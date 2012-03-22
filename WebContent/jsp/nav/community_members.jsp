@@ -67,41 +67,48 @@
 
 <!--  커뮤너티멤버를 찾을수 있는 트리 화면  -->
 <div class='nav_sub_list js_collapsible js_nav_com_members'>
-	<!-- 내부 메뉴 -->
-	<div id='community_members'>
-		<ul>
-			<%
-			if (members != null) {
-				for (UserInfo member : members) {
-			%>
-					<li>
-						<a href="<%=member.getSpaceController() %>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>">
-							<span class="icon_pe"><img src="<%=member.getMinPicture()%>" class="profile_size_s"></span> 
-							<span class="nav_sub_area"><%=member.getLongName()%></span>
-						</a>
-					</li>
-			<%
-				}
-			}
-			%>
-			<%
-			if (children != null) {
+	<%
+	if (children != null) {
+	%>
+		<!-- 내부 메뉴 -->
+		<div id='community_departments'>
+			<ul>
+				<%
 				String contextId = null;
 				for (DepartmentInfo department : children) {
 					contextId = ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + department.getId();
-			%>
+				%>
 					<li>
 						<a href="<%=department.getSpaceController() %>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>">
 							<span class="icon_pe"><img src="<%=department.getMinPicture()%>" class="profile_size_s"></span> 
 							<span class="nav_sub_area"><%=department.getName()%></span>
 						</a>
 					</li>
-			<%
+				<%
 				}
+				%>
+			</ul>
+		</div>
+		<!--내부메뉴//-->
+	<%
+	}
+	if (members != null) {
+	%>
+		<!-- 내부 메뉴 -->
+		<div id='community_members'>
+			<%		
+			for (UserInfo member : members) {
+			%>
+				<a href="<%=member.getSpaceController() %>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>">
+					<span class="icon_pe"><img src="<%=member.getMinPicture()%>" title="<%=member.getLongName() %>" class="profile_size_s"></span> 
+				</a>
+			<%
 			}
 			%>
-		</ul>
-	</div>
-	<!--내부메뉴//-->
+		</div>
+		<!--내부메뉴//-->
+	<%
+	}
+	%>		
 </div>
 <!--  커뮤너티멤버를 찾을수 있는 트리 화면 //-->

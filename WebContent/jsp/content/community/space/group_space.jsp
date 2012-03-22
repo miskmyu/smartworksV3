@@ -28,6 +28,6 @@
 	<!-- 오늘, 내일 그리고 모레이후에 대한 달력과 이벤트들을 보여주는 화면 //-->
 	
 	<div class="js_space_instance_list">
-		<jsp:include page="/jsp/content/community/space/space_tab_dayly.jsp"></jsp:include>
+		<jsp:include page="/jsp/content/community/space/space_tab_weekly.jsp"></jsp:include>
 	</div>
 </div>
