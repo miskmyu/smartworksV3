@@ -158,7 +158,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 
 	@RequestMapping("/sub_instances_in_instance")
 	public ModelAndView subInstancesInInstance(HttpServletRequest request, HttpServletResponse response) {
-
+		request.getSession().setAttribute("subComments", null);
 		return SmartUtil.returnMnv(request, "jsp/content/work/list/sub_instances_in_instance.jsp", "");
 	}
 
@@ -351,10 +351,38 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return null;
 	}
 
+	@RequestMapping(value = "/update_comment_on_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateCommentOnWork(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/remove_comment_on_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> removeCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentOnWork(requestBody, request);
+		return null;
+	}
+
 	@RequestMapping(value = "/add_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.addCommentOnInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/update_comment_on_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateCommentOnInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/remove_comment_on_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> removeCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentOnInstance(requestBody, request);
 		return null;
 	}
 
