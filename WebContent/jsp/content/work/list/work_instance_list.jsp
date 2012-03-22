@@ -32,11 +32,19 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+
 	if(SmartUtil.isBlankObject(params)){
-		params = new RequestParams();
-		params.setPageSize(20);
-		params.setCurrentPage(1);		
+		String savedWorkId = (String)session.getAttribute("workId");
+		params = (RequestParams)session.getAttribute("requestParams");
+		if(!SmartWork.ID_ALL_WORKS.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+		}
 	}
+	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", SmartWork.ID_ALL_WORKS);
+
 	User cUser = SmartUtil.getCurrentUser();
 	String cid = (String)session.getAttribute("cid");
 	String wid = (String)session.getAttribute("wid");
@@ -60,15 +68,6 @@
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
 			<th class="r_line">
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
-			 		<%
-					if(sortedField.getFieldId().equals(FormField.ID_WORK)){
-						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
-					%>
-				</a>				
-				<span class="js_progress_span"></span>
-			</th>
-			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
 			 		<%
 					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
@@ -87,6 +86,15 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
 			 		<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
+						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
+					%>
+				</a>				
+				<span class="js_progress_span"></span>
+			</th>
+			<th class="r_line">
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
+			 		<%
+					if(sortedField.getFieldId().equals(FormField.ID_WORK)){
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
@@ -133,11 +141,6 @@
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<div class="noti_pic">
-							<span class="<%=work.getIconClass()%>"><%=work.getFullpathName() %></span>
-						</div>
-					</td>
-					<td>
-						<div class="noti_pic">
 							<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s" />
 						</div>
 						<div class="noti_in">
@@ -149,6 +152,11 @@
 						<%=instanceInfo.getSubject()%>
 						<%if(((WorkInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
 						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+					</td>
+					<td>
+						<div class="noti_pic">
+							<span class="<%=work.getIconClass()%>"><%=work.getFullpathName() %></span>
+						</div>
 					</td>
 					<td>
  						<%=lastTask.getName()%>

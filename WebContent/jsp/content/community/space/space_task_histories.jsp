@@ -48,7 +48,10 @@
 			if(taskInstance.getType()<0){
 				String lastDateStr = (i>0) ? (new LocalDate(tasksHistories[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
-				<li class="t_nowork"><a href="" class="js_space_more_history" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a></li>
+				<li class="t_nowork">
+					<a href="" class="js_space_more_history" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+					<span class="js_progress_span"></span>
+				</li>
 	<%
 				break;
 			}
@@ -69,8 +72,9 @@
 			FileInstanceInfo file=null;
 			ImageInstanceInfo image=null;
 			MemoInstanceInfo memo=null;
+			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 	%>
-			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>">
+			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>"  workType="<%=workType%>">
 				<%
 				switch(workInstance.getType()){
 				
@@ -292,67 +296,70 @@
 					</div>
 				<%
 				}
-				
+	        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
 				%>
-				<!-- 댓글 -->
-			   <div class="reply_point pos_reply_point"></div>
-			   <div class="reply_section pos_reply">  
-			        <div class="list_reply">
-			        	<%
-			        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
-			        	%>
-			            <ul class="js_comment_list">
-			            	<li class="comment_list js_comment_instance" style="display:none">
-								<div class="noti_pic">
-									<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-										<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
-									</a>
-								</div>
-								<div class="noti_in">
-									<span class="t_name"><%=cUser.getLongName()%></span><span
-										class="t_date"><%=(new LocalDate()).toLocalString()%></span>
-									<div class="js_comment_content"></div>
-								</div>
-			            	</li>
-			            	<%
-			            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-			            		session.setAttribute("subComments", null);
-			            	%>
-				            	<li>
-				            		<img class="repl_tinfo">
-			            			<a href="sub_instances_in_instance.sw?instanceId=<%=instance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
-			            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
-			            			</a>
+				<div class="js_comments_box" <%if(instance.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+					<!-- 댓글 -->
+				   <div class="reply_point pos_reply_point"></div>
+				   <div class="reply_section pos_reply">  
+				        <div class="list_reply">
+				            <ul class="js_comment_list">
+				            	<li class="comment_list js_comment_instance" style="display:none">
+									<div class="noti_pic">
+										<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+											<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+										</a>
+									</div>
+									<div class="noti_in">
+										<span class="t_name"><%=cUser.getLongName()%></span><span
+											class="t_date"><%=(new LocalDate()).toLocalString()%></span>
+										<div class="js_comment_content"></div>
+									</div>
 				            	</li>
-								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-									<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-									<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-								</jsp:include>
-							<%
-							} else {
-								session.setAttribute("subComments", instance.getSubInstances());
-							%>
-								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-									<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-									<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-								</jsp:include>
-							<%
-							}
-							%>
-						</ul>
-			        </div>
-			        
-			        <div class="reply_input comment_box js_return_on_comment">
-						<div class="noti_pic">
-							<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-						</div>
-						<div class="noti_in">
-							<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
-						</div>
-			        </div>
-			    
+				            	<%
+				            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+				            		session.setAttribute("subComments", null);
+				            	%>
+					            	<li>
+					            		<img class="repl_tinfo">
+				            			<a href="sub_instances_in_instance.sw?instanceId=<%=instance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
+				            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
+				            			</a>
+					            	</li>
+									<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+										<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
+										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+									</jsp:include>
+								<%
+								} else {
+									session.setAttribute("subComments", instance.getSubInstances());
+								%>
+									<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+										<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
+										<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+									</jsp:include>
+								<%
+								}
+								%>
+							</ul>
+				        </div>
+				        
+				        <div class="reply_input js_return_on_comment" style="display:none">
+							<div class="noti_pic">
+								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+							</div>
+							<div class="noti_in">
+								<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+							</div>
+				        </div>
+				    
+				    </div>
+				    <!-- 댓글 //-->
+				</div>
+			    <div class="ml70 js_action_btns">
+			    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+			    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
 			    </div>
-			    <!-- 댓글 //-->
 			</li>
 	<%		
 		}

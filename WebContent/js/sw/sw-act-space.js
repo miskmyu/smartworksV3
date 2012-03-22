@@ -62,6 +62,9 @@ $(function() {
 	
 	$('a.js_space_more_history').live('click',function(e) {
 		var input = $(e.target);
+		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
+			return false;
+		smartPop.progressCont(input.siblings('.js_progress_span'));
 		var fromDate = input.attr('lastDate');
 		var target = input.parents('ul:first');
 		var spaceDayly = input.parents('.js_space_dayly_page');
@@ -92,8 +95,10 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					input.parents('li:first').remove();
 					target.append(data);
+					smartPop.closeProgress();
 				},
 				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
 				}
 			});
 			return false;
@@ -113,8 +118,10 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();
 				target.append(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -122,6 +129,9 @@ $(function() {
 	
 	$('a.js_space_more_instance').live('click',function(e) {
 		var input = $(e.target);
+		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
+			return false;
+		smartPop.progressCont(input.siblings('.js_progress_span'));
 		var fromDate = input.attr('lastDate');
 		var target = input.parents('ul:first');
 		var spacePage = input.parents('.js_space_instance_list_page');
@@ -136,8 +146,10 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				input.parents('li:first').remove();
 				target.append(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -312,14 +324,19 @@ $(function() {
 		if(isEmpty(comment)) return false;
 		var iworkManual = input.parents('.js_iwork_manual_page');
 		var pworkManual = input.parents('.js_pwork_manual_page');
-		var workId="", workInstanceId="", url="";
-		if(!isEmpty(iworkManual))
+		var workId="", workInstanceId="", workType="", url="";
+		if(!isEmpty(iworkManual)){
 			workId = iworkManual.attr('workId');
-		else if(!isEmpty(pworkManual))
+			workType = iworkManual.attr('workType');
+		}else if(!isEmpty(pworkManual)){
 			workId = pworkManual.attr('workId');
-		else
+			workType = pworkManual.attr('workType');
+		}else{
 			workInstanceId = input.parents('li:first').attr('instanceId');
+			workType = input.parents('li:first').attr('workType');
+		}
 		var paramsJson = {};
+		paramsJson['workType'] = parseInt(workType);
 		if(!isEmpty(workId)){
 			paramsJson['workId'] = workId;
 			url = "add_comment_on_work.sw";
@@ -380,4 +397,19 @@ $(function() {
 		});
 		return false;
 	});
+	
+	$('a.js_add_comment').live('click', function(e){
+		var input = $(e.target).parents('a.js_add_comment').removeAttr('href').addClass('no_hover_line');
+		input.find('.t_action').addClass('t_action_disabled');
+		input.parents('.js_action_btns').prev('.js_comments_box').show().find('.js_return_on_comment').show();
+		
+		return false;
+	});
+
+	$('a.js_add_like').live('click', function(e){
+		var input = $(e.target).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
+		input.find('.t_action').addClass('t_action_disabled');
+		
+	});
+
 });

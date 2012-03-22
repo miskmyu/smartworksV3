@@ -28,6 +28,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	String cid = request.getParameter("cid");
+	String wid = request.getParameter("wid");
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
 	String taskInstId = request.getParameter("taskInstId");
@@ -47,7 +48,10 @@
 	TaskInstanceInfo[] taskHistories = instance.getTasks();
 
 	session.setAttribute("cid", cid);
-	session.removeAttribute("wid");
+	if(SmartUtil.isBlankObject(wid))
+		session.removeAttribute("wid");
+	else
+		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
 	
 %>

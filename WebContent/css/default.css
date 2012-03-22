@@ -29,6 +29,10 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
      padding: 0pt;
 }
 
+a.no_hover_line:hover {
+	text-decoration:none !important
+}
+
 h1, h2, h3, h4, h5, h6, th, td, button, textarea, sub {
 	 text-align:left;
 	 padding:2px 1px;
@@ -153,6 +157,7 @@ mark, rp, rt, ruby, summary, time {
 .ml15 {margin-left:15px !important}
 .ml20 {margin-left: 20px !important}
 .ml25 {margin-left: 25px !important}
+.ml70 {margin-left: 70px !important}
 
 .mt2 {margin-top:2px !important}
 .mt4 {margin-top: 4px !important}

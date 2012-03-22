@@ -263,9 +263,6 @@ li.fvrt_item:hover .check_option {display:block}
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fffccd; cursor:pointer;}
 
-li.sub_instance_list .comment_box {display:none;}
-li.sub_instance_list:hover .comment_box {display:block}
-
 li.sub_instance_list > div.det_title {}
 li.sub_instance_list > div.det_title:hover {background-color:#fffccd; cursor:pointer;}
 
@@ -524,7 +521,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 #notice {clear:both; margin:0 30px 5px 5px; padding-top:10px;}
 #notice li {border-bottom: 1px dashed #DCDFE0; vertical-align:middle; padding:5px 0; clear:both;}
 
-.noti_pic {float:left; margin-right: 5px;}
+.noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:25px; line-height: 16px;}
 .noti_in_s { margin-left:25px; line-height: 16px;}
@@ -658,6 +655,8 @@ td.form_col .btn_x {display:none;}
 .t_name {color:#23579e; position: relative;}
 .t_woname {color:#23579e; font-weight:bold;}
 .t_size11 {font-size:11px}
+.t_action {color:#23579e; font-size:10px; text-decoration:underline;}
+.t_action_disabled {color:#454545 !important; text-decoration:none !important;}
 .t_date, .t_text_s11, .t_s11,
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important;}
 .t_white {font-size:12px; font-weight:normal;}
@@ -673,6 +672,7 @@ td.form_col .btn_x {display:none;}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%;}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%;}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px;}
+.dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px;}
 .line_width {padding:0 10px;}
 
 

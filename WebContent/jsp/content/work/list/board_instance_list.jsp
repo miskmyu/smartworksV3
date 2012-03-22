@@ -31,15 +31,24 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+
 	if(SmartUtil.isBlankObject(params)){
-		params = new RequestParams();
-		params.setPageSize(20);
-		params.setCurrentPage(1);		
+		String savedWorkId = (String)session.getAttribute("workId");
+		params = (RequestParams)session.getAttribute("requestParams");
+		if(!SmartWork.ID_BOARD_MANAGEMENT.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+		}
 	}
+	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", SmartWork.ID_BOARD_MANAGEMENT);
+
 	User cUser = SmartUtil.getCurrentUser();
 	String cid = (String)session.getAttribute("cid");
 	String wid = (String)session.getAttribute("wid");
 	InstanceInfoList instanceList = smartWorks.getBoardInstanceList(wid, params);
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -94,7 +103,7 @@
 									+ ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid
 									+ "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
 			%>
-				<tr class="instance_list js_content_iwork_space" href="<%=target%>">
+				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<img src="<%=owner.getMidPicture()%>" class="profile_size_s"/>

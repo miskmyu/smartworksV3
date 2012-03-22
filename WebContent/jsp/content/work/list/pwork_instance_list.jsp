@@ -28,11 +28,6 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
-	if(SmartUtil.isBlankObject(params)){
-		params = new RequestParams();
-		params.setPageSize(20);
-		params.setCurrentPage(1);		
-	}
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
 	SmartTaskInfo[] tasks = work.getDiagram().getTasks();
@@ -47,6 +42,18 @@
 		startTask = tasks[0];
 	}
 	String workId = work.getId();
+	if(SmartUtil.isBlankObject(params)){
+		String savedWorkId = (String)session.getAttribute("workId");
+		params = (RequestParams)session.getAttribute("requestParams");
+		if(!workId.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+		}
+	}
+	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", workId);
+
 	InstanceInfoList instanceList = smartWorks.getPWorkInstanceList(workId, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -161,7 +168,7 @@
 					statusTitle = "content.status.not_yet";
 				}
 			%>
-				<tr class="instance_list js_content_pwork_space" href="<%=target%>">
+				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<div>
