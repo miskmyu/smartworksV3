@@ -294,6 +294,122 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	@Override
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
+
+
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+				
+		try{
+			String workId = SmartWork.ID_BOARD_MANAGEMENT;
+	
+			User user = SmartUtil.getCurrentUser();
+	
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setCompanyId(user.getCompanyId());
+	
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setCompanyId(user.getCompanyId());
+			swfFormCond.setPackageId(workId);
+	
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+	
+			if(swfForms == null)
+				return null;
+	
+			swdDomainCond.setFormId(swfForms[0].getId());
+	
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+	
+			if(swdDomain == null)
+				return  null;
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(user.getCompanyId());
+			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setDomainId(swdDomain.getObjId());
+	
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(5);
+	
+			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
+	
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+	
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+	
+			BoardInstanceInfo[] boardInstanceInfos = null;
+
+			String subCtgId = swdRecordExtends[0].getSubCtgId();
+			String subCtgName = swdRecordExtends[0].getSubCtg();
+			String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			String parentCtgName = swdRecordExtends[0].getParentCtg();
+			String formId = swdDomain.getFormId();
+			String formName = swdDomain.getFormName();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				int swdRecordsLength = swdRecords.length;
+				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
+				for(int i=0; i < swdRecordsLength; i++) {
+					SwdRecord swdRecord = swdRecords[i];
+					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
+					boardInstanceInfo.setId(swdRecord.getRecordId());
+					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+					int type = WorkInstance.TYPE_INFORMATION;
+					boardInstanceInfo.setType(type);
+					boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					String workSpaceId = swdRecord.getWorkSpaceId();
+					if(workSpaceId == null)
+						workSpaceId = user.getId();
+
+					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+
+					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(subCtgId))
+						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+
+					boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					if(!CommonUtil.isEmpty(swdDataFields)) {
+						int swdDataFieldsLength = swdDataFields.length;
+						for(int j=0; j<swdDataFieldsLength; j++) {
+							SwdDataField swdDataField = swdDataFields[j];
+							String value = swdDataField.getValue();
+							if(swdDataField.getId().equals("0")) {
+								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+							} else if(swdDataField.getId().equals("1")) {
+								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+							}
+						}
+					}
+					boardInstanceInfos[i] = boardInstanceInfo;
+				}
+			}
+			return boardInstanceInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

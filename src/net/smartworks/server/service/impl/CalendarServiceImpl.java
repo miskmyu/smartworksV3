@@ -489,6 +489,12 @@ public class CalendarServiceImpl implements ICalendarService {
 		return this.getMyEventInstances(fromDate, toDate);
 	}
 
+	@Override
+	public EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception {
+		LocalDate toDate = new LocalDate(fromDate.getTime() + LocalDate.ONE_DAY*(days-1));
+		return this.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

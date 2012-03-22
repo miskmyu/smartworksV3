@@ -229,6 +229,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception {
+		return calendarService.getCommunityEventInstances(fromDate, days, workSpaceId);
+	}
+
+	@Override
 	public EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, LocalDate toDate) throws Exception {
 		return calendarService.getMyEventInstances(fromDate, toDate);
 	}
@@ -256,6 +261,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
 		return instanceService.getMyRecentBoardInstances();
+	}
+
+	@Override
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String workSpaceId) throws Exception {
+		return instanceService.getCommunityRecentBoardInstances(workSpaceId);
 	}
 
 	@Override

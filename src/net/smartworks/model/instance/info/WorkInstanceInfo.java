@@ -4,6 +4,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -43,6 +44,12 @@ public class WorkInstanceInfo extends InstanceInfo {
 		if(getWork()==null) return "";
 		switch(getWork().getType()){
 		case SmartWork.TYPE_INFORMATION:
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_MOVIE:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
 				return WorkInstance.CONTROLLER_FILE_SPACE;
 			else
@@ -61,6 +68,12 @@ public class WorkInstanceInfo extends InstanceInfo {
 		if(getWork()==null) return "";
 		switch(getWork().getType()){
 		case SmartWork.TYPE_INFORMATION:
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_MOVIE:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
 				return ISmartWorks.CONTEXT_PREFIX_FILE_SPACE + getId();
 			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(getWork().getId()))

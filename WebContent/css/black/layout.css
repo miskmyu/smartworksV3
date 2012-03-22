@@ -168,7 +168,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -364px transparent; display: inline-block; padding:0 0 0 12px}
 .icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 22px; font-weight:bold}
 /* new Icon added by ysjung */
-.icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 10px transparent;display:inline-block;height:20px;width:30px;}
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 10px transparent;display:inline-block;height:20px;width:30px;vertical-align:bottom;}
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
@@ -447,7 +447,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .gray_style td { background-color:#FFF; border-bottom:none}
 
 /*라운드 포틀릿*/
-.section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; margin-bottom:10px; position:relative; width:100%; z-index:30;}
+.section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; position:relative; width:100%; z-index:30;}
 .section_portlet ul {height:100%;}
 	
 .tab_portlet {

@@ -141,9 +141,13 @@ public interface ISmartWorks {
 
 	public abstract EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, int days) throws Exception;
 
+	public abstract EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception;
+
 	public abstract EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, LocalDate toDate) throws Exception;
 
 	public abstract BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception;
+
+	public abstract BoardInstanceInfo[] getCommunityRecentBoardInstances(String workSpaceId) throws Exception;
 
 	public abstract CompanyCalendar getCompanyEventBox(LocalDate date) throws Exception;
 

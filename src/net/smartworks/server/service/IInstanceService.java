@@ -22,6 +22,8 @@ public interface IInstanceService {
 
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception;
 
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String workSpaceId) throws Exception;
+
 	public InstanceInfo[] getMyRecentInstances() throws Exception;
 
 	public Instance getInstanceById(String instanceId) throws Exception;

@@ -153,6 +153,12 @@ public class Work extends BaseObject{
 	public String getContextId(){
 		switch(getType()){
 		case SmartWork.TYPE_INFORMATION:
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_MOVIE:
 			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return ISmartWorks.CONTEXT_PREFIX_FILE_LIST + getId();
 			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))

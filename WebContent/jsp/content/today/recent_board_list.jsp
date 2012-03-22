@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
@@ -20,9 +21,14 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+	String wid = (String)session.getAttribute("wid");
 
-	// 현재사용자에게 해당되는 최근 5개의 공지사항을 가져온다.... 
-	BoardInstanceInfo[] boards = smartWorks.getMyRecentBoardInstances();
+	BoardInstanceInfo[] boards = null;
+	if(SmartUtil.isBlankObject(wid))
+		// 현재사용자에게 해당되는 최근 5개의 공지사항을 가져온다.... 
+		boards = smartWorks.getMyRecentBoardInstances();
+	else
+		boards = smartWorks.getCommunityRecentBoardInstances(wid);
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -42,14 +48,13 @@
 	%>
 		<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
 		<div class="headline_notice">
-			<a href="<%=board.getController() %>?cid=<%=board.getContextId()%>wid=<%=workSpace.getId() %>" class="more"><fmt:message key="common.button.view_all"/></a>
-			<div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>">
-				<span class="title"><%=board.getSubject() %>
+			<a href="<%=board.getWork().getController() %>?cid=<%=board.getWork().getContextId()%>" class="more"><fmt:message key="common.button.view_all"/></a>
+			<div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
+				<span class="title"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject() %>
 					<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 					<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 				</span>
 				<span class="index">
-					<span class="t_name"><%=board.getOwner().getLongName() %></span> 
 					<%
 					if(!workSpaceIco.equals("")){
 					%>
@@ -74,12 +79,11 @@
 					board = boards[i];
 					workSpace = board.getWorkSpace();
 				%>			
-					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>">
+					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 						<td class="title">
-							<span><%=board.getSubject()%></span> 
+							<span><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
-							<span class="t_name"><%=board.getOwner().getLongName() %></span> 
 							<%
 							if(!workSpaceIco.equals("")){
 							%>
