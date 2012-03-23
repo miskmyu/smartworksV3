@@ -40,6 +40,7 @@ public class PkgPackageCond extends MisObjectCond{
 	private String categoryId;
 	private String[] categoryIdIns;
 	private String[] packageIdIns;
+	private String[] packageIdNotIns;
 	private String type;
 	private String content;
 	private String[] formContentList;
@@ -291,15 +292,20 @@ public class PkgPackageCond extends MisObjectCond{
 	public String[] getCategoryIdIns() {
 		return categoryIdIns;
 	}
-
 	public void setCategoryIdIns(String[] categoryIdIns) {
 		this.categoryIdIns = categoryIdIns;
 	}
 	public String[] getPackageIdIns() {
 		return packageIdIns;
 	}
-
 	public void setPackageIdIns(String[] packageIdIns) {
 		this.packageIdIns = packageIdIns;
 	}
+	public String[] getPackageIdNotIns() {
+		return packageIdNotIns;
+	}
+	public void setPackageIdNotIns(String[] packageIdNotIns) {
+		this.packageIdNotIns = packageIdNotIns;
+	}
+
 }
