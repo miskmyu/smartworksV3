@@ -12,15 +12,29 @@ public class Order extends BaseObject {
 	private static final String NAME = CommonUtil.toName(Order.class, PREFIX);
 	public static final String A_FIELD = "field";
 	public static final String A_ISASC = "isAsc";
-	
+	public static final String A_WHENCOLUMNNAME = "whenColumnName";
+	public static final String A_WHENCOLUMNVALUE = "whenColumnValue";
+	public static final String A_ORDERNUMBER = "orderNumber";
+
 	private String field;
 	private boolean isAsc = true;
+	private String whenColumnName;
+	private String whenColumnValue;
+	private int orderNumber;
 
 	public Order() {
 		super();
 	}
 	public Order(String columnName, boolean isAsc) {
 		super();
+		this.field = columnName;
+		this.isAsc = isAsc;
+	}
+	public Order(String whenColumnName, String whenColumnValue, int orderNumber, String columnName, boolean isAsc) {
+		super();
+		this.whenColumnName = whenColumnName;
+		this.whenColumnValue = whenColumnValue;
+		this.orderNumber = orderNumber;
 		this.field = columnName;
 		this.isAsc = isAsc;
 	}
@@ -39,6 +53,9 @@ public class Order extends BaseObject {
 		buf.append(super.toAttributesString());
 		appendAttributeString(A_FIELD, field, buf);
 		appendAttributeString(A_ISASC, isAsc, buf);
+		appendAttributeString(A_WHENCOLUMNNAME, whenColumnName, buf);
+		appendAttributeString(A_WHENCOLUMNVALUE, whenColumnValue, buf);
+		appendAttributeString(A_ORDERNUMBER, orderNumber, buf);
 		return buf.toString();
 	}
 	public static BaseObject toObject(Node node, BaseObject baseObj) throws Exception {
@@ -57,10 +74,19 @@ public class Order extends BaseObject {
 		if (attrMap != null) {
 			Node columnName = attrMap.getNamedItem(A_FIELD);
 			Node isAsc = attrMap.getNamedItem(A_ISASC);
+			Node whenColumnName = attrMap.getNamedItem(A_WHENCOLUMNNAME);
+			Node whenColumnValue = attrMap.getNamedItem(A_WHENCOLUMNVALUE);
+			Node orderNumber = attrMap.getNamedItem(A_ORDERNUMBER);
 			if (columnName != null)
 				obj.setField(columnName.getNodeValue());
 			if (isAsc != null)
 				obj.setAsc(CommonUtil.toBoolean(isAsc.getNodeValue()));
+			if (whenColumnName != null)
+				obj.setWhenColumnName(whenColumnName.getNodeValue());
+			if (whenColumnValue != null)
+				obj.setWhenColumnValue(whenColumnValue.getNodeValue());
+			if (orderNumber != null)
+				obj.setOrderNumber(CommonUtil.toInt(orderNumber.getNodeValue()));
 		}
 		
 		return obj;
@@ -167,4 +193,23 @@ public class Order extends BaseObject {
 	public void setAsc(boolean isAsc) {
 		this.isAsc = isAsc;
 	}
+	public String getWhenColumnName() {
+		return whenColumnName;
+	}
+	public void setWhenColumnName(String whenColumnName) {
+		this.whenColumnName = whenColumnName;
+	}
+	public String getWhenColumnValue() {
+		return whenColumnValue;
+	}
+	public void setWhenColumnValue(String whenColumnValue) {
+		this.whenColumnValue = whenColumnValue;
+	}
+	public int getOrderNumber() {
+		return orderNumber;
+	}
+	public void setOrderNumber(int orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
 }

@@ -82,6 +82,7 @@ CREATE TABLE SWOrgGroup (
 	groupLeader	varchar(50),
 	groupType	varchar(1),
 	status	varchar(1),
+	picture varchar(100),
 	description	varchar(4000),
 	creator	varchar(50),
 	createdTime	datetime,

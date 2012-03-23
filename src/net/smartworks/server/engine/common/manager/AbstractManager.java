@@ -33,6 +33,13 @@ public abstract class AbstractManager extends HibernateDaoSupport implements IMa
 	private static final String ORDERBY = " order by";
 	private static final String ASC = " asc";
 	private static final String DESC = " desc";
+	private static final String CASE = " case";
+	private static final String WHEN = " when";
+	private static final String THEN = " then";
+	private static final String END = " end";
+	private static final String EQUAL = " =";
+	private static final String ISNOTNULL = " is not null";
+	
 	
 	private boolean enableLogging = true;
 
@@ -67,6 +74,23 @@ public abstract class AbstractManager extends HibernateDaoSupport implements IMa
 		boolean first = true;
 		for (int i=0; i<orders.length; i++) {
 			Order order = orders[i];
+			String whenColumnName = order.getWhenColumnName();
+			String whenColumnValue = order.getWhenColumnValue();
+			if (!CommonUtil.isEmpty(whenColumnName)) {
+				if (first) {
+					buf.append(ORDERBY).append(CASE).append(WHEN);
+					first = false;
+				} else {
+					buf.append(WHEN);
+				}
+				if (whenColumnName.indexOf(DOT) == -1 && !CommonUtil.isEmpty(objName))
+					whenColumnName = new StringBuffer(objName).append(DOT).append(whenColumnName).toString();
+				buf.append(SPACE).append(whenColumnName).append(EQUAL).append(SPACE).append("'").append(whenColumnValue).append("'");
+				buf.append(THEN).append(SPACE).append(1);
+				buf.append(WHEN).append(SPACE).append(whenColumnName).append(ISNOTNULL);
+				buf.append(THEN).append(SPACE).append(2);
+				buf.append(END);
+			}
 			String field = order.getField();
 			if (CommonUtil.isEmpty(field))
 				continue;

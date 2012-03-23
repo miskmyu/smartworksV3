@@ -33,14 +33,12 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.filter.info.SearchFilterInfo;
-import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
-import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.FileInstanceInfo;
 import net.smartworks.model.instance.info.IWInstanceInfo;
@@ -60,7 +58,6 @@ import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartDiagram;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
-import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.model.work.info.FileCategoryInfo;
@@ -110,7 +107,6 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.infowork.form.model.SwfFormat;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
-import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
@@ -145,7 +141,6 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
-import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
@@ -1609,7 +1604,7 @@ public class ModelConverter {
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			groupInfo.setSmallPictureName(pictureId + "_small" + "." + extension);
+			groupInfo.setSmallPictureName(pictureId + "_thumb" + "." + extension);
 		} else {
 			groupInfo.setSmallPictureName(picture);
 		}

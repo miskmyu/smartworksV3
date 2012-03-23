@@ -134,6 +134,7 @@
 		<property name="groupLeader" type="string" length="50"/>
 		<property name="groupType" type="string" length="1"/>
 		<property name="status" type="string" length="1"/>
+		<property name="picture" type="string" length="100"/>
 		<property name="description" type="string" length="4000"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>

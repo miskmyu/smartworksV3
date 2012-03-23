@@ -2449,11 +2449,17 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<opinionLength; i++) {
 					Opinion opinion = opinions[i];
 					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
 					commentInstanceInfo.setId(opinion.getObjId());
 					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
 					commentInstanceInfo.setComment(opinion.getOpinion());
 					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(opinion.getModificationDate().getTime()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
 					commentInstanceInfosList.add(commentInstanceInfo);
 				}
 			}
@@ -2512,15 +2518,17 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<opinionLength; i++) {
 					Opinion opinion = opinions[i];
 					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
 					commentInstanceInfo.setId(opinion.getObjId());
 					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
 					commentInstanceInfo.setComment(opinion.getOpinion());
 					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(opinion.getModificationDate().getTime()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
 					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
 					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
 					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
-					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(opinion.getModificationUser()));;
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
 					instanceInfoList.add(commentInstanceInfo);
 				}
 			}
@@ -4402,15 +4410,17 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<opinionLength; i++) {
 					Opinion opinion = opinions[i];
 					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
 					commentInstanceInfo.setId(opinion.getObjId());
 					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
 					commentInstanceInfo.setComment(opinion.getOpinion());
 					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(opinion.getModificationDate().getTime()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
 					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
 					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
 					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
-					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(opinion.getModificationUser()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
 					instanceInfoList.add(commentInstanceInfo);
 				}
 			}
