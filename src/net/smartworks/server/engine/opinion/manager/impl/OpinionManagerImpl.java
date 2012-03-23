@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import net.smartworks.server.engine.basicwork.board.model.Board;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.opinion.exception.OpinionException;
@@ -109,7 +108,7 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 	@Override
 	public void removeOpinion(String user, String objId) throws OpinionException {
 		try {
-			remove(Board.class, objId);
+			remove(Opinion.class, objId);
 		} catch (Exception e) {
 			throw new OpinionException(e);
 		}

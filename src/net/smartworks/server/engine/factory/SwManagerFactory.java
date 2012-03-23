@@ -20,6 +20,7 @@ import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
+import net.smartworks.server.engine.like.manager.ILikeManager;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
@@ -61,6 +62,7 @@ public class SwManagerFactory {
 	private ISctManager sctManager;
 	private IFdrManager fdrManager;
 	private IOpinionManager opinionManager;
+	private ILikeManager likeManager;
 	private IResourceDesigntimeManager designtimeManager;
 	private IResourceRuntimeManager runtimeManager;
 
@@ -211,6 +213,12 @@ public class SwManagerFactory {
 	}
 	public void setOpinionManager(IOpinionManager opinionManager) {
 		this.opinionManager = opinionManager;
+	}
+	public ILikeManager getLikeManager() {
+		return likeManager;
+	}
+	public void setLikeManager(ILikeManager likeManager) {
+		this.likeManager = likeManager;
 	}
 	public IResourceDesigntimeManager getDesigntimeManager() {
 		return designtimeManager;

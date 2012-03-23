@@ -2237,3 +2237,13 @@ CREATE TABLE SwFolderFile (
 	fileSeq int,
   	primary key(folderId, fileId)
 );
+
+-- ¡¡æ∆ø‰
+CREATE TABLE SwLike (
+	id varchar(50) NOT NULL,
+	refType int,
+	refId varchar(50),
+	creator varchar(50),
+	createdTime datetime,
+	primary key (id)
+);

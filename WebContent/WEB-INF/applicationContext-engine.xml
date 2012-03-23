@@ -72,6 +72,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		<beans:property name="sctManager" ref="sctXPathManager"/>
 		<beans:property name="fdrManager" ref="fdrManager"/>
 		<beans:property name="opinionManager" ref="opinionManager"/>
+		<beans:property name="likeManager" ref="likeManager"/>
 
 		<beans:property name="designtimeManager" ref="resourceDesigntimeManager"/>
 		<beans:property name="runtimeManager" ref="resourceRuntimeManager"/>
@@ -90,5 +91,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	<beans:bean id="swcManager" class="net.smartworks.server.engine.config.manager.impl.SwcManagerImpl"/>
 	<beans:bean id="fdrManager" class="net.smartworks.server.engine.folder.manager.impl.FdrManagerImpl"/>
 	<beans:bean id="opinionManager" class="net.smartworks.server.engine.opinion.manager.impl.OpinionManagerImpl"/>
+	<beans:bean id="likeManager" class="net.smartworks.server.engine.like.manager.impl.LikeManagerImpl"/>
 
 </beans:beans>
