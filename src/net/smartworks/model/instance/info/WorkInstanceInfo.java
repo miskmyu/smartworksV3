@@ -51,7 +51,7 @@ public class WorkInstanceInfo extends InstanceInfo {
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_MOVIE:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
-				return WorkInstance.CONTROLLER_FILE_SPACE;
+				return WorkInstance.CONTROLLER_IWORK_SPACE;
 			else
 				return WorkInstance.CONTROLLER_IWORK_SPACE;
 		case SmartWork.TYPE_PROCESS:
@@ -75,7 +75,7 @@ public class WorkInstanceInfo extends InstanceInfo {
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_MOVIE:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
-				return ISmartWorks.CONTEXT_PREFIX_FILE_SPACE + getId();
+				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getId();
 			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(getWork().getId()))
 				return ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + getId();
 			else if(SmartWork.ID_GROUP_MANAGEMENT.equals(getWork().getId()))

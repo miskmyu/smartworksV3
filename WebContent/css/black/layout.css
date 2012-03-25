@@ -285,7 +285,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 
 #all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #community_departments .nav_sub_area,
 #my_mail .nav_sub_area, #m_setting .nav_sub_area {
-	display: inline; float: left; position: relative; width: 180px;
+	display: inline; float: left; position: relative; width: 180px; margin-top: 2px;
 }
 
 #community_members {

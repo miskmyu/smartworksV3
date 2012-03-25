@@ -164,6 +164,16 @@ smartPop = {
 			smartPop.closeInfo();
 			return false;
 		});
+
+		$('#sw_pop_show_info .js_btn_close').focus();
+		$('#sw_pop_show_info').keypress(function (e) {
+	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+	            $('#sw_pop_show_info .js_btn_close').click();
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    });
 	},
 	
 	closeConfirm : function(){
@@ -206,6 +216,15 @@ smartPop = {
 			smartPop.closeConfirm();
 			return false;
 		});
+		$('#sw_pop_confirm .js_btn_ok').focus();
+		$('#sw_pop_confirm').keypress(function (e) {
+	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+	            $('#sw_pop_confirm .js_btn_ok').click();
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    });
 	},
 
 	progressTarget : "",
@@ -299,6 +318,15 @@ smartPop = {
 							target.html('');
 							return false;
 						});
+						$('a.js_pop_select_user').focus();
+						$('a.js_pop_select_user').keypress(function (e) {
+					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+					            $('a.js_pop_select_user').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
 					}else{
 						$('a.js_pop_select_users').live('click', function(e){
 							var selections = $('form[name="frmUserSelections"]').find('input.js_checkbox:checked');
@@ -314,6 +342,15 @@ smartPop = {
 							target.html('');
 							return false;
 						});
+						$('a.js_pop_select_users').focus();
+						$('a.js_pop_select_users').keypress(function (e) {
+					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+					            $('a.js_pop_select_users').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
 					}
 				}
 			});
@@ -426,6 +463,15 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
+					$('.js_close_new_group').focus();
+					$('.js_close_new_group').keypress(function (e) {
+				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				            $('.js_close_new_group').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
 				}
 			});
 		});
@@ -447,6 +493,15 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
+					$('.js_close_new_category').focus();
+					$('.js_close_new_category').keypress(function (e) {
+				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				            $('.js_close_new_category').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
 				}
 			});
 		});
@@ -470,6 +525,15 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
+					$('.js_close_new_work').focus();
+					$('.js_close_new_work').keypress(function (e) {
+				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+				            $('.js_close_new_category').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
 				}
 			});
 		});

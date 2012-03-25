@@ -28,9 +28,9 @@
 
 .chat_section .chat_body {background-color:#FFF; margin: 0 2px; min-height:100px; max-height:300px; width:269px; color:#454545; overflow-y:auto;}
 .chat_input_area { border-top:1px solid #9C9C9C; padding: 0 3px;}
-.chat_textarea {vertical-align: top; width:100%; border:none; max-height:35px; min-height:16px; outline: medium none; overflow-y:auto;}
+.chat_textarea {vertical-align: top; width:100%; border:none; max-height:35px; min-height:16px; outline: medium none; overflow-y:hidden;}
 
-.chat_list li {border-bottom:1px dashed #9C9C9C; margin:5px 10px 0; color:#454545; vertical-align: middle; padding: 2px 0; overflow:hidden;}	
+.chat_list li {border-bottom:1px dashed #9C9C9C; margin:3px 2px; color:#454545; vertical-align: middle; padding: 2px 0; overflow:hidden;}	
 .chat_list li.end {border-bottom:none;}
 
 /* 占시쏙옙占쏙옙 占쌨쇽옙占쏙옙 */

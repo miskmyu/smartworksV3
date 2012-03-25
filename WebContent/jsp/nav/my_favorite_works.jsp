@@ -30,7 +30,7 @@
 			<li class="fvrt_item js_favorite_works">
 				<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="js_content" title="<%=work.getFullpathName()%>">
 					<span class="<%=work.getIconClass()%>"></span>
-					<span><%=work.getName()%></span>
+					<span  class="nav_sub_area"><%=work.getName()%></span>
 				</a>
 				<div class="check_option"><div title="<fmt:message key='common.button.delete'/>" class="js_check_favorite_work btn_x" workId="<%=work.getId() %>"></div></div>
 			</li>

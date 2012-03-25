@@ -29,10 +29,6 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
      padding: 0pt;
 }
 
-a.no_hover_line:hover {
-	text-decoration:none !important
-}
-
 h1, h2, h3, h4, h5, h6, th, td, button, textarea, sub {
 	 text-align:left;
 	 padding:2px 1px;
@@ -50,10 +46,6 @@ input[type="text"], textarea {
 
 select, input, textarea {
 	color:#868686;
-}
-
-textarea{
-	overflow-y:hidden;
 }
 
 /* 
@@ -153,7 +145,6 @@ mark, rp, rt, ruby, summary, time {
 .mr15 {margin-right: 15px !important}
 .mr20 {margin-right: 20px !important}
 
-.ml-1 {margin-left:-1px !important}
 .ml2 {margin-left:2px !important}
 .ml3 {margin-left: 3px !important}
 .ml4 {margin-left:4px !important}
@@ -162,10 +153,8 @@ mark, rp, rt, ruby, summary, time {
 .ml15 {margin-left:15px !important}
 .ml20 {margin-left: 20px !important}
 .ml25 {margin-left: 25px !important}
-.ml70 {margin-left: 70px !important}
 
 .mt2 {margin-top:2px !important}
-.mt3 {margin-top:3px !important}
 .mt4 {margin-top: 4px !important}
 .mt5 {margin-top:5px !important}
 .mt6 {margin-top:6px !important}

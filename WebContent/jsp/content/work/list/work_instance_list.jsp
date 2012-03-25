@@ -159,7 +159,7 @@
 						</div>
 					</td>
 					<td>
- 						<%=lastTask.getName()%>
+						<%if(work.getType() == SmartWork.TYPE_PROCESS){ %><%=lastTask.getName()%><%} %>
 					</td>
 					<td>
 						<%

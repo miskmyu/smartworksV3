@@ -43,7 +43,8 @@
 				<li class="work_action_item">
 					
 					<a href="<%=targetContent%>?cid=<%=workContext%>" class="<%=classType%>">
-						<span class="<%=work.getIconClass()%>"></span><%=work.getName()%><span></span>
+						<span class="<%=work.getIconClass()%>"></span>
+						<span  class="mt3"><%=work.getName()%></span>
 					</a>
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
@@ -73,7 +74,8 @@
 				<!--  *** js_drill_down : sw_act_work.js에서 이클래스의 클릭이벤트를 받아서 트리구조르 드릴다운할수 있게 한다.. -->
 				<li class="js_drill_down group_action_item">
 					<a href="<%=targetContent%>" categoryId="<%=work.getId()%>">
-						<span class="<%=work.getIconClass()%>"></span><span><%=work.getName()%></span>
+						<span class="<%=work.getIconClass()%>"></span>
+						<span class="mt3"><%=work.getName()%></span>
 					</a>
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){

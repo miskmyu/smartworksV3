@@ -58,7 +58,7 @@
 	<div class="fr">
 		<span class="btn_gray"> 
 			<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
-			<a href="" onclick='submitForms();return false;'> 
+			<a href="" class="js_complete_action" onclick='submitForms();return false;'> 
 				<span class="txt_btn_start"></span>
 				<span class="txt_btn_center"><fmt:message key="common.button.complete"/></span> 
 				<span class="txt_btn_end"></span> 
@@ -216,3 +216,16 @@
 	</form>
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
 </div>
+
+<script type="text/javascript">
+$(function() {	
+	$(document).keypress(function (e) {
+	    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+	        $('.js_complete_action').click();
+	        return false;
+	    } else {
+	        return true;
+	    }
+	});
+});
+</script>
