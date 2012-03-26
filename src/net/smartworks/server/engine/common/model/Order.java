@@ -30,13 +30,10 @@ public class Order extends BaseObject {
 		this.field = columnName;
 		this.isAsc = isAsc;
 	}
-	public Order(String whenColumnName, String whenColumnValue, int orderNumber, String columnName, boolean isAsc) {
+	public Order(String whenColumnName, String whenColumnValue) {
 		super();
 		this.whenColumnName = whenColumnName;
 		this.whenColumnValue = whenColumnValue;
-		this.orderNumber = orderNumber;
-		this.field = columnName;
-		this.isAsc = isAsc;
 	}
 	public String toString(String name, String tab) {
 		if (name == null || name.trim().length() == 0)
