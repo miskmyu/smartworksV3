@@ -36,77 +36,76 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-	<!-- 채팅Default -->	 
-	<div class="chat_de_section js_chatter_list">
-		<!-- 상단 -->
-		<div class="top_group">
-			<a href="" class="js_toggle_chatter_list">
-				<div class="chatic_titl">
-					채 팅 <span class="t_white js_chatters_number">(<%=chatters.length%>)</span>
-				</div> </a>
-			<!-- 상단우측 아이콘-->
-			<div class="txt_btn">
-				<div class="ch_right btn_admin">
-					<a href=""> <span> </span> </a>
-				</div>
+<!-- 채팅Default -->	 
+<div class="chat_de_section js_chatter_list">
+	<!-- 상단 -->
+	<div class="top_group">
+		<a href="" class="js_toggle_chatter_list">
+			<div class="chatic_titl"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=chatters.length%>)</span></div>
+		</a>
+		<!-- 상단우측 아이콘-->
+		<div class="txt_btn">
+			<div class="ch_right btn_admin">
+				<a href=""><span></span></a>
 			</div>
-			<!-- 상단 우측 아이콘//-->
 		</div>
-		<!-- 상단 //-->
+		<!-- 상단 우측 아이콘//-->
+	</div>
+	<!-- 상단 //-->
 
-		<!--온라인 일때는 class="chat_online", 오프라인 일때는 chat_offline -->
-		<div class="js_chatter_search_area" style="display: none">
+	<!--온라인 일때는 class="chat_online", 오프라인 일때는 chat_offline -->
+	<div class="js_chatter_search_area" style="display: none">
 
-			<!-- Body -->
-			<div class="chat_de_list js_chatter_list" id="available_chatter_list">
-				<ul>
-					<%
-						for (UserInfo chatter : chatters) {
-					%><li><a href="" userId="<%=chatter.getId()%>"><img
-							src="<%=chatter.getMinPicture()%>"
-							title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
-							<span class="chat_offline"> </span>
-					</a>
+		<!-- Body -->
+		<div class="chat_de_list js_chatter_list" id="available_chatter_list">
+			<ul>
+				<%
+				for (UserInfo chatter : chatters) {
+				%>
+					<li>
+						<a href="" userId="<%=chatter.getId()%>">
+							<img src="<%=chatter.getMinPicture()%>" class="profile_size_s" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
+							<span class="chat_offline"></span>
+						</a>
 					</li>
-					<%
-						}
-					%>
-				</ul>
-			</div>
+				<%
+				}
+				%>
+			</ul>
+		</div>
+		<!-- Body //-->
 
-			<!-- Body //-->
-
-			<!-- 검색영역 -->
-			<div class="chat_input_section js_chatter_names">
-				<div class="srch">
-					<input id="" class="input js_auto_complete" type="text"
-						href="chatter_name.sw" placeholder="사람,부서,그룹 찾기"
-						title="사람,부서,그룹 찾기">
-					<div class="srch_icon js_srch_x"></div>
-				</div>
+		<!-- 검색영역 -->
+		<div class="chat_input_section js_chatter_names">
+			<div class="chat_input_area">
+				<input id="" class="input js_auto_complete" type="text" href="chatter_name.sw" placeholder="<fmt:message key='search.search_people_depart_group'/>" title="<fmt:message key='search.search_people_depart_group'/>">
 			</div>
 		</div>
-		<!-- 검색영역//-->
 	</div>
-	<!-- 채팅Default //-->
+	<!-- 검색영역//-->
+</div>
+<!-- 채팅Default //-->
 
-	<!-- 이동 화살표-->
- 	<div class="chat_num_section js_chatting_group_prev" style="display:none">
-		<a href=""><div class="top_group"><span class="cha_num js_group_prev_count"></span><span class="cha_prev"></span></div> </a>
-	</div>
+<!-- 이동 화살표-->
+	<div class="chat_num_section js_chatting_group_prev" style="display:none">
+	<a href="">
+		<div class="top_group">
+			<span class="cha_num js_group_prev_count"></span>
+			<span class="cha_prev"></span>
+		</div>
+	</a>
+</div>
 
-	<!-- 채팅창 생성 -->
-	<div class="js_chatting_box_list"></div>
+<!-- 채팅창 생성 -->
+<div class="js_chatting_box_list"></div>
 
-	<!-- 이동 화살표-->
- 	<div class="chat_num_section js_chatting_group_next" style="display:none">
-		<a href=""><div class="top_group"><span class="cha_next"></span><span class="cha_num js_group_next_count"></span></div> </a>
-	</div>
-	<!-- 이동 화살표 //-->
-
-	<!-- 이동 화살표 //-->
-
-
- 
-
-
+<!-- 이동 화살표-->
+	<div class="chat_num_section js_chatting_group_next" style="display:none">
+	<a href="">
+		<div class="top_group">
+			<span class="cha_next"></span>
+			<span class="cha_num js_group_next_count"></span>
+		</div>
+	</a>
+</div>
+<!-- 이동 화살표 //-->

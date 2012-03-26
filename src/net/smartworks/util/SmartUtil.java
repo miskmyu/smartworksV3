@@ -381,6 +381,13 @@ public class SmartUtil {
 		return (str == null || str.length()==0) ? true : false;
 	}
 	
+	final static String TILES_POSTFIX = ".sw"; 
+	public static boolean isTilesLocation(String str){
+		if(SmartUtil.isBlankObject(str) || str.length() <= 3) return false;
+		if(TILES_POSTFIX.equals(str.substring(str.length()-TILES_POSTFIX.length(), str.length())) )return true;
+		return false;
+	}
+	
 	private static final String SUBJECT_SMARTWORKS = "/smartworks";
 	private static final String SUBJECT_BROADCASTING = "/broadcasting";
 	private static final String MSG_TYPE_BROADCASTING = "BCAST";

@@ -182,7 +182,6 @@
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 						<%
 						String runningTaskName = taskInstance.getName();
@@ -283,6 +282,7 @@
 							break;
 						}
 						%>
+							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						</div>			
 						<div>
 							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&wid=<%=cUser.getId()%>">

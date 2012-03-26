@@ -63,14 +63,17 @@
 		    <ul class="portlet_r" style="display: block;">		    		            
             	<div class="body_titl_pic js_form_header">		
                     <div class="">
-                        <div class="noti_pic mb5 mr7"><img class="profile_size_m" src="<%=instance.getOwner().getMidPicture() %>" /></div>
-                        <div class="noti_in_bodytitle mb5">
-                            <span class="t_name"><%=instance.getOwner().getLongName()%></span>
-                            <%if(workSpace != null && !workSpace.getId().equals(owner.getId())){ %><span class="arr">▶</span><span class="icon_division_s"><%=workSpace.getName() %></span><%} %>
-                            <span class="t_date"><%=instance.getCreatedDate().toLocalString() %></span>
-                            <div class="">
-                           		<span class="title_picico fl mr7"><%=instance.getSubject()%></span>
-                            	<span class="<%=work.getIconClass() %> t_date"><%=work.getFullpathName() %></span> 
+                        <div class="noti_pic mr7"><img class="profile_size_m" src="<%=instance.getOwner().getMidPicture() %>" /></div>
+                        <div class="noti_in_bodytitle">
+                        	<div>
+	                            <span class="t_name"><%=instance.getOwner().getLongName()%></span>
+	                            <%if(workSpace != null && !workSpace.getId().equals(owner.getId())){ %><span class="arr">▶</span><span class="icon_division_s"><%=workSpace.getName() %></span><%} %>
+	                            <span class="t_date"><%=instance.getCreatedDate().toLocalString() %></span>
+                            </div>
+                           	<div class=""><%=instance.getSubject()%></div>
+                           	<div class="">
+                            	<span class="<%=work.getIconClass() %>"></span>
+                            	<span><%=work.getFullpathName() %></span> 
                             </div>
                         </div>
                     </div>
@@ -81,7 +84,7 @@
 		            </div>
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
-					<div class="txt_btn image_posi fr vb">
+					<div class="mb10 fr vb">
 						<span class="icon_refer_w"><a href="" title="<fmt:message key='common.button.forward'/>"></a></span>
 						<span class="icon_link_w"><a href="" title="<fmt:message key='common.button.approval'/>"></a></span>
 	                	<span class="icon_mail_w"><a href="" title="<fmt:message key='common.button.email'/>"></a></span>

@@ -1,6 +1,8 @@
+<%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="java.util.Locale"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <script type="text/javascript">
 	var currentUser = {
 		locale : "<%=java.util.Locale.getDefault().getLanguage()%>"
@@ -68,9 +70,11 @@
 </html>
 <%
 	String type = (String)request.getAttribute("type");
+	if(SmartUtil.isBlankObject(type)) type ="login";
 %>
 <script type="text/javascript">
 $(function() {
+	
 	<%
 	if(type.equals("failedLogin")) {
 	%>
@@ -82,10 +86,7 @@ $(function() {
 	<%
 	} else if(type.equals("expiredSession")) {
 	%>
-		if(top.document.location.href === "login.sw")
-			smartPop.showInfo(smartPop.WARN, smartMessage.get('sessionTimeouted'));
-		else
-			top.document.location.href = "login.sw";			
+		smartPop.showInfo(smartPop.WARN, smartMessage.get('sessionTimeouted'));
 	<%
 	}
 	%>

@@ -52,6 +52,10 @@ select, input, textarea {
 	color:#868686;
 }
 
+textarea{
+	overflow-y:hidden;
+}
+
 /* 
 input[type="text"]:focus, textarea:focus {
 	border: 1.5px solid #7dc4ff;
@@ -149,6 +153,7 @@ mark, rp, rt, ruby, summary, time {
 .mr15 {margin-right: 15px !important}
 .mr20 {margin-right: 20px !important}
 
+.ml-1 {margin-left:-1px !important}
 .ml2 {margin-left:2px !important}
 .ml3 {margin-left: 3px !important}
 .ml4 {margin-left:4px !important}
@@ -160,6 +165,7 @@ mark, rp, rt, ruby, summary, time {
 .ml70 {margin-left: 70px !important}
 
 .mt2 {margin-top:2px !important}
+.mt3 {margin-top:3px !important}
 .mt4 {margin-top: 4px !important}
 .mt5 {margin-top:5px !important}
 .mt6 {margin-top:6px !important}
@@ -235,3 +241,4 @@ mark, rp, rt, ruby, summary, time {
 .w99 {width:99% !important}
 
 .oh {overflow:hidden !important}
+.psr { position:relative !important}

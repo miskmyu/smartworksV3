@@ -49,6 +49,10 @@
 .header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:35px; padding:49px 25px 0}
 .header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -462px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
 .header_tit .tit_dep2 h2 { font-size:14px; font-weight:bold; color:#454545}
+/* Title - Course Admin */
+.tit_cus1 {background: url("../images/header_admin.png") no-repeat scroll 0 0; height:85px}
+.tit_cus2 {background: url("../images/header_admin.png") no-repeat scroll 0 -85px; height:85px}
+.tit_cus3 {background: url("../images/header_admin.png") no-repeat scroll 0 -170px; height:85px}
 
 /* Icon in GNB */
 .icon_alarm a {background: url("../images/icon.png") no-repeat scroll -267px -6px; width:28px; height:45px; display:block}
@@ -78,6 +82,8 @@
 .my_comment .comment_txt textarea { border:1px solid #cccccc}
 .my_comment textarea { height:100%; width:99.4%}
 .option { float:left; display:block; width:250px}
+.option .txt { font-size:11px; float:left; margin:7px 5px 0 0; color:#dddddd}
+.option .txt a {color:#868686}
 .attach_file {height: 28px; margin-top: 5px; overflow: hidden; float:right}
 .attach_file li {float:left}
 .fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%;}
@@ -101,12 +107,15 @@
 .btn_blu_l {background: url("../images/btn_blu_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
 .btn_blu_r {background: url("../images/btn_blu_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF}
 
+.btn_red_l {background: url("../images/btn_red_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
+.btn_red_r {background: url("../images/btn_red_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF}
+
 button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; border: 1px solid #A1A1A1; border-radius: 3px; color: #777777; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 4px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px; height:19px; line-height:12px}
 
 /* Icon */
-.icon_cs_mentorname {background: url("../images/icon.png") no-repeat scroll -166px -397px; padding:0 0 0 40px}
-.icon_cs_openday {background: url("../images/icon.png") no-repeat scroll -166px -442px; padding:0 0 0 40px}
-.icon_cs_menteenum {background: url("../images/icon.png") no-repeat scroll -166px -442px; padding:0 0 0 40px}
+.icon_cs_mentorname {background: url("../images/icon.png") no-repeat scroll -166px -393px; padding:0 0 0 40px}
+.icon_cs_openday {background: url("../images/icon.png") no-repeat scroll -166px -443px; padding:0 0 0 40px}
+.icon_cs_menteenum {background: url("../images/icon.png") no-repeat scroll -166px -502px; padding:0 0 0 40px}
 .icon_blu_down {background: url("../images/icon.png") no-repeat scroll 0 -237px; width:8px; height:8px !important; display:inline-block !important}
 .icon_facebook a {background: url("../images/icon.png") no-repeat scroll 0 -257px; width:22px; height:22px; display:block; font-size:0}
 .icon_twitter a {background: url("../images/icon.png") no-repeat scroll -27px -257px; width:22px; height:22px; display:block; font-size:0}
@@ -155,6 +164,11 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .icon_heart {background: url("../images/icon.png") no-repeat scroll -29px -199px; width:16px; height:15px; display:block}
 .icon_heart.current { background-position:-63px -199px}
 .icon_more {background: url("../images/icon.png") no-repeat scroll -166px -175px; padding-left:10px}
+.icon_bul_select {background: url("../images/icon.png") no-repeat scroll 0 -80px; width:6px; height:7px; display:inline-block}
+a .icon_bul_select:hover { background-position:0 -88px}
+
+/* Icon Aside */
+.icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
 .icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:70%}
 .icon_as_badge {background: url("../images/icon.png") no-repeat scroll -166px -237px; height:25px; padding-left:30px; width:70%}
 .icon_as_friend {background: url("../images/icon.png") no-repeat scroll -166px -276px; height:25px; padding-left:30px; width:70%}
@@ -162,8 +176,6 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 
 .icon_as_more a {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right}
 .icon_as_more a:hover { background-position:-166px -357px}
-/* Icon Aside */
-.icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
 
 /* Panel Section */
 .panel_section, .course_section, .content_section { overflow:hidden; clear:both}
@@ -185,7 +197,8 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 /* Panel Block */
 .panel_block { border:1px solid #cccccc; width:560px; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0}
 .panel_block dt { margin-bottom:5px; overflow:hidden}
-.panel_block .content {padding:10px; overflow:hidden} 
+.panel_block .content {padding:10px; overflow:hidden}
+.panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
@@ -261,23 +274,23 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .course_df h1 { font-size:14px}
 .course_df ul { display:block}
 .course_df li { float:left; width:105px; margin-right:10px;}
-.course_df li div { border-bottom:1px solid #cccccc; height:34px; padding-bottom:10px; margin-bottom:10px}
+.course_df li div { border-bottom:1px solid #cccccc; height:34px; padding-bottom:7px; margin-bottom:10px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
-.course_info { width:193px; float:right; margin-top:10px; line-height:19px}
-.course_info dt {background: url("../images/icon.png") no-repeat -166px -525px; padding:0 0 0 20px; font-weight:bold; margin-bottom:3px}
+.course_info { width:193px; float:right; margin-top:10px; line-height:18px}
+.course_info dt {background: url("../images/icon.png") no-repeat -166px -568px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
 .course_menu_d1 { float: left; margin:0 0 0 10px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
-.course_menu_d1 li { float:left; margin:0 5px; font-size:12px; color:#FFF; text-align:center; width:80px; line-height:29px}
-.course_menu_d1 li:hover { background-color:#FFF; color:#454545; font-weight:bold}
+.course_menu_d1 li { float:left; margin:0 5px; font-size:12px; color:#FFF; text-align:center; width:80px; line-height:25px; height:29px}
+.course_menu_d1 li:hover, .course_menu_d1 li.current { background-color:#FFF; color:#454545; font-weight:bold}
 .course_menu_d2 { background: url("../images/cus_df_subbg.jpg") repeat-x scroll 0 0; height:35px; line-height:34px}
 .course_menu_d2 .menu001 {left:; position:relative}
 .course_menu_d2 .menu002 {left:210px; position:relative}
 .course_menu_d2 .menu003 {left:; position:relative}
 .course_menu_d2 .menu004 {left:64px; position:relative}
 .course_menu_d2 li { float:left; padding:0 10px; background: url("../images/li_gab.gif") no-repeat 100% 48%}
-.course_menu_d2 li a:hover { font-weight:bold; color:#4e90b7}
+.course_menu_d2 li a:hover, .course_menu_d2 li.current a { font-weight:bold; color:#4e90b7}
 .course_menu_d2 li.end { background:none}
 
 /* Bottom Btn Space */
@@ -306,7 +319,9 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .w375 {width:375px !important}
 .w420 {width:420px !important}
 .w470 {width:470px !important}
+.w569 {width:569px !important}
 .w580 {width:580px !important}
+.w635 {width:635px !important}
 
 /* Bullet */
 .bullet_dot {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; color:#9a9a9a}

@@ -19,27 +19,22 @@
 	<%
 	if (works != null) {
 		for (SmartWorkInfo work : works) {
-			String iconType = null;
-			String workContext = null;
 			String targetContent = null;
 			switch (work.getType()) {
 			case SmartWork.TYPE_PROCESS:
-				iconType = "icon_pworks";
 				targetContent = "start_pwork.sw";
 				break;
 			case SmartWork.TYPE_INFORMATION:
-				iconType = "icon_iworks";
 				targetContent = "new_iwork.sw";
 				break;
 			case SmartWork.TYPE_SCHEDULE:
-				iconType = "icon_sworks";
 				targetContent = "plan_swork.sw";
 				break;
 			}
 	%>
 			<li>
 				<a href="<%=targetContent%>?workId=<%=work.getId()%>" workId="<%=work.getId() %>" class="js_select_work">
-					<span class="<%=iconType%>"></span>
+					<span class="<%=work.getIconClass()%>"></span>
 					<span class="nav_sub_area" style="text-decoration:none;"><%=work.getFullpathName()%></span>
 				</a>
 			</li>

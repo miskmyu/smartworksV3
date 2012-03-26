@@ -206,11 +206,13 @@ function receivedMessageOnChatId(message) {
 			+ date.getHours() + ":" + date.getMinutes();
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
 	var data = "<li><div class='noti_pic'><img src='" + senderInfo.minPicture
-			+ "' title='" + senderInfo.longName
+			+ "' class='profile_size_s' title='" + senderInfo.longName
 			+ "'></div><div class='noti_in'><div>" + chatMessage
 			+ "<span class='t_date' >" + currentTime
 			+ "</span></div></div></li>";
+	var chatList = target.find('ul');
 	target.find('ul').append(data);
+	target.attr({ scrollTop: target[0].scrollHeight });
 	var chattingBox = $('#'+chatId);
 	if(chattingBox.find('div.js_chatting_body').css('display') === "none"){
 		blinkingOn.push(chatId);
@@ -401,7 +403,7 @@ $(function() {
 			if (!isEmpty(message)) {
 				smartTalk.publishChatMessage(chatId, message);
 			}
-			input.removeAttr('value');
+			input.attr('value', '');
 			return false;
 		}
 	});
