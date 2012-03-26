@@ -22,6 +22,7 @@
 			<li>
 				<img src="<%=chatter.getMinPicture()%>" class="profile_size_s">
 				<a title="<%=chatter.getDepartment()%>"><%=chatter.getPosition()%> <%=chatter.getName()%></a>
+				<span class="chat_offline"></span>
 			</li>
 	<%
 		}

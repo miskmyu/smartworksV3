@@ -64,7 +64,7 @@
 				%>
 					<li>
 						<a href="" userId="<%=chatter.getId()%>">
-							<img src="<%=chatter.getMinPicture()%>" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
+							<img src="<%=chatter.getMinPicture()%>" class="profile_size_s" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
 							<span class="chat_offline"></span>
 						</a>
 					</li>
