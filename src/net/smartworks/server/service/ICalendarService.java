@@ -13,6 +13,8 @@ public interface ICalendarService {
 
 	public abstract EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, int days) throws Exception;
 
+	public abstract EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception;
+
 	public abstract CompanyCalendar[] getCompanyCalendars(LocalDate fromDate, LocalDate toDate) throws Exception;
 
 	public abstract CompanyCalendar[] getCompanyCalendars(LocalDate fromDate, int days) throws Exception;

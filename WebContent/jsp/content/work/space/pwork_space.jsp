@@ -28,6 +28,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	String cid = request.getParameter("cid");
+	String wid = request.getParameter("wid");
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
 	String taskInstId = request.getParameter("taskInstId");
@@ -47,7 +48,10 @@
 	TaskInstanceInfo[] taskHistories = instance.getTasks();
 
 	session.setAttribute("cid", cid);
-	session.removeAttribute("wid");
+	if(SmartUtil.isBlankObject(wid))
+		session.removeAttribute("wid");
+	else
+		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
 	
 %>
@@ -233,7 +237,7 @@
 		var formId = input.attr("formId");
 		var formMode = input.attr("formMode");
 		var instId = input.attr("taskInstId");
-		var formContent = pworkSpace.find('div.js_form_content');
+		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');

@@ -82,6 +82,7 @@ CREATE TABLE SWOrgGroup (
 	groupLeader	varchar(50),
 	groupType	varchar(1),
 	status	varchar(1),
+	picture varchar(100),
 	description	varchar(4000),
 	creator	varchar(50),
 	createdTime	datetime,
@@ -257,12 +258,14 @@ CREATE TABLE swopinion (
 	reftype int,
 	groupid varchar(50),
 	refid varchar(50),
-	writer varchar(30),
-	writtentime datetime,
-	title varchar(255),
-	opinion varchar(4000),
 	domainid varchar(400),
 	formid varchar(400),
+	title varchar(255),
+	opinion varchar(4000),
+	writer varchar(30),
+	writtentime datetime,
+	modifier varchar(30),
+	modifiedTime datetime,
 	primary key (id)	
 );
 
@@ -2234,4 +2237,14 @@ CREATE TABLE SwFolderFile (
 	fileId varchar(50) NOT NULL,
 	fileSeq int,
   	primary key(folderId, fileId)
+);
+
+-- ¡¡æ∆ø‰
+CREATE TABLE SwLike (
+	id varchar(50) NOT NULL,
+	refType int,
+	refId varchar(50),
+	creator varchar(50),
+	createdTime datetime,
+	primary key (id)
 );

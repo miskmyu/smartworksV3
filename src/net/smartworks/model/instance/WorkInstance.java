@@ -3,6 +3,7 @@ package net.smartworks.model.instance;
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
@@ -42,8 +43,14 @@ public class WorkInstance extends Instance {
 		if(getWork()==null) return "";
 		switch(getWork().getType()){
 		case SmartWork.TYPE_INFORMATION:
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_MOVIE:
 			if(getWork().getId().equals(SmartWork.ID_FILE_MANAGEMENT))
-				return WorkInstance.CONTROLLER_FILE_SPACE;
+				return WorkInstance.CONTROLLER_IWORK_SPACE;
 			else
 				return WorkInstance.CONTROLLER_IWORK_SPACE;
 		case SmartWork.TYPE_PROCESS:
@@ -60,8 +67,14 @@ public class WorkInstance extends Instance {
 		if(getWork()==null) return "";
 		switch(getWork().getType()){
 		case SmartWork.TYPE_INFORMATION:
+		case SocialWork.TYPE_BOARD:
+		case SocialWork.TYPE_EVENT:
+		case SocialWork.TYPE_FILE:
+		case SocialWork.TYPE_IMAGE:
+		case SocialWork.TYPE_MEMO:
+		case SocialWork.TYPE_MOVIE:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
-				return ISmartWorks.CONTEXT_PREFIX_FILE_SPACE + getId();
+				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getId();
 			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(getWork().getId()))
 				return ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + getId();
 			else if(SmartWork.ID_GROUP_MANAGEMENT.equals(getWork().getId()))

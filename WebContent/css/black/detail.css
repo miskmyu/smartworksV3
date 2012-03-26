@@ -36,8 +36,8 @@
 
 /* 공간 영역 */
 .space_section {padding-top: 8px;}
-.space_section .title {background: url("../../images/body_icon.png") no-repeat 0 -418px transparent; font-weight:bold; padding:5px 0 0 20px; border-bottom: 1px solid #C7C7C7}
-.space_section .title_off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent; font-weight:bold; padding:4px 0 1px 20px; border-bottom: 1px solid #C7C7C7}
+.space_section .title {background: url("../../images/body_icon.png") no-repeat 0 -418px transparent; font-weight:bold; padding:5px 0 0 20px; border-bottom: 1px solid #C7C7C7;background-color: gainsboro;}
+.space_section .title_off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent; font-weight:bold; padding:4px 0 1px 20px; border-bottom: 1px solid #C7C7C7;background-color: gainsboro;}
 .space_section .imag_area { margin:4px 0;}
 .picture_section { overflow:hidden}
 .picture_section li { float:left; margin:20px 10px 0 10px}
@@ -49,7 +49,7 @@
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px;}
-.reply_section {background-color:#eef2f6; padding:10px; width:600px;}
+.reply_section {background-color:#eef2f6; padding:10px; width:600px; margin-bottom:5px;}
 .replay {margin:10px 15px 0;} /* 상세페이지에 댓글,업무,메모 입력 영역*/
 .list_reply {margin:0;} /* 댓글 목록 */
 .reply_input {margin-top:10px;} /* 댓글 입력 영역 */

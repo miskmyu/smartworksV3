@@ -99,9 +99,11 @@ public class Board extends MisObject {
 			Node content = attrMap.getNamedItem(A_CONTENT);
 			Node fileGroupId = attrMap.getNamedItem(A_FILEGROUPID);
 			
-			if (content != null)
+			if(title != null)
 				obj.setTitle(title.getNodeValue());
+			if(content != null)
 				obj.setContent(content.getNodeValue());
+			if(fileGroupId != null)
 				obj.setFileGroupId(fileGroupId.getNodeValue());
 		}
 		//element값 설정

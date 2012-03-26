@@ -29,24 +29,10 @@
 	// 검색결과 값이 있으면 그 목록들을 만들어 보여줌 
 	if (works != null) {
 		for (SmartWorkInfo work : works) {
-			String iconType = null, workContext = null, targetContent = null;
-			if (work.getType() == SmartWork.TYPE_PROCESS) {
-				iconType = "icon_pworks";
-				workContext = ISmartWorks.CONTEXT_PREFIX_PWORK_LIST + work.getId();
-				targetContent = "pwork_list.sw";
-			} else if (work.getType() == SmartWork.TYPE_INFORMATION) {
-				iconType = "icon_iworks";
-				workContext = ISmartWorks.CONTEXT_PREFIX_IWORK_LIST + work.getId();
-				targetContent = "iwork_list.sw";
-			} else if (work.getType() == SmartWork.TYPE_SCHEDULE) {
-				iconType = "icon_sworks";
-				workContext = ISmartWorks.CONTEXT_PREFIX_SWORK_LIST + work.getId();
-				targetContent = "swork_list.sw";
-			}
 	%>
 			<li>
-				<a href="<%=targetContent%>?cid=<%=workContext%>" class="js_content">
-					<span class="<%=iconType%>"></span>
+				<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="js_content">
+					<span class="<%=work.getIconClass()%>"></span>
 					<span class="nav_sub_area"><%=work.getFullpathName()%></span>
 				</a>
 			</li>

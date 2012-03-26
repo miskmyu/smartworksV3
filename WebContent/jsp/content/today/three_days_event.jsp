@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
@@ -20,14 +21,20 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-
+	String wid = (String)session.getAttribute("wid");
+	
 	// 회사 달력에 있는 3일의 달력정보를 가져온다...
 	CompanyCalendar[] threeDaysCC = smartWorks.getCompanyCalendars(new LocalDate(), 3);
 	LocalDate today = threeDaysCC[0].getDate();
 	LocalDate tomorrow = threeDaysCC[1].getDate();
 	
+	EventInstanceInfo[] events = null;
+	if(SmartUtil.isBlankObject(wid))
 	// 나에 대한 이벤트들을 오늘부터 10일간을 가져온다...
-	EventInstanceInfo[] events = smartWorks.getMyEventInstances(new LocalDate(), 10);
+		events = smartWorks.getMyEventInstances(new LocalDate(), 10);
+	else
+		events = smartWorks.getCommunityEventInstances(new LocalDate(), 10, wid);
+	
 %>
 
 	<!-- 이벤트,공지 포틀릿 -->	
@@ -171,31 +178,31 @@
 														if (!owner.getId().equals(cUser.getId())) {
 														%> 
 															<span class="t_name"><a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><%=owner.getLongName()%></a></span>
-															<span class="arr">▶</span> 
 														<%
 				 										}
 				 										%> 
 				 										<%
 				 										if (!workSpace.getId().equals(owner.getId())) {
 				 										%> 
+															<span class="arr">▶</span> 
 				 											<span class="<%=workSpace.getIconClass()%>"><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><%=workSpace.getName()%></a></span> 
 				 										<%
 				 										}
 				 										%>
-				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>
+				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>
 														<%if(event.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=event.getSubInstanceCount() %></b>]</font><%} %>
 														<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
 													</li>
 													<%
 													}
-													if(cnt==0 && !hasTodayEvent || cnt==1 && !hasTomorrowEvent || cnt==2 && !hasAfterEvent){
-													%>
-														<li><fmt:message key="common.message.no_event"/></li>
-											<%
-													}
 												}
 												// End 이벤트가 있으면 있는 만큼 돌면서 리스트를 만든다...
 											// 이벤트가 없으면 이벤트가 없습니다라고 표시한다..
+												if(cnt==0 && !hasTodayEvent || cnt==1 && !hasTomorrowEvent || cnt==2 && !hasAfterEvent){
+												%>
+													<li><fmt:message key="common.message.no_event"/></li>
+											<%
+												}
 											}else{
 											%>
 												<li><fmt:message key="common.message.no_event"/></li>
@@ -219,6 +226,7 @@
 		<!-- 오늘, 내일 그리고 모레이후 이벤트들을 나타내는 곳 -->
 
 		<div class="portlet_b" style="display: block;"></div>
+
 	</div>
 	
 	<div class="section_portlet">

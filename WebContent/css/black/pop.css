@@ -78,3 +78,11 @@ a .pop_icon_chat:hover { background-position:-151px -34px}
 a .pop_icon_mail:hover { background-position:-177px -34px}
 a .pop_icon_message:hover { background-position:-202px -34px}
 
+/* Button */
+.btn {background-color:#666666; float:right; height:22px; position:absolute;}
+.txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
+			 float:left; height:22px; width:5px;}
+.txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
+.txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
+    		float:left; height:22px; width:5px;}

@@ -91,18 +91,7 @@ $(function() {
 		}
 	});
 
-	$('.js_content_iwork_space').swnavi({
-		history : true,
-		before : function(e){
-			smartPop.progressCenter();
-		},
-		target : 'content',
-		after : function(e){
-			smartPop.closeProgress();																
-		}
-	});
-
-	$('.js_content_pwork_space').swnavi({
+	$('.js_content_work_space').swnavi({
 		history : true,
 		before : function(e){
 			smartPop.progressCenter();

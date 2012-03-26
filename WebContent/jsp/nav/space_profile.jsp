@@ -62,29 +62,39 @@
 	if (thisGroup != null) {
 		String target = thisGroup.getSpaceController() + "?cid=" + thisGroup.getSpaceContextId() + "&wid=" + thisGroup.getId(); 
 	%>
-		<li><a href="<%=target %>"><img class="profile_size_66" src="<%=thisGroup.getOrgPicture()%>"></a></li>
-		<li><a href="<%=target %>"><b><%=thisGroup.getName()%></b><br /> <%=thisGroup.getDesc()%><br />
-			<fmt:message key="group.role.leader" /> : <%=thisGroup.getLeader().getLongName()%><br />
-			<fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%><br />
-			<fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></a>
+		<li>
+			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisGroup.getOrgPicture()%>"></a>
+		</li>
+		<li>
+			<div><b><%=thisGroup.getName()%></b></div>
+			<div><fmt:message key="group.role.leader" /> : <%=thisGroup.getLeader().getLongName()%></div>
+			<div><fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%></div>
+			<div><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
 		</li>
 	<%
 	// 부서인경우....
 	} else if (thisDepartment != null) {
 		String target = thisDepartment.getSpaceController() + "?cid=" + thisDepartment.getSpaceContextId() + "&wid=" + thisDepartment.getId(); 
 	%>
-		<li><a href="<%=target %>"><img class="profile_size_66" src="<%=thisDepartment.getOrgPicture()%>"></a></li>
-		<li><a href="<%=target %>"><%=thisDepartment.getName()%><br /> <b><%=thisDepartment.getDesc()%></b><br />
-			<fmt:message key="department.role.head" /> : <%=thisDepartment.getHead() == null ? "" : thisDepartment.getHead().getLongName()%><br /></a>
+		<li>
+			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisDepartment.getOrgPicture()%>"></a>
+		</li>
+		<li>
+			<div><b><%=thisDepartment.getName()%></b></div>
+			<div><fmt:message key="department.role.head" /> : <%=thisDepartment.getHead() == null ? "" : thisDepartment.getHead().getLongName()%></div>
 		</li>
 	<%
 	// 사용자인 경우....
 	} else if (thisUser != null) {
 		String target = thisUser.getSpaceController() + "?cid=" + thisUser.getSpaceContextId() + "&wid=" + thisUser.getId(); 
 	%>
-		<li><a href="<%=target %>"><img class="profile_size_66" src="<%=thisUser.getOrgPicture()%>"></a></li>
-		<li><a href="<%=target %>"><%=thisUser.getPosition()%><br /> <b><%=thisUser.getName()%></b><br />
-			<%=thisUser.getDepartment()%><br /></a>
+		<li>
+			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisUser.getOrgPicture()%>"></a>
+		</li>
+		<li>
+			<div><%=thisUser.getPosition()%></div>
+			<div><b><%=thisUser.getName()%></b></div>
+			<div><%=thisUser.getDepartment()%></div>
 		</li>
 	<%
 	}

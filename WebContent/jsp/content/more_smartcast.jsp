@@ -42,7 +42,7 @@
 		session.setAttribute("taskHistories", moreTasks);
 %>
 		<!-- 컨텐츠 -->
-		<div class="contents_space">			
+		<div class="space_section contents_space">			
 			<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
 		</div>
 	<%

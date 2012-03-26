@@ -168,7 +168,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -364px transparent; display: inline-block; padding:0 0 0 12px}
 .icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 22px; font-weight:bold}
 /* new Icon added by ysjung */
-.icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 10px transparent;display:inline-block;height:20px;width:30px;}
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 10px transparent;display:inline-block;height:20px;width:30px;vertical-align:bottom;}
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
@@ -263,9 +263,6 @@ li.fvrt_item:hover .check_option {display:block}
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fffccd; cursor:pointer;}
 
-li.sub_instance_list .comment_box {display:none;}
-li.sub_instance_list:hover .comment_box {display:block}
-
 li.sub_instance_list > div.det_title {}
 li.sub_instance_list > div.det_title:hover {background-color:#fffccd; cursor:pointer;}
 
@@ -278,17 +275,26 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .nav_sub_area {display: inline;}
 
 /* 나의 커뮤니티, 나의 업무, 메일, 커뮤너티멤버 Hover */
-#all_works li, #my_works li, #my_communities li, #my_mail li, #community_members li, #m_setting li {position:relative;}
+#all_works li, #my_works li, #my_communities li, #community_departments li, #my_mail li, #m_setting li {position:relative;}
 
-#all_works li a, #my_works li a, #my_communities li a, #my_mail li a, #community_members li a {padding:4px 0 4px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
+#all_works li a, #my_works li a, #my_communities li a, #community_departments li a, #my_mail li a {padding:4px 0 4px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 #m_setting li a {padding:4px 0 4px 20px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 
-#all_works li a:hover, #my_works li a:hover, #my_communities li a:hover, #my_mail li a:hover, #community_members li a:hover  {display:block; background-color:#4e4e4e;}
+#all_works li a:hover, #my_works li a:hover, #my_communities li a:hover, #community_departments li a:hover, #my_mail li a:hover{display:block; background-color:#4e4e4e;}
 #m_setting li a:hover {display:block; background-color:#6b6b6b;}
 
-#all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area,
-#my_mail .nav_sub_area,#community_members .nav_sub_area, #m_setting .nav_sub_area {
-	display: inline; float: left; position: relative; width: 180px;
+#all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #community_departments .nav_sub_area,
+#my_mail .nav_sub_area, #m_setting .nav_sub_area {
+	display: inline; float: left; position: relative; width: 180px; margin-top: 2px;
+}
+
+#community_members {
+	display: inline-block;
+	padding: 4px 1px;
+	margin-bottom: -10px;
+}
+#community_members .icon_pe {
+	padding: 1px;
 }
 
 #all_works li .menu_2dep li a, #my_works li .menu_2dep li a, #m_setting li .menu_2dep li a {padding:2px 0 2px 24px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
@@ -447,7 +453,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .gray_style td { background-color:#FFF; border-bottom:none}
 
 /*라운드 포틀릿*/
-.section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; margin-bottom:10px; position:relative; width:100%; z-index:30;}
+.section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; position:relative; width:100%; z-index:30;}
 .section_portlet ul {height:100%;}
 	
 .tab_portlet {
@@ -524,7 +530,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 #notice {clear:both; margin:0 30px 5px 5px; padding-top:10px;}
 #notice li {border-bottom: 1px dashed #DCDFE0; vertical-align:middle; padding:5px 0; clear:both;}
 
-.noti_pic {float:left; margin-right: 5px;}
+.noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:25px; line-height: 16px;}
 .noti_in_s { margin-left:25px; line-height: 16px;}
@@ -658,6 +664,8 @@ td.form_col .btn_x {display:none;}
 .t_name {color:#23579e; position: relative;}
 .t_woname {color:#23579e; font-weight:bold;}
 .t_size11 {font-size:11px}
+.t_action {color:#23579e; font-size:10px; text-decoration:underline;}
+.t_action_disabled {color:#454545 !important; text-decoration:none !important;}
 .t_date, .t_text_s11, .t_s11,
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important;}
 .t_white {font-size:12px; font-weight:normal;}
@@ -673,6 +681,7 @@ td.form_col .btn_x {display:none;}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%;}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%;}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px;}
+.dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px;}
 .line_width {padding:0 10px;}
 
 

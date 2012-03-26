@@ -60,7 +60,6 @@ import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SmartTest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -229,6 +228,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception {
+		return calendarService.getCommunityEventInstances(fromDate, days, workSpaceId);
+	}
+
+	@Override
 	public EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, LocalDate toDate) throws Exception {
 		return calendarService.getMyEventInstances(fromDate, toDate);
 	}
@@ -256,6 +260,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
 		return instanceService.getMyRecentBoardInstances();
+	}
+
+	@Override
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String workSpaceId) throws Exception {
+		return instanceService.getCommunityRecentBoardInstances(workSpaceId);
 	}
 
 	@Override
@@ -850,8 +859,28 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public void updateCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.updateCommentOnWork(requestBody, request);
+	}
+
+	@Override
+	public void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.updateCommentOnWork(requestBody, request);
+	}
+
+	@Override
 	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.addCommentOnInstance(requestBody, request);
+	}
+
+	@Override
+	public void updateCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.updateCommentOnInstance(requestBody, request);
+	}
+
+	@Override
+	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeCommentOnInstance(requestBody, request);
 	}
 	
 }

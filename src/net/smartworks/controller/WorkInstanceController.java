@@ -158,7 +158,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 
 	@RequestMapping("/sub_instances_in_instance")
 	public ModelAndView subInstancesInInstance(HttpServletRequest request, HttpServletResponse response) {
-
+		request.getSession().setAttribute("subComments", null);
 		return SmartUtil.returnMnv(request, "jsp/content/work/list/sub_instances_in_instance.jsp", "");
 	}
 
@@ -351,10 +351,38 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return null;
 	}
 
+	@RequestMapping(value = "/update_comment_on_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateCommentOnWork(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/remove_comment_on_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> removeCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentOnWork(requestBody, request);
+		return null;
+	}
+
 	@RequestMapping(value = "/add_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.addCommentOnInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/update_comment_on_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateCommentOnInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/remove_comment_on_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> removeCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentOnInstance(requestBody, request);
 		return null;
 	}
 
@@ -375,48 +403,34 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			String ownerId;
 			String ownerName;
 			String ownerPicture;
+			String workSpaceId;
 			
 			public String getId() {
 				return id;
 			}
-			public void setId(String id) {
-				this.id = id;
-			}
 			public String getName() {
 				return name;
-			}
-			public void setName(String name) {
-				this.name = name;
 			}
 			public String getStart() {
 				return start;
 			}
-			public void setStart(String start) {
-				this.start = start;
-			}
 			public String getEnd() {
 				return end;
-			}
-			public void setEnd(String end) {
-				this.end = end;
 			}
 			public String getOwnerId() {
 				return ownerId;
 			}
-			public void setOwnerId(String ownerId) {
-				this.ownerId = ownerId;
-			}
 			public String getOwnerName() {
 				return ownerName;
-			}
-			public void setOwnerName(String ownerName) {
-				this.ownerName = ownerName;
 			}
 			public String getOwnerPicture() {
 				return ownerPicture;
 			}
-			public void setOwnerPicture(String ownerPicture) {
-				this.ownerPicture = ownerPicture;
+			public String getWorkSpaceId() {
+				return workSpaceId;
+			}
+			public String getWorkId() {
+				return SmartWork.ID_EVENT_MANAGEMENT;
 			}
 			public EventInfo(){
 			}
@@ -433,6 +447,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			event.ownerId = eventInstance.getOwner().getId();
 			event.ownerName = eventInstance.getOwner().getLongName();
 			event.ownerPicture = eventInstance.getOwner().getMinPicture();
+			event.workSpaceId = eventInstance.getWorkSpace().getId();
 			events[i] = event;
 		}
 		Map<String, Object> map = new HashMap<String, Object>();

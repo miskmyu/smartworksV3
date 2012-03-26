@@ -2,6 +2,7 @@ package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
@@ -54,6 +56,7 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.MappingService;
+import net.smartworks.server.engine.common.model.MisObjectCond;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -96,6 +99,9 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormat;
 import net.smartworks.server.engine.infowork.form.model.SwfMapping;
 import net.smartworks.server.engine.infowork.form.model.SwfMappings;
 import net.smartworks.server.engine.infowork.form.model.SwfOperand;
+import net.smartworks.server.engine.opinion.manager.IOpinionManager;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
@@ -163,6 +169,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	private static IFdrManager getFdrManager() {
 		return SwManagerFactory.getInstance().getFdrManager();
 	}
+	private static IOpinionManager getOpinionManager() {
+		return SwManagerFactory.getInstance().getOpinionManager();
+	}
 
 	private ICommunityService communityService;
 	private ICalendarService calendarService;
@@ -190,6 +199,122 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
 
+		try{
+			String workId = SmartWork.ID_BOARD_MANAGEMENT;
+	
+			User user = SmartUtil.getCurrentUser();
+	
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setCompanyId(user.getCompanyId());
+	
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setCompanyId(user.getCompanyId());
+			swfFormCond.setPackageId(workId);
+	
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+	
+			if(swfForms == null)
+				return null;
+	
+			swdDomainCond.setFormId(swfForms[0].getId());
+	
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+	
+			if(swdDomain == null)
+				return  null;
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(user.getCompanyId());
+			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setDomainId(swdDomain.getObjId());
+	
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(5);
+	
+			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
+	
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+	
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+	
+			BoardInstanceInfo[] boardInstanceInfos = null;
+
+			String subCtgId = swdRecordExtends[0].getSubCtgId();
+			String subCtgName = swdRecordExtends[0].getSubCtg();
+			String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			String parentCtgName = swdRecordExtends[0].getParentCtg();
+			String formId = swdDomain.getFormId();
+			String formName = swdDomain.getFormName();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				int swdRecordsLength = swdRecords.length;
+				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
+				for(int i=0; i < swdRecordsLength; i++) {
+					SwdRecord swdRecord = swdRecords[i];
+					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
+					boardInstanceInfo.setId(swdRecord.getRecordId());
+					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+					int type = WorkInstance.TYPE_INFORMATION;
+					boardInstanceInfo.setType(type);
+					boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					String workSpaceId = swdRecord.getWorkSpaceId();
+					if(workSpaceId == null)
+						workSpaceId = user.getId();
+
+					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+
+					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(subCtgId))
+						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+
+					boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					if(!CommonUtil.isEmpty(swdDataFields)) {
+						int swdDataFieldsLength = swdDataFields.length;
+						for(int j=0; j<swdDataFieldsLength; j++) {
+							SwdDataField swdDataField = swdDataFields[j];
+							String value = swdDataField.getValue();
+							if(swdDataField.getId().equals("0")) {
+								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+							} else if(swdDataField.getId().equals("1")) {
+								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+							}
+						}
+					}
+					boardInstanceInfos[i] = boardInstanceInfo;
+				}
+			}
+			return boardInstanceInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required
+		}
+	}
+
+	@Override
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
+
+
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+		// MODIFICATION REQUIRED BY WORK SPACE ID		
+				
 		try{
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
 	
@@ -1593,11 +1718,10 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public void removeInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-
 		try{
 			String workId = (String)requestBody.get("workId");
 			String instanceId = (String)requestBody.get("instanceId");
-	
+
 			User user = SmartUtil.getCurrentUser();
 			SwfFormCond swfFormCond = new SwfFormCond();
 			swfFormCond.setCompanyId(user.getCompanyId());
@@ -1620,8 +1744,23 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-
 		try{
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
+
+			String workId = (String)requestBody.get("workId");
+			String comment = (String)requestBody.get("comment");
+			int refType = 6;
+
+			Opinion opinion = new Opinion();
+			opinion.setRefType(refType);
+			opinion.setRefId(workId);
+			opinion.setOpinion(comment);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1630,13 +1769,138 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public void updateCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
 
+			String commentId = (String)requestBody.get("commentId");
+			String comment = (String)requestBody.get("comment");
+
+			Opinion opinion = new Opinion();
+			opinion.setObjId(commentId);
+			opinion.setOpinion(comment);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
+
+			String commentId = (String)requestBody.get("commentId");
+
+			Opinion opinion = new Opinion();
+			opinion.setObjId(commentId);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
-		}catch (Exception e){
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
+
+			int workType = (Integer)requestBody.get("workType");
+			String workInstanceId = (String)requestBody.get("workInstanceId");
+			String comment = (String)requestBody.get("comment");
+			int refType = 0;
+			String refDomainId = null; 
+			String refFormId = null;
+			TskTaskCond tskCond = new TskTaskCond();
+			TskTask[] tskTasks = null;
+			TskTask tskTask = null;
+			if(!CommonUtil.isEmpty(workInstanceId)) {
+				if(workType == SmartWork.TYPE_INFORMATION || workType == SocialWork.TYPE_MEMO || workType == SocialWork.TYPE_EVENT || workType == SocialWork.TYPE_BOARD
+						 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_MOVIE) {
+					tskCond.setExtendedProperties(new Property[] {new Property("recordId", workInstanceId)});
+					tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_MODIFICATIONDATE, false)});
+					tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+					tskTask = tskTasks[0];
+					String def = tskTask.getDef();
+					if (!CommonUtil.isEmpty(def)) {
+						String[] defArray = StringUtils.tokenizeToStringArray(def, "|");	
+						refDomainId = defArray[0];
+					}
+					refFormId = tskTask.getForm();
+					refType = 4;
+				} else if(workType == SmartWork.TYPE_PROCESS) {
+					refType = 2;
+				}
+			}
+
+			Opinion opinion = new Opinion();
+			opinion.setRefType(refType);
+			opinion.setRefId(workInstanceId);
+			opinion.setRefDomainId(refDomainId);
+			opinion.setRefFormId(refFormId);
+			opinion.setOpinion(comment);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
+		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public void updateCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
+	
+			String commentId = (String)requestBody.get("commentId");
+			String comment = (String)requestBody.get("comment");
+
+			Opinion opinion = new Opinion();
+			opinion.setObjId(commentId);
+			opinion.setOpinion(comment);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			if(CommonUtil.isEmpty(userId))
+				return;
+
+			String commentId = (String)requestBody.get("commentId");
+
+			Opinion opinion = new Opinion();
+			opinion.setObjId(commentId);
+
+			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -2171,15 +2435,48 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public CommentInstanceInfo[] getRecentCommentsInWorkManual(String workId, int length) throws Exception {
 		try{
-			if(length==WorkInstance.FETCH_ALL_SUB_INSTANCE)
-				return SmartTest.getAllCommentInstances();
-			else
-				return SmartTest.getCommentInstances();
+			User cuser = SmartUtil.getCurrentUser();
+			String userId = null;
+			if (cuser != null)
+				userId = cuser.getId();
+
+			CommentInstanceInfo[] commentInstanceInfos = null;
+			List<CommentInstanceInfo> commentInstanceInfosList = new ArrayList<CommentInstanceInfo>();
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setRefId(workId);
+			opinionCond.setPageSize(length);
+			opinionCond.setOrders(new Order[]{new Order(MisObjectCond.A_CREATIONDATE, false)});
+			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+			if(!CommonUtil.isEmpty(opinions)) {
+				int opinionLength = opinions.length;
+				for(int i=0; i<opinionLength; i++) {
+					Opinion opinion = opinions[i];
+					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+					commentInstanceInfo.setId(opinion.getObjId());
+					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+					commentInstanceInfo.setComment(opinion.getOpinion());
+					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+					commentInstanceInfosList.add(commentInstanceInfo);
+				}
+			}
+			if(commentInstanceInfosList.size() > 0) {
+				commentInstanceInfos = new CommentInstanceInfo[commentInstanceInfosList.size()];
+				commentInstanceInfosList.toArray(commentInstanceInfos);
+			}
+			return commentInstanceInfos;
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
-			// Exception Handling Required			
+			// Exception Handling Required
 		}
 	}
 
@@ -2195,32 +2492,71 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setTskWorkSpaceId(instanceId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
 			cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
-			cond.setPageSize(length);
+			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+				cond.setPageSize(length);
 			TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
-			if (tasks == null || tasks.length == 0)
-				return null;
-			
-			List<InstanceInfo> InstanceInfoList = new ArrayList<InstanceInfo>();
+
+			InstanceInfo[] subInstancesInInstances = null;
+			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
 			List<String> prcInstIdList = new ArrayList<String>();
-			for (int i = 0; i < tasks.length; i++) {
-				TaskWork task = tasks[i];
-				if (InstanceInfoList.size() == 10)
-					break;
-				if (prcInstIdList.contains(task.getTskPrcInstId()))
-					continue;
-				prcInstIdList.add(task.getTskPrcInstId());
-				InstanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+			if(!CommonUtil.isEmpty(tasks)) {
+				for (int i = 0; i < tasks.length; i++) {
+					TaskWork task = tasks[i];
+					if (instanceInfoList.size() == 10)
+						break;
+					if (prcInstIdList.contains(task.getTskPrcInstId()))
+						continue;
+					prcInstIdList.add(task.getTskPrcInstId());
+					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+				}
 			}
-			InstanceInfo[] subInstancesInInstance = new InstanceInfo[InstanceInfoList.size()];
-			InstanceInfoList.toArray(subInstancesInInstance);
 
-			return subInstancesInInstance;
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setRefId(instanceId);
+			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+				opinionCond.setPageSize(length);
+			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+			if(!CommonUtil.isEmpty(opinions)) {
+				int opinionLength = opinions.length;
+				for(int i=0; i<opinionLength; i++) {
+					Opinion opinion = opinions[i];
+					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+					commentInstanceInfo.setId(opinion.getObjId());
+					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+					commentInstanceInfo.setComment(opinion.getOpinion());
+					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
+					instanceInfoList.add(commentInstanceInfo);
+				}
+			}
+			if(instanceInfoList.size() > 0) {
+				Collections.sort(instanceInfoList);
+				subInstancesInInstances = new InstanceInfo[instanceInfoList.size()];
+				instanceInfoList.toArray(subInstancesInInstances);
+			}
 
-			/*if(length==WorkInstance.FETCH_ALL_SUB_INSTANCE) {
-				return SmartTest.getAllInstances();
-			} else {
-				return SmartTest.getInstances();
-			}*/
+			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT) {
+				if(!CommonUtil.isEmpty(subInstancesInInstances)) {
+					if(subInstancesInInstances.length > length) {
+						List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
+						for(int i=0; i<length; i++) {
+							InstanceInfo instanceInfo = subInstancesInInstances[i];
+							resultInstanceInfoList.add(instanceInfo);
+						}
+						subInstancesInInstances = new InstanceInfo[resultInstanceInfoList.size()];
+						resultInstanceInfoList.toArray(subInstancesInInstances);
+					}
+				}
+			}
+
+			return subInstancesInInstances;
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -4049,26 +4385,65 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setTskWorkSpaceId(spaceId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
 			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
-			cond.setPageNo(0);
 			cond.setPageSize(maxSize);
 			cond.setTskExecuteDateTo(new LocalDate(fromDate.getGMTDate()));
 			TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
-			if (tasks == null || tasks.length == 0)
-				return null;
-			
-			List<InstanceInfo> InstanceInfoList = new ArrayList<InstanceInfo>();
+			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
 			List<String> prcInstIdList = new ArrayList<String>();
-			for (int i = 0; i < tasks.length; i++) {
-				TaskWork task = tasks[i];
-				if (InstanceInfoList.size() == 10)
-					break;
-				if (prcInstIdList.contains(task.getTskPrcInstId()))
-					continue;
-				prcInstIdList.add(task.getTskPrcInstId());
-				InstanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+			if(!CommonUtil.isEmpty(tasks)) {
+				for (int i = 0; i < tasks.length; i++) {
+					TaskWork task = tasks[i];
+					if (instanceInfoList.size() == 10)
+						break;
+					if (prcInstIdList.contains(task.getTskPrcInstId()))
+						continue;
+					prcInstIdList.add(task.getTskPrcInstId());
+					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+				}
 			}
-			InstanceInfo[] spaceInstances = new InstanceInfo[InstanceInfoList.size()];
-			InstanceInfoList.toArray(spaceInstances);
+
+			InstanceInfo[] spaceInstances = null;
+
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setRefId(spaceId);
+			opinionCond.setPageSize(maxSize);
+			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+			if(!CommonUtil.isEmpty(opinions)) {
+				int opinionLength = opinions.length;
+				for(int i=0; i<opinionLength; i++) {
+					Opinion opinion = opinions[i];
+					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+					commentInstanceInfo.setId(opinion.getObjId());
+					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+					commentInstanceInfo.setComment(opinion.getOpinion());
+					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+					instanceInfoList.add(commentInstanceInfo);
+				}
+			}
+			if(instanceInfoList.size() > 0) {
+				Collections.sort(instanceInfoList, Collections.reverseOrder());
+				spaceInstances = new InstanceInfo[instanceInfoList.size()];
+				instanceInfoList.toArray(spaceInstances);
+			}
+
+			if(!CommonUtil.isEmpty(spaceInstances)) {
+				if(spaceInstances.length > maxSize) {
+					List<InstanceInfo> resultInstanceInfoList = new ArrayList<InstanceInfo>();
+					for(int i=0; i<maxSize; i++) {
+						InstanceInfo instanceInfo = spaceInstances[i];
+						resultInstanceInfoList.add(instanceInfo);
+					}
+					spaceInstances = new InstanceInfo[resultInstanceInfoList.size()];
+					resultInstanceInfoList.toArray(spaceInstances);
+				}
+			}
 
 			return spaceInstances;
 		}catch (Exception e){
@@ -4160,23 +4535,26 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setOrders(new Order[]{new Order("tskcreatedate", false)});
 			
 			TaskWork[] tasks = getWlmManager().getCastWorkList(userId, cond);
-			
-			TaskInstanceInfo[] taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
-			
-			if (totalSize > maxSize) {
-				TaskInstanceInfo[] tempTaskInfos = new TaskInstanceInfo[taskInfos.length + 1];
-				for (int i = 0; i < taskInfos.length + 1; i++) {
-					if (i == taskInfos.length) {
-						TaskInstanceInfo moreInstance = new TaskInstanceInfo();
-						moreInstance.setType(-21);
-						tempTaskInfos[i] = moreInstance;
-					} else {
-						tempTaskInfos[i] = taskInfos[i];
+			TaskInstanceInfo[] taskInfos = null;
+			if(!CommonUtil.isEmpty(tasks))
+				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
+
+			if(!CommonUtil.isEmpty(taskInfos)) {
+				if (totalSize > maxSize) {
+					TaskInstanceInfo[] tempTaskInfos = new TaskInstanceInfo[taskInfos.length + 1];
+					for (int i = 0; i < taskInfos.length + 1; i++) {
+						if (i == taskInfos.length) {
+							TaskInstanceInfo moreInstance = new TaskInstanceInfo();
+							moreInstance.setType(-21);
+							tempTaskInfos[i] = moreInstance;
+						} else {
+							tempTaskInfos[i] = taskInfos[i];
+						}
 					}
+					taskInfos = tempTaskInfos;
 				}
-				taskInfos = tempTaskInfos;
 			}
-			
+
 			return taskInfos;
 			//return ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
 			//return SmartTest.getTaskInstancesByDate(null, null, null, null, maxSize);

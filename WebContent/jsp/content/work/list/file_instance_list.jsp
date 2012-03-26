@@ -36,29 +36,36 @@
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	int displayType = Integer.parseInt(request.getParameter("displayType"));
 	if(SmartUtil.isBlankObject(params)){
-		params = new RequestParams();
-		params.setPageSize(20);
-		params.setCurrentPage(1);
-		SearchFilter searchFilter = null;
-		switch(displayType){
-		case FileCategory.DISPLAY_BY_CATEGORY:
-			searchFilter = SearchFilter.getByFileCategoryIdFilter(FileCategory.ID_ALL_FILES);
-			break;
-		case FileCategory.DISPLAY_BY_WORK:
-			searchFilter = SearchFilter.getByWorkIdFilter(FileCategory.ID_ALL_FILES);
-			break;
-		case FileCategory.DISPLAY_BY_YEAR:
-			searchFilter = SearchFilter.getByCreatedDateFilter(FileCategory.ID_ALL_FILES);
-			break;
-		case FileCategory.DISPLAY_BY_OWNER:
-			searchFilter = SearchFilter.getByOwnerFilter(FileCategory.ID_ALL_FILES);
-			break;
-		case FileCategory.DISPLAY_BY_FILE_TYPE:
-			searchFilter = SearchFilter.getByFileTypeFilter(FileCategory.ID_ALL_FILES);
-			break;
+		String savedWorkId = (String)session.getAttribute("workId");
+		params = (RequestParams)session.getAttribute("requestParams");
+		if(!SmartWork.ID_FILE_MANAGEMENT.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+			SearchFilter searchFilter = null;
+			switch(displayType){
+			case FileCategory.DISPLAY_BY_CATEGORY:
+				searchFilter = SearchFilter.getByFileCategoryIdFilter(FileCategory.ID_ALL_FILES);
+				break;
+			case FileCategory.DISPLAY_BY_WORK:
+				searchFilter = SearchFilter.getByWorkIdFilter(FileCategory.ID_ALL_FILES);
+				break;
+			case FileCategory.DISPLAY_BY_YEAR:
+				searchFilter = SearchFilter.getByCreatedDateFilter(FileCategory.ID_ALL_FILES);
+				break;
+			case FileCategory.DISPLAY_BY_OWNER:
+				searchFilter = SearchFilter.getByOwnerFilter(FileCategory.ID_ALL_FILES);
+				break;
+			case FileCategory.DISPLAY_BY_FILE_TYPE:
+				searchFilter = SearchFilter.getByFileTypeFilter(FileCategory.ID_ALL_FILES);
+				break;
+			}
+			params.setSearchFilter(searchFilter);
 		}
-		params.setSearchFilter(searchFilter);
 	}
+	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", SmartWork.ID_FILE_MANAGEMENT);
+
 	User cUser = SmartUtil.getCurrentUser();
 	String cid = (String)session.getAttribute("cid");
 	String wid = (String)session.getAttribute("wid");
@@ -88,6 +95,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>						
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_FILE_SIZE%>"><fmt:message key='common.title.file_size'/>
@@ -96,6 +104,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>						
+				<span class="js_progress_span"></span>
 			</th>
 			<%
 			if(displayType==FileCategory.DISPLAY_ALL){
@@ -107,6 +116,7 @@
 							if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 						%>
 					</a>				
+					<span class="js_progress_span"></span>
 				</th>
 			<%
 			}
@@ -119,6 +129,7 @@
 							if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 						%>
 					</a>				
+					<span class="js_progress_span"></span>
 				</th>
 			<%
 			}
@@ -131,6 +142,7 @@
 							if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 						%>
 					</a>				
+					<span class="js_progress_span"></span>
 				</th>
 			<%
 			}
@@ -142,6 +154,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 				<%
@@ -182,7 +195,7 @@
 				long size = (SmartUtil.isBlankObject(fileSize)) ? 0 : Long.parseLong(fileSize);
 				fileSize = SmartUtil.getBytesAsString(size);
 			%>
-				<tr class="instance_list js_content_iwork_space" href="<%=target%>">
+				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
 					<td>
   						<span class="js_pop_files_detail" filesDetail="<%=fileInstance.getFilesHtml()%>"><%=fileName %></span>
@@ -219,7 +232,7 @@
 							<%
 							if(displayType!=FileCategory.DISPLAY_BY_OWNER){
 							%>
-								<div class="noti_pic js_content_pwork_space">
+								<div class="noti_pic js_content_work_space">
 									<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
 								</div>
 							<%
@@ -308,7 +321,7 @@
 <%
 if(instanceList == null || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 %>
-	<div><fmt:message key="common.message.no_instance"/></div>
+	<div class="tc"><fmt:message key="common.message.no_instance"/></div>
 
 <%
 }

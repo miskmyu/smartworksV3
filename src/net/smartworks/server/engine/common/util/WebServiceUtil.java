@@ -35,17 +35,17 @@ public class WebServiceUtil {
 		Log logger = LogFactory.getLog(WebServiceUtil.class);
 		if (logger.isInfoEnabled()) {
 			StringBuffer infoBuffer = new StringBuffer();
-			infoBuffer.append("Invoke WebService \n[ EndPointAddress : ").append(targetEndpointAddress).append(", Operation : ").append(operation).append(", \n Input : ");
+			infoBuffer.append("Invoke WebService \r\n[\r\n EndPointAddress : ").append(targetEndpointAddress).append(", Operation : ").append(operation).append(", \r\n Input : ");
 			if (inputParams != null) {
 				for (int i = 0; i < inputParams.length; i++) {
 					infoBuffer.append(inputParams[i]).append(", ");
 				}
 			}
-			infoBuffer.append(", \n Result : ");
+			infoBuffer.append(", \r\n Result : ");
 			for (int i = 0; i < returnValue.length; i++) {
 				infoBuffer.append(returnValue[i]).append(",");
 			}
-			infoBuffer.append("]" );
+			infoBuffer.append("\r\n]\r\n" );
 			logger.info(infoBuffer.toString());
 		}
 		return returnValue;

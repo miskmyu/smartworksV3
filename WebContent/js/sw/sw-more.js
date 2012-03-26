@@ -1,6 +1,9 @@
 
 	$('.js_more_list').live('click', function(e) {
 		var anchor = $(e.target);
+		if(!isEmpty(anchor.siblings('.js_progress_span').find('.js_progress_icon'))) 
+			return false;
+		smartPop.progressCont(anchor.siblings('.js_progress_span'));
 		var runningPage = anchor.parents('.js_my_running_instance_list_page');
 		var lastDate = runningPage.find('.js_more_instance_item:last').attr('dateValue');
 		var assignedOnly = runningPage.find('a.js_view_assigned_instances').hasClass('current');
@@ -23,9 +26,10 @@
 			success : function(data, status, jqXHR) {
 				console.log('data=', data, ", target=", runningPage.find('.js_instance_list_table'));
 				$(data).appendTo(runningPage.find('.js_instance_list_table'));
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
-				
+				smartPop.closeProgress();				
 			}
 		});
 	

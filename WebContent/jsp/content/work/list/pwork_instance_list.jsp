@@ -28,11 +28,6 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
-	if(SmartUtil.isBlankObject(params)){
-		params = new RequestParams();
-		params.setPageSize(20);
-		params.setCurrentPage(1);		
-	}
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
 	SmartTaskInfo[] tasks = work.getDiagram().getTasks();
@@ -47,6 +42,18 @@
 		startTask = tasks[0];
 	}
 	String workId = work.getId();
+	if(SmartUtil.isBlankObject(params)){
+		String savedWorkId = (String)session.getAttribute("workId");
+		params = (RequestParams)session.getAttribute("requestParams");
+		if(!workId.equals(savedWorkId) || SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+		}
+	}
+	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", workId);
+
 	InstanceInfoList instanceList = smartWorks.getPWorkInstanceList(workId, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -73,6 +80,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
@@ -87,6 +95,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>
+				<span class="js_progress_span"></span>
 			</th>				
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
@@ -95,6 +104,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
@@ -103,6 +113,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>						
+				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
@@ -157,7 +168,7 @@
 					statusTitle = "content.status.not_yet";
 				}
 			%>
-				<tr class="instance_list js_content_pwork_space" href="<%=target%>">
+				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<div>
@@ -213,6 +224,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
@@ -227,6 +239,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>
+				<span class="js_progress_span"></span>
 			</th>				
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
@@ -235,6 +248,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>				
+				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
@@ -243,6 +257,7 @@
 						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
 					%>
 				</a>						
+				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
@@ -265,7 +280,7 @@
 <%
 if(instanceList == null || work == null || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 %>
-	<div><fmt:message key="common.message.no_instance"/></div>
+	<div class="tc"><fmt:message key="common.message.no_instance"/></div>
 
 <%
 }

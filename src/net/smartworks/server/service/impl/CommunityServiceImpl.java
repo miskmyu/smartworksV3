@@ -134,7 +134,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
 			swoGroupMembers[0] = swoGroupMember;
 			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
-			swoGroupCond.setOrders(new Order[]{new Order("name", true)});
+			swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 			if(swoGroups != null) {
 				for(SwoGroup swoGroup : swoGroups) {
@@ -229,13 +229,13 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
 
-			if(users != null) {
-				SwoGroupMember swoGroupMember = new SwoGroupMember();
-				swoGroupMember.setUserId(txtGroupLeader);
-				swoGroupMember.setJoinType("I");
-				swoGroupMember.setJoinStatus("P");
-				swoGroupMember.setJoinDate(new LocalDate());
-				swoGroup.addGroupMember(swoGroupMember);
+			SwoGroupMember swoGroupMember = new SwoGroupMember();
+			swoGroupMember.setUserId(txtGroupLeader);
+			swoGroupMember.setJoinType("I");
+			swoGroupMember.setJoinStatus("P");
+			swoGroupMember.setJoinDate(new LocalDate());
+			swoGroup.addGroupMember(swoGroupMember);
+			if(!CommonUtil.isEmpty(users)) {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");

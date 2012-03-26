@@ -68,7 +68,10 @@
 				<!-- 진행중인 업무목록 및 더보기 버튼 //-->
 				<!-- 더보기 버튼 -->
 				<%if(runningCounts.getTotal() > 20){ %>
-					<div class="js_more_list"><a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a></div>
+					<div class="js_more_list">
+						<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
+						<span class="js_progress_span"></span>
+					</div>
 				<%} %>
 				<!-- 더보기 버튼 !!-->
 	

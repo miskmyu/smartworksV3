@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.CommentInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
@@ -48,7 +49,10 @@
 			if(workInstance.getType()<0){
 				String lastDateStr = (i>0) ? (new LocalDate(subInstances[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
-				<li class="t_nowork"><a href="" class="js_space_more_instance" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a></li>
+				<li class="t_nowork">
+					<a href="" class="js_space_more_instance" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+					<span class="js_progress_span"></span>
+				</li>
 	<%
 				break;
 			}
@@ -68,8 +72,10 @@
 			FileInstanceInfo file=null;
 			ImageInstanceInfo image=null;
 			MemoInstanceInfo memo=null;
+			CommentInstanceInfo comment=null;
+			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 	%>
-			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>" >
+			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>"  workType="<%=workType%>">
 				<%
 				switch(workInstance.getType()){
 				
@@ -80,7 +86,6 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
@@ -105,7 +110,6 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<div><%=event.getSubject() %></div>
@@ -125,7 +129,6 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %></div><%} %>
@@ -144,7 +147,6 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
@@ -163,7 +165,6 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<div><%=memo.getContent() %></div>
@@ -173,9 +174,29 @@
 						</div>
 					</div>
 				<%
-					break;
+				break;
+				// 태스크가 댓글인 경우...									
+				case Instance.TYPE_COMMENT:
+					comment = (CommentInstanceInfo)workInstance;
+			%>
+				<div class="det_title">
+					<div class="noti_pic">
+						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
+							<img src="<%=owner.getMidPicture()%>" class="profile_size_m">
+						</a>
+					</div>
+					<div class="noti_in">
+						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<div><%=comment.getComment() %>
+							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
+						</div>
+					</div>
+				</div>
+			<%
+				break;
 				default:
-				%>
+			%>
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
@@ -190,72 +211,79 @@
 					</div>
 				<%
 				}
-				%>		
-				<!-- 댓글 -->
-			   <div class="reply_point pos_reply"></div>
-			   <div class="reply_section">  
-			        <div class="list_reply">
-			        	<%
-			        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
-// TEST PURPOSE
-			        	//instance.setSubInstanceCount(21);
-// TEST PURPOSE
-			        	%>
-			            <ul class="js_comment_list">
-			            	<li class="js_comment_instance" style="display:none">
+	        	if(workInstance.getType() != Instance.TYPE_COMMENT) {
+		        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
+				%>
+					<div class="js_comments_box" <%if(instance.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+						<!-- 댓글 -->
+					   <div class="reply_point pos_reply_point"></div>
+					   <div class="reply_section pos_reply">  
+					        <div class="list_reply">
+					            <ul class="js_comment_list">
+					            	<li class="js_comment_instance" style="display:none">
+										<div class="noti_pic">
+											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" 
+													userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+												<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+											</a>
+										</div>
+										<div class="noti_in">
+											<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
+												<span class="t_name"><%=cUser.getLongName()%></span>
+											</a>
+											<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
+											<div class="js_comment_content"></div>
+										</div>
+					            	</li>
+					            	<%
+					            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+					            		session.setAttribute("subComments", null);
+					            	%>
+						            	<li>
+						            		<img class="repl_tinfo">
+					            			<a href="sub_instances_in_instance.sw?instanceId=<%=instance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
+					            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
+					            			</a>
+						            	</li>
+										<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+											<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
+											<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+										</jsp:include>
+									<%
+									} else {
+										session.setAttribute("subComments", instance.getSubInstances());
+									%>
+										<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+											<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
+											<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+										</jsp:include>
+									<%
+									}
+					            	%>
+								</ul>
+					        </div>
+					        
+					        <div class="reply_input comment_box js_return_on_comment" style="display:none">
 								<div class="noti_pic">
-									<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-										<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
-									</a>
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 								</div>
 								<div class="noti_in">
-									<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
-										<span class="t_name"><%=cUser.getLongName()%></span>
-									</a>
-									<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
-									<div class="js_comment_content"></div>
+									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
 								</div>
-			            	</li>
-			            	<%
-			            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-			            	%>
-				            	<li>
-				            		<img class="repl_tinfo">
-			            			<a href="sub_instances_in_instance.sw?instanceId=<%=instance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
-			            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=instance.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
-			            			</a>
-				            	</li>
-								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-									<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-									<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-								</jsp:include>
-							<%
-							} else {
-								session.setAttribute("subComments", instance.getSubInstances());
-							%>
-								<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
-									<jsp:param value="<%=instance.getId() %>" name="instanceId"/>
-									<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
-								</jsp:include>
-							<%
-							}
-			            	%>
-						</ul>
-			        </div>
-			        
-			        <div class="reply_input comment_box js_return_on_comment">
-						<div class="noti_pic">
-							<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-						</div>
-						<div class="noti_in">
-							<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
-						</div>
-			        </div>
-			    
-			    </div>
-			    <!-- 댓글 //-->
+					        </div>
+					    
+					    </div>
+					    <!-- 댓글 //-->
+				    </div>
+				    <div class="ml70 js_action_btns">
+				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+				    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+				    </div>
+				<%
+				}
+				%>
 			</li>
-	<%							
+	<%		
 		}
 	}
 	%>

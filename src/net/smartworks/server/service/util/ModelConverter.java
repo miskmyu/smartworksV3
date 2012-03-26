@@ -95,7 +95,6 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.folder.model.FdrFolder;
 import net.smartworks.server.engine.folder.model.FdrFolderCond;
-import net.smartworks.server.engine.folder.model.FdrFolderFile;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
@@ -107,6 +106,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.infowork.form.model.SwfFormat;
+import net.smartworks.server.engine.opinion.manager.IOpinionManager;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoGroup;
@@ -140,7 +141,7 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
-import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -198,12 +199,20 @@ public class ModelConverter {
 	private static IWorkListManager getWlmManager() {
 		return SwManagerFactory.getInstance().getWorkListManager();
 	}
+	private static IOpinionManager getOpinionManager() {
+		return SwManagerFactory.getInstance().getOpinionManager();
+	}
 
 	private static IWorkService workService;
+	private static IInstanceService instanceService;
 
 	@Autowired(required=true)
 	public void setWorkService(IWorkService workService) {
 		ModelConverter.workService = workService;
+	}
+	@Autowired(required=true)
+	public void setInstanceService(IInstanceService instanceService) {
+		ModelConverter.instanceService = instanceService;
 	}
 
 	private static PkgPackage getPkgPackageByPackageId(String packageId) throws Exception {
@@ -262,7 +271,6 @@ public class ModelConverter {
 		for (int i = 0; i < tasks.length; i++) {
 			TaskWork task = tasks[i];
 			TaskInstanceInfo taskInfo = new TaskInstanceInfo();
-			
 			taskInfo.setId(task.getTskObjId());
 			taskInfo.setSubject(task.getPrcTitle());
 			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
@@ -274,7 +282,7 @@ public class ModelConverter {
 			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 				taskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 			}
-			
+
 			SmartWorkInfo workInfo = new SmartWorkInfo();
 			workInfo.setId(task.getPackageId());
 			workInfo.setName(task.getPackageName());
@@ -487,11 +495,25 @@ public class ModelConverter {
 		/*TYPE_INFORMATION = 21;
 		TYPE_PROCESS = 22;
 		TYPE_SCHEDULE = 23;*/
-		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
-			workInfo.setType(SmartWork.TYPE_PROCESS);
-		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
-			workInfo.setType(SmartWork.TYPE_INFORMATION);
-		}
+/*		if(task.getTskRefType() != null) {
+			if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_BOARD))
+				workInfo.setType(SocialWork.TYPE_BOARD);
+			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_EVENT))
+				workInfo.setType(SocialWork.TYPE_EVENT);
+			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_FILE))
+				workInfo.setType(SocialWork.TYPE_FILE);
+			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_IMAGE))
+				workInfo.setType(SocialWork.TYPE_IMAGE);
+			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_MEMO))
+				workInfo.setType(SocialWork.TYPE_MEMO);
+			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_MOVIE))
+				workInfo.setType(SocialWork.TYPE_MOVIE);
+		} else {*/
+			if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON))
+				workInfo.setType(SmartWork.TYPE_PROCESS);
+			else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE))
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
+		//}
 		if (task.getParentCtgId() != null) {
 			workInfo.setMyCategory(new WorkCategoryInfo(task.getParentCtgId(), task.getParentCtgName()));
 			workInfo.setMyGroup(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
@@ -537,21 +559,19 @@ public class ModelConverter {
 			workInstanceInfo.setId(recordId);
 		}
 
-		TaskWorkCond cond = new TaskWorkCond();
-		String tskWorkSpaceId = task.getTskObjId();
+		String tskWorkSpaceId = task.getTskPrcInstId();
 		if(task.getTskType().equals(SwfFormModel.TYPE_SINGLE)) {
 			SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
 			tskWorkSpaceId = record.getRecordId();
 		}
-		cond.setTskWorkSpaceId(tskWorkSpaceId);
-		cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-		long subInstanceCount = getWlmManager().getTaskWorkListSize(userId, cond);
-		workInstanceInfo.setSubInstanceCount((int)subInstanceCount);
-		TaskWork[] subInstances = getWlmManager().getTaskWorkList(userId, cond);
-		WorkInstanceInfo[] workInstanceInfos = null;
-		if(!CommonUtil.isEmpty(subInstances))
-			workInstanceInfos = getWorkInstanceInfosByTaskWorks(subInstances);
-		workInstanceInfo.setSubInstances(workInstanceInfos);
+		InstanceInfo[] subInstancesInInstances = null;
+		subInstancesInInstances = instanceService.getRecentSubInstancesInInstance(tskWorkSpaceId, -1);
+		int subInstanceCount = 0;
+		if(!CommonUtil.isEmpty(subInstancesInInstances))
+			subInstanceCount = subInstancesInInstances.length;
+
+		workInstanceInfo.setSubInstanceCount(subInstanceCount);
+		workInstanceInfo.setSubInstances(subInstancesInInstances);
 		workInstanceInfo.setSubject(task.getPrcTitle());
 		//workInstanceInfo.setType(Instance.TYPE_WORK);
 		workInstanceInfo.setWork(workInfo);
@@ -567,7 +587,7 @@ public class ModelConverter {
 	public static InstanceInfo[] getInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks) throws  Exception {
 		
 		List<InstanceInfo> resultInfoList = new ArrayList<InstanceInfo>();
-		
+
 		for (int i = 0; i < tasks.length; i++) {
 			TaskWork task = tasks[i];
 			if (task.getPrcObjId() == null)
@@ -1584,7 +1604,7 @@ public class ModelConverter {
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			groupInfo.setSmallPictureName(pictureId + "_small" + "." + extension);
+			groupInfo.setSmallPictureName(pictureId + "_thumb" + "." + extension);
 		} else {
 			groupInfo.setSmallPictureName(picture);
 		}
@@ -1766,7 +1786,13 @@ public class ModelConverter {
 		processWork.setManualFilePath("MANUAL FILE PATH");
 		
 		processWork.setDiagram(getSmartDiagramByPkgInfo(userId, pkg));
-		
+
+		OpinionCond opinionCond = new OpinionCond();
+		opinionCond.setRefId(pkg.getPackageId());
+		opinionCond.setRefType(6);
+		long commentCount = getOpinionManager().getOpinionSize(userId, opinionCond);
+		processWork.setCommentCount((int)commentCount);
+
 		return processWork;
 	}
 	private static SmartDiagram getSmartDiagramByPkgInfo(String userId, PkgPackage pkg) throws Exception {
