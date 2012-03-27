@@ -3082,6 +3082,9 @@ public class ModelConverter {
 			if(fileList.size() > 0)
 				tempWorkInstanceInfo.setFiles(fileList);
 			tempWorkInstanceInfo.setFileGroupId(fileGroupId);
+			workInstanceInfo = new WorkInstanceInfo();
+			workInstanceInfo.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
+			tempWorkInstanceInfo.setWorkInstance(workInstanceInfo);
 			workInstanceInfo = tempWorkInstanceInfo;
 		}
 
