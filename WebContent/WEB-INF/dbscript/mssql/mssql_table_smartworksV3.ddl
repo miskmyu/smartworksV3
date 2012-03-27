@@ -74,35 +74,6 @@ CREATE TABLE sworgrole (
 	primary key (id)
 );
 
--- 커뮤니티 그룹
-CREATE TABLE SWOrgGroup (
-	id	varchar(50) not null,
-	companyId	varchar(50),
-	name	varchar(50),
-	groupLeader	varchar(50),
-	groupType	varchar(1),
-	status	varchar(1),
-	picture varchar(100),
-	description	varchar(4000),
-	creator	varchar(50),
-	createdTime	datetime,
-	modifier	varchar(50),
-	modifiedTime	datetime,
-	primary key (id)
-);
-
--- 커뮤니티 그룹 멤버
-CREATE TABLE SWOrgGroupMember (
-	groupId	varchar(50) not null,
-	userId	varchar(50) not null,
-	joinType	varchar(1),
-	joinStatus	varchar(1),
-	joinTime	datetime,
-	outTime 	datetime,
-	memberSeq	int,
-	primary key (groupId, userId)
-);
-
 ---- 일정 : 단위 + 시스템
 --CREATE TABLE swschedule (
 --	id 	varchar(50) NOT NULL,
@@ -2218,6 +2189,38 @@ CREATE TABLE swwebserviceparameter(
 --GO
 
 -- 3.0 추가
+
+
+-- 커뮤니티 그룹
+CREATE TABLE SWOrgGroup (
+	id	varchar(50) not null,
+	companyId	varchar(50),
+	name	varchar(50),
+	groupLeader	varchar(50),
+	groupType	varchar(1),
+	status	varchar(1),
+	picture varchar(100),
+	description	varchar(4000),
+	creator	varchar(50),
+	createdTime	datetime,
+	modifier	varchar(50),
+	modifiedTime	datetime,
+	primary key (id)
+);
+
+-- 커뮤니티 그룹 멤버
+CREATE TABLE SWOrgGroupMember (
+	groupId	varchar(50) not null,
+	userId	varchar(50) not null,
+	joinType	varchar(1),
+	joinStatus	varchar(1),
+	joinTime	datetime,
+	outTime 	datetime,
+	memberSeq	int,
+	primary key (groupId, userId)
+);
+
+-- 폴더
 CREATE TABLE SwFolder (
 	id varchar(50) NOT NULL,
 	companyid varchar(100),
@@ -2232,6 +2235,7 @@ CREATE TABLE SwFolder (
 	primary key (id)
 );
 
+-- 폴더파일
 CREATE TABLE SwFolderFile (
 	folderId varchar(50) NOT NULL,
 	fileId varchar(50) NOT NULL,
