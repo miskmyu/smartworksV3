@@ -2125,6 +2125,9 @@ public class InstanceServiceImpl implements IInstanceService {
 								value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
 						}
 					}
+				} else if (fieldValue instanceof Integer) {
+					Integer intValue = (Integer)smartFormInfoMap.get(fieldId);
+					value = intValue + "";
 				}
 	//			if (CommonUtil.isEmpty(value))
 	//				continue;

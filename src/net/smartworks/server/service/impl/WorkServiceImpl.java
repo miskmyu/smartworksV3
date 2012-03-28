@@ -204,7 +204,7 @@ public class WorkServiceImpl implements IWorkService {
 				ctgCond.setParentId(CtgCategory.ROOTCTGID);
 				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000"};
 				ctgCond.setObjIdNotIns(objIdNotIns);
-				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "40288afb1b25f00b011b25f3c7950001", 1, CtgCategory.A_NAME, true)});
+				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "40288afb1b25f00b011b25f3c7950001"), new Order(CtgCategory.A_NAME, true)});
 				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
 				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 			} else {
@@ -217,6 +217,7 @@ public class WorkServiceImpl implements IWorkService {
 				pkgCond.setStatus("DEPLOYED");
 				String[] packageIdNotIns = {"pkg_19281471d5c9404392fea653e627da9e", "pkg_24245093482e404fae15a7b48a55f854", "pkg_fbbd1761c3f144d49337dc38119caa28", "pkg_c2156de59c14435bb551c61c1593a442", "pkg_df40ac03a33c41d59586e4b201b433fd", "pkg_394ea78cec37434d922c73f09ab4b24e"};
 				pkgCond.setPackageIdNotIns(packageIdNotIns);
+				pkgCond.setOrders(new Order[]{new Order(PkgPackage.A_NAME, true)});
 
 				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
@@ -266,6 +267,9 @@ public class WorkServiceImpl implements IWorkService {
 			if (CommonUtil.isEmpty(categoryId)) {
 				//1 level category
 				ctgCond.setParentId(CtgCategory.ROOTCTGID);
+//				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000", "40288afb1b25f00b011b25f3c7950001"};
+//				ctgCond.setObjIdNotIns(objIdNotIns);
+				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "52fca4b219fef4f50119ffcd871b0000"), new Order(CtgCategory.A_NAME, true)});
 				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
 				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 			

@@ -2,7 +2,6 @@ ALTER TABLE SWEventday alter column reltdperson varchar(4000);
 
 ALTER TABLE SWDataRef alter column refRecordId varchar(4000);
 
-
 ALTER TABLE prcprcinst alter column prctitle varchar(255); --prctitle의 컬럼사이즈를 text_input의 컬럼사이즈인 255로 변경
 ALTER TABLE tsktask alter column tsktitle varchar(255); --tsktitle의 컬럼사이즈를 text_input의 컬럼사이즈인 255로 변경
 
@@ -36,6 +35,35 @@ ALTER TABLE SwOpinion add modifiedTime datetime;
 -- SWOrgUser locale, timeZone column add
 ALTER TABLE SWOrgUser add locale varchar(20);
 ALTER TABLE SWOrgUser add timeZone varchar(20);
+
+-- 커뮤니티 그룹
+CREATE TABLE SWOrgGroup (
+	id	varchar(50) not null,
+	companyId	varchar(50),
+	name	varchar(50),
+	groupLeader	varchar(50),
+	groupType	varchar(1),
+	status	varchar(1),
+	picture varchar(100),
+	description	varchar(4000),
+	creator	varchar(50),
+	createdTime	datetime,
+	modifier	varchar(50),
+	modifiedTime	datetime,
+	primary key (id)
+);
+
+-- 커뮤니티 그룹 멤버
+CREATE TABLE SWOrgGroupMember (
+	groupId	varchar(50) not null,
+	userId	varchar(50) not null,
+	joinType	varchar(1),
+	joinStatus	varchar(1),
+	joinTime	datetime,
+	outTime 	datetime,
+	memberSeq	int,
+	primary key (groupId, userId)
+);
 
 ALTER TABLE prcprcinst add prcPackageId varchar(100);
 ALTER TABLE prcprcinst add prcType varchar(100);

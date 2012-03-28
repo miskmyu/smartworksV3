@@ -1,6 +1,5 @@
 package net.smartworks.server.engine.common.manager;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +19,10 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Property;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.SQLServerDialect;
+import org.hibernate.engine.SessionFactoryImplementor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -37,11 +40,12 @@ public abstract class AbstractManager extends HibernateDaoSupport implements IMa
 	private static final String WHEN = " when";
 	private static final String THEN = " then";
 	private static final String END = " end";
-	private static final String EQUAL = " =";
-	private static final String ISNOTNULL = " is not null";
+	private static final String ELSE = " else";
+	private static final String DECODE = " decode";
 	
 	
 	private boolean enableLogging = true;
+	private String dbType;
 
 	@Autowired
 	public void anyMethod(SessionFactory sessionFactory) {
@@ -72,42 +76,61 @@ public abstract class AbstractManager extends HibernateDaoSupport implements IMa
 		if (orders == null || orders.length == 0)
 			return;
 		boolean first = true;
+		boolean whenExist = false;
 		for (int i=0; i<orders.length; i++) {
 			Order order = orders[i];
 			String whenColumnName = order.getWhenColumnName();
 			String whenColumnValue = order.getWhenColumnValue();
 			if (!CommonUtil.isEmpty(whenColumnName)) {
-				if (first) {
-					buf.append(ORDERBY).append(CASE).append(WHEN);
-					first = false;
-				} else {
-					buf.append(WHEN);
-				}
 				if (whenColumnName.indexOf(DOT) == -1 && !CommonUtil.isEmpty(objName))
 					whenColumnName = new StringBuffer(objName).append(DOT).append(whenColumnName).toString();
-				buf.append(SPACE).append(whenColumnName).append(EQUAL).append(SPACE).append("'").append(whenColumnValue).append("'");
-				buf.append(THEN).append(SPACE).append(1);
-				buf.append(WHEN).append(SPACE).append(whenColumnName).append(ISNOTNULL);
-				buf.append(THEN).append(SPACE).append(2);
-				buf.append(END);
-			}
-			String field = order.getField();
-			if (CommonUtil.isEmpty(field))
-				continue;
-			if (field.indexOf(DOT) == -1 && !CommonUtil.isEmpty(objName))
-				field = new StringBuffer(objName).append(DOT).append(field).toString();
-			boolean isAsc = order.isAsc();
-			if (first) {
-				buf.append(ORDERBY);
-				first = false;
+				if(this.getDbType().equalsIgnoreCase("sqlserver")) {
+					if (first) {
+						buf.append(ORDERBY).append(CASE);
+						buf.append(SPACE).append(whenColumnName).append(WHEN).append(SPACE).append("'").append(whenColumnValue).append("'");
+						first = false;
+					} else {
+						buf.append(WHEN).append(SPACE).append("'").append(whenColumnValue).append("'");
+					}
+					buf.append(THEN).append(SPACE).append(i);
+				} else if(this.getDbType().equalsIgnoreCase("oracle")) {
+					if (first) {
+						buf.append(ORDERBY).append(DECODE).append("(");
+						buf.append(whenColumnName).append(COMMA).append("'").append(whenColumnValue).append("'");
+						first = false;
+					} else {
+						buf.append(COMMA).append("'").append(whenColumnValue).append("'");
+					}
+					buf.append(COMMA).append(i);
+				}
+				whenExist = true;
 			} else {
-				buf.append(COMMA);
-			}
-			buf.append(SPACE).append(field);
-			if (isAsc) {
-				buf.append(ASC);
-			} else {
-				buf.append(DESC);
+				if(whenExist) {
+					if(this.getDbType().equalsIgnoreCase("sqlserver")) {
+						buf.append(ELSE).append(SPACE).append(i);
+						buf.append(END);
+					} else if(this.getDbType().equalsIgnoreCase("oracle")) {
+						buf.append(COMMA).append(i).append(")");
+					}
+				}
+				String field = order.getField();
+				if (CommonUtil.isEmpty(field))
+					continue;
+				if (field.indexOf(DOT) == -1 && !CommonUtil.isEmpty(objName))
+					field = new StringBuffer(objName).append(DOT).append(field).toString();
+				boolean isAsc = order.isAsc();
+				if (first) {
+					buf.append(ORDERBY);
+					first = false;
+				} else {
+					buf.append(COMMA);
+				}
+				buf.append(SPACE).append(field);
+				if (isAsc) {
+					buf.append(ASC);
+				} else {
+					buf.append(DESC);
+				}
 			}
 		}
 	}
@@ -257,5 +280,23 @@ public abstract class AbstractManager extends HibernateDaoSupport implements IMa
 	}
 	public void setEnableLogging(boolean enableLogging) {
 		this.enableLogging = enableLogging;
+	}
+	public String getDbType() {
+		if (dbType == null) {
+			SessionFactory sf = getSessionFactory();
+			SessionFactoryImplementor sfi = (SessionFactoryImplementor)sf;
+			Dialect dialect = sfi.getDialect();
+			if (dialect instanceof PostgreSQLDialect) {
+				dbType = "postgresql";
+			} else if (dialect instanceof SQLServerDialect) {
+				dbType = "sqlserver";
+			} else {
+				dbType = "oracle";
+			}
+		}
+		return dbType;
+	}
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
 	}
 }
