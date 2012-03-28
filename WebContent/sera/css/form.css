@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-.form_layout {}
+.form_layout { overflow:hidden}
 .form_layout table {background-color:#ededed; border-bottom:1px solid #73afd3; padding:10px 5px 10px}
 .form_layout table td,
 .form_layout table th {padding:7px 10px}
@@ -9,6 +9,8 @@
 .form_value {}
 .form_label, .form_value {float:left}
 .form_value input[type="text"] {width:100%; vertical-align:middle; text-align:left}
+.form_layout .title { font-size:12px; font-weight:bold; color:#4e90b7; margin-bottom:10px}
+.form_layout table.bgn {background:none; border:none}
 
 /* Icon */
 .icon_fb_space {padding-right: 24px; position: relative;} /* 아이콘이 들어가 있는 영역- 캘린더아이콘 영역 */

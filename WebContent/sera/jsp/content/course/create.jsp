@@ -176,7 +176,7 @@
 		<div class="btn_blu_l mr10">
 			<div class="btn_blu_r">취 소</div>
 		</div>
-		<div class="btn_blu_l">
+		<div href="mentorProfile.sw" class="btn_blu_l js_sera_content">
 			<div class="btn_blu_r">멘토 프로필 입력하기</div>
 		</div>
 	</div>

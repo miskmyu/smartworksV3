@@ -37,7 +37,7 @@ public class User extends WorkSpace {
 	private String cellPhoneNo;
 	private String company;
 	private String companyId;
-
+	
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
 		return nickName;

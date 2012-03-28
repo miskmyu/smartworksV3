@@ -51,7 +51,7 @@
           <li class="icon_mycourse"><a href="">내코스</a></li>
           <li class="icon_friend"><a href="">친구</a></li>
           <li class="icon_notes"><a href="">쪽지</a></li>
-          <li class="icon_chaledar"><a href="">캘린더</a></li>
+          <li class="icon_calendar"><a href="">캘린더</a></li>
           <li class="icon_badge"><a href="">뱃지</a></li>
           <li class="icon_event"><a href="">이벤트</a></li>
         </ul>
@@ -121,7 +121,7 @@
             <li><a href="">미션등록/수행</a></li>
             <li><a href="">전체보기</a></li>
             <li><a href="">내글보기</a></li>
-            <li class="end"><a href="">미션별 보기</a></li>
+            <li class="end"><span class="icon_bul_select mr5"></span><a href="">미션별 보기</a></li>
           </ul>
         </div>
         <div class="menu003" style="visibility:hidden"> </div>
@@ -143,8 +143,8 @@
     <!-- Header Title -->
     <div class="header_tit">
       <div class="tit_dep2 m0">
-        <h2>코스 설정</h2>
-        <div>코스에 참여하고 있는 회원으로 코스를 탈퇴하거나, 불만사항을 접수하고 개설한 팀을 관리하할 수 있습니다.</div>
+        <h2>팀 구성하기</h2>
+        <div><span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료 등 이용약관에 명시한 불법게시물을 올리실 경우 경고 없이 삭제될 수있으며, 서비스 이용 제한 및 법적인 처벌을 받을 수 있습니다.</div>
       </div>
     </div>
     <!-- Header Title //-->
@@ -152,14 +152,14 @@
       <div class="form_layout">
         <table border="0" cellspacing="0" cellpadding="0">
          <tr>
-            <td><div class="form_label w101">코스 목적</div>
+            <td><div class="form_label w101">팀 이름</div>
               <div class="form_value">
                 <input type="text" class="fieldline fl" style="width:493px">
                 <div class="fr ml5"> <span class="t_red">0</span> /150kbyte </div>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">상세설명</div>
+            <td><div class="form_label w101">팀설명</div>
               <div class="form_value" >
                 <textarea class="fieldline fl" name="textarea" rows="3" value="" style="width:491px"></textarea>
               </div></td>
@@ -176,7 +176,7 @@
               </div></td>
           </tr>          
           <tr>
-            <td><div class="form_label w101">코스 기간</div>
+            <td><div class="form_label w101">기간</div>
               <div class="form_value" >
                 <input type="text" style="width:100px" class="fieldline fl mr5"/>
                 <span class="fl mr15">일(DAYS)</span>
@@ -228,8 +228,23 @@
       
   </div>
   <!-- Content //-->
+  
+  <!-- Search Section -->
+    <div class="srch_section">
+      <div class="srch">
+        <div>
+          <input type="text" placeholder="SERA를 검색하세요.">
+        </div>
+        <div class="icon_admin fr"></div>
+      </div>
+      <div class="btn_default_l ml4">
+        <div class="btn_default_r">채팅하기</div>
+      </div>
+    </div>
+    <!-- Search Section -->
+    
   <!-- Aside -->
-  <div class="aside">
+  <div class="aside m0">
     <!-- Aside Block1 -->
     <div class="aside_ad">
       <div>광고</div>
