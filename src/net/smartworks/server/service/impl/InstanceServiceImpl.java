@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -20,6 +21,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -43,6 +45,7 @@ import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -3489,7 +3492,110 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	public EventInstanceInfo[] getEventInstanceList(String workSpaceId, LocalDate fromDate, LocalDate toDate) throws Exception {
-		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+
+			EventInstanceInfo[] eventInstanceInfos = null;
+			List<EventInstanceInfo> eventInstanceInfoList = new ArrayList<EventInstanceInfo>();
+
+			TaskWorkCond taskWorkCond = new TaskWorkCond();
+			taskWorkCond.setTskAssigneeOrSpaceId(workSpaceId);
+			taskWorkCond.setTskRefType(TskTask.TASKREFTYPE_EVENT);
+			taskWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
+
+			TaskWork[] taskWorks = getWlmManager().getTaskWorkList(userId, taskWorkCond);
+			if(!CommonUtil.isEmpty(taskWorks)) {
+				int length = taskWorks.length;
+				for(int i=0; i<length; i++) {
+					TaskWork task = taskWorks[i];
+					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
+					String id = record.getRecordId();
+					String subject = record.getDataFieldValue("0");
+					String content = record.getDataFieldValue("6");
+					String startDateStr = record.getDataFieldValue("1");
+					LocalDate startLocalDate = null;
+					String endDateStr = record.getDataFieldValue("2");
+					LocalDate endLocalDate = null;
+					SwdDataField relatedUsersField = record.getDataField("5");
+					CommunityInfo[] relatedUsers = null;
+					if (relatedUsersField != null) {
+						String usersRecordId = relatedUsersField.getRefRecordId();
+						String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
+						relatedUsers = new UserInfo[userIdArray.length];
+						for (int j = 0; j<userIdArray.length; j++) {
+							relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
+						}
+					}
+					if (!CommonUtil.isEmpty(startDateStr)) {
+						startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
+					}
+					if (!CommonUtil.isEmpty(endDateStr)) {
+						endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
+					}
+					String owner = task.getTskAssignee();
+					LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
+					String modifier = task.getLastTskAssignee();
+					LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
+
+					eventInstanceInfo.setId(id);
+					eventInstanceInfo.setSubject(subject);
+					eventInstanceInfo.setContent(content);
+					eventInstanceInfo.setStart(startLocalDate);
+					eventInstanceInfo.setEnd(endLocalDate);
+					eventInstanceInfo.setRelatedUsers(relatedUsers);
+					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
+					eventInstanceInfo.setCreatedDate(createdDate);
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					eventInstanceInfo.setWorkSpace(null);
+					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
+					eventInstanceInfo.setLastModifiedDate(modifiedDate);
+
+					String tskAccessLevel = task.getTskAccessLevel();
+					String tskAccessValue = task.getTskAccessValue();
+
+					if(startLocalDate.getTime() >= fromDate.getTime() && startLocalDate.getTime() <= toDate.getTime()) {
+						if(!CommonUtil.isEmpty(tskAccessLevel)) {
+							if(Integer.parseInt(tskAccessLevel) == AccessPolicy.LEVEL_PRIVATE) {
+								if(owner.equals(userId) || modifier.equals(userId))
+									eventInstanceInfoList.add(eventInstanceInfo);
+							} else if(Integer.parseInt(tskAccessLevel) == AccessPolicy.LEVEL_CUSTOM) {
+								if(!CommonUtil.isEmpty(tskAccessValue)) {
+									String[] accessValues = tskAccessValue.split(";");
+									if(!CommonUtil.isEmpty(accessValues)) {
+										for(String accessValue : accessValues) {
+											if(!owner.equals(accessValue) && !modifier.equals(accessValue)) {
+												if(accessValue.equals(userId))
+													eventInstanceInfoList.add(eventInstanceInfo);
+											}
+										}
+										if(owner.equals(userId) || modifier.equals(userId))
+											eventInstanceInfoList.add(eventInstanceInfo);
+									}
+								}
+							} else {
+								eventInstanceInfoList.add(eventInstanceInfo);
+							}
+						} else {
+							eventInstanceInfoList.add(eventInstanceInfo);
+						}
+					}
+				}
+				if(eventInstanceInfoList.size() > 0) {
+					eventInstanceInfos = new EventInstanceInfo[eventInstanceInfoList.size()];
+					eventInstanceInfoList.toArray(eventInstanceInfos);
+				}
+			}
+			return eventInstanceInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	public InstanceInfoList getMemoInstanceList(String workSpaceId, RequestParams params) throws Exception {
