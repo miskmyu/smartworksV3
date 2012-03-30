@@ -12,23 +12,25 @@
 <div id="sera_header_bb">
   <div class="hd_shadow bb">
     <!-- GNB -->
-    <div class="gnb">
-      <ul class="login_info">
-        <li> <a href="">lumia</a> 님 안녕하세요 </li>
-      </ul>
-      <ul class="top_menu2">
+      <div class="gnb">
+        <div class="top_logo"> </div><ul class="top_menu2">
         <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu1_off.png"> </a> </li>
         <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu2_on.png"> </a> </li>
         <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu3_off.png"> </a> </li>
-      </ul>
+      </ul> 
       <ul class="util_menu">
-        <li class="seminar"></li>
-        <li class="about"> <a href="">about SERA</a> </li>
-        <li class="news"> <a href="">sera 소식</a> </li>
-        <li class="btn_login"> <a href=""> <img width="49" height="19" title="로그아웃" alt="로그아웃" src="../images/sera2_main_btnLogout.png"> </a> </li>
-      </ul>
-    </div>
-    <!-- GNB //-->
+          <li class="about"> <a href="">about SERA</a> </li>
+          <li class="news"> <a href="">sera 소식</a> </li>
+          <li class="btn_login"> <a href=""> <img width="49" height="19" title="로그아웃" alt="로그아웃" src="../images/sera2_main_btnLogout.png"> </a> </li>
+        </ul>
+        <!-- Search -->
+        	<div class="top_srch_section">
+            <input type="text" class="top_srch"/>
+            <div class="icon_srch"></div>
+            </div>
+        <!-- Search //-->
+      </div>
+      <!-- GNB //-->
     <!-- Top Navi -->
     <div class="top_navi">
       <div class="personal_info fl mt5">
@@ -51,7 +53,7 @@
           <li class="icon_mycourse"><a href="">내코스</a></li>
           <li class="icon_friend"><a href="">친구</a></li>
           <li class="icon_notes"><a href="">쪽지</a></li>
-          <li class="icon_chaledar"><a href="">캘린더</a></li>
+          <li class="icon_calendar"><a href="">캘린더</a></li>
           <li class="icon_badge"><a href="">뱃지</a></li>
           <li class="icon_event"><a href="">이벤트</a></li>
         </ul>
@@ -121,7 +123,7 @@
             <li><a href="">미션등록/수행</a></li>
             <li><a href="">전체보기</a></li>
             <li><a href="">내글보기</a></li>
-            <li class="end"><a href="">미션별 보기</a></li>
+            <li class="end"><span class="icon_bul_select mr5"></span><a href="">미션별 보기</a></li>
           </ul>
         </div>
         <div class="menu003" style="visibility:hidden"> </div>
@@ -131,9 +133,7 @@
             <li><a href="">멘티관리</a></li>
             <li class="end">
              <a href="">
-            <span class="icon_bul_select mr5"></span>팀관리
-            </a>
-            </li>
+            <span class="icon_bul_select mr5"></span>팀관리            </a>            </li>
           </ul>
         </div>
       </div>
@@ -217,8 +217,23 @@
       
   </div>
   <!-- Content //-->
+  
+  <!-- Search Section -->
+    <div class="srch_section">
+      <div class="srch">
+        <div>
+          <input type="text" placeholder="SERA를 검색하세요.">
+        </div>
+        <div class="icon_admin fr"></div>
+      </div>
+      <div class="btn_default_l ml4">
+        <div class="btn_default_r">채팅하기</div>
+      </div>
+    </div>
+    <!-- Search Section -->
+    
   <!-- Aside -->
-  <div class="aside">
+  <div class="aside m0">
     <!-- Aside Block1 -->
     <div class="aside_ad">
       <div>광고</div>
@@ -247,11 +262,12 @@
     <!-- Aside Block1 -->
     <div class="aside_ad m0">
       <div>광고</div>
-    </div>
+    </div>    
     <!-- Aside Block1 //-->
+    </div>
     <!-- Aside //-->
   </div>
-  <!-- Footer -->
+ <!-- Footer -->
   <div id="sera_footer">
     <ul class="footer_box">
       <li class="copyright"> <img width="270" height="20" src="../images/sera2_footer_Copyright.png"> </li>
@@ -259,6 +275,6 @@
     </ul>
   </div>
   <!-- Footer //-->
-</div>
+  </div>
 </body>
 </html>

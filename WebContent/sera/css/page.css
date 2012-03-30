@@ -10,18 +10,20 @@
 #sera_header .status .register ul {list-style: none outside none; margin: 0; padding: 0}
 #sera_header .status .register ul li {display: inline; font: 11px ,'Dotum'}
 
+#sera_header_join {background: url("../images/top_bg_out.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
+
 /* Global Navigation Bar*/
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:1004px;}
-.gnb .login_info {float: left; height: 25px; padding-top: 6px; width: 360px;}
-.gnb .login_info li {background: url("../images/sera2_main_ico_user.png") no-repeat scroll 0 0 transparent; height: 14px; padding: 2px 0 0 20px;}
+.gnb .top_logo {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:232px; height:17px; margin:5px 0 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
-.gnb .util_menu {float: right; height: 19px; overflow: hidden; padding-top: 5px}
-.gnb .util_menu .about {color: #333333; float: left; font: 11px/10px,'Dotum'; height: 19px; letter-spacing: -0.1em; margin-right: 10px; padding-top: 5px; width: 65px;}
-.gnb .util_menu .seminar {color: #333333; float: left; font: 11px/10px,'Dotum'; height: 19px; letter-spacing: -0.1em; margin-right: 10px; padding-top: 5px; width: 68px;}
-.gnb .util_menu .news {color: #333333; float: left; font: 11px/10px,'Dotum'; height: 19px; letter-spacing: -0.1em; margin-right: 10px; padding-top: 5px; width: 45px;}
-.gnb .util_menu .btnLogin {float: left; height: 19px; width: 49px;}
+.gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
+.gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
+.gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
+.gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
 .hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:1004px; height:91px; margin:0 auto}
 .hd_shadow.bb {background: url("../images/top_bg_im_b.jpg") no-repeat scroll 0 0 transparent !important}
+.hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
+.hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
 .top_navi {width:1004px; margin-right:5px; clear:both; padding:5px 0 0 0; overflow:hidden}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
@@ -33,12 +35,23 @@
 .bul_down a {background: url("../images/icon.png") no-repeat scroll -90px -34px transparent; width:9px; height:9px; display:inline-block; margin-left:3px}
 .bul_down a:hover { background-position: 0 0}
 .gni li { float:left; margin-left:15px; font-size:0}
+.top_srch_section { float:right; height:28px}
+.top_srch { border:2px solid #a7a7a7; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background-color:#FFF; margin:3px 0 0 0; padding:2px 17px 0 5px; width:168px !important; height:15px} 
 
 /* Btn in GNB */
 .btn_gnb { font-size:12px; color:#717171; line-height:21px; float:left; font-size:11px; font-weight:normal; padding-top:15px}
 .btn_gnb_l {background: url("../images/btn_topbg_l.jpg") no-repeat scroll 0 0; height:19px; cursor:pointer}
 .btn_gnb_r {background: url("../images/btn_topbg_r.jpg") no-repeat scroll 100% 0; height:19px; padding:0 10px}
 
+/* Icon in GNB */
+.icon_alarm a {background: url("../images/icon.png") no-repeat scroll -267px -6px; width:28px; height:45px; display:block}
+.icon_mycourse a {background: url("../images/icon.png") no-repeat scroll -307px -6px; width:40px; height:45px; display:block}
+.icon_friend a {background: url("../images/icon.png") no-repeat scroll -354px -6px; width:34px; height:45px; display:block}
+.icon_notes a {background: url("../images/icon.png") no-repeat scroll -400px -6px; width:39px; height:45px; display:block}
+.icon_calendar a {background: url("../images/icon.png") no-repeat scroll -448px -6px; width:42px; height:45px; display:block}
+.icon_badge a {background: url("../images/icon.png") no-repeat scroll -500px -6px; width:35px; height:45px; display:block}
+.icon_event a {background: url("../images/icon.png") no-repeat scroll -545px -6px; width:40px; height:45px; display:block}
+.icon_srch {background: url("../images/icon.png") no-repeat scroll -165px -616px; width:15px; height:15px; display:block; position:relative; top:-19px; left:171px}
 
 /* Header Title */
 .header_tit {width:700px; margin-bottom:15px; color:#858585; overflow:hidden}
@@ -54,18 +67,44 @@
 .tit_cus2 {background: url("../images/header_admin.png") no-repeat scroll 0 -85px; height:85px}
 .tit_cus3 {background: url("../images/header_admin.png") no-repeat scroll 0 -170px; height:85px}
 
-/* Icon in GNB */
-.icon_alarm a {background: url("../images/icon.png") no-repeat scroll -267px -6px; width:28px; height:45px; display:block}
-.icon_mycourse a {background: url("../images/icon.png") no-repeat scroll -307px -6px; width:40px; height:45px; display:block}
-.icon_friend a {background: url("../images/icon.png") no-repeat scroll -354px -6px; width:34px; height:45px; display:block}
-.icon_notes a {background: url("../images/icon.png") no-repeat scroll -400px -6px; width:39px; height:45px; display:block}
-.icon_chaledar a {background: url("../images/icon.png") no-repeat scroll -448px -6px; width:42px; height:45px; display:block}
-.icon_badge a {background: url("../images/icon.png") no-repeat scroll -500px -6px; width:35px; height:45px; display:block}
-.icon_event a {background: url("../images/icon.png") no-repeat scroll -545px -6px; width:40px; height:45px; display:block}
+/* Nav Side Navigation Bar */
+#nav_snb {float: left; line-height: normal; margin-bottom: -1px; position: relative; width: 190px; z-index: 20}
+
+/* Nav SNB Icon */
+.b_prev {background: url("../images/icon.png") no-repeat scroll 0 -520px; width:13px; height:13px; display:block}
+a.b_prev:hover { background-position:0 -535px}
+.b_next {background: url("../images/icon.png") no-repeat scroll -30px -520px; width:13px; height:13px; display:block}
+a.b_next:hover { background-position:-30px -535px}
+.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; width:11px; height:11px; display:block; float:left; padding:0 5px 0 0}
+.icon_mission.current { background-position:0 -579px}
+.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; width:11px; height:11px; display:block; float:left; padding:0 0 0 5px}
+.icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
+
+/* Section Center */
+#section_cen {margin: 0 0 0 210px; position: relative; z-index: 10}
+.this_month {}
+.this_month .tit_area { font-size:14px; font-weight:bold; text-align:center; margin:0 0 0 37px; padding-bottom:3px; overflow:hidden}
+.this_month .tit_area .tit { margin:0 10px; float:left}
+.this_month table { font-size:11px; margin-top:10px; border-collapse:collapse; background-color:#f8f8f8}
+.this_month table th, .this_month table td { border:1px solid #cccccc; padding:5px 2px}
+.this_month table th { text-align:center}
+.this_month table .today_cel { background-color:#9cc7e1}
+
+
+/* Tab */
+.tab {background: url("../images/tab.gif") repeat-x scroll left bottom transparent; height: 31px; margin: 15px 0 10px;}
+.tab ul { margin:0 0 0 13px}
+.tab li {background: url("../images/tab_l.gif") no-repeat scroll 0 0 transparent; float: left; height: 31px; margin:0 0 0 -1px;}
+.tab li.current {background-position: left -31px;}
+.tab li span {background: url("../images/tab_r.gif") no-repeat scroll right top transparent; display: block; float: left; height: 31px;}
+.tab li.current span {background-position: right -31px;}
+.tab li span a {display: inline-block; line-height: 36px; padding: 0 20px;}
+.tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
 #container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
 #container_bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
+#container_join {height: auto; margin: 0 auto; position: relative; width: 1004px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
@@ -75,13 +114,14 @@
 
 /* My Comment */
 .my_comment_section { overflow:hidden; margin-bottom:20px}
+.photo_section { float:left}
 .my_photo,.photo_line { float:left; width:118px; height:118px; border:1px solid #b4b2b2; margin-right:15px}
 .my_comment { float:left; width:564px}
 .my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:14px}
 .my_comment .comment_txt {line-height:18px; height:88px}
 .my_comment .comment_txt textarea { border:1px solid #cccccc}
 .my_comment textarea { height:100%; width:99.4%}
-.option { float:left; display:block; width:250px}
+.option { float:left; display:block}
 .option .txt { font-size:11px; float:left; margin:7px 5px 0 0; color:#dddddd}
 .option .txt a {color:#868686}
 .attach_file {height: 28px; margin-top: 5px; overflow: hidden; float:right}
@@ -166,7 +206,13 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .icon_more {background: url("../images/icon.png") no-repeat scroll -166px -175px; padding-left:10px}
 .icon_bul_select {background: url("../images/icon.png") no-repeat scroll 0 -80px; width:6px; height:7px; display:inline-block}
 a .icon_bul_select:hover { background-position:0 -88px}
-
+.icon_delete_red a { background: url("../images/icon.png") no-repeat scroll -243px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_delete_red a:hover {background-position:-262px -117px}
+.icon_close_red a { background: url("../images/icon.png") no-repeat scroll -243px -130px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_close_red a:hover {background-position:-262px -130px}
+.icon_open_red a { background: url("../images/icon.png") no-repeat scroll -243px -142px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_open_red a:hover {background-position:-262px -142px}
+.icon_ourfriend { width:100px}
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
 .icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:70%}
@@ -200,12 +246,23 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content {padding:10px; overflow:hidden}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
+.panel_block .content .name { color:#000000}
 .panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
 .panel_block .thum_image {width:120px; height:66px; float:right}
 .panel_block .detail_image {width:540px; border:1px solid #cccccc; height:auto; clear:both}
 .panel_block dl.bor {border-bottom:1px solid #cccccc}
 .panel_block dl.bor_no { border-bottom:none}
+
+
+/* Content Mission */
+.panel_block .content_mission dt { background-color:#f0f0f0; padding:5px 5px 0 5px; line-height:23px}
+.panel_block .content_mission dd { padding:5px 10px; overflow:hidden}
+.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
+.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:19px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
+.icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
+.icon_close_area div { padding:3px 10px}
+.bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
 
 /* Event */
 .panel_block .event_info { width:70%; float:left}
@@ -224,6 +281,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .util span {color:#dddddd}
 .util span a {color:#608eba !important}
 .util span a:hover {text-decoration:underline}
+.util .icon_mission { padding:0; margin-left:3px}
 .date {font-size:11px; color:#888888 !important}
 
 
@@ -263,12 +321,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Search Section */
 .srch_section {float:right; margin:15px 10px 5px; width:248px}
-.srch { border:3px solid #8d8d8d; width:160px; float:left}
+.srch { border:3px solid #8d8d8d; width:160px; float:left; background-color:#FFF}
 .srch input[type="text"] { width:130px; float:left; margin:2px}
 
 /* Course */
 /* Course Define */
-.course_df_section { overflow:hidden; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
+.course_df_section { position:relative; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
 .course_df_img {float:left; width:119px; height:118px; border-right:1px solid #cccccc; margin-right:15px}
 .course_df { float:left; width:350px; margin-top:10px}
 .course_df h1 { font-size:14px}
@@ -296,18 +354,22 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Bottom Btn Space */
 .btn_space { margin:10px auto 0; text-align:center; overflow:hidden }
 
+/* Select Box */
+.select_box { width:60px; background-color:#FFF; padding:7px 10px; position:absolute; border:1px solid #cccccc; line-height:17px}
+
 /* Text Style */
 .t_s11 { font-size:11px}
 .t_s14 { font-size:14px}
-.t_red {color:#F00}
+.t_red {color:#ed1c24}
 .t_redb {color:#ed1c24; font-weight:bold}
 .t_blue { color:#006699}
 .t_blueb { color:#006699; font-weight:bold}
 .t_orange { color:#ff7c2a}
 .t_gray { color:#9a9a9a}
+.t_grayb { color:#9a9a9a; font-weight:bold}
 .tb { font-weight:bold}
 .t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
-.t_refe { font-size:11px; color:#999999}
+.t_refe { font-size:11px; color:#999999; line-height:17px}
 
 /* Width */
 .w_auto { width:auto !important}
@@ -360,6 +422,53 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px; display:block}
 .process {float: right; height: 12px; width: 38px; color:#999999}
 .mission_info { float:left; width:200px; margin: 5px 0 0 0; color:#999999}
+
+/* Join Member Section */
+#join_section {background: url("../images/function_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; padding: 0; position: relative; width: 1004px; overflow:hidden; background-color:#FFF}
+.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 993px;}
+.logo_srch .logo {float: left; height: 36px; width: 201px}
+.logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 279px; border:none}
+.icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
+
+/* Course List Section */
+#course_list_section {background: url("../images/courselist_container_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 100px; position: relative; width: auto; overflow:hidden}
+#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 735px;}
+#content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
+#content_list_section .search {margin: 0 auto; width: 460px;}
+#content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 26px; margin-right: 5px; width: 375px;}
+#content_list_section .tit_header {border-bottom: 2px solid #74B3DD; height: 50px; margin: 20px 0;}
+#content_list_section .tit_header h2 {background: url("../images/ico_workshop.gif") no-repeat scroll 0 0 transparent; color: #333333; float: left; font-size: 16px; height: 22px; padding: 20px 0 0 50px}
+#content_list_section .course_listbox1 {clear: both; margin: 0 auto; width: 700px;}
+#content_list_section .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
+#content_list_section .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 11px/14px 'dotum','Helvetica','sans-serif'; height: 180px;  margin: 0 7px 20px 0; padding: 5px; width: 120px}
+#content_list_section .course_list li a {color: #666666; text-decoration: none;}
+
+/* Join Member Section */
+#join_content_section {float: left; height: auto; min-height: 600px; padding: 40px 50px 25px; width: 615px;}
+#join_content_section .tit {background: url("../images/header.png") no-repeat 0 -513px transparent; height:24px; width:130px; margin-bottom:45px}
+.join_process { float:right; margin-bottom:32px}
+.join_process li { float:left; font-size:0 }
+.join_process .prs1 {background: url("../images/header.png") no-repeat 0 -554px transparent; width:105px; height:64px}
+.join_process .prs1.current {background-position:0 -639px}
+.join_process .prs2 {background: url("../images/header.png") no-repeat -163px -554px transparent; width:105px; height:64px}
+.join_process .prs2.current { background-position:-163px -639px}
+.join_process .prs3 {background: url("../images/header.png") no-repeat -319px -554px transparent; width:105px; height:64px}
+.join_process .prs3.current { background-position:-163px -639px}
+.join_process .ar {background: url("../images/header.png") no-repeat -126px -574px transparent; width:14px; height:20px; margin:20px 22px}
+.join_content_area { clear:both; line-height:18px; overflow:hidden; margin-bottom:30px}
+.join_content_area li {float:left; width:79%}
+.join_content_area li.sub_label {float:left; font-weight:bold; width:114px; margin-right:10px}
+.join_content_area textarea {width:98%; padding:5px}
+
+/* SNB Left */
+.snb2 {float: left; height: 600px; padding-left: 25px; width: 160px}
+.snb2 a:link, .snb2 a:visited {color:#666666}
+.snb2 a:hover, .snb2 a:active, .snb2 a:focus {color:#262626}
+.snb2 .snb_menu li {font-weight: bold; padding: 5px 0 5px 10px; width: 150px;}
+.snb2 .snb_menu .selected {background: none repeat scroll 0 0 #89C2E4; color: #FFFFFF; font: bold 12px 'dotum','Helvetica','sans-serif'; padding: 5px 0 5px 10px; width: 150px;}
+.snb2 .snb_menu .categoryLine {border-bottom: 1px dotted #CCCCCC; display: block; height: 5px; margin-bottom: 10px}
+/* SNB Default */
+.snb {float: left; height: auto;overflow: hidden; padding-left: 25px; position: relative; width: 176px;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
