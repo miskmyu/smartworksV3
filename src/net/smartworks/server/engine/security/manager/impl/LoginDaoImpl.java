@@ -32,7 +32,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 
-	private static String RETRIVE_USER = "	select 	orguser.id, orguser.name, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
+	private static String RETRIVE_USER = "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
 										 "		   	orguser.empNo, orguser.mobileNo, orguser.internalNo, orguser.locale, orguser.timeZone,										" +
 										 "          orguser.type, orguser.lang, orguser.pos, orguser.stdtime, orguser.authId,													" +
 										 "	        orguser.email,	orguser.passwd, orguser.picture, orguser.roleId																" +
@@ -90,6 +90,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			Login login = new Login();
 			login.setId(rs.getString("id"));
 			login.setName(rs.getString("name"));
+			login.setNickName(rs.getString("nickName"));
 			login.setCompanyId(rs.getString("companyId"));
 			login.setCompany(rs.getString("companyName"));
 			login.setDepartmentId(rs.getString("deptId"));

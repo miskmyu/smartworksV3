@@ -1,6 +1,5 @@
 package net.smartworks.server.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -2786,7 +2785,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					iWInstanceInfo.setWork(workInfo);
 					iWInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					iWInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
-	
+					iWInstanceInfo.setViews(swdRecord.getHits());
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					List<FieldData> fieldDataList = new ArrayList<FieldData>();
 
@@ -2814,12 +2813,12 @@ public class InstanceServiceImpl implements IInstanceService {
 													if(!CommonUtil.isEmpty(users) && users.length > 0) {
 														if(users.length < 4) {
 															for(int l=0; l<users.length; l++) {
-																resultUser += users[j] + ", ";
+																resultUser += users[l] + ", ";
 															}
 															resultUser = resultUser.substring(0, resultUser.length()-2);
 														} else if(users.length > 3) {
 															for(int l=0; l<3; l++) {
-																resultUser += users[j] + ", ";
+																resultUser += users[l] + ", ";
 															}
 															resultUser = resultUser.substring(0, resultUser.length()-2);
 															resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));

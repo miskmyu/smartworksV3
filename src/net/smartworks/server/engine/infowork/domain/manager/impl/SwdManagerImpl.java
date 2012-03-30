@@ -507,7 +507,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query.setString("id", obj.getRecordId());
 			} else {
 				buf.append("insert into ").append(tableName).append(" (");
-				buf.append("id, domainId, creator, createdTime, modifier, modifiedTime, workSpaceId, workSpaceType, accessLevel, accessValue");
+				buf.append("id, domainId, creator, createdTime, modifier, modifiedTime, workSpaceId, workSpaceType, accessLevel, accessValue, hits");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					for (SwdDataField dataField : dataFields) {
 						fieldId = dataField.getId();
@@ -524,7 +524,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 								colName.equalsIgnoreCase("workSpaceId") ||
 								colName.equalsIgnoreCase("workSpaceType") ||
 								colName.equalsIgnoreCase("accessLevel") ||
-								colName.equalsIgnoreCase("accessValue")) {
+								colName.equalsIgnoreCase("accessValue") ||
+								colName.equalsIgnoreCase("hits")) {
 							fieldMap.remove(fieldId);
 							continue;
 						}
@@ -532,7 +533,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						buf.append(", ").append(colName);
 					}
 				}
-				buf.append(") values (:id, :domainId, :creator, :createdTime, :modifier, :modifiedTime, :workSpaceId, :workSpaceType, :accessLevel, :accessValue");
+				buf.append(") values (:id, :domainId, :creator, :createdTime, :modifier, :modifiedTime, :workSpaceId, :workSpaceType, :accessLevel, :accessValue, :hits");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					int i = 0;
 					String param;
@@ -557,6 +558,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query.setString("workSpaceType", obj.getWorkSpaceType());
 				query.setString("accessLevel", obj.getAccessLevel());
 				query.setString("accessValue", obj.getAccessValue());
+				query.setInteger("hits", obj.getHits());
 				this.setQueryParameters(query, paramMap);
 			}
 
@@ -570,6 +572,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
+				this.addTableColumn("", domain.getTableName(), "hits", "int");
 				return setRecord(user, obj, level);
 			}
 			throw new SwdException(e);
@@ -701,6 +704,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
+				this.addTableColumn("", domain.getTableName(), "hits", "int");
 				return getRecordSize(user, cond);
 			}
 			throw new SwdException(e);
@@ -792,6 +796,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				obj.setWorkSpaceType((String)fields[j++]);
 				obj.setAccessLevel((String)fields[j++]);
 				obj.setAccessValue((String)fields[j++]);
+				obj.setHits(CommonUtil.toInt(fields[j++]));
 				objList.add(obj);
 				if (CommonUtil.isEmpty(selectedFieldList))
 					continue;
@@ -869,6 +874,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
+				this.addTableColumn("", domain.getTableName(), "hits", "int");
 				return this.getRecords(user, cond, level);
 			}
 			if (query != null)
@@ -929,7 +935,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		// select
 		//buf.append("select obj.id, obj.domainId, domain.formId, domain.formName, obj.creator, obj.createdTime");
 		buf.append("select obj.id, obj.domainId, obj.creator, obj.createdTime");
-		buf.append(", obj.modifier, obj.modifiedTime, obj.workspaceId, obj.workspaceType, obj.accessLevel, obj.accessValue");
+		buf.append(", obj.modifier, obj.modifiedTime, obj.workspaceId, obj.workspaceType, obj.accessLevel, obj.accessValue, obj.hits");
 		String columnName;
 		if (!CommonUtil.isEmpty(fields)) {
 			int order = 0;
@@ -979,6 +985,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		String workSpaceType = cond.getWorkSpaceType();
 		String accessLevel = cond.getAccessLevel();
 		String accessValue = cond.getAccessValue();
+		int hits = cond.getHits();
 
 		if (recordId != null)
 			cond.addFilter(new Filter("=", "obj.id", recordId));
@@ -1012,6 +1019,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			cond.addFilter(new Filter("=", "obj.accessLevel", accessLevel));
 		if (accessValue != null)
 			cond.addFilter(new Filter("=", "obj.accessValue", accessValue));
+		if (hits > 0)
+			cond.addFilter(new Filter("=", "obj.hits", String.valueOf(hits)));
 
 		Map<String, Filter> filterMap = new HashMap<String, Filter>();
 		Map<String, String> paramTypeMap = new HashMap<String, String>();
@@ -2114,9 +2123,6 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			if(query.getQueryString() != null) {
 				buf = new StringBuffer("alter table ").append(table);
 				buf.append(" add ").append(column).append(CommonUtil.SPACE).append(type);
-
-				query = this.createSqlQuery(buf.toString(), null);
-				query.executeUpdate();
 			}
 		} catch (Exception e) {
 			return;
@@ -2158,8 +2164,11 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	}
 
 	public List<SwdDomainFieldView> findDomainFieldViewList(String formId) {
-		String hql = "from SwdDomainFieldView where domainId = (select id from SwdDomain where masterId is null and formId = '" + formId + "' and formVersion = (select max(formVersion) from SwdDomain where formId = '" + formId + "')) order by dispOrder asc";
-		Query query = this.getSession().createQuery(hql);
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("from SwdDomainFieldView");
+		stringBuffer.append(" where domainId = (select id from SwdDomain where masterId is null and formId = '" + formId + "' and formVersion = (select max(formVersion) from SwdDomain where formId = '" + formId + "'))");
+		stringBuffer.append(" order by dispOrder asc");
+		Query query = this.getSession().createQuery(stringBuffer.toString());
 		List<SwdDomainFieldView> fieldViewList = query.list();
 		return fieldViewList;
 	}
@@ -2172,16 +2181,16 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("select domainfield.formFieldId, domainfield.formFieldName, domainfield.formFieldType, domainfield.tableColumnName, domainfield.displayOrder");
+		stringBuffer.append("  from PkgPackage pkg, SwfForm form, SwdDomain domain, SwdField domainfield");
+		stringBuffer.append(" where pkg.packageId = form.packageId");
+		stringBuffer.append("   and form.id = domain.formId");
+		stringBuffer.append("   and domain.objId = domainfield.domain");
+		stringBuffer.append("   and pkg.packageId = '" + packageId + "' ");
+		stringBuffer.append(" order by domainfield.displayOrder asc");
 
-		String hql = "select domainfield.formFieldId, domainfield.formFieldName, domainfield.formFieldType, domainfield.tableColumnName, domainfield.displayOrder" +
-					 "  from PkgPackage pkg, SwfForm form, SwdDomain domain, SwdField domainfield" +
-					 " where pkg.packageId = form.packageId" +
-					 "   and form.id = domain.formId" +
-					 "   and domain.objId = domainfield.domain" +
-					 "   and pkg.packageId = '" + packageId + "' " +
-					 " order by domainfield.displayOrder asc";
-
-		Query query = this.getSession().createQuery(hql);
+		Query query = this.getSession().createQuery(stringBuffer.toString());
 
 		List<SwdField> list = query.list();
 
@@ -2214,15 +2223,16 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	}
 
 	public SwdRecordExtend[] getCtgPkg(String packageId) throws SwdException {
-		String hql = "select ctg.objId as subCtgId, ctg.name as subCtgName, parentCtg.objId as parentCtgId, parentCtg.name as parentCtgName" +
-					 "  from SwfForm form, SwdDomain domain, PkgPackage pkg, CtgCategory ctg, CtgCategory parentCtg" +
-					 " where form.packageId = pkg.packageId" +
-					 "   and domain.formId = form.id" +
-					 "   and pkg.categoryId = ctg.objId" +
-					 "   and ctg.parentId = parentCtg.objId" +
-					 "   and pkg.packageId = '" + packageId + "' ";
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("select ctg.objId as subCtgId, ctg.name as subCtgName, parentCtg.objId as parentCtgId, parentCtg.name as parentCtgName");
+		stringBuffer.append("  from SwfForm form, SwdDomain domain, PkgPackage pkg, CtgCategory ctg, CtgCategory parentCtg");
+		stringBuffer.append(" where form.packageId = pkg.packageId");
+		stringBuffer.append("   and domain.formId = form.id");
+		stringBuffer.append("   and pkg.categoryId = ctg.objId");
+		stringBuffer.append("   and ctg.parentId = parentCtg.objId");
+		stringBuffer.append("   and pkg.packageId = '" + packageId + "'");
 
-		Query query = this.getSession().createQuery(hql);
+		Query query = this.getSession().createQuery(stringBuffer.toString());
 
 		List<SwdField> list = query.list();
 
@@ -2247,11 +2257,12 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 
 	@Override
 	public String getTableColName(String domainId, String formFieldId) throws SwdException {
-		String hql = "select tableColName	" +
-				 "	 	from SwdDomainFieldView	" +
-				 "	   where domainId = '" + domainId + "' and formFieldId = '" + formFieldId + "'";
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append("select tableColName");
+		stringBuffer.append(" from SwdDomainFieldView");
+		stringBuffer.append(" where domainId = '" + domainId + "' and formFieldId = '" + formFieldId + "'");
 
-		Query query = this.getSession().createQuery(hql);
+		Query query = this.getSession().createQuery(stringBuffer.toString());
 
 		String tableColName = (String)query.uniqueResult();
 
@@ -2270,6 +2281,23 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		Query query = this.getSession().createSQLQuery(stringBuffer.toString());
 		int count = (Integer)query.uniqueResult();
 		return count;
+	}
+
+	@Override
+	public void addHits(String tableName, String recordId) throws SwdException {
+		try {
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append("select hits from ").append(tableName).append(" where id= '"+recordId+"' ");
+			Query query = this.getSession().createSQLQuery(stringBuffer.toString());
+			int hits = CommonUtil.toInt(query.uniqueResult());
+			stringBuffer = new StringBuffer();
+			stringBuffer.append("update ").append(tableName).append(" set hits=").append(hits+1).append(" where id= '"+recordId+"' ");
+			query = this.getSession().createSQLQuery(stringBuffer.toString());
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new SwdException();
+		}
 	}
 
 }

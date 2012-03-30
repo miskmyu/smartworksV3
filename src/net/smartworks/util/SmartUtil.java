@@ -286,6 +286,7 @@ public class SmartUtil {
 				if(login != null) {
 					user.setId(login.getId());
 					user.setName(login.getName());
+					user.setNickName(login.getNickName());
 					user.setPassword(login.getPassword());
 					user.setCompanyId(login.getCompanyId());
 					user.setCompany(login.getCompany());
