@@ -1,6 +1,7 @@
 package net.smartworks.model.community;
 
 import net.smartworks.model.BaseObject;
+import net.smartworks.model.sera.Course;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.service.ISmartWorks;

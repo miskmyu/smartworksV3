@@ -48,6 +48,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	public static final String A_WORKSPACETYPE = "workSpaceType";
 	public static final String A_ACCESSLEVEL = "accessLevel";
 	public static final String A_ACCESSVALUE = "accessValue";
+	public static final String A_HITS = "hits";
 
 	private String recordId;
 	private String domainId;
@@ -66,6 +67,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
+	private int hits;
 	
 	private String searchKey;
 	public SwdRecordCond() {
@@ -101,6 +103,7 @@ public class SwdRecordCond extends ClassObjectCond {
 		appendAttributeString(A_WORKSPACETYPE, workSpaceType, buf);
 		appendAttributeString(A_ACCESSLEVEL, accessLevel, buf);
 		appendAttributeString(A_ACCESSVALUE, accessValue, buf);
+		appendAttributeString(A_HITS, hits, buf);
 		return buf.toString();
 	}
 	public static BaseObject toObject(Node node, BaseObject baseObj) throws Exception {
@@ -135,6 +138,7 @@ public class SwdRecordCond extends ClassObjectCond {
 			Node workSpaceType = attrMap.getNamedItem(A_WORKSPACETYPE);
 			Node accessLevel = attrMap.getNamedItem(A_ACCESSLEVEL);
 			Node accessValue = attrMap.getNamedItem(A_ACCESSVALUE);
+			Node hits = attrMap.getNamedItem(A_HITS);
 			if (domainId != null)
 				obj.setDomainId(domainId.getNodeValue());
 			if (recordId != null)
@@ -169,6 +173,8 @@ public class SwdRecordCond extends ClassObjectCond {
 				obj.setAccessLevel(accessLevel.getNodeValue());
 			if (accessValue != null)
 				obj.setAccessValue(accessValue.getNodeValue());
+			if (hits != null)
+				obj.setHits(CommonUtil.toInt(hits.getNodeValue()));
 		}
 		
 		// elements 값 설정
@@ -379,6 +385,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
+	}
+	public int getHits() {
+		return hits;
+	}
+	public void setHits(int hits) {
+		this.hits = hits;
 	}
 
 }

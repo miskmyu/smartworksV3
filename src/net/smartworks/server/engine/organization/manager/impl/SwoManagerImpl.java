@@ -1089,7 +1089,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update SwoUser set");
 				buf.append(" companyId=:companyId, deptId=:deptId, roleId=:roleId, authId=:authId, empNo=:empNo,");
-				buf.append(" name=:name, type=:type, position=:position, email=:email, password=:password,");
+				buf.append(" name=:name, nickName:nickName, type=:type, position=:position, email=:email, password=:password,");
 				buf.append(" lang=:lang, stdTime=:stdTime, picture=:picture,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
 				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate, retiree=:retiree,");
@@ -1103,6 +1103,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoUser.A_AUTHID, obj.getAuthId());
 				query.setString(SwoUser.A_EMPNO, obj.getEmpNo());
 				query.setString(SwoUser.A_NAME, obj.getName());
+				query.setString(SwoUser.A_NICKNAME, obj.getNickName());
 				query.setString(SwoUser.A_TYPE, obj.getType());
 				query.setString(SwoUser.A_POSITION, obj.getPosition());
 				query.setString(SwoUser.A_EMAIL, obj.getEmail());
@@ -1160,6 +1161,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String authId = null;
 		String empNo = null;
 		String name = null;
+		String nickName = null;
 		String nameLike = null;
 		String type = null;
 		String position = null;
@@ -1176,7 +1178,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String modificationUser = null;
 		Date modificationDate = null;
 		String[] typeNotIns = null;
-				
+
 		if (cond != null) {
 			id = cond.getId();
 			companyId = cond.getCompanyId();
@@ -1185,6 +1187,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			authId = cond.getAuthId();
 			empNo = cond.getEmpNo();
 			name = cond.getName();
+			nickName = cond.getNickName();
 			nameLike = cond.getNameLike();
 			type = cond.getType();
 			position = cond.getPosition();
@@ -1220,6 +1223,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.empNo = :empNo");
 			if (name != null)
 				buf.append(" and obj.name = :name");
+			if (nickName != null)
+				buf.append(" and obj.nickName = :nickName");
 			if (nameLike != null)
 				buf.append(" and obj.name like :nameLike");
 			if (type != null)
@@ -1278,6 +1283,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("empNo", empNo);
 			if (name != null)
 				query.setString("name", name);
+			if (nickName != null)
+				query.setString("nickName", nickName);
 			if (nameLike != null)
 				query.setString("nameLike", CommonUtil.toLikeString(nameLike));
 			if (type != null)
@@ -1381,7 +1388,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.id, obj.companyId, obj.deptId, obj.roleId, obj.authId, obj.empNo,");
-				buf.append(" obj.name, obj.type, obj.position, obj.email, obj.password,");
+				buf.append(" obj.name, obj.nickName, obj.type, obj.position, obj.email, obj.password,");
 				buf.append(" obj.lang, obj.stdTime, obj.picture,");
 				buf.append(" obj.creationUser, obj.creationDate,");
 				buf.append(" obj.modificationUser, obj.modificationDate, obj.retiree, obj.mobileNo, obj.extensionNo, ");
@@ -1404,6 +1411,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setAuthId((String)fields[j++]);
 					obj.setEmpNo((String)fields[j++]);
 					obj.setName((String)fields[j++]);
+					obj.setNickName((String)fields[j++]);
 					obj.setType((String)fields[j++]);
 					obj.setPosition((String)fields[j++]);
 					obj.setEmail((String)fields[j++]);
@@ -2095,6 +2103,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			SwoUserExtend userExtend = new SwoUserExtend();
 			userExtend.setId("admin@maninsoft.co.kr");
 			userExtend.setName("admin");
+			userExtend.setNickName("admin");
 			userExtend.setPassword("admin");
 			userExtend.setCompanyId("Maninsoft");
 			userExtend.setCompanyName("Maninsoft");
@@ -2123,7 +2132,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		} else {
 			StringBuffer buff = new StringBuffer();
 			buff.append("	select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
-			buff.append("  		   user.id,  user.name, user.password, user.companyId,  company.name, ");
+			buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
 			buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
 			buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 			buff.append("     	   user.empNo, user.email, user.extensionNo, user.mobileNo )");
@@ -2174,7 +2183,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		StringBuffer buff = new StringBuffer();
 		
 		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
-		buff.append(" user.id,  user.name, user.password, user.companyId,  company.name, ");
+		buff.append(" user.id,  user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" user.deptId, dept.name,  user.lang, ");
 		buff.append(" user.picture,  user.picture, user.position, ");
 		buff.append(" user.stdTime,  user.authId");
@@ -2216,6 +2225,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		userExtend = new SwoUserExtend();
 		userExtend.setId(User.USER_ID_NONE_EXISTING);
 		userExtend.setName(SmartMessage.getString("server.user.name.noneexisting"));
+		userExtend.setNickName(SmartMessage.getString("server.user.name.noneexisting"));
 		userExtend.setPassword("");
 		userExtend.setCompanyId("");
 		userExtend.setCompanyName("");

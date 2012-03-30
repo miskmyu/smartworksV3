@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,6 +48,144 @@ public class SeraController {
 	public ModelAndView Course(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course.jsp", "Course.tiles");
+	}
+
+	@RequestMapping("/createCourse")
+	public ModelAndView createCourse(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/create.jsp", "createCourse.tiles");
+	}
+
+	@RequestMapping("/mentorProfile")
+	public ModelAndView mentorProfile(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mentor_profile.jsp", "mentorProfile.tiles");
+	}
+
+	@RequestMapping("/myCourses")
+	public ModelAndView myCourses(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/my_courses.jsp", "myCourses.tiles");
+	}
+
+	@RequestMapping("/courseHome")
+	public ModelAndView courseHome(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/home.jsp", "courseHome.tiles");
+	}
+
+	@RequestMapping("/courseGeneral")
+	public ModelAndView courseGeneral(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/general.jsp", "");
+	}
+
+	@RequestMapping("/courseBoard")
+	public ModelAndView courseBoard(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/board.jsp", "");
+	}
+
+	@RequestMapping("/courseSetting")
+	public ModelAndView courseSetting(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/course_setting.jsp", "");
+	}
+
+	@RequestMapping("/courseSettingProfile")
+	public ModelAndView courseSettingProfile(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/profile.jsp", "");
+	}
+
+	@RequestMapping("/courseSettingMentee")
+	public ModelAndView courseSettingMentee(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/mentee.jsp", "");
+	}
+
+	@RequestMapping("/courseSettingTeam")
+	public ModelAndView courseSettingTeam(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/team.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionSet")
+	public ModelAndView courseMissionSet(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/create.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionList")
+	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionMine")
+	public ModelAndView courseMissionMine(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/mine.jsp", "");
+	}
+
+	@RequestMapping("/socialNote")
+	public ModelAndView socialNote(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/note.jsp", "");
+	}
+
+	@RequestMapping("/socialBadge")
+	public ModelAndView socialBadge(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/badge.jsp", "");
+	}
+
+	@RequestMapping("/socialBoard")
+	public ModelAndView socialBoard(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/board.jsp", "");
+	}
+
+	@RequestMapping("/socialCalendar")
+	public ModelAndView socialCalendar(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/calendar.jsp", "");
+	}
+
+	@RequestMapping("/socialEvent")
+	public ModelAndView socialEvent(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/event.jsp", "");
+	}
+
+	@RequestMapping("/socialFriend")
+	public ModelAndView socialFriend(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/friend.jsp", "");
+	}
+
+	@RequestMapping("/othersPAGE")
+	public ModelAndView othersPage(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "othersPAGE.tiles");
+	}
+
+	@RequestMapping("/othersCourses")
+	public ModelAndView othersCourses(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/others_courses.jsp", "");
+	}
+
+	@RequestMapping("/othersFriend")
+	public ModelAndView othersFriend(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/others_friend.jsp", "");
+	}
+
+	@RequestMapping("/othersBadge")
+	public ModelAndView othersBadge(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/others_badge.jsp", "");
 	}
 
 }

@@ -38,6 +38,7 @@ ALTER TABLE SwOpinion add modifiedTime datetime;
 -- SWOrgUser locale, timeZone column add
 ALTER TABLE SWOrgUser add locale varchar(20);
 ALTER TABLE SWOrgUser add timeZone varchar(20);
+ALTER TABLE SWOrgUser add nickName varchar(255);
 
 -- 커뮤니티 그룹
 CREATE TABLE SWOrgGroup (
