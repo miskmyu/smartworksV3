@@ -14,16 +14,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.filter.SearchFilter;
-import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
-import net.smartworks.model.report.Data;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.SmartWork;
-import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;

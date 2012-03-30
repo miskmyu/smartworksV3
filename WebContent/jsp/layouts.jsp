@@ -185,6 +185,7 @@ currentUser = {
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 
 <title><fmt:message key="head.title"><fmt:param value="<%=currentUser.getCompany() %>" /></fmt:message></title>
+<link rel="shortcut icon" href="images/favicon/smartworks.ico"/>
 
 </head>
 

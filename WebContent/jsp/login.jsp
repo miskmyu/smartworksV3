@@ -23,6 +23,7 @@
 		<script type="text/javascript" src="js/sw/sw-util.js"></script>
 		<script type="text/javascript" src='js/sw/sw-popup.js'></script>
 		<title><fmt:message key="login.head.title"/></title>
+		<link rel="shortcut icon" href="images/favicon/smartworks.ico"/>
 	</head>
 	<body>
 		<div id="lo_wrap">
