@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
+<%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Mentor"%>
 <%@page import="net.smartworks.model.sera.Course"%>
@@ -15,6 +17,7 @@
 	Course course = (Course) session.getAttribute("course");
 	if (SmartUtil.isBlankObject(course) || !course.getId().equals(courseId))
 		course = smartWorks.getCourseById(courseId);
+	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 10);
 %>
 <!-- Header Title -->
 <div class="header_tit">

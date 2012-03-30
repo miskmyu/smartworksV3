@@ -4,37 +4,37 @@ import net.smartworks.model.sera.info.CourseInfo;
 
 public class CourseList{
 
-	public static final int MAX_BRIEF_COURSE_LIST = 5;
+	public static final int MAX_BRIEF_COURSE_LIST = 3;
 	public static final int MAX_COURSE_LIST = 6;
 	
-	private int myRunnings = 0;
-	private int myAttendings = 0;
-	private CourseInfo[] myRunningCourses;
-	private CourseInfo[] myAttendingCourses;
+	private int runnings = 0;
+	private int attendings = 0;
+	private CourseInfo[] runningCourses;
+	private CourseInfo[] attendingCourses;
 	
-	public int getMyRunnings() {
-		return myRunnings;
+	public int getRunnings() {
+		return runnings;
 	}
-	public void setMyRunnings(int myRunnings) {
-		this.myRunnings = myRunnings;
+	public void setRunnings(int runnings) {
+		this.runnings = runnings;
 	}
-	public int getMyAttendings() {
-		return myAttendings;
+	public int getAttendings() {
+		return attendings;
 	}
-	public void setMyAttendings(int myAttendings) {
-		this.myAttendings = myAttendings;
+	public void setAttendings(int attendings) {
+		this.attendings = attendings;
 	}
-	public CourseInfo[] getMyRunningCourses() {
-		return myRunningCourses;
+	public CourseInfo[] getRunningCourses() {
+		return runningCourses;
 	}
-	public void setMyRunningCourses(CourseInfo[] myRunningCourses) {
-		this.myRunningCourses = myRunningCourses;
+	public void setRunningCourses(CourseInfo[] runningCourses) {
+		this.runningCourses = runningCourses;
 	}
-	public CourseInfo[] getMyAttendingCourses() {
-		return myAttendingCourses;
+	public CourseInfo[] getAttendingCourses() {
+		return attendingCourses;
 	}
-	public void setMyAttendingCourses(CourseInfo[] myAttendingCourses) {
-		this.myAttendingCourses = myAttendingCourses;
+	public void setAttendingCourses(CourseInfo[] attendingCourses) {
+		this.attendingCourses = attendingCourses;
 	}
 
 	public CourseList(){

@@ -3,8 +3,10 @@ package net.smartworks.util;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
@@ -110,16 +112,16 @@ public class SeraTest {
 		return course;
 	}
 
-	public static CourseList getMyCourses(int maxList) throws Exception{
+	public static CourseList getCoursesById(String userId, int maxList) throws Exception{
 		CourseList courseList = new CourseList();
-		courseList.setMyRunnings(21);
-		courseList.setMyAttendings(8);
-		courseList.setMyRunningCourses(new CourseInfo[]{getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2()});
-		courseList.setMyAttendingCourses(new CourseInfo[]{getCourseInfo1(), getCourseInfo1(), getCourseInfo1(), getCourseInfo1(), getCourseInfo1()});
+		courseList.setRunnings(21);
+		courseList.setAttendings(8);
+		courseList.setRunningCourses(new CourseInfo[]{getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2()});
+		courseList.setAttendingCourses(new CourseInfo[]{getCourseInfo1(), getCourseInfo1(), getCourseInfo1(), getCourseInfo1(), getCourseInfo1()});
 		return courseList;
 	}
 	
-	public static CourseInfo[] getMyCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception{
+	public static CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception{
 		return new CourseInfo[]{getCourseInfo1(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo2(), getCourseInfo1(), new CourseInfo()};
 	}
 	
@@ -129,5 +131,28 @@ public class SeraTest {
 	
 	public static Mentor getMentorById(String mentorId) throws Exception{
 		return getMentor1();
+	}
+	
+	public static FriendList getFriendsById(String userId, int maxList) throws Exception{
+		FriendList friendList = new FriendList();
+		friendList.setFriends(SmartTest.getAvailableChatter());
+		friendList.setTotalFriends(51);
+		return friendList;		
+	}
+	
+	public static UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
+		return SmartTest.getAvailableChatter();
+	}
+	
+	public static InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
+		InstanceInfo[] boards = SmartTest.getBoardInstances();
+		InstanceInfo[] events = SmartTest.getEventInstances();
+		InstanceInfo[] instances = new InstanceInfo[5];
+		for(int i=0; i<3; i++)
+			instances[i] = boards[i];
+		for(int i=0; i<2; i++)
+			instances[3+i] = events[i];
+		
+		return instances;
 	}
 }

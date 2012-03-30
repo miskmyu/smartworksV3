@@ -10,13 +10,15 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	CourseList courseList = smartWorks.getMyCourses(CourseList.MAX_COURSE_LIST);
+	String otherUserId = request.getParameter("userId");
+	User otherUser = smartWorks.getUserById(otherUserId);
+	CourseList courseList = smartWorks.getCoursesById(otherUserId, CourseList.MAX_COURSE_LIST);
 %>
 <div class="my_comment_section">
 	<!-- Photo Section -->
 	<div class="photo_section">
 		<div class="my_photo">
-			<img src="" />친구사진
+			<img src="<%=otherUser.getMidPicture() %>" />친구사진
 		</div>
 		<!-- Btn -->
 		<div class="btn_green_l cb" style="margin: 8px 0 0 10px">
@@ -29,10 +31,9 @@
 	<!-- Photo Section //-->
 	<!-- My Comment -->
 	<div class="my_comment">
-		<div class="header">사랑사랑님</div>
+		<div class="header"><%=otherUser.getNickName() %></div>
 		<div class="comment_txt ">
-			<textarea name="" cols="" rows="5">전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~ 전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를
-                </textarea>
+			<textarea name="" cols="" rows="5" placeholder="전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~"></textarea>
 		</div>
 		<div class="cb mt6">
 			<!-- 좌측 영역 -->
@@ -81,195 +82,52 @@
 	<!-- Content Section -->
 	<div class="content_section">
 		<div class="header mt10">
-			<div>홍길동님의 운영코스</div>
+			<div><%=otherUser.getNickName() %>님의 운영코스</div>
 		</div>
 		<!-- 리스트1 -->
 		<div class="category_list">
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box end">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box end">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
+			<%
+			if(courseList.getRunnings()>0){
+				for(int i=0; i<courseList.getRunningCourses().length; i++){
+					CourseInfo course = courseList.getRunningCourses()[i];
+					String endClass = ((i+1) % 3 == 0) ? "end" : "";
+			%>
+					<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+						<li class="photo">
+							<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						</li>
+						<li class="subject"><a href=""><%=course.getName() %></a></li>
+						<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+						<li class="info">
+							<dl>
+								<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
+								<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+								<dd class="category"></dd>
+							</dl></li>
+						<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+						<!-- Gauge -->
+						<li class="gauge_box w_auto mt5">
+							<dl>
+								<dd class="gauge_outline w170">
+									<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+								</dd>
+								<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
+							</dl></li>
+						<!-- Gauge //-->
+					</ul>
+			<%
+				}
+			}
+			if(courseList.getRunnings()>CourseList.MAX_COURSE_LIST){
+			%>
+				<!-- 더보기 -->
+				<div class="more cb">
+					<div class="icon_more">더보기</div>
+				</div>
+				<!-- 더보기 //-->
+			<%
+			}
+			%>
 		</div>
 		<!-- 리스트1 //-->
 
@@ -279,195 +137,52 @@
 	<!-- Content Section2 -->
 	<div class="content_section">
 		<div class="header mt10">
-			<div>홍길동님의 참여코스</div>
+			<div><%=otherUser.getNickName() %>님의 참여코스</div>
 		</div>
 		<!-- 리스트1 -->
 		<div class="category_list">
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box end">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
-
-			<ul class="category_box end">
-				<li class="photo"><a href=""> <img width="218" height="148"
-						src="../images/course_01.jpg"> </a>
-				</li>
-				<li class="subject"><a href="">어느 젊은 마법사의 코스</a>
-				</li>
-				<li class="maker"><a href="">SERA캠퍼스</a>
-				</li>
-				<li class="info">
-					<dl>
-						<dd class="menteeNo">34명</dd>
-						<dd class="makeDate">2012.02.07</dd>
-						<dd class="category"></dd>
-					</dl>
-				</li>
-				<li class="detail"><a href="/Course/Detail/212">안녕하세요
-						선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을
-						관찰하고 그것을 밖으로 표현하는 그림입니다...</a>
-				</li>
-				<!-- Gauge -->
-				<li class="gauge_box w_auto mt5">
-					<dl>
-						<dd class="gauge_outline w170">
-							<label class="gauge" style="width: 50%;"></label>
-						</dd>
-						<dd class="process">(6/10)</dd>
-					</dl>
-				</li>
-				<!-- Gauge //-->
-			</ul>
+		<%
+		if(courseList.getAttendings()>0){
+			for(int i=0; i<courseList.getAttendingCourses().length; i++){
+				CourseInfo course = courseList.getAttendingCourses()[i];
+				String endClass = ((i+1) % 3 == 0) ? "end" : "";
+		%>
+				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+					<li class="photo">
+						<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+					</li>
+					<li class="subject"><a href=""><%=course.getName() %></a></li>
+					<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+					<li class="info">
+						<dl>
+							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
+							<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+							<dd class="category"></dd>
+						</dl></li>
+					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+					<!-- Gauge -->
+					<li class="gauge_box w_auto mt5">
+						<dl>
+							<dd class="gauge_outline w170">
+								<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+							</dd>
+							<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
+						</dl></li>
+					<!-- Gauge //-->
+				</ul>
+		<%
+			}
+		}
+		if(courseList.getAttendings()>CourseList.MAX_COURSE_LIST){
+		%>
+			<!-- 더보기 -->
+			<div class="more cb">
+				<div class="icon_more">더보기</div>
+			</div>
+			<!-- 더보기 //-->
+		<%
+		}
+		%>
 		</div>
 		<!-- 리스트1 //-->
 	</div>

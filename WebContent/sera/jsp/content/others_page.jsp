@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.service.ISmartWorks"%>
@@ -8,13 +9,20 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 
 	User cUser = SmartUtil.getCurrentUser();
+	
+	String otherUserId = request.getParameter("userId");
+	User otherUser = smartWorks.getUserById(otherUserId);
+	if(SmartUtil.isBlankObject(otherUser)){
+		otherUser = SmartTest.getUser1();
+	}
+	session.setAttribute("otherUser", otherUser);
+	
 %>
 <div class="my_comment_section">
 	<!-- Photo Section -->
 	<div class="photo_section">
 		<div class="my_photo">
-			<img src="" />친구사진
-		</div>
+			<img src="<%=otherUser.getMidPicture() %>" /></div>
 		<!-- Btn -->
 		<div class="btn_green_l cb" style="margin: 8px 0 0 10px">
 			<div class="btn_green_r">
@@ -26,10 +34,9 @@
 	<!-- Photo Section //-->
 	<!-- My Comment -->
 	<div class="my_comment">
-		<div class="header">사랑사랑님</div>
+		<div class="header"><%=otherUser.getNickName() %></div>
 		<div class="comment_txt ">
-			<textarea name="" cols="" rows="5">전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~ 전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를
-                </textarea>
+			<textarea name="" cols="" rows="5" placeHolder="전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~ "></textarea>
 		</div>
 		<div class="cb mt6">
 			<!-- 좌측 영역 -->

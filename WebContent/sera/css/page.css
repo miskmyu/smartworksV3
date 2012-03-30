@@ -242,7 +242,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .content .name { color:#000000}
 .panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
-.panel_block .notes { width:100%} /* ÂÊÁö */
+.panel_block .notes { width:100%} /* ï¿½ï¿½ï¿½ï¿½ */
 .panel_block .thum_image {width:120px; height:66px; float:right}
 .panel_block .detail_image {width:540px; border:1px solid #cccccc; height:auto; clear:both}
 .panel_block dl.bor {border-bottom:1px solid #cccccc}
@@ -308,6 +308,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Badge */
 .badge_df {background: url("../images/badge_df.gif") no-repeat scroll 0 0; width:40px; height:40px; display:inline-block}
 /* Friend */
+/*.friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
+*/
 .friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
 /* Aside AD */
 .aside_ad {display:block; margin-top:15px; padding:15px 12px;}

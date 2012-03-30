@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.instance.Instance"%>
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Mentor"%>
 <%@page import="net.smartworks.model.sera.Course"%>
@@ -13,6 +15,7 @@
 	
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
+	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, null, 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
 	String mentorName = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getName();
 	boolean myRunningCourse = (cUser.getId().equals(mentorId));
@@ -46,10 +49,20 @@
 		<div class="course_info">
 			<dl>
 				<dt>코스알림</dt>
-				<dd>- [알림] 3월 14일 번개팅합니다</dd>
-				<dd>- 미션6이 등록되었습니다</dd>
-				<dd>- [이벤트] 미션2 선착순 3명!...</dd>
-				<dd>- [이벤트] 미션2 선착순 3명!...</dd>
+				<%
+				for(int i=0; i<notices.length; i++){
+					InstanceInfo notice = notices[i];
+					if(notice.getType()==Instance.TYPE_BOARD){
+				%>
+						<dd>[알림] <%=notice.getSubject() %></dd>
+					<%
+					}else if(notice.getType()==Instance.TYPE_EVENT){
+					%>
+						<dd>[이벤트] <%=notice.getSubject() %></dd>
+					<%
+					}
+				}
+				%>
 			</dl>
 		</div>
 	</div>

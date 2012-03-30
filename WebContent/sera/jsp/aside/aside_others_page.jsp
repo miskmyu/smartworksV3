@@ -4,6 +4,7 @@
 <!-- Author			: Y.S. JUNG												 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.sera.info.CourseInfo"%>
@@ -18,7 +19,9 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	CourseList courseList = smartWorks.getMyCourses(CourseList.MAX_BRIEF_COURSE_LIST);
+	User otherUser = (User)session.getAttribute("otherUser");
+	CourseList courseList = smartWorks.getCoursesById(otherUser.getId(), CourseList.MAX_BRIEF_COURSE_LIST);
+	FriendList friendList = smartWorks.getFriendsById(otherUser.getId(), FriendList.MAX_BRIEF_FRIEND_LIST);
 %>
 
 <!-- Search Section -->
@@ -41,33 +44,57 @@
 	<div class="aside_block">
 		<div class="header">
 			<div class="icon_as_mycourse fl">
-				사랑사랑의 코스 <span class="num_cus">(23)</span>
+				<%=otherUser.getNickName() %>의 코스 <span class="num_cus">(<%=courseList.getRunnings() + courseList.getAttendings() %>)</span>
 			</div>
 			<div class="icon_as_more">
-				<a href="othersCourses.sw" class="mt10 js_sera_content"> </a>
+				<a href="othersCourses.sw?userId=<%=otherUser.getId() %>" class="mt10 js_sera_content"> </a>
 			</div>
 		</div>
 		<div class="content">
 			<dl>
-				<dt>운영코스 (10)</dt>
+				<dt>운영코스 (<%=courseList.getRunnings() %>)</dt>
 				<dd>
-					<ul>
-						<li><span class="t_blue">코스명1</span> 자화상 그리기</li>
-						<li><span class="t_blue">코스명2</span> 자기 소개하기</li>
-						<li><span class="t_blue">코스명3</span> 길거리 사진찍기 공유하기</li>
-					</ul>
+					<%
+					if(courseList.getRunnings()>0){
+					%>
+						<ul>
+							<%
+							for(int i=0; i<courseList.getRunningCourses().length; i++){
+								CourseInfo course = courseList.getRunningCourses()[i];
+								String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getName();
+							%>
+									<li ><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span><%=missionName%></a></li>
+							<%
+							}
+							%>
+						</ul>
+					<%
+					}
+					%>
 				</dd>
 			</dl>
 		</div>
 		<div class="content">
 			<dl>
-				<dt>참여코스 (13)</dt>
+				<dt>참여코스 (<%=courseList.getAttendings() %>)</dt>
 				<dd>
-					<ul>
-						<li><span class="t_blue">코스명1</span> 자화상 그리기</li>
-						<li><span class="t_blue">코스명2</span> 자기 소개하기</li>
-						<li><span class="t_blue">코스명3</span> 길거리 사진찍기 공유하기</li>
-					</ul>
+					<%
+					if(courseList.getAttendings()>0){
+					%>
+						<ul>
+							<%
+							for(int i=0; i<courseList.getAttendingCourses().length; i++){
+								CourseInfo course = courseList.getAttendingCourses()[i];
+								String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getName();
+							%>
+									<li><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span><%=missionName%></a></li>
+							<%
+							}
+							%>
+						</ul>
+					<%
+					}
+					%>
 				</dd>
 			</dl>
 		</div>
@@ -76,7 +103,7 @@
 	<!-- Aside Block2 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class=" icon_as_badge fl">사랑사랑의 뱃지 (16)</div>
+			<div class=" icon_as_badge fl"><%=otherUser.getNickName() %>의 뱃지 (16)</div>
 			<div class="icon_as_more">
 				<a href="othersBadge.sw" class="mt10 js_sera_content"> </a>
 			</div>
@@ -123,46 +150,21 @@
 	<!-- Aside Block3 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class=" icon_as_friend fl">사랑사랑의 친구 (100)</div>
+			<div class=" icon_as_friend fl"><%=otherUser.getNickName() %>의 친구 (<%=friendList.getTotalFriends() %>)</div>
 			<div class="icon_as_more">
-				<a href="othersFriend.sw" class="mt10 js_sera_content"> </a>
+				<a href="othersFriend.sw?userId=<%=otherUser.getId() %>" class="mt10 js_sera_content"> </a>
 			</div>
 		</div>
 		<div class="list">
 			<dl>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
-				<dd>
-					<div class="friend_df"></div>
-				</dd>
+				<%
+				for(int i=0; i<friendList.getFriends().length; i++){
+					UserInfo friend = friendList.getFriends()[i];
+				%>
+					<dd><a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img class="friend_df" src="<%=friend.getMinPicture()%>"></a></dd>
+				<%
+				}
+				%>
 			</dl>
 		</div>
 	</div>

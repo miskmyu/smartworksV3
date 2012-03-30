@@ -41,6 +41,7 @@ import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.service.ExternalForm;
@@ -895,13 +896,13 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public CourseList getMyCourses(int maxList) throws Exception {
-		return seraService.getMyCourses(maxList);
+	public CourseList getCoursesById(String userId, int maxList) throws Exception {
+		return seraService.getCoursesById(userId, maxList);
 	}
 	
 	@Override
-	public CourseInfo[] getMyCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getMyCoursesByType(courseType, fromDate, maxList);
+	public CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCoursesById(userId, courseType, fromDate, maxList);
 	}
 	
 	@Override
@@ -912,6 +913,21 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public Mentor getMentorById(String mentorId) throws Exception {
 		return seraService.getMentorById(mentorId);
+	}
+
+	@Override
+	public FriendList getFriendsById(String userId, int maxList) throws Exception {
+		return seraService.getFriendsById(userId, maxList);
+	}
+	
+	@Override
+	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendsById(userId, lastId, maxList);
+	}
+
+	@Override
+	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCourseNotices(courseId, fromDate, maxList);
 	}
 	
 }

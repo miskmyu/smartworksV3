@@ -10,7 +10,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	CourseList courseList = smartWorks.getMyCourses(CourseList.MAX_COURSE_LIST);
+	CourseList courseList = smartWorks.getCoursesById(cUser.getId(), CourseList.MAX_COURSE_LIST);
 %>
 <!-- Header Title -->
 <div class="header_tit">
@@ -26,9 +26,9 @@
 	<!-- 리스트1 -->
 	<div class="category_list">
 		<%
-		if(courseList.getMyRunnings()>0){
-			for(int i=0; i<courseList.getMyRunningCourses().length; i++){
-				CourseInfo course = courseList.getMyRunningCourses()[i];
+		if(courseList.getRunnings()>0){
+			for(int i=0; i<courseList.getRunningCourses().length; i++){
+				CourseInfo course = courseList.getRunningCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 		%>
 				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
@@ -57,7 +57,7 @@
 		<%
 			}
 		}
-		if(courseList.getMyRunnings()>CourseList.MAX_COURSE_LIST){
+		if(courseList.getRunnings()>CourseList.MAX_COURSE_LIST){
 		%>
 			<!-- 더보기 -->
 			<div class="more cb">
@@ -81,9 +81,9 @@
 	<!-- 리스트1 -->
 	<div class="category_list">
 		<%
-		if(courseList.getMyAttendings()>0){
-			for(int i=0; i<courseList.getMyAttendingCourses().length; i++){
-				CourseInfo course = courseList.getMyAttendingCourses()[i];
+		if(courseList.getAttendings()>0){
+			for(int i=0; i<courseList.getAttendingCourses().length; i++){
+				CourseInfo course = courseList.getAttendingCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 		%>
 				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
@@ -112,7 +112,7 @@
 		<%
 			}
 		}
-		if(courseList.getMyAttendings()>CourseList.MAX_COURSE_LIST){
+		if(courseList.getAttendings()>CourseList.MAX_COURSE_LIST){
 		%>
 			<!-- 더보기 -->
 			<div class="more cb">

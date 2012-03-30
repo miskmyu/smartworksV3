@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
+<%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.service.ISmartWorks"%>
@@ -7,18 +9,16 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-	String cid = request.getParameter("cid");
-	if (SmartUtil.isBlankObject(cid))
-		cid = ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId();
-	String wid = request.getParameter("wid");
-	if (SmartUtil.isBlankObject(wid))
-		wid = cUser.getId();
+	String otherUserId = request.getParameter("userId");
+	User otherUser = smartWorks.getUserById(otherUserId);
+	FriendList friendList = smartWorks.getFriendsById(otherUserId, FriendList.MAX_FRIEND_LIST);
+
 %>
 <div class="my_comment_section">
 	<!-- Photo Section -->
 	<div class="photo_section">
 		<div class="my_photo">
-			<img src="" />친구사진
+			<img src="<%=otherUser.getMidPicture() %>" />
 		</div>
 		<!-- Btn -->
 		<div class="btn_green_l cb" style="margin: 8px 0 0 10px">
@@ -31,10 +31,9 @@
 	<!-- Photo Section //-->
 	<!-- My Comment -->
 	<div class="my_comment">
-		<div class="header">사랑사랑님</div>
+		<div class="header"><%=otherUser.getNickName() %>님</div>
 		<div class="comment_txt ">
-			<textarea name="" cols="" rows="5">전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~ 전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~전공 공부만큼 영어를
-                </textarea>
+			<textarea name="" cols="" rows="5" placeholer="전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~ "></textarea>
 		</div>
 		<div class="cb mt6">
 			<!-- 좌측 영역 -->
@@ -84,7 +83,7 @@
 	<div>
 		<div class="header mt20">
 			<div class="fl">
-				<span class="t_myid">사랑사랑님</span>의 친구 (35)
+				<span class="t_myid"><%=otherUser.getNickName() %>님</span>의 친구 (<%=friendList.getTotalFriends() %>)
 			</div>
 
 			<div class="fr">
@@ -95,207 +94,51 @@
 
 		<div class="panel_area">
 
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="icon_ourfriend" style="">우리는 친구</div> <!-- Btn //-->
-					</span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-			<!-- 목록1-->
-			<div class="panel_rds_block mb10">
-				<ul>
-					<li class="pl0pr10"><img src="../images/photo_mid48_2.jpg" />
-					</li>
-					<li class="w90"><span> 피터팬<br /> <span class="cb t_id">identity</span>
-					</span>
-					</li>
-					<li class="bo_l w370"><span>
-							목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id">hongildong@korea.com</span>
-					</span>
-					</li>
-					<li class="fr bo_l"><span> <!-- Btn -->
-							<div class="btn_green_l">
-								<div class="btn_green_r">
-									<span class="icon_green_down mr5"></span>친구 요청
-								</div>
-							</div> <!-- Btn //--> </span>
-					</li>
-				</ul>
-			</div>
-			<!-- 목록1//-->
-
+			<%
+			if(friendList.getTotalFriends()>0){
+				for(int i=0; i<friendList.getFriends().length; i++){
+					UserInfo friend = friendList.getFriends()[i];
+			%>
+				<!-- 목록1-->
+				<div class="panel_rds_block mb10">
+					<ul>
+						<li class="pl0pr10"><img src="<%=friend.getMinPicture() %>" />
+						</li>
+						<li class="w90"><span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span>
+						</span>
+						</li>
+						<li class="bo_l w370"><span>
+								목표내용목표내용목표내용목표내용목표내용목표내용목표내용목표내용<br /> <span class="t_id"><%=friend.getId() %></span>
+						</span>
+						</li>
+						<li class="fr bo_l"><span> <!-- Btn -->
+								<div class="btn_green_l">
+									<div class="btn_green_r">
+										<span class="icon_green_down mr5"></span>친구 요청
+									</div>
+								</div> <!-- Btn //--> </span>
+						</li>
+					</ul>
+				</div>
+				<!-- 목록1//-->
+			<%
+				}
+			}
+			%>
 		</div>
 	</div>
 	<!-- Panel2 //-->
 
+	<%
+	if(friendList.getTotalFriends()>friendList.getFriends().length){
+	%>
+		<!-- 더보기 -->
+		<div class="more">
+			<div class="icon_more">더보기</div>
+		</div>
+		<!-- 더보기 //-->
+	<%
+	}
+	%>
 </div>
 <!-- Panel Section //-->
