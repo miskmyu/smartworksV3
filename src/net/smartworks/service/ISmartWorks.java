@@ -39,6 +39,11 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -417,4 +422,18 @@ public interface ISmartWorks {
 
 	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract Course getCourseById(String courseId) throws Exception;
+
+	public abstract Mentor getMentorById(String mentorId) throws Exception;
+
+	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
+
+	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+
+	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
+	
 }

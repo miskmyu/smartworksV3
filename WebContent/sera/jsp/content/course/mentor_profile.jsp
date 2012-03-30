@@ -101,7 +101,7 @@
 <!-- Btn -->
 <div class="btn_space">
 	<div style="clear: both; display: inline-block">
-		<div class="btn_blu_l mr10">
+		<div href="createCourse.sw" class="btn_blu_l mr10 js_sera_content">
 			<div class="btn_blu_r">코스 만들기</div>
 		</div>
 

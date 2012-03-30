@@ -12,7 +12,7 @@
 	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
 
 %>
-<script type="text/javascript">
+<script type="text/javascript" async="async">
 
 	// 회사일반정보프로파일 수정하기 버튼을 클릭하면, 
 	// 모든정보를 JSON형식으로 Serialize해서 서버의 set_company_general.sw 서비스를 호출하여 수정한다.
@@ -75,7 +75,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title_noico"><fmt:message key="settings.title.company.general"/></div>
+				<div class="body_titl_company title_noico"><fmt:message key="settings.title.company.general"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 //-->

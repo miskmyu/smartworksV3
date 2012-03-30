@@ -39,6 +39,11 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -56,6 +61,7 @@ import net.smartworks.server.service.IDocFileService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
@@ -76,6 +82,7 @@ public class SmartWorks implements ISmartWorks {
 	IDocFileService docFileService;
 	ISettingsService settingsService;
 	IBuilderService builderService;
+	ISeraService seraService;
 
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
@@ -120,6 +127,11 @@ public class SmartWorks implements ISmartWorks {
 	@Autowired
 	public void setBuilderService(IBuilderService builderService) {
 		this.builderService = builderService;
+	}
+
+	@Autowired
+	public void setSeraService(ISeraService seraService) {
+		this.seraService = seraService;
 	}
 
 	@Override
@@ -881,6 +893,41 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeCommentOnInstance(requestBody, request);
+	}
+	
+	@Override
+	public CourseList getCoursesById(String userId, int maxList) throws Exception {
+		return seraService.getCoursesById(userId, maxList);
+	}
+	
+	@Override
+	public CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCoursesById(userId, courseType, fromDate, maxList);
+	}
+	
+	@Override
+	public Course getCourseById(String courseId) throws Exception {
+		return seraService.getCourseById(courseId);
+	}
+	
+	@Override
+	public Mentor getMentorById(String mentorId) throws Exception {
+		return seraService.getMentorById(mentorId);
+	}
+
+	@Override
+	public FriendList getFriendsById(String userId, int maxList) throws Exception {
+		return seraService.getFriendsById(userId, maxList);
+	}
+	
+	@Override
+	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendsById(userId, lastId, maxList);
+	}
+
+	@Override
+	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCourseNotices(courseId, fromDate, maxList);
 	}
 	
 }
