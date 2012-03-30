@@ -853,6 +853,9 @@ public class WorkServiceImpl implements IWorkService {
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
 
 		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
 			String workId = request.getParameter("workId");
 			String recordId = request.getParameter("recordId");
 			String taskInstId = request.getParameter("taskInstId");
@@ -870,6 +873,16 @@ public class WorkServiceImpl implements IWorkService {
 				swdRecordCond.setRecordId(recordId);
 				swdRecordCond.setFormId(formId);
 				swdRecord = getSwdManager().getRecord("", swdRecordCond, IManager.LEVEL_ALL);
+				SwdDomainCond domainCond = new SwdDomainCond();
+				domainCond.setFormId(formId);
+				SwdDomain[] swdDomains = getSwdManager().getDomains(userId, domainCond, IManager.LEVEL_LITE);
+				SwdDomain swdDomain = null;
+				String tableName = null;
+				if(!CommonUtil.isEmpty(swdDomains)) {
+					swdDomain = swdDomains[0];
+					tableName = swdDomain.getTableName();
+				}
+				getSwdManager().addHits(tableName, recordId);
 			} else if(taskInstId != null) {
 				TskTaskCond tskTaskCond = new TskTaskCond();
 				tskTaskCond.setObjId(taskInstId);

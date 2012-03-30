@@ -21,6 +21,7 @@ CREATE TABLE sworguser (
 	authid varchar(50),
 	empno varchar(50),
 	name varchar(255),
+	nickName varchar(255),
 	type varchar(50),
 	pos varchar(50),
 	email varchar(50),
