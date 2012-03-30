@@ -912,6 +912,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, task.tskform ");
 		queryBuffer.append("		, task.isStartActivity ");
 		queryBuffer.append("		, task.tskWorkSpaceId ");//workSpaceId
+		queryBuffer.append("		, task.tskAccessLevel ");
+		queryBuffer.append("		, task.tskAccessValue ");
 		queryBuffer.append("		, task.tskDef ");//workSpaceId
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
@@ -1003,6 +1005,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, prcInst.prcPrcId ");
 		queryBuffer.append("		, prcInst.prcCreateDate ");
 		queryBuffer.append("		, prcInst.prcWorkSpaceId "); //workSpaceId
+		queryBuffer.append("		, prcInst.prcAccessLevel ");
+		queryBuffer.append("		, prcInst.prcAccessValue ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskobjid ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskname ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskcreateuser ");
@@ -1181,27 +1185,31 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setTskAssignee((String)fields[j++]); 
 				obj.setTaskLastModifyDate((Timestamp)fields[j++]);
 				obj.setTskCreateDate((Timestamp)fields[j++]);
-				obj.setTskName((String)fields[j++]);     
+				obj.setTskName((String)fields[j++]);
 				obj.setTskPrcInstId((String)fields[j++]);
-				obj.setTskForm((String)fields[j++]);     
-				obj.setIsStartActivity((String)fields[j++]); 
-				obj.setTskWorkSpaceId((String)fields[j++]);     
-				obj.setTskDef((String)fields[j++]);     
-				obj.setPackageId((String)fields[j++]);     
-				obj.setPackageName((String)fields[j++]);   
-				obj.setChildCtgId((String)fields[j++]);  
+				obj.setTskForm((String)fields[j++]);
+				obj.setIsStartActivity((String)fields[j++]);
+				obj.setTskWorkSpaceId((String)fields[j++]);
+				obj.setTskAccessLevel((String)fields[j++]);
+				obj.setTskAccessValue((String)fields[j++]);
+				obj.setTskDef((String)fields[j++]);
+				obj.setPackageId((String)fields[j++]);
+				obj.setPackageName((String)fields[j++]);
+				obj.setChildCtgId((String)fields[j++]);
 				obj.setChildCtgName((String)fields[j++]);
-				obj.setParentCtgId((String)fields[j++]); 
+				obj.setParentCtgId((String)fields[j++]);
 				obj.setParentCtgName((String)fields[j++]);
-				obj.setPrcObjId((String)fields[j++]);                           
-				obj.setPrcTitle((String)fields[j++]);                           
-				obj.setPrcType((String)fields[j++]);                            
-				obj.setPrcStatus((String)fields[j++]);                          
-				obj.setPrcCreateUser((String)fields[j++]);                      
-				obj.setPrcDid((String)fields[j++]);                             
-				obj.setPrcPrcId((String)fields[j++]); 
-				obj.setPrcCreateDate((Timestamp)fields[j++]);                    
-				obj.setPrcWorkSpaceId((String)fields[j++]); 
+				obj.setPrcObjId((String)fields[j++]);
+				obj.setPrcTitle((String)fields[j++]);
+				obj.setPrcType((String)fields[j++]);
+				obj.setPrcStatus((String)fields[j++]);
+				obj.setPrcCreateUser((String)fields[j++]);
+				obj.setPrcDid((String)fields[j++]);
+				obj.setPrcPrcId((String)fields[j++]);
+				obj.setPrcCreateDate((Timestamp)fields[j++]);
+				obj.setPrcWorkSpaceId((String)fields[j++]);
+				obj.setPrcAccessLevel((String)fields[j++]);
+				obj.setPrcAccessValue((String)fields[j++]);
 				obj.setLastTskObjId((String)fields[j++]);                       
 				obj.setLastTskName((String)fields[j++]);                        
 				obj.setLastTskCreateUser((String)fields[j++]);                  

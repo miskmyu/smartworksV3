@@ -13,7 +13,9 @@ import java.util.Date;
 import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.util.LocalDate;
 
-public class TaskWorkCond extends Cond{
+public class TaskWorkCond extends Cond {
+
+	private static final long serialVersionUID = 1L;
 
 	private String tskObjId;    
 	private String tskTitle;    

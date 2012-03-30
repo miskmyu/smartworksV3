@@ -28,6 +28,8 @@ public class TaskWork {
 	private String isStartActivity;
 	private String tskWorkSpaceId;
 	private String tskWorkSpaceType;
+	private String tskAccessLevel;
+	private String tskAccessValue;
 	private String tskDef;
 	private String packageId;  
 	private String packageName;
@@ -45,6 +47,8 @@ public class TaskWork {
 	private Date prcCreateDate;
 	private String prcWorkSpaceId;
 	private String prcWorkSpaceType;
+	private String prcAccessLevel;
+	private String prcAccessValue;
 	private String lastTskObjId;                       
 	private String lastTskName;                        
 	private String lastTskCreateUser;                  
@@ -348,5 +352,29 @@ public class TaskWork {
 	}
 	public void setLastTskDef(String lastTskDef) {
 		this.lastTskDef = lastTskDef;
+	}
+	public String getTskAccessLevel() {
+		return tskAccessLevel;
+	}
+	public void setTskAccessLevel(String tskAccessLevel) {
+		this.tskAccessLevel = tskAccessLevel;
+	}
+	public String getTskAccessValue() {
+		return tskAccessValue;
+	}
+	public void setTskAccessValue(String tskAccessValue) {
+		this.tskAccessValue = tskAccessValue;
+	}
+	public String getPrcAccessLevel() {
+		return prcAccessLevel;
+	}
+	public void setPrcAccessLevel(String prcAccessLevel) {
+		this.prcAccessLevel = prcAccessLevel;
+	}
+	public String getPrcAccessValue() {
+		return prcAccessValue;
+	}
+	public void setPrcAccessValue(String prcAccessValue) {
+		this.prcAccessValue = prcAccessValue;
 	}
 }

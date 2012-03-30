@@ -2,7 +2,7 @@
 /* CSS Document */
 
 /* 본문- 타이틀 아이콘*/
-.body_titl { padding:0 15px 10px; overflow: hidden;} /* 본문 페이지 타이틀*/
+.body_titl {padding:0 15px 10px; overflow: hidden;} /* 본문 페이지 타이틀*/
 .body_titl .title {font-size: 16px; font-weight: bold; height: 29px; float:left}  /* 타이틀 우측으로 아이콘이 있을때 */
 .body_titl .title_noico {font-size: 16px; font-weight: bold; height:29px}  /* 타이틀 우측으로 아이콘이 없을때 */
 .body_titl .myspace_h {padding: 7px 0 0; background:none} 
@@ -18,6 +18,12 @@
 .body_titl_pworks {background: url("../../images/body_title_proces.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px;}
 .body_titl_iworks {background: url("../../images/body_title_inform.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px;}
 .body_titl_set {background: url("../../images/body_title_set.png") no-repeat 0 -2px transparent; padding:22px 0 0 53px; line-height:18px;}
+.body_titl_company {background: url("../../images/body_title.jpg") no-repeat 0 0 transparent; padding:22px 0 0 68px; line-height:18px;}
+.body_titl_organization {background: url("../../images/body_title.jpg") no-repeat 0 -52px transparent; padding:22px 0 0 68px; line-height:18px;}
+.body_titl_approval {background: url("../../images/body_title.jpg") no-repeat 0 -156px transparent; padding:22px 0 0 68px; line-height:18px;}
+.body_titl_webservice {background: url("../../images/body_title.jpg") no-repeat 0 -208px transparent; padding:22px 0 0 68px; line-height:18px;}
+.body_titl_externalform {background: url("../../images/body_title.jpg") no-repeat 0 -260px transparent; padding:22px 0 0 68px; line-height:18px;}
+
 .body_titl .t_name {color:#23579e; line-height:12px; position: relative; vertical-align: bottom;}
 .body_titl .t_date {font-size:11px; color:#999897; line-height:12px; position: relative; vertical-align: bottom;}
 
