@@ -86,6 +86,7 @@ currentUser = {
 <link href="css/default.css" type="text/css" rel="stylesheet" />
 <link href="css/black/pop.css" type="text/css" rel="stylesheet" />
 <link href="css/black/chat.css" type="text/css" rel="stylesheet" />
+<link href="sera/css/form.css" type="text/css" rel="stylesheet" />
 <link href="sera/css/page.css" type="text/css" rel="stylesheet" />
 
 <link href="css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />
@@ -208,7 +209,7 @@ currentUser = {
 		    <!-- Content //-->
 		    
 			<!-- Aside -->
-			<div class="aside">
+			<div>
 				<tiles:insertAttribute name="aside" />
 			</div>
 			<!-- Aside //-->

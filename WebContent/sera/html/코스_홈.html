@@ -51,7 +51,7 @@
           <li class="icon_mycourse"><a href="">내코스</a></li>
           <li class="icon_friend"><a href="">친구</a></li>
           <li class="icon_notes"><a href="">쪽지</a></li>
-          <li class="icon_chaledar"><a href="">캘린더</a></li>
+          <li class="icon_calendar"><a href="">캘린더</a></li>
           <li class="icon_badge"><a href="">뱃지</a></li>
           <li class="icon_event"><a href="">이벤트</a></li>
         </ul>
@@ -69,7 +69,7 @@
         <div class="course_df_img"> <img src="../images/cus_df_img.jpg"/> </div>
         <div class="course_df">
           <h1>자화상 그리기</h1>
-          <ul class="mt10">
+          <ul class="mt8">
             <li>
               <div class="icon_cs_mentorname"><span>멘토명</span></div>
               <span class="t_s14">홍길동</span> </li>
@@ -98,7 +98,7 @@
         <!-- Menu Dep1-->
         <div class="course_menu_d1">
           <ul>
-            <li>홈</li>
+            <li class="current">홈</li>
             <li>미션</li>
             <li>코스알림</li>
             <li>코스설정</li>
@@ -114,23 +114,27 @@
         </div>
       </div>
       <!-- Menu Dep2 -->
-      <div class="course_menu_d2">
+      <div class="course_menu_d2" style=" display:none">
         <div class="menu001" style="visibility:hidden"> </div>
         <div class="menu002 current" style="visibility:hidden">
           <ul>
             <li><a href="">미션등록/수행</a></li>
             <li><a href="">전체보기</a></li>
             <li><a href="">내글보기</a></li>
-            <li class="end"><a href="">미션별 보기</a></li>
+            <li class="end"><span class="icon_bul_select mr5"></span><a href="">미션별 보기</a></li>
           </ul>
         </div>
         <div class="menu003" style="visibility:hidden"> 
         </div>
-        <div class="menu004">
+        <div class="menu004" style="visibility:hidden">
         <ul>
             <li><a href=""> 코스관리</a></li>
             <li><a href="">멘티관리</a></li>
-            <li class="end"><a href="">팀 관리</a></li>
+            <li class="end">
+             <a href="">
+            <span class="icon_bul_select mr5"></span>팀관리
+            </a>
+            </li>
           </ul>
         </div>
         
@@ -307,8 +311,23 @@
     <!-- Comment Pannel-->
   </div>
   <!-- Content //-->
+  
+      <!-- Search Section -->
+    <div class="srch_section">
+      <div class="srch">
+        <div>
+          <input type="text" placeholder="SERA를 검색하세요.">
+        </div>
+        <div class="icon_admin fr"></div>
+      </div>
+      <div class="btn_default_l ml4">
+        <div class="btn_default_r">채팅하기</div>
+      </div>
+    </div>
+    <!-- Search Section -->
+    
   <!-- Aside -->
-  <div class="aside">
+  <div class="aside m0">
     <!-- Aside Block1 -->
     <div class="aside_ad">
      <div>광고</div>

@@ -64,7 +64,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title_noico"><fmt:message key="settings.title.approval.setting"/></div>
+				<div class="body_titl_approval title_noico"><fmt:message key="settings.title.approval.setting"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 -->

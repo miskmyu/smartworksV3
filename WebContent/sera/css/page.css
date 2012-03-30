@@ -54,12 +54,45 @@
 .tit_cus2 {background: url("../images/header_admin.png") no-repeat scroll 0 -85px; height:85px}
 .tit_cus3 {background: url("../images/header_admin.png") no-repeat scroll 0 -170px; height:85px}
 
+/* Nav Side Navigation Bar */
+#nav_snb {float: left; line-height: normal; margin-bottom: -1px; position: relative; width: 190px; z-index: 20}
+/* Nav SNB Icon */
+.b_prev {background: url("../images/icon.png") no-repeat scroll 0 -520px; width:13px; height:13px; display:block}
+a.b_prev:hover { background-position:0 -535px}
+.b_next {background: url("../images/icon.png") no-repeat scroll -30px -520px; width:13px; height:13px; display:block}
+a.b_next:hover { background-position:-30px -535px}
+.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; width:11px; height:11px; display:block; float:left; padding:0 5px 0 0}
+.icon_mission.current { background-position:0 -579px}
+.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; width:11px; height:11px; display:block; float:left; padding:0 0 0 5px}
+.icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
+
+/* Section Center */
+#section_cen {margin: 0 0 0 210px; position: relative; z-index: 10}
+.this_month {}
+.this_month .tit_area { font-size:14px; font-weight:bold; text-align:center; margin:0 0 0 37px; padding-bottom:3px; overflow:hidden}
+.this_month .tit_area .tit { margin:0 10px; float:left}
+.this_month table { font-size:11px; margin-top:10px; border-collapse:collapse; background-color:#f8f8f8}
+.this_month table th, .this_month table td { border:1px solid #cccccc; padding:5px 2px}
+.this_month table th { text-align:center}
+.this_month table .today_cel { background-color:#9cc7e1}
+
+
+/* Tab */
+.tab {background: url("../images/tab.gif") repeat-x scroll left bottom transparent; height: 31px; margin: 15px 0 10px;}
+.tab ul { margin:0 0 0 13px}
+.tab li {background: url("../images/tab_l.gif") no-repeat scroll 0 0 transparent; float: left; height: 31px; margin:0 0 0 -1px;}
+.tab li.current {background-position: left -31px;}
+.tab li span {background: url("../images/tab_r.gif") no-repeat scroll right top transparent; display: block; float: left; height: 31px;}
+.tab li.current span {background-position: right -31px;}
+.tab li span a {display: inline-block; line-height: 36px; padding: 0 20px;}
+.tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
+
 /* Icon in GNB */
 .icon_alarm a {background: url("../images/icon.png") no-repeat scroll -267px -6px; width:28px; height:45px; display:block}
 .icon_mycourse a {background: url("../images/icon.png") no-repeat scroll -307px -6px; width:40px; height:45px; display:block}
 .icon_friend a {background: url("../images/icon.png") no-repeat scroll -354px -6px; width:34px; height:45px; display:block}
 .icon_notes a {background: url("../images/icon.png") no-repeat scroll -400px -6px; width:39px; height:45px; display:block}
-.icon_chaledar a {background: url("../images/icon.png") no-repeat scroll -448px -6px; width:42px; height:45px; display:block}
+.icon_calendar a {background: url("../images/icon.png") no-repeat scroll -448px -6px; width:42px; height:45px; display:block}
 .icon_badge a {background: url("../images/icon.png") no-repeat scroll -500px -6px; width:35px; height:45px; display:block}
 .icon_event a {background: url("../images/icon.png") no-repeat scroll -545px -6px; width:40px; height:45px; display:block}
 
@@ -75,13 +108,14 @@
 
 /* My Comment */
 .my_comment_section { overflow:hidden; margin-bottom:20px}
+.photo_section { float:left}
 .my_photo,.photo_line { float:left; width:118px; height:118px; border:1px solid #b4b2b2; margin-right:15px}
 .my_comment { float:left; width:564px}
 .my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:14px}
 .my_comment .comment_txt {line-height:18px; height:88px}
 .my_comment .comment_txt textarea { border:1px solid #cccccc}
 .my_comment textarea { height:100%; width:99.4%}
-.option { float:left; display:block; width:250px}
+.option { float:left; display:block}
 .option .txt { font-size:11px; float:left; margin:7px 5px 0 0; color:#dddddd}
 .option .txt a {color:#868686}
 .attach_file {height: 28px; margin-top: 5px; overflow: hidden; float:right}
@@ -166,7 +200,13 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .icon_more {background: url("../images/icon.png") no-repeat scroll -166px -175px; padding-left:10px}
 .icon_bul_select {background: url("../images/icon.png") no-repeat scroll 0 -80px; width:6px; height:7px; display:inline-block}
 a .icon_bul_select:hover { background-position:0 -88px}
-
+.icon_delete_red a { background: url("../images/icon.png") no-repeat scroll -243px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_delete_red a:hover {background-position:-262px -117px}
+.icon_close_red a { background: url("../images/icon.png") no-repeat scroll -243px -130px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_close_red a:hover {background-position:-262px -130px}
+.icon_open_red a { background: url("../images/icon.png") no-repeat scroll -243px -142px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_open_red a:hover {background-position:-262px -142px}
+.icon_ourfriend { width:100px}
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
 .icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:70%}
@@ -200,12 +240,23 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content {padding:10px; overflow:hidden}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
+.panel_block .content .name { color:#000000}
 .panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
-.panel_block .notes { width:100%} /* ÂÊÁö */
+.panel_block .notes { width:100%} /* ï¿½ï¿½ï¿½ï¿½ */
 .panel_block .thum_image {width:120px; height:66px; float:right}
 .panel_block .detail_image {width:540px; border:1px solid #cccccc; height:auto; clear:both}
 .panel_block dl.bor {border-bottom:1px solid #cccccc}
 .panel_block dl.bor_no { border-bottom:none}
+
+
+/* Content Mission */
+.panel_block .content_mission dt { background-color:#f0f0f0; padding:5px 5px 0 5px; line-height:23px}
+.panel_block .content_mission dd { padding:5px 10px; overflow:hidden}
+.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
+.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:19px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
+.icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
+.icon_close_area div { padding:3px 10px}
+.bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
 
 /* Event */
 .panel_block .event_info { width:70%; float:left}
@@ -224,6 +275,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .util span {color:#dddddd}
 .util span a {color:#608eba !important}
 .util span a:hover {text-decoration:underline}
+.util .icon_mission { padding:0; margin-left:3px}
 .date {font-size:11px; color:#888888 !important}
 
 
@@ -256,6 +308,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Badge */
 .badge_df {background: url("../images/badge_df.gif") no-repeat scroll 0 0; width:40px; height:40px; display:inline-block}
 /* Friend */
+/*.friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
+*/
 .friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
 /* Aside AD */
 .aside_ad {display:block; margin-top:15px; padding:15px 12px;}
@@ -263,12 +317,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Search Section */
 .srch_section {float:right; margin:15px 10px 5px; width:248px}
-.srch { border:3px solid #8d8d8d; width:160px; float:left}
+.srch { border:3px solid #8d8d8d; width:160px; float:left; background-color:#FFF}
 .srch input[type="text"] { width:130px; float:left; margin:2px}
 
 /* Course */
 /* Course Define */
-.course_df_section { overflow:hidden; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
+.course_df_section { position:relative; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
 .course_df_img {float:left; width:119px; height:118px; border-right:1px solid #cccccc; margin-right:15px}
 .course_df { float:left; width:350px; margin-top:10px}
 .course_df h1 { font-size:14px}
@@ -296,15 +350,19 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Bottom Btn Space */
 .btn_space { margin:10px auto 0; text-align:center; overflow:hidden }
 
+/* Select Box */
+.select_box { width:60px; background-color:#FFF; padding:7px 10px; position:absolute; border:1px solid #cccccc; line-height:17px}
+
 /* Text Style */
 .t_s11 { font-size:11px}
 .t_s14 { font-size:14px}
-.t_red {color:#F00}
+.t_red {color:#ed1c24}
 .t_redb {color:#ed1c24; font-weight:bold}
 .t_blue { color:#006699}
 .t_blueb { color:#006699; font-weight:bold}
 .t_orange { color:#ff7c2a}
 .t_gray { color:#9a9a9a}
+.t_grayb { color:#9a9a9a; font-weight:bold}
 .tb { font-weight:bold}
 .t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999}

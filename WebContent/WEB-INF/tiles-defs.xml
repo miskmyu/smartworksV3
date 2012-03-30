@@ -154,5 +154,9 @@
 	<definition name="Course" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/course.jsp" />
 	</definition>
+	<definition name="othersPAGE" extends="seraCampus">
+		<put-attribute name="sera_content" value="/sera/jsp/content/others_page.jsp" />
+		<put-attribute name="aside" value="/sera/jsp/aside/aside_others_page.jsp" />
+	</definition>
 
 </tiles-definitions>

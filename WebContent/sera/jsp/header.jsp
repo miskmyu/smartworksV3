@@ -74,7 +74,7 @@ function updateNoticeCount(message){
 			</div>
 			<!-- Btn in Gnb - 코스 만들기-->
 			<div class="btn_gnb">
-				<div class="btn_gnb_l">
+				<div href="createCourse.sw" class="btn_gnb_l js_sera_content">
 				  <div class="btn_gnb_r">코스 만들기</div>
 				</div>
 			</div>
@@ -82,13 +82,13 @@ function updateNoticeCount(message){
 		<!-- Global Navi Icon -->
 		<div class="gni fr">
 			<ul>
-				<li class="icon_alarm"><a href="" title="알림">알림</a></li>
-				<li class="icon_mycourse"><a href="" title="내코스">내코스</a></li>
-				<li class="icon_chatting"><a href="" title="친구">친구</a></li>
-				<li class="icon_message"><a href="" title="쪽지">쪽지</a></li>
-				<li class="icon_chaledar"><a href="" title="캘린더">캘린더</a></li>
-				<li class="icon_badge"><a href="" title="뱃지">뱃지</a></li>
-				<li class="icon_event"><a href="" title="이벤트">이벤트</a></li>
+            <li class="icon_alarm"><a href="socialBoard.sw" class="js_sera_content" title="알림"></a></li>
+            <li class="icon_mycourse"><a href="myCourses.sw" class="js_sera_content" title="내코스"></a></li>
+            <li class="icon_friend"><a href="socialFriend.sw" class="js_sera_content" title="친구"></a></li>
+            <li class="icon_notes"><a href="socialNote.sw" class="js_sera_content" title="쪽지"></a></li>
+            <li class="icon_calendar"><a href="socialCalendar.sw" class="js_sera_content" title="캘린더"></a></li>
+            <li class="icon_badge"><a href="socialBadge.sw" class="js_sera_content" title="뱃지"></a></li>
+            <li class="icon_event"><a href="socialEvent.sw" class="js_sera_content" title="이벤트"></a></li>
 			</ul>
 		</div>
 	</div>
