@@ -6,7 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gdata.data.youtube.FormUploadToken;
+
 import net.smartworks.model.RecordList;
+import net.smartworks.model.YTMetaInfo;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
@@ -435,5 +438,9 @@ public interface ISmartWorks {
 	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
-	
+
+	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
+
+	public abstract InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception;
+
 }

@@ -24,4 +24,6 @@ public interface ISeraService {
 	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception;
 }

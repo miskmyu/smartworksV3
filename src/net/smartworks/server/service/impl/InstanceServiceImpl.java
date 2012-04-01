@@ -1831,7 +1831,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			TskTask tskTask = null;
 			if(!CommonUtil.isEmpty(workInstanceId)) {
 				if(workType == SmartWork.TYPE_INFORMATION || workType == SocialWork.TYPE_MEMO || workType == SocialWork.TYPE_EVENT || workType == SocialWork.TYPE_BOARD
-						 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_MOVIE) {
+						 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_YTVIDEO) {
 					tskCond.setExtendedProperties(new Property[] {new Property("recordId", workInstanceId)});
 					tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_MODIFICATIONDATE, false)});
 					tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);

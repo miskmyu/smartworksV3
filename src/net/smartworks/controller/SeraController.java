@@ -8,21 +8,37 @@
 
 package net.smartworks.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
+import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SeraController {
 	
+	ISmartWorks smartworks;
+
+	@Autowired
+	public void setSmartworks(ISmartWorks smartworks) {
+		this.smartworks = smartworks;
+	}
+
 	@RequestMapping("/seraCampus")
 	public ModelAndView seraCampus(HttpServletRequest request, HttpServletResponse response) {
 
@@ -54,12 +70,6 @@ public class SeraController {
 	public ModelAndView createCourse(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/create.jsp", "createCourse.tiles");
-	}
-
-	@RequestMapping("/mentorProfile")
-	public ModelAndView mentorProfile(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mentor_profile.jsp", "mentorProfile.tiles");
 	}
 
 	@RequestMapping("/myCourses")
@@ -186,6 +196,29 @@ public class SeraController {
 	public ModelAndView othersBadge(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/social/others_badge.jsp", "");
+	}
+
+	@RequestMapping("/userInstances")
+	public ModelAndView userInstances(HttpServletRequest request, HttpServletResponse response) {
+
+		String userId = request.getParameter("userId");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/user_instances.jsp?userId=" + userId , "");
+	}
+
+	@RequestMapping("/myNewsFeed")
+	public ModelAndView myNewsFeed(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/my_news_feed.jsp", "");
+	}
+
+	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String courseId = "";//smartworks.setCourse(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
 	}
 
 }
