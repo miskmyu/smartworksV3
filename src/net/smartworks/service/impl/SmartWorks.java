@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.RecordList;
+import net.smartworks.model.YTMetaInfo;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
@@ -64,11 +65,14 @@ import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
+import net.smartworks.server.service.IYouTubeService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.gdata.data.youtube.FormUploadToken;
 
 @Service
 public class SmartWorks implements ISmartWorks {
@@ -82,6 +86,7 @@ public class SmartWorks implements ISmartWorks {
 	IDocFileService docFileService;
 	ISettingsService settingsService;
 	IBuilderService builderService;
+	IYouTubeService youTubeService;
 	ISeraService seraService;
 
 	@Autowired
@@ -127,6 +132,11 @@ public class SmartWorks implements ISmartWorks {
 	@Autowired
 	public void setBuilderService(IBuilderService builderService) {
 		this.builderService = builderService;
+	}
+
+	@Autowired
+	public void setYouTubeService(IYouTubeService youTubeService) {
+		this.youTubeService = youTubeService;
 	}
 
 	@Autowired
@@ -929,5 +939,15 @@ public class SmartWorks implements ISmartWorks {
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCourseNotices(courseId, fromDate, maxList);
 	}
+
+	@Override
+	public FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception{
+		return youTubeService.getUploadToken(metaInfo, ytUserId, ytPassword);
+	}
 	
+	@Override
+	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstancesByUser(userId, fromDate, maxList);
+	}
+
 }

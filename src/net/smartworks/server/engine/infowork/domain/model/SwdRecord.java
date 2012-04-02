@@ -61,7 +61,7 @@ public class SwdRecord extends BaseObject {
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
-	private int hits = 0;
+	private int hits;
 	private Map<String, List<Map<String, String>>> fileGroupMap;
 
 	private SwdDataField[] dataFields;

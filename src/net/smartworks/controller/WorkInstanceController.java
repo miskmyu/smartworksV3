@@ -437,8 +437,8 @@ public class WorkInstanceController extends ExceptionInterceptor {
 			EventInfo event = new EventInfo();
 			event.id = eventInstance.getId();
 			event.name = eventInstance.getSubject();
-			event.start = eventInstance.getStart().toLocalDateTimeSimpleString();
-			event.end = eventInstance.getEnd() != null ? eventInstance.getEnd().toLocalDateTimeSimpleString() : null;
+			event.start = eventInstance.getStart().toLocalDateValue();
+			event.end = eventInstance.getEnd() != null ? eventInstance.getEnd().toLocalDateValue() : null;
 			event.ownerId = eventInstance.getOwner().getId();
 			event.ownerName = eventInstance.getOwner().getLongName();
 			event.ownerPicture = eventInstance.getOwner().getMinPicture();

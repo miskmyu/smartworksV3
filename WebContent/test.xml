@@ -1,0 +1,14 @@
+<DataRecord ext_tskRefType="EVENT"
+	domainId="md_8d94e6225bf74312a22fe9ba2ac98124" recordId="dr_402880ec365c078701365c07878b0000"
+	formId="frm_a8b6f52fdd2f4cf6a4f7f3f9f175f4d3" formVersion="1"
+	creator="hsshin@maninsoft.co.kr" createdTime="2012-03-29T01:17:39.300"
+	modifier="hsshin@maninsoft.co.kr" modifiedTime="2012-03-29T01:17:39.300"
+	workSpaceId="group_318f298594f2456e9e66d5c3435b7a9f" workSpaceType="5"
+	accessLevel="2" accessValue="kmyu@maninsoft.co.kr">
+	<DataField id="0" name="이벤트이름" type="string" row="0"><![CDATA[주말에 산악회 조직]]></DataField>
+	<DataField id="1" name="시작일자" type="datetime" row="0"><![CDATA[2012-03-30 03:00:00.000]]></DataField>
+	<DataField id="2" name="종료일자" type="datetime" row="0"><![CDATA[2012-04-29 15:00:00.000]]></DataField>
+	<DataField id="4" name="장소" type="string" row="0"><![CDATA[청계산]]></DataField>
+	<DataField id="6" name="이벤트내용" type="text" row="0"><![CDATA[주말에 산악회 조직]]></DataField>
+	<DataField id="7" name="미리알림" type="string" row="0"><![CDATA[설정안함]]></DataField>
+</DataRecord>

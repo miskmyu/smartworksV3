@@ -48,7 +48,7 @@ public class WorkInstance extends Instance {
 		case SocialWork.TYPE_FILE:
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
-		case SocialWork.TYPE_MOVIE:
+		case SocialWork.TYPE_YTVIDEO:
 			if(getWork().getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return WorkInstance.CONTROLLER_IWORK_SPACE;
 			else
@@ -72,7 +72,7 @@ public class WorkInstance extends Instance {
 		case SocialWork.TYPE_FILE:
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
-		case SocialWork.TYPE_MOVIE:
+		case SocialWork.TYPE_YTVIDEO:
 			if(SmartWork.ID_FILE_MANAGEMENT.equals(getWork().getId()))
 				return ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + getId();
 			else if(SmartWork.ID_DEPARTMENT_MANAGEMENT.equals(getWork().getId()))
@@ -96,8 +96,7 @@ public class WorkInstance extends Instance {
 		super.setType(Instance.TYPE_WORK);
 	}
 
-	public WorkInstance(String id, String subject, Work work, User owner, User lastModifier,
-			LocalDate lastModifiedDate) {
+	public WorkInstance(String id, String subject, Work work, User owner, User lastModifier, LocalDate lastModifiedDate) {
 		super(id, subject, Instance.TYPE_WORK, owner, lastModifier, lastModifiedDate);
 		super.setWork(work);
 	}

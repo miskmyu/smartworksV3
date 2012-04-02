@@ -158,7 +158,7 @@ public class Work extends BaseObject{
 		case SocialWork.TYPE_FILE:
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
-		case SocialWork.TYPE_MOVIE:
+		case SocialWork.TYPE_YTVIDEO:
 			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return ISmartWorks.CONTEXT_PREFIX_FILE_LIST + getId();
 			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))

@@ -56,6 +56,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 		, task.tskDef  ");
 		queryBuffer.append(" 		, form.packageId  ");
 		queryBuffer.append(" 		, pkg.name as packageName  ");
+		queryBuffer.append(" 		, pkg.status as packageStatus  ");
 		queryBuffer.append(" 		, ctg.id as childCtgId  ");
 		queryBuffer.append(" 		, ctg.name as childCtgName  ");
 		queryBuffer.append(" 		, case when ctg.parentId = '_PKG_ROOT_' then null else ctg2.id end as parentCtgId  ");
@@ -218,6 +219,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setTskDef((String)fields[j++]);     
 				obj.setPackageId((String)fields[j++]);     
 				obj.setPackageName((String)fields[j++]);   
+				obj.setPackageStatus((String)fields[j++]);   
 				obj.setChildCtgId((String)fields[j++]);  
 				obj.setChildCtgName((String)fields[j++]);
 				obj.setParentCtgId((String)fields[j++]); 
@@ -293,6 +295,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		, task.tskDef ");
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
+		queryBuffer.append("		, pkg.status as packageStatus ");
 		queryBuffer.append("		, ctg.id as childCtgId ");
 		queryBuffer.append("		, ctg.name as childCtgName ");
 		queryBuffer.append("		, case when ctg.parentId = '_PKG_ROOT_' then null else ctg2.id end as parentCtgId ");
@@ -490,6 +493,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setTskDef((String)fields[j++]);
 				obj.setPackageId((String)fields[j++]);
 				obj.setPackageName((String)fields[j++]);
+				obj.setPackageStatus((String)fields[j++]);
 				obj.setChildCtgId((String)fields[j++]);
 				obj.setChildCtgName((String)fields[j++]);
 				obj.setParentCtgId((String)fields[j++]);
