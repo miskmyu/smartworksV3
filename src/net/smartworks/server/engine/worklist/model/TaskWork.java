@@ -33,6 +33,7 @@ public class TaskWork {
 	private String tskDef;
 	private String packageId;  
 	private String packageName;
+	private String packageStatus;
 	private String childCtgId;  
 	private String childCtgName;
 	private String parentCtgId; 
@@ -160,6 +161,12 @@ public class TaskWork {
 	}
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+	}
+	public String getPackageStatus() {
+		return packageStatus;
+	}
+	public void setPackageStatus(String packageStatus) {
+		this.packageStatus = packageStatus;
 	}
 	public String getChildCtgId() {
 		return childCtgId;

@@ -303,6 +303,14 @@ public class ModelConverter {
 			} else {
 				workInfo.setMyCategory(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
 			}
+			String packageStatus = task.getPackageStatus();
+			boolean isRunningPackage = true;
+			if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+				isRunningPackage = true;
+			} else {
+				isRunningPackage = false;
+			}
+			workInfo.setRunning(isRunningPackage);
 			taskInfo.setWork(workInfo); //workInfo
 
 			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
@@ -490,6 +498,16 @@ public class ModelConverter {
 		}
 		
 		SmartWorkInfo workInfo = new SmartWorkInfo();
+		
+		String packageStatus = task.getPackageStatus();
+		boolean isRunningPackage = true;
+		if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+			isRunningPackage = true;
+		} else {
+			isRunningPackage = false;
+		}
+		workInfo.setRunning(isRunningPackage);
+		
 		workInfo.setId(task.getPackageId());
 		workInfo.setName(task.getPackageName());
 		/*TYPE_INFORMATION = 21;
@@ -606,6 +624,15 @@ public class ModelConverter {
 					workInfo.setId(task.getPackageId());
 					workInfo.setName(task.getPackageName());
 					
+					String packageStatus = task.getPackageStatus();
+					boolean isRunningPackage = true;
+					if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+						isRunningPackage = true;
+					} else {
+						isRunningPackage = false;
+					}
+					workInfo.setRunning(isRunningPackage);
+					
 					/*TYPE_INFORMATION = 21;
 					TYPE_PROCESS = 22;
 					TYPE_SCHEDULE = 23;*/
@@ -690,7 +717,14 @@ public class ModelConverter {
 					} else {
 						workInfo.setMyCategory(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
 					}
-					
+					String packageStatus = task.getPackageStatus();
+					boolean isRunningPackage = true;
+					if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+						isRunningPackage = true;
+					} else {
+						isRunningPackage = false;
+					}
+					workInfo.setRunning(isRunningPackage);
 					instInfo.setWork(workInfo);
 					instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
@@ -793,7 +827,14 @@ public class ModelConverter {
 				} else {
 					workInfo.setMyCategory(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
 				}
-				
+				String packageStatus = task.getPackageStatus();
+				boolean isRunningPackage = true;
+				if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+					isRunningPackage = true;
+				} else {
+					isRunningPackage = false;
+				}
+				workInfo.setRunning(isRunningPackage);
 				instInfo.setWork(workInfo);
 				instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
