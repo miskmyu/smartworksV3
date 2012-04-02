@@ -111,4 +111,84 @@ $(function() {
 		});
 		return false;
 	});
+
+	$('.js_view_user_instances').live('click', function(e){
+		var input = $(e.target);
+		input.parent().siblings().find('a').removeClass('current');
+		input.addClass('current');
+		var userId = input.attr('userId');
+		$.ajax({
+			url : 'userInstances.sw',
+			data : {userId : userId},
+			success : function(data, status, jqXHR) {
+				$('.js_user_instance_list').html(data);
+			}
+		});
+		return false;
+	});
+
+	$('.js_view_news_feed').live('click', function(e){
+		var input = $(e.target);
+		input.parent().siblings().find('.js_view_news_feed').removeClass('current');
+		input.addClass('current');
+		$.ajax({
+			url : 'myNewsFeed.sw',
+			data : {},
+			success : function(data, status, jqXHR) {
+				$('.js_user_instance_list').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_mentor_form_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_mentor_form_btn');
+		var createCourse = input.parents('.js_create_course_page');
+		if(createCourse.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
+			createCourse.find('input[name="txtCourseStartDate"]').addClass('required');
+			createCourse.find('input[name="txtCourseEndDate"]').addClass('required');
+			createCourse.find('input[name="txtCourseDays"]').removeClass('required').removeClass('error');			
+			
+		}else{
+			createCourse.find('input[name="txtCourseStartDate"]').removeClass('required').removeClass('error');
+			createCourse.find('input[name="txtCourseEndDate"]').removeClass('required').removeClass('error');
+			createCourse.find('input[name="txtCourseDays"]').addClass('required');			
+		}
+		
+		if(createCourse.find('input[name="chkCourseUsers"]:checked').attr('value')==='userInput'){
+			createCourse.find('input[name="txtCourseUsers"]').addClass('required');
+			
+		}else{
+			createCourse.find('input[name="txtCourseUsers"]').removeClass('required').removeClass('error');
+		}
+		
+		if(createCourse.find('input[name="chkCourseFee"]:checked').attr('value')==='pay'){
+			createCourse.find('input[name="txtCourseFee"]').addClass('required');
+			
+		}else{
+			createCourse.find('input[name="txtCourseFee"]').removeClass('required').removeClass('error');
+		}
+		
+		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'), createCourse.find('.js_pop_error_message'))) {		
+			input.parents('.js_create_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
+			createCourse.find('.js_create_course_table').hide();
+			createCourse.find('.js_mentor_profile_table').show();
+			return false;
+		}
+		return false;
+	});
+
+	$('.js_create_course_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+	
+	$('.js_back_to_create_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_back_to_create_btn');		
+		input.parents('.js_mentor_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
+		var createCourse = input.parents('.js_create_course_page');
+		createCourse.find('.js_create_course_table').show();
+		createCourse.find('.js_mentor_profile_table').hide();
+		return false;
+	});
 });

@@ -396,6 +396,86 @@ function loadGroupProfileField() {
 	}
 };
 
+function loadCreateCourseFields() {
+	var courseProfileField = $('div.js_course_profile_field');
+	if(!isEmpty(courseProfileField)) {
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		courseProfileField.html(gridRow);
+
+		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+			container: gridRow,
+			fieldId: "imgCourseProfile",
+			fieldName: "course profile",
+			imgSource: "sera/images/default_img_course.gif",
+			columns: 1,
+			pictureWidth: 110,
+			pictureHeight: 110,
+			required: false
+		});
+		courseProfileField.find('.form_col').css({padding:"0"});
+		courseProfileField.find('.form_label').css({width:"100%"});
+		courseProfileField.find('.form_label').css({padding:"0 0 2px 20px"});
+		courseProfileField.find('.form_value').css({width:"100%"});
+	}
+	
+	var courseStartDateField = $('div.js_course_start_date_field');
+	if(!isEmpty(courseStartDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		courseStartDateField.html(gridRow);
+
+		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtCourseStartDate",
+			fieldName: "course start date",
+			value: startDateStr,
+			columns: 4,
+			colSpan: 1,
+			required: false
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_label').hide();
+	}
+	
+	var courseEndDateField = $('div.js_course_end_date_field');
+	if(!isEmpty(courseEndDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		courseEndDateField.html(gridRow);
+
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtCourseEndDate",
+			fieldName: "course end date",
+			value: "",
+			columns: 4,
+			colSpan: 1,
+			required: false
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_label').hide();		
+	}
+
+	var courseMentorField = $('div.js_course_mentor_field');
+	if(!isEmpty(courseMentorField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		courseMentorField.html(gridRow);
+
+		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtCourseMentor",
+			fieldName: "course mentor",
+			columns: 1,
+			multiUsers: false,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"300px", padding:"0px"});
+		gridRow.find('.form_label').hide();		
+	}
+};
+
 function loadNewGroupFields() {
 	var newGroupFields = $('div.js_new_group_fields');
 	if(!isEmpty(newGroupFields)) {

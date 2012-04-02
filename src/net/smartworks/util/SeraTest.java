@@ -155,4 +155,23 @@ public class SeraTest {
 		
 		return instances;
 	}
+	
+	public static InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception{
+		InstanceInfo[] boards = SmartTest.getBoardInstances();
+		InstanceInfo[] events = SmartTest.getEventInstances();
+		InstanceInfo[] memos = SmartTest.getMemoInstances();
+		InstanceInfo image = SmartTest.getImageInstanceInfo();
+		InstanceInfo video = SmartTest.getYTVideoInstanceInfo();
+		InstanceInfo message = SmartTest.getMessageInstanceInfo();
+
+		InstanceInfo[] instances = new InstanceInfo[6];
+		instances[0] = boards[0];
+		instances[1] = events[0];
+		instances[2] = memos[0];
+		instances[3] = image;
+		instances[4] = video;
+		instances[5] = message;
+		
+		return instances;
+	}
 }

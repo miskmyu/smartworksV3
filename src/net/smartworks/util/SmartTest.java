@@ -32,10 +32,12 @@ import net.smartworks.model.instance.info.IWInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.instance.info.YTVideoInstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
@@ -766,6 +768,12 @@ public class SmartTest {
 		
 	}
 
+	public static MemoInstanceInfo[] getMemoInstances() throws Exception{
+		MemoInstanceInfo memoInstance1 = new MemoInstanceInfo("memo1", "조금더 보강해야 될것 같은데요????",SmartTest.getInformationWorkInfo1(), SmartTest.getUserInfo1(), new LocalDate());
+		return new MemoInstanceInfo[] {memoInstance1};
+		
+	}
+
 	public static CommentInstanceInfo[] getAllCommentInstances() throws Exception{
 		CommentInstanceInfo commentInstance1 = new CommentInstanceInfo("comments1", CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL, "조금더 보강해야 될것 같은데요????",
 				SmartTest.getUserInfo1(), new LocalDate());
@@ -1242,6 +1250,17 @@ public class SmartTest {
 		return SmartTest.getAssignedTaskInstances();
 	}
 	
+	public static InstanceInfo getYTVideoInstanceInfo() throws Exception{
+		YTVideoInstanceInfo instance = new YTVideoInstanceInfo("u1zgFlCw8Aw", "Developer API Course", getUserInfo1(), new LocalDate());
+		instance.setContent("좋은 내용이여서 공유 합니다. YouTube개발자들에게는 많은 도움이 되리라 생각합니다. ");
+		return instance;
+	}
+	
+	public static InstanceInfo getMessageInstanceInfo() throws Exception{
+		AsyncMessageInstanceInfo instance = new AsyncMessageInstanceInfo("message1", getUserInfo2(), new LocalDate(), "요즘 어떻게 지내시는 거예요?? 연락한번 주시기 바랍니다." );
+		return instance;
+	}
+	
 	public static WSDLDetail getWsdlDetailFromUri(String wsdlUri) throws Exception{
 		Variable[] inputVariables = new Variable[]{new Variable()};
 		Variable[] returnVariables = new Variable[]{new Variable()};
@@ -1398,6 +1417,7 @@ public class SmartTest {
 		ImageInstanceInfo image = new ImageInstanceInfo("imageInst1", "사진입니다", new WorkInfo(), SmartTest.getUserInfo1(), new LocalDate() );
 		image.setImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr_big.png");
 		image.setOriginImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr.png");
+		image.setContent("안녕하세요......?그동안 무슨일이 있었나요, 통 연락이 없던데...ㅋㅋㅋㅋㅋㅋ");
 		return image;
 	}
 	

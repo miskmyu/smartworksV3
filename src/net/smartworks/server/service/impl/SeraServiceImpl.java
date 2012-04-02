@@ -111,4 +111,18 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 		
 	}
+	
+	@Override
+	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception{
+		try{
+			InstanceInfo[] instances = SeraTest.getSeraInstancesByUser(userId, fromDate, maxList);
+			return instances;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+		
+	}
 }

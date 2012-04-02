@@ -158,5 +158,9 @@
 		<put-attribute name="sera_content" value="/sera/jsp/content/others_page.jsp" />
 		<put-attribute name="aside" value="/sera/jsp/aside/aside_others_page.jsp" />
 	</definition>
+	<definition name="courseHome" extends="seraCampus">
+		<put-attribute name="sera_content" value="/sera/jsp/content/course/home.jsp" />
+		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
+	</definition>
 
 </tiles-definitions>

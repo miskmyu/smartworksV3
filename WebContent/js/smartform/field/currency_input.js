@@ -54,9 +54,9 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 		$currency.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(value);
+			options.container.find('.form_value').text(value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		else
-			options.container.find('.form_value input').attr('value', value);
+			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
 		
 	return options.container;

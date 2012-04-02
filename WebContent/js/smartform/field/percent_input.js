@@ -57,9 +57,9 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 		$percent.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(value);
+			options.container.find('.form_value').text(percentValue);
 		else
-			options.container.find('.form_value input').attr('value', value);
+			options.container.find('.form_value input').attr('value', percentValue);
 	}
 	return options.container;
 };

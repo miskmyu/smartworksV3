@@ -23,22 +23,6 @@
 	FriendList friendList = smartWorks.getFriendsById(cUser.getId(), FriendList.MAX_BRIEF_FRIEND_LIST);
 %>
 
-<!-- Search Section -->
-<div class="srch_section">
-	<div class="srch">
-		<div>
-			<input type="text" placeholder="SERA를 검색하세요.">
-		</div>
-		<div class="icon_admin fr"></div>
-	</div>
-	<div class="btn_default_l ml4">
-		<div class="btn_default_r">채팅하기</div>
-	</div>
-</div>
-<!-- Search Section -->
-
-<!-- Aside -->
-<div class="aside m0">
 	<!-- Aside Block1 -->
 	<div class="aside_block">
 		<div class="header">
@@ -55,10 +39,11 @@
 						<ul>
 							<%
 							for(int i=0; i<courseList.getRunningCourses().length; i++){
+								if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 								CourseInfo course = courseList.getRunningCourses()[i];
 								String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getName();
 							%>
-									<li ><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span><%=missionName%></a></li>
+									<li ><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue">코스명<%=i+1 %> </span><%=course.getName() %></a></li>
 							<%
 							}
 							%>
@@ -79,10 +64,11 @@
 						<ul>
 							<%
 							for(int i=0; i<courseList.getAttendingCourses().length; i++){
+								if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 								CourseInfo course = courseList.getAttendingCourses()[i];
 								String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getName();
 							%>
-									<li><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span><%=missionName%></a></li>
+									<li><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue">코스명<%=i+1 %> </span><%=course.getName() %></a></li>
 							<%
 							}
 							%>
@@ -132,7 +118,7 @@
 				for(int i=0; i<friendList.getFriends().length; i++){
 					UserInfo friend = friendList.getFriends()[i];
 				%>
-					<dd><a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img class="friend_df" src="<%=friend.getMinPicture()%>"></a></dd>
+					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>"></dd></a>
 				<%
 				}
 				%>
@@ -159,4 +145,3 @@
 		</div>
 	</div>
 	<!-- Aside Block4 //-->
-</div>      

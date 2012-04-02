@@ -50,7 +50,7 @@ public class ImageInstanceInfo extends FileInstanceInfo {
 	}
 
 	public ImageInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, LocalDate lastModifiedDate){
-		super();
+		super(id, subject, work, owner, lastModifiedDate);
 		super.setType(Instance.TYPE_IMAGE);
 	}
 
