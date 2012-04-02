@@ -168,10 +168,10 @@
 				<td><div class="form_label w101">코스 기간</div>
 					<div class="form_value">
 						<input name="txtCourseDays" type="text" style="width: 100px" class="fieldline fl tr number" />
-						<div class="fl mt4">일(Days)</div>
-						<div class="fl mt4 ml10">
+						<div class="fl mt2 ml2"> 일(Days)</div>
+						<div class="fl ml10">
 							<input class="fl pt2" name="chkUserDefineDays" type="checkbox"/>
-							<label class="fl mt2">사용자 정의</label>
+							<label class="fl">사용자 정의</label>
 							<div class="fl js_course_start_date_field" width="110px"></div>
 							<div class="fl mr10">~</div> 
 							<div class="fl js_course_end_date_field" width="110px"></div>
@@ -184,7 +184,7 @@
 				<td>
 					<div class="form_label w101">공개 설정</div>
 					<div class="form_value">
-						<input name="chkCourseSecurity" type="radio" checked value="<%=AccessPolicy.LEVEL_PUBLIC %>" />공개
+						<input name="chkCourseSecurity" type="radio" checked value="<%=AccessPolicy.LEVEL_PUBLIC %>" /><label>공개</label>
 						<input name="chkCourseSecurity" type="radio" value="<%=AccessPolicy.LEVEL_PRIVATE %>" />비공개
 						<div class="cb t_refe pt2">* 비공개 코스 설정 시 코스의 제반 내용이 노출되지 않습니다</div>
 					</div>
@@ -194,9 +194,9 @@
 				<td>
 					<div class="form_label w101">멘티 인원 제한</div>
 					<div class="form_value">
-						<input name="chkCourseUsers" type="radio" checked value="unlimited" />무제한 
+						<input name="chkCourseUsers" type="radio" checked value="unlimited" /><label>무제한</label> 
 						<input name="chkCourseUsers" type="radio" value="userInput" />직접입력 
-						<input name="txtCourseUsers" class="fieldline number tr" type="text" style="width: 80px" />명
+						<input name="txtCourseUsers" class="fieldline number tr" type="text" style="width: 80px" /> 명
 						<div class="cb t_refe pt2">* 코스 인원 제한 시 정해진 인원만 코스를 이용할 수 있습니다</div>
 					</div>
 				</td>
@@ -205,7 +205,7 @@
 				<td>
 					<div class="form_label w101">멘티 가입 승인</div>
 					<div class="form_value">
-						<input name="chkJoinApproval" type="radio" checked value="autoApporval" />자동승인
+						<input name="chkJoinApproval" type="radio" checked value="autoApporval" /><label>자동승인</label>
 						<input name="chkJoinApproval" type="radio" value="mentorApproval" />멘토승인
 						<div class="cb t_refe pt2">* 회원이 코스를 참여하는 데 있어 승인절차를 선택할 수 있습니다</div>
 					</div>
@@ -215,7 +215,7 @@
 				<td>
 					<div class="form_label w101">코스 유료 설정</div>
 					<div class="form_value">
-						<input name="chkCourseFee" type="radio" checked value="free" />무료 
+						<input name="chkCourseFee" type="radio" checked value="free" /><label>무료 </label>
 						<input name="chkCourseFee" type="radio" value="pay" />유료 (금액 입력: 
 						<input name="txtCourseFee" class="fieldline tr" type="text" style="width: 80px" /> 원)
 						<div class="cb t_refe pt2">* 코스 유료화는 관리자 승인 후 개설이 가능하므로 유료버전의 코스인 경우 바로 코스 생성이 되지 않습니다</div>
