@@ -60,7 +60,8 @@
 .header_tit .tit_notes {background: url("../images/header.png") no-repeat scroll 0 -175px; height:35px; padding:52px 25px 0}
 .header_tit .tit_friend {background: url("../images/header.png") no-repeat scroll 0 -261px; height:35px; padding:52px 25px 0}
 .header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:35px; padding:49px 25px 0}
-.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -462px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
+.header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:35px; padding:49px 25px 0}
+.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
 .header_tit .tit_dep2 h2 { font-size:14px; font-weight:bold; color:#454545}
 /* Title - Course Admin */
 .tit_cus1 {background: url("../images/header_admin.png") no-repeat scroll 0 0; height:85px}
@@ -150,7 +151,8 @@ a.b_next:hover { background-position:-30px -535px}
 .btn_red_l {background: url("../images/btn_red_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
 .btn_red_r {background: url("../images/btn_red_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF}
 
-button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; border: 1px solid #A1A1A1; border-radius: 3px; color: #777777; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 4px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px; height:19px; line-height:12px}
+button {border: 1px solid #A1A1A1; border-radius: 4px; color: #777777; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 4px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px; height:19px; line-height:12px; background-image: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background-image: -moz-linear-gradient(center top,white,#EBEBEB); background-image: -o-linear-gradient(top,white,#EBEBEB)}
+button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; background-image: none !important}
 
 /* Icon */
 .icon_cs_mentorname {background: url("../images/icon.png") no-repeat scroll -166px -393px; padding:0 0 0 40px}
@@ -164,24 +166,6 @@ button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat s
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
 .icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; display:inline-block !important}
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; display:inline-block !important}
-/* Icon in Mypage */
-.icon_memo a {background: url("../images/icon.png") no-repeat scroll -18px -75px; width:34px; height:28px; display:block}
-.icon_memo a:hover {background-position:-18px -103px}
-.icon_video a {background: url("../images/icon.png") no-repeat scroll -52px -75px; width:34px; height:28px; display:block}
-.icon_video a:hover {background-position:-52px -103px}
-.icon_photo a {background: url("../images/icon.png") no-repeat scroll -85px -75px; width:33px; height:28px; display:block}
-.icon_photo a:hover {background-position:-85px -103px}
-.icon_link a {background: url("../images/icon.png") no-repeat scroll -118px -75px; width:33px; height:28px; display:block}
-.icon_link a:hover {background-position:-118px -103px}
-/* Background Blue */
-.icon_memo.bb a {background-position:-18px -397px}
-.icon_memo.bb a:hover {background-position:-18px -425px}
-.icon_video.bb a {background-position: -52px -397px}
-.icon_video.bb a:hover {background-position:-52px -425px}
-.icon_photo.bb a {background-position: -85px -397px}
-.icon_photo.bb a:hover {background-position:-85px -425px}
-.icon_link.bb a {background-position: -118px -397px}
-.icon_link.bb a:hover {background-position:-118px -425px}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -213,6 +197,28 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_open_red a { background: url("../images/icon.png") no-repeat scroll -243px -142px; width:11px; height:11px; display:block; padding:0; font-size:0}
 .icon_open_red a:hover {background-position:-262px -142px}
 .icon_ourfriend { width:100px}
+.icon_facebook { background: url("../images/icon.png") no-repeat scroll -166px -646px; width:22px; height:22px; display:block}
+.icon_twitter { background: url("../images/icon.png") no-repeat scroll -193px -646px; width:22px; height:22px; display:block}
+
+/* Icon in Mypage */
+.icon_memo a {background: url("../images/icon.png") no-repeat scroll -18px -75px; width:34px; height:28px; display:block}
+.icon_memo a:hover {background-position:-18px -103px}
+.icon_video a {background: url("../images/icon.png") no-repeat scroll -52px -75px; width:34px; height:28px; display:block}
+.icon_video a:hover {background-position:-52px -103px}
+.icon_photo a {background: url("../images/icon.png") no-repeat scroll -85px -75px; width:33px; height:28px; display:block}
+.icon_photo a:hover {background-position:-85px -103px}
+.icon_link a {background: url("../images/icon.png") no-repeat scroll -118px -75px; width:33px; height:28px; display:block}
+.icon_link a:hover {background-position:-118px -103px}
+/* Background Blue */
+.icon_memo.bb a {background-position:-18px -397px}
+.icon_memo.bb a:hover {background-position:-18px -425px}
+.icon_video.bb a {background-position: -52px -397px}
+.icon_video.bb a:hover {background-position:-52px -425px}
+.icon_photo.bb a {background-position: -85px -397px}
+.icon_photo.bb a:hover {background-position:-85px -425px}
+.icon_link.bb a {background-position: -118px -397px}
+.icon_link.bb a:hover {background-position:-118px -425px}
+
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
 .icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:70%}
@@ -229,6 +235,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd}
 .panel_section .header div a {color:#333333; font-weight:bold}
+
+.panel_section .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
+.panel_section .list dd { display:inline; margin:0 28px 5px 0}
 
 .panel_area {margin:15px 0 0 0; overflow:hidden}
 .panel_area li { float:left}
@@ -311,8 +320,14 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display:inline; margin:0 2px}
 .num_cus { color:#ed1c24}
+
 /* Badge */
 .badge_df {background: url("../images/badge_df.gif") no-repeat scroll 0 0; width:40px; height:40px; display:inline-block}
+.badge_dt {background: url("../images/badge_dt.jpg") no-repeat scroll 0 0; width:113px; display:inline-block; padding:120px 0 15px 0}
+.badge_dt_tx { font-weight:bold; display:inline; text-align:center; line-height:15px}
+.badge_dt_tx .tit {color:#0066cc}
+.badge_dt.sty1 { background-position:-127px 0}
+
 /* Friend */
 .friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
 /* Aside AD */
@@ -353,6 +368,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Bottom Btn Space */
 .btn_space { margin:10px auto 0; text-align:center; overflow:hidden }
+.btn_space .btn_area { clear:both; display:inline-block; margin-left:60px}
 
 /* Select Box */
 .select_box { width:60px; background-color:#FFF; padding:7px 10px; position:absolute; border:1px solid #cccccc; line-height:17px}
@@ -364,6 +380,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_redb {color:#ed1c24; font-weight:bold}
 .t_blue { color:#006699}
 .t_blueb { color:#006699; font-weight:bold}
+.t_skyblueb { color:#0066cc; font-weight:bold}
 .t_orange { color:#ff7c2a}
 .t_gray { color:#9a9a9a}
 .t_grayb { color:#9a9a9a; font-weight:bold}
@@ -445,20 +462,21 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Join Member Section */
 #join_content_section {float: left; height: auto; min-height: 600px; padding: 40px 50px 25px; width: 615px;}
-#join_content_section .tit {background: url("../images/header.png") no-repeat 0 -513px transparent; height:24px; width:130px; margin-bottom:45px}
-.join_process { float:right; margin-bottom:32px}
+#join_content_section .tit {background: url("../images/header.png") no-repeat 0 -741px transparent; height:24px; width:130px; margin-bottom:45px}
+.join_process { float:left; margin:0 0 32px 123px}
 .join_process li { float:left; font-size:0 }
-.join_process .prs1 {background: url("../images/header.png") no-repeat 0 -554px transparent; width:105px; height:64px}
-.join_process .prs1.current {background-position:0 -639px}
-.join_process .prs2 {background: url("../images/header.png") no-repeat -163px -554px transparent; width:105px; height:64px}
-.join_process .prs2.current { background-position:-163px -639px}
-.join_process .prs3 {background: url("../images/header.png") no-repeat -319px -554px transparent; width:105px; height:64px}
-.join_process .prs3.current { background-position:-163px -639px}
-.join_process .ar {background: url("../images/header.png") no-repeat -126px -574px transparent; width:14px; height:20px; margin:20px 22px}
+.join_process .prs1 {background: url("../images/header.png") no-repeat 0 -780px transparent; width:105px; height:64px}
+.join_process .prs1.current {background-position:0 -866px}
+.join_process .prs2 {background: url("../images/header.png") no-repeat -163px -780px transparent; width:105px; height:64px}
+.join_process .prs2.current { background-position:-163px -866px}
+.join_process .prs3 {background: url("../images/header.png") no-repeat -319px -780px transparent; width:105px; height:64px}
+.join_process .prs3.current { background-position:-163px -866px}
+.join_process .ar {background: url("../images/header.png") no-repeat -126px -802px transparent; width:14px; height:20px; margin:20px 22px}
 .join_content_area { clear:both; line-height:18px; overflow:hidden; margin-bottom:30px}
 .join_content_area li {float:left; width:79%}
 .join_content_area li.sub_label {float:left; font-weight:bold; width:114px; margin-right:10px}
 .join_content_area textarea {width:98%; padding:5px}
+.join_content_area .form_layout table { background-color:#FFF; border:none}
 
 /* SNB Left */
 .snb2 {float: left; height: 600px; padding-left: 25px; width: 160px}
