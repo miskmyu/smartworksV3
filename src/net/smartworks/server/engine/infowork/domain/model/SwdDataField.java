@@ -49,12 +49,19 @@ public class SwdDataField extends BaseObject {
 	
 	private String value;
 	private List<Map<String, String>> users;
+	private List<Map<String, String>> files;
 
 	public List<Map<String, String>> getUsers() {
 		return users;
 	}
 	public void setUsers(List<Map<String, String>> users) {
 		this.users = users;
+	}
+	public List<Map<String, String>> getFiles() {
+		return files;
+	}
+	public void setFiles(List<Map<String, String>> files) {
+		this.files = files;
 	}
 	private int displayOrder;
 

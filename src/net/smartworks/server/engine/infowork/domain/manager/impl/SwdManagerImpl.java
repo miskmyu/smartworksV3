@@ -2120,11 +2120,12 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	
 			StringBuffer buf = new StringBuffer("select ").append(column).append(" from ").append(table);
 			Query query = this.createSqlQuery(buf.toString(), null);
-			if(query.getQueryString() != null) {
-				buf = new StringBuffer("alter table ").append(table);
-				buf.append(" add ").append(column).append(CommonUtil.SPACE).append(type);
-			}
+			query.list();
 		} catch (Exception e) {
+			StringBuffer buf = new StringBuffer("alter table ").append(table);
+			buf.append(" add ").append(column).append(CommonUtil.SPACE).append(type);
+			Query query = this.getSession().createSQLQuery(buf.toString());
+			query.executeUpdate();
 			return;
 		}
 	}
