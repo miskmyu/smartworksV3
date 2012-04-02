@@ -7,6 +7,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
+import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SeraTest;
@@ -116,6 +117,20 @@ public class SeraServiceImpl implements ISeraService {
 	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception{
 		try{
 			InstanceInfo[] instances = SeraTest.getSeraInstancesByUser(userId, fromDate, maxList);
+			return instances;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+		
+	}
+	
+	@Override
+	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
+		try{
+			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
 			return instances;
 		}catch (Exception e){
 			// Exception Handling Required

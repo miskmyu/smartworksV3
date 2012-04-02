@@ -4,6 +4,7 @@ import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
+import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
@@ -11,6 +12,7 @@ import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
 import net.smartworks.model.sera.info.MissionInfo;
+import net.smartworks.model.sera.info.ReviewInstanceInfo;
 
 public class SeraTest {
 
@@ -173,5 +175,15 @@ public class SeraTest {
 		instances[5] = message;
 		
 		return instances;
+	}
+	public static ReviewInstanceInfo[] getReviewInstances() throws Exception{
+		ReviewInstanceInfo reviewInstance1 = new ReviewInstanceInfo("review1", "조금더 보강해야 될것 같은데요????",SmartTest.getInformationWorkInfo1(), SmartTest.getUserInfo1(), new LocalDate());
+		return new ReviewInstanceInfo[] {reviewInstance1};
+		
+	}
+
+	public static ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
+		ReviewInstanceInfo[] reviews = SeraTest.getReviewInstances();
+		return reviews;
 	}
 }
