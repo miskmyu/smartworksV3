@@ -17,8 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class Login implements UserDetails {
 
 	private static final long serialVersionUID = 109756771178872916L;
-	private String 	id;
-	private String	name;
+	private String id;
+	private String name;
+	private String nickName;
 	private String username;
 	private String password;
 	private int	userLevel = User.USER_LEVEL_DEFAULT;
@@ -51,6 +52,12 @@ public class Login implements UserDetails {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 	public String getUsername() {
 		return username;

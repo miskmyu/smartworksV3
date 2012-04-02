@@ -14,8 +14,7 @@
 %>
 <!-- Header Title -->
 <div class="header_tit">
-	<div class="tit_course">자신이 멘토로 운영하는 코스와 멘티로 참여하는 코스를 한번에 확인할수
-		있습니다.</div>
+	<div class="tit_course">자신이 멘토로 운영하는 코스와 멘티로 참여하는 코스를 한번에 확인할 수 있습니다.</div>
 </div>
 <!-- Header Title //-->
 <!-- Content Section -->

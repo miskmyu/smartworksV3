@@ -25,6 +25,7 @@ public class SwoUser extends SwoObject {
 	
 	private static final String NAME = CommonUtil.toName(SwoUser.class, PREFIX);
 
+	public static final String A_NICKNAME = "nickName";
 	public static final String A_PASSWORD = "password";
 	public static final String A_COMPANYID = "companyId";
 	public static final String A_DEPTID = "deptId";
@@ -43,6 +44,7 @@ public class SwoUser extends SwoObject {
 	public static final String A_MOBILENO = "mobileNo";
 	public static final String A_EXTENSIONNO = "extensionNo";
 
+	private String nickName;
 	private String password;
 	private String companyId;
 	private String deptId;
@@ -77,6 +79,7 @@ public class SwoUser extends SwoObject {
 	public String toAttributesString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(super.toAttributesString());
+		appendAttributeString(A_NICKNAME, nickName, true, buf);
 		appendAttributeString(A_PASSWORD, password, true, buf);
 		appendAttributeString(A_COMPANYID, companyId, buf);
 		appendAttributeString(A_DEPTID, deptId, buf);
@@ -116,6 +119,7 @@ public class SwoUser extends SwoObject {
 		
 		NamedNodeMap attrMap = node.getAttributes();
 		if (attrMap != null) {
+			Node nickName = attrMap.getNamedItem(A_NICKNAME);
 			Node password = attrMap.getNamedItem(A_PASSWORD);
 			Node companyId = attrMap.getNamedItem(A_COMPANYID);
 			Node deptId = attrMap.getNamedItem(A_DEPTID);
@@ -134,6 +138,8 @@ public class SwoUser extends SwoObject {
 			Node mobileNo = attrMap.getNamedItem("A_MOBILENO");
 			Node extensionNo = attrMap.getNamedItem("A_EXTENSIONNO");
 			
+			if (nickName != null)
+				obj.setNickName(nickName.getNodeValue());
 			if (password != null)
 				obj.setPassword(password.getNodeValue());
 			if (companyId != null)
@@ -271,7 +277,13 @@ public class SwoUser extends SwoObject {
 			return null;
 		}
 	}
-	
+
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 	public String getCompanyId() {
 		return companyId;
 	}

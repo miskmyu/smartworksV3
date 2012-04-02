@@ -159,7 +159,7 @@ currentUser = {
 <script type="text/javascript" src="js/sw/sw-act-settings.js"></script>
 <script type="text/javascript" src="js/sw/sw-act-builder.js"></script>
 
-<script type="text/javascript" src="sera/js/sera-act-nav.js"></script>
+<script type="text/javascript" src="sera/js/sera-actions.js"></script>
 
 <script type="text/javascript" src='js/smartform/smartworks.js'></script>
 <script type="text/javascript" src='js/smartform/sw-form-layout.js'></script>
@@ -209,7 +209,7 @@ currentUser = {
 		    <!-- Content //-->
 		    
 			<!-- Aside -->
-			<div>
+			<div class="aside">
 				<tiles:insertAttribute name="aside" />
 			</div>
 			<!-- Aside //-->

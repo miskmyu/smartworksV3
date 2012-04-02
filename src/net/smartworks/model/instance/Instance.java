@@ -19,6 +19,7 @@ public class Instance {
 	public final static int TYPE_MEMO = 10;
 	public final static int TYPE_BOARD = 11;
 	public final static int TYPE_MISSION = 12;
+	public final static int TYPE_YTVIDEO = 13;
 	
 	public final static int STATUS_NOT_YET = 0;
 	public final static int STATUS_RUNNING = 1;

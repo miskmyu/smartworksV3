@@ -15,8 +15,9 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
-
+console.log("dataField.value=", options.dataField.value);
 	var value = (options.dataField && parseFloat(options.dataField.value)) || 0;
+console.log("value=", value);
 	var $entity = options.entity;
 	var $graphic = $entity.children('graphic');
 
@@ -53,9 +54,9 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 		$number.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(value);
+			options.container.find('.form_value').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		else
-			options.container.find('.form_value input').attr('value', value);
+			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
 
 	return options.container;

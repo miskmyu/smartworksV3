@@ -29,6 +29,8 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
      padding: 0pt;
 }
 
+label {margin-right:5px} 
+
 h1, h2, h3, h4, h5, h6, th, td, button, textarea, sub {
 	 text-align:left;
 	 padding:2px 1px;
@@ -164,6 +166,7 @@ mark, rp, rt, ruby, summary, time {
 .mt15 {margin-top:15px !important}
 .mt20 {margin-top:20px !important}
 .mt25 {margin-top:25px !important}
+.mt30 {margin-top:30px !important}
 
 .mb2 {margin-bottom:2px !important}
 .mb3 {margin-bottom:3px !important}

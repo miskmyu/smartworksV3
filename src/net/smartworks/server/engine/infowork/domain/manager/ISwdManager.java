@@ -102,4 +102,6 @@ public interface ISwdManager extends IManager {
 
 	public String getTableColName(String domainId, String formFieldId) throws SwdException;
 
+	public void addHits(String tableName, String recordId) throws SwdException;
+
 }

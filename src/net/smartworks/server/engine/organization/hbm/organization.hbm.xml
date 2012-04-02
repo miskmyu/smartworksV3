@@ -72,6 +72,7 @@
 		<property name="authId" type="string" length="50"/>
 		<property name="empNo" type="string" length="50"/>
 		<property name="name" type="string" length="255"/>
+		<property name="nickName" type="string" length="255"/>
 		<property name="type" type="string" length="50"/>
 		<property name="position" column="pos" type="string" length="50"/>
 		<property name="email" type="string" length="50"/>

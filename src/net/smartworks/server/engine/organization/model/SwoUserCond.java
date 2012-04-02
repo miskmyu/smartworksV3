@@ -25,7 +25,8 @@ public class SwoUserCond extends SwoObjectCond {
 	private static Log logger = LogFactory.getLog(SwoUserCond.class);
 	
 	private static final String NAME = CommonUtil.toName(SwoUserCond.class, PREFIX);
-	
+
+	public static final String A_NICKNAME = "nickName";
 	public static final String A_COMPANYID = "companyId";
 	public static final String A_DEPTID = "deptId";
 	public static final String A_ROLEID = "roleId";
@@ -44,7 +45,8 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_RETIREE = "retiree";
 	public static final String A_MOBILENO = "mobileNo";
 	public static final String A_EXTENSIONNO = "extensionNo";
-	
+
+	private String nickName;
 	private String companyId;
 	private String deptId;
 	private String roleId;
@@ -80,6 +82,7 @@ public class SwoUserCond extends SwoObjectCond {
 	public String toAttributesString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(super.toAttributesString());
+		appendAttributeString(A_NICKNAME, nickName, true, buf);
 		appendAttributeString(A_PASSWORD, password, true, buf);
 		appendAttributeString(A_EMAIL, email, buf);
 		appendAttributeString(A_LANG, lang, buf);
@@ -118,6 +121,7 @@ public class SwoUserCond extends SwoObjectCond {
 		
 		NamedNodeMap attrMap = node.getAttributes();
 		if (attrMap != null) {
+			Node nickName = attrMap.getNamedItem(A_NICKNAME);
 			Node password = attrMap.getNamedItem(A_PASSWORD);
 			Node email = attrMap.getNamedItem(A_EMAIL);
 			Node lang = attrMap.getNamedItem(A_LANG);
@@ -133,6 +137,8 @@ public class SwoUserCond extends SwoObjectCond {
 			Node retiree = attrMap.getNamedItem(A_RETIREE);
 			Node mobileNo = attrMap.getNamedItem(A_MOBILENO);
 			Node extensionNo = attrMap.getNamedItem(A_EXTENSIONNO);
+			if (nickName != null)
+				obj.setNickName(nickName.getNodeValue());
 			if (password != null)
 				obj.setPassword(password.getNodeValue());
 			if (email != null)
@@ -281,7 +287,13 @@ public class SwoUserCond extends SwoObjectCond {
 			return null;
 		}
 	}
-	
+
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 	public String getCompanyId() {
 		return companyId;
 	}
@@ -378,7 +390,6 @@ public class SwoUserCond extends SwoObjectCond {
 	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
 	}
-	
 	public String getExtensionNo() {
 		return extensionNo;
 	}

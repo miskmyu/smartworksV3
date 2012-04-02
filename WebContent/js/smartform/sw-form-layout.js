@@ -175,7 +175,7 @@ SmartWorks.GridLayout = function(config) {
 						return getLayout(formXml, formData.record, this_, null, true);
 					},
 					error : function(e) {
-						return getLayout(formXml, null, this_);
+						return;
 					}
 				});					
 			},
