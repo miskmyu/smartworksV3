@@ -609,8 +609,8 @@ public class SwdManagerAdvisorImpl_bakup extends AbstractSwdManagerAdvisor {
 			}
 		}
 		if (!CommonUtil.isEmpty(list) && !isExistModifier) {
-			this.getSwdManager().addTableColumn(user, tableName, "modifier", "varchar(50)", null);
-			this.getSwdManager().addTableColumn(user, tableName, "modifiedTime", "timestamp", null);
+			this.getSwdManager().addTableColumn(user, tableName, "modifier", "varchar(50)");
+			this.getSwdManager().addTableColumn(user, tableName, "modifiedTime", "timestamp");
 		}
 	}
 	

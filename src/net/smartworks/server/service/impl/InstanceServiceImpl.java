@@ -2096,7 +2096,10 @@ public class InstanceServiceImpl implements IInstanceService {
 						refRecordId = (String)valueMap.get("refRecordId");
 						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
 						swoDepartmentCond.setId(refRecordId);
-						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
+						String deptName = "";
+						SwoDepartment swoDepartment = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE);
+						if(swoDepartment != null)
+							deptName = swoDepartment.getName();
 						value = deptName;
 					} else if(!CommonUtil.isEmpty(users)) {
 						refFormField = "frm_user_SYSTEM"; 
@@ -3594,6 +3597,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			return null;
 		}
+		
+		//return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
 
 	}
 
