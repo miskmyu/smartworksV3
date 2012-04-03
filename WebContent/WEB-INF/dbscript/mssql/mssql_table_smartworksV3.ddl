@@ -7,7 +7,7 @@ CREATE TABLE sworgcompany (
 	workitemid varchar(50),
 	creator	varchar(50),
 	createdtime datetime,
-	modifier	varchar(50),
+	modifier varchar(50),
 	modifiedtime datetime,
 	primary key (id)
 );	

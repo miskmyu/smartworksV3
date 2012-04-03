@@ -907,27 +907,7 @@ public class WorkServiceImpl implements IWorkService {
 						String value = swdDataField.getValue();
 						String refRecordId = swdDataField.getRefRecordId();
 						List<Map<String, String>> resultUsers = null;
-						List<Map<String, String>> files = null;
-						if(formatType.equals(FormField.TYPE_FILE)) {
-							List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
-							files = new ArrayList<Map<String,String>>();
-							if(!CommonUtil.isEmpty(fileModelList)) {
-								for(int i=0; i<fileModelList.size(); i++) {
-									Map<String, String> fileMap = new LinkedHashMap<String, String>();
-									IFileModel fileModel = fileModelList.get(i);
-									String fileId = fileModel.getId();
-									String fileName = fileModel.getFileName();
-									String fileType = fileModel.getType();
-									String fileSize = String.valueOf(fileModel.getFileSize());
-									fileMap.put("fileId", fileId);
-									fileMap.put("fileName", fileName);
-									fileMap.put("fileType", fileType);
-									fileMap.put("fileSize", fileSize);
-									files.add(fileMap);
-								}
-							}
-							swdDataField.setFiles(files);
-						} else if(formatType.equals(FormField.TYPE_USER)) {
+						if(formatType.equals(FormField.TYPE_USER)) {
 							if(value != null && refRecordId != null) {
 								String[] values = value.split(";");
 								String[] refRecordIds = refRecordId.split(";");
