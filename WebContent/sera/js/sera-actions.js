@@ -169,7 +169,7 @@ $(function() {
 			createCourse.find('input[name="txtCourseFee"]').removeClass('required').removeClass('error');
 		}
 		
-		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'), createCourse.find('.js_pop_error_message'))) {		
+		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'), createCourse.find('.sw_error_message'))) {		
 			input.parents('.js_create_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
 			createCourse.find('.js_create_course_table').hide();
 			createCourse.find('.js_mentor_profile_table').show();

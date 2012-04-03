@@ -45,6 +45,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
+import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -948,6 +949,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getSeraInstancesByUser(userId, fromDate, maxList);
+	}
+	
+	@Override
+	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getReviewInstancesByCourse(courseId, fromDate, maxList);
 	}
 
 }

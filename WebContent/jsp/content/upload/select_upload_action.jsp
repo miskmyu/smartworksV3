@@ -25,7 +25,7 @@ case ISmartWorks.SPACE_TYPE_MEMO_LIST:
 %>
 	<!--  업로드할 항목(새업무, 사진, 파일, 이벤트, 메모, 공지)을 선택하는 아이콘들  -->
 	<div id="upload" class="js_select_action js_select_upload_action_page">
-		<div class="up_memo up_icon_list">
+		<div class="up_memo up_icon_list" style="width:50px">
 			<a class="current" href="new_memo.sw"><fmt:message key='common.upload.memo' /> </a>
 		</div>
 	</div>

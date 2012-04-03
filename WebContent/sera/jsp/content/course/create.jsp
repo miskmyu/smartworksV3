@@ -22,7 +22,7 @@
 	// 모든정보를 JSON형식으로 Serialize해서 서버의 update_my_profile.sw 서비스를 호출하여 수정한다.
 	function submitForms(e) {
 		var createCourse = $('.js_create_course_page');
-		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'), $('.js_pop_error_message'))) {
+		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'),  createCourse.find('.sw_error_message'))) {
 			var forms = createCourse.find('form');
 			var paramsJson = {};
 			for(var i=0; i<forms.length; i++){
@@ -222,7 +222,6 @@
 					</div>
 				</td>
 			</tr>
-	
 		</table>
 		<table class="js_mentor_profile_table" border="0" cellspacing="0" cellpadding="0" style="display:none">
 			<tr>
@@ -286,10 +285,10 @@
 			</tr>
 		</table>
 	</form>
+	<div class="sw_error_message tl" style="color: red"></div>
 	
 	<!-- Btn -->
 	<div class="btn_space">
-		<span class="sw_error_message"></span>
 		<div class="js_create_buttons" style="clear: both; display: inline-block">
 			<div href="createCourse.sw" class="btn_blu_l mr10 js_sera_content">
 				<div class="btn_blu_r">취 소</div>
