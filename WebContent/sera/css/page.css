@@ -318,7 +318,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
-.aside_block .list dd { display:inline; margin:0 2px}
+.aside_block .list dd { display: inline-block; margin:0 2px 5px}
 .num_cus { color:#ed1c24}
 
 /* Badge */
