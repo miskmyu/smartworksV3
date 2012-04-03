@@ -162,7 +162,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_facebook a {background: url("../images/icon.png") no-repeat scroll 0 -257px; width:22px; height:22px; display:block; font-size:0}
 .icon_twitter a {background: url("../images/icon.png") no-repeat scroll -27px -257px; width:22px; height:22px; display:block; font-size:0}
 .icon_star_score {background: url("../images/icon.png") no-repeat scroll -17px -293px; width:9px; height:9px; display:block; margin-right:3px}
-.icon_star_score.current {background-position:0 -293px}
+.icon_star_score.full {background-position:0 -293px}
+.icon_star_score.half {background-position:-37px -293px}
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
 .icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; display:inline-block !important}
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; display:inline-block !important}
