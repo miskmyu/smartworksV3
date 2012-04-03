@@ -188,7 +188,8 @@
 				FileInstanceInfo fileInstance = (FileInstanceInfo)instanceInfo;
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId();
+				String workId = instanceInfo.getWork().getId();
+				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId() + "&workId=" + workId;
 				List<Map<String, String>> fileNames = fileInstance.getFiles();
 				String fileName = (fileNames.size()==1) ? fileNames.get(0).get("fileName") : "";
 				String fileSize = (fileNames.size()==1) ? fileNames.get(0).get("fileSize") : "";

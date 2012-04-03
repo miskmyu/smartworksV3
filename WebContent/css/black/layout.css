@@ -314,7 +314,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 /* UpLoad */
 #upload {width:100%; height:22px; margin: 0 2px; display:inline-block; position:relative;}
 #upload div a:hover, #upload div a:focus, #upload div a:active, #upload div a:link, #upload div a:visited {color: #333333; text-decoration:none;}
-#upload div {float:left; padding-right:15px;}
+#upload div {float:left; padding-right:15px}
 
 .up_wrap {position:relative; margin: 0 3px 10px;}
 .upload_up_wrap {width:743px;}
@@ -330,23 +330,23 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 
 
 /* upload Icon */
-.up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; padding:4px 0 3px 26px; display:block;}
+.up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block;}
 .up_works a:hover, .up_works .current,  .up_works a.current:hover {background: url("../../images/header_nico.png") no-repeat -4px -190px; font-weight:bold;}
 
-.up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; padding:4px 0 3px 25px; display:block;}
+.up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; width:26px; padding:4px 0 3px 25px; display:block;}
 .up_file a:hover, .up_file .current,  .up_file a.current:hover {background: url("../../images/header_nico.png") no-repeat -147px -190px; font-weight:bold;}
 
-.up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; padding:4px 0 3px 34px; display:block;}
+.up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block;}
 .up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background: url("../../images/header_nico.png") no-repeat -677px -190px; font-weight:bold;}
 
-.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; padding:4px 0 3px 22px; display:block;}
+.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 22px; display:block;}
 .up_event a:hover, .up_event .current,  .up_event a.current:hover {background: url("../../images/header_nico.png") no-repeat -278px -190px; font-weight:bold;}
 
-.up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; padding:4px 0 3px 23px; display:block;}
+.up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block;}
 .up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold;}
 
-.up_board a {background: url("../../images/header_nico.png") no-repeat -563px -155px; height:22px; padding:4px 0 3px 28px; display:block;}
-.up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -563px -190px; font-weight:bold;}
+.up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block;}
+.up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold;}
 
 
 /* Table Format */
