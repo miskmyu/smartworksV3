@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
+import net.smartworks.model.community.info.DepartmentInfo;
+import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -2574,9 +2576,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception {
 
-		try{
+		try {
 			User user = SmartUtil.getCurrentUser();
-	
+			if(user == null)
+				return null;
+			String userId = user.getId();
+
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 	
@@ -2584,9 +2589,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 
-			swdDomainCond.setFormId(getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE)[0].getId());
+			swdDomainCond.setFormId(getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId());
 
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
 
 			if(swdDomain == null)
 				return null;
@@ -2634,11 +2639,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(filterId != null) {
 				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
 				} else if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {
-					swdRecordCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
+					swdRecordCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, userId));
 				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
 					swdRecordCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
 				} else if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) {
-					swdRecordCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
+					swdRecordCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, userId));
 					swdRecordCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
 				} else {
 					searchFilter = ModelConverter.getSearchFilterByFilterId(SwfFormModel.TYPE_SINGLE, workId, filterId);
@@ -2683,7 +2688,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!CommonUtil.isEmpty(searchKey))
 				swdRecordCond.setSearchKey(searchKey);
 
-			long totalCount = getSwdManager().getRecordSize(user.getId(), swdRecordCond);
+			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -2743,13 +2748,13 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			swdRecordCond.setPageSize(pageSize);
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			//SwdField[] swdFields = getSwdManager().getViewFieldList(workId, swdDomain.getFormId());
 
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_ALL);
+			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_ALL);
 			SwfField[] swfFields = swfForms[0].getFields();
 
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
@@ -2758,20 +2763,28 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formName = swdDomain.getFormName();
 			String titleFieldId = swdDomain.getTitleFieldId();
 
-			if(swdRecords != null) {
-				IWInstanceInfo[] iWInstanceInfos = new IWInstanceInfo[swdRecords.length];
+			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
+			IWInstanceInfo[] iWInstanceInfos = null;
+			if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordsLength = swdRecords.length;
 				for(int i = 0; i < swdRecordsLength; i++) {
 					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
+					String owner = swdRecord.getCreationUser();
+					Date creationDate = swdRecord.getCreationDate();
+					String modificationUser = swdRecord.getModificationUser();
+					Date modificationDate = swdRecord.getModificationDate();
 					iWInstanceInfo.setId(swdRecord.getRecordId());
-					iWInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					iWInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
+					iWInstanceInfo.setCreatedDate(new LocalDate(creationDate.getTime()));
+					iWInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+					iWInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
 					int type = WorkInstance.TYPE_INFORMATION;
 					iWInstanceInfo.setType(type);
 					iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
 					String workSpaceId = swdRecord.getWorkSpaceId();
-					if(workSpaceId == null)
-						workSpaceId = user.getId();
+					if(CommonUtil.isEmpty(workSpaceId))
+						workSpaceId = userId;
 
 					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
@@ -2786,8 +2799,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 	
 					iWInstanceInfo.setWork(workInfo);
-					iWInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
-					iWInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 					iWInstanceInfo.setViews(swdRecord.getHits());
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					List<FieldData> fieldDataList = new ArrayList<FieldData>();
@@ -2876,7 +2887,69 @@ public class InstanceServiceImpl implements IInstanceService {
 					FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
 					fieldDataList.toArray(fieldDatas);
 					iWInstanceInfo.setDisplayDatas(fieldDatas);
-					iWInstanceInfos[i] = iWInstanceInfo;
+
+/*					boolean isAccess = false;
+
+					if(workSpaceId.equals(userId))
+						isAccess = true;
+					if(!isAccess) {
+						DepartmentInfo[] myDepartments = communityService.getMyDepartments();
+						if(!CommonUtil.isEmpty(myDepartments)) {
+							for(DepartmentInfo myDepartment : myDepartments) {
+								String myDepartmentId = myDepartment.getId();
+								if(workSpaceId.equals(myDepartmentId)) {
+									isAccess = true;
+									break;
+								}
+							}
+						}
+					}
+					if(!isAccess) {
+						GroupInfo[] myGroups = communityService.getMyGroups();
+						if(!CommonUtil.isEmpty(myGroups)) {
+							for(GroupInfo myGroup : myGroups) {
+								String myGroupId = myGroup.getId();
+								if(workSpaceId.equals(myGroupId)) {
+									isAccess = true;
+									break;
+								}
+							}
+						}
+					}*/
+
+					String accessLevel = swdRecord.getAccessLevel();
+					String accessValue = swdRecord.getAccessValue();
+
+					//if(isAccess) { 
+						if(!CommonUtil.isEmpty(accessLevel)) {
+							if(Integer.parseInt(accessLevel) == AccessPolicy.LEVEL_PRIVATE) {
+								if(owner.equals(userId) || modificationUser.equals(userId))
+									iWInstanceInfoList.add(iWInstanceInfo);
+							} else if(Integer.parseInt(accessLevel) == AccessPolicy.LEVEL_CUSTOM) {
+								if(!CommonUtil.isEmpty(accessValue)) {
+									String[] accessValues = accessValue.split(";");
+									if(!CommonUtil.isEmpty(accessValues)) {
+										for(String value : accessValues) {
+											if(!owner.equals(value) && !modificationUser.equals(value)) {
+												if(accessValue.equals(userId))
+													iWInstanceInfoList.add(iWInstanceInfo);
+											}
+										}
+										if(owner.equals(userId) || modificationUser.equals(userId))
+											iWInstanceInfoList.add(iWInstanceInfo);
+									}
+								}
+							} else {
+								iWInstanceInfoList.add(iWInstanceInfo);
+							}
+						} else {
+							iWInstanceInfoList.add(iWInstanceInfo);
+						}
+					//}
+				}
+				if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
+					iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
+					iWInstanceInfoList.toArray(iWInstanceInfos);
 				}
 				instanceInfoList.setInstanceDatas(iWInstanceInfos);
 			}
