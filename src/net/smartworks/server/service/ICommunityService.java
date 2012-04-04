@@ -45,5 +45,10 @@ public interface ICommunityService {
 	public abstract CommunityInfo[] getMyCommunities() throws Exception;
 
 	public abstract String setMyProfile(HttpServletRequest request) throws Exception;
-	
+
+	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+
 }

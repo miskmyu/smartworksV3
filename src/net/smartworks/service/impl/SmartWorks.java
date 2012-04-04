@@ -956,4 +956,16 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.getReviewInstancesByCourse(courseId, fromDate, maxList);
 	}
 
+	@Override
+	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.joinGroupRequest(requestBody, request);
+		
+	}
+
+	@Override
+	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.inviteGroupMembers(requestBody, request);
+		
+	}
+
 }
