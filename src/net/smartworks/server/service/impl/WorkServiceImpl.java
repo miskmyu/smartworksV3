@@ -34,6 +34,11 @@ import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.authority.model.SwaResource;
+import net.smartworks.server.engine.authority.model.SwaResourceCond;
+import net.smartworks.server.engine.authority.model.SwaUser;
+import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
@@ -128,6 +133,9 @@ public class WorkServiceImpl implements IWorkService {
 	private IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
 	}
+	private ISwaManager getSwaManager() {
+		return SwManagerFactory.getInstance().getSwaManager();
+	}
 
 	private AuthenticationManager authenticationManager;
 
@@ -146,7 +154,7 @@ public class WorkServiceImpl implements IWorkService {
 
 		try{
 			User user = SmartUtil.getCurrentUser();
-			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
+			if (user == null)
 				return null;
 			
 			ItmMenuItemListCond itemListCond = new ItmMenuItemListCond();
@@ -160,8 +168,9 @@ public class WorkServiceImpl implements IWorkService {
 			if(itmList != null) {
 				menuItems = itmList.getMenuItems();
 				if(!CommonUtil.isEmpty(menuItems)) {
-					packageIdArray = new String[menuItems.length];
-					for (int i = 0; i < menuItems.length; i++) {
+					int menuItemLength = menuItems.length;
+					packageIdArray = new String[menuItemLength];
+					for (int i = 0; i < menuItemLength; i++) {
 						ItmMenuItem item = menuItems[i];
 						if(item != null) {
 							String packageId = item.getPackageId();
@@ -197,6 +206,7 @@ public class WorkServiceImpl implements IWorkService {
 			//categoryId 가 넘어오면 카테고리안에 속한 2 level 카테고리(group) 와 work(package)를 리턴한다
 	
 			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
 			CtgCategoryCond ctgCond = new CtgCategoryCond();
 			ctgCond.setCompanyId(user.getCompanyId());
 			
@@ -206,7 +216,7 @@ public class WorkServiceImpl implements IWorkService {
 				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000"};
 				ctgCond.setObjIdNotIns(objIdNotIns);
 				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "40288afb1b25f00b011b25f3c7950001"), new Order(CtgCategory.A_NAME, true)});
-				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
+				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
 				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 			} else {
 				ctgCond.setParentId(categoryId);
@@ -220,11 +230,52 @@ public class WorkServiceImpl implements IWorkService {
 				pkgCond.setPackageIdNotIns(packageIdNotIns);
 				pkgCond.setOrders(new Order[]{new Order(PkgPackage.A_NAME, true)});
 
-				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
+				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 				
-				PkgPackage[] pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_LITE);
-				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
+				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
+
+				List<PkgPackage> newPkgList = new ArrayList<PkgPackage>();
+				PkgPackage[] newPkgs = null;
+				if(!CommonUtil.isEmpty(pkgs)) {
+					for(PkgPackage pkg : pkgs) {
+						String packageId = pkg.getPackageId();
+						SwfFormCond swfFormCond = new SwfFormCond();
+						swfFormCond.setPackageId(packageId);
+						SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+						if(!CommonUtil.isEmpty(swfForms)) {
+							SwfForm swfForm = swfForms[0];
+							String resourceId = swfForm.getId();
+							SwaResourceCond swaResourceCond = new SwaResourceCond();
+							swaResourceCond.setResourceId(resourceId);
+							swaResourceCond.setMode("R");
+							SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+							if(swaResource != null) {
+								String permission = swaResource.getPermission();
+								if(permission.equals("PUB_SELECT")) {
+									SwaUserCond swaUserCond = new SwaUserCond();
+									swaUserCond.setResourceId(resourceId);
+									swaUserCond.setMode("R");
+									SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+									if(!CommonUtil.isEmpty(swaUsers)) {
+										for(SwaUser swaUser : swaUsers) {
+											if(swaUser.getUserId().equals(userId)) {
+												newPkgList.add(pkg);
+											}
+										}
+									}
+								} else {
+									newPkgList.add(pkg);
+								}
+							}
+						}
+					}
+					if(newPkgList.size() > 0) {
+						newPkgs = new PkgPackage[newPkgList.size()];
+						newPkgList.toArray(newPkgs);
+					}
+				}
+				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(newPkgs);
 	
 				int workCtgsSize = workCtgs == null? 0 : workCtgs.length;
 				int pkgPkgsSize = workPkgs == null? 0 : workPkgs.length;
@@ -262,6 +313,7 @@ public class WorkServiceImpl implements IWorkService {
 			//categoryId 가 넘어오면 카테고리안에 속한 2 level 카테고리(group) 와 work(package)를 리턴한다
 	
 			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
 			CtgCategoryCond ctgCond = new CtgCategoryCond();
 			ctgCond.setCompanyId(user.getCompanyId());
 			
@@ -271,7 +323,7 @@ public class WorkServiceImpl implements IWorkService {
 //				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000", "40288afb1b25f00b011b25f3c7950001"};
 //				ctgCond.setObjIdNotIns(objIdNotIns);
 				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "52fca4b219fef4f50119ffcd871b0000"), new Order(CtgCategory.A_NAME, true)});
-				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
+				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
 				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 			
 			} else {
@@ -282,10 +334,10 @@ public class WorkServiceImpl implements IWorkService {
 				pkgCond.setCategoryId(categoryId);
 				//pkgCond.setStatus("DEPLOYED");
 	
-				CtgCategory[] ctgs = getCtgManager().getCategorys(user.getId(), ctgCond, IManager.LEVEL_LITE);
+				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 				
-				PkgPackage[] pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_LITE);
+				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
 	
 				int workCtgsSize = workCtgs == null? 0 : workCtgs.length;

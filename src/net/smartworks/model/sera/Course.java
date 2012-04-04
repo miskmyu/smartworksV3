@@ -10,8 +10,9 @@ import net.smartworks.util.LocalDate;
 public class Course extends Group {
 
 	public static final String DEFAULT_COURSE_PICTURE  = "default_course_picture";
+	public static final int MY_ALL_COURSES = 0;
 	public static final int MY_RUNNING_COURSE = 1;
-	public static final int MY_ATTENDING_COURSE = 2;	
+	public static final int MY_ATTENDING_COURSE = 2;
 
 	private String object;
 	private String[] categories;

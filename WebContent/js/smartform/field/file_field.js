@@ -41,7 +41,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	
 	var $file = null;
 		
-	$file = $('<div class="form_value" style="width:' + valueWidth + '%"><span id="' + id + '"' + required + '></span></div>');
+	$file = $('<div class="form_value" groupId="' + value + '" style="width:' + valueWidth + '%"><span id="' + id + '"' + required + '></span></div>');
 
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -55,7 +55,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		var fileList = '';
 		if(isTempfile){
 			fileList = 	(options.dataField && options.dataField.fileList) || '';
-		}
+		}	
 		createUploader(value, $('#'+id), true, false, isTempfile, fileList);
 	}
 	return options.container;
@@ -111,6 +111,18 @@ SmartWorks.FormRuntime.FileFieldBuilder.serializeObject = function(fileFields){
 		}
 		fileJson['files'] = fileInfos;
 		filesJson[fieldId] =  fileJson;
+	}
+	if(isEmpty(fileUploaders) && !isEmpty(fileFields)){
+		for(var i=0; i<fileFields.length; i++){
+			var fileField = $(fileFields[i]);
+			var groupId = fileField.find('.form_value').attr('groupId');
+			if(!isEmpty(groupId)){
+				var fileJson = { groupId : groupId};
+//				var fileInfos = new Array();
+//				fileJson['files'] = fileInfos;
+				filesJson[fileField.attr('fieldId')] = fileJson; 
+			}
+		}
 	}
 	return filesJson;
 };

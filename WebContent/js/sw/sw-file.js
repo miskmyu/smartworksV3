@@ -121,7 +121,6 @@ function createUploader(groupId, target, isMultiple, isProfile, isTempFile, file
 			type : "GET",
 			context : this,
 			success : function(data, status, jqXHR) {
-				console.log(data);
 				fileUploader(groupId, target);
 				var uploader_div = $(target);
 				uploader_div.find('.qq-uploader').attr('isMultiple', isMultiple).attr('isProfile', isProfile).attr('groupId', groupId);
@@ -148,7 +147,7 @@ function createUploader(groupId, target, isMultiple, isProfile, isTempFile, file
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
-				alert(e);
+				console.log(e);
 			}
 		});
 	}

@@ -2232,7 +2232,9 @@ CREATE TABLE SwFolder (
 	creator varchar(30),
 	createdtime datetime,
 	modifier varchar(30),
-	modifiedtime datetime,	
+	modifiedtime datetime,
+	tskWorkspaceId varchar(50),
+	tskRefType varchar(50),
 	primary key (id)
 );
 
