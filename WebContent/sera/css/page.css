@@ -90,7 +90,7 @@ a.b_next:hover { background-position:-30px -535px}
 .this_month table { font-size:11px; margin-top:10px; border-collapse:collapse; background-color:#f8f8f8}
 .this_month table th, .this_month table td { border:1px solid #cccccc; padding:5px 2px}
 .this_month table th { text-align:center}
-.this_month table .today_cel { background-color:#9cc7e1}
+.this_month table .today_cel { background-color:#dbf1fe}
 
 
 /* Tab */
@@ -389,14 +389,16 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_orange { color:#ff7c2a}
 .t_gray { color:#9a9a9a}
 .t_grayb { color:#9a9a9a; font-weight:bold}
+.t_gray2 { color:#666666}
 .tb { font-weight:bold}
 .t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999; line-height:17px}
+.insert_text {color: #B6B6B6; font: bold 16px 'Tahoma'}
 
 /* Width */
 .w_auto { width:auto !important}
 .w90 {width:90px !important}
-.w101 {width:101px !important}
+.w110 {width:110px !important}
 .w170 {width:170px !important}
 .w310 {width:310px !important}
 .w370 {width:370px !important}
