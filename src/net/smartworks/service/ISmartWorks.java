@@ -47,6 +47,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
+import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
@@ -449,5 +450,7 @@ public interface ISmartWorks {
 	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
 }

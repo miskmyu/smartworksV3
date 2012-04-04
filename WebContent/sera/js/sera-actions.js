@@ -215,4 +215,36 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_prev_month_mission').live('click', function(e){
+		var input = $(e.target);
+		var missionCreate = input.parents('.js_mission_create_page');
+		$.ajax({
+			url : 'courseMissionSet.sw',
+			data : {
+				courseId : missionCreate.attr('courseId'),
+				today : missionCreate.attr('prevMonth')
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_next_month_mission').live('click', function(e){
+		var input = $(e.target);
+		var missionCreate = input.parents('.js_mission_create_page');
+		$.ajax({
+			url : 'courseMissionSet.sw',
+			data : {
+				courseId : missionCreate.attr('courseId'),
+				today : missionCreate.attr('nextMonth')
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
 });
