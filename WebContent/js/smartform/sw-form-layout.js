@@ -227,6 +227,7 @@ SmartWorks.GridLayout = function(config) {
 								type : 'POST',
 								data : JSON.stringify(paramsJson),
 								success : function(refreshData, status, jqXHR) {
+console.log('refreshData=', refreshData);
 									if(this_.options.mode==="edit"){
 										this_.options.target.show();
 										return getLayout(formXml, refreshData.record, this_, null, true);

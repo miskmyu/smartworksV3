@@ -15,9 +15,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
-console.log("dataField.value=", options.dataField.value);
 	var value = (options.dataField && parseFloat(options.dataField.value)) || 0;
-console.log("value=", value);
 	var $entity = options.entity;
 	var $graphic = $entity.children('graphic');
 

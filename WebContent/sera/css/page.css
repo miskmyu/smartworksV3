@@ -83,6 +83,7 @@ a.b_next:hover { background-position:-30px -535px}
 
 /* Section Center */
 #section_cen {margin: 0 0 0 210px; position: relative; z-index: 10}
+#section_cen .header div { font-size:14px; color:#3174ad; font-weight:bold}
 .this_month {}
 .this_month .tit_area { font-size:14px; font-weight:bold; text-align:center; margin:0 0 0 37px; padding-bottom:3px; overflow:hidden}
 .this_month .tit_area .tit { margin:0 10px; float:left}
@@ -167,6 +168,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
 .icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; display:inline-block !important}
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; display:inline-block !important}
+.icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
+.icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -307,7 +310,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Course */
 .course_section .header, .content_section .header {border-bottom:1px solid #559fcc; height:21px} /* Besides page Header */
 .content_section .header .t_myid {color:#608eba; font-weight:bold}
-.course_section .header div, .content_section .header div {color:#333333; font-weight:bold; font-size:14px}
+.course_section .header div,
+.content_section .header div {color:#333333; font-weight:bold; font-size:14px}
 .star_score {margin-top:8px; padding-left:7px; overflow:hidden}
 .star_score li { float:left !important}
 
@@ -343,7 +347,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Course */
 /* Course Define */
 .course_df_section { position:relative; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
-.course_df_img {float:left; width:119px; height:118px; border-right:1px solid #cccccc; margin-right:15px}
+.course_df_img {background: url("../images/course_df.gif") no-repeat 0 0; float:left; width:118px; height:118px; border-right:1px solid #d7d7d7; margin-right:15px}
 .course_df { float:left; width:350px; margin-top:10px}
 .course_df h1 { font-size:14px}
 .course_df ul { display:block}

@@ -158,7 +158,7 @@ $(document).ready(function(){
 			                 	editable: false,
 			                 	backgroundColor: "#ffffff",
 			                 	textColor: "#000000",
-			                 	borderColor: "#ffffff",
+			                 	borderColor: "#cccccc",
 			                  	url: "iwork_space.sw?cid=iw.sp." + event.id  + "&wid=" + event.workSpaceId + "&workId=" + event.workId
 			            	});
 		                }
