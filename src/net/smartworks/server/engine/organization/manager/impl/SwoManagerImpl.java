@@ -2297,7 +2297,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 		StringBuffer buff = new StringBuffer();
 		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
-		buff.append(" user.id,  user.name, user.password, user.companyId,  company.name, ");
+		buff.append(" user.id,  user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" user.deptId, dept.name, dept.description, user.locale, ");
 		buff.append(" user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 		buff.append(" user.empNo, user.email, user.extensionNo, user.mobileNo )");

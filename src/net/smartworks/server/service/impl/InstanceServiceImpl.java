@@ -443,24 +443,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
 			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
 			cond.setPageNo(0);
-			cond.setPageSize(50);
+			cond.setPageSize(10);
 			TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
 			if (tasks == null || tasks.length == 0)
 				return null;
 			
-			List<InstanceInfo> InstanceInfoList = new ArrayList<InstanceInfo>();
+			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
 			List<String> prcInstIdList = new ArrayList<String>();
-			for (int i = 0; i < tasks.length; i++) {
+			int taskLength = tasks.length;
+			for (int i = 0; i < taskLength; i++) {
 				TaskWork task = tasks[i];
-				if (InstanceInfoList.size() == 10)
-					break;
+				/*if (instanceInfoList.size() == 10)
+					break;*/
 				if (prcInstIdList.contains(task.getTskPrcInstId()))
 					continue;
 				prcInstIdList.add(task.getTskPrcInstId());
-				InstanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+				instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
 			}
-			InstanceInfo[] resultTasks = new InstanceInfo[InstanceInfoList.size()];
-			InstanceInfoList.toArray(resultTasks);
+			InstanceInfo[] resultTasks = new InstanceInfo[instanceInfoList.size()];
+			instanceInfoList.toArray(resultTasks);
 			
 			return resultTasks;
 			
@@ -2089,9 +2090,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	
 					if(!CommonUtil.isEmpty(groupId)) {
 						files = (ArrayList<Map<String,String>>)valueMap.get("files");
+						value = groupId;
 						if(!CommonUtil.isEmpty(files)) {
 							fileGroupMap.put(groupId, files);
-							value = groupId;
 						}
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
@@ -2145,7 +2146,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setRefFormField(refFormField);
 				fieldData.setRefRecordId(refRecordId);
 				fieldData.setValue(value);
-	
+
 				fieldDataList.add(fieldData);
 				
 			}
