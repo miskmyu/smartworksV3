@@ -2771,15 +2771,24 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i = 0; i < swdRecordsLength; i++) {
 					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
-					String owner = swdRecord.getCreationUser();
+					String creationUser = swdRecord.getCreationUser();
 					Date creationDate = swdRecord.getCreationDate();
 					String modificationUser = swdRecord.getModificationUser();
 					Date modificationDate = swdRecord.getModificationDate();
+					if(creationUser == null)
+						creationUser = User.USER_ID_NONE_EXISTING;
+					if(creationDate == null)
+						creationDate = new Date();
+					UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
+					LocalDate createdDate = new LocalDate(creationDate.getTime());
+					UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
+					LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
+
 					iWInstanceInfo.setId(swdRecord.getRecordId());
-					iWInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
-					iWInstanceInfo.setCreatedDate(new LocalDate(creationDate.getTime()));
-					iWInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
-					iWInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					iWInstanceInfo.setOwner(owner);
+					iWInstanceInfo.setCreatedDate(createdDate);
+					iWInstanceInfo.setLastModifier(lastModifier);
+					iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
 					int type = WorkInstance.TYPE_INFORMATION;
 					iWInstanceInfo.setType(type);
 					iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
