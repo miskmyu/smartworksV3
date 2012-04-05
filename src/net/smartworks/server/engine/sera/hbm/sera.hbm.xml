@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.sera.model" default-lazy="false">
+	<class name="MentorDetail" table="MentorDetail">
+		<id name="mentorId" column="mentorId" type="string" length="50">
+			<generator class="assigned"/>
+		</id>
+		<property name="born" type="string" length="500"/>
+		<property name="homeTown" type="string" length="500"/>
+		<property name="living" type="string" length="500"/>
+		<property name="family" type="string" length="100"/>
+		<property name="educations" type="string" length="500"/>
+		<property name="works" type="string" length="100"/>
+		<property name="mentorHistory" type="string" length="500"/>
+		<property name="menteeHistory" type="string" length="500"/>
+		<property name="lectures" type="string" length="500"/>
+		<property name="awards" type="string" length="500"/>
+		<property name="etc" type="string" length="500"/>
+	</class>
+</hibernate-mapping>

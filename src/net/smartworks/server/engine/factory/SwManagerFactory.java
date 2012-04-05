@@ -32,6 +32,7 @@ import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
+import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 
 import org.apache.commons.logging.Log;
@@ -65,7 +66,16 @@ public class SwManagerFactory {
 	private ILikeManager likeManager;
 	private IResourceDesigntimeManager designtimeManager;
 	private IResourceRuntimeManager runtimeManager;
+	
+	//SERA
+	private ISeraManager seraManager;
 
+	public ISeraManager getSeraManager() {
+		return seraManager;
+	}
+	public void setSeraManager(ISeraManager seraManager) {
+		this.seraManager = seraManager;
+	}
 	private WorkListManagerImpl workListManager;
 
 	public WorkListManagerImpl getWorkListManager() {
