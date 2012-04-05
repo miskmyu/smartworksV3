@@ -38,7 +38,7 @@ $(function() {
 				}
 			});
 		}else if(pos==1){
-			$('.js_course_mission_menu li.js_course_mission_set a').click();
+			$('.js_course_mission_menu li.js_course_mission_space a').click();
 		}else if(pos==2){
 			$.ajax({
 				url : "courseBoard.sw",
@@ -95,8 +95,8 @@ $(function() {
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
 		var url ="";
-		if(input.hasClass('js_course_mission_set')){
-			url = "courseMissionSet.sw";
+		if(input.hasClass('js_course_mission_space')){
+			url = "courseMissionSpace.sw";
 		}else if(input.hasClass('js_course_mission_list')){
 			url = "courseMissionList.sw";
 		}else if(input.hasClass('js_course_mission_mine')){
@@ -219,7 +219,7 @@ $(function() {
 		var input = $(e.target);
 		var missionCreate = input.parents('.js_mission_create_page');
 		$.ajax({
-			url : 'courseMissionSet.sw',
+			url : 'courseMissionSpace.sw',
 			data : {
 				courseId : missionCreate.attr('courseId'),
 				today : missionCreate.attr('prevMonth')
@@ -235,7 +235,7 @@ $(function() {
 		var input = $(e.target);
 		var missionCreate = input.parents('.js_mission_create_page');
 		$.ajax({
-			url : 'courseMissionSet.sw',
+			url : 'courseMissionSpace.sw',
 			data : {
 				courseId : missionCreate.attr('courseId'),
 				today : missionCreate.attr('nextMonth')
