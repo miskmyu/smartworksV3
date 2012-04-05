@@ -70,6 +70,8 @@ import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
+import net.smartworks.server.engine.authority.model.SwaUser;
+import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
@@ -1165,48 +1167,118 @@ public class ModelConverter {
 		return workInfo;
 	}	
 	
-	public static WorkCategoryInfo[] getWorkCategoryInfoArrayByCtgCategoryArray(CtgCategory[] argCtgs) throws Exception {
+	public static WorkCategoryInfo[] getWorkCategoryInfoArrayByCtgCategoryArray(CtgCategory[] argCtgs, int type) throws Exception {
 		if (CommonUtil.isEmpty(argCtgs))
 			return null;
 		
 		WorkCategoryInfo[] workCtgs = new WorkCategoryInfo[argCtgs.length];
 		for (int i =0; i < argCtgs.length; i ++) {
 			CtgCategory ctg = argCtgs[i];
-			WorkCategoryInfo workCtg = (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg);
+			WorkCategoryInfo workCtg = (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, type);
 			workCtgs[i] = workCtg; 
 		}
 		return workCtgs;
 	}
-	public static WorkCategoryInfo getWorkCategoryInfoByCtgCategory(WorkCategoryInfo workCtgInfo, CtgCategory argCtg) throws Exception {
+	public static WorkCategoryInfo getWorkCategoryInfoByCtgCategory(WorkCategoryInfo workCtgInfo, CtgCategory argCtg, int type) throws Exception {
 		if (argCtg == null)
 			return null;
 		if (workCtgInfo == null) 
 			workCtgInfo = new WorkCategoryInfo();
-		
+
 		CtgCategory ctg = (CtgCategory)argCtg;
 		String ctgId = ctg.getObjId();
 		String ctgName = ctg.getName();
 		WorkCategoryInfo workCtg = new WorkCategoryInfo(ctgId, ctgName);
-		workCtg.setRunning(isExistRunningPackageByCategoryId(ctgId));
+		workCtg.setRunning(isExistRunningPackageByCategoryId(ctgId, type));
 		return workCtg;
 	}
-	private static boolean isExistRunningPackageByCategoryId(String categoryId) throws Exception {
+
+	public static PkgPackage[] getMyViewPackages(String userId, PkgPackage[] pkgs) throws Exception {
+		List<PkgPackage> newPkgList = new ArrayList<PkgPackage>();
+		PkgPackage[] newPkgs = null;
+		if(!CommonUtil.isEmpty(pkgs)) {
+			for(PkgPackage pkg : pkgs) {
+				String packageId = pkg.getPackageId();
+				String type = pkg.getType();
+				String resourceId = null;
+				if(type.equals(SwfFormModel.TYPE_SINGLE)) {
+					SwfFormCond swfFormCond = new SwfFormCond();
+					swfFormCond.setPackageId(packageId);
+					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+					if(!CommonUtil.isEmpty(swfForms)) {
+						SwfForm swfForm = swfForms[0];
+						resourceId = swfForm.getId();
+					}
+				} else if(type.equals(SwfFormModel.TYPE_PROCESS) || type.equals(SwfFormModel.TYPE_GANTT)) {
+					PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
+					prcSwProcessCond.setPackageId(packageId);
+					PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses(userId, prcSwProcessCond);
+					if(!CommonUtil.isEmpty(swProcesses)) {
+						PrcSwProcess swProcess = swProcesses[0];
+						resourceId = swProcess.getProcessId();
+					}
+				}
+				SwaResourceCond swaResourceCond = new SwaResourceCond();
+				swaResourceCond.setResourceId(resourceId);
+				swaResourceCond.setMode("R");
+				SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+				if(swaResource != null) {
+					String permission = swaResource.getPermission();
+					if(permission.equals("PUB_SELECT")) {
+						SwaUserCond swaUserCond = new SwaUserCond();
+						swaUserCond.setResourceId(resourceId);
+						swaUserCond.setMode("R");
+						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+						if(!CommonUtil.isEmpty(swaUsers)) {
+							for(SwaUser swaUser : swaUsers) {
+								if(swaUser.getUserId().equals(userId)) {
+									newPkgList.add(pkg);
+								}
+							}
+						}
+					} else {
+						newPkgList.add(pkg);
+					}
+				} else {
+					newPkgList.add(pkg);
+				}
+			}
+			if(newPkgList.size() > 0) {
+				newPkgs = new PkgPackage[newPkgList.size()];
+				newPkgList.toArray(newPkgs);
+			}
+		}
+		return newPkgs;
+	}
+
+	private static boolean isExistRunningPackageByCategoryId(String categoryId, int type) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		PkgPackageCond cond = new PkgPackageCond();
 		cond.setCategoryId(categoryId);
 		cond.setStatus(PkgPackage.STATUS_DEPLOYED);
-		long runningPackageCount = getPkgManager().getPackageSize("ModelConverter", cond);
+		long runningPackageCount = 0;
+		if(type == 1) {
+			PkgPackage[] pkgs = getPkgManager().getPackages("", cond, IManager.LEVEL_LITE);
+			PkgPackage[] newPkgs = getMyViewPackages(userId, pkgs);
+			if(!CommonUtil.isEmpty(newPkgs))
+				runningPackageCount = newPkgs.length;
+		} else {
+			runningPackageCount = getPkgManager().getPackageSize("ModelConverter", cond);
+		}
 		if (runningPackageCount > 0)
 			return true;
-		
+
 		CtgCategoryCond ctgCond = new CtgCategoryCond();
 		ctgCond.setParentId(categoryId);
-		
+
 		CtgCategory[] ctg = getCtgManager().getCategorys("ModelConverter", ctgCond, IManager.LEVEL_LITE);
 		if (ctg == null) {
 			return false;
 		} else {
 			for (int i = 0; i < ctg.length; i++) {
-				if(isExistRunningPackageByCategoryId(ctg[i].getObjId())) {
+				if(isExistRunningPackageByCategoryId(ctg[i].getObjId(), type)) {
 					return true;
 				}
 			}
@@ -1250,11 +1322,11 @@ public class ModelConverter {
 		
 		Map<String, WorkCategoryInfo> resultMap = new HashMap<String, WorkCategoryInfo>();
 		if (parentCtg == null || parentCtg.getObjId().equalsIgnoreCase(CtgCategory.ROOTCTGID)) {
-			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg));
+			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, 2));
 			resultMap.put("group", null);
 		} else {
-			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, parentCtg));
-			resultMap.put("group", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg));
+			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, parentCtg, 2));
+			resultMap.put("group", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, 2));
 		}
 		return resultMap;
 	}

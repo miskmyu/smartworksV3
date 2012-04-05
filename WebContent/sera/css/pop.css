@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* Pop Layout*/
+.p_layout {position:absolute}
+.p_layout .point {background: url("../images/pop_point_top.png") no-repeat; width:15px; height:9px; position:relative; left:43px; top:1px}
+
+/* Pop Block */
+.pop_block { border:1px solid #7f8a9b; width:385px; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0}
+.pop_block .header { background-color:#4795c4; height:26px; color:#FFF; font-weight:bold; font-size:14px; padding: 12px 0 0 10px; border-top: 1px solid #63BFDC; border-bottom: 1px solid #63BFDC;}
+.pop_block dt { margin-bottom:5px; font-weight:bold; text-align:left; overflow:hidden}
+.pop_block dd { text-align:left; margin-bottom:10px}
+.pop_block .content_section {padding:10px; margin:5px; background-color:#F5F5F5; text-align:center; overflow:hidden; line-height:18px}
+.pop_block .content_area { display:inline-block; text-align:center; width:100%}
+.pop_block .content_area .text {vertical-align:middle; height:40px; width:100%; display: table-cell}
+.pop_block label { line-height:14px} 
+.bor_line { border-top:2px solid #145f99}
+.bg_w { background-color:#FFF !important}
+
+/* 2단 */
+.left_space { width:250px; float:left; text-align:left}
+.right_space { width:95px; float:right}
+
+/* Icon */
+.icon_pop_info {background: url("../images/icon.png") no-repeat scroll -243px -646px transparent; display: block; width:33px; height:34px}
+.icon_pop_warn {background: url("../images/icon.png") no-repeat scroll -299px -646px transparent; display: block; width:37px; height:34px}
+.icon_pop_error {}
+
+/* Btn */
+.btn_pop_l {background: url("../images/btn_pop_l.png") no-repeat scroll 0 0; height:27px; float:left; cursor:pointer}
+.btn_pop_r {background: url("../images/btn_pop_r.png") no-repeat scroll 100% 0; height:27px; padding:0 8px; line-height:31px; font-weight:bold; font-size:12px; color:#333333}
+.btn_close a {background: url("../images/icon.png") no-repeat scroll -166px -713px; height:11px; width:11px; margin-right:10px; float:right; display:block}
+.btn_close a:hover {background: url("../images/icon.png") no-repeat scroll -190px -713px}

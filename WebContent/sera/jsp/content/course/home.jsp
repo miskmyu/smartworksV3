@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.sera.info.ReviewInstanceInfo"%>
+<%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -15,7 +17,7 @@
 	
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
-	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, null, 5);
+	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
 	String mentorName = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getName();
 	boolean myRunningCourse = (cUser.getId().equals(mentorId));
@@ -125,7 +127,7 @@
 </div>
 <!-- Course Define //-->
 <!-- Course Section -->
-<div class="course_section js_course_content">
+<div class="course_section js_course_content" courseId="<%=courseId%>">
 	<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
 		<jsp:param value="<%=courseId %>" name="courseId"/>
 	</jsp:include>

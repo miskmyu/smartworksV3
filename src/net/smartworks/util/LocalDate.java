@@ -92,6 +92,13 @@ public class LocalDate extends Date{
 	public void setFirstDayOfWeek(int firstDayOfWeek) {
 		this.firstDayOfWeek = firstDayOfWeek;
 	}
+	
+	public int getDateOnly(){
+		Calendar cal = Calendar.getInstance(this.timeZone, this.locale);
+		cal.setTime(new Date(this.getLocalDate()));
+		return cal.get(Calendar.DATE);
+	}
+
 	public int getMonth(){
 		Calendar cal = Calendar.getInstance(this.timeZone, this.locale);
 		cal.setTime(new Date(this.getLocalDate()));
@@ -193,6 +200,10 @@ public class LocalDate extends Date{
 
 	public String toLocalTimeString2(){
 		return (new SimpleDateFormat("HH:mm", this.locale)).format(getLocalTime());
+	}
+
+	public String toLocalDayString(){
+		return (new SimpleDateFormat("E", this.locale)).format(getLocalTime());
 	}
 
 	public String toGMTDateString(){

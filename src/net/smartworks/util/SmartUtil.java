@@ -305,7 +305,7 @@ public class SmartUtil {
 				}
 				return user;
 			} else {
-				//TO-DO
+				return null;
 			}
 		}
 		return null;

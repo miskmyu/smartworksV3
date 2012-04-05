@@ -63,10 +63,8 @@ public class CommentInstance extends Instance {
 		super.setType(Instance.TYPE_COMMENT);
 	}
 
-	public CommentInstance(String id, int commentType, String comment,
-			User commentor, LocalDate lastModifiedDate) {
-		super(id, "", Instance.TYPE_COMMENT, commentor, commentor,
-				lastModifiedDate);
+	public CommentInstance(String id, int commentType, String comment, User commentor, LocalDate lastModifiedDate) {
+		super(id, "", Instance.TYPE_COMMENT, commentor, commentor, lastModifiedDate);
 		this.commentType = commentType;
 		this.commentor = commentor;
 		this.comment = comment;

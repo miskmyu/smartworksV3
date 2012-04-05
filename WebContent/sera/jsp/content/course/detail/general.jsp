@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.util.LocalDate"%>
+<%@page import="net.smartworks.model.sera.info.ReviewInstanceInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Mentor"%>
 <%@page import="net.smartworks.model.sera.Course"%>
@@ -7,13 +9,15 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 
 <%
-	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
+	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다. 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
 	Course course = (Course)session.getAttribute("course");
 	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
+
+	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
 	
 %>
 <div>
@@ -71,15 +75,13 @@
 						</div>
 					</dd>
 					<dd class="fr">
-						<div class="btn_large_l">
-							<div class="btn_large_r">
-								<span class="icon_blu_down2 mr5"></span>코스 가입하기
-							</div>
+						<div class="btn_large_l js_join_course_request" autoApproval="<%=course.isAutoApproval()%>">
+							<div class="btn_large_r"><span class="icon_blu_down2 mr5"></span>코스 가입하기</div>
 						</div>
 					</dd>
 					<div class="mission_info"><%=course.getTargetPoint()%>개의 미션
 						중
-						<%=course.getAchievedPoint()%>번쨰가 진행중입니다
+						<%=course.getAchievedPoint()%>번째가 진행중입니다
 					</div>
 					<div class="process" style="margin: 5px 30px 0 0">
 						(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
@@ -149,70 +151,57 @@
 		<!-- 리뷰 -->
 		<li class="fr">
 			<div class="panel_block fr">
-				<!-- Reply-->
-				<div class="reply_section">
-					<div class="photo">
-						<img src="../images/photo_mid48.jpg" />
-					</div>
-					<div class="reply_text w375 fl">
-						<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
-						그려지네요~~점점 시간이 지날수록 얼굴이...
-						<div class="icon_date">3월 5일</div>
-					</div>
-					<div class="fr">
-						<div class="btn_mid_l mt8">
-							<div class="btn_mid_r">
-								<span class="icon_blu_down mr5"></span>별점주기
+			
+				<%
+				if(!SmartUtil.isBlankObject(reviews) && reviews.length>0){
+					for(int i=0; i<reviews.length; i++){
+						ReviewInstanceInfo review = reviews[i];
+				%>
+						<!-- Reply-->
+						<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
+							<div class="photo">
+								<img src="<%=review.getOwner().getMinPicture() %>" />
+							</div>
+							<div class="reply_text w375 fl">
+								<span class="name"><%=review.getOwner().getNickName() %> : </span><%=review.getContent() %>
+								<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
+							</div>
+							<div class="fr">
+								<div class="btn_mid_l mt8">
+									<div class="btn_mid_r">
+										<span class="icon_blu_down mr5"></span>별점주기
+									</div>
+								</div>
+								<div class="star_score cb">
+									<ul>
+										<li class="icon_star_score current"><a href=""> </a></li>
+										<li class="icon_star_score current"><a href=""> </a></li>
+										<li class="icon_star_score current"><a href=""> </a></li>
+										<li class="icon_star_score"><a href=""> </a></li>
+										<li class="icon_star_score"><a href=""> </a></li>
+									</ul>
+								</div>
 							</div>
 						</div>
-						<div class="star_score cb">
-							<ul>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score"><a href=""> </a></li>
-								<li class="icon_star_score"><a href=""> </a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- Reply//-->
-				<!-- Reply-->
-				<div class="reply_section end">
-					<div class="photo">
-						<img src="../images/photo_mid48.jpg" />
-					</div>
-					<div class="reply_text w375 fl">
-						<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
-						그려지네요~~점점 시간이 지날수록 얼굴이...
-						<div class="icon_date">3월 5일</div>
-					</div>
-					<div class="fr">
-						<div class="btn_mid_l mt8">
-							<div class="btn_mid_r">
-								<span class="icon_blu_down mr5"></span>별점주기
-							</div>
-						</div>
-						<div class="star_score cb">
-							<ul>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score current"><a href=""> </a></li>
-								<li class="icon_star_score"><a href=""> </a></li>
-								<li class="icon_star_score"><a href=""> </a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- Reply//-->
+						<!-- Reply//-->
+				<%
+					}
+				}
+				%>
 			</div>
 		</li>
 		<!-- 리뷰//-->
 	</ul>
 </div>
 <!-- 코스 리뷰 //-->
-<!-- 더보기 -->
-<div class="more cb">
-	<div class="icon_more">더보기</div>
-</div>
-<!-- 더보기 //-->
+<%
+if(reviews.length>5){
+%>
+	<!-- 더보기 -->
+	<div class="more cb">
+		<div class="icon_more">더보기</div>
+	</div>
+	<!-- 더보기 //-->
+<%
+}
+%>

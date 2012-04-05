@@ -10,8 +10,9 @@ import net.smartworks.util.LocalDate;
 public class Course extends Group {
 
 	public static final String DEFAULT_COURSE_PICTURE  = "default_course_picture";
+	public static final int MY_ALL_COURSES = 0;
 	public static final int MY_RUNNING_COURSE = 1;
-	public static final int MY_ATTENDING_COURSE = 2;	
+	public static final int MY_ATTENDING_COURSE = 2;
 
 	private String object;
 	private String[] categories;
@@ -20,7 +21,6 @@ public class Course extends Group {
 	private LocalDate start;
 	private LocalDate end;
 	private int maxMentees;
-	private boolean autoApproval;
 	private boolean payable;
 	private int fee;
 	private Team team;
@@ -87,12 +87,6 @@ public class Course extends Group {
 	}
 	public void setMaxMentees(int maxMentees) {
 		this.maxMentees = maxMentees;
-	}
-	public boolean isAutoApproval() {
-		return autoApproval;
-	}
-	public void setAutoApproval(boolean autoApproval) {
-		this.autoApproval = autoApproval;
 	}
 	public boolean isPayable() {
 		return payable;

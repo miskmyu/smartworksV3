@@ -25,6 +25,7 @@ public class Group extends WorkSpace {
 	private LocalDate openDate = null;
 	private int numberOfGroupMember = 0;
 	private String type = GROUP_TYPE_DEFAULT;
+	private boolean autoApproval;
 
 	public String getType() {
 		return type;
@@ -44,12 +45,6 @@ public class Group extends WorkSpace {
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
-//	public boolean isContinue() {
-//		return isContinue;
-//	}
-//	public void setContinue(boolean isContinue) {
-//		this.isContinue = isContinue;
-//	}
 	public User getLeader() {
 		return leader;
 	}
@@ -79,6 +74,12 @@ public class Group extends WorkSpace {
 	}
 	public void setNumberOfGroupMember(int numberOfGroupMember) {
 		this.numberOfGroupMember = numberOfGroupMember;
+	}
+	public boolean isAutoApproval() {
+		return autoApproval;
+	}
+	public void setAutoApproval(boolean autoApproval) {
+		this.autoApproval = autoApproval;
 	}
 
 	public Group(){

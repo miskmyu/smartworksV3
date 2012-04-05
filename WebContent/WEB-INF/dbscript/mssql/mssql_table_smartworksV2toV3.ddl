@@ -5,8 +5,7 @@ ALTER TABLE SWDataRef alter column refRecordId varchar(4000);
 ALTER TABLE prcprcinst alter column prctitle varchar(255); --prctitle의 컬럼사이즈를 text_input의 컬럼사이즈인 255로 변경
 ALTER TABLE tsktask alter column tsktitle varchar(255); --tsktitle의 컬럼사이즈를 text_input의 컬럼사이즈인 255로 변경
 
-
--- swfolder table 생성 : 사용자별 folder
+-- 폴더
 CREATE TABLE SwFolder (
 	id varchar(50) NOT NULL,
 	companyid varchar(100),
@@ -17,16 +16,23 @@ CREATE TABLE SwFolder (
 	creator varchar(30),
 	createdtime datetime,
 	modifier varchar(30),
-	modifiedtime datetime,	
+	modifiedtime datetime,
+	tskWorkspaceId varchar(50),
+	tskRefType varchar(50),
 	primary key (id)
 );
 
--- swfolderfile table 생성 : folder 별 file 목록
+-- 폴더파일
 CREATE TABLE SwFolderFile (
 	folderId varchar(50) NOT NULL,
 	fileId varchar(50) NOT NULL,
+	fileSeq int,
   	primary key(folderId, fileId)
 );
+
+ALTER TABLE SwFolder add tskWorkspaceId varchar(50);
+ALTER TABLE SwFolder add tskRefType varchar(50);
+
 
 -- SwOpinion Table (댓글)에 컬럼 추가
 ALTER TABLE SwOpinion add modifier varchar(30);
@@ -85,6 +91,9 @@ ALTER TABLE aprapr add aprDueDate varchar(100);
 ALTER TABLE swdocgroup add tskInstanceId varchar(50);
 
 -- TO-DO : mode -> authmode 
+exec sp_rename 'SWAuthResource.mode', 'authMode', 'column'
+exec sp_rename 'SWAuthUser.mode', 'authMode', 'column'
+
 
 -- TO-DO : 테이블명 및 컬럼명 변경 lnklist, lnklistextprop, lnklistitem, lnkmap, lnkmapextprop, lnkvalue, lnkvalueextprop 의 모든 lnk를 col로 변경
 
