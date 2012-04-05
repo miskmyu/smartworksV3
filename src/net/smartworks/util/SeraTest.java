@@ -12,6 +12,7 @@ import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
 import net.smartworks.model.sera.info.MissionInfo;
+import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 
 public class SeraTest {
@@ -185,5 +186,13 @@ public class SeraTest {
 	public static ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		ReviewInstanceInfo[] reviews = SeraTest.getReviewInstances();
 		return reviews;
+	}
+
+	public static MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception{
+		MissionInstanceInfo mission = new MissionInstanceInfo("mission1", "자화상 그리기 미션", SmartTest.getUserInfo1(), new LocalDate());
+		mission.setContent("첫번째 미션입니다. 잘 수행하시기 바라빈다.");
+		mission.setPlannedStartDate(new LocalDate());
+		MissionInstanceInfo[] missions = new MissionInstanceInfo[]{mission};
+		return missions;
 	}
 }

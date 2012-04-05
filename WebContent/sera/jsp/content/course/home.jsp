@@ -127,7 +127,7 @@
 </div>
 <!-- Course Define //-->
 <!-- Course Section -->
-<div class="course_section js_course_content">
+<div class="course_section js_course_content" courseId="<%=courseId%>">
 	<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
 		<jsp:param value="<%=courseId %>" name="courseId"/>
 	</jsp:include>

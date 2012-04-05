@@ -191,4 +191,60 @@ $(function() {
 		createCourse.find('.js_mentor_profile_table').hide();
 		return false;
 	});
+
+	$('.js_join_course_request').live('click', function(e){
+		var input = $(e.target).parents('.js_join_course_request');
+		var paramsJson = {};
+		paramsJson["courseId"] = input.parents('.js_course_content').attr('courseId');
+		paramsJson["userId"] = currentUserId;
+		$.ajax({
+			url : 'join_group_request.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				if(input.attr('autoApproval')==="true")
+					smartPop.showInfo(smartPop.INFO, "코스가입 정상적으로 처리되었습니다. 코스에 방문하시면 미션들을 수행할 수 있습니다.");
+				else
+					smartPop.showInfo(smartPop.INFO, "코스가입 신청이 정상적으로 처리되었으며, 멘토의 가입승인을 기다리고 있습니다.");					
+			},
+			error : function(){
+				smartPop.showInfo(smartPop.ERROR, "코스가입하기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+			}
+		});
+		return false;
+	});
+	
+	$('.js_prev_month_mission').live('click', function(e){
+		var input = $(e.target);
+		var missionCreate = input.parents('.js_mission_create_page');
+		$.ajax({
+			url : 'courseMissionSet.sw',
+			data : {
+				courseId : missionCreate.attr('courseId'),
+				today : missionCreate.attr('prevMonth')
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_next_month_mission').live('click', function(e){
+		var input = $(e.target);
+		var missionCreate = input.parents('.js_mission_create_page');
+		$.ajax({
+			url : 'courseMissionSet.sw',
+			data : {
+				courseId : missionCreate.attr('courseId'),
+				today : missionCreate.attr('nextMonth')
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
 });

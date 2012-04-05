@@ -9,7 +9,7 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 
 <%
-	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
+	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다. 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
@@ -75,15 +75,13 @@
 						</div>
 					</dd>
 					<dd class="fr">
-						<div class="btn_large_l">
-							<div class="btn_large_r">
-								<span class="icon_blu_down2 mr5"></span>코스 가입하기
-							</div>
+						<div class="btn_large_l js_join_course_request" autoApproval="<%=course.isAutoApproval()%>">
+							<div class="btn_large_r"><span class="icon_blu_down2 mr5"></span>코스 가입하기</div>
 						</div>
 					</dd>
 					<div class="mission_info"><%=course.getTargetPoint()%>개의 미션
 						중
-						<%=course.getAchievedPoint()%>번쨰가 진행중입니다
+						<%=course.getAchievedPoint()%>번째가 진행중입니다
 					</div>
 					<div class="process" style="margin: 5px 30px 0 0">
 						(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)

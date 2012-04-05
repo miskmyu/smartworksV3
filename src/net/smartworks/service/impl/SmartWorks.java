@@ -45,6 +45,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
+import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
@@ -954,6 +955,23 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getReviewInstancesByCourse(courseId, fromDate, maxList);
+	}
+
+	@Override
+	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.joinGroupRequest(requestBody, request);
+		
+	}
+
+	@Override
+	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.inviteGroupMembers(requestBody, request);
+		
+	}
+
+	@Override
+	public MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception {
+		return seraService.getMissionInstanceList(courseId, fromDate, toDate);
 	}
 
 }

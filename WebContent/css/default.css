@@ -29,8 +29,6 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
      padding: 0pt;
 }
 
-label {margin-right:5px} 
-
 a.no_hover_line:hover {
 	text-decoration:none !important
 }
