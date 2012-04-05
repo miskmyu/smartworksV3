@@ -91,6 +91,9 @@ ALTER TABLE aprapr add aprDueDate varchar(100);
 ALTER TABLE swdocgroup add tskInstanceId varchar(50);
 
 -- TO-DO : mode -> authmode 
+exec sp_rename 'SWAuthResource.mode', 'authMode', 'column'
+exec sp_rename 'SWAuthUser.mode', 'authMode', 'column'
+
 
 -- TO-DO : 테이블명 및 컬럼명 변경 lnklist, lnklistextprop, lnklistitem, lnkmap, lnkmapextprop, lnkvalue, lnkvalueextprop 의 모든 lnk를 col로 변경
 

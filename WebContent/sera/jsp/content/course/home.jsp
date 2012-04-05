@@ -101,7 +101,8 @@
 		<div class="menu001 current" style="display:none"></div>
 		<div class="menu002 js_course_mission_menu" style="display:none">
 			<ul>
-				<li class="js_course_mission_set"><a href="">미션등록/수행</a></li>
+				<li class="js_course_mission_space"><a href="">보기/수행</a></li>
+				<li class="js_course_mission_create"><a href="">미션등록</a></li>
 				<li class="js_course_mission_list"><a href="">전체보기</a></li>
 				<li class="js_course_mission_mine"><a href="">내글보기</a></li>
 				<li class="end js_course_by_mission"><a href="">미션별 보기</a></li>
@@ -127,7 +128,7 @@
 </div>
 <!-- Course Define //-->
 <!-- Course Section -->
-<div class="course_section js_course_content">
+<div class="course_section js_course_content" courseId="<%=courseId%>">
 	<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
 		<jsp:param value="<%=courseId %>" name="courseId"/>
 	</jsp:include>

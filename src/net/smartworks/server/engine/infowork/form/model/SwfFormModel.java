@@ -42,6 +42,10 @@ public class SwfFormModel implements Serializable {
 	 * 프로세스 업무
 	 */
 	public static final String TYPE_PROCESS = "PROCESS";
+	/**
+	 * 일정관리 업무
+	 */
+	public static final String TYPE_GANTT = "GANTT";
 
 	/**
 	 * serialVersionUID

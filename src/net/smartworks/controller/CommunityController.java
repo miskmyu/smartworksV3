@@ -90,4 +90,17 @@ public class CommunityController {
 		return map;
 	}
 
+	@RequestMapping(value = "/join_group_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void joinGroupRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.joinGroupRequest(requestBody, request);
+		// TO DO : Exception handler
+	}
+
+	@RequestMapping(value = "/invite_group_members", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void inviteGroupMembers(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.inviteGroupMembers(requestBody, request);
+	}
+
 }

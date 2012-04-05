@@ -120,10 +120,10 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/team.jsp", "");
 	}
 
-	@RequestMapping("/courseMissionSet")
-	public ModelAndView courseMissionSet(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/courseMissionSpace")
+	public ModelAndView courseMissionSpace(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/create.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/space.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionList")
@@ -136,6 +136,24 @@ public class SeraController {
 	public ModelAndView courseMissionMine(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/mine.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionCreate")
+	public ModelAndView courseMissionCreate(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/create.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionModify")
+	public ModelAndView courseMissionModify(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/modify.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionPerform")
+	public ModelAndView courseMissionPerform(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")

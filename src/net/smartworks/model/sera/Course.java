@@ -21,7 +21,6 @@ public class Course extends Group {
 	private LocalDate start;
 	private LocalDate end;
 	private int maxMentees;
-	private boolean autoApproval;
 	private boolean payable;
 	private int fee;
 	private Team team;
@@ -88,12 +87,6 @@ public class Course extends Group {
 	}
 	public void setMaxMentees(int maxMentees) {
 		this.maxMentees = maxMentees;
-	}
-	public boolean isAutoApproval() {
-		return autoApproval;
-	}
-	public void setAutoApproval(boolean autoApproval) {
-		this.autoApproval = autoApproval;
 	}
 	public boolean isPayable() {
 		return payable;
