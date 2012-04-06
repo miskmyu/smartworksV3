@@ -24,6 +24,7 @@
 .hd_shadow.bb {background: url("../images/top_bg_im_b.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
+.hd_shadow.bg_no { background:none}
 .top_navi {width:1004px; margin-right:5px; clear:both; padding:5px 0 0 0; overflow:hidden}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
@@ -56,19 +57,21 @@
 /* Header Title */
 .header_tit {width:700px; margin-bottom:15px; color:#858585; overflow:hidden}
 .header_tit .tit_course {background: url("../images/header.png") no-repeat scroll 0 0; height:35px; padding:52px 25px 0}
-.header_tit .tit_event {background: url("../images/header.png") no-repeat scroll 0 -88px; height:35px; padding:49px 25px 0}
+.header_tit .tit_event {background: url("../images/header.png") no-repeat scroll 0 -88px; height:38px; padding:49px 25px 0}
 .header_tit .tit_notes {background: url("../images/header.png") no-repeat scroll 0 -175px; height:35px; padding:52px 25px 0}
 .header_tit .tit_friend {background: url("../images/header.png") no-repeat scroll 0 -261px; height:35px; padding:52px 25px 0}
-.header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:35px; padding:49px 25px 0}
-.header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:35px; padding:49px 25px 0}
+.header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:38px; padding:49px 25px 0}
+.header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:38px; padding:49px 25px 0}
+.header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:49px 25px 0}
+.header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:49px 25px 0}
 .header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
-.header_tit .tit_dep2 h2 { font-size:14px; font-weight:bold; color:#454545}
+.header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
 /* Title - Course Admin */
 .tit_cus1 {background: url("../images/header_admin.png") no-repeat scroll 0 0; height:85px}
 .tit_cus2 {background: url("../images/header_admin.png") no-repeat scroll 0 -85px; height:85px}
 .tit_cus3 {background: url("../images/header_admin.png") no-repeat scroll 0 -170px; height:85px}
 
-/* Nav Side Navigation Bar */
+/* Nav Side Navigation Bar - UI삭제후 미사용 */
 #nav_snb {float: left; line-height: normal; margin-bottom: -1px; position: relative; width: 190px; z-index: 20}
 
 /* Nav SNB Icon */
@@ -81,8 +84,8 @@ a.b_next:hover { background-position:-30px -535px}
 .icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; width:11px; height:11px; display:block; float:left; padding:0 0 0 5px}
 .icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
 
-/* Section Center */
-#section_cen {margin: 0 0 0 210px; position: relative; z-index: 10}
+/* Section Center - UI삭제후 미사용 */
+#section_cen {position: relative; z-index: 10}
 #section_cen .header div { font-size:14px; color:#3174ad; font-weight:bold}
 .this_month {}
 .this_month .tit_area { font-size:14px; font-weight:bold; text-align:center; margin:0 0 0 37px; padding-bottom:3px; overflow:hidden}
@@ -105,7 +108,8 @@ a.b_next:hover { background-position:-30px -535px}
 
 /* Body */
 #container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
-#container_bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
+#container.bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
+#container.bg_no { background-image:none; background-color:#FFF}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 1004px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
@@ -239,6 +243,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd}
 .panel_section .header div a {color:#333333; font-weight:bold}
+.panel_section .header_mission div { font-size:14px; color:#3174ad; font-weight:bold}
 
 .panel_section .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .panel_section .list dd { display:inline; margin:0 28px 5px 0}
@@ -346,7 +351,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Course */
 /* Course Define */
-.course_df_section { position:relative; margin-bottom:20px; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 22px 0; border:1px solid #cccccc}
+.course_df_section { position:relative; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 25px 0; border:1px solid #cccccc}
 .course_df_img {background: url("../images/course_df.gif") no-repeat 0 0; float:left; width:118px; height:118px; border-right:1px solid #d7d7d7; margin-right:15px}
 .course_df { float:left; width:350px; margin-top:10px}
 .course_df h1 { font-size:14px}
@@ -358,9 +363,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_info { width:193px; float:right; margin-top:10px; line-height:18px}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -568px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
-.course_menu_d1 { float: left; margin:0 0 0 10px}
+.course_menu_d1 { float: left; margin:0 0 0 22px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
-.course_menu_d1 li { float:left; margin:0 5px; font-size:12px; color:#FFF; text-align:center; width:80px; line-height:25px; height:29px}
+.course_menu_d1 li { float:left; margin:0 2px; font-size:12px; font-weight:bold; color:#FFF; text-align:center; width:75px; line-height:25px; height:29px}
 .course_menu_d1 li:hover, .course_menu_d1 li.current { background-color:#FFF; color:#454545; font-weight:bold}
 .course_menu_d2 { background: url("../images/cus_df_subbg.jpg") repeat-x scroll 0 0; height:35px; line-height:34px}
 .course_menu_d2 .menu001 {left:; position:relative}
@@ -497,6 +502,13 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .snb2 .snb_menu .categoryLine {border-bottom: 1px dotted #CCCCCC; display: block; height: 5px; margin-bottom: 10px}
 /* SNB Default */
 .snb {float: left; height: auto;overflow: hidden; padding-left: 25px; position: relative; width: 176px;}
+
+/* Calendar */
+.sp_b_prev {background-position: -294px -118px; cursor: pointer; height: 18px; width: 18px; margin: 2px 7px 0 0}
+.sp_b_prev:hover {background-position: -322px -118px}
+.sp_b_next {background-position: -387px -118px; cursor: pointer; height: 18px; width: 18px; margin: 2px 0 0 7px}
+.sp_b_next:hover {background-position: -359px -118px}
+.sp {background-image: url("../images/icon.png"); background-repeat: no-repeat; display: inline-block; float: left;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
