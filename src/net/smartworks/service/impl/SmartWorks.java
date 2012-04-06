@@ -949,8 +949,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstances(String userId, String courseId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstances(userId, courseId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 	}
 	
 	@Override

@@ -76,7 +76,7 @@
 <div class="js_mission_report_page" courseId="<%=courseId%>" missionId="<%=missionId%>">
 	<form name="frmPerformMissionReport" class="js_validation_required">	
 		<div class="comment_txt">
-			<textarea name="txtReportContent" class="required" rows="24" placeholder="미션을 수행하세요!"></textarea>
+			<textarea name="txtReportContent" class="required js_report_content" rows="3" placeholder="미션을 수행하세요!"></textarea>
 		</div>
 	
 		<div class="cb mt6">

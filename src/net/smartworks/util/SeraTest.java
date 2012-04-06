@@ -172,7 +172,7 @@ public class SeraTest {
 		return instances;
 	}
 	
-	public static InstanceInfo[] getSeraInstances(String userId, String courseId, LocalDate fromDate, int maxList) throws Exception{
+	public static InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
 		InstanceInfo[] boards = SmartTest.getBoardInstances();
 		InstanceInfo[] events = SmartTest.getEventInstances();
 		InstanceInfo[] memos = SmartTest.getMemoInstances();

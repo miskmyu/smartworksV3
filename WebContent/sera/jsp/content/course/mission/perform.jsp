@@ -22,16 +22,17 @@
 %>
 
 <div class="js_perform_mission_page">
+
 	<!-- Title -->
-	<div class="header mb10">
+	<div class="header_mission mb10">
 		<div>미션 수행하기</div>
 	</div>
 	<!-- Title //-->
-	
+
 	<!-- 미션 수행 -->
-	<div class="t_refe mb10">* 미션 마감일을 확인하고 수행하여 주십시오. 마감일이 지난 미션도 수행
+	<div class="t_refe">* 미션 마감일을 확인하고 수행하여 주십시오. 마감일이 지난 미션도 수행
 		가능합니다.</div>
-	<div class="panel_block">
+	<div class="panel_block m10" style="width: 698px">
 		<dl class="content_mission">
 			<dt>
 				<!-- title -->
@@ -84,4 +85,10 @@
 		</dl>
 	</div>
 	<!-- 미션수행 //-->
+	<!-- 수행된 글 -->
+	<jsp:include page="/sera/jsp/content/course/mission/instance_list.jsp">
+		<jsp:param value="<%=course.getId() %>" name="courseId"/>
+		<jsp:param value="<%=missionId %>" name="missionId"/>
+	</jsp:include>
+	<!-- 수행된 글//-->
 </div>

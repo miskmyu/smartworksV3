@@ -361,4 +361,8 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_report_content').live('click', function(e){
+		$(e.target).attr('rows', 24);
+	});
+	
 });
