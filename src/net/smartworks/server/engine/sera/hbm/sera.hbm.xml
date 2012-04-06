@@ -17,4 +17,24 @@
 		<property name="awards" type="string" length="500"/>
 		<property name="etc" type="string" length="500"/>
 	</class>
+	
+	<class name="CourseDetail" table="CourseDetail">
+		<id name="courseId" column="courseId" type="string" length="50">
+			<generator class="assigned"/>
+		</id>
+		<property name="object" type="string" length="500"/>
+		<property name="categories" type="string" length="500"/>
+		<property name="keywords" type="string" length="500"/>
+		<property name="duration" type="int"/>
+		<property name="start" column="startDate" type="timestamp"/>
+		<property name="end" column="endDate" type="timestamp"/>
+		<property name="maxMentees" type="int"/>
+		<property name="autoApproval" type="boolean"/>
+		<property name="payable" type="boolean"/>
+		<property name="fee" type="int"/>
+		<property name="teamId" type="string" length="100"/>
+		<property name="targetPoint" type="int"/>
+		<property name="achievedPoint" type="int"/>
+	</class>
+	
 </hibernate-mapping>

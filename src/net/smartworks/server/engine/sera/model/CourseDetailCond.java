@@ -8,13 +8,15 @@
 
 package net.smartworks.server.engine.sera.model;
 
+import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.util.LocalDate;
 
-public class CourseDetail {
+public class CourseDetailCond extends Cond{
 	private String courseId;
+	private String[] courseIdIns;
 	private String object;
-	private String categories;
-	private String keywords;
+	private String[] categories;
+	private String[] keywords;
 	private int duration;
 	private LocalDate start;
 	private LocalDate end;
@@ -25,6 +27,7 @@ public class CourseDetail {
 	private String teamId;
 	private int targetPoint;
 	private int achievedPoint;
+	
 
 	public String getCourseId() {
 		return courseId;
@@ -32,22 +35,28 @@ public class CourseDetail {
 	public void setCourseId(String courseId) {
 		this.courseId = courseId;
 	}
+	public String[] getCourseIdIns() {
+		return courseIdIns;
+	}
+	public void setCourseIdIns(String[] courseIdIns) {
+		this.courseIdIns = courseIdIns;
+	}
 	public String getObject() {
 		return object;
 	}
 	public void setObject(String object) {
 		this.object = object;
 	}
-	public String getCategories() {
+	public String[] getCategories() {
 		return categories;
 	}
-	public void setCategories(String categories) {
+	public void setCategories(String[] categories) {
 		this.categories = categories;
 	}
-	public String getKeywords() {
+	public String[] getKeywords() {
 		return keywords;
 	}
-	public void setKeywords(String keywords) {
+	public void setKeywords(String[] keywords) {
 		this.keywords = keywords;
 	}
 	public int getDuration() {
@@ -110,14 +119,6 @@ public class CourseDetail {
 	public void setAchievedPoint(int achievedPoint) {
 		this.achievedPoint = achievedPoint;
 	}
-	public static CourseDetail pickupCourseDetail(String courseId, CourseDetail[] courseDetails) {
-		if (courseDetails == null || courseDetails.length == 0)
-			return null;
-		for (CourseDetail courseDetail : courseDetails) {
-			if (courseDetail.getCourseId().equalsIgnoreCase(courseId)) {
-				return courseDetail;
-			}
-		}
-		return null;
-	}
+	
+	
 }

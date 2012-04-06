@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.service.impl.SeraServiceImpl"%>
 <%@page import="net.smartworks.server.engine.sera.manager.ISeraManager"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDataField"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdRecord"%>
@@ -67,10 +68,13 @@ public static Object getBean(String beanName, HttpServletRequest request) {
 
 
 %>
-<%
-	ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+<%	
+	SeraServiceImpl ssi = (SeraServiceImpl)getBean("seraServiceImpl", request);
 
-	seraMgr.getMentorById("test");
+
+	ssi.getCoursesById("kmyu@maninsoft.co.kr", 11);
+
+
 %>
 
 </body>

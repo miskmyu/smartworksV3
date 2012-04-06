@@ -1,5 +1,9 @@
 package net.smartworks.server.service;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
@@ -13,6 +17,8 @@ import net.smartworks.util.LocalDate;
 
 public interface ISeraService {
 
+	public abstract Course createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;

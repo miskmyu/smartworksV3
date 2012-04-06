@@ -8,12 +8,15 @@
 
 package net.smartworks.server.engine.sera.model;
 
-public class MentorDetail {
+import net.smartworks.server.engine.common.model.Cond;
 
-	public MentorDetail(){
+public class MentorDetailCond extends Cond{
+
+	public MentorDetailCond(){
 		super();
 	}
 	private String mentorId;
+	private String[] mentorIdIns;
 	private String born;
 	private String homeTown;
 	private String living;
@@ -31,6 +34,12 @@ public class MentorDetail {
 	}
 	public void setMentorId(String mentorId) {
 		this.mentorId = mentorId;
+	}
+	public String[] getMentorIdIns() {
+		return mentorIdIns;
+	}
+	public void setMentorIdIns(String[] mentorIdIns) {
+		this.mentorIdIns = mentorIdIns;
 	}
 	public String getBorn() {
 		return born;
@@ -97,15 +106,5 @@ public class MentorDetail {
 	}
 	public void setEtc(String etc) {
 		this.etc = etc;
-	}
-	public static MentorDetail pickupCourseDetail(String mentorId, MentorDetail[] mentorDetails) {
-		if (mentorDetails == null || mentorDetails.length == 0)
-			return null;
-		for (MentorDetail mentorDetail : mentorDetails) {
-			if (mentorDetail.getMentorId().equalsIgnoreCase(mentorId)) {
-				return mentorDetail;
-			}
-		}
-		return null;
 	}
 }
