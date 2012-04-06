@@ -75,47 +75,12 @@
 					<a href=""> </a>
 				</div>
 			</div>
-			<!-- Icon Close //-->
-			<dd>
-				<textarea name="" cols="" rows="8">미션을 수행하세요.</textarea>
-			</dd>
-			<dd class="cb" style="margin: -5px 0 0 0">
-				<!-- 좌측 영역 -->
-				<div class="option">
-					<!-- select -->
-					<div class="txt">
-						<a href=""> 전체공개<span class="icon_bul_select ml5"></span> </a> |
-					</div>
-					<!-- select //-->
-					<!-- 태그넣기 -->
-					<div class="txt">
-						<a href=""> 태그넣기<span class="icon_bul_select ml5"></span> </a>
-					</div>
-					<!-- 태그넣기//-->
-				</div>
-				<!-- 좌측 영역//-->
-				<!-- 우측 버튼 영역 -->
-				<div class="attach_file">
-					<ul>
-						<li class="insert_text">1000</li>
-						<li class="icon_memo ml10"><a href=""> </a></li>
-						<li class="icon_video"><a href=""> </a></li>
-						<li class="icon_photo"><a href=""> </a></li>
-						<li class="icon_link"><a href=""> </a></li>
-						<!-- Btn 등록-->
-						<li class="btn_default_l ml10">
-							<div class="btn_default_r">등록</div>
-						</li>
-						<!-- Btn 등록//-->
-						<!-- Btn 취소-->
-						<li class="btn_default_l ml5">
-							<div class="btn_default_r">취소</div>
-						</li>
-						<!-- Btn 취소//-->
-					</ul>
-				</div>
-				<!-- 우측 버튼 영역 //-->
-			</dd>
+			<div>
+				<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
+					<jsp:param value="<%=course.getId() %>" name="courseId"/>
+					<jsp:param value="<%=missionId %>" name="missionId"/>
+				</jsp:include>
+			</div>
 		</dl>
 	</div>
 	<!-- 미션수행 //-->

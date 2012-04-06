@@ -129,7 +129,7 @@ public class SeraController {
 	@RequestMapping("/courseMissionList")
 	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionCreate")
@@ -237,10 +237,46 @@ public class SeraController {
 	@RequestMapping(value = "/create_new_mission", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String courseId = "";//smartworks.setCourse(requestBody, request);
+		//smartworks.setMission(requestBody, request);
 		// TO DO : Exception handler
+		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/perform_mission_report", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> performMissionReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.performMissionReport(requestBody, request);
+		// TO DO : Exception handler
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseMissionList.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/create_sera_note", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> createSeraNote(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.setSeraNote(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		int spaceType = Integer.parseInt((String)requestBody.get("spaceType"));
+		String spaceId = (String)requestBody.get("spaceId");
+		String href = "";
+		switch(spaceType){
+		case ISmartWorks.SPACE_TYPE_USER:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		case ISmartWorks.SPACE_TYPE_GROUP:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		}
+		map.put("href", href);
 		return map;
 	}
 

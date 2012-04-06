@@ -67,10 +67,10 @@ input[type="text"]:focus, textarea:focus {
 
 input.error, textarea.error, select.error, 
 input.sw_error, textarea.sw_error, div.sw_error, fieldset.sw_error {
-	border: 1px solid red;
+	border: 1px solid red !important;
 }
 span.sw_error {
-	border: 1px solid red;
+	border: 1px solid red !important;
 	width: 100%;
 	height: 100%;
 	display: block;

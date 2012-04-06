@@ -29,7 +29,7 @@
 	String nextMonthStr = LocalDate.convertLocalMonthWithDiffMonth(thisDate, 1).toLocalDateSimpleString();
 %>
 <!-- Nav SNB -->
-<div id="nav_snb" class="js_mission_create_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>">
+<div id="nav_snb" class="js_mission_list_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>">
 	<div class="this_month">
 		<div class="tit_area">
 			<a href="" class="b_prev fl js_prev_month_mission"></a>
@@ -73,7 +73,7 @@
 									if(mission.getOpenDate().getMonth() != currentDate.getMonth() || mission.getOpenDate().getDateOnly() != currentDate.getDateOnly()) continue;
 									String iconClass = (mission.getOpenDate().getDateOnly()>today.getDateOnly()) ? "icon_reserve" : (mission.isClearedByMe()) ? "icon_mission" :  "icon_mission current";
 							%>
-									<a href="" class="js_view_mission"><div><span class="<%=iconClass%>"></span>미션<%=mission.getIndex()+1%> <%=mission.getSubject() %></div></a>
+									<a href="" class="js_select_mission" missionId="<%=mission.getId()%>"><div><span class="<%=iconClass%>"></span>미션<%=mission.getIndex()+1%> <%=mission.getSubject() %></div></a>
 							<%
 								}
 							}

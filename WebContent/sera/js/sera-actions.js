@@ -279,7 +279,7 @@ $(function() {
 	
 	$('.js_prev_month_mission').live('click', function(e){
 		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_create_page');
+		var missionCreate = input.parents('.js_mission_list_page');
 		$.ajax({
 			url : 'courseMissionSpace.sw',
 			data : {
@@ -295,7 +295,7 @@ $(function() {
 	
 	$('.js_next_month_mission').live('click', function(e){
 		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_create_page');
+		var missionCreate = input.parents('.js_mission_list_page');
 		$.ajax({
 			url : 'courseMissionSpace.sw',
 			data : {
@@ -309,7 +309,54 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_select_mission').live('click', function(e){
+		var input = $(e.target).parents('a');
+		var missionList = input.parents('.js_mission_list_page');
+		var courseId = missionList.attr('courseId');
+		var missionId = input.attr('missionId');
+		$.ajax({
+			url : 'courseMissionPerform.sw',
+			data : {
+				courseId :courseId,
+				missionId : missionId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
 	$('.js_create_mission_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+	
+	$('.js_note_buttons').live('click', function(e){
+		var input = $(e.target);
+		var noteAttachmentTable = input.parents('.js_note_buttons').siblings('.js_note_attachment_table');
+		var targetTable = [];
+		if(!isEmpty(input.hasClass('js_note_file_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_file');
+		else if(!isEmpty(input.hasClass('js_note_image_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_image');
+		else if(!isEmpty(input.hasClass('js_note_video_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_video');
+		else if(!isEmpty(input.hasClass('js_note_link_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_link');
+		if(noteAttachmentTable.is(':visible')){
+			noteAttachmentTable.show();
+			targetTable.toggle();
+			if(isEmpty(noteAttachmentTable.find('tr:visible')))
+				noteAttachmentTable.hide();
+		}else{
+			noteAttachmentTable.show();
+			targetTable.show();
+		}
+		return false;
+	});
+	
+	$('.js_create_note_btn').live('click', function(e){
 		submitForms(e);
 		return false;
 	});
