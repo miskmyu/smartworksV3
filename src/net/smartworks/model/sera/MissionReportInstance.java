@@ -6,17 +6,15 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SmartUtil;
 
-public class MissionInstance extends WorkInstance {
+public class MissionReportInstance extends WorkInstance {
 		
 	private int index;
 	private String content;
 	private LocalDate openDate;
 	private LocalDate closeDate;
-	private MissionInstance prevMission;
-	private String[] missionClearers;
-	private int starPoint;
+	private MissionReportInstance prevMission;
+	private UserInfo[] missionClearers;
 	
 	public int getIndex() {
 		return index;
@@ -42,42 +40,25 @@ public class MissionInstance extends WorkInstance {
 	public void setCloseDate(LocalDate closeDate) {
 		this.closeDate = closeDate;
 	}
-	public MissionInstance getPrevMission() {
+	public MissionReportInstance getPrevMission() {
 		return prevMission;
 	}
-	public void setPrevMission(MissionInstance prevMission) {
+	public void setPrevMission(MissionReportInstance prevMission) {
 		this.prevMission = prevMission;
-	}	
-	public String[] getMissionClearers() {
+	}
+	public UserInfo[] getMissionClearers() {
 		return missionClearers;
 	}
-	public void setMissionClearers(String[] missionClearers) {
+	public void setMissionClearers(UserInfo[] missionClearers) {
 		this.missionClearers = missionClearers;
-	}	
-	public int getStarPoint() {
-		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
-		this.starPoint = starPoint;
-	}
-	
-	public MissionInstance(){
+	public MissionReportInstance(){
 		super();
 		super.setType(Instance.TYPE_MISSION);
 	}
 
-	public MissionInstance(String id, String subject, Work work, User owner, LocalDate lastModifiedDate){
+	public MissionReportInstance(String id, String subject, Work work, User owner, LocalDate lastModifiedDate){
 			super(id, subject, work, owner, owner, lastModifiedDate);
 			super.setType(Instance.TYPE_MISSION);
 	}
-
-	public boolean isClearedByMe(){
-		if(SmartUtil.isBlankObject(missionClearers)) return false;
-		String currentUserId = SmartUtil.getCurrentUser().getId();
-		for(int i=0; i<missionClearers.length; i++)
-			if(currentUserId.equals(missionClearers[i]))
-				return true;
-		return false;
-	}
-
 }
