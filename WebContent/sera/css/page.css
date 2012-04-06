@@ -383,6 +383,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_s14 { font-size:14px}
 .t_red {color:#ed1c24}
 .t_redb {color:#ed1c24; font-weight:bold}
+.t_red2 {color:#c05252}
 .t_blue { color:#006699}
 .t_blueb { color:#006699; font-weight:bold}
 .t_skyblueb { color:#0066cc; font-weight:bold}
@@ -394,6 +395,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999; line-height:17px}
 .insert_text {color: #B6B6B6; font: bold 16px 'Tahoma'}
+.t_help { font-size:11px; line-height:14px; color:#666666}
 
 /* Width */
 .w_auto { width:auto !important}
@@ -403,6 +405,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .w310 {width:310px !important}
 .w370 {width:370px !important}
 .w375 {width:375px !important}
+.w415 {width:415px !important}
 .w420 {width:420px !important}
 .w470 {width:470px !important}
 .w569 {width:569px !important}

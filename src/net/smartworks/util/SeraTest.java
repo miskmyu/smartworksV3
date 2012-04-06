@@ -3,6 +3,7 @@ package net.smartworks.util;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.sera.Course;
@@ -11,7 +12,6 @@ import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
-import net.smartworks.model.sera.info.MissionInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 
@@ -65,17 +65,17 @@ public class SeraTest {
 		return mentor;
 	}
 	
-	public static MissionInfo getMissionInfo1() throws Exception{
-		return new MissionInfo("mission1", "자화상 그리기");
+	public static MissionInstanceInfo getMissionInstanceInfo1() throws Exception{
+		return new MissionInstanceInfo("mission1", "자화상 그리기", SmartTest.getUserInfo1(), new LocalDate());
 	}
 	
-	public static MissionInfo getMissionInfo2() throws Exception{
-		return new MissionInfo("mission2", "장래희망 정리하기");
+	public static MissionInstanceInfo getMissionInstanceInfo2() throws Exception{
+		return new MissionInstanceInfo("mission2", "장래희망 정리하기", SmartTest.getUserInfo1(), new LocalDate());
 	}
 	
 	public static CourseInfo getCourseInfo1() throws Exception {
 		CourseInfo course = new CourseInfo("course1", "어느젊음마법사의 코스");
-		course.setLastMission(getMissionInfo1());
+		course.setLastMission(getMissionInstanceInfo1());
 		course.setLeader(SmartTest.getUserInfo2());
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
@@ -88,7 +88,7 @@ public class SeraTest {
 
 	public static CourseInfo getCourseInfo2() throws Exception {
 		CourseInfo course = new CourseInfo("course2", "고등학생을위한 코스");
-		course.setLastMission(getMissionInfo2());
+		course.setLastMission(getMissionInstanceInfo2());
 		course.setLeader(SmartUtil.getCurrentUser().getUserInfo());
 		course.setNumberOfGroupMember(28);
 		course.setOpenDate(new LocalDate());
@@ -189,10 +189,22 @@ public class SeraTest {
 	}
 
 	public static MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception{
-		MissionInstanceInfo mission = new MissionInstanceInfo("mission1", "자화상 그리기 미션", SmartTest.getUserInfo1(), new LocalDate());
-		mission.setContent("첫번째 미션입니다. 잘 수행하시기 바라빈다.");
-		mission.setPlannedStartDate(new LocalDate());
-		MissionInstanceInfo[] missions = new MissionInstanceInfo[]{mission};
+		MissionInstanceInfo mission1 = new MissionInstanceInfo("mission1", "자화상 그리기 미션", SmartTest.getUserInfo1(), new LocalDate());
+		mission1.setContent("첫번째 미션입니다. 잘 수행하시기 바랍니다.");
+		mission1.setIndex(0);
+		mission1.setOpenDate(new LocalDate());
+		mission1.setMissionClearers(new String[]{SmartUtil.getCurrentUser().getId()});
+		
+		MissionInstanceInfo mission2 = new MissionInstanceInfo("mission2", "장래희망 계획 미션", SmartTest.getUserInfo1(), new LocalDate());
+		mission2.setContent("두번째 미션입니다. 잘 수행하시기 바랍니다.");
+		mission2.setIndex(1);
+		mission2.setOpenDate(new LocalDate(new LocalDate().getGMTDate()-LocalDate.ONE_DAY/2));
+		
+		MissionInstanceInfo mission3 = new MissionInstanceInfo("mission3", "자기소개서 작성 미션", SmartTest.getUserInfo1(), new LocalDate());
+		mission3.setContent("세번째 미션입니다. 잘 수행하시기 바랍니다.");
+		mission3.setIndex(2);
+		mission3.setOpenDate(new LocalDate(new LocalDate().getGMTDate()+LocalDate.ONE_DAY/2));
+		MissionInstanceInfo[] missions = new MissionInstanceInfo[]{mission1, mission2, mission3};
 		return missions;
 	}
 }

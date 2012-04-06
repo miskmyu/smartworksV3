@@ -3,7 +3,7 @@ package net.smartworks.model.sera;
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.model.sera.info.MissionInfo;
+import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.util.LocalDate;
 
 
@@ -18,20 +18,27 @@ public class Course extends Group {
 	private String[] categories;
 	private String[] keywords;
 	private int duration;
-	private LocalDate start;
-	private LocalDate end;
+	private LocalDate openDate;
+	private LocalDate closeDate;
 	private int maxMentees;
 	private boolean payable;
 	private int fee;
 	private Team team;
-	private MissionInfo[] missions;
+	private MissionInstanceInfo[] missions;
+	private int lastMissionIndex=-1;
 	private int targetPoint;
 	private int achievedPoint;
 	
-	public MissionInfo[] getMissions() {
+	public int getLastMissionIndex() {
+		return lastMissionIndex;
+	}
+	public void setLastMissionIndex(int lastMissionIndex) {
+		this.lastMissionIndex = lastMissionIndex;
+	}
+	public MissionInstanceInfo[] getMissions() {
 		return missions;
 	}
-	public void setMissions(MissionInfo[] missions) {
+	public void setMissions(MissionInstanceInfo[] missions) {
 		this.missions = missions;
 	}
 	public int getTargetPoint() {
@@ -70,17 +77,17 @@ public class Course extends Group {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-	public LocalDate getStart() {
-		return start;
+	public LocalDate getOpenDate() {
+		return openDate;
 	}
-	public void setStart(LocalDate start) {
-		this.start = start;
+	public void setOpenDate(LocalDate openDate) {
+		this.openDate = openDate;
 	}
-	public LocalDate getEnd() {
-		return end;
+	public LocalDate getCloseDate() {
+		return closeDate;
 	}
-	public void setEnd(LocalDate end) {
-		this.end = end;
+	public void setCloseDate(LocalDate closeDate) {
+		this.closeDate = closeDate;
 	}
 	public int getMaxMentees() {
 		return maxMentees;

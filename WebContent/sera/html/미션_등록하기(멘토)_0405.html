@@ -120,7 +120,8 @@
         <div class="menu001" style="visibility:hidden"> </div>
         <div class="menu002 current" style="visibility:visible">
           <ul>
-            <li class="current"><a href="">미션등록/수행</a></li>
+            <li class="current"><a href="">미션등록</a></li>
+             <li><a href="">미션수행</a></li>
             <li><a href="">전체보기</a></li>
             <li><a href="">내글보기</a></li>
             <li class="end"><span class="icon_bul_select mr5"></span><a href="">미션별 보기</a></li>
@@ -284,42 +285,36 @@
     <!-- Section Center -->
     <div id="section_cen">
     
-      <!-- Tab -->
-      <div id="" class="tab">
-        <ul class="clear">
-          <li class="current"> <span> <a href="#">등 록</a> </span> </li>
-           <li> <span> <a href="#">수 행</a> </span> </li>
-            <li> <span> <a href="#">등록미션보기</a> </span> </li>
-        </ul>
-      </div>
-      <!-- Tab //-->
+      <!-- Title -->
+      <div class="header mb10">
+        <div>미션 등록하기</div>
+    </div>
+      <!-- Title //-->
       
       <!-- Input Form -->
-      <div class="t_grayb mb10">
-     * 미션을 등록하기 위해서는 달력에서 <span class="t_redb">미션 마감일</span>에 클릭하여 등록하여 주십시오. <br/>
-	 * 등록된 미션을 수정하기 위해서는 이미 등록된 미션을 클릭하여 수정하십시오</div>
+      <div class="t_refe">
+    * 미션을 등록하려면 <span class="t_red">미션 제목</span>을 입력하시고 <span class="t_red">미션 수행 기간</span>을 설정하여 주십시오.<br />
+    * 미션을 등록하게 되면, 달력에서 <span class="t_red">미션 수행 마감일</span>에 내용이 표시됩니다.<br />
+    * 등록된 미션을 수정하기 위해서는 이미 등록된 미션을 클릭하여 수정하십시오.
+    </div>
 
       <div class="form_layout">
       
         <table class="bgn">
-        <tr>
-        <td class="title">미션 등록하기</td>
-        </tr>
           <tr>
             <td><div class="form_label">미션6 제목</div>
-              <div class="form_value"> <input type="text" class="fieldline" style="width:300px"/>
-               <div class="fr ml5"> <span class="t_red">0</span> /150kbyte </div>
+              <div class="form_value"> <input type="text" class="fieldline" style="width:342px"/>
+               <div class="fr"> <span class="insert_text ml5">50</span>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label">미션등록예약*</div>
+            <td><div class="form_label">미션 수행기간</div>
               <div class="form_value">
+                 <input name="" class="fieldline form_date_input" type="text"/>
+                  <span class="icon_fb_date psr"></span> ~
                  <input name="" class="fieldline form_date_input" type="text"/>
                   <span class="icon_fb_date psr"></span>
               </div>
-              <div class="cb pt10">
-               <div class="t_refe">* 선택사항 : 미션을 예약 등록하고자 할 경우에는, 미션 시작 날짜를 지정해 주세요.</div>
-               </div>
               </td>
           </tr>
           <tr>
@@ -333,7 +328,7 @@
                     <option>[미션4]미션제목 미션제목</option>
                 </select>
               </div>
-               <div class="cb pt10">
+               <div class="cb">
                <div class="t_refe">* 선택사항 : 선행미션을 선택하면, 선택한 미션을 수행해야 해당 미션을 수행할 수 있습니다.</div>
                </div>
               </td>
@@ -367,7 +362,7 @@
           <!-- 우측 버튼 영역 -->
           <div class="attach_file">
             <ul>
-              <li class="t_s11"> <span class="t_red">0</span> /1000kbyte</li>
+              <li class="insert_text">1000</li>
               <li class="icon_memo ml10"><a href=""> </a></li>
               <li class="icon_video"><a href=""> </a></li>
               <li class="icon_photo"><a href=""> </a></li>
