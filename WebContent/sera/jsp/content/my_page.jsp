@@ -74,13 +74,13 @@
 	<!-- My Comment //-->
 </div>
 <!-- Comment Pannel-->
-<div class="panel_section">
+<div class="panel_section js_my_instance_list_page">
 	<div class="header">
-		<div class="icon_mytext"><a href="" class="js_view_user_instances" userId="<%=cUser.getId()%>">내글보기</a></div><div> | <a href="" class="js_view_news_feed" class="current">뉴스피드</a></div>
+		<div class="icon_mytext"><a href="" class="js_view_user_instances current" userId="<%=cUser.getId()%>">내글보기</a></div><div> | <a href="" class="js_view_all_instances">전체보기</a></div>
 	</div>
 
 	<div class="js_user_instance_list">
-		<jsp:include page="/sera/jsp/content/user_instances.jsp">
+		<jsp:include page="/sera/jsp/content/sera_instances.jsp">
 			<jsp:param value="<%=cUser.getId() %>" name="userId"/>
 		</jsp:include>
 	</div>

@@ -80,7 +80,7 @@
 	<div class="header"></div>
 
 	<div class="js_user_instance_list">
-		<jsp:include page="/sera/jsp/content/user_instances.jsp">
+		<jsp:include page="/sera/jsp/content/sera_instances.jsp">
 			<jsp:param value="<%=otherUser.getId() %>" name="userId"/>
 		</jsp:include>
 	</div>

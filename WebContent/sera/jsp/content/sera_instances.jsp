@@ -21,7 +21,9 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	String userId = request.getParameter("userId");
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstancesByUser(userId, new LocalDate(), 10);
+	String courseId = request.getParameter("courseId");
+	
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(userId, courseId,  new LocalDate(), 10);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	

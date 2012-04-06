@@ -70,10 +70,10 @@
 							if(!SmartUtil.isBlankObject(missions)){
 								for(int m=0; m<missions.length; m++){
 									MissionInstanceInfo mission = missions[m];
-									if(mission.getPlannedStartDate().getMonth() != currentDate.getMonth() || mission.getPlannedStartDate().getDateOnly() != currentDate.getDateOnly()) continue;
-									String iconClass = (mission.getStatus()==Instance.STATUS_COMPLETED) ? "icon_mission current" : mission.getPlannedStartDate().getGMTDate()>today.getGMTDate() ? "icon_reserve" : "icon_mission";
+									if(mission.getOpenDate().getMonth() != currentDate.getMonth() || mission.getOpenDate().getDateOnly() != currentDate.getDateOnly()) continue;
+									String iconClass = (mission.getOpenDate().getDateOnly()>today.getDateOnly()) ? "icon_reserve" : (mission.isClearedByMe()) ? "icon_mission" :  "icon_mission current";
 							%>
-									<a href="" class="js_view_mission"><div><span class="<%=iconClass%>"></span><%=mission.getSubject() %></div></a>
+									<a href="" class="js_view_mission"><div><span class="<%=iconClass%>"></span>미션<%=mission.getIndex()+1%> <%=mission.getSubject() %></div></a>
 							<%
 								}
 							}
@@ -94,7 +94,7 @@
 <!-- Navi Indication//-->
 
 <!-- Section Center -->
-<div id="section_cen">
+<div id="section_cen" class="js_mission_space_detail">
 	<jsp:include page="/sera/jsp/content/course/mission/perform.jsp"></jsp:include>
 </div>
 <!-- Section Center //-->
