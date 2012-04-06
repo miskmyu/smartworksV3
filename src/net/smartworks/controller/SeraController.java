@@ -129,7 +129,7 @@ public class SeraController {
 	@RequestMapping("/courseMissionList")
 	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionCreate")

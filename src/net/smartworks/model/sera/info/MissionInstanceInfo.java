@@ -65,9 +65,10 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 		super.setType(Instance.TYPE_MISSION);
 	}
 
-	public MissionInstanceInfo(String id, String subject, UserInfo owner, LocalDate lastModifiedDate){
+	public MissionInstanceInfo(String id, String subject, CourseInfo course, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject,  owner, owner, lastModifiedDate);
 		super.setType(Instance.TYPE_MISSION);
+		super.setWorkSpace(course);
 	}
 	
 	public boolean isClearedByMe(){

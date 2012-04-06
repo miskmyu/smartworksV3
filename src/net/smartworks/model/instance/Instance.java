@@ -21,6 +21,7 @@ public class Instance {
 	public final static int TYPE_MISSION = 12;
 	public final static int TYPE_YTVIDEO = 13;
 	public final static int TYPE_REVIEW = 14;
+	public final static int TYPE_MISSION_REPORT = 15;
 	
 	public final static int STATUS_NOT_YET = 0;
 	public final static int STATUS_RUNNING = 1;
