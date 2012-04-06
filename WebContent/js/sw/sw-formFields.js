@@ -476,6 +476,70 @@ function loadCreateCourseFields() {
 	}
 };
 
+function loadCreateMissionFields() {
+	var missionOpenDateField = $('div.js_mission_open_date_field');
+	if(!isEmpty(missionOpenDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		missionOpenDateField.html(gridRow);
+
+		var openDateStr = (new Date()).format('yyyy.mm.dd');
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtMissionOpenDate",
+			fieldName: "mission open date",
+			value: openDateStr,
+			columns: 4,
+			colSpan: 1,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();
+	}
+	
+	var missionCloseDateField = $('div.js_mission_close_date_field');
+	if(!isEmpty(missionCloseDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		missionCloseDateField.html(gridRow);
+
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtMissionCloseDate",
+			fieldName: "mission close date",
+			value: "",
+			columns: 4,
+			colSpan: 1,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
+
+	var missionContentField = $('div.js_mission_content_field');
+	if(!isEmpty(missionContentField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		missionContentField.html(gridRow);
+
+		SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtaMissionContent",
+			fieldName: "mission content",
+			value: "",
+			columns: 1,
+			colSpan: 1,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"490px", padding:"0px"});
+		gridRow.find('textarea').css({height:"600px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
+};
+
 function loadNewGroupFields() {
 	var newGroupFields = $('div.js_new_group_fields');
 	if(!isEmpty(newGroupFields)) {

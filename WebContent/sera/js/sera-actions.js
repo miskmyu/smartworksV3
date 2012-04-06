@@ -31,15 +31,29 @@ $(function() {
 		}
 		if(pos==0){
 			$.ajax({
-				url : "courseGeneral.sw",
+				url : "courseInstanceList.sw",
 				data : {courseId : courseId},
 				success : function(data, status, jqXHR) {
 					$('.js_course_content').html(data);
 				}
 			});
 		}else if(pos==1){
-			$('.js_course_mission_menu li.js_course_mission_space a').click();
+			$.ajax({
+				url : "courseMissionList.sw",
+				data : {courseId : courseId},
+				success : function(data, status, jqXHR) {
+					$('.js_course_content').html(data);
+				}
+			});
 		}else if(pos==2){
+			$.ajax({
+				url : "courseGeneral.sw",
+				data : {courseId : courseId},
+				success : function(data, status, jqXHR) {
+					$('.js_course_content').html(data);
+				}
+			});
+		}else if(pos==3){
 			$.ajax({
 				url : "courseBoard.sw",
 				data : {courseId : courseId},
@@ -47,7 +61,7 @@ $(function() {
 					$('.js_course_content').html(data);
 				}
 			});
-		}else if(pos==3){
+		}else if(pos==4){
 			if(isEmpty($(subMenus[pos]).children())){
 				$.ajax({
 					url : "courseSetting.sw",
@@ -88,6 +102,38 @@ $(function() {
 		return false;
 	});
 
+	$('.js_create_mission').live('click', function(e){
+		var input = $(e.target).parent();
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		$.ajax({
+			url : "courseMissionCreate.sw",
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_create_team').live('click', function(e){
+		var input = $(e.target).parent();
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		$.ajax({
+			url : "courseTeamCreate.sw",
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
 	$('.js_course_mission_menu').live('click', function(e){
 		var input = $(e.target).parent();
 		input.siblings().removeClass('current');
@@ -100,7 +146,6 @@ $(function() {
 			url = "courseMissionSpace.sw";			
 		}else if(input.hasClass('js_course_mission_create')){
 			url = "courseMissionCreate.sw";
-			target = $('.js_mission_space_detail');
 		}else if(input.hasClass('js_course_mission_list')){
 			url = "courseMissionList.sw";
 		}else if(input.hasClass('js_course_mission_mine')){
@@ -121,9 +166,16 @@ $(function() {
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var userId = input.attr('userId');
+		var courseId = "";
+		var courseInstanceList = input.parents('.js_course_instance_list_page');
+		if(!isEmpty(courseInstanceList))
+			courseId = courseInstanceList.attr('courseId');
 		$.ajax({
-			url : 'userInstances.sw',
-			data : {userId : userId},
+			url : 'seraInstances.sw',
+			data : {
+				userId : userId,
+				courseId : courseId
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
 			}
@@ -131,13 +183,19 @@ $(function() {
 		return false;
 	});
 
-	$('.js_view_news_feed').live('click', function(e){
+	$('.js_view_all_instances').live('click', function(e){
 		var input = $(e.target);
-		input.parent().siblings().find('.js_view_news_feed').removeClass('current');
+		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
+		var courseId = "";
+		var courseInstanceList = input.parents('.js_course_instance_list_page');
+		if(!isEmpty(courseInstanceList))
+			courseId = courseInstanceList.attr('courseId');
 		$.ajax({
-			url : 'myNewsFeed.sw',
-			data : {},
+			url : 'seraInstances.sw',
+			data : {
+				courseId : courseId
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
 			}
@@ -248,6 +306,11 @@ $(function() {
 				$('.js_course_content').html(data);
 			}
 		});
+		return false;
+	});
+	
+	$('.js_create_mission_btn').live('click', function(e){
+		submitForms(e);
 		return false;
 	});
 	

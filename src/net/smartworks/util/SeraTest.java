@@ -1,11 +1,8 @@
 package net.smartworks.util;
 
-import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.info.InstanceInfo;
-import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
@@ -109,6 +106,7 @@ public class SeraTest {
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUser3());
+		course.setMissions(SeraTest.getMissionInstanceList(null, null, null));
 		course.setTargetPoint(18);
 		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
@@ -159,7 +157,7 @@ public class SeraTest {
 		return instances;
 	}
 	
-	public static InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception{
+	public static InstanceInfo[] getSeraInstances(String userId, String courseId, LocalDate fromDate, int maxList) throws Exception{
 		InstanceInfo[] boards = SmartTest.getBoardInstances();
 		InstanceInfo[] events = SmartTest.getEventInstances();
 		InstanceInfo[] memos = SmartTest.getMemoInstances();
