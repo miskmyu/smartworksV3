@@ -44,6 +44,7 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -954,8 +955,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstancesByUser(userId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 	}
 	
 	@Override
@@ -980,4 +981,9 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.getMissionInstanceList(courseId, fromDate, toDate);
 	}
 
+	@Override
+	public MissionInstance getMissionById(String missionId) throws Exception {
+		return seraService.getMissionById(missionId);
+	}
+	
 }

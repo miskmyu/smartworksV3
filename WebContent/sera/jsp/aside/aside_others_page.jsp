@@ -44,7 +44,6 @@
 						for (int i = 0; i < courseList.getRunningCourses().length; i++) {
 							if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 							CourseInfo course = courseList.getRunningCourses()[i];
-							String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getSubject();
 						%>
 							<li>
 								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>
@@ -71,7 +70,6 @@
 						for (int i = 0; i < courseList.getAttendingCourses().length; i++) {
 							if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 							CourseInfo course = courseList.getAttendingCourses()[i];
-							String missionName = (SmartUtil.isBlankObject(course.getLastMission())) ? "" : course.getLastMission().getSubject();
 						%>
 							<li>
 								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>

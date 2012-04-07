@@ -18,7 +18,6 @@ public class CourseInfo extends GroupInfo{
 	
 	private int targetPoint;
 	private int achievedPoint;
-	private MissionInstanceInfo lastMission;
 	
 	public UserInfo getOwner() {
 		return owner;
@@ -43,12 +42,6 @@ public class CourseInfo extends GroupInfo{
 	}
 	public void setNumberOfGroupMember(int numberOfGroupMember) {
 		this.numberOfGroupMember = numberOfGroupMember;
-	}
-	public MissionInstanceInfo getLastMission() {
-		return lastMission;
-	}
-	public void setLastMission(MissionInstanceInfo lastMission) {
-		this.lastMission = lastMission;
 	}
 	public String getBriefDesc(){
 		return getDesc();

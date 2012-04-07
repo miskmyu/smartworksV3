@@ -54,11 +54,11 @@ public class MissionReportInstance extends WorkInstance {
 	}
 	public MissionReportInstance(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_MISSION_REPORT);
 	}
 
 	public MissionReportInstance(String id, String subject, Work work, User owner, LocalDate lastModifiedDate){
 			super(id, subject, work, owner, owner, lastModifiedDate);
-			super.setType(Instance.TYPE_MISSION);
+			super.setType(Instance.TYPE_MISSION_REPORT);
 	}
 }

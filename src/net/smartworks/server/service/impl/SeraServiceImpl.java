@@ -21,6 +21,7 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -612,9 +613,9 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 	}
 	@Override
-	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception{
+	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
 		try{
-			InstanceInfo[] instances = SeraTest.getSeraInstancesByUser(userId, fromDate, maxList);
+			InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 			return instances;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -644,6 +645,19 @@ public class SeraServiceImpl implements ISeraService {
 		try{
 			MissionInstanceInfo[] missions = SeraTest.getMissionInstanceList(courseId, fromDate, toDate);
 			return missions;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+	}
+
+	@Override
+	public MissionInstance getMissionById(String missionId) throws Exception {
+		try{
+			MissionInstance mission = SeraTest.getMissionById(missionId);
+			return mission;
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

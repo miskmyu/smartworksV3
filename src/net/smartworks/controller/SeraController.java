@@ -84,6 +84,12 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/home.jsp", "courseHome.tiles");
 	}
 
+	@RequestMapping("/courseInstanceList")
+	public ModelAndView courseInstanceList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/instance_list.jsp", "");
+	}
+
 	@RequestMapping("/courseGeneral")
 	public ModelAndView courseGeneral(HttpServletRequest request, HttpServletResponse response) {
 
@@ -120,22 +126,10 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/team.jsp", "");
 	}
 
-	@RequestMapping("/courseMissionSpace")
-	public ModelAndView courseMissionSpace(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/space.jsp", "");
-	}
-
 	@RequestMapping("/courseMissionList")
 	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "");
-	}
-
-	@RequestMapping("/courseMissionMine")
-	public ModelAndView courseMissionMine(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/mine.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionCreate")
@@ -154,6 +148,12 @@ public class SeraController {
 	public ModelAndView courseMissionPerform(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamCreate")
+	public ModelAndView courseTeamCreate(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/create_team.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")
@@ -216,17 +216,12 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/social/others_badge.jsp", "");
 	}
 
-	@RequestMapping("/userInstances")
+	@RequestMapping("/seraInstances")
 	public ModelAndView userInstances(HttpServletRequest request, HttpServletResponse response) {
 
 		String userId = request.getParameter("userId");
-		return SmartUtil.returnMnv(request, "sera/jsp/content/user_instances.jsp?userId=" + userId , "");
-	}
-
-	@RequestMapping("/myNewsFeed")
-	public ModelAndView myNewsFeed(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnv(request, "sera/jsp/content/my_news_feed.jsp", "");
+		String courseId = request.getParameter("courseId");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/sera_instances.jsp?userId=" + userId + "&courseId=" + courseId, "");
 	}
 
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
@@ -236,6 +231,52 @@ public class SeraController {
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/create_new_mission", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> createNewMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.setMission(requestBody, request);
+		// TO DO : Exception handler
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/perform_mission_report", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> performMissionReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.performMissionReport(requestBody, request);
+		// TO DO : Exception handler
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseMissionList.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/create_sera_note", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> createSeraNote(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.setSeraNote(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		int spaceType = Integer.parseInt((String)requestBody.get("spaceType"));
+		String spaceId = (String)requestBody.get("spaceId");
+		String href = "";
+		switch(spaceType){
+		case ISmartWorks.SPACE_TYPE_USER:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		case ISmartWorks.SPACE_TYPE_GROUP:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE:
+			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			break;
+		}
+		map.put("href", href);
 		return map;
 	}
 
