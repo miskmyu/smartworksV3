@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.sera.model;
 
+import java.util.Date;
+
 import net.smartworks.util.LocalDate;
 
 public class CourseDetail {
@@ -16,8 +18,8 @@ public class CourseDetail {
 	private String categories;
 	private String keywords;
 	private int duration;
-	private LocalDate start;
-	private LocalDate end;
+	private Date start;
+	private Date end;
 	private int maxMentees;
 	private boolean autoApproval;
 	private boolean payable;
@@ -56,16 +58,16 @@ public class CourseDetail {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-	public LocalDate getStart() {
+	public Date getStart() {
 		return start;
 	}
-	public void setStart(LocalDate start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
-	public LocalDate getEnd() {
+	public Date getEnd() {
 		return end;
 	}
-	public void setEnd(LocalDate end) {
+	public void setEnd(Date end) {
 		this.end = end;
 	}
 	public int getMaxMentees() {

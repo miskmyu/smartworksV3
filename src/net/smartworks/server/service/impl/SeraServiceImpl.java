@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
@@ -34,6 +36,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
+import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
@@ -147,8 +150,10 @@ public class SeraServiceImpl implements ISeraService {
 		}
 		course.setKeywords(keywordsArray);
 		course.setDuration(courseDetail.getDuration());
-		course.setStart(courseDetail.getStart());
-		course.setEnd(courseDetail.getEnd());
+		if (courseDetail.getStart() != null)
+			course.setOpenDate(new LocalDate(courseDetail.getStart().getTime()));
+		if (courseDetail.getEnd() != null)
+			course.setCloseDate(new LocalDate(courseDetail.getEnd().getTime()));
 		course.setMaxMentees(courseDetail.getMaxMentees());
 		course.setAutoApproval(courseDetail.isAutoApproval());
 		course.setPayable(course.isPayable());
@@ -210,143 +215,240 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	@Override
-	public Course createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*
+		 {
+			frmCreateCourse=
+			{
+				txtCourseName=제목, 
+				txtCourseObject=목적, 
+				txtaCourseDesc=설명, 
+			*	chkCourseCategories=[예술, 엔터테인먼트, 스타일, 생활], 
+				txtCourseKeywords=키워드,키워드2, 
+				txtCourseDays=10, 
+				txtCourseStartDate=, 
+				txtCourseEndDate=, 
+				chkCourseSecurity=1, 
+				chkCourseUsers=userInput, 
+				txtCourseUsers=3, 
+				chkJoinApproval=autoApporval, 
+				chkCourseFee=free, 
+				txtCourseFee=, 
+				txtaMentorEducations=학력, 
+				txtaMentorWorks=경력, 
+				txtaMentorHistory=세라 활동 멘토활동, 
+				txtaMenteeHistory=세라활동 멘티활동, 
+				txtaMentorLectures=강의 활동, 
+				txtaMentorAwards=수상경력, 
+				txtaMentorEtc=기타활동, 
+				txtCourseMentor={users=[{id=kmyu@maninsoft.co.kr, name=1 유광민}]}, 
+				imgCourseProfile={groupId=fg_06737343eb606e45dde9396eb84ef78cb8d7, files=[]}
+			}
+		}
+		 */
+		
 		User user = SmartUtil.getCurrentUser();
-		Map<String, Object> frmNewGroupProfile = (Map<String, Object>)requestBody.get("frmNewGroupProfile");
+		Map<String, Object> frmNewCourseProfile = (Map<String, Object>)requestBody.get("frmCreateCourse");
 
-		Set<String> keySet = frmNewGroupProfile.keySet();
+		Set<String> keySet = frmNewCourseProfile.keySet();
 		Iterator<String> itr = keySet.iterator();
-
-		List<Map<String, String>> users = null;
-		List<Map<String, String>> files = null;
-		String groupId = null;
-		String txtGroupName = null;
-		String txtaGroupDesc = null;
-		String selGroupProfileType = null;
-		String txtGroupLeader = null;
+		
+		String txtCourseName = null;
+		String txtCourseObject = null;
+		String txtaCourseDesc = null;
+		String chkCourseCategories = null;
+		String txtCourseKeywords = null;
+		String txtCourseDays = null;
+		String chkUserDefineDays = null;
+		String txtCourseStartDate = null;
+		String txtCourseEndDate = null;
+		String chkCourseSecurity = null;
+		String chkCourseUsers = null;
+		String txtCourseUsers = null;
+		String chkJoinApproval = null;
+		String chkCourseFee = null;
+		String txtCourseFee = null;
+		String txtaMentorEducations = null;
+		String txtaMentorWorks = null;
+		String txtaMentorHistory = null;
+		String txtaMenteeHistory = null;
+		String txtaMentorLectures = null;
+		String txtaMentorAwards = null;
+		String txtaMentorEtc = null;
+		List<Map<String, String>> txtCourseMentor = null;
+		String mentorUserId = null;
+		List<Map<String, String>> imgCourseProfile = null;
+		String courseFileId = null;
+		String courseFileName = null;
+		String selGroupProfileType = null;//공개 비공개
+		
 		String imgGroupProfile = null;
-		String groupUserId = null;
-		String groupFileId = null;
-		String groupFileName = null;
 
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
-			Object fieldValue = frmNewGroupProfile.get(fieldId);
+			Object fieldValue = frmNewCourseProfile.get(fieldId);
 			if (fieldValue instanceof LinkedHashMap) {
 				Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
-				if(fieldId.equals("txtGroupMembers")) {
-					users = (ArrayList<Map<String,String>>)valueMap.get("users");
+				if(fieldId.equals("txtCourseMentor")) {
+					txtCourseMentor = (ArrayList<Map<String,String>>)valueMap.get("users");
 				} else if(fieldId.equals("imgGroupProfile")) {
-					files = (ArrayList<Map<String,String>>)valueMap.get("files");
+					imgCourseProfile = (ArrayList<Map<String,String>>)valueMap.get("files");
 				}
 			} else if(fieldValue instanceof String) {					
-				if(fieldId.equals("groupId")) {
-					groupId = (String)frmNewGroupProfile.get("groupId");
-				} else if(fieldId.equals("txtGroupName")) {
-					txtGroupName = (String)frmNewGroupProfile.get("txtGroupName");
-				} else if(fieldId.equals("txtaGroupDesc")) {
-					txtaGroupDesc = (String)frmNewGroupProfile.get("txtaGroupDesc");
-				} else if(fieldId.equals("selGroupProfileType")) {
-					selGroupProfileType = (String)frmNewGroupProfile.get("selGroupProfileType");
-					if(selGroupProfileType.equals(Group.GROUP_TYPE_OPEN))
+				if(fieldId.equals("txtCourseName")) {
+					txtCourseName = (String)frmNewCourseProfile.get("txtCourseName");
+				} else if(fieldId.equals("txtCourseObject")) {
+					txtCourseObject = (String)frmNewCourseProfile.get("txtCourseObject");
+				} else if(fieldId.equals("txtaCourseDesc")) {
+					txtaCourseDesc = (String)frmNewCourseProfile.get("txtaCourseDesc");
+				} else if(fieldId.equals("chkCourseCategories")) {
+					chkCourseCategories = (String)frmNewCourseProfile.get("chkCourseCategories");
+				} else if(fieldId.equals("txtCourseKeywords")) {
+					txtCourseKeywords = (String)frmNewCourseProfile.get("txtCourseKeywords");
+				} else if(fieldId.equals("txtCourseDays")) {
+					txtCourseDays = (String)frmNewCourseProfile.get("txtCourseDays");
+				} else if(fieldId.equals("txtCourseStartDate")) {
+					txtCourseStartDate = (String)frmNewCourseProfile.get("txtCourseStartDate");
+				} else if(fieldId.equals("txtCourseEndDate")) {
+					txtCourseEndDate = (String)frmNewCourseProfile.get("txtCourseEndDate");
+				} else if(fieldId.equals("chkCourseSecurity")) {
+					chkCourseSecurity = (String)frmNewCourseProfile.get("chkCourseSecurity");
+					if(chkCourseSecurity.equals(AccessPolicy.LEVEL_PUBLIC))
 						selGroupProfileType = "O";
 					else
 						selGroupProfileType = "C";
-				} else if(fieldId.equals("txtGroupLeader")) {
-					txtGroupLeader = (String)frmNewGroupProfile.get("txtGroupLeader");
+				} else if(fieldId.equals("chkCourseUsers")) {
+					chkCourseUsers = (String)frmNewCourseProfile.get("chkCourseUsers");
+				} else if(fieldId.equals("txtCourseUsers")) {
+					txtCourseUsers = (String)frmNewCourseProfile.get("txtCourseUsers");
+				} else if(fieldId.equals("chkJoinApproval")) {
+					chkJoinApproval = (String)frmNewCourseProfile.get("chkJoinApproval");
+				} else if(fieldId.equals("chkCourseFee")) {
+					chkCourseFee = (String)frmNewCourseProfile.get("chkCourseFee");
+				} else if(fieldId.equals("txtCourseFee")) {
+					txtCourseFee = (String)frmNewCourseProfile.get("txtCourseFee");
+				} else if(fieldId.equals("txtaMentorEducations")) {
+					txtaMentorEducations = (String)frmNewCourseProfile.get("txtaMentorEducations");
+				} else if(fieldId.equals("txtaMentorWorks")) {
+					txtaMentorWorks = (String)frmNewCourseProfile.get("txtaMentorWorks");
+				} else if(fieldId.equals("txtaMentorHistory")) {
+					txtaMentorHistory = (String)frmNewCourseProfile.get("txtaMentorHistory");
+				} else if(fieldId.equals("txtaMenteeHistory")) {
+					txtaMenteeHistory = (String)frmNewCourseProfile.get("txtaMenteeHistory");
+				} else if(fieldId.equals("txtaMentorLectures")) {
+					txtaMentorLectures = (String)frmNewCourseProfile.get("txtaMentorLectures");
+				} else if(fieldId.equals("txtaMentorAwards")) {
+					txtaMentorAwards = (String)frmNewCourseProfile.get("txtaMentorAwards");
+				} else if(fieldId.equals("txtaMentorEtc")) {
+					txtaMentorEtc = (String)frmNewCourseProfile.get("txtaMentorEtc");
 				}
-				
-				//Sera Extends Field Value - Course;
-				/*private String courseId;
-				private String object;
-				private String categories;
-				private String keywords;
-				private int duration;
-				private LocalDate start;
-				private LocalDate end;
-				private int maxMentees;
-				private boolean autoApproval;
-				private boolean payable;
-				private int fee;
-				private String teamId;
-				private int targetPoint;
-				private int achievedPoint;*/
-				
 			}
 		}
+		SwoGroup swoGroup = new SwoGroup();
+		swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 
-		SwoGroup swoGroup = null;
-
-		if(groupId != null) {
-			swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL);
-		} else {
-			swoGroup = new SwoGroup();
-			swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
+		if(!CommonUtil.isEmpty(txtCourseMentor)) {
+			for(int i=0; i < txtCourseMentor.subList(0, txtCourseMentor.size()).size(); i++) {
+				Map<String, String> userMap = txtCourseMentor.get(i);
+				mentorUserId = userMap.get("id");
+			}
 		}
-
+		
 		SwoGroupMember swoGroupMember = new SwoGroupMember();
-		swoGroupMember.setUserId(txtGroupLeader);
+		swoGroupMember.setUserId(mentorUserId);
 		swoGroupMember.setJoinType("I");
 		swoGroupMember.setJoinStatus("P");
 		swoGroupMember.setJoinDate(new LocalDate());
-		swoGroup.addGroupMember(swoGroupMember);
-		if(!CommonUtil.isEmpty(users)) {
-			for(int i=0; i < users.subList(0, users.size()).size(); i++) {
-				Map<String, String> userMap = users.get(i);
-				groupUserId = userMap.get("id");
-				if(!txtGroupLeader.equals(groupUserId)) {
-					swoGroupMember = new SwoGroupMember();
-					swoGroupMember.setUserId(groupUserId);
-					swoGroupMember.setJoinType("I");
-					swoGroupMember.setJoinStatus("P");
-					swoGroupMember.setJoinDate(new LocalDate());
-					swoGroup.addGroupMember(swoGroupMember);
-				}
+		if(!CommonUtil.isEmpty(txtCourseMentor)) {
+			for(int i=0; i < txtCourseMentor.subList(0, txtCourseMentor.size()).size(); i++) {
+				Map<String, String> userMap = txtCourseMentor.get(i);
+				swoGroupMember = new SwoGroupMember();
+				swoGroupMember.setUserId(userMap.get("id"));
+				swoGroupMember.setJoinType("I");
+				swoGroupMember.setJoinStatus("P");
+				swoGroupMember.setJoinDate(new LocalDate());
+				swoGroup.addGroupMember(swoGroupMember);
 			}
 		}
-
-		if(!files.isEmpty()) {
-			for(int i=0; i < files.subList(0, files.size()).size(); i++) {
-				Map<String, String> fileMap = files.get(i);
-				groupFileId = fileMap.get("fileId");
-				groupFileName = fileMap.get("fileName");
-				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(groupFileId, groupFileName, swoGroup.getId());
+		
+		if(!CommonUtil.isEmpty(imgCourseProfile)) {
+			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
+				Map<String, String> fileMap = imgCourseProfile.get(i);
+				courseFileId = fileMap.get("fileId");
+				courseFileName = fileMap.get("fileName");
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
 				swoGroup.setPicture(imgGroupProfile);
 			}
 		}
 
 		swoGroup.setCompanyId(user.getCompanyId());
-		swoGroup.setName(txtGroupName);
-		swoGroup.setDescription(txtaGroupDesc);
+		swoGroup.setName(txtCourseName);
+		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setStatus("C");
 		swoGroup.setGroupType(selGroupProfileType);
-		swoGroup.setGroupLeader(txtGroupLeader);
+		swoGroup.setGroupLeader(mentorUserId);
 
 		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
 
-		groupId = swoGroup.getId();
-
+		String groupId = swoGroup.getId();
 		if (CommonUtil.isEmpty(groupId))
 			return null;
+
+		//코스 확장 정보 저장
+		CourseDetail courseDetail = new CourseDetail();
+		courseDetail.setCourseId(groupId);
+		courseDetail.setObject(txtCourseObject);
+		courseDetail.setCategories(chkCourseCategories);
+		courseDetail.setKeywords(txtCourseKeywords);
+		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
+		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
+			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
+			courseDetail.setStart(new LocalDate(startDate.getTime()));
+		} else {
+			courseDetail.setStart(new LocalDate());
+		}
+		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
+			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
+			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		}
+		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
+		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
+		courseDetail.setPayable(chkCourseFee != null ? chkCourseFee.equalsIgnoreCase("free") ? false : true : false);
+		courseDetail.setFee(txtCourseFee == null || txtCourseFee.equals("") ? 0 : Integer.parseInt(txtCourseFee));
+		//courseDetail.setTeamId("teamId");
+		courseDetail.setTargetPoint(10);
+		courseDetail.setAchievedPoint(10);
 		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		seraMgr.setCourseDetail(courseDetail);
 		
+		//TODO 맨토 정보 저장
 		
+		MentorDetail mentorDetail = new MentorDetail();
+		mentorDetail.setMentorId(mentorUserId);
+		mentorDetail.setBorn("born");
+		mentorDetail.setHomeTown("homeTown");
+		mentorDetail.setLiving("living");
+		mentorDetail.setFamily("family");
+		mentorDetail.setEducations(txtaMentorEducations);
+		mentorDetail.setWorks(txtaMentorWorks);
+		mentorDetail.setMentorHistory(txtaMentorHistory);
+		mentorDetail.setMenteeHistory(txtaMenteeHistory);
+		mentorDetail.setLectures(txtaMentorLectures);
+		mentorDetail.setAwards(txtaMentorAwards);
+		mentorDetail.setEtc(txtaMentorEtc);
 		
+		seraMgr.setMentorDetail(mentorUserId, mentorDetail);
 		
-		
-		
-		
-		
-		
-		
-		return null;
+		return groupId;
 	}
 	
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
 		try{
+			CourseList courseList = new CourseList();
 			if (userId == null || userId.length() == 0)
-				return null;
+				return courseList;
 			ISwoManager swoManager = SwManagerFactory.getInstance().getSwoManager();
 			SwoGroupCond attendingCourseCond = new SwoGroupCond();
 			SwoGroupMember[] courseMembers = new SwoGroupMember[1];
@@ -364,7 +466,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			int totalCourseSize = ( attendingCourses == null ? 0 : attendingCourses.length ) + ( runningCourses == null ? 0 : runningCourses.length );
 			if (totalCourseSize == 0)
-				return null;
+				return courseList;
 			
 			List<String> courseIdList = new ArrayList<String>();
 			if (attendingCourses != null) {
@@ -392,7 +494,6 @@ public class SeraServiceImpl implements ISeraService {
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
 			
-			CourseList courseList = new CourseList();
 			courseList.setRunnings(runningCoursesArray == null ? 0 : runningCoursesArray.length);
 			courseList.setRunningCourses(runningCoursesArray);
 			courseList.setAttendings(attendingCoursesArray == null ? 0 : attendingCoursesArray.length);

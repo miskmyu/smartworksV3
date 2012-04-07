@@ -908,7 +908,7 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public Course createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewCourse(requestBody, request);
 	}
 	
