@@ -13,7 +13,6 @@ function getExt(fileName) {
 	return ext;
 }
 
-
 function fileUploader(groupId, target) {
 	
 	var template = '<div class="qq-uploader js_form_file_field">' + 
@@ -68,7 +67,15 @@ function fileUploader(groupId, target) {
         	return true;
         },
         onComplete : function(id, fileName, responseJSON){
-        	var file = $(this.element).find('.qq-upload-list li[qqFileId=' + id + ']');
+//        	var file = $(this.element).find('.qq-upload-list li[qqFileId=' + id + ']');
+        	var files = $(this.element).find('.qq-upload-list li');
+        	var file = null;
+        	for(var i=0; i<files.length; i++){
+        		if(files[i].qqFileId == id){
+        			file = $(files[i]);
+        			break;
+        		}
+        	}
         	if(isEmpty(file)) return;
         	
         	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
@@ -82,6 +89,80 @@ function fileUploader(groupId, target) {
         	}
         	if(file.hasClass('qq-upload-success') && !isEmpty(file.parents('td.js_type_imageBox'))){
 	        	file.parents('td.js_type_imageBox:first').find('img.js_auto_picture').attr("src", responseJSON.pullPathName);
+        	}
+        },
+        fileTemplate : uploadFileTemplate,
+        template : template,
+        debug: true
+    });
+}
+
+function videoYTUploader(target) {
+	
+	var template = '<div class="qq-uploader js_form_file_field">' + 
+    '<div class="qq-upload-drop-area"><span>' + smartMessage.get("uploadDropArea") + '</span></div>' +
+    '<div class="qq-upload-button">' + smartMessage.get("uploadFile") + '</div>' +
+    '<ul class="qq-upload-list"></ul>' + 
+    '</div>';
+
+	var uploadFileTemplate = '<li>' +
+	'<span></span>' +
+	'<a href="#" class="qq-upload-file"></a>' +
+	'<span class="qq-upload-spinner"></span>' +
+	'<span class="qq-upload-size"></span>' +
+	'<a class="qq-upload-cancel" href="#">' + smartMessage.get("cancelUpload") + '</a>' +
+	'<span class="qq-upload-failed-text">' + smartMessage.get("uploadFailed") + '</span>' +
+	'<a href="#" class="qq-delete-text" style="display:none">X</a>' +
+	'</li>';
+
+	return new qq.FileUploader({
+        element: $(target)[0],
+
+        params: {
+        },
+        sizeLimit: 67108864,
+        messages: {
+            typeError: smartMessage.get('uploadTypeError'),
+            sizeError: smartMessage.get('uploadSizeError'),
+            minSizeError: smartMessage.get('uploadMinSizeError'),
+            emptyError: smartMessage.get('uploadEmptyError'),
+            onLeave: smartMessage.get('uploadOnLeave')            
+        },
+        action: 'upload_yt_video.sw',
+        onSubmit: function(id, fileName) {
+        	var files = $(this.element).find('.qq-upload-list li');
+        	for(var i = 0;i < files.length;i++) {
+    			$(files[i]).remove();
+        	}
+        	return true;
+        },
+        onComplete : function(id, fileName, responseJSON){
+        	var files = $(this.element).find('.qq-upload-list li');
+        	var file = null;
+        	for(var i=0; i<files.length; i++){
+        		if(files[i].qqFileId == id){
+        			file = $(files[i]);
+        			break;
+        		}
+        	}
+        	if(isEmpty(file)) return;
+        	file.attr('videoYTId', responseJSON.videoYTId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
+        	var ext = getExt(fileName);
+    		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
+        	file.find('.qq-delete-text').show();
+        	if(file.hasClass('qq-upload-success') && $('form.js_validation_required').find('.sw_required').hasClass('sw_error')){
+        		$('form.js_validation_required').find('.sw_required').removeClass('sw_error');
+				$('form.js_validation_required').validate({ showErrors: showErrors}).form();
+        	}
+        	if(file.hasClass('qq-upload-success') && !isEmpty(file.parents('td.js_type_videoYTBox'))){
+        		var videoYT = file.parents('td.js_type_videoYTBox:first').find('object');
+        		var videoSize = videoYT.attr('style');
+        		var params = '<param name="movie" value="https://www.youtube.com/v/' + responseJSON.videoYTId + '?version=3&autohide=1&showinfo=0"></param>' +
+				 			 '<param name="allowScriptAccess" value="always"></param>' +
+				 			 '<embed src="https://www.youtube.com/v/' + responseJSON.videoYTId + '?version=3&autohide=1&showinfo=0"' + 
+				 			 	'type="application/x-shockwave-flash" allowscriptaccess="always" ' + videoSize +
+				 			 '</embed>';
+	        	videoYT.html(params);
         	}
         },
         fileTemplate : uploadFileTemplate,
@@ -196,5 +277,12 @@ function viewFiles(groupId, target){
 			}
 		});
 	}
+}
+
+function createYTUploader(videoYTId, target, fileList){
+
+	videoYTUploader(target);
+	var uploader = $(target).find('.qq-uploader');
+	uploader.attr('videoYTId', videoYTId);
 
 }

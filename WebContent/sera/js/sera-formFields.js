@@ -161,6 +161,23 @@ function loadSeraNoteFields() {
 		
 	}
 	
+	var noteVideoField = $('div.js_note_video_field');
+	if(!isEmpty(noteVideoField)) {
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		noteVideoField.html(gridRow);
+
+		SmartWorks.FormRuntime.VideoYTBoxBuilder.buildEx({
+			container: gridRow,
+			fieldId: "ytNoteVideo",
+			fieldName: "note video",
+			columns: 1,
+			pictureWidth: 300,
+			required: false
+		});
+		noteVideoField.find('.form_label').removeClass('form_label').css({width:"100%", padding:"0 0 2px 0"});
+		
+	}
+	
 	var noteFileField = $('div.js_note_file_field');
 	if(!isEmpty(noteFileField)) {
 		var gridRow = SmartWorks.GridLayout.newGridRow();

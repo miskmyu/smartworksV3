@@ -95,4 +95,10 @@ public class DocFileController {
 		}
 	}
 
+	@RequestMapping(value = "/upload_yt_video", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.uploadYTVideo(request, response);
+	}
+	
 }

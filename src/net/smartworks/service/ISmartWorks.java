@@ -308,6 +308,8 @@ public interface ISmartWorks {
 
 	public abstract void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
+	public abstract void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
 	public abstract List<IFileModel> findFileGroup(HttpServletRequest request) throws Exception;
 
 	public abstract void deleteFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
