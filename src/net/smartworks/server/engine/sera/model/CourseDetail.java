@@ -27,6 +27,7 @@ public class CourseDetail {
 	private String teamId;
 	private int targetPoint;
 	private int achievedPoint;
+	private int lastMissionIndex = -1;
 
 	public String getCourseId() {
 		return courseId;
@@ -111,6 +112,12 @@ public class CourseDetail {
 	}
 	public void setAchievedPoint(int achievedPoint) {
 		this.achievedPoint = achievedPoint;
+	}
+	public int getLastMissionIndex() {
+		return lastMissionIndex;
+	}
+	public void setLastMissionIndex(int lastMissionIndex) {
+		this.lastMissionIndex = lastMissionIndex;
 	}
 	public static CourseDetail pickupCourseDetail(String courseId, CourseDetail[] courseDetails) {
 		if (courseDetails == null || courseDetails.length == 0)

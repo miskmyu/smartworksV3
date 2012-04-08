@@ -100,11 +100,13 @@
 							<option value="">없 음</option>
 							<%
 							MissionInstanceInfo[] missions = course.getMissions();
-							for(int i=0; i<missions.length; i++){
-								MissionInstanceInfo mission = missions[i];
+							if (missions != null) {
+								for(int i=0; i<missions.length; i++){
+									MissionInstanceInfo mission = missions[i];
 							%>
 								<option value="<%=mission.getId() %>">미션<%=mission.getIndex()+1 %> <%=mission.getSubject() %></option>
 							<%
+								}
 							}
 							%>
 						</select>

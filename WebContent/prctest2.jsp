@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
+<%@page import="net.smartworks.model.instance.info.InstanceInfoList"%>
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
+<%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
 <%@page import="net.smartworks.server.service.impl.SeraServiceImpl"%>
 <%@page import="net.smartworks.server.engine.sera.manager.ISeraManager"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDataField"%>
@@ -69,11 +73,19 @@ public static Object getBean(String beanName, HttpServletRequest request) {
 
 %>
 <%	
-	SeraServiceImpl ssi = (SeraServiceImpl)getBean("seraServiceImpl", request);
+	//SeraServiceImpl ssi = (SeraServiceImpl)getBean("seraServiceImpl", request);
 
 
-	ssi.getCoursesById("kmyu@maninsoft.co.kr", 11);
-
+	//ssi.getCoursesById("kmyu@maninsoft.co.kr", 11);
+	
+	IInstanceService sv = SwServiceFactory.getInstance().getInstanceService();
+	RequestParams rp = new RequestParams();
+	InstanceInfoList list = sv.getIWorkInstanceList("pkg_dc3edb6efa47418cbd1f8fef889b4818", rp);
+	InstanceInfo[] infoList = list.getInstanceDatas();
+	for (int i = 0 ; i < infoList.length; i++) {
+		InstanceInfo info = infoList[i];
+		out.print(info.getSubject());
+	}
 
 %>
 

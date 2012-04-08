@@ -49,6 +49,13 @@
 		<beans:property name="dbDialect" value="${hibernate.dialect}"/>
 	</beans:bean>
 
+	<beans:bean id="instanceService" class="net.smartworks.server.service.impl.InstanceServiceImpl"/>
+	<beans:bean id="communityService" class="net.smartworks.server.service.impl.CommunityServiceImpl"/>
+	<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
+		<beans:property name="instanceService" ref="instanceService"/>
+		<beans:property name="communityService" ref="communityService"/>
+	</beans:bean>
+	
 	<beans:bean id="swManagerFactory" class="net.smartworks.server.engine.factory.SwManagerFactory" factory-method="createInstance">
 		<!--property name="mdlManager" ref="mdlManager"/-->
 		<beans:property name="tskManager" ref="tskManager"/>

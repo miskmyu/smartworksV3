@@ -18,6 +18,8 @@ import net.smartworks.util.LocalDate;
 
 public interface ISeraService {
 
+	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;

@@ -35,6 +35,7 @@
 		<property name="teamId" type="string" length="100"/>
 		<property name="targetPoint" type="int"/>
 		<property name="achievedPoint" type="int"/>
+		<property name="lastMissionIndex" type="int"/>
 	</class>
 	
 </hibernate-mapping>

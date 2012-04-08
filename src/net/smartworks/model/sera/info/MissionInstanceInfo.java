@@ -3,7 +3,6 @@ package net.smartworks.model.sera.info;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
-import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
