@@ -60,6 +60,12 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/my_page.jsp", "myPAGE.tiles");
 	}
 
+	@RequestMapping("/myProfile")
+	public ModelAndView myProfile(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/content/my_profile.jsp", "");
+	}
+
 	@RequestMapping("/Course")
 	public ModelAndView Course(HttpServletRequest request, HttpServletResponse response) {
 
@@ -277,6 +283,27 @@ public class SeraController {
 			break;
 		}
 		map.put("href", href);
+		return map;
+	}
+
+	@RequestMapping(value = "/create_new_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> createNewTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.setCourse(requestBody, request);
+		// TO DO : Exception handler
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/update_sera_profile", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> updateSeraProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.setMission(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "myPAGE.sw");
 		return map;
 	}
 

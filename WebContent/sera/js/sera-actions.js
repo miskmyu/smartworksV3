@@ -365,4 +365,13 @@ $(function() {
 		$(e.target).attr('rows', 24);
 	});
 	
+	$('.js_create_team_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+
+	$('.js_modify_profile_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
 });

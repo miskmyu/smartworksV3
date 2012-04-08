@@ -92,7 +92,7 @@
 			<div class="pofile_con">
 				<div class="btn_log on"></div>
 				<div class="nick_name">
-					<%=cUser.getNickName() %>님<span class="bul_down"><a href=""></a> </span>
+					<%=cUser.getNickName() %>님<span class="bul_down"><a href="myProfile.sw" class="js_sera_content"></a> </span>
 				</div>
 			</div>
 			<!-- Btn in Gnb - 코스 만들기-->

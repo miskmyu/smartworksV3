@@ -31,8 +31,8 @@ import com.google.gdata.util.AuthenticationException;
 @Service
 public class YouTubeServiceImpl implements IYouTubeService {
 	
-	private static String YOUTUBE_CLIENT_ID = "829048554562-fq3i3nrcjs93cur79d58du00k33n94ho.apps.googleusercontent.com";
-	private static String YOUTUBE_DEVELOPER_KEY = "AI39si54VKd-UHVmOAWrouh1q_CWAyh84EpAXkdhck4LKw2wHxBaeQg6qwzH--1o1ymXtdBJaUDLtXC4ZTOBuLiQpGi96WjzyA";
+	private static String YOUTUBE_CLIENT_ID = "SmartWorks.net";
+	private static String YOUTUBE_DEVELOPER_KEY = "AI39si5ITgaYnxRo9xpWzW-BDmhg127Rtlj2M5jB0OZ7Yz7hWlc7S0iu8opQ6LEhLKoS0e4Jp9_UproHtKftR3-I_CVMQW5ibQ";
 	private static String YOUTUBE_SMARTWORKS_USERID = "smartworksnet@gmail.com";
 	private static String YOUTUBE_SMARTWORKS_PASSWORD = "smartworks.net";
 	private static String YOUTUBE_YSJUNG_USERID = "ysjung@maninsoft.co.kr";
@@ -59,6 +59,7 @@ public class YouTubeServiceImpl implements IYouTubeService {
 				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
+				return;
 			}
 			if (fileName.indexOf(File.separator) > 1)
 				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
@@ -69,16 +70,17 @@ public class YouTubeServiceImpl implements IYouTubeService {
 			String ytUserId = request.getParameter("ytUserId");
 			String ytPassword = request.getParameter("ytPassword");
 				
-			YouTubeService service = new YouTubeService("gdataSample-YouTubeAuth-1", YOUTUBE_DEVELOPER_KEY);
+			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, YOUTUBE_DEVELOPER_KEY);
 			if(SmartUtil.isBlankObject(ytUserId) || SmartUtil.isBlankObject(ytPassword)){
 				ytUserId = YOUTUBE_YSJUNG_USERID;
 				ytPassword = YOUTUBE_YSJUNG_PASSWORD;
 			}
 			try{
-				service.setUserCredentials(ytUserId,  ytPassword);
+				service.setUserCredentials("ysjung@maninsoft.co.kr",  "ysjung5775");
 		    }catch (AuthenticationException e) {
 		        System.out.println("Invalid login credentials.");
 		        e.printStackTrace();
+		        return;
 		    }
 			
 			VideoEntry newEntry = new VideoEntry();

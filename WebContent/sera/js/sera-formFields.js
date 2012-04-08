@@ -142,6 +142,67 @@ function loadCreateMissionFields() {
 	}
 };
 
+function loadCreateTeamFields() {
+	var teamStartDateField = $('div.js_team_start_date_field');
+	if(!isEmpty(teamStartDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		teamStartDateField.html(gridRow);
+
+		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtTeamStartDate",
+			fieldName: "team start date",
+			value: startDateStr,
+			columns: 4,
+			colSpan: 1,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();
+	}
+	
+	var teamEndDateField = $('div.js_team_end_date_field');
+	if(!isEmpty(teamEndDateField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		teamEndDateField.html(gridRow);
+
+		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtTeamEndDate",
+			fieldName: "team end date",
+			value: "",
+			columns: 4,
+			colSpan: 1,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
+
+	var teamMembersField = $('div.js_team_members_field');
+	if(!isEmpty(teamMembersField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		teamMembersField.html(gridRow);
+
+		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtInviteMembers",
+			fieldName: "team members invite",
+			columns: 1,
+			multiUsers: true,
+			required: true
+		});
+		gridRow.find('.form_col').css({width:"491px", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
+};
 
 function loadSeraNoteFields() {
 	var noteImageField = $('div.js_note_image_field');
@@ -171,7 +232,8 @@ function loadSeraNoteFields() {
 			fieldId: "ytNoteVideo",
 			fieldName: "note video",
 			columns: 1,
-			pictureWidth: 300,
+			videoWidth: 300,
+			videoHeight: 200,
 			required: false
 		});
 		noteVideoField.find('.form_label').removeClass('form_label').css({width:"100%", padding:"0 0 2px 0"});

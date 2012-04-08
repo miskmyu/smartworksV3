@@ -162,6 +162,14 @@ public class LocalDate extends Date{
 		return (new SimpleDateFormat("yyyy", this.locale)).format(getLocalTime());		
 	}
 	
+	public String toLocalMonthOnlyString(){
+		return (new SimpleDateFormat("MM", this.locale)).format(getLocalTime());		
+	}
+	
+	public String toLocalDateOnlyString(){
+		return (new SimpleDateFormat("dd", this.locale)).format(getLocalTime());		
+	}
+	
 	public String toLocalMonthShortString(){
 		return (new SimpleDateFormat("MMM", this.locale)).format(getLocalTime());		
 	}

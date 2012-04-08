@@ -24,7 +24,6 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var $graphic = $entity.children('graphic');
 	var videoWidth = parseFloat($graphic.attr('videoWidth'));
 	var videoHeight = parseFloat($graphic.attr('videoHeight'));
-
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
@@ -41,14 +40,14 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 		required = ' class="form_value" ';
 	}
 	
-	var videoSize = 'style="min-height:0px;width:' + ((videoWidth) ? videoWidth : 300) + 'px;' + ((videoHeight) ? ('height:' + videoHeight + 'px;"') : '"' );
+	var videoSize = 'style="min-height:0px;width:' + ((videoWidth) ? videoWidth : 300) + 'px; height: ' + ((videoHeight && !isEmpty(value)) ? videoHeight : 0) + 'px"';
 	var params = (isBlank(value)) ? '' : '<param name="movie" value="https://www.youtube.com/v/' + value + '?version=3&autohide=1&showinfo=0"></param>' +
 										 '<param name="allowScriptAccess" value="always"></param>' +
 										 '<embed src="https://www.youtube.com/v/' + value + '?version=3&autohide=1&showinfo=0"' + 
-										 		'type="application/x-shockwave-flash" allowscriptaccess="always" ' + videoSize +
+										 		'type="application/x-shockwave-flash" allowscriptaccess="always" ' + videoSize + '>' +
 										 '</embed>';
  
-	var $video = $('<div ' + required + ' style="width:' + valueWidth + '%"><object ' + videoSize + '>' + params + '</object>');
+	var $video = $('<div ' + required + ' style="width:' + valueWidth + '%"><object ' + videoSize + '>' + params + '</object></div>');
 	var $label = null;
 		
 	$label = $('<div class="form_label" style="width:' + labelWidth + '%"><span id="' + id + '"></span></div>').append(spanRequired);
@@ -119,7 +118,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.serializeObject = function(videoYTBoxs)
 };
 
 SmartWorks.FormRuntime.VideoYTBoxBuilder.validate = function(videoYTBoxs){
-	if(isEmpty(vidoeYTBoxs.find('.sw_required'))) return true;
+	if(isEmpty(videoYTBoxs.find('.sw_required'))) return true;
 	var fileUploaders = videoYTBoxs.find('.qq-uploader');
 	var videosValid = true;
 	for(var i=0; i<fileUploaders.length; i++){
