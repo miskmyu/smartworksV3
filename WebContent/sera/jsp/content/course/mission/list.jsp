@@ -94,7 +94,4 @@
 <!-- Navi Indication//-->
 
 <!-- Section Center -->
-<div id="section_cen" class="js_mission_space_detail">
-	<jsp:include page="/sera/jsp/content/course/mission/perform.jsp"></jsp:include>
-</div>
 <!-- Section Center //-->

@@ -233,7 +233,7 @@ public class SeraController {
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String courseId = "";//smartworks.setCourse(requestBody, request);
+		String courseId = smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
@@ -245,7 +245,8 @@ public class SeraController {
 	public @ResponseBody Map<String, Object> createNewMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//smartworks.setMission(requestBody, request);
 		// TO DO : Exception handler
-		String courseId = (String)requestBody.get("courseId");
+		//String courseId = (String)requestBody.get("courseId");
+		String courseId = smartworks.createNewMission(requestBody, request);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
 		return map;

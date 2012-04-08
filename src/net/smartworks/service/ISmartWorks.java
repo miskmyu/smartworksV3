@@ -431,6 +431,10 @@ public interface ISmartWorks {
 
 	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
