@@ -10,12 +10,15 @@ package net.smartworks.server.engine.sera.model;
 
 public class SeraConstant {
 
-	public final static String MISSION_FORMID = "frm_093098b485a642dd96ebee275d3485a2";
+	public final static String MISSION_FORMID = "sera_mission";
 	public final static String MISSION_TITLEFIELDID = "7";
 	public final static String MISSION_OPENDATEFIELDID = "2";
 	public final static String MISSION_CLOSEDATEFIELDID = "3";
 	public final static String MISSION_PREVMISSIONFIELDID = "1";
 	public final static String MISSION_CONTENTFIELDID = "6";
 	public final static String MISSION_INDEXFIELDID = "0";
+	public final static String MISSION_MISSIONCLEARERS = "4";
+	public final static String MISSION_STARTPOINT = "5";
+	
 	
 }

@@ -22,7 +22,6 @@ import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
-import net.smartworks.model.instance.info.IWInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -48,9 +47,7 @@ import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
-import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
@@ -76,13 +73,11 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
-import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SeraTest;
-import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.stereotype.Service;
@@ -1342,7 +1337,8 @@ public class SeraServiceImpl implements ISeraService {
 					}
 				}
 			}
-			
+			String courseId = swdRecord.getWorkSpaceId();
+			missionInstance.setWorkSpace(getCourseById(courseId));
 			//MissionInstance mission = SeraTest.getMissionById(missionId);
 			return missionInstance;
 		}catch (Exception e){
