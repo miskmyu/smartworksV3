@@ -70,7 +70,7 @@ public class YouTubeServiceImpl implements IYouTubeService {
 			String ytUserId = request.getParameter("ytUserId");
 			String ytPassword = request.getParameter("ytPassword");
 				
-			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, YOUTUBE_DEVELOPER_KEY);
+			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, "");
 			if(SmartUtil.isBlankObject(ytUserId) || SmartUtil.isBlankObject(ytPassword)){
 				ytUserId = YOUTUBE_YSJUNG_USERID;
 				ytPassword = YOUTUBE_YSJUNG_PASSWORD;
