@@ -45,6 +45,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -631,6 +632,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		youTubeService.uploadYTVideo(request, response);
+	}
+
+	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
 		return mailService.getMailFoldersById(folderId);
 	}
@@ -989,5 +995,9 @@ public class SmartWorks implements ISmartWorks {
 	public MissionInstance getMissionById(String missionId) throws Exception {
 		return seraService.getMissionById(missionId);
 	}
-	
+
+	@Override
+	public SeraUser getSeraUserById(String userId) throws Exception {
+		return seraService.getSeraUserById(userId);
+	}
 }

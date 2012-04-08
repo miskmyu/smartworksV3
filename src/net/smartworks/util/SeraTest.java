@@ -8,6 +8,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
@@ -61,6 +62,18 @@ public class SeraTest {
 		mentor.setTimeZone("SEOUL");
 		mentor.setCompany("(주)맨인소프트");
 		return mentor;
+	}
+
+	public static SeraUser getSeraUserById(String userId) throws Exception{
+		SeraUser user = new SeraUser();
+		user.setId("kmyu@maninsoft.co.kr");
+		user.setName("유광민");
+		user.setPosition("기술연구소장");
+		user.setDepartment("기술사업팀");
+		user.setLocale("ko_KR"); // ko_KR, en_US
+		user.setTimeZone("SEOUL");
+		user.setCompany("(주)맨인소프트");
+		return user;
 	}
 	
 	public static MissionInstanceInfo getMissionInstanceInfo1() throws Exception{

@@ -32,6 +32,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -1344,6 +1345,18 @@ public class SeraServiceImpl implements ISeraService {
 			
 			//MissionInstance mission = SeraTest.getMissionById(missionId);
 			return missionInstance;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+	}
+
+	@Override
+	public SeraUser getSeraUserById(String userId) throws Exception {
+		try{
+			return SeraTest.getSeraUserById(userId);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

@@ -104,14 +104,14 @@
 										<div class="text"><%=video.getContent() %></div>
 										<!-- Thum Image-->
 										<div class="thum_image">
-											<object width="120" height="120">
+											<object class="thum_image">
 												<param name="movie"
 													value="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"></param>
 												<param name="allowScriptAccess" value="always"></param>
 												<embed
 													src="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"
 													type="application/x-shockwave-flash" allowscriptaccess="always"
-													width="120" height="120"></embed>
+													class="thum_image"></embed>
 											</object>
 										</div>
 										<!-- Thum Image//-->

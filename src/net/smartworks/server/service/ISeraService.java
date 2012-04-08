@@ -11,6 +11,7 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -44,4 +45,5 @@ public interface ISeraService {
 
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
 
+	public abstract SeraUser getSeraUserById(String userId) throws Exception;
 }

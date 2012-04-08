@@ -11,6 +11,7 @@ $(function() {
 
 	var autoLoadProfiles = $('div.js_auto_load_profile');
 	if(!isEmpty(autoLoadProfiles)) {
+		alert('in');
 		for(var i=0; i<autoLoadProfiles.length; i++) {			
 			loadMyProfileField();
 		}		
