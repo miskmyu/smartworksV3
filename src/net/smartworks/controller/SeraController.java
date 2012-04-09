@@ -54,6 +54,12 @@ public class SeraController {
 		return mnv;
 	}
 
+	@RequestMapping("/joinUs")
+	public ModelAndView joinUs(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "sera/jsp/joinus.jsp");
+	}
+
 	@RequestMapping("/myPAGE")
 	public ModelAndView myPAGE(HttpServletRequest request, HttpServletResponse response) {
 
