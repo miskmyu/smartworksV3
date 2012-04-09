@@ -217,6 +217,11 @@ public class DocFileServiceImpl implements IDocFileService {
 		getDocManager().uploadTempFile(request, response);
 	}
 
+	@Override
+	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		getDocManager().uploadYTVideo(request, response);
+	}
+
 /*	@Override
 	public String createFile(String userId, String groupId, IFileModel file) throws Exception {
 		return getDocManager().createFile(userId, groupId, file);

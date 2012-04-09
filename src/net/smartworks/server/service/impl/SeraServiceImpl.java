@@ -197,8 +197,6 @@ public class SeraServiceImpl implements ISeraService {
 		course.setFee(courseDetail.getFee());
 		course.setLastMissionIndex(courseDetail.getLastMissionIndex());
 		//course.setTeam("TEAM");
-		course.setTargetPoint(courseDetail.getTargetPoint());
-		course.setAchievedPoint(courseDetail.getAchievedPoint());
 		
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
 		
@@ -228,12 +226,13 @@ public class SeraServiceImpl implements ISeraService {
 		CourseInfo courseInfo = (CourseInfo)group;
 		courseInfo.setOwner(ModelConverter.getUserInfoByUserId(swoGroup.getCreationUser()));
 		courseInfo.setLeader(ModelConverter.getUserInfoByUserId(swoGroup.getGroupLeader()));
-		courseInfo.setOpenDate(new LocalDate(swoGroup.getCreationDate().getTime()));
 		courseInfo.setNumberOfGroupMember(swoGroup.getSwoGroupMembers() == null ? 0 : swoGroup.getSwoGroupMembers().length);
 		
 		if (courseDetail != null) {
-			courseInfo.setTargetPoint(courseDetail.getTargetPoint());
-			courseInfo.setAchievedPoint(courseDetail.getAchievedPoint());
+			if (courseDetail.getStart() != null)
+				courseInfo.setOpenDate(new LocalDate(courseDetail.getStart().getTime()));
+			if (courseDetail.getEnd() != null)
+				courseInfo.setCloseDate(new LocalDate(courseDetail.getEnd().getTime()));
 //			courseInfo.setLastMission(lastMission);
 		}
 		

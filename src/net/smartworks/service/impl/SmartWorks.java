@@ -633,7 +633,7 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		youTubeService.uploadYTVideo(request, response);
+		docFileService.uploadYTVideo(request, response);
 	}
 
 	@Override

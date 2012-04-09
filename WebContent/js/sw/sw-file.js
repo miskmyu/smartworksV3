@@ -37,7 +37,7 @@ function fileUploader(groupId, target) {
         params: {
         	groupId : groupId
         },
-        sizeLimit: 67108864,
+        sizeLimit: 64*1024*1024,
         messages: {
             typeError: smartMessage.get('uploadTypeError'),
             sizeError: smartMessage.get('uploadSizeError'),
@@ -76,7 +76,7 @@ function fileUploader(groupId, target) {
         			break;
         		}
         	}
-        	if(isEmpty(file)) return;
+        	if(isEmpty(file) || !responseJSON.success) return;
         	
         	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
@@ -118,9 +118,8 @@ function videoYTUploader(target) {
 	return new qq.FileUploader({
         element: $(target)[0],
 
-        params: {
-        },
-        sizeLimit: 67108864,
+        params: {},
+        sizeLimit: 200*1024*1024,
         messages: {
             typeError: smartMessage.get('uploadTypeError'),
             sizeError: smartMessage.get('uploadSizeError'),
@@ -145,7 +144,9 @@ function videoYTUploader(target) {
         			break;
         		}
         	}
-        	if(isEmpty(file)) return;
+        	console.log('id=', id, ', filename=', fileName, ', json=', responseJSON.videoYTId);
+        	alert('wait');
+        	if(isEmpty(file) || !responseJSON.success) return;
         	file.attr('videoYTId', responseJSON.videoYTId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');

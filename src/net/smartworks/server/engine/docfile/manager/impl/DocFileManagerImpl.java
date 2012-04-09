@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.Clob;
 import java.sql.Timestamp;
@@ -60,6 +61,18 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.gdata.client.youtube.YouTubeService;
+import com.google.gdata.data.media.MediaFileSource;
+import com.google.gdata.data.media.mediarss.MediaCategory;
+import com.google.gdata.data.media.mediarss.MediaDescription;
+import com.google.gdata.data.media.mediarss.MediaKeywords;
+import com.google.gdata.data.media.mediarss.MediaTitle;
+import com.google.gdata.data.youtube.VideoEntry;
+import com.google.gdata.data.youtube.YouTubeMediaGroup;
+import com.google.gdata.data.youtube.YouTubeNamespace;
+import com.google.gdata.util.AuthenticationException;
+import com.google.gdata.util.ServiceException;
 
 public class DocFileManagerImpl extends AbstractManager implements IDocFileManager {
 
@@ -508,6 +521,99 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
         writer.flush();
         writer.close();
     }
+	
+	private static String YOUTUBE_CLIENT_ID = "SmartWorks.net";
+	private static String YOUTUBE_DEVELOPER_KEY = "AI39si5ITgaYnxRo9xpWzW-BDmhg127Rtlj2M5jB0OZ7Yz7hWlc7S0iu8opQ6LEhLKoS0e4Jp9_UproHtKftR3-I_CVMQW5ibQ";
+	private static String YOUTUBE_SMARTWORKS_USERID = "smartworksnet@gmail.com";
+	private static String YOUTUBE_SMARTWORKS_PASSWORD = "smartworks.net";
+	private static String YOUTUBE_YSJUNG_USERID = "ysjung@maninsoft.co.kr";
+	private static String YOUTUBE_YSJUNG_PASSWORD = "ysjung5775";
+
+	private void uploadAjaxYTVideo(HttpServletRequest request, HttpServletResponse response, IFileModel formFile) throws DocFileException {
+
+		PrintWriter writer = null;
+        InputStream is = null;
+        FileOutputStream fos = null;
+		String videoSubject = request.getParameter("videoSubject");
+		String videoContent = request.getParameter("videoContent");
+		String ytUserId = request.getParameter("ytUserId");
+		String ytPassword = request.getParameter("ytPassword");
+
+        try {
+            writer = response.getWriter();
+        } catch (IOException ex) {
+            throw new DocFileException(ex.getMessage());
+        }
+
+        try {
+            is = request.getInputStream();
+            fos = new FileOutputStream(new File(formFile.getFilePath()));
+            IOUtils.copy(is, fos);
+        } catch (FileNotFoundException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writer.print("{success: false}");
+            throw new DocFileException(ex.getMessage());
+        } catch (IOException ex) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writer.print("{success: false}");
+            throw new DocFileException(ex.getMessage());
+        } finally {
+            try {
+                fos.close();
+                is.close();
+            } catch (IOException ignored) {
+                throw new DocFileException(ignored.getMessage());
+            }
+				
+			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, YOUTUBE_DEVELOPER_KEY);
+			if(SmartUtil.isBlankObject(ytUserId) || SmartUtil.isBlankObject(ytPassword)){
+				ytUserId = YOUTUBE_SMARTWORKS_USERID;
+				ytPassword = YOUTUBE_SMARTWORKS_PASSWORD;
+			}
+			
+			try{
+				service.setUserCredentials(ytUserId,  ytPassword);
+		    }catch (AuthenticationException e) {
+		        System.out.println("Invalid login credentials.");
+		        e.printStackTrace();
+		        return;
+		    }
+			
+			VideoEntry newEntry = new VideoEntry();
+
+			YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
+			mg.setTitle(new MediaTitle());
+			mg.getTitle().setPlainTextContent((SmartUtil.isBlankObject(videoSubject)) ? formFile.getFileName() : videoSubject);
+		    mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Tech"));
+			mg.setKeywords(new MediaKeywords());
+			mg.getKeywords().addKeyword("SmartWorks");
+			mg.setDescription(new MediaDescription());
+			if(!SmartUtil.isBlankObject(videoContent))
+				mg.getDescription().setPlainTextContent(SmartUtil.isBlankObject(videoContent) ? formFile.getFileName() : videoContent);
+			mg.setPrivate(false);
+
+			MediaFileSource ms = new MediaFileSource(new File(formFile.getFilePath()), "video/quicktime");
+			newEntry.setMediaSource(ms);	
+			String uploadUrl = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
+			try{
+				VideoEntry createdEntry = service.insert(new URL(uploadUrl), newEntry);
+	            response.setStatus(HttpServletResponse.SC_OK);
+	            String[] idSplited = createdEntry.getId().split(":");
+ 	            writer.print("{success: true, videoYTId: \"" + idSplited[idSplited.length-1] + "\", fileName: \"" + formFile.getFileName() + "\", fileSize: \"" + formFile.getFileSize() + "\"}");
+			}catch (ServiceException se){
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            writer.print("{success: false}");
+	            throw new DocFileException(se.getMessage());				
+			}catch (IOException ex){
+	            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            writer.print("{success: false}");
+	            throw new DocFileException(ex.getMessage());								
+			}
+        }
+
+        writer.flush();
+        writer.close();
+    }
 
 	@Override
 	public void ajaxUploadFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
@@ -629,7 +735,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			}
 			if (fileName.indexOf(File.separator) > 1)
 				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-
+			formFile.setFileName(fileName);
 			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
 
@@ -646,6 +752,52 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		}
 
 		this.writeAjaxFile(request, response, formFile);
+
+	}
+
+	@Override
+	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
+		IFileModel formFile = new HbFileModel();
+		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
+		formFile.setId(fileId);
+
+		//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
+		this.setFileDirectory(OSValidator.getImageDirectory());
+		String companyId = SmartUtil.getCurrentUser().getCompanyId();
+
+		String fileDivision = "Temps";
+		File repository = this.getFileRepository(companyId, fileDivision);
+		String filePath = "";
+		String imagerServerPath = "";
+		String extension = "";
+		if (formFile != null) {
+			String fileName = "";
+			try {
+				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			if (fileName.indexOf(File.separator) > 1)
+				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
+
+			formFile.setFileName(fileName);
+			
+			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
+
+			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+			formFile.setImageServerPath(imagerServerPath);
+
+			if (extension != null) {
+				filePath = filePath + "." + extension;
+			}
+			formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
+
+			formFile.setFilePath(filePath);
+
+		}
+
+		this.uploadAjaxYTVideo(request, response, formFile);
 
 	}
 

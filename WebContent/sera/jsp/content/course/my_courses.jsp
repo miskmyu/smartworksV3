@@ -29,6 +29,7 @@
 			for(int i=0; i<courseList.getRunningCourses().length; i++){
 				CourseInfo course = courseList.getRunningCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
+				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
 		%>
 				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
 					<li class="photo">
@@ -39,7 +40,7 @@
 					<li class="info">
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
-							<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalString() %><%} %></dd>
 							<dd class="category"></dd>
 						</dl></li>
 					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
@@ -47,7 +48,7 @@
 					<li class="gauge_box w_auto mt5">
 						<dl>
 							<dd class="gauge_outline w170">
-								<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+								<label class="gauge" style="width: <%=achievedPoint%>;"></label>
 							</dd>
 							<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
 						</dl></li>
@@ -84,6 +85,7 @@
 			for(int i=0; i<courseList.getAttendingCourses().length; i++){
 				CourseInfo course = courseList.getAttendingCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
+				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
 		%>
 				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
 					<li class="photo">
@@ -94,7 +96,7 @@
 					<li class="info">
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
-							<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalString() %><%} %></dd>
 							<dd class="category"></dd>
 						</dl></li>
 					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
@@ -102,7 +104,7 @@
 					<li class="gauge_box w_auto mt5">
 						<dl>
 							<dd class="gauge_outline w170">
-								<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+								<label class="gauge" style="width: <%=achievedPoint%>;"></label>
 							</dd>
 							<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
 						</dl></li>
