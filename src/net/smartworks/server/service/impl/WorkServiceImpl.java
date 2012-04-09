@@ -35,10 +35,6 @@ import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
-import net.smartworks.server.engine.authority.model.SwaResource;
-import net.smartworks.server.engine.authority.model.SwaResourceCond;
-import net.smartworks.server.engine.authority.model.SwaUser;
-import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
@@ -56,7 +52,6 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
-import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
@@ -71,7 +66,6 @@ import net.smartworks.server.engine.infowork.form.model.SwfField;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
-import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -81,9 +75,6 @@ import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
-import net.smartworks.server.engine.process.process.model.PrcProcess;
-import net.smartworks.server.engine.process.process.model.PrcProcessCond;
-import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -273,7 +264,7 @@ public class WorkServiceImpl implements IWorkService {
 
 				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
 
-				PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(userId, pkgs);
+				PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
 
 				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(newPkgs);
 	
@@ -410,7 +401,7 @@ public class WorkServiceImpl implements IWorkService {
 	}
 
 	@Override
-	public SmartWorkInfo[] searchWork(String key) throws Exception {
+	public SmartWorkInfo[] searchWork(String key, int searchType) throws Exception {
 
 		try{
 			if (CommonUtil.isEmpty(key))
@@ -424,7 +415,7 @@ public class WorkServiceImpl implements IWorkService {
 			PkgPackage[] pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_ALL);
 			if (pkgs == null)
 				return null;
-			PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(userId, pkgs);
+			PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, searchType);
 			SmartWorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(newPkgs);
 
 			return workPkgs;

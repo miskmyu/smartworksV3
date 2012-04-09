@@ -1,14 +1,24 @@
 package net.smartworks.model.security;
 
-import net.smartworks.model.community.Community;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.service.impl.SmartWorks;
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class WritePolicy {
+
+	private static ICommunityService communityService;
+
+	@Autowired(required=true)
+	public void setCommunityService(ICommunityService communityService) {
+		WritePolicy.communityService = communityService;
+	}
 
 	public final static int LEVEL_CUSTOM = 1;
 	public final static int LEVEL_PUBLIC = 2;
@@ -41,15 +51,14 @@ public class WritePolicy {
 			return true;
 		}else if(this.level == WritePolicy.LEVEL_CUSTOM){
 			if(SmartUtil.isBlankObject(communitiesToWrite)) return false;
-			SmartWorks smartWorks = new SmartWorks();
 			DepartmentInfo[] myDepartments = null;
 			GroupInfo[] myGroups = null;
 			try{
-				myDepartments = smartWorks.getMyDepartments();
-				myGroups = smartWorks.getMyGroups();
+				myDepartments = communityService.getMyDepartments();
+				myGroups = communityService.getMyGroups();
 			}catch (Exception e){				
 			}
-			for(CommunityInfo community : communitiesToWrite ){
+			for(CommunityInfo community : communitiesToWrite) {
 				if(community.getClass().equals(UserInfo.class) && community.getId().equals(SmartUtil.getCurrentUser().getId())){
 					return true;
 				}

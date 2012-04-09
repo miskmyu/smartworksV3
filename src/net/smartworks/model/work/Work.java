@@ -15,6 +15,9 @@ public class Work extends BaseObject{
 	public static final int PROVIDED_BY_APPSTORE = 1;
 	public static final int PROVIDED_BY_SYSTEM = 2;
 
+	public static final int SEARCH_TYPE_LIST_WORK = 1;
+	public static final int SEARCH_TYPE_START_WORK = 2;
+
 	public final static String ICON_CLASS_IWORKS_ON = "icon_iworks";
 	public final static String ICON_CLASS_PWORKS_ON = "icon_pworks";
 	public final static String ICON_CLASS_SWORKS_ON = "icon_sworks";

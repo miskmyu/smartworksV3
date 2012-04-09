@@ -10,7 +10,7 @@
 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String key = request.getParameter("key");
-	SmartWorkInfo[] works = smartWorks.searchWork(key);
+	SmartWorkInfo[] works = smartWorks.searchWork(key, Work.SEARCH_TYPE_START_WORK);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

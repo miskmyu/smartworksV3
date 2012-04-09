@@ -1,4 +1,5 @@
 #wrap {position: relative; width: 100%}
+.main_bg {background-color:#f4f4f4}
 #wrap_bb {position: relative; background-color:#f0f0ff; width: 100%}
 #sera_header {background: url("../images/top_bg.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
 #sera_header_bb {background: url("../images/top_bg_b.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
@@ -11,6 +12,49 @@
 #sera_header .status .register ul li {display: inline; font: 11px ,'Dotum'}
 
 #sera_header_join {background: url("../images/top_bg_out.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
+#sera_header_main {background: url("../images/main_top_bg.png") repeat-x scroll 0 0 transparent; clear: both; margin: 0 auto 20px;  width: 100%;}
+
+/* Intro */
+#inro_ct_section {clear: both; height: 1250px; margin: 0 auto; padding: 0 15px 0 30px; width: 948px;}
+.intro_category {height: 1100px; width: 470px}
+.ct_tit_01 {background: url("../images/header.png") no-repeat scroll 0 -1143px transparent; width:34px; height:20px; display:inline-block}
+.ct_tit_02 {background: url("../images/header.png") no-repeat scroll -50px -1143px transparent; width:34px; height:20px; display:inline-block}
+.ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
+.ribbon_mission {background: url("../images/header.png") no-repeat scroll -127px -1185px transparent; width:56px; height:56px}
+
+#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 991px;}
+.sera_guide {background: url("../images/main_guide_bg.png") repeat-x scroll 0 0 transparent; float: left; height: 435px; padding: 6px 0 0 6px; width: 286px;}
+.sera_guide .btn_start {clear: both; height: 65px; width: 285px;}
+.sera_guide .img_guide { clear: both; height: 74px; width: 285px;}
+.sera_guide .img_guide {clear: both; height: 74px; width: 285px;}
+.sera_guide .guide_menu {clear: both; height: 82px; width: 270px;}
+.sera_guide .guide_menu dl {height: 61px; padding-left: 13px; width: 261px;}
+.sera_guide .guide_menu dl dd {float: left; margin-right: 4px}
+.sera_guide .sponsor {clear: both; height: 140px; padding: 23px 6px 0 0; width: 286px}
+.sera_guide .sponsor .spon_lst {float: left; height: 140px; width: 250px;}
+.sera_guide .sponsor .spon_lst label {border: 1px solid #e5e5e5; height: 42px; margin: 0 4px 4px 0; width: 119px; float:left}
+.sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
+.sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
+.sera_friend {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 299px; padding: 132px 4px 4px; width: 284px;}
+.sera_friend .lst_normal {clear: both; height: 63px; padding: 16px 16px 16px 25px; width: 242px}
+.sera_friend .friend_sum {clear: both; height: 63px; width: 242px;}
+.sera_friend .friend_sum .photo {background: none repeat scroll 0 0 #BCBCBC; float: left; height: 57px; padding: 3px; width: 90px;}
+.sera_friend .friend_sum .info {color: #FFFFFF; float: left; height: 35px; padding: 14px 0 14px 10px; width: 110px}
+.sera_friend .friend_sum .btn_go {float: left; height: 21px; padding-top: 22px; width: 22px;}
+.sera_friend .friend_sum .info a {color: #FFF}
+.sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
+.sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 875px}
+.login_section {background: url("../images/layer_loginbg.png") no-repeat scroll 0 0 transparent; height: 76px; padding: 15px 25px 0 17px; position: absolute; right: 0; top: 33px; width: 178px}
+.login_section .login_box {clear: both; height: 41px; width: 178px;}
+.login_section .login_box .login_frm {float: left; margin-right: 4px; width: 133px}
+.login_section .login_box .login_frm dl dd {clear: both; height: 18px; margin-bottom: 3px; width: 133px;}
+.login_section .login_box .login_btn {float: left; height: 41px; width: 41px}
+.login_section .login_util {clear: both; height: 17px; margin-top: 6px; width: 133px; color:#666666}
+.login_section .login_util li {font: 11px 'µ¸¿ò','Dotum'}
+.id_blur {background: url("../images/input_email.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 15px; padding: 3px 3px 0; width: 125px !important}
+.pw_blur {background: url("../images/input_pw.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 15px; padding: 3px 3px 0; width: 125px !important}
+.id_focus, .pw_focus {background-color: #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 11px; padding: 4px 5px; width: 125px}
+
 
 /* Global Navigation Bar*/
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:1004px;}
@@ -109,7 +153,7 @@ a.b_next:hover { background-position:-30px -535px}
 /* Body */
 #container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
 #container.bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
-#container.bg_no { background-image:none; background-color:#FFF}
+#container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 1004px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
@@ -413,6 +457,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .w415 {width:415px !important}
 .w420 {width:420px !important}
 .w470 {width:470px !important}
+.w530 {width:530px !important}
 .w569 {width:569px !important}
 .w580 {width:580px !important}
 .w635 {width:635px !important}
@@ -429,6 +474,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Category List */
 .category_list { margin:10px 0 0 0; overflow:hidden}
 .category_box {float: left; height: 325px; margin: 0 20px 20px 0; width: 220px;}
+.category_box.intro_margin {margin: 0 15px 55px 0 !important}
 .category_box .photo {border: 1px solid #D1D1D1; clear: both; height: 148px; margin-bottom: 13px; width: 218px;}
 .category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 12px; margin-bottom: 10px; width: 220px;}
 .category_box .subject a {color: #333333;}

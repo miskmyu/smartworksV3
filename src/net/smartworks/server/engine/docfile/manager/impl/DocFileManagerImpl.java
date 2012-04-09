@@ -1008,7 +1008,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			obj.setType((String)fields[j++]);
 			obj.setFileName((String)fields[j++]);
 			obj.setFilePath((String)fields[j++]);
-			obj.setFileSize(Long.parseLong(String.valueOf(fields[j++])));
+			Object object = fields[j++];
+			obj.setFileSize(object == null ? 0 : Long.parseLong(String.valueOf(object)));
 			obj.setWrittenTime((Timestamp)fields[j++]);
 			objList.add(obj);
 		}
@@ -1311,12 +1312,12 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				Object[] fields = (Object[]) itr.next();
 				FileWork obj = new FileWork();
 				int j = 0;
-
 				obj.setFileId((String)fields[j++]);
 				obj.setFileType((String)fields[j++]);
 				obj.setFileName((String)fields[j++]);
 				obj.setFilePath((String)fields[j++]);
-				obj.setFileSize(Long.parseLong(String.valueOf(fields[j++])));
+				Object object = fields[j++];
+				obj.setFileSize(object == null ? 0 : Long.parseLong(String.valueOf(object)));
 				obj.setWrittenTime((Timestamp)fields[j++]);
 				obj.setGroupId((String)fields[j++]);
 				obj.setFolderId((String)fields[j++]);
