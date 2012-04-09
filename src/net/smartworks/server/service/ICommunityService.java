@@ -32,6 +32,8 @@ public interface ICommunityService {
 
 	public abstract DepartmentInfo[] getMyDepartments() throws Exception;
 
+	public abstract DepartmentInfo[] getMyChildDepartments() throws Exception;
+
 	public abstract WorkSpace getWorkSpaceById(String workSpaceId) throws Exception;
 
 	public abstract WorkSpaceInfo getWorkSpaceInfoById(String workSpaceId) throws Exception;

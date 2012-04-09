@@ -123,8 +123,10 @@
 									<%}else if(data.getFieldType().equals(FormField.TYPE_FILE)){%>
 										class="tc"
 									<%}%>>
-									<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){
-										%><img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml()%>">
+									<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
+									<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
+											<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml()%>">
+									<%	} %>
 									<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
 									<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>
 									<%}else if(data.getFieldType().equals(FormField.TYPE_CURRENCY)){%><%=data.getSymbol()%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>

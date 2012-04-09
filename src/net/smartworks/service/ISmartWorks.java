@@ -175,6 +175,8 @@ public interface ISmartWorks {
 
 	public abstract DepartmentInfo[] getMyDepartments() throws Exception;
 
+	public abstract DepartmentInfo[] getMyChildDepartments() throws Exception;
+
 	public abstract Department getDepartmentById(String departId) throws Exception;
 
 	public abstract GroupInfo[] getMyGroups() throws Exception;
@@ -185,7 +187,7 @@ public interface ISmartWorks {
 
 	public abstract User getUserById(String userId) throws Exception;
 
-	public abstract SmartWorkInfo[] searchWork(String key) throws Exception;
+	public abstract SmartWorkInfo[] searchWork(String key, int searchType) throws Exception;
 
 	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
 

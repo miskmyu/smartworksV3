@@ -15,8 +15,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
@@ -124,10 +126,9 @@ import net.smartworks.server.engine.process.approval.model.AprApproval;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
-import net.smartworks.server.engine.process.process.model.PrcProcess;
-import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
+import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
 import net.smartworks.server.engine.process.process.model.PrcSwProcess;
 import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
@@ -143,6 +144,7 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
@@ -207,6 +209,7 @@ public class ModelConverter {
 
 	private static IWorkService workService;
 	private static IInstanceService instanceService;
+	private static ICommunityService communityService;
 
 	@Autowired(required=true)
 	public void setWorkService(IWorkService workService) {
@@ -215,6 +218,10 @@ public class ModelConverter {
 	@Autowired(required=true)
 	public void setInstanceService(IInstanceService instanceService) {
 		ModelConverter.instanceService = instanceService;
+	}
+	@Autowired(required=true)
+	public void setCommunityService(ICommunityService communityService) {
+		ModelConverter.communityService = communityService;
 	}
 
 	private static PkgPackage getPkgPackageByPackageId(String packageId) throws Exception {
@@ -930,6 +937,9 @@ public class ModelConverter {
 		return instanceInfos;
 	}
 	public static void setPolicyToWork(SmartWork work, String resourceId) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		/* -- 공개여부 --
 		 공개 / 비공개*/
 
@@ -945,38 +955,98 @@ public class ModelConverter {
 		EditPolicy editPolicy = new EditPolicy();
 
 		SwaResourceCond swaResourceCond = new SwaResourceCond();
-		swaResourceCond.setResourceId(resourceId);//formid
-		SwaResource[] swaResources = getSwaManager().getResources("", swaResourceCond, IManager.LEVEL_LITE);
-		
+		swaResourceCond.setResourceId(resourceId);
+		SwaResource[] swaResources = getSwaManager().getResources(userId, swaResourceCond, IManager.LEVEL_LITE);
+
 		if (CommonUtil.isEmpty(swaResources)) {
 			accessPolicy.setLevel(AccessPolicy.LEVEL_DEFAULT);
 			writePolicy.setLevel(WritePolicy.LEVEL_DEFAULT);
 			editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
 		} else {
 			for(SwaResource swaResource : swaResources) {
-				if(CommonUtil.toNotNull(swaResource.getMode()).equals("R")) {
-					if(swaResource.getPermission().equals("PUB_ALL"))
+				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
+				CommunityInfo[] communitieInfos = null;
+				String mode = swaResource.getMode();
+				String permission = swaResource.getPermission();
+				if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_READ)) {
+					if(permission.equals(SwaResource.PERMISSION_ALL)) {
 						accessPolicy.setLevel(AccessPolicy.LEVEL_DEFAULT);
-					else if(swaResource.getPermission().equals("PUB_SELECT"))
+					} else if(permission.equals(SwaResource.PERMISSION_SELECT)) {
 						accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					else
+						SwaUserCond swaUserCond = new SwaUserCond();
+						swaUserCond.setResourceId(resourceId);
+						swaUserCond.setMode(SwaResource.MODE_READ);
+						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+						if(!CommonUtil.isEmpty(swaUsers)) {
+							for(SwaUser swaUser : swaUsers) {
+								String authUserId = swaUser.getUserId();
+								String type = swaUser.getType();
+								if(type.equals(SwaUser.TYPE_USER)) {
+									UserInfo userInfo = getUserInfoByUserId(authUserId);
+									if(userInfo != null)
+										communityInfoSet.add(userInfo);
+								} else if(type.equals(SwaUser.TYPE_DEPT)) {
+									DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(authUserId);
+									if(departmentInfo != null)
+										communityInfoSet.add(departmentInfo);
+								} else {
+									GroupInfo groupInfo = getGroupInfoByGroupId(authUserId);
+									if(groupInfo != null)
+										communityInfoSet.add(groupInfo);
+								}
+							}
+							if(communityInfoSet.size() > 0) {
+								communitieInfos = new CommunityInfo[communityInfoSet.size()];
+								communityInfoSet.toArray(communitieInfos);
+							}
+						}
+						accessPolicy.setCommunitiesToOpen(communitieInfos);
+					} else {
 						accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				} else if(CommonUtil.toNotNull(swaResource.getMode()).equals("W")) {
-					if(swaResource.getPermission().equals("PUB_ALL"))
+					}
+				} else if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_WRITE)) {
+					if(permission.equals(SwaResource.PERMISSION_ALL)) {
 						writePolicy.setLevel(WritePolicy.LEVEL_DEFAULT);
-					else
+					} else {
 						writePolicy.setLevel(WritePolicy.LEVEL_CUSTOM);
-				} else if(CommonUtil.toNotNull(swaResource.getMode()).equals("M")) {
-					if(swaResource.getPermission().equals("PUB_ALL"))
+						SwaUserCond swaUserCond = new SwaUserCond();
+						swaUserCond.setResourceId(resourceId);
+						swaUserCond.setMode(SwaResource.MODE_WRITE);
+						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+						if(!CommonUtil.isEmpty(swaUsers)) {
+							for(SwaUser swaUser : swaUsers) {
+								String authUserId = swaUser.getUserId();
+								String type = swaUser.getType();
+								if(type.equals(SwaUser.TYPE_USER)) {
+									UserInfo userInfo = getUserInfoByUserId(authUserId);
+									if(userInfo != null)
+										communityInfoSet.add(userInfo);
+								} else if(type.equals(SwaUser.TYPE_DEPT)) {
+									DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(authUserId);
+									if(departmentInfo != null)
+										communityInfoSet.add(departmentInfo);
+								} else {
+									GroupInfo groupInfo = getGroupInfoByGroupId(authUserId);
+									if(groupInfo != null)
+										communityInfoSet.add(groupInfo);
+								}
+							}
+							if(communityInfoSet.size() > 0) {
+								communitieInfos = new CommunityInfo[communityInfoSet.size()];
+								communityInfoSet.toArray(communitieInfos);
+							}
+						}
+						writePolicy.setCommunitiesToWrite(communitieInfos);
+					}
+				} else if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_MODIFY)) {
+					if(permission.equals(SwaResource.PERMISSION_ALL))
 						editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
-					else if(swaResource.getPermission().equals("PUB_SELECT"))
-						editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
 					else
 						editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
 				}
 			}
 		}
-		
+
 		work.setAccessPolicy(accessPolicy);
 		work.setWritePolicy(writePolicy);
 		work.setEditPolicy(editPolicy);
@@ -1193,59 +1263,227 @@ public class ModelConverter {
 		return workCtg;
 	}
 
-	public static PkgPackage[] getMyViewPackages(String userId, PkgPackage[] pkgs) throws Exception {
-		List<PkgPackage> newPkgList = new ArrayList<PkgPackage>();
+	public static boolean isAccessableForMe(Object object) throws Exception {
+		if(object == null)
+			return false;
+		boolean isAccessableForMe = false;
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
+		AccessPolicy accessPolicy = new AccessPolicy();
+		String workSpaceId = null;
+		String workSpaceType = null;
+		String accessLevel = null;
+		String accessValue = null;
+		String ownerId = null;
+		String modifierId = null;
+		if(object.getClass().equals(SwdRecord.class)) {
+			SwdRecord swdRecord = (SwdRecord)object;
+			workSpaceId = swdRecord.getWorkSpaceId() == null ? userId : swdRecord.getWorkSpaceId();
+			workSpaceType = swdRecord.getWorkSpaceType() == null ? "4" : swdRecord.getWorkSpaceType();
+			accessLevel = swdRecord.getAccessLevel() == null ? "3" : swdRecord.getAccessLevel();
+			accessValue = swdRecord.getAccessValue();
+			ownerId = swdRecord.getCreationUser();
+			modifierId = swdRecord.getModificationUser();
+		} else if(object.getClass().equals(PrcProcessInstExtend.class)) {
+			PrcProcessInstExtend prcProcessInstExtend = (PrcProcessInstExtend)object;
+			workSpaceId = prcProcessInstExtend.getPrcWorkSpaceId() == null ? userId : prcProcessInstExtend.getPrcWorkSpaceId();
+			workSpaceType = prcProcessInstExtend.getPrcWorkSpaceType() == null ? "4" : prcProcessInstExtend.getPrcWorkSpaceType();
+			accessLevel = prcProcessInstExtend.getPrcAccessLevel() == null ? "3" : prcProcessInstExtend.getPrcAccessLevel();
+			accessValue = prcProcessInstExtend.getPrcAccessValue();
+			ownerId = prcProcessInstExtend.getPrcCreateUser();
+			modifierId = prcProcessInstExtend.getPrcModifyUser();
+		}
+
+		Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
+		CommunityInfo[] communitieInfos = null;
+
+		if(workSpaceType.equals("4")) { //사용자공간
+			if(accessLevel.equals("1")) {
+				accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+			} else if(accessLevel.equals("2")) {
+				accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+				if(!CommonUtil.isEmpty(accessValue)) {
+					String[] accessValues = accessValue.split(";");
+					if(!CommonUtil.isEmpty(accessValues)) {
+						for(String accessUser : accessValues) {
+							UserInfo userInfo = getUserInfoByUserId(accessUser);
+							if(userInfo != null)
+								communityInfoSet.add(userInfo);
+						}
+					}
+				}
+			} else {
+				accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
+			}
+		} else if(workSpaceType.equals("5")) { //그룹공간
+			GroupInfo[] groupInfos = communityService.getMyGroups();
+			boolean isMember = false;
+			if(!CommonUtil.isEmpty(groupInfos)) {
+				for(GroupInfo groupInfo : groupInfos) {
+					if(workSpaceId.equals(groupInfo.getId())) {
+						isMember = true;
+						break;
+					}
+				}
+			}
+			if(isMember) {
+				if(accessLevel.equals("1")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+				} else if(accessLevel.equals("2")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					if(!CommonUtil.isEmpty(accessValue)) {
+						String[] accessValues = accessValue.split(";");
+						if(!CommonUtil.isEmpty(accessValues)) {
+							for(String accessUser : accessValues) {
+								UserInfo userInfo = getUserInfoByUserId(accessUser);
+								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+								else if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+								else if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+					}
+				} else {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
+				}
+			} else {
+				if(accessLevel.equals("2")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					if(!CommonUtil.isEmpty(accessValue)) {
+						String[] accessValues = accessValue.split(";");
+						if(!CommonUtil.isEmpty(accessValues)) {
+							for(String accessUser : accessValues) {
+								UserInfo userInfo = getUserInfoByUserId(accessUser);
+								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+								else if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+								else if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+					}
+				}
+			}
+		} else if(workSpaceType.equals("6")) { //부서공간
+			DepartmentInfo[] departmentInfos = communityService.getMyChildDepartments();
+			boolean isMember = false;
+			for(DepartmentInfo departmentInfo : departmentInfos) {
+				if(workSpaceId.equals(departmentInfo.getId())) {
+					isMember = true;
+					break;
+				}
+			}
+			if(isMember) {
+				if(accessLevel.equals("1")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+				} else if(accessLevel.equals("2")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					if(!CommonUtil.isEmpty(accessValue)) {
+						String[] accessValues = accessValue.split(";");
+						if(!CommonUtil.isEmpty(accessValues)) {
+							for(String accessUser : accessValues) {
+								UserInfo userInfo = getUserInfoByUserId(accessUser);
+								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+								else if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+								else if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+					}
+				} else {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
+				}
+			} else {
+				if(accessLevel.equals("2")) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					if(!CommonUtil.isEmpty(accessValue)) {
+						String[] accessValues = accessValue.split(";");
+						if(!CommonUtil.isEmpty(accessValues)) {
+							for(String accessUser : accessValues) {
+								UserInfo userInfo = getUserInfoByUserId(accessUser);
+								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+								else if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+								else if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+					}
+				}
+			}
+		} else if(workSpaceType.equals("2")) { //업무인스턴스공간
+			
+		}
+		if(communityInfoSet.size() > 0) {
+			communitieInfos = new CommunityInfo[communityInfoSet.size()];
+			communityInfoSet.toArray(communitieInfos);
+		}
+
+		accessPolicy.setCommunitiesToOpen(communitieInfos);
+		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId);
+
+		return isAccessableForMe;
+	}
+
+	public static PkgPackage[] getMyViewPackages(PkgPackage[] pkgs, int searchType) throws Exception {
+		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
 		PkgPackage[] newPkgs = null;
 		if(!CommonUtil.isEmpty(pkgs)) {
 			for(PkgPackage pkg : pkgs) {
-				String packageId = pkg.getPackageId();
-				String type = pkg.getType();
-				String resourceId = null;
-				if(type.equals(SwfFormModel.TYPE_SINGLE)) {
-					SwfFormCond swfFormCond = new SwfFormCond();
-					swfFormCond.setPackageId(packageId);
-					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
-					if(!CommonUtil.isEmpty(swfForms)) {
-						SwfForm swfForm = swfForms[0];
-						resourceId = swfForm.getId();
-					}
-				} else if(type.equals(SwfFormModel.TYPE_PROCESS) || type.equals(SwfFormModel.TYPE_GANTT)) {
-					PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
-					prcSwProcessCond.setPackageId(packageId);
-					PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses(userId, prcSwProcessCond);
-					if(!CommonUtil.isEmpty(swProcesses)) {
-						PrcSwProcess swProcess = swProcesses[0];
-						resourceId = swProcess.getProcessId();
-					}
-				}
-				SwaResourceCond swaResourceCond = new SwaResourceCond();
-				swaResourceCond.setResourceId(resourceId);
-				swaResourceCond.setMode("R");
-				SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
-				if(swaResource != null) {
-					String permission = swaResource.getPermission();
-					if(permission.equals("PUB_SELECT")) {
-						SwaUserCond swaUserCond = new SwaUserCond();
-						swaUserCond.setResourceId(resourceId);
-						swaUserCond.setMode("R");
-						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
-						if(!CommonUtil.isEmpty(swaUsers)) {
-							for(SwaUser swaUser : swaUsers) {
-								if(swaUser.getUserId().equals(userId)) {
-									newPkgList.add(pkg);
-								}
-							}
-						}
-					} else {
-						newPkgList.add(pkg);
-					}
+				SmartWork smartWork = new SmartWork();
+				getWorkByPkgPackage(smartWork, pkg);
+				String resourceId = getResourceIdByPkgPackage(pkg);
+				if(!CommonUtil.isEmpty(resourceId)) {
+					setPolicyToWork(smartWork, resourceId);
+					boolean isAccessableForMe = smartWork.getAccessPolicy().isAccessableForMe(null, null);
+					if(isAccessableForMe)
+						newPkgSet.add(pkg);
 				} else {
-					newPkgList.add(pkg);
+					newPkgSet.add(pkg);
 				}
 			}
-			if(newPkgList.size() > 0) {
-				newPkgs = new PkgPackage[newPkgList.size()];
-				newPkgList.toArray(newPkgs);
+		}
+		if(newPkgSet.size() > 0) {
+			newPkgs = new PkgPackage[newPkgSet.size()];
+			newPkgSet.toArray(newPkgs);
+		}
+		if(searchType == Work.SEARCH_TYPE_START_WORK) {
+			Set<PkgPackage> newPkgSet2 = new LinkedHashSet<PkgPackage>();
+			if(!CommonUtil.isEmpty(newPkgs)) {
+				for(PkgPackage newPkg : newPkgs) {
+					SmartWork smartWork = new SmartWork();
+					getWorkByPkgPackage(smartWork, newPkg);
+					String resourceId = getResourceIdByPkgPackage(newPkg);
+					if(!CommonUtil.isEmpty(resourceId)) {
+						setPolicyToWork(smartWork, resourceId);
+						boolean isWriteAccessForMe = smartWork.getWritePolicy().isWritableForMe();
+						if(isWriteAccessForMe)
+							newPkgSet2.add(newPkg);
+					} else {
+						newPkgSet2.add(newPkg);
+					}
+				}
+			}
+			if(newPkgSet2.size() > 0) {
+				newPkgs = new PkgPackage[newPkgSet2.size()];
+				newPkgSet2.toArray(newPkgs);
+			} else {
+				newPkgs = null;
 			}
 		}
 		return newPkgs;
@@ -1253,15 +1491,13 @@ public class ModelConverter {
 
 	private static boolean isExistRunningPackageByCategoryId(String categoryId, int type) throws Exception {
 
-		User user = SmartUtil.getCurrentUser();
-		String userId = user.getId();
 		PkgPackageCond cond = new PkgPackageCond();
 		cond.setCategoryId(categoryId);
 		cond.setStatus(PkgPackage.STATUS_DEPLOYED);
 		long runningPackageCount = 0;
 		if(type == 1) {
 			PkgPackage[] pkgs = getPkgManager().getPackages("", cond, IManager.LEVEL_LITE);
-			PkgPackage[] newPkgs = getMyViewPackages(userId, pkgs);
+			PkgPackage[] newPkgs = getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
 			if(!CommonUtil.isEmpty(newPkgs))
 				runningPackageCount = newPkgs.length;
 		} else {
@@ -2247,11 +2483,30 @@ public class ModelConverter {
 	public static String getResourceIdByPkgPackage(PkgPackage pkg) throws Exception {
 		if (pkg == null)
 			return null;
-		
+
 		String type = pkg.getType();
 		String packageId = pkg.getPackageId();
-		
-		if (type.equalsIgnoreCase("PROCESS") || type.equalsIgnoreCase("GANTT")) {
+		String resourceId = null;
+
+		if(type.equals(SwfFormModel.TYPE_SINGLE)) {
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setPackageId(packageId);
+			SwfForm[] swfForms = getSwfManager().getForms("", swfFormCond, IManager.LEVEL_LITE);
+			if(!CommonUtil.isEmpty(swfForms)) {
+				SwfForm swfForm = swfForms[0];
+				resourceId = swfForm.getId();
+			}
+		} else if(type.equals(SwfFormModel.TYPE_PROCESS) || type.equals(SwfFormModel.TYPE_GANTT)) {
+			PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
+			prcSwProcessCond.setPackageId(packageId);
+			PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses("", prcSwProcessCond);
+			if(!CommonUtil.isEmpty(swProcesses)) {
+				PrcSwProcess swProcess = swProcesses[0];
+				resourceId = swProcess.getProcessId();
+			}
+		}
+
+/*		if (type.equalsIgnoreCase("PROCESS") || type.equalsIgnoreCase("GANTT")) {
 			PrcProcessCond prcCond = new PrcProcessCond();
 			prcCond.setDiagramId(packageId);
 			PrcProcess[] prc = getPrcManager().getProcesses("", prcCond, IManager.LEVEL_LITE);
@@ -2270,8 +2525,8 @@ public class ModelConverter {
 			} else {
 				return form[0].getId();
 			}
-		}
-		return null;
+		}*/
+		return resourceId;
 	}
 	
 	public static Map<String, WorkCategory> getPkgCtgMapByPackage(PkgPackage pkg) throws Exception {

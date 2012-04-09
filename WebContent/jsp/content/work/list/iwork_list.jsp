@@ -191,12 +191,18 @@
 							<div class="icon_btn_edit">
 								<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
 							</div>
+							<%
+								if(work.getWritePolicy().isWritableForMe()) {
+							%>
 							<div class="icon_btn_create">
 								<a href="new_iwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.add_new_iwork"/></a>
 							</div>
 							<div class="icon_btn_excel">
 								<a href="" class="icon_btn_tail">엑셀로 등록하기</a>
 							</div>
+							<%
+								}
+							%>
 						</div>
 					
 						<div class="title_line_options">
