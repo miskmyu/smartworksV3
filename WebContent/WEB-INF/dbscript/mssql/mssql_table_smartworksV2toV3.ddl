@@ -30,9 +30,6 @@ CREATE TABLE SwFolderFile (
   	primary key(folderId, fileId)
 );
 
-ALTER TABLE SwFolder add tskWorkspaceId varchar(50);
-ALTER TABLE SwFolder add tskRefType varchar(50);
-
 
 -- SwOpinion Table (댓글)에 컬럼 추가
 ALTER TABLE SwOpinion add modifier varchar(30);
@@ -260,19 +257,24 @@ where formid = 'frm_148366628fb24edd976940398ba0d8d0'
 
 
 -- 메모 테이블 명 변경
+select * from dt_0d13bec72fcc43bca079eeb927bf1cc6
 sp_rename dt_0d13bec72fcc43bca079eeb927bf1cc6, SWMemo
 
 -- 메모 package 변경
+select * from swpackage where packageid = 'pkg_d391d4cd01864b2cada59ab5a9b12cd5'
 update swpackage set name = '메모' where packageid = 'pkg_d391d4cd01864b2cada59ab5a9b12cd5'
 
 -- 메모 domain 변경
+select * from swdomain where formid = 'frm_9d4df59b25694c8ea13e07e0f0fb2579'
 update swdomain set id='frm_memo_SYSTEM', formid='frm_memo_SYSTEM', formName = '메모', tblname = 'SWMemo' where formid = 'frm_9d4df59b25694c8ea13e07e0f0fb2579'
 
 -- 메모 domainfield 변경
+select * from swdomainfield where domainid= 'md_5aac6420321c44b282db0f2ee417a7f9'
 update swdomainfield set domainid = 'frm_memo_SYSTEM' where domainid= 'md_5aac6420321c44b282db0f2ee417a7f9'
 update swdomainfield set id = 'memo_title', tablecolname = 'title' where domainid= 'frm_memo_SYSTEM' and tablecolname = 'c12'
 update swdomainfield set id = 'memo_content', tablecolname = 'content'  where domainid= 'frm_memo_SYSTEM' and tablecolname = 'c4'
 
+select * from swform where formid = 'frm_9d4df59b25694c8ea13e07e0f0fb2579' 
 update swform set formid = 'frm_memo_SYSTEM', name = '메모', content = '<form id="frm_memo_SYSTEM" version="1" name="메모">
 	<children>
 		<formEntity id="4" name="내용" systemType="text" required="true" system="false">

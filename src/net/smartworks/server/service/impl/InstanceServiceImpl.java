@@ -4639,7 +4639,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwoUser[] teamUsers = swoMgr.getUsers(user, userCond, IManager.LEVEL_LITE);
 			if (teamUsers != null) {
 				for (int j = 0; j < teamUsers.length; j++) {
-					SwoUser teamUser = teamUsers[i];
+					SwoUser teamUser = teamUsers[j];
 					String teamUserId = teamUser.getId();
 					
 					if (!userList.contains(teamUserId)); {
