@@ -44,6 +44,8 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -635,6 +637,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		youTubeService.uploadYTVideo(request, response);
+	}
+
+	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
 		return mailService.getMailFoldersById(folderId);
 	}
@@ -911,6 +918,16 @@ public class SmartWorks implements ISmartWorks {
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeCommentOnInstance(requestBody, request);
 	}
+
+	@Override
+	public String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createNewMission(requestBody, request);
+	}
+	@Override
+	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createNewCourse(requestBody, request);
+	}
+	
 	
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
@@ -953,8 +970,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstancesByUser(userId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 	}
 	
 	@Override
@@ -979,4 +996,13 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.getMissionInstanceList(courseId, fromDate, toDate);
 	}
 
+	@Override
+	public MissionInstance getMissionById(String missionId) throws Exception {
+		return seraService.getMissionById(missionId);
+	}
+
+	@Override
+	public SeraUser getSeraUserById(String userId) throws Exception {
+		return seraService.getSeraUserById(userId);
+	}
 }

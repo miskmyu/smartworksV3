@@ -3,13 +3,15 @@ $(function() {
 	var autoPictures = $('img.js_auto_picture');
 	console.log("autoPictures", autoPictures);
 	if(!isEmpty(autoPictures)) {
-		for(var i=0; i<autoPictures.length; i++) {			
+		for(var i=0; i<autoPictures.length; i++) {
+			if(isEmpty($(autoPictures[i]).next().find('div.js_file_uploader'))) continue;
 			createUploader(null, $(autoPictures[i]).next().find('div.js_file_uploader'), false, true);
 		}		
 	}
 
 	var autoLoadProfiles = $('div.js_auto_load_profile');
 	if(!isEmpty(autoLoadProfiles)) {
+		alert('in');
 		for(var i=0; i<autoLoadProfiles.length; i++) {			
 			loadMyProfileField();
 		}		

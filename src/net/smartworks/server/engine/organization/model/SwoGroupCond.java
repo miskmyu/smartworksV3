@@ -33,6 +33,7 @@ public class SwoGroupCond extends SwoObjectCond {
 	public static final String A_GROUP_MEMBER = "swoGroupMember";
 	public static final String A_GROUP_MEMBERS = "swoGroupMembers";
 
+	private String[] groupIdIns;
 	private String groupLeader;
 	private String groupType;
 	private String status;
@@ -82,6 +83,12 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setNameLike(String nameLike) {
 		this.nameLike = nameLike;
+	}
+	public String[] getGroupIdIns() {
+		return groupIdIns;
+	}
+	public void setGroupIdIns(String[] groupIdIns) {
+		this.groupIdIns = groupIdIns;
 	}
 	public SwoGroupCond() {
 		super();

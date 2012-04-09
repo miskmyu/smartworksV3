@@ -12,6 +12,7 @@
 .pop_block .content_area { display:inline-block; text-align:center; width:100%}
 .pop_block .content_area .text {vertical-align:middle; height:40px; width:100%; display: table-cell}
 .pop_block label { line-height:14px} 
+.pop_block input[type="text"] { padding:2px 5px}
 .bor_line { border-top:2px solid #145f99}
 .bg_w { background-color:#FFF !important}
 

@@ -46,6 +46,8 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
@@ -309,6 +311,8 @@ public interface ISmartWorks {
 
 	public abstract void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
+	public abstract void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
 	public abstract List<IFileModel> findFileGroup(HttpServletRequest request) throws Exception;
 
 	public abstract void deleteFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -429,6 +433,10 @@ public interface ISmartWorks {
 
 	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
@@ -445,7 +453,7 @@ public interface ISmartWorks {
 
 	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
 
-	public abstract InstanceInfo[] getSeraInstancesByUser(String userId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
@@ -455,4 +463,7 @@ public interface ISmartWorks {
 	
 	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
+	public abstract MissionInstance getMissionById(String missionId) throws Exception;
+
+	public abstract SeraUser getSeraUserById(String userId) throws Exception;
 }

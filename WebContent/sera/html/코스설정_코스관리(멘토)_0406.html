@@ -62,7 +62,7 @@
     <!-- Top Navi //-->
   </div>
 </div>
-<div id="container_bb">
+<div id="container" class="bb">
   <!-- Content -->
   <div id="sera_content">
     <!-- Course Define -->
@@ -100,34 +100,21 @@
         <!-- Menu Dep1-->
         <div class="course_menu_d1">
           <ul>
-            <li>홈</li>
-            <li>미션</li>
-            <li>코스알림</li>
-            <li class="current">코스설정</li>
-          </ul>
+              <li>홈</li>
+              <li class="current">미션</li>
+              <li>코스 알림</li>
+              <li>팀 활동</li>
+              <li>코스 개요</li>
+              <li>코스 설정</li>
+            </ul>
         </div>
         <!-- Menu Dep1//-->
         <div class="icon_twitter fr ml5mt7"><a href="">트위터</a></div>
         <div class="icon_facebook fr ml5mt7"><a href="">페이스북</a></div>
-        <div class="fr" style="margin:8px 30px 0 0">
-          <div class="btn_mid_l">
-            <div class="btn_mid_r">팀구성하기</div>
-          </div>
-        </div>
       </div>
       <!-- Menu Dep2 -->
-      <div class="course_menu_d2">
-        <div class="menu001" style="visibility:hidden"> </div>
-        <div class="menu002 current" style="visibility:hidden">
-          <ul>
-            <li><a href="">미션등록/수행</a></li>
-            <li><a href="">전체보기</a></li>
-            <li><a href="">내글보기</a></li>
-            <li class="end"><span class="icon_bul_select mr5"></span><a href="">미션별 보기</a></li>
-          </ul>
-        </div>
-        <div class="menu003" style="visibility:hidden"> </div>
-        <div class="menu004">
+      <div class="course_menu_d2" style="display:none">
+        <div class="menu001">
           <ul>
             <li class="current"><a href=""> 코스관리</a></li>
             <li><a href="">멘티관리</a></li>
@@ -154,29 +141,30 @@
       <div class="form_layout">
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td><div class="form_label w101">코스 제목</div>
+            <td><div class="form_label w110">코스 제목</div>
               <div class="form_value">
                세라코스 - 선린 인터넷 고등학교 편
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">코스 목적</div>
+            <td><div class="form_label w110">코스 목적</div>
               <div class="form_value">
                 <input type="text" class="fieldline fl" style="width:493px">
-                <div class="fr ml5"> <span class="t_red">0</span> /150kbyte </div>
+                <span class="insert_text ml5">150</span>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">상세설명</div>
-              <div class="form_value" >
-                <textarea class="fieldline fl" name="textarea" rows="3" value="" style="width:491px"></textarea>
+            <td><div class="form_label w110">코스 상세설명*</div>
+              <div class="form_value">
+                <textarea class="fieldline" name="textarea" rows="5" value="" style="width:491px"></textarea>
+                <span class="insert_text ml3" style="vertical-align: bottom">800</span>
                 <div class="cb t_refe pt2">* 선택입력란입니다</div>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">코스 이미지</div>
+            <td><div class="form_label w110">코스 이미지</div>
               <div class="form_value" >
-                <input type="text" class="fieldline fl" style="width:493px">
+                <input type="text" class="fieldline fl" style="width:485px">
                 </input>
                 <div class="btn_mid_l ml5">
                   <div class="btn_mid_r">찾아보기</div>
@@ -184,9 +172,71 @@
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">키워드</div>
+            <td><div class="form_label w110">코스 카테고리</div>
+              <div class="form_value" >
+                <label>
+                <input name="" type="radio" value="" />예술</label>
+                <label>
+                <input name="" type="radio" value="" />엔터테인먼트</label>
+                <label>
+                <input name="" type="radio" value="" />스타일</label>
+                <label>
+                <input name="" type="radio" value="" />생활</label>
+                <label>
+                <input name="" type="radio" value="" />영화/애니메이션</label>
+                <label>
+                <input name="" type="radio" value="" />게임</label>
+                <br/>
+                <label>
+                <input name="" type="radio" value="" />영화</label>
+                <label>
+                <input name="" type="radio" value="" />이벤트</label>
+                <label>
+                <input name="" type="radio" value="" />스포츠</label>
+                <label>
+                <input name="" type="radio" value="" />이슈</label>
+                <label>
+                <input name="" type="radio" value="" />시사</label>
+                <label>
+                <input name="" type="radio" value="" />경제</label>
+                <label>
+                <input name="" type="radio" value="" />비즈니스</label>
+                <label>
+                <input name="" type="radio" value="" />미디어</label>
+                <br />
+                <label>
+                <input name="" type="radio" value="" />환경</label>
+                <label>
+                <input name="" type="radio" value="" />동물</label>
+                <label>
+                <input name="" type="radio" value="" />비영리/사회운동</label>
+                <label>
+                <input name="" type="radio" value="" />역사</label>
+                <label>
+                <input name="" type="radio" value="" />문학</label>
+                <label>
+                <input name="" type="radio" value="" />심리</label>
+                <label>
+                <input name="" type="radio" value="" />인물</label>
+                <br />
+                <label>
+                <input name="" type="radio" value="" />과학</label>
+                <label>
+                <input name="" type="radio" value="" />첨단기술</label>
+                <label>
+                <input name="" type="radio" value="" />의학</label>
+                <label>
+                <input name="" type="radio" value="" />건축</label>
+                <label>
+                <input name="" type="radio" value="" />교육</label>
+                <label>
+                <input name="" type="radio" value="" />기타</label>
+              </div></td>
+          </tr>
+          <tr>
+            <td><div class="form_label w110">카테고리 키워드</div>
               <div class="form_value">
-              <div class="fl">
+              <div class="fl mt3">
               <span class="mr10">관심분야</span>
               <span class="mr10">성실성</span>
               <span class="mr10">리더십</span>
@@ -199,7 +249,7 @@
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">코스 기간</div>
+            <td><div class="form_label w110">코스 기간</div>
               <div class="form_value" >
                 <input type="text" style="width:100px" class="fieldline fl mr5"/>
                 <span class="fl mr15">일(DAYS)</span>
@@ -207,8 +257,7 @@
                 
                 <div class="cb pt10">
                   <label>
-                  <input name="" type="checkbox" value="" />
-                  사용자 정의</label>
+                  <input name="" type="checkbox" value="" />사용자 정의</label>
                   <input name="" class="fieldline form_date_input" type="text"/>
                   <span class="icon_fb_date psr"></span> ~
                   <input name="" class="fieldline form_date_input" type="text"/>
@@ -217,41 +266,46 @@
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">공개 설정</div>
+            <td><div class="form_label w110">코스 공개 설정</div>
               <div class="form_value" >
                 <label>
-                <input name="" type="checkbox" value="" />
-                공개</label>
+                <input name="" type="checkbox" value="" />공개</label>
                 <label>
-                <input name="" type="checkbox" value="" />
-                비공개</label>
+                <input name="" type="checkbox" value="" />비공개</label>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">멘티 인원 제한</div>
+            <td><div class="form_label w110">멘티 인원 제한</div>
               <div class="form_value" >
                 <label>
-                <input name="" type="checkbox" value="" />
-                무제한</label>
+                <input name="" type="checkbox" value="" />무제한</label>
                 <label>
-                <input name="" type="checkbox" value="" />
-                직접입력</label>
+                <input name="" type="checkbox" value="" />직접입력</label>
                 <input class=" fieldline" type="text" style="width:80px" /> 명
                 <div class="cb t_refe pt2">* 현재 등록된 인원은 제외, 인원 제한을 지정한 다음부터 적용됩니다.</div>
               </div></td>
           </tr>
           <tr>
-            <td><div class="form_label w101">멘티 가입 승인</div>
+            <td><div class="form_label w110">멘티 가입 승인</div>
               <div class="form_value" >
                 <label>
-                <input name="" type="checkbox" value="" />
-                자동승인</label>
+                <input name="" type="checkbox" value="" />자동승인</label>
                 <label>
-                <input name="" type="checkbox" value="" />
-                멘토승인</label>
+                <input name="" type="checkbox" value="" />멘토승인</label>
                 <div class="cb t_refe pt2">* 회원이 코스를 참여하는 데 있어 승인절차를 선택할 수 있습니다</div>
               </div></td>
-          </tr>          
+          </tr>  
+          <tr>
+            <td><div class="form_label w110">코스 유료 설정</div>
+              <div class="form_value" >
+                <label>
+                <input name="" type="checkbox" value="" />무료</label>
+                <label>
+                <input name="" type="checkbox" value="" />유료</label>
+                (금액 입력: <input class=" fieldline" type="text" style="width:80px" /> 원)
+                <div class="cb t_refe pt2">* 코스 유료화는 관리자 승인 후 개설이 가능하므로 유료버전의 코스인 경우 바로 코스 생성이 되지 않습니다</div>
+              </div></td>
+          </tr>        
         </table>
       </div>
       <!-- Btn -->
@@ -260,8 +314,11 @@
           <div class="btn_blu_l mr10">
             <div class="btn_blu_r">코스 수정</div>
           </div>
-          <div class="btn_red_l">
+          <div class="btn_red_l mr10">
             <div class="btn_red_r">코스 삭제</div>
+          </div>
+          <div class="btn_blu_l">
+            <div class="btn_blu_r">멘토 프로필 수정</div>
           </div>
         </div>
       </div>

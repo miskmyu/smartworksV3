@@ -1,9 +1,6 @@
 package net.smartworks.model.sera;
 
-import net.smartworks.model.community.User;
-import net.smartworks.util.SmartUtil;
-
-public class Mentor extends User {
+public class Mentor extends SeraUser {
 
 	private String born;
 	private String homeTown;

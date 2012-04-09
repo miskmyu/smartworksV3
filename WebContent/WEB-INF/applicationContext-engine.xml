@@ -49,6 +49,13 @@
 		<beans:property name="dbDialect" value="${hibernate.dialect}"/>
 	</beans:bean>
 
+	<beans:bean id="instanceService" class="net.smartworks.server.service.impl.InstanceServiceImpl"/>
+	<beans:bean id="communityService" class="net.smartworks.server.service.impl.CommunityServiceImpl"/>
+	<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
+		<beans:property name="instanceService" ref="instanceService"/>
+		<beans:property name="communityService" ref="communityService"/>
+	</beans:bean>
+	
 	<beans:bean id="swManagerFactory" class="net.smartworks.server.engine.factory.SwManagerFactory" factory-method="createInstance">
 		<!--property name="mdlManager" ref="mdlManager"/-->
 		<beans:property name="tskManager" ref="tskManager"/>
@@ -73,6 +80,7 @@
 		<beans:property name="fdrManager" ref="fdrManager"/>
 		<beans:property name="opinionManager" ref="opinionManager"/>
 		<beans:property name="likeManager" ref="likeManager"/>
+		<beans:property name="seraManager" ref="seraManager"/>
 
 		<beans:property name="designtimeManager" ref="resourceDesigntimeManager"/>
 		<beans:property name="runtimeManager" ref="resourceRuntimeManager"/>
@@ -82,6 +90,8 @@
 		<beans:property name="updManager" ref="updManager"/-->
 	</beans:bean>
 
+	<beans:bean id="seraManager" class="net.smartworks.server.engine.sera.manager.impl.SeraManagerImpl"/>
+	
 	<beans:bean id="schManager" class="net.smartworks.server.engine.common.searcher.manager.impl.SchManagerImpl"/>
 	<beans:bean id="colManager" class="net.smartworks.server.engine.common.collection.manager.impl.ColManagerImpl"/>
 	<beans:bean id="ctgManager" class="net.smartworks.server.engine.category.manager.impl.CtgManagerImpl"/>

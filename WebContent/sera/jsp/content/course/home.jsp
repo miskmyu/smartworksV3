@@ -77,8 +77,9 @@
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu">
-				<li class="current"><a href="" class="js_course_detail">홈</a></li>
+				<li class="current"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
+				<li><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_board">코스알림</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
@@ -91,24 +92,21 @@
 			<a href="">페이스북</a>
 		</div>
 		<div class="fr" style="margin: 8px 30px 0 0">
-			<div class="btn_mid_l">
+			<div class="btn_mid_l js_create_team">
 				<div class="btn_mid_r">팀구성하기</div>
+			</div>
+			<div class="btn_mid_l js_create_mission">
+				<div class="btn_mid_r">미션등록</div>
 			</div>
 		</div>
 	</div>
 	<!-- Menu Dep2 -->
 	<div class="course_menu_d2 js_course_sub_menu" style="display:none">
 		<div class="menu001 current" style="display:none"></div>
-		<div class="menu002 js_course_mission_menu" style="display:none">
-			<ul>
-				<li class="js_course_mission_set"><a href="">미션등록/수행</a></li>
-				<li class="js_course_mission_list"><a href="">전체보기</a></li>
-				<li class="js_course_mission_mine"><a href="">내글보기</a></li>
-				<li class="end js_course_by_mission"><a href="">미션별 보기</a></li>
-			</ul>
-		</div>
+		<div class="menu002" style="display:none"></div>
 		<div class="menu003" style="display:none"></div>
-		<div class="menu004 js_course_setting_menu" style="display:none">
+		<div class="menu004" style="display:none"></div>
+		<div class="menu005 js_course_setting_menu" style="display:none">
 			<%
 			if(myRunningCourse){
 			%>
@@ -128,7 +126,7 @@
 <!-- Course Define //-->
 <!-- Course Section -->
 <div class="course_section js_course_content" courseId="<%=courseId%>">
-	<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
+	<jsp:include page="/sera/jsp/content/course/detail/instance_list.jsp">
 		<jsp:param value="<%=courseId %>" name="courseId"/>
 	</jsp:include>
 </div>

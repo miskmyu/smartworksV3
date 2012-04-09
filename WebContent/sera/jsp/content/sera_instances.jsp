@@ -21,7 +21,10 @@
 	User cUser = SmartUtil.getCurrentUser();
 	
 	String userId = request.getParameter("userId");
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstancesByUser(userId, new LocalDate(), 10);
+	String courseId = request.getParameter("courseId");
+	String missionId = request.getParameter("missionId");
+	
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(userId, courseId, missionId,  new LocalDate(), 10);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
@@ -101,14 +104,14 @@
 										<div class="text"><%=video.getContent() %></div>
 										<!-- Thum Image-->
 										<div class="thum_image">
-											<object width="120" height="120">
+											<object class="thum_image">
 												<param name="movie"
 													value="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"></param>
 												<param name="allowScriptAccess" value="always"></param>
 												<embed
 													src="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"
 													type="application/x-shockwave-flash" allowscriptaccess="always"
-													width="120" height="120"></embed>
+													class="thum_image"></embed>
 											</object>
 										</div>
 										<!-- Thum Image//-->

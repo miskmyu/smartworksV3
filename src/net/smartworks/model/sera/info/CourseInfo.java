@@ -1,14 +1,9 @@
 package net.smartworks.model.sera.info;
 
 import net.smartworks.model.community.Community;
-import net.smartworks.model.community.Department;
-import net.smartworks.model.community.Group;
-import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Course;
-import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.util.LocalDate;
 
 
@@ -23,7 +18,6 @@ public class CourseInfo extends GroupInfo{
 	
 	private int targetPoint;
 	private int achievedPoint;
-	private MissionInfo lastMission;
 	
 	public UserInfo getOwner() {
 		return owner;
@@ -48,12 +42,6 @@ public class CourseInfo extends GroupInfo{
 	}
 	public void setNumberOfGroupMember(int numberOfGroupMember) {
 		this.numberOfGroupMember = numberOfGroupMember;
-	}
-	public MissionInfo getLastMission() {
-		return lastMission;
-	}
-	public void setLastMission(MissionInfo lastMission) {
-		this.lastMission = lastMission;
 	}
 	public String getBriefDesc(){
 		return getDesc();

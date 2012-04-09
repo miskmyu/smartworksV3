@@ -31,15 +31,29 @@ $(function() {
 		}
 		if(pos==0){
 			$.ajax({
-				url : "courseGeneral.sw",
+				url : "courseInstanceList.sw",
 				data : {courseId : courseId},
 				success : function(data, status, jqXHR) {
 					$('.js_course_content').html(data);
 				}
 			});
 		}else if(pos==1){
-			$('.js_course_mission_menu li.js_course_mission_set a').click();
+			$.ajax({
+				url : "courseMissionList.sw",
+				data : {courseId : courseId},
+				success : function(data, status, jqXHR) {
+					$('.js_course_content').html(data);
+				}
+			});
 		}else if(pos==2){
+			$.ajax({
+				url : "courseGeneral.sw",
+				data : {courseId : courseId},
+				success : function(data, status, jqXHR) {
+					$('.js_course_content').html(data);
+				}
+			});
+		}else if(pos==3){
 			$.ajax({
 				url : "courseBoard.sw",
 				data : {courseId : courseId},
@@ -47,7 +61,7 @@ $(function() {
 					$('.js_course_content').html(data);
 				}
 			});
-		}else if(pos==3){
+		}else if(pos==4){
 			if(isEmpty($(subMenus[pos]).children())){
 				$.ajax({
 					url : "courseSetting.sw",
@@ -88,6 +102,38 @@ $(function() {
 		return false;
 	});
 
+	$('.js_create_mission').live('click', function(e){
+		var input = $(e.target).parent();
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		$.ajax({
+			url : "courseMissionCreate.sw",
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_create_team').live('click', function(e){
+		var input = $(e.target).parent();
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		$.ajax({
+			url : "courseTeamCreate.sw",
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
 	$('.js_course_mission_menu').live('click', function(e){
 		var input = $(e.target).parent();
 		input.siblings().removeClass('current');
@@ -95,8 +141,11 @@ $(function() {
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
 		var url ="";
-		if(input.hasClass('js_course_mission_set')){
-			url = "courseMissionSet.sw";
+		var target = $('.js_course_content');
+		if(input.hasClass('js_course_mission_space')){
+			url = "courseMissionSpace.sw";			
+		}else if(input.hasClass('js_course_mission_create')){
+			url = "courseMissionCreate.sw";
 		}else if(input.hasClass('js_course_mission_list')){
 			url = "courseMissionList.sw";
 		}else if(input.hasClass('js_course_mission_mine')){
@@ -106,7 +155,7 @@ $(function() {
 			url : url,
 			data : {courseId : courseId},
 			success : function(data, status, jqXHR) {
-				$('.js_course_content').html(data);
+				target.html(data);
 			}
 		});
 		return false;
@@ -117,9 +166,16 @@ $(function() {
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var userId = input.attr('userId');
+		var courseId = "";
+		var courseInstanceList = input.parents('.js_course_instance_list_page');
+		if(!isEmpty(courseInstanceList))
+			courseId = courseInstanceList.attr('courseId');
 		$.ajax({
-			url : 'userInstances.sw',
-			data : {userId : userId},
+			url : 'seraInstances.sw',
+			data : {
+				userId : userId,
+				courseId : courseId
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
 			}
@@ -127,13 +183,19 @@ $(function() {
 		return false;
 	});
 
-	$('.js_view_news_feed').live('click', function(e){
+	$('.js_view_all_instances').live('click', function(e){
 		var input = $(e.target);
-		input.parent().siblings().find('.js_view_news_feed').removeClass('current');
+		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
+		var courseId = "";
+		var courseInstanceList = input.parents('.js_course_instance_list_page');
+		if(!isEmpty(courseInstanceList))
+			courseId = courseInstanceList.attr('courseId');
 		$.ajax({
-			url : 'myNewsFeed.sw',
-			data : {},
+			url : 'seraInstances.sw',
+			data : {
+				courseId : courseId
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
 			}
@@ -217,9 +279,9 @@ $(function() {
 	
 	$('.js_prev_month_mission').live('click', function(e){
 		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_create_page');
+		var missionCreate = input.parents('.js_mission_list_page');
 		$.ajax({
-			url : 'courseMissionSet.sw',
+			url : 'courseMissionSpace.sw',
 			data : {
 				courseId : missionCreate.attr('courseId'),
 				today : missionCreate.attr('prevMonth')
@@ -233,9 +295,9 @@ $(function() {
 	
 	$('.js_next_month_mission').live('click', function(e){
 		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_create_page');
+		var missionCreate = input.parents('.js_mission_list_page');
 		$.ajax({
-			url : 'courseMissionSet.sw',
+			url : 'courseMissionSpace.sw',
 			data : {
 				courseId : missionCreate.attr('courseId'),
 				today : missionCreate.attr('nextMonth')
@@ -247,4 +309,69 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_select_mission').live('click', function(e){
+		var input = $(e.target).parents('a');
+		var missionList = input.parents('.js_mission_list_page');
+		var courseId = missionList.attr('courseId');
+		var missionId = input.attr('missionId');
+		$.ajax({
+			url : 'courseMissionPerform.sw',
+			data : {
+				courseId :courseId,
+				missionId : missionId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+			}
+		});
+		return false;
+	});
+	
+	$('.js_create_mission_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+	
+	$('.js_note_buttons').live('click', function(e){
+		var input = $(e.target);
+		var noteAttachmentTable = input.parents('.js_note_buttons').siblings('.js_note_attachment_table');
+		var targetTable = [];
+		if(!isEmpty(input.hasClass('js_note_file_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_file');
+		else if(!isEmpty(input.hasClass('js_note_image_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_image');
+		else if(!isEmpty(input.hasClass('js_note_video_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_video');
+		else if(!isEmpty(input.hasClass('js_note_link_btn')))
+			targetTable = noteAttachmentTable.find('.js_note_link');
+		if(noteAttachmentTable.is(':visible')){
+			noteAttachmentTable.show();
+			targetTable.toggle();
+			if(isEmpty(noteAttachmentTable.find('tr:visible')))
+				noteAttachmentTable.hide();
+		}else{
+			noteAttachmentTable.show();
+			targetTable.show();
+		}
+		return false;
+	});
+	
+	$('.js_create_note_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+	
+	$('.js_report_content').live('click', function(e){
+		$(e.target).attr('rows', 24);
+	});
+	
+	$('.js_create_team_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+
+	$('.js_modify_profile_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
 });

@@ -97,11 +97,8 @@ currentUser = {
 	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
-<!-- 
 <script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
- -->
- <script type="text/javascript" src="js/jquery/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="js/jquery/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.effects.core.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.effects.explode.js"></script>
@@ -160,6 +157,7 @@ currentUser = {
 <script type="text/javascript" src="js/sw/sw-act-builder.js"></script>
 
 <script type="text/javascript" src="sera/js/sera-actions.js"></script>
+<script type="text/javascript" src="sera/js/sera-formFields.js"></script>
 
 <script type="text/javascript" src='js/smartform/smartworks.js'></script>
 <script type="text/javascript" src='js/smartform/sw-form-layout.js'></script>
@@ -181,6 +179,7 @@ currentUser = {
 <script type="text/javascript" src='js/smartform/field/user_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/image_box.js'></script>
+<script type="text/javascript" src='js/smartform/field/videoYT_box.js'></script>
 
 <script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
