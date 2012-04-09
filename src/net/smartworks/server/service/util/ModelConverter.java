@@ -606,7 +606,8 @@ public class ModelConverter {
 		workInstanceInfo.setStatus(task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
 		workInstanceInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
-		workInstanceInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));
+		Date modifiedDate = task.getTaskLastModifyDate() == null ? task.getTskCreateDate() : task.getTaskLastModifyDate();
+		workInstanceInfo.setLastModifiedDate(new LocalDate(modifiedDate.getTime()));
 		workInstanceInfo.setLastModifier(getUserInfoByUserId(task.getTskAssignee()));
 		
 		return workInstanceInfo;
