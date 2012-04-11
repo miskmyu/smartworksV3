@@ -29,69 +29,141 @@
 	String nextMonthStr = LocalDate.convertLocalMonthWithDiffMonth(thisDate, 1).toLocalDateSimpleString();
 %>
 <!-- Nav SNB -->
-<div id="nav_snb" class="js_mission_list_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>">
-	<div class="this_month">
-		<div class="tit_area">
-			<a href="" class="b_prev fl js_prev_month_mission"></a>
-				<span class="tit"><%=thisDate.toLocalMonthString() %></span>
-			<a href="" class="b_next fl js_next_month_mission"></a>
-		</div>
-		<div class="cb">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<th width="36px">날짜</th>
-					<th width="146px">내용</th>
-				</tr>
-				<%
-				LocalDate today = new LocalDate();
-				EventInstanceInfo[] events = null;//smartWorks.getEventInstanceList(course.getId(), firstDateOfMonth, new LocalDate(firstDateOfMonth.getGMTDate() + LocalDate.ONE_DAY*31));
-				MissionInstanceInfo[] missions = smartWorks.getMissionInstanceList(course.getId(), firstDateOfMonth, new LocalDate(firstDateOfMonth.getGMTDate() + LocalDate.ONE_DAY*31));
-				for(int i=0; i<31; i++){
-					LocalDate currentDate = new LocalDate(firstDateOfMonth.getGMTDate() + LocalDate.ONE_DAY*i);
-					if(thisDate.getMonth() != currentDate.getMonth()) break;
-					String todayClass = (today.getYear()==currentDate.getYear() && today.getMonth()==currentDate.getMonth() && today.getDateOnly()==currentDate.getDateOnly()) ? "today_cel" : "";
-					String dayClass = (currentDate.getDayOfWeek()==Calendar.SATURDAY) ? "t_blue" : (currentDate.getDayOfWeek()==Calendar.SUNDAY) ? "t_red" : "";
- 				%>
-					<tr href="" class="<%=todayClass%> js_create_new_mission">
-						<td class="<%=dayClass %>"><%=String.format("%02d", currentDate.getDateOnly()) %>(<%=currentDate.toLocalDayString() %>)</td>
-						<td>
-							<%
-							if(!SmartUtil.isBlankObject(events)){
-								for(int e=0; e<events.length; e++){
-									EventInstanceInfo event = events[e];
-									if(event.getStart().getMonth() != currentDate.getMonth() || event.getStart().getDateOnly() != currentDate.getDateOnly()) continue;
-							%>
-									<div>[이벤트] <%=event.getSubject() %></div>
-							<%
-								}
-							}
-							%>
-							<%
-							if(!SmartUtil.isBlankObject(missions)){
-								for(int m=0; m<missions.length; m++){
-									MissionInstanceInfo mission = missions[m];
-									if(mission.getOpenDate().getMonth() != currentDate.getMonth() || mission.getOpenDate().getDateOnly() != currentDate.getDateOnly()) continue;
-									String iconClass = (mission.getOpenDate().getDateOnly()>today.getDateOnly()) ? "icon_reserve" : (mission.isClearedByMe()) ? "icon_mission" :  "icon_mission current";
-							%>
-									<a href="" class="js_select_mission" missionId="<%=mission.getId()%>"><div><span class="<%=iconClass%>"></span>미션<%=mission.getIndex()+1%> <%=mission.getSubject() %></div></a>
-							<%
-								}
-							}
-							%>
-						</td>
-					</tr>
-				<%
-				}
-				%>
-			</table>
-		</div>
-	</div>
+<div id="panel_section" class="js_mission_list_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>" startDate="" endDate="">
+	<table>
+		<tr class="tit_bg" style="height:2px"></tr>
+		<tr class="js_calendar_space"></tr>
+	</table>
 </div>
 <!-- Nav SNB //-->
 
-<!-- Navi Indication-->
-<div class="icon_Indication" style="top: 215px">미션마감일을 선택한 후, 미션을 등록할수 있습니다 = 미션 마감일 선택한 위치</div>
-<!-- Navi Indication//-->
+<script type="text/javascript">
+$(document).ready(function(){
 
-<!-- Section Center -->
-<!-- Section Center //-->
+	var columnFormat =  {
+		    month: 'dddd',    // Mon
+		    week: 'ddd M/d', // Mon 9/7
+		    day: 'dddd M/d'  // Monday 9/7
+		};
+	var titleFormat = {
+		    month: 'MMMM yyyy',                             // September 2009
+		    week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}", // Sep 7 - 13 2009
+		    day: 'dddd, MMM d, yyyy'                  // Tuesday, Sep 8, 2009
+		};
+	var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+	                  'August', 'September', 'October', 'November', 'December']; 
+	var monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; 
+	var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
+	                'Thursday', 'Friday', 'Saturday'];
+	var dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+	if(currentUser.locale === 'ko'){
+		columnFormat = {
+			    month: 'dddd',    // Mon
+			    week: 'M월d일 ddd', // Mon 9/7
+			    day: 'M월d일 dddd'  // Monday 9/7				
+		};
+		titleFormat = {
+			    month: 'yyyy년 MMMM',                             // September 2009
+			    week: "yyyy년 MMM d일{ '&#8212;'[yyyy년][MMM] d일}", // Sep 7 - 13 2009
+			    day: 'yyyy년 MMM d일 dddd'                  // Tuesday, Sep 8, 2009
+			};
+		monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+		monthNamesShort = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+		dayNames = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+		dayNamesShort = ['일', '월', '화', '수', '목', '금', '토'];
+	}
+	
+	$('.js_calendar_space').fullCalendar({
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
+		editable: true,
+		buttonText : {
+		    today:   smartMessage.get('todayText'),
+		    month:    smartMessage.get('monthText'),
+		    week:     smartMessage.get('weekText'),
+		    day:      smartMessage.get('dayText')
+		},
+	    events: function(start, end, callback) {
+	    	smartPop.progressCenter();
+	    	var courseId = $('.js_mission_list_page').attr('courseId');
+	        $.ajax({
+	            url: 'get_mission_list.sw',
+	            data: {
+	            	courseId: courseId,
+	            	fromDate: start.format('yyyy.mm.dd'),
+	            	toDate: end.format('yyyy.mm.dd')
+	            },
+	            success: function(data) {
+	                var missions = [];
+	                var missionInstances = data.missions;
+ 	                if(!isEmpty(missionInstances)){
+		                for(var i=0; i<missionInstances.length; i++){
+		                	var mission = missionInstances[i];
+	                		var title = '[미션' + mission.index+1 + ']&' + mission.name;
+
+	                		missions.push({
+			                 	id: mission.id,
+			            		title: title,
+			                	start: new Date(mission.openDate),
+			                 	end: new Date(mission.closeDate),
+			                 	allDay: isEmpty(mission.closeDate),
+			                 	editable: false,
+			                 	backgroundColor: "#ffffff",
+			                 	textColor: "#000000",
+			                 	borderColor: "#cccccc",
+			                  	url: "iwork_space.sw?cid=iw.sp." + mission.id
+			            	});
+		                }
+	                }
+ 					callback(missions);
+ 					smartPop.closeProgress();
+	            },
+	            error: function(){
+	            	smartPop.closeProgress();
+	            }
+	        });
+	    },
+		timeFormat: {
+		    agenda: 'H:mm{ - H:mm}',
+		    '': 'H(:mm)'
+		},
+ 		dayClick: function(date, allDay, jsEvent, view){
+ 			var toDate = null;
+ 			console.log('hours=', date.getHours());
+ 			if(date.getHours()>0) toDate = new Date(date.getTime() + 60*60*1000);
+			loadNewEventFields(date, toDate);
+			$('div.js_new_event_fields .form_value:first input').click();			
+		},
+		
+		eventClick: function(event, jsEvent, view){
+	    	smartPop.progressCenter();
+		},
+		
+	    eventRender: function(event, element) {
+	    	var title = $(element).find('.fc-event-title');
+	    	var titleText = title.html();
+	    	var tokens = titleText.split('&amp;');
+	    	var titleHtml = (tokens.length==3) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] : tokens[0]; 
+	    	title.html(titleHtml);
+	    	var eventTime = $(element).find('.fc-event-time').html();
+	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
+	    },
+		firstDay: 1,
+		weekMode: 'liquid',
+		columnFormat: columnFormat,
+		titleFormat: titleFormat,
+		monthNames : monthNames,
+		monthNamesShort : monthNamesShort,
+		dayNames : dayNames,
+		dayNamesShort : dayNamesShort,
+		allDayText : smartMessage.get('wholeDayText'),
+		axisFormat : 'HH:mm',
+		aspectRatio : 1.8,
+		defaultEventMinutes : 30
+	});	
+});
+</script>
