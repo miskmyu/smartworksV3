@@ -108,9 +108,10 @@
 												<param name="movie"
 													value="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"></param>
 												<param name="allowScriptAccess" value="always"></param>
+												<param name="allowFullScreen" value="true"></param>
 												<embed
 													src="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"
-													type="application/x-shockwave-flash" allowscriptaccess="always"
+													type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
 													class="thum_image"></embed>
 											</object>
 										</div>

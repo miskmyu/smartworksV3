@@ -160,8 +160,9 @@ function videoYTUploader(target) {
         		var videoSize = videoYT.attr('style');
         		var params = '<param name="movie" value="https://www.youtube.com/v/' + responseJSON.videoYTId + '?version=3&autohide=1&showinfo=0"></param>' +
 				 			 '<param name="allowScriptAccess" value="always"></param>' +
+				 			 '<param name="allowFullScreen" value="true"></param>' +
 				 			 '<embed src="https://www.youtube.com/v/' + responseJSON.videoYTId + '?version=3&autohide=1&showinfo=0"' + 
-				 			 	'type="application/x-shockwave-flash" allowscriptaccess="always" ' + videoSize +
+				 			 	'type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" ' + videoSize +
 				 			 '</embed>';
 	        	videoYT.html(params);
         	}

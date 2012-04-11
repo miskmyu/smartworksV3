@@ -82,8 +82,6 @@ public class SeraTest {
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUserInfo3());
-		course.setTargetPoint(18);
-		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 		return new MissionInstanceInfo("mission1", "자화상 그리기", course, SmartTest.getUserInfo1(), new LocalDate());
 	}
@@ -94,8 +92,6 @@ public class SeraTest {
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUserInfo3());
-		course.setTargetPoint(18);
-		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 		return new MissionInstanceInfo("mission2", "장래희망 정리하기", course, SmartTest.getUserInfo1(), new LocalDate());
 	}
@@ -106,8 +102,6 @@ public class SeraTest {
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUserInfo3());
-		course.setTargetPoint(18);
-		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 		return course;
 	}
@@ -118,8 +112,6 @@ public class SeraTest {
 		course.setNumberOfGroupMember(28);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUserInfo3());
-		course.setTargetPoint(9);
-		course.setAchievedPoint(8);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 		return course;
 	}
@@ -135,8 +127,6 @@ public class SeraTest {
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUser3());
 		course.setMissions(SeraTest.getMissionInstanceList(null, null, null));
-		course.setTargetPoint(18);
-		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 		return course;
 	}
@@ -220,8 +210,6 @@ public class SeraTest {
 		course.setNumberOfGroupMember(51);
 		course.setOpenDate(new LocalDate());
 		course.setOwner(SmartTest.getUserInfo3());
-		course.setTargetPoint(18);
-		course.setAchievedPoint(5);
 		course.setDesc("안녕하세요 선린인터넷고등학교 여러분! 세라캠퍼스에 오신걸 환영합니다. ^^* 꿈그리기란, 어렵고 전문적인 것이 아니라 '나'자신을 관찰하고 그것을 밖으로 표현하는 그림입니다.");
 
 		MissionInstanceInfo mission1 = new MissionInstanceInfo("mission1", "자화상 그리기 미션", course, SmartTest.getUserInfo1(), new LocalDate());
