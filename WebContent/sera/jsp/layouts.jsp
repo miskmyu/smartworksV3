@@ -85,7 +85,7 @@ currentUser = {
 
 <link href="css/default.css" type="text/css" rel="stylesheet" />
 <link href="sera/css/pop.css" type="text/css" rel="stylesheet" />
-<link href="css/black/chat.css" type="text/css" rel="stylesheet" />
+<link href="sera/css/chat.css" type="text/css" rel="stylesheet" />
 <link href="sera/css/form.css" type="text/css" rel="stylesheet" />
 <link href="sera/css/page.css" type="text/css" rel="stylesheet" />
 
