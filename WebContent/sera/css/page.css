@@ -65,7 +65,7 @@
 .gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
-.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:1004px; height:91px; margin:0 auto}
+.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:1004px; height:91px; margin:0 auto; position:relative}
 .hd_shadow.bb {background: url("../images/top_bg_im_b.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
@@ -91,6 +91,7 @@
 
 /* Icon in GNB */
 .icon_alarm a {background: url("../images/icon.png") no-repeat scroll -267px -6px; width:28px; height:45px; display:block}
+.icon_alarm.current {background: url("../images/icon.png") no-repeat scroll -676px 0; width:45px; height:39px; float:right}
 .icon_mycourse a {background: url("../images/icon.png") no-repeat scroll -307px -6px; width:40px; height:45px; display:block}
 .icon_friend a {background: url("../images/icon.png") no-repeat scroll -354px -6px; width:34px; height:45px; display:block}
 .icon_notes a {background: url("../images/icon.png") no-repeat scroll -400px -6px; width:39px; height:45px; display:block}
@@ -247,6 +248,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_close a:hover {background-position:-180px -129px}
 .icon_delete a { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
 .icon_delete a:hover {background-position:-219px -117px}
+a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+a .icon_delete:hover {background-position:-219px -117px}
 .icon_mentor {background: url("../images/icon.png") no-repeat scroll -29px -157px; width:16px; height:15px; display:block}
 .icon_mentor.current { background-position:-63px -157px}
 .icon_star {background: url("../images/icon.png") no-repeat scroll -29px -178px; width:16px; height:15px; display:block}
@@ -459,6 +462,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_refe { font-size:11px; color:#999999; line-height:17px}
 .insert_text {color: #B6B6B6; font: bold 16px 'Tahoma'}
 .t_help { font-size:11px; line-height:14px; color:#666666}
+.t_date, .t_s11, .t_date a, .t_s11 a {color: #999897 !important; font-size: 11px;}
 
 /* Width */
 .w_auto { width:auto !important}
