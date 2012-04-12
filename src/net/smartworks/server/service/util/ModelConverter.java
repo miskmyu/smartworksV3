@@ -540,6 +540,8 @@ public class ModelConverter {
 				workInfo.setType(SmartWork.TYPE_PROCESS);
 			else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE))
 				workInfo.setType(SmartWork.TYPE_INFORMATION);
+			else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
 		//}
 		if (task.getParentCtgId() != null) {
 			workInfo.setMyCategory(new WorkCategoryInfo(task.getParentCtgId(), task.getParentCtgName()));
@@ -567,7 +569,9 @@ public class ModelConverter {
 		lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 		lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
 		lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
-		lastTask.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
+		Date createdDate = task.getTskCreateDate();
+		Date lastTskDate = task.getLastTskCreateDate() == null ? createdDate : task.getLastTskCreateDate();
+		lastTask.setLastModifiedDate(new LocalDate(task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskDate.getTime() : lastTskDate.getTime()));
 		lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
 		
 		workInstanceInfo.setLastTask(lastTask);
@@ -575,7 +579,7 @@ public class ModelConverter {
 		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 			workInstanceInfo.setId(task.getPrcObjId());
 		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
-			String singleWorkInfos = task.getTskDef();
+			/*String singleWorkInfos = task.getTskDef();
 			String recordId = null;
 			String domainId = null;
 			if (!CommonUtil.isEmpty(singleWorkInfos)) {
@@ -583,7 +587,33 @@ public class ModelConverter {
 				domainId = singleWorkInfo[0];
 				recordId = singleWorkInfo[1];
 			}
+			workInstanceInfo.setId(recordId);*/
+			String tskDoc = task.getTskDoc();
+			String recordId = null;
+			if(!CommonUtil.isEmpty(tskDoc)) {
+				SwdRecord swdRecord = (SwdRecord)SwdRecord.toObject(tskDoc);
+				recordId = swdRecord.getRecordId();
+			}
 			workInstanceInfo.setId(recordId);
+		} else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+			String processInstId = task.getTskPrcInstId();
+			TskTaskCond tskTaskCond = new TskTaskCond();
+			tskTaskCond.setProcessInstId(processInstId);
+			TskTask[] tskTasks = getTskManager().getTasks(userId, tskTaskCond, IManager.LEVEL_LITE);
+			if(!CommonUtil.isEmpty(tskTasks)) {
+				for(TskTask tskTask : tskTasks) {
+					if(tskTask.getType().equals(TskTask.TASKTYPE_SINGLE)) {
+						String tskDoc = tskTask.getDocument();
+						String recordId = null;
+						if(!CommonUtil.isEmpty(tskDoc)) {
+							SwdRecord swdRecord = (SwdRecord)SwdRecord.toObject(tskDoc);
+							recordId = swdRecord.getRecordId();
+						}
+						workInstanceInfo.setId(recordId);
+					}
+				}
+			}
+			
 		}
 
 		String tskWorkSpaceId = task.getTskPrcInstId();
@@ -849,7 +879,9 @@ public class ModelConverter {
 				instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
 				instInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
-				instInfo.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
+				Date lastTskCreateDate = task.getLastTskCreateDate() == null ? new Date() : task.getLastTskCreateDate();
+				Date lastExecuteDate = task.getLastTskExecuteDate() == null ? new Date() : task.getLastTskExecuteDate();
+				instInfo.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskCreateDate.getTime() : lastExecuteDate.getTime()));
 				instInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
 				
 				TaskInstanceInfo lastTask = new TaskInstanceInfo();
@@ -874,7 +906,7 @@ public class ModelConverter {
 				lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
 				lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
 				lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
-				lastTask.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
+				lastTask.setLastModifiedDate(new LocalDate(task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskCreateDate.getTime() : lastExecuteDate.getTime()));
 				lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
 
 				
@@ -896,9 +928,8 @@ public class ModelConverter {
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 				}
-				
+
 				tskInfo.setType(Instance.TYPE_TASK);
-				
 				tskInfo.setWorkInstance(instInfo);
 				tskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 				tskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
@@ -907,7 +938,7 @@ public class ModelConverter {
 				tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				tskInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
 				tskInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
-				tskInfo.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
+				tskInfo.setLastModifiedDate(new LocalDate(task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskCreateDate.getTime() : lastExecuteDate.getTime()));
 				tskInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
 				
 				resultInfoList.add(tskInfo);
@@ -1003,7 +1034,7 @@ public class ModelConverter {
 						}
 						accessPolicy.setCommunitiesToOpen(communitieInfos);
 					} else {
-						accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+						//accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
 					}
 				} else if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_WRITE)) {
 					if(permission.equals(SwaResource.PERMISSION_ALL)) {
@@ -1294,6 +1325,22 @@ public class ModelConverter {
 			accessValue = prcProcessInstExtend.getPrcAccessValue();
 			ownerId = prcProcessInstExtend.getPrcCreateUser();
 			modifierId = prcProcessInstExtend.getPrcModifyUser();
+		} else if(object.getClass().equals(TaskWork.class)) {
+			TaskWork taskWork = (TaskWork)object;
+			workSpaceId = taskWork.getTskWorkSpaceId() == null ? userId : taskWork.getTskWorkSpaceId();
+			workSpaceType = taskWork.getTskWorkSpaceType() == null ? "4" : taskWork.getTskWorkSpaceType();
+			accessLevel = taskWork.getTskAccessLevel() == null ? "3" : taskWork.getTskAccessLevel();
+			accessValue = taskWork.getTskAccessValue();
+			ownerId = taskWork.getTskAssignee();
+			modifierId = taskWork.getLastTskAssignee();
+		} else if(object.getClass().equals(FileWork.class)) {
+			FileWork fileWork = (FileWork)object;
+			workSpaceId = fileWork.getTskWorkSpaceId() == null ? userId : fileWork.getTskWorkSpaceId();
+			workSpaceType = fileWork.getTskWorkSpaceType() == null ? "4" : fileWork.getTskWorkSpaceType();
+			accessLevel = fileWork.getTskAccessLevel() == null ? "3" : fileWork.getTskAccessLevel();
+			accessValue = fileWork.getTskAccessValue();
+			ownerId = fileWork.getTskAssignee();
+			modifierId = fileWork.getLastTskAssignee();
 		}
 
 		Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
@@ -1371,6 +1418,8 @@ public class ModelConverter {
 							}
 						}
 					}
+				} else {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
 				}
 			}
 		} else if(workSpaceType.equals("6")) { //부서공간
@@ -1425,10 +1474,12 @@ public class ModelConverter {
 							}
 						}
 					}
+				} else {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
 				}
 			}
 		} else if(workSpaceType.equals("2")) { //업무인스턴스공간
-			
+			 //workspaceid가 dr_로 시작하는 정보관리업무는 어떤 업무인지 알수가 없음. 업무정보가 TskTask에 추가된 후에 개발 예정...
 		}
 		if(communityInfoSet.size() > 0) {
 			communitieInfos = new CommunityInfo[communityInfoSet.size()];
@@ -1436,7 +1487,7 @@ public class ModelConverter {
 		}
 
 		accessPolicy.setCommunitiesToOpen(communitieInfos);
-		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId);
+		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId, AccessPolicy.TYPE_INSTANCE);
 
 		return isAccessableForMe;
 	}
@@ -1451,7 +1502,7 @@ public class ModelConverter {
 				String resourceId = getResourceIdByPkgPackage(pkg);
 				if(!CommonUtil.isEmpty(resourceId)) {
 					setPolicyToWork(smartWork, resourceId);
-					boolean isAccessableForMe = smartWork.getAccessPolicy().isAccessableForMe(null, null);
+					boolean isAccessableForMe = smartWork.getAccessPolicy().isAccessableForMe(null, null, AccessPolicy.TYPE_WORK);
 					if(isAccessableForMe)
 						newPkgSet.add(pkg);
 				} else {
@@ -3546,20 +3597,23 @@ public class ModelConverter {
 				FdrFolder[] fdrFolders = getFdrManager().getFolders(userId, fdrFolderCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(fileWorks)) {
 					for(FileWork fileWork : fileWorks) {
-						int length = 1;
-						FileCategoryInfo fileCategoryInfo = new FileCategoryInfo();
-						String folderId = CommonUtil.toNotNull(fileWork.getFolderId()).equals("") ? FileCategory.ID_UNCATEGORIZED : fileWork.getFolderId();
-						String folderName = CommonUtil.toNotNull(fileWork.getFolderName()).equals("") ? SmartMessage.getString("common.title.uncategorized") : fileWork.getFolderName();
-						fileCategoryInfo.setId(folderId);
-						fileCategoryInfo.setName(folderName);
-						if(!CommonUtil.isEmpty(fileCategoryMap)) {
-							for(Map.Entry<String, FileCategoryInfo> entry : fileCategoryMap.entrySet()) {
-								if(entry.getKey().equals(fileCategoryInfo.getId()))
-									length = entry.getValue().getLength() + 1;
+						boolean isAccessableForMe = isAccessableForMe(fileWork);
+						if(isAccessableForMe) {
+							int length = 1;
+							FileCategoryInfo fileCategoryInfo = new FileCategoryInfo();
+							String folderId = CommonUtil.toNotNull(fileWork.getFolderId()).equals("") ? FileCategory.ID_UNCATEGORIZED : fileWork.getFolderId();
+							String folderName = CommonUtil.toNotNull(fileWork.getFolderName()).equals("") ? SmartMessage.getString("common.title.uncategorized") : fileWork.getFolderName();
+							fileCategoryInfo.setId(folderId);
+							fileCategoryInfo.setName(folderName);
+							if(!CommonUtil.isEmpty(fileCategoryMap)) {
+								for(Map.Entry<String, FileCategoryInfo> entry : fileCategoryMap.entrySet()) {
+									if(entry.getKey().equals(fileCategoryInfo.getId()))
+										length = entry.getValue().getLength() + 1;
+								}
 							}
+							fileCategoryInfo.setLength(length);
+							fileCategoryMap.put(folderId, fileCategoryInfo);
 						}
-						fileCategoryInfo.setLength(length);
-						fileCategoryMap.put(folderId, fileCategoryInfo);
 					}
 				}
 				if(!CommonUtil.isEmpty(fdrFolders)) {

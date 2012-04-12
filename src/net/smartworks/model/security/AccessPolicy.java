@@ -25,7 +25,10 @@ public class AccessPolicy {
 	public final static int LEVEL_CUSTOM = 2;
 	public final static int LEVEL_PUBLIC = 3;
 	public final static int LEVEL_DEFAULT = LEVEL_PUBLIC;
-	
+
+	public final static int TYPE_WORK = 4;
+	public final static int TYPE_INSTANCE = 5;
+
 	private int level = LEVEL_DEFAULT;
 	private CommunityInfo[] communitiesToOpen;
 	public int getLevel() {
@@ -49,7 +52,7 @@ public class AccessPolicy {
 		this.level = level;
 	}
 	
-	public boolean isAccessableForMe(String ownerId, String modifierId) {
+	public boolean isAccessableForMe(String ownerId, String modifierId, int type) {
 
 		if(!CommonUtil.isEmpty(ownerId)) {
 			if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
@@ -59,14 +62,17 @@ public class AccessPolicy {
 			if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
 				return true;
 		}
-		if(this.level == AccessPolicy.LEVEL_PUBLIC){
+		if(this.level == AccessPolicy.LEVEL_PUBLIC) {
 			return true;
 		} else if(this.level == AccessPolicy.LEVEL_CUSTOM) {
 			if(SmartUtil.isBlankObject(communitiesToOpen)) return false;
 			DepartmentInfo[] myDepartments = null;
 			GroupInfo[] myGroups = null;
 			try{
-				myDepartments = communityService.getMyChildDepartments();
+				if(type == TYPE_WORK)
+					myDepartments = communityService.getMyDepartments();
+				else if(type == TYPE_INSTANCE)
+					myDepartments = communityService.getMyChildDepartments();
 				myGroups = communityService.getMyGroups();
 			}catch (Exception e){				
 			}

@@ -169,6 +169,8 @@ ALTER TABLE PrcprcInst add prcAccessLevel varchar(50);
 ALTER TABLE PrcprcInst add prcAccessValue varchar(4000);
 
 
+--자료실, 메모 테이블 컬럼명 변경
+
 -- 아래 --
 -- * 사이트 마다 주요 key 값이 다를 수 있기 때문에 조회 후 신중하게 실행
 
@@ -306,6 +308,14 @@ update swform set formid = 'frm_memo_SYSTEM', name = '메모', content = '<form id
 	</graphic>
 </form>'
 where formid = 'frm_9d4df59b25694c8ea13e07e0f0fb2579'
+
+select * from swauthresource where resourceId = 'frm_9d4df59b25694c8ea13e07e0f0fb2579'
+
+update swauthresource set resourceId = 'frm_memo_SYSTEM' where resourceId = 'frm_9d4df59b25694c8ea13e07e0f0fb2579'
+
+select * from swauthresource where resourceId = 'frm_148366628fb24edd976940398ba0d8d0'
+
+update swauthresource set resourceId = 'frm_attachment_SYSTEM' where resourceId = 'frm_148366628fb24edd976940398ba0d8d0'
 
 
 -- 신규 추가
