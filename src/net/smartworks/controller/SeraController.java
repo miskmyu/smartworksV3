@@ -321,8 +321,8 @@ public class SeraController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> getMissionList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String courseId = request.getParameter("courseId");
-		String fromDate = request.getParameter("toDate");
-		String toDate = request.getParameter("fromDate");
+		String fromDate = request.getParameter("fromDate");
+		String toDate = request.getParameter("toDate");
 		MissionInstanceInfo[] missions = smartworks.getMissionInstanceList(courseId, LocalDate.convertLocalDateStringToLocalDate(fromDate), LocalDate.convertLocalDateStringToLocalDate(toDate));
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("courseId", courseId);

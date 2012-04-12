@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
-import net.smartworks.model.community.info.DepartmentInfo;
-import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -46,7 +44,6 @@ import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
-import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -56,6 +53,9 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.authority.model.SwaResource;
+import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
@@ -78,7 +78,6 @@ import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
@@ -119,6 +118,8 @@ import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
+import net.smartworks.server.engine.process.process.model.PrcSwProcess;
+import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -170,8 +171,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	private IWorkListManager getWlmManager() {
 		return SwManagerFactory.getInstance().getWorkListManager();
 	}
-	private static IOpinionManager getOpinionManager() {
+	private IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
+	}
+	private ISwaManager getSwaManager() {
+		return SwManagerFactory.getInstance().getSwaManager();
+		
 	}
 
 	private ICommunityService communityService;
@@ -204,7 +209,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
 	
 			User user = SmartUtil.getCurrentUser();
-	
+			String userId = user.getId();
+
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 	
@@ -212,91 +218,114 @@ public class InstanceServiceImpl implements IInstanceService {
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 	
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
 	
 			if(swfForms == null)
 				return null;
 	
 			swdDomainCond.setFormId(swfForms[0].getId());
 	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
-	
+			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
+
 			if(swdDomain == null)
 				return  null;
 
+			String formId = swdDomain.getFormId();
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
-			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setFormId(formId);
 			swdRecordCond.setDomainId(swdDomain.getObjId());
-	
-			swdRecordCond.setPageNo(0);
-			swdRecordCond.setPageSize(5);
-	
+
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-	
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
-	
+
+			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
+			SwdRecord[] swdRecords = null;
+			if(!CommonUtil.isEmpty(totalSwdRecords)) {
+				for(SwdRecord totalSwdRecord : totalSwdRecords) {
+					totalSwdRecord.setFormId(formId);
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalSwdRecord);
+					if(isAccessForMe) {
+						swdRecordList.add(totalSwdRecord);
+					}
+				}
+			}
+
+			if(swdRecordList.size() > 0) {
+				swdRecords = new SwdRecord[swdRecordList.size()];
+				swdRecordList.toArray(swdRecords);
+			}
+
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-	
+
+			List<BoardInstanceInfo> boardInstanceInfoList = new ArrayList<BoardInstanceInfo>();
 			BoardInstanceInfo[] boardInstanceInfos = null;
 
 			String subCtgId = swdRecordExtends[0].getSubCtgId();
 			String subCtgName = swdRecordExtends[0].getSubCtg();
 			String parentCtgId = swdRecordExtends[0].getParentCtgId();
 			String parentCtgName = swdRecordExtends[0].getParentCtg();
-			String formId = swdDomain.getFormId();
 			String formName = swdDomain.getFormName();
 
 			if(!CommonUtil.isEmpty(swdRecords)) {
-				int swdRecordsLength = swdRecords.length;
-				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
-				for(int i=0; i < swdRecordsLength; i++) {
+				int swdRecordLength = swdRecords.length;
+				if(swdRecordLength > 5)
+					swdRecordLength = 5;
+				for(int i=0; i < swdRecordLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
+					swdRecord.setFormId(formId);
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
-					boardInstanceInfo.setId(swdRecord.getRecordId());
-					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
-					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
-					int type = WorkInstance.TYPE_INFORMATION;
-					boardInstanceInfo.setType(type);
-					boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					String workSpaceId = swdRecord.getWorkSpaceId();
-					if(workSpaceId == null)
-						workSpaceId = user.getId();
-
-					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
-
-					boardInstanceInfo.setWorkSpace(workSpaceInfo);
-
-					WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(subCtgId))
-						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
-
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
-
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
-
-					boardInstanceInfo.setWork(workInfo);
-					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
-					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
-
-					SwdDataField[] swdDataFields = swdRecord.getDataFields();
-					if(!CommonUtil.isEmpty(swdDataFields)) {
-						int swdDataFieldsLength = swdDataFields.length;
-						for(int j=0; j<swdDataFieldsLength; j++) {
-							SwdDataField swdDataField = swdDataFields[j];
-							String value = swdDataField.getValue();
-							if(swdDataField.getId().equals("0")) {
-								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
-							} else if(swdDataField.getId().equals("1")) {
-								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(swdRecord);
+					if(isAccessForMe) {
+						boardInstanceInfo.setId(swdRecord.getRecordId());
+						boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+						boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+						int type = WorkInstance.TYPE_INFORMATION;
+						boardInstanceInfo.setType(type);
+						boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+						String workSpaceId = swdRecord.getWorkSpaceId();
+						if(workSpaceId == null)
+							workSpaceId = user.getId();
+	
+						WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+	
+						boardInstanceInfo.setWorkSpace(workSpaceInfo);
+	
+						WorkCategoryInfo groupInfo = null;
+						if (!CommonUtil.isEmpty(subCtgId))
+							groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+	
+						WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+	
+						WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+	
+						boardInstanceInfo.setWork(workInfo);
+						boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+						boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+	
+						SwdDataField[] swdDataFields = swdRecord.getDataFields();
+						if(!CommonUtil.isEmpty(swdDataFields)) {
+							int swdDataFieldsLength = swdDataFields.length;
+							for(int j=0; j<swdDataFieldsLength; j++) {
+								SwdDataField swdDataField = swdDataFields[j];
+								String value = swdDataField.getValue();
+								if(swdDataField.getId().equals("0")) {
+									boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+								} else if(swdDataField.getId().equals("1")) {
+									boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+								}
 							}
 						}
+						boardInstanceInfoList.add(boardInstanceInfo);
 					}
-					boardInstanceInfos[i] = boardInstanceInfo;
 				}
 			}
+			if(boardInstanceInfoList.size() > 0) {
+				boardInstanceInfos = new BoardInstanceInfo[boardInstanceInfoList.size()];
+				boardInstanceInfoList.toArray(boardInstanceInfos);
+			}
 			return boardInstanceInfos;
-		}catch (Exception e){
+		} catch(Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
@@ -2582,9 +2611,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
-	
+
 			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 
 			swdDomainCond.setFormId(getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId());
@@ -2686,15 +2714,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!CommonUtil.isEmpty(searchKey))
 				swdRecordCond.setSearchKey(searchKey);
 
-			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
-			int viewCount = 0;
-			if(!CommonUtil.isEmpty(totalSwdRecords)) {
-				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalSwdRecord);
-					if(isAccessForMe) {
-						viewCount = viewCount + 1;
-					}
+			String formId = swdDomain.getFormId();
+			String formName = swdDomain.getFormName();
+			String titleFieldId = swdDomain.getTitleFieldId();
+
+			SwaResourceCond swaResourceCond = new SwaResourceCond();
+			swaResourceCond.setResourceId(formId);
+			swaResourceCond.setMode("R");
+			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+			String permission = null;
+			if(swaResource != null) {
+				permission = swaResource.getPermission();
+				if(permission.equals(SwaResource.PERMISSION_NO)) {
+					swdRecordCond.setCreationUser(userId);
 				}
 			}
 
@@ -2714,6 +2746,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			sortingField.setAscending(isAsc);
 
 			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+
+			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
+			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
+			SwdRecord[] finalSwdRecords = null;
+			int viewCount = 0;
+			if(!CommonUtil.isEmpty(totalSwdRecords)) {
+				for(SwdRecord totalSwdRecord : totalSwdRecords) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalSwdRecord);
+					if(isAccessForMe) {
+						viewCount = viewCount + 1;
+						swdRecordList.add(totalSwdRecord);
+					}
+				}
+				if(swdRecordList.size() > 0) {
+					finalSwdRecords = new SwdRecord[swdRecordList.size()];
+					swdRecordList.toArray(finalSwdRecords);
+				}
+			}
 
 			int pageSize = params.getPageSize();
 			if(pageSize == 0) pageSize = 20;
@@ -2758,12 +2809,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
 				currentPage = 1;
 
-			if (currentPage > 0)
+			/*if (currentPage > 0)
 				swdRecordCond.setPageNo(currentPage-1);
 
-			swdRecordCond.setPageSize(pageSize);
+			swdRecordCond.setPageSize(pageSize);*/
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+			int pageNo = currentPage-1;
 
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
@@ -2774,13 +2825,180 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 
-			String formId = swdDomain.getFormId();
-			String formName = swdDomain.getFormName();
-			String titleFieldId = swdDomain.getTitleFieldId();
-
 			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
 			IWInstanceInfo[] iWInstanceInfos = null;
-			if(!CommonUtil.isEmpty(swdRecords)) {
+
+			int startLength = pageNo * pageSize;
+			int endLength = startLength + pageSize;
+
+			if(!CommonUtil.isEmpty(finalSwdRecords) && startLength < finalSwdRecords.length) {
+				if(endLength > finalSwdRecords.length)
+					endLength = finalSwdRecords.length;
+				for(int i=startLength; i<endLength; i++) {
+					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
+					SwdRecord swdRecord = finalSwdRecords[i];
+					String creationUser = swdRecord.getCreationUser();
+					Date creationDate = swdRecord.getCreationDate();
+					String modificationUser = swdRecord.getModificationUser();
+					Date modificationDate = swdRecord.getModificationDate();
+					if(creationUser == null)
+						creationUser = User.USER_ID_NONE_EXISTING;
+					if(creationDate == null)
+						creationDate = new Date();
+					UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
+					LocalDate createdDate = new LocalDate(creationDate.getTime());
+					UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
+					LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
+
+					iWInstanceInfo.setId(swdRecord.getRecordId());
+					iWInstanceInfo.setOwner(owner);
+					iWInstanceInfo.setCreatedDate(createdDate);
+					iWInstanceInfo.setLastModifier(lastModifier);
+					iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
+					int type = WorkInstance.TYPE_INFORMATION;
+					iWInstanceInfo.setType(type);
+					iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					String workSpaceId = swdRecord.getWorkSpaceId();
+					if(CommonUtil.isEmpty(workSpaceId))
+						workSpaceId = userId;
+
+					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+
+					iWInstanceInfo.setWorkSpace(workSpaceInfo);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
+						groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
+		
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
+		
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+	
+					iWInstanceInfo.setWork(workInfo);
+					iWInstanceInfo.setViews(swdRecord.getHits());
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					List<FieldData> fieldDataList = new ArrayList<FieldData>();
+
+					if(!CommonUtil.isEmpty(swdDataFields)) {
+						int swdDataFieldsLength = swdDataFields.length;
+						for(int j=0; j<swdDataFieldsLength; j++) {
+							SwdDataField swdDataField = swdDataFields[j];
+							if(swdDataField.getId().equals(titleFieldId))
+								iWInstanceInfo.setSubject(swdDataField.getValue());
+							if(!CommonUtil.isEmpty(swfFields)) {
+								int swfFieldsLength = swfFields.length;
+								for(int k=0; k<swfFieldsLength; k++) {
+									SwfField swfField = swfFields[k];
+									String formatType = swfField.getFormat().getType();
+									if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
+										if(swdDataField.getId().equals(swfField.getId())) {
+											FieldData fieldData = new FieldData();
+											fieldData.setFieldId(swdDataField.getId());
+											fieldData.setFieldType(formatType);
+											String value = swdDataField.getValue();
+											if(formatType.equals(FormField.TYPE_USER)) {
+												if(value != null) {
+													String[] users = value.split(";");
+													String resultUser = "";
+													if(!CommonUtil.isEmpty(users) && users.length > 0) {
+														if(users.length < 4) {
+															for(int l=0; l<users.length; l++) {
+																resultUser += users[l] + ", ";
+															}
+															resultUser = resultUser.substring(0, resultUser.length()-2);
+														} else if(users.length > 3) {
+															for(int l=0; l<3; l++) {
+																resultUser += users[l] + ", ";
+															}
+															resultUser = resultUser.substring(0, resultUser.length()-2);
+															resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
+														}
+													}
+													value = resultUser;
+												}
+											} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
+												String symbol = swfField.getFormat().getCurrency();
+												fieldData.setSymbol(symbol);
+											} else if(formatType.equals(FormField.TYPE_PERCENT)) {
+												// TO-DO
+											} else if(formatType.equals(FormField.TYPE_DATE)) {
+												LocalDate localDateValue = null;
+												if(value != null) {
+													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+													if(localDateValue != null)
+														value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+												}
+											} else if(formatType.equals(FormField.TYPE_TIME)) {
+												LocalDate localDateValue = null;
+												if(value != null) {
+													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+													if(localDateValue != null)
+														value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+												}
+											} else if(formatType.equals(FormField.TYPE_DATETIME)) {
+												LocalDate localDateValue = null;
+												if(value != null) {
+													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+													if(localDateValue != null)
+														value = localDateValue.toLocalDateTimeSimpleString();
+												}
+											} else if(formatType.equals(FormField.TYPE_FILE)) { 
+												List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
+												List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+												int fileModelListLength = fileModelList.size();
+												for(int l=0; l<fileModelListLength; l++) {
+													Map<String, String> fileMap = new LinkedHashMap<String, String>();
+													IFileModel fileModel = fileModelList.get(l);
+													String fileId = fileModel.getId();
+													String fileName = fileModel.getFileName();
+													String fileType = fileModel.getType();
+													String fileSize = fileModel.getFileSize() + "";
+													fileMap.put("fileId", fileId);
+													fileMap.put("fileName", fileName);
+													fileMap.put("fileType", fileType);
+													fileMap.put("fileSize", fileSize);
+													fileList.add(fileMap);
+												}
+												if(fileList.size() > 0)
+													fieldData.setFiles(fileList);
+											} else if(formatType.equals(FormField.TYPE_TEXT)) {
+												value = StringUtil.subString(value, 0, 30, "...");
+											}
+											fieldData.setValue(value);
+											fieldDataList.add(fieldData);
+										}
+									}
+								}
+							}
+						}
+					}
+					FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
+					fieldDataList.toArray(fieldDatas);
+					iWInstanceInfo.setDisplayDatas(fieldDatas);
+
+					iWInstanceInfoList.add(iWInstanceInfo);
+				}
+				if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
+					iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
+					iWInstanceInfoList.toArray(iWInstanceInfos);
+				}
+				instanceInfoList.setInstanceDatas(iWInstanceInfos);
+			}
+
+			/*SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+
+			//SwdField[] swdFields = getSwdManager().getViewFieldList(workId, swdDomain.getFormId());
+
+			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_ALL);
+			SwfField[] swfFields = swfForms[0].getFields();
+
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+
+			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
+			IWInstanceInfo[] iWInstanceInfos = null;*/
+			/*if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordsLength = swdRecords.length;
 				for(int i = 0; i < swdRecordsLength; i++) {
 					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
@@ -2872,14 +3090,26 @@ public class InstanceServiceImpl implements IInstanceService {
 												} else if(formatType.equals(FormField.TYPE_PERCENT)) {
 													// TO-DO
 												} else if(formatType.equals(FormField.TYPE_DATE)) {
-													if(value != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+													LocalDate localDateValue = null;
+													if(value != null) {
+														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+														if(localDateValue != null)
+															value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+													}
 												} else if(formatType.equals(FormField.TYPE_TIME)) {
-													if(value != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+													LocalDate localDateValue = null;
+													if(value != null) {
+														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+														if(localDateValue != null)
+															value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+													}
 												} else if(formatType.equals(FormField.TYPE_DATETIME)) {
-													if(value != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateTimeSimpleString();
+													LocalDate localDateValue = null;
+													if(value != null) {
+														localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+														if(localDateValue != null)
+															value = localDateValue.toLocalDateTimeSimpleString();
+													}
 												} else if(formatType.equals(FormField.TYPE_FILE)) { 
 													List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
 													List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
@@ -2922,7 +3152,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					iWInstanceInfoList.toArray(iWInstanceInfos);
 				}
 				instanceInfoList.setInstanceDatas(iWInstanceInfos);
-			}
+			}*/
 
 			instanceInfoList.setTotalSize(viewCount);
 			instanceInfoList.setSortedField(sortingField);
@@ -2967,11 +3197,11 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		try{
 			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
 			//TODO workId = category 프로세스 인스턴스정보에는 패키지 컬럼이 없고 다이어 그램 컬럼에 정보가 들어가 있다
 			//임시로 프로세스 다이어그램아이디 필드를 이용하고 프로세스인스턴스가 생성되는 시점(업무 시작, 처리 개발 완료)에 패키지 아이디 컬럼을 추가해 그곳에서 조회하는걸로 변경한다
 			PrcProcessInstCond prcInstCond = new PrcProcessInstCond();
 			prcInstCond.setPackageId(workId);
-
 			String filterId = params.getFilterId();
 
 			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
@@ -2988,31 +3218,34 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}
 
-			//long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
-			PrcProcessInstExtend[] totalPrcInsts = getPrcManager().getProcessInstExtends(user.getId(), prcInstCond);
-			int viewCount = 0;
-			if(!CommonUtil.isEmpty(totalPrcInsts)) {
-				for(PrcProcessInstExtend totalPrcInst : totalPrcInsts) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalPrcInst);
-					if(isAccessForMe) {
-						viewCount = viewCount + 1;
-					}
+			String resourceId = null;
+			PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
+			prcSwProcessCond.setPackageId(workId);
+			PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses("", prcSwProcessCond);
+			if(!CommonUtil.isEmpty(swProcesses)) {
+				PrcSwProcess swProcess = swProcesses[0];
+				resourceId = swProcess.getProcessId();
+			}
+
+			SwaResourceCond swaResourceCond = new SwaResourceCond();
+			swaResourceCond.setResourceId(resourceId);
+			swaResourceCond.setMode("R");
+			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+			String permission = null;
+			if(swaResource != null) {
+				permission = swaResource.getPermission();
+				if(permission.equals(SwaResource.PERMISSION_NO)) {
+					prcInstCond.setCreationUser(userId);
 				}
 			}
 
-			int pageCount = params.getPageSize();
-			int currentPage = params.getCurrentPage()-1;
-			
 			SortingField sf = params.getSortingField();
-			
-			String columnName = "";
-			boolean isAsc;
-	
+
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
 			//한군데에서 관리 하도록 상수로 변경 필요
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId("createdTime");
+				sf.setFieldId(FormField.ID_LAST_MODIFIED_DATE);
 				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
@@ -3034,11 +3267,169 @@ public class InstanceServiceImpl implements IInstanceService {
 			} else {
 				sfColumnNameTemp = "prcCreateDate";
 			}
-	
-			prcInstCond.setPageNo(currentPage);
-			prcInstCond.setPageSize(pageCount);
+
+			//long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
 			prcInstCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
-			PrcProcessInstExtend[] prcInsts = getPrcManager().getProcessInstExtends(user.getId(), prcInstCond);
+			PrcProcessInstExtend[] totalPrcInsts = getPrcManager().getProcessInstExtends(userId, prcInstCond);
+			List<PrcProcessInstExtend> prcProcessInstExtendList = new ArrayList<PrcProcessInstExtend>();
+			PrcProcessInstExtend[] finalPrcInsts = null;
+			int viewCount = 0;
+			if(!CommonUtil.isEmpty(totalPrcInsts)) {
+				for(PrcProcessInstExtend totalPrcInst : totalPrcInsts) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalPrcInst);
+					if(isAccessForMe) {
+						viewCount = viewCount + 1;
+						prcProcessInstExtendList.add(totalPrcInst);
+					}
+				}
+				if(prcProcessInstExtendList.size() > 0) {
+					finalPrcInsts = new PrcProcessInstExtend[prcProcessInstExtendList.size()];
+					prcProcessInstExtendList.toArray(finalPrcInsts);
+				}
+			}
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+/*			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;*/
+
+			int totalPages = viewCount % pageSize;
+			
+			if(totalPages == 0)
+				totalPages = viewCount / pageSize;
+			else
+				totalPages = viewCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
+				currentPage = 1;
+
+			/*if (currentPage > 0)
+				swdRecordCond.setPageNo(currentPage-1);
+
+			swdRecordCond.setPageSize(pageSize);*/
+
+			int pageNo = currentPage-1;
+
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+
+			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
+			PWInstanceInfo[] pWInstanceInfos = null;
+
+			int startLength = pageNo * pageSize;
+			int endLength = startLength + pageSize;
+
+			if(!CommonUtil.isEmpty(finalPrcInsts) && startLength < finalPrcInsts.length) {
+				if(endLength > finalPrcInsts.length)
+					endLength = finalPrcInsts.length;
+				for(int i=startLength; i<endLength; i++) {
+					PWInstanceInfo pwInstInfo = new PWInstanceInfo();
+					PrcProcessInstExtend prcInst = finalPrcInsts[i];
+					pwInstInfo.setId(prcInst.getPrcObjId());
+					pwInstInfo.setOwner(ModelConverter.getUserInfoByUserId(prcInst.getPrcCreateUser()));
+					int status = -1;
+					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						status = Instance.STATUS_RUNNING;
+					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						status = Instance.STATUS_COMPLETED;
+					}
+					pwInstInfo.setStatus(status);
+					pwInstInfo.setSubject(prcInst.getPrcTitle());
+					int type = WorkInstance.TYPE_PROCESS;
+					pwInstInfo.setType(type);
+	
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(prcInst.getSubCtgId()))
+						groupInfo = new WorkCategoryInfo(prcInst.getSubCtgId(), prcInst.getSubCtg());
+						
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(prcInst.getParentCtgId(), prcInst.getParentCtg());
+					
+					WorkInfo workInfo = new SmartWorkInfo(prcInst.getPrcDid(), prcInst.getPrcName(), SmartWork.TYPE_PROCESS, groupInfo, categoryInfo);
+					pwInstInfo.setWork(workInfo);
+		
+					TaskInstanceInfo lastTaskInfo = null;
+					
+					if (!CommonUtil.isEmpty(prcInst.getLastTask_tskObjId())) {
+						lastTaskInfo = new TaskInstanceInfo();
+						
+						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) || prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CREATE)) {
+							pwInstInfo.setLastModifiedDate(new LocalDate(prcInst.getLastTask_tskCreateDate().getTime()));
+						} else {
+							pwInstInfo.setLastModifiedDate(new LocalDate(prcInst.getLastTask_tskExecuteDate().getTime()));//마지막태스크 수행일
+						}
+						pwInstInfo.setLastModifier(ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee()));//마지막태스크 수행자
+						
+						String id = prcInst.getLastTask_tskObjId();
+						String subject = prcInst.getLastTask_tskTitle();
+						int tskType = WorkInstance.TYPE_TASK;
+						String name = prcInst.getLastTask_tskName();
+						String assignee = prcInst.getLastTask_tskAssignee();
+						String performer = prcInst.getLastTask_tskAssignee();
+						
+						int tskStatus = -1;
+						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+							tskStatus = Instance.STATUS_COMPLETED;
+						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+							tskStatus = Instance.STATUS_COMPLETED;
+						}
+						UserInfo owner = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee());
+						UserInfo lastModifier = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee()); 
+						LocalDate lastModifiedDate = new LocalDate((prcInst.getLastTask_tskCreateDate().getTime()));
+						
+						lastTaskInfo.setId(id);
+						lastTaskInfo.setLastModifiedDate(lastModifiedDate);
+						lastTaskInfo.setLastModifier(lastModifier);
+						lastTaskInfo.setOwner(owner);
+						lastTaskInfo.setStatus(tskStatus);
+						lastTaskInfo.setSubject(subject);
+						lastTaskInfo.setType(tskType);
+						lastTaskInfo.setWork(workInfo);
+						lastTaskInfo.setWorkInstance(pwInstInfo);
+						lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						lastTaskInfo.setName(name);
+						lastTaskInfo.setTaskType(tskType);
+						lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
+						lastTaskInfo.setPerformer(ModelConverter.getUserInfoByUserId(performer));
+						//WorkInstanceInfo workInstanceInfo = paretProcessInstObj;
+						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
+					}
+					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
+					pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					pwInstanceInfoList.add(pwInstInfo);
+				}
+			}
+
+			//prcInstCond.setPageNo(currentPage);
+			//prcInstCond.setPageSize(pageCount);
+			//prcInstCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
+/*			PrcProcessInstExtend[] prcInsts = getPrcManager().getProcessInstExtends(userId, prcInstCond);
 
 			if (prcInsts == null)
 				return null;
@@ -3125,27 +3516,18 @@ public class InstanceServiceImpl implements IInstanceService {
 					pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
 					pwInstanceInfoList.add(pwInstInfo);
 				}
-			}
+			}*/
 			if(pwInstanceInfoList.size() > 0) {
 				pWInstanceInfos = new PWInstanceInfo[pwInstanceInfoList.size()];
 				pwInstanceInfoList.toArray(pWInstanceInfos);
 			}
 	//		instanceInfoList.setInstanceDatas(ModelConverter.getPWInstanceInfoArrayByPrcProcessInstArray(prcInsts));
 			instanceInfoList.setInstanceDatas(pWInstanceInfos);
-			instanceInfoList.setPageSize(pageCount);
-			int totalPages = viewCount / pageCount;
-			if (totalPages == 0) {
-				totalPages = 1;
-			} else {
-				int ext = viewCount % pageCount;
-				if (ext != 0)
-					totalPages += 1;
-			}
-
+			instanceInfoList.setPageSize(pageSize);
 			instanceInfoList.setTotalSize(viewCount);
 			instanceInfoList.setSortedField(sf);
 			instanceInfoList.setTotalPages(totalPages);
-			instanceInfoList.setCurrentPage(currentPage+1);
+			instanceInfoList.setCurrentPage(currentPage);
 			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
 			return instanceInfoList;
 		}catch (Exception e){
@@ -3264,7 +3646,18 @@ public class InstanceServiceImpl implements IInstanceService {
 				break;
 			}
 
-			long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
+			FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+			int viewCount = 0;
+			if(!CommonUtil.isEmpty(totalFileWorks)) {
+				for(FileWork totalFileWork : totalFileWorks) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalFileWork);
+					if(isAccessForMe) {
+						viewCount = viewCount + 1;
+					}
+				}
+			}
+
+			//long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -3292,12 +3685,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-			int totalPages = (int)totalCount % pageSize;
+			int totalPages = viewCount % pageSize;
 
 			if(totalPages == 0)
-				totalPages = (int)totalCount / pageSize;
+				totalPages = viewCount / pageSize;
 			else
-				totalPages = (int)totalCount / pageSize + 1;
+				totalPages = viewCount / pageSize + 1;
 
 			int result = 0;
 
@@ -3319,7 +3712,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
 				currentPage = 1;
 
 			if (currentPage > 0)
@@ -3328,11 +3721,26 @@ public class InstanceServiceImpl implements IInstanceService {
 			fileWorkCond.setPageSize(pageSize);
 			//fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 
+			List<FileWork> fileWorkList = new ArrayList<FileWork>();
+			FileWork[] finalFileWorks = null;
+
 			FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+
 			WorkInstanceInfo[] workInstanceInfos = null;
 			if(!CommonUtil.isEmpty(fileWorks)) {
-				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(fileWorks, TskTask.TASKREFTYPE_IMAGE, displayBy);
+				for(FileWork fileWork : fileWorks) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(fileWork);
+					if(isAccessForMe) {
+						fileWorkList.add(fileWork);
+					}
+				}
 			}
+			if(fileWorkList.size() > 0) {
+				finalFileWorks = new FileWork[fileWorkList.size()];
+				fileWorkList.toArray(finalFileWorks);
+			}
+			if(!CommonUtil.isEmpty(finalFileWorks))
+				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_IMAGE, displayBy);
 
 /*			List<WorkInstanceInfo> newWorkInstanceInfoList = new ArrayList<WorkInstanceInfo>();
 			for(WorkInstanceInfo workInstanceInfo : workInstanceInfos) {
@@ -3348,7 +3756,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				workInstanceInfos = null;
 			}*/
 
-			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setTotalSize(viewCount);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
@@ -3456,7 +3864,18 @@ public class InstanceServiceImpl implements IInstanceService {
 				fileWorkCond.addFilters(filters);
 			}*/
 
-			long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
+			FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+			int viewCount = 0;
+			if(!CommonUtil.isEmpty(totalFileWorks)) {
+				for(FileWork totalFileWork : totalFileWorks) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalFileWork);
+					if(isAccessForMe) {
+						viewCount = viewCount + 1;
+					}
+				}
+			}
+
+			//long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -3484,12 +3903,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-			int totalPages = (int)totalCount % pageSize;
+			int totalPages = viewCount % pageSize;
 
 			if(totalPages == 0)
-				totalPages = (int)totalCount / pageSize;
+				totalPages = viewCount / pageSize;
 			else
-				totalPages = (int)totalCount / pageSize + 1;
+				totalPages = viewCount / pageSize + 1;
 
 			int result = 0;
 
@@ -3511,7 +3930,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
 				currentPage = 1;
 
 			if (currentPage > 0)
@@ -3520,13 +3939,28 @@ public class InstanceServiceImpl implements IInstanceService {
 			fileWorkCond.setPageSize(pageSize);
 			//fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 
+			List<FileWork> fileWorkList = new ArrayList<FileWork>();
+			FileWork[] finalFileWorks = null;
+
 			FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+
 			WorkInstanceInfo[] workInstanceInfos = null;
 			if(!CommonUtil.isEmpty(fileWorks)) {
-				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(fileWorks, TskTask.TASKREFTYPE_FILE, 0);
+				for(FileWork fileWork : fileWorks) {
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(fileWork);
+					if(isAccessForMe) {
+						fileWorkList.add(fileWork);
+					}
+				}
 			}
+			if(fileWorkList.size() > 0) {
+				finalFileWorks = new FileWork[fileWorkList.size()];
+				fileWorkList.toArray(finalFileWorks);
+			}
+			if(!CommonUtil.isEmpty(finalFileWorks))
+				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_FILE, 0);
 
-			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setTotalSize(viewCount);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
@@ -3573,51 +4007,55 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<length; i++) {
 					TaskWork task = taskWorks[i];
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
-					eventInstanceInfo.setType(Instance.TYPE_EVENT);
-					SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
-					String id = record.getRecordId();
-					String subject = record.getDataFieldValue("0");
-					String content = record.getDataFieldValue("6");
-					String startDateStr = record.getDataFieldValue("1");
-					LocalDate startLocalDate = null;
-					String endDateStr = record.getDataFieldValue("2");
-					LocalDate endLocalDate = null;
-					SwdDataField relatedUsersField = record.getDataField("5");
-					CommunityInfo[] relatedUsers = null;
-					if (relatedUsersField != null) {
-						String usersRecordId = relatedUsersField.getRefRecordId();
-						String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
-						relatedUsers = new UserInfo[userIdArray.length];
-						for (int j = 0; j<userIdArray.length; j++) {
-							relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
+					boolean isAccessForMe = ModelConverter.isAccessableForMe(task);
+					if(isAccessForMe) {
+						eventInstanceInfo.setType(Instance.TYPE_EVENT);
+						SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
+						String id = record.getRecordId();
+						String subject = record.getDataFieldValue("0");
+						String content = record.getDataFieldValue("6");
+						String startDateStr = record.getDataFieldValue("1");
+						LocalDate startLocalDate = null;
+						String endDateStr = record.getDataFieldValue("2");
+						LocalDate endLocalDate = null;
+						SwdDataField relatedUsersField = record.getDataField("5");
+						CommunityInfo[] relatedUsers = null;
+						if (relatedUsersField != null) {
+							String usersRecordId = relatedUsersField.getRefRecordId();
+							String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
+							relatedUsers = new UserInfo[userIdArray.length];
+							for (int j = 0; j<userIdArray.length; j++) {
+								relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
+							}
 						}
-					}
-					if (!CommonUtil.isEmpty(startDateStr)) {
-						startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
-					}
-					if (!CommonUtil.isEmpty(endDateStr)) {
-						endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
-					}
-					String owner = task.getTskAssignee();
-					LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
-					String modifier = task.getLastTskAssignee();
-					LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
+						if (!CommonUtil.isEmpty(startDateStr)) {
+							startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
+						}
+						if (!CommonUtil.isEmpty(endDateStr)) {
+							endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
+						}
+						String owner = task.getTskAssignee();
+						LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
+						String modifier = task.getLastTskAssignee();
+						LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
 
-					eventInstanceInfo.setId(id);
-					eventInstanceInfo.setSubject(subject);
-					eventInstanceInfo.setContent(content);
-					eventInstanceInfo.setStart(startLocalDate);
-					eventInstanceInfo.setEnd(endLocalDate);
-					eventInstanceInfo.setRelatedUsers(relatedUsers);
-					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
-					eventInstanceInfo.setCreatedDate(createdDate);
-					eventInstanceInfo.setType(Instance.TYPE_EVENT);
-					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					eventInstanceInfo.setWorkSpace(null);
-					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
-					eventInstanceInfo.setLastModifiedDate(modifiedDate);
+						eventInstanceInfo.setId(id);
+						eventInstanceInfo.setSubject(subject);
+						eventInstanceInfo.setContent(content);
+						eventInstanceInfo.setStart(startLocalDate);
+						eventInstanceInfo.setEnd(endLocalDate);
+						eventInstanceInfo.setRelatedUsers(relatedUsers);
+						eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
+						eventInstanceInfo.setCreatedDate(createdDate);
+						eventInstanceInfo.setType(Instance.TYPE_EVENT);
+						eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+						eventInstanceInfo.setWorkSpace(null);
+						eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
+						eventInstanceInfo.setLastModifiedDate(modifiedDate);
+						eventInstanceInfoList.add(eventInstanceInfo);
+					}
 
-					String tskAccessLevel = task.getTskAccessLevel();
+					/*String tskAccessLevel = task.getTskAccessLevel();
 					String tskAccessValue = task.getTskAccessValue();
 
 					if(startLocalDate.getTime() >= fromDate.getTime() && startLocalDate.getTime() <= toDate.getTime()) {
@@ -3645,13 +4083,14 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else {
 							eventInstanceInfoList.add(eventInstanceInfo);
 						}
-					}
-				}
-				if(eventInstanceInfoList.size() > 0) {
-					eventInstanceInfos = new EventInstanceInfo[eventInstanceInfoList.size()];
-					eventInstanceInfoList.toArray(eventInstanceInfos);
+					}*/
 				}
 			}
+			if(eventInstanceInfoList.size() > 0) {
+				eventInstanceInfos = new EventInstanceInfo[eventInstanceInfoList.size()];
+				eventInstanceInfoList.toArray(eventInstanceInfos);
+			}
+
 			return eventInstanceInfos;
 		} catch (Exception e) {
 			e.printStackTrace();

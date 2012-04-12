@@ -21,11 +21,12 @@ public class TaskWorkCond extends Cond {
 	private String tskTitle;    
 	private String tskType; 
 	private String tskRefType;
-	private String tskStatus;   
+	private String tskStatus;
 	private String tskAssignee; 
 	private String tskAssigneeIdIns;
 	private String tskAssigneeOrSpaceId;
 	private Date taskLastModifyDate;
+	private String tskCreateUser;
 	private Date tskCreateDate;
 	private Date tskExecuteDate;
 	private Date tskExecuteDateFrom;
@@ -124,6 +125,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTaskLastModifyDate(Date taskLastModifyDate) {
 		this.taskLastModifyDate = taskLastModifyDate;
+	}
+	public String getTskCreateUser() {
+		return tskCreateUser;
+	}
+	public void setTskCreateUser(String tskCreateUser) {
+		this.tskCreateUser = tskCreateUser;
 	}
 	public Date getTskCreateDate() {
 		return tskCreateDate;

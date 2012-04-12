@@ -216,16 +216,3 @@
 	</form>
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
 </div>
-
-<script type="text/javascript">
-$(function() {	
-	$(document).keypress(function (e) {
-	    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-	        $('.js_complete_action').click();
-	        return false;
-	    } else {
-	        return true;
-	    }
-	});
-});
-</script>
