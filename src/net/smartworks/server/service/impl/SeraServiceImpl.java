@@ -922,6 +922,11 @@ public class SeraServiceImpl implements ISeraService {
 		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
 			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
+			Date endDate = new Date();
+			long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
+			endDate.setTime(endDateLong);
+			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
 		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
 		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
