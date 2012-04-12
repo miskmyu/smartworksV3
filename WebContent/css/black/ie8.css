@@ -1,0 +1,4 @@
+/* Login.css */
+.btn_login {margin:13px 0 0 7px !important; padding:0 3px !important; height:21px !important; background:url("../../images/btn_login.gif") no-repeat 0 0; width:51px; height:21px}
+.lo_idp {width:360px !important}
+.lo_idp input[type="text"], .lo_idp input[type="password"] {vertical-align:middle; height:15px !important; width:136px !important}
