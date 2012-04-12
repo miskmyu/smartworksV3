@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
+import net.smartworks.model.community.info.DepartmentInfo;
+import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -44,6 +47,7 @@ import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -56,6 +60,8 @@ import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
+import net.smartworks.server.engine.authority.model.SwaUser;
+import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
@@ -2723,9 +2729,45 @@ public class InstanceServiceImpl implements IInstanceService {
 			swaResourceCond.setMode("R");
 			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
 			String permission = null;
+			AccessPolicy accessPolicy = new AccessPolicy();
+			boolean isAccessableForMe = false;
 			if(swaResource != null) {
+				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
+				CommunityInfo[] communitieInfos = null;
 				permission = swaResource.getPermission();
-				if(permission.equals(SwaResource.PERMISSION_NO)) {
+				if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					SwaUserCond swaUserCond = new SwaUserCond();
+					swaUserCond.setResourceId(formId);
+					swaUserCond.setMode(SwaResource.MODE_READ);
+					SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+					if(!CommonUtil.isEmpty(swaUsers)) {
+						for(SwaUser swaUser : swaUsers) {
+							String authUserId = swaUser.getUserId();
+							String type = swaUser.getType();
+							if(type.equals(SwaUser.TYPE_USER)) {
+								UserInfo userInfo = ModelConverter.getUserInfoByUserId(authUserId);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+							} else if(type.equals(SwaUser.TYPE_DEPT)) {
+								DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(authUserId);
+								if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+							} else {
+								GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(authUserId);
+								if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+						if(communityInfoSet.size() > 0) {
+							communitieInfos = new CommunityInfo[communityInfoSet.size()];
+							communityInfoSet.toArray(communitieInfos);
+						}
+					}
+					accessPolicy.setCommunitiesToOpen(communitieInfos);
+					isAccessableForMe = accessPolicy.isAccessableForMe(null, null, AccessPolicy.TYPE_INSTANCE);
+				}
+				if(permission.equals(SwaResource.PERMISSION_NO) || !isAccessableForMe) {
 					swdRecordCond.setCreationUser(userId);
 				}
 			}
@@ -3232,12 +3274,60 @@ public class InstanceServiceImpl implements IInstanceService {
 			swaResourceCond.setMode("R");
 			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
 			String permission = null;
+			AccessPolicy accessPolicy = new AccessPolicy();
+			boolean isAccessableForMe = false;
+			if(swaResource != null) {
+				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
+				CommunityInfo[] communitieInfos = null;
+				permission = swaResource.getPermission();
+				if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+					SwaUserCond swaUserCond = new SwaUserCond();
+					swaUserCond.setResourceId(resourceId);
+					swaUserCond.setMode(SwaResource.MODE_READ);
+					SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+					if(!CommonUtil.isEmpty(swaUsers)) {
+						for(SwaUser swaUser : swaUsers) {
+							String authUserId = swaUser.getUserId();
+							String type = swaUser.getType();
+							if(type.equals(SwaUser.TYPE_USER)) {
+								UserInfo userInfo = ModelConverter.getUserInfoByUserId(authUserId);
+								if(userInfo != null)
+									communityInfoSet.add(userInfo);
+							} else if(type.equals(SwaUser.TYPE_DEPT)) {
+								DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(authUserId);
+								if(departmentInfo != null)
+									communityInfoSet.add(departmentInfo);
+							} else {
+								GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(authUserId);
+								if(groupInfo != null)
+									communityInfoSet.add(groupInfo);
+							}
+						}
+						if(communityInfoSet.size() > 0) {
+							communitieInfos = new CommunityInfo[communityInfoSet.size()];
+							communityInfoSet.toArray(communitieInfos);
+						}
+					}
+					accessPolicy.setCommunitiesToOpen(communitieInfos);
+					isAccessableForMe = accessPolicy.isAccessableForMe(null, null, AccessPolicy.TYPE_INSTANCE);
+				}
+				if(permission.equals(SwaResource.PERMISSION_NO) || !isAccessableForMe) {
+					prcInstCond.setCreationUser(userId);
+				}
+			}
+
+			/*SwaResourceCond swaResourceCond = new SwaResourceCond();
+			swaResourceCond.setResourceId(resourceId);
+			swaResourceCond.setMode("R");
+			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+			String permission = null;
 			if(swaResource != null) {
 				permission = swaResource.getPermission();
 				if(permission.equals(SwaResource.PERMISSION_NO)) {
 					prcInstCond.setCreationUser(userId);
 				}
-			}
+			}*/
 
 			SortingField sf = params.getSortingField();
 
@@ -4001,11 +4091,26 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskRefType(TskTask.TASKREFTYPE_EVENT);
 			taskWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 
-			TaskWork[] taskWorks = getWlmManager().getTaskWorkList(userId, taskWorkCond);
-			if(!CommonUtil.isEmpty(taskWorks)) {
-				int length = taskWorks.length;
+			TaskWork[] totalWorks = getWlmManager().getTaskWorkList(userId, taskWorkCond);
+
+			List<TaskWork> taskWorkList = new ArrayList<TaskWork>();
+			TaskWork[] resultWorks = null;
+
+			if(!CommonUtil.isEmpty(totalWorks)) {
+				for(TaskWork taskWork : totalWorks) {
+					boolean isAccessableForMe = ModelConverter.isAccessableForMe(taskWork);
+					if(isAccessableForMe)
+						taskWorkList.add(taskWork);
+				}
+				if(taskWorkList.size() > 0) {
+					resultWorks = new TaskWork[taskWorkList.size()];
+					taskWorkList.toArray(resultWorks);
+				}
+			}
+			if(!CommonUtil.isEmpty(resultWorks)) {
+				int length = resultWorks.length;
 				for(int i=0; i<length; i++) {
-					TaskWork task = taskWorks[i];
+					TaskWork task = resultWorks[i];
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
 					boolean isAccessForMe = ModelConverter.isAccessableForMe(task);
 					if(isAccessForMe) {

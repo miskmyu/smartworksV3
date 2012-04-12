@@ -1269,19 +1269,19 @@ public class ModelConverter {
 		return workInfo;
 	}	
 	
-	public static WorkCategoryInfo[] getWorkCategoryInfoArrayByCtgCategoryArray(CtgCategory[] argCtgs, int type) throws Exception {
+	public static WorkCategoryInfo[] getWorkCategoryInfoArrayByCtgCategoryArray(CtgCategory[] argCtgs) throws Exception {
 		if (CommonUtil.isEmpty(argCtgs))
 			return null;
 		
 		WorkCategoryInfo[] workCtgs = new WorkCategoryInfo[argCtgs.length];
 		for (int i =0; i < argCtgs.length; i ++) {
 			CtgCategory ctg = argCtgs[i];
-			WorkCategoryInfo workCtg = (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, type);
+			WorkCategoryInfo workCtg = (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg);
 			workCtgs[i] = workCtg; 
 		}
 		return workCtgs;
 	}
-	public static WorkCategoryInfo getWorkCategoryInfoByCtgCategory(WorkCategoryInfo workCtgInfo, CtgCategory argCtg, int type) throws Exception {
+	public static WorkCategoryInfo getWorkCategoryInfoByCtgCategory(WorkCategoryInfo workCtgInfo, CtgCategory argCtg) throws Exception {
 		if (argCtg == null)
 			return null;
 		if (workCtgInfo == null) 
@@ -1291,7 +1291,7 @@ public class ModelConverter {
 		String ctgId = ctg.getObjId();
 		String ctgName = ctg.getName();
 		WorkCategoryInfo workCtg = new WorkCategoryInfo(ctgId, ctgName);
-		workCtg.setRunning(isExistRunningPackageByCategoryId(ctgId, type));
+		workCtg.setRunning(isExistRunningPackageByCategoryId(ctgId));
 		return workCtg;
 	}
 
@@ -1492,8 +1492,8 @@ public class ModelConverter {
 		return isAccessableForMe;
 	}
 
-	public static PkgPackage[] getMyViewPackages(PkgPackage[] pkgs, int searchType) throws Exception {
-		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
+	public static PkgPackage[] getMyWritablePackages(PkgPackage[] pkgs) throws Exception {
+/*		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
 		PkgPackage[] newPkgs = null;
 		if(!CommonUtil.isEmpty(pkgs)) {
 			for(PkgPackage pkg : pkgs) {
@@ -1514,47 +1514,40 @@ public class ModelConverter {
 			newPkgs = new PkgPackage[newPkgSet.size()];
 			newPkgSet.toArray(newPkgs);
 		}
-		if(searchType == Work.SEARCH_TYPE_START_WORK) {
-			Set<PkgPackage> newPkgSet2 = new LinkedHashSet<PkgPackage>();
-			if(!CommonUtil.isEmpty(newPkgs)) {
-				for(PkgPackage newPkg : newPkgs) {
+		if(searchType == Work.SEARCH_TYPE_START_WORK) {*/
+			Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
+			PkgPackage[] newPkgs = null;
+			if(!CommonUtil.isEmpty(pkgs)) {
+				for(PkgPackage pkg : pkgs) {
 					SmartWork smartWork = new SmartWork();
-					getWorkByPkgPackage(smartWork, newPkg);
-					String resourceId = getResourceIdByPkgPackage(newPkg);
+					getWorkByPkgPackage(smartWork, pkg);
+					String resourceId = getResourceIdByPkgPackage(pkg);
 					if(!CommonUtil.isEmpty(resourceId)) {
 						setPolicyToWork(smartWork, resourceId);
 						boolean isWriteAccessForMe = smartWork.getWritePolicy().isWritableForMe();
 						if(isWriteAccessForMe)
-							newPkgSet2.add(newPkg);
+							newPkgSet.add(pkg);
 					} else {
-						newPkgSet2.add(newPkg);
+						newPkgSet.add(pkg);
 					}
 				}
 			}
-			if(newPkgSet2.size() > 0) {
-				newPkgs = new PkgPackage[newPkgSet2.size()];
-				newPkgSet2.toArray(newPkgs);
+			if(newPkgSet.size() > 0) {
+				newPkgs = new PkgPackage[newPkgSet.size()];
+				newPkgSet.toArray(newPkgs);
 			} else {
 				newPkgs = null;
 			}
-		}
+		//}
 		return newPkgs;
 	}
 
-	private static boolean isExistRunningPackageByCategoryId(String categoryId, int type) throws Exception {
+	private static boolean isExistRunningPackageByCategoryId(String categoryId) throws Exception {
 
 		PkgPackageCond cond = new PkgPackageCond();
 		cond.setCategoryId(categoryId);
 		cond.setStatus(PkgPackage.STATUS_DEPLOYED);
-		long runningPackageCount = 0;
-		if(type == 1) {
-			PkgPackage[] pkgs = getPkgManager().getPackages("", cond, IManager.LEVEL_LITE);
-			PkgPackage[] newPkgs = getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
-			if(!CommonUtil.isEmpty(newPkgs))
-				runningPackageCount = newPkgs.length;
-		} else {
-			runningPackageCount = getPkgManager().getPackageSize("ModelConverter", cond);
-		}
+		long runningPackageCount = getPkgManager().getPackageSize("ModelConverter", cond);
 		if (runningPackageCount > 0)
 			return true;
 
@@ -1566,7 +1559,7 @@ public class ModelConverter {
 			return false;
 		} else {
 			for (int i = 0; i < ctg.length; i++) {
-				if(isExistRunningPackageByCategoryId(ctg[i].getObjId(), type)) {
+				if(isExistRunningPackageByCategoryId(ctg[i].getObjId())) {
 					return true;
 				}
 			}
@@ -1610,11 +1603,11 @@ public class ModelConverter {
 		
 		Map<String, WorkCategoryInfo> resultMap = new HashMap<String, WorkCategoryInfo>();
 		if (parentCtg == null || parentCtg.getObjId().equalsIgnoreCase(CtgCategory.ROOTCTGID)) {
-			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, 2));
+			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg));
 			resultMap.put("group", null);
 		} else {
-			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, parentCtg, 2));
-			resultMap.put("group", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg, 2));
+			resultMap.put("category", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, parentCtg));
+			resultMap.put("group", (WorkCategoryInfo)getWorkCategoryInfoByCtgCategory(null, ctg));
 		}
 		return resultMap;
 	}
