@@ -212,7 +212,7 @@ public class WorkServiceImpl implements IWorkService {
 			if (CommonUtil.isEmpty(categoryId)) {
 				//1 level category
 				ctgCond.setParentId(CtgCategory.ROOTCTGID);
-				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000"};
+				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000", "5e6caf381ed78430011ed887f6f200a7"};
 				ctgCond.setObjIdNotIns(objIdNotIns);
 				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "40288afb1b25f00b011b25f3c7950001"), new Order(CtgCategory.A_NAME, true)});
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);

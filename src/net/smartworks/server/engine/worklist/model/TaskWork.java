@@ -20,6 +20,7 @@ public class TaskWork {
 	private String tskStatus;   
 	private String tskAssignee; 
 	private Date taskLastModifyDate;
+	private String tskCreateUser;
 	private Date tskCreateDate;
 	private Date tskExecuteDate;
 	private String tskName;     
@@ -113,6 +114,12 @@ public class TaskWork {
 	}
 	public void setTaskLastModifyDate(Date taskLastModifyDate) {
 		this.taskLastModifyDate = taskLastModifyDate;
+	}
+	public String getTskCreateUser() {
+		return tskCreateUser;
+	}
+	public void setTskCreateUser(String tskCreateUser) {
+		this.tskCreateUser = tskCreateUser;
 	}
 	public Date getTskCreateDate() {
 		return tskCreateDate;
