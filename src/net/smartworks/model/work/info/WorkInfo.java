@@ -90,9 +90,9 @@ public class WorkInfo extends BaseObject {
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_YTVIDEO:
-			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
+			/*if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return Work.CONTROLLER_FILE_LIST;
-			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
+			else */if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
 				return Work.CONTROLLER_EVENT_LIST;
 			else
 				return Work.CONTROLLER_IWORK_LIST;
@@ -116,9 +116,9 @@ public class WorkInfo extends BaseObject {
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_YTVIDEO:
-			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
+			/*if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return Work.CONTROLLER_FILE_LIST;
-			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
+			else*/ if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
 				return Work.CONTROLLER_EVENT_LIST;
 			else if(getId().equals(SmartWork.ID_MEMO_MANAGEMENT))
 				return Work.CONTROLLER_MEMO_LIST;
@@ -142,9 +142,9 @@ public class WorkInfo extends BaseObject {
 		case SocialWork.TYPE_IMAGE:
 		case SocialWork.TYPE_MEMO:
 		case SocialWork.TYPE_YTVIDEO:
-			if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
+			/*if(getId().equals(SmartWork.ID_FILE_MANAGEMENT))
 				return ISmartWorks.CONTEXT_PREFIX_FILE_LIST + getId();
-			else if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
+			else */if(getId().equals(SmartWork.ID_EVENT_MANAGEMENT))
 				return ISmartWorks.CONTEXT_PREFIX_EVENT_LIST + getId();
 			else if(getId().equals(SmartWork.ID_BOARD_MANAGEMENT))
 				return ISmartWorks.CONTEXT_PREFIX_BOARD_LIST + getId();
