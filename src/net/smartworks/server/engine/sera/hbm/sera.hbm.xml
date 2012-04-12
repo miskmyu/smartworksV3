@@ -38,4 +38,12 @@
 		<property name="lastMissionIndex" type="int"/>
 	</class>
 	
+	<class name="SeraFriend" table="Friends">
+		<id name="objId" type="string" length="100" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="userId" type="string" length="50"/>
+		<property name="friendId" type="string" length="50"/>
+		<property name="friendName" type="string" length="50"/>
+	</class>
 </hibernate-mapping>

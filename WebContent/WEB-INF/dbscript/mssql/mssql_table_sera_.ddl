@@ -197,6 +197,13 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 </form>');
 
 
+CREATE TABLE Friends (
+	objId varchar(50) NOT NULL,
+	userId varchar(50),
+	friendId varchar(50),
+	friendName varchar(50),
+	primary key (objId)
+);
 
 
 
