@@ -50,7 +50,7 @@
 								<dd><input id="j_password" name="j_password" class="pw_blur" type="password"></dd>
 							</dl></li>
 						<li class="login_btn">
-							<input class="btn_login" width="41" type="submit" height="41" title="로그인" src="sera/images/layer_btn_login.png" value="로그인">
+							<input class="btn_login btn_img_login" width="41" type="submit" height="41" title="로그인" src="sera/images/layer_btn_login.png" value="">
 						</li>
 					</ul>
 					<ul class="login_util">

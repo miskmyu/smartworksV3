@@ -49,10 +49,11 @@
 .login_section .login_box .login_frm {float: left; margin-right: 4px; width: 133px}
 .login_section .login_box .login_frm dl dd {clear: both; height: 18px; margin-bottom: 3px; width: 133px;}
 .login_section .login_box .login_btn {float: left; height: 41px; width: 41px}
+.login_section .login_box .btn_img_login {background: url("../images/layer_btn_login.png") no-repeat 0 0; height:41px; width:41px}
 .login_section .login_util {clear: both; height: 17px; margin-top: 6px; width: 133px; color:#666666}
 .login_section .login_util li {font: 11px '돋움','Dotum'}
-.id_blur {background: url("../images/input_email.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 15px; padding: 3px 3px 0; width: 125px !important}
-.pw_blur {background: url("../images/input_pw.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 15px; padding: 3px 3px 0; width: 125px !important}
+.id_blur {background: url("../images/input_email.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
+.pw_blur {background: url("../images/input_pw.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
 .id_focus, .pw_focus {background-color: #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 11px; padding: 4px 5px; width: 125px}
 
 
@@ -202,6 +203,19 @@ a.b_next:hover { background-position:-30px -535px}
 
 button {border: 1px solid #A1A1A1; border-radius: 4px; color: #777777; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 4px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px; height:19px; line-height:12px; background-image: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background-image: -moz-linear-gradient(center top,white,#EBEBEB); background-image: -o-linear-gradient(top,white,#EBEBEB)}
 button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; background-image: none !important}
+
+/* Text Btn */
+.txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal;}
+.txt_btn .po_right {float:right; margin-left:10px;}
+.txt_btn .po_left {float:left; margin-right:10px;}
+.txt_btn .ch_right {float:right; margin-left:4px;}
+
+.txt_btn .current { font-weight:bold;}
+.txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none;}
+.txt_btn a:hover {text-decoration:underline; }
+.txt_btn_height {height:16px; padding: 5px 0; text-align: center}
+.txt_btn_height25{height:25px}
+.txt_btn .image_pos {position: relative; bottom:2px;} /* 우측 메뉴중 이미지가 올때 위치 조정 */
 
 /* Icon */
 .icon_cs_mentorname {background: url("../images/icon.png") no-repeat scroll -166px -393px; padding:0 0 0 40px}
@@ -539,7 +553,15 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .join_content_area textarea {width:98%; padding:5px}
 .join_content_area .form_layout table { background-color:#FFF; border:none}
 
-/* SNB Left */
+/* 검색- 자동 완성어 list, layer_pop list */
+.srch_list {z-index:100; position:absolute; width:447px; margin-top: 1px; -webkit-box-shadow: 0px 2px 10px #505050; -moz-box-shadow: 0px 2px 10px #505050; box-shadow: 0px 2px 10px #505050; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif;}
+.srch_list li, .srch_list_nowid li {position:relative; color:#454545;}
+.srch_list li a, .srch_list_nowid li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545;}
+.srch_list li.sw_hover, .srch_list_nowid li a:hover {display:block; background-color:#ffeed9; color:#454545;}
+.srch_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px;}
+.srch_list_nowid {z-index:100; position:absolute; margin-top: 1px; -webkit-box-shadow: 0px 2px 10px #505050; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif} 
+
+/* SNB Left - 현재사용안함*/
 .snb2 {float: left; height: 600px; padding-left: 25px; width: 160px}
 .snb2 a:link, .snb2 a:visited {color:#666666}
 .snb2 a:hover, .snb2 a:active, .snb2 a:focus {color:#262626}
@@ -549,7 +571,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* SNB Default */
 .snb {float: left; height: auto;overflow: hidden; padding-left: 25px; position: relative; width: 176px;}
 
-/* Calendar */
+/* Calendar - 현재 사용안함 */
 .sp_b_prev {background-position: -294px -118px; cursor: pointer; height: 18px; width: 18px; margin: 2px 7px 0 0}
 .sp_b_prev:hover {background-position: -322px -118px}
 .sp_b_next {background-position: -387px -118px; cursor: pointer; height: 18px; width: 18px; margin: 2px 0 0 7px}
