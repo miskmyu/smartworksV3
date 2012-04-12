@@ -325,6 +325,7 @@ public class SeraController {
 		String toDate = request.getParameter("fromDate");
 		MissionInstanceInfo[] missions = smartworks.getMissionInstanceList(courseId, LocalDate.convertLocalDateStringToLocalDate(fromDate), LocalDate.convertLocalDateStringToLocalDate(toDate));
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("courseId", courseId);
 		map.put("missions", missions);
 		return map;
 	}	

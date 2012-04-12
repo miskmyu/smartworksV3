@@ -77,15 +77,11 @@ $(document).ready(function(){
 	$('.js_calendar_space').fullCalendar({
 		header: {
 			left: 'prev,next today',
-			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
+			center: 'title'
 		},
 		editable: true,
 		buttonText : {
-		    today:   smartMessage.get('todayText'),
-		    month:    smartMessage.get('monthText'),
-		    week:     smartMessage.get('weekText'),
-		    day:      smartMessage.get('dayText')
+		    today:   smartMessage.get('todayText')
 		},
 	    events: function(start, end, callback) {
 	    	smartPop.progressCenter();
@@ -100,10 +96,15 @@ $(document).ready(function(){
 	            success: function(data) {
 	                var missions = [];
 	                var missionInstances = data.missions;
+	                var courseId = data.courseId;
  	                if(!isEmpty(missionInstances)){
 		                for(var i=0; i<missionInstances.length; i++){
 		                	var mission = missionInstances[i];
-	                		var title = '[미션' + mission.index+1 + ']&' + mission.name;
+		                	var today = new Date();
+		                	var openDate = new Date(mission.openDate);
+		                	var iconClass = (openDate>today) ? "icon_reserve" : (mission.isClearedByMe) ? "icon_mission" :  "icon_mission current";
+            	
+	                		var title = iconClass + '&' + '[미션' + (mission.index+1) + '] ' + mission.subject;
 
 	                		missions.push({
 			                 	id: mission.id,
@@ -115,7 +116,7 @@ $(document).ready(function(){
 			                 	backgroundColor: "#ffffff",
 			                 	textColor: "#000000",
 			                 	borderColor: "#cccccc",
-			                  	url: "iwork_space.sw?cid=iw.sp." + mission.id
+			                  	url: "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" +  mission.id
 			            	});
 		                }
 	                }
@@ -147,7 +148,7 @@ $(document).ready(function(){
 	    	var title = $(element).find('.fc-event-title');
 	    	var titleText = title.html();
 	    	var tokens = titleText.split('&amp;');
-	    	var titleHtml = (tokens.length==3) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] : tokens[0]; 
+	    	var titleHtml = (tokens.length==2) ? '<span class="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[1] : token[0]; 
 	    	title.html(titleHtml);
 	    	var eventTime = $(element).find('.fc-event-time').html();
 	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
