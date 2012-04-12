@@ -24,6 +24,8 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
+import net.smartworks.server.engine.sera.model.SeraFriend;
+import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 
 import org.hibernate.Query;
@@ -291,5 +293,109 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String[] objs = new String[list.size()];
 		list.toArray(objs);
 		return objs;
+	}
+	@Override
+	public SeraFriend getFriendById(String userId, String objId) throws SeraException {
+		try {
+			if (CommonUtil.isEmpty(objId)) 
+				return null;
+			SeraFriend seraFriend = (SeraFriend)this.get(SeraFriend.class, objId);
+			return seraFriend;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public SeraFriend setFriend(String userId, SeraFriend friend) throws SeraException {
+		try {
+			if (friend == null)
+				return null;
+			this.set(friend);
+			return friend;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public void removeFriend(String userId, String objId) throws SeraException {
+		try {
+			SeraFriend obj = this.getFriendById(userId, objId);
+			this.getHibernateTemplate().delete(obj);
+			this.getHibernateTemplate().flush();
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	private Query appendQuery(StringBuffer buf, SeraFriendCond cond) throws Exception {
+		String userId = null;
+		String friendNameOrder = null;
+		boolean isFriendNameAsc = true;
+		if (cond != null) {
+			userId = cond.getUserId();
+			friendNameOrder = cond.getFriendNameOrder();
+			isFriendNameAsc = cond.isFriendNameAsc();
+		}
+		buf.append(" from SeraFriend obj");
+		buf.append(" where obj.objId is not null");
+		if (cond != null) {
+			if (userId != null)
+				buf.append(" and obj.userId = :userId");
+			if (friendNameOrder != null) {
+				if (isFriendNameAsc) {
+					buf.append(" and obj.friendName > :friendNameOrder");
+				} else {
+					buf.append(" and obj.friendName < :friendNameOrder");
+				}
+				
+			}
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (userId != null)
+				query.setString("userId", userId);
+		}
+		return query;
+	}
+	
+	
+	@Override
+	public long getFriendSize(String userId, SeraFriendCond friendCond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, friendCond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public SeraFriend[] getFriends(String userId, SeraFriendCond friendCond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, friendCond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SeraFriend[] objs = new SeraFriend[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
 	}
 }

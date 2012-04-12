@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
@@ -67,12 +68,15 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
+import net.smartworks.server.engine.sera.model.SeraFriend;
+import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
@@ -1144,8 +1148,52 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public FriendList getFriendsById(String userId, int maxList) throws Exception{
 		try{
-			FriendList friendList = SeraTest.getFriendsById(userId, maxList);
-			return friendList;
+			FriendList friendListObj = new FriendList();
+			if (CommonUtil.isEmpty(userId)) {
+				friendListObj.setTotalFriends(0);
+				return friendListObj;
+			}
+			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+			
+			SeraFriendCond cond = new SeraFriendCond();
+			cond.setUserId(userId);
+			long totalSize = seraMgr.getFriendSize(userId, cond);
+			cond.setOrders(new Order[]{new Order("friendName" , true)});
+			cond.setPageNo(0);
+			cond.setPageSize(maxList);
+
+			SeraFriend[] friends = seraMgr.getFriends(userId, cond);
+			
+			if (CommonUtil.isEmpty(friends)) {
+				friendListObj.setTotalFriends(0);
+				return friendListObj;
+			}
+			friendListObj.setTotalFriends((int)totalSize);
+			String[] ids = new String[friends.length];
+			for (int i = 0; i < friends.length; i++) {
+				SeraFriend sf = friends[i];
+				ids[i] = sf.getFriendId();
+			}
+			SwoUserExtend[] userExtends = swoMgr.getUsersExtend(userId, ids);
+			List userInfoList = new ArrayList();
+			if(userExtends != null) {
+				for(SwoUserExtend swoUserExtend : userExtends) {
+					UserInfo member = new UserInfo();
+					member.setId(swoUserExtend.getId());
+					member.setName(swoUserExtend.getName());
+					member.setPosition(swoUserExtend.getPosition());
+					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+					member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+					userInfoList.add(member);
+				}
+				UserInfo[] friendsUserInfo = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(friendsUserInfo);
+				friendListObj.setFriends(friendsUserInfo);
+			}
+			//FriendList friendList = SeraTest.getFriendsById(userId, maxList);
+			return friendListObj;
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1157,8 +1205,49 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
 		try{
-			UserInfo[] friends = SeraTest.getFriendsById(userId, lastId, maxList);
-			return friends;
+			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+			
+			SeraFriendCond cond = new SeraFriendCond();
+			cond.setUserId(userId);
+			cond.setOrders(new Order[]{new Order("friendName" , true)});
+			if (CommonUtil.isEmpty(lastId))
+			{
+				SwoUser lastIndexUser = swoMgr.getUser(userId, lastId, IManager.LEVEL_LITE);
+				cond.setFriendNameOrder(lastIndexUser.getName());
+			}
+			cond.setPageNo(0);
+			cond.setPageSize(maxList);
+
+			SeraFriend[] friends = seraMgr.getFriends(userId, cond);
+			
+			if (CommonUtil.isEmpty(friends)) 
+				return null;
+			
+			String[] ids = new String[friends.length];
+			for (int i = 0; i < friends.length; i++) {
+				SeraFriend sf = friends[i];
+				ids[i] = sf.getFriendId();
+			}
+			SwoUserExtend[] userExtends = swoMgr.getUsersExtend(userId, ids);
+			List userInfoList = new ArrayList();
+			UserInfo[] friendsUserInfo = null;
+			if(userExtends != null) {
+				for(SwoUserExtend swoUserExtend : userExtends) {
+					UserInfo member = new UserInfo();
+					member.setId(swoUserExtend.getId());
+					member.setName(swoUserExtend.getName());
+					member.setPosition(swoUserExtend.getPosition());
+					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+					member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+					userInfoList.add(member);
+				}
+				friendsUserInfo = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(friendsUserInfo);
+			}
+			//UserInfo[] friends = SeraTest.getFriendsById(userId, lastId, maxList);
+			return friendsUserInfo;
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

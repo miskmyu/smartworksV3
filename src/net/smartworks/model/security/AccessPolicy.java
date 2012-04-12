@@ -52,42 +52,41 @@ public class AccessPolicy {
 		this.level = level;
 	}
 	
-	public boolean isAccessableForMe(String ownerId, String modifierId, int type) {
+	public boolean isAccessableForMe(String ownerId, String modifierId, int type) throws Exception {
 
-		if(!CommonUtil.isEmpty(ownerId)) {
-			if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
-				return true;
-		}
-		if(!CommonUtil.isEmpty(modifierId)) {
-			if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
-				return true;
-		}
-		if(this.level == AccessPolicy.LEVEL_PUBLIC) {
+		if(type == TYPE_WORK) {
 			return true;
-		} else if(this.level == AccessPolicy.LEVEL_CUSTOM) {
-			if(SmartUtil.isBlankObject(communitiesToOpen)) return false;
-			DepartmentInfo[] myDepartments = null;
-			GroupInfo[] myGroups = null;
-			try{
-				if(type == TYPE_WORK)
-					myDepartments = communityService.getMyDepartments();
-				else if(type == TYPE_INSTANCE)
-					myDepartments = communityService.getMyChildDepartments();
-				myGroups = communityService.getMyGroups();
-			}catch (Exception e){				
-			}
-			for(CommunityInfo community : communitiesToOpen) {
-				if(community.getClass().equals(UserInfo.class) && community.getId().equals(SmartUtil.getCurrentUser().getId())) {
+		} else {
+			if(!CommonUtil.isEmpty(ownerId)) {
+				if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
 					return true;
-				} else if(community.getClass().equals(DepartmentInfo.class) && !SmartUtil.isBlankObject(myDepartments)) {
-					for(DepartmentInfo department : myDepartments)
-						if(department.getId().equals(community.getId())) return true;
-				} else if(community.getClass().equals(GroupInfo.class) && !SmartUtil.isBlankObject(myGroups)) {
-					for(GroupInfo group : myGroups)
-						if(group.getId().equals(community.getId())) return true;
+			}
+			if(!CommonUtil.isEmpty(modifierId)) {
+				if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
+					return true;
+			}
+			if(this.level == AccessPolicy.LEVEL_PUBLIC) {
+				return true;
+			} else if(this.level == AccessPolicy.LEVEL_CUSTOM) {
+				if(SmartUtil.isBlankObject(communitiesToOpen)) return false;
+				DepartmentInfo[] myDepartments = null;
+				GroupInfo[] myGroups = null;
+				myDepartments = communityService.getMyChildDepartments();
+				myGroups = communityService.getMyGroups();
+	
+				for(CommunityInfo community : communitiesToOpen) {
+					if(community.getClass().equals(UserInfo.class) && community.getId().equals(SmartUtil.getCurrentUser().getId())) {
+						return true;
+					} else if(community.getClass().equals(DepartmentInfo.class) && !SmartUtil.isBlankObject(myDepartments)) {
+						for(DepartmentInfo department : myDepartments)
+							if(department.getId().equals(community.getId())) return true;
+					} else if(community.getClass().equals(GroupInfo.class) && !SmartUtil.isBlankObject(myGroups)) {
+						for(GroupInfo group : myGroups)
+							if(group.getId().equals(community.getId())) return true;
+					}
 				}
 			}
+			return false;
 		}
-		return false;
 	}
 }
