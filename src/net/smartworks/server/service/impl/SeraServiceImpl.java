@@ -1205,6 +1205,7 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception {
 		try{
+
 			//코스에 속한 미션들을 가져온다
 			User user = SmartUtil.getCurrentUser();
 			if(user == null)
