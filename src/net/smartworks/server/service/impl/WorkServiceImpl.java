@@ -212,11 +212,11 @@ public class WorkServiceImpl implements IWorkService {
 			if (CommonUtil.isEmpty(categoryId)) {
 				//1 level category
 				ctgCond.setParentId(CtgCategory.ROOTCTGID);
-				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000"};
+				String[] objIdNotIns = {"52fca4b219fef4f50119ffcd871b0000", "5e6caf381ed78430011ed887f6f200a7"};
 				ctgCond.setObjIdNotIns(objIdNotIns);
 				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_OBJID, "40288afb1b25f00b011b25f3c7950001"), new Order(CtgCategory.A_NAME, true)});
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
-				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs, 1);
+				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 				List<WorkInfo> newWorkCtgList = new ArrayList<WorkInfo>();
 				WorkInfo[] newWorkCtgs = null;
 				if(!CommonUtil.isEmpty(workCtgs)) {
@@ -245,7 +245,7 @@ public class WorkServiceImpl implements IWorkService {
 				pkgCond.setOrders(new Order[]{new Order(PkgPackage.A_NAME, true)});
 
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
-				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs, 1);
+				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 
 				List<WorkInfo> newWorkCtgList = new ArrayList<WorkInfo>();
 				WorkInfo[] newWorkCtgs = null;
@@ -264,9 +264,9 @@ public class WorkServiceImpl implements IWorkService {
 
 				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
 
-				PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
+				//PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
 
-				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(newPkgs);
+				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
 	
 				int workCtgsSize = newWorkCtgs == null? 0 : newWorkCtgs.length;
 				int pkgPkgsSize = workPkgs == null? 0 : workPkgs.length;
@@ -315,7 +315,7 @@ public class WorkServiceImpl implements IWorkService {
 //				ctgCond.setObjIdNotIns(objIdNotIns);
 				ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_NAME, true)});
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
-				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs, 2);
+				return (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 			
 			} else {
 				ctgCond.setParentId(categoryId);
@@ -328,7 +328,7 @@ public class WorkServiceImpl implements IWorkService {
 				//pkgCond.setStatus("DEPLOYED");
 	
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
-				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs, 2);
+				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
 				
 				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
@@ -412,10 +412,15 @@ public class WorkServiceImpl implements IWorkService {
 			PkgPackageCond pkgCond = new PkgPackageCond();
 			pkgCond.setCompanyId(user.getCompanyId());
 			pkgCond.setNameLike(key);
-			PkgPackage[] pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_ALL);
+			PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_ALL);
 			if (pkgs == null)
 				return null;
-			PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, searchType);
+			PkgPackage[] newPkgs = null;
+			if(searchType == Work.SEARCH_TYPE_START_WORK) {
+				newPkgs = ModelConverter.getMyWritablePackages(pkgs);
+			} else {
+				newPkgs = pkgs;
+			}
 			SmartWorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(newPkgs);
 
 			return workPkgs;

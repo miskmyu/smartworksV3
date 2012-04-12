@@ -739,6 +739,17 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				size = Double.parseDouble(valueObj.toString());
 			} 
 			return size;
+		} catch (SQLGrammarException e) {
+			if(e.getSQLState().equals("42S22")) {
+				SwdDomain domain = getDomain(user, cond);
+				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
+				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
+				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
+				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
+				this.addTableColumn("", domain.getTableName(), "hits", "int");
+				return getRecordValue(user, field, func, cond);
+			}
+			throw new SwdException(e);
 		} catch (Exception e) {
 			throw new SwdException(e);
 		}
