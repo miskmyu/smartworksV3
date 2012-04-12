@@ -5,6 +5,7 @@ import net.smartworks.model.community.Group;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 
 public class Course extends Group {
@@ -26,8 +27,6 @@ public class Course extends Group {
 	private Team team;
 	private MissionInstanceInfo[] missions;
 	private int lastMissionIndex=-1;
-	private int targetPoint;
-	private int achievedPoint;
 	
 	public int getLastMissionIndex() {
 		return lastMissionIndex;
@@ -42,16 +41,12 @@ public class Course extends Group {
 		this.missions = missions;
 	}
 	public int getTargetPoint() {
-		return targetPoint;
-	}
-	public void setTargetPoint(int targetPoint) {
-		this.targetPoint = targetPoint;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
+		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
 	}
 	public int getAchievedPoint() {
-		return achievedPoint;
-	}
-	public void setAchievedPoint(int achievedPoint) {
-		this.achievedPoint = achievedPoint;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
+		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
 	}
 	public String getObject() {
 		return object;

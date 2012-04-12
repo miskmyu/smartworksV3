@@ -43,8 +43,9 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var videoSize = 'style="min-height:0px;width:' + ((videoWidth) ? videoWidth : 300) + 'px; height: ' + ((videoHeight && !isEmpty(value)) ? videoHeight : 0) + 'px"';
 	var params = (isBlank(value)) ? '' : '<param name="movie" value="https://www.youtube.com/v/' + value + '?version=3&autohide=1&showinfo=0"></param>' +
 										 '<param name="allowScriptAccess" value="always"></param>' +
+										 '<param name="allowFullScreen" value="true"></param>' +
 										 '<embed src="https://www.youtube.com/v/' + value + '?version=3&autohide=1&showinfo=0"' + 
-										 		'type="application/x-shockwave-flash" allowscriptaccess="always" ' + videoSize + '>' +
+										 		'type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" ' + videoSize + '>' +
 										 '</embed>';
  
 	var $video = $('<div ' + required + ' style="width:' + valueWidth + '%"><object ' + videoSize + '>' + params + '</object></div>');

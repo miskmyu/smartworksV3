@@ -21,15 +21,20 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
+import net.smartworks.server.engine.common.searcher.manager.ISchManager;
 import net.smartworks.server.engine.common.searcher.model.SchUser;
 import net.smartworks.server.engine.common.searcher.model.SchWorkspace;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
+import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
+import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.util.ModelConverter;
@@ -41,6 +46,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
+
+	private ISwoManager getSwoManager() {
+		return SwManagerFactory.getInstance().getSwoManager();
+	}
+	private IDocFileManager getDocManager() {
+		return SwManagerFactory.getInstance().getDocManager();
+	}
+	private ISchManager getSchManager() {
+		return SwManagerFactory.getInstance().getSchManager();
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -55,7 +70,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		try{
 			User user = SmartUtil.getCurrentUser();
 
-			SwoUserExtend userExtend = SwManagerFactory.getInstance().getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+			SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
 			String myDeptId = userExtend.getDepartmentId();
 			List<SwoDepartment> deptList = new ArrayList<SwoDepartment>();
 			getDeptTreeByDeptId(deptList, myDeptId);
@@ -80,7 +95,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	private void getDeptTreeByDeptId(List<SwoDepartment> deptList, String deptId) throws Exception {
 
 		try{
-			SwoDepartment dept = SwManagerFactory.getInstance().getSwoManager().getDepartment("", deptId, IManager.LEVEL_LITE);
+			SwoDepartment dept = getSwoManager().getDepartment("", deptId, IManager.LEVEL_LITE);
 			if (dept == null)
 				return;
 			deptList.add(dept);
@@ -93,7 +108,56 @@ public class CommunityServiceImpl implements ICommunityService {
 			// Exception Handling Required			
 		}
 	}
-	
+
+	@Override
+	public DepartmentInfo[] getMyChildDepartments() throws Exception {
+
+		try{
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			SwoUser swoUser = getSwoManager().getUser("", userId, IManager.LEVEL_LITE);
+			String myDeptId = null;
+			if(!CommonUtil.isEmpty(swoUser))
+				myDeptId = swoUser.getDeptId();
+			else return null;
+			List<SwoDepartment> deptList = new ArrayList<SwoDepartment>();
+			SwoDepartment swoDepartment = getSwoManager().getDepartment("", myDeptId, IManager.LEVEL_LITE);
+			deptList.add(swoDepartment);
+			getChildDeptTreeByDeptId(deptList, myDeptId);
+
+			DepartmentInfo[] departmentInfos = new DepartmentInfo[deptList.size()];
+			for(int i=0; i<deptList.size(); i++) {
+				DepartmentInfo departmentInfo = new DepartmentInfo();
+				SwoDepartment department = deptList.get(i);
+				String departmentId = department.getId();
+				departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(departmentId);
+				departmentInfos[i] = departmentInfo;	
+			}
+			return departmentInfos;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+	}
+	private void getChildDeptTreeByDeptId(List<SwoDepartment> deptList, String deptId) throws Exception {
+		try{
+			SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+			swoDepartmentCond.setParentId(deptId);
+			SwoDepartment[] swoDepartments = getSwoManager().getDepartments("", swoDepartmentCond, IManager.LEVEL_LITE);
+			if (CommonUtil.isEmpty(swoDepartments))
+				return;
+			for(SwoDepartment swoDepartment : swoDepartments) {
+				deptList.add(swoDepartment);
+				getChildDeptTreeByDeptId(deptList, swoDepartment.getId());
+			}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			// Exception Handling Required			
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -135,7 +199,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			swoGroupMembers[0] = swoGroupMember;
 			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
 			swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
-			SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
+			SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 			if(swoGroups != null) {
 				for(SwoGroup swoGroup : swoGroups) {
 					GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
@@ -223,7 +287,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			SwoGroup swoGroup = null;
 
 			if(groupId != null) {
-				swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL);
+				swoGroup = getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL);
 			} else {
 				swoGroup = new SwoGroup();
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
@@ -255,7 +319,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					Map<String, String> fileMap = files.get(i);
 					groupFileId = fileMap.get("fileId");
 					groupFileName = fileMap.get("fileName");
-					imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(groupFileId, groupFileName, swoGroup.getId());
+					imgGroupProfile = getDocManager().insertProfilesFile(groupFileId, groupFileName, swoGroup.getId());
 					swoGroup.setPicture(imgGroupProfile);
 				}
 			}
@@ -267,7 +331,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			swoGroup.setGroupType(selGroupProfileType);
 			swoGroup.setGroupLeader(txtGroupLeader);
 
-			SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+			getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
 
 			groupId = swoGroup.getId();
 
@@ -320,7 +384,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 			User cUser = SmartUtil.getCurrentUser();
 	
-			SchWorkspace[] workSpaceInfos = SwManagerFactory.getInstance().getSchManager().getSchWorkspace(cUser.getCompanyId(), cUser.getId(), key);
+			SchWorkspace[] workSpaceInfos = getSchManager().getSchWorkspace(cUser.getCompanyId(), cUser.getId(), key);
 			
 			if (CommonUtil.isEmpty(workSpaceInfos))
 				return null;
@@ -416,7 +480,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 			User cUser = SmartUtil.getCurrentUser();
 	
-			SchUser[] schUsers = SwManagerFactory.getInstance().getSchManager().getSchCommunityMember(cUser.getCompanyId(), cUser.getId(), communityId, key);
+			SchUser[] schUsers = getSchManager().getSchCommunityMember(cUser.getCompanyId(), cUser.getId(), communityId, key);
 			List<UserInfo> userList = new ArrayList<UserInfo>();
 	
 			if(schUsers != null) {
@@ -462,7 +526,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (CommonUtil.isEmpty(workSpaceId))
 				return SmartUtil.getCurrentUser();
 			
-			String type = SwManagerFactory.getInstance().getSwoManager().getTypeByWorkspaceId(workSpaceId);
+			String type = getSwoManager().getTypeByWorkspaceId(workSpaceId);
 	
 			if(type != null) {
 				if(type.equals("user")) {
@@ -493,7 +557,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (CommonUtil.isEmpty(workSpaceId))
 				return null;
 			
-			String type = SwManagerFactory.getInstance().getSwoManager().getTypeByWorkspaceId(workSpaceId);
+			String type = getSwoManager().getTypeByWorkspaceId(workSpaceId);
 	
 			if(type != null) {
 				if(type.equals("user")) {
@@ -564,7 +628,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 			User cUser = SmartUtil.getCurrentUser();
 	
-			SchUser[] schUsers = SwManagerFactory.getInstance().getSchManager().getSchUser(cUser.getCompanyId(), cUser.getId(), key);
+			SchUser[] schUsers = getSchManager().getSchUser(cUser.getCompanyId(), cUser.getId(), key);
 	
 			if (CommonUtil.isEmpty(schUsers))
 				return null;

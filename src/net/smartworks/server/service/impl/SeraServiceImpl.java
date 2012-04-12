@@ -197,8 +197,6 @@ public class SeraServiceImpl implements ISeraService {
 		course.setFee(courseDetail.getFee());
 		course.setLastMissionIndex(courseDetail.getLastMissionIndex());
 		//course.setTeam("TEAM");
-		course.setTargetPoint(courseDetail.getTargetPoint());
-		course.setAchievedPoint(courseDetail.getAchievedPoint());
 		
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
 		
@@ -228,12 +226,13 @@ public class SeraServiceImpl implements ISeraService {
 		CourseInfo courseInfo = (CourseInfo)group;
 		courseInfo.setOwner(ModelConverter.getUserInfoByUserId(swoGroup.getCreationUser()));
 		courseInfo.setLeader(ModelConverter.getUserInfoByUserId(swoGroup.getGroupLeader()));
-		courseInfo.setOpenDate(new LocalDate(swoGroup.getCreationDate().getTime()));
 		courseInfo.setNumberOfGroupMember(swoGroup.getSwoGroupMembers() == null ? 0 : swoGroup.getSwoGroupMembers().length);
 		
 		if (courseDetail != null) {
-			courseInfo.setTargetPoint(courseDetail.getTargetPoint());
-			courseInfo.setAchievedPoint(courseDetail.getAchievedPoint());
+			if (courseDetail.getStart() != null)
+				courseInfo.setOpenDate(new LocalDate(courseDetail.getStart().getTime()));
+			if (courseDetail.getEnd() != null)
+				courseInfo.setCloseDate(new LocalDate(courseDetail.getEnd().getTime()));
 //			courseInfo.setLastMission(lastMission);
 		}
 		
@@ -922,6 +921,11 @@ public class SeraServiceImpl implements ISeraService {
 		}
 		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
 			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
+			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
+			Date endDate = new Date();
+			long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
+			endDate.setTime(endDateLong);
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
 		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));

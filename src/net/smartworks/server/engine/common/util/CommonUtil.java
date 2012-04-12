@@ -637,6 +637,9 @@ public class CommonUtil {
 	public static int size(NamedNodeMap obj) {
 		return isEmpty(obj)? 0 : obj.getLength();
 	}
+	public static boolean isEmpty(Object obj) {
+		return obj == null;
+	}
 	public static boolean isEmpty(Object[] array) {
 		return array == null || array.length == 0;
 	}

@@ -47,76 +47,106 @@ public class YouTubeServiceImpl implements IYouTubeService {
 	
 	@Override
 	public FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception {
-		return null;
-	}
-
-	@Override
-	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
 		try{
-			String fileName = "";
-			try {
-				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				return;
-			}
-			if (fileName.indexOf(File.separator) > 1)
-				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-			String fileExtension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
-			Long fileSize = Long.parseLong(request.getHeader("Content-Length"));
-			String videoSubject = request.getParameter("videoSubject");
-			String videoContent = request.getParameter("videoContent");
-			String ytUserId = request.getParameter("ytUserId");
-			String ytPassword = request.getParameter("ytPassword");
-				
 			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, YOUTUBE_DEVELOPER_KEY);
 			if(SmartUtil.isBlankObject(ytUserId) || SmartUtil.isBlankObject(ytPassword)){
-				ytUserId = YOUTUBE_YSJUNG_USERID;
-				ytPassword = YOUTUBE_YSJUNG_PASSWORD;
+				ytUserId = YOUTUBE_SMARTWORKS_USERID;
+				ytPassword = YOUTUBE_SMARTWORKS_PASSWORD;
 			}
 			try{
-				service.setUserCredentials("ysjung@maninsoft.co.kr",  "ysjung5775");
+				service.setUserCredentials(ytUserId,  ytPassword);
 		    }catch (AuthenticationException e) {
 		        System.out.println("Invalid login credentials.");
 		        e.printStackTrace();
-		        return;
+		        return null;
 		    }
-			
 			VideoEntry newEntry = new VideoEntry();
 
 			YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
 			mg.setTitle(new MediaTitle());
-			mg.getTitle().setPlainTextContent("비디오 제목");
-//			mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "SmartWorks.net"));
-			mg.setKeywords(new MediaKeywords());
-			mg.getKeywords().addKeyword("SmartWorks");
-			mg.getKeywords().addKeyword("Business");
+			mg.getTitle().setPlainTextContent(metaInfo.getTitle());
+			mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, metaInfo.getCategory()));
+			if(!SmartUtil.isBlankObject(metaInfo.getKeywords())){
+				mg.setKeywords(new MediaKeywords());
+				for(int i=0; i<metaInfo.getKeywords().length; i++)
+					mg.getKeywords().addKeyword(metaInfo.getKeywords()[i]);
+			}
 			mg.setDescription(new MediaDescription());
-			mg.getDescription().setPlainTextContent("비디오 내용입니다.");
-			mg.setPrivate(false);
-//			mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "smartworks"));
-//			mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "maninsoft"));
+			mg.getDescription().setPlainTextContent(metaInfo.getDesc());
+			mg.setPrivate(metaInfo.isPrivate());
+//			mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "mydevtag"));
+//			mg.addCategory(new MediaCategory(YouTubeNamespace.DEVELOPER_TAG_SCHEME, "anotherdevtag"));
 
 //			newEntry.setGeoCoordinates(new GeoRssWhere(37.0,-122.0));
 			// alternatively, one could specify just a descriptive string
-			newEntry.setLocation("Mountain View, CA");
+			// newEntry.setLocation("Mountain View, CA");
 
-			try{
-				smartworks.uploadTempFile(request, response);
-			}catch (Exception e){
-				throw e;
-			}finally{
-				MediaFileSource ms = new MediaFileSource(new File("/Users/ysjung/smartworksV3/apache-tomcat-7.0.22-imageServer/webapps/imageServer/SmartFiles/Semiteq/Temps/temp_1a3fe0b87f834e44a7e913e1dd32df74.mp4"), "video/quicktime");
-				newEntry.setMediaSource(ms);	
-				String uploadUrl = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
-				VideoEntry createdEntry = service.insert(new URL(uploadUrl), newEntry);
-				createdEntry.getId();	
-			}
+			URL uploadUrl = new URL("http://gdata.youtube.com/action/GetUploadToken");
+			FormUploadToken token = service.getFormUploadToken(uploadUrl, newEntry);			
+			return token;
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
+			return null;			
 			// Exception Handling Required			
 		}		
 	}
+
+//	@Override
+//	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//
+//		try{
+//			String videoSubject = request.getParameter("videoSubject");
+//			String videoContent = request.getParameter("videoContent");
+//			String ytUserId = request.getParameter("ytUserId");
+//			String ytPassword = request.getParameter("ytPassword");
+//				
+//			YouTubeService service = new YouTubeService(YOUTUBE_CLIENT_ID, YOUTUBE_DEVELOPER_KEY);
+//			if(SmartUtil.isBlankObject(ytUserId) || SmartUtil.isBlankObject(ytPassword)){
+//				ytUserId = YOUTUBE_SMARTWORKS_USERID;
+//				ytPassword = YOUTUBE_SMARTWORKS_PASSWORD;
+//			}
+//			
+//			try{
+//				service.setUserCredentials(ytUserId,  ytPassword);
+//		    }catch (AuthenticationException e) {
+//		        System.out.println("Invalid login credentials.");
+//		        e.printStackTrace();
+//		        return;
+//		    }
+//			
+//			VideoEntry newEntry = new VideoEntry();
+//
+//			YouTubeMediaGroup mg = newEntry.getOrCreateMediaGroup();
+//			mg.setTitle(new MediaTitle());
+//			mg.getTitle().setPlainTextContent((SmartUtil.isBlankObject(videoSubject)) ? fileName : videoSubject);
+//		    mg.addCategory(new MediaCategory(YouTubeNamespace.CATEGORY_SCHEME, "Tech"));
+//			mg.setKeywords(new MediaKeywords());
+//			mg.getKeywords().addKeyword("SmartWorks");
+//			mg.setDescription(new MediaDescription());
+//			if(!SmartUtil.isBlankObject(videoContent))
+//				mg.getDescription().setPlainTextContent(SmartUtil.isBlankObject(videoContent) ? fileName : videoContent);
+//			mg.setPrivate(true);
+//			//newEntry.setGeoCoordinates(new GeoRssWhere(37.0,-122.0));
+//			// alternatively, one could specify just a descriptive string
+//			//newEntry.setLocation("Mountain View, CA");
+//
+//			try{
+//				smartworks.uploadTempFile(request, response);
+//			}catch (Exception e){
+//				throw e;
+//			}finally{
+//				MediaFileSource ms = new MediaFileSource(new File("/Users/ysjung/smartworksV3/apache-tomcat-7.0.22-imageServer/webapps/imageServer/SmartFiles/Semiteq/Temps/temp_9476d093e7164661a35040abda402e49.AVI"), "video/quicktime");
+//				newEntry.setMediaSource(ms);	
+//				String uploadUrl = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
+//				VideoEntry createdEntry = service.insert(new URL(uploadUrl), newEntry);
+//				createdEntry.getId();	
+//			}
+//		}catch (Exception e){
+//			// Exception Handling Required
+//			e.printStackTrace();
+//			// Exception Handling Required			
+//		}		
+//	}
 }

@@ -5,6 +5,7 @@ import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 
 public class CourseInfo extends GroupInfo{
@@ -14,10 +15,8 @@ public class CourseInfo extends GroupInfo{
 	private UserInfo owner;
 	private UserInfo leader;
 	private LocalDate openDate;
+	private LocalDate closeDate;
 	private int numberOfGroupMember;
-	
-	private int targetPoint;
-	private int achievedPoint;
 	
 	public UserInfo getOwner() {
 		return owner;
@@ -37,6 +36,12 @@ public class CourseInfo extends GroupInfo{
 	public void setOpenDate(LocalDate openDate) {
 		this.openDate = openDate;
 	}
+	public LocalDate getCloseDate() {
+		return closeDate;
+	}
+	public void setCloseDate(LocalDate closeDate) {
+		this.closeDate = closeDate;
+	}
 	public int getNumberOfGroupMember() {
 		return numberOfGroupMember;
 	}
@@ -47,16 +52,12 @@ public class CourseInfo extends GroupInfo{
 		return getDesc();
 	}	
 	public int getTargetPoint() {
-		return targetPoint;
-	}
-	public void setTargetPoint(int targetPoint) {
-		this.targetPoint = targetPoint;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
+		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
 	}
 	public int getAchievedPoint() {
-		return achievedPoint;
-	}
-	public void setAchievedPoint(int achievedPoint) {
-		this.achievedPoint = achievedPoint;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
+		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {

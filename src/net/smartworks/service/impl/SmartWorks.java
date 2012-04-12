@@ -154,6 +154,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public DepartmentInfo[] getMyChildDepartments() throws Exception {
+		return communityService.getMyChildDepartments();
+	}
+
+	@Override
 	public Department getDepartmentById(String departId) throws Exception {
 		return communityService.getDepartmentById(departId);
 	}
@@ -189,8 +194,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SmartWorkInfo[] searchWork(String key) throws Exception {
-		return workService.searchWork(key);
+	public SmartWorkInfo[] searchWork(String key, int searchType) throws Exception {
+		return workService.searchWork(key, searchType);
 	}
 
 	@Override
@@ -633,7 +638,7 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		youTubeService.uploadYTVideo(request, response);
+		docFileService.uploadYTVideo(request, response);
 	}
 
 	@Override
