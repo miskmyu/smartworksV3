@@ -32,10 +32,11 @@ public class SwaUser extends MisObject {
 	public static final String A_TYPE = "type";
 	public static final String A_MODE = "mode";
 	public static final String A_USERID = "userId";
-	
-	public static final String TYPE_DEPT = "DEPT";
+
 	public static final String TYPE_USER = "USER";
-	
+	public static final String TYPE_DEPT = "DEPT";
+	public static final String TYPE_GROUP = "GROUP";
+
 	public static final String MODE_READ = "R";
 	public static final String MODE_WRITE = "W";
 	public static final String MODE_MODIFY = "M";

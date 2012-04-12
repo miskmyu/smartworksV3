@@ -12,6 +12,4 @@ public interface IYouTubeService {
 
 	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
 
-	public abstract void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws Exception;
-
 }

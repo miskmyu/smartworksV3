@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDomain"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDomainCond"%>
 <%@page import="net.smartworks.server.engine.category.model.CtgCategory"%>
@@ -151,6 +152,9 @@
 
 	ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 
+	DepartmentInfo[] departmentInfos = smartworks.getMyChildDepartments();
+
+	System.out.println(departmentInfos);
 	//InformationWork infoWork = (InformationWork)smartworks.getWorkById("Maninsoft", "hsshin@maninsoft.co.kr", "pkg_af2c5abbdc694feab78b2706c31f3bde");
 	//Work work = smartworks.getWorkById("Maninsoft", "hsshin@maninsoft.co.kr", "pkg_af2c5abbdc694feab78b2706c31f3bde");
 
@@ -331,7 +335,7 @@
 
  	User user = SmartUtil.getCurrentUser();
 	String userId = user.getId();
-	PkgPackageCond pkgPackageCond = new PkgPackageCond();
+	/* PkgPackageCond pkgPackageCond = new PkgPackageCond();
 	pkgPackageCond.setStatus("DEPLOYED");
 	pkgPackageCond.setOrders(new Order[]{new Order("categoryId", true)});
 	PkgPackage[] pkgPackages = SwManagerFactory.getInstance().getPkgManager().getPackages(userId, pkgPackageCond, IManager.LEVEL_LITE);
@@ -471,7 +475,7 @@
 				}
 			}
 		}
-	}
+	} */
 
 %>
 <textarea style="width:800px;height:400px;">

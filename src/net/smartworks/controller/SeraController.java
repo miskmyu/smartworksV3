@@ -14,9 +14,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,12 @@ public class SeraController {
 		mnv.addObject("type", type);
 		mnv.setViewName("sera/jsp/login.jsp");
 		return mnv;
+	}
+
+	@RequestMapping("/joinUs")
+	public ModelAndView joinUs(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "sera/jsp/joinus.jsp");
 	}
 
 	@RequestMapping("/myPAGE")
@@ -308,4 +317,15 @@ public class SeraController {
 		return map;
 	}
 
+	@RequestMapping(value = "/get_mission_list", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> getMissionList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String courseId = request.getParameter("courseId");
+		String fromDate = request.getParameter("toDate");
+		String toDate = request.getParameter("fromDate");
+		MissionInstanceInfo[] missions = smartworks.getMissionInstanceList(courseId, LocalDate.convertLocalDateStringToLocalDate(fromDate), LocalDate.convertLocalDateStringToLocalDate(toDate));
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("missions", missions);
+		return map;
+	}	
 }

@@ -31,7 +31,7 @@ public interface IWorkService {
 
 	public SmartWorkInfo[] getMyFavoriteWorks() throws Exception;
 
-	public SmartWorkInfo[] searchWork(String key) throws Exception;
+	public SmartWorkInfo[] searchWork(String key, int searchType) throws Exception;
 
 	public String getWorkIdByFormId(String formId) throws Exception;
 

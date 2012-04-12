@@ -1,16 +1,25 @@
 package net.smartworks.model.security;
 
-import net.smartworks.model.community.Community;
-import net.smartworks.model.community.Department;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.server.service.impl.CommunityServiceImpl;
-import net.smartworks.service.impl.SmartWorks;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class AccessPolicy {
+
+	private static ICommunityService communityService;
+
+	@Autowired(required=true)
+	public void setCommunityService(ICommunityService communityService) {
+		AccessPolicy.communityService = communityService;
+	}
 
 	public final static int LEVEL_PRIVATE = 1;
 	public final static int LEVEL_CUSTOM = 2;
@@ -40,27 +49,34 @@ public class AccessPolicy {
 		this.level = level;
 	}
 	
-	public boolean isAccessableForMe(String ownerId){
-		if(this.level == AccessPolicy.LEVEL_PUBLIC || ownerId.equals(SmartUtil.getCurrentUser().getId())){
+	public boolean isAccessableForMe(String ownerId, String modifierId) {
+
+		if(!CommonUtil.isEmpty(ownerId)) {
+			if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		if(!CommonUtil.isEmpty(modifierId)) {
+			if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		if(this.level == AccessPolicy.LEVEL_PUBLIC){
 			return true;
-		}else if(this.level == AccessPolicy.LEVEL_CUSTOM){
+		} else if(this.level == AccessPolicy.LEVEL_CUSTOM) {
 			if(SmartUtil.isBlankObject(communitiesToOpen)) return false;
-			SmartWorks smartWorks = new SmartWorks();
 			DepartmentInfo[] myDepartments = null;
 			GroupInfo[] myGroups = null;
 			try{
-				myDepartments = smartWorks.getMyDepartments();
-				myGroups = smartWorks.getMyGroups();
+				myDepartments = communityService.getMyChildDepartments();
+				myGroups = communityService.getMyGroups();
 			}catch (Exception e){				
 			}
-			for(CommunityInfo community : communitiesToOpen){
-				if(community.getClass().equals(UserInfo.class) && community.getId().equals(SmartUtil.getCurrentUser().getId())){
+			for(CommunityInfo community : communitiesToOpen) {
+				if(community.getClass().equals(UserInfo.class) && community.getId().equals(SmartUtil.getCurrentUser().getId())) {
 					return true;
-				}
-				else if(community.getClass().equals(DepartmentInfo.class) && !SmartUtil.isBlankObject(myDepartments)){
+				} else if(community.getClass().equals(DepartmentInfo.class) && !SmartUtil.isBlankObject(myDepartments)) {
 					for(DepartmentInfo department : myDepartments)
 						if(department.getId().equals(community.getId())) return true;
-				}else if(community.getClass().equals(GroupInfo.class) && !SmartUtil.isBlankObject(myGroups)){
+				} else if(community.getClass().equals(GroupInfo.class) && !SmartUtil.isBlankObject(myGroups)) {
 					for(GroupInfo group : myGroups)
 						if(group.getId().equals(community.getId())) return true;
 				}
