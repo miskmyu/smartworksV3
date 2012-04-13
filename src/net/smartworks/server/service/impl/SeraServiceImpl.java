@@ -23,6 +23,7 @@ import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -48,7 +49,10 @@ import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
+import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
+import net.smartworks.server.engine.config.manager.ISwcManager;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
@@ -77,6 +81,7 @@ import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
@@ -1256,10 +1261,126 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 		
 	}
+	private BoardInstanceInfo[] getBoardInstancesByCourseId(String courseId, LocalDate fromDate, int maxList) throws Exception {
+		try{
+			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
+			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
+			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
+			
+			String workId = SmartWork.ID_BOARD_MANAGEMENT;
+			User user = SmartUtil.getCurrentUser();
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setCompanyId(user.getCompanyId());
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setCompanyId(user.getCompanyId());
+			swfFormCond.setPackageId(workId);
+			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
 	
+			if(swfForms == null)
+				return null;
+	
+			swdDomainCond.setFormId(swfForms[0].getId());
+	
+			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+	
+			if(swdDomain == null)
+				return  null;
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(user.getCompanyId());
+			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setDomainId(swdDomain.getObjId());
+	
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(maxList);
+			
+			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
+			Filter[] filters = new Filter[2];
+
+			filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, courseId);		
+			filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			
+			swdRecordCond.setFilter(filters);
+			
+			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+	
+			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+	
+			BoardInstanceInfo[] boardInstanceInfos = null;
+
+			String subCtgId = swdRecordExtends[0].getSubCtgId();
+			String subCtgName = swdRecordExtends[0].getSubCtg();
+			String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			String parentCtgName = swdRecordExtends[0].getParentCtg();
+			String formId = swdDomain.getFormId();
+			String formName = swdDomain.getFormName();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				int swdRecordsLength = swdRecords.length;
+				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
+				for(int i=0; i < swdRecordsLength; i++) {
+					SwdRecord swdRecord = swdRecords[i];
+					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
+					boardInstanceInfo.setId(swdRecord.getRecordId());
+					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+					int type = WorkInstance.TYPE_INFORMATION;
+					boardInstanceInfo.setType(type);
+					boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					String workSpaceId = swdRecord.getWorkSpaceId();
+					if(workSpaceId == null)
+						workSpaceId = user.getId();
+
+					WorkSpaceInfo workSpaceInfo = comSvc.getWorkSpaceInfoById(workSpaceId);
+
+					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(subCtgId))
+						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+
+					boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					if(!CommonUtil.isEmpty(swdDataFields)) {
+						int swdDataFieldsLength = swdDataFields.length;
+						for(int j=0; j<swdDataFieldsLength; j++) {
+							SwdDataField swdDataField = swdDataFields[j];
+							String value = swdDataField.getValue();
+							if(swdDataField.getId().equals("0")) {
+								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+							} else if(swdDataField.getId().equals("1")) {
+								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
+							}
+						}
+					}
+					boardInstanceInfos[i] = boardInstanceInfo;
+				}
+			}
+			return boardInstanceInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required
+		}
+	}
 	@Override
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		try{
+			//공지사항(getCommunityRecentBoardInstances) + 이벤트(getEventInstanceInfosByWorkSpaceId)
+			InstanceInfo[] bordInfo = getBoardInstancesByCourseId(courseId, fromDate, maxList);
+			
+			
+			
+			
 			InstanceInfo[] notices = SeraTest.getCourseNotices(courseId, fromDate, maxList);
 			return notices;
 		}catch (Exception e){
