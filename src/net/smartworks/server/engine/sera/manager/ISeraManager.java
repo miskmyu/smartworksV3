@@ -16,19 +16,27 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
+import net.smartworks.server.engine.sera.model.SeraFriend;
+import net.smartworks.server.engine.sera.model.SeraFriendCond;
 
 public interface ISeraManager extends IManager{
 
-	public abstract MentorDetail getMentorDetailById(String userId, String mentorId) throws SeraException;
-	public abstract MentorDetail setMentorDetail(String userId, MentorDetail mentor) throws SeraException;
-	public abstract void removeMentorDetail(String userId, String mentorId) throws SeraException;
+	public MentorDetail getMentorDetailById(String userId, String mentorId) throws SeraException;
+	public MentorDetail setMentorDetail(String userId, MentorDetail mentor) throws SeraException;
+	public void removeMentorDetail(String userId, String mentorId) throws SeraException;
 	public long getMentorDetailSize(String user, MentorDetailCond cond) throws SeraException;
 	public MentorDetail[] getMentorDetails(String user, MentorDetailCond cond) throws SeraException;
 	
-	public abstract CourseDetail getCourseDetailById(String courseId) throws SeraException;
-	public abstract CourseDetail setCourseDetail(CourseDetail courseDetail) throws SeraException;
-	public abstract void removeCourseDetail(String courseId) throws SeraException;
+	public CourseDetail getCourseDetailById(String courseId) throws SeraException;
+	public CourseDetail setCourseDetail(CourseDetail courseDetail) throws SeraException;
+	public void removeCourseDetail(String courseId) throws SeraException;
 	public long getCourseDetailSize(String user, CourseDetailCond cond) throws SeraException;
 	public CourseDetail[] getCourseDetails(String user, CourseDetailCond cond) throws SeraException;
 	public String[] getCourseIdArrayByCondition(int type, String userId, Date fromDate, int pageSize, int pageNo) throws SeraException;
+	
+	public SeraFriend getFriendById(String userId, String objId) throws SeraException;
+	public SeraFriend setFriend(String userId, SeraFriend friend) throws SeraException;
+	public void removeFriend(String userId, String objId) throws SeraException;
+	public long getFriendSize(String userId, SeraFriendCond friendCond) throws SeraException;
+	public SeraFriend[] getFriends(String userId, SeraFriendCond friendCond) throws SeraException;
 }

@@ -170,7 +170,8 @@
 	<!-- Panel2 //-->
 
 	<%
-	if(friendList.getTotalFriends()>friendList.getFriends().length){
+	if (friendList.getFriends() != null) {
+		if(friendList.getTotalFriends()>friendList.getFriends().length){
 	%>
 		<!-- 더보기 -->
 		<div class="more">
@@ -178,7 +179,8 @@
 		</div>
 		<!-- 더보기 //-->
 	<%
-	}
+		}
+	}	
 	%>
 </div>
 <!-- Panel Section //-->
