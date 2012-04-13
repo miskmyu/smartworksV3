@@ -22,6 +22,7 @@ import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
+import net.smartworks.server.engine.worklist.model.SubTaskWorkCond;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 
@@ -433,6 +434,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 
 		return query;
 	}
+
 	public long getTaskWorkListSize(String user, TaskWorkCond cond) throws Exception {
 		try {
 			StringBuffer buf = new StringBuffer();
@@ -725,4 +727,91 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		list.toArray(objs);
 		return objs;
 	}
+
+	
+	public TaskWork[] getSubTaskWorkList(String user, SubTaskWorkCond cond) throws Exception {
+		try {
+			StringBuffer queryBuffer = new StringBuffer();
+			queryBuffer.append(" select taskInfo.*, ");
+			queryBuffer.append(" prcInstInfo.* ");
+			Query query = null;
+			//Query query = this.appendSubTaskWorkQuery(queryBuffer, cond);
+
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			List objList = new ArrayList();
+			for (Iterator itr = list.iterator(); itr.hasNext();) {
+				Object[] fields = (Object[]) itr.next();
+				TaskWork obj = new TaskWork();
+				int j = 0;
+		
+				obj.setTskObjId((String)fields[j++]);    
+				obj.setTskTitle((String)fields[j++]); 
+				Clob varData = (Clob)fields[j++];
+				long length = 0;
+				String tempCountStr = "";
+				if(varData != null) {
+					length = varData.length();
+					tempCountStr = varData.getSubString(1, (int)length);
+				}
+				obj.setTskDoc(tempCountStr);
+				obj.setTskType((String)fields[j++]);
+				obj.setTskRefType((String)fields[j++]);
+				obj.setTskStatus((String)fields[j++]); 
+				obj.setTskAssignee((String)fields[j++]);
+				obj.setTaskLastModifyDate((Timestamp)fields[j++]);
+				obj.setTskCreateDate((Timestamp)fields[j++]);
+				obj.setTskName((String)fields[j++]);
+				obj.setTskPrcInstId((String)fields[j++]);
+				obj.setTskForm((String)fields[j++]);
+				obj.setIsStartActivity((String)fields[j++]);
+				obj.setTskWorkSpaceId((String)fields[j++]);
+				obj.setTskAccessLevel((String)fields[j++]);
+				obj.setTskAccessValue((String)fields[j++]);
+				obj.setTskDef((String)fields[j++]);
+				obj.setPackageId((String)fields[j++]);
+				obj.setPackageName((String)fields[j++]);
+				obj.setPackageStatus((String)fields[j++]);
+				obj.setChildCtgId((String)fields[j++]);
+				obj.setChildCtgName((String)fields[j++]);
+				obj.setParentCtgId((String)fields[j++]);
+				obj.setParentCtgName((String)fields[j++]);
+				obj.setPrcObjId((String)fields[j++]);                      
+				obj.setPrcTitle((String)fields[j++]);
+				obj.setPrcType((String)fields[j++]);
+				obj.setPrcStatus((String)fields[j++]);
+				obj.setPrcCreateUser((String)fields[j++]);
+				obj.setPrcDid((String)fields[j++]);
+				obj.setPrcPrcId((String)fields[j++]);
+				obj.setPrcCreateDate((Timestamp)fields[j++]);
+				obj.setPrcWorkSpaceId((String)fields[j++]);
+				obj.setPrcAccessLevel((String)fields[j++]);
+				obj.setPrcAccessValue((String)fields[j++]);
+				obj.setLastTskObjId((String)fields[j++]);
+				obj.setLastTskName((String)fields[j++]);
+				obj.setLastTskCreateUser((String)fields[j++]);
+				obj.setLastTskCreateDate((Timestamp)fields[j++]);
+				obj.setLastTskStatus((String)fields[j++]);
+				obj.setLastTskType((String)fields[j++]);
+				obj.setLastTskTitle((String)fields[j++]);
+				obj.setLastTskAssignee((String)fields[j++]);
+				obj.setLastTskExecuteDate((Timestamp)fields[j++]);
+				obj.setLastTskDueDate((Timestamp)fields[j++]);
+				obj.setLastTskForm((String)fields[j++]);
+				obj.setLastTskWorkSpaceId((String)fields[j++]);
+				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
+				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
+				objList.add(obj);
+			}
+			list = objList;
+			TaskWork[] objs = new TaskWork[list.size()];
+			list.toArray(objs);
+			return objs;
+				
+		} catch (Exception e) {
+			throw new PrcException(e);
+		}
+	}
+
 }
