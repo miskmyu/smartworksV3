@@ -41,7 +41,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title">
+				<div class="body_titl_area ti_picture title">
 					<div class="title myspace_h"><%=workSpace.getName() %>
 						<span class="bul_space"><fmt:message key="space.title.pictures"/></span>
 					</div>
