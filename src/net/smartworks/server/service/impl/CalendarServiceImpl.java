@@ -324,8 +324,6 @@ public class CalendarServiceImpl implements ICalendarService {
 			swdRecordCond.setFormId(swdDomain.getFormId());
 			swdRecordCond.setDomainId(swdDomain.getObjId());
 	
-			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-	
 			List<Filter> filterList = new ArrayList<Filter>();
 			Filter filter1 = new Filter();
 			Filter filter2 = new Filter();
@@ -349,6 +347,8 @@ public class CalendarServiceImpl implements ICalendarService {
 			filterList.toArray(filters);
 
 			swdRecordCond.setFilter(filters);
+
+			swdRecordCond.setOrders(new Order[]{new Order(tableColName, true)});
 
 			if(workSpaceId != null)
 				swdRecordCond.setWorkSpaceId(workSpaceId);
