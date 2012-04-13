@@ -125,6 +125,7 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.util.ModelConverter;
@@ -175,10 +176,15 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	private ICommunityService communityService;
+	private ICalendarService calendarService;
 
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
 		this.communityService = communityService;
+	}
+	@Autowired
+	public void setCalendarService(ICalendarService calendarService) {
+		this.calendarService = calendarService;
 	}
 
 	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
@@ -223,7 +229,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwdRecord[] swdRecords = null;
 			if(!CommonUtil.isEmpty(totalSwdRecords)) {
 				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					totalSwdRecord.setFormId(formId);
 					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
 					if(isAccessForMe) {
 						swdRecordList.add(totalSwdRecord);
@@ -253,7 +258,6 @@ public class InstanceServiceImpl implements IInstanceService {
 					swdRecordLength = 5;
 				for(int i=0; i < swdRecordLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
-					swdRecord.setFormId(formId);
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
 					boardInstanceInfo.setId(swdRecord.getRecordId());
 					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
@@ -3880,53 +3884,56 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<length; i++) {
 					TaskWork task = resultWorks[i];
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(task);
-					if(isAccessForMe) {
-						eventInstanceInfo.setType(Instance.TYPE_EVENT);
-						SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
-						String id = record.getRecordId();
-						String subject = record.getDataFieldValue("0");
-						String content = record.getDataFieldValue("6");
-						String startDateStr = record.getDataFieldValue("1");
-						LocalDate startLocalDate = null;
-						String endDateStr = record.getDataFieldValue("2");
-						LocalDate endLocalDate = null;
-						SwdDataField relatedUsersField = record.getDataField("5");
-						CommunityInfo[] relatedUsers = null;
-						if (relatedUsersField != null) {
-							String usersRecordId = relatedUsersField.getRefRecordId();
-							String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
-							relatedUsers = new UserInfo[userIdArray.length];
-							for (int j = 0; j<userIdArray.length; j++) {
-								relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
-							}
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
+					String id = record.getRecordId();
+					String subject = record.getDataFieldValue("0");
+					String content = record.getDataFieldValue("6");
+					String startDateStr = record.getDataFieldValue("1");
+					LocalDate startLocalDate = null;
+					String endDateStr = record.getDataFieldValue("2");
+					LocalDate endLocalDate = null;
+					SwdDataField relatedUsersField = record.getDataField("5");
+					CommunityInfo[] relatedUsers = null;
+					if (relatedUsersField != null) {
+						String usersRecordId = relatedUsersField.getRefRecordId();
+						String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
+						relatedUsers = new UserInfo[userIdArray.length];
+						for (int j = 0; j<userIdArray.length; j++) {
+							relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
 						}
-						if (!CommonUtil.isEmpty(startDateStr)) {
-							startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
-						}
-						if (!CommonUtil.isEmpty(endDateStr)) {
-							endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
-						}
-						String owner = task.getTskAssignee();
-						LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
-						String modifier = task.getLastTskAssignee();
-						LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
-
-						eventInstanceInfo.setId(id);
-						eventInstanceInfo.setSubject(subject);
-						eventInstanceInfo.setContent(content);
-						eventInstanceInfo.setStart(startLocalDate);
-						eventInstanceInfo.setEnd(endLocalDate);
-						eventInstanceInfo.setRelatedUsers(relatedUsers);
-						eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
-						eventInstanceInfo.setCreatedDate(createdDate);
-						eventInstanceInfo.setType(Instance.TYPE_EVENT);
-						eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-						eventInstanceInfo.setWorkSpace(null);
-						eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
-						eventInstanceInfo.setLastModifiedDate(modifiedDate);
-						eventInstanceInfoList.add(eventInstanceInfo);
 					}
+					if (!CommonUtil.isEmpty(startDateStr)) {
+						startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
+					}
+					if (!CommonUtil.isEmpty(endDateStr)) {
+						endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
+					}
+					String owner = task.getTskAssignee();
+					LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
+					String modifier = task.getLastTskAssignee();
+					LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
+
+					eventInstanceInfo.setId(id);
+					eventInstanceInfo.setSubject(subject);
+					eventInstanceInfo.setContent(content);
+					eventInstanceInfo.setStart(startLocalDate);
+					eventInstanceInfo.setEnd(endLocalDate);
+					eventInstanceInfo.setRelatedUsers(relatedUsers);
+					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
+					eventInstanceInfo.setCreatedDate(createdDate);
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					eventInstanceInfo.setWorkSpace(null);
+					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
+					eventInstanceInfo.setLastModifiedDate(modifiedDate);
+
+					CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
+					boolean isParticipant = false;
+					if(!CommonUtil.isEmpty(participants))
+						isParticipant =  calendarService.isParticipant(participants);
+					if(isParticipant || owner.equals(userId) || modifier.equals(userId))
+						eventInstanceInfoList.add(eventInstanceInfo);
 
 					/*String tskAccessLevel = task.getTskAccessLevel();
 					String tskAccessValue = task.getTskAccessValue();
