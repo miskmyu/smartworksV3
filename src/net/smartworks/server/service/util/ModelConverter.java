@@ -142,7 +142,6 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.Activity;
 import net.smartworks.server.engine.process.xpdl.xpdl2.PackageType;
 import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
-import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
@@ -199,9 +198,6 @@ public class ModelConverter {
 	}
 	private static IFdrManager getFdrManager() {
 		return SwManagerFactory.getInstance().getFdrManager();
-	}
-	private static IWorkListManager getWlmManager() {
-		return SwManagerFactory.getInstance().getWorkListManager();
 	}
 	private static IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
@@ -1295,7 +1291,57 @@ public class ModelConverter {
 		return workCtg;
 	}
 
-	public static boolean isAccessableForMe(Object object) throws Exception {
+	public static void setAccessPolicyByMember(String accessLevel, AccessPolicy accessPolicy, Set<CommunityInfo> communityInfoSet, String accessValue) throws Exception {
+		if(accessLevel.equals("1")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+		} else if(accessLevel.equals("2")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+			if(!CommonUtil.isEmpty(accessValue)) {
+				String[] accessValues = accessValue.split(";");
+				if(!CommonUtil.isEmpty(accessValues)) {
+					for(String accessUser : accessValues) {
+						UserInfo userInfo = getUserInfoByUserId(accessUser);
+						DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+						GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+						if(userInfo != null)
+							communityInfoSet.add(userInfo);
+						else if(departmentInfo != null)
+							communityInfoSet.add(departmentInfo);
+						else if(groupInfo != null)
+							communityInfoSet.add(groupInfo);
+					}
+				}
+			}
+		} else if(accessLevel.equals("3")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
+		}
+	}
+
+	public static void setAccessPolicyByNoMember(String accessLevel, AccessPolicy accessPolicy, Set<CommunityInfo> communityInfoSet, String accessValue) throws Exception {
+		if(accessLevel.equals("2")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+			if(!CommonUtil.isEmpty(accessValue)) {
+				String[] accessValues = accessValue.split(";");
+				if(!CommonUtil.isEmpty(accessValues)) {
+					for(String accessUser : accessValues) {
+						UserInfo userInfo = getUserInfoByUserId(accessUser);
+						DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+						GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+						if(userInfo != null)
+							communityInfoSet.add(userInfo);
+						else if(departmentInfo != null)
+							communityInfoSet.add(departmentInfo);
+						else if(groupInfo != null)
+							communityInfoSet.add(groupInfo);
+					}
+				}
+			}
+		} else {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+		}
+	}
+
+	public static boolean isAccessableInstance(Object object) throws Exception {
 		if(object == null)
 			return false;
 		boolean isAccessableForMe = false;
@@ -1347,23 +1393,7 @@ public class ModelConverter {
 		CommunityInfo[] communitieInfos = null;
 
 		if(workSpaceType.equals("4")) { //사용자공간
-			if(accessLevel.equals("1")) {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-			} else if(accessLevel.equals("2")) {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-				if(!CommonUtil.isEmpty(accessValue)) {
-					String[] accessValues = accessValue.split(";");
-					if(!CommonUtil.isEmpty(accessValues)) {
-						for(String accessUser : accessValues) {
-							UserInfo userInfo = getUserInfoByUserId(accessUser);
-							if(userInfo != null)
-								communityInfoSet.add(userInfo);
-						}
-					}
-				}
-			} else {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-			}
+			setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 		} else if(workSpaceType.equals("5")) { //그룹공간
 			GroupInfo[] groupInfos = communityService.getMyGroups();
 			boolean isMember = false;
@@ -1376,54 +1406,12 @@ public class ModelConverter {
 				}
 			}
 			if(isMember) {
-				if(accessLevel.equals("1")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				} else if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-				}
+				setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			} else {
-				if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				}
+				setAccessPolicyByNoMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			}
 		} else if(workSpaceType.equals("6")) { //부서공간
-			DepartmentInfo[] departmentInfos = communityService.getMyChildDepartments();
+			DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
 			boolean isMember = false;
 			for(DepartmentInfo departmentInfo : departmentInfos) {
 				if(workSpaceId.equals(departmentInfo.getId())) {
@@ -1432,51 +1420,9 @@ public class ModelConverter {
 				}
 			}
 			if(isMember) {
-				if(accessLevel.equals("1")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				} else if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-				}
+				setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			} else {
-				if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				}
+				setAccessPolicyByNoMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			}
 		} else if(workSpaceType.equals("2")) { //업무인스턴스공간
 			 //workspaceid가 dr_로 시작하는 정보관리업무는 어떤 업무인지 알수가 없음. 업무정보가 TskTask에 추가된 후에 개발 예정...
@@ -1487,23 +1433,132 @@ public class ModelConverter {
 		}
 
 		accessPolicy.setCommunitiesToOpen(communitieInfos);
-		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId, AccessPolicy.TYPE_INSTANCE);
+		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId);
 
 		return isAccessableForMe;
 	}
 
+	public static boolean isAccessibleAllInstance(String resourceId, String userId) throws Exception {
+
+		if(CommonUtil.isEmpty(resourceId))
+			return true;
+
+		SwaResourceCond swaResourceCond = new SwaResourceCond();
+		swaResourceCond.setResourceId(resourceId);
+		swaResourceCond.setMode(SwaResource.MODE_READ);
+		SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+
+		if(!CommonUtil.isEmpty(swaResource)) {
+			String permission = swaResource.getPermission();
+			if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+				SwaUserCond swaUserCond = new SwaUserCond();
+				swaUserCond.setResourceId(resourceId);
+				swaUserCond.setMode(SwaResource.MODE_READ);
+				SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(swaUsers)) {
+					for(SwaUser swaUser : swaUsers) {
+						String authUserId = swaUser.getUserId();
+						String type = swaUser.getType();
+						if(type.equals(SwaUser.TYPE_USER)) {
+							if(authUserId.equals(userId))
+								return true;
+						} else if(type.equals(SwaUser.TYPE_DEPT)) {
+							DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
+							if(!CommonUtil.isEmpty(departmentInfos)) {
+								for(DepartmentInfo departmentInfo : departmentInfos) {
+									String deptId = departmentInfo.getId();
+									if(authUserId.equals(deptId))
+										return true;
+								}
+							}
+						} else if(type.equals(SwaUser.TYPE_GROUP)){
+							GroupInfo[] groupInfos = communityService.getMyGroups();
+							if(!CommonUtil.isEmpty(groupInfos)) {
+								for(GroupInfo groupInfo : groupInfos) {
+									String groupId = groupInfo.getId();
+									if(authUserId.equals(groupId))
+										return true;
+								}
+							}
+						}
+					}
+				}
+			} else if(permission.equals(SwaResource.PERMISSION_NO)) {
+				return false;
+			} else if(permission.equals(SwaResource.PERMISSION_ALL)) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isWritablePackage(String resourceId, String userId) throws Exception {
+
+		if(CommonUtil.isEmpty(resourceId))
+			return true;
+
+		SwaResourceCond swaResourceCond = new SwaResourceCond();
+		swaResourceCond.setResourceId(resourceId);
+		swaResourceCond.setMode(SwaResource.MODE_WRITE);
+		SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+
+		if(!CommonUtil.isEmpty(swaResource)) {
+			String permission = swaResource.getPermission();
+			if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+				SwaUserCond swaUserCond = new SwaUserCond();
+				swaUserCond.setResourceId(resourceId);
+				swaUserCond.setMode(SwaResource.MODE_WRITE);
+				SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(swaUsers)) {
+					for(SwaUser swaUser : swaUsers) {
+						String authUserId = swaUser.getUserId();
+						String type = swaUser.getType();
+						if(type.equals(SwaUser.TYPE_USER)) {
+							if(authUserId.equals(userId))
+								return true;
+						} else if(type.equals(SwaUser.TYPE_DEPT)) {
+							DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
+							if(!CommonUtil.isEmpty(departmentInfos)) {
+								for(DepartmentInfo departmentInfo : departmentInfos) {
+									String deptId = departmentInfo.getId();
+									if(authUserId.equals(deptId))
+										return true;
+								}
+							}
+						} else if(type.equals(SwaUser.TYPE_GROUP)){
+							GroupInfo[] groupInfos = communityService.getMyGroups();
+							if(!CommonUtil.isEmpty(groupInfos)) {
+								for(GroupInfo groupInfo : groupInfos) {
+									String groupId = groupInfo.getId();
+									if(authUserId.equals(groupId))
+										return true;
+								}
+							}
+						}
+					}
+				}
+			} else if(permission.equals(SwaResource.PERMISSION_ALL)) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
 	public static PkgPackage[] getMyWritablePackages(PkgPackage[] pkgs) throws Exception {
-/*		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
 		PkgPackage[] newPkgs = null;
 		if(!CommonUtil.isEmpty(pkgs)) {
 			for(PkgPackage pkg : pkgs) {
-				SmartWork smartWork = new SmartWork();
-				getWorkByPkgPackage(smartWork, pkg);
 				String resourceId = getResourceIdByPkgPackage(pkg);
 				if(!CommonUtil.isEmpty(resourceId)) {
-					setPolicyToWork(smartWork, resourceId);
-					boolean isAccessableForMe = smartWork.getAccessPolicy().isAccessableForMe(null, null, AccessPolicy.TYPE_WORK);
-					if(isAccessableForMe)
+					if(isWritablePackage(resourceId, userId))
 						newPkgSet.add(pkg);
 				} else {
 					newPkgSet.add(pkg);
@@ -1514,31 +1569,6 @@ public class ModelConverter {
 			newPkgs = new PkgPackage[newPkgSet.size()];
 			newPkgSet.toArray(newPkgs);
 		}
-		if(searchType == Work.SEARCH_TYPE_START_WORK) {*/
-			Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
-			PkgPackage[] newPkgs = null;
-			if(!CommonUtil.isEmpty(pkgs)) {
-				for(PkgPackage pkg : pkgs) {
-					SmartWork smartWork = new SmartWork();
-					getWorkByPkgPackage(smartWork, pkg);
-					String resourceId = getResourceIdByPkgPackage(pkg);
-					if(!CommonUtil.isEmpty(resourceId)) {
-						setPolicyToWork(smartWork, resourceId);
-						boolean isWriteAccessForMe = smartWork.getWritePolicy().isWritableForMe();
-						if(isWriteAccessForMe)
-							newPkgSet.add(pkg);
-					} else {
-						newPkgSet.add(pkg);
-					}
-				}
-			}
-			if(newPkgSet.size() > 0) {
-				newPkgs = new PkgPackage[newPkgSet.size()];
-				newPkgSet.toArray(newPkgs);
-			} else {
-				newPkgs = null;
-			}
-		//}
 		return newPkgs;
 	}
 
@@ -3590,7 +3620,7 @@ public class ModelConverter {
 				FdrFolder[] fdrFolders = getFdrManager().getFolders(userId, fdrFolderCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(fileWorks)) {
 					for(FileWork fileWork : fileWorks) {
-						boolean isAccessableForMe = isAccessableForMe(fileWork);
+						boolean isAccessableForMe = isAccessableInstance(fileWork);
 						if(isAccessableForMe) {
 							int length = 1;
 							FileCategoryInfo fileCategoryInfo = new FileCategoryInfo();
