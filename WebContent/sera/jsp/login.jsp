@@ -46,8 +46,8 @@
 					<ul class="login_box">
 						<li class="login_frm">
 							<dl>
-								<dd><input id="j_username" name="j_username" class="id_blur" type="text"></dd>
-								<dd><input id="j_password" name="j_password" class="pw_blur" type="password"></dd>
+								<dd><input id="j_username" name="j_username" class="" type="text"></dd>
+								<dd><input id="j_password" name="j_password" class="" type="password"></dd>
 							</dl></li>
 						<li class="login_btn">
 							<input class="btn_login btn_img_login" width="41" type="submit" height="41" title="로그인" src="sera/images/layer_btn_login.png" value="">
