@@ -100,7 +100,7 @@
 
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title">
+				<div class="body_titl_area ti_file title">
 					<div class="title myspace_h"><%=workSpaceName %>
 						<span class="bul_space"><fmt:message key="space.title.files"/></span>
 					</div>
