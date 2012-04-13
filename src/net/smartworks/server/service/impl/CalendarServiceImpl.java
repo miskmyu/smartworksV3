@@ -439,11 +439,11 @@ public class CalendarServiceImpl implements ICalendarService {
 							eventInstanceInfo.setRelatedUsers(relatedUsers);
 						}
 					}
-					CommunityInfo[] relatedUsers = eventInstanceInfo.getRelatedUsers();
+/*					CommunityInfo[] relatedUsers = eventInstanceInfo.getRelatedUsers();
 					boolean isParticipant = false;
 					if(!CommonUtil.isEmpty(relatedUsers))
 						isParticipant = isParticipant(relatedUsers);
-					if(isParticipant || swdRecord.getCreationUser().equals(userId) || swdRecord.getModificationUser().equals(userId))
+					if(isParticipant || swdRecord.getCreationUser().equals(userId) || swdRecord.getModificationUser().equals(userId))*/
 						eventInstanceInfoList.add(eventInstanceInfo);
 				}
 			}

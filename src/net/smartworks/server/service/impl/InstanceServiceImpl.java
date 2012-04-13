@@ -3928,11 +3928,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
 					eventInstanceInfo.setLastModifiedDate(modifiedDate);
 
-					CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
+					/*CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
 					boolean isParticipant = false;
 					if(!CommonUtil.isEmpty(participants))
 						isParticipant =  calendarService.isParticipant(participants);
-					if(isParticipant || owner.equals(userId) || modifier.equals(userId))
+					if(isParticipant || owner.equals(userId) || modifier.equals(userId))*/
 						eventInstanceInfoList.add(eventInstanceInfo);
 
 					/*String tskAccessLevel = task.getTskAccessLevel();
