@@ -35,15 +35,13 @@
 .sera_guide .sponsor .spon_lst label {border: 1px solid #e5e5e5; height: 42px; margin: 0 4px 4px 0; width: 119px; float:left}
 .sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
 .sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
-.sera_friend {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 299px; padding: 132px 4px 4px; width: 284px;}
-.sera_friend .lst_normal {clear: both; height: 63px; padding: 16px 16px 16px 25px; width: 242px}
-.sera_friend .friend_sum {clear: both; height: 63px; width: 242px;}
-.sera_friend .friend_sum .photo {background: none repeat scroll 0 0 #BCBCBC; float: left; height: 57px; padding: 3px; width: 90px;}
-.sera_friend .friend_sum .info {color: #FFFFFF; float: left; height: 35px; padding: 14px 0 14px 10px; width: 110px}
-.sera_friend .friend_sum .btn_go {float: left; height: 21px; padding-top: 22px; width: 22px;}
-.sera_friend .friend_sum .info a {color: #FFF}
+.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 274px;}
+.sera_news .lst_normal {clear: both; padding: 0 16px 20px 25px; background:url("../images/line_dashed.png") repeat-x 0 100%}
+.sera_news .lst_normal.end {background:none}
+.sera_news .lst_normal dt { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
+.sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
-.sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 875px}
+.sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
 .login_section {background: url("../images/layer_loginbg.png") no-repeat scroll 0 0 transparent; height: 76px; padding: 15px 25px 0 17px; position: absolute; right: 0; top: 33px; width: 178px}
 .login_section .login_box {clear: both; height: 41px; width: 178px;}
 .login_section .login_box .login_frm {float: left; margin-right: 4px; width: 133px}
@@ -52,8 +50,7 @@
 .login_section .login_box .btn_img_login {background: url("../images/layer_btn_login.png") no-repeat 0 0; height:41px; width:41px}
 .login_section .login_util {clear: both; height: 17px; margin-top: 6px; width: 133px; color:#666666}
 .login_section .login_util li {font: 11px 'µ¸¿ò','Dotum'}
-.id_blur {background: url("../images/input_email.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
-.pw_blur {background: url("../images/input_pw.png") no-repeat scroll 5px 5px #ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
+.login_section .login_box .login_frm dl dd input { background:#ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
 .id_focus, .pw_focus {background-color: #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 11px; padding: 4px 5px; width: 125px}
 
 
@@ -294,9 +291,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_as_badge {background: url("../images/icon.png") no-repeat scroll -166px -237px; height:25px; padding-left:30px; width:70%}
 .icon_as_friend {background: url("../images/icon.png") no-repeat scroll -166px -276px; height:25px; padding-left:30px; width:70%}
 .icon_as_srtrend {background: url("../images/icon.png") no-repeat scroll -166px -310px; height:25px; padding-left:30px; width:70%}
+.icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; width:70%}
 
 .icon_as_more a {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right}
 .icon_as_more a:hover { background-position:-166px -357px}
+.icon_mn_more a {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
+.icon_mn_more a:hover { background-position:-221px -724px}
 
 /* Panel Section */
 .panel_section, .course_section, .content_section { overflow:hidden; clear:both}

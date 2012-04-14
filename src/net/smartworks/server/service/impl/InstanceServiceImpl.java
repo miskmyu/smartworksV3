@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
-import net.smartworks.model.community.info.DepartmentInfo;
-import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -47,7 +44,6 @@ import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
-import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -57,11 +53,6 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
-import net.smartworks.server.engine.authority.manager.ISwaManager;
-import net.smartworks.server.engine.authority.model.SwaResource;
-import net.smartworks.server.engine.authority.model.SwaResourceCond;
-import net.smartworks.server.engine.authority.model.SwaUser;
-import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
@@ -180,9 +171,8 @@ public class InstanceServiceImpl implements IInstanceService {
 	private IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
 	}
-	private ISwaManager getSwaManager() {
-		return SwManagerFactory.getInstance().getSwaManager();
-		
+	private IWorkListManager getWorkListManager() {
+		return SwManagerFactory.getInstance().getWorkListManager();
 	}
 
 	private ICommunityService communityService;
@@ -197,21 +187,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		this.calendarService = calendarService;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.smartworks.service.impl.ISmartWorks#getBoardInstances(net.smartworks
-	 * .util.LocalDate, int)
-	 * 
-	 * description : 현재사용자의 최근 5개 공지사항을 가져다 주는 서비스..
-	 * 
-	 * BoardInstanceInfo[] : return
-	 */
-	@Override
-	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
+	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
 
-		try{
+		try {
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
 	
 			User user = SmartUtil.getCurrentUser();
@@ -241,6 +219,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setCompanyId(user.getCompanyId());
 			swdRecordCond.setFormId(formId);
 			swdRecordCond.setDomainId(swdDomain.getObjId());
+			if(spaceId != null)
+				swdRecordCond.setWorkSpaceId(spaceId);
 
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
@@ -249,8 +229,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwdRecord[] swdRecords = null;
 			if(!CommonUtil.isEmpty(totalSwdRecords)) {
 				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					totalSwdRecord.setFormId(formId);
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalSwdRecord);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
 					if(isAccessForMe) {
 						swdRecordList.add(totalSwdRecord);
 					}
@@ -278,130 +257,6 @@ public class InstanceServiceImpl implements IInstanceService {
 				if(swdRecordLength > 5)
 					swdRecordLength = 5;
 				for(int i=0; i < swdRecordLength; i++) {
-					SwdRecord swdRecord = swdRecords[i];
-					swdRecord.setFormId(formId);
-					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(swdRecord);
-					if(isAccessForMe) {
-						boardInstanceInfo.setId(swdRecord.getRecordId());
-						boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
-						boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
-						int type = WorkInstance.TYPE_INFORMATION;
-						boardInstanceInfo.setType(type);
-						boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-						String workSpaceId = swdRecord.getWorkSpaceId();
-						if(workSpaceId == null)
-							workSpaceId = user.getId();
-	
-						WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
-	
-						boardInstanceInfo.setWorkSpace(workSpaceInfo);
-	
-						WorkCategoryInfo groupInfo = null;
-						if (!CommonUtil.isEmpty(subCtgId))
-							groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
-	
-						WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
-	
-						WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
-	
-						boardInstanceInfo.setWork(workInfo);
-						boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
-						boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
-	
-						SwdDataField[] swdDataFields = swdRecord.getDataFields();
-						if(!CommonUtil.isEmpty(swdDataFields)) {
-							int swdDataFieldsLength = swdDataFields.length;
-							for(int j=0; j<swdDataFieldsLength; j++) {
-								SwdDataField swdDataField = swdDataFields[j];
-								String value = swdDataField.getValue();
-								if(swdDataField.getId().equals("0")) {
-									boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
-								} else if(swdDataField.getId().equals("1")) {
-									boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
-								}
-							}
-						}
-						boardInstanceInfoList.add(boardInstanceInfo);
-					}
-				}
-			}
-			if(boardInstanceInfoList.size() > 0) {
-				boardInstanceInfos = new BoardInstanceInfo[boardInstanceInfoList.size()];
-				boardInstanceInfoList.toArray(boardInstanceInfos);
-			}
-			return boardInstanceInfos;
-		} catch(Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required
-		}
-	}
-
-	@Override
-	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
-
-
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-		// MODIFICATION REQUIRED BY WORK SPACE ID		
-				
-		try{
-			String workId = SmartWork.ID_BOARD_MANAGEMENT;
-	
-			User user = SmartUtil.getCurrentUser();
-	
-			SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setCompanyId(user.getCompanyId());
-	
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
-			swfFormCond.setPackageId(workId);
-	
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
-			if(swfForms == null)
-				return null;
-	
-			swdDomainCond.setFormId(swfForms[0].getId());
-	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
-	
-			if(swdDomain == null)
-				return  null;
-
-			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			swdRecordCond.setCompanyId(user.getCompanyId());
-			swdRecordCond.setFormId(swdDomain.getFormId());
-			swdRecordCond.setDomainId(swdDomain.getObjId());
-	
-			swdRecordCond.setPageNo(0);
-			swdRecordCond.setPageSize(5);
-	
-			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-	
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
-	
-			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-	
-			BoardInstanceInfo[] boardInstanceInfos = null;
-
-			String subCtgId = swdRecordExtends[0].getSubCtgId();
-			String subCtgName = swdRecordExtends[0].getSubCtg();
-			String parentCtgId = swdRecordExtends[0].getParentCtgId();
-			String parentCtgName = swdRecordExtends[0].getParentCtg();
-			String formId = swdDomain.getFormId();
-			String formName = swdDomain.getFormName();
-
-			if(!CommonUtil.isEmpty(swdRecords)) {
-				int swdRecordsLength = swdRecords.length;
-				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
-				for(int i=0; i < swdRecordsLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
 					boardInstanceInfo.setId(swdRecord.getRecordId());
@@ -443,25 +298,33 @@ public class InstanceServiceImpl implements IInstanceService {
 							}
 						}
 					}
-					boardInstanceInfos[i] = boardInstanceInfo;
+					boardInstanceInfoList.add(boardInstanceInfo);
 				}
 			}
+			if(boardInstanceInfoList.size() > 0) {
+				boardInstanceInfos = new BoardInstanceInfo[boardInstanceInfoList.size()];
+				boardInstanceInfoList.toArray(boardInstanceInfos);
+			}
 			return boardInstanceInfos;
-		}catch (Exception e){
+		} catch(Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
 			// Exception Handling Required
 		}
+		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.smartworks.service.impl.ISmartWorks#getMyRecentInstances(java.lang
-	 * .String)
-	 */
+	@Override
+	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
+		return getBoardInstancesByWorkSpaceId(null);
+	}
+
+	@Override
+	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
+		return getBoardInstancesByWorkSpaceId(spaceId);
+	}
+
 	@Override
 	public InstanceInfo[] getMyRecentInstances() throws Exception {
 		try{
@@ -601,7 +464,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 			
-			TaskWork[] tasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 			
 			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
 			return null;
@@ -632,11 +495,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskCond.setLastInstanceDate(new LocalDate());
 			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
 			
 			taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 			
-			long assignedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
 			
 			RunningCounts runningCounts = new RunningCounts();
 			runningCounts.setTotal((int)totalTaskSize);
@@ -752,7 +615,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formId = record.getFormId();
 			if (CommonUtil.isEmpty(formId))
 				return null;
-			SwfForm form = SwManagerFactory.getInstance().getSwfManager().getForm(null, formId);
+			SwfForm form = getSwfManager().getForm(null, formId);
 			if (form == null)
 				return null;
 			SwfField[] fields = form.getFields();
@@ -806,7 +669,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			//레코드 폼정보를 가져온다
 			if (CommonUtil.isEmpty(formId))
 				return null;
-			SwfForm form = SwManagerFactory.getInstance().getSwfManager().getForm(null, formId);
+			SwfForm form = getSwfManager().getForm(null, formId);
 			if (form == null)
 				return null;
 			SwfField[] fields = form.getFields();
@@ -1080,8 +943,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							continue;
 					} else if (SwfMapping.MAPPINGTYPE_SYSTEM.equalsIgnoreCase(mappingFormType)) {
 					//시스템 함수
-						ISwoManager mgr = SwManagerFactory.getInstance().getSwoManager();
-						SwoUser func = mgr.getUser(userId, userId, "all");
+						SwoUser func = getSwoManager().getUser(userId, userId, "all");
 						String functionId = CommonUtil.toNull(preMapping.getFieldId());
 						String funcDeptId = "";
 						String funcDeptName = "";
@@ -1116,7 +978,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else if (functionId.equals("mis:getDeptId")){		
 							if(func != null){
 							funcDeptId = func.getDeptId();
-							SwoDepartment funcdept = mgr.getDepartment(userId, funcDeptId, "all");
+							SwoDepartment funcdept = getSwoManager().getDepartment(userId, funcDeptId, "all");
 								if(funcdept != null){
 									funcDeptName = funcdept.getName();
 								}
@@ -1132,7 +994,7 @@ public class InstanceServiceImpl implements IInstanceService {
 								cond.setDeptId(funcDeptId);
 								cond.setRoleId("DEPT LEADER");
 								
-								SwoUser[] funcs = mgr.getUsers(userId, cond, "all");
+								SwoUser[] funcs = getSwoManager().getUsers(userId, cond, "all");
 								if(funcs != null){
 									funcTeamLeader = funcs[0].getId();
 								}
@@ -1869,7 +1731,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_YTVIDEO) {
 					tskCond.setExtendedProperties(new Property[] {new Property("recordId", workInstanceId)});
 					tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_MODIFICATIONDATE, false)});
-					tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+					tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
 					tskTask = tskTasks[0];
 					String def = tskTask.getDef();
 					if (!CommonUtil.isEmpty(def)) {
@@ -2724,53 +2586,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formName = swdDomain.getFormName();
 			String titleFieldId = swdDomain.getTitleFieldId();
 
-			SwaResourceCond swaResourceCond = new SwaResourceCond();
-			swaResourceCond.setResourceId(formId);
-			swaResourceCond.setMode("R");
-			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
-			String permission = null;
-			AccessPolicy accessPolicy = new AccessPolicy();
-			boolean isAccessableForMe = false;
-			if(swaResource != null) {
-				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
-				CommunityInfo[] communitieInfos = null;
-				permission = swaResource.getPermission();
-				if(permission.equals(SwaResource.PERMISSION_SELECT)) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					SwaUserCond swaUserCond = new SwaUserCond();
-					swaUserCond.setResourceId(formId);
-					swaUserCond.setMode(SwaResource.MODE_READ);
-					SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
-					if(!CommonUtil.isEmpty(swaUsers)) {
-						for(SwaUser swaUser : swaUsers) {
-							String authUserId = swaUser.getUserId();
-							String type = swaUser.getType();
-							if(type.equals(SwaUser.TYPE_USER)) {
-								UserInfo userInfo = ModelConverter.getUserInfoByUserId(authUserId);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-							} else if(type.equals(SwaUser.TYPE_DEPT)) {
-								DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(authUserId);
-								if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-							} else {
-								GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(authUserId);
-								if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-						if(communityInfoSet.size() > 0) {
-							communitieInfos = new CommunityInfo[communityInfoSet.size()];
-							communityInfoSet.toArray(communitieInfos);
-						}
-					}
-					accessPolicy.setCommunitiesToOpen(communitieInfos);
-					isAccessableForMe = accessPolicy.isAccessableForMe(null, null, AccessPolicy.TYPE_INSTANCE);
-				}
-				if(permission.equals(SwaResource.PERMISSION_NO) || !isAccessableForMe) {
-					swdRecordCond.setCreationUser(userId);
-				}
-			}
+			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
+				swdRecordCond.setCreationUser(userId);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -2796,7 +2613,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			int viewCount = 0;
 			if(!CommonUtil.isEmpty(totalSwdRecords)) {
 				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalSwdRecord);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
 					if(isAccessForMe) {
 						viewCount = viewCount + 1;
 						swdRecordList.add(totalSwdRecord);
@@ -3269,53 +3086,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				resourceId = swProcess.getProcessId();
 			}
 
-			SwaResourceCond swaResourceCond = new SwaResourceCond();
-			swaResourceCond.setResourceId(resourceId);
-			swaResourceCond.setMode("R");
-			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
-			String permission = null;
-			AccessPolicy accessPolicy = new AccessPolicy();
-			boolean isAccessableForMe = false;
-			if(swaResource != null) {
-				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
-				CommunityInfo[] communitieInfos = null;
-				permission = swaResource.getPermission();
-				if(permission.equals(SwaResource.PERMISSION_SELECT)) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					SwaUserCond swaUserCond = new SwaUserCond();
-					swaUserCond.setResourceId(resourceId);
-					swaUserCond.setMode(SwaResource.MODE_READ);
-					SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
-					if(!CommonUtil.isEmpty(swaUsers)) {
-						for(SwaUser swaUser : swaUsers) {
-							String authUserId = swaUser.getUserId();
-							String type = swaUser.getType();
-							if(type.equals(SwaUser.TYPE_USER)) {
-								UserInfo userInfo = ModelConverter.getUserInfoByUserId(authUserId);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-							} else if(type.equals(SwaUser.TYPE_DEPT)) {
-								DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(authUserId);
-								if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-							} else {
-								GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(authUserId);
-								if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-						if(communityInfoSet.size() > 0) {
-							communitieInfos = new CommunityInfo[communityInfoSet.size()];
-							communityInfoSet.toArray(communitieInfos);
-						}
-					}
-					accessPolicy.setCommunitiesToOpen(communitieInfos);
-					isAccessableForMe = accessPolicy.isAccessableForMe(null, null, AccessPolicy.TYPE_INSTANCE);
-				}
-				if(permission.equals(SwaResource.PERMISSION_NO) || !isAccessableForMe) {
-					prcInstCond.setCreationUser(userId);
-				}
-			}
+			if(!ModelConverter.isAccessibleAllInstance(resourceId, userId))
+				prcInstCond.setCreationUser(userId);
 
 			/*SwaResourceCond swaResourceCond = new SwaResourceCond();
 			swaResourceCond.setResourceId(resourceId);
@@ -3366,7 +3138,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			int viewCount = 0;
 			if(!CommonUtil.isEmpty(totalPrcInsts)) {
 				for(PrcProcessInstExtend totalPrcInst : totalPrcInsts) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalPrcInst);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalPrcInst);
 					if(isAccessForMe) {
 						viewCount = viewCount + 1;
 						prcProcessInstExtendList.add(totalPrcInst);
@@ -3740,7 +3512,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			int viewCount = 0;
 			if(!CommonUtil.isEmpty(totalFileWorks)) {
 				for(FileWork totalFileWork : totalFileWorks) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalFileWork);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalFileWork);
 					if(isAccessForMe) {
 						viewCount = viewCount + 1;
 					}
@@ -3819,7 +3591,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			WorkInstanceInfo[] workInstanceInfos = null;
 			if(!CommonUtil.isEmpty(fileWorks)) {
 				for(FileWork fileWork : fileWorks) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(fileWork);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(fileWork);
 					if(isAccessForMe) {
 						fileWorkList.add(fileWork);
 					}
@@ -3958,7 +3730,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			int viewCount = 0;
 			if(!CommonUtil.isEmpty(totalFileWorks)) {
 				for(FileWork totalFileWork : totalFileWorks) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(totalFileWork);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalFileWork);
 					if(isAccessForMe) {
 						viewCount = viewCount + 1;
 					}
@@ -4037,7 +3809,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			WorkInstanceInfo[] workInstanceInfos = null;
 			if(!CommonUtil.isEmpty(fileWorks)) {
 				for(FileWork fileWork : fileWorks) {
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(fileWork);
+					boolean isAccessForMe = ModelConverter.isAccessableInstance(fileWork);
 					if(isAccessForMe) {
 						fileWorkList.add(fileWork);
 					}
@@ -4098,7 +3870,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			if(!CommonUtil.isEmpty(totalWorks)) {
 				for(TaskWork taskWork : totalWorks) {
-					boolean isAccessableForMe = ModelConverter.isAccessableForMe(taskWork);
+					boolean isAccessableForMe = ModelConverter.isAccessableInstance(taskWork);
 					if(isAccessableForMe)
 						taskWorkList.add(taskWork);
 				}
@@ -4112,53 +3884,56 @@ public class InstanceServiceImpl implements IInstanceService {
 				for(int i=0; i<length; i++) {
 					TaskWork task = resultWorks[i];
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
-					boolean isAccessForMe = ModelConverter.isAccessableForMe(task);
-					if(isAccessForMe) {
-						eventInstanceInfo.setType(Instance.TYPE_EVENT);
-						SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
-						String id = record.getRecordId();
-						String subject = record.getDataFieldValue("0");
-						String content = record.getDataFieldValue("6");
-						String startDateStr = record.getDataFieldValue("1");
-						LocalDate startLocalDate = null;
-						String endDateStr = record.getDataFieldValue("2");
-						LocalDate endLocalDate = null;
-						SwdDataField relatedUsersField = record.getDataField("5");
-						CommunityInfo[] relatedUsers = null;
-						if (relatedUsersField != null) {
-							String usersRecordId = relatedUsersField.getRefRecordId();
-							String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
-							relatedUsers = new UserInfo[userIdArray.length];
-							for (int j = 0; j<userIdArray.length; j++) {
-								relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
-							}
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					SwdRecord record = (SwdRecord)SwdRecord.toObject(task.getTskDoc());
+					String id = record.getRecordId();
+					String subject = record.getDataFieldValue("0");
+					String content = record.getDataFieldValue("6");
+					String startDateStr = record.getDataFieldValue("1");
+					LocalDate startLocalDate = null;
+					String endDateStr = record.getDataFieldValue("2");
+					LocalDate endLocalDate = null;
+					SwdDataField relatedUsersField = record.getDataField("5");
+					CommunityInfo[] relatedUsers = null;
+					if (relatedUsersField != null) {
+						String usersRecordId = relatedUsersField.getRefRecordId();
+						String[] userIdArray = StringUtils.tokenizeToStringArray(usersRecordId, ";");
+						relatedUsers = new UserInfo[userIdArray.length];
+						for (int j = 0; j<userIdArray.length; j++) {
+							relatedUsers[j] = ModelConverter.getUserInfoByUserId(userIdArray[j]);
 						}
-						if (!CommonUtil.isEmpty(startDateStr)) {
-							startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
-						}
-						if (!CommonUtil.isEmpty(endDateStr)) {
-							endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
-						}
-						String owner = task.getTskAssignee();
-						LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
-						String modifier = task.getLastTskAssignee();
-						LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
-
-						eventInstanceInfo.setId(id);
-						eventInstanceInfo.setSubject(subject);
-						eventInstanceInfo.setContent(content);
-						eventInstanceInfo.setStart(startLocalDate);
-						eventInstanceInfo.setEnd(endLocalDate);
-						eventInstanceInfo.setRelatedUsers(relatedUsers);
-						eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
-						eventInstanceInfo.setCreatedDate(createdDate);
-						eventInstanceInfo.setType(Instance.TYPE_EVENT);
-						eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-						eventInstanceInfo.setWorkSpace(null);
-						eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
-						eventInstanceInfo.setLastModifiedDate(modifiedDate);
-						eventInstanceInfoList.add(eventInstanceInfo);
 					}
+					if (!CommonUtil.isEmpty(startDateStr)) {
+						startLocalDate = LocalDate.convertGMTStringToLocalDate(startDateStr);
+					}
+					if (!CommonUtil.isEmpty(endDateStr)) {
+						endLocalDate = LocalDate.convertGMTStringToLocalDate(endDateStr);
+					}
+					String owner = task.getTskAssignee();
+					LocalDate createdDate = new LocalDate(task.getTskCreateDate().getTime());
+					String modifier = task.getLastTskAssignee();
+					LocalDate modifiedDate = new LocalDate(task.getTaskLastModifyDate().getTime());
+
+					eventInstanceInfo.setId(id);
+					eventInstanceInfo.setSubject(subject);
+					eventInstanceInfo.setContent(content);
+					eventInstanceInfo.setStart(startLocalDate);
+					eventInstanceInfo.setEnd(endLocalDate);
+					eventInstanceInfo.setRelatedUsers(relatedUsers);
+					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(owner));
+					eventInstanceInfo.setCreatedDate(createdDate);
+					eventInstanceInfo.setType(Instance.TYPE_EVENT);
+					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					eventInstanceInfo.setWorkSpace(null);
+					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
+					eventInstanceInfo.setLastModifiedDate(modifiedDate);
+
+					/*CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
+					boolean isParticipant = false;
+					if(!CommonUtil.isEmpty(participants))
+						isParticipant =  calendarService.isParticipant(participants);
+					if(isParticipant || owner.equals(userId) || modifier.equals(userId))*/
+						eventInstanceInfoList.add(eventInstanceInfo);
 
 					/*String tskAccessLevel = task.getTskAccessLevel();
 					String tskAccessValue = task.getTskAccessValue();
@@ -5169,18 +4944,17 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	
 	private void addSubDepartmentUsers(String user, String parentDeptId, List<String> userList) throws Exception {
-		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+
 		SwoDepartmentCond deptCond = new SwoDepartmentCond();
 		deptCond.setParentId(parentDeptId);
-		SwoDepartment[] subDeptObjs = swoMgr.getDepartments(user, deptCond, IManager.LEVEL_LITE);
+		SwoDepartment[] subDeptObjs = getSwoManager().getDepartments(user, deptCond, IManager.LEVEL_LITE);
 		if (subDeptObjs == null)
 			return;
 		for (int i = 0; i < subDeptObjs.length; i++) {
 			SwoDepartment subDeptObj = subDeptObjs[i];
 			SwoUserCond userCond = new SwoUserCond();
 			userCond.setDeptId(subDeptObj.getId());
-			SwoUser[] teamUsers = swoMgr.getUsers(user, userCond, IManager.LEVEL_LITE);
+			SwoUser[] teamUsers = getSwoManager().getUsers(user, userCond, IManager.LEVEL_LITE);
 			if (teamUsers != null) {
 				for (int j = 0; j < teamUsers.length; j++) {
 					SwoUser teamUser = teamUsers[j];
