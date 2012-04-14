@@ -31,6 +31,7 @@
 			}
 		}
 	}
+	
 	window.onload = function() {
 		//toggleToolBars();
 	}
@@ -251,14 +252,22 @@
 					<!-- /인용 레이어 -->
 				</li>
 		        <li class="imgupload husky_seditor_ui_imgupload">
-		          <button type="button" title="이미지삽입"><span>이미지삽입</span></button>
-		          <!-- 이미지삽입 레이어 -->
-		          <div class="layer husky_seditor_imgupload_layer" style="display:none;">
-		            <div class="pic_content1">
-		              <iframe src="" id="imgUploadFrame" frameborder="0" border="0" marginwidth="0" marginheight="0" scrolling="no" width="236" height="214"></iframe>
-		            </div>
-		          </div>
-		          <!-- /이미지삽입 레이어 -->
+					<button type="button" title="이미지삽입"><span>이미지삽입</span></button>
+					<!-- 이미지삽입 레이어 -->
+					<div class="layer husky_seditor_imgupload_layer" style="display:none;">
+				      	<form name="frmUploadSEImage" id="frmUploadSEImage" enctype="multipart/form-data" action="upModule/jsp/imgUploadProc.jsp" method="post">
+							<fieldset>
+								<h3>이미지삽입</h3>
+								<input name="fileSelectImage" id="fileSelectImage" type="file"/>
+							</fieldset>
+							<div class="btn_area">
+					       		<input name="smtSendImage" id="smtSendImage" type="submit" style="display:none"/>
+								<button type="button" class="confirm" title="확인"><span>확인</span></button>
+								<button type="button" class="cancel" title="취소"><span>취소</span></button>		
+							</div>
+						</form>
+					</div>
+					<!-- /이미지삽입 레이어 -->
 		        </li>
 				<li class="url husky_seditor_ui_hyperlink">
 					<button type="button" title="링크"><span>URL</span></button>
@@ -454,3 +463,7 @@
 </div>
 </body>
 </html>
+<script type="text/javascript">
+
+
+</script>
