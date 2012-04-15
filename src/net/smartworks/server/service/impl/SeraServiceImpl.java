@@ -41,6 +41,7 @@ import net.smartworks.model.sera.NoteInstance;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
+import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.work.FormField;
@@ -320,7 +321,7 @@ public class SeraServiceImpl implements ISeraService {
 						FormField leftOperand = condition.getLeftOperand();
 						String formFieldId = leftOperand.getId();
 						String tableColName = formFieldId;
-						if(!formFieldId.equals(FormField.ID_OWNER) && !formFieldId.equals(FormField.ID_CREATED_DATE) && !formFieldId.equals(FormField.ID_LAST_MODIFIER) && !formFieldId.equals(FormField.ID_LAST_MODIFIED_DATE))
+						if(!formFieldId.equals("workSpaceId") &&!formFieldId.equals(FormField.ID_OWNER) && !formFieldId.equals(FormField.ID_CREATED_DATE) && !formFieldId.equals(FormField.ID_LAST_MODIFIER) && !formFieldId.equals(FormField.ID_LAST_MODIFIED_DATE))
 							tableColName = swdMgr.getTableColName(swdDomain.getObjId(), formFieldId);
 	
 						String formFieldType = leftOperand.getType();
@@ -510,6 +511,20 @@ public class SeraServiceImpl implements ISeraService {
 
 					missionInstanceInfo.setWorkSpace(workSpaceInfo);
 
+					
+					SwdRecordCond cond = new SwdRecordCond();
+					cond.setWorkSpaceId(swdRecord.getRecordId());
+					cond.setFormId(SeraConstant.MISSION_REPORT_FORMID);
+					SwdRecord[] records = swdMgr.getRecords(user.getId(), cond, IManager.LEVEL_LITE);
+					if (records != null && records.length != 0) {
+						String[] clearers = new String[records.length];
+						for (int j = 0; j < records.length; j++) {
+							SwdRecord record = records[j];
+							clearers[j] = record.getCreationUser();
+						}
+						missionInstanceInfo.setMissionClearers(clearers);
+					}
+					
 					WorkCategoryInfo groupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
 						groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
@@ -1608,7 +1623,18 @@ public class SeraServiceImpl implements ISeraService {
 			formField.setId(FormField.ID_CREATED_DATE);
 			formField.setName("createdTime");
 			formField.setType(FormField.TYPE_DATE);
+			
+
+			FormField courseIdFormField = new FormField();
+			courseIdFormField.setId("workSpaceId");
+			courseIdFormField.setName("workSpaceId");
+			courseIdFormField.setType(FormField.TYPE_TEXT);
+			
 			List<Condition> conditionList = new ArrayList<Condition>();
+			if (courseId != null) {
+				Condition condition = new Condition(courseIdFormField, "=", courseId);
+				conditionList.add(condition);
+			}
 			if (fromDate != null) {
 				Condition condition = new Condition(formField, ">", fromDate.toLocalDateValue());
 				conditionList.add(condition);
@@ -2140,6 +2166,153 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}
 	}
+	private MissionReportInstanceInfo[] getSeraReportByMissionId(String missionId, LocalDate fromDate, int maxList) throws Exception {
+		try{
+
+			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
+			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
+			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
+			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
+			
+			String workId = "pkg_8fc9ed30a64b467eb89fd35097cc6212";
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String companyId = user.getCompanyId();
+
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setCompanyId(user.getCompanyId());
+	
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setCompanyId(user.getCompanyId());
+			swfFormCond.setPackageId(workId);
+	
+			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+	
+			if(swfForms == null)
+				return null;
+			
+			String formId = swfForms[0].getId();
+	
+			swdDomainCond.setFormId(formId);
+	
+			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+	
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(user.getCompanyId());
+			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setDomainId(swdDomain.getObjId());
+	
+			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
+	
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(maxList);
+			
+			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
+			Filter[] filters = new Filter[2];
+
+			filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, missionId);		
+			filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			
+			swdRecordCond.setFilter(filters);
+
+			if(missionId != null)
+				swdRecordCond.setWorkSpaceId(missionId);
+
+			SwdRecord[] swdRecords = swdMgr.getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+
+			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+
+			List<MissionReportInstanceInfo> missionReportInstanceInfoList = new ArrayList<MissionReportInstanceInfo>();
+			MissionReportInstanceInfo[] missionReportInstanceInfos = null;
+			if(swdRecords != null) {
+				for(int i=0; i < swdRecords.length; i++) {
+					MissionReportInstanceInfo missionReportInstanceInfo = new MissionReportInstanceInfo();
+					SwdRecord swdRecord = swdRecords[i];
+					missionReportInstanceInfo.setId(swdRecord.getRecordId());
+					missionReportInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					missionReportInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+					int type = WorkInstance.TYPE_INFORMATION;
+					missionReportInstanceInfo.setType(type);
+					missionReportInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+					missionReportInstanceInfo.setWorkSpace(null);
+
+					WorkCategoryInfo workGroupInfo = null;
+					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
+						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
+
+					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
+
+					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), type, workGroupInfo, workCategoryInfo);
+
+					missionReportInstanceInfo.setWork(workInfo);
+					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+					missionReportInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					List<CommunityInfo> communityInfoList = new ArrayList<CommunityInfo>();
+					for(SwdDataField swdDataField : swdDataFields) {
+						String value = swdDataField.getValue();
+						String refRecordId = swdDataField.getRefRecordId();
+						
+						if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_CONTENTFIELDID)) {
+							missionReportInstanceInfo.setContent(value);
+						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_IMAGEGROUPIDFIELDID)) {
+							
+							List<IFileModel> fileList = docMgr.findFileGroup(value);
+							if (fileList != null && fileList.size() != 0) {
+								IFileModel fileModel = fileList.get(0);
+								if(fileModel != null) {
+									String filePath = fileModel.getFilePath();
+									String extension = filePath.lastIndexOf(".") > 1 ? filePath.substring(filePath.lastIndexOf(".")) : null;
+									filePath = StringUtils.replace(filePath, "\\", "/");
+									if(filePath.indexOf(companyId) != -1)
+										missionReportInstanceInfo.setImageSrcOrigin(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
+									filePath = filePath.replaceAll(extension, "_thumb" + extension);
+									if(filePath.indexOf(companyId) != -1)
+										missionReportInstanceInfo.setImageSrc(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
+								}
+							}
+						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_VIDEOYTIDFIELDID)) {
+							missionReportInstanceInfo.setVideoId(value);
+						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_LINKURLFIELDID)) {
+							missionReportInstanceInfo.setLinkUrl(value);
+						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_STARPOINTFIELDID)) {
+							missionReportInstanceInfo.setStarPoint(Integer.parseInt(value));
+						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_FILEGROUPIDFIELDID)) {
+							missionReportInstanceInfo.setFileGroupId(value);
+							
+							List<IFileModel> docFileList = docMgr.findFileGroup(value);
+							
+							if (docFileList != null && docFileList.size() != 0) {
+								List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+								for (int j = 0 ; j <docFileList.size(); j++) {
+									Map<String, String> fileMap = new HashMap<String, String>();
+									IFileModel docFile = docFileList.get(j);
+									fileMap.put("fileId", docFile.getId());
+									fileMap.put("fileName", docFile.getFileName());
+									fileMap.put("fileSize", docFile.getFileSize()+"");
+									fileList.add(fileMap);
+								}
+								missionReportInstanceInfo.setFileList(fileList);
+							}
+						}
+					}
+					missionReportInstanceInfoList.add(missionReportInstanceInfo);
+				}
+			}
+			if(missionReportInstanceInfoList.size() != 0) {
+				missionReportInstanceInfos = new MissionReportInstanceInfo[missionReportInstanceInfoList.size()];
+				missionReportInstanceInfoList.toArray(missionReportInstanceInfos);
+			}
+			return missionReportInstanceInfos;
+
+		} catch(Exception e) {
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
 	@Override
 	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
 		try{
@@ -2147,6 +2320,7 @@ public class SeraServiceImpl implements ISeraService {
 			InstanceInfo[] boardInfo = getBoardInstancesByCourseId(courseId, fromDate, maxList);
 			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(courseId, fromDate, maxList);
 			InstanceInfo[] noteInfo = getSeraNoteByMissionId(missionId, fromDate, maxList);
+			InstanceInfo[] reportInfo = getSeraReportByMissionId(missionId, fromDate, maxList);
 			
 			Map<Long, InstanceInfo> resultMap = new HashMap<Long, InstanceInfo>();
 			if (boardInfo != null) {
@@ -2163,6 +2337,12 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			if (noteInfo != null) {
 				for (InstanceInfo info : noteInfo) {
+					LocalDate createDate = info.getCreatedDate();
+					resultMap.put(createDate.getTime(), info);
+				}
+			}
+			if (reportInfo != null) {
+				for (InstanceInfo info : reportInfo) {
 					LocalDate createDate = info.getCreatedDate();
 					resultMap.put(createDate.getTime(), info);
 				}
@@ -2194,78 +2374,110 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 		
 	}
-	@Override
-	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
-		return null;
-	}
-	@Override
-	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
-		return null;
-	}
-	//TODO
-	@Override
-	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
-		try{
-			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
-			return instances;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}		
-	}
 	//TODO
 	@Override
 	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
-			courseId=group_27c8e4008cfe4975bdbc16f85e2f8623, 
+			courseId=group_1f22476fe184438586488da824692919, 
+			missionId=dr_402880eb36b59d9e0136b5b852560007, 
 			frmPerformMissionReport=
 				{
-					index=인덱스, 
-					content=2012.04.04, 
-					openDate=2012.04.04, 
-					closeDate=2012.04.04
+					txtReportContent=미션 수행 합니다., 
+					txtNoteUrl=, 
+					selAccessLevel=3, 
+					txtNoteFile=
+						{
+							groupId=fg_b3f55fdfce205c4aacc9e98c573703f34125, 
+							files=[]
+						}, 
+					imgNoteImage=
+						{
+							groupId=fg_d3321bb05957e5467b5b24553a269b80c50b, 
+							files=[]
+						},
+					ytNoteVideo=
+						{
+						}
 				}
 		}*/
-
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
-		String courseId = (String)requestBody.get("courseId");
-		String missionId = (String)requestBody.get("missionId");
-		Map<String, Object> frmNewMissionProfile = (Map<String, Object>)requestBody.get("frmPerformMissionReport");
 
-		Set<String> keySet = frmNewMissionProfile.keySet();
+		String missionId = (String)requestBody.get("missionId");
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> frmCreateSeraNoteMap = (Map<String, Object>)requestBody.get("frmPerformMissionReport");
+
+		Set<String> keySet = frmCreateSeraNoteMap.keySet();
 		Iterator<String> itr = keySet.iterator();
 		
-		String txtMissionName = null;
-		String txtMissionOpenDate = null;
-		String txtMissionCloseDate = null;
-		String selPrevMission = null;
-		String txtaMissionContent = null;
+		String txtReportContent = null;
+		String selAccessLevel = null;
+		String txtNoteUrl = null;
+		String starPoint = null;
+		
+		Map<String, Object> txtNoteFile = null;
+		String fileGroupId = null;
+		Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
+		
+		Map<String, Object> imgNoteImage = null;
+		String imageGroupId = null;
+		String imageSrc = null;
+		String imageSrcOriginal = null;
+		Map<String, List<Map<String, String>>> imageGroupMap = new HashMap<String, List<Map<String, String>>>();
+		
+		Map<String, Object> ytNoteVideo = null;
+		String videoYTId = null;
+		String videoFileName = null;
+		String videoFileSize = null;
 
+		
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
-			Object fieldValue = frmNewMissionProfile.get(fieldId);
-			if(fieldValue instanceof String) {					
-				if(fieldId.equals("txtMissionName")) {
-					txtMissionName = (String)frmNewMissionProfile.get("txtMissionName");
-				} else if(fieldId.equals("txtMissionOpenDate")) {
-					txtMissionOpenDate = (String)frmNewMissionProfile.get("txtMissionOpenDate");
-				} else if(fieldId.equals("txtMissionCloseDate")) {
-					txtMissionCloseDate = (String)frmNewMissionProfile.get("txtMissionCloseDate");
-				} else if(fieldId.equals("selPrevMission")) {
-					selPrevMission = (String)frmNewMissionProfile.get("selPrevMission");
-				} else if(fieldId.equals("txtaMissionContent")) {
-					txtaMissionContent = (String)frmNewMissionProfile.get("txtaMissionContent");
+			Object fieldValue = frmCreateSeraNoteMap.get(fieldId);
+			if (fieldValue instanceof LinkedHashMap) {
+				if (fieldId.equalsIgnoreCase("txtNoteFile")) {
+					txtNoteFile = (Map<String, Object>)fieldValue;
+					if(txtNoteFile != null && txtNoteFile.size() > 0) {
+						fileGroupId = (String)txtNoteFile.get("groupId");
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)txtNoteFile.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							fileGroupMap.put(fileGroupId, files);
+						}
+					}
+				} else if (fieldId.equalsIgnoreCase("imgNoteImage")) {
+					imgNoteImage = (Map<String, Object>)fieldValue;
+					if(imgNoteImage != null && imgNoteImage.size() > 0) {
+						imageGroupId = (String)imgNoteImage.get("groupId");
+
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)imgNoteImage.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							imageGroupMap.put(imageGroupId, files);
+						}
+					}
+				} else if (fieldId.equalsIgnoreCase("ytNoteVideo")) {
+					ytNoteVideo = (Map<String, Object>)fieldValue;
+					if(ytNoteVideo != null && ytNoteVideo.size() > 0) {
+						Map videoMap = (Map<String, Object>)ytNoteVideo.get("video");
+						if(videoMap != null && videoMap.size() > 0) {
+							videoYTId = (String)videoMap.get("videoYTId");
+							videoFileName = (String)videoMap.get("fileName");
+							videoFileSize = (String)videoMap.get("fileSize");
+						}
+					}
+				}
+			} else if(fieldValue instanceof String) {
+				if (fieldId.equals("txtReportContent")) {
+					txtReportContent = (String)frmCreateSeraNoteMap.get("txtReportContent");
+				} else if (fieldId.equals("selAccessLevel")) {
+					selAccessLevel = (String)frmCreateSeraNoteMap.get("selAccessLevel");
+				} else if (fieldId.equals("txtNoteUrl")) {
+					txtNoteUrl = (String)frmCreateSeraNoteMap.get("txtNoteUrl");
 				}
 			}
 		}
-
+		
 		SwdDomainCond swdDomainCond = new SwdDomainCond();
-		swdDomainCond.setFormId(SeraConstant.PERFORMMISSION_FORMID);
+		swdDomainCond.setFormId(SeraConstant.MISSION_REPORT_FORMID);
 		SwdDomain swdDomain = SwManagerFactory.getInstance().getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
 		String domainId = swdDomain.getObjId();
 		
@@ -2289,37 +2501,23 @@ public class SeraServiceImpl implements ISeraService {
 			fieldData.setRefForm(null);
 			fieldData.setRefFormField(null);
 			fieldData.setRefRecordId(null);
-			if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_TITLEFIELDID)) {
-				fieldData.setValue(txtMissionName);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_OPENDATEFIELDID)) {
-				if(txtMissionOpenDate.length() == FieldData.SIZE_DATETIME)
-					txtMissionOpenDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionOpenDate).toGMTDateString();
-				else if(txtMissionOpenDate.length() == FieldData.SIZE_DATE)
-					txtMissionOpenDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionOpenDate).toGMTDateString();
-				fieldData.setValue(txtMissionOpenDate);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CLOSEDATEFIELDID)) {
-				if(txtMissionCloseDate.length() == FieldData.SIZE_DATETIME)
-					txtMissionCloseDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionCloseDate).toGMTDateString();
-				else if(txtMissionCloseDate.length() == FieldData.SIZE_DATE)
-					txtMissionCloseDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionCloseDate).toGMTDateString();
-				fieldData.setValue(txtMissionCloseDate);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_PREVMISSIONFIELDID)) {
-				fieldData.setValue(selPrevMission);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CONTENTFIELDID)) {
-				fieldData.setValue(txtaMissionContent);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_INDEXFIELDID)) {
-				ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-				CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
-				int lastMissionIndex = courseDetail.getLastMissionIndex();
-				if (lastMissionIndex == -1) {
-					lastMissionIndex = 0;
-				} else {
-					lastMissionIndex = lastMissionIndex + 1;
-				}
-				courseDetail.setLastMissionIndex(lastMissionIndex);
-				seraMgr.setCourseDetail(courseDetail);
-				
-				fieldData.setValue(lastMissionIndex + "");
+			
+			if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_IMAGEGROUPIDFIELDID)) {
+				fieldData.setValue(imageGroupId);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_LINKURLFIELDID)) {
+				fieldData.setValue(txtNoteUrl);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_FILEGROUPIDFIELDID)) {
+				fieldData.setValue(fileGroupId);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_CONTENTFIELDID)) {
+				fieldData.setValue(txtReportContent);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_VIDEOYTIDFIELDID)) {
+				fieldData.setValue(videoYTId);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_VIDEOFILENAMEFIELDID)) {
+				fieldData.setValue(videoFileName);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_VIDEOFILESIZEFIELDID)) {
+				fieldData.setValue(videoFileSize);
+			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_STARPOINTFIELDID)) {
+				fieldData.setValue(starPoint);
 			}
 			fieldDataList.add(fieldData);
 		}
@@ -2328,19 +2526,85 @@ public class SeraServiceImpl implements ISeraService {
 		fieldDataList.toArray(fieldDatas);
 		SwdRecord obj = new SwdRecord();
 		obj.setDomainId(domainId);
-		obj.setFormId(SeraConstant.PERFORMMISSION_FORMID);
+		obj.setFormId(SeraConstant.MISSION_REPORT_FORMID);
 		obj.setFormName(swdDomain.getFormName());
 		obj.setFormVersion(swdDomain.getFormVersion());
 		obj.setDataFields(fieldDatas);
 		obj.setRecordId("dr_" + CommonUtil.newId());
 		
-		obj.setWorkSpaceId(courseId);
-		obj.setWorkSpaceType("5");
-		obj.setAccessLevel("3");
+		obj.setWorkSpaceId(missionId);
+		obj.setWorkSpaceType("3");
+		obj.setAccessLevel(selAccessLevel);
 		obj.setAccessValue(null);
 
-		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
+		String recordId = SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
 		
-		return courseId;
+		
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
+		tskCond.setModificationUser(userId);
+		tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_CREATIONDATE, false)});
+		TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		String taskInstId = tskTasks[0].getObjId();
+		
+		if(fileGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+				String fGroupId = entry.getKey();
+				List<Map<String, String>> fileGroups = entry.getValue();
+				try {
+					for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+						Map<String, String> file = fileGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Files", taskInstId, fGroupId, fileId, fileName, fileSize);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("file upload fail...");
+				}
+			}
+		}if(imageGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
+				String imgGroupId = entry.getKey();
+				List<Map<String, String>> imgGroups = entry.getValue();
+				try {
+					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
+						Map<String, String> file = imgGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						//String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", taskInstId, imgGroupId, fileId, fileName, "0");
+					}
+				} catch (Exception e) {
+					throw new DocFileException("image upload fail...");
+				}
+			}
+		}
+		
+		return recordId;
+	}
+
+	@Override
+	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		return null;
+	}
+	@Override
+	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		return null;
+	}
+	//TODO
+	@Override
+	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
+		try{
+			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
+			return instances;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
 	}
 }

@@ -372,3 +372,183 @@ VALUES ('402880eb36b487f60136b48c4fc70002', 'pkg_e4c34f837ea64b1c994d4827d8a4bb5
 </form>');
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--MissionReport Tabel
+CREATE TABLE MissionReport (
+	id varchar(50)NOT NULL,
+	domainid varchar(50),
+	workitemid varchar(50),
+	masterrecordid varchar(50),
+	creator varchar(50),
+	createdtime datetime ,
+	modifier varchar(50),
+	modifiedtime datetime ,
+	hit int,
+	workSpaceId varchar(100),
+	workSpaceType varchar(50),
+	accessLevel varchar(1),
+	accessValue varchar(4000),
+	videoFileSize varchar(255),
+	starPoint varchar(255),
+	content text,
+	videoFileName varchar(255),
+	fileGroup varchar(255),
+	linkUrl varchar(255),
+	imageFileGroup varchar(255),
+	videoYTId varchar(255),
+	primary key (id)
+);
+
+INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880eb36b5fe8c0136b6025fc50001', '40288afb1b25f00b011b25f3c7950001', 'pkg_8fc9ed30a64b467eb89fd35097cc6212', 1, '미션리포트', 'SINGLE', 'DEPLOYED', 'Y', 'admin', getdate(), 'admin', getdate(), '미션리포트');
+
+INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('mission_report','Maninsoft', 'mission_report', 1, '미션리포트', '', 'MissionReport', 'id', '0', NULL, NULL, 'Y', 'PUB_ALL');
+
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_videoFileSize', 'mission_report', '5', NULL, 'videoFileSize', 'string', 'videoFileSize', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_starPoint', 'mission_report', '2', NULL, 'starPoint', 'string', 'starPoint', NULL, 'N', 'N', NULL, 2, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_content', 'mission_report', '0', NULL, 'content', 'text', 'content', NULL, 'N', 'N', NULL, 4, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_imageFileGroup', 'mission_report', '7', NULL, 'imageFileGroup', 'string', 'imageFileGroup', NULL, 'N', 'N', NULL, 5, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_linkUrl', 'mission_report', '1', NULL, 'linkUrl', 'string', 'linkUrl', NULL, 'N', 'N', NULL, 3, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_videoFileName', 'mission_report', '4', NULL, 'videoFileName', 'string', 'videoFileName', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_videoYTId', 'mission_report', '3', NULL, 'videoYTId', 'string', 'videoYTId', NULL, 'N', 'N', NULL, 1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_report_fileGroup', 'mission_report', '6', NULL, 'fileGroup', 'string', 'fileGroup', NULL, 'N', 'N', NULL, 6, 0);
+
+INSERT INTO swform (id, packageid, formid, version, name, type, status, creator, createdtime, modifier, modifiedtime, content)
+VALUES ('402880eb36b5fe8c0136b60260030002', 'pkg_8fc9ed30a64b467eb89fd35097cc6212', 'mission_report', 1, '미션리포트', 'SINGLE', 'DEPLOYED', 'admin', getdate(), 'admin', getdate(), '<form id="mission_report" version="1" name="미션리포트">
+	<children>
+		<formEntity id="0" name="content" systemType="text"
+			required="false" system="false">
+			<children />
+			<format type="richEditor" viewingType="richEditor"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="777" height="122" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="1" name="linkUrl" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="295" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="2" name="starPoint" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="295" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="3" name="videoYTId" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="295" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="4" name="videoFileName" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="295" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="5" name="videoFileSize" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="295" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="6" name="fileGroup" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="427" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="7" name="imageFileGroup" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="124"
+				contentWidth="427" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+	</children>
+	<mappingForms />
+	<mappingServices />
+	<layout type="grid_layout">
+		<columns>
+			<gridColumn size="588.5558312655087" labelSize="78.21339950372209" />
+			<gridColumn size="588.5558312655087" labelSize="78.21339950372209" />
+		</columns>
+		<gridRow size="129.5">
+			<gridCell size="588.5558312655087" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="0" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="1" />
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="2" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="3" />
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="4" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="5" />
+			<gridCell size="588.5558312655087" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="588.5558312655087" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="6" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="588.5558312655087" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="7" />
+		</gridRow>
+	</layout>
+	<graphic width="1184" height="459" currentEntityNum="8"
+		currentMappingNum="0">
+		<space />
+	</graphic>
+</form>');
+
+
