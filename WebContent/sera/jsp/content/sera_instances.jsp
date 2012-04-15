@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.InstanceSpaceInfo"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.MissionInstance"%>
 <%@page import="net.smartworks.model.sera.info.MissionInstanceInfo"%>
@@ -37,15 +38,15 @@
 		for(int i=0; i<seraInstances.length; i++){	
 			InstanceInfo seraInstance = seraInstances[i];
 			WorkSpaceInfo workSpace = seraInstance.getWorkSpace();
-			String courseName = "";
-			MissionInstance mission = null;
+			CourseInfo course = null;
+			MissionInstanceInfo mission = null;
 			if(!SmartUtil.isBlankObject(workSpace)){
 				if(workSpace.getClass().equals(CourseInfo.class)){
-					courseName = workSpace.getName();
-				}else{
-					mission = (MissionInstance)smartWorks.getMissionById(workSpace.getId());
+					course = (CourseInfo)workSpace;
+				}else if(workSpace.getClass().equals(InstanceSpaceInfo.class)){
+					mission = (MissionInstanceInfo)((InstanceSpaceInfo)workSpace).getInstance();
 					if(!SmartUtil.isBlankObject(mission))
-						courseName = SmartUtil.isBlankObject(mission.getWorkSpace()) ? "" : mission.getWorkSpace().getName();
+						course = SmartUtil.isBlankObject(mission.getWorkSpace()) ? null : (CourseInfo)mission.getWorkSpace();
 				}
 			}
 %>
@@ -73,10 +74,10 @@
 								switch(seraInstance.getType()){
 								case Instance.TYPE_BOARD:
 									BoardInstanceInfo board = (BoardInstanceInfo)seraInstance;
-									if(!SmartUtil.isBlankObject(courseName)){
+									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -89,10 +90,10 @@
 									break;
 								case Instance.TYPE_EVENT:
 									EventInstanceInfo event = (EventInstanceInfo)seraInstance;
-									if(!SmartUtil.isBlankObject(courseName)){
+									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -105,10 +106,10 @@
 									break;
 								case Instance.TYPE_SERA_NOTE:
 									NoteInstanceInfo seraNote = (NoteInstanceInfo)seraInstance;
-									if(!SmartUtil.isBlankObject(courseName)){
+									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -151,10 +152,10 @@
 									break;
 								case Instance.TYPE_SERA_MISSION_REPORT:
 									MissionReportInstanceInfo seraReport = (MissionReportInstanceInfo)seraInstance;
-									if(!SmartUtil.isBlankObject(courseName)){
+									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
