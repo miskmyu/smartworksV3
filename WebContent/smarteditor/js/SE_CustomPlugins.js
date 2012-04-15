@@ -55,7 +55,7 @@ function uploadImageFile(uploadForm, appId, maxWidth)
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.setRequestHeader("X-File-Name", encodeURIComponent(qqFile));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
-    xhr.send(theFrm.fileSelectImage.value);
+    xhr.send(theFrm.fileSelectImage.files[0]);
     
     return;
 }
@@ -109,7 +109,7 @@ nhn.husky.SE_ImageUpload = $Class({
      },
      
     $ON_SE_SUBMIT_IMAGEUPLOAD : function(oAppContainer){
-    	uploadImageFile(document.getElementById('frmUploadSEImage'), this.oApp.sAppId, this.oIFrame.offsetWidth);
+    	uploadImageFile(document.getElementById('frmUploadSEImage'), this.oApp.sAppId, this.oIFrame.offsetWidth-20);
      }    
 });
 
