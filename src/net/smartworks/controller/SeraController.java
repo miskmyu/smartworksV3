@@ -275,7 +275,7 @@ public class SeraController {
 	@RequestMapping(value = "/create_sera_note", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createSeraNote(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.setSeraNote(requestBody, request);
+		smartworks.setSeraNote(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		int spaceType = Integer.parseInt((String)requestBody.get("spaceType"));
@@ -299,7 +299,7 @@ public class SeraController {
 	@RequestMapping(value = "/create_new_team", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.setCourse(requestBody, request);
+		smartworks.createNewTeam(requestBody, request);
 		// TO DO : Exception handler
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -310,7 +310,7 @@ public class SeraController {
 	@RequestMapping(value = "/update_sera_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> updateSeraProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.setMission(requestBody, request);
+		smartworks.updateSeraProfile(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "myPAGE.sw");

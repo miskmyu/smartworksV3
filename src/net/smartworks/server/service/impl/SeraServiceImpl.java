@@ -969,132 +969,6 @@ public class SeraServiceImpl implements ISeraService {
 		return groupId;
 	}
 
-	//TODO
-	@Override
-	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		/*{
-			courseId=group_27c8e4008cfe4975bdbc16f85e2f8623, 
-			frmPerformMissionReport=
-				{
-					index=인덱스, 
-					content=2012.04.04, 
-					openDate=2012.04.04, 
-					closeDate=2012.04.04
-				}
-		}*/
-
-		User user = SmartUtil.getCurrentUser();
-		String userId = user.getId();
-		String courseId = (String)requestBody.get("courseId");
-		String missionId = (String)requestBody.get("missionId");
-		Map<String, Object> frmNewMissionProfile = (Map<String, Object>)requestBody.get("frmPerformMissionReport");
-
-		Set<String> keySet = frmNewMissionProfile.keySet();
-		Iterator<String> itr = keySet.iterator();
-		
-		String txtMissionName = null;
-		String txtMissionOpenDate = null;
-		String txtMissionCloseDate = null;
-		String selPrevMission = null;
-		String txtaMissionContent = null;
-
-		while (itr.hasNext()) {
-			String fieldId = (String)itr.next();
-			Object fieldValue = frmNewMissionProfile.get(fieldId);
-			if(fieldValue instanceof String) {					
-				if(fieldId.equals("txtMissionName")) {
-					txtMissionName = (String)frmNewMissionProfile.get("txtMissionName");
-				} else if(fieldId.equals("txtMissionOpenDate")) {
-					txtMissionOpenDate = (String)frmNewMissionProfile.get("txtMissionOpenDate");
-				} else if(fieldId.equals("txtMissionCloseDate")) {
-					txtMissionCloseDate = (String)frmNewMissionProfile.get("txtMissionCloseDate");
-				} else if(fieldId.equals("selPrevMission")) {
-					selPrevMission = (String)frmNewMissionProfile.get("selPrevMission");
-				} else if(fieldId.equals("txtaMissionContent")) {
-					txtaMissionContent = (String)frmNewMissionProfile.get("txtaMissionContent");
-				}
-			}
-		}
-
-		SwdDomainCond swdDomainCond = new SwdDomainCond();
-		swdDomainCond.setFormId(SeraConstant.PERFORMMISSION_FORMID);
-		SwdDomain swdDomain = SwManagerFactory.getInstance().getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
-		String domainId = swdDomain.getObjId();
-		
-		SwdFieldCond swdFieldCond = new SwdFieldCond();
-		swdFieldCond.setDomainObjId(domainId);
-		SwdField[] fields = SwManagerFactory.getInstance().getSwdManager().getFields(userId, swdFieldCond, IManager.LEVEL_LITE);
-		if (CommonUtil.isEmpty(fields))
-			return null;//TODO return null? throw new Exception??
-
-		Map<String, SwdField> fieldInfoMap = new HashMap<String, SwdField>();
-		for (SwdField field : fields) {
-			fieldInfoMap.put(field.getFormFieldId(), field);
-		}
-
-		List fieldDataList = new ArrayList();
-		for (SwdField field : fields) {
-			String fieldId = field.getFormFieldId();
-			SwdDataField fieldData = new SwdDataField();
-			fieldData.setId(fieldId);
-			fieldData.setName(field.getFormFieldName());
-			fieldData.setRefForm(null);
-			fieldData.setRefFormField(null);
-			fieldData.setRefRecordId(null);
-			if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_TITLEFIELDID)) {
-				fieldData.setValue(txtMissionName);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_OPENDATEFIELDID)) {
-				if(txtMissionOpenDate.length() == FieldData.SIZE_DATETIME)
-					txtMissionOpenDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionOpenDate).toGMTDateString();
-				else if(txtMissionOpenDate.length() == FieldData.SIZE_DATE)
-					txtMissionOpenDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionOpenDate).toGMTDateString();
-				fieldData.setValue(txtMissionOpenDate);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CLOSEDATEFIELDID)) {
-				if(txtMissionCloseDate.length() == FieldData.SIZE_DATETIME)
-					txtMissionCloseDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionCloseDate).toGMTDateString();
-				else if(txtMissionCloseDate.length() == FieldData.SIZE_DATE)
-					txtMissionCloseDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionCloseDate).toGMTDateString();
-				fieldData.setValue(txtMissionCloseDate);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_PREVMISSIONFIELDID)) {
-				fieldData.setValue(selPrevMission);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CONTENTFIELDID)) {
-				fieldData.setValue(txtaMissionContent);
-			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_INDEXFIELDID)) {
-				ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-				CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
-				int lastMissionIndex = courseDetail.getLastMissionIndex();
-				if (lastMissionIndex == -1) {
-					lastMissionIndex = 0;
-				} else {
-					lastMissionIndex = lastMissionIndex + 1;
-				}
-				courseDetail.setLastMissionIndex(lastMissionIndex);
-				seraMgr.setCourseDetail(courseDetail);
-				
-				fieldData.setValue(lastMissionIndex + "");
-			}
-			fieldDataList.add(fieldData);
-		}
-
-		SwdDataField[] fieldDatas = new SwdDataField[fieldDataList.size()];
-		fieldDataList.toArray(fieldDatas);
-		SwdRecord obj = new SwdRecord();
-		obj.setDomainId(domainId);
-		obj.setFormId(SeraConstant.PERFORMMISSION_FORMID);
-		obj.setFormName(swdDomain.getFormName());
-		obj.setFormVersion(swdDomain.getFormVersion());
-		obj.setDataFields(fieldDatas);
-		obj.setRecordId("dr_" + CommonUtil.newId());
-		
-		obj.setWorkSpaceId(courseId);
-		obj.setWorkSpaceType("5");
-		obj.setAccessLevel("3");
-		obj.setAccessValue(null);
-
-		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
-		
-		return courseId;
-	}
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
 		try{
@@ -1700,36 +1574,6 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
-	
-	//TODO
-	@Override
-	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
-		try{
-			InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
-			return instances;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}		
-		
-	}
-
-	//TODO
-	@Override
-	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
-		try{
-			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
-			return instances;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}		
-		
-	}
 	@Override
 	public MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception {
 		try{
@@ -1908,5 +1752,177 @@ public class SeraServiceImpl implements ISeraService {
 			return null;			
 			// Exception Handling Required			
 		}		
+	}
+
+	@Override
+	public String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		return null;
+	}
+	@Override
+	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		return null;
+	}
+	@Override
+	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		return null;
+	}
+	//TODO
+	@Override
+	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
+		try{
+			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
+			return instances;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+	}
+	//TODO
+	@Override
+	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
+		try{
+			InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
+			return instances;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}		
+		
+	}
+	//TODO
+	@Override
+	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			courseId=group_27c8e4008cfe4975bdbc16f85e2f8623, 
+			frmPerformMissionReport=
+				{
+					index=인덱스, 
+					content=2012.04.04, 
+					openDate=2012.04.04, 
+					closeDate=2012.04.04
+				}
+		}*/
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String courseId = (String)requestBody.get("courseId");
+		String missionId = (String)requestBody.get("missionId");
+		Map<String, Object> frmNewMissionProfile = (Map<String, Object>)requestBody.get("frmPerformMissionReport");
+
+		Set<String> keySet = frmNewMissionProfile.keySet();
+		Iterator<String> itr = keySet.iterator();
+		
+		String txtMissionName = null;
+		String txtMissionOpenDate = null;
+		String txtMissionCloseDate = null;
+		String selPrevMission = null;
+		String txtaMissionContent = null;
+
+		while (itr.hasNext()) {
+			String fieldId = (String)itr.next();
+			Object fieldValue = frmNewMissionProfile.get(fieldId);
+			if(fieldValue instanceof String) {					
+				if(fieldId.equals("txtMissionName")) {
+					txtMissionName = (String)frmNewMissionProfile.get("txtMissionName");
+				} else if(fieldId.equals("txtMissionOpenDate")) {
+					txtMissionOpenDate = (String)frmNewMissionProfile.get("txtMissionOpenDate");
+				} else if(fieldId.equals("txtMissionCloseDate")) {
+					txtMissionCloseDate = (String)frmNewMissionProfile.get("txtMissionCloseDate");
+				} else if(fieldId.equals("selPrevMission")) {
+					selPrevMission = (String)frmNewMissionProfile.get("selPrevMission");
+				} else if(fieldId.equals("txtaMissionContent")) {
+					txtaMissionContent = (String)frmNewMissionProfile.get("txtaMissionContent");
+				}
+			}
+		}
+
+		SwdDomainCond swdDomainCond = new SwdDomainCond();
+		swdDomainCond.setFormId(SeraConstant.PERFORMMISSION_FORMID);
+		SwdDomain swdDomain = SwManagerFactory.getInstance().getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
+		String domainId = swdDomain.getObjId();
+		
+		SwdFieldCond swdFieldCond = new SwdFieldCond();
+		swdFieldCond.setDomainObjId(domainId);
+		SwdField[] fields = SwManagerFactory.getInstance().getSwdManager().getFields(userId, swdFieldCond, IManager.LEVEL_LITE);
+		if (CommonUtil.isEmpty(fields))
+			return null;//TODO return null? throw new Exception??
+
+		Map<String, SwdField> fieldInfoMap = new HashMap<String, SwdField>();
+		for (SwdField field : fields) {
+			fieldInfoMap.put(field.getFormFieldId(), field);
+		}
+
+		List fieldDataList = new ArrayList();
+		for (SwdField field : fields) {
+			String fieldId = field.getFormFieldId();
+			SwdDataField fieldData = new SwdDataField();
+			fieldData.setId(fieldId);
+			fieldData.setName(field.getFormFieldName());
+			fieldData.setRefForm(null);
+			fieldData.setRefFormField(null);
+			fieldData.setRefRecordId(null);
+			if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_TITLEFIELDID)) {
+				fieldData.setValue(txtMissionName);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_OPENDATEFIELDID)) {
+				if(txtMissionOpenDate.length() == FieldData.SIZE_DATETIME)
+					txtMissionOpenDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionOpenDate).toGMTDateString();
+				else if(txtMissionOpenDate.length() == FieldData.SIZE_DATE)
+					txtMissionOpenDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionOpenDate).toGMTDateString();
+				fieldData.setValue(txtMissionOpenDate);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CLOSEDATEFIELDID)) {
+				if(txtMissionCloseDate.length() == FieldData.SIZE_DATETIME)
+					txtMissionCloseDate = LocalDate.convertLocalDateTimeStringToLocalDate(txtMissionCloseDate).toGMTDateString();
+				else if(txtMissionCloseDate.length() == FieldData.SIZE_DATE)
+					txtMissionCloseDate = LocalDate.convertLocalDateStringToLocalDate(txtMissionCloseDate).toGMTDateString();
+				fieldData.setValue(txtMissionCloseDate);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_PREVMISSIONFIELDID)) {
+				fieldData.setValue(selPrevMission);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CONTENTFIELDID)) {
+				fieldData.setValue(txtaMissionContent);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_INDEXFIELDID)) {
+				ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+				CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
+				int lastMissionIndex = courseDetail.getLastMissionIndex();
+				if (lastMissionIndex == -1) {
+					lastMissionIndex = 0;
+				} else {
+					lastMissionIndex = lastMissionIndex + 1;
+				}
+				courseDetail.setLastMissionIndex(lastMissionIndex);
+				seraMgr.setCourseDetail(courseDetail);
+				
+				fieldData.setValue(lastMissionIndex + "");
+			}
+			fieldDataList.add(fieldData);
+		}
+
+		SwdDataField[] fieldDatas = new SwdDataField[fieldDataList.size()];
+		fieldDataList.toArray(fieldDatas);
+		SwdRecord obj = new SwdRecord();
+		obj.setDomainId(domainId);
+		obj.setFormId(SeraConstant.PERFORMMISSION_FORMID);
+		obj.setFormName(swdDomain.getFormName());
+		obj.setFormVersion(swdDomain.getFormVersion());
+		obj.setDataFields(fieldDatas);
+		obj.setRecordId("dr_" + CommonUtil.newId());
+		
+		obj.setWorkSpaceId(courseId);
+		obj.setWorkSpaceType("5");
+		obj.setAccessLevel("3");
+		obj.setAccessValue(null);
+
+		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
+		
+		return courseId;
 	}
 }

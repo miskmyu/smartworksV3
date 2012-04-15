@@ -931,7 +931,18 @@ public class SmartWorks implements ISmartWorks {
 	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.performMissionReport(requestBody, request);
 	}
-	
+	@Override
+	public String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setSeraNote(requestBody, request);
+	}
+	@Override
+	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createNewTeam(requestBody, request);
+	}
+	@Override
+	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.updateSeraProfile(requestBody, request);
+	}
 	
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
