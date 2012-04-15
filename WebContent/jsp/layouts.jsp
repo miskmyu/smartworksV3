@@ -96,10 +96,11 @@ currentUser = {
 <link href="smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />
 	
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- 
+ 
 <script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
- --> 
+<!--  
 <script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
+ -->
 <script type="text/javascript" src="js/jquery/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.validate.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.effects.core.js"></script>
