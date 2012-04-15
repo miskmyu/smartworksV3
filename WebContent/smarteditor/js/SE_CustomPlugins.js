@@ -76,10 +76,18 @@ nhn.husky.SE_ToolbarToggler = $Class({
 	$ON_MSG_APP_READY : function(){
 		this.oApp.exec("SE_TOGGLE_TOOLBAR", []);
 		this.oApp.exec("REGISTER_HOTKEY", ["ctrl+s", "SE_TOGGLE_TOOLBAR", []]);
+        this.oApp.exec("REGISTER_UI_EVENT", ["toolbarToggler", "click", "SE_TOGGLE_TOOLBAR"]);
 	},
 	
 	$ON_SE_TOGGLE_TOOLBAR : function(){
-		this.toolbarArea.style.display = (this.toolbarArea.style.display == "none")?"block":"none";
+		alert('in');
+		if(this.toolbarArea.style.display == "none"){
+			this.toolbarArea.style.display = "block";
+			document.getElementById('c_tool').innerHTML = '▲';
+		}else{
+			this.toolbarArea.style.display = "none";			
+			document.getElementById('c_tool').innerHTML = '▼';
+		}
 		this.oApp.exec("MSG_EDITING_AREA_SIZE_CHANGED", []);
 	}
 });
