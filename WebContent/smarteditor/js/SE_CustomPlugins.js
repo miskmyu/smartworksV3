@@ -55,7 +55,7 @@ function uploadImageFile(uploadForm, appId, maxWidth)
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.setRequestHeader("X-File-Name", encodeURIComponent(qqFile));
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
-    xhr.send(theFrm.fileSelectImage);
+    xhr.send(theFrm.fileSelectImage.value);
     
     return;
 }

@@ -388,7 +388,7 @@ qq.FileUploaderBasic.prototype = {
             this._uploadFile(files[i]);        
         }        
     },       
-    _uploadFile: function(fileContainer){      
+    _uploadFile: function(fileContainer){ 
         var id = this._handler.add(fileContainer);
         var fileName = this._handler.getName(id);
         
