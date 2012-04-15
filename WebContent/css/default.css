@@ -98,6 +98,7 @@ select {
 input[type="image"], input[type="text"], input[type="submit"],
 input[type="password"], textarea {
 	resize: none;
+	padding: 0
 }
 
 input[type="radio"] {margin:0 5px 2px 0}
@@ -165,6 +166,7 @@ mark, rp, rt, ruby, summary, time {
 .ml20 {margin-left: 20px !important}
 .ml25 {margin-left: 25px !important}
 .ml70 {margin-left: 70px !important}
+.mlr5 {margin:0 5px !important}
 
 .mt2 {margin-top:2px !important}
 .mt3 {margin-top:3px !important}

@@ -368,7 +368,7 @@ qq.FileUploaderBasic.prototype = {
         this._filesInProgress--;        
     },
     _onInputChange: function(input){
-        if (this._handler instanceof qq.UploadHandlerXhr){                
+        if (this._handler instanceof qq.UploadHandlerXhr){
             this._uploadFileList(input.files);                   
         } else {             
             if (this._validateFile(input)){                
@@ -388,7 +388,7 @@ qq.FileUploaderBasic.prototype = {
             this._uploadFile(files[i]);        
         }        
     },       
-    _uploadFile: function(fileContainer){      
+    _uploadFile: function(fileContainer){ 
         var id = this._handler.add(fileContainer);
         var fileName = this._handler.getName(id);
         
@@ -1148,7 +1148,6 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         if (!(file instanceof File)){
             throw new Error('Passed obj in not a File (in qq.UploadHandlerXhr)');
         }
-                
         return this._files.push(file) - 1;        
     },
     getName: function(id){        

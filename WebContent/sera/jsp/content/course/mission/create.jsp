@@ -80,7 +80,7 @@
 				<td>
 					<div class="form_label w101">미션<%=course.getLastMissionIndex()+2 %> 제목</div>
 					<div class="form_value">
-						<input name="txtMissionName" type="text" class="fieldline fl required" style="width: 490px">
+						<input name="txtMissionName" type="text" class="fieldline fl required" style="width: 574px">
 					</div>
 				</td>
 			</tr>
