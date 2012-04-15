@@ -13,7 +13,7 @@
 .form_layout table.bgn {background:none; border:none}
 
 /* Icon */
-.icon_fb_space {padding-right: 24px; position: relative;} /* 아이콘이 들어가 있는 영역- 캘린더아이콘 영역 */
+.icon_fb_space {padding-right: 28px; position: relative;} /* 아이콘이 들어가 있는 영역- 캘린더아이콘 영역 */
 .btn_fb_space {padding-right: 65px; position: relative;} /* 버튼4자 들어가 있는 영역 */
 .btn_fb_space5 {padding-right: 75px; position: relative;} /* 버튼5자 들어가 있는 영역 */
 .icon_fb_user {background: url("../images/btn_s_person.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
@@ -33,8 +33,8 @@
 .filter_area .selb_size_sec {float:left; margin-right:5px; width:120px;}
 .str_field {width:200px; text-align:left; float:left;}
 
-.form_date_input {width:55px !important} /*date input 사이즈, 상세필터 공용*/
-.form_time_input {width:60px !important} /*time input 사이즈, 상세필터 공용*/
+.form_date_input {width:65px !important} /*date input 사이즈, 상세필터 공용*/
+.form_time_input {width:65px !important} /*time input 사이즈, 상세필터 공용*/
 .form_datetime_input {width:118px !important}
 
 /* label check icon add */
