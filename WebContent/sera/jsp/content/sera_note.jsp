@@ -79,7 +79,7 @@
 			<table class="js_note_attachment_table cb attach_file_detail" border="0" cellspacing="0" cellpadding="0" style="display:none">
 				<tr class="js_note_file" style="display:none">
 					<td>
-						<div class="form_label w101">첨부파일</div>
+						<div class="form_label">첨부파일</div>
 						<div class="form_value">
 							<div class="js_note_file_field"></div>
 						</div>
@@ -87,7 +87,7 @@
 				</tr>
 				<tr class="js_note_video" style="display:none">
 					<td>
-						<div class="form_label w101">동영상</div>
+						<div class="form_label">동영상</div>
 						<div class="form_value">
 							<div class="js_note_video_field"></div>
 						</div>
@@ -95,7 +95,7 @@
 				</tr>
 				<tr class="js_note_image" style="display:none">
 					<td>
-						<div class="form_label w101">이미지</div>
+						<div class="form_label">이미지</div>
 						<div class="form_value">
 							<div class="js_note_image_field"></div>
 						</div>
@@ -103,9 +103,9 @@
 				</tr>
 				<tr class="js_note_link" style="display:none">
 					<td>
-						<div class="form_label w101">링크</div>
+						<div class="form_label">링크</div>
 						<div class="form_value">
-							<input name="txtNoteUrl" type="text" class="fieldline url" style="width:465px;display:block"/>
+							<input name="txtNoteUrl" type="text" class="fieldline url" style="width:450px;display:block"/>
 						</div>
 					</td>
 				</tr>
