@@ -642,11 +642,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void uploadSEImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		docFileService.uploadSEImage(request, response);
-	}
-
-	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
 		return mailService.getMailFoldersById(folderId);
 	}
