@@ -95,7 +95,7 @@ function loadCreateMissionFields() {
 			colSpan: 1,
 			required: true
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();
 	}
