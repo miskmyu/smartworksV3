@@ -63,11 +63,11 @@ public class NoteInstanceInfo extends WorkInstanceInfo {
 	}
 	public NoteInstanceInfo(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_NOTE);
 	}
 
 	public NoteInstanceInfo(String id, String subject, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject,  owner, owner, lastModifiedDate);
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_NOTE);
 	}
 }

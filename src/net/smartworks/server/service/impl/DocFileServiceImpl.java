@@ -222,11 +222,6 @@ public class DocFileServiceImpl implements IDocFileService {
 		getDocManager().uploadYTVideo(request, response);
 	}
 
-	@Override
-	public void uploadSEImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		getDocManager().uploadSEImage(request, response);
-	}
-
 /*	@Override
 	public String createFile(String userId, String groupId, IFileModel file) throws Exception {
 		return getDocManager().createFile(userId, groupId, file);
