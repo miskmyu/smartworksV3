@@ -50,7 +50,7 @@ function uploadImageFile(uploadForm, appId, maxWidth)
     var baseUri = window.location.href.substring(0,window.location.href.lastIndexOf('/'));
     baseUri = baseUri.substring(0, baseUri.lastIndexOf('/'));
     var qqFile = fileName.substring(fileName.lastIndexOf('\\')+1,fileName.length);
-    var queryString =  baseUri + '/upload_se_image.sw?qqFile=' + qqFile;
+    var queryString =  baseUri + '/upload_temp_file.sw?qqFile=' + qqFile;
     xhr.open("POST", queryString, true);
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.setRequestHeader("X-File-Name", encodeURIComponent(qqFile));

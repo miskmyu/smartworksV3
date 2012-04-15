@@ -1,3 +1,10 @@
+<%@page import="net.smartworks.model.sera.Course"%>
+<%@page import="net.smartworks.model.sera.MissionInstance"%>
+<%@page import="net.smartworks.model.sera.info.MissionInstanceInfo"%>
+<%@page import="net.smartworks.model.sera.info.CourseInfo"%>
+<%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
+<%@page import="net.smartworks.model.sera.info.MissionReportInstanceInfo"%>
+<%@page import="net.smartworks.model.sera.info.NoteInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.AsyncMessageInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.YTVideoInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.EventInstanceInfo"%>
@@ -29,6 +36,18 @@
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
 			InstanceInfo seraInstance = seraInstances[i];
+			WorkSpaceInfo workSpace = seraInstance.getWorkSpace();
+			String courseName = "";
+			MissionInstance mission = null;
+			if(!SmartUtil.isBlankObject(workSpace)){
+				if(workSpace.getClass().equals(CourseInfo.class)){
+					courseName = workSpace.getName();
+				}else{
+					mission = (MissionInstance)smartWorks.getMissionById(workSpace.getId());
+					if(!SmartUtil.isBlankObject(mission))
+						courseName = SmartUtil.isBlankObject(mission.getWorkSpace()) ? "" : mission.getWorkSpace().getName();
+				}
+			}
 %>
 			<div>
 				<ul class="panel_area">
@@ -54,11 +73,15 @@
 								switch(seraInstance.getType()){
 								case Instance.TYPE_BOARD:
 									BoardInstanceInfo board = (BoardInstanceInfo)seraInstance;
-								%>
-									<dt class="name">
-										코스명 <span class="t_redb">[미션1. 자화상 그리기]</span> <span
-											class="icon_delete fr"><a href="">삭제</a> </span>
-									</dt>
+									if(!SmartUtil.isBlankObject(courseName)){
+								%>								
+										<dt class="name">
+											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+												class="icon_delete fr"><a href="">삭제</a> </span>
+										</dt>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text"><%=board.getBriefContent() %></div>
 									</dd>
@@ -66,68 +89,109 @@
 									break;
 								case Instance.TYPE_EVENT:
 									EventInstanceInfo event = (EventInstanceInfo)seraInstance;
-								%>
-									<dt class="name">
-										코스명 <span class="t_redb">[미션1. 자화상 그리기]</span> <span
-											class="icon_delete fr"><a href="">삭제</a> </span>
-									</dt>
+									if(!SmartUtil.isBlankObject(courseName)){
+								%>								
+										<dt class="name">
+											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+												class="icon_delete fr"><a href="">삭제</a> </span>
+										</dt>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text"><%=event.getContent() %></div>
 									</dd>
 								<%
 									break;
-								case Instance.TYPE_IMAGE:
-									ImageInstanceInfo image = (ImageInstanceInfo)seraInstance;
-								%>
-									<dt class="name">
-										코스명 <span class="t_redb">[미션1. 자화상 그리기]</span> <span
-											class="icon_delete fr"><a href="">삭제</a> </span>
-									</dt>
+								case Instance.TYPE_SERA_NOTE:
+									NoteInstanceInfo seraNote = (NoteInstanceInfo)seraInstance;
+									if(!SmartUtil.isBlankObject(courseName)){
+								%>								
+										<dt class="name">
+											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+												class="icon_delete fr"><a href="">삭제</a> </span>
+										</dt>
+									<%
+									}
+									%>
 									<dd>
-										<div class="text"><%=image.getContent() %></div>
+										<div class="text"><%=seraNote.getContent() %></div>
 										<!-- Thum Image-->
-										<div class="thum_image">
-											<img src="<%=image.getImgSource() %>" />
-										</div>
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getImageSrc())){ 
+										%>
+											<div class="thum_image">
+												<img src="<%=seraNote.getImageSrc() %>" />
+											</div>
+										<%
+										} 
+										%>
 										<!-- Thum Image//-->
+										
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
+										%>
+											<div class="thum_image">
+												<object class="thum_image">
+													<param name="movie"
+														value="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
+													<param name="allowScriptAccess" value="always"></param>
+													<param name="allowFullScreen" value="true"></param>
+													<embed
+														src="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"
+														type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
+														class="thum_image"></embed>
+												</object>
+											</div>
+										<%
+										}
+										%>
 									</dd>
 								<%
 									break;
-								case Instance.TYPE_YTVIDEO:
-									YTVideoInstanceInfo video = (YTVideoInstanceInfo)seraInstance;
-								%>
-									<dt class="name">
-										코스명 <span class="t_redb">[미션1. 자화상 그리기]</span> <span
-											class="icon_delete fr"><a href="">삭제</a> </span>
-									</dt>
+								case Instance.TYPE_SERA_MISSION_REPORT:
+									MissionReportInstanceInfo seraReport = (MissionReportInstanceInfo)seraInstance;
+									if(!SmartUtil.isBlankObject(courseName)){
+								%>								
+										<dt class="name">
+											<%=courseName %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+												class="icon_delete fr"><a href="">삭제</a> </span>
+										</dt>
+									<%
+									}
+									%>
 									<dd>
-										<div class="text"><%=video.getContent() %></div>
+										<div class="text"><%=seraReport.getContent() %></div>
 										<!-- Thum Image-->
-										<div class="thum_image">
-											<object class="thum_image">
-												<param name="movie"
-													value="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"></param>
-												<param name="allowScriptAccess" value="always"></param>
-												<param name="allowFullScreen" value="true"></param>
-												<embed
-													src="https://www.youtube.com/v/<%=video.getId() %>?version=3&autohide=1&showinfo=0"
-													type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
-													class="thum_image"></embed>
-											</object>
-										</div>
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getImageSrc())){ 
+										%>
+											<div class="thum_image">
+												<img src="<%=seraReport.getImageSrc() %>" />
+											</div>
+										<%
+										} 
+										%>
 										<!-- Thum Image//-->
-									</dd>
-								<%
-									break;
-								case Instance.TYPE_MEMO:
-									MemoInstanceInfo memo = (MemoInstanceInfo)seraInstance;
-								%>
-									<dt class="name">
-										코스명 <span class="t_redb">[미션1. 자화상 그리기]</span> <span
-											class="icon_delete fr"><a href="">삭제</a> </span>
-									</dt>
-									<dd>
-										<div class="text"><%=memo.getContent() %></div>
+										
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getVideoId())){
+										%>
+											<div class="thum_image">
+												<object class="thum_image">
+													<param name="movie"
+														value="https://www.youtube.com/v/<%=seraReport.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
+													<param name="allowScriptAccess" value="always"></param>
+													<param name="allowFullScreen" value="true"></param>
+													<embed
+														src="https://www.youtube.com/v/<%=seraReport.getVideoId() %>?version=3&autohide=1&showinfo=0"
+														type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
+														class="thum_image"></embed>
+												</object>
+											</div>
+										<%
+										}
+										%>
 									</dd>
 								<%
 									break;
