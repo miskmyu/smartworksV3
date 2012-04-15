@@ -88,7 +88,7 @@
 				<td><div class="form_label w101">미션 기간</div>
 					<div class="form_value">
 						<div class="fl js_mission_open_date_field" width="110px"></div>
-						<div class="fl mr10">~</div> 
+						<div class="fl mr5">~</div> 
 						<div class="fl js_mission_close_date_field" width="110px"></div>
 					</div>
 				</td>
