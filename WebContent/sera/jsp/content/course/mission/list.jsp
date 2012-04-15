@@ -105,7 +105,7 @@ $(document).ready(function(){
 		                	var openDate = new Date(mission.openDate);
 		                	var iconClass = (openDate>today) ? "icon_reserve" : (mission.isClearedByMe) ? "icon_mission" :  "icon_mission current";
             	
-	                		var title = iconClass + '&' + '[미션' + (mission.index+1) + '] ' + mission.subject;
+	                		var title = iconClass + '&' + '[미션' + (mission.index+1) + '] ' + mission.subject + '&' + mission.id;
 
 	                		missions.push({
 			                 	id: mission.id,
@@ -116,9 +116,9 @@ $(document).ready(function(){
 			                 	editable: false,
 			                 	backgroundColor: "#ffffff",
 			                 	textColor: "#000000",
-			                 	borderColor: "#cccccc",
-			                  	url: "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" +  mission.id
-			            	});
+			                 	borderColor: "#cccccc"
+/* 			                  	url: "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" +  mission.id
+ */			            	});
 		                }
 	                }
  					callback(missions);
@@ -142,14 +142,14 @@ $(document).ready(function(){
 		},
 		
 		eventClick: function(event, jsEvent, view){
-	    	smartPop.progressCenter();
+//	    	smartPop.progressCenter();
 		},
 		
 	    eventRender: function(event, element) {
 	    	var title = $(element).find('.fc-event-title');
 	    	var titleText = title.html();
 	    	var tokens = titleText.split('&amp;');
-	    	var titleHtml = (tokens.length==2) ? '<span class="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[1] : token[0]; 
+	    	var titleHtml = (tokens.length==3) ? '<a href="" class="js_select_mission" missionId="' + tokens[2] + '"><span class="' + tokens[0] + '" title="' + tokens[1] + '">' +  tokens[1] + '</span></a>' : token[0]; 
 	    	title.html(titleHtml);
 	    	var eventTime = $(element).find('.fc-event-time').html();
 	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
