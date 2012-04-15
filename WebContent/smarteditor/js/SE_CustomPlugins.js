@@ -76,7 +76,7 @@ nhn.husky.SE_ToolbarToggler = $Class({
 	$ON_MSG_APP_READY : function(){
 		this.oApp.exec("SE_TOGGLE_TOOLBAR", []);
 		this.oApp.exec("REGISTER_HOTKEY", ["ctrl+s", "SE_TOGGLE_TOOLBAR", []]);
-        this.oApp.exec("REGISTER_UI_EVENT", ["toolbarToggler", "click", "SE_TOGGLE_TOOLBAR"]);
+//        this.oApp.exec("REGISTER_UI_EVENT", ["toolbarToggler", "click", "SE_TOGGLE_TOOLBAR"]);
 	},
 	
 	$ON_SE_TOGGLE_TOOLBAR : function(){
