@@ -220,3 +220,155 @@ CREATE TABLE SeraUserDetail (
 	primary key (userId)
 );
 
+
+--Note Tabel
+CREATE TABLE SeraNote (
+	id varchar(50)NOT NULL,
+	domainid varchar(50),
+	workitemid varchar(50),
+	masterrecordid varchar(50),
+	creator varchar(50),
+	createdtime datetime ,
+	modifier varchar(50),
+	modifiedtime datetime ,
+	hit int,
+	workSpaceId varchar(100),
+	workSpaceType varchar(50),
+	accessLevel varchar(1),
+	accessValue varchar(4000),
+	videoFileSize varchar(255),
+	content text,
+	videoFileName varchar(255),
+	fileGroupId varchar(255),
+	linkUrl varchar(255),
+	imageFileGroupId varchar(255),
+	videoYTId varchar(255),
+	primary key (id)
+);
+
+INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880eb36b487f60136b48c4f920001', '40288afb1b25f00b011b25f3c7950001', 'pkg_e4c34f837ea64b1c994d4827d8a4bb51', 1, '세라노트', 'SINGLE', 'DEPLOYED', 'Y', 'admin', getdate(), 'admin', getdate(), '세라노트');
+
+INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('sera_note','Maninsoft', 'sera_note', 1, '세라노트', '', 'SeraNote', 'id', '5', NULL, NULL, 'Y', 'PUB_ALL');
+
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_videoFileSize', 'sera_note', '8', NULL, 'videoFileSize', 'string', 'videoFileSize', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_content', 'sera_note', '5', NULL, 'content', 'text', 'content', NULL, 'N', 'N', NULL, 5, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_videoFileName', 'sera_note', '7', NULL, 'videoFileName', 'string', 'videoFileName', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_file', 'sera_note', '9', NULL, 'fileGroup', 'string', 'fileGroupId', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_linkUrl', 'sera_note', '3', NULL, 'linkUrl', 'string', 'linkUrl', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_imageFile', 'sera_note', '10', NULL, 'imageFileGroup', 'string', 'imageFileGroupId', NULL, 'N', 'N', NULL, -1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_note_videoYTId', 'sera_note', '6', NULL, 'videoYTId', 'string', 'videoYTId', NULL, 'N', 'N', NULL, -1, 0);
+
+INSERT INTO swform (id, packageid, formid, version, name, type, status, creator, createdtime, modifier, modifiedtime, content)
+VALUES ('402880eb36b487f60136b48c4fc70002', 'pkg_e4c34f837ea64b1c994d4827d8a4bb51', 'sera_note', 1, '세라노트', 'SINGLE', 'DEPLOYED', 'admin', getdate(), 'admin', getdate(), '<form id="sera_note" version="1" name="세라노트">
+	<children>
+		<formEntity id="3" name="linkUrl" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="5" name="content" systemType="text"
+			required="false" system="false">
+			<children />
+			<format type="richEditor" viewingType="richEditor"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="772" height="158" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="6" name="videoYTId" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="78"
+				contentWidth="188" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="7" name="videoFileName" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="78"
+				contentWidth="188" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="8" name="videoFileSize" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="78"
+				contentWidth="188" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="9" name="fileGroup" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="79"
+				contentWidth="274" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="10" name="imageFileGroup" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="79"
+				contentWidth="274" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+	</children>
+	<mappingForms />
+	<mappingServices />
+	<layout type="grid_layout">
+		<columns>
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
+		</columns>
+		<gridRow size="105.5">
+			<gridCell size="586.0001821408293" span="2" rowSpan="3"
+				gridColumnIndex="0" fieldId="5" />
+		</gridRow>
+		<gridRow size="30" />
+		<gridRow size="30" />
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="3" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="6" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="7" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="8" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="9" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="10" />
+		</gridRow>
+	</layout>
+	<graphic width="1184" height="475" currentEntityNum="11"
+		currentMappingNum="0">
+		<space />
+	</graphic>
+</form>');
+
+
