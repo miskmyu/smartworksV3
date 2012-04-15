@@ -1067,10 +1067,11 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, task.tskprcinstid ");
 		queryBuffer.append("		, task.tskform ");
 		queryBuffer.append("		, task.isStartActivity ");
-		queryBuffer.append("		, task.tskWorkSpaceId ");//workSpaceId
+		queryBuffer.append("		, task.tskWorkSpaceId ");
+		queryBuffer.append("		, task.tskWorkSpaceType ");
 		queryBuffer.append("		, task.tskAccessLevel ");
 		queryBuffer.append("		, task.tskAccessValue ");
-		queryBuffer.append("		, task.tskDef ");//workSpaceId
+		queryBuffer.append("		, task.tskDef ");
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
 		queryBuffer.append("		, ctg.id as childCtgId ");
@@ -1160,7 +1161,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, prcInst.prcDid ");
 		queryBuffer.append("		, prcInst.prcPrcId ");
 		queryBuffer.append("		, prcInst.prcCreateDate ");
-		queryBuffer.append("		, prcInst.prcWorkSpaceId "); //workSpaceId
+		queryBuffer.append("		, prcInst.prcWorkSpaceId ");
+		queryBuffer.append("		, prcInst.prcWorkSpaceType ");
 		queryBuffer.append("		, prcInst.prcAccessLevel ");
 		queryBuffer.append("		, prcInst.prcAccessValue ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskobjid ");
@@ -1174,7 +1176,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, prcInstInfo.lastTask_tskexecuteDate ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskduedate ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskform ");
-		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceId "); //workSpaceId
+		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceId ");
+		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceType ");
 		queryBuffer.append("		, (select count(*) from tsktask where tskstatus='11' and tsktype='common' and tskprcInstId = prcInst.prcObjid) as lastTaskCount ");
 		queryBuffer.append("	from  ");
 		queryBuffer.append("		prcprcinst prcInst,  ");
@@ -1191,7 +1194,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("					, task.tskexecuteDate as lastTask_tskexecuteDate ");
 		queryBuffer.append("					, task.tskduedate as lastTask_tskduedate ");
 		queryBuffer.append("					, task.tskform as lastTask_tskform ");
-		queryBuffer.append("					, task.tskWorkSpaceId as lastTask_tskWorkSpaceId "); //workSpaceId
+		queryBuffer.append("					, task.tskWorkSpaceId as lastTask_tskWorkSpaceId ");
+		queryBuffer.append("					, task.tskWorkSpaceType as lastTask_tskWorkSpaceType ");
 		queryBuffer.append("			from ( ");
 		queryBuffer.append("					select tskprcinstId , max(tskCreatedate) as createDate  ");
 		queryBuffer.append("					from tsktask  ");
@@ -1346,6 +1350,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setTskForm((String)fields[j++]);
 				obj.setIsStartActivity((String)fields[j++]);
 				obj.setTskWorkSpaceId((String)fields[j++]);
+				obj.setTskWorkSpaceType((String)fields[j++]);
 				obj.setTskAccessLevel((String)fields[j++]);
 				obj.setTskAccessValue((String)fields[j++]);
 				obj.setTskDef((String)fields[j++]);
@@ -1364,6 +1369,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setPrcPrcId((String)fields[j++]);
 				obj.setPrcCreateDate((Timestamp)fields[j++]);
 				obj.setPrcWorkSpaceId((String)fields[j++]);
+				obj.setPrcWorkSpaceType((String)fields[j++]);
 				obj.setPrcAccessLevel((String)fields[j++]);
 				obj.setPrcAccessValue((String)fields[j++]);
 				obj.setLastTskObjId((String)fields[j++]);                       
@@ -1377,7 +1383,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setLastTskExecuteDate((Timestamp)fields[j++]);                 
 				obj.setLastTskDueDate((Timestamp)fields[j++]); 
 				obj.setLastTskForm((String)fields[j++]);    
-				obj.setLastTskWorkSpaceId((String)fields[j++]);                    
+				obj.setLastTskWorkSpaceId((String)fields[j++]);
+				obj.setLastTskWorkSpaceType((String)fields[j++]);
 				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);

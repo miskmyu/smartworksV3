@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.InstanceSpaceInfo"%>
 <%@page import="net.smartworks.model.instance.info.CommentInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
@@ -62,11 +63,8 @@
 			WorkSpaceInfo workSpace = workInstance.getWorkSpace();
 			if(SmartUtil.isBlankObject(workSpace)) workSpace = workInstance.getOwner();
 			boolean onWorkSpace = false;
-			if(workSpace.getClass().equals(DepartmentInfo.class)){
+			if(!(workSpace.getClass().equals(UserInfo.class)))
 				onWorkSpace = true;
-			}else if(workSpace.getClass().equals(GroupInfo.class)){
-				onWorkSpace = true;
-			}
 			BoardInstanceInfo board=null;
 			EventInstanceInfo event=null;
 			FileInstanceInfo file=null;
@@ -202,7 +200,7 @@
 						<div class="noti_in_m">
 							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span></a><%} %>
 							<div><%=workInstance.getSubject() %></div>
 							<!-- 인스턴스 마지막수정일자 -->
 							<div class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
