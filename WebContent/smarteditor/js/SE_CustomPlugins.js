@@ -3,32 +3,61 @@
 	oEditor.registerPlugin(new nhn.husky.SE_ImageUpload(elAppContainer));
 }
 
-function submitImageUploadForm(uploadForm)
+function uploadImageFile(uploadForm, appId, maxWidth)
 {
-  var theFrm = uploadForm;
 
-  fileName = theFrm.fileSelectImage.value;
-  if (fileName == "") {
-    alert('본문에 삽입할 이미지를 선택해주세요.');
-    return;
-  }
-    pathpoint = fileName.lastIndexOf('.');
-    filepoint = fileName.substring(pathpoint+1,fileName.length);
-    filetype = filepoint.toLowerCase();
-    if (filetype != 'jpg' && filetype != 'gif' && filetype != 'png' && filetype != 'jpeg' && filetype !='bmp') {
-        alert('이미지 파일만 선택할 수 있습니다.');
-        self.close();
-        return;
-    }
+	var theFrm = uploadForm;
 
-    theFrm.imagepath.value = parent.parent.imagepath;
-  try {
-      theFrm.submit();
-  } catch (e) {
-    theFrm.reset();
-    alert('파일을 업로드할 수 없습니다.');
+	fileName = theFrm.fileSelectImage.value;
+
+	if (fileName == "") {
+		alert('본문에 삽입할 이미지를 선택해주세요.');
+		return;
+	}
+	pathpoint = fileName.lastIndexOf('.');
+	filepoint = fileName.substring(pathpoint+1,fileName.length);
+	filetype = filepoint.toLowerCase();
+	if (filetype != 'jpg' && filetype != 'gif' && filetype != 'png' && filetype != 'jpeg' && filetype !='bmp') {
+		alert('이미지 파일만 선택할 수 있습니다.');
+		return;
+	}
+
+    var xhr = new XMLHttpRequest();
+    
+    xhr.upload.onprogress = function(e){
+    	if (e.lengthComputable){
+//    		_loaded[id] = e.loaded;
+//    		self._options.onProgress(id, name, e.loaded, e.total);
+    	}
+    };
+
+    xhr.onreadystatechange = function(){            
+    	if (xhr.readyState == 4){
+    		var responseJSON;
+    		try{
+	    		responseJSON = eval("(" + xhr.responseText + ")");
+	    		var fileFullPath = responseJSON.pullPathName;
+	    	    var sHTML = "<img src='" + fileFullPath + "' border='0' style='max-width:" +maxWidth + "px'>";
+	    	    parent.parent.oEditors.getById[appId].exec("PASTE_HTML", [sHTML]);
+    		}catch (err){
+	    		responseJSON = {};
+	    	}
+    	    parent.parent.oEditors.getById[appId].exec("SE_TOGGLE_IMAGEUPLOAD_LAYER");
+    	}
+    };
+    
+    // build query string
+    var baseUri = window.location.href.substring(0,window.location.href.lastIndexOf('/'));
+    baseUri = baseUri.substring(0, baseUri.lastIndexOf('/'));
+    var qqFile = fileName.substring(fileName.lastIndexOf('\\')+1,fileName.length);
+    var queryString =  baseUri + '/upload_se_image.sw?qqFile=' + qqFile;
+    xhr.open("POST", queryString, true);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.setRequestHeader("X-File-Name", encodeURIComponent(qqFile));
+    xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    xhr.send(theFrm.fileSelectImage);
+    
     return;
-  }
 }
 
 // Sample plugin. Use CTRL+T to toggle the toolbar
@@ -64,6 +93,7 @@ nhn.husky.SE_ImageUpload = $Class({
 
     _assignHTMLObjects : function(oAppContainer){
     	this.oImageUploadLayer = cssquery.getSingle("DIV.husky_seditor_imgupload_layer", oAppContainer);
+    	this.oIFrame = cssquery.getSingle("IFRAME#husky_iframe", oAppContainer);
 		this.oBtnConfirm=cssquery.getSingle("BUTTON.confirm",this.oImageUploadLayer);
 		this.oBtnCancel=cssquery.getSingle("BUTTON.cancel",this.oImageUploadLayer);
     },
@@ -78,8 +108,8 @@ nhn.husky.SE_ImageUpload = $Class({
         this.oApp.exec("TOGGLE_TOOLBAR_ACTIVE_LAYER", [this.oImageUploadLayer]);
      },
      
-    $ON_SE_SUBMIT_IMAGEUPLOAD : function(){
-    	submitImageUploadForm(document.getElementById('frmUploadSEImage'));
+    $ON_SE_SUBMIT_IMAGEUPLOAD : function(oAppContainer){
+    	uploadImageFile(document.getElementById('frmUploadSEImage'), this.oApp.sAppId, this.oIFrame.offsetWidth);
      }    
 });
 
