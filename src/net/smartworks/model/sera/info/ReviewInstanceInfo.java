@@ -9,7 +9,7 @@ import net.smartworks.util.LocalDate;
 public class ReviewInstanceInfo extends WorkInstanceInfo {
 
 	private String content;
-	private int startPoint;
+	private int starPoint;
 	
 	public String getContent() {
 		return content;
@@ -17,21 +17,21 @@ public class ReviewInstanceInfo extends WorkInstanceInfo {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public int getStartPoint() {
-		return startPoint;
+	public int getStarPoint() {
+		return starPoint;
 	}
-	public void setStartPoint(int startPoint) {
-		this.startPoint = startPoint;
+	public void setStarPoint(int starPoint) {
+		this.starPoint = starPoint;
 	}
 	
 	public ReviewInstanceInfo(){
 		super();
-		super.setType(Instance.TYPE_REVIEW);
+		super.setType(Instance.TYPE_SERA_REVIEW);
 	}
 
 	public ReviewInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject, owner, owner, lastModifiedDate);
-		super.setType(Instance.TYPE_REVIEW);
+		super.setType(Instance.TYPE_SERA_REVIEW);
 	}
 
 }

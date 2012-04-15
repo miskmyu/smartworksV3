@@ -61,12 +61,12 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 	
 	public MissionInstanceInfo(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_MISSION);
 	}
 
 	public MissionInstanceInfo(String id, String subject, CourseInfo course, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject,  owner, owner, lastModifiedDate);
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_MISSION);
 		super.setWorkSpace(course);
 	}
 	

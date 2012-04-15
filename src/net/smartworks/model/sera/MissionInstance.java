@@ -62,12 +62,12 @@ public class MissionInstance extends WorkInstance {
 	
 	public MissionInstance(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_MISSION);
 	}
 
 	public MissionInstance(String id, String subject, Course course, User owner, LocalDate lastModifiedDate){
 			super(id, subject, null, owner, owner, lastModifiedDate);
-			super.setType(Instance.TYPE_MISSION);
+			super.setType(Instance.TYPE_SERA_MISSION);
 			super.setWorkSpace(course);
 	}
 

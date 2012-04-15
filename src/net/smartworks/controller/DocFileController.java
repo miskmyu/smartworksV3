@@ -101,10 +101,4 @@ public class DocFileController {
 		smartworks.uploadYTVideo(request, response);
 	}
 	
-	@RequestMapping(value = "/upload_se_image", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody void uploadSEImage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.uploadSEImage(request, response);
-	}
-
 }

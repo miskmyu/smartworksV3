@@ -67,12 +67,12 @@ public class NoteInstance extends WorkInstance {
 	}
 	public NoteInstance(){
 		super();
-		super.setType(Instance.TYPE_NOTE);
+		super.setType(Instance.TYPE_SERA_NOTE);
 	}
 
-	public NoteInstance(String id, String subject, Work work, User owner, LocalDate lastModifiedDate){
-			super(id, subject, work, owner, owner, lastModifiedDate);
-			super.setType(Instance.TYPE_NOTE);
+	public NoteInstance(String id, String subject, User owner, LocalDate lastModifiedDate){
+			super(id, subject, null, owner, owner, lastModifiedDate);
+			super.setType(Instance.TYPE_SERA_NOTE);
 	}
 
 	
