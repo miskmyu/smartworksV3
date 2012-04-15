@@ -36,7 +36,7 @@ function loadCreateCourseFields() {
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();
 	}
 	
@@ -55,7 +55,7 @@ function loadCreateCourseFields() {
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();		
 	}
 

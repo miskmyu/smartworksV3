@@ -54,7 +54,7 @@
 					<!-- photo-->
 					<li class="">
 						<div class="photo_bg">
-							<img src="<%=seraInstance.getOwner().getMidPicture() %>" />
+							<img class="sz_s_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
 							<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
 						</div>
 						<div class="grade">
