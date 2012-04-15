@@ -223,6 +223,18 @@
 #smart_editor .tool li.url .layer fieldset p input{ width:13px; height:13px; vertical-align:middle; margin-right:3px;}
 #smart_editor .tool li.url .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
 
+#smart_editor .tool li.imgupload .layer{ width:231px; height:125px; background-image:url(../img/bx_url.gif); background-repeat:no-repeat; background-position:10px 14px;}
+#smart_editor .tool li.imgupload .layer fieldset{ position:absolute; width:212px; left:10px; top:14px;}
+#smart_editor .tool li.imgupload .layer fieldset h3{ position:absolute; top:-4px; left:15px; color:#404040; visibility:visible; font-size:12px; line-height:normal; width:auto; height:auto; background:none; margin:0; padding:0; font-weight:normal;}
+#smart_editor .tool li.imgupload .layer fieldset input{ position:absolute; left:12px; top:19px; width:179px; padding:2px 0 1px 6px; *margin:-1px 0; font-size:11px; height:15px;}
+#smart_editor .tool li.imgupload .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
+
+#smart_editor .tool li.videoupload .layer{ width:231px; height:125px; background-image:url(../img/bx_url.gif); background-repeat:no-repeat; background-position:10px 14px;}
+#smart_editor .tool li.videoupload .layer fieldset{ position:absolute; width:212px; left:10px; top:14px;}
+#smart_editor .tool li.videoupload .layer fieldset h3{ position:absolute; top:-4px; left:15px; color:#404040; visibility:visible; font-size:12px; line-height:normal; width:auto; height:auto; background:none; margin:0; padding:0; font-weight:normal;}
+#smart_editor .tool li.videoupload .layer fieldset input{ position:absolute; left:12px; top:19px; width:179px; padding:2px 0 1px 6px; *margin:-1px 0; font-size:11px; height:15px;}
+#smart_editor .tool li.videoupload .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
+
 #smart_editor .tool li.table .layer{ width:242px; height:239px; background-image:url(../img/bx_table.gif); background-repeat:no-repeat; background-position:10px 14px;}
 #smart_editor .tool li.table .layer fieldset{ position:absolute; width:222px; left:10px;}
 #smart_editor .tool li.table .layer fieldset h3{ position:absolute; top:-4px; left:15px; color:#404040; visibility:visible; font-size:12px; line-height:normal; width:auto; height:auto; background:none; margin:0; padding:0; font-weight:normal;}
