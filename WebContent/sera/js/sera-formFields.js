@@ -36,7 +36,7 @@ function loadCreateCourseFields() {
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();
 	}
 	
@@ -55,7 +55,7 @@ function loadCreateCourseFields() {
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();		
 	}
 
@@ -95,7 +95,7 @@ function loadCreateMissionFields() {
 			colSpan: 1,
 			required: true
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();
 	}
@@ -135,7 +135,7 @@ function loadCreateMissionFields() {
 			colSpan: 1,
 			required: true
 		});
-		gridRow.find('.form_col').css({width:"490px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"580px", padding:"0px"});
 		gridRow.find('textarea').css({height:"300px"});
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();		

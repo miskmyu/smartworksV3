@@ -1,18 +1,17 @@
 package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.InstanceSpaceInfo;
-import net.smartworks.model.work.Work;
-
+import net.smartworks.model.instance.Instance;
 
 public class InstanceSpace extends WorkSpace {
 
-	private Work work;
-	
-	public Work getWork() {
-		return work;
+	private Instance instance;
+
+	public Instance getInstance() {
+		return instance;
 	}
-	public void setWork(Work work) {
-		this.work = work;
+	public void setInstance(Instance instance) {
+		this.instance = instance;
 	}
 	public InstanceSpace(){
 		super();

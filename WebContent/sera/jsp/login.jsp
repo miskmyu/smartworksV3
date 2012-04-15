@@ -73,7 +73,7 @@
 			<!-- Top Logo_Srch //-->
 			<!-- Slogun -->
 			<div class="sera_slogun">
-				<img width="875" height="32" alt="" src="sera/images/main_slogun.png">
+				<img width="875" height="32" alt="" src="sera/images/main_slogun.jpg">
 			</div>
 			<!-- Slogun//-->
 		</div>
@@ -162,57 +162,37 @@
 			</ul>
 			<!-- Center Visual//-->
 			<!-- Right -->
-			<ul class="sera_friend">
-				<li class="lst_normal">
-					<dl class="friend_sum">
-						<dd class="photo">
-							<a href="http://blog.seracampus.com/?p=703"> 
-								<img width="90" height="57" alt="" src="sera/images/element_sample4.png"> 
-							</a>
-						</dd>
-						<dd class="info">
-							<strong> <a href="http://blog.seracampus.com/?p=703">SERAian 인터뷰</a></strong><br> 이상호
-						</dd>
-						<dd class="btn_go">
-							<a href="http://blog.seracampus.com/?p=703"> 
-								<img width="22" height="21" title="바로가기" alt="바로가기" src="sera/images/main_btn_go.png"> 
-							</a>
-						</dd>
-					</dl>
-				</li>
-				<li class="lst_normal">
-					<dl class="friend_sum">
-						<dd class="photo">
-							<a target="_blank" href="http://www.youtube.com/watch?v=KneS3Mstmes"> 
-								<img width="90" height="57" alt="" src="sera/images/element_sample5.png"> 
-							</a>
-						</dd>
-						<dd class="info">
-							<strong><a target="_blank" href="http://www.youtube.com/watch?v=KneS3Mstmes"> TEDx 과천 <br> 전하진 대표 </a> </strong>
-						</dd>
-						<dd class="btn_go">
-							<a target="_blank" href="http://www.youtube.com/watch?v=KneS3Mstmes"> 
-								<img width="22" height="21" title="바로가기" alt="바로가기" src="sera/images/main_btn_go.png"> 
-							</a>
-						</dd>
-					</dl>
-				</li>
-				<li class="lst_normal">
-					<dl class="friend_sum">
-						<dd class="photo">
-							<a href="http://blog.seracampus.com/?p=508"> <img width="90"height="57" alt="" src="sera/images/element_sample3.png"> </a>
-						</dd>
-						<dd class="info">
-							<strong> <a href="http://blog.seracampus.com/?p=508">Recruiting Mentor</a> </strong> <br> 조동원 대표
-						</dd>
-						<dd class="btn_go">
-							<a href="http://blog.seracampus.com/?p=508"> 
-								<img width="22" height="21" src="sera/images/main_btn_go.png"> 
-							</a>
-						</dd>
-					</dl>
-				</li>
-			</ul>
+			<ul class="sera_news">
+		      <li class="lst_normal">
+		        <dl class="">
+		          <dt><div class="icon_mn_news fl">SERA 소식</div><div class="icon_mn_more"><a href="" class="mt13"> </a></div></dt>
+		          <dd>
+		              <ul>
+		                <li>- 세라 캠퍼스가 기능을 강화하여 새롭게...</li>
+		                <li>- 장동인 대표의 [클라우드]코스가 신설...</li>
+		                <li>- TEDx 과천 강의가 업로드...</li>
+		                <li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
+		                <li>- [세라소식] 게시글 제목은 최근 5개만...</li>
+		              </ul>
+		          </dd>
+		        </dl>
+		      </li>
+		      
+		      <li class="lst_normal end mt20">
+		        <dl class="">
+		          <dt><div class="icon_as_srtrend fl">트렌드 세라</div><div class="icon_mn_more"><a href="" class="mt13"> </a></div></dt>
+		          <dd>
+		              <ul>
+		                <li>- 세라 캠퍼스가 기능을 강화하여 새롭게...</li>
+		                <li>- 장동인 대표의 [클라우드]코스가 신설...</li>
+		                <li>- TEDx 과천 강의가 업로드...</li>
+		                <li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
+		                <li>- [세라소식] 게시글 제목은 최근 5개만...</li>
+		              </ul>
+		          </dd>
+		        </dl>
+		      </li>
+		    </ul>
 			<!-- Right//-->
 		</div>
 		<!-- Intro AD//-->

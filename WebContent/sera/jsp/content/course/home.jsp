@@ -29,7 +29,7 @@
 <div class="course_df_section js_course_home_page" courseId="<%=courseId%>">
 	<div class="course_df_block">
 		<div class="course_df_img">
-			<img src="<%=course.getMidPicture() %>" />
+			<img class="sz_xl_118" src="<%=course.getMidPicture() %>" />
 		</div>
 		<div class="course_df">
 			<h1><%=course.getName() %></h1>
@@ -52,16 +52,18 @@
 			<dl>
 				<dt>코스알림</dt>
 				<%
-				for(int i=0; i<notices.length; i++){
-					InstanceInfo notice = notices[i];
-					if(notice.getType()==Instance.TYPE_BOARD){
+				if(!SmartUtil.isBlankObject(notices)){
+					for(int i=0; i<notices.length; i++){
+						InstanceInfo notice = notices[i];
+						if(notice.getType()==Instance.TYPE_BOARD){
 				%>
-						<dd>[알림] <%=notice.getSubject() %></dd>
-					<%
-					}else if(notice.getType()==Instance.TYPE_EVENT){
-					%>
-						<dd>[이벤트] <%=notice.getSubject() %></dd>
-					<%
+							<dd>[알림] <%=notice.getSubject() %></dd>
+						<%
+						}else if(notice.getType()==Instance.TYPE_EVENT){
+						%>
+							<dd>[이벤트] <%=notice.getSubject() %></dd>
+						<%
+						}
 					}
 				}
 				%>

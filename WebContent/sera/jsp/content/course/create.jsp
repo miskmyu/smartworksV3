@@ -89,7 +89,7 @@
 		<table class="js_create_course_table" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td>
-					<div class="form_label w101">코스 제목</div>
+					<div class="form_label w110">코스 제목</div>
 					<div class="form_value">
 						<input name="txtCourseName" type="text" class="fieldline fl required" style="width: 490px">
 					</div>
@@ -97,7 +97,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">코스 목적</div>
+					<div class="form_label w110">코스 목적</div>
 					<div class="form_value">
 						<input name="txtCourseObject" type="text" class="fieldline fl required" style="width: 490px">
 					</div>
@@ -105,7 +105,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">상세설명</div>
+					<div class="form_label w110">상세설명</div>
 					<div class="form_value">
 						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="3" style="width: 490px"></textarea>
 						<div class="cb t_refe pt2">* 선택입력란입니다</div>
@@ -114,7 +114,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">이미지</div>
+					<div class="form_label w110">이미지</div>
 					<div class="form_value">
 						<div class="js_course_profile_field js_auto_load_course_profile"></div>
 						<div class="cb t_refe pt2">* 이미지를 등록하지 않은 경우 SERA에서 제공하는 기본 이미지가 제공되어 보여집니다</div>
@@ -123,7 +123,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">카테고리</div>
+					<div class="form_label w110">카테고리</div>
 					<div class="form_value">
 						<input name="chkCourseCategories" type="checkbox" value="예술" />예술
 						<input name="chkCourseCategories" type="checkbox" value="엔터테인먼트" />엔터테인먼트
@@ -157,7 +157,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">키워드</div>
+					<div class="form_label w110">키워드</div>
 					<div class="form_value">
 						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" />
 						<div class="cb t_refe pt2">* 코스의 이해를 도울수 있는 키워드 입력 (코스 검색 또는 추천코스에 사용 됨), 2개이상은 콤마(,)로 구분</div>
@@ -165,24 +165,26 @@
 				</td>
 			</tr>
 			<tr>
-				<td><div class="form_label w101">코스 기간</div>
+				<td><div class="form_label w110">코스 기간</div>
 					<div class="form_value">
 						<input name="txtCourseDays" type="text" style="width: 100px" class="fieldline fl tr number" />
 						<div class="fl mt2 ml2"> 일(Days)</div>
-						<div class="fl ml10">
+						<div class="t_refe pt2 fl"> * 코스 기간은 6개월 이내로 설정해 주세요</div>
+						
+						<div class="cb pt10">
 							<input class="fl pt2" name="chkUserDefineDays" type="checkbox"/>
 							<label class="fl">사용자 정의</label>
-							<div class="fl js_course_start_date_field" width="110px"></div>
-							<div class="fl mr10">~</div> 
-							<div class="fl js_course_end_date_field" width="110px"></div>
+							<div class="fl js_course_start_date_field"></div>
+							<div class="fl mr5" style="line-height: 20px"> ~ </div> 
+							<div class="fl js_course_end_date_field"></div>
 						</div>
-						<div class="cb t_refe">* 코스 기간은 6개월 이내로 설정해 주세요</div>
+						<div class="cb t_refe pt2">* 정해진 날짜를 통해 코스를 진행해야 하는 경우 코스 상세기간 입력으로 해당 날짜를 입력해주세요</div>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">공개 설정</div>
+					<div class="form_label w110">공개 설정</div>
 					<div class="form_value">
 						<input name="chkCourseSecurity" type="radio" checked value="<%=AccessPolicy.LEVEL_PUBLIC %>" /><label>공개</label>
 						<input name="chkCourseSecurity" type="radio" value="<%=AccessPolicy.LEVEL_PRIVATE %>" />비공개
@@ -192,7 +194,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">멘티 인원 제한</div>
+					<div class="form_label w110">멘티 인원 제한</div>
 					<div class="form_value">
 						<input name="chkCourseUsers" type="radio" checked value="unlimited" /><label>무제한</label> 
 						<input name="chkCourseUsers" type="radio" value="userInput" />직접입력 
@@ -203,7 +205,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">멘티 가입 승인</div>
+					<div class="form_label w110">멘티 가입 승인</div>
 					<div class="form_value">
 						<input name="chkJoinApproval" type="radio" checked value="autoApporval" /><label>자동승인</label>
 						<input name="chkJoinApproval" type="radio" value="mentorApproval" />멘토승인
@@ -213,7 +215,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div class="form_label w101">코스 유료 설정</div>
+					<div class="form_label w110">코스 유료 설정</div>
 					<div class="form_value">
 						<input name="chkCourseFee" type="radio" checked value="free" /><label>무료 </label>
 						<input name="chkCourseFee" type="radio" value="pay" />유료 (금액 입력: 
