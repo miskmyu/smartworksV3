@@ -79,33 +79,8 @@
 			<textarea name="txtReportContent" class="required js_report_content" rows="3" placeholder="미션을 수행하세요!"></textarea>
 		</div>
 	
-		<div class="cb mt6">
-			<!-- 좌측 영역 -->
-			<div class="option">
-				<!-- 버튼 -->
-				<div class="btn_wstyle_l">
-					<div class="btn_wstyle_r">텍스트</div>
-				</div>
-				<!-- 버튼 //-->
-				<!-- 전체공개 -->
-				<div class="txt ml10">
-					<select name="selAccessLevel" class="ml5">
-						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
-						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
-					</select>
-				</div>
-				<!-- 전체공개 //-->
-	
-				<!-- 태그넣기 -->
-				<div class="txt">
-					<a href=""> 태그넣기<span class="icon_bul_select ml5"></span> </a>
-				</div>
-				<!-- 태그넣기//-->
-				<div class="txt t_s11"><span class="t_red">0</span> /1000kbyte</div>
-			</div>
-			<!-- 좌측 영역//-->
-	
-			<table class="js_note_attachment_table" border="0" cellspacing="0" cellpadding="0" style="display:none">
+		<div class="cb mt6">	
+			<table class="js_note_attachment_table cb attach_file_detail" border="0" cellspacing="0" cellpadding="0" style="display:none">
 				<tr class="js_note_file" style="display:none">
 					<td>
 						<div class="form_label w101">첨부파일</div>
@@ -141,6 +116,7 @@
 			</table>
 	
 			<div class="sw_error_message tl" style="color: red"></div>
+
 			<!-- 우측 버튼 영역 -->
 			<div class="attach_file js_note_buttons">
 				<ul>

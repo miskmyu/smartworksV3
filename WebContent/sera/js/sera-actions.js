@@ -310,7 +310,7 @@ $(function() {
 	});
 	
 	$('.js_select_mission').live('click', function(e){
-		var input = $(e.target).parents('a');
+		var input = $(e.target).parent('a');
 		var missionList = input.parents('.js_mission_list_page');
 		var courseId = missionList.attr('courseId');
 		var missionId = input.attr('missionId');
