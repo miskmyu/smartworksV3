@@ -264,7 +264,7 @@ public class SeraController {
 	@RequestMapping(value = "/perform_mission_report", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> performMissionReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.performMissionReport(requestBody, request);
+		smartworks.performMissionReport(requestBody, request);
 		// TO DO : Exception handler
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();

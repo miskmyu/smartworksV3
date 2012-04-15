@@ -932,6 +932,10 @@ public class SmartWorks implements ISmartWorks {
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewCourse(requestBody, request);
 	}
+	@Override
+	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.performMissionReport(requestBody, request);
+	}
 	
 	
 	@Override

@@ -20,5 +20,5 @@ public class SeraConstant {
 	public final static String MISSION_MISSIONCLEARERS = "4";
 	public final static String MISSION_STARTPOINT = "5";
 	
-	
+	public final static String PERFORMMISSION_FORMID = "";
 }
