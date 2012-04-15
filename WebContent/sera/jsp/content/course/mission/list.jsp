@@ -77,7 +77,8 @@ $(document).ready(function(){
 	$('.js_calendar_space').fullCalendar({
 		header: {
 			left: 'prev,next today',
-			center: 'title'
+			center: 'title',
+			right: ''
 		},
 		editable: true,
 		buttonText : {

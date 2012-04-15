@@ -65,7 +65,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title_noico"><fmt:message key="settings.title.company.event_setting"/></div>
+				<div class="body_titl_area ti_company title_noico"><fmt:message key="settings.title.company.event_setting"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 -->

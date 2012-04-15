@@ -36,6 +36,7 @@ public interface IDocFileManager extends IManager {
 	public void ajaxUploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
 	public void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
 	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
+	public void uploadSEImage(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
 	public String deleteTempFile() throws DocFileException;
 	public IFileModel retrieveFile(String fileId) throws DocFileException;
 	public void updateFile(String userId, IFileModel file) throws DocFileException;

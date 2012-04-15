@@ -150,3 +150,5 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	};
 	return dataField;
 };
+
+// oEditors.getById[id].exec("PASTE_HTML", [sHTML]);

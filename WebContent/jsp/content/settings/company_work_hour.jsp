@@ -68,7 +68,7 @@
 
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title_noico"><fmt:message key="settings.title.company.work_hour_policy"/></div>
+				<div class="body_titl_area ti_company title_noico"><fmt:message key="settings.title.company.work_hour_policy"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 -->
