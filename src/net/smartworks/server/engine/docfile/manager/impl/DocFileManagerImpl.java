@@ -801,50 +801,6 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 	}
 
-	@Override
-	public void uploadSEImage(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
-		IFileModel formFile = new HbFileModel();
-		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
-		formFile.setId(fileId);
-
-		//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
-		this.setFileDirectory(OSValidator.getImageDirectory());
-		String companyId = SmartUtil.getCurrentUser().getCompanyId();
-
-		String fileDivision = "Temps";
-		File repository = this.getFileRepository(companyId, fileDivision);
-		String filePath = "";
-		String imagerServerPath = "";
-		String extension = "";
-		if (formFile != null) {
-			String fileName = "";
-			try {
-				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			if (fileName.indexOf(File.separator) > 1)
-				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-			formFile.setFileName(fileName);
-			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
-			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
-
-			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
-			formFile.setImageServerPath(imagerServerPath);
-
-			if (extension != null) {
-				filePath = filePath + "." + extension;
-			}
-			formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
-
-			formFile.setFilePath(filePath);
-
-		}
-
-		this.writeAjaxFile(request, response, formFile);
-
-	}
-
 	public String insertProfilesFile(String fileId, String fileName, String communityId) throws DocFileException {
 
 		try {
