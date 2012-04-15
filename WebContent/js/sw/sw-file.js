@@ -144,8 +144,6 @@ function videoYTUploader(target) {
         			break;
         		}
         	}
-        	console.log('id=', id, ', filename=', fileName, ', json=', responseJSON.videoYTId);
-        	alert('wait');
         	if(isEmpty(file) || !responseJSON.success) return;
         	file.attr('videoYTId', responseJSON.videoYTId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
