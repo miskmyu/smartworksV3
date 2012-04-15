@@ -37,7 +37,22 @@
 		<property name="achievedPoint" type="int"/>
 		<property name="lastMissionIndex" type="int"/>
 	</class>
-	
+	<class name="SeraUserDetail" table="SeraUserDetail">
+		<id name="userId" column="userId" type="string" length="50">
+			<generator class="assigned"/>
+		</id>
+		<property name="email" type="string" length="50"/>
+		<property name="birthday" type="timestamp"/>
+		<property name="sex" type="int"/>
+		<property name="goal" type="string" length="500"/>
+		<property name="interests" type="string" length="500"/>
+		<property name="educations" type="string" length="500"/>
+		<property name="works" type="string" length="500"/>
+		<property name="twUserId" type="string" length="50"/>
+		<property name="twPassword" type="string" length="100"/>
+		<property name="fbUserId" type="string" length="50"/>
+		<property name="fbPassword" type="string" length="100"/>
+	</class>
 	<class name="SeraFriend" table="Friends">
 		<id name="objId" type="string" length="100" unsaved-value="undefined">
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
