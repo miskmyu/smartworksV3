@@ -61,6 +61,7 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.media.MediaFileSource;
@@ -539,6 +540,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String ytUserId = request.getParameter("ytUserId");
 		String ytPassword = request.getParameter("ytPassword");
 
+		//MultipartRequest multipartRequest = (MultipartRequest)request;
         try {
             writer = response.getWriter();
         } catch (IOException ex) {
@@ -593,6 +595,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			mg.setPrivate(false);
 
 			MediaFileSource ms = new MediaFileSource(new File(formFile.getFilePath()), "video/quicktime");
+			//MediaFileSource ms = new MediaFileSource(multipartRequest.getFile("file"), "video/quicktime");
 			newEntry.setMediaSource(ms);	
 			String uploadUrl = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
 			try{
