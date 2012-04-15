@@ -311,7 +311,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_area {margin:15px 0 0 0; overflow:hidden}
 .panel_area li { float:left}
 .panel_area .cb li { float:none}
-.photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:73px; height:84px; display: inline; float: left; padding: 5px 15px 0 4px}
+.photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:73px; float: left; padding: 5px 15px 0 4px}
 .photo_bg .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
 .grade { float:left; margin:5px 0 0 0}
 .grade div { margin-bottom:6px}
@@ -478,6 +478,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .w569 {width:569px !important}
 .w580 {width:580px !important}
 .w635 {width:635px !important}
+
+/* Size */
+.sz_s_34 {width:34px !important; height:34px !important}
+.sz_s_48 {width:48px !important; height:48px !important}
+.sz_s_72 {width:72px !important; height:72px !important}
+.sz_s_118 {width:118px !important; height:118px !important}
 
 /* Bullet */
 .bullet_dot {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; color:#9a9a9a}

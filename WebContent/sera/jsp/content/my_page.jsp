@@ -24,7 +24,7 @@
 %>
 
 <div class="my_comment_section">
-	<div class="my_photo"><img src="<%=cUser.getMidPicture() %>" width="120px" height="120px"/></div>
+	<div class="my_photo"><img class="sz_s_118" src="<%=cUser.getMidPicture() %>" /></div>
 	<!-- My Comment -->
 	<div class="my_comment">
 		<div class="header"><%=cUser.getNickName() %>님</div>
