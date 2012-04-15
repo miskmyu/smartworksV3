@@ -196,7 +196,6 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 	</graphic>
 </form>');
 
-
 CREATE TABLE Friends (
 	objId varchar(50) NOT NULL,
 	userId varchar(50),
@@ -205,5 +204,19 @@ CREATE TABLE Friends (
 	primary key (objId)
 );
 
-
+CREATE TABLE SeraUserDetail (
+	userId varchar(50) NOT NULL,
+	email varchar(50),
+	birthday datetime,
+	sex int,
+	goal varchar(500),
+	interests varchar(500),
+	educations varchar(500),
+	works varchar(500),
+	twUserId varchar(50),
+	twPassword varchar(100),
+	fbUserId varchar(50),
+	fbPassword varchar(100),
+	primary key (userId)
+);
 

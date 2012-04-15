@@ -8,8 +8,6 @@
 
 package net.smartworks.server.engine.sera.manager.impl;
 
-import java.sql.Clob;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -26,7 +24,7 @@ import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
-import net.smartworks.server.engine.worklist.model.TaskWork;
+import net.smartworks.server.engine.sera.model.SeraUserDetail;
 
 import org.hibernate.Query;
 
@@ -395,6 +393,44 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			return objs;
 		} catch (Exception e) {
 			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException {
+		try {
+			if (CommonUtil.isEmpty(objId)) 
+				return null;
+			SeraUserDetail seraUser = (SeraUserDetail)this.get(SeraUserDetail.class, objId);
+			return seraUser;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException {
+		try {
+			if (seraUser == null)
+				return null;
+			this.set(seraUser);
+			return seraUser;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public void removeSeraUser(String userId, String objId) throws SeraException {
+		try {
+			SeraUserDetail obj = this.getSeraUserById(userId, objId);
+			this.getHibernateTemplate().delete(obj);
+			this.getHibernateTemplate().flush();
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
 			throw new SeraException(e);
 		}
 	}

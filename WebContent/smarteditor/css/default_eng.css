@@ -38,7 +38,7 @@
 #smart_editor .input_area iframe{}
 #smart_editor .input_area textarea{ *margin:0 -10px; _margin-bottom:-2px;}
 #smart_editor .input_area textarea.blind{ display:none;}
-#smart_editor .input_control{ position:relative; display:block; width:100%;height:1px; clear:both; text-align:center; /*background:#fbfbfb url(../img/btn_expand.gif) no-repeat center center;*/ cursor:n-resize;}
+#smart_editor .input_control{ position:relative; display:block; width:100%; height:15px; border-top:1px solid #dfdfdf; clear:both; text-valign:top; text-align:center; background:#fbfbfb url(../img/btn_expand.gif) no-repeat center center; cursor:s-resize;}
 #smart_editor .input_control span{ display:block; height:0px; border-top:1px solid #dfdfdf; visibility:visible; font-size:0; line-height:200%; white-space:nowrap; color:#fff;}
 
 #smart_editor .tool{ position:relative; overflow:visible; padding:5px 0 6px 0; *padding:5px 0 8px 0; z-index:40; clear:both; background:#f8f8f8 url(../img/bg_tool.gif) repeat-x left bottom; border:0; *zoom:1;}
@@ -48,7 +48,7 @@
 #smart_editor .tool ul.type{ width:auto; white-space:nowrap;}
 #smart_editor .tool ul.style{ width:169px; z-index:3;}
 #smart_editor .tool ul.paragraph{ width:169px; z-index:2;}
-#smart_editor .tool ul.extra{ width:111px; z-index:1;}
+#smart_editor .tool ul.extra{ width:163px; z-index:1;}
 #smart_editor .tool li{ position:relative; float:left; left:8px;}
 #smart_editor .tool li button{ width:21px; height:21px; background:url(../img/btn_set_e.gif) no-repeat 0 0; vertical-align:top;}
 #smart_editor .tool li button span{ position:absolute; top:0; left:0; width:0; height:0; overflow:hidden; visibility:hidden;}

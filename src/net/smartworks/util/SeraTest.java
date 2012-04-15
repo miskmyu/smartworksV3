@@ -2,6 +2,9 @@ package net.smartworks.util;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
@@ -13,6 +16,24 @@ import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.info.SmartWorkInfo;
+import net.smartworks.model.work.info.WorkCategoryInfo;
+import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Order;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.StringUtil;
+import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordExtend;
+import net.smartworks.server.engine.infowork.form.model.SwfForm;
+import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
+import net.smartworks.server.service.util.ModelConverter;
 
 public class SeraTest {
 
@@ -162,7 +183,6 @@ public class SeraTest {
 	public static UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
 		return SmartTest.getAvailableChatter();
 	}
-	
 	public static InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		InstanceInfo[] boards = SmartTest.getBoardInstances();
 		InstanceInfo[] events = SmartTest.getEventInstances();
