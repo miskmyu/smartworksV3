@@ -20,5 +20,21 @@ public class SeraConstant {
 	public final static String MISSION_MISSIONCLEARERS = "4";
 	public final static String MISSION_STARTPOINT = "5";
 	
+	public final static String NOTE_FORMID = "sera_note";
+	public final static String NOTE_IMAGEGROUPIDFIELDID = "10";
+	public final static String NOTE_LINKURLFIELDID = "3";
+	public final static String NOTE_FILEGROUPIDFIELDID = "9";
+	public final static String NOTE_CONTENTFIELDID = "5";
+	public final static String NOTE_VIDEOYTIDFIELDID = "6";
+	public final static String NOTE_VIDEOFILENAMEFIELDID = "7";
+	public final static String NOTE_VIDEOFILESIZEFIELDID = "8";
 	
+	
+	
+	
+	
+	
+	
+	
+	public final static String PERFORMMISSION_FORMID = "";
 }

@@ -61,8 +61,8 @@
 #smart_editor .tool .html span{ position:absolute; top:0; left:0; width:0; height:0; overflow:hidden; visibility:hidden;}
 
 /* Content > Tool > Button Default*/
-#smart_editor .tool li.undo button{ width:22px; background-position:0 0;}
-#smart_editor .tool li.redo button{ background-position:-22px 0;}
+#smart_editor .tool li.imgupload button{ width:21px; background-position:0 0}
+#smart_editor .tool li.videoupload button{ width:21px; background-position:-22px 0;}
 #smart_editor .tool li.bold button{ width:22px; background-position:-43px 0;}
 #smart_editor .tool li.underline button{ background-position:-65px 0;}
 #smart_editor .tool li.italic button{ background-position:-86px 0;}
@@ -86,9 +86,10 @@
 #smart_editor .tool li.find button{ background-position:-471px 0;}
 #smart_editor .tool .html{ background-position:0 0;}
 
+
 /* Content > Tool > Button Hover */
-#smart_editor .tool li.undo button.hover{ width:22px; background-position:0 -21px;}
-#smart_editor .tool li.redo button.hover{ background-position:-22px -21px;}
+#smart_editor .tool li.imgupload button.hover{ background-position:0 -21px}
+#smart_editor .tool li.videoupload button.hover{ background-position:-22px -21px;}
 #smart_editor .tool li.bold button.hover{ width:22px; background-position:-43px -21px;}
 #smart_editor .tool li.underline button.hover{ background-position:-65px -21px;}
 #smart_editor .tool li.italic button.hover{ background-position:-86px -21px;}
