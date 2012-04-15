@@ -61,6 +61,7 @@ import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartDiagram;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.model.work.info.FileCategoryInfo;
@@ -156,6 +157,8 @@ import net.smartworks.util.SmartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.IntArrayData;
 
 import commonj.sdo.Sequence;
 
@@ -258,27 +261,45 @@ public class ModelConverter {
 		switch (Integer.parseInt(workSpaceType)) {
 		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE :
 			InstanceSpaceInfo instanceSpaceInfo = new InstanceSpaceInfo();
-			InstanceInfo instanceInfo = new InstanceInfo();
+			InstanceInfo instanceInfo = null;
 			WorkInfo workInfo = new WorkInfo();
 			TskTaskCond tskCond = new TskTaskCond();
 			tskCond.setExtendedProperties(new Property[] {new Property("recordId", workSpaceId)});
-			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
+			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+			WorkSpaceInfo wsInfo = null;
 			String instanceId = workSpaceId;
 			String subject = null;
 			String domainId = null;
 			String workId = null;
 			String workName = null;
+			String owner = null;
+			LocalDate createDate = null;
+			String lastModifier = null;
+			LocalDate lastModifiedDate = null;
+
 			if(!CommonUtil.isEmpty(tskTasks)) {
 				TskTask tskTask = tskTasks[0];
-				Property[] properties = tskTask.getExtendedProperties();
-				if(!CommonUtil.isEmpty(properties)) {
-					for(Property property : properties) {
-						if(property.getName().equals("subject")) {
-							subject = property.getValue();
-						} else if(property.getName().equals("domainId")) {
-							domainId = property.getValue();
-						}
-					}
+				String refType = CommonUtil.toNotNull(tskTask.getRefType());
+				SwdRecord swdRecord = (SwdRecord)SwdRecord.toObject(tskTask.getDocument());
+				if(refType.equals(TskTask.TASKREFTYPE_BOARD)) {
+					instanceInfo = new BoardInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_EVENT)) {
+					instanceInfo = new EventInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_FILE)) {
+					instanceInfo = new FileInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_IMAGE)) {
+					instanceInfo = new ImageInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_MEMO)) {
+					instanceInfo = new MemoInstanceInfo();
+				} else {
+					instanceInfo = new PWInstanceInfo();
+				}
+				if(swdRecord != null) {
+//					String wsType = swdRecord.getWorkSpaceType();
+//					String wsId = swdRecord.getWorkSpaceId();
+//					wsInfo = getWorkSpaceInfo(wsType, wsId);
+					subject = tskTask.getTitle();
+					domainId = swdRecord.getDomainId();
 					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
 					String formId = swdDomain.getFormId();
 					SwfFormCond swfFormCond = new SwfFormCond();
@@ -289,24 +310,32 @@ public class ModelConverter {
 						workId = swfForm.getPackageId();
 						workName = swfForm.getName();
 					}
-					workInfo.setId(workId);
-					workInfo.setName(workName);
-					workInfo.setType(SmartWork.TYPE_INFORMATION);
+					owner = swdRecord.getCreationUser();
+					createDate = new LocalDate(swdRecord.getCreationDate() != null ? swdRecord.getCreationDate().getTime() : new Date().getTime());
+					lastModifier = swdRecord.getModificationUser();
+					lastModifiedDate = new LocalDate(swdRecord.getModificationDate() != null ? swdRecord.getModificationDate().getTime() : new Date().getTime());
 				}
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
 			} else {
+				instanceInfo = new PWInstanceInfo();
 				PrcProcessInst prcProcessInst = getPrcManager().getProcessInst(userId, workSpaceId, IManager.LEVEL_LITE);
 				if(!CommonUtil.isEmpty(prcProcessInst)) {
 					subject = prcProcessInst.getTitle();
 					workId = prcProcessInst.getDiagramId();
 					workName = prcProcessInst.getName();
 				}
-				workInfo.setId(workId);
-				workInfo.setName(workName);
 				workInfo.setType(SmartWork.TYPE_PROCESS);
 			}
+			workInfo.setId(workId);
+			workInfo.setName(workName);
 			instanceInfo.setId(instanceId);
 			instanceInfo.setSubject(subject);
 			instanceInfo.setWork(workInfo);
+			instanceInfo.setWorkSpace(wsInfo);
+			instanceInfo.setOwner(getUserInfoByUserId(owner));
+			instanceInfo.setCreatedDate(createDate);
+			instanceInfo.setLastModifier(getUserInfoByUserId(lastModifier));
+			instanceInfo.setLastModifiedDate(lastModifiedDate);
 			instanceSpaceInfo.setId(instanceId);
 			instanceSpaceInfo.setName(subject);
 			instanceSpaceInfo.setInstance(instanceInfo);
