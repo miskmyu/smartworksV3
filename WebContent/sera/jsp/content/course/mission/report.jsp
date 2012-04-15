@@ -120,6 +120,15 @@
 			<!-- 우측 버튼 영역 -->
 			<div class="attach_file js_note_buttons">
 				<ul>
+					<li>
+						<span class="insert_text">500</span>
+					</li>
+					<li class="ml5">
+						<select name="selAccessLevel" >
+						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
+						</select>
+					</li>
 					<li class="icon_memo ml10"><a href="" class="js_note_file_btn" title="첨부파일"> </a></li>
 					<li class="icon_video"><a href="" class="js_note_video_btn" title="동영상"> </a></li>
 					<li class="icon_photo"><a href="" class="js_note_image_btn" title="사진"> </a></li>
