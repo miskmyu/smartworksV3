@@ -1,17 +1,16 @@
 package net.smartworks.model.community.info;
 
-import net.smartworks.model.work.info.WorkInfo;
-
+import net.smartworks.model.instance.info.InstanceInfo;
 
 public class InstanceSpaceInfo extends WorkSpaceInfo {
 
-	private WorkInfo work;
-	
-	public WorkInfo getWork() {
-		return work;
+	private InstanceInfo instance;
+
+	public InstanceInfo getInstance() {
+		return instance;
 	}
-	public void setWork(WorkInfo work) {
-		this.work = work;
+	public void setInstance(InstanceInfo instance) {
+		this.instance = instance;
 	}
 	public InstanceSpaceInfo(){
 		super();

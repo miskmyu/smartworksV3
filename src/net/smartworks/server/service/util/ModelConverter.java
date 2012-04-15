@@ -30,6 +30,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.InstanceSpaceInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -147,6 +148,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
+import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
@@ -248,22 +250,79 @@ public class ModelConverter {
 	// #########################################  INFO  ########################################################################
 	
 	public static WorkSpaceInfo getWorkSpaceInfo(String workSpaceType, String workSpaceId) throws Exception {
-		if (workSpaceType == null || workSpaceId == null)
+		if(CommonUtil.isEmpty(workSpaceType) || CommonUtil.isEmpty(workSpaceId))
 			return null;
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		WorkSpaceInfo workSpaceInfo = null;
 		switch (Integer.parseInt(workSpaceType)) {
 		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE :
-			//workSpaceInfo = new WorkInstanceInfo(workSpaceId, null);
-			workSpaceInfo = null;
+			InstanceSpaceInfo instanceSpaceInfo = new InstanceSpaceInfo();
+			InstanceInfo instanceInfo = new InstanceInfo();
+			WorkInfo workInfo = new WorkInfo();
+			TskTaskCond tskCond = new TskTaskCond();
+			tskCond.setExtendedProperties(new Property[] {new Property("recordId", workSpaceId)});
+			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
+			String instanceId = workSpaceId;
+			String subject = null;
+			String domainId = null;
+			String workId = null;
+			String workName = null;
+			if(!CommonUtil.isEmpty(tskTasks)) {
+				TskTask tskTask = tskTasks[0];
+				Property[] properties = tskTask.getExtendedProperties();
+				if(!CommonUtil.isEmpty(properties)) {
+					for(Property property : properties) {
+						if(property.getName().equals("subject")) {
+							subject = property.getValue();
+						} else if(property.getName().equals("domainId")) {
+							domainId = property.getValue();
+						}
+					}
+					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
+					String formId = swdDomain.getFormId();
+					SwfFormCond swfFormCond = new SwfFormCond();
+					swfFormCond.setId(formId);
+					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+					if(!CommonUtil.isEmpty(swfForms)) {
+						SwfForm swfForm = swfForms[0];
+						workId = swfForm.getPackageId();
+						workName = swfForm.getName();
+					}
+					workInfo.setId(workId);
+					workInfo.setName(workName);
+					workInfo.setType(SmartWork.TYPE_INFORMATION);
+				}
+			} else {
+				PrcProcessInst prcProcessInst = getPrcManager().getProcessInst(userId, workSpaceId, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(prcProcessInst)) {
+					subject = prcProcessInst.getTitle();
+					workId = prcProcessInst.getDiagramId();
+					workName = prcProcessInst.getName();
+				}
+				workInfo.setId(workId);
+				workInfo.setName(workName);
+				workInfo.setType(SmartWork.TYPE_PROCESS);
+			}
+			instanceInfo.setId(instanceId);
+			instanceInfo.setSubject(subject);
+			instanceInfo.setWork(workInfo);
+			instanceSpaceInfo.setId(instanceId);
+			instanceSpaceInfo.setName(subject);
+			instanceSpaceInfo.setInstance(instanceInfo);
+			workSpaceInfo = instanceSpaceInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_DEPARTMENT :
-			workSpaceInfo = new DepartmentInfo(workSpaceId, null);
+			DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(workSpaceId);
+			workSpaceInfo = departmentInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_GROUP :
-			workSpaceInfo = new GroupInfo(workSpaceId, null);
+			GroupInfo groupInfo = getGroupInfoByGroupId(workSpaceId);
+			workSpaceInfo = groupInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_USER : 
-			workSpaceInfo = new UserInfo(workSpaceId, null);
+			UserInfo userInfo = getUserInfoByUserId(workSpaceId);
+			workSpaceInfo = userInfo;
 			break;
 		}
 		return workSpaceInfo;
@@ -319,9 +378,9 @@ public class ModelConverter {
 			taskInfo.setWork(workInfo); //workInfo
 
 			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-			
+
 			taskInfo.setStatus(task.getTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
-			
+
 			//taskInfo.setNumberOfAssociatedWorks(numberOfAssociatedWorks);
 			taskInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setLastModifiedDate(new LocalDate( task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getTskCreateDate().getTime() : task.getTaskLastModifyDate().getTime()));
@@ -332,7 +391,7 @@ public class ModelConverter {
 			taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setFormId(task.getTskForm());
-			
+
 			resultInfoList.add(taskInfo);
 		}
 		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
