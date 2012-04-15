@@ -157,7 +157,7 @@ a.b_next:hover { background-position:-30px -535px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
-#sera_content textarea { border:1px solid #cccccc; width:99.5%}
+#sera_content textarea { border:1px solid #cccccc; width:99.2%; padding: 2px; height:100%}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 267px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
 
@@ -168,13 +168,12 @@ a.b_next:hover { background-position:-30px -535px}
 .my_comment { float:left; width:564px}
 .my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:14px}
 .my_comment .comment_txt {line-height:18px; height:88px}
-.my_comment .comment_txt textarea { border:1px solid #cccccc}
-.my_comment textarea { height:100%; width:99.4%}
 .option { float:right; display:block}
 .option .txt { font-size:11px; float:left; margin:7px 5px 0 0; color:#dddddd}
 .option .txt a {color:#868686}
 .attach_file {height: 28px; margin-top: 5px; overflow: hidden; float:right; clear:both}
 .attach_file li {float:left}
+.attach_file_detail {background: url("../images/line_dashed.png") repeat-x scroll 0 100% transparent; margin-top:5px}
 .fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%;}
 
 /* Btn in Body*/
