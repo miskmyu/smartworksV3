@@ -125,33 +125,33 @@
 				<td>
 					<div class="form_label w110">카테고리</div>
 					<div class="form_value">
-						<input name="chkCourseCategories" type="checkbox" value="예술" />예술
-						<input name="chkCourseCategories" type="checkbox" value="엔터테인먼트" />엔터테인먼트
-						<input name="chkCourseCategories" type="checkbox" value="스타일" />스타일
-						<input name="chkCourseCategories" type="checkbox" value="생활" />생활
-						<input name="chkCourseCategories" type="checkbox" value="영화/애니메이션" />영화/애니메이션
-						<input name="chkCourseCategories" type="checkbox" value="게임" />게임<br />
-						<input name="chkCourseCategories" type="checkbox" value="영화" />영화
-						<input name="chkCourseCategories" type="checkbox" value="이벤트" />이벤트
-						<input name="chkCourseCategories" type="checkbox" value="스포츠" />스포츠
-						<input name="chkCourseCategories" type="checkbox" value="이슈" />이슈
-						<input name="chkCourseCategories" type="checkbox" value="시사" />시사
-						<input name="chkCourseCategories" type="checkbox" value="경제" />경제
-						<input name="chkCourseCategories" type="checkbox" value="비즈니스" />비즈니스
-						<input name="chkCourseCategories" type="checkbox" value="미디어" />미디어<br />
-						<input name="chkCourseCategories" type="checkbox" value="환경" />환경
-						<input name="chkCourseCategories" type="checkbox" value="동물" />동물
-						<input name="chkCourseCategories" type="checkbox" value="비영리/사회운동" />비영리/사회운동
-						<input name="chkCourseCategories" type="checkbox" value="역사" />역사
-						<input name="chkCourseCategories" type="checkbox" value="문학" />문학
-						<input name="chkCourseCategories" type="checkbox" value="심리" />심리
-						<input name="chkCourseCategories" type="checkbox" value="인물" />인물<br /> 
-						<input name="chkCourseCategories" type="checkbox" value="과학" />과학
-						<input name="chkCourseCategories" type="checkbox" value="첨단기술" />첨단기술
-						<input name="chkCourseCategories" type="checkbox" value="의학" />의학
-						<input name="chkCourseCategories" type="checkbox" value="건축" />건축
-						<input name="chkCourseCategories" type="checkbox" value="교육" />교육
-						<input name="chkCourseCategories" type="checkbox" value="기타" />기타
+						<input name="chkCourseCategories" type="radio" value="예술" />예술
+						<input name="chkCourseCategories" type="radio" value="엔터테인먼트" />엔터테인먼트
+						<input name="chkCourseCategories" type="radio" value="스타일" />스타일
+						<input name="chkCourseCategories" type="radio" value="생활" />생활
+						<input name="chkCourseCategories" type="radio" value="영화/애니메이션" />영화/애니메이션
+						<input name="chkCourseCategories" type="radio" value="게임" />게임<br />
+						<input name="chkCourseCategories" type="radio" value="영화" />영화
+						<input name="chkCourseCategories" type="radio" value="이벤트" />이벤트
+						<input name="chkCourseCategories" type="radio" value="스포츠" />스포츠
+						<input name="chkCourseCategories" type="radio" value="이슈" />이슈
+						<input name="chkCourseCategories" type="radio" value="시사" />시사
+						<input name="chkCourseCategories" type="radio" value="경제" />경제
+						<input name="chkCourseCategories" type="radio" value="비즈니스" />비즈니스
+						<input name="chkCourseCategories" type="radio" value="미디어" />미디어<br />
+						<input name="chkCourseCategories" type="radio" value="환경" />환경
+						<input name="chkCourseCategories" type="radio" value="동물" />동물
+						<input name="chkCourseCategories" type="radio" value="비영리/사회운동" />비영리/사회운동
+						<input name="chkCourseCategories" type="radio" value="역사" />역사
+						<input name="chkCourseCategories" type="radio" value="문학" />문학
+						<input name="chkCourseCategories" type="radio" value="심리" />심리
+						<input name="chkCourseCategories" type="radio" value="인물" />인물<br /> 
+						<input name="chkCourseCategories" type="radio" value="과학" />과학
+						<input name="chkCourseCategories" type="radio" value="첨단기술" />첨단기술
+						<input name="chkCourseCategories" type="radio" value="의학" />의학
+						<input name="chkCourseCategories" type="radio" value="건축" />건축
+						<input name="chkCourseCategories" type="radio" value="교육" />교육
+						<input name="chkCourseCategories" type="radio" value="기타" />기타
 					</div>
 				</td>
 			</tr>
@@ -229,7 +229,8 @@
 			<tr>
 				<td>
 					<div class="form_label">멘토이름</div>
-					<div class="js_course_mentor_field"></div>
+					<div class="<%=cUser.getNickName()%>"></div>
+					<input name="txtCourseMentor" type="hidden" value="<%=cUser.getId() %>"/>
 				</td>
 			</tr>
 			<tr>

@@ -59,23 +59,6 @@ function loadCreateCourseFields() {
 		gridRow.find('.form_label').hide();		
 	}
 
-	var courseMentorField = $('div.js_course_mentor_field');
-	if(!isEmpty(courseMentorField)) {
-		
-		var gridRow = SmartWorks.GridLayout.newGridRow();
-		courseMentorField.html(gridRow);
-
-		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
-			container: gridRow,
-			fieldId: "txtCourseMentor",
-			fieldName: "course mentor",
-			columns: 1,
-			multiUsers: false,
-			required: true
-		});
-		gridRow.find('.form_col').css({width:"300px", padding:"0px"});
-		gridRow.find('.form_label').hide();		
-	}
 };
 
 function loadCreateMissionFields() {
