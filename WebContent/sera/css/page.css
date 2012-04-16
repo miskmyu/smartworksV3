@@ -56,7 +56,7 @@
 
 /* Global Navigation Bar*/
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
-.gnb .top_logo {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:232px; height:17px; margin:5px 0 0 0}
+.gnb .top_logo a {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:107px; height:17px; margin:5px 125px 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
 .gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
 .gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
