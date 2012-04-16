@@ -22,7 +22,7 @@
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
 .ribbon_mission {background: url("../images/header.png") no-repeat scroll -127px -1185px transparent; width:56px; height:56px}
 
-#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 990px;}
+#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 980px;}
 .sera_guide {background: url("../images/main_guide_bg.png") repeat-x scroll 0 0 transparent; float: left; height: 435px; padding: 6px 0 0 6px; width: 286px;}
 .sera_guide .btn_start {clear: both; height: 65px; width: 285px;}
 .sera_guide .img_guide { clear: both; height: 74px; width: 285px;}
@@ -35,8 +35,8 @@
 .sera_guide .sponsor .spon_lst label {border: 1px solid #e5e5e5; height: 42px; margin: 0 4px 4px 0; width: 119px; float:left}
 .sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
 .sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
-.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 273px;}
-.sera_news .lst_normal {clear: both; padding: 0 16px 20px 25px; background:url("../images/line_dashed.png") repeat-x 0 100%}
+.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 263px;}
+.sera_news .lst_normal {clear: both; padding: 0 15px 20px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
