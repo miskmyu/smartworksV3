@@ -66,3 +66,14 @@
 
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep {padding:2px 0 2px 44px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
+
+/* Button */
+.btn {background-color:#666666; float:right; height:22px; position:absolute;}
+.txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
+			 float:left; height:22px; width:5px;}
+.txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; line-height: 19px}
+.txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
+    		float:left; height:22px; width:5px;}
+
+    		

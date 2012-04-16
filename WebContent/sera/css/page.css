@@ -122,9 +122,9 @@
 a.b_prev:hover { background-position:0 -535px}
 .b_next {background: url("../images/icon.png") no-repeat scroll -30px -520px; width:13px; height:13px; display:block}
 a.b_next:hover { background-position:-30px -535px}
-.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; width:11px; height:11px; display:block; float:left; padding:0 5px 0 0}
+.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px}
 .icon_mission.current { background-position:0 -579px}
-.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; width:11px; height:11px; display:block; float:left; padding:0 0 0 5px}
+.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; height:11px; display:block; float:left; padding:0 0 0 5px}
 .icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
 
 /* Section Center - UI삭제후 미사용 */
@@ -421,7 +421,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
 .course_info { width:193px; float:right; margin-top:10px; line-height:18px}
-.course_info dt {background: url("../images/icon.png") no-repeat -166px -568px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
+.course_info dt {background: url("../images/icon.png") no-repeat -166px -764px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
 .course_menu_d1 { float: left; margin:0 0 0 22px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
