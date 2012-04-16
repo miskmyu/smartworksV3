@@ -2542,6 +2542,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String companyId = null;
 		String name = null;
 		String groupLeader = null;
+		String notGroupLeader = null;
 		String groupType = null;
 		String status = null;
 		String creationUser = null;
@@ -2557,6 +2558,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			companyId = cond.getCompanyId();
 			name = cond.getName();
 			groupLeader = cond.getGroupLeader();
+			notGroupLeader = cond.getNotGroupLeader();
 			groupType = cond.getGroupType();
 			status = cond.getStatus();
 			creationUser = cond.getCreationUser();
@@ -2594,6 +2596,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.name like :nameLike");
 			if (groupLeader != null)
 				buf.append(" and obj.groupLeader = :groupLeader");
+			if (notGroupLeader != null)
+				buf.append(" and obj.groupLeader != :notGroupLeader");
 			if (groupType != null)
 				buf.append(" and obj.groupType = :groupType");
 			if (status != null)
@@ -2650,6 +2654,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("nameLike", CommonUtil.toLikeString(nameLike));
 			if (groupLeader != null)
 				query.setString("groupLeader", groupLeader);
+			if (notGroupLeader != null)
+				query.setString("notGroupLeader", notGroupLeader);
 			if (groupType != null)
 				query.setString("groupType", groupType);
 			if (status != null)

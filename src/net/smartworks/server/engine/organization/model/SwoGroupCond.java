@@ -35,6 +35,7 @@ public class SwoGroupCond extends SwoObjectCond {
 
 	private String[] groupIdIns;
 	private String groupLeader;
+	private String notGroupLeader;
 	private String groupType;
 	private String status;
 	private String description;
@@ -59,6 +60,12 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setGroupLeader(String groupLeader) {
 		this.groupLeader = groupLeader;
+	}
+	public String getNotGroupLeader() {
+		return notGroupLeader;
+	}
+	public void setNotGroupLeader(String notGroupLeader) {
+		this.notGroupLeader = notGroupLeader;
 	}
 	public String getGroupType() {
 		return groupType;
