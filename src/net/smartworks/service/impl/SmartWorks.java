@@ -927,7 +927,22 @@ public class SmartWorks implements ISmartWorks {
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewCourse(requestBody, request);
 	}
-	
+	@Override
+	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.performMissionReport(requestBody, request);
+	}
+	@Override
+	public String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setSeraNote(requestBody, request);
+	}
+	@Override
+	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createNewTeam(requestBody, request);
+	}
+	@Override
+	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.updateSeraProfile(requestBody, request);
+	}
 	
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
@@ -1004,5 +1019,15 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public SeraUser getSeraUserById(String userId) throws Exception {
 		return seraService.getSeraUserById(userId);
+	}
+
+	@Override
+	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+		return seraService.getFavoriteCourses(maxList);
+	}
+
+	@Override
+	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+		return seraService.getRecommendedCourses(maxList);
 	}
 }

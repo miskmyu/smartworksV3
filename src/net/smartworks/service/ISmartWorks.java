@@ -435,11 +435,23 @@ public interface ISmartWorks {
 
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getFavoriteCourses(int maxList) throws Exception;
+
+	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
 	public abstract Course getCourseById(String courseId) throws Exception;
 

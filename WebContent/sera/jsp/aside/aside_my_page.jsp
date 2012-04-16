@@ -1,9 +1,4 @@
 
-<!-- Name 			: nav.jsp										 		 -->
-<!-- Description	: 화면 왼쪽의 Navigation Bar 를 구성하는 화면  				 -->
-<!-- Author			: Y.S. JUNG												 -->
-<!-- Created Date	: 2011.9.												 -->
-
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
