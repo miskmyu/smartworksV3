@@ -12,7 +12,7 @@
 /* Contents */
 #lo_contents {text-align: center; margin: 80px 0}
 .lo_img {left:257px; top:191px; width: 513px; height: 430px}
-.btn_login {margin:15px 0 0 7px; background-color:#80b0de; border-radius:3px; color:#FFF; font-size:11px; cursor:pointer; height:21px}
+.btn_login {margin:15px 0 0 7px; background-color:#80b0de; border-radius:3px; color:#FFF; font-size:11px; cursor:pointer; height:21px; width:40px}
 
 /* Footer */
 #footer {border-top:1px solid #D3D3D3; height: 29px; margin:0 30px; padding-top: 20px; text-align: center;} 
