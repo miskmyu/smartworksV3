@@ -229,7 +229,7 @@
 			<tr>
 				<td>
 					<div class="form_label">멘토이름</div>
-					<div class="<%=cUser.getNickName()%>"></div>
+					<div class="form_value"><img class="profile_size_s" style="line-height:20px" src="<%=cUser.getMinPicture()%>"/><%=cUser.getNickName()%></div>
 					<input name="txtCourseMentor" type="hidden" value="<%=cUser.getId() %>"/>
 				</td>
 			</tr>

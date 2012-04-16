@@ -47,7 +47,7 @@ $(function() {
 			});
 		}else if(pos==2){
 			$.ajax({
-				url : "courseGeneral.sw",
+				url : "courseBoard.sw",
 				data : {courseId : courseId},
 				success : function(data, status, jqXHR) {
 					$('.js_course_content').html(data);
@@ -55,13 +55,21 @@ $(function() {
 			});
 		}else if(pos==3){
 			$.ajax({
-				url : "courseBoard.sw",
+				url : "courseTeamCreate.sw",
 				data : {courseId : courseId},
 				success : function(data, status, jqXHR) {
 					$('.js_course_content').html(data);
 				}
 			});
 		}else if(pos==4){
+			$.ajax({
+				url : "courseGeneral.sw",
+				data : {courseId : courseId},
+				success : function(data, status, jqXHR) {
+					$('.js_course_content').html(data);
+				}
+			});
+		}else if(pos==5){
 			if(isEmpty($(subMenus[pos]).children())){
 				$.ajax({
 					url : "courseSetting.sw",
