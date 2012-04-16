@@ -55,7 +55,7 @@
 
 
 /* Global Navigation Bar*/
-.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:1004px;}
+.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:990px;}
 .gnb .top_logo {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:232px; height:17px; margin:5px 0 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
 .gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
@@ -67,7 +67,7 @@
 .hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_no { background:none}
-.top_navi {width:1004px; margin-right:5px; clear:both; padding:5px 0 0 0; overflow:hidden}
+.top_navi {width:990px; margin-right:5px; clear:both; padding:5px 0 0 0; overflow:hidden}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
 .pofile_con { float:left;line-height:28px; margin-top:5px}
