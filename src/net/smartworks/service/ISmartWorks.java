@@ -449,6 +449,10 @@ public interface ISmartWorks {
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
 
+	public abstract CourseInfo[] getFavoriteCourses(int maxList) throws Exception;
+
+	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
+
 	public abstract Course getCourseById(String courseId) throws Exception;
 
 	public abstract Mentor getMentorById(String mentorId) throws Exception;

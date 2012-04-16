@@ -1,13 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<script type="text/javascript">
+	var currentUser = {
+		locale : "<%=java.util.Locale.getDefault().getLanguage()%>"
+	};
+</script>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 	<link type="text/css" rel="stylesheet" href="css/default.css">
+	<link href="css/black/pop.css" type="text/css" rel="stylesheet" /></link>
 	<link type="text/css" rel="stylesheet" href="sera/css/form.css">
 	<link type="text/css" rel="stylesheet" href="sera/css/page.css">
 	<script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="js/sw/sw-language.js"></script>
+	<script type="text/javascript" src="js/sw/sw-language-ko.js"></script>
+	<script type="text/javascript" src="js/sw/sw-language-en.js"></script>
 	<script type="text/javascript" src="sera/js/rolling_img.js"></script>
+	<script type="text/javascript" src="js/sw/sw-util.js"></script>
+	<script type="text/javascript" src='js/sw/sw-popup.js'></script>
+	
 </head>
 <body>
 	<div id="wrap" class="js_joinus_page">
@@ -22,7 +34,7 @@
 							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a>
 						</li>
 						<li class="fl">
-							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_on.png" /></a>
+							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_off.png" /></a>
 						</li>
 						<li class="fl">
 							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a>
@@ -31,7 +43,7 @@
 					<ul class="util_menu fr">
 						<li class="about"><a href="">about SERA</a></li>
 						<li class="news"><a href="">sera 소식</a></li>
-						<li class="btn_login"><a href=""> <img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png" /> </a></li>
+						<li class="btn_login"><a href=""> <img width="49" height="19" title="로그인" alt="로그인" src="sera/images/sera2_main_btnLogout.png" /> </a></li>
 					</ul>
 					<!-- Search -->
 					<div class="top_srch_section" style="display: none">

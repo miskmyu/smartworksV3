@@ -1020,4 +1020,14 @@ public class SmartWorks implements ISmartWorks {
 	public SeraUser getSeraUserById(String userId) throws Exception {
 		return seraService.getSeraUserById(userId);
 	}
+
+	@Override
+	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+		return seraService.getFavoriteCourses(maxList);
+	}
+
+	@Override
+	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+		return seraService.getRecommendedCourses(maxList);
+	}
 }

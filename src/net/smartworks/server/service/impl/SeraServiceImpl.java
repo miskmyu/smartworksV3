@@ -2607,4 +2607,24 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
+	@Override
+	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		
+		// TEST PURPOSE
+		// TEST PURPOSE
+		CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
+		return courses.getAttendingCourses();
+		// TEST PURPOSE
+		// TEST PURPOSE
+	}
+	@Override
+	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+		// TEST PURPOSE
+		// TEST PURPOSE
+		CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
+		return courses.getRunningCourses();
+		// TEST PURPOSE
+		// TEST PURPOSE
+	}
 }
