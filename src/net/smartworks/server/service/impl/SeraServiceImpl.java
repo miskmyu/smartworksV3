@@ -840,7 +840,7 @@ public class SeraServiceImpl implements ISeraService {
 				Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 				if(fieldId.equals("txtCourseMentor")) {
 					txtCourseMentor = (ArrayList<Map<String,String>>)valueMap.get("users");
-				} else if(fieldId.equals("imgGroupProfile")) {
+				} else if(fieldId.equals("imgCourseProfile")) {
 					imgCourseProfile = (ArrayList<Map<String,String>>)valueMap.get("files");
 				}
 			} else if(fieldValue instanceof String) {					
@@ -1003,32 +1003,29 @@ public class SeraServiceImpl implements ISeraService {
 			if (userId == null || userId.length() == 0)
 				return courseList;
 			ISwoManager swoManager = SwManagerFactory.getInstance().getSwoManager();
+
+			SwoGroupCond runningCourseCond = new SwoGroupCond();
+			runningCourseCond.setGroupLeader(userId);
+			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
+			runningCourseCond.setPageSize(maxList);
+			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
+
 			SwoGroupCond attendingCourseCond = new SwoGroupCond();
 			SwoGroupMember[] courseMembers = new SwoGroupMember[1];
 			SwoGroupMember courseMember = new SwoGroupMember();
 			courseMember.setUserId(userId);
 			courseMembers[0] = courseMember;
 			attendingCourseCond.setSwoGroupMembers(courseMembers);
+			attendingCourseCond.setNotGroupLeader(userId);
+			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
 			attendingCourseCond.setPageSize(maxList);
 			SwoGroup[] attendingCourses = swoManager.getGroups(userId, attendingCourseCond, IManager.LEVEL_ALL);
-			
-			SwoGroupCond runningCourseCond = new SwoGroupCond();
-			runningCourseCond.setGroupLeader(userId);
-			runningCourseCond.setPageSize(maxList);
-			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
-			
-			int totalCourseSize = ( attendingCourses == null ? 0 : attendingCourses.length ) + ( runningCourses == null ? 0 : runningCourses.length );
+
+			int totalCourseSize = ( runningCourses == null ? 0 : runningCourses.length ) + ( attendingCourses == null ? 0 : attendingCourses.length );
 			if (totalCourseSize == 0)
 				return courseList;
 			
 			List<String> courseIdList = new ArrayList<String>();
-			if (attendingCourses != null) {
-				for(int i = 0; i < attendingCourses.length; i++) {
-					SwoGroup course = attendingCourses[i];
-					String courseId = course.getId();
-					courseIdList.add(courseId);
-				}
-			}
 			if (runningCourses != null) {
 				for(int i = 0; i < runningCourses.length; i++) {
 					SwoGroup course = runningCourses[i];
@@ -1036,22 +1033,29 @@ public class SeraServiceImpl implements ISeraService {
 					courseIdList.add(courseId);
 				}
 			}
-			
+			if (attendingCourses != null) {
+				for(int i = 0; i < attendingCourses.length; i++) {
+					SwoGroup course = attendingCourses[i];
+					String courseId = course.getId();
+					courseIdList.add(courseId);
+				}
+			}
+
 			String[] courseIds = new String[totalCourseSize];
 			courseIdList.toArray(courseIds);
-			
+
 			CourseDetailCond courseDetailCond = new CourseDetailCond();
 			courseDetailCond.setCourseIdIns(courseIds);
 			CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails(userId, courseDetailCond);
-			
+
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
-			
-			courseList.setRunnings(runningCoursesArray == null ? 0 : runningCoursesArray.length);
+
+			courseList.setRunnings((int)runningCourseCnt);
 			courseList.setRunningCourses(runningCoursesArray);
-			courseList.setAttendings(attendingCoursesArray == null ? 0 : attendingCoursesArray.length);
+			courseList.setAttendings((int)attendingCourseCnt);
 			courseList.setAttendingCourses(attendingCoursesArray);
-			
+
 			//CourseList courses = SeraTest.getCoursesById(userId, maxList);
 			return courseList;
 			
@@ -2316,7 +2320,7 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
 		try{
-			
+
 			InstanceInfo[] boardInfo = getBoardInstancesByCourseId(courseId, fromDate, maxList);
 			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(courseId, fromDate, maxList);
 			InstanceInfo[] noteInfo = getSeraNoteByMissionId(missionId, fromDate, maxList);

@@ -47,7 +47,7 @@
 <div class="hd_shadow">
 	<!-- GNB -->
 	<div class="gnb">
-		<div class="top_logo"></div>
+		<div class="top_logo"><a href="logins.sw"></a></div>
 		<ul class="top_menu2">
 			<li class="fl">
 				<a href="Course.sw" class="js_sera_content">
