@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.util.LocalDate"%>
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -25,10 +27,10 @@
 <script type="text/javascript" src='js/sw/sw-popup.js'></script>
 </head>
 <%
-	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다 
-	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	CourseInfo[] favoriteCourses = null;//smartWorks.getFavoriteCourses(6);
-	CourseInfo[] recommendedCourses = null;//smartWorks.getRecommendedCourses(6);
+	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
+	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
+	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
 %>
 
 <script type="text/javascript">
@@ -284,7 +286,7 @@
 							<li class="info">
 								<dl>
 									<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
-									<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+									<dd class="makeDate"><%=course.getOpenDate() == null ? "" : course.getOpenDate().toLocalDateSimple2String() %></dd>
 									<dd class="category"></dd>
 								</dl>
 							</li>
@@ -334,7 +336,7 @@
 							<li class="info">
 								<dl>
 									<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
-									<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
+									<dd class="makeDate"><%=course.getOpenDate() == null ? "" : course.getOpenDate().toLocalDateSimple2String() %></dd>
 									<dd class="category"></dd>
 								</dl>
 							</li>
