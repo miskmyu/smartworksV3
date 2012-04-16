@@ -153,7 +153,7 @@ a.b_next:hover { background-position:-30px -535px}
 #container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 990px}
 #container.bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
 #container.bg_no { background-image:none}
-#container_join {height: auto; margin: 0 auto; position: relative; width: 1004px}
+#container_join {height: auto; margin: 0 auto; position: relative; width: 990px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
@@ -531,7 +531,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Join Member Section */
 #join_section {background: url("../images/function_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; padding: 0; position: relative; width: 1004px; overflow:hidden; background-color:#FFF}
-.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 993px;}
+.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 990px;}
 .logo_srch .logo {float: left; height: 36px; width: 201px}
 .logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 279px; border:none}
 .icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
