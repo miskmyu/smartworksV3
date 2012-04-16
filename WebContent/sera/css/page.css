@@ -95,7 +95,7 @@
 .icon_calendar a {background: url("../images/icon.png") no-repeat scroll -448px -6px; width:42px; height:45px; display:block}
 .icon_badge a {background: url("../images/icon.png") no-repeat scroll -500px -6px; width:35px; height:45px; display:block}
 .icon_event a {background: url("../images/icon.png") no-repeat scroll -545px -6px; width:40px; height:45px; display:block}
-.icon_srch {background: url("../images/icon.png") no-repeat scroll -165px -616px; width:15px; height:15px; display:block; position:relative; top:-19px; left:171px}
+.icon_srch {background: url("../images/icon.png") no-repeat scroll -165px -616px; width:15px; height:15px; display:block; position:relative; top:-18px; left:150px}
 
 /* Header Title */
 .header_tit {width:700px; margin-bottom:15px; color:#858585; overflow:hidden}
