@@ -44,9 +44,8 @@
 		<div id="sera_header_main">
 			<!-- GNB -->
 			<div class="gnb">
-				<div class="top_logo" style="visibility: hidden; width: 360px">
-				</div>
-				<ul class="top_menu2">
+				
+				<ul class="top_menu2" style="margin-left: 340px">
 					<li class="fl"><a href=""> <img width="101" height="28"
 							src="sera/images/sera2_main_btnTopMenu1_off.png" />
 					</a></li>
