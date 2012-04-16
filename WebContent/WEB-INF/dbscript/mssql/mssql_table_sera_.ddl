@@ -13,6 +13,7 @@ CREATE TABLE CourseDetail (
 	teamId varchar(100),
 	targetPoint int,
 	achievedPoint int,
+	recommended bit,
 	lastMissionIndex int,
 	primary key (courseId)
 );
