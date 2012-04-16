@@ -43,7 +43,7 @@
 					<ul class="util_menu fr">
 						<li class="about"><a href="">about SERA</a></li>
 						<li class="news"><a href="">sera 소식</a></li>
-						<li class="btn_login"><a href=""> <img width="49" height="19" title="로그인" alt="로그인" src="sera/images/sera2_main_btnLogout.png" /> </a></li>
+						<li class="btn_login"><a href=""> <img width="49" height="19" title="로그인" alt="로그인" src="sera/images/sera2_main_btnLogin.png" /> </a></li>
 					</ul>
 					<!-- Search -->
 					<div class="top_srch_section" style="display: none">
@@ -95,8 +95,8 @@
 제 2조 (용어의 정의)
               					</textarea>
 								<div class="mt5 fr">
-									<input name="rdoUserAgreement" type="radio"/> <label>동의합니다</label>
-									<input name="rdoUserAgreement" type="radio"/> 동의하지 않습니다
+									<input name="rdoUserAgreement" type="radio" value="agree"/> <label>동의합니다</label>
+									<input name="rdoUserAgreement" type="radio" value="disagree"/> 동의하지 않습니다
 								</div></li>
 						</ul>
 					</div>
@@ -112,8 +112,8 @@
 개인정보 보유 및 이용기간
               					</textarea>
 								<div class="mt5 fr">
-									<input name="rdoPrivacyAgreement" type="radio"/> <label>동의합니다</label>
-									<input name="rdoPrivacyAgreement" type="radio"/> 동의하지 않습니다
+									<input name="rdoPrivacyAgreement" type="radio" value="agree"/> <label>동의합니다</label>
+									<input name="rdoPrivacyAgreement" type="radio" value="disagree"/> 동의하지 않습니다
 								</div></li>
 						</ul>
 					</div>
@@ -126,13 +126,12 @@
 								없이 공개되지 않으며, 개인정보취급방침에 의해 보호받고 있습니다.<br> <br> 국내 거주
 										외국인인 경우 외국인등록증에 쓰여진 순서대로 이름과 외국인등록번호를 정확히 입력해 주시기 바랍니다.
 										<div class="mt5">
-											<input name="" type="checkbox" value="" /> 외국인인 경우 체크
+											<input name="chkForeigner" type="checkbox"/> 외국인인 경우 체크
 										</div>
-										<div class="mt30">
-											이름 <input name="" type="text" class="fieldline mr10"
-												style="width: 100px" /> 주민등록번호 <input name="" type="text"
-												class="fieldline" style="width: 100px" /> - <input name=""
-												type="text" class="fieldline" style="width: 100px" />
+										<div class="mt30"> 이름 
+											<input name="txtUserName" type="text" class="fieldline mr10" style="width: 100px" /> 주민등록번호 
+											<input name="txtUserRRN1" type="text" class="fieldline" style="width: 100px" /> - 
+											<input name="txtUserRRN2" type="text" class="fieldline" style="width: 100px" />
 										</div>
 										<div class="t_refe mt10">
 											타인의 주민등록번호를 도용하여 가입하는 행위는 3년 이하의 징역 또는 1천 만원 이하의 벌금에 부과될 수
@@ -173,14 +172,14 @@
 					</div>
 					<!-- Joint Content -->
 					<div class="join_content_area">
-						<div class="form_layout">
+						<form name="frmCreateNewUser" class="form_layout js_validation_required">
 							<div class="t_refe mt10">* 선택입력란입니다</div>
 							<table>
 								<tr>
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input type="text" class="fieldline fl" style="width: 150px">
+											<input name="txtUserId" type="text" class="fieldline fl" style="width: 150px">
 												<div class="btn_mid_l ml5">
 													<div class="btn_mid_r">중복확인</div>
 												</div>
@@ -198,8 +197,8 @@
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input type="text" class="fieldline fl" style="width: 150px">
-												<input name="" type="checkbox" value="" /> 사용
+											<input name="txtUserNickName" type="text" class="fieldline fl" style="width: 150px">
+												<input name="chkUseNickName" type="checkbox"/> 사용
 												<div class="t_refe mt10">
 													* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
 													혹은 변경 가능합니다.
@@ -211,7 +210,7 @@
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input type="text" class="fieldline fl" style="width: 100px" />
+											<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" />
 										</div>
 									</td>
 								</tr>
@@ -219,17 +218,7 @@
 									<td>
 										<div class="form_label">비밀번호 확인</div>
 										<div class="form_value">
-											<input type="text" class="fieldline" style="width: 100px" />
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div class="form_label">이메일</div>
-										<div class="form_value">
-											<input type="text" class="fieldline" style="width: 100px" />
-											@ <input type="text" class="fieldline" style="width: 100px" />
-											<div class="t_refe mt10">* 가입 완료 시 확인메일을 보내드립니다.</div>
+											<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" />
 										</div>
 									</td>
 								</tr>
@@ -237,12 +226,12 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="" class="fieldline form_date_input" type="text" />
-											년 <input name="" class="fieldline form_date_input"
-												type="text" /> 월 <input name=""
-												class="fieldline form_date_input" type="text" /> 일 <select>
-												<option>여자</option>
-												<option>남자</option>
+											<input name="txtBirthYear" class="fieldline form_date_input" type="text" /> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input" type="text" /> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input" type="text" /> 일 
+											<select name="selSex">
+												<option value="female">여자</option>
+												<option value="male">남자</option>
 											</select>
 										</div>
 									</td>
@@ -251,8 +240,7 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input class=" fieldline" name="" type="text"
-												style="width: 300px" />
+											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px" />
 										</div>
 									</td>
 								</tr>
@@ -260,12 +248,7 @@
 									<td>
 										<div class="form_label">관심분야</div>
 										<div class="form_value">
-											<div class="t_skyblueb fl">
-												<span class="mr5">[예술]</span> <span class="mr5">[사회]</span>
-											</div>
-											<div class="btn_mid_l ml5">
-												<div class="btn_mid_r">추가</div>
-											</div>
+											<input name="txtInterestingPart" class="fieldline" type="text"/>
 											<div class="cb t_refe pt10">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -281,7 +264,7 @@
 									</td>
 								</tr>
 							</table>
-						</div>
+						</form>
 					</div>
 					<!-- Joint Content //-->
 					<!-- Btn -->
@@ -352,13 +335,35 @@
 	</div>
 </body>
 </html>
+
 <script type="text/javascript">
 $(function() {
 	$('.js_joinus_first_btn').live('click', function(e){
 		var input = $(e.target);
+		var joinusFirst = input.parents('.js_joinus_first');
+		var userAgreement = joinusFirst.find('input[name="rdoUserAgreement"]:checked').attr('value');
+		console.log('userAgreement=', userAgreement);
+		if(userAgreement !== "agree"){
+			smartPop.showInfo(smartPop.WARN, '회원이용약관에 동의하여야 회원가입을 할 수 있습니다.');
+			return false;
+		}
+		var privacyAgreement = joinusFirst.find('input[name="rdoPrivacyAgreement"]:checked').attr('value');
+		if(privacyAgreement !== "agree"){
+			smartPop.showInfo(smartPop.WARN, '개인정보취급방침에 동의하여야 회원가입을 할 수 있습니다.');			
+			return false;
+		}
+		var chkForeigner = joinusFirst.find('input[name="chkForeigner"]').attr('value');
+		var userName = joinusFirst.find('input[name="txtUserName"]').attr('value');
+		var userRRN1 = joinusFirst.find('input[name="txtUserRRN1"]').attr('value');
+		var userRRN2 = joinusFirst.find('input[name="txtUserRRN2"]').attr('value');
+		if(isEmpty(userName) || isEmpty(userRRN1) || isEmpty(userRRN2)){
+			smartPop.showInfo(smartPop.WARN, '실명확인을 위해 이름과 주민등록번호를 반드시 입력하여야 합니다.');			
+			return false;			
+		}
 		input.parents('.js_joinus_first').hide().next().show();
 		return false;
 	});
+	
 	$('.js_joinus_second_btn').live('click', function(e){
 		var input = $(e.target);
 		input.parents('.js_joinus_second').hide().next().show();

@@ -382,4 +382,5 @@ $(function() {
 		submitForms(e);
 		return false;
 	});
+	
 });
