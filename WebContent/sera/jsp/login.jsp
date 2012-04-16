@@ -106,7 +106,7 @@
 			<!-- Top Logo_Srch -->
 			<div class="logo_srch">
 				<h1 class="logo">
-					<a href="/"> <img width="201" height="36" alt=""
+					<a href="logins.sw"> <img width="201" height="36" alt=""
 						src="sera/images/sera2_logo.png"> </a>
 				</h1>
 				<ul class="srch">
@@ -160,19 +160,19 @@
 						<dd class="btn_pre"></dd>
 						<dd></dd>
 						<dd class="spon_lst">
-							<label> <a href="#"> <img width="119" height="42"
+							<label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_cj.png">
-							</a> </label> <label> <a href="#"> <img width="119" height="42"
+							</label> <label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_oliveyoung.png">
-							</a> </label> <label> <a href="#"> <img width="119" height="42"
+							</label> <label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_CFP.png">
-							</a> </label> <label> <a href="#"> <img width="119" height="42"
+							</label> <label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_Sokang.png">
-							</a> </label> <label> <a href="#"> <img width="119" height="42"
+							</label> <label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_KU.png">
-							</a> </label> <label> <a href="#"> <img width="119" height="42"
+							</label> <label> <img width="119" height="42"
 									src="sera/images/sera2_main_banner_millet.png">
-							</a> </label>
+							</label>
 						</dd>
 						<dd class="btn_next"></dd>
 						<dd></dd>
