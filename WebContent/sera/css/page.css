@@ -22,7 +22,7 @@
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
 .ribbon_mission {background: url("../images/header.png") no-repeat scroll -127px -1185px transparent; width:56px; height:56px}
 
-#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 991px;}
+#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 990px;}
 .sera_guide {background: url("../images/main_guide_bg.png") repeat-x scroll 0 0 transparent; float: left; height: 435px; padding: 6px 0 0 6px; width: 286px;}
 .sera_guide .btn_start {clear: both; height: 65px; width: 285px;}
 .sera_guide .img_guide { clear: both; height: 74px; width: 285px;}
@@ -35,7 +35,7 @@
 .sera_guide .sponsor .spon_lst label {border: 1px solid #e5e5e5; height: 42px; margin: 0 4px 4px 0; width: 119px; float:left}
 .sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
 .sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
-.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 274px;}
+.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 273px;}
 .sera_news .lst_normal {clear: both; padding: 0 16px 20px 25px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
@@ -55,19 +55,19 @@
 
 
 /* Global Navigation Bar*/
-.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:990px;}
+.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
 .gnb .top_logo {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:232px; height:17px; margin:5px 0 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
 .gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
 .gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
-.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:990px; height:91px; margin:0 auto; position:relative}
+.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:980px; height:91px; margin:0 auto; position:relative}
 .hd_shadow.bb {background: url("../images/top_bg_im_b.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_no { background:none}
-.top_navi {width:990px; margin-right:5px; clear:both; padding:5px 0 0 0; overflow:hidden}
+.top_navi {width:980px; clear:both; padding:5px 0 0 0; overflow:hidden}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
 .pofile_con { float:left;line-height:28px; margin-top:5px}
@@ -150,15 +150,15 @@ a.b_next:hover { background-position:-30px -535px}
 .tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
-#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 990px}
+#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 980px}
 #container.bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
 #container.bg_no { background-image:none}
-#container_join {height: auto; margin: 0 auto; position: relative; width: 990px}
+#container_join {height: auto; margin: 0 auto; position: relative; width: 980px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
 #sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%}
-.aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 267px; margin:15px 0 0}
+.aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
 
 /* My Comment */
@@ -530,8 +530,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .mission_info { float:left; width:200px; margin: 5px 0 0 0; color:#999999}
 
 /* Join Member Section */
-#join_section {background: url("../images/function_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; padding: 0; position: relative; width: 1004px; overflow:hidden; background-color:#FFF}
-.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 990px;}
+#join_section {background: url("../images/function_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; padding: 0; position: relative; width: 980px; overflow:hidden; background-color:#FFF}
+.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 980px;}
 .logo_srch .logo {float: left; height: 36px; width: 201px}
 .logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 279px; border:none}
 .icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
