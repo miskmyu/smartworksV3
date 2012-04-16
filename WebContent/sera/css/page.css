@@ -62,7 +62,7 @@
 .gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
-.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:1004px; height:91px; margin:0 auto; position:relative}
+.hd_shadow {background: url("../images/top_bg_im.jpg") no-repeat scroll 0 0 transparent; width:990px; height:91px; margin:0 auto; position:relative}
 .hd_shadow.bb {background: url("../images/top_bg_im_b.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg2 {background: url("../images/top_bg_im2.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
@@ -150,7 +150,7 @@ a.b_next:hover { background-position:-30px -535px}
 .tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
-#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 1004px}
+#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 990px}
 #container.bb {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
 #container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 1004px}
