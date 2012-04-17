@@ -94,11 +94,6 @@
 		<div class="icon_facebook fr ml5mt7">
 			<a href="">페이스북</a>
 		</div>
-		<div class="fr" style="margin: 8px 30px 0 0">
-			<div class="btn_mid_l js_create_mission">
-				<div class="btn_mid_r">미션등록</div>
-			</div>
-		</div>
 	</div>
 	<!-- Menu Dep2 -->
 	<div class="course_menu_d2 js_course_sub_menu" style="display:none">

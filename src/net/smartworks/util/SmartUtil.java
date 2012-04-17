@@ -373,6 +373,7 @@ public class SmartUtil {
 
 	public static boolean isBlankObject(Object obj){
 		if(obj==null) return true;
+		if(obj.equals("null")) return true;
 		if(obj.getClass().equals(String.class)) return StringUtils.isEmpty((String)obj);
 		if(obj.getClass().isArray()) return (obj==null || Array.getLength(obj)==0) ? true : false;
 		return false;

@@ -1327,19 +1327,19 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 			Filter[] filters = null;
-			if(courseId != null) {
+			if(!SmartUtil.isBlankObject(courseId)) {
 				filters = new Filter[2];
 				filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, courseId);
 				filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());
 			} else {
 				String workSpaceIdIns = null;
-				if(userId != null) {
+				if(!SmartUtil.isBlankObject(userId)) {
 					swdRecordCond.setCreationUser(userId);
 				} else {
 					SwoGroupCond attendingCourseCond = new SwoGroupCond();
 					SwoGroupMember[] courseMembers = new SwoGroupMember[1];
 					SwoGroupMember courseMember = new SwoGroupMember();
-					courseMember.setUserId(userId);
+					courseMember.setUserId(user.getId());
 					courseMembers[0] = courseMember;
 					attendingCourseCond.setSwoGroupMembers(courseMembers);
 					SwoGroup[] attendingCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), attendingCourseCond, IManager.LEVEL_ALL);
