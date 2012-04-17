@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -44,6 +45,9 @@ import net.smartworks.server.engine.docfile.model.HbDocumentModel;
 import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.exception.SwoException;
+import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.util.LocalDate;
@@ -722,7 +726,23 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
 		this.setFileDirectory(OSValidator.getImageDirectory());
-		String companyId = SmartUtil.getCurrentUser().getCompanyId();
+		User user = SmartUtil.getCurrentUser();
+		String companyId = null;
+		SwoCompany[] swoCompanies = null;
+		if(user == null) {
+			try {
+				swoCompanies = SwManagerFactory.getInstance().getSwoManager().getCompanys("", null, IManager.LEVEL_LITE);
+			} catch (SwoException e) {
+				e.printStackTrace();
+			} finally {
+				if(!CommonUtil.isEmpty(swoCompanies)) {
+					SwoCompany swoCompany = swoCompanies[0];
+					companyId = swoCompany.getId();
+				}
+			}
+		} else {
+			companyId = user.getCompanyId();
+		}
 
 		String fileDivision = "Temps";
 		File repository = this.getFileRepository(companyId, fileDivision);
