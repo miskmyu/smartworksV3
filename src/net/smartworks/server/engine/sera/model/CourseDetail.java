@@ -10,8 +10,6 @@ package net.smartworks.server.engine.sera.model;
 
 import java.util.Date;
 
-import net.smartworks.util.LocalDate;
-
 public class CourseDetail {
 	private String courseId;
 	private String object;
@@ -27,6 +25,7 @@ public class CourseDetail {
 	private String teamId;
 	private int targetPoint;
 	private int achievedPoint;
+	private boolean recommended;
 	private int lastMissionIndex = -1;
 
 	public String getCourseId() {
@@ -112,6 +111,12 @@ public class CourseDetail {
 	}
 	public void setAchievedPoint(int achievedPoint) {
 		this.achievedPoint = achievedPoint;
+	}
+	public boolean isRecommended() {
+		return recommended;
+	}
+	public void setRecommended(boolean recommended) {
+		this.recommended = recommended;
 	}
 	public int getLastMissionIndex() {
 		return lastMissionIndex;

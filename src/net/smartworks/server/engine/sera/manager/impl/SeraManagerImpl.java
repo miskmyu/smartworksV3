@@ -173,10 +173,12 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String courseId = null;
 		String[] courseIdIns = null;
 		Date fromDate = null;
+		boolean recommended = false;
 		if (cond != null) {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
 			fromDate = cond.getStart();
+			recommended = cond.isRecommended();
 		}
 		buf.append(" from CourseDetail obj");
 		buf.append(" where obj.courseId is not null");
@@ -195,7 +197,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			}
 			if (fromDate != null) 
 				buf.append(" and obj.start > :fromDate");
-				
+			if (recommended)
+				buf.append(" and obj.recommended = :recommended");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);
@@ -210,6 +213,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			}
 			if (fromDate != null)
 				query.setTimestamp("fromDate", fromDate);
+			if (recommended)
+				query.setBoolean("recommended", recommended);
 		}
 		return query;
 	}
