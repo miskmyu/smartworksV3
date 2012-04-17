@@ -56,9 +56,7 @@
 			<div class="hd_shadow bg_join">
 				<!-- GNB -->
 				<div class="gnb">
-					<div class="top_logo" style="visibility: hidden; width: 360px">
-					</div>
-					<ul class="top_menu2">
+					<ul class="top_menu2" style="margin-left: 340px">
 						<li class="fl">
 							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a>
 						</li>
@@ -208,7 +206,7 @@
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input name="txtUserId" type="text" class="fieldline fl required" style="width: 150px" value=""/>
+											<input name="txtUserId" type="text" class="fieldline fl required" style="width: 150px"/>
 											<div class="btn_mid_l ml5"><div class="btn_mid_r">중복확인</div></div>
 										</div>
 									</td>
@@ -223,7 +221,7 @@
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px" value=""/>
+											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px"/>
 											<div class="t_refe mt10">
 												* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
 												혹은 변경 가능합니다.
@@ -235,7 +233,7 @@
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" value=" " />
+											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" />
 										</div>
 									</td>
 								</tr>
@@ -243,7 +241,7 @@
 									<td>
 										<div class="form_label">비밀번호 확인</div>
 										<div class="form_value">
-											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px" value="" />
+											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px"/>
 										</div>
 									</td>
 								</tr>
@@ -251,9 +249,9 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="txtBirthYear" class="fieldline form_date_input required" type="text" value=""/> 년 
-											<input name="txtBirthMonth" class="fieldline form_date_input required" type="text" value=""/> 월 
-											<input name="txtBirthDay" class="fieldline form_date_input required" type="text" value=""/> 일 
+											<input name="txtBirthYear" class="fieldline form_date_input required" type="text"/> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input required" type="text" /> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input required" type="text"/> 일 
 											<select name="selSex">
 												<option value="female">여자</option>
 												<option value="male">남자</option>
@@ -265,7 +263,7 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px" value=""/>
+											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px"/>
 										</div>
 									</td>
 								</tr>
@@ -273,7 +271,7 @@
 									<td>
 										<div class="form_label">관심분야</div>
 										<div class="form_value">
-											<input name="txtInterestPart" class="fieldline" type="text" value=""/>
+											<input name="txtInterestPart" class="fieldline" type="text"/>
 											<div class="cb t_refe pt10">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -284,7 +282,7 @@
 										<div class="form_value">
 											<div class="icon_facebook fl mr5"></div>
 											<div class="icon_twitter fl mr5"></div>
-											<input name="" type="checkbox" value="" /> 연동여부
+											<input name="" type="checkbox"/> <label>연동여부</label>
 										</div>
 									</td>
 								</tr>
