@@ -21,9 +21,9 @@
 .right_space { width:95px; float:right}
 
 /* Icon */
-.icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -448px -117px transparent; display: block; width:33px; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 20px; padding: 2px 0 0 33px; text-align: left; margin-bottom: 10px}
-.icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -504px -117px transparent; display: block; width:37px; height:34px; display: block; font-size: 14px; font-weight: bold; height: 26px; line-height: 20px; padding: 3px 0 0 33px; text-align: left; margin-bottom: 10px}
-.icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -504px -117px transparent; display: block; width:37px; height:34px; display: block; font-size: 14px; font-weight: bold; height: 26px; line-height: 20px; padding: 3px 0 0 33px; text-align: left; margin-bottom: 10px}
+.icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -448px -117px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -448px -181px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -448px -181px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
 
 /* Btn */
 .btn_pop_l {background: url("../images/btn_pop_l.png") no-repeat scroll 0 0; height:27px; float:left; cursor:pointer}
@@ -77,7 +77,7 @@
 
 /* Smart Pop */
 .pop_corner_all{ border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border: 1px solid #c7c7c7; background-color:#FFF; -webkit-box-shadow: 0px 2px 10px #505050;}
-.smart_pop_section {width:425px; border: 1px solid #c7c7c7; background-color:#FFF;}
+.smart_pop_section {width:390px; border: 1px solid #c7c7c7; background-color:#FFF;}
 .smart_userinfo_section {width:300px; border: 1px solid #c7c7c7; background-color:#FFF;}
 .pop_contents {padding: 10px; overflow:hidden;}
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545;}
