@@ -11,7 +11,9 @@ package net.smartworks.server.engine.sera.model;
 import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.util.LocalDate;
 
-public class CourseDetailCond extends Cond{
+public class CourseDetailCond extends Cond {
+	private static final long serialVersionUID = 1L;
+
 	private String courseId;
 	private String[] courseIdIns;
 	private String object;
@@ -27,7 +29,7 @@ public class CourseDetailCond extends Cond{
 	private String teamId;
 	private int targetPoint;
 	private int achievedPoint;
-	
+	private boolean recommended;
 
 	public String getCourseId() {
 		return courseId;
@@ -119,6 +121,11 @@ public class CourseDetailCond extends Cond{
 	public void setAchievedPoint(int achievedPoint) {
 		this.achievedPoint = achievedPoint;
 	}
-	
-	
+	public boolean isRecommended() {
+		return recommended;
+	}
+	public void setRecommended(boolean recommended) {
+		this.recommended = recommended;
+	}
+
 }
