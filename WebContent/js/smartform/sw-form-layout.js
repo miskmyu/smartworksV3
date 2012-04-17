@@ -220,14 +220,12 @@ SmartWorks.GridLayout = function(config) {
 								// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 								paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 							}
-							console.log(JSON.stringify(paramsJson));
 							$.ajax({
 								url : "refresh_record.sw",
 								contentType : 'application/json',
 								type : 'POST',
 								data : JSON.stringify(paramsJson),
 								success : function(refreshData, status, jqXHR) {
-console.log('refreshData=', refreshData);
 									if(this_.options.mode==="edit"){
 										this_.options.target.show();
 										return getLayout(formXml, refreshData.record, this_, null, true);
@@ -276,7 +274,6 @@ console.log('refreshData=', refreshData);
 									// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 									paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 								}
-								console.log(JSON.stringify(paramsJson));
 								$.ajax({
 									url : "refresh_record.sw",
 									contentType : 'application/json',
@@ -323,7 +320,6 @@ console.log('refreshData=', refreshData);
 						// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 						paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 					}
-					console.log(JSON.stringify(paramsJson));
 					$.ajax({
 						url : "refresh_record.sw",
 						contentType : 'application/json',
@@ -382,7 +378,6 @@ console.log('refreshData=', refreshData);
 					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 				}
-				console.log(JSON.stringify(paramsJson));
 				$.ajax({
 					url : "refresh_record.sw",
 					contentType : 'application/json',

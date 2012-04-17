@@ -48,8 +48,8 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		var text = $staticItem.text();
 		var checked = (value === text ) ? 'checked' : '' ;
 
-		var $input = $('<input type="radio" ' + checked + ' name="' + id + '" value="' + text + '">' + text + '</input>');
-		
+		var $inputLabel = $('<label><input type="radio" ' + checked + ' name="' + id + '" value="' + text + '">' + text + '</input></label>');
+		var $input = $inputLabel.find('input');
 		$input.attr('fieldId', id);
 		if (readOnly) {
 			$input.attr('disabled', 'disabled');
@@ -58,7 +58,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 			$label.hide();
 			$input.hide();		
 		}
-		$input.appendTo($fieldset);
+		$inputLabel.appendTo($fieldset);
 	}
 	$fieldset.appendTo($input_container);
 

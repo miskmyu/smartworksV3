@@ -59,23 +59,6 @@ function loadCreateCourseFields() {
 		gridRow.find('.form_label').hide();		
 	}
 
-	var courseMentorField = $('div.js_course_mentor_field');
-	if(!isEmpty(courseMentorField)) {
-		
-		var gridRow = SmartWorks.GridLayout.newGridRow();
-		courseMentorField.html(gridRow);
-
-		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
-			container: gridRow,
-			fieldId: "txtCourseMentor",
-			fieldName: "course mentor",
-			columns: 1,
-			multiUsers: false,
-			required: true
-		});
-		gridRow.find('.form_col').css({width:"300px", padding:"0px"});
-		gridRow.find('.form_label').hide();		
-	}
 };
 
 function loadCreateMissionFields() {
@@ -256,3 +239,26 @@ function loadSeraNoteFields() {
 		gridRow.find('.form_label').hide();		
 	}
 };
+
+function loadJoinUsFields() {
+	var joinusProfileField = $('div.js_joinus_profile_field');
+	if(!isEmpty(joinusProfileField)) {
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		joinusProfileField.html(gridRow);
+
+		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+			container: gridRow,
+			fieldId: "imgJoinusProfile",
+			fieldName: "join us profile",
+			imgSource: "",
+			columns: 1,
+			pictureWidth: 118,
+			pictureHeight: 118,
+			required: false
+		});
+		joinusProfileField.find('.form_col').css({padding:"0"});
+		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
+		joinusProfileField.find('.form_value').css({width:"100%"});
+	}
+};
+

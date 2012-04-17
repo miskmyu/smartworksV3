@@ -172,40 +172,28 @@
 		</div>
 
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
-		<div class="fr form_space js_access_level_custom" <%if(work.getAccessPolicy().getLevel() != AccessPolicy.LEVEL_CUSTOM){ %> style="display:none"<%} %>>
-			<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
-				<div class="form_value">
-					<div class="icon_fb_space">
-						<div class="fieldline community_names js_community_names sw_required">
-							<div class="js_selected_communities user_sel_area">
-								<%
-								if(!SmartUtil.isBlankObject(work.getAccessPolicy().getCommunitiesToOpen())){
-									String comName = "";
-									for(CommunityInfo community : work.getAccessPolicy().getCommunitiesToOpen()){	
-										if(community.getClass().equals(UserInfo.class))
-											comName = ((UserInfo)community).getLongName();
-										else 
-											comName = community.getName();
-									%>
-										<span>
-											<span class="js_community_item user_select" comId="<%=community.getId()%>"><%=comName %>
-												<span class='btn_x_gr'><a class='js_remove_community' href=''> x</a></span>
-											</span>
-										</span>
-									<%
-									}
-								}
-								%>
+		<%
+		if(accessLevel == AccessPolicy.LEVEL_PUBLIC){
+		%>
+			<div class="fr form_space js_access_level_custom" style="display:none">
+				<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+					<div class="form_value">
+						<div class="icon_fb_space">
+							<div class="fieldline community_names js_community_names sw_required">
+								<div class="js_selected_communities user_sel_area">
+								</div>
+								<input class="js_auto_complete" href="community_name.sw" type="text">
+								<div class="js_srch_x"></div>
 							</div>
-							<input class="js_auto_complete" href="community_name.sw" type="text">
-							<div class="js_srch_x"></div>
+							<div class="js_community_list com_list" style="display: none"></div>
+							<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
 						</div>
-						<div class="js_community_list com_list" style="display: none"></div>
-						<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
 					</div>
-				</div>
-			</span>
-		</div>
+				</span>
+			</div>
+		<%
+		}
+		%>
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
 		
 		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->

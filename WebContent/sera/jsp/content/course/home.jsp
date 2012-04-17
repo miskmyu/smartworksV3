@@ -81,8 +81,9 @@
 			<ul class="js_course_menu">
 				<li class="current"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
-				<li><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_board">코스알림</a></li>
+				<li><a href="" class="js_create_team">팀활동</a></li>
+				<li><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
@@ -93,14 +94,6 @@
 		<div class="icon_facebook fr ml5mt7">
 			<a href="">페이스북</a>
 		</div>
-		<div class="fr" style="margin: 8px 30px 0 0">
-			<div class="btn_mid_l js_create_team">
-				<div class="btn_mid_r">팀구성하기</div>
-			</div>
-			<div class="btn_mid_l js_create_mission">
-				<div class="btn_mid_r">미션등록</div>
-			</div>
-		</div>
 	</div>
 	<!-- Menu Dep2 -->
 	<div class="course_menu_d2 js_course_sub_menu" style="display:none">
@@ -108,7 +101,8 @@
 		<div class="menu002" style="display:none"></div>
 		<div class="menu003" style="display:none"></div>
 		<div class="menu004" style="display:none"></div>
-		<div class="menu005 js_course_setting_menu" style="display:none">
+		<div class="menu005" style="display:none"></div>
+		<div class="menu006 js_course_setting_menu" style="display:none">
 			<%
 			if(myRunningCourse){
 			%>
