@@ -316,9 +316,9 @@
 					<span class="ct_tit_02"> </span>
 				</h2>
 				<%
-				if(!SmartUtil.isBlankObject(favoriteCourses)){
-					for(int i=0; i<favoriteCourses.length; i++){
-						CourseInfo course = favoriteCourses[i];
+				if(!SmartUtil.isBlankObject(recommendedCourses)){
+					for(int i=0; i<recommendedCourses.length; i++){
+						CourseInfo course = recommendedCourses[i];
 						String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
 				%>
 						<ul class="category_box intro_margin">

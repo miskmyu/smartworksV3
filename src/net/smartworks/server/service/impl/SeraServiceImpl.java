@@ -2862,10 +2862,12 @@ public class SeraServiceImpl implements ISeraService {
 		  courseDetailCond.setPageNo(0);
 		  courseDetailCond.setPageSize(maxList);
 		  CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
-		  
+		  if (courseDetails == null || courseDetails.length == 0) 
+			  return null;
+			  
 		  String[] courseIds = new String[courseDetails.length];
 		  for (int i = 0; i < courseDetails.length; i++) {
-		   courseIds[i] = courseDetails[i].getCourseId();
+			  courseIds[i] = courseDetails[i].getCourseId();
 		  }
 		  
 		  SwoGroupCond groupCond = new SwoGroupCond();
