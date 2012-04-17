@@ -139,7 +139,7 @@
 					</li>
 					<!-- Btn 등록//-->
 					<!-- Btn 취소-->
-					<li class="btn_default_l ml10 js_create_note_btn">
+					<li class="btn_default_l ml5 js_create_note_btn">
 						<div class="btn_default_r">취소</div>
 					</li>
 					<!-- Btn 취소//-->

@@ -305,7 +305,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
 .panel_section .header div a {color:#333333; font-weight:bold}
-.panel_section .header_mission div { font-size:14px; color:#3174ad; font-weight:bold}
+.panel_section .header_mission div, .course_section .header_mission div { font-size:14px; color:#3174ad; font-weight:bold}
 
 .panel_section .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .panel_section .list dd { display:inline; margin:0 28px 5px 0}
