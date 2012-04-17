@@ -23,12 +23,12 @@ public class CourseDetail {
 	private boolean payable;
 	private int fee;
 	private String teamId;
-	private int targetPoint;
-	private int achievedPoint;
+	private int targetPoint = 0;
+	private int achievedPoint = 0;
 	private boolean recommended;
 	private int lastMissionIndex = -1;
 	private Date createDate;
-	private int coursePoint;
+	private int coursePoint = 0;
 
 	public String getCourseId() {
 		return courseId;

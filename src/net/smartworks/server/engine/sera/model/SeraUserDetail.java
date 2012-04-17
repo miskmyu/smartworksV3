@@ -15,7 +15,7 @@ public class SeraUserDetail {
 	private String userId;
 	private String email;
 	private Date birthday;
-	private int sex;
+	private int sex = 0;
 	private String goal;
 	private String interests;
 	private String educations;
