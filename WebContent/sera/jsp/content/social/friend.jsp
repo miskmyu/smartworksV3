@@ -34,7 +34,7 @@
 			<!-- 목록1-->
 			<div class="panel_rds_block mb10">
 				<ul>
-					<li class="pl0pr10"><img class="sz_m_48" src="../images/photo_mid48_2.jpg" />
+					<li class="pl0pr10"><img class="profile_size_m" src="../images/photo_mid48_2.jpg" />
 					</li>
 					<li class="w90"><span> 아이디는일곱자<br /> <span
 							class="cb t_id">identity</span> </span>
