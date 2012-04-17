@@ -1324,7 +1324,7 @@ public class SeraServiceImpl implements ISeraService {
 	
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxList);
-			
+
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 			Filter[] filters = null;
 			if(!SmartUtil.isBlankObject(courseId)) {
@@ -1381,7 +1381,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, courseId);		
 			filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());*/		
-			
+
 			swdRecordCond.setFilter(filters);
 			
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
