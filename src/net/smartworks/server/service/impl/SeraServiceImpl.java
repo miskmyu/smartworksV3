@@ -2855,11 +2855,26 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
-		// TEST PURPOSE
-		// TEST PURPOSE
-		CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
-		return courses.getRunningCourses();
-		// TEST PURPOSE
-		// TEST PURPOSE
+		  //추천 받은 코스중에 날짜순으로 maxList 만큼
+		  CourseDetailCond courseDetailCond = new CourseDetailCond();
+		  courseDetailCond.setRecommended(true);
+		  courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
+		  courseDetailCond.setPageNo(0);
+		  courseDetailCond.setPageSize(maxList);
+		  CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		  
+		  String[] courseIds = new String[courseDetails.length];
+		  for (int i = 0; i < courseDetails.length; i++) {
+		   courseIds[i] = courseDetails[i].getCourseId();
+		  }
+		  
+		  SwoGroupCond groupCond = new SwoGroupCond();
+		  groupCond.setGroupIdIns(courseIds);
+		  ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		  SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		  
+		  CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		  //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
+		  return courses;
 	}
 }
