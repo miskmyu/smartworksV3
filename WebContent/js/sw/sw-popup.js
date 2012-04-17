@@ -100,7 +100,11 @@ smartPop = {
 				return false;
 			});
 		}
+		popUserInfo.find('img').attr('src', profile);
 		popUserInfo.find('.js_user_information').html(userDetail);
+		popUserInfo.find('.js_send_mail_to_user').attr('userId', userId);
+		popUserInfo.find('.js_leave_message_for_user').attr('userId', userId);
+		popUserInfo.find('.js_start_chat_with_user').attr('userId', userId);
 		if(directionUp){
 			popUserInfo.find('.up_point_b').hide();
 			popUserInfo.find('.up_point').show();

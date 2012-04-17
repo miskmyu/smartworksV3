@@ -122,9 +122,6 @@ currentUser = {
 <script type="text/javascript" src="js/jquery/jquery.numberformatter-1.2.2.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
-<!--
-<script type="text/javascript" src="js/jquery/gcal.js"></script>
--->
 <script type="text/javascript" src="js/jquery/fullcalendar.min.js"></script>
 
 <script type="text/javascript" src="js/jstorage/jstorage.js"></script>

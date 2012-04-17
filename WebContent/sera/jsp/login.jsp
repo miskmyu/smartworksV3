@@ -14,10 +14,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>세라캠퍼스에 오신걸 환영합니다.</title>
-<link type="text/css" rel="stylesheet" href="css/default.css">
-<link type="text/css" rel="stylesheet" href="sera/css/pop.css"/></link>
-<link type="text/css" rel="stylesheet" href="sera/css/form.css">
-<link type="text/css" rel="stylesheet" href="sera/css/page.css">
+<link type="text/css" rel="stylesheet" href="css/default.css"/>
+<link type="text/css" rel="stylesheet" href="sera/css/pop.css"/>
+<link type="text/css" rel="stylesheet" href="sera/css/form.css"/>
+<link type="text/css" rel="stylesheet" href="sera/css/page.css"/>
 <script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
 <script type="text/javascript" src="js/sw/sw-language.js"></script>
 <script type="text/javascript" src="js/sw/sw-language-ko.js"></script>
