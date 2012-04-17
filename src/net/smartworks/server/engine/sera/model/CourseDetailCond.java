@@ -24,6 +24,8 @@ public class CourseDetailCond extends Cond {
 	private int duration;
 	private LocalDate start;
 	private LocalDate end;
+	private LocalDate endFrom;
+	private LocalDate endTo;
 	private int maxMentees;
 	private boolean autoApproval;
 	private boolean payable;
@@ -32,9 +34,9 @@ public class CourseDetailCond extends Cond {
 	private int targetPoint;
 	private int achievedPoint;
 	private boolean recommended;
-	private Date createDate;
-	private Date createDateFrom;
-	private Date createDateTo;
+	private LocalDate createDate;
+	private LocalDate createDateFrom;
+	private LocalDate createDateTo;
 
 	public String getCourseId() {
 		return courseId;
@@ -135,20 +137,32 @@ public class CourseDetailCond extends Cond {
 	public Date getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(LocalDate createDate) {
 		this.createDate = createDate;
 	}
 	public Date getCreateDateFrom() {
 		return createDateFrom;
 	}
-	public void setCreateDateFrom(Date createDateFrom) {
+	public void setCreateDateFrom(LocalDate createDateFrom) {
 		this.createDateFrom = createDateFrom;
 	}
 	public Date getCreateDateTo() {
 		return createDateTo;
 	}
-	public void setCreateDateTo(Date createDateTo) {
+	public void setCreateDateTo(LocalDate createDateTo) {
 		this.createDateTo = createDateTo;
+	}
+	public LocalDate getEndFrom() {
+		return endFrom;
+	}
+	public void setEndFrom(LocalDate endFrom) {
+		this.endFrom = endFrom;
+	}
+	public LocalDate getEndTo() {
+		return endTo;
+	}
+	public void setEndTo(LocalDate endTo) {
+		this.endTo = endTo;
 	}
 
 }

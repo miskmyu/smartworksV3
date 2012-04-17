@@ -173,6 +173,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String courseId = null;
 		String[] courseIdIns = null;
 		Date fromDate = null;
+		Date endDateTo = null;
+		Date endDateFrom = null;
 		boolean recommended = false;
 		Date createDate = null;
 		Date createDateFrom = null;
@@ -181,6 +183,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
 			fromDate = cond.getStart();
+			endDateFrom = cond.getEndFrom();
+			endDateTo = cond.getEndTo();
 			recommended = cond.isRecommended();
 			createDate = cond.getCreateDate();
 			createDateFrom = cond.getCreateDateFrom();
@@ -203,6 +207,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			}
 			if (fromDate != null) 
 				buf.append(" and obj.start > :fromDate");
+			if (endDateFrom != null) 
+				buf.append(" and obj.end > :endDateFrom");
+			if (endDateTo != null) 
+				buf.append(" and obj.end < :endDateTo");
 			if (recommended)
 				buf.append(" and obj.recommended = :recommended");
 			if (createDate != null)
@@ -225,6 +233,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			}
 			if (fromDate != null)
 				query.setTimestamp("fromDate", fromDate);
+			if (endDateFrom != null) 
+				query.setTimestamp("endDateFrom", endDateFrom);
+			if (endDateTo != null) 
+				query.setTimestamp("endDateTo", endDateTo);
 			if (recommended)
 				query.setBoolean("recommended", recommended);
 			if (createDate != null)

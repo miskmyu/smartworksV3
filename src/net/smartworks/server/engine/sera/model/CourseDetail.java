@@ -28,6 +28,7 @@ public class CourseDetail {
 	private boolean recommended;
 	private int lastMissionIndex = -1;
 	private Date createDate;
+	private int coursePoint;
 
 	public String getCourseId() {
 		return courseId;
@@ -130,6 +131,12 @@ public class CourseDetail {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public int getCoursePoint() {
+		return coursePoint;
+	}
+	public void setCoursePoint(int coursePoint) {
+		this.coursePoint = coursePoint;
 	}
 	public static CourseDetail pickupCourseDetail(String courseId, CourseDetail[] courseDetails) {
 		if (courseDetails == null || courseDetails.length == 0)
