@@ -76,12 +76,27 @@
 					<a href=""> </a>
 				</div>
 			</div>
-			<div>
-				<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
-					<jsp:param value="<%=course.getId() %>" name="courseId"/>
-					<jsp:param value="<%=missionId %>" name="missionId"/>
-				</jsp:include>
-			</div>
+			<%
+			boolean missionClearedByMe = false;
+			if(!SmartUtil.isBlankObject(mission.getMissionClearers())){
+				String[] clearers = mission.getMissionClearers();
+				for(int i=0; i<clearers.length; i++)
+					if(clearers[i].equals(cUser.getId())){
+						missionClearedByMe = true;
+						break;
+					}
+			}
+			if(!missionClearedByMe){
+			%>
+				<div>
+					<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
+						<jsp:param value="<%=course.getId() %>" name="courseId"/>
+						<jsp:param value="<%=missionId %>" name="missionId"/>
+					</jsp:include>
+				</div>
+			<%
+			}
+			%>
 		</dl>
 	</div>
 	<!-- 미션수행 //-->
