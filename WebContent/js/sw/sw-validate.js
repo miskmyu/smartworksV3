@@ -1,10 +1,9 @@
 
 $.validator.messages.required = "";
+$.validator.messages.email = "";
+$.validator.messages.number = "";
 
-$.validator.addMethod('positiveNumber',
-	    function (value) { 
-	        return Number(value) > 0;
-	    }, '0보다 큰숫자를 입력바랍니다.');
+$.validator.addMethod('positiveNumber', function (value) { return Number(value) > 0; }, '0보다 큰숫자를 입력바랍니다.');
 
 var showErrors = function(errorMap, errorList) {
 	if(!isEmpty(errorMap)){

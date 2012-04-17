@@ -132,9 +132,9 @@ SmartWorks.GridLayout = function(config) {
 					$html_cell.attr('rowspan', rowspan);
 				if(id) {
 					var $entity = $form.find('#' + id);
-					if(this_.options.requiredOnly !== 'true' || $entity[0].getAttribute('required') === 'true'){
-						SmartWorks.FormFieldBuilder.build(mode, $html_cell, $entity, dataField, this_, refreshOnly);
-					}
+//					if(this_.options.requiredOnly !== 'true' || $entity[0].getAttribute('required') === 'true'){
+					SmartWorks.FormFieldBuilder.build(mode, $html_cell, $entity, dataField, this_, refreshOnly);
+//					}
 				}
 			}
 		}

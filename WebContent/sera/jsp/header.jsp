@@ -87,7 +87,7 @@
 	<div class="top_navi">
 		<div class="personal_info fl mt5">
 			<div class="profile_pic fl">
-				<img class="sz_s_34" src="<%=cUser.getMidPicture() %>">
+				<img class="profile_size_c" src="<%=cUser.getMidPicture() %>">
 			</div>
 			<div class="pofile_con">
 				<div class="btn_log on"></div>
