@@ -125,33 +125,33 @@
 				<td>
 					<div class="form_label w110">카테고리</div>
 					<div class="form_value">
-						<input name="chkCourseCategories" type="radio" value="예술" />예술
-						<input name="chkCourseCategories" type="radio" value="엔터테인먼트" />엔터테인먼트
-						<input name="chkCourseCategories" type="radio" value="스타일" />스타일
-						<input name="chkCourseCategories" type="radio" value="생활" />생활
-						<input name="chkCourseCategories" type="radio" value="영화/애니메이션" />영화/애니메이션
-						<input name="chkCourseCategories" type="radio" value="게임" />게임<br />
-						<input name="chkCourseCategories" type="radio" value="영화" />영화
-						<input name="chkCourseCategories" type="radio" value="이벤트" />이벤트
-						<input name="chkCourseCategories" type="radio" value="스포츠" />스포츠
-						<input name="chkCourseCategories" type="radio" value="이슈" />이슈
-						<input name="chkCourseCategories" type="radio" value="시사" />시사
-						<input name="chkCourseCategories" type="radio" value="경제" />경제
-						<input name="chkCourseCategories" type="radio" value="비즈니스" />비즈니스
-						<input name="chkCourseCategories" type="radio" value="미디어" />미디어<br />
-						<input name="chkCourseCategories" type="radio" value="환경" />환경
-						<input name="chkCourseCategories" type="radio" value="동물" />동물
-						<input name="chkCourseCategories" type="radio" value="비영리/사회운동" />비영리/사회운동
-						<input name="chkCourseCategories" type="radio" value="역사" />역사
-						<input name="chkCourseCategories" type="radio" value="문학" />문학
-						<input name="chkCourseCategories" type="radio" value="심리" />심리
-						<input name="chkCourseCategories" type="radio" value="인물" />인물<br /> 
-						<input name="chkCourseCategories" type="radio" value="과학" />과학
-						<input name="chkCourseCategories" type="radio" value="첨단기술" />첨단기술
-						<input name="chkCourseCategories" type="radio" value="의학" />의학
-						<input name="chkCourseCategories" type="radio" value="건축" />건축
-						<input name="chkCourseCategories" type="radio" value="교육" />교육
-						<input name="chkCourseCategories" type="radio" value="기타" />기타
+						<input name="chkCourseCategories" type="radio" value="예술" /><label>예술</label>
+						<input name="chkCourseCategories" type="radio" value="엔터테인먼트" /><label>엔터테인먼트</label>
+						<input name="chkCourseCategories" type="radio" value="스타일" /><label>스타일</label>
+						<input name="chkCourseCategories" type="radio" value="생활" /><label>생활</label>
+						<input name="chkCourseCategories" type="radio" value="영화/애니메이션" /><label>영화/애니메이션</label>
+						<input name="chkCourseCategories" type="radio" value="게임" /><label>게임</label><br />
+						<input name="chkCourseCategories" type="radio" value="영화" /><label>영화</label>
+						<input name="chkCourseCategories" type="radio" value="이벤트" /><label>이벤트</label>
+						<input name="chkCourseCategories" type="radio" value="스포츠" /><label>스포츠</label>
+						<input name="chkCourseCategories" type="radio" value="이슈" /><label>이슈</label>
+						<input name="chkCourseCategories" type="radio" value="시사" /><label>시사</label>
+						<input name="chkCourseCategories" type="radio" value="경제" /><label>경제</label>
+						<input name="chkCourseCategories" type="radio" value="비즈니스" /><label>비즈니스</label>
+						<input name="chkCourseCategories" type="radio" value="미디어" /><label>미디어</label><br />
+						<input name="chkCourseCategories" type="radio" value="환경" /><label>환경</label>
+						<input name="chkCourseCategories" type="radio" value="동물" /><label>동물</label>
+						<input name="chkCourseCategories" type="radio" value="비영리/사회운동" /><label>비영리/사회운동</label>
+						<input name="chkCourseCategories" type="radio" value="역사" /><label>역사</label>
+						<input name="chkCourseCategories" type="radio" value="문학" /><label>문학</label>
+						<input name="chkCourseCategories" type="radio" value="심리" /><label>심리</label>
+						<input name="chkCourseCategories" type="radio" value="인물" /><label>인물</label><br /> 
+						<input name="chkCourseCategories" type="radio" value="과학" /><label>과학</label>
+						<input name="chkCourseCategories" type="radio" value="첨단기술" /><label>첨단기술</label>
+						<input name="chkCourseCategories" type="radio" value="의학" /><label>의학</label>
+						<input name="chkCourseCategories" type="radio" value="건축" /><label>건축</label>
+						<input name="chkCourseCategories" type="radio" value="교육" /><label>교육</label>
+						<input name="chkCourseCategories" type="radio" value="기타" /><label>기타</label>
 					</div>
 				</td>
 			</tr>

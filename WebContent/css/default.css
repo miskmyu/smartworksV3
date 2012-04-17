@@ -104,7 +104,7 @@ input[type="password"], textarea {
 
 input[type="image"]	{padding:0}
 
-input[type="radio"] {margin:0 5px 2px 0}
+input[type="radio"] {margin:0 4px 2px 0}
 	
 ul, ol, li {
 	list-style: none outside none;
