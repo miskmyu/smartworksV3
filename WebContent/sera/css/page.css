@@ -436,7 +436,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_menu_d2 .menu003 {position:relative}
 .course_menu_d2 .menu004 {position:relative}
 .course_menu_d2 .menu005 {position:relative}
-.course_menu_d2 .menu006 {left:70px; position:relative}
+.course_menu_d2 .menu006 {position:relative; float:right; right:32px}
 .course_menu_d2 li { float:left; padding:0 10px; background: url("../images/li_gab.gif") no-repeat 100% 48%}
 .course_menu_d2 li a:hover, .course_menu_d2 li.current a { font-weight:bold; color:#4e90b7}
 .course_menu_d2 li.end { background:none}

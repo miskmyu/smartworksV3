@@ -99,3 +99,6 @@ a .btn_plus:hover {background-position:0 -16px}
 .icon_file_word {background: url("../../images/file/icon_word.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_xls {background: url("../../images/file/icon_xls.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_zip {background: url("../../images/file/icon_zip.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
+
+/* Input Type */
+.form_value label { margin:0 10px 0 0; line-height: 20px}
