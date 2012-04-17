@@ -44,9 +44,8 @@
 		<div id="sera_header_main">
 			<!-- GNB -->
 			<div class="gnb">
-				<div class="top_logo" style="visibility: hidden; width: 360px">
-				</div>
-				<ul class="top_menu2">
+				
+				<ul class="top_menu2" style="margin-left: 340px">
 					<li class="fl"><a href=""> <img width="101" height="28"
 							src="sera/images/sera2_main_btnTopMenu1_off.png" />
 					</a></li>
@@ -227,7 +226,7 @@
 						</dt>
 						<dd>
 							<ul>
-								<li>- 세라 캠퍼스가 기능을 강화하여 새롭게...</li>
+								<li>- 세라 캠퍼스가 기능을 강화하여 새롭...</li>
 								<li>- 장동인 대표의 [클라우드]코스가 신설...</li>
 								<li>- TEDx 과천 강의가 업로드...</li>
 								<li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
@@ -246,7 +245,7 @@
 						</dt>
 						<dd>
 							<ul>
-								<li>- 세라 캠퍼스가 기능을 강화하여 새롭게...</li>
+								<li>- 세라 캠퍼스가 기능을 강화하여 새롭...</li>
 								<li>- 장동인 대표의 [클라우드]코스가 신설...</li>
 								<li>- TEDx 과천 강의가 업로드...</li>
 								<li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
