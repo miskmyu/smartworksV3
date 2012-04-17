@@ -56,9 +56,7 @@
 			<div class="hd_shadow bg_join">
 				<!-- GNB -->
 				<div class="gnb">
-					<div class="top_logo" style="visibility: hidden; width: 360px">
-					</div>
-					<ul class="top_menu2">
+					<ul class="top_menu2" style="margin-left: 340px">
 						<li class="fl">
 							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a>
 						</li>
@@ -201,29 +199,30 @@
 					</div>
 					<!-- Joint Content -->
 					<div class="join_content_area">
-						<form name="frmCreateNewUser" class="form_layout js_validation_required">
+						<form name="frmCreateSeraUser" class="form_layout js_validation_required">
 							<div class="t_refe mt10">* 선택입력란입니다</div>
 							<table>
 								<tr>
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input name="txtUserId" type="text" class="fieldline fl required" style="width: 150px" value=""/>
-											<div class="btn_mid_l ml5"><div class="btn_mid_r">중복확인</div></div>
+											<input name="txtUserId" type="text" class="fieldline fl required email" style="width: 150px" value=""/>
+											<div class="btn_mid_l ml5 js_check_iddup_btn"><div class="btn_mid_r">중복확인</div></div>
+											<div class="btn_mid_l ml5 js_change_id_btn" style="display:none"><div class="btn_mid_r">아이디변경</div></div>
 										</div>
 									</td>
 									<td rowspan="9" valign="top">
 										<!-- 사진 올리기 -->
 										<div class="my_photo fn m0 js_joinus_profile_field"></div>
 										<div class="t_refe mt10">
-											* 사진은 자동으로<br />77x77으로 변경됩니다
+											* 사진은 자동으로<br />118x118으로 변경됩니다
 										</div> <!-- 사진 올리기 //--></td>
 								</tr>
 								<tr>
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px" value=""/>
+											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px"/>
 											<div class="t_refe mt10">
 												* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
 												혹은 변경 가능합니다.
@@ -235,7 +234,7 @@
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" value=" " />
+											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" />
 										</div>
 									</td>
 								</tr>
@@ -243,7 +242,7 @@
 									<td>
 										<div class="form_label">비밀번호 확인</div>
 										<div class="form_value">
-											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px" value="" />
+											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px"/>
 										</div>
 									</td>
 								</tr>
@@ -251,9 +250,9 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="txtBirthYear" class="fieldline form_date_input required" type="text" value=""/> 년 
-											<input name="txtBirthMonth" class="fieldline form_date_input required" type="text" value=""/> 월 
-											<input name="txtBirthDay" class="fieldline form_date_input required" type="text" value=""/> 일 
+											<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=""/> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 일 
 											<select name="selSex">
 												<option value="female">여자</option>
 												<option value="male">남자</option>
@@ -265,7 +264,7 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px" value=""/>
+											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px"/>
 										</div>
 									</td>
 								</tr>
@@ -273,7 +272,7 @@
 									<td>
 										<div class="form_label">관심분야</div>
 										<div class="form_value">
-											<input name="txtInterestPart" class="fieldline" type="text" value=""/>
+											<input name="txtInterestPart" class="fieldline" type="text"/>
 											<div class="cb t_refe pt10">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -284,7 +283,7 @@
 										<div class="form_value">
 											<div class="icon_facebook fl mr5"></div>
 											<div class="icon_twitter fl mr5"></div>
-											<input name="" type="checkbox" value="" /> 연동여부
+											<input name="" type="checkbox"/> <label>연동여부</label>
 										</div>
 									</td>
 								</tr>
@@ -368,6 +367,10 @@ loadJoinUsFields();
 
 function submitForms() {
 	var joinUs = $('.js_joinus_page');
+	if(!joinUs.find('input[name="txtUserId"]').hasClass('sw_dup_checked')){
+		smartPop.showInfo(smartPop.ERROR, "아이디 중복확인을 수행하지 않았습니다!");
+		return false;
+	}
 	if (SmartWorks.GridLayout.validate(joinUs.find('form.js_validation_required'), $('.js_profile_error_message'))) {
 		var forms = joinUs.find('form');
 		var paramsJson = {};
@@ -430,6 +433,10 @@ $(function() {
 	$('.js_joinus_second_btn').live('click', function(e){
 		var input = $(e.target);
 		var joinUs = $('.js_joinus_page');
+		if(!joinUs.find('input[name="txtUserId"]').hasClass('sw_dup_checked')){
+			smartPop.showInfo(smartPop.WARN, "아이디 중복확인을 수행하지않았습니다. 중복확인을 수행바랍니다!");
+			return false;
+		}
 		if (SmartWorks.GridLayout.validate(joinUs.find('form.js_validation_required'), $('.js_profile_error_message'))) {
 			var forms = joinUs.find('form');
 			var paramsJson = {};
@@ -442,7 +449,7 @@ $(function() {
 				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 			}
 			console.log(JSON.stringify(paramsJson));
-			var url = "create_new_user.sw";
+			var url = "create_sera_user.sw";
 			var progressSpan = joinUs.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			$.ajax({
@@ -468,5 +475,39 @@ $(function() {
 		var input = $(e.target);
 		return false;
 	});
+	
+	$('.js_check_iddup_btn').live('click', function(e){
+		var input = $(e.target).parent();
+		var target = input.siblings('input[name="txtUserId"]');
+		var userId = target.attr('value');
+		if(!target.valid()){
+			smartPop.showInfo(smartPop.ERROR, "이메일만 아이디로 사용할 수 있습니다. 유호한 이메일을 입력바랍니다.");
+			return false;
+		}
+		$.ajax({
+			url : "check_id_duplication.sw",
+			data : {
+				userId : userId
+			},
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFORM, "사용가능한 아이디 입니다.");
+				target.addClass('sw_dup_checked').attr('readonly', true);
+				input.hide().siblings('.js_change_id_btn').show();;
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.showInfo(smartPop.WARN, "이미 사용중인 아이디 입니다.");
+			}
+		});
+		return false;
+	});
+	
+	$('.js_change_id_btn').live('click', function(e) {
+		var input = $(e.target).parent();
+		var target = input.siblings('input[name="txtUserId"]');
+		target.removeClass('sw_dup_checked').attr('readonly', false);
+		input.hide().siblings('.js_check_iddup_btn').show();;
+		return false;
+	});
+
 });
 </script>

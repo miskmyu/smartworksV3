@@ -119,7 +119,8 @@ function submitForms() {
 		<div class="solid_line"></div>
 	</div>
 	
-	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 -->
+<%--
+ 	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 -->
 	<!-- js_toggle_form_detail : js/sw/sw-act-work.js 에서 해당 항목의 click 이벤트에 라이브를 걸어 toggle 해준다. -->
 	<div class="txt_btn txt_btn_height js_form_detail_buttons">
 		<div>
@@ -130,7 +131,7 @@ function submitForms() {
 		</div>
 	</div>
 	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 //-->
-
+ --%>
 	<!--  전자결재화면이 나타나는 곳 -->
 	<div class="js_form_task_approval" style="display:none"></div>
 	
