@@ -24,7 +24,6 @@ $(function() {
 		}
 		refreshData['workId'] = workId;
 		refreshData['recordId'] = recordId;
-		console.log(JSON.stringify(refreshData));
 		new SmartWorks.GridLayout({
 			target : target,
 			mode : "edit",
