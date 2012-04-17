@@ -553,3 +553,8 @@ VALUES ('402880eb36b5fe8c0136b60260030002', 'pkg_8fc9ed30a64b467eb89fd35097cc621
 </form>');
 
 
+
+
+ALTER TABLE coursedetail add createDate datetime;
+
+
