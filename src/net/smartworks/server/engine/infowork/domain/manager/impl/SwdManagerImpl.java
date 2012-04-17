@@ -980,8 +980,6 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(" and swdataref.refformid = :refFormId");
 			if (refRecordId != null)
 				buf.append(" and swdataref.refrecordid = :refRecordId");
-			if (workSpaceIdIns != null)
-				buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
 			//buf.append(" and obj.domainId = domain.id");
 		//} else {
 			//buf.append(" where obj.domainId = domain.id");
@@ -1071,7 +1069,11 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(")");
 			}
 		}
-		
+		if (workSpaceIdIns != null) {
+			if(first) buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+			else buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+		}
+
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);

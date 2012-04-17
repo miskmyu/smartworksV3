@@ -32,7 +32,7 @@
 	String courseId = request.getParameter("courseId");
 	String missionId = request.getParameter("missionId");
 	
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(userId, courseId, missionId,  new LocalDate(), 10);
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(-1, userId, courseId, missionId,  new LocalDate(), 10);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
