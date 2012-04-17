@@ -1011,6 +1011,7 @@ public class SeraServiceImpl implements ISeraService {
 			runningCourseCond.setGroupLeader(userId);
 			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
 			runningCourseCond.setPageSize(maxList);
+			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
 
 			SwoGroupCond attendingCourseCond = new SwoGroupCond();
@@ -1022,6 +1023,7 @@ public class SeraServiceImpl implements ISeraService {
 			attendingCourseCond.setNotGroupLeader(userId);
 			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
 			attendingCourseCond.setPageSize(maxList);
+			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] attendingCourses = swoManager.getGroups(userId, attendingCourseCond, IManager.LEVEL_ALL);
 
 			int totalCourseSize = ( runningCourses == null ? 0 : runningCourses.length ) + ( attendingCourses == null ? 0 : attendingCourses.length );
