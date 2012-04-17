@@ -486,10 +486,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Size */
 .profile_size_s {width:20px !important; height:20px !important; padding-right:3px}
-.sz_s_34 {width:34px !important; height:34px !important}
-.sz_m_48 {width:48px !important; height:48px !important}
-.sz_l_72 {width:72px !important; height:72px !important}
-.sz_xl_118 {width:118px !important; height:118px !important}
+.profile_size_c {width:34px !important; height:34px !important}
+.profile_size_m {width:48px !important; height:48px !important}
+.profile_size_72 {width:72px !important; height:72px !important}
+.profile_size_b {width:118px !important; height:118px !important}
 
 
 /* Bullet */
