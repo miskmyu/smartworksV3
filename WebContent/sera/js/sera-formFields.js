@@ -248,7 +248,7 @@ function loadJoinUsFields() {
 
 		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
 			container: gridRow,
-			fieldId: "imgJoinusProfile",
+			fieldId: "imgUserProfile",
 			fieldName: "join us profile",
 			imgSource: "",
 			columns: 1,

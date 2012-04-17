@@ -174,11 +174,17 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String[] courseIdIns = null;
 		Date fromDate = null;
 		boolean recommended = false;
+		Date createDate = null;
+		Date createDateFrom = null;
+		Date createDateTo = null;
 		if (cond != null) {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
 			fromDate = cond.getStart();
 			recommended = cond.isRecommended();
+			createDate = cond.getCreateDate();
+			createDateFrom = cond.getCreateDateFrom();
+			createDateTo = cond.getCreateDateTo();
 		}
 		buf.append(" from CourseDetail obj");
 		buf.append(" where obj.courseId is not null");
@@ -199,6 +205,12 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.start > :fromDate");
 			if (recommended)
 				buf.append(" and obj.recommended = :recommended");
+			if (createDate != null)
+				buf.append(" and obj.createDate = :createDate");
+			if (createDateFrom != null)
+				buf.append(" and obj.createDate > :createDateFrom");
+			if (createDateTo != null)
+				buf.append(" and obj.createDate < :createDateTo");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);
@@ -215,6 +227,12 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setTimestamp("fromDate", fromDate);
 			if (recommended)
 				query.setBoolean("recommended", recommended);
+			if (createDate != null)
+				query.setTimestamp("createDate", createDate);
+			if (createDateFrom != null)
+				query.setTimestamp("createDateFrom", createDateFrom);
+			if (createDateTo != null)
+				query.setTimestamp("createDateTo", createDateTo);
 		}
 		return query;
 	}

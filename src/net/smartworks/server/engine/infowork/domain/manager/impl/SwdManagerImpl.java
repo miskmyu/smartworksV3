@@ -971,6 +971,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			buf.append(", swdataref");
 		}
 		// where
+		String workSpaceIdIns = cond.getWorkSpaceIdIns();
 		boolean first = true;
 		if (refFormId != null || refRecordId != null) {
 			first = false;
@@ -979,6 +980,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(" and swdataref.refformid = :refFormId");
 			if (refRecordId != null)
 				buf.append(" and swdataref.refrecordid = :refRecordId");
+			if (workSpaceIdIns != null)
+				buf.append(" and obj.workSpaceId in :workSpaceIdIns");
 			//buf.append(" and obj.domainId = domain.id");
 		//} else {
 			//buf.append(" where obj.domainId = domain.id");
@@ -1099,6 +1102,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			query.setString("refFormId", refFormId);
 		if (refRecordId != null)
 			query.setString("refRecordId", refRecordId);
+		if (workSpaceIdIns != null)
+			query.setString("workSpaceIdIns", workSpaceIdIns);
 		if (!CommonUtil.isEmpty(filterMap)) {
 			Filter f;
 			String operType;
@@ -1112,6 +1117,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					operValue = CommonUtil.toLikeString(f.getRightOperandValue());
 				} else {
 					operValue = f.getRightOperandValue();
+					System.out.println(param);
+					System.out.println(operValue);
+					System.out.println("----------------");
 					if ((operType == null || operType.equalsIgnoreCase(Filter.OPERANDTYPE_STRING)) && paramTypeMap.containsKey(param))
 						operType = paramTypeMap.get(param);
 				}
