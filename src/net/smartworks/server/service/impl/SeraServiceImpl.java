@@ -1326,13 +1326,10 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setPageSize(maxList);
 
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-			Filter[] filters = null;
+			String workSpaceIdIns = null;
 			if(!SmartUtil.isBlankObject(courseId)) {
-				filters = new Filter[2];
-				filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, courseId);
-				filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());
+				swdRecordCond.setWorkSpaceIdIns("('"+workSpaceIdIns+"')");
 			} else {
-				String workSpaceIdIns = null;
 				if(!SmartUtil.isBlankObject(userId)) {
 					swdRecordCond.setCreationUser(userId);
 				} else {
@@ -1366,24 +1363,16 @@ public class SeraServiceImpl implements ISeraService {
 						}
 						workSpaceIdIns = workSpaceIdIns + ")";
 					}
-				}
-				if(workSpaceIdIns == null) {
-					filters = new Filter[1];
-					filters[0] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());
-				} else {
-					filters = new Filter[2];
-					filters[0] = new Filter("in", "workSpaceId", Filter.OPERANDTYPE_STRING, workSpaceIdIns);
-					filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());
+					swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 				}
 			}
 
-			/*Filter[] filters = new Filter[2];
+			Filter[] filters = new Filter[1];
 
-			filters[0] = new Filter("=", "workSpaceId", Filter.OPERANDTYPE_STRING, courseId);		
-			filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());*/		
+			filters[1] = new Filter(">", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
 
 			swdRecordCond.setFilter(filters);
-			
+
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 	
 			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
@@ -2329,7 +2318,7 @@ public class SeraServiceImpl implements ISeraService {
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_LINKURLFIELDID)) {
 							missionReportInstanceInfo.setLinkUrl(value);
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_STARPOINTFIELDID)) {
-							missionReportInstanceInfo.setStarPoint(Integer.parseInt(value));
+							missionReportInstanceInfo.setStarPoint(value != null ? Integer.parseInt(value) : 0);
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_FILEGROUPIDFIELDID)) {
 							missionReportInstanceInfo.setFileGroupId(value);
 							
