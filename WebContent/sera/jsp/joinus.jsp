@@ -8,17 +8,46 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
-	<link type="text/css" rel="stylesheet" href="css/default.css">
-	<link href="css/black/pop.css" type="text/css" rel="stylesheet" /></link>
-	<link type="text/css" rel="stylesheet" href="sera/css/form.css">
-	<link type="text/css" rel="stylesheet" href="sera/css/page.css">
+	<link href="css/default.css" type="text/css" rel="stylesheet"/>
+	<link href="css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>
+
+	<link href="sera/css/pop.css" type="text/css" rel="stylesheet" />
+	<link href="sera/css/form.css" type="text/css" rel="stylesheet"/>
+	<link href="sera/css/page.css" type="text/css" rel="stylesheet"/>
+
 	<script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.validate.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language-ko.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language-en.js"></script>
-	<script type="text/javascript" src="sera/js/rolling_img.js"></script>
+	<script type="text/javascript" src="js/sw/sw-validate.js"></script>
 	<script type="text/javascript" src="js/sw/sw-util.js"></script>
 	<script type="text/javascript" src='js/sw/sw-popup.js'></script>
+	<script type="text/javascript" src="js/sw/sw-file.js"></script>
+	<script type="text/javascript" src='sera/js/sera-formFields.js'></script>
+	<script type="text/javascript" src='js/smartform/smartworks.js'></script>
+	<script type="text/javascript" src='js/smartform/sw-form-layout.js'></script>
+	<script type="text/javascript" src='js/smartform/sw-form-field-builder.js'></script>
+	<script type="text/javascript" src='js/smartform/sw-form-dataFields.js'></script>
+	<script type="text/javascript" src='js/smartform/field/currency_input.js'></script>
+	<script type="text/javascript" src='js/smartform/field/radio_button.js'></script>
+	<script type="text/javascript" src='js/smartform/field/check_box.js'></script>
+	<script type="text/javascript" src='js/smartform/field/combo_box.js'></script>
+	<script type="text/javascript" src='js/smartform/field/date_chooser.js'></script>
+	<script type="text/javascript" src='js/smartform/field/email_input.js'></script>
+	<script type="text/javascript" src='js/smartform/field/file_field.js'></script>
+	<script type="text/javascript" src='js/smartform/field/number_input.js'></script>
+	<script type="text/javascript" src='js/smartform/field/percent_input.js'></script>
+	<script type="text/javascript" src='js/smartform/field/rich_editor.js'></script>
+	<script type="text/javascript" src='js/smartform/field/text_input.js'></script>
+	<script type="text/javascript" src='js/smartform/field/time_chooser.js'></script>
+	<script type="text/javascript" src='js/smartform/field/datetime_chooser.js'></script>
+	<script type="text/javascript" src='js/smartform/field/user_field.js'></script>
+	<script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script>
+	<script type="text/javascript" src='js/smartform/field/image_box.js'></script>
+	<script type="text/javascript" src='js/smartform/field/videoYT_box.js'></script>
+	<script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
+	<script type="text/javascript" src="sera/js/rolling_img.js"></script>
 	
 </head>
 <body>
@@ -179,16 +208,13 @@
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input name="txtUserId" type="text" class="fieldline fl" style="width: 150px">
-												<div class="btn_mid_l ml5">
-													<div class="btn_mid_r">중복확인</div>
-												</div>
+											<input name="txtUserId" type="text" class="fieldline fl required" style="width: 150px" value=""/>
+											<div class="btn_mid_l ml5"><div class="btn_mid_r">중복확인</div></div>
 										</div>
 									</td>
 									<td rowspan="9" valign="top">
 										<!-- 사진 올리기 -->
-										<div class="my_photo fn m0">사진</div>
-										<button class="styl_bl mt5" style="width: 118px; text-align: center">사진올리기</button>
+										<div class="my_photo fn m0 js_joinus_profile_field"></div>
 										<div class="t_refe mt10">
 											* 사진은 자동으로<br />77x77으로 변경됩니다
 										</div> <!-- 사진 올리기 //--></td>
@@ -197,20 +223,19 @@
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input name="txtUserNickName" type="text" class="fieldline fl" style="width: 150px">
-												<input name="chkUseNickName" type="checkbox"/> 사용
-												<div class="t_refe mt10">
-													* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
-													혹은 변경 가능합니다.
-												</div>
+											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px" value=""/>
+											<div class="t_refe mt10">
+												* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
+												혹은 변경 가능합니다.
+											</div>
 										</div>
 									</td>
 								</tr>
-								<tr>
+ 								<tr>
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" />
+											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" value=" " />
 										</div>
 									</td>
 								</tr>
@@ -218,7 +243,7 @@
 									<td>
 										<div class="form_label">비밀번호 확인</div>
 										<div class="form_value">
-											<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" />
+											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px" value="" />
 										</div>
 									</td>
 								</tr>
@@ -226,9 +251,9 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="txtBirthYear" class="fieldline form_date_input" type="text" /> 년 
-											<input name="txtBirthMonth" class="fieldline form_date_input" type="text" /> 월 
-											<input name="txtBirthDay" class="fieldline form_date_input" type="text" /> 일 
+											<input name="txtBirthYear" class="fieldline form_date_input required" type="text" value=""/> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input required" type="text" value=""/> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input required" type="text" value=""/> 일 
 											<select name="selSex">
 												<option value="female">여자</option>
 												<option value="male">남자</option>
@@ -240,7 +265,7 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px" />
+											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px" value=""/>
 										</div>
 									</td>
 								</tr>
@@ -248,7 +273,7 @@
 									<td>
 										<div class="form_label">관심분야</div>
 										<div class="form_value">
-											<input name="txtInterestingPart" class="fieldline" type="text"/>
+											<input name="txtInterestPart" class="fieldline" type="text" value=""/>
 											<div class="cb t_refe pt10">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -267,6 +292,7 @@
 						</form>
 					</div>
 					<!-- Joint Content //-->
+					<div class="sw_error_message tl" style="color: red"></div>
 					<!-- Btn -->
 					<div class="btn_space">
 						<div class="btn_area">
@@ -337,12 +363,49 @@
 </html>
 
 <script type="text/javascript">
+
+loadJoinUsFields();
+
+function submitForms() {
+	var joinUs = $('.js_joinus_page');
+	if (SmartWorks.GridLayout.validate(joinUs.find('form.js_validation_required'), $('.js_profile_error_message'))) {
+		var forms = joinUs.find('form');
+		var paramsJson = {};
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			if(form.attr('name') === 'frmSmartForm'){
+				paramsJson['formId'] = form.attr('formId');
+				paramsJson['formName'] = form.attr('formName');
+			}
+			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+		}
+		console.log(JSON.stringify(paramsJson));
+		var url = "create_sera_user.sw";
+		var progressSpan = joinUs.find('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "가입하는데 문제가 발생하였습니다. 세라직원에게 문의하시기 바랍니다!");
+			}
+		});
+	}
+};
+
 $(function() {
 	$('.js_joinus_first_btn').live('click', function(e){
 		var input = $(e.target);
 		var joinusFirst = input.parents('.js_joinus_first');
 		var userAgreement = joinusFirst.find('input[name="rdoUserAgreement"]:checked').attr('value');
-		console.log('userAgreement=', userAgreement);
 		if(userAgreement !== "agree"){
 			smartPop.showInfo(smartPop.WARN, '회원이용약관에 동의하여야 회원가입을 할 수 있습니다.');
 			return false;
@@ -366,7 +429,39 @@ $(function() {
 	
 	$('.js_joinus_second_btn').live('click', function(e){
 		var input = $(e.target);
-		input.parents('.js_joinus_second').hide().next().show();
+		var joinUs = $('.js_joinus_page');
+		if (SmartWorks.GridLayout.validate(joinUs.find('form.js_validation_required'), $('.js_profile_error_message'))) {
+			var forms = joinUs.find('form');
+			var paramsJson = {};
+			for(var i=0; i<forms.length; i++){
+				var form = $(forms[i]);
+				if(form.attr('name') === 'frmSmartForm'){
+					paramsJson['formId'] = form.attr('formId');
+					paramsJson['formName'] = form.attr('formName');
+				}
+				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			}
+			console.log(JSON.stringify(paramsJson));
+			var url = "create_new_user.sw";
+			var progressSpan = joinUs.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFORM, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");					
+					input.parents('.js_joinus_second').hide().next().show();
+				},
+				error : function(e) {
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "가입하는데 문제가 발생하였습니다. 세라직원에게 문의하시기 바랍니다!");
+				}
+			});
+		}
 		return false;
 	});
 	$('.js_joinus_third_btn').live('click', function(e){

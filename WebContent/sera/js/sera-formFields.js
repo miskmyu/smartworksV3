@@ -239,3 +239,26 @@ function loadSeraNoteFields() {
 		gridRow.find('.form_label').hide();		
 	}
 };
+
+function loadJoinUsFields() {
+	var joinusProfileField = $('div.js_joinus_profile_field');
+	if(!isEmpty(joinusProfileField)) {
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		joinusProfileField.html(gridRow);
+
+		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+			container: gridRow,
+			fieldId: "imgJoinusProfile",
+			fieldName: "join us profile",
+			imgSource: "",
+			columns: 1,
+			pictureWidth: 118,
+			pictureHeight: 118,
+			required: false
+		});
+		joinusProfileField.find('.form_col').css({padding:"0"});
+		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
+		joinusProfileField.find('.form_value').css({width:"100%"});
+	}
+};
+
