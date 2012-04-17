@@ -146,7 +146,6 @@ $(function() {
 			new SmartWorks.GridLayout({
 				target : formContent,
 				mode : "edit",
-				requiredOnly : "true",
 				workId : workId,
 				onSuccess : function(){
 					$('#form_works').parent().show();
@@ -159,22 +158,22 @@ $(function() {
 		}
 	});
 
-	$('.js_toggle_form_detail').live('click', function(event){
-		var input = $(event.target);
-		input.parent().hide().siblings().show();
-		var formContent = $('#form_works').find('div.js_form_content');
-		if(isEmpty(formContent)) formContent = input.parents('.js_work_list_page').find('div.js_form_content');
-		var workId = input.attr('workId');
-		var requiredOnly = input.attr('requiredOnly');
-		formContent.html('');
-		new SmartWorks.GridLayout({
-			target : formContent,
-			mode : "edit",
-			requiredOnly : requiredOnly,						
-			workId : workId
-		});
-		return false;
-	});
+//	$('.js_toggle_form_detail').live('click', function(event){
+//		var input = $(event.target);
+//		input.parent().hide().siblings().show();
+//		var formContent = $('#form_works').find('div.js_form_content');
+//		if(isEmpty(formContent)) formContent = input.parents('.js_work_list_page').find('div.js_form_content');
+//		var workId = input.attr('workId');
+//		var requiredOnly = input.attr('requiredOnly');
+//		formContent.html('');
+//		new SmartWorks.GridLayout({
+//			target : formContent,
+//			mode : "edit",
+//			requiredOnly : requiredOnly,						
+//			workId : workId
+//		});
+//		return false;
+//	});
 	
 	$('input.js_toggle_schedule_work').live('click', function(e) {
 		var input = $(e.target);
@@ -220,7 +219,6 @@ $(function() {
 				new SmartWorks.GridLayout({
 					target : formContent,
 					mode : "edit",
-					requiredOnly : "true",
 					workId : workId
 				});
 			}
