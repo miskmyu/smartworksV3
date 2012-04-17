@@ -76,6 +76,7 @@
 			<!-- GNB //-->
 			<!-- Login Section -->
 			<div class="login_section" style="display: none; z-index: 1000;">
+			<div class="login_area">
 				<form action="j_spring_security_check" method="post">
 					<ul class="login_box">
 						<li class="login_frm">
@@ -99,6 +100,7 @@
 						</li>
 					</ul>
 				</form>
+			</div>
 			</div>
 			<!-- Login Section //-->
 
