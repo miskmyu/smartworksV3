@@ -256,9 +256,9 @@ function loadJoinUsFields() {
 			pictureHeight: 118,
 			required: false
 		});
-		joinusProfileField.find('.form_col').css({padding:"0"});
-		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
-		joinusProfileField.find('.form_value').css({width:"100%"});
+//		joinusProfileField.find('.form_col').css({padding:"0"});
+//		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
+//		joinusProfileField.find('.form_value').css({width:"100%"});
 	}
 };
 

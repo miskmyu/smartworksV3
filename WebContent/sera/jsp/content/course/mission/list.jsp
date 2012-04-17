@@ -76,13 +76,13 @@ $(document).ready(function(){
 	
 	$('.js_calendar_space').fullCalendar({
 		header: {
-			left: 'prev,next today',
-			center: 'title',
+			left: '',
+			center: 'prev title next',
 			right: ''
 		},
 		editable: true,
 		buttonText : {
-		    today:   smartMessage.get('todayText')
+		    today:   "미션생성"
 		},
 	    events: function(start, end, callback) {
 	    	smartPop.progressCenter();
@@ -117,8 +117,7 @@ $(document).ready(function(){
 			                 	backgroundColor: "#ffffff",
 			                 	textColor: "#000000",
 			                 	borderColor: "#cccccc"
-/* 			                  	url: "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" +  mission.id
- */			            	});
+			            	});
 		                }
 	                }
  					callback(missions);
@@ -141,8 +140,9 @@ $(document).ready(function(){
 			$('div.js_new_event_fields .form_value:first input').click();			
 		},
 		
-		eventClick: function(event, jsEvent, view){
-//	    	smartPop.progressCenter();
+		todayClick: function(event, jsEvent, vie){
+			$('.js_create_mission').click();			
+			
 		},
 		
 	    eventRender: function(event, element) {

@@ -273,7 +273,7 @@ function viewFiles(groupId, target){
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
-				alert(xhr);
+				console.log(xhr);
 			}
 		});
 	}

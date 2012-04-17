@@ -8,9 +8,10 @@
 .form_label { font-weight:bold; width:90px; line-height:21px}
 .form_value {}
 .form_label, .form_value {float:left; font-size:12px}
-.form_value input[type="text"] {width:100%; vertical-align:middle; text-align:left; height:14px; padding:1px 2px}
+.form_value input[type="text"], .form_value input[type="submit"], .form_value input[type="password"] {width:100%; vertical-align:middle; text-align:left; height:14px; padding:1px 2px !important}
 .form_layout .title { font-size:12px; font-weight:bold; color:#4e90b7; margin-bottom:10px}
 .form_layout table.bgn {background:none; border:none}
+.join_content_area .form_value input[type="text"], .join_content_area .form_value input[type="submit"], .join_content_area .form_value input[type="password"] {height:auto !important}
 
 /* Icon */
 .icon_fb_space {padding-right: 28px; position: relative;} /* 아이콘이 들어가 있는 영역- 캘린더아이콘 영역 */

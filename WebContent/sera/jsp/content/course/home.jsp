@@ -107,7 +107,8 @@
 			if(myRunningCourse){
 			%>
 				<ul>
-					<li class="js_course_setting_profile"><a href=""> 코스관리</a></li>
+					<li class="js_course_setting_profile"><a href="">코스관리</a></li>
+					<li class="js_create_mission"><a href="">미션등록</a></li>
 					<li  class="js_course_setting_mentee"><a href="">멘티관리</a></li>
 					<li class="end js_course_setting_team"><a href="" ><span class="icon_bul_select mr5"></span>팀관리 </a></li>
 				</ul>

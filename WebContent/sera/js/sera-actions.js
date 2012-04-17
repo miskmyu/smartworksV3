@@ -174,10 +174,8 @@ $(function() {
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var userId = input.attr('userId');
-		var courseId = "";
 		var courseInstanceList = input.parents('.js_course_instance_list_page');
-		if(!isEmpty(courseInstanceList))
-			courseId = courseInstanceList.attr('courseId');
+		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {
@@ -195,10 +193,8 @@ $(function() {
 		var input = $(e.target);
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
-		var courseId = "";
 		var courseInstanceList = input.parents('.js_course_instance_list_page');
-		if(!isEmpty(courseInstanceList))
-			courseId = courseInstanceList.attr('courseId');
+		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {

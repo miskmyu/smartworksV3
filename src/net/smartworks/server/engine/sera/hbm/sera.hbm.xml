@@ -36,7 +36,9 @@
 		<property name="targetPoint" type="int"/>
 		<property name="achievedPoint" type="int"/>
 		<property name="lastMissionIndex" type="int"/>
+		<property name="recommended" type="boolean"/>
 		<property name="createDate" type="timestamp"/>
+		<property name="coursePoint" type="int"/>
 	</class>
 	<class name="SeraUserDetail" table="SeraUserDetail">
 		<id name="userId" column="userId" type="string" length="50">

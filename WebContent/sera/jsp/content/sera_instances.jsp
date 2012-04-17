@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
 <%@page import="net.smartworks.model.community.info.InstanceSpaceInfo"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.MissionInstance"%>
@@ -31,10 +33,13 @@
 	String typeStr = request.getParameter("instanceType");
 	int instanceType = (SmartUtil.isBlankObject(typeStr)) ? -1 : Integer.parseInt(typeStr); 
 	String userId = request.getParameter("userId");
+	if(userId!=null && userId.equals("null")) userId = null;
 	String courseId = request.getParameter("courseId");
+	if(courseId!=null && courseId.equals("null")) courseId = null;
 	String missionId = request.getParameter("missionId");
+	if(missionId!=null && missionId.equals("null")) missionId = null;
 	
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstances( userId, courseId, missionId,  new LocalDate(), 10);
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId,  new LocalDate(), 10);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
@@ -73,6 +78,14 @@
 						<div class="panel_block fr">
 							<dl class="content">
 								<%
+								if(seraInstance.getClass().equals(EventInstanceInfo.class))
+									seraInstance.setType(Instance.TYPE_EVENT);
+								else if(seraInstance.getClass().equals(BoardInstanceInfo.class))
+									seraInstance.setType(Instance.TYPE_BOARD);
+								else if(seraInstance.getClass().equals(NoteInstanceInfo.class))
+									seraInstance.setType(Instance.TYPE_SERA_NOTE);
+								else if(seraInstance.getClass().equals(MissionReportInstanceInfo.class))
+									seraInstance.setType(Instance.TYPE_SERA_MISSION_REPORT);
 								switch(seraInstance.getType()){
 								case Instance.TYPE_BOARD:
 									BoardInstanceInfo board = (BoardInstanceInfo)seraInstance;
@@ -86,6 +99,7 @@
 									}
 									%>
 									<dd>
+										<div class="text"><%=board.getSubject() %></div>
 										<div class="text"><%=board.getBriefContent() %></div>
 									</dd>
 								<%
@@ -102,6 +116,11 @@
 									}
 									%>
 									<dd>
+										<div class="text">
+											<span><%=event.getSubject() %></span>
+											<span>시작:<%=event.getStart().toLocalString() %></span>
+											<%if(!SmartUtil.isBlankObject(event.getEnd())){ %><span>~종료:<%=event.getEnd().toLocalDateLongString() %></span><%} %>
+										</div>
 										<div class="text"><%=event.getContent() %></div>
 									</dd>
 								<%
@@ -130,6 +149,25 @@
 										} 
 										%>
 										<!-- Thum Image//-->
+										<!-- File information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getFileList())){
+										%>
+											<%=SmartUtil.getFilesDetailInfo(seraNote.getFileList()) %>
+										<%
+										} 
+										%>
+										<!-- File information//-->
+										
+										<!-- URL information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getLinkUrl())){
+										%>
+											<a target="_blank" href="<%=seraNote.getLinkUrl()%>"><%=seraNote.getLinkUrl() %></a>
+										<%
+										} 
+										%>
+										<!-- URL information//-->
 										
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
@@ -176,6 +214,25 @@
 										} 
 										%>
 										<!-- Thum Image//-->
+										<!-- File information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getFileList())){
+										%>
+											<%=SmartUtil.getFilesDetailInfo(seraReport.getFileList()) %>
+										<%
+										} 
+										%>
+										<!-- File information//-->
+										
+										<!-- URL information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
+										%>
+											<a target="_blank" href="<%=seraReport.getLinkUrl()%>"><%=seraReport.getLinkUrl() %></a>
+										<%
+										} 
+										%>
+										<!-- URL information//-->
 										
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getVideoId())){
