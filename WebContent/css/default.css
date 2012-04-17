@@ -76,6 +76,8 @@ span.sw_error {
 	display: block;
 }
 
+label.error {display:none !important; width:0px}
+
 em, cite, address, optgroup {
 	font-style: normal;
 }
