@@ -98,8 +98,9 @@ select {
 input[type="image"], input[type="text"], input[type="submit"],
 input[type="password"], textarea {
 	resize: none;
-	padding: 0
 }
+
+input[type="image"]	{padding:0}
 
 input[type="radio"] {margin:0 5px 2px 0}
 	

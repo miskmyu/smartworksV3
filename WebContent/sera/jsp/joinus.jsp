@@ -10,7 +10,6 @@
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 	<link href="css/default.css" type="text/css" rel="stylesheet"/>
 	<link href="css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>
-
 	<link href="sera/css/pop.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/form.css" type="text/css" rel="stylesheet"/>
 	<link href="sera/css/page.css" type="text/css" rel="stylesheet"/>
@@ -206,7 +205,7 @@
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input name="txtUserId" type="text" class="fieldline fl required email" style="width: 150px" value=""/>
+											<input name="txtUserId" type="text" class="fieldline fl required email" style="width:150px" value=" "/>
 											<div class="btn_mid_l ml5 js_check_iddup_btn"><div class="btn_mid_r">중복확인</div></div>
 											<div class="btn_mid_l ml5 js_change_id_btn" style="display:none"><div class="btn_mid_r">아이디변경</div></div>
 										</div>
@@ -222,7 +221,7 @@
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input name="txtNickName" type="text" class="fieldline fl" style="width: 150px"/>
+											<input name="txtNickName" type="text" class="fieldline fl" style="width:150px" value=" "/>
 											<div class="t_refe mt10">
 												* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
 												혹은 변경 가능합니다.
@@ -234,7 +233,7 @@
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input name="txtPassword" type="password" class="fieldline fl required" style="width: 100px" />
+											<input name="txtPassword" type="password" class="fieldline fl required" style="width:100px" value=""/>
 										</div>
 									</td>
 								</tr>
@@ -242,7 +241,7 @@
 									<td>
 										<div class="form_label">비밀번호 확인</div>
 										<div class="form_value">
-											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width: 100px"/>
+											<input name="txtConfirmPassword" type="password" class="fieldline required" style="width:100px" value=""/>
 										</div>
 									</td>
 								</tr>
@@ -250,9 +249,9 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=""/> 년 
-											<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 월 
-											<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 일 
+											<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=" "/> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=" "/> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=" "/> 일 
 											<select name="selSex">
 												<option value="female">여자</option>
 												<option value="male">남자</option>
@@ -264,7 +263,7 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input name="txtChallengingTarget" class=" fieldline" name="" type="text" style="width: 300px"/>
+											<input name="txtChallengingTarget" class="fieldline" type="text" style="width:300px" value=" "/>
 										</div>
 									</td>
 								</tr>
@@ -272,7 +271,7 @@
 									<td>
 										<div class="form_label">관심분야</div>
 										<div class="form_value">
-											<input name="txtInterestPart" class="fieldline" type="text"/>
+											<input name="txtInterestPart" class="fieldline" type="text" value=" "/>
 											<div class="cb t_refe pt10">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -283,7 +282,7 @@
 										<div class="form_value">
 											<div class="icon_facebook fl mr5"></div>
 											<div class="icon_twitter fl mr5"></div>
-											<input name="" type="checkbox"/> <label>연동여부</label>
+											<label><input name="" type="checkbox"/> 연동여부</label>
 										</div>
 									</td>
 								</tr>
@@ -310,7 +309,7 @@
 			<div id="join_section" class="js_joinus_third" style="display:none">
 				<!-- SNB Left -->
 				<div class="snb">
-					<img width="176" height="146" alt=""
+					<img width="176" height="146" 
 						src="sera/images/function_title2.gif" />
 				</div>
 				<!-- SNB Left//-->
