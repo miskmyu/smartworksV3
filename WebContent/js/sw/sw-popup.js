@@ -390,7 +390,6 @@ smartPop = {
 							new SmartWorks.GridLayout({
 								target : formContent,
 								mode : "edit",
-								requiredOnly : 'true',
 								workId : workId,
 								onSuccess : function(){
 									$('#form_works').show().parent().show();
