@@ -76,12 +76,12 @@
 					<a href=""> </a>
 				</div>
 			</div>
-			<div>
+			<dd>
 				<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
 					<jsp:param value="<%=course.getId() %>" name="courseId"/>
 					<jsp:param value="<%=missionId %>" name="missionId"/>
 				</jsp:include>
-			</div>
+			</dd>
 		</dl>
 	</div>
 	<!-- 미션수행 //-->
