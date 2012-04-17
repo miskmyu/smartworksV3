@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.sera.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.util.LocalDate;
 
@@ -30,6 +32,9 @@ public class CourseDetailCond extends Cond {
 	private int targetPoint;
 	private int achievedPoint;
 	private boolean recommended;
+	private Date createDate;
+	private Date createDateFrom;
+	private Date createDateTo;
 
 	public String getCourseId() {
 		return courseId;
@@ -126,6 +131,24 @@ public class CourseDetailCond extends Cond {
 	}
 	public void setRecommended(boolean recommended) {
 		this.recommended = recommended;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getCreateDateFrom() {
+		return createDateFrom;
+	}
+	public void setCreateDateFrom(Date createDateFrom) {
+		this.createDateFrom = createDateFrom;
+	}
+	public Date getCreateDateTo() {
+		return createDateTo;
+	}
+	public void setCreateDateTo(Date createDateTo) {
+		this.createDateTo = createDateTo;
 	}
 
 }

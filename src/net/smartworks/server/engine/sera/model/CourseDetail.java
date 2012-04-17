@@ -27,6 +27,7 @@ public class CourseDetail {
 	private int achievedPoint;
 	private boolean recommended;
 	private int lastMissionIndex = -1;
+	private Date createDate;
 
 	public String getCourseId() {
 		return courseId;
@@ -123,6 +124,12 @@ public class CourseDetail {
 	}
 	public void setLastMissionIndex(int lastMissionIndex) {
 		this.lastMissionIndex = lastMissionIndex;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	public static CourseDetail pickupCourseDetail(String courseId, CourseDetail[] courseDetails) {
 		if (courseDetails == null || courseDetails.length == 0)
