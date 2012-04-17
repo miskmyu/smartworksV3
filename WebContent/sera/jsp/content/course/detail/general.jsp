@@ -28,7 +28,7 @@
 		<!-- photo-->
 		<li class="">
 			<div class="photo_bg">
-				<img src="<%=course.getOwner().getMinPicture()%>" />
+				<img class="profile_size_72" src="<%=course.getOwner().getMinPicture()%>" />
 				<div class="rgt_name"><%=course.getOwner().getNickName()%></div>
 			</div>
 			<div class="grade">
@@ -109,7 +109,7 @@
 							Mentor mentor = smartWorks.getMentorById(course.getLeader().getId());
 					%>
 					<div class="photo_line">
-						<img src="<%=mentor.getMidPicture()%>" width="118" height="118" />
+						<img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" />
 					</div>
 					<div class="text fr m0">
 						<ul class="cb">
@@ -160,19 +160,15 @@
 						<!-- Reply-->
 						<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
 							<div class="photo">
-								<img src="<%=review.getOwner().getMinPicture() %>" />
+								<img class="profile_size_m" src="<%=review.getOwner().getMinPicture() %>" />
 							</div>
 							<div class="reply_text w375 fl">
 								<span class="name"><%=review.getOwner().getNickName() %> : </span><%=review.getContent() %>
 								<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
 							</div>
 							<div class="fr">
-								<div class="btn_mid_l mt8">
-									<div class="btn_mid_r">
-										<span class="icon_blu_down mr5"></span>별점주기
-									</div>
-								</div>
-								<div class="star_score cb">
+								<div class="name fl mr5">별점</div>
+								<div class="star_score fr">
 									<ul>
 										<li class="icon_star_score current"><a href=""> </a></li>
 										<li class="icon_star_score current"><a href=""> </a></li>

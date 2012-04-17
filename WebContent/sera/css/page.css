@@ -313,7 +313,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_area {margin:15px 0 0 0; overflow:hidden}
 .panel_area li { float:left}
 .panel_area .cb li { float:none}
-.photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:73px; float: left; padding: 5px 15px 0 4px}
+.photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:72px; float: left; padding: 5px 15px 0 4px}
 .photo_bg .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
 .grade { float:left; margin:5px 0 0 0}
 .grade div { margin-bottom:6px}
@@ -379,7 +379,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .content_section .header .t_myid {color:#608eba; font-weight:bold}
 .course_section .header div,
 .content_section .header div {color:#333333; font-weight:bold; font-size:14px}
-.star_score {margin-top:8px; padding-left:7px; overflow:hidden}
+.star_score {margin-top:3px; overflow:hidden; display:inline-block}
 .star_score li { float:left !important}
 
 
@@ -484,13 +484,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .w580 {width:580px !important}
 .w635 {width:635px !important}
 
-/* Size */
+/* Image Size */
 .profile_size_s {width:20px !important; height:20px !important; padding-right:3px}
-.profile_size_c {width:34px !important; height:34px !important}
-.profile_size_m {width:48px !important; height:48px !important}
-.profile_size_72 {width:72px !important; height:72px !important}
-.profile_size_b {width:118px !important; height:118px !important}
-
+.profile_size_c {width:34px !important; height:34px !important} /* sz_s_34 */
+.profile_size_m {width:48px !important; height:48px !important} /* sz_m_48 */
+.profile_size_72 {width:72px !important; height:72px !important} /* sz_l_72 */
+.profile_size_b {width:118px !important; height:118px !important} /* sz_xl_118 */
 
 /* Bullet */
 .bullet_dot {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; color:#9a9a9a}
