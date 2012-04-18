@@ -21,9 +21,9 @@
 .right_space { width:95px; float:right}
 
 /* Icon */
-.icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -448px -117px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
-.icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -448px -181px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
-.icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -448px -181px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -585px -199px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
 
 /* Btn */
 .btn_pop_l {background: url("../images/btn_pop_l.png") no-repeat scroll 0 0; height:27px; float:left; cursor:pointer}
@@ -32,8 +32,8 @@
 .btn_close a:hover {background: url("../images/icon.png") no-repeat scroll -190px -713px}
 
 /*popup information*/
-.sera_tpop_section {margin:-45px -7px 0 0; position: absolute}
-.sera_tpop {background:#F1F7FC; border: 1px solid #4C87BE; font-family: dotum,Helvetica,sans-serif; -webkit-box-shadow: 1px 1px 1px #787878; -moz-box-shadow: 1px 1px 1px #787878; box-shadow: 1px 1px 1px #787878; width:230px; color:#666666; margin:38px 2px 0 0}
+.sera_tpop_section {position: absolute}
+.sera_tpop {background:#F1F7FC; border: 1px solid #4C87BE; font-family: dotum,Helvetica,sans-serif; -webkit-box-shadow: 1px 1px 1px #787878; -moz-box-shadow: 1px 1px 1px #787878; box-shadow: 1px 1px 1px #787878; width:230px; color:#666666}
 .sera_tpop li {position:relative; clear:both; overflow:hidden;}
 .sera_tpop li:hover {display:block; background-color:#ffeed9; color:#454545;}
 .sera_tpop li:hover .btn_x {display:block; overflow: hidden; vertical-align:middle;}
@@ -42,10 +42,11 @@
 .sera_tpop .info_ms_title {margin:10px 15px 5px; border-bottom: 1px solid #9f9f9f;} /* title */
 .sera_tpop .info_img {border: 1px solid #C7C7C7}
 .sera_tpop .info_img,.sera_tpop .info_list {float:left;}
-.sera_tpop .info_list {padding:0 0 0 5px; width:168px}
+.sera_tpop .info_list {padding:0 0 0 5px; width:176px}
 .sera_tpop .more { border:none; background-color:#e0e0e0}
 .sera_tpop .more a { color:#608eba; text-align:center; display:block}
 .sera_tpop .more a:hover {color:#1a5083}
+.sera_tpop li .layer_pop_section {margin:0 10px; padding: 4px 0; overflow: hidden; font-weight:bold; color:#454545} /* Layer Pop Menu */
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px;}

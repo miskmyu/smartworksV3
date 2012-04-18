@@ -10,25 +10,29 @@
 <link type="text/css" rel="stylesheet" href="../css/fullcalendar.css">
 </head>
 <body>
-<div id="wrap_bb">
-  <div id="sera_header_bb">
-    <div class="hd_shadow bb">
+<div id="wrap" class="bb">
+  <div id="sera_header">
+    <div class="hd_shadow">
       <!-- GNB -->
       <div class="gnb">
-        <div class="top_logo"> </div>
+        <div class="top_logo"> <a href="logins.sw"></a> </div>
         <ul class="top_menu2">
-          <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu1_off.png"> </a> </li>
-          <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu2_on.png"> </a> </li>
-          <li class="fl"> <a href=""> <img width="101" height="28" src="../images/sera2_main_btnTopMenu3_off.png"> </a> </li>
+          <li class="fl"> <a class="js_sera_content" href="Course.sw"> <img width="101" height="28" src="../images/sera2_main_btnTopMenu1_off.png" alt="Course" title="Course"> </a> </li>
+          <li class="fl"> <a class="js_sera_content" href="myPAGE.sw"> <img width="101" height="28" src="../images/sera2_main_btnTopMenu2_on.png" alt="myPAGE" title="myPAGE"> </a> </li>
+          <li class="fl"> <a class="js_sera_content" href="seraCLUB.sw"> <img width="101" height="28" src="../images/sera2_main_btnTopMenu3_off.png" alt="seraCLUB" title="seraCLUB"> </a> </li>
         </ul>
         <ul class="util_menu">
           <li class="about"> <a href="">about SERA</a> </li>
           <li class="news"> <a href="">sera 소식</a> </li>
-          <li class="btn_login"> <a href=""> <img width="49" height="19" title="로그아웃" alt="로그아웃" src="../images/sera2_main_btnLogout.png"> </a> </li>
+          <li class="btn_login">
+            <a href="logout">
+            <img width="49" height="19" src="../images/sera2_main_btnLogout.png" alt="로그아웃" title="로그아웃">
+            </a>
+			</li>
         </ul>
         <!-- Search -->
         <div class="top_srch_section">
-          <input type="text" class="top_srch"/>
+          <input class="top_srch" type="text">
           <div class="icon_srch"></div>
         </div>
         <!-- Search //-->
@@ -64,51 +68,72 @@
       </div>
       <!-- Top Navi //-->
       <!-- Pop Alarm -->
-      <div class="sera_tpop_section" style=" display: block; z-index: 1000; right:320px">
-      <div class="icon_alarm current"> </div>
-      <div class="sera_tpop" >
-        <ul>
-          <li>
-            <div class="info_ms_section">
-              <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
-              <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
-                <div class="t_date"> 04.12 15:50 <a  href="">
-                  <div class="icon_delete fr"></div>
-                  </a> </div>
+      <div class="sera_tpop_section" style=" display: block; z-index: 1000; right:314px; top:36px">
+        <div class="icon_alarm current"> </div>
+        <div class="sera_tpop" style="margin:38px 2px 0 0">
+          <ul>
+            <li>
+              <div class="info_ms_section">
+                <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
+                <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
+                  <div class="t_date"> 04.12 15:50 <a  href="">
+                    <div class="icon_delete fr"></div>
+                    </a> </div>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <div class="info_ms_section">
-              <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
-              <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
-                <div class="t_date"> 04.12 15:50 <a  href="">
-                  <div class="icon_delete fr"></div>
-                  </a> </div>
+            </li>
+
+            <li>
+              <div class="info_ms_section">
+                <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
+                <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
+                  <div class="t_date"> 04.12 15:50 <a  href="">
+                    <div class="icon_delete fr"></div>
+                    </a> </div>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <div class="info_ms_section">
-              <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
-              <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
-                <div class="t_date"> 04.12 15:50 <a  href="">
-                  <div class="icon_delete fr"></div>
-                  </a> </div>
+            </li>
+
+            <li>
+              <div class="info_ms_section">
+                <div class="info_img"> <a title="기술연구소장 유광민" href="user_space.sw?cid=us.sp.kmyu@maninsoft.co.kr"> <img class="profile_size_s" src="../images/photo_sm34.jpg"> </a> </div>
+                <div class="info_list">홍길동님이 자화상코스의 미션에 게시물을 남겼습니다.
+                  <div class="t_date"> 04.12 15:50 <a  href="">
+                    <div class="icon_delete fr"></div>
+                    </a> </div>
+                </div>
               </div>
-            </div>
-          </li>
-        </ul>
-        <div class="more">
-        <a href="">더보기</a>
+            </li>
+          </ul>
+          <div class="more"> <a href="">더보기</a> </div>
         </div>
       </div>
-      </div>
       <!-- Pop Alarm //-->
+      
+      <!-- Pop 계정설정 -->
+      <div class="sera_tpop_section" style=" display: block; z-index: 1002; left:40px; top:75px">
+        <div class="sera_tpop" style="width:95px">
+          <ul>
+            <li>
+              <div class="layer_pop_section"><span class="icon_account"> </span>계정설정</div>
+            </li>
+            <li>
+              <div class="layer_pop_section"><span class="icon_charge"> </span>결 제</div>
+            </li>
+             <li>
+              <div class="layer_pop_section"><span class="icon_app"> </span>앱</div>
+            </li>
+             <li>
+              <div class="layer_pop_section"><span class="icon_dashboard"> </span>대시보드</div>
+            </li>
+             <li>
+              <div class="layer_pop_section"><span class="icon_listing"> </span>리스팅</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Pop 계정설정 //-->
+      
     </div>
   </div>
   <div id="container" class="bb">
@@ -149,12 +174,12 @@
           <!-- Menu Dep1-->
           <div class="course_menu_d1">
             <ul>
-              <li>홈</li>
-              <li class="current">미션</li>
-              <li>코스 알림</li>
-              <li>팀 활동</li>
-              <li>코스 개요</li>
-              <li>코스 설정</li>
+              <li><a href="">홈</a></li>
+              <li class="current"><a href="">미션</a></li>
+              <li><a href="">코스 알림</a></li>
+              <li><a href="">팀 활동</a></li>
+              <li><a href="">코스 개요</a></li>
+              <li><a href="">코스 설정</a></li>
             </ul>
           </div>
           <!-- Menu Dep1//-->
@@ -492,19 +517,6 @@
       <!-- 목록 테이블 //-->
     </div>
     <!-- Content //-->
-    <!-- Search Section -->
-    <div class="srch_section">
-      <div class="srch">
-        <div>
-          <input type="text" placeholder="SERA를 검색하세요.">
-        </div>
-        <div class="icon_admin fr"></div>
-      </div>
-      <div class="btn_default_l ml4">
-        <div class="btn_default_r">채팅하기</div>
-      </div>
-    </div>
-    <!-- Search Section -->
     <!-- Aside -->
     <div class="aside m0">
       <!-- Aside Block1 -->
