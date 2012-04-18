@@ -19,7 +19,6 @@ public class Course extends Group {
 	private String[] categories;
 	private String[] keywords;
 	private int duration;
-	private LocalDate openDate;
 	private LocalDate closeDate;
 	private int maxMentees;
 	private boolean payable;
@@ -41,12 +40,12 @@ public class Course extends Group {
 		this.missions = missions;
 	}
 	public int getTargetPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
-		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime()) return -1;
+		return (int)LocalDate.getDiffDate(super.getOpenDate(), closeDate)+1;
 	}
 	public int getAchievedPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
+		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime() || super.getOpenDate().getTime()>(new LocalDate()).getTime()) return 0;
+		return (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate());
 	}
 	public String getObject() {
 		return object;
@@ -71,12 +70,6 @@ public class Course extends Group {
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
-	}
-	public LocalDate getOpenDate() {
-		return openDate;
-	}
-	public void setOpenDate(LocalDate openDate) {
-		this.openDate = openDate;
 	}
 	public LocalDate getCloseDate() {
 		return closeDate;
