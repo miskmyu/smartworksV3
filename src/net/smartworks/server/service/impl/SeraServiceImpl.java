@@ -1254,7 +1254,7 @@ public class SeraServiceImpl implements ISeraService {
 			List userInfoList = new ArrayList();
 			if(userExtends != null) {
 				for(SwoUserExtend swoUserExtend : userExtends) {
-					UserInfo member = new UserInfo();
+					UserInfo member = new SeraUserInfo();
 					member.setId(swoUserExtend.getId());
 					member.setName(swoUserExtend.getName());
 					member.setPosition(swoUserExtend.getPosition());
@@ -1263,7 +1263,7 @@ public class SeraServiceImpl implements ISeraService {
 					member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
 					userInfoList.add(member);
 				}
-				UserInfo[] friendsUserInfo = new UserInfo[userInfoList.size()];
+				SeraUserInfo[] friendsUserInfo = new SeraUserInfo[userInfoList.size()];
 				userInfoList.toArray(friendsUserInfo);
 				friendListObj.setFriends(friendsUserInfo);
 			}
@@ -1278,7 +1278,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	
 	@Override
-	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
 		try{
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
@@ -1306,10 +1306,10 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			SwoUserExtend[] userExtends = swoMgr.getUsersExtend(userId, ids);
 			List userInfoList = new ArrayList();
-			UserInfo[] friendsUserInfo = null;
+			SeraUserInfo[] friendsUserInfo = null;
 			if(userExtends != null) {
 				for(SwoUserExtend swoUserExtend : userExtends) {
-					UserInfo member = new UserInfo();
+					UserInfo member = new SeraUserInfo();
 					member.setId(swoUserExtend.getId());
 					member.setName(swoUserExtend.getName());
 					member.setPosition(swoUserExtend.getPosition());
@@ -1318,7 +1318,7 @@ public class SeraServiceImpl implements ISeraService {
 					member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
 					userInfoList.add(member);
 				}
-				friendsUserInfo = new UserInfo[userInfoList.size()];
+				friendsUserInfo = new SeraUserInfo[userInfoList.size()];
 				userInfoList.toArray(friendsUserInfo);
 			}
 			//UserInfo[] friends = SeraTest.getFriendsById(userId, lastId, maxList);
@@ -2901,6 +2901,11 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

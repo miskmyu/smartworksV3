@@ -296,7 +296,7 @@
 								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
 									if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 									%>
-										<a href="sub_instances_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+										<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
 											<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글 모두보기</div>
 					            		</a>
 									<%

@@ -971,7 +971,7 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
 		return seraService.getFriendsById(userId, lastId, maxList);
 	}
 
@@ -1045,5 +1045,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		seraService.friendRequest(requestBody, request);
+	}
+
+	@Override
+	public void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.destroyFriendship(requestBody, request);
+		
 	}
 }

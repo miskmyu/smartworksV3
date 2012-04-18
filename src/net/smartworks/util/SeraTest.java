@@ -170,13 +170,13 @@ public class SeraTest {
 	
 	public static FriendList getFriendsById(String userId, int maxList) throws Exception{
 		FriendList friendList = new FriendList();
-		friendList.setFriends(SmartTest.getAvailableChatter());
+		friendList.setFriends(SeraTest.getFriendRequestsForMe(null, -1));
 		friendList.setTotalFriends(51);
 		return friendList;		
 	}
 	
-	public static UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
-		return SmartTest.getAvailableChatter();
+	public static SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
+		return SeraTest.getFriendRequestsForMe(null, -1);
 	}
 	public static InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		InstanceInfo[] boards = SmartTest.getBoardInstances();

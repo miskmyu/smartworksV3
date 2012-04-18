@@ -1,4 +1,5 @@
 
+<%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -110,7 +111,7 @@
 				<%
 				if (friendList.getFriends() != null || friendList.getTotalFriends() != 0) {
 					for(int i=0; i<friendList.getFriends().length; i++){
-						UserInfo friend = friendList.getFriends()[i];
+						SeraUserInfo friend = friendList.getFriends()[i];
 				%>
 					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>"></dd></a>
 				<%

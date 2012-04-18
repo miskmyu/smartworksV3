@@ -460,13 +460,15 @@ public interface ISmartWorks {
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 
-	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
 
 	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 

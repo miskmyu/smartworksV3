@@ -342,22 +342,26 @@ public class SeraController {
 
 	@RequestMapping(value = "/friend_request", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> friendRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String userId = smartworks.friendRequest(requestBody, request);
-		// TO DO : Exception handler
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "myPAGE.sw");
-		return map;
+	public @ResponseBody void friendRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.friendRequest(requestBody, request);
 	}
 
 	@RequestMapping(value = "/reply_friend_request", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> replyFriendRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String userId = smartworks.replyFriendRequest(requestBody, request);
-		// TO DO : Exception handler
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "myPAGE.sw");
-		return map;
+	public @ResponseBody void replyFriendRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.replyFriendRequest(requestBody, request);
+	}
+
+	@RequestMapping(value = "/destroy_friendship", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void destroyFriendship(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.destroyFriendship(requestBody, request);
+	}
+
+	@RequestMapping("/comments_in_instance")
+	public ModelAndView commentsInInstance(HttpServletRequest request, HttpServletResponse response) {
+		request.getSession().setAttribute("subComments", null);
+		return SmartUtil.returnMnv(request, "sera/jsp/content/comments_in_instance.jsp", "");
 	}
 
 }
