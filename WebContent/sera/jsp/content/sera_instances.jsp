@@ -1,3 +1,6 @@
+<%@page import="net.smartworks.model.work.info.WorkInfo"%>
+<%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="net.smartworks.model.community.info.InstanceSpaceInfo"%>
@@ -56,6 +59,9 @@
 						course = SmartUtil.isBlankObject(mission.getWorkSpace()) ? null : (CourseInfo)mission.getWorkSpace();
 				}
 			}
+			WorkInstanceInfo workInstance = (WorkInstanceInfo)seraInstance;
+			WorkInfo work = workInstance.getWork();
+			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 %>
 			<div>
 				<ul class="panel_area">
@@ -73,7 +79,7 @@
 					</li>
 					<!-- photo//-->
 					<!-- comment -->
-					<li class="fr">
+					<li class="fr js_sub_instance_list" instanceId="<%=workInstance.getId() %>" workType="<%=workType%>"">
 						<div class="point"></div>
 						<div class="panel_block fr">
 							<dl class="content">
@@ -268,17 +274,17 @@
 								%>
 								
 								<!-- Util -->
-								<dd class="util">
-									<span><a href="">댓글달기</a> | </span> <span><a href="">공감하기</a>
-										| </span> <span class=""><a href="">더보기</a> | </span> <span
-										class="date"><%=seraInstance.getLastModifiedDate().toLocalDateLongString() %></span>
+								<dd class="util js_action_btns">
+									<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
+									<span><a href="" class="js_add_sera_like" >공감하기</a> | </span>
+									<span><a href="" class="js_show_more_content">더보기</a> | </span> 
+									<span class="date"><%=seraInstance.getLastModifiedDate().toLocalDateLongString() %></span>
 								</dd>
 								<!-- Util //-->
 							</dl>
 							
 							<%
 							if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
-								WorkInstanceInfo workInstance = (WorkInstanceInfo)seraInstance;
 								if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 								%>
 									<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글이 모두보기</div>
@@ -289,21 +295,29 @@
 									for(int j=0; j<comments.length; j++){
 										CommentInstanceInfo comment = comments[j];
 								%>
-									<!-- Reply-->
-									<div class="reply_section">
-										<div class="photo">
-											<img src="<%=comment.getOwner().getMinPicture() %>" />
+										<!-- Reply-->
+										<div class="reply_section">
+											<div class="photo">
+												<img src="<%=comment.getOwner().getMinPicture() %>" />
+											</div>
+											<div class="reply_text">
+												<span class="name"><%=comment.getOwner().getNickName() %> : </span><%=comment.getComment() %><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+											</div>
 										</div>
-										<div class="reply_text">
-											<span class="name"><%=comment.getOwner().getNickName() %> : </span><%=comment.getComment() %><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
-										</div>
-									</div>
-									<!-- Reply//-->
+										<!-- Reply//-->
 							<%
 									}
 								}
 							}
 							%>
+					        <div class="reply_section js_return_on_sera_comment">
+								<div class="photo">
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+								</div>
+								<div class="reply_text">
+									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
+								</div>
+					        </div>
 						</div>
 					</li>
 					<!-- comment //-->
