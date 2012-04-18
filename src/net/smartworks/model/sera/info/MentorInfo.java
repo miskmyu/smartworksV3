@@ -1,9 +1,6 @@
 package net.smartworks.model.sera.info;
 
-import net.smartworks.model.community.User;
-import net.smartworks.util.SmartUtil;
-
-public class MentorInfo extends User {
+public class MentorInfo extends SeraUserInfo {
 
 	public MentorInfo(){
 		super();

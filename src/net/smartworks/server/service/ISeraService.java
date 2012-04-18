@@ -15,6 +15,7 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.util.LocalDate;
 
 public interface ISeraService {
@@ -58,4 +59,11 @@ public interface ISeraService {
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
+
+	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
+
+	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

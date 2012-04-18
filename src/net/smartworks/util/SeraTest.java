@@ -18,6 +18,7 @@ import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.SmartWorkInfo;
@@ -56,10 +57,6 @@ public class SeraTest {
 		mentor.setId("kmyu@maninsoft.co.kr");
 		mentor.setName("유광민");
 		mentor.setPosition("기술연구소장");
-		mentor.setDepartment("기술사업팀");
-		mentor.setLocale("ko_KR"); // ko_KR, en_US
-		mentor.setTimeZone("SEOUL");
-		mentor.setCompany("(주)맨인소프트");
 		return mentor;
 	}
 	
@@ -80,10 +77,6 @@ public class SeraTest {
 		mentor.setId("ysjung@maninsoft.co.kr");
 		mentor.setName("정윤식");
 		mentor.setPosition("기술연구소장");
-		mentor.setDepartment("기술사업팀");
-		mentor.setLocale("ko_KR"); // ko_KR, en_US
-		mentor.setTimeZone("SEOUL");
-		mentor.setCompany("(주)맨인소프트");
 		return mentor;
 	}
 
@@ -273,6 +266,12 @@ public class SeraTest {
 		mission.setCloseDate(new LocalDate((new LocalDate()).getGMTDate() + LocalDate.ONE_DAY));
 		mission.setMissionClearers(new String[]{SmartUtil.getCurrentUser().getId()});
 		return mission;
+	}
+	
+	public static SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception{
+		SeraUserInfo seraUser1 = new SeraUserInfo("ktsoo@maninsoft.co.kr", "김 태수");
+		seraUser1.setGoal("개인 달성 목표입니다.");
+		return new SeraUserInfo[]{seraUser1};
 	}
 
 }

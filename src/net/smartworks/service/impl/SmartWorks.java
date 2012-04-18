@@ -49,6 +49,7 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -975,6 +976,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsForMe(lastId, maxList);
+	}
+	
+	@Override
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCourseNotices(courseId, fromDate, maxList);
 	}
@@ -1029,5 +1035,15 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
 		return seraService.getRecommendedCourses(maxList);
+	}
+
+	@Override
+	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.replyFriendRequest(requestBody, request);
+	}
+
+	@Override
+	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.friendRequest(requestBody, request);
 	}
 }

@@ -46,6 +46,7 @@ import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
@@ -2772,6 +2773,21 @@ public class SeraServiceImpl implements ISeraService {
 	    CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 	    return courses;
+	}
+	@Override
+	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return SeraTest.getFriendRequestsForMe(lastId, maxList);
+	}
+	@Override
+	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
