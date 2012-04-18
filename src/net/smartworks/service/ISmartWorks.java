@@ -487,4 +487,7 @@ public interface ISmartWorks {
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
+
 }

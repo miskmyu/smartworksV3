@@ -570,4 +570,24 @@ $(function() {
 		});
 	});
 
+	$('.js_select_course_btn').live('click', function(e) {
+		var input = $(e.target).parents('.js_select_course_btn');
+		var courseType = input.attr('courseType');
+		$.ajax({
+			url : "course_by_type.sw",
+			data : {
+				courseType: courseType
+			},
+			success : function(data, status, jqXHR) {
+				var target = input.parents('.js_course_page').find('.js_course_list');
+				target.html(data);
+				input.siblings().removeClass('selected');
+				input.addClass('selected');
+			},
+			error : function(e) {
+			}			
+		});
+		return false;
+	});
+	
 });

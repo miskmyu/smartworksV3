@@ -1052,4 +1052,9 @@ public class SmartWorks implements ISmartWorks {
 		seraService.destroyFriendship(requestBody, request);
 		
 	}
+
+	@Override
+	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCoursesByType(courseType, fromDate, maxList);
+	}
 }

@@ -14,6 +14,12 @@ public class Course extends Group {
 	public static final int MY_ALL_COURSES = 0;
 	public static final int MY_RUNNING_COURSE = 1;
 	public static final int MY_ATTENDING_COURSE = 2;
+	public static final int TYPE_ALL_COURSES = -1;
+	public static final int TYPE_FAVORITE_COURSES = 11;
+	public static final int TYPE_RECOMMENDED_COURSES = 12;
+	public static final int TYPE_CLOSED_COURSES = 13;
+	
+	public static final int LIST_PAGE_SIZE = 20;
 
 	private String object;
 	private String[] categories;

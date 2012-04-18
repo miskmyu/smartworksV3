@@ -67,16 +67,18 @@
 			<div>
 				<ul class="panel_area">
 					<!-- photo-->
-					<li class="">
-						<div class="photo_bg">
-							<img class="profile_size_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
-							<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
-						</div>
-						<div class="grade">
-							<div class="icon_mentor current"></div>
-							<div class="icon_star"></div>
-							<div class="icon_heart"></div>
-						</div>
+					<li>
+						<a <%if(!seraInstance.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=seraInstance.getOwner().getId()%>" <%} %>>
+							<div class="photo_bg">
+								<img class="profile_size_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
+								<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
+							</div>
+							<div class="grade">
+								<div class="icon_mentor current"></div>
+								<div class="icon_star"></div>
+								<div class="icon_heart"></div>
+							</div>
+						</a>
 					</li>
 					<!-- photo//-->
 					<!-- comment -->
@@ -309,9 +311,11 @@
 									%>
 											<!-- Reply-->
 											<div class="reply_section">
-												<div class="photo">
-													<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
-												</div>
+												<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
+													<div class="photo">
+														<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+													</div>
+												</a>
 												<div class="reply_text">
 													<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 												</div>

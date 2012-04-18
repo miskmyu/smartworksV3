@@ -71,10 +71,15 @@
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10">
 					<ul>
-						<li class="pl0pr10"><img src="<%=friend.getMinPicture() %>" />
+						<li class="pl0pr10">
+							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
+								<img src="<%=friend.getMinPicture() %>" />
+							</a>
 						</li>
-						<li class="w90"><span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span>
-						</span>
+						<li class="w90">
+							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
+								<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
+							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(friend.getGoal()) %><br /> <span class="t_id"><%=friend.getId() %></span>
 						</span>

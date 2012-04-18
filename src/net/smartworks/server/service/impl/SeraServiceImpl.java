@@ -2909,5 +2909,18 @@ public class SeraServiceImpl implements ISeraService {
 		// TODO Auto-generated method stub
 		
 	}
-
+	@Override
+	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
+		//// TEST PURPOSE
+		//// TEST PURPOSE
+		switch(courseType){
+		case Course.TYPE_FAVORITE_COURSES:
+			return this.getFavoriteCourses(maxList);
+		case Course.TYPE_RECOMMENDED_COURSES:
+			return this.getRecommendedCourses(maxList);
+		}
+		return null;
+		//// TEST PURPOSE
+		//// TEST PURPOSE
+	}
 }
