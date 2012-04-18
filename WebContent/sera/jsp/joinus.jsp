@@ -63,7 +63,7 @@
 							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_off.png" /></a>
 						</li>
 						<li class="fl">
-							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a>
+							<a href="http://blog.seracampus.com"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a>
 						</li>
 					</ul>
 					<ul class="util_menu fr">

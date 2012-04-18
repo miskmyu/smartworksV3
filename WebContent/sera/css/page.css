@@ -492,10 +492,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Image Size */
 .profile_size_s {width:20px !important; height:20px !important; padding-right:3px}
-.profile_size_c {width:34px !important; height:34px !important} /* sz_s_34 */
-.profile_size_m {width:48px !important; height:48px !important} /* sz_m_48 */
-.profile_size_72 {width:72px !important; height:72px !important} /* sz_l_72 */
-.profile_size_b {width:118px !important; height:118px !important} /* sz_xl_118 */
+.profile_size_c {width:34px !important; height:34px !important; display:block} /* sz_s_34 */
+.profile_size_m {width:48px !important; height:48px !important; display:block} /* sz_m_48 */
+.profile_size_72 {width:72px !important; height:72px !important; display:block} /* sz_l_72 */
+.profile_size_b {width:118px !important; height:118px !important; display:block} /* sz_xl_118 */
 
 /* Bullet */
 .bullet_dot {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; color:#9a9a9a}
@@ -545,7 +545,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Course List Section */
 #course_list_section {background: url("../images/courselist_container_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 100px; position: relative; width: auto; overflow:hidden}
-#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 735px;}
+#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 715px;}
 #content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
 #content_list_section .search {margin: 0 auto; width: 460px;}
 #content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 26px; margin-right: 5px; width: 375px;}
