@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -282,37 +283,49 @@
 								</dd>
 								<!-- Util //-->
 							</dl>
-							
-							<%
-							if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
-								if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-								%>
-									<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글이 모두보기</div>
+							<div class="js_comment_list">
+								<div class="reply_section js_comment_instance" style="display:none">
+									<div class="photo">
+										<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
+									</div>
+									<div class="reply_text">
+										<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+									</div>
+								</div>
 								<%
-								}
-								if(workInstance.getSubInstanceCount()>0){
-									CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
-									for(int j=0; j<comments.length; j++){
-										CommentInstanceInfo comment = comments[j];
-								%>
-										<!-- Reply-->
-										<div class="reply_section">
-											<div class="photo">
-												<img src="<%=comment.getOwner().getMinPicture() %>" />
+								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
+									if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+									%>
+										<a href="sub_instances_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+											<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글 모두보기</div>
+					            		</a>
+									<%
+									}
+									if(workInstance.getSubInstanceCount()>0){
+										CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
+										//comments = SmartTest.getCommentInstances();
+										for(int j=0; j<comments.length; j++){
+											CommentInstanceInfo comment = comments[j];
+									%>
+											<!-- Reply-->
+											<div class="reply_section">
+												<div class="photo">
+													<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+												</div>
+												<div class="reply_text">
+													<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+												</div>
 											</div>
-											<div class="reply_text">
-												<span class="name"><%=comment.getOwner().getNickName() %> : </span><%=comment.getComment() %><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
-											</div>
-										</div>
-										<!-- Reply//-->
-							<%
+											<!-- Reply//-->
+								<%
+										}
 									}
 								}
-							}
-							%>
-					        <div class="reply_section js_return_on_sera_comment">
+								%>
+							</div>
+					        <div class="reply_section js_return_on_sera_comment" style="display:none">
 								<div class="photo">
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_m"/>
 								</div>
 								<div class="reply_text">
 									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
