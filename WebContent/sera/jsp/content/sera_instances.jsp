@@ -301,9 +301,9 @@
 					            		</a>
 									<%
 									}
-									if(workInstance.getSubInstanceCount()==0){
+									if(workInstance.getSubInstanceCount()>0){
 										CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
-										comments = SmartTest.getCommentInstances();
+										//comments = SmartTest.getCommentInstances();
 										for(int j=0; j<comments.length; j++){
 											CommentInstanceInfo comment = comments[j];
 									%>

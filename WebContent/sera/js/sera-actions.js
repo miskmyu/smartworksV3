@@ -448,14 +448,14 @@ $(function() {
 	});
 	
 	$('a.js_add_sera_comment').live('click', function(e){
-		var input = $(e.target).parents('a.js_add_sera_comment').removeAttr('href');
-		input.parents('.js_sub_instance_list').find('.js_return_on_comment').show();
+		var input = $(e.target).removeAttr('href');
+		console.log('input=', input);
+		input.parents('.js_sub_instance_list').find('.js_return_on_sera_comment').show();
 		return false;
 	});
 
 	$('a.js_add_sera_like').live('click', function(e){
-		var input = $(e.target).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
-		input.find('.t_action').addClass('t_action_disabled');
+		var input = $(e.target).removeAttr('href');
 		
 	});
 
