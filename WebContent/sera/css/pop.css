@@ -68,7 +68,7 @@
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
 
 /* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden}
+.glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden; margin:0 10px; border-top:1px solid #ededed}
 /* Global Btn Space Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
 .btn_gray {display:inline-block;}
