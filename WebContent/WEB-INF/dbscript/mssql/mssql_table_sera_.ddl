@@ -53,11 +53,6 @@ CREATE TABLE Mission (
 	title varchar(255),
 	starPoint varchar(255),
 	content text,
-	hit int,
-	workSpaceId varchar(100),
-	workSpaceType varchar(50),
-	accessLevel varchar(1),
-	accessValue varchar(4000),
 	primary key (id)
 );
 INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880e3368c3af901368c3ccd690004', '40288afb1b25f00b011b25f3c7950001', 'pkg_dc3edb6efa47418cbd1f8fef889b4818', 1, '미션관리', 'SINGLE', 'DEPLOYED', 'Y', 'admin', getdate(), 'admin', getdate(), '미션관리');
