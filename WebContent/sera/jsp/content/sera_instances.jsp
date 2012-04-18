@@ -298,7 +298,7 @@
 										<!-- Reply-->
 										<div class="reply_section">
 											<div class="photo">
-												<img src="<%=comment.getOwner().getMinPicture() %>" />
+												<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
 											</div>
 											<div class="reply_text">
 												<span class="name"><%=comment.getOwner().getNickName() %> : </span><%=comment.getComment() %><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
@@ -312,7 +312,7 @@
 							%>
 					        <div class="reply_section js_return_on_sera_comment">
 								<div class="photo">
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_m"/>
 								</div>
 								<div class="reply_text">
 									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
