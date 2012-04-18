@@ -78,7 +78,7 @@
 			<!-- photo-->
 			<li class="">
 				<div class="photo_bg">
-					<img src="../images/photo_default72.jpg" />
+					<img class="profile_size_72" src="../images/photo_default72.jpg" />
 					<div class="rgt_name">사랑사랑</div>
 				</div>
 				<div class="grade">
@@ -121,7 +121,7 @@
 					<!-- Reply-->
 					<div class="reply_section">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 						</div>
 						<div class="reply_text">
 							<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
@@ -135,7 +135,7 @@
 					<!-- Reply-->
 					<div class="reply_section">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 						</div>
 						<div class="reply_text">
 							<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
@@ -149,7 +149,7 @@
 					<!-- Reply-->
 					<div class="reply_section end">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 							<div class="name mt2">닉네임은</div>
 						</div>
 						<div class="reply_text">
@@ -173,7 +173,7 @@
 			<!-- photo-->
 			<li class="">
 				<div class="photo_bg">
-					<img src="../images/photo_default72_2.jpg" />
+					<img class="profile_size_72" src="../images/photo_default72_2.jpg" />
 					<div class="rgt_name">사랑사랑</div>
 				</div>
 				<div class="grade">
@@ -218,7 +218,7 @@
 			<!-- photo-->
 			<li class="">
 				<div class="photo_bg">
-					<img src="../images/photo_default72_2.jpg" />
+					<img class="profile_size_72" src="../images/photo_default72_2.jpg" />
 					<div class="rgt_name">사랑사랑</div>
 				</div>
 				<div class="grade">
