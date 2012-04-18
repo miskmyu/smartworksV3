@@ -399,21 +399,23 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-//				var target = subInstanceList.find('.js_comment_list');
-//				var showAllComments = target.find('.js_show_all_comments');
-//				if(!isEmpty(showAllComments)){
-//					showAllComments.find('span').click();
-//					input.attr('value', '');
-//				}else{
-//					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
-//					newComment.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
-//					target.append(newComment);
-//					input.attr('value', '');
-//				}
+				var target = subInstanceList.find('.js_comment_list');
+				console.log('target=', target);
+				var showAllComments = target.find('.js_show_all_sera_comments');
+				if(!isEmpty(showAllComments)){
+					showAllComments.find('div').click();
+					input.attr('value', '');
+				}else{
+					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+					newComment.find('.js_comment_content').html(comment);
+					console.log('newComment=', newComment);
+					target.append(newComment);
+					input.attr('value', '');
+				}
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addCommentError"), function(){
+				smartPop.showInfo(smartPop.ERROR, "댓글달기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});
 				
 			}
@@ -422,8 +424,8 @@ $(function() {
 		
 	});
 	
-	$('.js_show_all_comments').live('click', function(e) {
-		var input = $(e.target).parents('.js_show_all_comments');
+	$('.js_show_all_sera_comments').live('click', function(e) {
+		var input = $(e.target).parents('.js_show_all_sera_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
 		$.ajax({
@@ -436,7 +438,7 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addCommentError"), function(){
+				smartPop.showInfo(smartPop.ERROR, "댓글 모두보기에 오류가 발생하였습니다. 담당자에게 연락하시기 바랍니다.", function(){
 				});
 				
 			}
@@ -445,15 +447,13 @@ $(function() {
 		return false;
 	});
 	
-	$('a.js_add_comment').live('click', function(e){
-		var input = $(e.target).parents('a.js_add_comment').removeAttr('href').addClass('no_hover_line');
-		input.find('.t_action').addClass('t_action_disabled');
-		input.parents('.js_action_btns').prev('.js_comments_box').show().find('.js_return_on_comment').show();
-		
+	$('a.js_add_sera_comment').live('click', function(e){
+		var input = $(e.target).parents('a.js_add_sera_comment').removeAttr('href');
+		input.parents('.js_sub_instance_list').find('.js_return_on_comment').show();
 		return false;
 	});
 
-	$('a.js_add_like').live('click', function(e){
+	$('a.js_add_sera_like').live('click', function(e){
 		var input = $(e.target).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
 		input.find('.t_action').addClass('t_action_disabled');
 		
