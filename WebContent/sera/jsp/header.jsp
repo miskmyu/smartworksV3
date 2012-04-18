@@ -60,7 +60,7 @@
 				</a>
 			</li>
 			<li class="fl">
-				<a href="seraCLUB.sw" class="js_sera_content">
+				<a href="http://blog.seracampus.com" class="js_sera_content">
 					<img width="101" height="28" title="seraCLUB" alt="seraCLUB" src="sera/images/sera2_main_btnTopMenu3_off.png">
 				</a>
 			</li>
