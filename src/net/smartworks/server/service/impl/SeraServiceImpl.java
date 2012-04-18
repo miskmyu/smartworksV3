@@ -20,6 +20,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.InstanceSpaceInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -39,7 +40,6 @@ import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
-import net.smartworks.model.sera.NoteInstance;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
@@ -47,7 +47,6 @@ import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.work.FormField;
-import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
@@ -81,7 +80,6 @@ import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
-import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
@@ -89,7 +87,6 @@ import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
-import net.smartworks.server.engine.resource.manager.IDocumentManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
@@ -102,6 +99,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
@@ -112,6 +110,36 @@ import org.springframework.util.StringUtils;
 @Service
 public class SeraServiceImpl implements ISeraService {
 
+	private CourseInfo getCourseInfoById(String courseId) throws Exception {
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		SwoGroup group = swoMgr.getGroup("", courseId, IManager.LEVEL_ALL);
+		CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
+		CourseInfo courseInfo = this.convertSwoGroupToCourseInfo(group, courseDetail);
+		return courseInfo;
+	}
+	private WorkSpaceInfo getWorkSpaceInfoBySwdRecord(SwdRecord record) throws Exception {
+		if (record == null)
+			return null;
+		
+		String workSpaceType = record.getWorkSpaceType();
+		String workSpaceId = record.getWorkSpaceId();
+		if (CommonUtil.isEmpty(workSpaceType) || CommonUtil.isEmpty(workSpaceId))
+			return null;
+		
+		if (workSpaceType.equals(ISmartWorks.SPACE_TYPE_WORK_INSTANCE + "")) {
+			MissionInstanceInfo missionInstanceInfo = getMissionInfoById(workSpaceId);
+			InstanceSpaceInfo workSpaceInfo = new InstanceSpaceInfo(workSpaceId, missionInstanceInfo.getSubject());
+			workSpaceInfo.setInstance(missionInstanceInfo);
+			return workSpaceInfo;
+		} else if (workSpaceType.equals(ISmartWorks.SPACE_TYPE_GROUP + "")) {
+			return getCourseInfoById(workSpaceId);
+		} else if (workSpaceType.equals(ISmartWorks.SPACE_TYPE_USER + "")) {
+			return ModelConverter.getUserInfoByUserId(workSpaceId);
+		} else {
+			return null;
+		}
+	}
 	private static GroupInfo getGroupInfoBySwoGroup(GroupInfo groupInfo, SwoGroup swoGroup) throws Exception {
 		if (swoGroup == null)
 			return null;
@@ -509,7 +537,7 @@ public class SeraServiceImpl implements ISeraService {
 					if(CommonUtil.isEmpty(workSpaceId))
 						workSpaceId = userId;
 
-					WorkSpaceInfo workSpaceInfo = SwServiceFactory.getInstance().getCommunityService().getWorkSpaceInfoById(workSpaceId);
+					WorkSpaceInfo workSpaceInfo = getCourseInfoById(workSpaceId);
 
 					missionInstanceInfo.setWorkSpace(workSpaceInfo);
 
@@ -1553,7 +1581,7 @@ public class SeraServiceImpl implements ISeraService {
 					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					eventInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					eventInstanceInfo.setWorkSpace(null);
+					eventInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -2155,7 +2183,7 @@ public class SeraServiceImpl implements ISeraService {
 					noteInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					noteInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					noteInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					noteInstanceInfo.setWorkSpace(null);
+					noteInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -2295,7 +2323,7 @@ public class SeraServiceImpl implements ISeraService {
 					missionReportInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					missionReportInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					missionReportInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					missionReportInstanceInfo.setWorkSpace(null);
+					missionReportInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
 					WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
@@ -2618,7 +2646,7 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setRecordId("dr_" + CommonUtil.newId());
 		
 		obj.setWorkSpaceId(missionId);
-		obj.setWorkSpaceType("3");
+		obj.setWorkSpaceType("2");
 		obj.setAccessLevel(selAccessLevel);
 		obj.setAccessValue(null);
 
