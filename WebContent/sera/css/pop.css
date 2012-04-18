@@ -69,11 +69,12 @@
 
 /* Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
-.txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
+.btn_gray {display:inline-block;}
+.btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
-.txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; line-height: 19px}
-.txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
+.btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
+.btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 
 /* Smart Pop */
@@ -87,7 +88,7 @@
 .pop_message_h {padding:10px 0;}
 
 /* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
+.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; overflow: hidden}
 /* Close Btn */
 a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
     padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 

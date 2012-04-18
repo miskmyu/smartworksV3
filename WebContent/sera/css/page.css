@@ -492,10 +492,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Image Size */
 .profile_size_s {width:20px !important; height:20px !important; padding-right:3px}
-.profile_size_c {width:34px !important; height:34px !important} /* sz_s_34 */
-.profile_size_m {width:48px !important; height:48px !important} /* sz_m_48 */
-.profile_size_72 {width:72px !important; height:72px !important} /* sz_l_72 */
-.profile_size_b {width:118px !important; height:118px !important} /* sz_xl_118 */
+.profile_size_c {width:34px !important; height:34px !important; display:block} /* sz_s_34 */
+.profile_size_m {width:48px !important; height:48px !important; display:block} /* sz_m_48 */
+.profile_size_72 {width:72px !important; height:72px !important; display:block} /* sz_l_72 */
+.profile_size_b {width:118px !important; height:118px !important; display:block} /* sz_xl_118 */
 
 /* Bullet */
 .bullet_dot {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; color:#9a9a9a}

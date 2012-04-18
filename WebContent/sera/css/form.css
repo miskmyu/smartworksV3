@@ -45,3 +45,6 @@
 
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
+
+/* Form Space */
+.form_space { margin-right:5px}
