@@ -54,7 +54,7 @@
 					<!-- 우측 버튼 영역 -->
 					<div class="attach_file">
 						<ul>
-							<li class="t_s11"><span class="t_red">0</span> /1000kbyte</li>
+							<li><span class="insert_text">500</span></li>
 							<!-- Btn 등록-->
 							<li class="btn_default_l ml10">
 								<div class="btn_default_r">보내기</div>

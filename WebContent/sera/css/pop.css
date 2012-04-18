@@ -67,15 +67,17 @@
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep {padding:2px 0 2px 44px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
 
-/* Button */
+/* Global Btn Space */
+.glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden}
+/* Global Btn Space Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
 .btn_gray {display:inline-block;}
-.btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
-			 float:left; height:22px; width:5px;}
-.btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
-.btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
-    		float:left; height:22px; width:5px;}
+.btn_gray .txt_btn_start {background: url("../images/form_btn_default_l.gif") repeat scroll 0 0 transparent;
+			 float:left; height:28px; width:12px;}
+.btn_gray .txt_btn_center {background: url("../images/form_btn_default_c.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:28px; padding:0 3px; text-align:center; font-weight:bold; color:#555555; line-height: 28px}
+.btn_gray .txt_btn_end {background: url("../images/form_btn_default_r.gif") repeat scroll 0 0 transparent;
+    		float:left; height:28px; width:12px;}
 
 /* Smart Pop */
 .pop_corner_all{ border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border: 1px solid #c7c7c7; background-color:#FFF; -webkit-box-shadow: 0px 2px 10px #505050;}
@@ -87,8 +89,6 @@
 .pop_notice_section {padding-left: 10px; text-align: left; color:#7d7d7d}
 .pop_message_h {padding:10px 0;}
 
-/* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; overflow: hidden}
 /* Close Btn */
 a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
     padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 
