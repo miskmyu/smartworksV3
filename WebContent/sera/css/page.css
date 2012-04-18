@@ -545,7 +545,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Course List Section */
 #course_list_section {background: url("../images/courselist_container_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 100px; position: relative; width: auto; overflow:hidden}
-#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 735px;}
+#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 715px;}
 #content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
 #content_list_section .search {margin: 0 auto; width: 460px;}
 #content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 26px; margin-right: 5px; width: 375px;}
