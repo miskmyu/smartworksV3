@@ -1573,8 +1573,12 @@ public class SeraServiceImpl implements ISeraService {
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
-					if(!CommonUtil.isEmpty(subInstanceInfos))
-						boardInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					if(!CommonUtil.isEmpty(subInstanceInfos)) {
+						OpinionCond opinionCond = new OpinionCond();
+						opinionCond.setRefId(recordId);
+						long subInstanceInfoCount = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+						boardInstanceInfo.setSubInstanceCount((int)subInstanceInfoCount);
+					}
 					boardInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
@@ -1678,8 +1682,12 @@ public class SeraServiceImpl implements ISeraService {
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
-					if(!CommonUtil.isEmpty(subInstanceInfos))
-						eventInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					if(!CommonUtil.isEmpty(subInstanceInfos)) {
+						OpinionCond opinionCond = new OpinionCond();
+						opinionCond.setRefId(recordId);
+						long subInstanceInfoCount = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+						eventInstanceInfo.setSubInstanceCount((int)subInstanceInfoCount);
+					}
 					eventInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
@@ -2286,8 +2294,12 @@ public class SeraServiceImpl implements ISeraService {
 					noteInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
-					if(!CommonUtil.isEmpty(subInstanceInfos))
-						noteInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					if(!CommonUtil.isEmpty(subInstanceInfos)) {
+						OpinionCond opinionCond = new OpinionCond();
+						opinionCond.setRefId(recordId);
+						long subInstanceInfoCount = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+						noteInstanceInfo.setSubInstanceCount((int)subInstanceInfoCount);
+					}
 					noteInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
@@ -2432,8 +2444,12 @@ public class SeraServiceImpl implements ISeraService {
 					missionReportInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
-					if(!CommonUtil.isEmpty(subInstanceInfos))
-						missionReportInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					if(!CommonUtil.isEmpty(subInstanceInfos)) {
+						OpinionCond opinionCond = new OpinionCond();
+						opinionCond.setRefId(recordId);
+						long subInstanceInfoCount = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+						missionReportInstanceInfo.setSubInstanceCount((int)subInstanceInfoCount);
+					}
 					missionReportInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
