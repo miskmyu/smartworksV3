@@ -25,11 +25,13 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
@@ -79,6 +81,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfField;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
@@ -1327,6 +1331,49 @@ public class SeraServiceImpl implements ISeraService {
 		
 	}
 
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId) throws Exception {
+
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			List<CommentInstanceInfo> commentInstanceInfoList = new ArrayList<CommentInstanceInfo>();
+			CommentInstanceInfo[] commentInstanceInfos = null;
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setRefId(refId);
+			int maxLength = WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT;
+			opinionCond.setPageSize(maxLength);
+			opinionCond.setOrders(new Order[]{new Order(OpinionCond.A_CREATIONDATE, false)});
+			Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+			if(!CommonUtil.isEmpty(opinions)) {
+				int opinionLength = opinions.length;
+				for(int i=0; i<opinionLength; i++) {
+					Opinion opinion = opinions[i];
+					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+					commentInstanceInfo.setId(opinion.getObjId());
+					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+					commentInstanceInfo.setComment(opinion.getOpinion());
+					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
+					commentInstanceInfoList.add(commentInstanceInfo);
+				}
+			}
+			if(commentInstanceInfoList.size() > 0) {
+				commentInstanceInfos = new CommentInstanceInfo[commentInstanceInfoList.size()];
+				commentInstanceInfoList.toArray(commentInstanceInfos);
+			}
+			return commentInstanceInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, String currentUserId, String userId, String courseId, String missionId) throws Exception {
 		try {
 			String workSpaceIdIns = null;
@@ -1405,6 +1452,32 @@ public class SeraServiceImpl implements ISeraService {
 					} else {
 						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
 					}
+					/*if(!CommonUtil.isEmpty(attendingCourses)) {
+						workSpaceIdIns = "(";
+						for(int i=0; i<attendingCourses.length; i++) {
+							SwoGroup attendingCourse = attendingCourses[i];
+							String attendingCourseId = attendingCourse.getId();
+							Course course = getCourseById(attendingCourseId);
+							if(course != null) {
+								MissionInstanceInfo[] missionInstanceInfos = course.getMissions();
+								if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
+									for(int j=0; j<missionInstanceInfos.length; j++) {
+										MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
+										String missionInstanceId = missionInstanceInfo.getId();
+										workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
+									}
+								}
+							}
+							if(i == attendingCourses.length - 1)								
+								workSpaceIdIns = workSpaceIdIns + "'" + attendingCourseId + "'";
+							else
+								workSpaceIdIns = workSpaceIdIns + "'" + attendingCourseId + "', ";
+						}
+						workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
+						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+					} else {
+						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
+					}*/
 				}
 			}
 		} catch (Exception e) {
@@ -1473,8 +1546,9 @@ public class SeraServiceImpl implements ISeraService {
 				boardInstanceInfos = new BoardInstanceInfo[swdRecordsLength];
 				for(int i=0; i < swdRecordsLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
+					String recordId = swdRecord.getRecordId();
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
-					boardInstanceInfo.setId(swdRecord.getRecordId());
+					boardInstanceInfo.setId(recordId);
 					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					boardInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
@@ -1497,6 +1571,11 @@ public class SeraServiceImpl implements ISeraService {
 					boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
+					if(!CommonUtil.isEmpty(subInstanceInfos))
+						boardInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					boardInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					if(!CommonUtil.isEmpty(swdDataFields)) {
@@ -1579,7 +1658,8 @@ public class SeraServiceImpl implements ISeraService {
 				for(int i=0; i < swdRecords.length; i++) {
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
-					eventInstanceInfo.setId(swdRecord.getRecordId());
+					String recordId = swdRecord.getRecordId();
+					eventInstanceInfo.setId(recordId);
 					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					eventInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
@@ -1596,6 +1676,11 @@ public class SeraServiceImpl implements ISeraService {
 					eventInstanceInfo.setWork(workInfo);
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
+					if(!CommonUtil.isEmpty(subInstanceInfos))
+						eventInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					eventInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					List<CommunityInfo> communityInfoList = new ArrayList<CommunityInfo>();
@@ -2166,10 +2251,10 @@ public class SeraServiceImpl implements ISeraService {
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
 
-			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			//Filter[] filters = new Filter[1];
+			//filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
 			
-			swdRecordCond.setFilter(filters);
+			//swdRecordCond.setFilter(filters);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
@@ -2181,7 +2266,8 @@ public class SeraServiceImpl implements ISeraService {
 				for(int i=0; i < swdRecords.length; i++) {
 					NoteInstanceInfo noteInstanceInfo = new NoteInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
-					noteInstanceInfo.setId(swdRecord.getRecordId());
+					String recordId = swdRecord.getRecordId();
+					noteInstanceInfo.setId(recordId);
 					noteInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					noteInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					noteInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
@@ -2198,6 +2284,11 @@ public class SeraServiceImpl implements ISeraService {
 					noteInstanceInfo.setWork(workInfo);
 					noteInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					noteInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
+					if(!CommonUtil.isEmpty(subInstanceInfos))
+						noteInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					noteInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					List<CommunityInfo> communityInfoList = new ArrayList<CommunityInfo>();
@@ -2321,7 +2412,8 @@ public class SeraServiceImpl implements ISeraService {
 				for(int i=0; i < swdRecords.length; i++) {
 					MissionReportInstanceInfo missionReportInstanceInfo = new MissionReportInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
-					missionReportInstanceInfo.setId(swdRecord.getRecordId());
+					String recordId = swdRecord.getRecordId();
+					missionReportInstanceInfo.setId(recordId);
 					missionReportInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					missionReportInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
 					missionReportInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
@@ -2338,6 +2430,11 @@ public class SeraServiceImpl implements ISeraService {
 					missionReportInstanceInfo.setWork(workInfo);
 					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					missionReportInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					CommentInstanceInfo[] subInstanceInfos = getSubInstancesByRefId(recordId);
+					if(!CommonUtil.isEmpty(subInstanceInfos))
+						missionReportInstanceInfo.setSubInstanceCount(subInstanceInfos.length);
+					missionReportInstanceInfo.setSubInstances(subInstanceInfos);
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
 					List<CommunityInfo> communityInfoList = new ArrayList<CommunityInfo>();
