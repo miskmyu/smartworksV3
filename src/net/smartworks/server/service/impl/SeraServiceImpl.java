@@ -1372,8 +1372,10 @@ public class SeraServiceImpl implements ISeraService {
 								}
 							}
 						}
-						workSpaceIdIns = workSpaceIdIns + ")";
+						workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
 						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+					} else {
+						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
 					}
 				}
 			}
