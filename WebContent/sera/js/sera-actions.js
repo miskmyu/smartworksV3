@@ -379,4 +379,84 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_return_on_sera_comment').live('keydown', function(e) {
+		if(e.which != $.ui.keyCode.ENTER) return;
+		var input = $(e.target);
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var comment = input.attr('value');
+		if(isEmpty(comment)) return false;
+		var	workInstanceId = subInstanceList.attr('instanceId');
+		var	workType = subInstanceList.attr('workType');
+		var paramsJson = {};
+		paramsJson['workType'] = parseInt(workType);
+		paramsJson['workInstanceId'] = workInstanceId;
+		url = "add_comment_on_instance.sw";
+		paramsJson['comment'] = comment;
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+//				var target = subInstanceList.find('.js_comment_list');
+//				var showAllComments = target.find('.js_show_all_comments');
+//				if(!isEmpty(showAllComments)){
+//					showAllComments.find('span').click();
+//					input.attr('value', '');
+//				}else{
+//					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+//					newComment.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
+//					target.append(newComment);
+//					input.attr('value', '');
+//				}
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addCommentError"), function(){
+				});
+				
+			}
+			
+		});
+		
+	});
+	
+	$('.js_show_all_comments').live('click', function(e) {
+		var input = $(e.target).parents('.js_show_all_comments');
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var href = input.attr('href');
+		$.ajax({
+			url : href,
+			data : {},
+			success : function(data, status, jqXHR) {
+				var target = subInstanceList.find('.js_comment_list');
+				target.find(':visible').remove();
+				target.append(data);
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addCommentError"), function(){
+				});
+				
+			}
+			
+		});
+		return false;
+	});
+	
+	$('a.js_add_comment').live('click', function(e){
+		var input = $(e.target).parents('a.js_add_comment').removeAttr('href').addClass('no_hover_line');
+		input.find('.t_action').addClass('t_action_disabled');
+		input.parents('.js_action_btns').prev('.js_comments_box').show().find('.js_return_on_comment').show();
+		
+		return false;
+	});
+
+	$('a.js_add_like').live('click', function(e){
+		var input = $(e.target).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
+		input.find('.t_action').addClass('t_action_disabled');
+		
+	});
+
 });
