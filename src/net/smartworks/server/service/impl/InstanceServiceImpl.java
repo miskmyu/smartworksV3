@@ -5573,4 +5573,14 @@ public class InstanceServiceImpl implements IInstanceService {
 	public String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "save");
 	}
+	@Override
+	public void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

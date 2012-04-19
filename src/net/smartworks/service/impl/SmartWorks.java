@@ -1057,4 +1057,14 @@ public class SmartWorks implements ISmartWorks {
 	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCoursesByType(courseType, fromDate, maxList);
 	}
+
+	@Override
+	public void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.addLinkToInstance(requestBody, request);
+	}
+
+	@Override
+	public void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeLinkToInstance(requestBody, request);
+	}
 }

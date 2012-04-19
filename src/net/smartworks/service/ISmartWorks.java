@@ -434,6 +434,10 @@ public interface ISmartWorks {
 
 	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

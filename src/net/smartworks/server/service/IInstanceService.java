@@ -114,4 +114,8 @@ public interface IInstanceService {
 
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }
