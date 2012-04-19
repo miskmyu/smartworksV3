@@ -60,8 +60,12 @@
 		<id name="objId" type="string" length="100" unsaved-value="undefined">
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
-		<property name="userId" type="string" length="50"/>
-		<property name="friendId" type="string" length="50"/>
-		<property name="friendName" type="string" length="50"/>
+		<property name="requestId" type="string" length="50"/>
+		<property name="requestName" type="string" length="50"/>
+		<property name="receiveId" type="string" length="50"/>
+		<property name="receiveName" type="string" length="50"/>
+		<property name="acceptStatus" type="int"/>
+		<property name="requestDate" type="timestamp"/>
+		<property name="replyDate" type="timestamp"/>
 	</class>
 </hibernate-mapping>
