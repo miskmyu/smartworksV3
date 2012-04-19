@@ -490,4 +490,6 @@ public interface ISmartWorks {
 
 	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
 
+	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
+
 }

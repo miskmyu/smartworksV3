@@ -28,7 +28,7 @@
 	int fetchCount = Integer.parseInt(request.getParameter("fetchCount"));
 	InstanceInfo[] subInstances = (InstanceInfo[])session.getAttribute("subComments");
 	if(SmartUtil.isBlankObject(subInstances))
-		subInstances = smartWorks.getRecentSubInstancesInInstance(instanceId, fetchCount);
+		subInstances = smartWorks.getSubInstancesByRefId(instanceId, fetchCount);
 
 	if (subInstances != null) {
 		for (InstanceInfo instance : subInstances) {

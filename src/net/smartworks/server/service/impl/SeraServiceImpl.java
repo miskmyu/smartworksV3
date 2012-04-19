@@ -1333,6 +1333,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 	}
 
+	@Override
 	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
 
 		try {

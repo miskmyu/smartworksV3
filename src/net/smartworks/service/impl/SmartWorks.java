@@ -1057,4 +1057,10 @@ public class SmartWorks implements ISmartWorks {
 	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCoursesByType(courseType, fromDate, maxList);
 	}
+
+	@Override
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
+		return seraService.getSubInstancesByRefId(refId, maxSize);
+	}
+
 }
