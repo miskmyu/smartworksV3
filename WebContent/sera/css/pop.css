@@ -47,7 +47,7 @@
 .sera_tpop .more a { color:#608eba; text-align:center; display:block}
 .sera_tpop .more a:hover {color:#1a5083}
 .sera_tpop li .layer_pop_section {margin:0 10px; padding: 4px 0; overflow: hidden; font-weight:bold; color:#454545} /* Layer Pop Menu */
-.sera_tpop .layer_pop_tit {border-bottom: 1px solid #006699; color: #006699; font-weight: bold; line-height: 20px; margin: 5px 10px;}
+.sera_tpop .layer_pop_tit {border-bottom: 1px solid #cccccc; color: #006699; font-weight: bold; line-height: 20px; margin: 5px 10px;}
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px;}
@@ -94,3 +94,8 @@
 a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
     padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 
 a:hover .pop_btn_x {background-color:#e5e5e5;}
+
+/* Policy */
+.policy_wrap {background: url("../images/policy_bg.png") no-repeat scroll 0 0 transparent; border: 1px solid #666666; height: 441px; padding: 140px 25px 0; width: 532px}
+.policy_wrap h2 {color: #FFFFFF; font: bold 14px 'NanumGothic','ngttf'; margin-bottom: 5px}
+.policy_wrap .content {background-color: #FFFFFF; border: 1px solid #1C60A3; height: 130px; line-height: 20px; margin-bottom: 15px; overflow-y: scroll; padding: 10px; text-align: justify; width: 512px}

@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* CSS Document */
+.content_box {clear: both; height: auto; margin-bottom: 30px; overflow: hidden; width: 703px}
+.content_box .tutorial_menu {float: left; height: 404px; margin-right: 16px; width: 90px}
+.content_box .tutorial_menu ul li {margin-bottom: 10px;}
+.content_box .tutorial_visual {border: 2px solid #DCDCDC; float: left; height: 690px; padding: 2px; width: 587px}
+.content_box .tutorial_menu {float: left; height: 404px; margin-right: 16px; width: 90px}
+
+/* FAQ */
+.faq_menu {clear: both; height: 20px; padding: 0 0 20px 20px;}
+.faq_menu .menu_on {color: #4E90B7; display: inline; float: left; font: bold 12px 'dotum,','gulim';}
+.faq_menu .menu_off {display: inline; float: left; font: 12px 'dotum,','gulim';}
+.faq_menu .line {display: inline; float: left; font: 12px 'dotum,','gulim'; margin: 0 10px}
+.faq_list {height: auto; overflow: hidden; padding-left: 20px; width: 683px;}
+.faq_list li {font: 12px 'dotum','gulim'; margin-bottom: 20px;}
+.faq_list li dl { border-bottom:1px dashed #cccccc}
+.faq_list li dl dt {font: bold 12px/20px 'dotum','gulim'; height: 30px;}
+.faq_list li dl dt .faq_number {background: url("../images/helpcenter/faq_number_bg.gif") no-repeat scroll 0 0 transparent; color: #FFFFFF; font: bold 12px 'dotum','gulim'; height: 20px; padding: 5px 0 0 4px; width: 36px;}
+.faq_list li dl dt .faq_name {color: #655230; height: 20px; padding: 2px 0 0 10px; width: auto;}
+.faq_list li dl dd {color: #666666; line-height: 20px;}
+.faq_list label { float:left}
