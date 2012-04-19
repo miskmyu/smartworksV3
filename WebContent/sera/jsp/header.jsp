@@ -50,17 +50,17 @@
 		<div class="top_logo"><a href="logins.sw"></a></div>
 		<ul class="top_menu2">
 			<li class="fl">
-				<a href="Course.sw" class="js_sera_content">
+				<a href="Course.sw">
 					<img width="101" height="28" title="Course" alt="Course" src="sera/images/sera2_main_btnTopMenu1_off.png">
 				</a>
 			</li>
 			<li class="fl">
-				<a href="myPAGE.sw" class="js_sera_content">
+				<a href="myPAGE.sw">
 					<img width="101" height="28" title="myPAGE" alt="myPAGE" src="sera/images/sera2_main_btnTopMenu2_on.png">
 				</a>
 			</li>
 			<li class="fl">
-				<a href="seraCLUB.sw" class="js_sera_content">
+				<a href="http://blog.seracampus.com" class="js_sera_content">
 					<img width="101" height="28" title="seraCLUB" alt="seraCLUB" src="sera/images/sera2_main_btnTopMenu3_off.png">
 				</a>
 			</li>

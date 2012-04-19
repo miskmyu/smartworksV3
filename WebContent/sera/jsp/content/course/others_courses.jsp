@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.SeraUser"%>
 <%@page import="net.smartworks.model.sera.info.CourseInfo"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
@@ -11,67 +12,35 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String otherUserId = request.getParameter("userId");
-	User otherUser = smartWorks.getUserById(otherUserId);
+	SeraUser otherUser = smartWorks.getSeraUserById(otherUserId);
 	CourseList courseList = smartWorks.getCoursesById(otherUserId, CourseList.MAX_COURSE_LIST);
 %>
 <div class="my_comment_section">
 	<!-- Photo Section -->
 	<div class="photo_section">
-		<div class="my_photo">
-			<img src="<%=otherUser.getMidPicture() %>" />친구사진
-		</div>
+		<a href="othersPAGE.sw?userId=<%=otherUser.getId() %>">
+			<div class="my_photo"><img src="<%=otherUser.getMidPicture() %>" /></div>
+		</a>
 		<!-- Btn -->
-		<div class="btn_green_l cb" style="margin: 8px 0 0 10px">
-			<div class="btn_green_r">
-				<span class="icon_green_down mr5"></span>친구요청
+		<%
+		if(!otherUser.isFriend()){
+		%>
+			<div class="btn_green_l cb js_fried_request_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px">
+				<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구요청</div>
 			</div>
-		</div>
+		<%
+		}
+		%>
 		<!-- Btn //-->
 	</div>
 	<!-- Photo Section //-->
 	<!-- My Comment -->
 	<div class="my_comment">
 		<div class="header"><%=otherUser.getNickName() %></div>
-		<div class="comment_txt ">
-			<textarea name="" cols="" rows="5" placeholder="전공 공부만큼 영어를 좋아했는데 입사하고 나니 영어에는 손을 뚝 끊어버리게 되네요~"></textarea>
-		</div>
-		<div class="cb mt6">
-			<!-- 좌측 영역 -->
-			<div class="option">
-				<!-- 버튼 -->
-				<div class="btn_wstyle_l">
-					<div class="btn_wstyle_r">텍스트</div>
-				</div>
-				<!-- 버튼 //-->
-				<!-- 전체공개 -->
-				<div class="txt ml10">
-					<a href=""> 전체공개<span class="icon_bul_select ml5"></span> </a> |
-				</div>
-				<!-- 전체공개 //-->
-				<!-- 태그넣기 -->
-				<div class="txt">
-					<a href=""> 태그넣기<span class="icon_bul_select ml5"></span> </a>
-				</div>
-				<!-- 태그넣기//-->
-			</div>
-			<!-- 좌측 영역//-->
-			<!-- 우측 버튼 영역 -->
-			<div class="attach_file">
-				<ul>
-					<li class="t_s11"><span class="t_red">0</span> /1000kbyte</li>
-					<li class="icon_memo ml10"><a href=""> </a></li>
-					<li class="icon_video"><a href=""> </a></li>
-					<li class="icon_photo"><a href=""> </a></li>
-					<li class="icon_link"><a href=""> </a></li>
-					<!-- Btn 등록-->
-					<li class="btn_default_l ml10">
-						<div class="btn_default_r">등록</div>
-					</li>
-					<!-- Btn 등록//-->
-				</ul>
-			</div>
-			<!-- 우측 버튼 영역 //-->
-		</div>
+		<jsp:include page="/sera/jsp/content/sera_note.jsp">
+			<jsp:param value="<%=ISmartWorks.SPACE_TYPE_USER %>" name="spaceType"/>
+			<jsp:param value="<%=otherUserId%>" name="spaceId"/>
+		</jsp:include>
 	</div>
 	<!-- My Comment //-->
 </div>
@@ -92,19 +61,19 @@
 					CourseInfo course = courseList.getRunningCourses()[i];
 					String endClass = ((i+1) % 3 == 0) ? "end" : "";
 			%>
-					<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+					<ul class="category_box <%=endClass%>">
 						<li class="photo">
-							<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+							<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 						</li>
-						<li class="subject"><a href=""><%=course.getName() %></a></li>
-						<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+						<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
+						<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getName() %></a></li>
 						<li class="info">
 							<dl>
 								<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
 								<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
 								<dd class="category"></dd>
 							</dl></li>
-						<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+						<li class="detail"><a href="/courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 						<!-- Gauge -->
 						<li class="gauge_box w_auto mt5">
 							<dl>
@@ -147,19 +116,19 @@
 				CourseInfo course = courseList.getAttendingCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 		%>
-				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+				<ul class="category_box <%=endClass%>">
 					<li class="photo">
-						<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 					</li>
-					<li class="subject"><a href=""><%=course.getName() %></a></li>
-					<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
+					<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getName() %></a></li>
 					<li class="info">
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
 							<dd class="makeDate"><%=course.getOpenDate().toLocalString() %></dd>
 							<dd class="category"></dd>
 						</dl></li>
-					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>

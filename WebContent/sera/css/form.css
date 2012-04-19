@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
-.form_layout { overflow:hidden}
+.form_layout {}
 .form_layout table {background-color:#ededed; border-bottom:1px solid #73afd3; padding:10px 5px 10px}
 .form_layout table td,
 .form_layout table th {padding:7px 10px}
@@ -45,3 +45,8 @@
 
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
+
+/* Form Space */
+.form_space {padding-right:3px;}
+.icon_space { padding-right:26px; position:relative;}
+.space_data {text-align:center; margin-right:5px; width:70px;}

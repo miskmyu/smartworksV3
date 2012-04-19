@@ -57,13 +57,13 @@
 				<div class="gnb">
 					<ul class="top_menu2" style="margin-left: 340px">
 						<li class="fl">
-							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a>
+							<a href="Course.sw"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a>
 						</li>
 						<li class="fl">
-							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_off.png" /></a>
+							<a href="myPAGE.sw"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_off.png" /></a>
 						</li>
 						<li class="fl">
-							<a href=""> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a>
+							<a href="http://blog.seracampus.com"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a>
 						</li>
 					</ul>
 					<ul class="util_menu fr">

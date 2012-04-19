@@ -31,7 +31,7 @@
 .btn_close a {background: url("../images/icon.png") no-repeat scroll -166px -713px; height:11px; width:11px; margin-right:10px; float:right; display:block}
 .btn_close a:hover {background: url("../images/icon.png") no-repeat scroll -190px -713px}
 
-/*popup information*/
+/* Sera Top Popup */
 .sera_tpop_section {position: absolute}
 .sera_tpop {background:#F1F7FC; border: 1px solid #4C87BE; font-family: dotum,Helvetica,sans-serif; -webkit-box-shadow: 1px 1px 1px #787878; -moz-box-shadow: 1px 1px 1px #787878; box-shadow: 1px 1px 1px #787878; width:230px; color:#666666}
 .sera_tpop li {position:relative; clear:both; overflow:hidden;}
@@ -47,6 +47,7 @@
 .sera_tpop .more a { color:#608eba; text-align:center; display:block}
 .sera_tpop .more a:hover {color:#1a5083}
 .sera_tpop li .layer_pop_section {margin:0 10px; padding: 4px 0; overflow: hidden; font-weight:bold; color:#454545} /* Layer Pop Menu */
+.sera_tpop .layer_pop_tit {border-bottom: 1px solid #cccccc; color: #006699; font-weight: bold; line-height: 20px; margin: 5px 10px;}
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px;}
@@ -67,14 +68,17 @@
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep {padding:2px 0 2px 44px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 .pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
 
-/* Button */
+/* Global Btn Space */
+.glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden; margin:0 10px; border-top:1px solid #ededed}
+/* Global Btn Space Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
-.txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
-			 float:left; height:22px; width:5px;}
-.txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; line-height: 19px}
-.txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
-    		float:left; height:22px; width:5px;}
+.btn_gray {display:inline-block;}
+.btn_gray .txt_btn_start {background: url("../images/form_btn_default_l.gif") repeat scroll 0 0 transparent;
+			 float:left; height:28px; width:12px;}
+.btn_gray .txt_btn_center {background: url("../images/form_btn_default_c.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:28px; padding:0 3px; text-align:center; font-weight:bold; color:#555555; line-height: 28px}
+.btn_gray .txt_btn_end {background: url("../images/form_btn_default_r.gif") repeat scroll 0 0 transparent;
+    		float:left; height:28px; width:12px;}
 
 /* Smart Pop */
 .pop_corner_all{ border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border: 1px solid #c7c7c7; background-color:#FFF; -webkit-box-shadow: 0px 2px 10px #505050;}
@@ -86,9 +90,12 @@
 .pop_notice_section {padding-left: 10px; text-align: left; color:#7d7d7d}
 .pop_message_h {padding:10px 0;}
 
-/* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
 /* Close Btn */
 a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
     padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 
 a:hover .pop_btn_x {background-color:#e5e5e5;}
+
+/* Policy */
+.policy_wrap {background: url("../images/policy_bg.png") no-repeat scroll 0 0 transparent; border: 1px solid #666666; height: 441px; padding: 140px 25px 0; width: 532px}
+.policy_wrap h2 {color: #FFFFFF; font: bold 14px 'NanumGothic','ngttf'; margin-bottom: 5px}
+.policy_wrap .content {background-color: #FFFFFF; border: 1px solid #1C60A3; height: 130px; line-height: 20px; margin-bottom: 15px; overflow-y: scroll; padding: 10px; text-align: justify; width: 512px}

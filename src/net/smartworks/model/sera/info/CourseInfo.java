@@ -1,6 +1,5 @@
 package net.smartworks.model.sera.info;
 
-import net.smartworks.model.community.Community;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Course;
@@ -61,21 +60,21 @@ public class CourseInfo extends GroupInfo{
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getBigPictureName();
 	}
 
 	public String getMidPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_mid.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}
 
 	public String getMinPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_min.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}

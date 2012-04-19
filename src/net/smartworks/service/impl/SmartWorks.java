@@ -49,6 +49,7 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -970,10 +971,15 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
 		return seraService.getFriendsById(userId, lastId, maxList);
 	}
 
+	@Override
+	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsForMe(lastId, maxList);
+	}
+	
 	@Override
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCourseNotices(courseId, fromDate, maxList);
@@ -1030,4 +1036,39 @@ public class SmartWorks implements ISmartWorks {
 	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
 		return seraService.getRecommendedCourses(maxList);
 	}
+
+	@Override
+	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.replyFriendRequest(requestBody, request);
+	}
+
+	@Override
+	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.friendRequest(requestBody, request);
+	}
+
+	@Override
+	public void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.destroyFriendship(requestBody, request);
+		
+	}
+
+	@Override
+	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getCoursesByType(courseType, fromDate, maxList);
+	}
+
+	@Override
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.addLikeToInstance(requestBody, request);
+	}
+
+	@Override
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeLikeToInstance(requestBody, request);
+	}
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
+		return seraService.getSubInstancesByRefId(refId, maxSize);
+	}
+
 }

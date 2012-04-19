@@ -366,33 +366,57 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		}
 	}
 	private Query appendQuery(StringBuffer buf, SeraFriendCond cond) throws Exception {
-		String userId = null;
-		String friendNameOrder = null;
-		boolean isFriendNameAsc = true;
+		String objId = null;
+		String requestId = null;
+		String requestName = null;
+		String receiveId = null;
+		String receiveName = null;
+		int acceptStatus = -1;
+		String requestIdOrReceiveId = null;
 		if (cond != null) {
-			userId = cond.getUserId();
-			friendNameOrder = cond.getFriendNameOrder();
-			isFriendNameAsc = cond.isFriendNameAsc();
+			objId = cond.getObjId();
+			requestId = cond.getReceiveId();
+			requestName = cond.getReceiveName();
+			receiveId = cond.getReceiveId();
+			receiveName = cond.getReceiveName();
+			acceptStatus = cond.getAcceptStatus();
+			requestIdOrReceiveId = cond.getRequestIdOrReceiveId();
 		}
 		buf.append(" from SeraFriend obj");
 		buf.append(" where obj.objId is not null");
 		if (cond != null) {
-			if (userId != null)
-				buf.append(" and obj.userId = :userId");
-			if (friendNameOrder != null) {
-				if (isFriendNameAsc) {
-					buf.append(" and obj.friendName > :friendNameOrder");
-				} else {
-					buf.append(" and obj.friendName < :friendNameOrder");
-				}
-				
-			}
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (requestId != null)
+				buf.append(" and obj.requestId = :requestId");
+			if (requestName != null)
+				buf.append(" and obj.requestName = :requestName");
+			if (receiveId != null)
+				buf.append(" and obj.receiveId = :receiveId");
+			if (receiveName != null)
+				buf.append(" and obj.receiveName = :receiveName");
+			if (acceptStatus != -1)
+				buf.append(" and obj.acceptStatus = :acceptStatus");
+			if (requestIdOrReceiveId != null)
+				buf.append(" and (obj.requestId = :requestIdOrReceiveId or obj.receiveId = :requestIdOrReceiveId)");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);
 		if (cond != null) {
-			if (userId != null)
-				query.setString("userId", userId);
+			if (objId != null)
+				query.setString("objId", objId);
+			if (requestId != null)
+				query.setString("requestId", requestId);
+			if (requestName != null)
+				query.setString("requestName", requestName);
+			if (receiveId != null)
+				query.setString("receiveId", receiveId);
+			if (receiveName != null)
+				query.setString("receiveName", receiveName);
+			if (acceptStatus != -1)
+				query.setInteger("acceptStatus", acceptStatus);
+			if (requestIdOrReceiveId != null)
+				query.setString("requestIdOrReceiveId", requestIdOrReceiveId);
 		}
 		return query;
 	}

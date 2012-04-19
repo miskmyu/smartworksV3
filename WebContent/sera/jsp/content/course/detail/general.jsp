@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.sera.info.ReviewInstanceInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -16,7 +17,18 @@
 	String courseId = request.getParameter("courseId");
 	Course course = (Course)session.getAttribute("course");
 	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
-
+	UserInfo[] members = course.getMembers();
+	boolean isMyCourse = false;
+	if(course.getOwner().getId().equals(cUser.getId())){
+		isMyCourse = true;
+	}else if(!SmartUtil.isBlankObject(members)){
+		for(int i=0; i<members.length; i++){
+			if(members[i].getId().equals(cUser.getId())){
+				isMyCourse = true;
+				break;
+			}
+		}
+	}
 	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
 	
 %>
@@ -74,11 +86,17 @@
 								style="width: <%=course.getAchievedPoint() * 100 / course.getTargetPoint()%>%;"></label>
 						</div>
 					</dd>
-					<dd class="fr">
-						<div class="btn_large_l js_join_course_request" autoApproval="<%=course.isAutoApproval()%>">
-							<div class="btn_large_r"><span class="icon_blu_down2 mr5"></span>코스 가입하기</div>
-						</div>
-					</dd>
+					<%
+					if(!isMyCourse){
+					%>
+						<dd class="fr">
+							<div class="btn_large_l js_join_course_request" autoApproval="<%=course.isAutoApproval()%>">
+								<div class="btn_large_r"><span class="icon_blu_down2 mr5"></span>코스 가입하기</div>
+							</div>
+						</dd>
+					<%
+					}
+					%>
 					<div class="mission_info"><%=course.getTargetPoint()%>개의 미션
 						중
 						<%=course.getAchievedPoint()%>번째가 진행중입니다

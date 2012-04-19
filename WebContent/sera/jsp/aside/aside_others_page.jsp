@@ -4,6 +4,7 @@
 <!-- Author			: Y.S. JUNG												 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -46,7 +47,7 @@
 							CourseInfo course = courseList.getRunningCourses()[i];
 						%>
 							<li>
-								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>
+								<a href="courseHome.sw?courseId=<%=course.getId()%>"><span class="t_blue"><%=course.getName()%></span></a>
 							</li>
 						<%
 						}
@@ -72,7 +73,7 @@
 							CourseInfo course = courseList.getAttendingCourses()[i];
 						%>
 							<li>
-								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>
+								<a href="courseHome.sw?courseId=<%=course.getId()%>"><span class="t_blue"><%=course.getName()%></span></a>
 							</li>
 						<%
 						}
@@ -144,7 +145,7 @@
 		<dl>
 			<%
 				for (int i = 0; i < friendList.getFriends().length; i++) {
-					UserInfo friend = friendList.getFriends()[i];
+					SeraUserInfo friend = friendList.getFriends()[i];
 			%>
 			<dd>
 				<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img

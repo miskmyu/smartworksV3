@@ -8,52 +8,77 @@
 
 package net.smartworks.server.engine.sera.model;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Date;
 
 import net.smartworks.server.engine.common.model.Cond;
-import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.process.task.model.TskTaskCond;
 
 public class SeraFriendCond extends Cond{
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String objId;
-	private String userId;
-	private String friendId;
-	private String friendNameOrder;
-	private boolean isFriendNameAsc = true;
-	
+	private String requestId;
+	private String requestName;
+	private String receiveId;
+	private String receiveName;
+	private int acceptStatus;
+	private Date requestDate;
+	private Date replyDate;
+	private String requestIdOrReceiveId;
+
 	public String getObjId() {
 		return objId;
 	}
 	public void setObjId(String objId) {
 		this.objId = objId;
 	}
-	public String getUserId() {
-		return userId;
+	public String getRequestId() {
+		return requestId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
-	public String getFriendId() {
-		return friendId;
+	public String getRequestName() {
+		return requestName;
 	}
-	public void setFriendId(String friendId) {
-		this.friendId = friendId;
+	public void setRequestName(String requestName) {
+		this.requestName = requestName;
 	}
-	public String getFriendNameOrder() {
-		return friendNameOrder;
+	public String getReceiveId() {
+		return receiveId;
 	}
-	public void setFriendNameOrder(String friendNameOrder) {
-		this.friendNameOrder = friendNameOrder;
+	public void setReceiveId(String receiveId) {
+		this.receiveId = receiveId;
 	}
-	public boolean isFriendNameAsc() {
-		return isFriendNameAsc;
+	public String getReceiveName() {
+		return receiveName;
 	}
-	public void setFriendNameAsc(boolean isFriendNameAsc) {
-		this.isFriendNameAsc = isFriendNameAsc;
+	public void setReceiveName(String receiveName) {
+		this.receiveName = receiveName;
+	}
+	public int getAcceptStatus() {
+		return acceptStatus;
+	}
+	public void setAcceptStatus(int acceptStatus) {
+		this.acceptStatus = acceptStatus;
+	}
+	public Date getRequestDate() {
+		return requestDate;
+	}
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
+	}
+	public Date getReplyDate() {
+		return replyDate;
+	}
+	public void setReplyDate(Date replyDate) {
+		this.replyDate = replyDate;
+	}
+	public String getRequestIdOrReceiveId() {
+		return requestIdOrReceiveId;
+	}
+	public void setRequestIdOrReceiveId(String requestIdOrReceiveId) {
+		this.requestIdOrReceiveId = requestIdOrReceiveId;
 	}
 	
 }
