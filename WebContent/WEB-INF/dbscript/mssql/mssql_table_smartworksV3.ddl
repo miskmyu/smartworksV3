@@ -792,6 +792,7 @@ CREATE TABLE prcprc (
     prcdver varchar(100),
     prcprcid varchar(100),
     prcdiagram text,
+    prcType varchar(100),
 	primary key(prcobjid)
 );
 
