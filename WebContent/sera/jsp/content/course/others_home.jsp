@@ -1,3 +1,6 @@
+<%@page import="net.smartworks.model.instance.Instance"%>
+<%@page import="net.smartworks.util.LocalDate"%>
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Mentor"%>
 <%@page import="net.smartworks.model.sera.Course"%>
@@ -13,6 +16,7 @@
 	
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
+	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
 	String mentorName = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getName();
 	boolean myRunningCourse = (cUser.getId().equals(mentorId));
@@ -46,10 +50,22 @@
 		<div class="course_info">
 			<dl>
 				<dt>코스알림</dt>
-				<dd>- [알림] 3월 14일 번개팅합니다</dd>
-				<dd>- 미션6이 등록되었습니다</dd>
-				<dd>- [이벤트] 미션2 선착순 3명!...</dd>
-				<dd>- [이벤트] 미션2 선착순 3명!...</dd>
+				<%
+				if(!SmartUtil.isBlankObject(notices)){
+					for(int i=0; i<notices.length; i++){
+						InstanceInfo notice = notices[i];
+						if(notice.getType()==Instance.TYPE_BOARD){
+				%>
+							<dd>[알림] <%=notice.getSubject() %></dd>
+						<%
+						}else if(notice.getType()==Instance.TYPE_EVENT){
+						%>
+							<dd>[이벤트] <%=notice.getSubject() %></dd>
+						<%
+						}
+					}
+				}
+				%>
 			</dl>
 		</div>
 	</div>
@@ -62,9 +78,11 @@
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu">
-				<li class="current"><a href="" class="js_course_detail">홈</a></li>
+				<li class="current"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스알림</a></li>
+				<li><a href="" class="js_create_team">팀활동</a></li>
+				<li><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
@@ -75,30 +93,21 @@
 		<div class="icon_facebook fr ml5mt7">
 			<a href="">페이스북</a>
 		</div>
-		<div class="fr" style="margin: 8px 30px 0 0">
-			<div class="btn_mid_l">
-				<div class="btn_mid_r">팀구성하기</div>
-			</div>
-		</div>
 	</div>
 	<!-- Menu Dep2 -->
 	<div class="course_menu_d2 js_course_sub_menu" style="display:none">
 		<div class="menu001 current" style="display:none"></div>
-		<div class="menu002 js_course_mission_menu" style="display:none">
-			<ul>
-				<li class="js_course_mission_set"><a href="">미션등록/수행</a></li>
-				<li class="js_course_mission_list"><a href="">전체보기</a></li>
-				<li class="js_course_mission_mine"><a href="">내글보기</a></li>
-				<li class="end js_course_by_mission"><a href="">미션별 보기</a></li>
-			</ul>
-		</div>
+		<div class="menu002" style="display:none"></div>
 		<div class="menu003" style="display:none"></div>
-		<div class="menu004 js_course_setting_menu" style="display:none">
+		<div class="menu004" style="display:none"></div>
+		<div class="menu005" style="display:none"></div>
+		<div class="menu006 js_course_setting_menu" style="display:none">
 			<%
 			if(myRunningCourse){
 			%>
 				<ul>
-					<li class="js_course_setting_profile"><a href=""> 코스관리</a></li>
+					<li class="js_course_setting_profile"><a href="">코스관리</a></li>
+					<li class="js_create_mission"><a href="">미션등록</a></li>
 					<li  class="js_course_setting_mentee"><a href="">멘티관리</a></li>
 					<li class="end js_course_setting_team"><a href="" ><span class="icon_bul_select mr5"></span>팀관리 </a></li>
 				</ul>

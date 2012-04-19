@@ -148,11 +148,13 @@
 		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
 	</definition>
+	<definition name="Course" template="/sera/jsp/layouts_course.jsp">
+		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
+		<put-attribute name="container" value="/sera/jsp/content/course.jsp" />
+		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
+	</definition>
 	<definition name="myPAGE" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/my_page.jsp" />
-	</definition>
-	<definition name="Course" extends="seraCampus">
-		<put-attribute name="sera_content" value="/sera/jsp/content/course.jsp" />
 	</definition>
 	<definition name="othersPAGE" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/others_page.jsp" />
@@ -160,7 +162,7 @@
 	</definition>
 	<definition name="courseHome" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/course/home.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
+		<put-attribute name="aside" value="/sera/jsp/aside/aside_course.jsp" />
 	</definition>
 
 </tiles-definitions>

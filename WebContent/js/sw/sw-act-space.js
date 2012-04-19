@@ -386,6 +386,7 @@ $(function() {
 				var target = subInstanceList.find('.js_comment_list');
 				target.find(':visible').remove();
 				target.append(data);
+				input.remove();
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

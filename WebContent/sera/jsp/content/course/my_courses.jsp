@@ -31,19 +31,19 @@
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
 		%>
-				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+				<ul class="category_box <%=endClass%>">
 					<li class="photo">
-						<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 					</li>
-					<li class="subject"><a href=""><%=course.getName() %></a></li>
-					<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
+					<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getName()%>"><%=course.getOwner().getName() %></a></li>
 					<li class="info">
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalString() %><%} %></dd>
 							<dd class="category"></dd>
 						</dl></li>
-					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>
@@ -87,19 +87,19 @@
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
 		%>
-				<ul href="courseHome.sw?courseId=<%=course.getId() %>" class="category_box <%=endClass%> js_sera_content">
+				<ul class="category_box <%=endClass%>">
 					<li class="photo">
-						<a href=""> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 					</li>
-					<li class="subject"><a href=""><%=course.getName() %></a></li>
-					<li class="maker"><a href=""><%=course.getOwner().getName() %></a></li>
+					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
+					<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getName() %></a></li>
 					<li class="info">
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalString() %><%} %></dd>
 							<dd class="category"></dd>
 						</dl></li>
-					<li class="detail"><a href="/Course/Detail/212"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>

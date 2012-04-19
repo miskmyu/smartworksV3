@@ -67,16 +67,18 @@
 			<div>
 				<ul class="panel_area">
 					<!-- photo-->
-					<li class="">
-						<div class="photo_bg">
-							<img class="profile_size_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
-							<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
-						</div>
-						<div class="grade">
-							<div class="icon_mentor current"></div>
-							<div class="icon_star"></div>
-							<div class="icon_heart"></div>
-						</div>
+					<li>
+						<a <%if(!seraInstance.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=seraInstance.getOwner().getId()%>" <%} %>>
+							<div class="photo_bg">
+								<img class="profile_size_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
+								<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
+							</div>
+							<div class="grade">
+								<div class="icon_mentor current"></div>
+								<div class="icon_star"></div>
+								<div class="icon_heart"></div>
+							</div>
+						</a>
 					</li>
 					<!-- photo//-->
 					<!-- comment -->
@@ -296,7 +298,7 @@
 								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
 									if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 									%>
-										<a href="sub_instances_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+										<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
 											<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글 모두보기</div>
 					            		</a>
 									<%
@@ -309,9 +311,11 @@
 									%>
 											<!-- Reply-->
 											<div class="reply_section">
-												<div class="photo">
-													<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
-												</div>
+												<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
+													<div class="photo">
+														<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+													</div>
+												</a>
 												<div class="reply_text">
 													<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 												</div>

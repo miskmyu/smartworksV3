@@ -15,6 +15,7 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.util.LocalDate;
 
 public interface ISeraService {
@@ -39,13 +40,15 @@ public interface ISeraService {
 
 	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
+	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
+
 	public abstract Course getCourseById(String courseId) throws Exception;
 
 	public abstract Mentor getMentorById(String mentorId) throws Exception;
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 	
-	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
@@ -58,4 +61,13 @@ public interface ISeraService {
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
+
+	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
+
+	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

@@ -47,4 +47,6 @@
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 
 /* Form Space */
-.form_space { margin-right:3px}
+.form_space {padding-right:3px;}
+.icon_space { padding-right:26px; position:relative;}
+.space_data {text-align:center; margin-right:5px; width:70px;}
