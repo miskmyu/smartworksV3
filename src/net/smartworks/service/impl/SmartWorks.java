@@ -1057,4 +1057,18 @@ public class SmartWorks implements ISmartWorks {
 	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCoursesByType(courseType, fromDate, maxList);
 	}
+
+	@Override
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.addLikeToInstance(requestBody, request);
+	}
+
+	@Override
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeLikeToInstance(requestBody, request);
+	}
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
+		return seraService.getSubInstancesByRefId(refId, maxSize);
+	}
+
 }

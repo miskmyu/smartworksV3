@@ -15,7 +15,14 @@ public class WorkInstanceInfo extends InstanceInfo {
 	private int lastTaskCount = -1;
 	private int subInstanceCount;
 	private InstanceInfo[] subInstances;
+	private int likes;
 
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 	public TaskInstanceInfo getLastTask() {
 		return lastTask;
 	}

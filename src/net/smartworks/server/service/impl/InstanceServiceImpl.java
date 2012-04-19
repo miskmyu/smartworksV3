@@ -5573,4 +5573,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	public String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "save");
 	}
+	@Override
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+	@Override
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
 }

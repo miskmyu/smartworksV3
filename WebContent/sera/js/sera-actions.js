@@ -29,59 +29,37 @@ $(function() {
 			$(subMenus[pos]).show();
 			subMenu.show();
 		}
+		var url = "";
+		var target = '.js_course_content';
 		if(pos==0){
-			$.ajax({
-				url : "courseInstanceList.sw",
-				data : {courseId : courseId},
-				success : function(data, status, jqXHR) {
-					$('.js_course_content').html(data);
-				}
-			});
+			url = "courseHome.sw";
+			target = "#sera_content";
 		}else if(pos==1){
-			$.ajax({
-				url : "courseMissionList.sw",
-				data : {courseId : courseId},
-				success : function(data, status, jqXHR) {
-					$('.js_course_content').html(data);
-				}
-			});
+			url = "courseMissionList.sw";
 		}else if(pos==2){
-			$.ajax({
-				url : "courseBoard.sw",
-				data : {courseId : courseId},
-				success : function(data, status, jqXHR) {
-					$('.js_course_content').html(data);
-				}
-			});
+			url = "courseBoard.sw";
 		}else if(pos==3){
-			$.ajax({
-				url : "courseTeamCreate.sw",
-				data : {courseId : courseId},
-				success : function(data, status, jqXHR) {
-					$('.js_course_content').html(data);
-				}
-			});
+			url = "courseTeamCreate.sw";
 		}else if(pos==4){
+			url = "courseGeneral.sw";
+		}else if(pos==5){
+			url = "courseSetting.sw";
+		}
+		if(pos!=5 || (pos==5 && isEmpty($(subMenus[pos]).children()))){
+			smartPop.progressCenter();				
 			$.ajax({
-				url : "courseGeneral.sw",
+				url : url,
 				data : {courseId : courseId},
 				success : function(data, status, jqXHR) {
-					$('.js_course_content').html(data);
+					$(target).html(data);
+					smartPop.closeProgress();
+				},
+				error : function(){
+					smartPop.closeProgress();
 				}
 			});
-		}else if(pos==5){
-			if(isEmpty($(subMenus[pos]).children())){
-				$.ajax({
-					url : "courseSetting.sw",
-					data : {courseId : courseId},
-					success : function(data, status, jqXHR) {
-						$('.js_course_content').html(data);
-					}
-				});
-				
-			}else{
-				$('.js_course_setting_menu li.js_course_setting_profile a').click();
-			}
+		}else{
+			$('.js_course_setting_menu li.js_course_setting_profile a').click();			
 		}
 		return false;
 	});
@@ -94,54 +72,29 @@ $(function() {
 		var courseId = courseHome.attr('courseId');
 		var url ="";
 		if(input.hasClass('js_course_setting_profile')){
-			url = "courseSettingProfile.sw";
+			url = "courseSettingProfile.sw";		
+		}else if(input.hasClass('js_create_mission')){
+			url = "courseMissionCreate.sw";
 		}else if(input.hasClass('js_course_setting_mentee')){
 			url = "courseSettingMentee.sw";
 		}else if(input.hasClass('js_course_setting_team')){
 			url = "courseSettingTeam.sw";
 		}
+		smartPop.progressCenter();
 		$.ajax({
 			url : url,
 			data : {courseId : courseId},
 			success : function(data, status, jqXHR) {
 				$('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
 	});
 
-	$('.js_create_mission').live('click', function(e){
-		var input = $(e.target).parent();
-		var courseHome = input.parents('.js_course_home_page');
-		var courseId = courseHome.attr('courseId');
-		$.ajax({
-			url : "courseMissionCreate.sw",
-			data : {
-				courseId : courseId
-			},
-			success : function(data, status, jqXHR) {
-				$('.js_course_content').html(data);
-			}
-		});
-		return false;
-	});
-	
-	$('.js_create_team').live('click', function(e){
-		var input = $(e.target).parent();
-		var courseHome = input.parents('.js_course_home_page');
-		var courseId = courseHome.attr('courseId');
-		$.ajax({
-			url : "courseTeamCreate.sw",
-			data : {
-				courseId : courseId
-			},
-			success : function(data, status, jqXHR) {
-				$('.js_course_content').html(data);
-			}
-		});
-		return false;
-	});
-	
 	$('.js_course_mission_menu').live('click', function(e){
 		var input = $(e.target).parent();
 		input.siblings().removeClass('current');
@@ -159,11 +112,16 @@ $(function() {
 		}else if(input.hasClass('js_course_mission_mine')){
 			url = "courseMissionMine.sw";
 		}
+		smartPop.progressCenter();				
 		$.ajax({
 			url : url,
 			data : {courseId : courseId},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -176,6 +134,7 @@ $(function() {
 		var userId = input.attr('userId');
 		var courseInstanceList = input.parents('.js_course_instance_list_page');
 		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {
@@ -184,6 +143,10 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -195,6 +158,7 @@ $(function() {
 		input.addClass('current');
 		var courseInstanceList = input.parents('.js_course_instance_list_page');
 		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {
@@ -202,6 +166,10 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -249,6 +217,59 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_remove_course_btn').live('click', function(e){
+		var input = $(e.target);
+		var courseId = input.parents('.js_setting_profile_page').attr('courseId');
+		var paramsJson = {};
+		paramsJson['courseId'] = courseId;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
+		$.ajax({
+			url : "remove_course.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				document.location.href = "myPAGE.sw";									
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
+				});
+			}
+			
+		});
+		
+		return false;
+	});
+	
+	$('.js_modify_course_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_modify_course_btn');
+		var settingProfile = input.parents('.js_setting_profile_page');
+		if(settingProfile.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
+			settingProfile.find('input[name="txtCourseStartDate"]').addClass('required');
+			settingProfile.find('input[name="txtCourseEndDate"]').addClass('required');
+			settingProfile.find('input[name="txtCourseDays"]').removeClass('required').removeClass('error');			
+			
+		}else{
+			settingProfile.find('input[name="txtCourseStartDate"]').removeClass('required').removeClass('error');
+			settingProfile.find('input[name="txtCourseEndDate"]').removeClass('required').removeClass('error');
+			settingProfile.find('input[name="txtCourseDays"]').addClass('required');			
+		}
+		
+		if(settingProfile.find('input[name="chkCourseUsers"]:checked').attr('value')==='userInput'){
+			settingProfile.find('input[name="txtCourseUsers"]').addClass('required');
+			
+		}else{
+			settingProfile.find('input[name="txtCourseUsers"]').removeClass('required').removeClass('error');
+		}
+		
+		submitForms(e);
+		return false;
+	});
+	
 	$('.js_back_to_create_btn').live('click', function(e){
 		var input = $(e.target).parents('.js_back_to_create_btn');		
 		input.parents('.js_mentor_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
@@ -263,12 +284,14 @@ $(function() {
 		var paramsJson = {};
 		paramsJson["courseId"] = input.parents('.js_course_content').attr('courseId');
 		paramsJson["userId"] = currentUserId;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'join_group_request.sw',
 			contentType : 'application/json',
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
 				if(input.attr('autoApproval')==="true")
 					smartPop.showInfo(smartPop.INFO, "코스가입 정상적으로 처리되었습니다. 코스에 방문하시면 미션들을 수행할 수 있습니다.");
 				else
@@ -276,39 +299,8 @@ $(function() {
 				input.remove();
 			},
 			error : function(){
+				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, "코스가입하기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
-			}
-		});
-		return false;
-	});
-	
-	$('.js_prev_month_mission').live('click', function(e){
-		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_list_page');
-		$.ajax({
-			url : 'courseMissionSpace.sw',
-			data : {
-				courseId : missionCreate.attr('courseId'),
-				today : missionCreate.attr('prevMonth')
-			},
-			success : function(data, status, jqXHR) {
-				$('.js_course_content').html(data);
-			}
-		});
-		return false;
-	});
-	
-	$('.js_next_month_mission').live('click', function(e){
-		var input = $(e.target);
-		var missionCreate = input.parents('.js_mission_list_page');
-		$.ajax({
-			url : 'courseMissionSpace.sw',
-			data : {
-				courseId : missionCreate.attr('courseId'),
-				today : missionCreate.attr('nextMonth')
-			},
-			success : function(data, status, jqXHR) {
-				$('.js_course_content').html(data);
 			}
 		});
 		return false;
@@ -319,6 +311,7 @@ $(function() {
 		var missionList = input.parents('.js_mission_list_page');
 		var courseId = missionList.attr('courseId');
 		var missionId = input.attr('missionId');
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'courseMissionPerform.sw',
 			data : {
@@ -327,6 +320,10 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -394,6 +391,7 @@ $(function() {
 		url = "add_comment_on_instance.sw";
 		paramsJson['comment'] = comment;
 		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
 		$.ajax({
 			url : url,
 			contentType : 'application/json',
@@ -411,12 +409,13 @@ $(function() {
 					target.append(newComment);
 					input.attr('value', '');
 				}
+				smartPop.closeProgress();
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, "댓글달기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});
-				
 			}
 			
 		});
@@ -427,6 +426,7 @@ $(function() {
 		var input = $(e.target).parents('.js_show_all_sera_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
+		smartPop.progressCenter();				
 		$.ajax({
 			url : href,
 			data : {},
@@ -435,12 +435,13 @@ $(function() {
 				target.find(':visible').remove();
 				target.append(data);
 				input.remove();
+				smartPop.closeProgress();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, "댓글 모두보기에 오류가 발생하였습니다. 담당자에게 연락하시기 바랍니다.", function(){
 				});
-				
 			}
 			
 		});
@@ -449,14 +450,47 @@ $(function() {
 	
 	$('a.js_add_sera_comment').live('click', function(e){
 		var input = $(e.target).removeAttr('href');
-		console.log('input=', input);
 		input.parents('.js_sub_instance_list').find('.js_return_on_sera_comment').show();
 		return false;
 	});
 
 	$('a.js_add_sera_like').live('click', function(e){
 		var input = $(e.target).removeAttr('href');
-		
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var	workInstanceId = subInstanceList.attr('instanceId');
+		var	workType = subInstanceList.attr('workType');
+		var paramsJson = {};
+		paramsJson['workType'] = parseInt(workType);
+		paramsJson['workInstanceId'] = workInstanceId;
+		url = "add_like_to_instance.sw";
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+//				var target = subInstanceList.find('.js_comment_list');
+//				var showAllComments = target.find('.js_show_all_sera_comments');
+//				if(!isEmpty(showAllComments)){
+//					showAllComments.find('div').click();
+//					input.attr('value', '');
+//				}else{
+//					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+//					newComment.find('.js_comment_content').html(comment);
+//					target.append(newComment);
+//					input.attr('value', '');
+//				}
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "좋아요 추가에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});
+			}			
+		});
 	});
 	
 	$('.js_accept_friend_btn').live('click', function(e){
@@ -467,6 +501,7 @@ $(function() {
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
 		paramsJson['accepted'] = true;		
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'reply_friend_request.sw',
 			contentType : 'application/json',
@@ -480,8 +515,10 @@ $(function() {
 					requesterCount.html('(' + (count) + ')');
 					requesterCount.attr('count', count);
 				}
+				smartPop.closeProgress();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, "친구요청 수락에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});	
@@ -497,6 +534,7 @@ $(function() {
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
 		paramsJson['accepted'] = false;		
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'reply_friend_request.sw',
 			contentType : 'application/json',
@@ -510,8 +548,10 @@ $(function() {
 					requesterCount.html('(' + (count) + ')');
 					requesterCount.attr('count', count);
 				}
+				smartPop.closeProgress();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, "친구요청 나중에확인에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});				
@@ -526,6 +566,7 @@ $(function() {
 		var userId = friend.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'destroy_friendship.sw',
 			contentType : 'application/json',
@@ -538,8 +579,10 @@ $(function() {
 					count = parseInt(count)-1;
 					friendCount.html(count);
 				}
+				smartPop.closeProgress();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, "친구끊기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});				
@@ -552,17 +595,20 @@ $(function() {
 		var userId = input.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'friend_request.sw',
 			contentType : 'application/json',
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFORM, "친구요청이 성공적으로 이루어 졌습니다.", function(){
 				});				
 				input.remove();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, "친구요청에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});				
@@ -573,6 +619,7 @@ $(function() {
 	$('.js_select_course_btn').live('click', function(e) {
 		var input = $(e.target).parents('.js_select_course_btn');
 		var courseType = input.attr('courseType');
+		smartPop.progressCenter();				
 		$.ajax({
 			url : "course_by_type.sw",
 			data : {
@@ -583,8 +630,10 @@ $(function() {
 				target.html(data);
 				input.siblings().removeClass('selected');
 				input.addClass('selected');
+				smartPop.closeProgress();
 			},
 			error : function(e) {
+				smartPop.closeProgress();
 			}			
 		});
 		return false;

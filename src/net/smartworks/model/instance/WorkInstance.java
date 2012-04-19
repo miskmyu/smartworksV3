@@ -24,8 +24,15 @@ public class WorkInstance extends Instance {
 	public static final int FETCH_ALL_SUB_INSTANCE = -1; 
 	
 	private TaskInstanceInfo[] tasks;
-	private int numberOfSubInstances; 
+	private int numberOfSubInstances;
+	private int likes;
 	
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 	public TaskInstanceInfo[] getTasks() {
 		return tasks;
 	}

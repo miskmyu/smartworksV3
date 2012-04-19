@@ -249,6 +249,26 @@ public class SeraController {
 		return map;
 	}
 
+	@RequestMapping(value = "/set_course_profile", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> setCourseProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/remove_course", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> removeCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "myPAGE.sw");
+		return map;
+	}
+
 	@RequestMapping(value = "/create_new_mission", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

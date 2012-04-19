@@ -114,4 +114,8 @@ public interface IInstanceService {
 
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }
