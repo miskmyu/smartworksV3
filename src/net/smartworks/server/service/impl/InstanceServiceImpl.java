@@ -5574,13 +5574,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		return executeTask(requestBody, request, "save");
 	}
 	@Override
-	public void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 	}
 	@Override
-	public void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 	}
 }

@@ -1059,12 +1059,16 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.addLinkToInstance(requestBody, request);
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.addLikeToInstance(requestBody, request);
 	}
 
 	@Override
-	public void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.removeLinkToInstance(requestBody, request);
+	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeLikeToInstance(requestBody, request);
 	}
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
+		return seraService.getSubInstancesByRefId(refId, maxSize);
+	}
+
 }

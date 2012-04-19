@@ -434,9 +434,9 @@ public interface ISmartWorks {
 
 	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void addLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeLinkToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
@@ -493,5 +493,7 @@ public interface ISmartWorks {
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
 
 	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
 
 }

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
@@ -69,5 +69,7 @@ public interface ISeraService {
 	public abstract void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
 
 }

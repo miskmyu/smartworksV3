@@ -453,13 +453,13 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/add_like_to_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void addLikeToInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.addLinkToInstance(requestBody, request);
+		smartworks.addLikeToInstance(requestBody, request);
 	}
 
 	@RequestMapping(value = "/remove_like_to_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void removeLikeToInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeLinkToInstance(requestBody, request);
+		smartworks.removeLikeToInstance(requestBody, request);
 	}
 
 }
