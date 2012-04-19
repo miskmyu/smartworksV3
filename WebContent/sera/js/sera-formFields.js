@@ -4,12 +4,15 @@ function loadCreateCourseFields() {
 	if(!isEmpty(courseProfileField)) {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseProfileField.html(gridRow);
+		var imgSrc = courseProfileField.attr('imgSrc');
+		if(isEmpty(imgSrc)) imgSrc =	"sera/images/default_img_course.gif";
+		
 
 		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
 			container: gridRow,
 			fieldId: "imgCourseProfile",
 			fieldName: "course profile",
-			imgSource: "sera/images/default_img_course.gif",
+			imgSource: imgSrc,
 			columns: 1,
 			pictureWidth: 110,
 			pictureHeight: 110,
@@ -26,7 +29,9 @@ function loadCreateCourseFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseStartDateField.html(gridRow);
 
-		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		var startDateStr = courseStartDateField.attr('openDate');
+		if(isEmpty(startDateStr)) startDateStr = (new Date()).format('yyyy.mm.dd');
+
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtCourseStartDate",
@@ -45,12 +50,13 @@ function loadCreateCourseFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseEndDateField.html(gridRow);
-
+		var endDateStr = courseEndDateField.attr('closeDate');
+		if(isEmpty(endDateStr)) endDateStr = "";
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtCourseEndDate",
 			fieldName: "course end date",
-			value: "",
+			value: endDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: false

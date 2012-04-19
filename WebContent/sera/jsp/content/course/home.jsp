@@ -72,9 +72,7 @@
 	</div>
 	<div class="course_menu js_course_main_menu">
 		<div class="btn_green_l mt8 fl">
-			<div class="btn_green_r">
-				<span class="icon_green_down mr5"></span>친구초대
-			</div>
+			<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티초대</div>
 		</div>
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
