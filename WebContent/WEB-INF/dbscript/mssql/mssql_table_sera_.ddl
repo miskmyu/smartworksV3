@@ -196,9 +196,13 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 
 CREATE TABLE Friends (
 	objId varchar(50) NOT NULL,
-	userId varchar(50),
-	friendId varchar(50),
-	friendName varchar(50),
+	requestId varchar(50),
+	requestName varchar(50),
+	receiveId varchar(50),
+	receiveName varchar(50),
+	acceptStatus int,
+	requestDate datetime,
+	replyDate datetime,
 	primary key (objId)
 );
 

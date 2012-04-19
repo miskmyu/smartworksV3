@@ -54,16 +54,15 @@ public class AccessPolicy {
 	
 	public boolean isAccessableForMe(String ownerId, String modifierId) throws Exception {
 
-		if(this.level == AccessPolicy.LEVEL_PRIVATE) {
-			if(!CommonUtil.isEmpty(ownerId)) {
-				if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
-					return true;
-			}
-			if(!CommonUtil.isEmpty(modifierId)) {
-				if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
-					return true;
-			}
-		} else if(this.level == AccessPolicy.LEVEL_PUBLIC) {
+		if(!CommonUtil.isEmpty(ownerId)) {
+			if(ownerId.equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		if(!CommonUtil.isEmpty(modifierId)) {
+			if(modifierId.equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		if(this.level == AccessPolicy.LEVEL_PUBLIC) {
 			return true;
 		} else if(this.level == AccessPolicy.LEVEL_CUSTOM) {
 			if(SmartUtil.isBlankObject(communitiesToOpen)) return false;
