@@ -519,6 +519,7 @@ $(function() {
 				});
 			}			
 		});
+		return false;
 	});
 	
 	$('a.js_remove_sera_like').live('click', function(e){
@@ -559,6 +560,7 @@ $(function() {
 				});
 			}			
 		});
+		return false;
 	});
 	
 	$('.js_accept_friend_btn').live('click', function(e){
@@ -592,6 +594,7 @@ $(function() {
 				});	
 			}			
 		});
+		return false;
 	});
 
 	$('.js_deny_friend_btn').live('click', function(e){
@@ -625,6 +628,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_destroy_friendship_btn').live('click', function(e){
@@ -656,6 +660,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_friend_request_btn').live('click', function(e){
@@ -682,6 +687,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_select_course_btn').live('click', function(e) {
