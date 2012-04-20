@@ -24,7 +24,7 @@ public class Like extends MisObject {
 	private static final long serialVersionUID = 1L;
 	private static Log logger = LogFactory.getLog(Like.class);
 
-	protected static final String PREFIX = "Like";
+	protected static final String PREFIX = "";
 	private static final String NAME = CommonUtil.toName(Like.class, PREFIX);
 
 	public static final String A_REFTYPE = "refType";

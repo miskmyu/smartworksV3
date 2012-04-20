@@ -61,7 +61,6 @@ import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartDiagram;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
-import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.model.work.info.FileCategoryInfo;
@@ -112,6 +111,9 @@ import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.infowork.form.model.SwfFormat;
+import net.smartworks.server.engine.like.manager.ILikeManager;
+import net.smartworks.server.engine.like.model.Like;
+import net.smartworks.server.engine.like.model.LikeCond;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -149,7 +151,6 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
-import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
@@ -157,8 +158,6 @@ import net.smartworks.util.SmartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.IntArrayData;
 
 import commonj.sdo.Sequence;
 
@@ -251,6 +250,26 @@ public class ModelConverter {
 		return new WorkSpace(workSpaceId, null);
 	}
 	// #########################################  INFO  ########################################################################
+	
+	public static String[] getLikersUserIdArray(String userId, int refType, String refId) throws Exception {
+		if ( CommonUtil.isEmpty(refType) || CommonUtil.isEmpty(refId))
+			return null;
+		ILikeManager likeMgr = SwManagerFactory.getInstance().getLikeManager();
+		LikeCond cond = new LikeCond();
+		//cond.setRefType(refType);
+		cond.setRefId(refId);
+		Like[] likes = likeMgr.getLikes(userId, cond, IManager.LEVEL_ALL);
+		if (likes == null || likes.length == 0)
+			return null;
+		String[] likesArray = new String[likes.length];
+		for (int i = 0; i < likes.length; i++) {
+			Like like = likes[i];
+			String createUserId = like.getCreationUser();
+			likesArray[i] = createUserId;
+		}
+		return likesArray;
+	}
+	
 	
 	public static WorkSpaceInfo getWorkSpaceInfo(String workSpaceType, String workSpaceId) throws Exception {
 		if(CommonUtil.isEmpty(workSpaceType) || CommonUtil.isEmpty(workSpaceId))

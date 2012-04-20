@@ -518,8 +518,11 @@ public class SeraServiceImpl implements ISeraService {
 			if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordsLength = swdRecords.length;
 				for(int i = 0; i < swdRecordsLength; i++) {
-					MissionInstanceInfo missionInstanceInfo = new MissionInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
+					MissionInstanceInfo missionInstanceInfo = new MissionInstanceInfo();
+
+					missionInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_SERA_MISSION, swdRecord.getRecordId()));
+					
 					String creationUser = swdRecord.getCreationUser();
 					Date creationDate = swdRecord.getCreationDate();
 					String modificationUser = swdRecord.getModificationUser();
@@ -538,8 +541,6 @@ public class SeraServiceImpl implements ISeraService {
 					missionInstanceInfo.setCreatedDate(createdDate);
 					missionInstanceInfo.setLastModifier(lastModifier);
 					missionInstanceInfo.setLastModifiedDate(lastModifiedDate);
-					int type = WorkInstance.TYPE_INFORMATION;
-					missionInstanceInfo.setType(type);
 					missionInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
 					String workSpaceId = swdRecord.getWorkSpaceId();
 					if(CommonUtil.isEmpty(workSpaceId))
@@ -569,7 +570,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 		
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, missionInstanceInfo.getType(), groupInfo, categoryInfo);
 	
 					missionInstanceInfo.setWork(workInfo);
 					//missionInstanceInfo.setViews(swdRecord.getHits());
@@ -1583,6 +1584,9 @@ public class SeraServiceImpl implements ISeraService {
 					SwdRecord swdRecord = swdRecords[i];
 					String recordId = swdRecord.getRecordId();
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
+					
+					boardInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_BOARD, swdRecord.getRecordId()));
+					
 					boardInstanceInfo.setId(recordId);
 					boardInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
 					boardInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
@@ -1703,8 +1707,10 @@ public class SeraServiceImpl implements ISeraService {
 			EventInstanceInfo[] eventInstanceInfos = null;
 			if(swdRecords != null) {
 				for(int i=0; i < swdRecords.length; i++) {
-					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
+					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
+					eventInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_EVENT, swdRecord.getRecordId()));
+					
 					String recordId = swdRecord.getRecordId();
 					eventInstanceInfo.setId(recordId);
 					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
@@ -2323,8 +2329,11 @@ public class SeraServiceImpl implements ISeraService {
 			NoteInstanceInfo[] noteInstanceInfos = null;
 			if(swdRecords != null) {
 				for(int i=0; i < swdRecords.length; i++) {
-					NoteInstanceInfo noteInstanceInfo = new NoteInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
+					NoteInstanceInfo noteInstanceInfo = new NoteInstanceInfo();
+
+					noteInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_SERA_NOTE, swdRecord.getRecordId()));
+					
 					String recordId = swdRecord.getRecordId();
 					noteInstanceInfo.setId(recordId);
 					noteInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
@@ -2481,8 +2490,11 @@ public class SeraServiceImpl implements ISeraService {
 			MissionReportInstanceInfo[] missionReportInstanceInfos = null;
 			if(swdRecords != null) {
 				for(int i=0; i < swdRecords.length; i++) {
-					MissionReportInstanceInfo missionReportInstanceInfo = new MissionReportInstanceInfo();
 					SwdRecord swdRecord = swdRecords[i];
+					MissionReportInstanceInfo missionReportInstanceInfo = new MissionReportInstanceInfo();
+
+					missionReportInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_SERA_MISSION_REPORT, swdRecord.getRecordId()));
+					
 					String recordId = swdRecord.getRecordId();
 					missionReportInstanceInfo.setId(recordId);
 					missionReportInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));

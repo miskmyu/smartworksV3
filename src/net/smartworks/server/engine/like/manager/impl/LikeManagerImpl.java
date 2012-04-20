@@ -64,9 +64,8 @@ public class LikeManagerImpl extends AbstractManager implements ILikeManager {
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
 		}
-		buf.append(" from Opinion obj");
+		buf.append(" from Like obj");
 		buf.append(" where obj.objId is not null");
-		//TODO 시간 검색에 대한 확인 필요
 		if (cond != null) {
 			if (objId != null) 
 				buf.append(" and obj.objId = :objId");
