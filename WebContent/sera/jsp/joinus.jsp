@@ -205,7 +205,7 @@
 									<td>
 										<div class="form_label">회원ID</div>
 										<div class="form_value">
-											<input name="txtUserId" type="text" class="fieldline fl required email" style="width:150px" value=" "/>
+											<input name="txtUserId" type="text" class="fieldline fl required email" style="width:150px" value=""/>
 											<div class="btn_mid_l ml5 js_check_iddup_btn"><div class="btn_mid_r">중복확인</div></div>
 											<div class="btn_mid_l ml5 js_change_id_btn" style="display:none"><div class="btn_mid_r">아이디변경</div></div>
 										</div>
@@ -221,7 +221,7 @@
 									<td>
 										<div class="form_label">닉네임*</div>
 										<div class="form_value">
-											<input name="txtNickName" type="text" class="fieldline" style="width:150px" value=" "/>
+											<input name="txtNickName" type="text" class="fieldline" style="width:150px" value=""/>
 											<div class="t_refe mt5">
 												* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.<br /> * 닉네임은 추후 프로필 수정에서 입력
 												혹은 변경 가능합니다.
