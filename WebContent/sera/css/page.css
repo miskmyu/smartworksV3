@@ -1,5 +1,5 @@
 #wrap {position: relative; width: 100%}
-.main_bg {background-color:#f4f4f4}
+.main_bg {background-color:#f4f4f4; margin: 0 auto}
 #sera_header {background: url("../images/top_bg.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
 #sera_header .top {background: url("../images/sub_top.gif") no-repeat scroll 0 0 transparent; clear: both; height: 45px; margin: 0 auto; position: relative; width: 1004px}
 #sera_header .top h1 {float: left; font-size: 0; height: 30px; margin: 7px 5px 0 25px; width: 158px}
@@ -242,8 +242,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
 .icon_date {background: url("../images/icon.png") no-repeat scroll -165px -74px; height:15px; display:block; padding:0 0 0 20px; color:#666666; margin-top:5px}
-.icon_like {background: url("../images/icon.png") no-repeat scroll -165px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}
-.icon_reply {background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}
+.icon_like {background: url("../images/icon.png") no-repeat scroll -162px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}
+.icon_reply {background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px}
 .icon_answer a {color:#608eba !important}
 
 .icon_sm_notes, .icon_sm_notes a {color:#006699 !important; font-weight:bold; background: url("../images/icon.png") no-repeat scroll -165px -157px; height:15px;  padding-left:19px}
@@ -541,7 +541,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Join Member Section */
 #join_section {background: url("../images/function_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; padding: 0; position: relative; width: 980px; overflow:hidden; background-color:#FFF}
-.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 980px;}
+.logo_srch {clear: both; height: 36px; margin: 10px auto; width: 980px; position: relative}
 .logo_srch .logo {float: left; height: 36px; width: 201px}
 .logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 279px; border:none}
 .icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
