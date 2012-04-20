@@ -88,7 +88,7 @@ public class User extends WorkSpace {
 		this.userLevel = userLevel;
 	}
 	public String getLongName() {
-		if(!position.equals("")) return position + " " + super.getName();
+		if(position != null && !position.equals("")) return position + " " + super.getName();
 		else return super.getName();
 	}
 	public String getPosition() {

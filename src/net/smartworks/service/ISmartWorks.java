@@ -498,4 +498,5 @@ public interface ISmartWorks {
 	
 	public abstract String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }

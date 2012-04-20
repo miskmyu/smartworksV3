@@ -2957,12 +2957,12 @@ public class SeraServiceImpl implements ISeraService {
 	    return courses;
 	}
 	
-	public String removeSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
-		Map<String, Object> frmCreateSeraUserMap = (Map<String, Object>)requestBody.get("frmCreateSeraUser");
+		String userId = (String)requestBody.get("userId");
+		if (CommonUtil.isEmpty(userId))
+			return null;
 		
-		String userId = "";
-
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		swoMgr.removeUser(userId, userId);
 		
