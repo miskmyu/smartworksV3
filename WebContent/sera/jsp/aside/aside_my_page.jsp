@@ -113,7 +113,7 @@
 					for(int i=0; i<friendList.getFriends().length; i++){
 						SeraUserInfo friend = friendList.getFriends()[i];
 				%>
-					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>"></dd></a>
+					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>" title="<%=friend.getNickName()%>"></dd></a>
 				<%
 					}
 				}

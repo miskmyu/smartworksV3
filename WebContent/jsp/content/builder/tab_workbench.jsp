@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -15,7 +16,19 @@
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	
 	SmartWork work = (SmartWork) smartWorks.getWorkById(workId);
-	boolean isEditable = (!work.isRunning() && !work.isEditing()); 
+	boolean isEditable = (!work.isRunning() && !work.isEditing());
+	String iconClass = "";
+	switch(work.getType()){
+	case SmartWork.TYPE_INFORMATION:
+		iconClass = "body_titl_iworks";
+		break;
+	case SmartWork.TYPE_PROCESS:
+		iconClass = "body_titl_pworks";
+		break;
+	case SmartWork.TYPE_SCHEDULE:
+		iconClass = "body_titl_sworks";
+		break;
+	}
 	
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
@@ -32,7 +45,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_iworks title"><%=work.getName() %></div>
+				<div class="<%=iconClass %> title"><%=work.getName() %></div>
 				<span class="t_location"><%=work.getFullpathName() %></span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
