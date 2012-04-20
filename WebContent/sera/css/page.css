@@ -242,9 +242,10 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
 .icon_date {background: url("../images/icon.png") no-repeat scroll -165px -74px; height:15px; display:block; padding:0 0 0 20px; color:#666666; margin-top:5px}
-.icon_like {background: url("../images/icon.png") no-repeat scroll -162px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}
-.icon_reply {background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px}
+.icon_like {} /*background: url("../images/icon.png") no-repeat scroll -162px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}*/
+.icon_reply {} /*background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px*/
 .icon_answer a {color:#608eba !important}
+.icon_link {background: url("../images/icon_link.gif") no-repeat 0 0; width:16px; height:16px; display:inline-block}
 
 .icon_sm_notes, .icon_sm_notes a {color:#006699 !important; font-weight:bold; background: url("../images/icon.png") no-repeat scroll -165px -157px; height:15px;  padding-left:19px}
 .icon_open a { background: url("../images/icon.png") no-repeat scroll -166px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
@@ -334,10 +335,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .content .name { color:#000000}
-.panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
+.panel_block .text { float:left; margin-right:10px} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
-.panel_block .thum_image {width:120px; height:66px; float:right}
+.panel_block .thum_image {width:200px; float:right}
+.panel_block .thum_image img, .panel_block .thum_image_size {width:100%}
 .panel_block .detail_image {width:540px; border:1px solid #cccccc; height:auto; clear:both}
+.panel_block .detail_image_size {width:540px}
 .panel_block dl.bor {border-bottom:1px solid #cccccc}
 .panel_block dl.bor_no { border-bottom:none}
 

@@ -152,7 +152,7 @@
 										if(!SmartUtil.isBlankObject(seraNote.getImageSrc())){ 
 										%>
 											<div class="thum_image">
-												<img src="<%=seraNote.getImageSrc() %>" />
+												<img class="thum_image_size" src="<%=seraNote.getImageSrc() %>" />
 											</div>
 										<%
 										} 
@@ -181,8 +181,8 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
 										%>
-											<div class="thum_image">
-												<object class="thum_image">
+											<div class="cb thum_image mt3">
+												<object class="thum_image_size">
 													<param name="movie"
 														value="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
 													<param name="allowScriptAccess" value="always"></param>
@@ -190,7 +190,7 @@
 													<embed
 														src="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"
 														type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
-														class="thum_image"></embed>
+														class="thum_image_size"></embed>
 												</object>
 											</div>
 										<%
@@ -217,7 +217,7 @@
 										if(!SmartUtil.isBlankObject(seraReport.getImageSrc())){ 
 										%>
 											<div class="thum_image">
-												<img src="<%=seraReport.getImageSrc() %>" />
+												<img class="thum_image_size" src="<%=seraReport.getImageSrc() %>" />
 											</div>
 										<%
 										} 
@@ -237,7 +237,7 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
 										%>
-											<a target="_blank" href="<%=seraReport.getLinkUrl()%>"><%=seraReport.getLinkUrl() %></a>
+											<span class="icon_link mr3"></span><a target="_blank" href="<%=seraReport.getLinkUrl()%>"><%=seraReport.getLinkUrl() %></a>
 										<%
 										} 
 										%>
@@ -247,7 +247,7 @@
 										if(!SmartUtil.isBlankObject(seraReport.getVideoId())){
 										%>
 											<div class="thum_image">
-												<object class="thum_image">
+												<object class="thum_image_size">
 													<param name="movie"
 														value="https://www.youtube.com/v/<%=seraReport.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
 													<param name="allowScriptAccess" value="always"></param>
@@ -255,7 +255,7 @@
 													<embed
 														src="https://www.youtube.com/v/<%=seraReport.getVideoId() %>?version=3&autohide=1&showinfo=0"
 														type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true"
-														class="thum_image"></embed>
+														class="thum_image_size"></embed>
 												</object>
 											</div>
 										<%

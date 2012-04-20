@@ -1071,4 +1071,13 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.getSubInstancesByRefId(refId, maxSize);
 	}
 
+	@Override
+	public String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createSeraUser(requestBody, request);
+	}
+	@Override
+	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.leaveSeraUser(requestBody, request);
+	}
+
 }

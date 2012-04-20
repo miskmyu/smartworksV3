@@ -219,6 +219,8 @@ CREATE TABLE SeraUserDetail (
 	twPassword varchar(100),
 	fbUserId varchar(50),
 	fbPassword varchar(100),
+	nickName varchar(100),
+	challengingTarget varchar(500),
 	primary key (userId)
 );
 
@@ -558,5 +560,7 @@ VALUES ('402880eb36b5fe8c0136b60260030002', 'pkg_8fc9ed30a64b467eb89fd35097cc621
 -------------------------------------------------------------------------------
 ALTER TABLE coursedetail add createDate datetime;
 ALTER TABLE coursedetail add coursePoint int;
+ALTER TABLE SeraUserDetail add nickName varchar(100);
+ALTER TABLE SeraUserDetail add challengingTarget varchar(500);
 
 
