@@ -133,7 +133,7 @@ a.b_prev:hover { background-position:0 -535px}
 a.b_next:hover { background-position:-30px -535px}
 .icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px}
 .icon_mission.current { background-position:0 -579px}
-.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; height:11px; display:block; float:left; padding:0 0 0 5px}
+.icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; height:11px; display:block; float:left; padding:0 0 0 14px}
 .icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
 
 /* Section Center - UI삭제후 미사용 */
@@ -245,7 +245,7 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_like {} /*background: url("../images/icon.png") no-repeat scroll -162px -96px; height:12px; display: inline-block; height:12px; width:15px; margin-right:3px}*/
 .icon_reply {} /*background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px*/
 .icon_answer a {color:#608eba !important}
-.icon_link {background: url("../images/icon_link.gif") no-repeat 0 0; width:16px; height:16px; display:inline-block}
+.icon_link_s {background: url("../images/icon_link.gif") no-repeat 0 0; height:16px; padding:0 0 0 20px; line-height:18px; float:left}
 
 .icon_sm_notes, .icon_sm_notes a {color:#006699 !important; font-weight:bold; background: url("../images/icon.png") no-repeat scroll -165px -157px; height:15px;  padding-left:19px}
 .icon_open a { background: url("../images/icon.png") no-repeat scroll -166px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
@@ -332,9 +332,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block { border:1px solid #cccccc; width:560px; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0}
 .panel_block dt { margin-bottom:5px; overflow:hidden}
 .panel_block .content {padding:10px; overflow:hidden}
+.panel_block .content dd { line-height:18px}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
-.panel_block .content .name { color:#000000}
+.panel_block .content .name { color:#000000; font-size:14px} /* Title Name */
 .panel_block .text { float:left; margin-right:10px} /* content txt */
 .panel_block .notes { width:100%} /* 쪽지 */
 .panel_block .thum_image {width:200px; float:right}
@@ -357,7 +358,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Event */
 .panel_block .event_info { width:70%; float:left}
 .panel_block .event_name {font-weight:bold; color:#333333}
-.panel_block .event_more_info {font-weight:bold; color:#0066cc}
+.panel_block .event_more_info {font-weight:bold; color:#398ade}
 
 /* Panel Radius Block */
 .panel_rds_block { border:1px solid #cccccc; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0; border-radius:5px}
@@ -473,6 +474,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .t_gray { color:#9a9a9a}
 .t_grayb { color:#9a9a9a; font-weight:bold}
 .t_gray2 { color:#666666}
+.t_link a {color:#788EB7}
+.t_link a:hover {color:#788EB7; text-decoration:underline}
 .tb { font-weight:bold}
 .t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999; line-height:17px}

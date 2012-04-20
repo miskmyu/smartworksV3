@@ -101,7 +101,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -118,7 +118,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -126,9 +126,13 @@
 									%>
 									<dd>
 										<div class="text">
-											<span><%=event.getSubject() %></span>
-											<span>시작:<%=event.getStart().toLocalString() %></span>
-											<%if(!SmartUtil.isBlankObject(event.getEnd())){ %><span>~종료:<%=event.getEnd().toLocalDateLongString() %></span><%} %>
+											<div class="name">[이벤트]<%=event.getSubject() %></div>
+											<div class="event_more_info">
+												<span>이벤트 기간 : <%=event.getStart().toLocalString() %></span>
+												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
+												<span>~<%=event.getEnd().toLocalDateLongString() %></span>
+												<div>이벤트 장소 : </div>
+											</div><%} %>
 										</div>
 										<div class="text"><%=event.getContent() %></div>
 									</dd>
@@ -139,7 +143,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -147,6 +151,26 @@
 									%>
 									<dd>
 										<div class="text"><%=seraNote.getContent() %></div>
+										<!-- URL information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getLinkUrl())){
+										%>
+											<div class="cb icon_link_s t_link"><a target="_blank" href="<%=seraNote.getLinkUrl()%>"><%=seraNote.getLinkUrl() %></a></div>
+										<%
+										} 
+										%>
+										<!-- URL information//-->
+										
+										<!-- File information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraNote.getFileList())){
+										%>
+											<div class="cb fl"><%=SmartUtil.getFilesDetailInfo(seraNote.getFileList()) %></div>
+										<%
+										} 
+										%>
+										<!-- File information//-->
+										
 										<!-- Thum Image-->
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getImageSrc())){ 
@@ -158,25 +182,6 @@
 										} 
 										%>
 										<!-- Thum Image//-->
-										<!-- File information -->
-										<%
-										if(!SmartUtil.isBlankObject(seraNote.getFileList())){
-										%>
-											<%=SmartUtil.getFilesDetailInfo(seraNote.getFileList()) %>
-										<%
-										} 
-										%>
-										<!-- File information//-->
-										
-										<!-- URL information -->
-										<%
-										if(!SmartUtil.isBlankObject(seraNote.getLinkUrl())){
-										%>
-											<a target="_blank" href="<%=seraNote.getLinkUrl()%>"><%=seraNote.getLinkUrl() %></a>
-										<%
-										} 
-										%>
-										<!-- URL information//-->
 										
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
@@ -204,7 +209,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 								%>								
 										<dt class="name">
-											<%=course.getName() %> <span class="t_redb"><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
+											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span> <span
 												class="icon_delete fr"><a href="">삭제</a> </span>
 										</dt>
 									<%
@@ -212,6 +217,26 @@
 									%>
 									<dd>
 										<div class="text"><%=seraReport.getContent() %></div>
+										<!-- URL information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
+										%>
+											<div class="cb icon_link_s t_link"><a target="_blank" href="<%=seraReport.getLinkUrl()%>"><%=seraReport.getLinkUrl() %></a></div>
+										<%
+										} 
+										%>
+										<!-- URL information//-->
+										
+										<!-- File information -->
+										<%
+										if(!SmartUtil.isBlankObject(seraReport.getFileList())){
+										%>
+											<div class="db fl"><%=SmartUtil.getFilesDetailInfo(seraReport.getFileList()) %></div>
+										<%
+										} 
+										%>
+										<!-- File information//-->
+										
 										<!-- Thum Image-->
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getImageSrc())){ 
@@ -223,25 +248,6 @@
 										} 
 										%>
 										<!-- Thum Image//-->
-										<!-- File information -->
-										<%
-										if(!SmartUtil.isBlankObject(seraReport.getFileList())){
-										%>
-											<%=SmartUtil.getFilesDetailInfo(seraReport.getFileList()) %>
-										<%
-										} 
-										%>
-										<!-- File information//-->
-										
-										<!-- URL information -->
-										<%
-										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
-										%>
-											<span class="icon_link mr3"></span><a target="_blank" href="<%=seraReport.getLinkUrl()%>"><%=seraReport.getLinkUrl() %></a>
-										<%
-										} 
-										%>
-										<!-- URL information//-->
 										
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getVideoId())){
