@@ -99,6 +99,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormat;
 import net.smartworks.server.engine.infowork.form.model.SwfMapping;
 import net.smartworks.server.engine.infowork.form.model.SwfMappings;
 import net.smartworks.server.engine.infowork.form.model.SwfOperand;
+import net.smartworks.server.engine.like.manager.ILikeManager;
+import net.smartworks.server.engine.like.model.Like;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
@@ -5575,8 +5577,40 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		/*{
+				workType=21, 
+				workInstanceId=dr_402880e336aa7f640136aa80552d0002
+		}*/
+		String workType = (String)requestBody.get("workType");
+		String workInstanceId = (String)requestBody.get("workInstanceId");
+
+		User cuser = SmartUtil.getCurrentUser();
+		String userId = null;
+		if (cuser != null)
+			userId = cuser.getId();
+		
+		if (CommonUtil.isEmpty(userId))
+			return;
+		
+		ILikeManager likeMgr = SwManagerFactory.getInstance().getLikeManager();
+		
+		Like like = new Like();
+
+		like.setRefType(Integer.parseInt(workType));
+		like.setRefId(workInstanceId);
+		like.setCreationUser(userId);
+		like.setCreationDate(new LocalDate());
+		
+		likeMgr.createLike(userId, like);
+		
 	}
 	@Override
 	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		System.out.println(requestBody);
+		
+		
+		
 	}
 }
