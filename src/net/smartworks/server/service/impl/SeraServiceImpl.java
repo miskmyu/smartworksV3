@@ -3055,6 +3055,25 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			}
 		}
+		String txtUserProfilePicture = null;
+		if(imageGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
+				String imgGroupId = entry.getKey();
+				List<Map<String, String>> imgGroups = entry.getValue();
+				try {
+					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
+						Map<String, String> file = imgGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						//String fileSize = file.get("fileSize");
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, txtUserId);
+						//SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", null, imgGroupId, fileId, fileName, "0");
+					}
+				} catch (Exception e) {
+					throw new DocFileException("image upload fail...");
+				}
+			}
+		}
 		
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		
@@ -3082,6 +3101,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoUser.setAuthId("USER");
 		swoUser.setLocale("ko");
 		swoUser.setTimeZone("Asia/Seoul");
+		swoUser.setPicture(txtUserProfilePicture);
 		
 		swoMgr.setUser(txtUserId, swoUser, IManager.LEVEL_ALL);
 		
@@ -3101,23 +3121,6 @@ public class SeraServiceImpl implements ISeraService {
 		
 		seraMgr.setSeraUser(txtUserId, seraUser);
 		
-		if(imageGroupMap.size() > 0) {
-			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
-				String imgGroupId = entry.getKey();
-				List<Map<String, String>> imgGroups = entry.getValue();
-				try {
-					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
-						Map<String, String> file = imgGroups.get(i);
-						String fileId = file.get("fileId");
-						String fileName = file.get("fileName");
-						//String fileSize = file.get("fileSize");
-						SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", null, imgGroupId, fileId, fileName, "0");
-					}
-				} catch (Exception e) {
-					throw new DocFileException("image upload fail...");
-				}
-			}
-		}
 		return txtUserId;
 	}
 	@Override
