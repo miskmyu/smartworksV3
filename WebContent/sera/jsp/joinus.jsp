@@ -461,6 +461,7 @@
 					<!-- Joint Content -->
 					<div class="join_content_area">
 						<form name="frmCreateSeraUser" class="form_layout js_validation_required">
+							<input name="hdnUserName" type="hidden">
 							<div class="t_refe mt10">* 선택입력란입니다</div>
 							<table>
 								<tr>
@@ -495,7 +496,7 @@
 									<td>
 										<div class="form_label">비밀번호</div>
 										<div class="form_value">
-											<input name="txtPassword" type="password" class="fieldline fl required" style="width:100px" value=""/>
+											<input name="txtPassword" type="password" class="fieldline fl required" style="width:100px" value=" "/>
 										</div>
 									</td>
 								</tr>
@@ -511,9 +512,9 @@
 									<td>
 										<div class="form_label">생일/성별</div>
 										<div class="form_value">
-											<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=" "/> 년 
-											<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=" "/> 월 
-											<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=" "/> 일 
+											<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=""/> 년 
+											<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 월 
+											<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 일 
 											<select name="selSex">
 												<option value="female">여자</option>
 												<option value="male">남자</option>
@@ -525,15 +526,15 @@
 									<td>
 										<div class="form_label">도전목표*</div>
 										<div class="form_value">
-											<input name="txtChallengingTarget" class="fieldline" type="text" style="width:300px" value=" "/>
+											<input name="txtChallengingTarget" class="fieldline" type="text" style="width:300px" value=""/>
 										</div>
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<div class="form_label">관심분야</div>
+										<div class="form_label">관심분야*</div>
 										<div class="form_value">
-											<input name="txtInterestPart" class="fieldline" type="text" value=" "/>
+											<input name="txtInterestPart" class="fieldline" type="text" value=""/>
 											<div class="cb t_refe pt5">* 관심있는 키워드를 입력해 주세요.</div>
 										</div>
 									</td>
@@ -687,6 +688,7 @@ $(function() {
 			smartPop.showInfo(smartPop.WARN, '실명확인을 위해 이름과 주민등록번호를 반드시 입력하여야 합니다.');			
 			return false;			
 		}
+		input.parents('.js_joinus_page').find('input[name="hdnUserName"]').attr('value', userName);
 		input.parents('.js_joinus_first').hide().next().show();
 		return false;
 	});
@@ -733,7 +735,7 @@ $(function() {
 		return false;
 	});
 	$('.js_joinus_third_btn').live('click', function(e){
-		var input = $(e.target);
+		document.location.href = "logins.sw";
 		return false;
 	});
 	
@@ -742,7 +744,7 @@ $(function() {
 		var target = input.siblings('input[name="txtUserId"]');
 		var userId = target.attr('value');
 		if(!target.valid()){
-			smartPop.showInfo(smartPop.ERROR, "이메일만 아이디로 사용할 수 있습니다. 유호한 이메일을 입력바랍니다.");
+			smartPop.showInfo(smartPop.ERROR, "이메일만 아이디로 사용할 수 있습니다. 유효한 이메일을 입력바랍니다.");
 			return false;
 		}
 		$.ajax({
