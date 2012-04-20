@@ -5577,6 +5577,6 @@ public class InstanceServiceImpl implements IInstanceService {
 	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 	}
 	@Override
-	public void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 	}
 }

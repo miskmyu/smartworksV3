@@ -275,15 +275,31 @@
 									break;
 								}
 								%>
-								
-								<!-- Util -->
-								<dd class="util js_action_btns">
-									<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
-									<span><a href="" class="js_add_sera_like" >공감하기</a> | </span>
-									<span><a href="" class="js_show_more_content">더보기</a> | </span> 
-									<span class="date"><%=seraInstance.getLastModifiedDate().toLocalDateLongString() %></span>
-								</dd>
-								<!-- Util //-->
+							
+								<%
+								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE ){
+								%>
+									<!-- Util -->
+									<dd class="util js_action_btns">
+										<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
+										<%
+										if(workInstance.doesCurrentUserLike()){
+										%>
+											<span><a href="" class="js_remove_sera_like" >공감취소</a> | </span>
+										<%
+										}else{
+										%>
+											<span><a href="" class="js_add_sera_like" >공감하기</a> | </span>
+										<%
+										}
+										%>
+										<span><a href="" class="js_show_more_content">더보기</a> | </span> 
+										<span class="date"><%=seraInstance.getLastModifiedDate().toLocalDateLongString() %></span>
+									</dd>
+									<!-- Util //-->
+								<%
+								}
+								%>
 							</dl>
 							
 							
@@ -297,48 +313,56 @@
 										<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
 									</div>
 								</div>
-								<%
-								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
-									if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-									%>
-									<div class="stat_notice">
-										<ul>
-											<li>
-												<span class="icon_like"></span><span class="t_blue">신현성</span>님이 좋아합니다
-											</li>
-											<li>
-												<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
-													<span class="icon_reply"></span>											
-													<span class="t_blue"><%=workInstance.getSubInstanceCount() %></span>개의 댓글 모두보기
-							            		</a>
-						            		</li>
-					            		</ul>
-					            		</div>
-									<%
-									}
-									if(workInstance.getSubInstanceCount()>0){
-										CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
-										//comments = SmartTest.getCommentInstances();
-										for(int j=0; j<comments.length; j++){
-											CommentInstanceInfo comment = comments[j];
-									%>
-											<!-- Reply-->
-											<div class="reply_section">
-												<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
-													<div class="photo">
-														<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
-													</div>
-												</a>
-												<div class="reply_text">
-													<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
-												</div>
-											</div>
-											<!-- Reply//-->
-								<%
+								<div class="stat_notice">
+									<ul class="js_likes_count_shown">
+										<%
+										if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
+											if(!SmartUtil.isBlankObject(workInstance.getLikers())){
+										%>
+												<li>
+													<span class="icon_like"></span><span class="t_blue js_likes_count"><%=workInstance.getLikers().length %></span>명이 공감합니다.
+												</li>
+											<%
+											}
+											if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+											%>
+												<li>
+													<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+														<span class="icon_reply"></span>											
+														<span class="t_blue"><%=workInstance.getSubInstanceCount() %></span>개의 댓글 모두보기
+								            		</a>
+							            		</li>
+							            <%
+											}
 										}
-									}
-								}
-								%>
+							            %>
+				            		</ul>
+				            		<div class="js_comment_list_target">
+										<%
+										if(workInstance.getSubInstanceCount()>0){
+											CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
+											//comments = SmartTest.getCommentInstances();
+											for(int j=0; j<comments.length; j++){
+												CommentInstanceInfo comment = comments[j];
+										%>
+												<!-- Reply-->
+												<div class="reply_section">
+													<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
+														<div class="photo">
+															<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+														</div>
+													</a>
+													<div class="reply_text">
+														<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+													</div>
+												</div>
+												<!-- Reply//-->
+										<%
+											}
+										}
+										%>
+									</div>
+				            	</div>									
 							</div>
 					        <div class="reply_section js_return_on_sera_comment" style="display:none">
 								<div class="photo">

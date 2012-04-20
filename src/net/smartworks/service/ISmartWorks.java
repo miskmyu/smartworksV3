@@ -436,7 +436,7 @@ public interface ISmartWorks {
 
 	public abstract void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
