@@ -17,20 +17,13 @@ public class WorkInstanceInfo extends InstanceInfo {
 	private int lastTaskCount = -1;
 	private int subInstanceCount;
 	private InstanceInfo[] subInstances;
-	private String[] likers = new String[]{"ysjung@maninsoft.co.kr", "kmyu@maninsoft.co.kr"};//Array of User Id.
-	private String firstLikerName = "정윤식";
+	private String[] likers;
 
 	public String[] getLikers() {
 		return likers;
 	}
 	public void setLikers(String[] likers) {
 		this.likers = likers;
-	}
-	public String getFirstLikerName() {
-		return firstLikerName;
-	}
-	public void setFirstLikerName(String firstLikerName) {
-		this.firstLikerName = firstLikerName;
 	}
 	public TaskInstanceInfo getLastTask() {
 		return lastTask;
@@ -114,15 +107,6 @@ public class WorkInstanceInfo extends InstanceInfo {
 	}	
 	public WorkInstanceInfo(String id, String subject, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate) {
 		super(id, subject, Instance.TYPE_WORK, owner, lastModifier, lastModifiedDate);
-	}
-	
-	public String getLikersShown(){
-		if(SmartUtil.isBlankObject(this.likers)) return "";
-		if(likers.length == 1)
-			return SmartMessage.getString("common.title.has_liker", new Object[]{firstLikerName});
-		else if(likers.length >1)
-			return SmartMessage.getString("common.title.has_likers", new Object[]{firstLikerName, likers.length-1});
-		return "";
 	}
 	
 	public boolean doesCurrentUserLike(){
