@@ -217,7 +217,7 @@
 										if(!SmartUtil.isBlankObject(seraReport.getImageSrc())){ 
 										%>
 											<div class="thum_image">
-												<img src="<%=seraReport.getImageSrc() %>" />
+												<img class="thum_image_size" src="<%=seraReport.getImageSrc() %>" />
 											</div>
 										<%
 										} 

@@ -334,10 +334,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .content .name { color:#000000}
-.panel_block .text { float:left; width:75%; margin-right:10px} /* content txt */
+.panel_block .text { float:left; width:70%; margin-right:10px} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
-.panel_block .thum_image {width:120px; height:66px; float:right}
+.panel_block .thum_image {width:150px; height:66px; float:right}
+.panel_block .thum_image_size {width:150px}
 .panel_block .detail_image {width:540px; border:1px solid #cccccc; height:auto; clear:both}
+.panel_block .detail_image_size {width:540px}
 .panel_block dl.bor {border-bottom:1px solid #cccccc}
 .panel_block dl.bor_no { border-bottom:none}
 
