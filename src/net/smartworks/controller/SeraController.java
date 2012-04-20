@@ -360,6 +360,16 @@ public class SeraController {
 		return map;
 	}
 
+	@RequestMapping(value = "/leave_sera_user", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> leaveSeraUser(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		String userId = smartworks.leaveSeraUser(requestBody, request);//smartworks.setCourse(requestBody, request);
+		// TO DO : Exception handler
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "logins.sw");
+		return map;
+	}
+
 	@RequestMapping(value = "/friend_request", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void friendRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
