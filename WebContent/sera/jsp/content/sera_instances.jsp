@@ -285,6 +285,9 @@
 								</dd>
 								<!-- Util //-->
 							</dl>
+							
+							
+							<!-- Reply -->
 							<div class="js_comment_list">
 								<div class="reply_section js_comment_instance" style="display:none">
 									<div class="photo">
@@ -298,9 +301,19 @@
 								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
 									if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 									%>
-										<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
-											<div class="stat_notice"><%=workInstance.getSubInstanceCount() %>개의 댓글 모두보기</div>
-					            		</a>
+									<div class="stat_notice">
+										<ul>
+											<li>
+												<span class="icon_like"></span><span class="t_blue">신현성</span>님이 좋아합니다
+											</li>
+											<li>
+												<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+													<span class="icon_reply"></span>											
+													<span class="t_blue"><%=workInstance.getSubInstanceCount() %></span>개의 댓글 모두보기
+							            		</a>
+						            		</li>
+					            		</ul>
+					            		</div>
 									<%
 									}
 									if(workInstance.getSubInstanceCount()>0){
