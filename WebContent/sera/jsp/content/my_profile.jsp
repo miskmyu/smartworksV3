@@ -89,6 +89,7 @@
 					<div class="form_label">이름</div>
 					<div class="form_value">
 						<span class="t_blueb"><%=seraUser.getName() %></span>
+						<input name="hdnUserName" type="hidden" value="<%=seraUser.getName() %>">
 					</div>
 				</td>
 	
