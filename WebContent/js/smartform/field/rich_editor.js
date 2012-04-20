@@ -16,7 +16,6 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
-
 	var value = (options.dataField && options.dataField.value) || '';
 	var $entity = options.entity;
 	//var $graphic = $entity.children('graphic');

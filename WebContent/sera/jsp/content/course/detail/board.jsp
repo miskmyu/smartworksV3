@@ -19,6 +19,10 @@
 	if (SmartUtil.isBlankObject(course) || !course.getId().equals(courseId))
 		course = smartWorks.getCourseById(courseId);
 	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 10);
+	
+	session.setAttribute("cid", ISmartWorks.CONTEXT_GROUP_SPACE + courseId);
+	session.setAttribute("wid", courseId);
+		
 %>
 <!-- Header Title -->
 <div class="header_tit">

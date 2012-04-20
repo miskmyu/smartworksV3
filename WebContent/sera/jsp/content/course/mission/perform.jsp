@@ -21,7 +21,7 @@
 	Course course = (Course)mission.getWorkSpace();
 %>
 
-<div class="js_perform_mission_page">
+<div class="js_perform_mission_page" missionId="<%=missionId%>" courseId="<%=course.getId()%>">
 
 	<!-- Title -->
 	<div class="header_mission mb10">
@@ -48,7 +48,7 @@
 					<%
 					if(cUser.getId().equals(course.getLeader().getId())){
 					%>
-						<div class="btn_mid_l fr ml10">
+						<div class="btn_mid_l fr ml10 js_show_modify_mission">
 							<div class="btn_mid_r">미션수정</div>
 						</div>
 					<%

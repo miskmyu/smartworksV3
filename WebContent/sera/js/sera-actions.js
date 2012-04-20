@@ -329,7 +329,35 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_show_modify_mission').live('click', function(e){
+		var input = $(e.target);
+		var performMission = input.parents('.js_perform_mission_page');
+		var courseId = performMission.attr('courseId');
+		var missionId = performMission.attr('missionId');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'courseMissionModify.sw',
+			data : {
+				courseId :courseId,
+				missionId : missionId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 	$('.js_create_mission_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+	
+	$('.js_modify_mission_btn').live('click', function(e){
 		submitForms(e);
 		return false;
 	});

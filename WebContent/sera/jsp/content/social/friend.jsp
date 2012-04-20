@@ -110,7 +110,7 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_destroy_friendship">
+								<div class="btn_green_l js_destroy_friendship_btn">
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
 								</div> <!-- Btn //--> 
 							</span>

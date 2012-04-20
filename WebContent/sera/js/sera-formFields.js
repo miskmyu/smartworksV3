@@ -74,7 +74,10 @@ function loadCreateMissionFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionOpenDateField.html(gridRow);
 
-		var openDateStr = (new Date()).format('yyyy.mm.dd');
+		var openDateStr = missionOpenDateField.attr('openDate');
+		if(isEmpty(openDateStr)) openDateStr = (new Date()).format('yyyy.mm.dd');
+		console.log('openDateStr=', openDateStr);
+
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtMissionOpenDate",
@@ -95,11 +98,14 @@ function loadCreateMissionFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionCloseDateField.html(gridRow);
 
+		var closeDateStr = missionCloseDateField.attr('closeDate');
+		if(isEmpty(closeDateStr)) closeDateStr = "";
+		console.log('closeDateStr=', closeDateStr);
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtMissionCloseDate",
 			fieldName: "mission close date",
-			value: "",
+			value: closeDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: true
@@ -114,12 +120,16 @@ function loadCreateMissionFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionContentField.html(gridRow);
+		
+		var missionContent = missionContentField.attr('content');
+		if(isEmpty(missionContent)) missionContent = "";
 
+		console.log('content=', missionContent);
 		SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtaMissionContent",
 			fieldName: "mission content",
-			value: "",
+			value: missionContent,
 			columns: 1,
 			colSpan: 1,
 			required: true
