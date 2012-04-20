@@ -47,7 +47,9 @@ import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.organization.exception.SwoException;
+import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
+import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.util.LocalDate;
@@ -839,8 +841,20 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				extension = extension.toLowerCase();
 
 			User user = SmartUtil.getCurrentUser();
-	
-			File repository = this.getFileRepository(user.getCompanyId(), "Profiles");
+			String companyId = "Maninsoft";
+			if (user != null) {
+				companyId = user.getCompanyId();
+			} else {
+				ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+				
+				SwoCompanyCond cond = new SwoCompanyCond();
+				SwoCompany[] companys = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+				if (companys != null) {
+					companyId = companys[0].getId();
+				}				
+			}
+			
+			File repository = this.getFileRepository(companyId, "Profiles");
 	
 			String communityPictureId = communityId + "." + extension;
 			//String bigId = null;
@@ -848,9 +862,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String originId = null;
 			//String realFile1 = null;
 			String realFile2 = null;
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + "Temps" + "/" + fileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
 
-			if(communityId.equals(user.getCompanyId())) {
+			if(communityId.equals(companyId)) {
 				originId = communityId;
 			} else {
 				//bigId = communityId + "_big";
@@ -889,13 +903,24 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 
 			User user = SmartUtil.getCurrentUser();
-
-			File repository = this.getFileRepository(user.getCompanyId(), workType);
+			String companyId = "Maninsoft";
+			if (user != null) {
+				companyId = user.getCompanyId();
+			} else {
+				ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+				
+				SwoCompanyCond cond = new SwoCompanyCond();
+				SwoCompany[] companys = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+				if (companys != null) {
+					companyId = companys[0].getId();
+				}
+			}
+			File repository = this.getFileRepository(companyId, workType);
 			String fileId = tempFileId.split("temp_")[tempFileId.split("temp_").length-1];
 			if(workType.equals("Pictures")) fileId = "pic_" + fileId;
 			else fileId = "file_" + fileId;
 
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + "Temps" + "/" + tempFileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + tempFileId + "." + extension;
 			String realFile = repository.getAbsolutePath() + File.separator + fileId + "." + extension;
 			if(workType.equals("Pictures")) {
 				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + "_thumb." + extension;

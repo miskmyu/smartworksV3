@@ -72,4 +72,7 @@ public interface ISeraService {
 
 	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
 
+	public abstract String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }
