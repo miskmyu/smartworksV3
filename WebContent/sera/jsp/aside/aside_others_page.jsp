@@ -148,9 +148,7 @@
 					SeraUserInfo friend = friendList.getFriends()[i];
 			%>
 			<dd>
-				<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img
-					class="friend_df" src="<%=friend.getMinPicture()%>">
-				</a>
+				<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img class="friend_df" src="<%=friend.getMinPicture()%>" title="<%=friend.getNickName()%>"></a>
 			</dd>
 			<%
 				}

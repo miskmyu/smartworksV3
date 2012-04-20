@@ -377,6 +377,36 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_leave_sera_btn').live('click', function(e){
+		smartPop.confirm('세라캠퍼스 회원을 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
+			var input = $(e.target);
+			var userId = input.parents('.js_my_profile_page').attr('userId');
+			var paramsJson = {};
+			paramsJson['userId'] = userId;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : "leave_sera_user.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					document.location.href = "logins.sw";					
+					smartPop.closeProgress();
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "회원탈퇴에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});
+				}
+				
+			});
+			return false;
+		}); 
+		return false;
+	});
+	
 	$('.js_return_on_sera_comment').live('keydown', function(e) {
 		if(e.which != $.ui.keyCode.ENTER) return;
 		var input = $(e.target);

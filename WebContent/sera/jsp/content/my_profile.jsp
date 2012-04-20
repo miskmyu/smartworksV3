@@ -67,7 +67,7 @@
 	};
 </script>
 
-<div class="js_my_profile_page">
+<div class="js_my_profile_page" userId="<%=seraUser.getId()%>">
 	<!-- Header Title -->
 	<div class="header_tit">
 		<div class="tit_account">닉네임, 프로필 사진, 비밀번호 등 프로필 정보를 수정할 수 있습니다.<br /> * 선택 입력란입니다.</div>
@@ -133,9 +133,8 @@
 						<input name="txtBirthMonth" class="fieldline form_date_input number tr" type="text" value="<%=birthMonth%>"/> 월
 						<input name="txtBirthDay" class="fieldline form_date_input number tr" type="text" value="<%=birthDay%>"/> 일
 						<select name="selSex" class="required">
-							<option value="0">성별</option>
-							<option value="<%=SeraUser.SEX_MALE%>">남자</option>
 							<option value="<%=SeraUser.SEX_FEMALE %>">여자</option>
+							<option value="<%=SeraUser.SEX_MALE%>">남자</option>
 						</select>
 					</div>
 				</td>
@@ -190,10 +189,7 @@
 				<td>
 					<div class="form_label">비밀번호</div>
 					<div class="form_value">
-						<input type="password" class="fieldline fl" style="width: 100px" value="<%=cUser.getPassword() %>" />
-						<div class="btn_mid_l ml5">
-							<div class="btn_mid_r">비밀번호 변경</div>
-						</div>
+						<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" value="<%=cUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>
@@ -201,7 +197,7 @@
 				<td>
 					<div class="form_label">비밀번호 확인</div>
 					<div class="form_value">
-						<input type="passwordConfirm" class="fieldline" style="width: 100px" value="<%=cUser.getPassword() %>" />
+						<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" value="<%=cUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>
@@ -217,7 +213,7 @@
 			<div href="myPAGE.sw" class="btn_blu_l mr10 js_sera_content">
 				<div class="btn_blu_r">취 소</div>
 			</div>
-			<div class="btn_red_l">
+			<div class="btn_red_l js_leave_sera_btn">
 				<div class="btn_red_r">회원탈퇴</div>
 			</div>
 		</div>
