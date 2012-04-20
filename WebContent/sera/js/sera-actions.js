@@ -454,6 +454,7 @@ $(function() {
 	
 	$('.js_show_all_sera_comments').live('click', function(e) {
 		var input = $(e.target).parents('.js_show_all_sera_comments');
+		if(isEmpty(input)) input = $(e.target);
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
 		smartPop.progressCenter();				
@@ -461,10 +462,10 @@ $(function() {
 			url : href,
 			data : {},
 			success : function(data, status, jqXHR) {
-				var target = subInstanceList.find('.js_comment_list');
+				var target = subInstanceList.find('.js_comment_list_target');
 				target.find(':visible').remove();
 				target.append(data);
-				input.remove();
+				input.parent().remove();
 				smartPop.closeProgress();
 			},
 			error : function(e) {
@@ -485,7 +486,7 @@ $(function() {
 	});
 
 	$('a.js_add_sera_like').live('click', function(e){
-		var input = $(e.target).removeAttr('href');
+		var input = $(e.target);
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var	workInstanceId = subInstanceList.attr('instanceId');
 		var	workType = subInstanceList.attr('workType');
@@ -501,17 +502,14 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-//				var target = subInstanceList.find('.js_comment_list');
-//				var showAllComments = target.find('.js_show_all_sera_comments');
-//				if(!isEmpty(showAllComments)){
-//					showAllComments.find('div').click();
-//					input.attr('value', '');
-//				}else{
-//					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
-//					newComment.find('.js_comment_content').html(comment);
-//					target.append(newComment);
-//					input.attr('value', '');
-//				}
+				var likesCountShown = subInstanceList.find('.js_likes_count_shown');
+				var target = likesCountShown.find(".js_likes_count");
+				if(isEmpty(target) || isEmpty(target.html())){
+					likesCountShown.html('<li><span class="icon_like"></span><span class="t_blue js_likes_count">1</span>명이 공감합니다.</li>');
+				}else{
+					target.html(parseInt(target.html()) + 1);
+				}
+				input.removeClass('js_add_sera_like').addClass('js_remove_sera_like').html('공감취소');
 				smartPop.closeProgress();
 			},
 			error : function(e) {
@@ -521,6 +519,48 @@ $(function() {
 				});
 			}			
 		});
+		return false;
+	});
+	
+	$('a.js_remove_sera_like').live('click', function(e){
+		var input = $(e.target);
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var	workInstanceId = subInstanceList.attr('instanceId');
+		var	workType = subInstanceList.attr('workType');
+		var paramsJson = {};
+		paramsJson['workType'] = parseInt(workType);
+		paramsJson['workInstanceId'] = workInstanceId;
+		url = "remove_like_from_instance.sw";
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				var likesCountShown = subInstanceList.find('.js_likes_count_shown');
+				var target = likesCountShown.find(".js_likes_count");
+				if(isEmpty(target) || isEmpty(target.html())){
+				}else{
+					var likesCount = parseInt(target.html());
+					if(likesCount<=1){
+						target.parent().remove();
+					}else{
+						target.html(likesCount - 1);
+					}
+				}
+				input.addClass('js_add_sera_like').removeClass('js_remove_sera_like').html('공감하기');
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "좋아요 추가에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});
+			}			
+		});
+		return false;
 	});
 	
 	$('.js_accept_friend_btn').live('click', function(e){
@@ -554,6 +594,7 @@ $(function() {
 				});	
 			}			
 		});
+		return false;
 	});
 
 	$('.js_deny_friend_btn').live('click', function(e){
@@ -587,6 +628,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_destroy_friendship_btn').live('click', function(e){
@@ -618,6 +660,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_friend_request_btn').live('click', function(e){
@@ -644,6 +687,7 @@ $(function() {
 				});				
 			}
 		});
+		return false;
 	});
 
 	$('.js_select_course_btn').live('click', function(e) {

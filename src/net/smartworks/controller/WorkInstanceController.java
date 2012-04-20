@@ -456,10 +456,10 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		smartworks.addLikeToInstance(requestBody, request);
 	}
 
-	@RequestMapping(value = "/remove_like_to_instance", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_like_from_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void removeLikeToInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeLikeToInstance(requestBody, request);
+	public @ResponseBody void removeLikeFromInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeLikeFromInstance(requestBody, request);
 	}
 
 }
