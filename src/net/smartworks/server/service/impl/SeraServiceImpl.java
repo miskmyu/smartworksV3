@@ -86,6 +86,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.model.SwoCompany;
+import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
@@ -2856,7 +2858,8 @@ public class SeraServiceImpl implements ISeraService {
 					throw new DocFileException("file upload fail...");
 				}
 			}
-		}if(imageGroupMap.size() > 0) {
+		}
+		if(imageGroupMap.size() > 0) {
 			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
 				String imgGroupId = entry.getKey();
 				List<Map<String, String>> imgGroups = entry.getValue();
@@ -2952,6 +2955,170 @@ public class SeraServiceImpl implements ISeraService {
 	    CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 	    return courses;
+	}
+	
+	public String removeSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		Map<String, Object> frmCreateSeraUserMap = (Map<String, Object>)requestBody.get("frmCreateSeraUser");
+		
+		String userId = "";
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		swoMgr.removeUser(userId, userId);
+		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		seraMgr.removeSeraUser(userId, userId);
+		
+		return userId;
+	}
+	@Override
+	public String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			frmCreateSeraUser=
+				{
+					txtUserId=kmyu@maninsoft.co.kr,
+					hdnUserName = 유광민, 
+					txtNickName= 1, 
+					txtPassword=1, 
+					txtConfirmPassword=1, 
+					txtBirthYear=1999, 
+					txtBirthMonth=1, 
+					txtBirthDay=1, 
+					selSex=female, 
+					txtChallengingTarget= 1, 
+					txtInterestPart= 1, 
+					imgUserProfile=
+						{
+							groupId=fg_f06cb045c0d61c4916ca5b4c85961299434d, 
+							files=[]
+						}
+				}
+		}*/
+		Map<String, Object> frmCreateSeraUserMap = (Map<String, Object>)requestBody.get("frmCreateSeraUser");
+		Set<String> keySet = frmCreateSeraUserMap.keySet();
+		Iterator<String> itr = keySet.iterator();
+	
+		String txtUserId = null;
+		String hdnUserName = null;
+		String txtNickName = null;
+		String txtPassword = null;
+		String txtConfirmPassword = null;
+		String txtBirthYear = null;
+		String txtBirthMonth = null;
+		String txtBirthDay = null;
+		String selSex = null;
+		String txtChallengingTarget = null;
+		String txtInterestPart = null;
+
+		Map<String, Object> imgUserProfileImage = null;
+		String imageGroupId = null;
+		Map<String, List<Map<String, String>>> imageGroupMap = new HashMap<String, List<Map<String, String>>>();
+		
+		while (itr.hasNext()) {
+			String fieldId = (String)itr.next();
+			Object fieldValue = frmCreateSeraUserMap.get(fieldId);
+			if (fieldValue instanceof LinkedHashMap) {
+				if (fieldId.equalsIgnoreCase("imgUserProfile")) {
+					imgUserProfileImage = (Map<String, Object>)fieldValue;
+					if(imgUserProfileImage != null && imgUserProfileImage.size() > 0) {
+						imageGroupId = (String)imgUserProfileImage.get("groupId");
+	
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)imgUserProfileImage.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							imageGroupMap.put(imageGroupId, files);
+						}
+					}
+				}
+			} else if(fieldValue instanceof String) {
+				if (fieldId.equals("txtUserId")) {
+					txtUserId = (String)frmCreateSeraUserMap.get("txtUserId");
+				} else if (fieldId.equals("txtNickName")) {
+					txtNickName = (String)frmCreateSeraUserMap.get("txtNickName");
+				} else if (fieldId.equals("txtPassword")) {
+					txtPassword = (String)frmCreateSeraUserMap.get("txtPassword");
+				} else if (fieldId.equals("txtConfirmPassword")) {
+					txtConfirmPassword = (String)frmCreateSeraUserMap.get("txtConfirmPassword");
+				} else if (fieldId.equals("txtBirthYear")) {
+					txtBirthYear = (String)frmCreateSeraUserMap.get("txtBirthYear");
+				} else if (fieldId.equals("txtBirthMonth")) {
+					txtBirthMonth = (String)frmCreateSeraUserMap.get("txtBirthMonth");
+				} else if (fieldId.equals("txtBirthDay")) {
+					txtBirthDay = (String)frmCreateSeraUserMap.get("txtBirthDay");
+				} else if (fieldId.equals("selSex")) {
+					selSex = (String)frmCreateSeraUserMap.get("selSex");
+				} else if (fieldId.equals("txtChallengingTarget")) {
+					txtChallengingTarget = (String)frmCreateSeraUserMap.get("txtChallengingTarget");
+				} else if (fieldId.equals("txtInterestPart")) {
+					txtInterestPart = (String)frmCreateSeraUserMap.get("txtInterestPart");
+				}	else if (fieldId.equals("hdnUserName")) {
+					hdnUserName = (String)frmCreateSeraUserMap.get("hdnUserName");
+				}
+			}
+		}
+		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoCompanyCond cond = new SwoCompanyCond();
+		SwoCompany[] company = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+		String companyId = "Maninsoft";
+		if (company != null) {
+			companyId = company[0].getId();
+		}
+		
+		SwoUser swoUser = new SwoUser();
+		swoUser.setCompanyId(companyId);
+		swoUser.setType("BASIC");
+		swoUser.setDomainId("frm_user_SYSTEM");
+		swoUser.setRetiree("N");
+		
+		swoUser.setId(txtUserId);
+		swoUser.setName(hdnUserName);
+		swoUser.setDeptId(companyId);
+		swoUser.setEmail(txtUserId);
+		swoUser.setPassword(txtPassword);
+		swoUser.setEmpNo(null);
+		swoUser.setPosition(null);
+		swoUser.setRoleId("DEPT MEMBER");
+		swoUser.setAuthId("USER");
+		swoUser.setLocale("ko");
+		swoUser.setTimeZone("Asia/Seoul");
+		
+		swoMgr.setUser(txtUserId, swoUser, IManager.LEVEL_ALL);
+		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		SeraUserDetail seraUser = new SeraUserDetail();
+		seraUser.setUserId(txtUserId);
+		seraUser.setEmail(txtUserId);
+		if (!CommonUtil.isEmpty(txtBirthYear) && !CommonUtil.isEmpty(txtBirthMonth) && !CommonUtil.isEmpty(txtBirthDay)) {
+			String birthDayString = txtBirthYear + (txtBirthMonth.length() == 1 ? "0" + txtBirthMonth : txtBirthMonth) + (txtBirthDay.length() == 1 ? "0" + txtBirthDay : txtBirthDay) + "0000";
+			Date birthDay = LocalDate.convertStringToDate(birthDayString);
+			seraUser.setBirthday(new LocalDate(birthDay.getTime()));
+		}
+		seraUser.setSex(CommonUtil.isEmpty(selSex) ? 0 : selSex.equalsIgnoreCase("female") ? SeraUser.SEX_FEMALE : SeraUser.SEX_MALE );
+		seraUser.setNickName(txtNickName);
+		seraUser.setInterests(txtInterestPart);
+		seraUser.setChallengingTarget(txtChallengingTarget);
+		
+		seraMgr.setSeraUser(txtUserId, seraUser);
+		
+		if(imageGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
+				String imgGroupId = entry.getKey();
+				List<Map<String, String>> imgGroups = entry.getValue();
+				try {
+					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
+						Map<String, String> file = imgGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						//String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", null, imgGroupId, fileId, fileName, "0");
+					}
+				} catch (Exception e) {
+					throw new DocFileException("image upload fail...");
+				}
+			}
+		}
+		return txtUserId;
 	}
 	@Override
 	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
