@@ -148,11 +148,6 @@
 		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
 	</definition>
-	<definition name="Course" template="/sera/jsp/layouts_course.jsp">
-		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
-		<put-attribute name="container" value="/sera/jsp/content/course.jsp" />
-		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
-	</definition>
 	<definition name="myPAGE" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/my_page.jsp" />
 	</definition>
@@ -163,6 +158,27 @@
 	<definition name="courseHome" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/course/home.jsp" />
 		<put-attribute name="aside" value="/sera/jsp/aside/aside_course.jsp" />
+	</definition>
+
+	<definition name="Course" template="/sera/jsp/layouts_nouser.jsp">
+		<put-attribute name="sera_header_join" value="/sera/jsp/header_nouser.jsp" />
+		<put-attribute name="container" value="/sera/jsp/content/course.jsp" />
+		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
+	</definition>
+	<definition name="joinUs" extends="Course">
+		<put-attribute name="container" value="/sera/jsp/content/joinus.jsp" />
+	</definition>
+	<definition name="aboutSera" extends="Course">
+		<put-attribute name="container" value="/sera/jsp/content/links/about_sera.jsp" />
+	</definition>
+	<definition name="seraNews" extends="Course">
+		<put-attribute name="container" value="/sera/jsp/content/links/sera_news.jsp" />
+	</definition>
+	<definition name="helpCenter" extends="Course">
+		<put-attribute name="container" value="/sera/jsp/content/links/help_center.jsp" />
+	</definition>
+	<definition name="helpFAQ" extends="Course">
+		<put-attribute name="container" value="/sera/jsp/content/links/help_faq.jsp" />
 	</definition>
 
 </tiles-definitions>

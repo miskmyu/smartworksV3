@@ -90,45 +90,25 @@
 <!-- Aside Block2 -->
 <div class="aside_block m0">
 	<div class="header">
-		<div class=" icon_as_badge fl"><%=otherUser.getNickName()%>님의 뱃지(16)</div>
-		<div class="icon_as_more"><a href="othersBadge.sw" class="mt10 js_sera_content"> </a></div>
+		<div class=" icon_as_badge fl"><%=otherUser.getNickName()%>님의 뱃지(0)</div>
+		<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
 	</div>
 	<div class="list">
 		<dl>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-			<dd>
-				<div class="badge_df"></div>
-			</dd>
-		</dl>
+<!--
+ 			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+			<dd><div class="badge_df"></div></dd>
+ -->
+ 		</dl>
 	</div>
 </div>
 <!-- Aside Block2 //-->
@@ -160,18 +140,18 @@
 <!-- Aside Block4 -->
 <div class="aside_block">
 	<div class="header">
-		<div class="icon_as_srtrend fl">트렌드 세라 (23)</div>
-		<div class="icon_as_more">
-			<a href="" class="mt10"> </a>
-		</div>
+		<div class="icon_as_srtrend fl">트렌드 세라 (0)</div>
+		<div class="icon_as_more" style="display:none"><a href="" class="mt10"> </a></div>
 	</div>
 	<div class="content">
 		<dl>
 			<dd>
 				<ul>
-					<li>[정치인 공부하기] 새누리당으로...</li>
+<!--
+ 					<li>[정치인 공부하기] 새누리당으로...</li>
 					<li>[정치인 공부하기] 한나라당이...</li>
-				</ul>
+ -->
+ 				</ul>
 			</dd>
 		</dl>
 	</div>

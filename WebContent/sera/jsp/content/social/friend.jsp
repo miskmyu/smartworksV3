@@ -86,38 +86,38 @@
 			</div>
 		</div>
 
-		<div class="panel_area">
+		<div class="panel_area js_friend_list">
 			<%
 			if(friendList.getTotalFriends()>0){
 				for(int i=0; i<friendList.getFriends().length; i++){
 					SeraUserInfo friend = friendList.getFriends()[i];
 			%>
-				<!-- 목록1-->
-				<div class="panel_rds_block mb10 js_friend_item" userId="<%=friend.getId()%>">
-					<ul>
-						<li class="pl0pr10">
-							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-								<img src="<%=friend.getMinPicture() %>" />
-							</a>
-						</li>
-						<li class="w90">
-							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-								<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
-							</a>
-						</li>
-						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(friend.getGoal()) %><br /> <span class="t_id"><%=friend.getId() %></span>
-						</span>
-						</li>
-						<li class="fr bo_l">
-							<span> <!-- Btn -->
-								<div class="btn_green_l js_destroy_friendship_btn">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
-								</div> <!-- Btn //--> 
+					<!-- 목록1-->
+					<div class="panel_rds_block mb10 js_friend_item" userId="<%=friend.getId()%>">
+						<ul>
+							<li class="pl0pr10">
+								<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
+									<img src="<%=friend.getMinPicture() %>" />
+								</a>
+							</li>
+							<li class="w90">
+								<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
+									<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
+								</a>
+							</li>
+							<li class="bo_l w370"><span><%=CommonUtil.toNotNull(friend.getGoal()) %><br /> <span class="t_id"><%=friend.getId() %></span>
 							</span>
-						</li>
-					</ul>
-				</div>
-				<!-- 목록1//-->
+							</li>
+							<li class="fr bo_l">
+								<span> <!-- Btn -->
+									<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
+										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
+									</div> <!-- Btn //--> 
+								</span>
+							</li>
+						</ul>
+					</div>
+					<!-- 목록1//-->
 			<%
 				}
 			}
@@ -128,13 +128,16 @@
 
 	<%
 	if (friendList.getFriends() != null) {
-		if(friendList.getTotalFriends()>friendList.getFriends().length){
+		SeraUserInfo[] friends = friendList.getFriends();
+		if(friendList.getTotalFriends()>friends.length){
+			String lastId = friends[friends.length-1].getId(); 
 	%>
-		<!-- 더보기 -->
-		<div class="more">
-			<div class="icon_more">더보기</div>
-		</div>
-		<!-- 더보기 //-->
+			<!-- 더보기 -->
+			<div class="more js_more_friend_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+				<div class="icon_more">더보기</div>
+				<span class="js_progress_span"></span>
+			</div>
+			<!-- 더보기 //-->
 	<%
 		}
 	}	

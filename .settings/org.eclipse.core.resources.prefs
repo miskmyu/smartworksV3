@@ -1,4 +1,4 @@
-#Tue Apr 10 04:00:18 KST 2012
+#Sat Apr 21 15:09:19 KST 2012
 eclipse.preferences.version=1
 encoding//WebContent/WEB-INF/dbscript/mssql/mssql_defaultdata_smartworksV3.sql=MS949
 encoding//WebContent/WEB-INF/dbscript/mssql/mssql_table_smartworksV2toV3.ddl=MS949
@@ -14,4 +14,5 @@ encoding//WebContent/jsp/nav/communities.jsp=UTF-8
 encoding//WebContent/jsp/nav/mail.jsp=UTF-8
 encoding//WebContent/jsp/nav/space_profile.jsp=UTF-8
 encoding//WebContent/sera/jsp/login.jsp=UTF-8
+encoding//WebContent/sera/jsp/user_personal_terms.jsp=UTF-8
 encoding/<project>=UTF-8

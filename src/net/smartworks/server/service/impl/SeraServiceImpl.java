@@ -3156,7 +3156,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 	}
 	@Override
-	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
+	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
 		//// TEST PURPOSE
 		//// TEST PURPOSE
 		switch(courseType){
@@ -3166,6 +3166,14 @@ public class SeraServiceImpl implements ISeraService {
 			return this.getRecommendedCourses(maxList);
 		}
 		return null;
+		//// TEST PURPOSE
+		//// TEST PURPOSE
+	}
+	@Override
+	public CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception {
+		//// TEST PURPOSE
+		//// TEST PURPOSE
+		return this.getFavoriteCourses(maxList);
 		//// TEST PURPOSE
 		//// TEST PURPOSE
 	}

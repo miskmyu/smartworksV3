@@ -149,7 +149,10 @@ SmartWorks.FormRuntime.PercentInputBuilder.buildEx = function(config){
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
-			dataField : options.value			
+			dataField : SmartWorks.FormRuntime.PercentInputBuilder.dataField({
+				fieldId: options.fieldId,
+				value: options.value			
+			})
 	});
 	
 };
@@ -158,15 +161,16 @@ SmartWorks.FormRuntime.PercentInputBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			value: ''
 	};
 
 	SmartWorks.extend(options, config);
 	$formXml = $(options.formXml);
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,

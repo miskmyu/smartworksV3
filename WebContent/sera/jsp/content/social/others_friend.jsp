@@ -61,7 +61,7 @@
 			</div>
 		</div>
 
-		<div class="panel_area">
+		<div class="panel_area js_friend_list">
 
 			<%
 			if(friendList.getTotalFriends()>0){
@@ -69,11 +69,11 @@
 					SeraUserInfo friend = friendList.getFriends()[i];
 			%>
 				<!-- 목록1-->
-				<div class="panel_rds_block mb10">
+				<div class="panel_rds_block mb10 js_friend_item">
 					<ul>
 						<li class="pl0pr10">
 							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-								<img src="<%=friend.getMinPicture() %>" />
+								<img src="<%=friend.getMidPicture() %>" />
 							</a>
 						</li>
 						<li class="w90">
@@ -87,7 +87,7 @@
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
 								<%
-								if(!friend.isFriend()){
+								if(!friend.isFriend() && !friend.getId().equals(cUser.getId())){
 								%>
 									<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>">
 										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
@@ -109,14 +109,19 @@
 	<!-- Panel2 //-->
 
 	<%
-	if(friendList.getTotalFriends()>friendList.getFriends().length){
+	if (friendList.getFriends() != null) {
+		SeraUserInfo[] friends = friendList.getFriends();
+		if(friendList.getTotalFriends()>friends.length){
+			String lastId = friends[friends.length-1].getId(); 
 	%>
-		<!-- 더보기 -->
-		<div class="more">
-			<div class="icon_more">더보기</div>
-		</div>
-		<!-- 더보기 //-->
+			<!-- 더보기 -->
+			<div class="more js_more_friend_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+				<div class="icon_more">더보기</div>
+				<span class="js_progress_span"></span>
+			</div>
+			<!-- 더보기 //-->
 	<%
+		}
 	}
 	%>
 </div>

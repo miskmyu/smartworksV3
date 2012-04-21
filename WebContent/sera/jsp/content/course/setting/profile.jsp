@@ -116,7 +116,7 @@
 						<div class="t_refe pt2 fl"> * 코스 기간은 6개월 이내로 설정해 주세요</div>
 						
 						<div class="cb pt10">
-							<input class="fl pt2" name="chkUserDefineDays" type="checkbox"/>
+							<input class="fl pt2" name="chkUserDefineDays" type="checkbox" <%if(!SmartUtil.isBlankObject(course.getOpenDate()) && !SmartUtil.isBlankObject(course.getCloseDate())){ %>checked<%} %>/>
 							<label class="fl">사용자 정의</label>
 							<div class="fl js_course_start_date_field" <%if(!SmartUtil.isBlankObject(course.getOpenDate())){ %>openDate="<%=course.getOpenDate().toLocalDateSimpleString()%>"<%} %>></div>
 							<div class="fl mr5" style="line-height: 20px"> ~ </div> 

@@ -40,7 +40,9 @@ public interface ISeraService {
 
 	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
-	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
+	public abstract CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception;
 
 	public abstract Course getCourseById(String courseId) throws Exception;
 

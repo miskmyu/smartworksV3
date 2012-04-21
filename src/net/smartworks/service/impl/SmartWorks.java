@@ -1054,8 +1054,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getCoursesByType(courseType, fromDate, maxList);
+	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByType(courseType, lastId, maxList);
 	}
 
 	@Override
@@ -1078,6 +1078,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.leaveSeraUser(requestBody, request);
+	}
+
+	@Override
+	public CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByCategory(categoryName, lastId, maxList);
 	}
 
 }

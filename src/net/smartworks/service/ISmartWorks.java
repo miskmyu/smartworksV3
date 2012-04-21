@@ -492,7 +492,9 @@ public interface ISmartWorks {
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
 
-	public abstract CourseInfo[] getCoursesByType(int courseType, LocalDate fromDate, int maxList) throws Exception;
+	public abstract CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception;
 
 	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
 	

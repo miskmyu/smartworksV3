@@ -17,6 +17,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 	var value = (options.dataField && options.dataField.value) || '';
+console.log('dataField=', options.dataField, ', dataField.vale=', options.dataField.value, ', value=', value);
 	var $entity = options.entity;
 	//var $graphic = $entity.children('graphic');
 	var $graphic = $entity.children('graphic');
@@ -93,7 +94,10 @@ SmartWorks.FormRuntime.RichEditorBuilder.buildEx = function(config){
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
-			dataField : options.value			
+			dataField : SmartWorks.FormRuntime.RichEditorBuilder.dataField({
+				fieldId: options.fieldId,
+				value: options.value
+			})
 	});
 	
 };
@@ -134,15 +138,16 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			value: ''
 	};
 
 	SmartWorks.extend(options, config);
 	$formXml = $(options.formXml);
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,

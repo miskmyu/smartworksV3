@@ -87,8 +87,7 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.DateTimeChooserBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				value: options.value				
 			})
 	});
@@ -99,15 +98,16 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			value: ''
 	};
 
 	SmartWorks.extend(options, config);
 	$formXml = $(options.formXml);
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,

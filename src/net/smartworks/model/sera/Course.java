@@ -18,6 +18,7 @@ public class Course extends Group {
 	public static final int TYPE_FAVORITE_COURSES = 11;
 	public static final int TYPE_RECOMMENDED_COURSES = 12;
 	public static final int TYPE_CLOSED_COURSES = 13;
+	public static final int TYPE_CATEGORIES = 14;
 	
 	public static final int LIST_PAGE_SIZE = 20;
 

@@ -42,12 +42,12 @@
 				<span class="tb ml5"><%=mission.getSubject() %></span>
 				<!-- 우측영역 -->
 				<div class="fr ">
-					<div class="icon_delete_red fr ml5">
-						<a href=""> </a>
-					</div>
 					<%
 					if(cUser.getId().equals(course.getLeader().getId())){
 					%>
+						<div class="icon_delete_red fr ml5 js_delete_mission_btn">
+							<a href="" title="미션삭제"> </a>
+						</div>
 						<div class="btn_mid_l fr ml10 js_show_modify_mission">
 							<div class="btn_mid_r">미션수정</div>
 						</div>

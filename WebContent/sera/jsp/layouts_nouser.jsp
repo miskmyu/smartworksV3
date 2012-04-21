@@ -31,59 +31,22 @@
 
 <!-- For Development Purpose -->
 <%
-	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-	if (!SmartUtil.isBlankObject(context)) {
-		Authentication auth = context.getAuthentication();
-		if(!SmartUtil.isBlankObject(auth)){
-			if (SmartUtil.isBlankObject(request.getSession().getAttribute("loginId"))) {
-				System.out.println("-------------------------------------------");
-				System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
-				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
-				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
-				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
-				System.out.println("-------------------------------------------");
-				request.getSession().setAttribute("loginId", ((Login) auth.getPrincipal()).getId());
-			}
-		}
-	} else {
-		response.sendRedirect("logins.sw");
-		return;
-	}
-
-	String cid = (String) session.getAttribute("cid");
-	String wid = (String) session.getAttribute("wid");
-	if (SmartUtil.isBlankObject(cid)) {
-		session.setAttribute("cid", ISmartWorks.CONTEXT_HOME);
-	}
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	User currentUser = SmartUtil.getCurrentUser();
 
 %>
-<fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
-<fmt:setBundle basename="resource.seraMessage" scope="request" />
 
 <head>
-	<script type="">
-		currentUser = {
-			userId : "<%=currentUser.getId()%>",
-			name : "<%=currentUser.getName()%>",
-			longName : "<%=currentUser.getLongName()%>",
-			nickName : "<%=currentUser.getNickName()%>",
-			companyId : "<%=currentUser.getCompanyId()%>",
-			department : "<%=currentUser.getDepartment()%>",
-			departmentId : "<%=currentUser.getDepartmentId()%>",
-			minPicture : "<%=currentUser.getMinPicture()%>",
-			midPicture : "<%=currentUser.getMidPicture()%>",
-			orgPicture : "<%=currentUser.getOrgPicture()%>",
-			locale : "<%=currentUser.getLocale()%>",
-			timeZone : "<%=currentUser.getTimeZone()%>",
-			timeOffset : "<%=currentUser.getTimeOffsetInHour()%>"
+
+	<script type="text/javascript">
+		var currentUser = {
+			locale : "<%=java.util.Locale.getDefault().getLanguage()%>",
+			timeZone : "<%=TimeZone.getDefault().getID()%>",
+			timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>"
 		};
 	</script>
 	
 	<link href="css/default.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/pop.css" type="text/css" rel="stylesheet" />
-	<link href="sera/css/chat.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/form.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/page.css" type="text/css" rel="stylesheet" />
 	
@@ -141,8 +104,6 @@
 	<script type="text/javascript" src="js/sw/sw-flash.js"></script>
 	<script type="text/javascript" src="sera/js/sera-nav.js"></script>
 	
-	<script type="text/javascript" src="js/sw/sw-faye.js"></script>
-	<script type="text/javascript" src="js/sw/sw-chat.js"></script>
 	<script type="text/javascript" src="js/sw/sw-report.js"></script>
 	<script type="text/javascript" src="js/sw/sw-file.js"></script>
 	<script type="text/javascript" src="js/sw/sw-webmail.js"></script>
@@ -187,31 +148,22 @@
 	<script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>
 	
-	<title><fmt:message key="head.title"><fmt:param value="<%=currentUser.getCompany() %>" /></fmt:message></title>	
+	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
-	
-<body>	
+
+<body>
+
 	<script type="">smartPop.progressCenter();</script>
 	<div id="wrap">
 		<!-- Header -->
-		<div id="sera_header">
-			<tiles:insertAttribute name="sera_header" />
+		<div id="sera_header_join">
+			<tiles:insertAttribute name="sera_header_join" />
 		</div>
 		<!-- Header//-->
 		
 		<!-- Container -->
 		<div id="container">
-		    <!-- Content -->
-		    <div id="sera_content">
-				<tiles:insertAttribute name="sera_content" />
-		    </div>
-		    <!-- Content //-->
-		    
-			<!-- Aside -->
-			<div class="aside">
-				<tiles:insertAttribute name="aside" />
-			</div>
-			<!-- Aside //-->
+			<tiles:insertAttribute name="container" />
 		</div>
 		<!-- Container// -->
 
@@ -220,8 +172,8 @@
 			<tiles:insertAttribute name="sera_footer" />
 		</div>
 		<!--  Footer// -->
+
 	</div>
- 	<jsp:include page="/jsp/chatting/chatter_list.jsp" />	
 	<script type="">smartPop.closeProgress();</script>
 </body>
 </html>

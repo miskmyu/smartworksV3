@@ -60,7 +60,7 @@ public class SeraController {
 	@RequestMapping("/joinUs")
 	public ModelAndView joinUs(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "", "sera/jsp/joinus.jsp");
+		return SmartUtil.returnMnv(request, "", "joinUs.tiles");
 	}
 
 	@RequestMapping("/myPAGE")
@@ -213,6 +213,30 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "", "othersPAGE.tiles");
 	}
 
+	@RequestMapping("/aboutSera")
+	public ModelAndView aboutSera(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "aboutSera.tiles");
+	}
+
+	@RequestMapping("/seraNews")
+	public ModelAndView seraNews(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "seraNews.tiles");
+	}
+
+	@RequestMapping("/helpCenter")
+	public ModelAndView helpCenter(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "helpCenter.tiles");
+	}
+
+	@RequestMapping("/helpFAQ")
+	public ModelAndView helpFAQ(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "helpFAQ.tiles");
+	}
+
 	@RequestMapping("/othersCourses")
 	public ModelAndView othersCourses(HttpServletRequest request, HttpServletResponse response) {
 
@@ -233,10 +257,12 @@ public class SeraController {
 
 	@RequestMapping("/seraInstances")
 	public ModelAndView userInstances(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/sera_instances.jsp", "");
+	}
 
-		String userId = request.getParameter("userId");
-		String courseId = request.getParameter("courseId");
-		return SmartUtil.returnMnv(request, "sera/jsp/content/sera_instances.jsp?userId=" + userId + "&courseId=" + courseId, "");
+	@RequestMapping("/moreCourses")
+	public ModelAndView moreCourses(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/more_courses.jsp", "");
 	}
 
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
@@ -276,6 +302,26 @@ public class SeraController {
 		// TO DO : Exception handler
 		//String courseId = (String)requestBody.get("courseId");
 		String courseId = smartworks.createNewMission(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseHome.sw?courseId=" + courseId);
+		return map;
+	}
+
+	@RequestMapping(value = "/modify_mission", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> modifyMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String missionId = null;//smartworks.modifyMission(requestBody, request);
+		String courseId = (String)requestBody.get("courseId");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" + missionId);
+		return map;
+	}
+
+	@RequestMapping(value = "/remove_mission", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> removeMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.removeMission(requestBody, request);
+		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
 		return map;
@@ -397,6 +443,13 @@ public class SeraController {
 	@RequestMapping("/course_by_type")
 	public ModelAndView courseByType(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course_by_type.jsp", "");
+	}
+
+	@RequestMapping(value = "/remove_sera_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeSeraInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.removeSeraInstane(requestBody, request);
+		// TO DO : Exception handler
 	}
 
 }

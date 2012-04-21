@@ -4,7 +4,7 @@ $(function() {
 	 * 어디에서든 class 값이 js_container로 지정된 anchor 가 선택이 되면, anchor 의 href 값으로 ajax 를 호출하여
 	 * 가져온 값을 container(메인컨텐트)화면에 보여준다.
 	 */
-	$('.js_sera_content').swnavi({
+	$('.js_sera_content').seranavi({
 		history : true,
 		before : function(event){
 			smartPop.progressCenter();				
@@ -359,6 +359,62 @@ $(function() {
 	
 	$('.js_modify_mission_btn').live('click', function(e){
 		submitForms(e);
+		return false;
+	});
+	
+	$('.js_delete_mission_btn').live('click', function(e){
+		smartPop.confirm('미션을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
+			var input = $(e.target);
+			var performMission = input.parents('.js_perform_mission_page');
+			var courseId = performMission.attr('courseId');
+			var paramsJson = {};
+			paramsJson["courseId"] = courseId;
+			paramsJson["courseId"] = performMission.attr('missionId');
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'remove_mission.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					document.location.href = "courseHome.sw?courseId=" + courseId;
+					smartPop.closeProgress();
+				},
+				error : function(){
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "코스삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+				}
+			});
+		});
+		return false;
+	});
+	
+	$('.js_delete_instance_btn').live('click', function(e){
+		smartPop.confirm('항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
+			var input = $(e.target);
+			var subInstanceList = input.parents('.js_sub_instance_list');
+			var	workInstanceId = subInstanceList.attr('instanceId');
+			var	workType = subInstanceList.attr('workType');
+			var paramsJson = {};
+			paramsJson['workType'] = parseInt(workType);
+			paramsJson['workInstanceId'] = workInstanceId;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'remove_sera_instance.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					input.parents('.js_sera_instance_item').remove();
+					smartPop.closeProgress();
+				},
+				error : function(){
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "항목삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+				}
+			});
+		});
 		return false;
 	});
 	
@@ -721,17 +777,104 @@ $(function() {
 	$('.js_select_course_btn').live('click', function(e) {
 		var input = $(e.target).parents('.js_select_course_btn');
 		var courseType = input.attr('courseType');
+		var categoryName = (courseType === "14") ? input.html() : "";
+		
 		smartPop.progressCenter();				
 		$.ajax({
 			url : "course_by_type.sw",
 			data : {
-				courseType: courseType
+				courseType: courseType,
+				categoryName: categoryName
 			},
 			success : function(data, status, jqXHR) {
 				var target = input.parents('.js_course_page').find('.js_course_list');
 				target.html(data);
 				input.siblings().removeClass('selected');
 				input.addClass('selected');
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_more_sera_instances_btn').live('click', function(e) {
+		var input = $(e.target).parents('.js_more_sera_instances_btn');
+		var instanceType = input.attr('instanceType');
+		var userId = input.attr('userId');
+		var courseId = input.attr('courseId');
+		var missionId = input.attr('missoinId');
+		var lastDate = input.attr('lastDate');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "seraInstances.sw",
+			data : {
+				instanceType: instanceType,
+				userId: userId,
+				courseId: courseId,
+				missionId: missionId,
+				lastDate: lastDate
+			},
+			success : function(data, status, jqXHR) {
+				input.parent().append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_more_friends_btn').live('click', function(e) {
+		var input = $(e.target).parents('.js_more_friends_btn');
+		var userId = input.attr('userId');
+		var lastId = input.attr('lastId');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreFriends.sw",
+			data : {
+				userId: userId,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				var friendPage = input.parents('.js_friend_page');
+				var othersFriendPage = input.parents('.js_others_friend_page');
+				if(!isEmpty(friendPage)){
+					friendPage.find('.js_friend_list').append(data);					
+				}else if(!isEmpty(othersFriendPage)){
+					othersFriendPage.find('.js_friend_list').append(data);					
+				}
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_more_course_by_type').live('click', function(e) {
+		var input = $(e.target).parents('.js_more_course_by_type');
+		var courseType = input.attr('courseType');
+		var categoryName = (courseType === "14") ? input.attr('categoryName') : "";
+		var lastId = input.attr('lastId');
+		if(isEmpty(lastId)) lastId = "";
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreCourses.sw",
+			data : {
+				courseType: courseType,
+				categoryName: categoryName,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_course_by_type_list').append(data);
+				input.remove();
 				smartPop.closeProgress();
 			},
 			error : function(e) {

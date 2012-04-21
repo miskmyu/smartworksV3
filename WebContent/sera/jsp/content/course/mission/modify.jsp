@@ -48,7 +48,7 @@
 			console.log(JSON.stringify(paramsJson));
 			var progressSpan = modifyMission.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
-			var url = "create_new_mission.sw";
+			var url = "modify_mission.sw";
 			$.ajax({
 				url : url,
 				contentType : 'application/json',
@@ -56,19 +56,19 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.closeProgress();
 					document.location.href = data.href;
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('modifyMissionError'));
+					smartPop.showInfo(smartPop.ERROR, '미션을 수정하는데 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.');
 				}
 			});
 		}
 	};
 </script>
 
-<div class="js_create_mission_page" courseId="<%=courseId%>">
+<div class="js_modify_mission_page" courseId="<%=courseId%>">
 	<!-- Header Title -->
 	<div class="header_tit">
 		<div class="tit_dep2 m0">
