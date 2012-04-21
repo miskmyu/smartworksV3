@@ -8,6 +8,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		container : $('<td></td>'),
 		entity : null,
 		dataField : '',
+		courseId : null,
 		refreshData : false,
 		layoutInstance : null
 	};
@@ -42,13 +43,14 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var $user = null;
 	
 	var usersHtml = '';
-	var href = "user_name.sw";
+	var href = (isEmpty(options.courseId)) ? "user_name.sw" : "course_member.sw?courseId=" + options.courseId;
 	var icoClass = ' class="icon_fb_user"';
+	var userPicker = (isEmpty(options.courseId)) ? 'class="js_userpicker_button"' : 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"';
 
 	if(multiUsers === 'true'){
 		for(var i=0; i<users.length; i++)
 			usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
-		href = "community_name.sw";
+		href = (isEmpty(options.courseId)) ? "community_name.sw" : "course_member.sw?courseId=" + options.courseId;
 		icoClass = ' class="icon_fb_users"';
 	}else if (!isEmpty(users)) {
 		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
@@ -59,7 +61,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 						' + usersHtml + '\
 						<input class="m0 js_auto_complete" style="width:100px" href="' + href + '" type="text">\
 					</div>\
-					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span ' + icoClass + '></span></a></div></div>');
+					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href=""' + userPicker + '><span ' + icoClass + '></span></a></div></div>');
 
 	if(readOnly){
 		$user = $('<div class="form_value" style="width:' + valueWidth + '%"></div>');
@@ -103,6 +105,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			columns: 1,
 			colSpan: 1,
 			multiUsers: false,
+			courseId: null,
 			required: false,
 			readOnly: false		
 	};
@@ -120,6 +123,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
+			courseId: options.courseId,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
 				fieldName: options.fieldName,
 				formXml: $formEntity,

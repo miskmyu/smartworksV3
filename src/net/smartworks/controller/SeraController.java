@@ -265,6 +265,11 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/more_courses.jsp", "");
 	}
 
+	@RequestMapping("/moreMenteeInforms")
+	public ModelAndView moreMenteeInforms(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/setting/more_mentee_informs.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -452,4 +457,10 @@ public class SeraController {
 		// TO DO : Exception handler
 	}
 
+	@RequestMapping("/pop_select_course_member")
+	public ModelAndView popSelectCourseMember(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/popup/pop_select_course_member.jsp", "");
+	}
+	
 }

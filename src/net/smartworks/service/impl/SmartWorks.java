@@ -43,6 +43,7 @@ import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
@@ -1003,13 +1004,26 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		communityService.joinGroupRequest(requestBody, request);
-		
 	}
 
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		communityService.inviteGroupMembers(requestBody, request);
-		
+		communityService.inviteGroupMembers(requestBody, request);		
+	}
+
+	@Override
+	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.approvalJoinGroup(requestBody, request);		
+	}
+
+	@Override
+	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.pushoutGroupMember(requestBody, request);		
+	}
+
+	@Override
+	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.leaveGroup(requestBody, request);		
 	}
 
 	@Override
@@ -1083,6 +1097,21 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception {
 		return seraService.getCoursesByCategory(categoryName, lastId, maxList);
+	}
+
+	@Override
+	public UserInfo[] getCommunityMembers(String communityId) throws Exception {
+		return communityService.getCommunityMembers(communityId);
+	}
+
+	@Override
+	public MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception {
+		return seraService.getCourseMenteeInformations(courseId, maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception {
+		return seraService.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
 	}
 
 }

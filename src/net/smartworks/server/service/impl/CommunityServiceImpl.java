@@ -697,15 +697,30 @@ public class CommunityServiceImpl implements ICommunityService {
 			// Exception Handling Required			
 		}
 	}
+	
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
+	
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+	
+	@Override
+	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+	
+	@Override
+	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	}
+	
+	@Override
+	public UserInfo[] getCommunityMembers(String communityId) throws Exception {
 		// TODO Auto-generated method stub
-		
+		return SmartTest.getAvailableChatter();
+	}
+	@Override
+	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
 	}
 
 }

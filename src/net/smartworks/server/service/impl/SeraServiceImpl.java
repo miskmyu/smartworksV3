@@ -41,6 +41,7 @@ import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
@@ -3176,5 +3177,13 @@ public class SeraServiceImpl implements ISeraService {
 		return this.getFavoriteCourses(maxList);
 		//// TEST PURPOSE
 		//// TEST PURPOSE
+	}
+	@Override
+	public MenteeInformList getCourseMenteeInformations(String courseId, int maxList) throws Exception {
+		return SeraTest.getCourseMenteeInformations(courseId, maxList);
+	}
+	@Override
+	public SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception {
+		return SeraTest.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
 	}
 }

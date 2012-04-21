@@ -99,7 +99,7 @@
 				<td>
 					<div class="form_label w101">팀원 초대</div>
 					<div class="form_value">
-						<div class="js_team_members_field"></div> 
+						<div class="js_team_members_field" courseId="<%=courseId%>"></div> 
 						<div class="cb t_refe pt2">* 팀 구성원은 해당 코스에서 활동하는 코스친구만 초대가 가능합니다</div>
 					</div>
 				</td>
