@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.service.ISmartWorks;
-import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -388,6 +386,18 @@ public class SeraController {
 		return map;
 	}
 
+	@RequestMapping(value = "/modify_course_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void modifyCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.modifyCourseTeam(requestBody, request);
+	}
+
+	@RequestMapping(value = "/remove_course_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCourseTeam(requestBody, request);
+	}
+
 	@RequestMapping(value = "/update_sera_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> updateSeraProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -479,15 +489,6 @@ public class SeraController {
 		smartworks.addReviewOnCourse(requestBody, request);
 	}
 
-	@RequestMapping(value = "/modify_course_team", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void modifyCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	}
-
-	@RequestMapping(value = "/remove_course_team", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void removeCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	}
 
 	@RequestMapping(value = "/defective_course_report", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
