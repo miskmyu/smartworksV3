@@ -21,7 +21,7 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 	private MissionInstanceInfo prevMission;
 	private String[] missionClearers;
 	private double starPoint;
-	
+
 	public String getBriefContent() {
 		return briefContent;
 	}
