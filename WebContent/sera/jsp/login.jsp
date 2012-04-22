@@ -156,7 +156,7 @@
 							<img id="eventBtnOn3" width="9" height="9" alt="" src="sera/images/main_indicator_on.png" style="display: none;">
 							<img id="eventBtnOff3" width="9" height="9" alt="" style="" src="sera/images/main_indicator_off.png"> 
 						</a> 
-						<a id="eventBtn4" href="http://www.youtube.com/watch?v=KneS3Mstmes"> 
+						<a id="eventBtn4" href="http://www.youtube.com/watch?v=KneS3Mstmes" target="_blank"> 
 							<img id="eventBtnOn4" width="9" height="9" alt="" src="sera/images/main_indicator_on.png" style="display: none;">
 							<img id="eventBtnOff4" width="9" height="9" alt="" style="" src="sera/images/main_indicator_off.png"> 
 						</a> 
@@ -170,7 +170,7 @@
 					<a href="http://www.seracampus.com/Course/Detail/242"> 
 						<img id="eventBanner3" width="405" height="435" alt="" style="position: absolute; z-index: 8;" src="sera/images/N_visual_03.png"> 
 					</a>
-					<a href="http://www.youtube.com/watch?v=KneS3Mstmes"> 
+					<a href="http://www.youtube.com/watch?v=KneS3Mstmes" target="_blank"> 
 						<img id="eventBanner4" width="405" height="435" alt="" style="position: absolute; z-index: 7;" src="sera/images/N_visual_04.png"> 
 					</a>
 				</li>
