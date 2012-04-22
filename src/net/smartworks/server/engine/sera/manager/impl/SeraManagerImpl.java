@@ -507,6 +507,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	public void removeSeraUser(String userId, String objId) throws SeraException {
 		try {
 			SeraUserDetail obj = this.getSeraUserById(userId, objId);
+			if (obj == null)
+				return;
 			this.getHibernateTemplate().delete(obj);
 			this.getHibernateTemplate().flush();
 		} catch (SeraException e) {

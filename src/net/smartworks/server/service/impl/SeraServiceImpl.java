@@ -3184,6 +3184,10 @@ public class SeraServiceImpl implements ISeraService {
 			return this.getFavoriteCourses(lastId, maxList);
 		case Course.TYPE_RECOMMENDED_COURSES:
 			return this.getRecommendedCourses(lastId, maxList);
+		case Course.TYPE_ALL_COURSES:
+			return this.getRecommendedCourses(lastId, maxList);
+		case Course.TYPE_CLOSED_COURSES:
+			return this.getRecommendedCourses(lastId, maxList);
 		}
 		return null;
 	}
