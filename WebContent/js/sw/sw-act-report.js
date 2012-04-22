@@ -152,7 +152,7 @@ $(function() {
 					$('.js_work_report_list_box:first').html(data);
 					$('a.js_work_report_close').click();
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('setReportSucceed'));
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('setReportSucceed'));
  				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -180,7 +180,7 @@ $(function() {
 				$('.js_work_report_list_box:first').html(data);
 				$('a.js_work_report_close').click();
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, smartMessage.get('setReportSucceed'));
+				smartPop.showInfo(smartPop.INFO, smartMessage.get('setReportSucceed'));
 			},
 			error : function(e) {
 				smartPop.closeProgress();

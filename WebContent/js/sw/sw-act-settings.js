@@ -39,7 +39,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeWorkHourSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkHourSucceed'), function(){
 						document.location.href = "company_work_hour.sw";					
 					});					
 				},
@@ -94,7 +94,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeCompanyEventSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCompanyEventSucceed'), function(){
 						document.location.href = "company_event.sw";					
 					});					
 				},
@@ -149,7 +149,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeApprovalLineSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeApprovalLineSucceed'), function(){
 						document.location.href = "approval_line.sw";					
 					});					
 				},
@@ -228,7 +228,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeWebServiceSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWebServiceSucceed'), function(){
 						document.location.href = "web_service.sw";					
 					});					
 				},
@@ -283,7 +283,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeExternalFormSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeExternalFormSucceed'), function(){
 						document.location.href = "external_form.sw";					
 					});					
 				},
@@ -328,7 +328,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeDepartmentSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeDepartmentSucceed'), function(){
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -373,7 +373,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeMemberSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeMemberSucceed'), function(){
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -400,7 +400,7 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				console.log("success");
-				smartPop.showInfo(smartPop.INFORM, smartMessage.get('usableUserId'));
+				smartPop.showInfo(smartPop.INFO, smartMessage.get('usableUserId'));
 				target.addClass('sw_dup_checked').attr('readonly', true);
 				input.hide().siblings().show();;
 			},
@@ -430,7 +430,7 @@ $(function() {
 				wsdlUri : wsdlUri
 			},
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFORM, smartMessage.get('fetchWsdlSucceed'));
+				smartPop.showInfo(smartPop.INFO, smartMessage.get('fetchWsdlSucceed'));
 				target.addClass('sw_fetched').attr('readonly', true);
 				input.hide().siblings().show();
 				var tbody = input.parents('.js_edit_webservice_tbody');

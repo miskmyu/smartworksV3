@@ -3,6 +3,7 @@ package net.smartworks.util;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
@@ -10,6 +11,7 @@ import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
+import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MentorInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
@@ -267,4 +269,14 @@ public class SeraTest {
 		return new SeraUserInfo[]{seraUser1, seraUser1, seraUser1, seraUser1, seraUser1, seraUser1 };
 	}
 
+	public static Team getTeam() throws Exception{
+		Team team = new Team("team1", "테스트팀입니다.");
+		team.setDesc("테스트팀이니 잘 활용하시기 바랍니다.");
+		team.setStart(new LocalDate());
+		team.setEnd(new LocalDate());
+		team.setAccessPolicy(AccessPolicy.LEVEL_PRIVATE);
+		team.setMaxMembers(10);
+		team.setMembers(SeraTest.getFriendRequestsForMe("", 1));
+		return team;
+	}
 }

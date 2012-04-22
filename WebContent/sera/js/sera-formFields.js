@@ -100,7 +100,6 @@ function loadCreateMissionFields() {
 
 		var closeDateStr = missionCloseDateField.attr('closeDate');
 		if(isEmpty(closeDateStr)) closeDateStr = "";
-		console.log('closeDateStr=', closeDateStr);
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtMissionCloseDate",
@@ -148,7 +147,8 @@ function loadCreateTeamFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamStartDateField.html(gridRow);
 
-		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		var startDateStr = teamStartDateField.attr('startDate');
+		if(isEmpty(startDateStr)) startDateStr = (new Date()).format('yyyy.mm.dd');
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtTeamStartDate",
@@ -169,11 +169,13 @@ function loadCreateTeamFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamEndDateField.html(gridRow);
 
+		var endDateStr = teamEndDateField.attr('endDate');
+		if(isEmpty(endDateStr)) endDateStr = "";
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtTeamEndDate",
 			fieldName: "team end date",
-			value: "",
+			value: endDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: true
