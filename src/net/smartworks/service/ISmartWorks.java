@@ -440,6 +440,10 @@ public interface ISmartWorks {
 
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
