@@ -53,6 +53,7 @@ CREATE TABLE Mission (
 	title varchar(255),
 	starPoint varchar(255),
 	content text,
+	files varchar(255),
 	primary key (id)
 );
 INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880e3368c3af901368c3ccd690004', '40288afb1b25f00b011b25f3c7950001', 'pkg_dc3edb6efa47418cbd1f8fef889b4818', 1, '미션관리', 'SINGLE', 'DEPLOYED', 'Y', 'admin', getdate(), 'admin', getdate(), '미션관리');
@@ -67,6 +68,7 @@ INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldna
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_title', 'sera_mission', '7', NULL, 'title', 'string', 'title', NULL, 'N', 'N', NULL, -1, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_starPoint', 'sera_mission', '5', NULL, 'starPoint', 'string', 'starPoint', NULL, 'N', 'N', NULL, 6, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_openDate', 'sera_mission', '2', NULL, 'openDate', 'datetime', 'openDate', NULL, 'N', 'N', NULL, 2, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_files', 'sera_mission', '8', NULL, 'files', 'string', 'files', NULL, 'N', 'N', NULL, -1, 0);
 
 INSERT INTO swform (id, packageid, formid, version, name, type, status, creator, createdtime, modifier, modifiedtime, content)
 VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b4818', 'sera_mission', 1, '미션관리', 'SINGLE', 'DEPLOYED', 'admin', getdate(), 'admin', getdate(), '<form id="sera_mission" version="1" name="미션관리">
@@ -75,8 +77,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="textInput" viewingType="textInput"></format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="293" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -84,8 +86,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="textInput" viewingType="textInput"></format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="293" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -97,8 +99,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 					tueNotUse="false" wedNotUse="false" thuNotUse="false" friNotUse="false"
 					satNotUse="false" />
 			</format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="201" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="200" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -110,8 +112,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 					tueNotUse="false" wedNotUse="false" thuNotUse="false" friNotUse="false"
 					satNotUse="false" />
 			</format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="201" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="200" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -119,8 +121,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="textInput" viewingType="textInput"></format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="293" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -128,8 +130,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="textInput" viewingType="textInput"></format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="293" height="23" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -137,8 +139,8 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="richEditor" viewingType="richEditor"></format>
-			<graphic hidden="false" readOnly="false" labelWidth="123"
-				contentWidth="773" height="83" cellSize="1" fitWidth="false"
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="772" height="83" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -146,8 +148,17 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 			required="false" system="false">
 			<children />
 			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="78"
+				contentWidth="188" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="8" name="files" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
 			<graphic hidden="false" readOnly="false" labelWidth="79"
-				contentWidth="189" height="23" cellSize="1" fitWidth="false"
+				contentWidth="274" height="23" cellSize="1" fitWidth="false"
 				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
 				listEditable="false" multipleUsers="false" />
 		</formEntity>
@@ -156,39 +167,43 @@ VALUES ('402880e3368c3af901368c3ccd6e0005', 'pkg_dc3edb6efa47418cbd1f8fef889b481
 	<mappingServices />
 	<layout type="grid_layout">
 		<columns>
-			<gridColumn size="586.0215298303115" labelSize="77.87661525984205" />
-			<gridColumn size="586.0215298303115" labelSize="77.87661525984205" />
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
 		</columns>
 		<gridRow size="30">
-			<gridCell size="586.0215298303115" span="2" rowSpan="1"
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
 				gridColumnIndex="0" fieldId="7" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="0" fieldId="0" />
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="1" fieldId="1" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="0" fieldId="2" />
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="1" fieldId="3" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="0" fieldId="4" />
-			<gridCell size="586.0215298303115" span="1" rowSpan="1"
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
 				gridColumnIndex="1" fieldId="5" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="586.0215298303115" span="2" rowSpan="3"
+			<gridCell size="586.0001821408293" span="2" rowSpan="3"
 				gridColumnIndex="0" fieldId="6" />
 		</gridRow>
 		<gridRow size="30" />
 		<gridRow size="30" />
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="8" />
+		</gridRow>
 	</layout>
-	<graphic width="1184" height="392" currentEntityNum="8"
+	<graphic width="1184" height="400" currentEntityNum="9"
 		currentMappingNum="0">
 		<space />
 	</graphic>
@@ -567,6 +582,150 @@ ALTER TABLE SWOrgGroupMember add creator varchar(50);
 ALTER TABLE SWOrgGroupMember add createdtime datetime;
 ALTER TABLE SWOrgGroupMember add modifier varchar(50);
 ALTER TABLE SWOrgGroupMember add modifiedtime datetime;
+
+--미션 첨부파일 추가
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('sera_files', 'sera_mission', '8', NULL, 'files', 'string', 'files', NULL, 'N', 'N', NULL, -1, 0);
+ALTER TABLE mission add files varchar(255);
+update swform set content='<form id="sera_mission" version="1" name="미션관리">
+	<children>
+		<formEntity id="0" name="index" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="1" name="prevMission" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="2" name="openDate" systemType="datetime"
+			required="false" system="false">
+			<children />
+			<format type="dateChooser" viewingType="dateChooser">
+				<date yearUse="false" sunNotUse="false" monNotUse="false"
+					tueNotUse="false" wedNotUse="false" thuNotUse="false" friNotUse="false"
+					satNotUse="false" />
+			</format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="200" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="3" name="closeDate" systemType="datetime"
+			required="false" system="false">
+			<children />
+			<format type="dateChooser" viewingType="dateChooser">
+				<date yearUse="false" sunNotUse="false" monNotUse="false"
+					tueNotUse="false" wedNotUse="false" thuNotUse="false" friNotUse="false"
+					satNotUse="false" />
+			</format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="200" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="4" name="missionClearers" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="5" name="starPoint" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="292" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="6" name="content" systemType="text"
+			required="false" system="false">
+			<children />
+			<format type="richEditor" viewingType="richEditor"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="122"
+				contentWidth="772" height="83" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="7" name="title" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="textInput" viewingType="textInput"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="78"
+				contentWidth="188" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+		<formEntity id="8" name="files" systemType="string"
+			required="false" system="false">
+			<children />
+			<format type="fileField" viewingType="fileField"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="79"
+				contentWidth="274" height="23" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" textAlign="left" fitToScreen="false"
+				listEditable="false" multipleUsers="false" />
+		</formEntity>
+	</children>
+	<mappingForms />
+	<mappingServices />
+	<layout type="grid_layout">
+		<columns>
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
+			<gridColumn size="586.0001821408293" labelSize="77.8737783575853" />
+		</columns>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="7" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="0" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="1" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="2" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="3" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="0" fieldId="4" />
+			<gridCell size="586.0001821408293" span="1" rowSpan="1"
+				gridColumnIndex="1" fieldId="5" />
+		</gridRow>
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="3"
+				gridColumnIndex="0" fieldId="6" />
+		</gridRow>
+		<gridRow size="30" />
+		<gridRow size="30" />
+		<gridRow size="30">
+			<gridCell size="586.0001821408293" span="2" rowSpan="1"
+				gridColumnIndex="0" fieldId="8" />
+		</gridRow>
+	</layout>
+	<graphic width="1184" height="400" currentEntityNum="9"
+		currentMappingNum="0">
+		<space />
+	</graphic>
+</form>' where formid='sera_mission'
+
+
+
 
 CREATE TABLE CourseReview (
 	objId varchar(50) NOT NULL,
