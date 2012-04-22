@@ -781,7 +781,7 @@ $(function() {
 	$('.js_select_course_btn').live('click', function(e) {
 		var input = $(e.target).parents('.js_select_course_btn');
 		var courseType = input.attr('courseType');
-		var categoryName = (courseType === "14") ? input.html() : "";
+		var categoryName = (courseType === "14") ? input.find('a').html() : "";
 		
 		smartPop.progressCenter();				
 		$.ajax({

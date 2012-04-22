@@ -11,12 +11,11 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 %>
 
-<div id="course_list_section">
+<div id="course_list_section" class="js_about_sera_page">
 	<!-- SNB Left -->
 	<div class="snb2">
-		<ul class="snb_menu">
-			<li><img height="112" width="149"
-				src="sera/images/function_title10.gif"></li>
+		<ul class="snb_menu js_about_sera_menu">
+			<li><img height="112" width="149" src="sera/images/function_title10.gif"></li>
 			<li class="selected"><a href="">SERA는</a></li>
 			<li class=""><a href="">SERA의 철학</a></li>
 			<li class=""><a href="">SERA의 사업</a></li>
@@ -26,14 +25,14 @@
 	</div>
 	<!-- SNB Left//-->
 	<!-- Content -->
-	<div id="content_list_section">
+	<div id="content_list_section" class="js_about_sera_content">
 		<!-- About Content 001 -->
 		<div>
 			<h3>SERA는</h3>
 			<div>
-				<img src="sera/images/aboutSERA_intro1.jpg"> <img
-					src="sera/images/aboutSERA_intro2.jpg"> <img
-					src="sera/images/aboutSERA_intro3.jpg">
+				<img src="sera/images/aboutSERA_intro1.jpg"> 
+				<img src="sera/images/aboutSERA_intro2.jpg"> 
+				<img src="sera/images/aboutSERA_intro3.jpg">
 			</div>
 		</div>
 		<!-- About Content 001 //-->
@@ -73,3 +72,20 @@
 	</div>
 	<!-- Content //-->
 </div>
+
+<script type="text/javascript">
+
+$(function() {
+	$('.js_about_sera_menu').live('click', function(e){
+		var input = $(e.target).parents('li');
+		var prevs = input.prevAll();
+		var index = (isEmpty(prevs)) ? 1 : prevs.length;
+		input.addClass('selected').siblings().removeClass('selected');
+		var aboutSeraContents = input.parents('.js_about_sera_page').find('.js_about_sera_content > div');
+		aboutSeraContents.hide();
+		$(aboutSeraContents[index-1]).show();
+		return false;
+	});
+});
+
+</script>

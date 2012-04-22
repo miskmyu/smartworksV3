@@ -25,7 +25,6 @@ public class SeraUserDetail {
 	private String fbUserId;
 	private String fbPassword;
 	private String nickName;
-	private String challengingTarget;
 	
 	public String getUserId() {
 		return userId;
@@ -104,12 +103,6 @@ public class SeraUserDetail {
 	}
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
-	}
-	public String getChallengingTarget() {
-		return challengingTarget;
-	}
-	public void setChallengingTarget(String challengingTarget) {
-		this.challengingTarget = challengingTarget;
 	}
 	
 }
