@@ -73,7 +73,7 @@
 .glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden; margin:0 10px; border-top:1px solid #ededed}
 /* Global Btn Space Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
-.btn_gray {display:inline-block;}
+.btn_gray {}
 .btn_gray .txt_btn_start {background: url("../images/form_btn_default_l.gif") repeat scroll 0 0 transparent;
 			 float:left; height:28px; width:12px;}
 .btn_gray .txt_btn_center {background: url("../images/form_btn_default_c.gif") repeat scroll 0 0 transparent;
