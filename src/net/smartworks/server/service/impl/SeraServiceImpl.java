@@ -826,7 +826,7 @@ public class SeraServiceImpl implements ISeraService {
 				txtCourseStartDate=, 
 				txtCourseEndDate=, 
 				chkCourseSecurity=1, 
-				chkCourseUsers=userInput, 
+				chkCourseUsers=unlimited, 
 				txtCourseUsers=3, 
 				chkJoinApproval=autoApporval, 
 				chkCourseFee=free, 
@@ -1022,7 +1022,12 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
-		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
+		if (chkCourseUsers != null && chkCourseUsers.equalsIgnoreCase("unlimited")) {
+			courseDetail.setMaxMentees(-1);
+		} else {
+			courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? -1 : Integer.parseInt(txtCourseUsers));
+		}
+			
 		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
 		courseDetail.setPayable(chkCourseFee != null ? chkCourseFee.equalsIgnoreCase("free") ? false : true : false);
 		courseDetail.setFee(txtCourseFee == null || txtCourseFee.equals("") ? 0 : Integer.parseInt(txtCourseFee));
