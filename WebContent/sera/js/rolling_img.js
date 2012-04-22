@@ -16,20 +16,15 @@
         $("[id^=eventBanner]").each(
             function (i) {
                 if (after == i) {
-                    $(this).css("z-index", "1").css("display", "none").fadeIn(500);
+                    $(this).css("z-index", "10").css("display", "none").fadeIn(500);
                 }
                 else if (before == i) {
-                    $(this).css("z-index", "2").css("display", "").fadeIn(1);
-                }
-                else {
-                    $(this).css("z-index", "3").css("display", "").fadeIn(1);
-                }
-                else {
-                    $(this).css("z-index", "4").css("display", "").fadeIn(1);
+                    $(this).css("z-index", "9").css("display", "").fadeIn(1);
+                }else {
+                    $(this).css("z-index", "7").css("display", "").fadeIn(1);
                 }
                 $(this).hover(function () { this.isOver = true; }, function () { this.isOver = false; });
-            }
-        );
+       });
 
     },
 
@@ -69,7 +64,7 @@
                     );
                 }
             );
-            EventBannerHandler.itemMaxCount = 4;
+            EventBannerHandler.itemMaxCount = 5;
             EventBannerHandler.SetCurrentBanner(0);
             setInterval(
                 function () {
