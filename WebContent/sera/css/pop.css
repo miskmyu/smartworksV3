@@ -22,6 +22,7 @@
 
 /* Icon */
 .icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -585px -199px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Confirm {background: url("../images/icon.png") no-repeat scroll -585px -199px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
 .icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
 .icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
 
