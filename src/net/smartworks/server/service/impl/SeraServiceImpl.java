@@ -450,7 +450,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			
+			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
@@ -715,6 +715,21 @@ public class SeraServiceImpl implements ISeraService {
 								missionInstanceInfo.setContent(swdDataField.getValue());
 							} else if (swdDataField.getId().equals(SeraConstant.MISSION_INDEXFIELDID)) {
 								missionInstanceInfo.setIndex(Integer.parseInt(swdDataField.getValue()));
+							} else if (swdDataField.getId().equals(SeraConstant.MISSION_FILESFIELDID)) {
+								missionInstanceInfo.setFileGroupId(swdDataField.getValue());
+								List<IFileModel> docFileList = docMgr.findFileGroup(swdDataField.getValue());
+								if (docFileList != null && docFileList.size() != 0) {
+									List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+									for (int k = 0 ; k <docFileList.size(); k++) {
+										Map<String, String> fileMap = new HashMap<String, String>();
+										IFileModel docFile = docFileList.get(k);
+										fileMap.put("fileId", docFile.getId());
+										fileMap.put("fileName", docFile.getFileName());
+										fileMap.put("fileSize", docFile.getFileSize()+"");
+										fileList.add(fileMap);
+									}
+									missionInstanceInfo.setFiles(fileList);
+								}
 							}
 						}
 					}
@@ -809,6 +824,7 @@ public class SeraServiceImpl implements ISeraService {
 					txtMissionOpenDate=2012.04.04, 
 					txtMissionCloseDate=2012.04.11, 
 					selPrevMission=, 
+					txtFileField={groupId=fg_d299186ecf640c4407cbd69c0dc3a2c4bc30, files=[]},
 					txtaMissionContent=미션 내용
 				}
 		}*/
@@ -827,6 +843,11 @@ public class SeraServiceImpl implements ISeraService {
 		String selPrevMission = null;
 		String txtaMissionContent = null;
 
+		Map<String, Object> txtFileField = null;
+		String fileGroupId = null;
+		Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
+
+		
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
 			Object fieldValue = frmNewMissionProfile.get(fieldId);
@@ -841,6 +862,17 @@ public class SeraServiceImpl implements ISeraService {
 					selPrevMission = (String)frmNewMissionProfile.get("selPrevMission");
 				} else if(fieldId.equals("txtaMissionContent")) {
 					txtaMissionContent = (String)frmNewMissionProfile.get("txtaMissionContent");
+				}
+			} else if (fieldValue instanceof LinkedHashMap) {
+				if (fieldId.equalsIgnoreCase("txtFileField")) {
+					txtFileField = (Map<String, Object>)fieldValue;
+					if(txtFileField != null && txtFileField.size() > 0) {
+						fileGroupId = (String)txtFileField.get("groupId");
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)txtFileField.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							fileGroupMap.put(fileGroupId, files);
+						}
+					}
 				}
 			}
 		}
@@ -901,6 +933,8 @@ public class SeraServiceImpl implements ISeraService {
 				seraMgr.setCourseDetail(courseDetail);
 				
 				fieldData.setValue(lastMissionIndex + "");
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_FILESFIELDID)) {
+				fieldData.setValue(fileGroupId);
 			}
 			fieldDataList.add(fieldData);
 		}
@@ -921,6 +955,31 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setAccessValue(null);
 
 		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
+		
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", obj.getRecordId())});
+		tskCond.setModificationUser(userId);
+		tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_CREATIONDATE, false)});
+		TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		String taskInstId = tskTasks[0].getObjId();
+		
+		if(fileGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+				String fGroupId = entry.getKey();
+				List<Map<String, String>> fileGroups = entry.getValue();
+				try {
+					for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+						Map<String, String> file = fileGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Files", taskInstId, fGroupId, fileId, fileName, fileSize);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("file upload fail...");
+				}
+			}
+		}
 		
 		return courseId;
 	}
@@ -1929,7 +1988,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			Filter[] filters = new Filter[1];
 
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
 
 			swdRecordCond.setFilter(filters);
 
@@ -2065,7 +2124,7 @@ public class SeraServiceImpl implements ISeraService {
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
 
 			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
 			
 			swdRecordCond.setFilter(filters);
 
@@ -2331,6 +2390,7 @@ public class SeraServiceImpl implements ISeraService {
 			swfCond.setCompanyId(user.getCompanyId());
 			swfCond.setId(SeraConstant.MISSION_FORMID);
 
+			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			SwfForm swfForm = swfMgr.getForms(user.getId(), swfCond, IManager.LEVEL_LITE)[0];
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
@@ -2379,6 +2439,21 @@ public class SeraServiceImpl implements ISeraService {
 						missionInstance.setContent(swdDataField.getValue());
 					} else if (swdDataField.getId().equals(SeraConstant.MISSION_INDEXFIELDID)) {
 						missionInstance.setIndex(Integer.parseInt(swdDataField.getValue()));
+					} else if (swdDataField.getId().equals(SeraConstant.MISSION_FILESFIELDID)) {
+						missionInstance.setFileGroupId(swdDataField.getValue());
+						List<IFileModel> docFileList = docMgr.findFileGroup(swdDataField.getValue());
+						if (docFileList != null && docFileList.size() != 0) {
+							List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+							for (int k = 0 ; k <docFileList.size(); k++) {
+								Map<String, String> fileMap = new HashMap<String, String>();
+								IFileModel docFile = docFileList.get(k);
+								fileMap.put("fileId", docFile.getId());
+								fileMap.put("fileName", docFile.getFileName());
+								fileMap.put("fileSize", docFile.getFileSize()+"");
+								fileList.add(fileMap);
+							}
+							missionInstance.setFiles(fileList);
+						}
 					}
 				}
 			}
