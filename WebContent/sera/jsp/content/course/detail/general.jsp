@@ -81,7 +81,7 @@
 						<dd class="gauge_box fl mt10">
 							<div class="gauge_outline">
 								<label class="gauge"
-									style="width: <%=course.getAchievedPoint() * 100 / course.getTargetPoint()%>%;"></label>
+									style="width: <%=course.getAchievedRatio()%>%;"></label>
 							</div>
 						</dd>
 						<%
@@ -95,12 +95,8 @@
 						<%
 						}
 						%>
-						<div class="mission_info"><%=course.getTargetPoint()%>개의 미션
-							중
-							<%=course.getAchievedPoint()%>번째가 진행중입니다
-						</div>
-						<div class="process">
-							(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
+						<div class="mission_info"><%=course.getTargetPoint()%>일 미션기간 중 <%=course.getAchievedPoint()%>일째가 진행중입니다</div>
+						<div class="process">(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
 						</div>
 					</dl>
 				</div>
