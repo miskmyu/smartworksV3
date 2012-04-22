@@ -42,10 +42,12 @@
 	if(courseId!=null && courseId.equals("null")) courseId = null;
 	String missionId = request.getParameter("missionId");
 	if(missionId!=null && missionId.equals("null")) missionId = null;
+	String teamId = request.getParameter("teamId");
+	if(teamId!=null && teamId.equals("null")) teamId = null;
 	String fromDateStr = request.getParameter("fromDate");
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId,  fromDate, 10);
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId,  fromDate, 10);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
@@ -71,7 +73,7 @@
 	%>
 				<div class="js_sera_instance_item" >
 					<!-- 더보기 -->
-					<div class="more js_more_sera_instances_btn" instanceType="<%=instanceType %>"  userId="<%=userId %>" courseId="<%=courseId %>" missionId="<%=missionId %>" lastDate="<%=lastDateStr%>">
+					<div class="more js_more_sera_instances_btn" instanceType="<%=instanceType %>"  userId="<%=userId %>" courseId="<%=courseId %>" missionId="<%=missionId %>" teamId="<%=teamId %>" lastDate="<%=lastDateStr%>">
 						<div class="icon_more">더보기</div>
 						<span class="js_progress_span"></span>
 					</div>

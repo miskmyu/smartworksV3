@@ -2725,7 +2725,7 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 	@Override
-	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception{
+	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception{
 		try{
 
 			InstanceInfo[] boardInfo = null;

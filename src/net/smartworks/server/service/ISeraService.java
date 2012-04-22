@@ -55,7 +55,7 @@ public interface ISeraService {
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
-	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

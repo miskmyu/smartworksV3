@@ -22,7 +22,9 @@
 		var settingProfile = $('.js_setting_profile_page');
 		if (SmartWorks.GridLayout.validate(settingProfile.find('form.js_validation_required'),  settingProfile.find('.sw_error_message'))) {
 			var forms = settingProfile.find('form');
+			var courseId = settingProfile.attr('courseId');
 			var paramsJson = {};
+			paramsJson['courseId'] = courseId;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){

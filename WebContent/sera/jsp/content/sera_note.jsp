@@ -23,6 +23,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	int spaceType = Integer.parseInt(request.getParameter("spaceType"));
 	String spaceId = request.getParameter("spaceId");
+	String teamId = request.getParameter("teamId");
 %>
 
 <script type="text/javascript">
@@ -33,9 +34,12 @@
 		var seraNote = $('.js_sera_note_page');
 		if (SmartWorks.GridLayout.validate(seraNote.find('form.js_validation_required'),  seraNote.find('.sw_error_message'))) {
 			var forms = seraNote.find('form');
+			var teamId = seraNote.attr('teamId');
+			if(isEmpty(teamId)) teamId="";
 			var paramsJson = {};
 			paramsJson['spaceType'] = seraNote.attr('spaceType');
 			paramsJson['spaceId'] = seraNote.attr('spaceId');
+			paramsJson['teamId'] = seraNote.attr('teamId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -67,7 +71,7 @@
 	};
 </script>
 
-<div class="js_sera_note_page" spaceType="<%=spaceType%>" spaceId="<%=spaceId%>">
+<div class="js_sera_note_page" spaceType="<%=spaceType%>" spaceId="<%=spaceId%>" teamId="<%=teamId%>">
 	<form name="frmCreateSeraNote" class="js_validation_required">	
 		<div class="comment_txt">
 			<textarea name="txtNoteContent" class="required" rows="5" placeholder="남기고 싶은 이야기를 적어 주세요!"></textarea>
