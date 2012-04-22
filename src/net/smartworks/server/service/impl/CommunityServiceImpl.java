@@ -36,6 +36,8 @@ import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.sera.manager.ISeraManager;
+import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
@@ -700,13 +702,15 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
-		System.out.println(requestBody);
-		
-		String groupId = null;
-		String userId = null;
+		/*{
+			courseId=group_8e04540e1f8a4791bbef78eacd1acc1a, 
+			userId=kj@maninsoft.co.kr
+		}*/
+		String groupId = (String)requestBody.get("courseId");
+		String userId = (String)requestBody.get("userId");
 		
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		
 		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
 		if (group == null)
@@ -717,8 +721,18 @@ public class CommunityServiceImpl implements ICommunityService {
 		groupMember.setGroupId(groupId);
 		groupMember.setUserId(userId);
 		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
-		groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 		
+		CourseDetail courseDetail = seraMgr.getCourseDetailById(groupId);
+		if (courseDetail == null) {
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+		} else {
+			boolean autoApproval = courseDetail.isAutoApproval();
+			if (autoApproval) {
+				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			} else {
+				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+			}
+		}
 		group.addGroupMember(groupMember);
 		
 		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
@@ -727,22 +741,126 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		System.out.println(requestBody);
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			users=
+				[
+					{
+						userId=ktsoo@maninsoft.co.kr
+					}
+				]
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		List<Map<String, String>> users = (ArrayList<Map<String,String>>)requestBody.get("users");
+		
+		if (users == null || users.size() == 0)
+			return;
+		
+		String[] userIdArray = new String[users.size()];
+		if(!CommonUtil.isEmpty(users)) {
+			for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+				Map<String, String> userMap = users.get(i);
+				userIdArray[i] = userMap.get("userId");
+			}
+		}
+		if (userIdArray == null || userIdArray.length == 0)
+			return;
+		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup("", groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		for (int i = 0; i < userIdArray.length; i++) {
+			String userId = userIdArray[i];
+			if (group.isContainGroupMember(userId))
+				continue;
+
+			SwoGroupMember groupMember = new SwoGroupMember();
+			groupMember.setGroupId(groupId);
+			groupMember.setUserId(userId);
+			groupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			groupMember.setJoinDate(new LocalDate());
+
+			group.addGroupMember(groupMember);
+			
+		}
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
 	
 	@Override
 	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		System.out.println(requestBody);
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7,
+			userId=ktsoo@maninsoft.co.kr, 
+			approval=true
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		String userId = (String)requestBody.get("userId");
+		String approval = (String)requestBody.get("approval");
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		if (Boolean.parseBoolean(approval)) {
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+		} else {
+			group.removeGroupMember(groupMember);
+		}
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
 	
 	@Override
 	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		System.out.println(requestBody);
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			userId=ktsoo@maninsoft.co.kr
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		String userId = (String)requestBody.get("userId");
+	
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		group.removeGroupMember(groupMember);
+		
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
 	
 	@Override
 	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
-		System.out.println(requestBody);
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			userId=ktsoo@maninsoft.co.kr
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		String userId = (String)requestBody.get("userId");
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		group.removeGroupMember(groupMember);
+		
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
 
 }

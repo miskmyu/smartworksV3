@@ -25,6 +25,7 @@ import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.sera.model.SeraUserDetail;
+import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
 
 import org.hibernate.Query;
 
@@ -490,6 +491,82 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			throw new SeraException(e);
 		}
 	}
+	private Query appendQuery(StringBuffer buf, SeraUserDetailCond cond) throws Exception {
+		String userId = null;
+		String email = null;
+		String[] userIdIns = null;
+		String[] userIdNotIns = null;
+		if (cond != null) {
+			userId = cond.getUserId();
+			email = cond.getEmail();
+			userIdIns = cond.getUserIdIns();
+			userIdNotIns = cond.getUserIdNotIns();
+		}
+		buf.append(" from SeraUserDetail obj");
+		buf.append(" where obj.userId is not null");
+		if (cond != null) {
+			if (userId != null)
+				buf.append(" and obj.userId = :userId");
+			if (email != null)
+				buf.append(" and obj.email = :email");
+			if (userIdIns != null && userIdIns.length != 0) {
+				buf.append(" and obj.userId in (");
+				for (int i=0; i<userIdIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":userIdIn").append(i);
+				}
+				buf.append(")");
+			}
+			if (userIdNotIns != null && userIdNotIns.length != 0) {
+				buf.append(" and obj.userId not in (");
+				for (int i=0; i<userIdNotIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":userIdNotIn").append(i);
+				}
+				buf.append(")");
+			}
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (userId != null)
+				query.setString("userId", userId);
+			if (email != null)
+				query.setString("email", email);
+
+			if (userIdIns != null && userIdIns.length != 0) {
+				for (int i=0; i<userIdIns.length; i++) {
+					query.setString("userIdIn"+i, userIdIns[i]);
+				}
+			}
+			if (userIdNotIns != null && userIdNotIns.length != 0) {
+				for (int i=0; i<userIdNotIns.length; i++) {
+					query.setString("userIdNotIn"+i, userIdNotIns[i]);
+				}
+			}
+		}
+		return query;
+	}
+	
+	public SeraUserDetail[] getSeraUserDetails(String userId, SeraUserDetailCond cond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SeraUserDetail[] objs = new SeraUserDetail[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
 	@Override
 	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException {
 		try {
@@ -514,6 +591,21 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		} catch (SeraException e) {
 			throw e;
 		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public long getSeraUserSize(String userId, SeraUserDetailCond cond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
 			throw new SeraException(e);
 		}
 	}

@@ -19,6 +19,7 @@ import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.sera.model.SeraUserDetail;
+import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
 
 public interface ISeraManager extends IManager{
 
@@ -42,7 +43,9 @@ public interface ISeraManager extends IManager{
 	public SeraFriend[] getFriends(String userId, SeraFriendCond friendCond) throws SeraException;
 
 	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException;
+	public SeraUserDetail[] getSeraUserDetails(String userId, SeraUserDetailCond cond) throws SeraException;
 	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException;
 	public void removeSeraUser(String userId, String objId) throws SeraException;
+	public long getSeraUserSize(String userId, SeraUserDetailCond cond) throws SeraException;
 	
 }

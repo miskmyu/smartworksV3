@@ -246,5 +246,4 @@ public class SwoGroupMember extends SwoObject {
 	public void setOutDate(Date outDate) {
 		this.outDate = outDate;
 	}
-
 }
