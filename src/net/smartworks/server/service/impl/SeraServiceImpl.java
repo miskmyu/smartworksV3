@@ -3811,10 +3811,12 @@ public class SeraServiceImpl implements ISeraService {
 
 		List courseRelatedUserIdList = new ArrayList();
 		
+		courseRelatedUserIdList.add(group.getGroupLeader());
+		
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
-			courseRelatedUserIdList.add(groupMember.getId());
+			courseRelatedUserIdList.add(groupMember.getUserId());
 		}
 
 		String[] courseRelatedUserIds = new String[courseRelatedUserIdList.size()];
@@ -3896,6 +3898,7 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 		SeraUserDetailCond cond = new SeraUserDetailCond();
+		cond.setUserIdNotIns(new String[]{userId});
 		long totalSeraUserSize = seraMgr.getSeraUserSize(userId, cond);
 		
 		MenteeInformList menteeInformList = new MenteeInformList();
