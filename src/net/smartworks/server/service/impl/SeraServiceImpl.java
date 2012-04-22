@@ -2039,6 +2039,19 @@ public class SeraServiceImpl implements ISeraService {
 
 			MissionInstance missionInstance = (MissionInstance)workInstance;
 			
+			SwdRecordCond cond = new SwdRecordCond();
+			cond.setWorkSpaceId(swdRecord.getRecordId());
+			cond.setFormId(SeraConstant.MISSION_REPORT_FORMID);
+			SwdRecord[] records = swdMgr.getRecords(user.getId(), cond, IManager.LEVEL_LITE);
+			if (records != null && records.length != 0) {
+				String[] clearers = new String[records.length];
+				for (int j = 0; j < records.length; j++) {
+					SwdRecord record = records[j];
+					clearers[j] = record.getCreationUser();
+				}
+				missionInstance.setMissionClearers(clearers);
+			}
+			
 			SwdDataField[] swdDataFields = swdRecord.getDataFields();
 
 			if(!CommonUtil.isEmpty(swdDataFields)) {
@@ -2593,7 +2606,7 @@ public class SeraServiceImpl implements ISeraService {
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
 
 			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());
 
 			swdRecordCond.setFilter(filters);
 
