@@ -12,6 +12,7 @@ import net.smartworks.util.SmartUtil;
 public class MissionInstanceInfo extends WorkInstanceInfo {
 
 	private int index;
+	private String briefContent;
 	private String content;
 	private String fileGroupId;
 	private List<Map<String, String>> files;
@@ -21,6 +22,12 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 	private String[] missionClearers;
 	private double starPoint;
 	
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
+	}
 	public String getContent() {
 		return content;
 	}

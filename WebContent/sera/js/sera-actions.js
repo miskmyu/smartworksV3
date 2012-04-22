@@ -392,7 +392,7 @@ $(function() {
 			var courseId = performMission.attr('courseId');
 			var paramsJson = {};
 			paramsJson["courseId"] = courseId;
-			paramsJson["courseId"] = performMission.attr('missionId');
+			paramsJson["missionId"] = performMission.attr('missionId');
 			smartPop.progressCenter();				
 			$.ajax({
 				url : 'remove_mission.sw',
@@ -1293,6 +1293,14 @@ $(function() {
 			input.addClass('icon_close_red').removeClass('icon_open_red');			
 		}
 		input.parents('.js_perform_mission_page').find('.js_mission_content_item').toggle();
+		return false;
+	});
+
+	$('.js_show_more_content').live('click', function(e){
+		var input = $(e.target).removeAttr('href').removeClass('js_show_more_content');
+		var seraInstanceItem = input.parents('.js_sera_instance_item');
+		seraInstanceItem.find('.js_brief_content').hide().next().show();
+		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
 		return false;
 	});
 

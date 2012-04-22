@@ -824,7 +824,6 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	public CourseTeam getCourseTeam(String user, CourseTeamCond cond, String level) throws SeraException {
 		if (level == null)
 			level = LEVEL_ALL;
-		cond.setPageSize(2);
 		CourseTeam[] objs = getCourseTeams(user, cond, level);
 		if (CommonUtil.isEmpty(objs))
 			return null;
@@ -882,13 +881,11 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	private Query appendQuery(StringBuffer buf, CourseTeamCond cond) throws Exception {
 		String objId = null;
 		String courseId = null;
-		int accessPolicy = -1;
 		CourseTeamUser[] courseTeamUsers = null;
 
 		if (cond != null) {
 			objId = cond.getObjId();
 			courseId = cond.getCourseId();
-			accessPolicy = cond.getAccessPolicy();
 			courseTeamUsers = cond.getCourseTeamUsers();
 		}
 		buf.append(" from CourseTeam obj");
@@ -904,8 +901,6 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.objId = :objId");
 			if (courseId != null)
 				buf.append(" and obj.courseId = :courseId");
-			if (accessPolicy != -1)
-				buf.append(" and obj.accessPolicy = :accessPolicy");
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
@@ -927,8 +922,6 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setString("objId", objId);
 			if (courseId != null)
 				query.setString("courseId", courseId);
-			if (accessPolicy != -1)
-				query.setInteger("accessPolicy", accessPolicy);
 
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {

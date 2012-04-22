@@ -37,6 +37,7 @@
 			var forms = modifyMission.find('form');
 			var paramsJson = {};
 			paramsJson['courseId'] = modifyMission.attr('courseId');
+			paramsJson['missionId'] = modifyMission.attr('missionId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -68,7 +69,7 @@
 	};
 </script>
 
-<div class="js_modify_mission_page" courseId="<%=courseId%>">
+<div class="js_modify_mission_page" courseId="<%=courseId%>" missionId="<%=mission.getId() %>">
 	<!-- Header Title -->
 	<div class="header_tit">
 		<div class="tit_dep2 m0">

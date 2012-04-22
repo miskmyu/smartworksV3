@@ -12,9 +12,16 @@ public class BoardInstanceInfo extends WorkInstanceInfo {
 		
 	private int views;
 	private String briefContent;
+	private String content;
 	private String fileGroupId;
 	private List<Map<String, String>> files;
 
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
 	public int getViews() {
 		return views;
 	}

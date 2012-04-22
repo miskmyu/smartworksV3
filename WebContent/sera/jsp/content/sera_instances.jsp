@@ -121,7 +121,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 									%>
 										<dt class="name fl">
-											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
+											<a href="courseHome.sw?courseId=<%=course.getId()%>">[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span></a>
 										</dt>
 									<%
 									}
@@ -133,7 +133,8 @@
 									%>
 									<dd>
 										<div class="text"><%=board.getSubject() %></div>
-										<div class="text"><%=board.getBriefContent() %></div>
+										<div class="text js_brief_content"><%=board.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=board.getContent() %></div>
 									</dd>
 								<%
 									break;
@@ -142,7 +143,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 									%>
 										<dt class="name">
-											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
+											<a href="courseHome.sw?courseId=<%=course.getId()%>">[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span></a>
 										</dt>
 									<%
 									}
@@ -156,13 +157,14 @@
 										<div class="text">
 											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
-												<span>이벤트 기간 : <%=event.getStart().toLocalString() %></span>
+												<span>이벤트 기간 : <%=event.getStart().toLocalDateTimeSimpleString() %></span>
 												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
-												<span>~<%=event.getEnd().toLocalDateLongString() %></span>
+												<span>~<%=event.getEnd().toLocalDateTimeSimpleString() %></span>
 												<div>이벤트 장소 : </div>
 											</div><%} %>
 										</div>
-										<div class="text"><%=event.getContent() %></div>
+										<div class="text js_brief_content"><%=event.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=event.getContent() %></div>
 									</dd>
 								<%
 									break;
@@ -171,7 +173,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 									%>
 										<dt class="name fl">
-											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
+											<a href="courseHome.sw?courseId=<%=course.getId()%>">[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span></a>
 										</dt>
 									<%
 									}
@@ -182,7 +184,8 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=seraNote.getContent() %></div>
+										<div class="text js_brief_content"><%=seraNote.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=seraNote.getContent() %></div>
 										<!-- URL information -->
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getLinkUrl())){
@@ -207,7 +210,7 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getImageSrc())){ 
 										%>
-											<div class="thum_image">
+											<div class="thum_image js_thum_image">
 												<img class="thum_image_size" src="<%=seraNote.getImageSrc() %>" />
 											</div>
 										<%
@@ -218,7 +221,7 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
 										%>
-											<div class="cb thum_image mt3">
+											<div class="cb thum_image mt3 js_thum_image">
 												<object class="thum_image_size">
 													<param name="movie"
 														value="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
@@ -241,7 +244,7 @@
 									if(!SmartUtil.isBlankObject(course)){
 									%>
 										<dt class="name fl">
-											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
+											<a href="courseHome.sw?courseId=<%=course.getId()%>">[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span></a>
 										</dt>
 									<%
 									}
@@ -252,7 +255,8 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=seraReport.getContent() %></div>
+										<div class="text js_brief_content"><%=seraReport.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=seraReport.getContent() %></div>
 										<!-- URL information -->
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
@@ -339,7 +343,7 @@
 										}
 										%>
 										<span><a href="" class="js_show_more_content">더보기</a> | </span> 
-										<span class="date"><%=seraInstance.getLastModifiedDate().toLocalDateLongString() %></span>
+										<span class="date"><%=seraInstance.getLastModifiedDate().toLocalString() %></span>
 									</dd>
 									<!-- Util //-->
 								<%
