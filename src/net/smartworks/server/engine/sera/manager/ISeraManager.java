@@ -16,6 +16,8 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.CourseReview;
 import net.smartworks.server.engine.sera.model.CourseReviewCond;
+import net.smartworks.server.engine.sera.model.CourseTeam;
+import net.smartworks.server.engine.sera.model.CourseTeamCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -56,5 +58,14 @@ public interface ISeraManager extends IManager{
 	public void removeCourseReview(String userId, String objId) throws SeraException;
 	public long getCourseReviewSize(String userId, CourseReviewCond courseReviewCond) throws SeraException;
 	public CourseReview[] getCourseReviews(String userId, CourseReviewCond courseReviewCond) throws SeraException;
+
+	public CourseTeam getCourseTeam(String user, String id, String level) throws SeraException;
+	public CourseTeam getCourseTeam(String user, CourseTeamCond cond, String level) throws SeraException;
+	public CourseTeam setCourseTeam(String user, CourseTeam obj) throws SeraException;
+	public CourseTeam createCourseTeam(String user, CourseTeam obj) throws SeraException;
+	public void removeCourseTeam(String user, String id) throws SeraException;
+	public void removeCourseTeam(String user, CourseTeamCond cond) throws SeraException;
+	public long getCourseTeamSize(String user, CourseTeamCond cond) throws SeraException;
+	public CourseTeam[] getCourseTeams(String user, CourseTeamCond cond, String level) throws SeraException;
 
 }
