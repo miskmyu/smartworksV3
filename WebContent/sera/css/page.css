@@ -73,7 +73,7 @@
 .top_navi {width:980px; clear:both; padding:5px 0 0 0; overflow:hidden}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
-.pofile_con { float:left;line-height:28px; margin-top:5px}
+.pofile_con { float:left;line-height:28px; margin-top:17px}
 .btn_log {background: url("../images/icon.png") no-repeat scroll 0 0 transparent; width:22px; height:9px; display:inline-block}
 .btn_log.on {background-position:0 -17px}
 .btn_log.off {background-position:-29px -17px}

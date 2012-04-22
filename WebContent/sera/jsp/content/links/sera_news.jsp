@@ -25,13 +25,13 @@
 	<div id="content_list_section">
 
 		<div class="tit_header">
-			<h2>SERA News</h2>
-			<ul>
+			<h2>세라 소식</h2>
+			<!-- <ul>
 				<li class="fl"><input id="rdoHandleOpen" class="pr3" type="radio" checked="checked" name="rdoHandle"></li>
 				<li class="fl"><span class="pr5">펼쳐보기</span></li>
 				<li class="fl"><input id="rdoHandleClose" class="pr3" type="radio" name="rdoHandle"></li>
 				<li class="fl"><span class="pr5">접어보기</span></li>
-			</ul>
+			</ul> -->
 		</div>
 
 		<!-- News Content 001 -->
