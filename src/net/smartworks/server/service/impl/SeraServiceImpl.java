@@ -189,7 +189,7 @@ public class SeraServiceImpl implements ISeraService {
 			group.setName(swoGroup.getName());
 			group.setDesc(swoGroup.getDescription());
 			group.setCreatedDate(new LocalDate(swoGroup.getCreationDate().getTime()));
-			group.setPublic(swoGroup.equals("O") ? true : false);
+			group.setPublic(swoGroup.getGroupType().equals("O") ? true : false);
 			//group.setContinue(swoGroup.getStatus().equals("C") ? true : false);
 			User leader = ModelConverter.getUserByUserId(swoGroup.getGroupLeader());
 			if(leader != null)
@@ -911,10 +911,12 @@ public class SeraServiceImpl implements ISeraService {
 					txtCourseEndDate = (String)frmNewCourseProfile.get("txtCourseEndDate");
 				} else if(fieldId.equals("chkCourseSecurity")) {
 					chkCourseSecurity = (String)frmNewCourseProfile.get("chkCourseSecurity");
-					if(chkCourseSecurity.equals(AccessPolicy.LEVEL_PUBLIC))
-						selGroupProfileType = "O";
-					else
-						selGroupProfileType = "C";
+					if (chkCourseSecurity != null) {
+						if(Integer.parseInt(chkCourseSecurity) == AccessPolicy.LEVEL_PUBLIC)
+							selGroupProfileType = "O";
+						else
+							selGroupProfileType = "C";
+					}
 				} else if(fieldId.equals("chkCourseUsers")) {
 					chkCourseUsers = (String)frmNewCourseProfile.get("chkCourseUsers");
 				} else if(fieldId.equals("txtCourseUsers")) {
