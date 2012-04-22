@@ -134,6 +134,7 @@
 									<dd>
 										<div class="text"><%=board.getSubject() %></div>
 										<div class="text js_brief_content"><%=board.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=board.getContent() %></div>
 									</dd>
 								<%
 									break;
@@ -162,7 +163,8 @@
 												<div>이벤트 장소 : </div>
 											</div><%} %>
 										</div>
-										<div class="text"><%=event.getContent() %></div>
+										<div class="text js_brief_content"><%=event.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=event.getContent() %></div>
 									</dd>
 								<%
 									break;
@@ -182,7 +184,8 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=seraNote.getContent() %></div>
+										<div class="text js_brief_content"><%=seraNote.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=seraNote.getContent() %></div>
 										<!-- URL information -->
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getLinkUrl())){
@@ -207,7 +210,7 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getImageSrc())){ 
 										%>
-											<div class="thum_image">
+											<div class="thum_image js_thum_image">
 												<img class="thum_image_size" src="<%=seraNote.getImageSrc() %>" />
 											</div>
 										<%
@@ -218,7 +221,7 @@
 										<%
 										if(!SmartUtil.isBlankObject(seraNote.getVideoId())){
 										%>
-											<div class="cb thum_image mt3">
+											<div class="cb thum_image mt3 js_thum_image">
 												<object class="thum_image_size">
 													<param name="movie"
 														value="https://www.youtube.com/v/<%=seraNote.getVideoId() %>?version=3&autohide=1&showinfo=0"></param>
@@ -252,7 +255,8 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=seraReport.getContent() %></div>
+										<div class="text js_brief_content"><%=seraReport.getBriefContent() %></div>
+										<div class="text" style="display:none"><%=seraReport.getContent() %></div>
 										<!-- URL information -->
 										<%
 										if(!SmartUtil.isBlankObject(seraReport.getLinkUrl())){
