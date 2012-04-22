@@ -567,7 +567,7 @@ CREATE TABLE CourseReview (
 	objId varchar(50) NOT NULL,
 	courseId varchar(50),
 	content varchar(4000),
-	startPoint int,
+	startPoint bigint,
 	creator	varchar(50),
 	createdtime datetime,
 	modifier varchar(50),
