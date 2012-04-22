@@ -11,6 +11,7 @@ package net.smartworks.server.engine.sera.manager;
 import java.util.Date;
 
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.searcher.exception.SchException;
 import net.smartworks.server.engine.sera.exception.SeraException;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
@@ -40,6 +41,7 @@ public interface ISeraManager extends IManager{
 	public void removeFriend(String userId, String objId) throws SeraException;
 	public long getFriendSize(String userId, SeraFriendCond friendCond) throws SeraException;
 	public SeraFriend[] getFriends(String userId, SeraFriendCond friendCond) throws SeraException;
+	public SeraFriend[] getMyFriends(String userId, SeraFriendCond cond) throws SeraException;
 
 	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException;
 	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException;
