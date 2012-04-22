@@ -654,7 +654,8 @@ $(function() {
 		var userId = friendRequest.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
-		paramsJson['accepted'] = true;		
+		paramsJson['accepted'] = true;
+		console.log(JSON.stringify(paramsJson));
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'reply_friend_request.sw',
@@ -688,7 +689,8 @@ $(function() {
 		var userId = friendRequest.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
-		paramsJson['accepted'] = false;		
+		paramsJson['accepted'] = false;
+		console.log(JSON.stringify(paramsJson));
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'reply_friend_request.sw',
@@ -722,6 +724,7 @@ $(function() {
 		var userId = friend.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
+		console.log(JSON.stringify(paramsJson));
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'destroy_friendship.sw',
@@ -752,7 +755,8 @@ $(function() {
 		var userId = input.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
-		smartPop.progressCenter();				
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();
 		$.ajax({
 			url : 'friend_request.sw',
 			contentType : 'application/json',

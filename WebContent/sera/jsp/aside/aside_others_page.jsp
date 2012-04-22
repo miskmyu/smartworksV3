@@ -124,13 +124,15 @@
 	<div class="list">
 		<dl>
 			<%
-				for (int i = 0; i < friendList.getFriends().length; i++) {
-					SeraUserInfo friend = friendList.getFriends()[i];
+				if(friendList.getFriends() != null) {
+					for (int i = 0; i < friendList.getFriends().length; i++) {
+						SeraUserInfo friend = friendList.getFriends()[i];
 			%>
 			<dd>
 				<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><img class="friend_df" src="<%=friend.getMinPicture()%>" title="<%=friend.getNickName()%>"></a>
 			</dd>
 			<%
+					}
 				}
 			%>
 		</dl>

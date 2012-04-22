@@ -94,6 +94,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
@@ -118,6 +119,10 @@ import org.springframework.util.StringUtils;
 
 @Service
 public class SeraServiceImpl implements ISeraService {
+
+	private ISeraManager getSeraManager() {
+		return SwManagerFactory.getInstance().getSeraManager();
+	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -2032,6 +2037,7 @@ public class SeraServiceImpl implements ISeraService {
 				seraUser.setTwPassword(seraUserDetail.getTwPassword());
 				seraUser.setFbUserId(seraUserDetail.getFbUserId());
 				seraUser.setFbPassword(seraUserDetail.getFbPassword());
+				seraUser.setNickName(seraUserDetail.getNickName());
 			}
 			return seraUser;
 			
@@ -3151,7 +3157,8 @@ public class SeraServiceImpl implements ISeraService {
 		seraUser.setSex(CommonUtil.isEmpty(selSex) ? 0 : selSex.equalsIgnoreCase("female") ? SeraUser.SEX_FEMALE : SeraUser.SEX_MALE );
 		seraUser.setNickName(txtNickName);
 		seraUser.setInterests(txtInterestPart);
-		seraUser.setChallengingTarget(txtChallengingTarget);
+		//seraUser.setChallengingTarget(txtChallengingTarget);
+		seraUser.setGoal(txtChallengingTarget);
 		
 		seraMgr.setSeraUser(txtUserId, seraUser);
 		
@@ -3159,30 +3166,142 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getFriendRequestsForMe(lastId, maxList);
+		try {
+			SeraUserInfo[] seraUserInfos = null;
+			List userInfosList = new ArrayList();
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setReceiveId(userId);
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+			seraFriendCond.setPageNo(0);
+			if(maxList != -1)
+				seraFriendCond.setPageSize(maxList);
+			seraFriendCond.setOrders(new Order[]{new Order("requestDate", false), new Order("requestName", true)});
+
+			SeraFriend[] seraFriends = getSeraManager().getFriends(userId, seraFriendCond);
+			if(!CommonUtil.isEmpty(seraFriends)) {
+				String[] ids = new String[seraFriends.length];
+				for(int j=0; j<seraFriends.length; j++) {
+					SeraFriend seraFriend = seraFriends[j];
+					String id = seraFriend.getRequestId();
+					ids[j] = id;
+				}
+				SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, ids);
+
+				if(userExtends != null) {
+					for(SwoUserExtend swoUserExtend : userExtends) {
+						UserInfo member = new SeraUserInfo();
+						member.setId(swoUserExtend.getId());
+						member.setName(swoUserExtend.getName());
+						member.setPosition(swoUserExtend.getPosition());
+						member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+						member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+						member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+						userInfosList.add(member);
+					}
+				}
+				
+			}
+
+			if(userInfosList.size() > 0) {
+				seraUserInfos = new SeraUserInfo[userInfosList.size()];
+				userInfosList.toArray(seraUserInfos);
+			}
+			return seraUserInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
+
 	@Override
 	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			String requestId = (String)requestBody.get("userId");
+			boolean accepted = (Boolean)requestBody.get("accepted");
+			User user = SmartUtil.getCurrentUser();
+			String receiveId = user.getId();
+
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setRequestId(requestId);
+			seraFriendCond.setReceiveId(receiveId);
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+			SeraFriend[] seraFriends = getSeraManager().getFriends(receiveId, seraFriendCond);
+
+			if(!CommonUtil.isEmpty(seraFriends)) {
+				SeraFriend seraFriend = seraFriends[0];
+				seraFriend.setAcceptStatus(accepted ? SeraFriend.ACCEPT_STATUS_ACCEPT : SeraFriend.ACCEPT_STATUS_REJECT);
+				seraFriend.setReplyDate(new LocalDate());
+				getSeraManager().setFriend(receiveId, seraFriend);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 	@Override
 	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			String receiveId = (String)requestBody.get("userId");
+			User user = SmartUtil.getCurrentUser();
+			String requestId = user.getId();
+			UserInfo requestUser = ModelConverter.getUserInfoByUserId(requestId);
+			UserInfo receiveUser = ModelConverter.getUserInfoByUserId(receiveId);
+			if(requestUser != null && receiveUser != null) {
+				SeraFriend seraFriend = new SeraFriend();
+				seraFriend.setRequestId(requestUser.getId());
+				seraFriend.setRequestName(requestUser.getName());
+				seraFriend.setReceiveId(receiveUser.getId());
+				seraFriend.setReceiveName(receiveUser.getName());
+				seraFriend.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+				seraFriend.setRequestDate(new LocalDate());	
+				getSeraManager().setFriend(requestId, seraFriend);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 	@Override
 	public void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			String destroyId = (String)requestBody.get("userId");
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			SeraFriend[] seraFriends = null;
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setRequestId(userId);
+			seraFriendCond.setReceiveId(destroyId);
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			seraFriends = getSeraManager().getFriends(userId, seraFriendCond);
+			if(CommonUtil.isEmpty(seraFriends)) {
+				seraFriendCond.setRequestId(destroyId);
+				seraFriendCond.setReceiveId(userId);
+				seraFriends = getSeraManager().getFriends(userId, seraFriendCond);
+			}
+
+			if(!CommonUtil.isEmpty(seraFriends)) {
+				SeraFriend seraFriend = seraFriends[0];
+				String objId = seraFriend.getObjId();
+				getSeraManager().removeFriend(userId, objId);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 	@Override
 	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
 		switch(courseType){
 		case Course.TYPE_FAVORITE_COURSES:
 			return this.getFavoriteCourses(lastId, maxList);
 		case Course.TYPE_RECOMMENDED_COURSES:
+			return this.getRecommendedCourses(lastId, maxList);
+		case Course.TYPE_ALL_COURSES:
+			return this.getRecommendedCourses(lastId, maxList);
+		case Course.TYPE_CLOSED_COURSES:
 			return this.getRecommendedCourses(lastId, maxList);
 		}
 		return null;
