@@ -29,6 +29,7 @@
 	String nextMonthStr = LocalDate.convertLocalMonthWithDiffMonth(thisDate, 1).toLocalDateSimpleString();
 %>
 <!-- Nav SNB -->
+<div class="t_gray mb5">* 미션 내용을 등록하려면 캘린더에서 일자를 클릭하여 등록합니다. 수정은 수행창에서 수정가능합니다. </div>
 <div id="panel_section" class="js_mission_list_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>" startDate="" endDate="">
 	<table>
 		<tr class="tit_bg" style="height:2px"></tr>
