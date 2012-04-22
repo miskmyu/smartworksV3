@@ -165,10 +165,10 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
 	}
 
-	@RequestMapping("/courseTeamCreate")
+	@RequestMapping("/courseTeamActivity")
 	public ModelAndView courseTeamCreate(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/create_team.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")

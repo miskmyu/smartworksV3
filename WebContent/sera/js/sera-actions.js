@@ -39,7 +39,7 @@ $(function() {
 		}else if(pos==2){
 			url = "courseBoard.sw";
 		}else if(pos==3){
-			url = "courseTeamCreate.sw";
+			url = "courseTeamActivity.sw";
 		}else if(pos==4){
 			url = "courseGeneral.sw";
 		}else if(pos==5){
