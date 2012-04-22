@@ -16,7 +16,6 @@ public class SeraFriend {
 	public final static int ACCEPT_STATUS_ACCEPT = 1;
 	public final static int ACCEPT_STATUS_LATER  = 2;
 	public final static int ACCEPT_STATUS_REJECT  = 3;
-	public final static int ACCEPT_STATUS_DESTROY = 4;
 
 	private String objId;
 	private String requestId;
