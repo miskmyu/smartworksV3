@@ -41,8 +41,8 @@
 		%>
 				<div class="panel_rds_block mb20 js_join_requester_item" courseId="<%=courseId%>" userId="<%=requester.getId()%>">
 					<ul>
-						<li class="pl0pr10"><img src="<%=requester.getMidPicture() %>" /></li>
-						<li class="w470"><span> <%=requester.getNickName() %><br /> <%=requester.getName() %><br /><%=requester.getId()%></span></li>
+						<li class="pl0pr10"><img class="profile_size_m" src="<%=requester.getMidPicture() %>" /></li>
+						<li class=""><span> <%=requester.getNickName() %><br /> <%=requester.getName() %><br /><%=requester.getId()%></span></li>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_default_l mr5 js_approve_join_btn"><div class="btn_default_r">승 인</div></div>
@@ -69,13 +69,16 @@
 		%>
 	</div>
 	
-	<div class="t_redb mb10 fl">* 등록한 멘티가 <%=menteeInformations.getTotalMentees() %>명 있습니다</div>
+	<div class="title_srch">
+	<span class="t_redb">* 등록한 멘티가 <%=menteeInformations.getTotalMentees() %>명 있습니다</span>
 	<!-- 검색 -->
 	<div class="fr">
-		<span class="fl tb mr5">멘티검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
+		<span class="fl t_grayb mr5">멘티검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
 		<button type="button" class="fl ml5">검색</button>
 	</div>
 	<!-- 검색 //-->
+	</div>
+
 	<div class="js_course_mentees_list">
 		<%
 		SeraUserInfo[] mentees = menteeInformations.getMentees();
@@ -86,11 +89,11 @@
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10 cb js_mentee_item" courseId="<%=courseId%>" userId="<%=mentee.getId()%>">
 					<ul>
-						<li class="pl0pr10"><img src="<%=mentee.getMidPicture() %>" /></li>
-						<li class="w90"><span><%=mentee.getNickName() %><br /> <span class="cb t_id"><%=mentee.getId() %></span> </span></li>
+						<li class="pl0pr10"><img class="profile_size_m" src="<%=mentee.getMidPicture() %>" /></li>
+						<li class=""><span><%=mentee.getNickName() %><br /> <span class="cb t_id"><%=mentee.getId() %></span> </span></li>
 						<li class="bo_l" style="width: 15%"><span> 미션수행 20 </span></li>
 						<li class="bo_l" style="width: 15%"><span> 받은 게시물 15<br />댓글쓰기 20<br /> 공감 + 19 </span></li>
-						<li class="bo_l" style="width: 15%"><span> 참여 90일째 </span></li>
+						<li class="bo_l" style="width: 10%"><span> 참여 90일째 </span></li>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_green_l js_pushout_mentee_btn">
@@ -118,13 +121,16 @@
 		%>
 	</div>
 
-	<div class="t_redb mb10 fl">* 동록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
+	<div class="title_srch">
+	<div class="t_redb fl">* 동록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
 	<!-- 검색 -->
 	<div class="fr">
-		<span class="fl tb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
+		<span class="fl t_grayb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
 		<button type="button" class="fl ml5">검색</button>
 	</div>
 	<!-- 검색 //-->
+	</div>
+	
 	<div class="js_course_non_mentees_list">
 		<%
 		SeraUserInfo[] nonMentees = menteeInformations.getNonMentees();
@@ -137,7 +143,7 @@
 					<ul>
 						<li class="pl0pr10">
 							<a href="othersPAGE.sw?userId=<%=nonMentee.getId()%>">
-								<img src="<%=nonMentee.getMidPicture() %>" />
+								<img class="profile_size_m" src="<%=nonMentee.getMidPicture() %>" />
 							</a>
 						</li>
 						<li class="w90">
