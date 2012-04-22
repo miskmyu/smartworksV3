@@ -3192,6 +3192,7 @@ public class SeraServiceImpl implements ISeraService {
 			courseReviewCond.setModificationDateFrom(new LocalDate(fromDate.getTime()));
 			courseReviewCond.setPageSize(maxList);
 			courseReviewCond.setPageNo(0);
+			courseReviewCond.setOrders(new Order[]{new Order(CourseReviewCond.A_MODIFICATIONDATE, false)});
 
 			ReviewInstanceInfo[] reviewInstanceInfos = null;
 			CourseReview[] courseReviews = getSeraManager().getCourseReviews(userId, courseReviewCond);

@@ -714,11 +714,13 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	}
 	private Query appendQuery(StringBuffer buf, CourseReviewCond cond) throws Exception {
 		String objId = null;
+		String courseId = null;
 		String creationUser = null;
 		String modificationUser = null;
 		Date modificationDateFrom = null;
 		if (cond != null) {
 			objId = cond.getObjId();
+			courseId = cond.getCourseId();
 			creationUser = cond.getCreationUser();
 			modificationUser = cond.getModificationUser();
 			modificationDateFrom = cond.getModificationDateFrom();
@@ -728,6 +730,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if (cond != null) {
 			if (objId != null)
 				buf.append(" and obj.objId = :objId");
+			if (courseId != null)
+				buf.append(" and obj.courseId = :courseId");
 			if (creationUser != null)
 				buf.append(" and obj.creationUser = :creationUser");
 			if (modificationUser != null)
@@ -740,6 +744,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if (cond != null) {
 			if (objId != null)
 				query.setString("objId", objId);
+			if (courseId != null)
+				query.setString("courseId", courseId);
 			if (creationUser != null)
 				query.setString("creationUser", creationUser);
 			if (modificationUser != null)
