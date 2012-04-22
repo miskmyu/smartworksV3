@@ -117,7 +117,7 @@
 								case Instance.TYPE_BOARD:
 									BoardInstanceInfo board = (BoardInstanceInfo)seraInstance;
 								%>								
-									<dt class="name">
+									<dt class="name fr">
 										<%
 										if(!SmartUtil.isBlankObject(course)){
 										%>
@@ -126,7 +126,7 @@
 										}
 										if(board.getOwner().getId().equals(cUser.getId())) {
 										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+											<span class="icon_delete js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
 										<%
 										}
 										%>
@@ -140,7 +140,7 @@
 								case Instance.TYPE_EVENT:
 									EventInstanceInfo event = (EventInstanceInfo)seraInstance;
 								%>								
-									<dt class="name">
+									<dt class="name fr">
 										<%
 										if(!SmartUtil.isBlankObject(course)){
 										%>
@@ -149,7 +149,7 @@
 										}
 										if(event.getOwner().getId().equals(cUser.getId())) {
 										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+											<span class="icon_delete js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
 										<%
 										}
 										%>
@@ -171,7 +171,7 @@
 								case Instance.TYPE_SERA_NOTE:
 									NoteInstanceInfo seraNote = (NoteInstanceInfo)seraInstance;
 								%>								
-									<dt class="name">
+									<dt class="name fr">
 										<%
 										if(!SmartUtil.isBlankObject(course)){
 										%>
@@ -180,7 +180,7 @@
 										}
 										if(seraNote.getOwner().getId().equals(cUser.getId())) {
 										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+											<span class="icon_delete js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
 										<%
 										}
 										%>
@@ -243,7 +243,7 @@
 								case Instance.TYPE_SERA_MISSION_REPORT:
 									MissionReportInstanceInfo seraReport = (MissionReportInstanceInfo)seraInstance;
 								%>								
-									<dt class="name">
+									<dt class="name fr">
 										<%
 										if(!SmartUtil.isBlankObject(course)){
 										%>
@@ -252,7 +252,7 @@
 										}
 										if(seraReport.getOwner().getId().equals(cUser.getId())) {
 										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+											<span class="icon_delete js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
 										<%
 										}
 										%>

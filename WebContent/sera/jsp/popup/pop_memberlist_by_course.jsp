@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.Department"%>
@@ -20,7 +21,7 @@
 	boolean isMultiSelectable = false;
 	isMultiSelectable = Boolean.parseBoolean(request.getParameter("multiUsers"));
 	
-	CommunityInfo[] communities = course.getMembers();
+	CommunityInfo[] communities = SmartTest.getAvailableChatter();//getMembers();
 	String iconType = null;
 %>
 

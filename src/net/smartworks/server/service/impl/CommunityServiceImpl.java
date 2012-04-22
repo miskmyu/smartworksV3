@@ -700,22 +700,49 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+		System.out.println(requestBody);
+		
+		String groupId = null;
+		String userId = null;
+		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (group.isContainGroupMember(userId))
+			return;
+		SwoGroupMember groupMember = new SwoGroupMember();
+		groupMember.setGroupId(groupId);
+		groupMember.setUserId(userId);
+		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
+		groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+		
+		group.addGroupMember(groupMember);
+		
+		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
+		
 	}
 	
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		System.out.println(requestBody);
 	}
 	
 	@Override
 	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		System.out.println(requestBody);
 	}
 	
 	@Override
 	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		System.out.println(requestBody);
 	}
 	
 	@Override
 	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
+		System.out.println(requestBody);
 	}
 
 }
