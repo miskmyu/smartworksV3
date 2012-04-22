@@ -131,7 +131,7 @@
 a.b_prev:hover { background-position:0 -535px}
 .b_next {background: url("../images/icon.png") no-repeat scroll -30px -520px; width:13px; height:13px; display:block}
 a.b_next:hover { background-position:-30px -535px}
-.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px}
+.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px; margin:0 0 0 3px}
 .icon_mission.current { background-position:0 -579px}
 .icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; height:11px; display:block; float:left; padding:0 0 0 14px}
 .icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
@@ -311,7 +311,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_mn_more a:hover { background-position:-221px -724px}
 
 /* Panel Section */
-.panel_section, .course_section, .content_section { overflow:hidden; clear:both}
+.panel_section, .course_section, .content_section {clear:both}
 .panel_section .header {border-bottom:5px solid #559fcc; height:21px} /* Mypage Header */
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
@@ -439,7 +439,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_df li div { border-bottom:1px solid #cccccc; height:34px; padding-bottom:7px; margin-bottom:10px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
-.course_info { width:193px; float:right; margin-top:10px; line-height:18px}
+.course_info { width:193px; float:right; margin-top:10px; line-height:20px; height:108px; overflow:hidden}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -764px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
 .course_menu_d1 { float: left; margin:0 0 0 22px}
