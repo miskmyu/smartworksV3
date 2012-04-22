@@ -306,6 +306,8 @@ public class SeraServiceImpl implements ISeraService {
 			if (courseDetail.getEnd() != null)
 				courseInfo.setCloseDate(new LocalDate(courseDetail.getEnd().getTime()));
 //			courseInfo.setLastMission(lastMission);
+			if (courseDetail.getCategories() != null)
+				courseInfo.setCategory(courseDetail.getCategories());
 		}
 		
 		return courseInfo;
