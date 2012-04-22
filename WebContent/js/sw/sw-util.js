@@ -242,3 +242,15 @@ isEmailAddress = function(emailAddress){
 	}
 	return false;		
 };
+
+function getByteLength(s){
+	var len = 0;
+	if ( s == null ) return 0;
+	for(var i=0;i<s.length;i++){
+		var c = escape(s.charAt(i));
+		if ( c.length == 1 ) len ++;
+		else if ( c.indexOf("%u") != -1 ) len += 2;
+		else if ( c.indexOf("%") != -1 ) len += c.length/3;
+	}
+	return len;
+};

@@ -1304,5 +1304,22 @@ $(function() {
 		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
 		return false;
 	});
+	
+	$('.js_sera_note_content').live('keyup', function(e){
+		if(e.keyCode>=9 && e.keyCode<=45) return;
+		var input = $(e.target);
+		var content = input.attr('value');
+		var iLength =  getByteLength(content);
+		var seraNoteLength = input.parents('.js_sera_note_page').find('.js_note_content_length');
+		var cLength = parseInt(seraNoteLength.html());
+		if(cLength<=0){
+			seraNoteLength.html(0);
+			return false;
+		}else{
+			cLength = 500 - iLength;
+			if(cLength<0) return false;
+			seraNoteLength.html(cLength);
+		}
+	});
 
 });
