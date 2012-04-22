@@ -47,7 +47,7 @@ public class Course extends Group {
 		this.missions = missions;
 	}
 	public int getTargetPoint() {
-		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime()) return -1;
+		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime()) return 0;
 		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), closeDate)+1;
 		return (point<0) ? 0 : point;
 	}
@@ -55,6 +55,10 @@ public class Course extends Group {
 		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime() || super.getOpenDate().getTime()>(new LocalDate()).getTime()) return 0;
 		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate())+1;
 		return (point<0) ? getTargetPoint() : point;
+	}
+	public double getAchievedRatio(){
+		if(getTargetPoint()==0 || getAchievedPoint()==0) return 0;
+		return (getAchievedPoint() * 100 / getTargetPoint());
 	}
 	public String getObject() {
 		return object;

@@ -29,7 +29,7 @@
 			for(int i=0; i<courseList.getRunningCourses().length; i++){
 				CourseInfo course = courseList.getRunningCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
-				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
+				String achievedPoint =course.getAchievedRatio() + "%";
 		%>
 				<ul class="category_box <%=endClass%>">
 					<li class="photo">
@@ -85,7 +85,7 @@
 			for(int i=0; i<courseList.getAttendingCourses().length; i++){
 				CourseInfo course = courseList.getAttendingCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
-				String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
+				String achievedPoint =course.getAchievedRatio() + "%";
 		%>
 				<ul class="category_box <%=endClass%>">
 					<li class="photo">
