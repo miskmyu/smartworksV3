@@ -24,15 +24,12 @@
 			<img src="<%=otherUser.getMidPicture() %>" />
 		</div>
 		<!-- Btn -->
-		<%
-		if(!otherUser.isFriend()){
-		%>
-			<div class="btn_green_l cb js_fried_request_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px">
-				<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구요청</div>
-			</div>
-		<%
-		}
-		%>
+		<div class="btn_green_l cb js_friend_request_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px; <%if(otherUser.isFriend()){%>display:none;<%}%>">
+			<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구요청</div>
+		</div>
+		<div class="btn_green_l cb js_destroy_friendship_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px; <%if(!otherUser.isFriend()){%>display:none;<%}%>">
+			<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구끊기</div>
+		</div>
 		<!-- Btn //-->
 	</div>
 	<!-- Photo Section //-->

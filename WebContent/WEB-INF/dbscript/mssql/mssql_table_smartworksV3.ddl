@@ -2219,6 +2219,10 @@ CREATE TABLE SWOrgGroupMember (
 	joinTime	datetime,
 	outTime 	datetime,
 	memberSeq	int,
+	creator varchar(50),
+	createdtime datetime ,
+	modifier varchar(50),
+	modifiedtime datetime ,
 	primary key (groupId, userId)
 );
 

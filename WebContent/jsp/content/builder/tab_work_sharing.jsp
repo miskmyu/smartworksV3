@@ -81,7 +81,7 @@
 					success : function(data, status, jqXHR) {
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.INFORM, smartMessage.get('publishWorkSucceed'), function(){
+						smartPop.showInfo(smartPop.INFO, smartMessage.get('publishWorkSucceed'), function(){
 							document.location.href = "tab_workbench.sw?cid=bd.sp."+ workId;					
 						});
 					},

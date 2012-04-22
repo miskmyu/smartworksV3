@@ -479,4 +479,18 @@ public class SeraController {
 		smartworks.addReviewOnCourse(requestBody, request);
 	}
 
+	@RequestMapping(value = "/modify_course_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void modifyCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.removeSeraInstane(requestBody, request);
+		// TO DO : Exception handler
+	}
+
+	@RequestMapping(value = "/remove_course_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//smartworks.removeSeraInstane(requestBody, request);
+		// TO DO : Exception handler
+	}
+
 }

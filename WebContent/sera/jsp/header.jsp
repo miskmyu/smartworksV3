@@ -43,7 +43,9 @@
 	<!-- Top Navi -->
 	<div class="top_navi">
 		<div class="personal_info fl mt5">
-			<div class="profile_pic fl"><img class="profile_size_c" src="<%=cUser.getMidPicture() %>"></div>
+			<a href="myPAGE.sw">
+				<div class="profile_pic fl"><img class="profile_size_c" src="<%=cUser.getMidPicture() %>"></div>
+			</a>
 			<div class="pofile_con">
 				<div class="nick_name"><%=cUser.getNickName() %>님<span class="bul_down"><a href="myProfile.sw" class="js_sera_content"></a> </span></div>
 			</div>

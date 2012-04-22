@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.persistence.criteria.CriteriaBuilder.Case;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.Community;
@@ -92,6 +93,7 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -105,6 +107,7 @@ import net.smartworks.server.engine.sera.model.SeraConstant;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.sera.model.SeraUserDetail;
+import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
@@ -2062,7 +2065,44 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
+	public SeraUserInfo[] getSeraUserInfos(String[] userIds) throws Exception {
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", userIds);
+		if (userExtends == null)
+			return null;
+		List userInfoList = new ArrayList();
+		SeraUserInfo[] userInfoArray = null;
+		if(userExtends != null) {
+			for(SwoUserExtend swoUserExtend : userExtends) {
+				UserInfo member = new SeraUserInfo();
+				member.setId(swoUserExtend.getId());
+				member.setName(swoUserExtend.getName());
+				member.setPosition(swoUserExtend.getPosition());
+				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				userInfoList.add(member);
+			}
+			userInfoArray = new SeraUserInfo[userInfoList.size()];
+			userInfoList.toArray(userInfoArray);
+		}
+		return userInfoArray;
+	}
+	public SeraUser[] getSeraUsers(String[] userIds) throws Exception {
 
+		if (CommonUtil.isEmpty(userIds))
+			return null;
+		SwoUserExtend[] userExtend = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", userIds);
+		if (userExtend == null)
+			return null;
+		
+		SeraUser[] seraUsers = new SeraUser[userExtend.length];
+		for (int i = 0; i < userExtend.length; i++) {
+			seraUsers[i] = getUserBySwoUserExtend(null, userExtend[i]);
+		}
+		
+		return seraUsers;
+		
+	}
 	@Override
 	public SeraUser getSeraUserById(String userId) throws Exception {
 		try{
@@ -3144,7 +3184,7 @@ public class SeraServiceImpl implements ISeraService {
 			String userId = user.getId();
 			CourseReviewCond courseReviewCond = new CourseReviewCond();
 			courseReviewCond.setCourseId(courseId);
-			courseReviewCond.setModificationDateFrom(new Date(fromDate.getTime()));
+			courseReviewCond.setModificationDateFrom(new LocalDate(fromDate.getTime()));
 			courseReviewCond.setPageSize(maxList);
 			courseReviewCond.setPageNo(0);
 
@@ -3620,13 +3660,339 @@ public class SeraServiceImpl implements ISeraService {
 		CourseInfo[] courseInfo = this.convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		return courseInfo;
 	}
+	
+	
+	
+	
+	
+	
+
+	private SeraUserInfo[] getJoinRequesterByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
+		if (group == null)
+			return null;
+		
+		List joinRequesterIdList = new ArrayList();
+		Map joinRequesterIdMap = new HashMap();
+		
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			String joinType = groupMember.getJoinType();
+			String joinStatus = groupMember.getJoinStatus();
+			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
+				if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+					joinRequesterIdList.add(userId);
+					if (!CommonUtil.isEmpty(lastId)) {
+						SwoGroupMember lastMember = group.getGroupMember(lastId);
+						long lastMemberCreationDateLong = lastMember.getCreationDate().getTime();
+						if (lastMemberCreationDateLong > groupMember.getCreationDate().getTime()) {
+							joinRequesterIdMap.put(groupMember.getCreationDate().getTime(), groupMember);
+						}
+					} else {
+						joinRequesterIdMap.put(groupMember.getCreationDate().getTime(), groupMember);
+					}
+				}
+			}
+		}
+		String[] joinRequesterIds = null;
+		String[] resultJoinRequesterIds = null;
+		boolean isMoreThenMaxList = false;
+		Map<Long, SwoGroupMember> sortMap = new TreeMap<Long, SwoGroupMember>();
+		if (joinRequesterIdList.size() != 0) {
+			joinRequesterIds = new String[joinRequesterIdList.size()];
+			joinRequesterIdList.toArray(joinRequesterIds);
+
+			//Map<Long, SwoGroupMember> sortMap = new TreeMap<Long, SwoGroupMember>(Collections.reverseOrder());
+			sortMap.putAll(joinRequesterIdMap);
+			isMoreThenMaxList = joinRequesterIdMap.size() > maxList ? true : false;
+				
+			resultJoinRequesterIds = new String[sortMap.size()];
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int i = 0;
+			while (itr.hasNext()) {
+				if (i == maxList) 
+					break;
+				resultJoinRequesterIds[i] = ((SwoGroupMember)sortMap.get(itr.next())).getUserId();
+				i++;
+			}
+		}
+		if (CommonUtil.isEmpty(resultJoinRequesterIds))
+			return null;
+		
+		if (isMoreThenMaxList) {
+			SeraUserInfo[] userInfos = getSeraUserInfos(resultJoinRequesterIds);	
+			
+			SeraUserInfo[] tempUserInfos = new SeraUserInfo[userInfos.length];
+			
+			Map resultMap = new HashMap();
+			for (SeraUserInfo userInfo : userInfos) {
+				resultMap.put(userInfo.getId(), userInfos);
+			}
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int index = 0;
+			while (itr.hasNext()) {
+				SwoGroupMember member = sortMap.get(itr.next());
+				String id = member.getUserId();
+				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+			}
+			SeraUserInfo[] resultInfo = new SeraUserInfo[tempUserInfos.length + 1];
+			for (int i = 0; i < tempUserInfos.length; i++) {
+				resultInfo[i] = tempUserInfos[i];
+			}
+			resultInfo[userInfos.length] = new SeraUserInfo();
+			return resultInfo;	
+		} else {
+			SeraUserInfo[] userInfos = getSeraUserInfos(resultJoinRequesterIds);
+			SeraUserInfo[] tempUserInfos = new SeraUserInfo[userInfos.length];
+			
+			Map resultMap = new HashMap();
+			for (SeraUserInfo userInfo : userInfos) {
+				resultMap.put(userInfo.getId(), userInfos);
+			}
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int index = 0;
+			while (itr.hasNext()) {
+				SwoGroupMember member = sortMap.get(itr.next());
+				String id = member.getUserId();
+				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+			}
+			return tempUserInfos;
+		}
+	}
+
+	private SeraUserInfo[] getMenteesByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
+		if (group == null)
+			return null;
+		
+		List menteesIdList = new ArrayList();
+		Map menteesIdMap = new HashMap();
+
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			String joinStatus = groupMember.getJoinStatus();
+			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+				menteesIdList.add(userId);
+				if (!CommonUtil.isEmpty(lastId)) {
+					SwoGroupMember lastMember = group.getGroupMember(lastId);
+					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
+					if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
+						menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
+					}
+				} else {
+					menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
+				}
+			}
+		}
+		String[] menteesIds = null;
+		String[] resultMenteesIds = null;
+		boolean isMoreThenMaxList = false;
+		Map<Long, SwoGroupMember> sortMap = new TreeMap<Long, SwoGroupMember>();
+		if (menteesIdList.size() != 0) {
+			menteesIds = new String[menteesIdList.size()];
+			menteesIdList.toArray(menteesIds);
+			
+			//Map<Long, SwoGroupMember> sortMap = new TreeMap<Long, SwoGroupMember>(Collections.reverseOrder());
+			sortMap.putAll(menteesIdMap);
+			isMoreThenMaxList = menteesIdMap.size() > maxList ? true : false;
+			resultMenteesIds = new String[sortMap.size()];
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int i = 0;
+			while (itr.hasNext()) {
+				if (i == maxList) 
+					break;
+				resultMenteesIds[i] = ((SwoGroupMember)sortMap.get(itr.next())).getUserId();
+				i++;
+			}
+		}
+
+		if (CommonUtil.isEmpty(resultMenteesIds))
+			return null;
+		
+		if (isMoreThenMaxList) {
+			SeraUserInfo[] userInfos = getSeraUserInfos(resultMenteesIds);
+			SeraUserInfo[] tempUserInfos = new SeraUserInfo[userInfos.length];
+			
+			Map resultMap = new HashMap();
+			for (SeraUserInfo userInfo : userInfos) {
+				resultMap.put(userInfo.getId(), userInfos);
+			}
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int index = 0;
+			while (itr.hasNext()) {
+				SwoGroupMember member = sortMap.get(itr.next());
+				String id = member.getUserId();
+				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+			}
+			SeraUserInfo[] resultInfo = new SeraUserInfo[tempUserInfos.length + 1];
+			for (int i = 0; i < tempUserInfos.length; i++) {
+				resultInfo[i] = tempUserInfos[i];
+			}
+			resultInfo[userInfos.length] = new SeraUserInfo();
+			return resultInfo;	
+			
+		} else {
+			SeraUserInfo[] userInfos = getSeraUserInfos(resultMenteesIds);
+			SeraUserInfo[] tempUserInfos = new SeraUserInfo[userInfos.length];
+			
+			Map resultMap = new HashMap();
+			for (SeraUserInfo userInfo : userInfos) {
+				resultMap.put(userInfo.getId(), userInfos);
+			}
+			Iterator<Long> itr = sortMap.keySet().iterator();
+			int index = 0;
+			while (itr.hasNext()) {
+				SwoGroupMember member = sortMap.get(itr.next());
+				String id = member.getUserId();
+				SeraUserInfo[] temp = (SeraUserInfo[])resultMap.get(id);
+				tempUserInfos[index] = temp[0];
+			}
+			return tempUserInfos;
+		}
+	}
+
+	private SeraUserInfo[] getNotRelatedUserByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+
+		if (group == null)
+			return null;
+
+		List courseRelatedUserIdList = new ArrayList();
+		
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			courseRelatedUserIdList.add(groupMember.getId());
+		}
+
+		String[] courseRelatedUserIds = new String[courseRelatedUserIdList.size()];
+		courseRelatedUserIdList.toArray(courseRelatedUserIds);
+		
+		String[] courseNotRelatedUserIds = null;
+		
+		List courseNotRelatedUserIdList = new ArrayList();
+		SeraUserDetailCond cond = new SeraUserDetailCond();
+		cond.setUserIdNotIns(courseRelatedUserIds);
+		SeraUserDetail[] courseNotRelatedUser = seraMgr.getSeraUserDetails(userId, cond);
+		if (courseNotRelatedUser == null || courseNotRelatedUser.length == 0) {
+			return null;
+		} else {
+			for (int i = 0; i < courseNotRelatedUser.length; i++) {
+				courseNotRelatedUserIdList.add(courseNotRelatedUser[i].getUserId());
+			}
+			if (courseNotRelatedUserIdList.size() != 0) {
+				courseNotRelatedUserIds = new String[courseNotRelatedUserIdList.size()];
+				courseNotRelatedUserIdList.toArray(courseNotRelatedUserIds);
+			}
+		}
+		
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", courseNotRelatedUserIds, lastId);
+		
+		if (userExtends == null)
+			return null;
+		List userInfoList = new ArrayList();
+		SeraUserInfo[] userInfoArray = null;
+		if(userExtends != null) {
+			for(int i = 0; i < userExtends.length; i++) {
+				SwoUserExtend swoUserExtend = userExtends[i];
+				UserInfo member = new SeraUserInfo();
+				member.setId(swoUserExtend.getId());
+				member.setName(swoUserExtend.getName());
+				member.setPosition(swoUserExtend.getPosition());
+				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				userInfoList.add(member);
+				
+				if (maxList > 0) {
+					if (userInfoList.size() == maxList)
+						break; 
+				}
+			}
+			userInfoArray = new SeraUserInfo[userInfoList.size()];
+			userInfoList.toArray(userInfoArray);
+		}
+		return userInfoArray;
+		
+	}
+	
 	@Override
 	public MenteeInformList getCourseMenteeInformations(String courseId, int maxList) throws Exception {
-		return SeraTest.getCourseMenteeInformations(courseId, maxList);
+		if (CommonUtil.isEmpty(courseId))
+			return null;
+		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		SwoGroup group = swoMgr.getGroup(userId, courseId, IManager.LEVEL_ALL);
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		
+		int totalMentee = 0;
+		int totalJoinRequester = 0;
+		
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			String joinStatus = groupMember.getJoinStatus();
+			String joinType = groupMember.getJoinType();
+			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+				totalMentee += 1;
+			} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY) || joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+				totalJoinRequester += 1;
+			}
+		}
+		SeraUserDetailCond cond = new SeraUserDetailCond();
+		long totalSeraUserSize = seraMgr.getSeraUserSize(userId, cond);
+		
+		MenteeInformList menteeInformList = new MenteeInformList();
+		menteeInformList.setJoinRequesters(getJoinRequesterByCourseId(group, null, maxList));
+		menteeInformList.setTotalJoinRequesters(totalJoinRequester);
+		menteeInformList.setMentees(getMenteesByCourseId(group, null, maxList));
+		menteeInformList.setTotalMentees(totalMentee);
+		menteeInformList.setNonMentees(getNotRelatedUserByCourseId(group, null, maxList));
+		menteeInformList.setTotalNonMentees((int)totalSeraUserSize - (groupMembers.length));
+		
+		return menteeInformList;
+//		return SeraTest.getCourseMenteeInformations(courseId, maxList);
 	}
 	@Override
 	public SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception {
-		return SeraTest.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
+		if (CommonUtil.isEmpty(courseId))
+			return null;
+		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		SwoGroup group = swoMgr.getGroup(userId, courseId, IManager.LEVEL_ALL);
+		
+		switch (type) {
+		case MenteeInformList.TYPE_JOIN_REQUESTERS:
+			return getJoinRequesterByCourseId(group, lastId, maxList);
+		case MenteeInformList.TYPE_MENTEES:
+			return getMenteesByCourseId(group, lastId, maxList);
+		case MenteeInformList.TYPE_NON_MENTEES:
+			return getNotRelatedUserByCourseId(group, lastId, maxList);
+		default:
+			return null;
+		}
+		
+		//return SeraTest.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
 	}
 
 }

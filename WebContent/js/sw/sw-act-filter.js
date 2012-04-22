@@ -127,7 +127,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeFilterSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeFilterSucceed'), function(){
 						document.location.href = "iwork_list.sw?cid=iw.li." + workId;
 					});					
 				},

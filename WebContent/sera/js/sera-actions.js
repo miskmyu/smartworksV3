@@ -456,6 +456,46 @@ $(function() {
 		return false;
 	});
 
+	$('.js_modify_team_btn').live('click', function(e){
+		submitForms(e);
+		return false;
+	});
+
+	$('.js_remove_team_btn').live('click', function(e){
+		smartPop.confirm('코스팀을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
+			var input = $(e.target);
+			var form = input.parents('.js_course_setting_page').find('form');
+			var courseId = form.attr('courseId');
+			var teamId = form.attr('teamId');
+			var paramsJson = {};
+			paramsJson['courseId'] = courseId;
+			paramsJson['teamId'] = teamId;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : "remove_course_team.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, "팀이 성공적으로 삭제 되었습니다.", function(){
+						document.location.href = "courseHome.sw?courseId=" + courseId;						
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "회원탈퇴에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});
+				}
+				
+			});
+			return false;
+		}); 
+		return false;
+	});
+
 	$('.js_modify_profile_btn').live('click', function(e){
 		submitForms(e);
 		return false;
@@ -565,7 +605,7 @@ $(function() {
 		var review = input.attr('value');
 		if(isEmpty(review)) return false;
 		var courseId = courseGeneral.attr('courseId');
-		var starPointList = courseGeneral.find('.js_star_point_list:visible li');
+		var starPointList = courseGeneral.find('.js_return_on_course_review:visible .js_star_point_list:visible li');
 		var starPoint = 0;
 		for(var i=0; i<starPointList.length; i++){
 			var item = $(starPointList[i]);
@@ -824,7 +864,6 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				var friendPage = input.parents('.js_friend_page');
-				var othersFriendPage = input.parents('.js_others_friend_page');
 				if(!isEmpty(friendPage)){
 					friend.remove();
 					var count = friendCount.html();
@@ -832,10 +871,12 @@ $(function() {
 						count = parseInt(count)-1;
 						friendCount.html(count);
 					}
-				}else if(!isEmpty(othersFriendPage)){
+				}else{
 					input.hide().siblings().show();
 				}
 				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFO, "친구끊기가 성공적으로 이루어 졌습니다.", function(){
+				});
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -861,7 +902,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "친구요청이 성공적으로 이루어 졌습니다.", function(){
+				smartPop.showInfo(smartPop.INFO, "친구요청이 성공적으로 이루어 졌습니다.", function(){
 				});				
 				input.hide().siblings().show();
 			},
@@ -1043,7 +1084,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "가입승인 수락이 정상적으로 이루어 졌습니다.", function(){
+				smartPop.showInfo(smartPop.INFO, "가입승인 수락이 정상적으로 이루어 졌습니다.", function(){
 				});				
 				input.remove();
 			},
@@ -1073,7 +1114,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "가입승인 거절이 정상적으로 이루어 졌습니다.", function(){
+				smartPop.showInfo(smartPop.INFO, "가입승인 거절이 정상적으로 이루어 졌습니다.", function(){
 				});				
 				input.remove();
 			},
@@ -1102,7 +1143,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "멘티강퇴가 정상적으로 이루어 졌습니다.", function(){
+				smartPop.showInfo(smartPop.INFO, "멘티강퇴가 정상적으로 이루어 졌습니다.", function(){
 				});				
 				input.remove();
 			},
@@ -1134,7 +1175,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "멘티초대가 정상적으로 이루어 졌습니다.", function(){
+				smartPop.showInfo(smartPop.INFO, "멘티초대가 정상적으로 이루어 졌습니다.", function(){
 				});				
 				input.remove();
 			},
@@ -1144,6 +1185,79 @@ $(function() {
 				smartPop.showInfo(smartPop.ERROR, "멘티초대에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});				
 			}
+		});
+		return false;
+	});
+
+	$('.js_toggle_course_setting_btn').live('click', function(e){
+		$(e.target).parent().next().toggle();
+		return false;
+	});
+
+	$('.js_leave_course_btn').live('click', function(e){
+		smartPop.confirm('코스를 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
+			var input = $(e.target);
+			var courseSetting = input.parents('.js_course_setting_page');
+			var courseId = courseSetting.attr('courseId');
+			var leaveReason = courseSetting.find('textarea[name="txtaLeaveReason"]').attr('value');
+			console.log('textarea=', courseSetting.find('textarea[name="txtaLeaveReason"]'), ', text=', leaveReason);
+			var paramsJson = {};
+			paramsJson['groupId'] = courseId;
+			paramsJson['leaveReason'] = leaveReason;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'leave_group.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, "코스탈퇴가 성공적으로 이루어졌습니다!", function(){
+						document.location.href = "myPAGE.sw";											
+					});
+				},
+				error : function(e) {
+					smartPop.closeProgress();
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, "코스탈퇴에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});				
+				}
+			});
+		});
+		return false;
+	});
+
+	$('.js_leave_course_btn').live('click', function(e){
+		smartPop.confirm('코스를 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
+			var input = $(e.target);
+			var courseSetting = input.parents('.js_course_setting_page');
+			var courseId = courseSetting.attr('courseId');
+			var leaveReason = courseSetting.find('textarea[name="txtaLeaveReason"]').attr('value');
+			console.log('textarea=', courseSetting.find('textarea[name="txtaLeaveReason"]'), ', text=', leaveReason);
+			var paramsJson = {};
+			paramsJson['groupId'] = courseId;
+			paramsJson['leaveReason'] = leaveReason;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'leave_group.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, "코스탈퇴가 성공적으로 이루어졌습니다!", function(){
+						document.location.href = "myPAGE.sw";											
+					});
+				},
+				error : function(e) {
+					smartPop.closeProgress();
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, "코스탈퇴에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});				
+				}
+			});
 		});
 		return false;
 	});

@@ -257,6 +257,20 @@ public class SwoGroup extends SwoObject {
 	public void resetGroupMembers() {
 		this.swoGroupMembers = null;
 	}
+	public SwoGroupMember getGroupMember(String userId) {
+		if (CommonUtil.isEmpty(userId))
+			return null;
+		if (this.swoGroupMembers != null) {
+			for (int i = 0; i < this.swoGroupMembers.length; i++) {
+				SwoGroupMember groupMember = this.swoGroupMembers[i];
+				if (userId.equalsIgnoreCase(groupMember.getUserId())) 
+					return groupMember;
+			}
+			return null;
+		} else {
+			return null;
+		}
+	}
 	public boolean isContainGroupMember(SwoGroupMember member) {
 		if (CommonUtil.isEmpty(member))
 			return false;

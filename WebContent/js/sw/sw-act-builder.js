@@ -93,7 +93,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-	 					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeCategorySucceed'), function(){
+	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCategorySucceed'), function(){
 							document.location.href = document.location.href;
 	 						smartPop.close();
 	  					});
@@ -145,7 +145,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-	 					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeWorkDefinitionSucceed'), function(){
+	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkDefinitionSucceed'), function(){
 							document.location.href = document.location.href;
 	 						smartPop.close();
 	  					});

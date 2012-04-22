@@ -563,6 +563,11 @@ ALTER TABLE coursedetail add coursePoint int;
 ALTER TABLE SeraUserDetail add nickName varchar(100);
 ALTER TABLE SeraUserDetail add challengingTarget varchar(500);
 
+ALTER TABLE SWOrgGroupMember add creator varchar(50);
+ALTER TABLE SWOrgGroupMember add createdtime datetime;
+ALTER TABLE SWOrgGroupMember add modifier varchar(50);
+ALTER TABLE SWOrgGroupMember add modifiedtime datetime;
+
 CREATE TABLE CourseReview (
 	objId varchar(50) NOT NULL,
 	courseId varchar(50),

@@ -134,11 +134,7 @@ $(document).ready(function(){
 		    '': 'H(:mm)'
 		},
  		dayClick: function(date, allDay, jsEvent, view){
- 			var toDate = null;
- 			console.log('hours=', date.getHours());
- 			if(date.getHours()>0) toDate = new Date(date.getTime() + 60*60*1000);
-			loadNewEventFields(date, toDate);
-			$('div.js_new_event_fields .form_value:first input').click();			
+			$('.js_create_mission > a').attr('startDate', date.format('yyyy.mm.dd')).click();			
 		},
 		
 		todayClick: function(event, jsEvent, vie){
