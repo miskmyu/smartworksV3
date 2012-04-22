@@ -89,7 +89,7 @@
 			<textarea name="txtReportContent" class="required js_report_content" rows="3" placeholder="미션을 수행하세요!"></textarea>
 		</div>
 	
-		<div class="cb mt6">	
+		<div class="cb" style="margin:2px 5px 5px; overflow: hidden">	
 			<table class="js_note_attachment_table cb attach_file_detail" border="0" cellspacing="0" cellpadding="0" style="display:none">
 				<tr class="js_note_file" style="display:none">
 					<td>
@@ -127,20 +127,8 @@
 	
 			<div class="sw_error_message tl" style="color: red"></div>
 
-			<div class="fl">
-				<div class="name fl mr5">별점</div>
-				<div class="star_score fr">
-					<ul class="js_star_point_list js_star_point_btn">
-						<li class="icon_star_score"><a href=""></a></li>
-						<li class="icon_star_score"><a href=""></a></li>
-						<li class="icon_star_score"><a href=""></a></li>
-						<li class="icon_star_score"><a href=""></a></li>
-						<li class="icon_star_score"><a href=""></a></li>
-					</ul>
-				</div>
-			</div>
 			<!-- 우측 버튼 영역 -->
-			<div class="attach_file js_note_buttons" style="margin:5px">
+			<div class="attach_file js_note_buttons" style="margin:3px">
 				<ul>
 					<li>
 						<span class="insert_text">1000</span>
@@ -168,6 +156,18 @@
 				</ul>
 			</div>
 			<!-- 우측 버튼 영역 //-->
+			<div class="fl mt4">
+				<div class="name fl mr5">별점</div>
+				<div class="star_score fr">
+					<ul class="js_star_point_list js_star_point_btn">
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>
