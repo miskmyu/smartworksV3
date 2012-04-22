@@ -9,7 +9,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 %>
 
-<div class="hd_shadow bg_join">
+<div class="hd_shadow bg_no">
 	<!-- GNB -->
 	<div class="gnb">
 		
