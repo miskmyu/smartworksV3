@@ -11,6 +11,7 @@ import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.MisUtil;
+import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.AbstractSwdManagerAdvisor;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
@@ -195,7 +196,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 			name = domain.getFormName();
 			String titleFieldId = domain.getTitleFieldId();
 			if (!CommonUtil.isEmpty(titleFieldId))
-				title = obj.getDataFieldValue(titleFieldId);
+				title = StringUtil.subString(obj.getDataFieldValue(titleFieldId), 0, 100, "...");
 		}
 		
 		// 결재자 / 수신자 / 참조자
