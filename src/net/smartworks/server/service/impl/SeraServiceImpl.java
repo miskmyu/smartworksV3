@@ -895,6 +895,7 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
+		  	courseId=,
 			frmSetCourseProfile=
 				{
 					txtCourseObject=asd, 
@@ -956,6 +957,8 @@ public class SeraServiceImpl implements ISeraService {
 					txtCourseKeywords = (String)frmSetCourseProfile.get("txtCourseKeywords");
 				} else if(fieldId.equals("txtCourseDays")) {
 					txtCourseDays = (String)frmSetCourseProfile.get("txtCourseDays");
+				} else if(fieldId.equals("chkUserDefineDays")) {
+					chkUserDefineDays = (String)frmSetCourseProfile.get("chkUserDefineDays");
 				} else if(fieldId.equals("txtCourseStartDate")) {
 					txtCourseStartDate = (String)frmSetCourseProfile.get("txtCourseStartDate");
 				} else if(fieldId.equals("txtCourseEndDate")) {
@@ -982,7 +985,6 @@ public class SeraServiceImpl implements ISeraService {
 		
 		if (swoGroup == null)
 			return null;
-		
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
 			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
@@ -997,7 +999,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setStatus("C");
 		swoGroup.setGroupType(selGroupProfileType);
-
+		
 		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
 
 		String groupId = swoGroup.getId();
@@ -1012,8 +1014,11 @@ public class SeraServiceImpl implements ISeraService {
 		
 		courseDetail.setObject(txtCourseObject);
 		courseDetail.setKeywords(txtCourseKeywords);
+		
+		boolean isUserDefineDays = !CommonUtil.isEmpty(chkUserDefineDays) && chkUserDefineDays.equalsIgnoreCase("on") ? true : false;
+		
 		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
-		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
+		if (isUserDefineDays) {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		} else {
@@ -1021,7 +1026,7 @@ public class SeraServiceImpl implements ISeraService {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		}
-		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
+		if (isUserDefineDays) {
 			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
