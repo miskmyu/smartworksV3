@@ -46,17 +46,16 @@
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
 .login_section { position:relative; width:980px; margin:0 auto}
-.login_area {background: url("../images/layer_loginbg.png") no-repeat scroll 0 0 transparent; height: 76px; padding: 15px 25px 0 17px; position: absolute; right: -10px; top: 2px; width: 178px}
-.login_section .login_box {clear: both; height: 41px; width: 178px;}
-.login_section .login_box .login_frm {float: left; margin-right: 4px; width: 133px}
+.login_area {background: url("../images/layer_loginbg.png") no-repeat scroll 0 0 transparent; height: 76px; padding: 15px 10px 0; position: absolute; right: -2px; top: 2px; width: 193px}
+.login_section .login_box {clear: both; height: 41px; width: 193px;}
+.login_section .login_box .login_frm {float: left; margin-right: 4px}
 .login_section .login_box .login_frm dl dd {clear: both; height: 18px; margin-bottom: 3px; width: 133px;}
-.login_section .login_box .login_btn {float: left; height: 41px; width: 41px}
+.login_section .login_box .login_btn {float:right; height: 41px; width: 41px}
 .login_section .login_box .btn_img_login {background: url("../images/layer_btn_login.png") no-repeat 0 0; height:41px; width:41px; cursor: pointer}
 .login_section .login_util {clear: both; height: 17px; margin-top: 6px; width: 133px; color:#666666}
 .login_section .login_util li {font: 11px 'µ¸¿ò','Dotum'}
-.login_section .login_box .login_frm dl dd input { background:#ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 0 3px; height:18px; width: 132px !important}
+.login_section .login_box .login_frm dl dd input { background:#ECECEC; border: 1px solid #D7D7D7; color: #666666; padding: 3px 3px 0; height:15px; width: 139px !important}
 .id_focus, .pw_focus {background-color: #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 11px; padding: 4px 5px; width: 125px}
-
 
 /* Global Navigation Bar*/
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
