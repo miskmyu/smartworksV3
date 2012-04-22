@@ -18,8 +18,8 @@
 			<li><img height="112" width="149" src="sera/images/function_title_helpcenter.gif"></li>
 			<li class=""><a href="helpCenter.sw">사용 설명서</a></li>
 			<li class="selected"><a href="helpFAQ.sw">자주 묻는 질문</a></li>
-			<li class=""><a href="helpQNA.sw">Q&A </a></li>
-		</ul>
+<!-- 			<li class=""><a href="helpQNA.sw">Q&A </a></li>
+ -->		</ul>
 	</div>
 	<!-- SNB Left//-->
 	<!-- Content -->

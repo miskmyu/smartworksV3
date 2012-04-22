@@ -80,6 +80,7 @@ function fileUploader(groupId, target) {
         	
         	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
+        	console.log('ext=', ext, ', fileName=', fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
         	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);
         	file.find('.qq-delete-text').show();

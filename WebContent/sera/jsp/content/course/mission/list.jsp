@@ -104,7 +104,7 @@ $(document).ready(function(){
 		                	var mission = missionInstances[i];
 		                	var today = new Date();
 		                	var openDate = new Date(mission.openDate);
-		                	var iconClass = (openDate>today) ? "icon_reserve" : (mission.isClearedByMe) ? "icon_mission" :  "icon_mission current";
+		                	var iconClass = (openDate>today) ? "icon_reserve" : (mission.clearedByMe) ? "icon_mission" :  "icon_mission current";
             	
 	                		var title = iconClass + '&' + '[미션' + (mission.index+1) + '] ' + mission.subject + '&' + mission.id;
 

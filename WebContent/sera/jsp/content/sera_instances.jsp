@@ -93,7 +93,7 @@
 								<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
 							</div>
 							<div class="grade">
-								<div class="icon_mentor current"></div>
+								<div class="icon_mentor"></div>
 								<div class="icon_star"></div>
 								<div class="icon_heart"></div>
 							</div>
