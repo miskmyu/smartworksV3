@@ -126,7 +126,7 @@
 	<!-- Aside Block3 //-->
 	
 	 <!-- Aside Block4 -->
-	<div class="aside_block">
+	<div class="aside_block m0">
 		<div class="header">
 			<div class="icon_as_srtrend fl">트렌드 세라 (0)</div>
 			<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>

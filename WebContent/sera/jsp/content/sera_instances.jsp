@@ -152,7 +152,7 @@
 									%>
 									<dd>
 										<div class="text">
-											<div class="name">[이벤트]<%=event.getSubject() %></div>
+											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
 												<span>이벤트 기간 : <%=event.getStart().toLocalString() %></span>
 												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>

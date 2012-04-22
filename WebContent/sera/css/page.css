@@ -353,8 +353,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Content Mission */
 .panel_block .content_mission dt { background-color:#f0f0f0; padding:5px 5px 0 5px; line-height:23px}
 .panel_block .content_mission dd { padding:5px 10px; overflow:hidden}
-.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
-.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:19px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
+.panel_block .content_mission .comment_txt textarea { margin:2px; width:98.5% !important}
+.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:20px !important; float:left; cursor:pointer}
+.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:209px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
 .icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
 .icon_close_area div { padding:3px 10px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
@@ -376,7 +377,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .util span {color:#dddddd}
 .util span a {color:#608eba !important}
 .util span a:hover {text-decoration:underline}
-.util .icon_mission { padding:0; margin-left:3px}
+.util .icon_mission { padding:0; margin-left:3px; width:10px}
 .date {font-size:11px; color:#888888 !important}
 
 
@@ -409,7 +410,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
 .aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}
-.aside_block .content .ad_text { float:right; width:144px; line-height:15px}
+.aside_block .content .ad_text { float:right; width:144px; line-height:15px; height:73px; overflow:hidden}
 .num_cus { color:#ed1c24}
 
 /* Badge */
