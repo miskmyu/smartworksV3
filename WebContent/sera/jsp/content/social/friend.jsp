@@ -97,7 +97,7 @@
 						<ul>
 							<li class="pl0pr10">
 								<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-									<img src="<%=friend.getMinPicture() %>" />
+									<img class="profile_size_m" src="<%=friend.getMinPicture() %>" />
 								</a>
 							</li>
 							<li class="w90">
@@ -133,9 +133,9 @@
 			String lastId = friends[friends.length-1].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
-				<div class="icon_more">더보기</div>
-				<span class="js_progress_span"></span>
+			<div class="more js_more_friends_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
+				
 			</div>
 			<!-- 더보기 //-->
 	<%

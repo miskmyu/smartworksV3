@@ -15,9 +15,20 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
-	String fromDateStr = request.getParameter("fromDate");
-	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : 
-	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
+	Course course = (Course)session.getAttribute("course");
+	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
+	UserInfo[] members = course.getMembers();
+	boolean isMyCourse = false;
+	if(course.getOwner().getId().equals(cUser.getId())){
+		isMyCourse = true;
+	}else if(!SmartUtil.isBlankObject(members)){
+		for(int i=0; i<members.length; i++){
+			if(members[i].getId().equals(cUser.getId())){
+				isMyCourse = true;
+				break;
+			}
+		}
+	}
 	
 %>
 <div>
@@ -151,62 +162,13 @@
 		</li>
 		<!-- 리뷰 -->
 		<li class="fr">
-			<div class="panel_block fr">			
-				<%
-				if(!SmartUtil.isBlankObject(reviews) && reviews.length>0){
-					for(int i=0; i<reviews.length; i++){
-						ReviewInstanceInfo review = reviews[i];
-				%>
-						<!-- Reply-->
-						<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
-							<div class="photo">
-								<img class="profile_size_m" src="<%=review.getOwner().getMinPicture() %>" />
-							</div>
-							<div class="reply_text w375 fl">
-								<span class="name"><%=review.getOwner().getNickName() %> : </span><%=CommonUtil.toNotNull(review.getContent()) %>
-								<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
-							</div>
-							<div class="fr">
-								<div class="name fl mr5">별점</div>
-								<div class="star_score fr">
-									<ul>
-										<%
-										for(int j=0; j<5; j++){
-											String pointClass = "";
-											if(review.getStarPoint()>j)
-												if(review.getStarPoint()>(j+1))
-													pointClass = "full";
-												else
-													pointClass = "half";
-										%>
-											<li class="icon_star_score <%=pointClass%>"><a href=""> </a></li>
-										<%
-										}
-										%>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<!-- Reply//-->
-				<%
-					}
-					
-				}
-				%>
+			<div class="panel_block fr">
+				<jsp:include page="/sera/jsp/content/course/detail/more_course_reviews.jsp">
+					<jsp:param value="<%=courseId %>" name="courseId"/>
+				</jsp:include>			
 			</div>
 		</li>
 		<!-- 리뷰//-->
 	</ul>
 </div>
 <!-- 코스 리뷰 //-->
-<%
-if(reviews.length>5){
-%>
-	<!-- 더보기 -->
-	<div class="more cb">
-		<div class="icon_more">더보기</div>
-	</div>
-	<!-- 더보기 //-->
-<%
-}
-%>

@@ -67,17 +67,18 @@
 			if(friendList.getTotalFriends()>0){
 				for(int i=0; i<friendList.getFriends().length; i++){
 					SeraUserInfo friend = friendList.getFriends()[i];
+					String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
 			%>
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10 js_friend_item">
 					<ul>
 						<li class="pl0pr10">
-							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-								<img src="<%=friend.getMidPicture() %>" />
+							<a href="<%=userHref%>">
+								<img class="profile_size_m" src="<%=friend.getMidPicture() %>" />
 							</a>
 						</li>
 						<li class="w90">
-							<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
+							<a href="<%=userHref%>">
 								<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
 							</a>
 						</li>
@@ -86,15 +87,12 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<%
-								if(!friend.isFriend() && !friend.getId().equals(cUser.getId())){
-								%>
-									<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>">
-										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
-									</div> <!-- Btn //--> 
-								<%
-								}
-								%>
+								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
+								</div> <!-- Btn //--> 
+								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId() %>" <%if(!friend.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
+								</div> <!-- Btn //-->
 							</span>
 						</li>
 					</ul>
@@ -115,9 +113,9 @@
 			String lastId = friends[friends.length-1].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
-				<div class="icon_more">더보기</div>
-				<span class="js_progress_span"></span>
+			<div class="more js_more_friends_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
+				
 			</div>
 			<!-- 더보기 //-->
 	<%

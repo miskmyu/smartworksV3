@@ -732,11 +732,17 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				friend.remove();
-				var count = friendCount.html();
-				if(!isEmpty(count) && (count!=='0')){
-					count = parseInt(count)-1;
-					friendCount.html(count);
+				var friendPage = input.parents('.js_friend_page');
+				var othersFriendPage = input.parents('.js_others_friend_page');
+				if(!isEmpty(friendPage)){
+					friend.remove();
+					var count = friendCount.html();
+					if(!isEmpty(count) && (count!=='0')){
+						count = parseInt(count)-1;
+						friendCount.html(count);
+					}
+				}else if(!isEmpty(othersFriendPage)){
+					input.hide().siblings().show();
 				}
 				smartPop.closeProgress();
 			},
@@ -766,7 +772,7 @@ $(function() {
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFORM, "친구요청이 성공적으로 이루어 졌습니다.", function(){
 				});				
-				input.remove();
+				input.hide().siblings().show();
 			},
 			error : function(e) {
 				smartPop.closeProgress();
