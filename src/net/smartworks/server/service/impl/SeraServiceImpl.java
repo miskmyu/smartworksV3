@@ -44,6 +44,7 @@ import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
+import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.MissionReportInstanceInfo;
@@ -100,6 +101,9 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.CourseReview;
 import net.smartworks.server.engine.sera.model.CourseReviewCond;
+import net.smartworks.server.engine.sera.model.CourseTeam;
+import net.smartworks.server.engine.sera.model.CourseTeamCond;
+import net.smartworks.server.engine.sera.model.CourseTeamUser;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -122,6 +126,9 @@ public class SeraServiceImpl implements ISeraService {
 
 	private ISeraManager getSeraManager() {
 		return SwManagerFactory.getInstance().getSeraManager();
+	}
+	private ISwoManager getSwoManager() {
+		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
@@ -265,11 +272,86 @@ public class SeraServiceImpl implements ISeraService {
 		course.setPayable(course.isPayable());
 		course.setFee(courseDetail.getFee());
 		course.setLastMissionIndex(courseDetail.getLastMissionIndex());
-		//course.setTeam("TEAM");
-		
+		SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+		List<UserInfo> userinfoList = new ArrayList<UserInfo>();
+		UserInfo[] members = null;
+		if(!CommonUtil.isEmpty(swoGroupMembers)) {
+			for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+				userinfoList.add(ModelConverter.getUserInfoByUserId(swoGroupMember.getUserId()));
+			}
+		}
+		if(userinfoList.size() > 0) {
+			members = new UserInfo[userinfoList.size()];
+			userinfoList.toArray(members);
+		}
+		course.setMembers(members);
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String courseId = swoGroup.getId();
+		CourseTeamCond courseTeamCond = new CourseTeamCond();
+		courseTeamCond.setCourseId(courseId);
+		CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
+		Team team = null;
+		List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
+		SeraUserInfo[] seraUserInfos = null;
+		if(courseTeam != null) {
+			team = new Team();
+			team.setId(courseTeam.getObjId());
+			team.setCourseId(courseTeam.getCourseId());
+			team.setDesc(courseTeam.getDescription());
+			team.setStart(new LocalDate(courseTeam.getStartDate().getTime()));
+			team.setEnd(new LocalDate(courseTeam.getEndDate().getTime()));
+			team.setAccessPolicy(courseTeam.getAccessPolicy());
+			team.setMaxMembers(courseTeam.getMemberSize());
+			CourseTeamUser[] courseTeamUsers = courseTeam.getCourseTeamUsers();
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			if(!CommonUtil.isEmpty(courseTeamUsers)) {
+				for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+					SeraUserInfo seraUserInfo = new SeraUserInfo();
+					String id = courseTeamUser.getUserId();
+					SwoUserExtend swoUserExtend = getSwoManager().getUserExtend(userId, id, false);
+					String name = null;
+					int role = -1;
+					String smallPictureName = null;
+					if(swoUserExtend != null) {
+						name = swoUserExtend.getName();
+						role = swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER;
+						smallPictureName = swoUserExtend.getSmallPictureName();
+					}
+					SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, id);
+					String goal = null;
+					boolean isFriend = false;
+					if(seraUserDetail != null)
+						goal = seraUserDetail.getGoal();
+					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
+					if(!CommonUtil.isEmpty(mySeraFriends)) {
+						for(SeraFriend seraFriend : mySeraFriends) {
+							if(id.equals(seraFriend.getFriendId())) {
+								isFriend = true;
+								break;
+							}
+						}
+					}
+					seraUserInfo.setName(name);
+					seraUserInfo.setRole(role);
+					seraUserInfo.setSmallPictureName(smallPictureName);
+					seraUserInfo.setGoal(goal);
+					seraUserInfo.setFriend(isFriend);
+					seraUserInfoList.add(seraUserInfo);
+				}
+			}
+			if(seraUserInfoList.size() > 0) {
+				seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
+				seraUserInfoList.toArray(seraUserInfos);
+			}
+			team.setMembers(seraUserInfos);
+		}
+
+		course.setTeam(team);
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
-		
-		
+
 		return course;
 	}
 	private Course[] convertSwoGroupArrayToCourseArray(SwoGroup[] swoGroups, CourseDetail[] courseDetails) throws Exception {
@@ -336,7 +418,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			
+			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
@@ -601,6 +683,21 @@ public class SeraServiceImpl implements ISeraService {
 								missionInstanceInfo.setContent(swdDataField.getValue());
 							} else if (swdDataField.getId().equals(SeraConstant.MISSION_INDEXFIELDID)) {
 								missionInstanceInfo.setIndex(Integer.parseInt(swdDataField.getValue()));
+							} else if (swdDataField.getId().equals(SeraConstant.MISSION_FILESFIELDID)) {
+								missionInstanceInfo.setFileGroupId(swdDataField.getValue());
+								List<IFileModel> docFileList = docMgr.findFileGroup(swdDataField.getValue());
+								if (docFileList != null && docFileList.size() != 0) {
+									List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+									for (int k = 0 ; k <docFileList.size(); k++) {
+										Map<String, String> fileMap = new HashMap<String, String>();
+										IFileModel docFile = docFileList.get(k);
+										fileMap.put("fileId", docFile.getId());
+										fileMap.put("fileName", docFile.getFileName());
+										fileMap.put("fileSize", docFile.getFileSize()+"");
+										fileList.add(fileMap);
+									}
+									missionInstanceInfo.setFiles(fileList);
+								}
 							}
 						}
 					}
@@ -695,6 +792,7 @@ public class SeraServiceImpl implements ISeraService {
 					txtMissionOpenDate=2012.04.04, 
 					txtMissionCloseDate=2012.04.11, 
 					selPrevMission=, 
+					txtFileField={groupId=fg_d299186ecf640c4407cbd69c0dc3a2c4bc30, files=[]},
 					txtaMissionContent=미션 내용
 				}
 		}*/
@@ -713,6 +811,11 @@ public class SeraServiceImpl implements ISeraService {
 		String selPrevMission = null;
 		String txtaMissionContent = null;
 
+		Map<String, Object> txtFileField = null;
+		String fileGroupId = null;
+		Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
+
+		
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
 			Object fieldValue = frmNewMissionProfile.get(fieldId);
@@ -727,6 +830,17 @@ public class SeraServiceImpl implements ISeraService {
 					selPrevMission = (String)frmNewMissionProfile.get("selPrevMission");
 				} else if(fieldId.equals("txtaMissionContent")) {
 					txtaMissionContent = (String)frmNewMissionProfile.get("txtaMissionContent");
+				}
+			} else if (fieldValue instanceof LinkedHashMap) {
+				if (fieldId.equalsIgnoreCase("txtFileField")) {
+					txtFileField = (Map<String, Object>)fieldValue;
+					if(txtFileField != null && txtFileField.size() > 0) {
+						fileGroupId = (String)txtFileField.get("groupId");
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)txtFileField.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							fileGroupMap.put(fileGroupId, files);
+						}
+					}
 				}
 			}
 		}
@@ -787,6 +901,8 @@ public class SeraServiceImpl implements ISeraService {
 				seraMgr.setCourseDetail(courseDetail);
 				
 				fieldData.setValue(lastMissionIndex + "");
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_FILESFIELDID)) {
+				fieldData.setValue(fileGroupId);
 			}
 			fieldDataList.add(fieldData);
 		}
@@ -807,6 +923,31 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setAccessValue(null);
 
 		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
+		
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", obj.getRecordId())});
+		tskCond.setModificationUser(userId);
+		tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_CREATIONDATE, false)});
+		TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		String taskInstId = tskTasks[0].getObjId();
+		
+		if(fileGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+				String fGroupId = entry.getKey();
+				List<Map<String, String>> fileGroups = entry.getValue();
+				try {
+					for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+						Map<String, String> file = fileGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Files", taskInstId, fGroupId, fileId, fileName, fileSize);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("file upload fail...");
+				}
+			}
+		}
 		
 		return courseId;
 	}
@@ -1442,7 +1583,9 @@ public class SeraServiceImpl implements ISeraService {
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 
-			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, null);
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
 
 			if(CommonUtil.isEmpty(seraFriends)) {
 				friendListObj.setTotalFriends(0);
@@ -1450,8 +1593,6 @@ public class SeraServiceImpl implements ISeraService {
 			} else {
 				friendListObj.setTotalFriends(seraFriends.length);
 			}
-
-			SeraFriendCond seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setPageNo(0);
 			seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
@@ -1483,6 +1624,9 @@ public class SeraServiceImpl implements ISeraService {
 			User currentUser = SmartUtil.getCurrentUser();
 			String currentUserId = currentUser.getId();
 
+			seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
 			List userInfoList = new ArrayList();
 			if(finalUserExtends != null) {
 				for(SwoUserExtend swoUserExtend : finalUserExtends) {
@@ -1490,7 +1634,7 @@ public class SeraServiceImpl implements ISeraService {
 					String id = swoUserExtend.getId();
 					member.setId(id);
 					boolean isFriend = false;
-					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, null);
+					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -1537,6 +1681,7 @@ public class SeraServiceImpl implements ISeraService {
 				String lastFriendName = swoUser.getName();
 				seraFriendCond.setLastFriendName(lastFriendName);
 			}
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 			seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setPageNo(0);
 			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
@@ -1571,6 +1716,9 @@ public class SeraServiceImpl implements ISeraService {
 			User currentUser = SmartUtil.getCurrentUser();
 			String currentUserId = currentUser.getId();
 
+			seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
 			List userInfoList = new ArrayList();
 			SeraUserInfo[] friendsUserInfo = null;
 			if(finalUserExtends != null) {
@@ -1579,7 +1727,7 @@ public class SeraServiceImpl implements ISeraService {
 					String id = swoUserExtend.getId();
 					member.setId(id);
 					boolean isFriend = false;
-					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, null);
+					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -2210,6 +2358,7 @@ public class SeraServiceImpl implements ISeraService {
 			swfCond.setCompanyId(user.getCompanyId());
 			swfCond.setId(SeraConstant.MISSION_FORMID);
 
+			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			SwfForm swfForm = swfMgr.getForms(user.getId(), swfCond, IManager.LEVEL_LITE)[0];
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
@@ -2258,6 +2407,21 @@ public class SeraServiceImpl implements ISeraService {
 						missionInstance.setContent(swdDataField.getValue());
 					} else if (swdDataField.getId().equals(SeraConstant.MISSION_INDEXFIELDID)) {
 						missionInstance.setIndex(Integer.parseInt(swdDataField.getValue()));
+					} else if (swdDataField.getId().equals(SeraConstant.MISSION_FILESFIELDID)) {
+						missionInstance.setFileGroupId(swdDataField.getValue());
+						List<IFileModel> docFileList = docMgr.findFileGroup(swdDataField.getValue());
+						if (docFileList != null && docFileList.size() != 0) {
+							List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+							for (int k = 0 ; k <docFileList.size(); k++) {
+								Map<String, String> fileMap = new HashMap<String, String>();
+								IFileModel docFile = docFileList.get(k);
+								fileMap.put("fileId", docFile.getId());
+								fileMap.put("fileName", docFile.getFileName());
+								fileMap.put("fileSize", docFile.getFileSize()+"");
+								fileList.add(fileMap);
+							}
+							missionInstance.setFiles(fileList);
+						}
 					}
 				}
 			}
@@ -2317,7 +2481,9 @@ public class SeraServiceImpl implements ISeraService {
 			String currentUserId = currentUser.getId();
 
 			boolean isFriend = false;
-			SeraFriend[] seraFriends = getSeraManager().getMyFriends(currentUserId, null);
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			SeraFriend[] seraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 			if(!CommonUtil.isEmpty(seraFriends)) {
 				for(SeraFriend seraFriend : seraFriends) {
 					if(userId.equals(seraFriend.getFriendId())) {
@@ -2727,6 +2893,7 @@ public class SeraServiceImpl implements ISeraService {
 									IFileModel docFile = docFileList.get(j);
 									fileMap.put("fileId", docFile.getId());
 									fileMap.put("fileName", docFile.getFileName());
+									fileMap.put("fileType", docFile.getType());
 									fileMap.put("fileSize", docFile.getFileSize()+"");
 									fileList.add(fileMap);
 								}
@@ -3212,9 +3379,107 @@ public class SeraServiceImpl implements ISeraService {
 
 	@Override
 	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
-		return null;
+
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String courseId = (String)requestBody.get("courseId");
+			Map<String, Object> frmCreateTeamMap = (Map<String, Object>)requestBody.get("frmCreateTeam");
+	
+			String txtTeamName = null;
+			String txaTeamDesc = null;
+			String txtTeamDays = null;
+			String txtTeamStartDate = null;
+			String txtTeamEndDate = null;
+			String chkTeamSecurity = null;
+			String txtTeamUsers = null;
+			List<Map<String, String>> users = null;
+	
+			Set<String> keySet = frmCreateTeamMap.keySet();
+			Iterator<String> itr = keySet.iterator();
+	
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmCreateTeamMap.get(fieldId);
+				if(fieldValue instanceof LinkedHashMap) {
+					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+					if(fieldId.equals("txtInviteMembers")) {
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+					}
+					if(!CommonUtil.isEmpty(users)) {
+						
+					}
+				} else if(fieldValue instanceof String) {
+					if(fieldId.equals("txtTeamName")) {
+						txtTeamName = (String)frmCreateTeamMap.get("txtTeamName");
+					} else if(fieldId.equals("txaTeamDesc")) {
+						txaTeamDesc = (String)frmCreateTeamMap.get("txaTeamDesc");
+					} else if(fieldId.equals("txtTeamDays")) {
+						txtTeamDays = (String)frmCreateTeamMap.get("txtTeamDays");
+					} else if(fieldId.equals("txtTeamStartDate")) {
+						txtTeamStartDate = (String)frmCreateTeamMap.get("txtTeamStartDate");
+					} else if(fieldId.equals("txtTeamEndDate")) {
+						txtTeamEndDate = (String)frmCreateTeamMap.get("txtTeamEndDate");
+					} else if(fieldId.equals("chkTeamSecurity")) {
+						chkTeamSecurity = (String)frmCreateTeamMap.get("chkTeamSecurity");
+					} else if(fieldId.equals("txtTeamUsers")) {
+						txtTeamUsers = (String)frmCreateTeamMap.get("txtTeamUsers");
+					}
+				}
+			}
+	
+			Date startDate = null;
+			Date endDate = null;
+	
+			if(!CommonUtil.isEmpty(txtTeamDays)) {
+				startDate = new LocalDate();
+				endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtTeamDays)-1));
+			} else {
+				startDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamStartDate);
+				endDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamEndDate);
+			}
+
+			CourseTeam courseTeam = new CourseTeam();
+			courseTeam.setCourseId(courseId);
+			courseTeam.setName(txtTeamName);
+			courseTeam.setDescription(txaTeamDesc);
+			courseTeam.setAccessPolicy(Integer.parseInt(chkTeamSecurity));
+			courseTeam.setMemberSize(Integer.parseInt(txtTeamUsers));
+			courseTeam.setStartDate(startDate);
+			courseTeam.setEndDate(endDate);
+	
+			if(!CommonUtil.isEmpty(users)) {
+				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+					Map<String, String> userMap = users.get(i);
+					String teamUserId = userMap.get("id");
+					CourseTeamUser courseTeamUser = new CourseTeamUser();
+					courseTeamUser.setUserId(teamUserId);
+					courseTeam.addGroupMember(courseTeamUser);
+				}
+			}
+	
+			courseTeam = getSeraManager().setCourseTeam(userId, courseTeam);
+			return courseTeam.getObjId();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
+
+	@Override
+	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
@@ -4410,18 +4675,6 @@ public class SeraServiceImpl implements ISeraService {
 		//SwManagerFactory.getInstance().getSwdManager().removeRecord(user.getId(), domainId, missionId);
 		
 		return missionId;
-	}
-
-	@Override
-	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

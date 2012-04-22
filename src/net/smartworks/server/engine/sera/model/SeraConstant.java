@@ -19,6 +19,7 @@ public class SeraConstant {
 	public final static String MISSION_INDEXFIELDID = "0";
 	public final static String MISSION_MISSIONCLEARERS = "4";
 	public final static String MISSION_STARTPOINT = "5";
+	public final static String MISSION_FILESFIELDID = "8";
 	
 	public final static String MISSION_REPORT_FORMID = "mission_report";
 	public final static String MISSION_REPORT_IMAGEGROUPIDFIELDID = "7";
