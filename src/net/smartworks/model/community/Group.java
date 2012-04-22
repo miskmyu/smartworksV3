@@ -25,6 +25,7 @@ public class Group extends WorkSpace {
 	private int numberOfGroupMember = 0;
 	private String type = GROUP_TYPE_DEFAULT;
 	private boolean autoApproval;
+	private LocalDate createdDate;
 
 	public String getType() {
 		return type;
@@ -81,6 +82,12 @@ public class Group extends WorkSpace {
 		this.autoApproval = autoApproval;
 	}
 
+	public LocalDate getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(LocalDate createdDate) {
+		this.createdDate = createdDate;
+	}
 	public Group(){
 		super();
 	}
