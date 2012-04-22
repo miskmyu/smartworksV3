@@ -20,7 +20,6 @@
 %>
 
 <!-- Aside -->
-<div class="aside m0">
 
 	<%
 	if(favoriteCourses==null) favoriteCourses = new CourseInfo[]{};
@@ -35,7 +34,7 @@
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -55,12 +54,12 @@
 		CourseInfo course = recommendedCourses[0];
 	%>
 		<!-- AD Block1 -->
-		<div class="aside_block">
+		<div class="aside_block m0">
 			<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -80,12 +79,12 @@
 		CourseInfo course = favoriteCourses[1];
 	%>
 		<!-- AD Block1 -->
-		<div class="aside_block">
+		<div class="aside_block m0">
 			<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -105,12 +104,12 @@
 		CourseInfo course = recommendedCourses[1];
 	%>
 		<!-- AD Block1 -->
-		<div class="aside_block">
+		<div class="aside_block m0">
 			<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -130,12 +129,12 @@
 		CourseInfo course = favoriteCourses[2];
 	%>
 		<!-- AD Block1 -->
-		<div class="aside_block">
+		<div class="aside_block m0">
 			<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -155,12 +154,12 @@
 		CourseInfo course = favoriteCourses[2];
 	%>
 		<!-- AD Block1 -->
-		<div class="aside_block">
+		<div class="aside_block m0">
 			<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
-				<div class="content">
+				<div class="content p0">
 					<!-- 코스 이미지-->
 					<div class="ad_photo">
 						<img class="profile_size_72"
@@ -177,5 +176,4 @@
 	<%
 	}
 	%>
-</div>
 <!-- Aside //-->
