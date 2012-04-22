@@ -133,7 +133,7 @@
 									%>
 									<dd>
 										<div class="text"><%=board.getSubject() %></div>
-										<div class="text"><%=board.getBriefContent() %></div>
+										<div class="text js_brief_content"><%=board.getBriefContent() %></div>
 									</dd>
 								<%
 									break;

@@ -8,9 +8,16 @@ import net.smartworks.util.LocalDate;
 
 public class ReviewInstanceInfo extends WorkInstanceInfo {
 
+	private String briefContent;
 	private String content;
 	private double starPoint;
 	
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
+	}
 	public String getContent() {
 		return content;
 	}

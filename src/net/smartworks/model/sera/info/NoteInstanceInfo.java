@@ -11,6 +11,7 @@ import net.smartworks.util.LocalDate;
 
 public class NoteInstanceInfo extends WorkInstanceInfo {
 
+	private String briefContent;
 	private String content;
 	private String imageSrc;
 	private String imageSrcOrigin;
@@ -19,6 +20,12 @@ public class NoteInstanceInfo extends WorkInstanceInfo {
 	private String fileGroupId;
 	private List<Map<String, String>> fileList;
 	
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
+	}
 	public String getContent() {
 		return content;
 	}
