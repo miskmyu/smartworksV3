@@ -20,6 +20,8 @@ import net.smartworks.server.engine.sera.exception.SeraException;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
+import net.smartworks.server.engine.sera.model.CourseReview;
+import net.smartworks.server.engine.sera.model.CourseReviewCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -578,4 +580,119 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			throw new SeraException(e);
 		}
 	}
+	@Override
+	public CourseReview getCourseReviewById(String userId, String objId) throws SeraException {
+		try {
+			if(CommonUtil.isEmpty(objId)) 
+				return null;
+			CourseReview courseReview = (CourseReview)this.get(CourseReview.class, objId);
+			return courseReview;
+		} catch(SeraException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public CourseReview setCourseReview(String userId, CourseReview courseReview) throws SeraException {
+		try {
+			if(courseReview == null)
+				return null;
+			this.set(courseReview);
+			return courseReview;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public void removeCourseReview(String userId, String objId) throws SeraException {
+		try {
+			CourseReview obj = this.getCourseReviewById(userId, objId);
+			this.getHibernateTemplate().delete(obj);
+			this.getHibernateTemplate().flush();
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	private Query appendQuery(StringBuffer buf, CourseReviewCond cond) throws Exception {
+		String objId = null;
+		String creationUser = null;
+		String modificationUser = null;
+		Date modificationDateFrom = null;
+		Date modificationDateTo = null;
+		if (cond != null) {
+			objId = cond.getObjId();
+			creationUser = cond.getCreationUser();
+			modificationUser = cond.getModificationUser();
+			modificationDateFrom = cond.getModificationDateFrom();
+			modificationDateTo = cond.getModificationDateTo();
+		}
+		buf.append(" from CourseReview obj");
+		buf.append(" where obj.objId is not null");
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
+			if (modificationDateFrom != null)
+				buf.append(" and obj.modificationDate > :modificationDateFrom");
+			if (modificationDateTo != null)
+				buf.append(" and obj.modificationDate < :modificationDateTo");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
+			if (modificationDateFrom != null)
+				query.setTimestamp("modificationDateFrom", modificationDateFrom);
+			if (modificationDateTo != null)
+				query.setTimestamp("modificationDateTo", modificationDateTo);
+		}
+		return query;
+	}
+	@Override
+	public long getCourseReviewSize(String userId, CourseReviewCond courseReviewCond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, courseReviewCond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public CourseReview[] getCourseReviews(String userId, CourseReviewCond courseReviewCond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, courseReviewCond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			CourseReview[] objs = new CourseReview[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+
 }

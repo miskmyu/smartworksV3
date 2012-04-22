@@ -98,6 +98,8 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
+import net.smartworks.server.engine.sera.model.CourseReview;
+import net.smartworks.server.engine.sera.model.CourseReviewCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -3108,19 +3110,76 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return userId;
 	}
-	//TODO
+
+	@Override
+	public void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String courseId = (String)requestBody.get("courseId");
+			String content = (String)requestBody.get("reviewContent");
+			Double startPoint = (Double)requestBody.get("starPoint");
+			CourseReview courseReview = new CourseReview();
+			courseReview.setCourseId(courseId);
+			courseReview.setContent(content);
+			courseReview.setStartPoint(startPoint);
+			courseReview.setCreationUser(userId);
+			courseReview.setCreationDate(new LocalDate());
+			courseReview.setModificationUser(userId);
+			courseReview.setModificationDate(new LocalDate());
+
+			getSeraManager().setCourseReview(userId, courseReview);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	@Override
 	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception{
-		try{
-			ReviewInstanceInfo[] instances = SeraTest.getReviewInstancesByCourse(courseId, fromDate, maxList);
-			return instances;
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			CourseReviewCond courseReviewCond = new CourseReviewCond();
+			courseReviewCond.setCourseId(courseId);
+			courseReviewCond.setModificationDateFrom(new Date(fromDate.getTime()));
+			courseReviewCond.setPageSize(maxList);
+			courseReviewCond.setPageNo(0);
+
+			ReviewInstanceInfo[] reviewInstanceInfos = null;
+			CourseReview[] courseReviews = getSeraManager().getCourseReviews(userId, courseReviewCond);
+			if(!CommonUtil.isEmpty(courseReviews)) {
+				int courseReviewsLength = courseReviews.length;
+				reviewInstanceInfos = new ReviewInstanceInfo[courseReviewsLength];
+				for(int i=0; i<courseReviewsLength; i++) {
+					CourseReview courseReview = courseReviews[i];
+					ReviewInstanceInfo reviewInstanceInfo = new ReviewInstanceInfo();
+					reviewInstanceInfo.setContent(courseReview.getContent());
+					reviewInstanceInfo.setStarPoint(courseReview.getStartPoint());
+					String creationUser = courseReview.getCreationUser();
+					Date creationDate = courseReview.getCreationDate();
+					String modificationUser = courseReview.getModificationUser();
+					Date modificatonDate = courseReview.getModificationDate();
+					UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
+					LocalDate createdDate = new LocalDate(creationDate.getTime());
+					UserInfo lastModifier = ModelConverter.getUserInfoByUserId(modificationUser);
+					LocalDate lastModifiedDate = new LocalDate(modificatonDate.getTime());
+					reviewInstanceInfo.setOwner(owner);
+					reviewInstanceInfo.setCreatedDate(createdDate);
+					reviewInstanceInfo.setLastModifier(lastModifier);
+					reviewInstanceInfo.setLastModifiedDate(lastModifiedDate);
+					reviewInstanceInfos[i] = reviewInstanceInfo;
+				}
+			}
+			return reviewInstanceInfos;
 		}catch (Exception e){
-			// Exception Handling Required
 			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			return null;
 		}		
 	}
+
 	public CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
@@ -3569,4 +3628,5 @@ public class SeraServiceImpl implements ISeraService {
 	public SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception {
 		return SeraTest.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
 	}
+
 }

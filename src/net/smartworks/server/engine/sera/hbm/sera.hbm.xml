@@ -69,4 +69,16 @@
 		<property name="requestDate" type="timestamp"/>
 		<property name="replyDate" type="timestamp"/>
 	</class>
+	<class name="CourseReview" table="CourseReview">
+		<id name="objId" type="string" length="100" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="courseId" type="string" length="50"/>
+		<property name="content" type="string" length="4000"/>
+		<property name="startPoint" type="long"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
 </hibernate-mapping>

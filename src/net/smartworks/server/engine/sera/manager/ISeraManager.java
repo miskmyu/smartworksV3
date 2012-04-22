@@ -11,10 +11,11 @@ package net.smartworks.server.engine.sera.manager;
 import java.util.Date;
 
 import net.smartworks.server.engine.common.manager.IManager;
-import net.smartworks.server.engine.common.searcher.exception.SchException;
 import net.smartworks.server.engine.sera.exception.SeraException;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
+import net.smartworks.server.engine.sera.model.CourseReview;
+import net.smartworks.server.engine.sera.model.CourseReviewCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -46,5 +47,11 @@ public interface ISeraManager extends IManager{
 	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException;
 	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException;
 	public void removeSeraUser(String userId, String objId) throws SeraException;
-	
+
+	public CourseReview getCourseReviewById(String userId, String objId) throws SeraException;
+	public CourseReview setCourseReview(String userId, CourseReview courseReview) throws SeraException;
+	public void removeCourseReview(String userId, String objId) throws SeraException;
+	public long getCourseReviewSize(String userId, CourseReviewCond courseReviewCond) throws SeraException;
+	public CourseReview[] getCourseReviews(String userId, CourseReviewCond courseReviewCond) throws SeraException;
+
 }

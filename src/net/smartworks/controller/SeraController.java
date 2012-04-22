@@ -476,8 +476,7 @@ public class SeraController {
 	@RequestMapping(value = "/add_review_on_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void addReviewOnCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeSeraInstane(requestBody, request);
-		// TO DO : Exception handler
+		smartworks.addReviewOnCourse(requestBody, request);
 	}
 
 }

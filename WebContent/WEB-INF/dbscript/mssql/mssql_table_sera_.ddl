@@ -563,4 +563,14 @@ ALTER TABLE coursedetail add coursePoint int;
 ALTER TABLE SeraUserDetail add nickName varchar(100);
 ALTER TABLE SeraUserDetail add challengingTarget varchar(500);
 
-
+CREATE TABLE CourseReview (
+	objId varchar(50) NOT NULL,
+	courseId varchar(50),
+	content varchar(4000),
+	startPoint int,
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+	primary key (id)
+);
