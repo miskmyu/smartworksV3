@@ -158,13 +158,16 @@
 						</a> 
 					</label> 
 					<a href="http://blog.seracampus.com/?p=718"> 
-						<img id="eventBanner1" width="405" height="435" alt="" style="position: absolute; z-index: 9;" src="sera/images/visual_03.png"> 
+						<img id="eventBanner1" width="405" height="435" alt="" style="position: absolute; z-index: 1;" src="sera/images/N_visual_01.png"> 
 					</a> 
 					<a href="http://blog.seracampus.com/?p=786"> 
-						<img id="eventBanner2" width="405" height="435" alt="" style="position: absolute; z-index: 10;" src="sera/images/visual_01.png"> 
+						<img id="eventBanner2" width="405" height="435" alt="" style="position: absolute; z-index: 2;" src="sera/images/N_visual_02.png"> 
 					</a> 
 					<a href="http://blog.seracampus.com/?p=685"> 
-						<img id="eventBanner3" width="405" height="435" alt="" style="position: absolute; z-index: 1;" src="sera/images/visual_04.png"> 
+						<img id="eventBanner3" width="405" height="435" alt="" style="position: absolute; z-index: 3;" src="sera/images/N_visual_03.png"> 
+					</a>
+					<a href="http://blog.seracampus.com/?p=685"> 
+						<img id="eventBanner3" width="405" height="435" alt="" style="position: absolute; z-index: 4;" src="sera/images/N_visual_04.png"> 
 					</a>
 				</li>
 			</ul>
