@@ -150,6 +150,10 @@
 				<property name="joinStatus" type="string" length="1"/>
 				<property name="joinDate" column="joinTime" type="timestamp"/>
 				<property name="outDate" column="outTime" type="timestamp"/>
+				<property name="creationUser" column="creator" type="string" length="50"/>
+				<property name="creationDate" column="createdTime" type="timestamp"/>
+				<property name="modificationUser" column="modifier" type="string" length="50"/>
+				<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 			</composite-element>
 		</array>
 	</class>

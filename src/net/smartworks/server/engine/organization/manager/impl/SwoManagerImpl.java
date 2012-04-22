@@ -1178,6 +1178,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String modificationUser = null;
 		Date modificationDate = null;
 		String[] typeNotIns = null;
+		String[] idIns = null;
+		String[] idNotIns = null;
 
 		if (cond != null) {
 			id = cond.getId();
@@ -1204,6 +1206,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			retiree = cond.getRetiree();
 			mobileNo = cond.getMobileNo();
 			extensionNo = cond.getExtensionNo();
+			idIns = cond.getIdIns();
+			idNotIns = cond.getIdNotIns();
 		}
 		buf.append(" from SwoUser obj");
 		buf.append(" where obj.id is not null");
@@ -1264,6 +1268,24 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				}
 				buf.append(")");
 			}
+			if (idIns != null && idIns.length != 0) {
+				buf.append(" and obj.id in (");
+				for (int i=0; i<idIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":idIn").append(i);
+				}
+				buf.append(")");
+			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				buf.append(" and obj.id not in (");
+				for (int i=0; i<idNotIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":idNotIn").append(i);
+				}
+				buf.append(")");
+			}
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		
@@ -1318,6 +1340,16 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (typeNotIns != null && typeNotIns.length != 0) {
 				for (int i=0; i<typeNotIns.length; i++) {
 					query.setString("typeNotIn"+i, typeNotIns[i]);
+				}
+			}
+			if (idIns != null && idIns.length != 0) {
+				for (int i=0; i<idIns.length; i++) {
+					query.setString("idIn"+i, idIns[i]);
+				}
+			}
+			if (idNotIns != null && idNotIns.length != 0) {
+				for (int i=0; i<idNotIns.length; i++) {
+					query.setString("idNotIn"+i, idNotIns[i]);
 				}
 			}
 		}
@@ -2174,8 +2206,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 		return userExtend;
 	}
-
-	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException {
+	public SwoUserExtend[] getUsersExtendNotIn(String userId, String[] ids, String lastName) throws SwoException {
 
 		if (CommonUtil.isEmpty(ids))
 			return null;
@@ -2189,15 +2220,17 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("     	   user.empNo, user.email, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
+		if (!CommonUtil.isEmpty(lastName))
+			buff.append(" and user.name > ").append("'").append(lastName).append("'");
 		buff.append(" and user.companyId = company.id");
-		buff.append(" and user.id in ( ");
+		buff.append(" and user.id not in ( ");
 		for (int i = 0; i < ids.length; i++) {
 			if (i != 0)
 				buff.append(", ");
 			buff.append(":userIn").append(i);
 		}
-		buff.append(")");
-
+		buff.append(", 'admin@maninsoft.co.kr', 'PROCESS')");
+		buff.append(" order by user.name asc");
 		Query query = this.getSession().createQuery(buff.toString());
 
 		for (int i=0; i<ids.length; i++) {
@@ -2228,6 +2261,67 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			i++;
 		}
 		return usersExtendsArray;
+	}
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName) throws SwoException {
+
+		if (CommonUtil.isEmpty(ids))
+			return null;
+		
+		StringBuffer buff = new StringBuffer();
+		
+		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
+		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
+		buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
+		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
+		buff.append("     	   user.empNo, user.email, user.extensionNo, user.mobileNo )");
+		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
+		buff.append(" where user.deptId = dept.id");
+		if (!CommonUtil.isEmpty(lastName))
+			buff.append(" and user.name > ").append("'").append(lastName).append("'");
+		buff.append(" and user.companyId = company.id");
+		buff.append(" and user.id in ( ");
+		for (int i = 0; i < ids.length; i++) {
+			if (i != 0)
+				buff.append(", ");
+			buff.append(":userIn").append(i);
+		}
+		buff.append(")");
+		buff.append(" order by user.name asc");
+		
+		Query query = this.getSession().createQuery(buff.toString());
+		
+		for (int i=0; i<ids.length; i++) {
+			query.setString("userIn"+i, ids[i]);
+		}
+		List list = query.list();
+		
+		if (list == null || list.isEmpty())
+			return null;
+		
+		SwoUserExtend[] usersExtendsArray = new SwoUserExtend[list.size()];
+		
+		int i = 0;
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			SwoUserExtend user = (SwoUserExtend) itr.next();
+			String picture = CommonUtil.toNotNull(user.getPictureName());
+
+			if(!picture.equals("")) {
+				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+				user.setBigPictureName(pictureId + "_thumb" + "." + extension);
+				user.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+			} else {
+				user.setBigPictureName(picture);
+				user.setSmallPictureName(picture);
+			}
+			usersExtendsArray[i] = user;
+			i++;
+		}
+		return usersExtendsArray;
+	}
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException {
+
+		return getUsersExtend(userId, ids, null);
 	}
 
 	public SwoUserExtend getNoneExistingUser() throws SwoException {
@@ -2483,6 +2577,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		try {
 			if (level.equals(LEVEL_ALL)) {
 				fill(user, obj);
+				if (obj.getSwoGroupMembers() != null) {
+					SwoGroupMember[] members = obj.getSwoGroupMembers();
+					for (int i = 0; i < members.length; i++) {
+						SwoGroupMember member = members[i];
+						fill(user, member);
+					}
+				}
 				if(obj.getId() == null)
 					obj.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 				set(obj);
@@ -2518,6 +2619,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	public void createGroup(String user, SwoGroup obj) throws SwoException {
 		try {
 			fill(user, obj);
+			if (obj.getSwoGroupMembers() != null) {
+				SwoGroupMember[] members = obj.getSwoGroupMembers();
+				for (int i = 0; i < members.length; i++) {
+					SwoGroupMember member = members[i];
+					fill(user, member);
+				}
+			}
 			if(obj.getId() == null)
 				obj.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			create(obj);
@@ -2777,13 +2885,14 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		StringBuffer buff = new StringBuffer();
 
 		buff.append(" insert into SwoGroupMember ");
-		buff.append(" (groupId, userId, joinType, joinStatus) ");
-		buff.append(" values(groupId = :groupId, userId = :userId, joinType = :joinType, joinStatus = 'P') ");
+		buff.append(" (groupId, userId, joinType, joinStatus, creationDate) ");
+		buff.append(" values(groupId = :groupId, userId = :userId, joinType = :joinType, joinStatus = 'P', creationDate = :creationDate) ");
 
 		Query query = this.getSession().createQuery(buff.toString());
 		query.setString(SwoGroupMember.A_GROUPID, groupId);
 		query.setString(SwoGroupMember.A_USERID, userId);
 		query.setString(SwoGroupMember.A_JOINTYPE, joinType);
+		query.setTimestamp(SwoGroupMember.A_CREATIONDATE, new LocalDate());
 
 		query.executeUpdate();
 
