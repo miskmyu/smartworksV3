@@ -35,6 +35,10 @@ public interface ISeraService {
 
 	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;

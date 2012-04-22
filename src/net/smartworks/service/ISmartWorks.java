@@ -446,6 +446,10 @@ public interface ISmartWorks {
 
 	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

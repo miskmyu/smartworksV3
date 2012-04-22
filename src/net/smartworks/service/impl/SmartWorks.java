@@ -950,6 +950,14 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.createNewTeam(requestBody, request);
 	}
 	@Override
+	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.modifyCourseTeam(requestBody, request);
+	}
+	@Override
+	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.removeCourseTeam(requestBody, request);
+	}
+	@Override
 	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.updateSeraProfile(requestBody, request);
 	}

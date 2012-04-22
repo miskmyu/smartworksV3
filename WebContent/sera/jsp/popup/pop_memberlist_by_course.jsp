@@ -21,7 +21,7 @@
 	boolean isMultiSelectable = false;
 	isMultiSelectable = Boolean.parseBoolean(request.getParameter("multiUsers"));
 	
-	CommunityInfo[] communities = SmartTest.getAvailableChatter();//getMembers();
+	CommunityInfo[] communities = course.getMembers();
 	String iconType = null;
 %>
 

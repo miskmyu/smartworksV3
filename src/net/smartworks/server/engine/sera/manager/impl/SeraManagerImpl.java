@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.sera.manager.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -22,6 +23,9 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.CourseReview;
 import net.smartworks.server.engine.sera.model.CourseReviewCond;
+import net.smartworks.server.engine.sera.model.CourseTeam;
+import net.smartworks.server.engine.sera.model.CourseTeamCond;
+import net.smartworks.server.engine.sera.model.CourseTeamUser;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
@@ -485,11 +489,13 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 
 		String friendId = userId;
 		String lastFriendName = null;
+		int acceptStatus = -1;
 		int pageSize = -1;
 		int pageNo = -1;
 
 		if(cond != null) {
 			lastFriendName = cond.getLastFriendName();
+			acceptStatus = cond.getAcceptStatus();
 			pageSize = cond.getPageSize();
 			pageNo = cond.getPageNo();
 		}
@@ -510,9 +516,11 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		queryBuffer.append(" 	from friends ");
 		queryBuffer.append(" 	where requestId =:friendId ");
 		queryBuffer.append(" ) friendInfo ");
-		queryBuffer.append(" where friendInfo.acceptStatus = 1 ");
+		queryBuffer.append(" where 1=1 ");
+		if(acceptStatus != -1)
+			queryBuffer.append(" and friendInfo.acceptStatus =:acceptStatus ");
 		if(lastFriendName != null)
-			queryBuffer.append(" and friendInfo.friendName > '" + lastFriendName +"'");
+			queryBuffer.append(" and friendInfo.friendName >:lastFriendName ");
 		queryBuffer.append(" order by friendInfo.friendName asc ");
 
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
@@ -522,6 +530,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		}
 
 		query.setString("friendId", friendId);
+		if(acceptStatus != -1)
+			query.setInteger("acceptStatus", acceptStatus);
+		if(lastFriendName != null)
+			query.setString("lastFriendName", lastFriendName);
 
 		List list = query.list();
 		if (list == null || list.isEmpty())
@@ -781,6 +793,200 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			if (list == null || list.isEmpty())
 				return null;
 			CourseReview[] objs = new CourseReview[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public CourseTeam getCourseTeam(String user, String id, String level) throws SeraException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				CourseTeam obj = (CourseTeam)this.get(CourseTeam.class, id);
+				return obj;
+			} else {
+				CourseTeamCond cond = new CourseTeamCond();
+				cond.setObjId(id);
+				CourseTeam[] objs = this.getCourseTeams(user, cond, level);
+				if (objs == null || objs.length == 0)
+					return null;
+				return objs[0];
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	@Override
+	public CourseTeam getCourseTeam(String user, CourseTeamCond cond, String level) throws SeraException {
+		if (level == null)
+			level = LEVEL_ALL;
+		CourseTeam[] objs = getCourseTeams(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		try {
+			if (objs.length != 1)
+				throw new SeraException("More than 1 Object");
+		} catch (SeraException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return objs[0];
+	}
+	@Override
+	public CourseTeam setCourseTeam(String user, CourseTeam courseTeam) throws SeraException {
+		try {
+			if(courseTeam == null)
+				return null;
+			this.set(courseTeam);
+			return courseTeam;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public CourseTeam createCourseTeam(String user, CourseTeam courseTeam) throws SeraException {
+		try {
+			if(courseTeam == null)
+				return null;
+			this.create(courseTeam);
+			return courseTeam;
+		} catch (SeraException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public void removeCourseTeam(String user, String id) throws SeraException {
+		try {
+			remove(CourseTeam.class, id);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public void removeCourseTeam(String user, CourseTeamCond cond) throws SeraException {
+		CourseTeam obj = getCourseTeam(user, cond, null);
+		if (obj == null)
+			return;
+		removeCourseTeam(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, CourseTeamCond cond) throws Exception {
+		String objId = null;
+		String courseId = null;
+		CourseTeamUser[] courseTeamUsers = null;
+
+		if (cond != null) {
+			objId = cond.getObjId();
+			courseId = cond.getCourseId();
+			courseTeamUsers = cond.getCourseTeamUsers();
+		}
+		buf.append(" from CourseTeam obj");
+		if (courseTeamUsers != null && courseTeamUsers.length != 0) {
+			for (int i=0; i<courseTeamUsers.length; i++) {
+				buf.append(" left join obj.courseTeamUsers as teamUser ").append(i);
+			}
+		}
+		buf.append(" where obj.objId is not null");
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (courseId != null)
+				buf.append(" and obj.courseId = :courseId");
+			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
+				for (int i=0; i<courseTeamUsers.length; i++) {
+					CourseTeamUser courseTeamUser = courseTeamUsers[i];
+					String teamId = courseTeamUser.getObjId();
+					String userId = courseTeamUser.getUserId();
+					if (teamId != null)
+						buf.append(" and teamUser").append(i).append(".objId = :teamId").append(i);
+					if (userId != null)
+						buf.append(" and teamUser").append(i).append(".userId = :userId").append(i);
+				}
+			}
+		}
+
+		this.appendOrderQuery(buf, "obj", cond);
+
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (courseId != null)
+				query.setString("courseId", courseId);
+
+			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
+				for (int i=0; i<courseTeamUsers.length; i++) {
+					CourseTeamUser courseTeamUser = courseTeamUsers[i];
+					String teamId = courseTeamUser.getObjId();
+					String userId = courseTeamUser.getUserId();
+					if (teamId != null)
+						query.setString("teamId"+i, teamId);
+					if (userId != null)
+						query.setString("userId"+i, userId);
+				}
+			}
+		}
+		return query;
+	}
+	@Override
+	public long getCourseTeamSize(String user, CourseTeamCond cond) throws SeraException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SeraException(e);
+		}
+	}
+	@Override
+	public CourseTeam[] getCourseTeams(String user, CourseTeamCond cond, String level) throws SeraException {
+		try {
+			if (level == null)
+				level = LEVEL_LITE;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			if (level.equals(LEVEL_ALL)) {
+				buf.append(" obj");
+			} else {
+				buf.append(" obj.objId, obj.name, obj.courseId, obj.description, obj.accessPolicy, obj.memberSize, obj.startDate, obj.endDate");
+			}
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			if (!level.equals(LEVEL_ALL)) {
+				List objList = new ArrayList();
+				for (Iterator itr = list.iterator(); itr.hasNext();) {
+					Object[] fields = (Object[]) itr.next();
+					CourseTeam obj = new CourseTeam();
+					int j = 0;
+					obj.setObjId((String)fields[j++]);
+					obj.setName((String)fields[j++]);
+					obj.setCourseId((String)fields[j++]);
+					obj.setDescription((String)fields[j++]);
+					obj.setAccessPolicy((Integer)fields[j++]);
+					obj.setMemberSize((Integer)fields[j++]);
+					obj.setStartDate((Timestamp)fields[j++]);
+					obj.setEndDate((Timestamp)fields[j++]);
+					objList.add(obj);
+				}
+				list = objList;
+			}
+			CourseTeam[] objs = new CourseTeam[list.size()];
 			list.toArray(objs);
 			return objs;
 		} catch (Exception e) {
