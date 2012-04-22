@@ -36,7 +36,6 @@ import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
-import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
@@ -94,7 +93,6 @@ import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
-import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
@@ -1002,15 +1000,21 @@ public class SeraServiceImpl implements ISeraService {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		} else {
-			courseDetail.setStart(new LocalDate());
+			LocalDate nowLocalDate = new LocalDate();
+			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		}
 		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
 			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
-			Date endDate = new Date();
-			long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
-			endDate.setTime(endDateLong);
+			LocalDate nowLocalDate = new LocalDate();
+			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			
+			if (!txtCourseDays.equalsIgnoreCase("1")) {
+				long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
+				endDate.setTime(endDateLong);
+			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
 		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
@@ -2906,8 +2910,147 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			frmSeraProfile=
+				{
+					txtNickName=121, 
+					txtEmail=kj@maninsoft.co.kr, 
+					txtBirthYear=2012, 
+					txtBirthMonth=04, 
+					txtBirthDay=22, 
+					selSex=2, 
+					txtGoal=, 
+					txtInterests=11, 
+					txtEducations=, 
+					txtWorks=, 
+					txtPassword=1, 
+					txtConfirmPassword=1, 
+					imgMyProfile=
+						{
+							groupId=fg_80c988a2420504457e4ad704f8cc8dcae966, 
+							files=[]
+						}
+				}
+		}*/
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		
-		return null;
+		Map<String, Object> frmSeraProfileMap = (Map<String, Object>)requestBody.get("frmSeraProfile");
+
+		Set<String> keySet = frmSeraProfileMap.keySet();
+		Iterator<String> itr = keySet.iterator();
+		
+		Map<String, Object> imgUserProfileImage = null;
+		String imageGroupId = null;
+		Map<String, List<Map<String, String>>> imageGroupMap = new HashMap<String, List<Map<String, String>>>();
+		
+		String txtNickName = null;
+		String txtEmail = null;
+		String txtBirthYear = null;
+		String txtBirthMonth = null;
+		String txtBirthDay = null;
+		String selSex = null;
+		String txtGoal = null;
+		String txtInterests = null;
+		String txtEducations = null;
+		String txtWorks = null;
+		String txtPassword = null;
+		String txtConfirmPassword = null;
+		
+		while (itr.hasNext()) {
+			String fieldId = (String)itr.next();
+			Object fieldValue = frmSeraProfileMap.get(fieldId);
+			if (fieldValue instanceof LinkedHashMap) {
+				if (fieldId.equalsIgnoreCase("imgMyProfile")) {
+					imgUserProfileImage = (Map<String, Object>)fieldValue;
+					if(imgUserProfileImage != null && imgUserProfileImage.size() > 0) {
+						imageGroupId = (String)imgUserProfileImage.get("groupId");
+	
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)imgUserProfileImage.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							imageGroupMap.put(imageGroupId, files);
+						}
+					}
+				}
+			} else if(fieldValue instanceof String) {
+				if (fieldId.equals("txtNickName")) {
+					txtNickName = (String)frmSeraProfileMap.get("txtNickName");
+				} else if (fieldId.equals("txtEmail")) {
+					txtEmail = (String)frmSeraProfileMap.get("txtEmail");
+				} else if (fieldId.equals("txtBirthYear")) {
+					txtBirthYear = (String)frmSeraProfileMap.get("txtBirthYear");
+				} else if (fieldId.equals("txtConfirmPassword")) {
+					txtBirthMonth = (String)frmSeraProfileMap.get("txtBirthMonth");
+				} else if (fieldId.equals("txtBirthDay")) {
+					txtBirthDay = (String)frmSeraProfileMap.get("txtBirthDay");
+				} else if (fieldId.equals("selSex")) {
+					selSex = (String)frmSeraProfileMap.get("selSex");
+				} else if (fieldId.equals("txtGoal")) {
+					txtGoal = (String)frmSeraProfileMap.get("txtGoal");
+				} else if (fieldId.equals("txtInterests")) {
+					txtInterests = (String)frmSeraProfileMap.get("txtInterests");
+				} else if (fieldId.equals("txtEducations")) {
+					txtEducations = (String)frmSeraProfileMap.get("txtEducations");
+				} else if (fieldId.equals("txtWorks")) {
+					txtWorks = (String)frmSeraProfileMap.get("txtWorks");
+				}	else if (fieldId.equals("txtPassword")) {
+					txtPassword = (String)frmSeraProfileMap.get("txtPassword");
+				}	else if (fieldId.equals("txtConfirmPassword")) {
+					txtConfirmPassword = (String)frmSeraProfileMap.get("txtConfirmPassword");
+				}
+			}
+		}
+		String txtUserProfilePicture = null;
+		if(imageGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
+				String imgGroupId = entry.getKey();
+				List<Map<String, String>> imgGroups = entry.getValue();
+				try {
+					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
+						Map<String, String> file = imgGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						//String fileSize = file.get("fileSize");
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, userId);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("image upload fail...");
+				}
+			}
+		}
+		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		
+		SwoUser swoUser = swoMgr.getUser(userId, userId, IManager.LEVEL_ALL);
+		if (swoUser == null)
+			return null;
+
+		swoUser.setNickName(txtNickName);
+		swoUser.setEmail(txtEmail);
+		swoUser.setPassword(txtPassword);
+		
+		SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(userId, userId);
+		
+		seraUserDetail.setNickName(txtNickName);
+		seraUserDetail.setEmail(txtEmail);
+		
+		if (!CommonUtil.isEmpty(txtBirthYear) && !CommonUtil.isEmpty(txtBirthMonth) && !CommonUtil.isEmpty(txtBirthDay)) {
+			String birthDayString = txtBirthYear + (txtBirthMonth.length() == 1 ? "0" + txtBirthMonth : txtBirthMonth) + (txtBirthDay.length() == 1 ? "0" + txtBirthDay : txtBirthDay) + "0000";
+			Date birthDay = LocalDate.convertStringToDate(birthDayString);
+			seraUserDetail.setBirthday(new LocalDate(birthDay.getTime()));
+		}
+		seraUserDetail.setSex(CommonUtil.isEmpty(selSex) ? 0 : Integer.parseInt(selSex));
+		seraUserDetail.setGoal(txtGoal);
+		seraUserDetail.setInterests(txtInterests);
+		seraUserDetail.setEducations(txtEducations);
+		seraUserDetail.setWorks(txtWorks);
+		
+		swoMgr.setUser(userId, swoUser, IManager.LEVEL_ALL);
+		seraMgr.setSeraUser(userId, seraUserDetail);
+		
+		return userId;
 	}
 	//TODO
 	@Override

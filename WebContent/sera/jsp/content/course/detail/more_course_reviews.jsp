@@ -95,11 +95,8 @@
 					<%
 					}
 					%>
-					<div class="mission_info"><%=course.getTargetPoint()%>개의 미션
-						중
-						<%=course.getAchievedPoint()%>번째가 진행중입니다
-					</div>
-					<div class="process">
+					<div class="mission_info"><%=course.getTargetPoint()%>일의 코스기간 중 <%=course.getAchievedPoint()%>일째 진행중입니다.</div>
+					<div class="process" style="margin: 5px 30px 0 0">
 						(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
 					</div>
 				</dl>
@@ -127,7 +124,7 @@
 					<div class="photo_line">
 						<img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" />
 					</div>
-					<div class="text m0">
+					<div class="text fr m0">
 						<ul class="cb">
 							<li class="tb"><%=mentor.getName()%></li>
 							<li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
@@ -166,7 +163,7 @@
 		</li>
 		<!-- 리뷰 -->
 		<li class="fr">
-			<div class="panel_block fr">
+			<div class="panel_block fr">			
 				<%
 				if(!SmartUtil.isBlankObject(reviews) && reviews.length>0){
 					for(int i=0; i<reviews.length; i++){

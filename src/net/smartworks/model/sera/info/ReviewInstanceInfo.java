@@ -9,7 +9,7 @@ import net.smartworks.util.LocalDate;
 public class ReviewInstanceInfo extends WorkInstanceInfo {
 
 	private String content;
-	private int starPoint;
+	private double starPoint;
 	
 	public String getContent() {
 		return content;
@@ -17,10 +17,10 @@ public class ReviewInstanceInfo extends WorkInstanceInfo {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public int getStarPoint() {
+	public double getStarPoint() {
 		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
+	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
 	
