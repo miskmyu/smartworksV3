@@ -55,7 +55,6 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					alert('wait');
 					smartPop.showInfo(smartPop.INFORM, smartMessage.get('setMyProfileSucceed'));
 				},
 				error : function(e) {
@@ -80,7 +79,7 @@
 			<tr>
 				<td rowspan="12" valign="top" width="150px">
 					<!-- 사진 올리기 -->
-					<div class="js_my_profile_field js_auto_load_profile myaccount_photo"></div>
+					<div class="js_sera_profile_field js_auto_load_profile myaccount_photo"></div>
 					<div class="t_refe" style="margin: 15px 0 0 33px">
 						* 사진은 자동으로<br /> 118x118으로 변경됩니다
 					</div> <!-- 사진 올리기 //-->
