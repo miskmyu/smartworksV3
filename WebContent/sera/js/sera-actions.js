@@ -536,6 +536,97 @@ $(function() {
 		
 	});
 	
+	$('.js_view_new_course_review').live('click', function(e) {
+		var courseReview = $(e.target).parents('.js_course_general_page').find('.js_return_on_course_review');
+		courseReview.parent().prepend(courseReview.clone());
+		courseReview.show();
+		return false;
+	});
+	
+	$('.js_star_point_btn').live('click', function(e) {
+		var input = $(e.target);
+		if(input.hasClass('full')){
+			input.removeClass('full').addClass('half');
+			input.nextAll().removeClass('full').removeClass('half');
+		}else if(input.hasClass('half')){
+			input.removeClass('half').addClass('full');
+			input.nextAll().removeClass('full').removeClass('half');
+		}else{
+			input.addClass('full').prevAll().addClass('full').removeClass('half');
+			input.nextAll().removeClass('full').removeClass('half');
+		}
+		return false;
+	});
+	
+	$('.js_return_on_course_review').live('keydown', function(e) {
+		if(e.which != $.ui.keyCode.ENTER) return;
+		var input = $(e.target);
+		var courseGeneral = input.parents('.js_course_general_page');
+		var review = input.attr('value');
+		if(isEmpty(review)) return false;
+		var courseId = courseGeneral.attr('courseId');
+		var starPointList = courseGeneral.find('.js_star_point_list:visible li');
+		var starPoint = 0;
+		for(var i=0; i<starPointList.length; i++){
+			var item = $(starPointList[i]);
+			if(item.hasClass('full'))
+				starPoint = starPoint + 1;
+			else if(item.hasClass('half'))
+				starPoint = starPoint + 0.5;
+		}
+		var paramsJson = {};
+		paramsJson['courseId'] = courseId;
+		paramsJson['reviewContent'] = review;
+		paramsJson['starPoint'] = starPoint;
+		url = "add_review_on_course.sw";
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				input.hide().siblings().show();
+				input.siblings('.js_review_content').html(review);
+				input.parents('.js_return_on_course_review:visible').removeClass('js_return_on_course_review');
+				starPointList.parent().removeClass('js_star_point_btn').find('a').remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "리뷰남기기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});
+			}			
+		});
+		
+	});
+	
+	$('.js_more_course_reviews_btn').live('click', function(e) {
+		var input = $(e.target).parents('.js_more_course_reviews_btn');
+		console.log('input=', input, ', target=', $(e.target));
+		var courseId = input.attr('courseId');
+		var fromDate = input.attr('fromDate');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreCourseReviews.sw",
+			data : {
+				courseId: courseId,
+				fromDate: fromDate
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_course_review_list').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
 	$('.js_show_all_sera_comments').live('click', function(e) {
 		var input = $(e.target).parents('.js_show_all_sera_comments');
 		if(isEmpty(input)) input = $(e.target);
