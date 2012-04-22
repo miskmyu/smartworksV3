@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.persistence.criteria.CriteriaBuilder.Case;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.Community;
@@ -93,7 +92,6 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
-import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -114,7 +112,6 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.stereotype.Service;
@@ -306,6 +303,8 @@ public class SeraServiceImpl implements ISeraService {
 			if (courseDetail.getEnd() != null)
 				courseInfo.setCloseDate(new LocalDate(courseDetail.getEnd().getTime()));
 //			courseInfo.setLastMission(lastMission);
+			if (courseDetail.getCategories() != null)
+				courseInfo.setCategory(courseDetail.getCategories());
 		}
 		
 		return courseInfo;
@@ -1887,7 +1886,7 @@ public class SeraServiceImpl implements ISeraService {
 								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
 							} else if(swdDataField.getId().equals("1")) {
 								boardInstanceInfo.setContent(value);
-								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 64, "..."));
+								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
 							}
 						}
 					}
@@ -2006,7 +2005,7 @@ public class SeraServiceImpl implements ISeraService {
 							eventInstanceInfo.setSubject(value);
 						} else if(swdDataField.getId().equals("6")) {
 							eventInstanceInfo.setContent(CommonUtil.toNotNull(value));
-							eventInstanceInfo.setBriefContent(StringUtil.subString(CommonUtil.toNotNull(value), 0, 64, "..."));
+							eventInstanceInfo.setBriefContent(StringUtil.subString(CommonUtil.toNotNull(value), 0, 120, "..."));
 						} else if(swdDataField.getId().equals("1")) {
 							LocalDate start = LocalDate.convertGMTStringToLocalDate(value);
 							eventInstanceInfo.setStart(start);
@@ -2695,7 +2694,7 @@ public class SeraServiceImpl implements ISeraService {
 						
 						if(swdDataField.getId().equals(SeraConstant.NOTE_CONTENTFIELDID)) {
 							noteInstanceInfo.setContent(value);
-							noteInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 64, "..."));
+							noteInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.NOTE_IMAGEGROUPIDFIELDID)) {
 							
 							List<IFileModel> fileList = docMgr.findFileGroup(value);
@@ -2857,7 +2856,7 @@ public class SeraServiceImpl implements ISeraService {
 						
 						if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_CONTENTFIELDID)) {
 							missionReportInstanceInfo.setContent(value);
-							missionReportInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 64, "..."));
+							missionReportInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_IMAGEGROUPIDFIELDID)) {
 							
 							List<IFileModel> fileList = docMgr.findFileGroup(value);
@@ -3782,6 +3781,36 @@ public class SeraServiceImpl implements ISeraService {
 			String receiveId = (String)requestBody.get("userId");
 			User user = SmartUtil.getCurrentUser();
 			String requestId = user.getId();
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+			seraFriendCond.setRequestId(requestId);
+			seraFriendCond.setReceiveId(receiveId);
+			SeraFriend[] requestFriends = getSeraManager().getFriends(requestId, seraFriendCond);
+			if(!CommonUtil.isEmpty(requestFriends)) {
+				return;
+			} else {
+				seraFriendCond.setRequestId(receiveId);
+				seraFriendCond.setReceiveId(requestId);
+				requestFriends = getSeraManager().getFriends(requestId, seraFriendCond);
+				if(!CommonUtil.isEmpty(requestFriends)) {
+					return;
+				}
+			}
+			seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			seraFriendCond.setRequestId(requestId);
+			seraFriendCond.setReceiveId(receiveId);
+			requestFriends = getSeraManager().getFriends(requestId, seraFriendCond);
+			if(!CommonUtil.isEmpty(requestFriends)) {
+				return;
+			} else {
+				seraFriendCond.setRequestId(receiveId);
+				seraFriendCond.setReceiveId(requestId);
+				requestFriends = getSeraManager().getFriends(requestId, seraFriendCond);
+				if(!CommonUtil.isEmpty(requestFriends)) {
+					return;
+				}
+			}
 			UserInfo requestUser = ModelConverter.getUserInfoByUserId(requestId);
 			UserInfo receiveUser = ModelConverter.getUserInfoByUserId(receiveId);
 			if(requestUser != null && receiveUser != null) {
