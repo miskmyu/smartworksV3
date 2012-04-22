@@ -278,5 +278,29 @@ function loadJoinUsFields() {
 //		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
 //		joinusProfileField.find('.form_value').css({width:"100%"});
 	}
+
+	function loadSeraProfileField() {
+		var seraProfileFields = $('div.js_sera_profile_field');
+		if(!isEmpty(seraProfileFields)) {
+			for(var i=0; i<seraProfileFields.length; i++) {
+				var seraProfileField = $(seraProfileFields[i]);
+				
+				var gridRow = SmartWorks.GridLayout.newGridRow();
+				var gridTable = SmartWorks.GridLayout.newGridTable();
+				seraProfileField.html(gridTable.html(gridRow));
+
+				SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+					container: gridRow,
+					fieldId: "imgMyProfile",
+					fieldName: "picture profile",
+					imgSource: currentUser.orgPicture,
+					pictureWidth: 118,
+					pictureHeight: 118,
+					required: false
+				});
+			}		
+		}
+	};
+
 };
 

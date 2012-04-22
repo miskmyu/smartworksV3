@@ -222,5 +222,5 @@
 </div>
 
 <script type="text/javascript">
-	loadMyProfileField();
+	loadSeraProfileField();
 </script>

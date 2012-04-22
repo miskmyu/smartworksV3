@@ -1100,11 +1100,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public UserInfo[] getCommunityMembers(String communityId) throws Exception {
-		return communityService.getCommunityMembers(communityId);
-	}
-
-	@Override
 	public MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception {
 		return seraService.getCourseMenteeInformations(courseId, maxList);
 	}
