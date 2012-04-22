@@ -476,22 +476,21 @@ public class SeraController {
 	@RequestMapping(value = "/add_review_on_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void addReviewOnCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeSeraInstane(requestBody, request);
-		// TO DO : Exception handler
 	}
 
 	@RequestMapping(value = "/modify_course_team", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void modifyCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeSeraInstane(requestBody, request);
-		// TO DO : Exception handler
 	}
 
 	@RequestMapping(value = "/remove_course_team", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void removeCourseTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeSeraInstane(requestBody, request);
-		// TO DO : Exception handler
+	}
+
+	@RequestMapping(value = "/defective_course_report", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void defectiveCourseReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	}
 
 }

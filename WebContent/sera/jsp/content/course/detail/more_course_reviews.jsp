@@ -53,7 +53,7 @@
 								for(int j=0; j<5; j++){
 									String pointClass = "";
 									if(review.getStarPoint()>j)
-										if(review.getStarPoint()>(j+1))
+										if(review.getStarPoint()>=(j+1))
 											pointClass = "full";
 										else
 											pointClass = "half";
