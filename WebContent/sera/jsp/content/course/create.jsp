@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.sera.Mentor"%>
 <%@page import="net.smartworks.model.security.AccessPolicy"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
@@ -8,12 +10,7 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-	String cid = request.getParameter("cid");
-	if (SmartUtil.isBlankObject(cid))
-		cid = ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId();
-	String wid = request.getParameter("wid");
-	if (SmartUtil.isBlankObject(wid))
-		wid = cUser.getId();
+	Mentor mentor = smartWorks.getMentorById(cUser.getId());
 %>
 
 <script type="text/javascript">
@@ -237,7 +234,7 @@
 				<td>
 					<div class="form_label">학 력</div>
 					<div class="form_value w580">
-						<textarea name="txtaMentorEducations" class="fieldline required" name="textarea" rows="3"></textarea>
+						<textarea name="txtaMentorEducations" class="fieldline required" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getEducations()) %></textarea>
 					</div>
 				</td>
 			</tr>
@@ -245,7 +242,7 @@
 				<td>
 					<div class="form_label">경 력</div>
 					<div class="form_value w580">
-						<textarea name="txtaMentorWorks" class="fieldline required" name="textarea" rows="3" value=""></textarea>
+						<textarea name="txtaMentorWorks" class="fieldline required" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getWorks()) %></textarea>
 					</div>
 				</td>
 			</tr>
@@ -254,10 +251,10 @@
 					<div class="form_label">세라활동 *</div>
 					<div class="form_value" style="width: 580px">
 						<div class="fl" style="width: 285px">
-							<textarea name="txtaMentorHistory" class="fieldline" name="" rows="3" value="">멘토활동</textarea>
+							<textarea name="txtaMentorHistory" class="fieldline" name="" rows="3" value="" placeholder="멘토활동"><%=CommonUtil.toNotNull(mentor.getMentorHistory()) %></textarea>
 						</div>
 						<div class="fr" style="width: 285px">
-							<textarea name="txtaMenteeHistory" class="fieldline" name="" rows="3" value="">멘티활동</textarea>
+							<textarea name="txtaMenteeHistory" class="fieldline" name="" rows="3" placeholder="멘티활동"><%=CommonUtil.toNotNull(mentor.getMenteeHistory()) %></textarea>
 						</div>
 					</div>
 				</td>
@@ -266,7 +263,7 @@
 				<td>
 					<div class="form_label">강의활동 *</div>
 					<div class="form_value w580">
-						<textarea name="txtaMentorLectures" class="fieldline" name="textarea" rows="3" value=""></textarea>
+						<textarea name="txtaMentorLectures" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getLectures()) %></textarea>
 					</div>
 				</td>
 			</tr>
@@ -274,7 +271,7 @@
 				<td>
 					<div class="form_label">수상경력*</div>
 					<div class="form_value w580">
-						<textarea name="txtaMentorAwards" class="fieldline" name="textarea" rows="3" value=""></textarea>
+						<textarea name="txtaMentorAwards" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getAwards()) %></textarea>
 					</div>
 				</td>
 			</tr>
@@ -282,7 +279,7 @@
 				<td>
 					<div class="form_label">기타활동*</div>
 					<div class="form_value w580">
-						<textarea name="txtaMentorEtc" class="fieldline" name="textarea" rows="3" value=""></textarea>
+						<textarea name="txtaMentorEtc" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getEtc()) %></textarea>
 					</div>
 				</td>
 			</tr>

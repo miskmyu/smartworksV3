@@ -36,17 +36,26 @@
 			<h1><%=course.getName() %></h1>
 			<ul class="mt8">
 				<li>
-					<div class="icon_cs_mentorname">
-						<span>멘토명</span>
-					</div> <span class="t_s14"><%=mentorName%></span></li>
+					<div class="icon_cs_mentorname"><span>멘토명</span></div> 
+					<span class="t_s14"><%=mentorName%></span>
+				</li>
 				<li>
 					<div class="icon_cs_openday">
 						<span>개설일</span>
-					</div> <span><%=course.getOpenDate().toLocalString() %></span></li>
+					</div> 
+					<%
+					if(!SmartUtil.isBlankObject(course.getCreatedDate())){
+					%>
+						<span><%=course.getCreatedDate().toLocalString() %></span>
+					<%
+					}
+					%>
+				</li>
 				<li>
 					<div class="icon_cs_menteenum">
 						<span>멘티수</span>
-					</div> <span class="t_s14"><%=course.getNumberOfGroupMember() %></span></li>
+					</div> <span class="t_s14"><%=course.getNumberOfGroupMember() %></span>
+				</li>
 			</ul>
 		</div>
 		<div class="course_info">
