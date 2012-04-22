@@ -39,7 +39,7 @@ $(function() {
 		}else if(pos==2){
 			url = "courseBoard.sw";
 		}else if(pos==3){
-			url = "courseTeamCreate.sw";
+			url = "courseTeamActivity.sw";
 		}else if(pos==4){
 			url = "courseGeneral.sw";
 		}else if(pos==5){
@@ -217,6 +217,26 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_invite_course_members_btn').live('click', function(e){
+		var courseId = $(e.target).parents('.js_course_home_page').attr('courseId');
+		var target = $('.js_course_content');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'inviteCourseMembers.sw',
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 	$('.js_remove_course_btn').live('click', function(e){
 		smartPop.confirm('코스를 삭제하시려고 합니다. 정말로 삭제하시겠습니까??', function(){
 			var input = $(e.target);
@@ -372,7 +392,7 @@ $(function() {
 			var courseId = performMission.attr('courseId');
 			var paramsJson = {};
 			paramsJson["courseId"] = courseId;
-			paramsJson["courseId"] = performMission.attr('missionId');
+			paramsJson["missionId"] = performMission.attr('missionId');
 			smartPop.progressCenter();				
 			$.ajax({
 				url : 'remove_mission.sw',
@@ -1266,13 +1286,21 @@ $(function() {
 	});
 
 	$('.js_toggle_mission_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(e.target).parent();
 		if(input.hasClass('icon_close_red')){
 			input.removeClass('icon_close_red').addClass('icon_open_red');
 		}else{
 			input.addClass('icon_close_red').removeClass('icon_open_red');			
 		}
 		input.parents('.js_perform_mission_page').find('.js_mission_content_item').toggle();
+		return false;
+	});
+
+	$('.js_show_more_content').live('click', function(e){
+		var input = $(e.target).removeAttr('href').removeClass('js_show_more_content');
+		var seraInstanceItem = input.parents('.js_sera_instance_item');
+		seraInstanceItem.find('.js_brief_content').hide().next().show();
+		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
 		return false;
 	});
 

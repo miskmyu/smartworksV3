@@ -579,3 +579,22 @@ CREATE TABLE CourseReview (
 	modifiedtime datetime,
 	primary key(objId)
 );
+
+CREATE TABLE CourseTeam (
+	objId varchar(50) NOT NULL,
+	name varchar(100),
+	courseId varchar(50),
+	description varchar(4000),
+	accessPolicy int,
+	memberSize int,
+	startDate datetime,
+	endDate datetime,
+	primary key(objId)
+);
+
+CREATE TABLE CourseTeamUser (
+	objId varchar(50) NOT NULL,
+	userId varchar(50) NOT NULL,
+	memberSeq int,
+	primary key(objId, userId)
+);

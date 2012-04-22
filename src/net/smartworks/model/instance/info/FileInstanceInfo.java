@@ -16,6 +16,7 @@ public class FileInstanceInfo extends WorkInstanceInfo {
 	private int views;
 	private WorkInstanceInfo workInstance;
 	private FileCategoryInfo fileCategory;
+	private String briefContent;
 	private String content;
 	private String fileGroupId;
 	private List<Map<String, String>> files;
@@ -49,6 +50,12 @@ public class FileInstanceInfo extends WorkInstanceInfo {
 	}
 	public void setFiles(List<Map<String, String>> files) {
 		this.files = files;
+	}
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
 	}
 	public String getContent() {
 		return content;

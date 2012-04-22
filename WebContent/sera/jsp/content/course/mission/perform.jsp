@@ -62,6 +62,13 @@
 			</dt>
 			<dd style="display: block" class="js_mission_content_item">
 				<div class="text w100"><%=mission.getContent() %></div>
+				<%
+				if(!SmartUtil.isBlankObject(mission.getFileGroupId())){
+				%>
+					<div><%=SmartUtil.getFilesDetailInfo(mission.getFiles()) %></div>
+				<%
+				}
+				%>
 				<!-- 별점 -->
 				<div class="star_score fr">
 					<ul>
@@ -89,7 +96,7 @@
 				</div>
 			</div>
 			<%
-			if(!mission.isClearedByMe()){
+			if((course.isMyAttendingCourse() || course.isMyRunningCourse()) && !mission.isClearedByMe()){
 			%>
 				<div>
 					<jsp:include page="/sera/jsp/content/course/mission/report.jsp">

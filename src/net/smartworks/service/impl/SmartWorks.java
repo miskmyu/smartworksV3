@@ -920,7 +920,14 @@ public class SmartWorks implements ISmartWorks {
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeCommentOnInstance(requestBody, request);
 	}
-
+	@Override
+	public String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeMission(requestBody, request);
+	}
+	@Override
+	public String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.modifyMission(requestBody, request);
+	}
 	@Override
 	public String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewMission(requestBody, request);
@@ -928,6 +935,14 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewCourse(requestBody, request);
+	}
+	@Override
+	public String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setCourseProfile(requestBody, request);
+	}
+	@Override
+	public String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeCourse(requestBody, request);
 	}
 	@Override
 	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -940,6 +955,14 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewTeam(requestBody, request);
+	}
+	@Override
+	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.modifyCourseTeam(requestBody, request);
+	}
+	@Override
+	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.removeCourseTeam(requestBody, request);
 	}
 	@Override
 	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -992,8 +1015,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstances(type, userId, courseId, missionId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(type, userId, courseId, missionId, teamId, fromDate, maxList);
 	}
 
 	@Override

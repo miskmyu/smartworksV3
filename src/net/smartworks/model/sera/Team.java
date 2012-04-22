@@ -1,15 +1,8 @@
 package net.smartworks.model.sera;
 
 import net.smartworks.model.BaseObject;
-import net.smartworks.model.security.AccessPolicy;
-import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.info.SeraUserInfo;
-import net.smartworks.model.work.SmartWork;
-import net.smartworks.server.engine.security.model.Login;
-import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SmartConfUtil;
-import net.smartworks.util.SmartUtil;
 
 public class Team extends BaseObject {
 
