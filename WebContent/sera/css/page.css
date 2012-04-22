@@ -583,6 +583,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Join Member Section */
 #join_content_section {float: left; height: auto; min-height: 600px; padding: 40px 50px 25px; width: 615px;}
 #join_content_section .tit {background: url("../images/header.png") no-repeat 0 -741px transparent; height:24px; width:130px; margin-bottom:45px}
+#join_content_section .tit.find_info { background-position:-233px -741px; width:auto}
 .join_process { float:left; margin:0 0 32px 123px}
 .join_process li { float:left; font-size:0 }
 .join_process .prs1 {background: url("../images/header.png") no-repeat 0 -780px transparent; width:105px; height:64px}
