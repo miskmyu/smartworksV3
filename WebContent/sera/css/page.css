@@ -403,11 +403,13 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Aside */
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
 .aside_block .header { font-size:14px; color:#333333; line-height:27px; font-weight:bold}
-.aside_block .content { clear:both; padding:10px 0 0 5px; color:#666666; line-height:18px}
+.aside_block .content { clear:both; padding:10px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
 .aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
+.aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}
+.aside_block .content .ad_text { float:right; width:144px; line-height:15px}
 .num_cus { color:#ed1c24}
 
 /* Badge */
@@ -419,9 +421,6 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Friend */
 .friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
-/* Aside AD */
-.aside_ad {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
-.aside_ad div { background-color:#cccccc; height:150px; text-align:center; vertical-align:middle}
 
 /* Search Section */
 .srch_section {float:right; margin:15px 10px 5px; width:238px}
@@ -537,7 +536,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .category_box .detail a { color: #666666;}
 .category_box .detail a:hover {color: #999999;}
 .category_box .gauge_box { clear: both; height: 10px; width: 220px;}
-.category_box .gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 170px;}
+.category_box .gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 170px; overflow:hidden}
 .category_box .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px;}
 .category_box .gauge_box .process {float: right; height: 12px; margin-left: 5px}
 .category_box.end { margin:0 0 20px 0 !important; float:right !important}
