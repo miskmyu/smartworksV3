@@ -15,21 +15,19 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
+	String fromDateStr = request.getParameter("fromDate");
 	Course course = (Course)session.getAttribute("course");
 	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
-	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
+	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
+	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, fromDate, 10);
 	
-%>
-	<%
 	if(!SmartUtil.isBlankObject(reviews) && reviews.length>0){
 		for(int i=0; i<reviews.length; i++){
 			ReviewInstanceInfo review = reviews[i];
+			if(reviews.length>10){
 	%>
-	<%
-			if(reviews.length>5){
-			%>
 				<!-- 더보기 -->
-				<div class="more cb js_more_course_reviews_btn">
+				<div class="more cb js_more_course_reviews_btn" courseId="<%=courseId %>" fromDate="<%=reviews[i-1].getLastModifiedDate().toLocalDateString2()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
@@ -38,39 +36,38 @@
 			}
 			%>
 	
-			<!-- Reply-->
-			<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
-				<div class="photo">
-					<img class="profile_size_m" src="<%=review.getOwner().getMinPicture() %>" />
-				</div>
-				<div class="reply_text w375 fl">
-					<span class="name"><%=review.getOwner().getNickName() %> : </span><%=CommonUtil.toNotNull(review.getContent()) %>
-					<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
-				</div>
-				<div class="fr">
-					<div class="name fl mr5">별점</div>
-					<div class="star_score fr">
-						<ul>
-							<%
-							for(int j=0; j<5; j++){
-								String pointClass = "";
-								if(review.getStarPoint()>j)
-									if(review.getStarPoint()>(j+1))
-										pointClass = "full";
-									else
-										pointClass = "half";
-							%>
-								<li class="icon_star_score <%=pointClass%>"><a href=""> </a></li>
-							<%
-							}
-							%>
-						</ul>
+				<!-- Reply-->
+				<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
+					<div class="photo">
+						<img class="profile_size_m" src="<%=review.getOwner().getMinPicture() %>" />
+					</div>
+					<div class="reply_text w375 fl">
+						<span class="name"><%=review.getOwner().getNickName() %> : </span><%=CommonUtil.toNotNull(review.getContent()) %>
+						<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
+					</div>
+					<div class="fr">
+						<div class="name fl mr5">별점</div>
+						<div class="star_score fr">
+							<ul>
+								<%
+								for(int j=0; j<5; j++){
+									String pointClass = "";
+									if(review.getStarPoint()>j)
+										if(review.getStarPoint()>(j+1))
+											pointClass = "full";
+										else
+											pointClass = "half";
+								%>
+									<li class="icon_star_score <%=pointClass%>"><a href=""> </a></li>
+								<%
+								}
+								%>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-			<!-- Reply//-->
+				<!-- Reply//-->
 	<%
-		}
-		
+		}		
 	}
-	%>
+	%>	

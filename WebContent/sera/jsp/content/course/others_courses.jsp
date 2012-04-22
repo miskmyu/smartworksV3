@@ -78,7 +78,7 @@
 						<li class="gauge_box w_auto mt5">
 							<dl>
 								<dd class="gauge_outline w170">
-									<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+									<label class="gauge" style="width: <%=course.getAchievedRatio()%>%;"></label>
 								</dd>
 								<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
 							</dl></li>
@@ -133,7 +133,7 @@
 					<li class="gauge_box w_auto mt5">
 						<dl>
 							<dd class="gauge_outline w170">
-								<label class="gauge" style="width: <%=course.getAchievedPoint()*100/course.getTargetPoint()%>%;"></label>
+								<label class="gauge" style="width: <%=course.getAchievedRatio()%>%;"></label>
 							</dd>
 							<dd class="process">(<%=course.getAchievedPoint() %>/<%=course.getTargetPoint() %>)</dd>
 						</dl></li>

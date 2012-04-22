@@ -219,7 +219,7 @@
 				if(!SmartUtil.isBlankObject(favoriteCourses)){
 					for(int i=0; i<favoriteCourses.length; i++){
 						CourseInfo course = favoriteCourses[i];
-						String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
+						String achievedPoint =course.getAchievedRatio() + "%";
 				%>
 						<ul class="category_box intro_margin">
 							<li class="photo">
@@ -268,7 +268,7 @@
 				if(!SmartUtil.isBlankObject(recommendedCourses)){
 					for(int i=0; i<recommendedCourses.length; i++){
 						CourseInfo course = recommendedCourses[i];
-						String achievedPoint = (course.getTargetPoint()<=0 || course.getAchievedPoint()<=0) ? "0px" : course.getAchievedPoint()*100/course.getTargetPoint() + "px";
+						String achievedPoint =course.getAchievedRatio() + "%";
 				%>
 						<ul class="category_box intro_margin">
 							<li class="photo">
