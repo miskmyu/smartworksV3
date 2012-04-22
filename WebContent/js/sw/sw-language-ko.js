@@ -26,6 +26,7 @@ smartMessage.bundle['ko'] = {
 	popTypeInfo : "알림",
 	popTypeWarn : "경고",
 	popTypeError : "오류",
+	popTypeConfirm : "확인",
 	buttonClose : "닫기",
 	buttonCancel : "취소",
 	buttonConfirm : "확인",

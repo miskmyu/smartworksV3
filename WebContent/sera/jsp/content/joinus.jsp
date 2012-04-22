@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<div id="container_join">
+<div id="container_join" class="js_joinus_page">
 	<div id="join_section" class="js_joinus_first">
 		<!-- SNB Left -->
 		<div class="snb">
@@ -420,9 +420,9 @@
 							<td>
 								<div class="form_label">생일/성별</div>
 								<div class="form_value">
-									<input name="txtBirthYear" class="fieldline form_date_input number required" maxlength="4" type="text" value=""/> 년 
-									<input name="txtBirthMonth" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 월 
-									<input name="txtBirthDay" class="fieldline form_date_input number required" maxlength="2" type="text" value=""/> 일 
+									<input name="txtBirthYear" class="fieldline form_date_input number required tr" maxlength="4" type="text" value=""/> 년 
+									<input name="txtBirthMonth" class="fieldline form_date_input number required tr" maxlength="2" type="text" value=""/> 월 
+									<input name="txtBirthDay" class="fieldline form_date_input number required tr" maxlength="2" type="text" value=""/> 일 
 									<select name="selSex">
 										<option value="female">여자</option>
 										<option value="male">남자</option>
