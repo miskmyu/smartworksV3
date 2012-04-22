@@ -196,9 +196,6 @@ public interface ISmartWorks {
 	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
-	
-	public abstract UserInfo[] getCommunityMembers(String communityId) throws Exception;
-	
 	/*
 	 * 현재 스마트웍스에 접속되어 있는 유저들에 대한 정보를 리턴한다 (채팅가능 유져)
 	 * 채팅가능 유저목록의 갱신을 위하여 서버에서는 세션정보를 리스닝하고 있으면서 세션의 접속과 끊김 이벤트가

@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -12,10 +13,14 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String courseId = request.getParameter("courseId");
+	Course course = (Course)session.getAttribute("course");
+	if(SmartUtil.isBlankObject(course)){
+		course = smartWorks.getCourseById(courseId);
+	}
 	boolean isMultiSelectable = false;
 	isMultiSelectable = Boolean.parseBoolean(request.getParameter("multiUsers"));
 	
-	CommunityInfo[] communities = smartWorks.getCommunityMembers(courseId);
+	CommunityInfo[] communities = course.getMembers();
 	String iconType = null;
 %>
 

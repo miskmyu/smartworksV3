@@ -15,8 +15,20 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
-	String fromDateStr = request.getParameter("fromDate");
-	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : 
+	Course course = (Course)session.getAttribute("course");
+	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
+	UserInfo[] members = course.getMembers();
+	boolean isMyCourse = false;
+	if(course.getOwner().getId().equals(cUser.getId())){
+		isMyCourse = true;
+	}else if(!SmartUtil.isBlankObject(members)){
+		for(int i=0; i<members.length; i++){
+			if(members[i].getId().equals(cUser.getId())){
+				isMyCourse = true;
+				break;
+			}
+		}
+	}
 	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
 	
 %>

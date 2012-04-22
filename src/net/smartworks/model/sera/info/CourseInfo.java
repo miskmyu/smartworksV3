@@ -56,7 +56,7 @@ public class CourseInfo extends GroupInfo{
 	}
 	public int getAchievedPoint() {
 		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
+		return (int)LocalDate.getDiffDate(openDate, new LocalDate())+1;
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
