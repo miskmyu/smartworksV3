@@ -2032,6 +2032,7 @@ public class SeraServiceImpl implements ISeraService {
 				seraUser.setTwPassword(seraUserDetail.getTwPassword());
 				seraUser.setFbUserId(seraUserDetail.getFbUserId());
 				seraUser.setFbPassword(seraUserDetail.getFbPassword());
+				seraUser.setNickName(seraUserDetail.getNickName());
 			}
 			return seraUser;
 			
@@ -3151,7 +3152,8 @@ public class SeraServiceImpl implements ISeraService {
 		seraUser.setSex(CommonUtil.isEmpty(selSex) ? 0 : selSex.equalsIgnoreCase("female") ? SeraUser.SEX_FEMALE : SeraUser.SEX_MALE );
 		seraUser.setNickName(txtNickName);
 		seraUser.setInterests(txtInterestPart);
-		seraUser.setChallengingTarget(txtChallengingTarget);
+		//seraUser.setChallengingTarget(txtChallengingTarget);
+		seraUser.setGoal(txtChallengingTarget);
 		
 		seraMgr.setSeraUser(txtUserId, seraUser);
 		
