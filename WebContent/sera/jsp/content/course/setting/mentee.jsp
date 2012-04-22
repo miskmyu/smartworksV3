@@ -54,8 +54,7 @@
 				<!-- 목록1//-->
 			<%
 			}
-			if(true){
-//				if(menteeInformations.getTotalJoinRequesters()>requesters.length){
+			if(menteeInformations.getTotalJoinRequesters()>requesters.length){
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_JOIN_REQUESTERS %>" courseId="<%=courseId %>" lastId="<%=requesters[requesters.length-1].getId()%>">
@@ -106,8 +105,7 @@
 				<!-- 목록1//-->
 			<%
 			}
-			if(true){
-//				if(menteeInformations.getTotalMentees()>mentees.length){
+			if(menteeInformations.getTotalMentees()>mentees.length){
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_MENTEES %>" courseId="<%=courseId %>" lastId="<%=mentees[mentees.length-1].getId()%>">
@@ -122,7 +120,7 @@
 	</div>
 
 	<div class="title_srch">
-	<div class="t_redb fl">* 동록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
+	<div class="t_redb fl">* 등록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
 	<!-- 검색 -->
 	<div class="fr">
 		<span class="fl tb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
@@ -166,8 +164,7 @@
 				<!-- 목록1//-->
 			<%
 			}
-			if(true){
-//				if(menteeInformations.getTotalNonMentees()>nonMentees.length){
+			if(menteeInformations.getTotalNonMentees()>nonMentees.length){
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_NON_MENTEES %>" courseId="<%=courseId %>" lastId="<%=nonMentees[nonMentees.length-1].getId()%>">

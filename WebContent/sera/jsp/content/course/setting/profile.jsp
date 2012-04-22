@@ -103,7 +103,7 @@
 				<td>
 					<div class="form_label w110">키워드</div>
 					<div class="form_value">
-						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywords())%>"/>
+						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywordsAsCommaString())%>"/>
 						<div class="cb t_refe pt2">* 코스의 이해를 도울수 있는 키워드 입력 (코스 검색 또는 추천코스에 사용 됨), 2개이상은 콤마(,)로 구분</div>
 					</div>
 				</td>

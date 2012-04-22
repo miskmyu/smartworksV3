@@ -217,6 +217,26 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_invite_course_members_btn').live('click', function(e){
+		var courseId = $(e.target).parents('.js_course_home_page').attr('courseId');
+		var target = $('.js_course_content');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'inviteCourseMembers.sw',
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 	$('.js_remove_course_btn').live('click', function(e){
 		smartPop.confirm('코스를 삭제하시려고 합니다. 정말로 삭제하시겠습니까??', function(){
 			var input = $(e.target);
@@ -1266,7 +1286,7 @@ $(function() {
 	});
 
 	$('.js_toggle_mission_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(e.target).parent();
 		if(input.hasClass('icon_close_red')){
 			input.removeClass('icon_close_red').addClass('icon_open_red');
 		}else{
