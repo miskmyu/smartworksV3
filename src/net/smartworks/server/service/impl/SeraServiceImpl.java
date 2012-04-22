@@ -188,6 +188,7 @@ public class SeraServiceImpl implements ISeraService {
 			group.setId(swoGroup.getId());
 			group.setName(swoGroup.getName());
 			group.setDesc(swoGroup.getDescription());
+			group.setCreatedDate(new LocalDate(swoGroup.getCreationDate().getTime()));
 			group.setPublic(swoGroup.equals("O") ? true : false);
 			//group.setContinue(swoGroup.getStatus().equals("C") ? true : false);
 			User leader = ModelConverter.getUserByUserId(swoGroup.getGroupLeader());
@@ -826,7 +827,7 @@ public class SeraServiceImpl implements ISeraService {
 				txtCourseStartDate=, 
 				txtCourseEndDate=, 
 				chkCourseSecurity=1, 
-				chkCourseUsers=userInput, 
+				chkCourseUsers=unlimited, 
 				txtCourseUsers=3, 
 				chkJoinApproval=autoApporval, 
 				chkCourseFee=free, 
@@ -1022,7 +1023,12 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
-		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
+		if (chkCourseUsers != null && chkCourseUsers.equalsIgnoreCase("unlimited")) {
+			courseDetail.setMaxMentees(-1);
+		} else {
+			courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? -1 : Integer.parseInt(txtCourseUsers));
+		}
+			
 		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
 		courseDetail.setPayable(chkCourseFee != null ? chkCourseFee.equalsIgnoreCase("free") ? false : true : false);
 		courseDetail.setFee(txtCourseFee == null || txtCourseFee.equals("") ? 0 : Integer.parseInt(txtCourseFee));
@@ -3785,7 +3791,7 @@ public class SeraServiceImpl implements ISeraService {
 			SwoGroupMember groupMember = groupMembers[i];
 			String joinStatus = groupMember.getJoinStatus();
 			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
-				menteesIdList.add(userId);
+				menteesIdList.add(groupMember.getUserId());
 				if (!CommonUtil.isEmpty(lastId)) {
 					SwoGroupMember lastMember = group.getGroupMember(lastId);
 					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
@@ -3850,15 +3856,15 @@ public class SeraServiceImpl implements ISeraService {
 			
 			Map resultMap = new HashMap();
 			for (SeraUserInfo userInfo : userInfos) {
-				resultMap.put(userInfo.getId(), userInfos);
+				resultMap.put(userInfo.getId(), userInfo);
 			}
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
-				SeraUserInfo[] temp = (SeraUserInfo[])resultMap.get(id);
-				tempUserInfos[index] = temp[0];
+				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+				index += 1;
 			}
 			return tempUserInfos;
 		}
@@ -3881,6 +3887,8 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
+			if (group.getGroupLeader().equalsIgnoreCase(groupMember.getUserId()))
+				continue;
 			courseRelatedUserIdList.add(groupMember.getUserId());
 		}
 
@@ -3958,7 +3966,7 @@ public class SeraServiceImpl implements ISeraService {
 			String joinType = groupMember.getJoinType();
 			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
 				totalMentee += 1;
-			} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY) || joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+			} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY) && joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
 				totalJoinRequester += 1;
 			}
 		}
@@ -3972,7 +3980,7 @@ public class SeraServiceImpl implements ISeraService {
 		menteeInformList.setMentees(getMenteesByCourseId(group, null, maxList));
 		menteeInformList.setTotalMentees(totalMentee);
 		menteeInformList.setNonMentees(getNotRelatedUserByCourseId(group, null, maxList));
-		menteeInformList.setTotalNonMentees((int)totalSeraUserSize - (groupMembers.length));
+		menteeInformList.setTotalNonMentees((int)totalSeraUserSize - (totalJoinRequester + totalMentee));
 		
 		return menteeInformList;
 //		return SeraTest.getCourseMenteeInformations(courseId, maxList);

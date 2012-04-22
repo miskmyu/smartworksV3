@@ -10,7 +10,7 @@ import net.smartworks.util.LocalDate;
 public class MissionReportInstance extends NoteInstance {
 		
 	private MissionInstance mission;
-	int starPoint;
+	private double starPoint;
 	
 	public MissionInstance getMission() {
 		return mission;
@@ -18,10 +18,10 @@ public class MissionReportInstance extends NoteInstance {
 	public void setMission(MissionInstance mission) {
 		this.mission = mission;
 	}
-	public int getStarPoint() {
+	public double getStarPoint() {
 		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
+	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
 

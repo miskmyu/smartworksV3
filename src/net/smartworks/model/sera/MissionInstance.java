@@ -1,5 +1,8 @@
 package net.smartworks.model.sera;
 
+import java.util.List;
+import java.util.Map;
+
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.WorkInstance;
@@ -11,11 +14,13 @@ public class MissionInstance extends WorkInstance {
 		
 	private int index;
 	private String content;
+	private String fileGroupId;
+	private List<Map<String, String>> files;
 	private LocalDate openDate;
 	private LocalDate closeDate;
 	private MissionInstance prevMission;
 	private String[] missionClearers;
-	private int starPoint;
+	private double starPoint;
 	
 	public int getIndex() {
 		return index;
@@ -28,6 +33,18 @@ public class MissionInstance extends WorkInstance {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getFileGroupId() {
+		return fileGroupId;
+	}
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
+	}
+	public List<Map<String, String>> getFiles() {
+		return files;
+	}
+	public void setFiles(List<Map<String, String>> files) {
+		this.files = files;
 	}
 	public LocalDate getOpenDate() {
 		return openDate;
@@ -53,10 +70,10 @@ public class MissionInstance extends WorkInstance {
 	public void setMissionClearers(String[] missionClearers) {
 		this.missionClearers = missionClearers;
 	}	
-	public int getStarPoint() {
+	public double getStarPoint() {
 		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
+	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
 	
