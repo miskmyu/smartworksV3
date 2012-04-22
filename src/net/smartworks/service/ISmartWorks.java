@@ -454,6 +454,10 @@ public interface ISmartWorks {
 	
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
@@ -482,7 +486,7 @@ public interface ISmartWorks {
 
 	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
 
-	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

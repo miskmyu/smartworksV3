@@ -43,9 +43,9 @@
 				<!-- 우측영역 -->
 				<div class="fr ">
 					<%
-					if(cUser.getId().equals(course.getLeader().getId())){
+					if(course.isMyRunningCourse()){
 					%>
-						<div class="icon_delete_red fr ml5 js_delete_mission_btn">
+						<div class="icon_delete_red fr ml10 js_delete_mission_btn">
 							<a href="" title="미션삭제"> </a>
 						</div>
 						<div class="btn_mid_l fr ml10 js_show_modify_mission">
@@ -60,33 +60,36 @@
 					<span class="t_redb"><%=remainDays%></span> <span class="t_refe ml5"><%=now.toLocalDateTimeSimpleString() %></span>
 				</div>
 			</dt>
-			<dd style="display: block">
+			<dd style="display: block" class="js_mission_content_item">
 				<div class="text w100"><%=mission.getContent() %></div>
 				<!-- 별점 -->
-				<div class="util">
-					<span class="icon_mission fr"></span> <span class="icon_mission fr"></span>
-					<span class="icon_mission fr"></span> <span class="icon_mission fr"></span>
-					<span class="icon_mission fr"></span>
+				<div class="star_score fr">
+					<ul>
+						<%
+						for(int j=0; j<5; j++){
+							String pointClass = "";
+							if(mission.getStarPoint()>j)
+								if(mission.getStarPoint()>=(j+1))
+									pointClass = "full";
+								else
+									pointClass = "half";
+						%>
+							<li class="icon_star_score <%=pointClass%>"><a href=""> </a></li>
+						<%
+						}
+						%>
+					</ul>
 				</div>
 				<!-- 별점 //-->
 			</dd>
 			<!-- Icon Close -->
 			<div class="icon_close_area">
-				<div class="icon_close_red fr">
+				<div class="icon_close_red fr js_toggle_mission_btn">
 					<a href=""> </a>
 				</div>
 			</div>
 			<%
-			boolean missionClearedByMe = false;
-			if(!SmartUtil.isBlankObject(mission.getMissionClearers())){
-				String[] clearers = mission.getMissionClearers();
-				for(int i=0; i<clearers.length; i++)
-					if(clearers[i].equals(cUser.getId())){
-						missionClearedByMe = true;
-						break;
-					}
-			}
-			if(!missionClearedByMe){
+			if((course.isMyAttendingCourse() || course.isMyRunningCourse()) && !mission.isClearedByMe()){
 			%>
 				<div>
 					<jsp:include page="/sera/jsp/content/course/mission/report.jsp">

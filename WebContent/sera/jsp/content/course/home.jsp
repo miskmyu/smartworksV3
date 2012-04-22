@@ -36,17 +36,26 @@
 			<h1><%=course.getName() %></h1>
 			<ul class="mt8">
 				<li>
-					<div class="icon_cs_mentorname">
-						<span>멘토명</span>
-					</div> <span class="t_s14"><%=mentorName%></span></li>
+					<div class="icon_cs_mentorname"><span>멘토명</span></div> 
+					<span class="t_s14"><%=mentorName%></span>
+				</li>
 				<li>
 					<div class="icon_cs_openday">
 						<span>개설일</span>
-					</div> <span><%=course.getOpenDate().toLocalString() %></span></li>
+					</div> 
+					<%
+					if(!SmartUtil.isBlankObject(course.getCreatedDate())){
+					%>
+						<span><%=course.getCreatedDate().toLocalString() %></span>
+					<%
+					}
+					%>
+				</li>
 				<li>
 					<div class="icon_cs_menteenum">
 						<span>멘티수</span>
-					</div> <span class="t_s14"><%=course.getNumberOfGroupMember() %></span></li>
+					</div> <span class="t_s14"><%=course.getNumberOfGroupMember() %></span>
+				</li>
 			</ul>
 		</div>
 		<div class="course_info">
@@ -72,9 +81,15 @@
 		</div>
 	</div>
 	<div class="course_menu js_course_main_menu">
-		<div class="btn_green_l mt8 fl">
-			<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티초대</div>
-		</div>
+		<%
+		if(course.isMyAttendingCourse() || course.isMyRunningCourse()){
+		%>
+			<div class="btn_green_l mt8 fl js_invite_course_members_btn">
+				<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티초대</div>
+			</div>
+		<%
+		}
+		%>
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu">

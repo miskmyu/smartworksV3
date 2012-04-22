@@ -11,12 +11,19 @@ public class CourseInfo extends GroupInfo{
 
 	public static final String DEFAULT_COURSE_PICTURE  = "default_course_picture";
 
+	private String category;
 	private UserInfo owner;
 	private UserInfo leader;
 	private LocalDate openDate;
 	private LocalDate closeDate;
 	private int numberOfGroupMember;
 	
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public UserInfo getOwner() {
 		return owner;
 	}

@@ -41,7 +41,7 @@
 						<dl>
 							<dd class="menteeNo"><%=course.getNumberOfGroupMember() %>명</dd>
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalString() %><%} %></dd>
-							<dd class="category"></dd>
+							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
 					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->

@@ -930,6 +930,14 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.createNewCourse(requestBody, request);
 	}
 	@Override
+	public String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setCourseProfile(requestBody, request);
+	}
+	@Override
+	public String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeCourse(requestBody, request);
+	}
+	@Override
 	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.performMissionReport(requestBody, request);
 	}
@@ -1000,8 +1008,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstances(type, userId, courseId, missionId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(type, userId, courseId, missionId, teamId, fromDate, maxList);
 	}
 
 	@Override

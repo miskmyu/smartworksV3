@@ -163,10 +163,10 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
 	}
 
-	@RequestMapping("/courseTeamCreate")
+	@RequestMapping("/courseTeamActivity")
 	public ModelAndView courseTeamCreate(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/create_team.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")
@@ -278,6 +278,11 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/more_course_reviews.jsp", "");
 	}
 
+	@RequestMapping("/inviteCourseMembers")
+	public ModelAndView inviteCourseMembers(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/invite_course_members.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -291,7 +296,7 @@ public class SeraController {
 	@RequestMapping(value = "/set_course_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> setCourseProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		String courseId = smartworks.setCourseProfile(requestBody, request);//smartworks.setCourse(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
@@ -301,7 +306,7 @@ public class SeraController {
 	@RequestMapping(value = "/remove_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> removeCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		smartworks.removeCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "myPAGE.sw");
