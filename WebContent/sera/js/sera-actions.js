@@ -1228,7 +1228,7 @@ $(function() {
 		return false;
 	});
 
-	$('.js_leave_course_btn').live('click', function(e){
+	$('.js_defective_report_btn').live('click', function(e){
 		smartPop.confirm('코스를 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
 			var input = $(e.target);
 			var courseSetting = input.parents('.js_course_setting_page');
