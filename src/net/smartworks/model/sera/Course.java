@@ -160,4 +160,12 @@ public class Course extends Group {
 		
 		super(id, name, mentees, mentor);
 	}
+	
+	public String getKeywordsAsCommaString(){
+		String str = "";
+		if(SmartUtil.isBlankObject(this.getKeywords())) return str;
+		for(int i=0; i<this.getKeywords().length; i++)
+			str = str + this.getKeywords()[i] + ((i==this.getKeywords().length-1) ? "" : ", ");
+		return str;
+	}
 }

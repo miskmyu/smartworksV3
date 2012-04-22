@@ -217,31 +217,54 @@ $(function() {
 		return false;
 	});
 	
-	$('.js_remove_course_btn').live('click', function(e){
-		var input = $(e.target);
-		var courseId = input.parents('.js_setting_profile_page').attr('courseId');
-		var paramsJson = {};
-		paramsJson['courseId'] = courseId;
-		console.log(JSON.stringify(paramsJson));
-		smartPop.progressCenter();
+	$('.js_invite_course_members_btn').live('click', function(e){
+		var courseId = $(e.target).parents('.js_course_home_page').attr('courseId');
+		var target = $('.js_course_content');
+		smartPop.progressCenter();				
 		$.ajax({
-			url : "remove_course.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
+			url : 'inviteCourseMembers.sw',
+			data : {
+				courseId : courseId
+			},
 			success : function(data, status, jqXHR) {
-				document.location.href = "myPAGE.sw";									
+				target.html(data);
 				smartPop.closeProgress();
 			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+			error : function(){
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
-				});
 			}
-			
 		});
-		
+		return false;
+	});
+	
+	$('.js_remove_course_btn').live('click', function(e){
+		smartPop.confirm('코스를 삭제하시려고 합니다. 정말로 삭제하시겠습니까??', function(){
+			var input = $(e.target);
+			var courseId = input.parents('.js_setting_profile_page').attr('courseId');
+			var paramsJson = {};
+			paramsJson['courseId'] = courseId;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();
+			$.ajax({
+				url : "remove_course.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();					
+					smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
+						document.location.href = "myPAGE.sw";									
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
+					});
+				}
+				
+			});
+		});
 		return false;
 	});
 	
@@ -1259,6 +1282,17 @@ $(function() {
 				});				
 			}
 		});
+		return false;
+	});
+
+	$('.js_toggle_mission_btn').live('click', function(e){
+		var input = $(e.target).parent();
+		if(input.hasClass('icon_close_red')){
+			input.removeClass('icon_close_red').addClass('icon_open_red');
+		}else{
+			input.addClass('icon_close_red').removeClass('icon_open_red');			
+		}
+		input.parents('.js_perform_mission_page').find('.js_mission_content_item').toggle();
 		return false;
 	});
 

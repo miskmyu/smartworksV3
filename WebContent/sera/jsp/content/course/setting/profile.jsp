@@ -103,7 +103,7 @@
 				<td>
 					<div class="form_label w110">키워드</div>
 					<div class="form_value">
-						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywords())%>"/>
+						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywordsAsCommaString())%>"/>
 						<div class="cb t_refe pt2">* 코스의 이해를 도울수 있는 키워드 입력 (코스 검색 또는 추천코스에 사용 됨), 2개이상은 콤마(,)로 구분</div>
 					</div>
 				</td>
@@ -142,7 +142,7 @@
 					<div class="form_value">
 						<input name="chkCourseUsers" type="radio" <%if(course.getMaxMentees() == -1) {%>checked<%} %> value="unlimited" /><label>무제한</label> 
 						<input name="chkCourseUsers" type="radio" <%if(course.getMaxMentees() > 0) {%>checked<%} %> value="userInput" />직접입력 
-						<input name="txtCourseUsers" class="fieldline number tr" type="text" style="width: 80px" value="<%=course.getMaxMentees()%>"/> 명
+						<input name="txtCourseUsers" class="fieldline number tr" type="text" style="width: 80px" value="<%if(course.getMaxMentees()>0){ %><%=course.getMaxMentees()%><%}%>"/> 명
 						<div class="cb t_refe pt2">* 코스 인원 제한 시 정해진 인원만 코스를 이용할 수 있습니다</div>
 					</div>
 				</td>
