@@ -997,15 +997,21 @@ public class SeraServiceImpl implements ISeraService {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		} else {
-			courseDetail.setStart(new LocalDate());
+			LocalDate nowLocalDate = new LocalDate();
+			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		}
 		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
 			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
-			Date endDate = new Date();
-			long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
-			endDate.setTime(endDateLong);
+			LocalDate nowLocalDate = new LocalDate();
+			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			
+			if (!txtCourseDays.equalsIgnoreCase("1")) {
+				long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
+				endDate.setTime(endDateLong);
+			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
 		}
 		courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? 0 : Integer.parseInt(txtCourseUsers));
