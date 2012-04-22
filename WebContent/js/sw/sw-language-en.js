@@ -26,6 +26,7 @@ smartMessage.bundle['en'] = {
 	popTypeInfo : "Information",
 	popTypeWarn : "Warning",
 	popTypeError : "Error",
+	popTypeConfirm : "Confirm",
 	buttonClose : "Close",
 	buttonCancel : "Cancel",
 	buttonConfirm : "Confirm",
