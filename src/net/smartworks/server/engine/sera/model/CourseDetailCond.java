@@ -34,9 +34,10 @@ public class CourseDetailCond extends Cond {
 	private int targetPoint;
 	private int achievedPoint;
 	private boolean recommended;
-	private LocalDate createDate;
-	private LocalDate createDateFrom;
-	private LocalDate createDateTo;
+	private Date createDate;
+	private Date createDateFrom;
+	private Date createDateTo;
+	private int coursePointFrom = -1;
 
 	public String getCourseId() {
 		return courseId;
@@ -137,19 +138,19 @@ public class CourseDetailCond extends Cond {
 	public Date getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(LocalDate createDate) {
+	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 	public Date getCreateDateFrom() {
 		return createDateFrom;
 	}
-	public void setCreateDateFrom(LocalDate createDateFrom) {
+	public void setCreateDateFrom(Date createDateFrom) {
 		this.createDateFrom = createDateFrom;
 	}
 	public Date getCreateDateTo() {
 		return createDateTo;
 	}
-	public void setCreateDateTo(LocalDate createDateTo) {
+	public void setCreateDateTo(Date createDateTo) {
 		this.createDateTo = createDateTo;
 	}
 	public LocalDate getEndFrom() {
@@ -163,6 +164,12 @@ public class CourseDetailCond extends Cond {
 	}
 	public void setEndTo(LocalDate endTo) {
 		this.endTo = endTo;
+	}
+	public int getCoursePointFrom() {
+		return coursePointFrom;
+	}
+	public void setCoursePointFrom(int coursePointFrom) {
+		this.coursePointFrom = coursePointFrom;
 	}
 
 }

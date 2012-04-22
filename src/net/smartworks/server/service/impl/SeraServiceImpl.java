@@ -2916,13 +2916,20 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
-	@Override
-	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+	public CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception {
+		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
 		courseDetailCond.setEndFrom(new LocalDate());
 		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false)});
 		courseDetailCond.setPageNo(0);
 		courseDetailCond.setPageSize(maxList);
+		
+		if (fromCourseId != null) {
+			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
+			if (lastCourseDetailInfo != null)
+				courseDetailCond.setCoursePointFrom(lastCourseDetailInfo.getCoursePoint());
+		}
+		
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 		if (courseDetails == null || courseDetails.length == 0) 
 			return null;
@@ -2942,7 +2949,10 @@ public class SeraServiceImpl implements ISeraService {
 		return courses;
 	}
 	@Override
-	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+		return getFavoriteCourses(null, maxList);
+	}
+	public CourseInfo[] getRecommendedCourses(String fromCourseId, int maxList) throws Exception {
 
 		//추천 받은 코스중에 날짜순으로 maxList 만큼
 	    CourseDetailCond courseDetailCond = new CourseDetailCond();
@@ -2951,6 +2961,13 @@ public class SeraServiceImpl implements ISeraService {
 	    courseDetailCond.setEndFrom(new LocalDate());
 	    courseDetailCond.setPageNo(0);
 	    courseDetailCond.setPageSize(maxList);
+	    
+		if (fromCourseId != null) {
+			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
+			if (lastCourseDetailInfo != null)
+				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
+		}
+		
 	    CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 	    if (courseDetails == null || courseDetails.length == 0) 
 	     return null;
@@ -2968,6 +2985,10 @@ public class SeraServiceImpl implements ISeraService {
 	    CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 	    return courses;
+	}
+	@Override
+	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+		return getRecommendedCourses(null, maxList);
 	}
 	
 	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -3158,25 +3179,48 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
-		//// TEST PURPOSE
-		//// TEST PURPOSE
 		switch(courseType){
 		case Course.TYPE_FAVORITE_COURSES:
-			return this.getFavoriteCourses(maxList);
+			return this.getFavoriteCourses(lastId, maxList);
 		case Course.TYPE_RECOMMENDED_COURSES:
-			return this.getRecommendedCourses(maxList);
+			return this.getRecommendedCourses(lastId, maxList);
 		}
 		return null;
-		//// TEST PURPOSE
-		//// TEST PURPOSE
 	}
 	@Override
 	public CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception {
-		//// TEST PURPOSE
-		//// TEST PURPOSE
-		return this.getFavoriteCourses(maxList);
-		//// TEST PURPOSE
-		//// TEST PURPOSE
+		if (CommonUtil.isEmpty(categoryName))
+			return null;
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		
+		CourseDetailCond cond = new CourseDetailCond();
+		cond.setCategories(new String[]{categoryName});
+		cond.setOrders(new Order[]{new Order("createDate", false)});
+		cond.setPageNo(0);
+		cond.setPageSize(maxList);
+		if (!CommonUtil.isEmpty(lastId)) {
+			CourseDetail lastCoureDetail = seraMgr.getCourseDetailById(lastId);
+			if (lastCoureDetail != null)
+				cond.setCreateDateTo(lastCoureDetail.getCreateDate());
+		}
+		CourseDetail[] courseDetails = seraMgr.getCourseDetails("", cond);
+		
+		if (courseDetails == null)
+			return null;
+		
+		String[] groupIdIns = new String[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			groupIdIns[i] = courseDetails[i].getCourseId();
+		}
+		
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setGroupIdIns(groupIdIns);
+		
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		CourseInfo[] courseInfo = this.convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		return courseInfo;
 	}
 	@Override
 	public MenteeInformList getCourseMenteeInformations(String courseId, int maxList) throws Exception {
