@@ -552,7 +552,7 @@ function submitForms() {
 			success : function(data, status, jqXHR) {
 				// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFORM, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");
+				smartPop.showInfo(smartPop.INFO, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -619,7 +619,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFORM, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");					
+					smartPop.showInfo(smartPop.INFO, "세라회원으로 가입되셨습니다. 가입을 축하드립니다!");					
 					input.parents('.js_joinus_second').hide().next().show();
 				},
 				error : function(e) {
@@ -649,7 +649,7 @@ $(function() {
 				userId : userId
 			},
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFORM, "사용가능한 아이디 입니다.");
+				smartPop.showInfo(smartPop.INFO, "사용가능한 아이디 입니다.");
 				target.addClass('sw_dup_checked').attr('readonly', true);
 				input.hide().siblings('.js_change_id_btn').show();;
 			},

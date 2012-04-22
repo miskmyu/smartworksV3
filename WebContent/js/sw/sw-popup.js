@@ -190,7 +190,7 @@ smartPop = {
 		smartPop.overlayDark();
 		$('<div id="sw_pop_confirm" class="pop_corner_all smart_pop_section" style="z-index:10001; position:absolute;">' + 
 					'<div class="pop_contents">' + 
-						'<div class="icon_pop_Confirm">' + smartMessage.get('popTypeComfirm') + '</div>' +
+						'<div class="icon_pop_Confirm">' + smartMessage.get('popTypeConfirm') + '</div>' +
 					 	'<div class="pop_notice_section mt10">' + message + '</div>' +
 					 '</div>' +
 					 '<div class="glo_btn_space">' +
