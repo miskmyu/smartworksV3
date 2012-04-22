@@ -1956,7 +1956,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			Filter[] filters = new Filter[1];
 
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
 
 			swdRecordCond.setFilter(filters);
 
@@ -2092,7 +2092,7 @@ public class SeraServiceImpl implements ISeraService {
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
 
 			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
 			
 			swdRecordCond.setFilter(filters);
 

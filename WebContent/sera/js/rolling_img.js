@@ -1,6 +1,6 @@
         var EventBannerHandler =
 {
-    itemMaxCount: 0, //¸ðµç ¾ÆÀÌÅÛ ¼ýÀÚ
+    itemMaxCount: 0, //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     itemStatus: 0,
     beforeStatus: 0,
     isOver: false,
@@ -9,20 +9,23 @@
         this.itemStatus = no;
         this.SetSignal(this.itemStatus);
         this.FadeinBanner(this.itemStatus, this.beforeStatus);
-        this.beforeStatus = this.itemStatus; //°ú°ÅÀÇ °ÍÀ» °»½Å½ÃÄÑÁÜ
+        this.beforeStatus = this.itemStatus; //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å½ï¿½ï¿½ï¿½ï¿½ï¿½
     },
 
     FadeinBanner: function (after, before) {
         $("[id^=eventBanner]").each(
             function (i) {
                 if (after == i) {
-                    $(this).css("z-index", "10").css("display", "none").fadeIn(500);
+                    $(this).css("z-index", "1").css("display", "none").fadeIn(500);
                 }
                 else if (before == i) {
-                    $(this).css("z-index", "9").css("display", "").fadeIn(1);
+                    $(this).css("z-index", "2").css("display", "").fadeIn(1);
                 }
                 else {
-                    $(this).css("z-index", "1").css("display", "").fadeIn(1);
+                    $(this).css("z-index", "3").css("display", "").fadeIn(1);
+                }
+                else {
+                    $(this).css("z-index", "4").css("display", "").fadeIn(1);
                 }
                 $(this).hover(function () { this.isOver = true; }, function () { this.isOver = false; });
             }
