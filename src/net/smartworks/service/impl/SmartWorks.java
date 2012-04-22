@@ -995,7 +995,12 @@ public class SmartWorks implements ISmartWorks {
 	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getSeraInstances(type, userId, courseId, missionId, fromDate, maxList);
 	}
-	
+
+	@Override
+	public void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.addReviewOnCourse(requestBody, request);
+	}
+
 	@Override
 	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getReviewInstancesByCourse(courseId, fromDate, maxList);

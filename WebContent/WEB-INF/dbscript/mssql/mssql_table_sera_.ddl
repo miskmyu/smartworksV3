@@ -568,4 +568,14 @@ ALTER TABLE SWOrgGroupMember add createdtime datetime;
 ALTER TABLE SWOrgGroupMember add modifier varchar(50);
 ALTER TABLE SWOrgGroupMember add modifiedtime datetime;
 
-
+CREATE TABLE CourseReview (
+	objId varchar(50) NOT NULL,
+	courseId varchar(50),
+	content varchar(4000),
+	startPoint decimal(18,1),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+	primary key (id)
+);

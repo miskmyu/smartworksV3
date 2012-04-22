@@ -476,6 +476,7 @@ public class SeraController {
 	@RequestMapping(value = "/add_review_on_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void addReviewOnCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.addReviewOnCourse(requestBody, request);
 	}
 
 	@RequestMapping(value = "/modify_course_team", method = RequestMethod.POST)
