@@ -89,7 +89,7 @@
 				</div>
 			</div>
 			<%
-			if(!mission.isClearedByMe()){
+			if((course.isMyAttendingCourse() || course.isMyRunningCourse()) && !mission.isClearedByMe()){
 			%>
 				<div>
 					<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
