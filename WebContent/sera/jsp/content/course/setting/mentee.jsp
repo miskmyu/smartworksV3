@@ -42,7 +42,7 @@
 				<div class="panel_rds_block mb20 js_join_requester_item" courseId="<%=courseId%>" userId="<%=requester.getId()%>">
 					<ul>
 						<li class="pl0pr10"><img class="profile_size_m" src="<%=requester.getMidPicture() %>" /></li>
-						<li class=""><span> <%=requester.getNickName() %><br /> <%=requester.getName() %><br /><%=requester.getId()%></span></li>
+						<li class=""><span> <%=requester.getNickName() %><br /> <%=requester.getName() %><br /><span class="t_id"><%=requester.getId()%></span></span></li>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_default_l mr5 js_approve_join_btn"><div class="btn_default_r">승 인</div></div>
@@ -73,7 +73,7 @@
 	<span class="t_redb">* 등록한 멘티가 <%=menteeInformations.getTotalMentees() %>명 있습니다</span>
 	<!-- 검색 -->
 	<div class="fr">
-		<span class="fl t_grayb mr5">멘티검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
+		<span class="fl tb mr5">멘티검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
 		<button type="button" class="fl ml5">검색</button>
 	</div>
 	<!-- 검색 //-->
@@ -125,7 +125,7 @@
 	<div class="t_redb fl">* 동록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
 	<!-- 검색 -->
 	<div class="fr">
-		<span class="fl t_grayb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
+		<span class="fl tb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
 		<button type="button" class="fl ml5">검색</button>
 	</div>
 	<!-- 검색 //-->
