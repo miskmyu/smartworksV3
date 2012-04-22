@@ -123,6 +123,13 @@
 					</div>
 				</td>
 			</tr>
+			<tr>
+				<td><div class="form_label">첨부 파일</div>
+					<div class="form_value">
+						<div class="fl js_mission_attachment_field" width="490px"></div>
+					</div>
+				</td>
+			</tr>
 		</table>
 	</form>
 	

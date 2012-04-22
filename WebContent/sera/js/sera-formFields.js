@@ -138,6 +138,29 @@ function loadCreateMissionFields() {
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();		
 	}
+
+	var missionAttachmentField = $('div.js_mission_attachment_field');
+	if(!isEmpty(missionAttachmentField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		missionAttachmentField.html(gridRow);
+		
+		var groupId = missionAttachmentField.attr('groupId');
+		if(isEmpty(groupId)) groupId = "";
+
+		SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtFileField",
+			fieldName: "attachment",
+			groupId: groupId,
+			columns: 1,
+			colSpan: 1,
+			required: false
+		});
+		gridRow.find('.form_col').css({width:"100%", padding:"0px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
 };
 
 function loadCreateTeamFields() {

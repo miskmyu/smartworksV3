@@ -33,9 +33,19 @@
 		var missionReport = $('.js_mission_report_page');
 		if (SmartWorks.GridLayout.validate(missionReport.find('form.js_validation_required'),  missionReport.find('.sw_error_message'))) {
 			var forms = missionReport.find('form');
+			var starPointList = forms.find('.js_star_point_list:visible li');
+			var starPoint = 0;
+			for(var i=0; i<starPointList.length; i++){
+				var item = $(starPointList[i]);
+				if(item.hasClass('full'))
+					starPoint = starPoint + 1;
+				else if(item.hasClass('half'))
+					starPoint = starPoint + 0.5;
+			}
 			var paramsJson = {};
 			paramsJson['courseId'] = missionReport.attr('courseId');
 			paramsJson['missionId'] = missionReport.attr('missionId');
+			paramsJson['starPoint'] = starPoint;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -117,6 +127,18 @@
 	
 			<div class="sw_error_message tl" style="color: red"></div>
 
+			<div class="fl">
+				<div class="name fl mr5">별점</div>
+				<div class="star_score fr">
+					<ul class="js_star_point_list js_star_point_btn">
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+					</ul>
+				</div>
+			</div>
 			<!-- 우측 버튼 영역 -->
 			<div class="attach_file js_note_buttons" style="margin:5px">
 				<ul>
