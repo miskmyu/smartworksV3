@@ -302,7 +302,7 @@
 		</div>
 		<div class="js_mentor_buttons" style="clear: both; display: none">
 			<div href="" class="btn_blu_l mr10 js_create_course_btn">
-				<div class="btn_blu_r">코스 만들기</div>
+				<div class="btn_blu_r">코스 등록</div>
 			</div>
 	
 			<div href="" class="btn_blu_l js_back_to_create_btn">

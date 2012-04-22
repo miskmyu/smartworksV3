@@ -132,7 +132,7 @@
 	<div class="btn_space">
 		<div style="clear: both; display: inline-block">
 			<div href="" class="btn_blu_l mr10 js_create_mission_btn">
-				<div class="btn_blu_r">미션 만들기</div>
+				<div class="btn_blu_r">미션 등록</div>
 			</div>
 		
 			<div href="" class="btn_blu_l js_create_mission">

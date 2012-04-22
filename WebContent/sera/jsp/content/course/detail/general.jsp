@@ -123,7 +123,7 @@
 						<div class="photo_line">
 							<img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" />
 						</div>
-						<div class="text m0">
+						<div class="text m0" style="width:auto">
 							<ul class="cb">
 								<li class="tb"><%=mentor.getName()%></li>
 								<li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
