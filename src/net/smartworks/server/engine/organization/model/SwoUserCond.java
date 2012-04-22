@@ -65,6 +65,8 @@ public class SwoUserCond extends SwoObjectCond {
 	private String extensionNo;
 
 	private String[] typeNotIns;
+	private String[] idIns;
+	private String[] idNotIns;
 
 	public SwoUserCond() {
 		super();
@@ -395,6 +397,18 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setExtensionNo(String extensionNo) {
 		this.extensionNo = extensionNo;
+	}
+	public String[] getIdIns() {
+		return idIns;
+	}
+	public void setIdIns(String[] idIns) {
+		this.idIns = idIns;
+	}
+	public String[] getIdNotIns() {
+		return idNotIns;
+	}
+	public void setIdNotIns(String[] idNotIns) {
+		this.idNotIns = idNotIns;
 	}
 
 }

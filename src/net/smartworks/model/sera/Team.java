@@ -17,7 +17,7 @@ public class Team extends BaseObject {
 	private String desc;
 	private LocalDate start;
 	private LocalDate end;
-	private AccessPolicy accessPolicy;
+	private int accessPolicy;
 	private int maxMembers;
 	private SeraUserInfo[] members;
 	
@@ -45,10 +45,10 @@ public class Team extends BaseObject {
 	public void setEnd(LocalDate end) {
 		this.end = end;
 	}
-	public AccessPolicy getAccessPolicy() {
+	public int getAccessPolicy() {
 		return accessPolicy;
 	}
-	public void setAccessPolicy(AccessPolicy accessPolicy) {
+	public void setAccessPolicy(int accessPolicy) {
 		this.accessPolicy = accessPolicy;
 	}
 	public int getMaxMembers() {
