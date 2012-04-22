@@ -80,9 +80,9 @@
 			<tr>
 				<td rowspan="12" valign="top" width="150px">
 					<!-- 사진 올리기 -->
-					<div class="js_my_profile_field js_auto_load_profile"></div>
-					<div class="t_refe mt10">
-						* 사진은 자동으로<br /> 77x77으로 변경됩니다
+					<div class="js_my_profile_field js_auto_load_profile myaccount_photo"></div>
+					<div class="t_refe" style="margin: 15px 0 0 33px">
+						* 사진은 자동으로<br /> 118x118으로 변경됩니다
 					</div> <!-- 사진 올리기 //-->
 				</td>
 				<td>
