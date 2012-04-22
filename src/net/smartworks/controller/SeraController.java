@@ -298,7 +298,7 @@ public class SeraController {
 	@RequestMapping(value = "/set_course_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> setCourseProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		String courseId = smartworks.setCourseProfile(requestBody, request);//smartworks.setCourse(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
@@ -308,7 +308,7 @@ public class SeraController {
 	@RequestMapping(value = "/remove_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> removeCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String courseId = null;//smartworks.createNewCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
+		smartworks.removeCourse(requestBody, request);//smartworks.setCourse(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "myPAGE.sw");

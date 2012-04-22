@@ -812,6 +812,179 @@ public class SeraServiceImpl implements ISeraService {
 		return courseId;
 	}
 
+
+	@Override
+	public String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			frmSetCourseProfile=
+				{
+					txtCourseObject=asd, 
+					txtaCourseDesc=asd, 
+					txtCourseKeywords=222, 
+					txtCourseDays=, 
+					chkUserDefineDays=on, 
+					txtCourseStartDate=2012.04.23, 
+					txtCourseEndDate=2012.04.23, 
+					chkCourseSecurity=3, 
+					chkCourseUsers=unlimited, 
+					txtCourseUsers=, 
+					chkJoinApproval=autoApporval, 
+					imgCourseProfile=
+						{
+							groupId=fg_0c541f664ee814406c496394b58e1b40e497, files=[]
+						}
+				}
+		}*/
+		User user = SmartUtil.getCurrentUser();
+		Map<String, Object> frmSetCourseProfile = (Map<String, Object>)requestBody.get("frmSetCourseProfile");
+		String courseId = (String)requestBody.get("courseId");
+
+		Set<String> keySet = frmSetCourseProfile.keySet();
+		Iterator<String> itr = keySet.iterator();
+		
+		String txtCourseObject = null;
+		String txtaCourseDesc = null;
+		String txtCourseKeywords = null;
+		String txtCourseDays = null;
+		String chkUserDefineDays = null;
+		String txtCourseStartDate = null;
+		String txtCourseEndDate = null;
+		String chkCourseSecurity = null;
+		String chkCourseUsers = null;
+		String txtCourseUsers = null;
+		String chkJoinApproval = null;
+		List<Map<String, String>> imgCourseProfile = null;
+		String courseFileId = null;
+		String courseFileName = null;
+		String selGroupProfileType = null;//공개 비공개
+		
+		String imgGroupProfile = null;
+
+		while (itr.hasNext()) {
+			String fieldId = (String)itr.next();
+			Object fieldValue = frmSetCourseProfile.get(fieldId);
+			if (fieldValue instanceof LinkedHashMap) {
+				Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+				if(fieldId.equals("imgCourseProfile")) {
+					imgCourseProfile = (ArrayList<Map<String,String>>)valueMap.get("files");
+				}
+			} else if(fieldValue instanceof String) {					
+				if(fieldId.equals("txtCourseObject")) {
+					txtCourseObject = (String)frmSetCourseProfile.get("txtCourseObject");
+				} else if(fieldId.equals("txtaCourseDesc")) {
+					txtaCourseDesc = (String)frmSetCourseProfile.get("txtaCourseDesc");
+				} else if(fieldId.equals("txtCourseKeywords")) {
+					txtCourseKeywords = (String)frmSetCourseProfile.get("txtCourseKeywords");
+				} else if(fieldId.equals("txtCourseDays")) {
+					txtCourseDays = (String)frmSetCourseProfile.get("txtCourseDays");
+				} else if(fieldId.equals("txtCourseStartDate")) {
+					txtCourseStartDate = (String)frmSetCourseProfile.get("txtCourseStartDate");
+				} else if(fieldId.equals("txtCourseEndDate")) {
+					txtCourseEndDate = (String)frmSetCourseProfile.get("txtCourseEndDate");
+				} else if(fieldId.equals("chkCourseSecurity")) {
+					chkCourseSecurity = (String)frmSetCourseProfile.get("chkCourseSecurity");
+					if (chkCourseSecurity != null) {
+						if(Integer.parseInt(chkCourseSecurity) == AccessPolicy.LEVEL_PUBLIC)
+							selGroupProfileType = "O";
+						else
+							selGroupProfileType = "C";
+					}
+				} else if(fieldId.equals("chkCourseUsers")) {
+					chkCourseUsers = (String)frmSetCourseProfile.get("chkCourseUsers");
+				} else if(fieldId.equals("txtCourseUsers")) {
+					txtCourseUsers = (String)frmSetCourseProfile.get("txtCourseUsers");
+				} else if(fieldId.equals("chkJoinApproval")) {
+					chkJoinApproval = (String)frmSetCourseProfile.get("chkJoinApproval");
+				}
+			}
+		}
+		
+		SwoGroup swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
+		
+		if (swoGroup == null)
+			return null;
+		
+
+		if(!CommonUtil.isEmpty(imgCourseProfile)) {
+			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
+				Map<String, String> fileMap = imgCourseProfile.get(i);
+				courseFileId = fileMap.get("fileId");
+				courseFileName = fileMap.get("fileName");
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
+				swoGroup.setPicture(imgGroupProfile);
+			}
+		}
+
+		swoGroup.setDescription(txtaCourseDesc);
+		swoGroup.setStatus("C");
+		swoGroup.setGroupType(selGroupProfileType);
+
+		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+
+		String groupId = swoGroup.getId();
+		if (CommonUtil.isEmpty(groupId))
+			return null;
+
+		//코스 확장 정보 저장
+		
+		CourseDetail courseDetail = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(courseId);
+		if (courseDetail == null)
+			return courseId;
+		
+		courseDetail.setObject(txtCourseObject);
+		courseDetail.setKeywords(txtCourseKeywords);
+		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
+		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
+			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
+			courseDetail.setStart(new LocalDate(startDate.getTime()));
+		} else {
+			LocalDate nowLocalDate = new LocalDate();
+			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			courseDetail.setStart(new LocalDate(startDate.getTime()));
+		}
+		if (txtCourseEndDate != null && !txtCourseEndDate.equalsIgnoreCase("")) {
+			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseEndDate);
+			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		} else if (!CommonUtil.isEmpty(txtCourseDays)) {
+			LocalDate nowLocalDate = new LocalDate();
+			Date endDate = new SimpleDateFormat("yyyy.MM.dd").parse(nowLocalDate.toLocalDateSimpleString());
+			
+			if (!txtCourseDays.equalsIgnoreCase("1")) {
+				long endDateLong = endDate.getTime() + (Integer.parseInt(txtCourseDays) * 1000 * 60 * 60 * 24);
+				endDate.setTime(endDateLong);
+			}
+			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		}
+		if (chkCourseUsers != null && chkCourseUsers.equalsIgnoreCase("unlimited")) {
+			courseDetail.setMaxMentees(-1);
+		} else {
+			courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? -1 : Integer.parseInt(txtCourseUsers));
+		}
+			
+		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
+		//courseDetail.setTeamId("teamId");
+		
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		seraMgr.setCourseDetail(courseDetail);
+		
+		return groupId;
+		
+	}
+
+	@Override
+	public String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			courseId=group_0df26ae7aebc4656bae93701060acf4c
+		}*/
+		User user = SmartUtil.getCurrentUser();
+		String courseId = (String)requestBody.get("courseId");
+		SwManagerFactory.getInstance().getSwoManager().removeGroup(user.getId(), courseId);
+		SwManagerFactory.getInstance().getSeraManager().removeCourseDetail(courseId);
+		
+		return courseId;
+	}
+	
+	
 	@Override
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*
