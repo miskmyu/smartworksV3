@@ -52,7 +52,7 @@ public class Course extends Group {
 	}
 	public int getAchievedPoint() {
 		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime() || super.getOpenDate().getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate());
+		return (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate())+1;
 	}
 	public String getObject() {
 		return object;

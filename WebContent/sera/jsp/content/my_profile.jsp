@@ -106,7 +106,7 @@
 					<div class="form_label">닉네임*</div>
 					<div class="form_value">
 						<input name="txtNickName" type="text" class="fieldline fl mr5" style="width: 150px" value="<%=CommonUtil.toNotNull(seraUser.getNickName())%>">
-						<div class="t_refe mt5">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
+						<div class="t_refe mt5 cb">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
 					</div>
 				</td>
 			</tr>
@@ -124,7 +124,7 @@
 					<div class="form_label">생일/성별</div>
 					<div class="form_value">
 						<%
-						LocalDate birthDate = new LocalDate();//seraUser.getBirthday();
+						LocalDate birthDate = seraUser.getBirthday();
 						String birthYear = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalYearString();
 						String birthMonth = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalMonthOnlyString();
 						String birthDay = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalDateOnlyString();
@@ -133,8 +133,8 @@
 						<input name="txtBirthMonth" class="fieldline form_date_input number tr" type="text" value="<%=birthMonth%>"/> 월
 						<input name="txtBirthDay" class="fieldline form_date_input number tr" type="text" value="<%=birthDay%>"/> 일
 						<select name="selSex" class="required">
-							<option value="<%=SeraUser.SEX_FEMALE %>">여자</option>
-							<option value="<%=SeraUser.SEX_MALE%>">남자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_FEMALE){ %>selected<%} %> value="<%=SeraUser.SEX_FEMALE %>">여자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_MALE){ %>selected<%} %> value="<%=SeraUser.SEX_MALE%>">남자</option>
 						</select>
 					</div>
 				</td>

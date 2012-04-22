@@ -1,6 +1,5 @@
 package net.smartworks.model.community;
 
-import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.util.LocalDate;
