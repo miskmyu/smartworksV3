@@ -340,7 +340,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .content .name { color:#000000; font-size:14px} /* Title Name */
-.panel_block .text { float:left; margin-right:10px} /* content txt */
+.panel_block .text { float:left; margin-right:10px; width: 96%} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
 .panel_block .thum_image {width:200px; float:right}
 .panel_block .thum_image img, .panel_block .thum_image_size {width:100%}
