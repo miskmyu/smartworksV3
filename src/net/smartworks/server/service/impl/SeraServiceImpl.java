@@ -3159,7 +3159,12 @@ public class SeraServiceImpl implements ISeraService {
 			String userId = user.getId();
 			String courseId = (String)requestBody.get("courseId");
 			String content = (String)requestBody.get("reviewContent");
-			Double startPoint = (Double)requestBody.get("starPoint");
+			Double startPoint = null;
+			if(requestBody.get("starPoint").getClass().equals(Integer.class))
+				startPoint = Double.parseDouble(String.valueOf((Integer)requestBody.get("starPoint")));
+			else if(requestBody.get("starPoint").getClass().equals(Double.class))
+				startPoint = (Double)requestBody.get("starPoint");
+
 			CourseReview courseReview = new CourseReview();
 			courseReview.setCourseId(courseId);
 			courseReview.setContent(content);
