@@ -217,7 +217,9 @@ public class LocalDate extends Date{
 	public String toGMTDateString(){
 		return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")).format(getGMTDate());
 	}
-
+	public String toGMTDateString2(){
+		return (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")).format(getGMTDate());
+	}
 	public String toGMTSimpleDateString(){
 		return (new SimpleDateFormat("yyyy-MM-dd")).format(getGMTDate());
 	}
