@@ -328,7 +328,7 @@ public class SeraController {
 	@RequestMapping(value = "/modify_mission", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> modifyMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String missionId = null;//smartworks.modifyMission(requestBody, request);
+		String missionId = smartworks.modifyMission(requestBody, request);
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" + missionId);
@@ -338,7 +338,7 @@ public class SeraController {
 	@RequestMapping(value = "/remove_mission", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> removeMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeMission(requestBody, request);
+		smartworks.removeMission(requestBody, request);
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("href", "courseHome.sw?courseId=" + courseId);
