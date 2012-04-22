@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -1241,48 +1242,29 @@ public class SeraServiceImpl implements ISeraService {
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 
-			SeraFriendCond cond = new SeraFriendCond();
-			cond.setRequestIdOrReceiveId(userId);
-			cond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
-			long totalSize = seraMgr.getFriendSize(userId, cond);
-			cond.setPageNo(0);
-			cond.setPageSize(maxList);
+			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, null);
 
-			SeraFriend[] friends = seraMgr.getFriends(userId, cond);
-			
-			if (CommonUtil.isEmpty(friends)) {
+			if(CommonUtil.isEmpty(seraFriends)) {
 				friendListObj.setTotalFriends(0);
 				return friendListObj;
+			} else {
+				friendListObj.setTotalFriends(seraFriends.length);
 			}
-			friendListObj.setTotalFriends((int)totalSize);
-			String[] ids = new String[friends.length];
-			for (int i = 0; i < friends.length; i++) {
-				SeraFriend seraFriend = friends[i];
-				String requestId = seraFriend.getRequestId();
-				String receiveId = seraFriend.getReceiveId();
-				if(requestId.equals(userId))
-					ids[i] = receiveId;
-				else if(receiveId.equals(userId))
-					ids[i] = requestId;
+
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setPageSize(maxList);
+			seraFriendCond.setPageNo(0);
+			seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
+
+			String[] ids = new String[seraFriends.length];
+
+			for(int i=0; i<seraFriends.length; i++) {
+				SeraFriend seraFriend = seraFriends[i];
+				String id = seraFriend.getFriendId();
+				ids[i] = id;
 			}
+
 			SwoUserExtend[] userExtends = swoMgr.getUsersExtend(userId, ids);
-
-			Map<String, SwoUserExtend> sortMap = new TreeMap<String, SwoUserExtend>();
-
-			if(!CommonUtil.isEmpty(userExtends)) {
-				for(SwoUserExtend userExtend : userExtends) {
-					String name = userExtend.getName();
-					sortMap.put(name, userExtend);
-				}
-			}
-
-			userExtends = new SwoUserExtend[sortMap.size()];
-			Iterator<String> iterator = sortMap.keySet().iterator();
-			int i = 0;
-			while(iterator.hasNext()) {
-				userExtends[i] = sortMap.get(iterator.next());
-				i++;
-			}
 
 			List userInfoList = new ArrayList();
 			if(userExtends != null) {
@@ -1311,37 +1293,29 @@ public class SeraServiceImpl implements ISeraService {
 	
 	@Override
 	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
-		try{
+		try {
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-			
-			SeraFriendCond cond = new SeraFriendCond();
-			cond.setRequestIdOrReceiveId(userId);
-			cond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
-			//cond.setUserId(userId);
-			//cond.setOrders(new Order[]{new Order("friendName" , true)});
-			if (CommonUtil.isEmpty(lastId))
-			{
-				SwoUser lastIndexUser = swoMgr.getUser(userId, lastId, IManager.LEVEL_LITE);
-				//cond.setFriendNameOrder(lastIndexUser.getName());
-			}
-			cond.setPageNo(0);
-			cond.setPageSize(maxList);
 
-			SeraFriend[] friends = seraMgr.getFriends(userId, cond);
-			
-			if (CommonUtil.isEmpty(friends)) 
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			if(!CommonUtil.isEmpty(lastId)) {
+				SwoUser swoUser = swoMgr.getUser("", lastId, IManager.LEVEL_LITE);
+				String lastFriendName = swoUser.getName();
+				seraFriendCond.setLastFriendName(lastFriendName);
+			}
+			seraFriendCond.setPageSize(maxList);
+			seraFriendCond.setPageNo(0);
+			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
+
+			if (CommonUtil.isEmpty(seraFriends)) 
 				return null;
-			
-			String[] ids = new String[friends.length];
-			for (int i = 0; i < friends.length; i++) {
-				SeraFriend seraFriend = friends[i];
-				String requestId = seraFriend.getRequestId();
-				String receiveId = seraFriend.getReceiveId();
-				if(requestId.equals(userId))
-					ids[i] = receiveId;
-				else if(receiveId.equals(userId))
-					ids[i] = requestId;
+
+			String[] ids = new String[seraFriends.length];
+
+			for(int i=0; i<seraFriends.length; i++) {
+				SeraFriend seraFriend = seraFriends[i];
+				String id = seraFriend.getFriendId();
+				ids[i] = id;
 			}
 
 			SwoUserExtend[] userExtends = swoMgr.getUsersExtend(userId, ids);
@@ -1361,7 +1335,6 @@ public class SeraServiceImpl implements ISeraService {
 				friendsUserInfo = new SeraUserInfo[userInfoList.size()];
 				userInfoList.toArray(friendsUserInfo);
 			}
-			//UserInfo[] friends = SeraTest.getFriendsById(userId, lastId, maxList);
 			return friendsUserInfo;
 		}catch (Exception e){
 			// Exception Handling Required

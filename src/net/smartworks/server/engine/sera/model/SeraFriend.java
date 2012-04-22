@@ -22,6 +22,8 @@ public class SeraFriend {
 	private String requestName;
 	private String receiveId;
 	private String receiveName;
+	private String friendId;
+	private String friendName;
 	private int acceptStatus;
 	private Date requestDate;
 	private Date replyDate;
@@ -55,6 +57,18 @@ public class SeraFriend {
 	}
 	public void setReceiveName(String receiveName) {
 		this.receiveName = receiveName;
+	}
+	public String getFriendId() {
+		return friendId;
+	}
+	public void setFriendId(String friendId) {
+		this.friendId = friendId;
+	}
+	public String getFriendName() {
+		return friendName;
+	}
+	public void setFriendName(String friendName) {
+		this.friendName = friendName;
 	}
 	public int getAcceptStatus() {
 		return acceptStatus;
