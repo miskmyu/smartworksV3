@@ -48,11 +48,13 @@ public class Course extends Group {
 	}
 	public int getTargetPoint() {
 		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime()) return -1;
-		return (int)LocalDate.getDiffDate(super.getOpenDate(), closeDate)+1;
+		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), closeDate)+1;
+		return (point<0) ? 0 : point;
 	}
 	public int getAchievedPoint() {
 		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime() || super.getOpenDate().getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate());
+		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate())+1;
+		return (point<0) ? getTargetPoint() : point;
 	}
 	public String getObject() {
 		return object;

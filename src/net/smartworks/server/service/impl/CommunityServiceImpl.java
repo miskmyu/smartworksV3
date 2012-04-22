@@ -715,11 +715,6 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	
 	@Override
-	public UserInfo[] getCommunityMembers(String communityId) throws Exception {
-		// TODO Auto-generated method stub
-		return SmartTest.getAvailableChatter();
-	}
-	@Override
 	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
 	}
 

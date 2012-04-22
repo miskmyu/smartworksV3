@@ -55,7 +55,6 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					alert('wait');
 					smartPop.showInfo(smartPop.INFORM, smartMessage.get('setMyProfileSucceed'));
 				},
 				error : function(e) {
@@ -80,9 +79,9 @@
 			<tr>
 				<td rowspan="12" valign="top" width="150px">
 					<!-- 사진 올리기 -->
-					<div class="js_my_profile_field js_auto_load_profile"></div>
-					<div class="t_refe mt10">
-						* 사진은 자동으로<br /> 77x77으로 변경됩니다
+					<div class="js_sera_profile_field js_auto_load_profile myaccount_photo"></div>
+					<div class="t_refe" style="margin: 15px 0 0 33px">
+						* 사진은 자동으로<br /> 118x118으로 변경됩니다
 					</div> <!-- 사진 올리기 //-->
 				</td>
 				<td>
@@ -106,7 +105,7 @@
 					<div class="form_label">닉네임*</div>
 					<div class="form_value">
 						<input name="txtNickName" type="text" class="fieldline fl mr5" style="width: 150px" value="<%=CommonUtil.toNotNull(seraUser.getNickName())%>">
-						<div class="t_refe mt5">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
+						<div class="t_refe mt5 cb">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
 					</div>
 				</td>
 			</tr>
@@ -124,7 +123,7 @@
 					<div class="form_label">생일/성별</div>
 					<div class="form_value">
 						<%
-						LocalDate birthDate = new LocalDate();//seraUser.getBirthday();
+						LocalDate birthDate = seraUser.getBirthday();
 						String birthYear = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalYearString();
 						String birthMonth = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalMonthOnlyString();
 						String birthDay = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalDateOnlyString();
@@ -133,8 +132,8 @@
 						<input name="txtBirthMonth" class="fieldline form_date_input number tr" type="text" value="<%=birthMonth%>"/> 월
 						<input name="txtBirthDay" class="fieldline form_date_input number tr" type="text" value="<%=birthDay%>"/> 일
 						<select name="selSex" class="required">
-							<option value="<%=SeraUser.SEX_FEMALE %>">여자</option>
-							<option value="<%=SeraUser.SEX_MALE%>">남자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_FEMALE){ %>selected<%} %> value="<%=SeraUser.SEX_FEMALE %>">여자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_MALE){ %>selected<%} %> value="<%=SeraUser.SEX_MALE%>">남자</option>
 						</select>
 					</div>
 				</td>
@@ -222,5 +221,5 @@
 </div>
 
 <script type="text/javascript">
-	loadMyProfileField();
+	loadSeraProfileField();
 </script>

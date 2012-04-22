@@ -29,7 +29,6 @@
 			}
 		}
 	}
-	ReviewInstanceInfo[] reviews = smartWorks.getReviewInstancesByCourse(courseId, new LocalDate(), 5);
 	
 %>
 <div>
@@ -64,9 +63,7 @@
 					<dd>
 						<div class="text"><%=CommonUtil.toNotNull(course.getObject())%></div>
 						<!-- Thum Image-->
-						<div class="thum_image">
-							<img src="../images/thum_image.jpg" />
-						</div>
+						<div class="thum_image"><img src="<%=course.getOrgPicture() %>" /></div>
 						<!-- Thum Image//-->
 					</dd>
 				</dl>
@@ -101,7 +98,7 @@
 						중
 						<%=course.getAchievedPoint()%>번째가 진행중입니다
 					</div>
-					<div class="process" style="margin: 5px 30px 0 0">
+					<div class="process">
 						(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
 					</div>
 				</dl>
@@ -129,7 +126,7 @@
 					<div class="photo_line">
 						<img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" />
 					</div>
-					<div class="text fr m0">
+					<div class="text m0">
 						<ul class="cb">
 							<li class="tb"><%=mentor.getName()%></li>
 							<li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
@@ -169,53 +166,12 @@
 		<!-- 리뷰 -->
 		<li class="fr">
 			<div class="panel_block fr">
-			
-				<%
-				if(!SmartUtil.isBlankObject(reviews) && reviews.length>0){
-					for(int i=0; i<reviews.length; i++){
-						ReviewInstanceInfo review = reviews[i];
-				%>
-						<!-- Reply-->
-						<div class="reply_section <%if(i+1==reviews.length){%>end<%}%>">
-							<div class="photo">
-								<img class="profile_size_m" src="<%=review.getOwner().getMinPicture() %>" />
-							</div>
-							<div class="reply_text w375 fl">
-								<span class="name"><%=review.getOwner().getNickName() %> : </span><%=review.getContent() %>
-								<div class="icon_date"><%=review.getLastModifiedDate().toLocalString() %></div>
-							</div>
-							<div class="fr">
-								<div class="name fl mr5">별점</div>
-								<div class="star_score fr">
-									<ul>
-										<li class="icon_star_score current"><a href=""> </a></li>
-										<li class="icon_star_score current"><a href=""> </a></li>
-										<li class="icon_star_score current"><a href=""> </a></li>
-										<li class="icon_star_score"><a href=""> </a></li>
-										<li class="icon_star_score"><a href=""> </a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<!-- Reply//-->
-				<%
-					}
-				}
-				%>
+				<jsp:include page="/sera/jsp/content/course/detail/more_course_reviews.jsp">
+					<jsp:param value="<%=courseId %>" name="courseId"/>
+				</jsp:include>			
 			</div>
 		</li>
 		<!-- 리뷰//-->
 	</ul>
 </div>
 <!-- 코스 리뷰 //-->
-<%
-if(reviews.length>5){
-%>
-	<!-- 더보기 -->
-	<div class="more cb">
-		<div class="icon_more">더보기</div>
-	</div>
-	<!-- 더보기 //-->
-<%
-}
-%>

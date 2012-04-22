@@ -20,12 +20,12 @@
 	if(!SmartUtil.isBlankObject(friends)){
 		for(int i=0; i<friends.length; i++){
 			SeraUserInfo friend = friends[i];
+			String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
 			if(i==FriendList.MAX_FRIEND_LIST){
 	%>
 				<!-- 더보기 -->
-				<div class="more js_more_friend_btn js_friend_item" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
-					<div class="icon_more">더보기</div>
-					<span class="js_progress_span"></span>
+				<div class="more js_more_friends_btn js_friend_item" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 			<%
@@ -36,8 +36,8 @@
 			<div class="panel_rds_block mb10 js_friend_item" userId="<%=friend.getId()%>">
 				<ul>
 					<li class="pl0pr10">
-						<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-							<img src="<%=friend.getMinPicture() %>" />
+						<a href="<%=userHref%>">
+							<img class="profile_size_m" src="<%=friend.getMinPicture() %>" />
 						</a>
 					</li>
 					<li class="w90">
@@ -50,21 +50,12 @@
 					</li>
 					<li class="fr bo_l">
 						<span> <!-- Btn -->
-							<%
-							if(!friend.isFriend()){
-							%>
-								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
-								</div> <!-- Btn //--> 
-							<%
-							}else{
-							%>
-								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
-								</div> <!-- Btn //--> 
-							<%
-							}
-							%>
+							<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
+								<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
+							</div> <!-- Btn //--> 
+							<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>" <%if(!friend.isFriend()){%>style="display:none"<%} %>>
+								<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
+							</div> <!-- Btn //--> 
 						</span>
 					</li>
 				</ul>

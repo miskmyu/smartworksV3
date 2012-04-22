@@ -52,11 +52,13 @@ public class CourseInfo extends GroupInfo{
 	}	
 	public int getTargetPoint() {
 		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
-		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		int point = (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		return (point<0) ? 0 : point;
 	}
 	public int getAchievedPoint() {
 		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
+		int point = (int)LocalDate.getDiffDate(openDate, new LocalDate())+1;
+		return (point<0) ? getTargetPoint() : point;
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
