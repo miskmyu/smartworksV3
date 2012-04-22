@@ -618,6 +618,7 @@ $(function() {
 			input.addClass('full').prevAll().addClass('full').removeClass('half');
 			input.nextAll().removeClass('full').removeClass('half');
 		}
+		input.parents('.js_return_on_course_review').find('textarea[name="txtaReviewContent"]').focus();
 		return false;
 	});
 	
