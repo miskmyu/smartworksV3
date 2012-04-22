@@ -375,8 +375,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String requestIdOrReceiveId = null;
 		if (cond != null) {
 			objId = cond.getObjId();
-			requestId = cond.getReceiveId();
-			requestName = cond.getReceiveName();
+			requestId = cond.getRequestId();
+			requestName = cond.getRequestName();
 			receiveId = cond.getReceiveId();
 			receiveName = cond.getReceiveName();
 			acceptStatus = cond.getAcceptStatus();
