@@ -2072,6 +2072,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(userId, userId);
 			SeraUser seraUser = (SeraUser)user;
+			seraUser.setFriend(isFriend);
 			if (seraUserDetail != null) {
 				seraUser.setEmail(seraUserDetail.getEmail());
 				if (seraUserDetail.getBirthday() != null)
@@ -2086,7 +2087,6 @@ public class SeraServiceImpl implements ISeraService {
 				seraUser.setFbUserId(seraUserDetail.getFbUserId());
 				seraUser.setFbPassword(seraUserDetail.getFbPassword());
 				seraUser.setNickName(seraUserDetail.getNickName());
-				seraUser.setFriend(isFriend);
 			}
 			return seraUser;
 
