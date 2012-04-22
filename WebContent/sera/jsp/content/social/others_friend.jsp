@@ -86,6 +86,9 @@
 						</span>
 						</li>
 						<li class="fr bo_l">
+							<%
+								if(!friend.getId().equals(cUser.getId())) {
+							%>
 							<span> <!-- Btn -->
 								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
@@ -94,6 +97,9 @@
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
 								</div> <!-- Btn //-->
 							</span>
+							<%
+								}
+							%>
 						</li>
 					</ul>
 				</div>

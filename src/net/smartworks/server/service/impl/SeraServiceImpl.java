@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -1291,18 +1290,24 @@ public class SeraServiceImpl implements ISeraService {
 			if(finalUserExtends != null) {
 				for(SwoUserExtend swoUserExtend : finalUserExtends) {
 					SeraUserInfo member = new SeraUserInfo();
-					member.setId(swoUserExtend.getId());
+					String id = swoUserExtend.getId();
+					member.setId(id);
 					boolean isFriend = false;
 					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, null);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
-							if(swoUserExtend.getId().equals(seraFriend.getFriendId())) {
+							if(id.equals(seraFriend.getFriendId())) {
 								isFriend = true;
 								break;
 							}
 						}
 					}
 					member.setFriend(isFriend);
+					SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(currentUserId, id);
+					String goal = null;
+					if(seraUserDetail != null)
+						goal = seraUserDetail.getGoal();
+					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
@@ -1374,18 +1379,24 @@ public class SeraServiceImpl implements ISeraService {
 			if(finalUserExtends != null) {
 				for(SwoUserExtend swoUserExtend : finalUserExtends) {
 					SeraUserInfo member = new SeraUserInfo();
-					member.setId(swoUserExtend.getId());
+					String id = swoUserExtend.getId();
+					member.setId(id);
 					boolean isFriend = false;
 					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, null);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
-							if(swoUserExtend.getId().equals(seraFriend.getFriendId())) {
+							if(id.equals(seraFriend.getFriendId())) {
 								isFriend = true;
 								break;
 							}
 						}
 					}
 					member.setFriend(isFriend);
+					SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(currentUserId, id);
+					String goal = null;
+					if(seraUserDetail != null)
+						goal = seraUserDetail.getGoal();
+					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
@@ -3394,8 +3405,14 @@ public class SeraServiceImpl implements ISeraService {
 
 				if(finalUserExtends != null) {
 					for(SwoUserExtend swoUserExtend : finalUserExtends) {
-						UserInfo member = new SeraUserInfo();
-						member.setId(swoUserExtend.getId());
+						SeraUserInfo member = new SeraUserInfo();
+						String id = swoUserExtend.getId();
+						member.setId(id);
+						SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, id);
+						String goal = null;
+						if(seraUserDetail != null)
+							goal = seraUserDetail.getGoal();
+						member.setGoal(goal);
 						member.setName(swoUserExtend.getName());
 						member.setPosition(swoUserExtend.getPosition());
 						member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
