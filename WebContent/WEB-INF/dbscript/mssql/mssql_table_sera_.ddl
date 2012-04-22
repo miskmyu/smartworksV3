@@ -577,5 +577,5 @@ CREATE TABLE CourseReview (
 	createdtime datetime,
 	modifier varchar(50),
 	modifiedtime datetime,
-	primary key (id)
+	primary key(objId)
 );
