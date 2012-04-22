@@ -823,8 +823,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
 			userId=ktsoo@maninsoft.co.kr
 		}*/
+
+		User user = SmartUtil.getCurrentUser();
+		
 		String groupId = (String)requestBody.get("groupId");
-		String userId = (String)requestBody.get("userId");
+		String userId = user.getId();
 	
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		
