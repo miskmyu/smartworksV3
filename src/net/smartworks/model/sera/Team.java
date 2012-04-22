@@ -3,6 +3,7 @@ package net.smartworks.model.sera;
 import net.smartworks.model.BaseObject;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.service.ISmartWorks;
@@ -12,24 +13,25 @@ import net.smartworks.util.SmartUtil;
 
 public class Team extends BaseObject {
 
+	private String courseId;
 	private String desc;
-	private int duration;
 	private LocalDate start;
 	private LocalDate end;
 	private AccessPolicy accessPolicy;
-	private int length;
+	private int maxMembers;
+	private SeraUserInfo[] members;
 	
+	public String getCourseId() {
+		return courseId;
+	}
+	public void setCourseId(String courseId) {
+		this.courseId = courseId;
+	}
 	public String getDesc() {
 		return desc;
 	}
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-	public int getDuration() {
-		return duration;
-	}
-	public void setDuration(int duration) {
-		this.duration = duration;
 	}
 	public LocalDate getStart() {
 		return start;
@@ -49,11 +51,17 @@ public class Team extends BaseObject {
 	public void setAccessPolicy(AccessPolicy accessPolicy) {
 		this.accessPolicy = accessPolicy;
 	}
-	public int getLength() {
-		return length;
+	public int getMaxMembers() {
+		return maxMembers;
 	}
-	public void setLength(int length) {
-		this.length = length;
+	public void setMaxMembers(int maxMembers) {
+		this.maxMembers = maxMembers;
+	}
+	public SeraUserInfo[] getMembers() {
+		return members;
+	}
+	public void setMembers(SeraUserInfo[] members) {
+		this.members = members;
 	}
 	public Team(){
 		super();

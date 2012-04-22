@@ -824,7 +824,6 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				var friendPage = input.parents('.js_friend_page');
-				var othersFriendPage = input.parents('.js_others_friend_page');
 				if(!isEmpty(friendPage)){
 					friend.remove();
 					var count = friendCount.html();
@@ -832,10 +831,12 @@ $(function() {
 						count = parseInt(count)-1;
 						friendCount.html(count);
 					}
-				}else if(!isEmpty(othersFriendPage)){
+				}else{
 					input.hide().siblings().show();
 				}
 				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "친구끊기가 성공적으로 이루어 졌습니다.", function(){
+				});
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -1145,6 +1146,11 @@ $(function() {
 				});				
 			}
 		});
+		return false;
+	});
+
+	$('.js_toggle_course_setting_btn').live('click', function(e){
+		$(e.target).parent().next().toggle();
 		return false;
 	});
 

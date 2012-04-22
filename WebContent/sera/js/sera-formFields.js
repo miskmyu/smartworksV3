@@ -254,7 +254,8 @@ function loadSeraNoteFields() {
 			required: false
 		});
 		
-		gridRow.find('.form_label').hide();		
+		gridRow.find('.form_label').hide();
+		gridRow.find('.form_value').css({width:"100%"});
 	}
 };
 
