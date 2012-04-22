@@ -1,6 +1,7 @@
 package net.smartworks.model.sera;
 
 import net.smartworks.model.community.Group;
+import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.util.LocalDate;
@@ -113,6 +114,18 @@ public class Course extends Group {
 	}
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+	public boolean isMyRunningCourse(){
+		return this.getLeader().getId().equals(SmartUtil.getCurrentUser().getId());
+	}
+	public boolean isMyAttendingCourse(){
+		UserInfo[] members = this.getMembers();
+		User currentUser = SmartUtil.getCurrentUser();
+		if(SmartUtil.isBlankObject(members) || SmartUtil.isBlankObject(currentUser)) return false;
+		for(int i=0; i<members.length; i++)
+			if(members[i].getId().equals(currentUser.getId()))
+				return true;
+		return false;
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {

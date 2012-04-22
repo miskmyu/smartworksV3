@@ -20,7 +20,8 @@
 	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
 	String mentorName = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getName();
-	boolean myRunningCourse = (cUser.getId().equals(mentorId));
+	boolean myRunningCourse = course.isMyRunningCourse();
+	boolean myAttendingCourse = course.isMyAttendingCourse();
 	
 	session.setAttribute("course", course);
 	
@@ -80,9 +81,9 @@
 				<li class="current"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스알림</a></li>
-				<li><a href="" class="js_create_team">팀활동</a></li>
+				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_create_team">팀활동</a></li>
 				<li><a href="" class="js_course_general">코스개요</a></li>
-				<li><a href="" class="js_course_setting">코스설정</a></li>
+				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
 		<!-- Menu Dep1//-->

@@ -1200,7 +1200,6 @@ $(function() {
 			var courseSetting = input.parents('.js_course_setting_page');
 			var courseId = courseSetting.attr('courseId');
 			var leaveReason = courseSetting.find('textarea[name="txtaLeaveReason"]').attr('value');
-			console.log('textarea=', courseSetting.find('textarea[name="txtaLeaveReason"]'), ', text=', leaveReason);
 			var paramsJson = {};
 			paramsJson['groupId'] = courseId;
 			paramsJson['leaveReason'] = leaveReason;
@@ -1229,35 +1228,36 @@ $(function() {
 	});
 
 	$('.js_defective_report_btn').live('click', function(e){
-		smartPop.confirm('코스를 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
-			var input = $(e.target);
-			var courseSetting = input.parents('.js_course_setting_page');
-			var courseId = courseSetting.attr('courseId');
-			var leaveReason = courseSetting.find('textarea[name="txtaLeaveReason"]').attr('value');
-			console.log('textarea=', courseSetting.find('textarea[name="txtaLeaveReason"]'), ', text=', leaveReason);
-			var paramsJson = {};
-			paramsJson['groupId'] = courseId;
-			paramsJson['leaveReason'] = leaveReason;
-			console.log(JSON.stringify(paramsJson));
-			smartPop.progressCenter();				
-			$.ajax({
-				url : 'leave_group.sw',
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, "코스탈퇴가 성공적으로 이루어졌습니다!", function(){
-						document.location.href = "myPAGE.sw";											
-					});
-				},
-				error : function(e) {
-					smartPop.closeProgress();
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, "코스탈퇴에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
-					});				
-				}
-			});
+		var input = $(e.target);
+		var courseSetting = input.parents('.js_course_setting_page');
+		var courseId = courseSetting.attr('courseId');
+		var defectiveReport = courseSetting.find('textarea[name="txtaDefectiveReport"]').attr('value');
+		if(isEmpty(defectiveReport)){
+			smartPop.showInfo(smartPop.WARN, "코스신고 내용을 입력하시기 바랍니다.");
+			return false;
+		}
+		var paramsJson = {};
+		paramsJson['groupId'] = courseId;
+		paramsJson['defectiveReport'] = defectiveReport;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'defective_course_report.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFO, "코스신고가 성공적으로 이루어졌습니다!", function(){
+					document.location.href = "courseHome.sw?courseId=" + courseId;											
+				});
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "코스신고에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
 		});
 		return false;
 	});
