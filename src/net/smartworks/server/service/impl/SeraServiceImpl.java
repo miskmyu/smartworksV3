@@ -188,6 +188,7 @@ public class SeraServiceImpl implements ISeraService {
 			group.setId(swoGroup.getId());
 			group.setName(swoGroup.getName());
 			group.setDesc(swoGroup.getDescription());
+			group.setCreatedDate(new LocalDate(swoGroup.getCreationDate().getTime()));
 			group.setPublic(swoGroup.equals("O") ? true : false);
 			//group.setContinue(swoGroup.getStatus().equals("C") ? true : false);
 			User leader = ModelConverter.getUserByUserId(swoGroup.getGroupLeader());
