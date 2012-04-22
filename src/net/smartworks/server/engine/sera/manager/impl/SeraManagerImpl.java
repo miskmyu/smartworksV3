@@ -443,8 +443,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		}
 		return query;
 	}
-	
-	
+
 	@Override
 	public long getFriendSize(String userId, SeraFriendCond friendCond) throws SeraException {
 		try {
@@ -478,6 +477,68 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			throw new SeraException(e);
 		}
 	}
+
+	@Override
+	public SeraFriend[] getMyFriends(String userId, SeraFriendCond cond) throws SeraException {
+
+		String friendId = userId;
+		String lastFriendName = null;
+		int pageSize = -1;
+		int pageNo = -1;
+
+		if(cond != null) {
+			lastFriendName = cond.getLastFriendName();
+			pageSize = cond.getPageSize();
+			pageNo = cond.getPageNo();
+		}
+		StringBuffer queryBuffer = new StringBuffer();
+
+		queryBuffer.append(" select *  ");
+		queryBuffer.append(" from  ");
+		queryBuffer.append(" ( ");
+		queryBuffer.append(" 	select requestId as friendId ");
+		queryBuffer.append(" 		, requestName as friendName ");
+		queryBuffer.append(" 		, acceptStatus ");
+		queryBuffer.append(" 	from friends ");
+		queryBuffer.append(" 	where receiveId =:friendId ");
+		queryBuffer.append(" 	union ");
+		queryBuffer.append(" 	select receiveId as friendId ");
+		queryBuffer.append(" 		, receiveName as friendName ");
+		queryBuffer.append(" 		, acceptStatus ");
+		queryBuffer.append(" 	from friends ");
+		queryBuffer.append(" 	where requestId =:friendId ");
+		queryBuffer.append(" ) friendInfo ");
+		queryBuffer.append(" where friendInfo.acceptStatus = 1 ");
+		if(lastFriendName != null)
+			queryBuffer.append(" and friendInfo.friendName > '" + lastFriendName +"'");
+		queryBuffer.append(" order by friendInfo.friendName asc ");
+
+		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
+		if (pageSize > 0 || pageNo >= 0) {
+			query.setFirstResult(pageNo * pageSize);
+			query.setMaxResults(pageSize);
+		}
+
+		query.setString("friendId", friendId);
+
+		List list = query.list();
+		if (list == null || list.isEmpty())
+			return null;
+		List objList = new ArrayList();
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			Object[] fields = (Object[]) itr.next();
+			SeraFriend obj = new SeraFriend();
+			int j = 0;
+			obj.setFriendId((String)fields[j++]);    
+			obj.setFriendName((String)fields[j++]);
+			objList.add(obj);
+		}
+		list = objList;
+		SeraFriend[] objs = new SeraFriend[list.size()];
+		list.toArray(objs);
+		return objs;
+	}
+
 	@Override
 	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException {
 		try {

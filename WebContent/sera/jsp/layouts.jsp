@@ -140,6 +140,7 @@
 	<script type="text/javascript" src="js/sw/sw-validate.js"></script>
 	<script type="text/javascript" src="js/sw/sw-flash.js"></script>
 	<script type="text/javascript" src="sera/js/sera-nav.js"></script>
+	<script type="text/javascript" src="sera/js/sera-more.js"></script>
 	
 	<script type="text/javascript" src="js/sw/sw-faye.js"></script>
 	<script type="text/javascript" src="js/sw/sw-chat.js"></script>

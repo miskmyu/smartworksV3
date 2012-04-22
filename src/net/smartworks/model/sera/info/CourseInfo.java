@@ -51,7 +51,7 @@ public class CourseInfo extends GroupInfo{
 		return getDesc();
 	}	
 	public int getTargetPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return 0;
 		int point = (int)LocalDate.getDiffDate(openDate, closeDate)+1;
 		return (point<0) ? 0 : point;
 	}
@@ -59,6 +59,10 @@ public class CourseInfo extends GroupInfo{
 		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
 		int point = (int)LocalDate.getDiffDate(openDate, new LocalDate())+1;
 		return (point<0) ? getTargetPoint() : point;
+	}
+	public double getAchievedRatio(){
+		if(getTargetPoint()==0 || getAchievedPoint()==0) return 0;
+		return (getAchievedPoint() * 100 / getTargetPoint());
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {

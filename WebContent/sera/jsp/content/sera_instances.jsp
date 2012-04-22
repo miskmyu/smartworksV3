@@ -116,21 +116,19 @@
 								
 								case Instance.TYPE_BOARD:
 									BoardInstanceInfo board = (BoardInstanceInfo)seraInstance;
-								%>								
-									<dt class="name">
-										<%
-										if(!SmartUtil.isBlankObject(course)){
-										%>
+									if(!SmartUtil.isBlankObject(course)){
+									%>
+										<dt class="name fl">
 											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
-										<%
-										}
-										if(board.getOwner().getId().equals(cUser.getId())) {
-										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
-										<%
-										}
-										%>
-									</dt>
+										</dt>
+									<%
+									}
+									if(board.getOwner().getId().equals(cUser.getId())) {
+									%>
+										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text"><%=board.getSubject() %></div>
 										<div class="text"><%=board.getBriefContent() %></div>
@@ -139,24 +137,22 @@
 									break;
 								case Instance.TYPE_EVENT:
 									EventInstanceInfo event = (EventInstanceInfo)seraInstance;
-								%>								
-									<dt class="name">
-										<%
-										if(!SmartUtil.isBlankObject(course)){
-										%>
+									if(!SmartUtil.isBlankObject(course)){
+									%>
+										<dt class="name">
 											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
-										<%
-										}
-										if(event.getOwner().getId().equals(cUser.getId())) {
-										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
-										<%
-										}
-										%>
-									</dt>
+										</dt>
+									<%
+									}
+									if(event.getOwner().getId().equals(cUser.getId())) {
+									%>
+										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text">
-											<div class="name">[이벤트]<%=event.getSubject() %></div>
+											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
 												<span>이벤트 기간 : <%=event.getStart().toLocalString() %></span>
 												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
@@ -170,21 +166,19 @@
 									break;
 								case Instance.TYPE_SERA_NOTE:
 									NoteInstanceInfo seraNote = (NoteInstanceInfo)seraInstance;
-								%>								
-									<dt class="name">
-										<%
-										if(!SmartUtil.isBlankObject(course)){
-										%>
+									if(!SmartUtil.isBlankObject(course)){
+									%>
+										<dt class="name fl">
 											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
-										<%
-										}
-										if(seraNote.getOwner().getId().equals(cUser.getId())) {
-										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
-										<%
-										}
-										%>
-									</dt>
+										</dt>
+									<%
+									}
+									if(seraNote.getOwner().getId().equals(cUser.getId())) {
+									%>
+										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text"><%=seraNote.getContent() %></div>
 										<!-- URL information -->
@@ -242,21 +236,19 @@
 									break;
 								case Instance.TYPE_SERA_MISSION_REPORT:
 									MissionReportInstanceInfo seraReport = (MissionReportInstanceInfo)seraInstance;
-								%>								
-									<dt class="name">
-										<%
-										if(!SmartUtil.isBlankObject(course)){
-										%>
+									if(!SmartUtil.isBlankObject(course)){
+									%>
+										<dt class="name fl">
 											[코스. <span class=""><%=course.getName() %></span>] <span><%if(!SmartUtil.isBlankObject(mission)){ %>[미션<%=mission.getIndex()+1 %>. <%=mission.getSubject() %>]<%} %></span>
-										<%
-										}
-										if(seraReport.getOwner().getId().equals(cUser.getId())) {
-										%>
-											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
-										<%
-										}
-										%>
-									</dt>
+										</dt>
+									<%
+									}
+									if(seraReport.getOwner().getId().equals(cUser.getId())) {
+									%>
+										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+									<%
+									}
+									%>
 									<dd>
 										<div class="text"><%=seraReport.getContent() %></div>
 										<!-- URL information -->

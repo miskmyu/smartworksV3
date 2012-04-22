@@ -131,7 +131,7 @@
 a.b_prev:hover { background-position:0 -535px}
 .b_next {background: url("../images/icon.png") no-repeat scroll -30px -520px; width:13px; height:13px; display:block}
 a.b_next:hover { background-position:-30px -535px}
-.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px}
+.icon_mission {background: url("../images/icon.png") no-repeat scroll 0 -560px; height:11px; display:block; float:left; padding:0 0 0 14px; margin:0 0 0 3px}
 .icon_mission.current { background-position:0 -579px}
 .icon_reserve {background: url("../images/icon.png") no-repeat scroll 0 -596px; height:11px; display:block; float:left; padding:0 0 0 14px}
 .icon_Indication {background: url("../images/icon.png") no-repeat scroll 0 -157px; width:8px; height:12px; display:block; font-size:0; float:left; margin-left:5px; position:relative}
@@ -311,7 +311,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_mn_more a:hover { background-position:-221px -724px}
 
 /* Panel Section */
-.panel_section, .course_section, .content_section { overflow:hidden; clear:both}
+.panel_section, .course_section, .content_section {clear:both}
 .panel_section .header {border-bottom:5px solid #559fcc; height:21px} /* Mypage Header */
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
@@ -340,7 +340,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_block .content h3 { font-size:12px; font-weight:bold}
 .panel_block .name {font-weight:bold; color:#006699}
 .panel_block .content .name { color:#000000; font-size:14px} /* Title Name */
-.panel_block .text { float:left; margin-right:10px} /* content txt */
+.panel_block .text { float:left; margin-right:10px; width: 96%} /* content txt */
 .panel_block .notes { width:100%} /* ÂÊÁö */
 .panel_block .thum_image {width:200px; float:right}
 .panel_block .thum_image img, .panel_block .thum_image_size {width:100%}
@@ -353,8 +353,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Content Mission */
 .panel_block .content_mission dt { background-color:#f0f0f0; padding:5px 5px 0 5px; line-height:23px}
 .panel_block .content_mission dd { padding:5px 10px; overflow:hidden}
-.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
-.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:19px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
+.panel_block .content_mission .comment_txt textarea { margin:2px; width:98.5% !important}
+.tit_mission_l {background: url("../images/mission_tit_l.gif") no-repeat scroll 0 0; height:20px !important; float:left; cursor:pointer}
+.tit_mission_r {background: url("../images/mission_tit_r.gif") no-repeat scroll 100% 0; height:209px !important; padding:0 10px 0 30px; line-height:21px; font-size:12px; color:#FFF; font-weight: bold}
 .icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
 .icon_close_area div { padding:3px 10px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
@@ -376,7 +377,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .util span {color:#dddddd}
 .util span a {color:#608eba !important}
 .util span a:hover {text-decoration:underline}
-.util .icon_mission { padding:0; margin-left:3px}
+.util .icon_mission { padding:0; margin-left:3px; width:10px}
 .date {font-size:11px; color:#888888 !important}
 
 
@@ -403,11 +404,13 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Aside */
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
 .aside_block .header { font-size:14px; color:#333333; line-height:27px; font-weight:bold}
-.aside_block .content { clear:both; padding:10px 0 0 5px; color:#666666; line-height:18px}
+.aside_block .content { clear:both; padding:10px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
 .aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
+.aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}
+.aside_block .content .ad_text { float:right; width:144px; line-height:15px; height:73px; overflow:hidden}
 .num_cus { color:#ed1c24}
 
 /* Badge */
@@ -419,9 +422,6 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Friend */
 .friend_df {background: url("../images/friend_df.gif") no-repeat scroll 0 0; width:41px; height:41px; display:inline-block}
-/* Aside AD */
-.aside_ad {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
-.aside_ad div { background-color:#cccccc; height:150px; text-align:center; vertical-align:middle}
 
 /* Search Section */
 .srch_section {float:right; margin:15px 10px 5px; width:238px}
@@ -439,7 +439,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_df li div { border-bottom:1px solid #cccccc; height:34px; padding-bottom:7px; margin-bottom:10px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
-.course_info { width:193px; float:right; margin-top:10px; line-height:18px}
+.course_info { width:193px; float:right; margin-top:10px; line-height:20px; height:108px; overflow:hidden}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -764px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
 .course_menu_d1 { float: left; margin:0 0 0 22px}
@@ -537,7 +537,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .category_box .detail a { color: #666666;}
 .category_box .detail a:hover {color: #999999;}
 .category_box .gauge_box { clear: both; height: 10px; width: 220px;}
-.category_box .gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 170px;}
+.category_box .gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 170px; overflow:hidden}
 .category_box .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px;}
 .category_box .gauge_box .process {float: right; height: 12px; margin-left: 5px}
 .category_box.end { margin:0 0 20px 0 !important; float:right !important}

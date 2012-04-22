@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +68,7 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.media.MediaFileSource;
@@ -501,9 +502,14 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
         } catch (IOException ex) {
             throw new DocFileException(ex.getMessage());
         }
-
+        String agentInfo = request.getHeader("User-Agent");
         try {
-            is = request.getInputStream();
+    		if(agentInfo.indexOf("MSIE") > 0) { //IE
+    			MultipartFile multipartFile = formFile.getMultipartFile();
+    			is = multipartFile.getInputStream();
+    		} else {
+                is = request.getInputStream();
+    		}
             fos = new FileOutputStream(new File(formFile.getFilePath()));
             IOUtils.copy(is, fos);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -723,8 +729,6 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	@Override
 	public void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
 		IFileModel formFile = new HbFileModel();
-		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
-		formFile.setId(fileId);
 
 		//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
 		this.setFileDirectory(OSValidator.getImageDirectory());
@@ -746,35 +750,55 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			companyId = user.getCompanyId();
 		}
 
+		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
 		String fileDivision = "Temps";
 		File repository = this.getFileRepository(companyId, fileDivision);
 		String filePath = "";
 		String imagerServerPath = "";
 		String extension = "";
-		if (formFile != null) {
-			String fileName = "";
+
+
+		String fileName = "";
+		String agentInfo = request.getHeader("User-Agent");
+		if(agentInfo.indexOf("MSIE") > 0) { //IE
+			List<IFileModel> docList = new ArrayList<IFileModel>();
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			Map<String, MultipartFile> filesMap = multipartRequest.getFileMap();
+			for(String key : filesMap.keySet()) {
+	        	MultipartFile mf = filesMap.get(key);
+	        	IFileModel doc = new HbFileModel();
+	        	doc.setMultipartFile(mf);
+	        	docList.add(doc);
+			}
+			formFile = docList.get(0);
+			MultipartFile multipartFile = formFile.getMultipartFile();
+			fileName = multipartFile.getOriginalFilename();
+			formFile.setFileSize(multipartFile.getSize());
+			formFile.setMultipartFile(multipartFile);
+		} else {
 			try {
 				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
+				formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if (fileName.indexOf(File.separator) > 1)
-				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-			formFile.setFileName(fileName);
-			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
-			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
-
-			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
-			formFile.setImageServerPath(imagerServerPath);
-
-			if (extension != null) {
-				filePath = filePath + "." + extension;
-			}
-			formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
-
-			formFile.setFilePath(filePath);
-
 		}
+
+		if (fileName.indexOf(File.separator) > 1)
+			fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
+		formFile.setFileName(fileName);
+		extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+		filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
+
+		imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+		formFile.setImageServerPath(imagerServerPath);
+
+		if (extension != null) {
+			filePath = filePath + "." + extension;
+		}
+
+		formFile.setFilePath(filePath);
+		formFile.setId(fileId);
 
 		this.writeAjaxFile(request, response, formFile);
 
@@ -936,7 +960,6 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			} catch (Exception e) {
 				throw new DocFileException("Failed to copy file [" + tempFile + "]!");
 			}
-
 
 			// 그룹 아이디가 넘어 오지 않았다면 그룹아이디 설정
 			if (groupId == null)

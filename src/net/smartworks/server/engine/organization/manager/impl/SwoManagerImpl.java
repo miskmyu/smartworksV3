@@ -2231,15 +2231,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		}
 		buff.append(", 'admin@maninsoft.co.kr', 'PROCESS')");
 		buff.append(" order by user.name asc");
-		
-		
 		Query query = this.getSession().createQuery(buff.toString());
-		
+
 		for (int i=0; i<ids.length; i++) {
 			query.setString("userIn"+i, ids[i]);
 		}
 		List list = query.list();
-		
+
 		if (list == null || list.isEmpty())
 			return null;
 		

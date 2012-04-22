@@ -118,10 +118,10 @@
 			<div class="sw_error_message tl" style="color: red"></div>
 
 			<!-- 우측 버튼 영역 -->
-			<div class="attach_file js_note_buttons">
+			<div class="attach_file js_note_buttons" style="margin:5px">
 				<ul>
 					<li>
-						<span class="insert_text">500</span>
+						<span class="insert_text">1000</span>
 					</li>
 					<li class="ml5">
 						<select name="selAccessLevel" >

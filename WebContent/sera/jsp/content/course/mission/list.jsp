@@ -29,6 +29,7 @@
 	String nextMonthStr = LocalDate.convertLocalMonthWithDiffMonth(thisDate, 1).toLocalDateSimpleString();
 %>
 <!-- Nav SNB -->
+<div class="t_gray mb5">* 미션 내용을 등록하려면 캘린더에서 일자를 클릭하여 등록합니다. 수정은 수행창에서 수정가능합니다. </div>
 <div id="panel_section" class="js_mission_list_page" prevMonth="<%=prevMonthStr %>" nextMonth="<%=nextMonthStr%>" courseId="<%=courseId%>" startDate="" endDate="">
 	<table>
 		<tr class="tit_bg" style="height:2px"></tr>
@@ -133,11 +134,7 @@ $(document).ready(function(){
 		    '': 'H(:mm)'
 		},
  		dayClick: function(date, allDay, jsEvent, view){
- 			var toDate = null;
- 			console.log('hours=', date.getHours());
- 			if(date.getHours()>0) toDate = new Date(date.getTime() + 60*60*1000);
-			loadNewEventFields(date, toDate);
-			$('div.js_new_event_fields .form_value:first input').click();			
+			$('.js_create_mission > a').attr('startDate', date.format('yyyy.mm.dd')).click();			
 		},
 		
 		todayClick: function(event, jsEvent, vie){
@@ -151,7 +148,7 @@ $(document).ready(function(){
 	    	var tokens = titleText.split('&amp;');
 	    	var titleHtml = (tokens.length==3) ? '<a href="" class="js_select_mission" missionId="' + tokens[2] + '"><span class="' + tokens[0] + '" title="' + tokens[1] + '">' +  tokens[1] + '</span></a>' : token[0]; 
 	    	title.html(titleHtml);
-	    	var eventTime = $(element).find('.fc-event-time').html();
+	    	var eventTime = $(element).find('.fc-event-time').addClass("fl").html();
 	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
 	    },
 		firstDay: 1,
