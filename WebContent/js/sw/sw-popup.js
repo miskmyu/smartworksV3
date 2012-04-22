@@ -412,7 +412,6 @@ smartPop = {
 	},
 
 	selectWorkItem : function(formId, target){
-		console.log('formId=', formId, ', target=', target);
 		if(isEmpty(formId) || isEmpty(target)) return;
 		$.get("pop_select_work_item.sw", {formId: formId}, function(data){
 			$(data).modal({
@@ -572,6 +571,100 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
+				}
+			});
+		});
+	},	
+
+
+	selectCourseMember : function(communityItems, target, width, isMultiUsers, courseId){
+		target.html('');
+		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
+		$.get("pop_select_course_member.sw?multiUsers="+isMultiUsers + "&courseId=" + courseId, function(data){
+			$(data).modal({
+				appendTo: target,
+				opacity: 0,
+				autoPosition: false,
+				fixed: false,
+				overlayCss: {backgroundColor:"#000"},
+				containerCss:{
+					width: conWidth
+				},
+				overlayClose: true,
+				onShow: function(dialog){
+
+					var selectionProc = function(comId, comName){
+						var userField = target.parents('.js_type_userField:first');
+						var inputTarget = userField.find('input.js_auto_complete:first');
+						if(inputTarget.parents('.sw_required').hasClass('sw_error')){
+							inputTarget.parents('.sw_required').removeClass('sw_error');
+							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
+						}
+
+						if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
+							communityItems.remove();
+						var isSameId = false;
+						for(var i=0; i<communityItems.length; i++){
+							var oldComId = $(communityItems[i]).attr('comId');
+							if(oldComId !=null && oldComId === comId){
+								isSameId = true;
+								break;
+							}
+						}
+						if(!isSameId){
+							$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+									+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+						}
+						inputTarget.focus();
+						userField.find('.js_community_names').change();
+					};
+					
+					$('a.js_pop_select_user').die('click');
+					$('a.js_pop_select_users').die('click');
+					if(isEmpty(isMultiUsers) || isMultiUsers!== 'true'){
+						$('a.js_pop_select_user').live('click', function(e){
+							var input = $(e.target);
+							var comId = input.attr('userId');
+							var comName = input.text();
+							selectionProc(comId, comName);
+							smartPop.close();
+							target.html('');
+							return false;
+						});
+						$('a.js_pop_select_user').focus();
+						$('a.js_pop_select_user').keypress(function (e) {
+					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+					            $('a.js_pop_select_user').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
+					}else{
+						$('a.js_pop_select_users').live('click', function(e){
+							var selections = $('form[name="frmUserSelections"]').find('input.js_checkbox:checked');
+							if(isEmpty(selections)) return false;
+							
+							for(var i=0; i<selections.length; i++){
+								var selection = $(selections[i]);
+								var comId = selection.attr('value');
+								var comName = selection.attr("comName");
+								selectionProc(comId, comName);
+							}
+							smartPop.close();
+							target.html('');
+							return false;
+						});
+						$('a.js_pop_select_users').focus();
+						$('a.js_pop_select_users').keypress(function (e) {
+					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+					            $('a.js_pop_select_users').click();
+					            return false;
+					        } else {
+					            return true;
+					        }
+					    });
+					}
 				}
 			});
 		});

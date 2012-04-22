@@ -884,4 +884,167 @@ $(function() {
 		return false;
 	});
 	
+	$('a.js_coursememberpicker_button').live('click', function(e) {
+		var input = $(e.target).parents('.js_coursememberpicker_button');
+		var userField = $(e.target).parents('.js_type_userField:first');
+		var communityItems = userField.find('.js_community_item');
+		var target = userField.find('.js_community_popup:first');
+		var width = userField.find('.form_value').find('div:first').width();
+		var isMultiUsers = userField.attr('multiUsers');
+		var courseId = input.attr('courseId');
+		smartPop.selectCourseMember(communityItems, target, width, isMultiUsers, courseId);
+		return false;
+	});
+
+	$('.js_more_mentee_informs_btn').live('click', function(e) {
+		var input = $(e.target).parents('.js_more_mentee_informs_btn');
+		var requestType = input.attr('requestType');
+		var courseId = input.attr('courseId');
+		var lastId = input.attr('lastId');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreMenteeInforms.sw",
+			data : {
+				type: requestType,
+				courseId: courseId,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				if(requestType==="1")
+					input.parents('.js_join_requesters_list').append(data);
+				else if(requestType==="2")
+					input.parents('.js_course_mentees_list').append(data);
+				if(requestType==="3")
+					input.parents('.js_course_non_mentees_list').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_approve_join_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_join_requester_item');
+		var courseId = input.attr('courseId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = courseId;
+		paramsJson['userId'] = userId;
+		paramsJson['approval'] = true;
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'approval_join_group.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "가입승인 수락이 정상적으로 이루어 졌습니다.", function(){
+				});				
+				input.remove();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "가입승인 수락에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_reject_join_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_join_requester_item');
+		var courseId = input.attr('courseId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = courseId;
+		paramsJson['userId'] = userId;
+		paramsJson['approval'] = false;
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'approval_join_group.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "가입승인 거절이 정상적으로 이루어 졌습니다.", function(){
+				});				
+				input.remove();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "가입승인 거절에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_pushout_mentee_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_mentee_item');
+		var courseId = input.attr('courseId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = courseId;
+		paramsJson['userId'] = userId;
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'pushout_group_member.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "멘티강퇴가 정상적으로 이루어 졌습니다.", function(){
+				});				
+				input.remove();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "멘티강퇴에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_invite_mentee_btn').live('click', function(e){
+		var input = $(e.target).parents('.js_non_mentee_item');
+		var courseId = input.attr('courseId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = courseId;
+		var users = new Array();
+		users.push({userId: userId});
+		paramsJson['users'] = users;
+		
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'invite_group_members.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFORM, "멘티초대가 정상적으로 이루어 졌습니다.", function(){
+				});				
+				input.remove();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "멘티초대에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
 });

@@ -188,6 +188,7 @@ function loadCreateTeamFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamMembersField.html(gridRow);
+		var courseId = teamMembersField.attr('courseId');
 
 		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 			container: gridRow,
@@ -195,6 +196,7 @@ function loadCreateTeamFields() {
 			fieldName: "team members invite",
 			columns: 1,
 			multiUsers: true,
+			courseId: courseId,
 			required: true
 		});
 		gridRow.find('.form_col').css({width:"491px", padding:"0px"});

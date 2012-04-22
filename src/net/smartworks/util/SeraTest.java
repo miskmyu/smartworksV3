@@ -2,13 +2,11 @@ package net.smartworks.util;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.model.community.info.WorkSpaceInfo;
-import net.smartworks.model.instance.WorkInstance;
-import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
@@ -19,24 +17,6 @@ import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
-import net.smartworks.model.work.FormField;
-import net.smartworks.model.work.SmartWork;
-import net.smartworks.model.work.info.SmartWorkInfo;
-import net.smartworks.model.work.info.WorkCategoryInfo;
-import net.smartworks.model.work.info.WorkInfo;
-import net.smartworks.server.engine.common.manager.IManager;
-import net.smartworks.server.engine.common.model.Order;
-import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.common.util.StringUtil;
-import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
-import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
-import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
-import net.smartworks.server.engine.infowork.domain.model.SwdRecordExtend;
-import net.smartworks.server.engine.infowork.form.model.SwfForm;
-import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
-import net.smartworks.server.service.util.ModelConverter;
 
 public class SeraTest {
 
@@ -174,10 +154,23 @@ public class SeraTest {
 		friendList.setTotalFriends(51);
 		return friendList;		
 	}
-	
-	public static SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
-		return SeraTest.getFriendRequestsForMe(null, -1);
+
+	public static MenteeInformList getCourseMenteeInformations(String courseId, int maxList) throws Exception{
+		MenteeInformList menteeInformList = new MenteeInformList();
+		menteeInformList.setJoinRequesters(SeraTest.getFriendRequestsForMe(null, -1));
+		menteeInformList.setMentees(SeraTest.getFriendRequestsForMe(null, -1));
+		menteeInformList.setNonMentees(SeraTest.getFriendRequestsForMe(null, -1));
+		menteeInformList.setTotalJoinRequesters(31);
+		menteeInformList.setTotalMentees(43);
+		menteeInformList.setTotalNonMentees(57);
+		return menteeInformList;		
 	}
+	
+	
+	public static SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception{
+		return (SeraTest.getFriendRequestsForMe(null, -1));
+	}
+
 	public static InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		InstanceInfo[] boards = SmartTest.getBoardInstances();
 		InstanceInfo[] events = SmartTest.getEventInstances();
@@ -271,7 +264,7 @@ public class SeraTest {
 	public static SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception{
 		SeraUserInfo seraUser1 = new SeraUserInfo("ktsoo@maninsoft.co.kr", "김 태수");
 		seraUser1.setGoal("개인 달성 목표입니다.");
-		return new SeraUserInfo[]{seraUser1};
+		return new SeraUserInfo[]{seraUser1, seraUser1, seraUser1, seraUser1, seraUser1, seraUser1 };
 	}
 
 }

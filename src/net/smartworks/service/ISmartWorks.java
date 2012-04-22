@@ -45,6 +45,7 @@ import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
@@ -195,6 +196,8 @@ public interface ISmartWorks {
 	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
+	
+	public abstract UserInfo[] getCommunityMembers(String communityId) throws Exception;
 	
 	/*
 	 * 현재 스마트웍스에 접속되어 있는 유저들에 대한 정보를 리턴한다 (채팅가능 유져)
@@ -486,6 +489,12 @@ public interface ISmartWorks {
 	
 	public abstract void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
@@ -501,4 +510,9 @@ public interface ISmartWorks {
 	public abstract String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception;
+	
 }

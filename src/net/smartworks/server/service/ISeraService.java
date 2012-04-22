@@ -4,11 +4,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
@@ -77,4 +79,9 @@ public interface ISeraService {
 	public abstract String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract MenteeInformList getCourseMenteeInformations(String courseId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception;
+	
 }
