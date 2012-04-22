@@ -920,7 +920,14 @@ public class SmartWorks implements ISmartWorks {
 	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeCommentOnInstance(requestBody, request);
 	}
-
+	@Override
+	public String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeMission(requestBody, request);
+	}
+	@Override
+	public String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.modifyMission(requestBody, request);
+	}
 	@Override
 	public String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewMission(requestBody, request);
