@@ -1965,6 +1965,7 @@ public class SeraServiceImpl implements ISeraService {
 							if(swdDataField.getId().equals("0")) {
 								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
 							} else if(swdDataField.getId().equals("1")) {
+								boardInstanceInfo.setContent(value);
 								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
 							}
 						}
@@ -2084,6 +2085,7 @@ public class SeraServiceImpl implements ISeraService {
 							eventInstanceInfo.setSubject(value);
 						} else if(swdDataField.getId().equals("6")) {
 							eventInstanceInfo.setContent(CommonUtil.toNotNull(value));
+							eventInstanceInfo.setBriefContent(StringUtil.subString(CommonUtil.toNotNull(value), 0, 40, "..."));
 						} else if(swdDataField.getId().equals("1")) {
 							LocalDate start = LocalDate.convertGMTStringToLocalDate(value);
 							eventInstanceInfo.setStart(start);
@@ -2774,6 +2776,7 @@ public class SeraServiceImpl implements ISeraService {
 						
 						if(swdDataField.getId().equals(SeraConstant.NOTE_CONTENTFIELDID)) {
 							noteInstanceInfo.setContent(value);
+							noteInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.NOTE_IMAGEGROUPIDFIELDID)) {
 							
 							List<IFileModel> fileList = docMgr.findFileGroup(value);
@@ -2935,6 +2938,7 @@ public class SeraServiceImpl implements ISeraService {
 						
 						if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_CONTENTFIELDID)) {
 							missionReportInstanceInfo.setContent(value);
+							missionReportInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_IMAGEGROUPIDFIELDID)) {
 							
 							List<IFileModel> fileList = docMgr.findFileGroup(value);
