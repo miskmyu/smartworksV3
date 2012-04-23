@@ -618,6 +618,7 @@ $(function() {
 			input.addClass('full').prevAll().addClass('full').removeClass('half');
 			input.nextAll().removeClass('full').removeClass('half');
 		}
+		input.parents('.js_return_on_course_review').find('textarea[name="txtaReviewContent"]').focus();
 		return false;
 	});
 	
@@ -1302,6 +1303,17 @@ $(function() {
 		seraInstanceItem.find('.js_brief_content').hide().next().show();
 		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
 		return false;
+	});
+	
+	$('textarea.js_sera_note_content').live('keyup', function(e){
+		if(e.keyCode>=9 && e.keyCode<=45) return;
+		var input = $(e.target);
+		var content = input.attr('value');
+		var iLength =  getByteLength(content);
+		if(iLength>500) return false;
+		
+		var seraNoteLength = input.parents('.js_sera_note_page').find('.js_note_content_length');
+		seraNoteLength.html(500-iLength);
 	});
 
 });

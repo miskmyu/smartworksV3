@@ -11,7 +11,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
-	Course course = (Course)session.getAttribute("course");
+	Course course = null;// (Course)session.getAttribute("course");
 	if(SmartUtil.isBlankObject(course) || !course.getId().equals(courseId)) course = smartWorks.getCourseById(courseId);
 	
 	if(!SmartUtil.isBlankObject(course.getTeam())){

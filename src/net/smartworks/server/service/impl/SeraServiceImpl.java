@@ -131,6 +131,38 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
+	public void addMemberByCourse(String courseId, boolean isAdd) throws Exception {
+		try {
+			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+
+			if(isAdd)
+				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
+			else
+				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
+
+			getSeraManager().setCourseDetail(courseDetail);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addContentByCourse(String courseId, boolean isAdd) throws Exception {
+		try {
+			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+
+			if(isAdd)
+				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
+			else
+				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
+
+			getSeraManager().setCourseDetail(courseDetail);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();

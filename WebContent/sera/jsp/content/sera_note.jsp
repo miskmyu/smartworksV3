@@ -74,7 +74,7 @@
 <div class="js_sera_note_page" spaceType="<%=spaceType%>" spaceId="<%=spaceId%>" teamId="<%=teamId%>">
 	<form name="frmCreateSeraNote" class="js_validation_required">	
 		<div class="comment_txt">
-			<textarea name="txtNoteContent" class="required" rows="5" placeholder="남기고 싶은 이야기를 적어 주세요!"></textarea>
+			<textarea name="txtNoteContent" class="required js_sera_note_content" rows="5" placeholder="남기고 싶은 이야기를 적어 주세요!"></textarea>
 		</div>
 	
 		<div class="cb mt6">
@@ -121,7 +121,7 @@
 			<div class="attach_file js_note_buttons">
 				<ul>
 					<li>
-						<span class="insert_text">500</span>
+						<span class="insert_text js_note_content_length">500</span>
 					</li>
 					<li class="ml5">
 						<select name="selAccessLevel" >
