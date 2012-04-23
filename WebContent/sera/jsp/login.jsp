@@ -43,7 +43,7 @@
 		};
 	</script>
 
-<body>
+<body onload="window.open(this."../html/p_system.jsp",'',"scrollbars=no, width=560px, height="600px")>
 	<div id="wrap" class="main_bg">
 		<div id="sera_header_main">
 			<!-- GNB -->
