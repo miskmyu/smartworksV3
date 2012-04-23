@@ -254,3 +254,7 @@ function getByteLength(s){
 	}
 	return len;
 };
+//
+//function get_hostname_from_url(url) {
+//    return url.match(/:\/\/(.[^/]+)/)[1];
+//};

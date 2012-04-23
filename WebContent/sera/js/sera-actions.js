@@ -1307,15 +1307,22 @@ $(function() {
 		return false;
 	});
 	
-	$('textarea.js_sera_note_content').live('keyup', function(e){
-		if(e.keyCode>=9 && e.keyCode<=45) return;
+	var keyProcess = function(e, maxCount, countTarget){
 		var input = $(e.target);
-		var content = input.attr('value');
-		var iLength =  getByteLength(content);
-		if(iLength>500) return false;
-		
-		var seraNoteLength = input.parents('.js_sera_note_page').find('.js_note_content_length');
-		seraNoteLength.html(500-iLength);
+	    var tval = input.val(),
+	        tlength = getByteLength(tval),
+	        set = maxCount,
+	        remain = parseInt(set - tlength);
+	    countTarget.text(remain);
+	    if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
+	        input.val((tval).substring(0, tlength - 1));
+	    }
+	};
+	$('textarea.js_sera_note_content').keypress(function(e) {
+		return keyProcess(500, e, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+	});
+	$('textarea.js_sera_note_content').keyup(function(e) {
+		return keyProcess(500, e, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 
 });
