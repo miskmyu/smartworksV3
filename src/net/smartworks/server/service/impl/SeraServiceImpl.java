@@ -3920,6 +3920,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoUser.setLocale("ko");
 		swoUser.setTimeZone("Asia/Seoul");
 		swoUser.setPicture(txtUserProfilePicture);
+		swoUser.setNickName(txtNickName);
 		
 		swoMgr.setUser(txtUserId, swoUser, IManager.LEVEL_ALL);
 		
