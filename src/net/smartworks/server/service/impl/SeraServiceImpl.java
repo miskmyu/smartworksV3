@@ -39,6 +39,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -1388,10 +1389,10 @@ public class SeraServiceImpl implements ISeraService {
 		
 		MentorDetail mentorDetail = new MentorDetail();
 		mentorDetail.setMentorId(mentorUserId);
-		mentorDetail.setBorn("born");
-		mentorDetail.setHomeTown("homeTown");
-		mentorDetail.setLiving("living");
-		mentorDetail.setFamily("family");
+		mentorDetail.setBorn(null);
+		mentorDetail.setHomeTown(null);
+		mentorDetail.setLiving(null);
+		mentorDetail.setFamily(null);
 		mentorDetail.setEducations(txtaMentorEducations);
 		mentorDetail.setWorks(txtaMentorWorks);
 		mentorDetail.setMentorHistory(txtaMentorHistory);
@@ -4699,6 +4700,16 @@ public class SeraServiceImpl implements ISeraService {
 		//SwManagerFactory.getInstance().getSwdManager().removeRecord(user.getId(), domainId, missionId);
 		
 		return missionId;
+	}
+	@Override
+	public FriendInformList getMyFriendInformations(int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

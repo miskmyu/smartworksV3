@@ -44,6 +44,7 @@ import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -525,5 +526,9 @@ public interface ISmartWorks {
 	public abstract MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception;
 
 	public abstract SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception;
+	
+	public abstract FriendInformList getMyFriendInformations(int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception;
 	
 }
