@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
@@ -410,7 +411,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					if(picture != null && !picture.equals("")) {
 						String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 						String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-						userInfo.setSmallPictureName(pictureId + "_small" + "." + extension);
+						userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 					}
 	
 					DepartmentInfo userDeptInfo = new DepartmentInfo();
