@@ -730,6 +730,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			boolean autoApproval = courseDetail.isAutoApproval();
 			if (autoApproval) {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+				groupMember.setJoinDate(new LocalDate());
 			} else {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 			}
@@ -812,6 +813,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		if (Boolean.parseBoolean(approval)) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			groupMember.setJoinDate(new LocalDate());
 		} else {
 			group.removeGroupMember(groupMember);
 		}

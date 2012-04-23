@@ -4333,7 +4333,7 @@ public class SeraServiceImpl implements ISeraService {
 					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
 					if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
 						menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
-					}
+					} 
 				} else {
 					menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
 				}
