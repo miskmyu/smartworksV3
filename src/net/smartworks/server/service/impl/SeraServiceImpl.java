@@ -133,30 +133,17 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
-	public void addMemberByCourse(String courseId, boolean isAdd) throws Exception {
+	public void updateCoursePointByType(String courseId, int type, boolean isAdd) throws Exception {
 		try {
 			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
 
-			if(isAdd)
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
-			else
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
-
-			getSeraManager().setCourseDetail(courseDetail);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void addContentByCourse(String courseId, boolean isAdd) throws Exception {
-		try {
-			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
-
-			if(isAdd)
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
-			else
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
+			if(type == 1) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
+			} else {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
+			}
 
 			getSeraManager().setCourseDetail(courseDetail);
 
@@ -4333,7 +4320,7 @@ public class SeraServiceImpl implements ISeraService {
 					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
 					if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
 						menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
-					}
+					} 
 				} else {
 					menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
 				}
