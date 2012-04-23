@@ -1002,7 +1002,7 @@ $(function() {
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
 		$.ajax({
-			url : "moreFriendInforms.sw",
+			url : "moreFriends.sw",
 			data : {
 				type: type,
 				userId: userId,
