@@ -592,7 +592,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	public UserInfo[] getAvailableChatter() throws Exception {
 		
 		try{
-			return SmartTest.getAvailableChatter();
+			return new UserInfo[]{};
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
