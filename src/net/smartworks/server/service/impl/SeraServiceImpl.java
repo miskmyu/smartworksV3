@@ -93,6 +93,7 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -3627,7 +3628,9 @@ public class SeraServiceImpl implements ISeraService {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		
-		SwoUser swoUser = swoMgr.getUser(userId, userId, IManager.LEVEL_ALL);
+		SwoUserCond cond = new SwoUserCond();
+		cond.setId(userId);
+		SwoUser swoUser = swoMgr.getUser(userId, cond, IManager.LEVEL_ALL);
 		if (swoUser == null)
 			return null;
 

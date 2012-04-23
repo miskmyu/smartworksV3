@@ -1122,6 +1122,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoUser.A_TIMEZONE, obj.getTimeZone());
 				query.setString(SwoUser.A_ID, obj.getId());
 			}
+			
+			if (userMap.containsKey(obj.getId())) {
+				userMap.put(obj.getId(), obj);
+			}
+			
 		} catch (Exception e) {
 			logger.error(e, e);
 			throw new SwoException(e);
