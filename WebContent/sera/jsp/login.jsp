@@ -26,6 +26,7 @@
 	<script type="text/javascript" src="sera/js/rolling_img.js"></script>
 	<script type="text/javascript" src="js/sw/sw-util.js"></script>
 	<script type="text/javascript" src='js/sw/sw-popup.js'></script>
+	<script type="text/javascript" src='sera/js/window_popup.js'></script>
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
 <%

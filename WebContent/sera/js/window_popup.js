@@ -4,5 +4,5 @@ window.open('sera/html/use_personal_terms.htm', 'opWin', 'width=580,height=581,r
 }
 
 function startPopup() {
-	window.open('sera/html/p_system.html', 'opWin2', 'width=560,height=581,resizable=no,scrollbars=no');
+	window.open('sera/html/p_system.html', 'opWin2', 'width=562, height=358, resizable=no,scrollbars=no');
 	}
