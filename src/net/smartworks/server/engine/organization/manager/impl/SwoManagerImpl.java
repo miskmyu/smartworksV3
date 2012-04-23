@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -1122,6 +1123,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoUser.A_TIMEZONE, obj.getTimeZone());
 				query.setString(SwoUser.A_ID, obj.getId());
 			}
+			
+			if (userMap.containsKey(obj.getId())) {
+				userMap.put(obj.getId(), obj);
+			}
+			
 		} catch (Exception e) {
 			logger.error(e, e);
 			throw new SwoException(e);
@@ -2184,8 +2190,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			userExtend.setBigPictureName(pictureId + "_thumb" + "." + extension);
-			userExtend.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+			userExtend.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			userExtend.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 		} else {
 			userExtend.setBigPictureName(picture);
 			userExtend.setSmallPictureName(picture);
@@ -2251,8 +2257,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				user.setBigPictureName(pictureId + "_thumb" + "." + extension);
-				user.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				user.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				user.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
 				user.setBigPictureName(picture);
 				user.setSmallPictureName(picture);
@@ -2308,8 +2314,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				user.setBigPictureName(pictureId + "_thumb" + "." + extension);
-				user.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				user.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				user.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
 				user.setBigPictureName(picture);
 				user.setSmallPictureName(picture);
@@ -2430,8 +2436,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				swoUserExtends[i].setBigPictureName(pictureId + "_thumb" + "." + extension);
-				swoUserExtends[i].setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				swoUserExtends[i].setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				swoUserExtends[i].setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
 				swoUserExtends[i].setBigPictureName(picture);
 				swoUserExtends[i].setSmallPictureName(picture);

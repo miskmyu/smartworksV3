@@ -29,6 +29,9 @@ public class Community extends BaseObject {
 	public static final String CONTROLLER_DEPARTMENT_SPACE = "department_space.sw";
 	public static final String CONTROLLER_GROUP_SPACE = "group_space.sw";
 
+	public static final String IMAGE_TYPE_ORIGINAL = "_origin";
+	public static final String IMAGE_TYPE_THUMB = "_thumb";
+
 	private String bigPictureName;
 	private String smallPictureName;
 
