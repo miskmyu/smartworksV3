@@ -207,7 +207,7 @@ public class SeraServiceImpl implements ISeraService {
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			groupInfo.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+			groupInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 		} else {
 			groupInfo.setSmallPictureName(picture);
 		}
@@ -258,8 +258,8 @@ public class SeraServiceImpl implements ISeraService {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				group.setBigPictureName(pictureId + "_thumb" + "." + extension);
-				group.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				group.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				group.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
 				group.setBigPictureName(picture);
 				group.setSmallPictureName(picture);
@@ -2904,7 +2904,7 @@ public class SeraServiceImpl implements ISeraService {
 									filePath = StringUtils.replace(filePath, "\\", "/");
 									if(filePath.indexOf(companyId) != -1)
 										noteInstanceInfo.setImageSrcOrigin(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
-									filePath = filePath.replaceAll(extension, "_thumb" + extension);
+									filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 									if(filePath.indexOf(companyId) != -1)
 										noteInstanceInfo.setImageSrc(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
 								}
@@ -3067,7 +3067,7 @@ public class SeraServiceImpl implements ISeraService {
 									filePath = StringUtils.replace(filePath, "\\", "/");
 									if(filePath.indexOf(companyId) != -1)
 										missionReportInstanceInfo.setImageSrcOrigin(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
-									filePath = filePath.replaceAll(extension, "_thumb" + extension);
+									filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 									if(filePath.indexOf(companyId) != -1)
 										missionReportInstanceInfo.setImageSrc(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
 								}

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
@@ -875,7 +876,7 @@ public class WorkServiceImpl implements IWorkService {
 						if(!CommonUtil.isEmpty(picture)) {
 							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-							userInfo.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 						} else {
 							userInfo.setSmallPictureName(picture);
 						}

@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
@@ -892,8 +893,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				originId = communityId;
 			} else {
 				//bigId = communityId + "_big";
-				thumbId = communityId + "_thumb";
-				originId = communityId + "_origin";
+				thumbId = communityId + Community.IMAGE_TYPE_THUMB;
+				originId = communityId + Community.IMAGE_TYPE_ORIGINAL;
 				//realFile1 = repository.getAbsolutePath() + "/" + bigId + "." + extension;
 				realFile2 = repository.getAbsolutePath() + "/" + thumbId + "." + extension;
 				//Thumbnail.createImage(tempFile, realFile1, "big", extension);
@@ -947,7 +948,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + tempFileId + "." + extension;
 			String realFile = repository.getAbsolutePath() + File.separator + fileId + "." + extension;
 			if(workType.equals("Pictures")) {
-				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + "_thumb." + extension;
+				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + Community.IMAGE_TYPE_THUMB + "." + extension;
 				Thumbnail.createImage(tempFile, thumbFile, "thumb", extension);
 			}
 
