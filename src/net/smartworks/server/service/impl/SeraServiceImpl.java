@@ -3634,6 +3634,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoUser.setNickName(txtNickName);
 		swoUser.setEmail(txtEmail);
 		swoUser.setPassword(txtPassword);
+		swoUser.setPicture(txtUserProfilePicture);
 		
 		SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(userId, userId);
 		
