@@ -1402,10 +1402,10 @@ public class SeraServiceImpl implements ISeraService {
 		
 		MentorDetail mentorDetail = new MentorDetail();
 		mentorDetail.setMentorId(mentorUserId);
-		mentorDetail.setBorn("born");
-		mentorDetail.setHomeTown("homeTown");
-		mentorDetail.setLiving("living");
-		mentorDetail.setFamily("family");
+		mentorDetail.setBorn(null);
+		mentorDetail.setHomeTown(null);
+		mentorDetail.setLiving(null);
+		mentorDetail.setFamily(null);
 		mentorDetail.setEducations(txtaMentorEducations);
 		mentorDetail.setWorks(txtaMentorWorks);
 		mentorDetail.setMentorHistory(txtaMentorHistory);
