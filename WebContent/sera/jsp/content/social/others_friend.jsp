@@ -21,7 +21,7 @@
 	<!-- Photo Section -->
 	<div class="photo_section">
 		<div class="my_photo">
-			<img src="<%=otherUser.getMidPicture() %>" />
+			<img class="profile_size_b" src="<%=otherUser.getMidPicture() %>" />
 		</div>
 		<!-- Btn -->
 		<div class="btn_green_l cb js_friend_request_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px; <%if(otherUser.isFriend()){%>display:none;<%}%>">
