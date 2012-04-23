@@ -144,7 +144,7 @@
 			<ul class="sera_visual">
 				<li>
 					<label id="pnlBanner" style="position: absolute; left: 180px; bottom: 5px; z-index: 1000;">
-						<a id="eventBtn1" href="http://www.seracampus.com/Course/Detail/242"> 
+						<a id="eventBtn1" href=""> 
 							<img id="eventBtnOn1" width="9" height="9" alt="" src="sera/images/main_indicator_on.png" style="display: none;">
 							<img id="eventBtnOff1" width="9" height="9" alt="" style="" src="sera/images/main_indicator_off.png"> 
 						</a> 
@@ -161,7 +161,7 @@
 							<img id="eventBtnOff4" width="9" height="9" alt="" style="" src="sera/images/main_indicator_off.png"> 
 						</a> 
 					</label> 
-					<a href="http://www.seracampus.com/Course/Detail/242"> 
+					<a href=""> 
 						<img id="eventBanner1" width="405" height="435" alt="" style="position: absolute; z-index: 10;" src="sera/images/N_visual_01.png"> 
 					</a> 
 					<a href="http://club.seracampus.com/?p=1017"> 
