@@ -997,12 +997,14 @@ $(function() {
 	
 	$('.js_more_friends_btn').live('click', function(e) {
 		var input = $(e.target).parents('.js_more_friends_btn');
+		var type = input.attr('requestType');
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
 		$.ajax({
 			url : "moreFriends.sw",
 			data : {
+				type: type,
 				userId: userId,
 				lastId: lastId
 			},

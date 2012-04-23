@@ -39,6 +39,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -132,30 +133,17 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
-	public void addMemberByCourse(String courseId, boolean isAdd) throws Exception {
+	public void updateCoursePointByType(String courseId, int type, boolean isAdd) throws Exception {
 		try {
 			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
 
-			if(isAdd)
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
-			else
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
-
-			getSeraManager().setCourseDetail(courseDetail);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void addContentByCourse(String courseId, boolean isAdd) throws Exception {
-		try {
-			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
-
-			if(isAdd)
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
-			else
-				courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
+			if(type == 1) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
+			} else {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
+			}
 
 			getSeraManager().setCourseDetail(courseDetail);
 
@@ -1401,10 +1389,10 @@ public class SeraServiceImpl implements ISeraService {
 		
 		MentorDetail mentorDetail = new MentorDetail();
 		mentorDetail.setMentorId(mentorUserId);
-		mentorDetail.setBorn("born");
-		mentorDetail.setHomeTown("homeTown");
-		mentorDetail.setLiving("living");
-		mentorDetail.setFamily("family");
+		mentorDetail.setBorn(null);
+		mentorDetail.setHomeTown(null);
+		mentorDetail.setLiving(null);
+		mentorDetail.setFamily(null);
 		mentorDetail.setEducations(txtaMentorEducations);
 		mentorDetail.setWorks(txtaMentorWorks);
 		mentorDetail.setMentorHistory(txtaMentorHistory);
@@ -4332,7 +4320,7 @@ public class SeraServiceImpl implements ISeraService {
 					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
 					if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
 						menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
-					}
+					} 
 				} else {
 					menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
 				}
@@ -4712,6 +4700,16 @@ public class SeraServiceImpl implements ISeraService {
 		//SwManagerFactory.getInstance().getSwdManager().removeRecord(user.getId(), domainId, missionId);
 		
 		return missionId;
+	}
+	@Override
+	public FriendInformList getMyFriendInformations(int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
