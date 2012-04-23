@@ -40,7 +40,7 @@
 				<li>
 					<div class="icon_cs_openday">
 						<span>개설일</span>
-					</div> <span><%=course.getOpenDate().toLocalString() %></span></li>
+					</div> <span><%=course.getOpenDate().toLocalDateSimpleString() %></span></li>
 				<li>
 					<div class="icon_cs_menteenum">
 						<span>멘티수</span>

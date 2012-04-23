@@ -6,7 +6,7 @@ $(document).ready(function(){
 });
 
 // 채팅서버의 연결할 url, faye Context, etc...
-var serverUrl = "http://localhost:8000";
+var serverUrl = "http://sera.smartworks.net:8011";
 var swContext = "/faye";
 var currentUserId = currentUser.userId;
 

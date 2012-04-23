@@ -46,7 +46,7 @@
 					<%
 					if(!SmartUtil.isBlankObject(course.getCreatedDate())){
 					%>
-						<span><%=course.getCreatedDate().toLocalString() %></span>
+						<span><%=course.getCreatedDate().toLocalDateSimpleString() %></span>
 					<%
 					}
 					%>
