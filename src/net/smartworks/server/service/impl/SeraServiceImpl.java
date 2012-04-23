@@ -1344,7 +1344,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setCompanyId(user.getCompanyId());
 		swoGroup.setName(txtCourseName);
 		swoGroup.setDescription(txtaCourseDesc);
-		swoGroup.setStatus(Group.GROUP_TYPE_OPEN);
+		swoGroup.setStatus("O");
 		swoGroup.setGroupType(selGroupProfileType);
 		swoGroup.setGroupLeader(mentorUserId);
 
