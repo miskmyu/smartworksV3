@@ -22,16 +22,24 @@
 		for (CommunityInfo community : communities) {
 			if(!community.getClass().equals(UserInfo.class)) continue;
 			String picName = community.getMinPicture();
-			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + community.getId();
-			String comName = null;
-			if(community.getClass().equals(UserInfo.class)) comName = ((UserInfo)community).getLongName();
-			else comName = community.getName();
-			String comId = community.getId();
+			String comName = "", comId = "", userId = "";
+			String online = "chat_offline";
+			if(community.getClass().equals(UserInfo.class)){
+				UserInfo user = (UserInfo)community;
+				comName = user.getLongName();
+				userId = user.getId();
+				online = (user.isOnline()) ? "chat_online" : "chat_offline";
+			}else{
+				comName = community.getName();
+				comId = community.getId();
+			}
 	%>
-				<li>
-					<a href="" comName="<%=comName %>" comId="<%=comId %>" class="js_select_chatter">
-					<img class="mr2 profile_size_s" src="<%=picName%>"> <%=comName %></a>
-				</li>
+			<li>
+				<a href="" comId="<%=comId %>" userId="<%=userId %>">
+					<img class="mr2 profile_size_s" src="<%=picName%>" title="<%=comName%>"><%=comName %>
+ 					<span class="<%=online%>"></span>
+				</a>
+			</li>
 	<%
 		}
 	}else{

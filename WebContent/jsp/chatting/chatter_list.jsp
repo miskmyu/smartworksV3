@@ -18,13 +18,13 @@
 			var data = "";
 			var length = userInfos.length;
 			for ( var i = 0; i < length; i++) {
-				data = data
-						+ "<li><a href='' userId='" + userInfos[i].userId + "'><span><img src='" + userInfos[i].minPicture + "' title='" + userInfos[i].longName + "' class='online'/>"
-						+ userInfos[i].longName + "</span></a></li>";
+				data = data + "<li>" +
+									"<a href='' userId='" + userInfos[i].userId + "'>" +
+										"<span><img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s chat_online' title='" + userInfos[i].longName + "'/>" + userInfos[i].longName + "</span>" +
+									"</a>" +
+								"</li>";
 			}
-			$("#available_chatter_list").html(data).parents(
-					'div.js_chatter_list').find('span.js_chatters_number')
-					.html("(" + length + ")");
+			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + length + ")");
 		}
 	}
 </script>
@@ -45,9 +45,7 @@
 		</a>
 		<!-- 상단우측 아이콘-->
 		<div class="txt_btn">
-			<div class="ch_right btn_admin">
-				<a href=""><span></span></a>
-			</div>
+			<div class="ch_right btn_admin"><a><span></span></a></div>
 		</div>
 		<!-- 상단 우측 아이콘//-->
 	</div>
@@ -64,8 +62,7 @@
 				%>
 					<li>
 						<a href="" userId="<%=chatter.getId()%>">
-							<img src="<%=chatter.getMinPicture()%>" class="profile_size_s" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
-							<span class="chat_offline"></span>
+							<span><img src="<%=chatter.getMinPicture()%>" class="mr2 profile_size_s chat_offline" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%></span>
 						</a>
 					</li>
 				<%
@@ -78,7 +75,7 @@
 		<!-- 검색영역 -->
 		<div class="chat_input_section js_chatter_names">
 			<div class="chat_input_area">
-				<input id="" class="input js_auto_complete" type="text" href="chatter_name.sw" placeholder="<fmt:message key='search.search_people_depart_group'/>" title="<fmt:message key='search.search_people_depart_group'/>">
+				<input id="" class="input js_auto_complete" type="text" href="chatter_name.sw" placeholder="<fmt:message key='search.search_chatter'/>" title="<fmt:message key='search.search_chatter'/>">
 			</div>
 		</div>
 	</div>
