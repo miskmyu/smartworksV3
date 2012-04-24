@@ -11,6 +11,7 @@ public class UserInfo extends WorkSpaceInfo {
 	private String position = "";
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
+	private boolean online;
 
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -38,7 +39,7 @@ public class UserInfo extends WorkSpaceInfo {
 		this.department = department;
 	}
 	public String getLongName(){
-		return (SmartUtil.isBlankObject(position)) ? super.getName() : position + " " + super.getName(); 
+		return (SmartUtil.isBlankObject(position)) ? getNickName() : position + " " + getNickName(); 
 	}
 	public String getPhoneNo() {
 		return phoneNo;
@@ -52,6 +53,13 @@ public class UserInfo extends WorkSpaceInfo {
 	public void setCellPhoneNo(String cellPhoneNo) {
 		this.cellPhoneNo = cellPhoneNo;
 	}
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+	
 	public UserInfo(){
 		super();
 	}

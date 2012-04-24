@@ -131,7 +131,7 @@
 			<div class="attach_file js_note_buttons" style="margin:3px">
 				<ul>
 					<li>
-						<span class="insert_text">1000</span>
+						<span class="insert_text js_report_content_length">1000</span>
 					</li>
 					<li class="ml5">
 						<select name="selAccessLevel" >

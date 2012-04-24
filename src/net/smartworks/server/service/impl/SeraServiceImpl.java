@@ -133,24 +133,6 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
-	public void updateCoursePointByType(String courseId, int type, boolean isAdd) throws Exception {
-		try {
-			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
-
-			if(type == 1) {
-				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 5);	
-				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 5);
-			} else {
-				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + 1);	
-				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - 1);
-			}
-
-			getSeraManager().setCourseDetail(courseDetail);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -1156,8 +1138,28 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return courseId;
 	}
-	
-	
+
+	@Override
+	public void scoreCoursePointByType(String courseId, int type, int count, boolean isAdd) throws Exception {
+		try {
+			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+			if(courseDetail == null)
+				return;
+			if(type == Course.TYPE_COURSEPOINT_MEMBER) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_MEMBER * count);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_MEMBER * count);
+			} else if(type == Course.TYPE_COURSEPOINT_CONTENT) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_CONTENT * count);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_CONTENT * count);
+			}
+
+			getSeraManager().setCourseDetail(courseDetail);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*
@@ -1526,6 +1528,7 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
+
 	private Mentor getUserBySwoUserExtend(Mentor user, SwoUserExtend userExtend) throws Exception {
 		if (userExtend == null)
 			return null;
@@ -1795,7 +1798,7 @@ public class SeraServiceImpl implements ISeraService {
 			opinionCond.setRefId(refId);
 			if(maxSize != WorkInstance.FETCH_ALL_SUB_INSTANCE)
 				opinionCond.setPageSize(maxSize);
-			opinionCond.setOrders(new Order[]{new Order(OpinionCond.A_CREATIONDATE, false)});
+			opinionCond.setOrders(new Order[]{new Order(OpinionCond.A_CREATIONDATE, true)});
 			Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
 			if(!CommonUtil.isEmpty(opinions)) {
 				int opinionLength = opinions.length;
@@ -2723,15 +2726,17 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setFormVersion(swdDomain.getFormVersion());
 		obj.setDataFields(fieldDatas);
 		obj.setRecordId("dr_" + CommonUtil.newId());
-		
+
 		obj.setWorkSpaceId(spaceId);
 		obj.setWorkSpaceType(spaceType);
 		obj.setAccessLevel(selAccessLevel);
 		obj.setAccessValue(null);
 
 		String recordId = SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
-		
-		
+
+		if(String.valueOf(ISmartWorks.SPACE_TYPE_GROUP).equals(spaceType))
+			scoreCoursePointByType(spaceId, Course.TYPE_COURSEPOINT_CONTENT, 1, true);
+
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
 		tskCond.setModificationUser(userId);
@@ -2772,7 +2777,7 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			}
 		}
-		
+
 		return recordId;
 	}
 	private NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
@@ -3406,7 +3411,7 @@ public class SeraServiceImpl implements ISeraService {
 			String userId = user.getId();
 			String courseId = (String)requestBody.get("courseId");
 			Map<String, Object> frmCreateTeamMap = (Map<String, Object>)requestBody.get("frmCreateTeam");
-	
+
 			String txtTeamName = null;
 			String txaTeamDesc = null;
 			String txtTeamDays = null;
@@ -3426,9 +3431,6 @@ public class SeraServiceImpl implements ISeraService {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					if(fieldId.equals("txtInviteMembers")) {
 						users = (ArrayList<Map<String,String>>)valueMap.get("users");
-					}
-					if(!CommonUtil.isEmpty(users)) {
-						
 					}
 				} else if(fieldValue instanceof String) {
 					if(fieldId.equals("txtTeamName")) {
@@ -3491,14 +3493,78 @@ public class SeraServiceImpl implements ISeraService {
 
 	@Override
 	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String teamId = (String)requestBody.get("teamId");
+			Map<String, Object> frmSetTeamMap = (Map<String, Object>)requestBody.get("frmSetTeam");
+
+			String txtaTeamDesc = null;
+			String txtTeamDays = null;
+			String txtTeamStartDate = null;
+			String txtTeamEndDate = null;
+			String chkTeamSecurity = null;
+			String txtTeamUsers = null;
+
+			Set<String> keySet = frmSetTeamMap.keySet();
+			Iterator<String> itr = keySet.iterator();
+	
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmSetTeamMap.get(fieldId);
+				if(fieldValue instanceof String) {
+					if(fieldId.equals("txtaTeamDesc")) {
+						txtaTeamDesc = (String)frmSetTeamMap.get("txtaTeamDesc");
+					} else if(fieldId.equals("txtTeamDays")) {
+						txtTeamDays = (String)frmSetTeamMap.get("txtTeamDays");
+					} else if(fieldId.equals("txtTeamStartDate")) {
+						txtTeamStartDate = (String)frmSetTeamMap.get("txtTeamStartDate");
+					} else if(fieldId.equals("txtTeamEndDate")) {
+						txtTeamEndDate = (String)frmSetTeamMap.get("txtTeamEndDate");
+					} else if(fieldId.equals("chkTeamSecurity")) {
+						chkTeamSecurity = (String)frmSetTeamMap.get("chkTeamSecurity");
+					} else if(fieldId.equals("txtTeamUsers")) {
+						txtTeamUsers = (String)frmSetTeamMap.get("txtTeamUsers");
+					}
+				}
+			}
+
+			Date startDate = null;
+			Date endDate = null;
+
+			if(!CommonUtil.isEmpty(txtTeamDays)) {
+				startDate = new LocalDate();
+				endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtTeamDays)-1));
+			} else {
+				startDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamStartDate);
+				endDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamEndDate);
+			}
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
+			courseTeam.setDescription(txtaTeamDesc);
+			courseTeam.setAccessPolicy(Integer.parseInt(chkTeamSecurity));
+			courseTeam.setMemberSize(Integer.parseInt(txtTeamUsers));
+			courseTeam.setStartDate(startDate);
+			courseTeam.setEndDate(endDate);
+
+			getSeraManager().setCourseTeam(userId, courseTeam);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String teamId = (String)requestBody.get("teamId");
+			getSeraManager().removeCourseTeam(userId, teamId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
