@@ -402,6 +402,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String receiveName = null;
 		int acceptStatus = -1;
 		String requestIdOrReceiveId = null;
+		String lastRequestName = null;
 		if (cond != null) {
 			objId = cond.getObjId();
 			requestId = cond.getRequestId();
@@ -410,6 +411,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			receiveName = cond.getReceiveName();
 			acceptStatus = cond.getAcceptStatus();
 			requestIdOrReceiveId = cond.getRequestIdOrReceiveId();
+			lastRequestName = cond.getLastRequestName();
 		}
 		buf.append(" from SeraFriend obj");
 		buf.append(" where obj.objId is not null");
@@ -428,6 +430,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.acceptStatus = :acceptStatus");
 			if (requestIdOrReceiveId != null)
 				buf.append(" and (obj.requestId = :requestIdOrReceiveId or obj.receiveId = :requestIdOrReceiveId)");
+			if (lastRequestName != null)
+				buf.append(" and obj.requestName > :lastRequestName");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);
@@ -446,6 +450,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setInteger("acceptStatus", acceptStatus);
 			if (requestIdOrReceiveId != null)
 				query.setString("requestIdOrReceiveId", requestIdOrReceiveId);
+			if (lastRequestName != null)
+				query.setString("lastRequestName", lastRequestName);
 		}
 		return query;
 	}
