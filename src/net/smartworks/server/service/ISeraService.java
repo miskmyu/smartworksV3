@@ -22,7 +22,7 @@ import net.smartworks.util.LocalDate;
 
 public interface ISeraService {
 
-	public abstract void updateCoursePointByType(String courseId, int type, boolean isAdd) throws Exception;
+	public abstract void updateCoursePointByType(String courseId, int type, int count, boolean isAdd) throws Exception;
 
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

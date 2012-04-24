@@ -20,7 +20,13 @@ public class Course extends Group {
 	public static final int TYPE_RECOMMENDED_COURSES = 12;
 	public static final int TYPE_CLOSED_COURSES = 13;
 	public static final int TYPE_CATEGORIES = 14;
-	
+
+	public static final int TYPE_COURSEPOINT_MEMBER = 1;
+	public static final int TYPE_COURSEPOINT_CONTENT = 2;
+
+	public static final int POINT_MEMBER = 5;
+	public static final int POINT_CONTENT = 1;
+
 	public static final int LIST_PAGE_SIZE = 20;
 
 	private String object;
