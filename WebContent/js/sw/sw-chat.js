@@ -201,18 +201,15 @@ function receivedMessageOnChatId(message) {
 	var chatId = message.chatId;
 	var senderInfo = message.senderInfo;
 	var chatMessage = message.chatMessage;
-	var date = new Date();
-	var currentTime = date.getMonth() + "." + date.getDate() + " "
-			+ date.getHours() + ":" + date.getMinutes();
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
-	var data = "<li><div class='noti_pic'><img src='" + senderInfo.minPicture
-			+ "' class='profile_size_s' title='" + senderInfo.longName
-			+ "'></div><div class='noti_in'><div>" + chatMessage
-			+ "<span class='t_date' >" + currentTime
-			+ "</span></div></div></li>";
-	var chatList = target.find('ul');
+	var data = "<li>" + 
+					"<div class='noti_pic'>" +
+						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + 
+					"</div>" + 
+					"<div class='noti_in'>" + chatMessage + "<span class='t_date ml3' >" + printDateTime(new Date()) + "</span></div>" +
+				"</li>";
 	target.find('ul').append(data);
-	target.attr({ scrollTop: target[0].scrollHeight });
+	target[0].scrollTop = target[0].scrollHeight;
 	var chattingBox = $('#'+chatId);
 	if(chattingBox.find('div.js_chatting_body').css('display') === "none"){
 		blinkingOn.push(chatId);
@@ -255,6 +252,7 @@ $(function() {
 		var input = $(e.target).parents('a');
 		if(isEmpty(input)) input = $(e.target);
 		var userId = input.attr('userId');
+		var comId = input.attr('comId');
 		var img = input.find('img');
 		var longName = img.attr('title');
 		var minPicture = img.attr('src');
@@ -284,121 +282,101 @@ $(function() {
 		return false;
 	});
 	
-	$('a.js_min_chatting_box').live(
-			'click',
-			function(e) {
-				var input = $(e.target);
-				input.parents('div.js_chatting_title_icons:first').hide().parents(
-						'div.js_chatting_header').siblings('div.js_chatting_body').slideUp(500);
-				var target = input.parents('div.js_chatting_box');
-				setTimeout(function(){
-					setRightPosition("resize", target);
-				}, 600);
-				return false;
+	$('a.js_min_chatting_box').live('click',function(e) {
+		var input = $(e.target);
+		input.parents('div.js_chatting_title_icons:first').hide().parents('div.js_chatting_header').siblings('div.js_chatting_body').slideUp(500);
+		var target = input.parents('div.js_chatting_box');
+		setTimeout(function(){
+			setRightPosition("resize", target);
+		}, 600);
+		return false;
+	});
+	
+	$('div.js_chatting_header').live('click',function(e) {
+		var input = $(e.target).parents('div.js_chatting_box:first').children('div.js_chatting_header');
+		if (input.children('div.js_chatting_title_icons').css("display") === "none") {
+			input.children('div.js_chatting_title_icons:first').show().parents('div.js_chatting_header').siblings('div.js_chatting_body').slideDown(500);
+			var target = input.parents('div.js_chatting_box');
+			setRightPosition("resize", target);
+
+		}
+		removeBlinkingOn(input.parents('div.js_chatting_box').attr('id'));
+		return false;
+	});
+	
+	$('a.js_admin_chatting_box').live('click',function(e) {
+		var input = $(e.target);
+		input.parents('div.js_chatting_header:first').siblings('div.js_chatting_body').children('div.js_chatters_search_box').slideDown(500);
+		return false;
+	});
+	
+	$('a.js_toggle_chatter_list').live('click',function(e) {
+		var input = $(e.target);
+		var chatterList = input.parents('div.js_chatter_list');
+		var target = chatterList.find('div.js_chatter_search_area');
+		var display = target.css('display');
+		target.slideToggle(500);
+		if (display !== "none") {
+			setTimeout(function(){ setRightPosition("resize", null); }, 600);
+		}else{
+			setRightPosition("resize", null);				
+			chatterList.find('input.js_auto_complete').focus();
+		}
+		return false;
+	});
+	
+	$('div.js_chatting_group_prev a').live('click',function(e) {
+		var input = $(e.target).parents('div.js_chatting_group_prev');
+		var lastChattingBox = input.children('div.js_chatting_box:last');
+		if(isEmpty(lastChattingBox)) return false;
+		var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
+		if(chattingBoxs.length==3){
+			shiftBoxToGroup("next", $(chattingBoxs[2]));
+		}
+		shiftBoxFromGroup("prev", lastChattingBox);
+		setRightPosition("groupPrev", input);				
+		return false;
+	});
+	
+	$('div.js_chatting_group_next a').live('click',function(e) {
+		var input = $(e.target).parents('div.js_chatting_group_next');
+		var firstChattingBox = input.children('div.js_chatting_box:first');
+		if(isEmpty(firstChattingBox)) return false;
+		var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
+		if(chattingBoxs.length==3){
+			shiftBoxToGroup("prev", $(chattingBoxs[0]));
+		}
+		shiftBoxFromGroup("next", firstChattingBox);
+		setRightPosition("groupNext", input);				
+		return false;
+	});
+	
+	$('a.js_add_chatters').live('click',function(e) {
+		var input = $(e.target);
+		var chatId = input.parents('div.js_chatting_box:first').attr('id');
+		var target = input.parents('div.js_chatter_names').find(
+				'div.js_selected_chatters');
+		var chatterList = target.children('span.js_chatter_item');
+		var chatterInfos = new Array();
+		for ( var i = 0; i < chatterList.length; i++) {
+			var chatter = $(chatterList[i]);
+			chatterInfos.push({
+				userId : chatter.attr('comId'),
+				longName : chatter.attr('comName'),
+				minPicture : chatter.attr('minPicture')
 			});
-	
-	$('div.js_chatting_header')
-			.live(
-					'click',
-					function(e) {
-						var input = $(e.target).parents('div.js_chatting_box:first').children('div.js_chatting_header');
-						if (input.children('div.js_chatting_title_icons').css(
-								"display") === "none") {
-							input.children('div.js_chatting_title_icons:first')
-									.show().parents('div.js_chatting_header')
-									.siblings('div.js_chatting_body').slideDown(500);
-							var target = input.parents('div.js_chatting_box');
-							setRightPosition("resize", target);
-	
-						}
-						removeBlinkingOn(input.parents('div.js_chatting_box').attr('id'));
-						return false;
-					});
-	
-	$('a.js_admin_chatting_box').live(
-			'click',
-			function(e) {
-				var input = $(e.target);
-				input.parents('div.js_chatting_header:first')
-						.siblings('div.js_chatting_body').children(
-								'div.js_chatters_search_box').slideDown(500);
-				return false;
-			});
-	
-	$('a.js_toggle_chatter_list').live(
-			'click',
-			function(e) {
-				var input = $(e.target);
-				var target = input.parents('div.js_chatter_list').find('div.js_chatter_search_area');
-				var display = target.css('display');
-				target.slideToggle(500);
-				if (display !== "none") {
-					setTimeout(function(){					
-						setRightPosition("resize", null);
-					}, 600);
-				}else{
-					setRightPosition("resize", null);				
-				}
-				return false;
-			});
-	
-	$('div.js_chatting_group_prev a').live(
-			'click',
-			function(e) {
-				var input = $(e.target).parents('div.js_chatting_group_prev');
-				var lastChattingBox = input.children('div.js_chatting_box:last');
-				if(isEmpty(lastChattingBox)) return false;
-				var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
-				if(chattingBoxs.length==3){
-					shiftBoxToGroup("next", $(chattingBoxs[2]));
-				}
-				shiftBoxFromGroup("prev", lastChattingBox);
-				setRightPosition("groupPrev", input);				
-				return false;
-			});
-	
-	$('div.js_chatting_group_next a').live(
-			'click',
-			function(e) {
-				var input = $(e.target).parents('div.js_chatting_group_next');
-				var firstChattingBox = input.children('div.js_chatting_box:first');
-				if(isEmpty(firstChattingBox)) return false;
-				var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
-				if(chattingBoxs.length==3){
-					shiftBoxToGroup("prev", $(chattingBoxs[0]));
-				}
-				shiftBoxFromGroup("next", firstChattingBox);
-				setRightPosition("groupNext", input);				
-				return false;
-			});
-	
-	$('a.js_add_chatters').live(
-			'click',
-			function(e) {
-				var input = $(e.target);
-				var chatId = input.parents('div.js_chatting_box:first').attr('id');
-				var target = input.parents('div.js_chatter_names').find(
-						'div.js_selected_chatters');
-				var chatterList = target.children('span.js_chatter_item');
-				var chatterInfos = new Array();
-				for ( var i = 0; i < chatterList.length; i++) {
-					var chatter = $(chatterList[i]);
-					chatterInfos.push({
-						userId : chatter.attr('comId'),
-						longName : chatter.attr('comName'),
-						minPicture : chatter.attr('minPicture')
-					});
-				}
-				chatterList.remove();
-				smartTalk.addJoinChatters(chatId, chatterInfos);
-				input.parents('div.js_chatters_search_box').slideUp(500);
-				return false;
-			});
+		}
+		chatterList.remove();
+		smartTalk.addJoinChatters(chatId, chatterInfos);
+		input.parents('div.js_chatters_search_box').slideUp(500);
+		return false;
+	});
 	
 	$('div.js_chat_input textarea').live('keypress', function(e) {
 		if (e.keyCode == 13) {
 			var input = $(e.target);
-			var chatId = input.parents('div.js_chatting_box:first').attr('id');
+			var chattingBox = input.parents('div.js_chatting_box:first');
+			var chatId = chattingBox.attr('id');
 			var message = input.attr('value');
 			if (!isEmpty(message)) {
 				smartTalk.publishChatMessage(chatId, message);
@@ -415,13 +393,12 @@ $(function() {
 	});
 	
 	$('.js_select_chatter').live( 'click', function(e) {
+		alert('js_select_chatter');
 		var input = $(e.target);
 		var comName = input.attr('comName');
 		var comId = input.attr('comId');
 		var minPicture = input.children('img').attr('src');
-		var target = input.parents('div.js_chatter_list').siblings(
-				'div.js_chatter_names').find(
-				'div.js_selected_chatters');
+		var target = input.parents('div.js_chatter_list').siblings('div.js_chatter_names').find('div.js_selected_chatters');
 		var oldHTML = target.html();
 		if (oldHTML == null)
 			oldHTML = "";

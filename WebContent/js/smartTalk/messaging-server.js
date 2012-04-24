@@ -1,4 +1,4 @@
-var serverUrl = "http://localhost:8000";
+var serverUrl = "http://localhost:8011";
 var swContext = "/faye";
 var fayeServer = "fayeServer";
  
@@ -20,7 +20,7 @@ var msgType = {
 };
 
 var http = require('http'), faye = require('faye');
-var port = 8000;
+var port = 8011;
 
 var bayeux = new faye.NodeAdapter({
 	mount : '/faye',

@@ -254,7 +254,43 @@ function getByteLength(s){
 	}
 	return len;
 };
-//
-//function get_hostname_from_url(url) {
-//    return url.match(/:\/\/(.[^/]+)/)[1];
-//};
+
+String.prototype.cut = function(len){
+	var str = this;
+	var l = 0;
+	for(var i=0; i<str.length; i++){
+		l += (str.charCodeAt(i)>128) ? 2:1;
+		if(l>=len) return str.substring(0,i);
+	}
+	return str;
+};
+
+var textareaMaxSize = function(keyEvent, maxChars, countTarget){
+	var input = $(keyEvent.target);
+	var tval = input.val();
+	var tlength = getByteLength(tval); 
+	var remain = parseInt(maxChars - tlength);	    
+	countTarget.text(remain);
+	
+    //if (remain < 0 && keyEvent.which !== 0 && (keyEvent.charCode !== 0 || (keyEvent.charCode === 0 && keyEvent.which<=90 && keyEvent.which>=65))) {
+	if (remain < 0 && keyEvent.which !== 0 ){
+        input.val((tval).cut(tlength + remain));			
+        tlength = getByteLength(input.val()); 
+		remain = parseInt(maxChars - tlength);
+        countTarget.text(remain);
+    }
+};
+
+var printDateTime = function(date){
+	var today = new Date();
+	if(isEmpty(date)) return "";
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var day = date.getDate();
+	if(year != today.getFullYear()){
+		return date.format("yyyy.mm.dd HH:MM");
+	}else if(month != today.getMonth()+1 || day != today.getDate()){
+		return date.format("mm.dd HH:MM");
+	}
+	return date.format("HH:MM");
+};
