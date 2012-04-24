@@ -133,25 +133,6 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
-	public void updateCoursePointByType(String courseId, int type, int count, boolean isAdd) throws Exception {
-		try {
-			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
-			if(courseDetail == null)
-				return;
-			if(type == Course.TYPE_COURSEPOINT_MEMBER) {
-				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_MEMBER * count);	
-				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_MEMBER * count);
-			} else if(type == Course.TYPE_COURSEPOINT_CONTENT) {
-				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_CONTENT * count);	
-				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_CONTENT * count);
-			}
-
-			getSeraManager().setCourseDetail(courseDetail);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -1157,8 +1138,28 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return courseId;
 	}
-	
-	
+
+	@Override
+	public void scoreCoursePointByType(String courseId, int type, int count, boolean isAdd) throws Exception {
+		try {
+			CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+			if(courseDetail == null)
+				return;
+			if(type == Course.TYPE_COURSEPOINT_MEMBER) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_MEMBER * count);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_MEMBER * count);
+			} else if(type == Course.TYPE_COURSEPOINT_CONTENT) {
+				if(isAdd) courseDetail.setCoursePoint(courseDetail.getCoursePoint() + Course.POINT_CONTENT * count);	
+				else courseDetail.setCoursePoint(courseDetail.getCoursePoint() - Course.POINT_CONTENT * count);
+			}
+
+			getSeraManager().setCourseDetail(courseDetail);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*
@@ -1527,6 +1528,7 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
+
 	private Mentor getUserBySwoUserExtend(Mentor user, SwoUserExtend userExtend) throws Exception {
 		if (userExtend == null)
 			return null;
@@ -2733,7 +2735,7 @@ public class SeraServiceImpl implements ISeraService {
 		String recordId = SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
 
 		if(String.valueOf(ISmartWorks.SPACE_TYPE_GROUP).equals(spaceType))
-			updateCoursePointByType(spaceId, Course.TYPE_COURSEPOINT_CONTENT, 1, true);
+			scoreCoursePointByType(spaceId, Course.TYPE_COURSEPOINT_CONTENT, 1, true);
 
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});

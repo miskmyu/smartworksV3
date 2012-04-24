@@ -745,7 +745,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			if (autoApproval) {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 				groupMember.setJoinDate(new LocalDate());
-				seraService.updateCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 			} else {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 			}
@@ -807,7 +807,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			group.addGroupMember(groupMember);
 			
 		}
-		seraService.updateCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
 
@@ -838,7 +838,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		if (Boolean.parseBoolean(approval)) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 			groupMember.setJoinDate(new LocalDate());
-			seraService.updateCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 		} else {
 			group.removeGroupMember(groupMember);
 		}
@@ -872,7 +872,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
 
-		seraService.updateCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
 
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
@@ -901,9 +901,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
 
-		seraService.updateCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
 
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+
 	}
 
 }
