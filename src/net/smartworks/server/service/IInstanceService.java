@@ -119,7 +119,7 @@ public interface IInstanceService {
 	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-
+	
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception;
 
 	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
