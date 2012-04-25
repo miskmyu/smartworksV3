@@ -36,6 +36,7 @@ function submitForms() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
+				window.location.href = "socialNote.sw";
 			},
 			error : function(e) {
 				smartPop.closeProgress();

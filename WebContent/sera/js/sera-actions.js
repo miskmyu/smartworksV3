@@ -1345,7 +1345,7 @@ $(function() {
 			newNote.find('form[name="frmNewNote"]').addClass('form_title');
 			target = newNote.find('.js_upload_buttons');
 		}
-		if(isEmpty(target) || !isEmpty(target.html())) return true;
+		if(isEmpty(target) || !isEmpty(target.html())) return;
 		$.ajax({
 			url : 'upload_buttons.sw',
 			data : {
@@ -1361,7 +1361,21 @@ $(function() {
 				
 			}
 		});			
-		return true;
+		return false;
 	});
 
+	$('a.js_cancel_action').live('click',function(e) {
+		var input = $(e.target);
+		var newNote = input.parents('.js_new_note_page');
+		var newEvent = input.parents('.js_new_event_page');
+		var newBoard = input.parents('.js_new_board_page');
+		if(!isEmpty(newNote)){
+			newNote.find('.js_community_item').remove();
+			newNote.find('input.js_auto_complete').attr('value', '');
+			newNote.find('textarea').attr("value", "");
+		}else if(!isEmpty(newEvent)){
+		}else if(!isEmpty(newBoard)){
+		}
+		return false;
+	});
 });

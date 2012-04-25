@@ -5667,7 +5667,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			MessageCond messageCond = new MessageCond();
 			messageCond.setTargetUser(userId);
 			if(fromDate != null)
-				messageCond.setCreationDateFrom(fromDate);
+				messageCond.setCreationDateTo(fromDate);
 			messageCond.setPageNo(0);
 			messageCond.setPageSize(maxSize);
 			if(type == AsyncMessageInstance.MESSAGE_STATUS_UNREAD)
