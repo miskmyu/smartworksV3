@@ -26,6 +26,7 @@ public class SeraFriendCond extends Cond{
 	private Date replyDate;
 	private String requestIdOrReceiveId;
 	private String lastFriendName;
+	private String lastRequestName;
 
 	public String getObjId() {
 		return objId;
@@ -86,6 +87,12 @@ public class SeraFriendCond extends Cond{
 	}
 	public void setLastFriendName(String lastFriendName) {
 		this.lastFriendName = lastFriendName;
+	}
+	public String getLastRequestName() {
+		return lastRequestName;
+	}
+	public void setLastRequestName(String lastRequestName) {
+		this.lastRequestName = lastRequestName;
 	}
 
 }

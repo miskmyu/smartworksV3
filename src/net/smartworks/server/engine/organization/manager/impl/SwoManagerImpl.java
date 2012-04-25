@@ -1037,6 +1037,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 	public SwoUser getUser(String userId, String id, String level) throws SwoException {
 		try {
+			if (CommonUtil.isEmpty(id))
+				return null;
 			if (userMap.containsKey(id))
 				return (SwoUser)userMap.get(id);
 			if (level == null)

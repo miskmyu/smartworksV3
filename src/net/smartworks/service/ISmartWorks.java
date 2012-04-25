@@ -441,6 +441,12 @@ public interface ISmartWorks {
 
 	public abstract void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

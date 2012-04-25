@@ -5637,6 +5637,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			likeMgr.removeLike(userId, like.getObjId());
 		}
 	}
+
 	@Override
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
 		return SmartTest.getMyMessageInstancesByType(type, maxSize);
@@ -5645,5 +5646,18 @@ public class InstanceServiceImpl implements IInstanceService {
 	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+	}
+	@Override
+	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+	}
+	@Override
+	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
 	}
 }

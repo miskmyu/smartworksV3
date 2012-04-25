@@ -1112,6 +1112,22 @@ public class SmartWorks implements ISmartWorks {
 	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.removeLikeFromInstance(requestBody, request);
 	}
+
+	@Override
+	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.createAsyncMessage(requestBody, request);
+	}
+	
+	@Override
+	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeAsyncMessage(requestBody, request);
+	}
+
+	@Override
+	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.setAsyncMessage(requestBody, request);
+	}
+	
 	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
 		return seraService.getSubInstancesByRefId(refId, maxSize);
 	}

@@ -1,16 +1,12 @@
-/*	
- * $Id$
- * created by    : hsshin
- * creation-date : 2011. 11. 14.
- * =========================================================
- * Copyright (c) 2011 ManinSoft, Inc. All rights reserved.
- */
+package net.smartworks.server.engine.message.model;
 
-package net.smartworks.server.engine.basicwork.message.model;
+import java.util.Date;
 
 import net.smartworks.server.engine.common.model.BaseObject;
+import net.smartworks.server.engine.common.model.MisObject;
 import net.smartworks.server.engine.common.model.MisObjectCond;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
 
 import org.apache.commons.logging.Log;
@@ -23,67 +19,92 @@ public class MessageCond extends MisObjectCond {
 
 	private static final long serialVersionUID = 1L;
 	private static Log logger = LogFactory.getLog(MessageCond.class);
-	
-	protected static final String PREFIX = "Msg";
+
+	protected static final String PREFIX = "";
 	private static final String NAME = CommonUtil.toName(MessageCond.class, PREFIX);
 	
 	public static final String A_CONTENT = "content";
+	public static final String A_SENDUSER = "sendUser";
 	public static final String A_TARGETUSER = "targetUser";
+	public static final String A_ISCHECKED = "isChecked";	
+	public static final String A_CHECKEDTIME = "checkedTime";	
 	
 	private String content;
+	private String sendUser;
 	private String targetUser;
-	
-	public MessageCond() {
+	private boolean isChecked = false;
+	private Date checkedTime;
+
+	public MessageCond(){
 		super();
 	}
+
 	public String toString(String name, String tab) {
 		if (name == null || name.trim().length() == 0)
 			name = NAME;
 		return super.toString(name, tab);
 	}
+	
 	public String toLiteString(String name, String tab) {
 		if (name == null || name.trim().length() == 0)
 			name = NAME;
 		return super.toLiteString(name, tab);
 	}
-	public String toAttributeString() {
+	
+	public String toAttributesString() {
 		StringBuffer buf = new StringBuffer();
 		buf.append(super.toAttributesString());
-		appendAttributeString(A_CONTENT,content, buf);
-		appendAttributeString(A_TARGETUSER, targetUser, buf);
 		
+		appendAttributeString(A_CONTENT, content, buf);
+		appendAttributeString(A_SENDUSER, sendUser, buf);
+		appendAttributeString(A_TARGETUSER, targetUser, buf);
+		appendAttributeString(A_ISCHECKED, isChecked, buf);
+		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
+				
 		return buf.toString();
 	}
+	
 	public String toElementsString(String tab, boolean lite) {
 		StringBuffer buf = new StringBuffer();
 		buf.append(super.toElementsString(tab, lite));
 		return buf.toString();
 	}
+	
 	public static BaseObject toObject(Node node, BaseObject baseObj) throws Exception {
 		if (node == null)
 			return null;
-		
+
 		MessageCond obj = null;
 		if (baseObj == null || !(baseObj instanceof MessageCond))
 			obj = new MessageCond();
 		else
 			obj = (MessageCond)baseObj;
-		//부모 attributes, elements값 설정
-		MisObjectCond.toObject(node, obj);
-		
+		MisObject.toObject(node, obj);
+
 		NamedNodeMap attrMap = node.getAttributes();
 		if (attrMap != null) {
+			
 			Node content = attrMap.getNamedItem(A_CONTENT);
 			Node targetUser = attrMap.getNamedItem(A_TARGETUSER);
-			
-			if (content != null)
+			Node sendUser = attrMap.getNamedItem(A_SENDUSER);
+			Node isChecked = attrMap.getNamedItem(A_ISCHECKED);
+			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
+
+			if(content != null)
 				obj.setContent(content.getNodeValue());
+			if(sendUser != null)
+				obj.setSendUser(sendUser.getNodeValue());
+			if(targetUser != null)
 				obj.setTargetUser(targetUser.getNodeValue());
-		}
-		//element값 설정
+			if (isChecked != null)
+				obj.setChecked(CommonUtil.toBoolean(isChecked.getNodeValue()));
+			if (checkedTime != null)
+				obj.setCheckedTime(DateUtil.toDate(checkedTime.getNodeValue()));
+		}		
 		
 		return  obj;
 	}
+	
 	public static BaseObject toObject(String str) throws Exception {
 		if (str == null)
 			return null;
@@ -92,6 +113,7 @@ public class MessageCond extends MisObjectCond {
 			return null;
 		return toObject(doc.getDocumentElement(), null);
 	}
+	
 	public static MessageCond[] add(MessageCond[] objs, MessageCond obj) {
 		if (obj == null)
 			return objs;
@@ -104,6 +126,7 @@ public class MessageCond extends MisObjectCond {
 			newObjs[i] = objs[i];
 		return newObjs;
 	}
+	
 	public static MessageCond[] remove(MessageCond[] objs, MessageCond obj) {
 		if (obj == null)
 			return objs;
@@ -122,6 +145,7 @@ public class MessageCond extends MisObjectCond {
 		}
 		return newObjs;
 	}
+	
 	public static MessageCond[] left(MessageCond[] objs, MessageCond obj) {
 		if (objs == null || objs.length == 0 || obj == null)
 			return objs;
@@ -147,6 +171,7 @@ public class MessageCond extends MisObjectCond {
 		}
 		return newObjs;
 	}
+	
 	public static MessageCond[] right(MessageCond[] objs, MessageCond obj) {
 		if (objs == null || objs.length == 0 || obj == null)
 			return objs;
@@ -172,6 +197,7 @@ public class MessageCond extends MisObjectCond {
 		}
 		return newObjs;
 	}
+	
 	public Object clone() throws CloneNotSupportedException {
 		try {
 			return toObject(this.toString());
@@ -180,6 +206,7 @@ public class MessageCond extends MisObjectCond {
 			return null;
 		}
 	}
+
 	public String getContent() {
 		return content;
 	}
@@ -191,6 +218,24 @@ public class MessageCond extends MisObjectCond {
 	}
 	public void setTargetUser(String targetUser) {
 		this.targetUser = targetUser;
+	}
+	public String getSendUser() {
+		return sendUser;
+	}
+	public void setSendUser(String sendUser) {
+		this.sendUser = sendUser;
+	}
+	public boolean isChecked() {
+		return isChecked;
+	}
+	public void setChecked(boolean isChecked) {
+		this.isChecked = isChecked;
+	}
+	public Date getCheckedTime() {
+		return checkedTime;
+	}
+	public void setCheckedTime(Date checkedTime) {
+		this.checkedTime = checkedTime;
 	}
 
 }
