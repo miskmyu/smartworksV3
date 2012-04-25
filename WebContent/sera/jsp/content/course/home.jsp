@@ -60,7 +60,7 @@
 		</div>
 		<div class="course_info">
 			<dl>
-				<dt>코스알림</dt>
+				<dt>코스 게시판</dt>
 				<%
 				if(!SmartUtil.isBlankObject(notices)){
 					for(int i=0; i<notices.length; i++){
