@@ -49,7 +49,7 @@
 		</div>
 		<div class="course_info">
 			<dl>
-				<dt>코스알림</dt>
+				<dt>코스 게시판</dt>
 				<%
 				if(!SmartUtil.isBlankObject(notices)){
 					for(int i=0; i<notices.length; i++){
@@ -80,7 +80,7 @@
 			<ul class="js_course_menu">
 				<li class="current"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
-				<li><a href="" class="js_course_board">코스알림</a></li>
+				<li><a href="" class="js_course_board">코스 게시판</a></li>
 				<li><a href="" class="js_create_team">팀활동</a></li>
 				<li><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
