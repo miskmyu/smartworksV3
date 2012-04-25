@@ -25,6 +25,7 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -1480,5 +1481,17 @@ public class SmartTest {
 			return categories;
 		}
 		return categories;
+	}
+	
+	public static AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception{
+		AsyncMessageList messageList = new AsyncMessageList();
+		messageList.setTotalSize(38);
+		AsyncMessageInstanceInfo message1 = new AsyncMessageInstanceInfo("msg1", SmartTest.getUserInfo1(), new LocalDate(), "안녕하세요? 잘지내십니까??");
+		messageList.setMessages(new AsyncMessageInstanceInfo[] {message1});
+		return messageList;
+	}
+	public static AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception{
+		AsyncMessageInstanceInfo message1 = new AsyncMessageInstanceInfo("msg1", SmartTest.getUserInfo1(), new LocalDate(), "안녕하세요? 잘지내십니까??");
+		return new AsyncMessageInstanceInfo[] {message1};
 	}
 }

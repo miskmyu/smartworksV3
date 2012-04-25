@@ -49,6 +49,8 @@ public class Work extends BaseObject{
 	public static final String CONTROLLER_IMAGE_LIST = "image_list.sw";
 	public static final String CONTROLLER_BOARD_LIST = "board_list.sw";
 	public static final String CONTROLLER_MEMO_LIST = "memo_list.sw";
+	
+	public static final String ID_EMPTY_WORK = "EmptyWorkId";
 
 	private int 	type=-1; 
 	private int 	providedBy;

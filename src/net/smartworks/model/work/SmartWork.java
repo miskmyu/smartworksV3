@@ -23,6 +23,7 @@ public class SmartWork extends Work {
 	public final static String ID_GROUP_MANAGEMENT = "";
 	public final static String ID_FORUM_MANAGEMENT = "pkg_af2c5abbdc694feab78b2706c31f3bde";
 	public final static String ID_CONTACTS_MANAGEMENT = "pkg_dde3f719c50143cd821e6c46e8df8655";
+	public final static String ID_MESSAGE_MANAGEMENT = "";
 	public final static String ID_ALL_WORKS = "allSmartWorks";
 		
 	private WorkCategory myGroup = null;

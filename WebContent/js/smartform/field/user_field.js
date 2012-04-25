@@ -45,8 +45,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var usersHtml = '';
 	var href = (isEmpty(options.courseId)) ? "user_name.sw" : "course_member.sw?courseId=" + options.courseId;
 	var icoClass = ' class="icon_fb_user"';
-	var userPicker = (isEmpty(options.courseId)) ? 'class="js_userpicker_button"' : 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"';
-
+	var userPicker = (!isEmpty(options.courseId)) ? 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"' : (options.friendOnly) ? 'class="js_friendpicker_button' : 'class="js_userpicker_button"';
+	
 	if(multiUsers === 'true'){
 		for(var i=0; i<users.length; i++)
 			usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
@@ -106,6 +106,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			colSpan: 1,
 			multiUsers: false,
 			courseId: null,
+			friendOnly: false,
 			required: false,
 			readOnly: false		
 	};
@@ -124,6 +125,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			courseId: options.courseId,
+			friendOnly: options.friendOnly,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
 				fieldName: options.fieldName,
 				formXml: $formEntity,

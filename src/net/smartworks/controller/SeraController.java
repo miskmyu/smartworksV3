@@ -106,7 +106,7 @@ public class SeraController {
 	@RequestMapping("/courseGeneral")
 	public ModelAndView courseGeneral(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/general.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/general.jsp", "courseGeneral");
 	}
 
 	@RequestMapping("/courseBoard")
@@ -142,7 +142,7 @@ public class SeraController {
 	@RequestMapping("/courseMissionList")
 	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/list.jsp", "courseMissionList");
 	}
 
 	@RequestMapping("/courseMissionCreate")
@@ -160,49 +160,49 @@ public class SeraController {
 	@RequestMapping("/courseMissionPerform")
 	public ModelAndView courseMissionPerform(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "courseMissionPerform");
 	}
 
 	@RequestMapping("/courseTeamActivity")
 	public ModelAndView courseTeamActivity(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "courseTeamActivity");
 	}
 
 	@RequestMapping("/socialNote")
 	public ModelAndView socialNote(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/note.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/note.jsp", "socialNote");
 	}
 
 	@RequestMapping("/socialBadge")
 	public ModelAndView socialBadge(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/badge.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/badge.jsp", "socialBadge");
 	}
 
 	@RequestMapping("/socialBoard")
 	public ModelAndView socialBoard(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/board.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/board.jsp", "socialBoard");
 	}
 
 	@RequestMapping("/socialCalendar")
 	public ModelAndView socialCalendar(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/calendar.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/calendar.jsp", "socialCalendar");
 	}
 
 	@RequestMapping("/socialEvent")
 	public ModelAndView socialEvent(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/event.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/event.jsp", "socialEvent");
 	}
 
 	@RequestMapping("/socialFriend")
 	public ModelAndView socialFriend(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/friend.jsp", "");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/friend.jsp", "socialFriend");
 	}
 
 	@RequestMapping("/othersPAGE")
@@ -486,6 +486,12 @@ public class SeraController {
 	public ModelAndView popSelectCourseMember(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		return SmartUtil.returnMnv(request, "sera/jsp/popup/pop_select_course_member.jsp", "");
+	}
+	
+	@RequestMapping("/pop_select_friend")
+	public ModelAndView popSelectFriend(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/popup/pop_select_friend.jsp", "");
 	}
 	
 	@RequestMapping(value = "/add_review_on_course", method = RequestMethod.POST)
