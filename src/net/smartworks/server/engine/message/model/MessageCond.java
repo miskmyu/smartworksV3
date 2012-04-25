@@ -9,7 +9,6 @@ import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
@@ -25,18 +24,17 @@ public class MessageCond extends MisObjectCond {
 	private static final String NAME = CommonUtil.toName(MessageCond.class, PREFIX);
 	
 	public static final String A_CONTENT = "content";
+	public static final String A_SENDUSER = "sendUser";
 	public static final String A_TARGETUSER = "targetUser";
-	public static final String A_SENDER = "sender";
 	public static final String A_ISCHECKED = "isChecked";	
 	public static final String A_CHECKEDTIME = "checkedTime";	
 	
 	private String content;
+	private String sendUser;
 	private String targetUser;
-	private String sender;
 	private boolean isChecked = false;
 	private Date checkedTime;
-	
-	
+
 	public MessageCond(){
 		super();
 	}
@@ -58,8 +56,8 @@ public class MessageCond extends MisObjectCond {
 		buf.append(super.toAttributesString());
 		
 		appendAttributeString(A_CONTENT, content, buf);
+		appendAttributeString(A_SENDUSER, sendUser, buf);
 		appendAttributeString(A_TARGETUSER, targetUser, buf);
-		appendAttributeString(A_SENDER, sender, buf);
 		appendAttributeString(A_ISCHECKED, isChecked, buf);
 		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
 				
@@ -88,16 +86,16 @@ public class MessageCond extends MisObjectCond {
 			
 			Node content = attrMap.getNamedItem(A_CONTENT);
 			Node targetUser = attrMap.getNamedItem(A_TARGETUSER);
-			Node sender = attrMap.getNamedItem(A_SENDER);
+			Node sendUser = attrMap.getNamedItem(A_SENDUSER);
 			Node isChecked = attrMap.getNamedItem(A_ISCHECKED);
 			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
 
 			if(content != null)
 				obj.setContent(content.getNodeValue());
+			if(sendUser != null)
+				obj.setSendUser(sendUser.getNodeValue());
 			if(targetUser != null)
 				obj.setTargetUser(targetUser.getNodeValue());
-			if(sender != null)
-				obj.setSender(sender.getNodeValue());
 			if (isChecked != null)
 				obj.setChecked(CommonUtil.toBoolean(isChecked.getNodeValue()));
 			if (checkedTime != null)
@@ -208,43 +206,34 @@ public class MessageCond extends MisObjectCond {
 			return null;
 		}
 	}
-		
+
 	public String getContent() {
 		return content;
 	}
-
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 	public String getTargetUser() {
 		return targetUser;
 	}
-
 	public void setTargetUser(String targetUser) {
 		this.targetUser = targetUser;
 	}
-
-	public String getSender() {
-		return sender;
+	public String getSendUser() {
+		return sendUser;
 	}
-
-	public void setSender(String sender) {
-		this.sender = sender;
+	public void setSendUser(String sendUser) {
+		this.sendUser = sendUser;
 	}
-
 	public boolean isChecked() {
 		return isChecked;
 	}
-
 	public void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
-
 	public Date getCheckedTime() {
 		return checkedTime;
 	}
-
 	public void setCheckedTime(Date checkedTime) {
 		this.checkedTime = checkedTime;
 	}

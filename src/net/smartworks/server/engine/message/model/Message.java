@@ -23,14 +23,14 @@ public class Message extends MisObject {
 	private static final String NAME = CommonUtil.toName(Message.class, PREFIX);
 	
 	public static final String A_CONTENT = "content";
+	public static final String A_SENDUSER = "sendUser";
 	public static final String A_TARGETUSER = "targetUser";
-	public static final String A_SENDER = "sender";
 	public static final String A_ISCHECKED = "isChecked";			
 	public static final String A_CHECKEDTIME = "checkedTime";			
 	
 	private String content;
+	private String sendUser;
 	private String targetUser;
-	private String sender;
 	private boolean isChecked = false;
 	private Date checkedTime;
 	
@@ -56,8 +56,8 @@ public class Message extends MisObject {
 		buf.append(super.toAttributesString());
 		
 		appendAttributeString(A_CONTENT, content, buf);
+		appendAttributeString(A_SENDUSER, sendUser, buf);
 		appendAttributeString(A_TARGETUSER, targetUser, buf);
-		appendAttributeString(A_SENDER, sender, buf);
 		appendAttributeString(A_ISCHECKED, isChecked, buf);
 		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
 			
@@ -86,7 +86,7 @@ public class Message extends MisObject {
 			
 			Node content = attrMap.getNamedItem(A_CONTENT);
 			Node targetUser = attrMap.getNamedItem(A_TARGETUSER);
-			Node sender = attrMap.getNamedItem(A_SENDER);
+			Node sendUser = attrMap.getNamedItem(A_SENDUSER);
 			Node isChecked = attrMap.getNamedItem(A_ISCHECKED);
 			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
 
@@ -94,8 +94,8 @@ public class Message extends MisObject {
 				obj.setContent(content.getNodeValue());
 			if(targetUser != null)
 				obj.setTargetUser(targetUser.getNodeValue());
-			if(sender != null)
-				obj.setSender(sender.getNodeValue());
+			if(sendUser != null)
+				obj.setSendUser(sendUser.getNodeValue());
 			if (isChecked != null)
 				obj.setChecked(CommonUtil.toBoolean(isChecked.getNodeValue()));
 			if (checkedTime != null)
@@ -206,32 +206,25 @@ public class Message extends MisObject {
 			return null;
 		}
 	}
-	
-	
+
 	public String getContent() {
 		return content;
 	}
-
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 	public String getTargetUser() {
 		return targetUser;
 	}
-
 	public void setTargetUser(String targetUser) {
 		this.targetUser = targetUser;
 	}
-
-	public String getSender() {
-		return sender;
+	public String getSendUser() {
+		return sendUser;
 	}
-
-	public void setSender(String sender) {
-		this.sender = sender;
+	public void setSendUser(String sendUser) {
+		this.sendUser = sendUser;
 	}
-
 	public boolean isChecked() {
 		return isChecked;
 	}
@@ -244,15 +237,11 @@ public class Message extends MisObject {
 	public void setIsChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
-
 	public Date getCheckedTime() {
 		return checkedTime;
 	}
-
 	public void setCheckedTime(Date checkedTime) {
 		this.checkedTime = checkedTime;
 	}
-	
-	
-	
+
 }

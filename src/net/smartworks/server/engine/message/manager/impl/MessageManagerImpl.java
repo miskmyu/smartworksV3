@@ -64,13 +64,12 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update Message set ");
-				buf.append(" content=:content, targerUser=:targetUser, sender=:sender, isChecked=:isChecked, checkedTime=:checkedTime, checkedTime=:checkedTime");
+				buf.append(" content=:content, sendUser=:sendUser, targerUser=:targetUser, isChecked=:isChecked, checkedTime=:checkedTime, checkedTime=:checkedTime");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
-				
 				query.setString(Message.A_CONTENT, obj.getContent());
+				query.setString(Message.A_SENDUSER, obj.getSendUser());
 				query.setString(Message.A_TARGETUSER, obj.getTargetUser());
-				query.setString(Message.A_SENDER, obj.getSender());
 				query.setBoolean(Message.A_ISCHECKED, obj.isChecked());
 				query.setDate(Message.A_CHECKEDTIME, obj.getCheckedTime());
 				query.setString(Message.A_OBJID, obj.getObjId());
@@ -115,8 +114,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		
 		String objId = null;
 		String content = null;
+		String sendUser = null;
 		String targetUser = null;
-		String sender = null;
 		boolean isChecked = false;
 		Date checkedTime = null;
 		String creationUser = null;
@@ -127,8 +126,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		if (cond != null) {
 			objId = cond.getObjId();
 			content = cond.getContent();
+			sendUser = cond.getSendUser();
 			targetUser = cond.getTargetUser();
-			sender = cond.getSender();
 			isChecked = cond.isChecked();
 			checkedTime = cond.getCheckedTime();
 			creationUser = cond.getCreationUser();
@@ -144,10 +143,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.objId = :objId");
 			if (content != null)
 				buf.append(" and obj.content = :content");
+			if (sendUser != null) 
+				buf.append(" and obj.sendUser = :sendUser");
 			if (targetUser != null) 
 				buf.append(" and obj.targetUser = :targetUser");
-			if (sender != null) 
-				buf.append(" and obj.sender = :sender");
 			if (isChecked != false) 
 				buf.append(" and obj.isChecked = :isChecked");
 			if (checkedTime != null)
@@ -171,10 +170,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				query.setString("objId", objId);
 			if (content != null)
 				query.setString("content", content);
+			if (sendUser != null)
+				query.setString("sendUser", sendUser);
 			if (targetUser != null)
 				query.setString("targetUser", targetUser);
-			if (sender != null)
-				query.setString("sender", sender);
 			if (isChecked != false)
 				query.setBoolean("isChecked", isChecked);
 			if (checkedTime != null)
@@ -221,7 +220,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId,");
-				buf.append(" obj.content,  obj.targetUser, obj.sender, obj.isChecked, obj.checkedTime,");
+				buf.append(" obj.content, obj.sendUser, obj.targetUser, obj.isChecked, obj.checkedTime,");
 				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -237,8 +236,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 					
 					obj.setObjId((String)fields[j++]);
 					obj.setContent((String)fields[j++]);
+					obj.setSendUser((String)fields[j++]);
 					obj.setTargetUser((String)fields[j++]);
-					obj.setSender((String)fields[j++]);
 					obj.setCheckedTime((Timestamp)fields[j++]);
 					obj.setChecked(CommonUtil.toBoolean(fields[j++]));
 					obj.setCreationUser((String)fields[j++]);

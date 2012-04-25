@@ -6,12 +6,12 @@
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
 		<property name="content" type="string" length="4000"/>
-		<property name="targetUser" column="targetUser" type="string" length="50"/>
-		<property name="sender" column="refId" type="string" length="50"/>
+		<property name="sendUser" column="sendUserId" type="string" length="50"/>
+		<property name="targetUser" column="targetUserId" type="string" length="50"/>
 		<property name="isChecked" type="boolean"/>
 		<property name="checkedTime" column="checkedTime" type="timestamp"/>
-		<property name="creationUser" column="writer" type="string" length="30"/>
-		<property name="creationDate" column="writtenTime" type="timestamp"/>
+		<property name="creationUser" column="creator" type="string" length="30"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="30"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 	</class>
