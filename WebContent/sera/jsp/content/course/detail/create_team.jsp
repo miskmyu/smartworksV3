@@ -82,6 +82,7 @@
 					<div class="form_label w101">팀 이름</div>
 					<div class="form_value">
 						<input name="txtTeamName" type="text" class="fieldline fl required" style="width: 493px">
+						<span class="insert_text ml5 js_note_content_length">50</span>
 					</div>
 				</td>
 			</tr>
@@ -89,6 +90,7 @@
 				<td><div class="form_label w101">팀설명</div>
 					<div class="form_value">
 						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 491px"></textarea>
+						<span class="insert_text ml5 js_note_content_length">150</span>
 					</div>
 				</td>
 			</tr>

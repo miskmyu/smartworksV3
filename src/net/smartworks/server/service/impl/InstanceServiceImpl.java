@@ -33,6 +33,8 @@ import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -102,6 +104,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfOperand;
 import net.smartworks.server.engine.like.manager.ILikeManager;
 import net.smartworks.server.engine.like.model.Like;
 import net.smartworks.server.engine.like.model.LikeCond;
+import net.smartworks.server.engine.message.manager.IMessageManager;
+import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
@@ -176,6 +180,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	private IWorkListManager getWorkListManager() {
 		return SwManagerFactory.getInstance().getWorkListManager();
+	}
+	private IMessageManager getMessageManager() {
+		return SwManagerFactory.getInstance().getMessageManager();
 	}
 
 	private ICommunityService communityService;
@@ -5635,18 +5642,74 @@ public class InstanceServiceImpl implements IInstanceService {
 			likeMgr.removeLike(userId, like.getObjId());
 		}
 	}
-	
+
+	@Override
+	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
+		return SmartTest.getMyMessageInstancesByType(type, maxSize);
+	}
+
+	@Override
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+
+		try {
+			String senderId = (String)requestBody.get("senderId");
+			String message = (String)requestBody.get("message");
+			String receiverId = (String)requestBody.get("receiverId");
+
+			Message msg = new Message();
+			msg.setContent(message);
+			msg.setSendUser(senderId);
+			msg.setTargetUser(receiverId);
+
+			getMessageManager().createMessage(senderId, msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	@Override
 	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			String messageId = (String)requestBody.get("messageId");
+
+			getMessageManager().removeMessage(userId, messageId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	@Override
 	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			String messageId = (String)requestBody.get("messageId");
+
+			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
+			msg.setChecked(true);
+			msg.setCheckedTime(new LocalDate());
+
+			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 }

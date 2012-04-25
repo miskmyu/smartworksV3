@@ -47,7 +47,8 @@
 	String fromDateStr = request.getParameter("fromDate");
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId,  fromDate, 10);
+	int MAX_SERA_INSTANCES = 10;
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId,  fromDate, MAX_SERA_INSTANCES);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
@@ -68,7 +69,7 @@
 			WorkInfo work = workInstance.getWork();
 			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 			
-			if(seraInstance.getType()<0){
+			if(i==MAX_SERA_INSTANCES){
 				String lastDateStr = (i>0) ? seraInstances[i-1].getLastModifiedDate().toLocalDateString2() : ""; 
 	%>
 				<div class="js_sera_instance_item" >
@@ -419,6 +420,7 @@
 								</div>
 								<div class="reply_text">
 									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
+									<div class="t_refe">줄바꿈을 하려면 시프트(Shift)+엔터(Enter)키를 눌러주세요.</div>
 								</div>
 					        </div>
 						</div>

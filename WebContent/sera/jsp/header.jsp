@@ -60,7 +60,7 @@
 				<li class="icon_alarm"><a class="js_sera_content" title="알림"></a></li>
 				<li class="icon_mycourse"><a href="myCourses.sw" class="js_sera_content" title="내코스"></a></li>
 				<li class="icon_friend"><a href="socialFriend.sw" class="js_sera_content" title="친구"></a></li>
-				<li class="icon_notes"><a class="js_sera_content" title="쪽지"></a></li>
+				<li class="icon_notes"><a href="socialNote.sw" class="js_sera_content" title="쪽지"></a></li>
 				<li class="icon_calendar"><a class="js_sera_content" title="캘린더"></a></li>
 				<li class="icon_badge"><a class="js_sera_content" title="뱃지"></a></li>
 				<li class="icon_event"><a href="socialEvent.sw" class="js_sera_content" title="이벤트"></a></li>

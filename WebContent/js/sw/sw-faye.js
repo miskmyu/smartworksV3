@@ -520,8 +520,7 @@ var smartTalk = {
 	},
 
 	publishChatMessage : function(chatId, message) {
-		smartTalk.publish(smartTalk.myChannel("/"
-				+ chatId), {
+		smartTalk.publish(smartTalk.myChannel("/" + chatId), {
 			msgType : msgType.CHAT_MESSAGE,
 			senderInfo : {
 				userId : currentUserId,
@@ -537,14 +536,22 @@ var smartTalk = {
 	storeAsyncMessage : function(chatId, message){
 		var chat = chatManager.chatById(chatId);
 		var users = chat.users;
+		var paramsJson = {};
+		var chatters = new Array();
+		if(!isEmpty(users)){
+			for(var i=0; i<users.length; i++){
+				if(users[i].userId === currentUser.userId)
+					continue;
+				chatters.push(users[i].userId);
+			}
+		}
+		paramsJson['senderId'] = currentUser.userId;
+		paramsJson['chatters'] = chatters;
+		paramsJson['message'] = message;
 		for(var i=0; i<users.length; i++){
 			var user = users[i];
 			if(user.status != userStatus.OFFLINE) continue;
 
-			var paramsJson = {};
-			paramsJson['senderId'] = currentUser.userId;
-//			paramsJson['chatters'] = users;
-			paramsJson['message'] = message;
 			paramsJson['receiverId'] = user.userId;
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({

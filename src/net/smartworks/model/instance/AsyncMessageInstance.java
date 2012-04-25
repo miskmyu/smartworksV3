@@ -6,9 +6,9 @@ import net.smartworks.util.LocalDate;
 
 public class AsyncMessageInstance extends Instance {
 
-	public static final int MESSAGE_STATUS_UNREAD = 1;
-	public static final int MESSAGE_STATUS_READ = 2;
-	public static final int MESSAGE_STATUS_OFFLINE_CHAT = 3;
+	public static final int MESSAGE_STATUS_ALL = -1;
+	public static final int MESSAGE_STATUS_UNREAD = 0;
+	public static final int MESSAGE_STATUS_READ = 1;
 	
 	private User sender;
 	private User receiver;

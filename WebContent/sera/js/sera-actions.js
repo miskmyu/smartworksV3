@@ -1061,7 +1061,17 @@ $(function() {
 		var width = userField.find('.form_value').find('div:first').width();
 		var isMultiUsers = userField.attr('multiUsers');
 		var courseId = input.attr('courseId');
-		smartPop.selectCourseMember(communityItems, target, width, isMultiUsers, courseId);
+		smartPop.selectUser(communityItems, target, width, isMultiUsers, courseId);
+		return false;
+	});
+
+	$('a.js_friendpicker_button').live('click', function(e) {
+		var userField = $(e.target).parents('.js_type_userField:first');
+		var communityItems = userField.find('.js_community_item');
+		var target = userField.find('.js_community_popup:first');
+		var width = userField.find('.form_value').find('div:first').width();
+		var isMultiUsers = userField.attr('multiUsers');
+		smartPop.selectUser(communityItems, target, width, isMultiUsers, null, true);
 		return false;
 	});
 
@@ -1316,11 +1326,41 @@ $(function() {
 	});
 
 	$('textarea.js_sera_note_content').live('keypress', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 	$('textarea.js_sera_note_content').live('keyup', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 
+	$('.js_click_start_form').live('click', function(e){
+		var input = $(e.target).parents('.js_click_start_form:first');
+		var newNote = input.parents('.js_new_note_page');
+		var target = [];
+		if(!isEmpty(newNote)){
+			var noteContent = newNote.find('td[fieldId="txtNoteContent"]');
+			noteContent.find('.form_label').show();
+			noteContent.find('.form_value textarea').attr('rows', 4).addClass('fieldline');
+			newNote.find('tr').show();
+			newNote.find('form[name="frmNewNote"]').addClass('form_title');
+			target = newNote.find('.js_upload_buttons');
+		}
+		if(isEmpty(target) || !isEmpty(target.html())) return true;
+		$.ajax({
+			url : 'upload_buttons.sw',
+			data : {
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(!isEmpty(newNote)){
+					target.find('.js_select_access_level').hide();
+					target.find('.js_select_work_space').hide();
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				
+			}
+		});			
+		return true;
+	});
 
 });
