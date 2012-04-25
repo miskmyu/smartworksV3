@@ -102,6 +102,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfOperand;
 import net.smartworks.server.engine.like.manager.ILikeManager;
 import net.smartworks.server.engine.like.model.Like;
 import net.smartworks.server.engine.like.model.LikeCond;
+import net.smartworks.server.engine.message.manager.IMessageManager;
+import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
@@ -139,9 +141,12 @@ import net.smartworks.util.SmartUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.claros.intouch.webmail.services.SendReadReceiptMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOpt;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -176,6 +181,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	private IWorkListManager getWorkListManager() {
 		return SwManagerFactory.getInstance().getWorkListManager();
+	}
+	private IMessageManager getMessageManager() {
+		return SwManagerFactory.getInstance().getMessageManager();
 	}
 
 	private ICommunityService communityService;
@@ -5635,18 +5643,63 @@ public class InstanceServiceImpl implements IInstanceService {
 			likeMgr.removeLike(userId, like.getObjId());
 		}
 	}
-	
+
 	@Override
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+
+		try {
+			String senderId = (String)requestBody.get("senderId");
+			String message = (String)requestBody.get("message");
+			String receiverId = (String)requestBody.get("receiverId");
+
+			Message msg = new Message();
+			msg.setContent(message);
+			msg.setSendUser(senderId);
+			msg.setTargetUser(receiverId);
+
+			getMessageManager().createMessage(senderId, msg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	@Override
 	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			String messageId = (String)requestBody.get("messageId");
+
+			getMessageManager().removeMessage(userId, messageId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	@Override
 	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		
+
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			String messageId = (String)requestBody.get("messageId");
+
+			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
+			msg.setChecked(true);
+			msg.setCheckedTime(new LocalDate());
+
+			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
-	
+
 }
