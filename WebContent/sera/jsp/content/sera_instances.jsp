@@ -338,7 +338,7 @@
 								<!-- Util -->
 								<dd class="util js_action_btns">
 									<%
-									if(seraInstance.getType()==Instance.TYPE_ASYNC_MESSAGE ){
+									if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE ){
 									%>
 										<span><a href="" class="js_add_reply_note" >답글달기</a> | </span>
 										<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
