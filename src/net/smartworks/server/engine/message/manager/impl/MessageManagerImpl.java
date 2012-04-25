@@ -117,11 +117,12 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		String sendUser = null;
 		String targetUser = null;
 		boolean isChecked = false;
+		int readStatus = -1;
 		Date checkedTime = null;
 		String creationUser = null;
 		Date creationDate = null;
 		String modificationUser = null;
-		Date modificarionDate = null;
+		Date modificationDate = null;
 		Date creationDateFrom = null;
 		Date creationDateTo = null;
 
@@ -130,18 +131,18 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			content = cond.getContent();
 			sendUser = cond.getSendUser();
 			targetUser = cond.getTargetUser();
-			isChecked = cond.isChecked();
+			readStatus = cond.getReadStatus();
 			checkedTime = cond.getCheckedTime();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
 			creationDateFrom = cond.getCreationDateFrom();
 			creationDateTo = cond.getCreationDateTo();
 			modificationUser = cond.getModificationUser();
-			modificarionDate = cond.getModificationDate();
+			modificationDate = cond.getModificationDate();
 		}
 		buf.append(" from Message obj");
 		buf.append(" where obj.objId is not null");
-		
+
 		if (cond != null) {
 			if (objId != null) 
 				buf.append(" and obj.objId = :objId");
@@ -151,7 +152,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.sendUser = :sendUser");
 			if (targetUser != null) 
 				buf.append(" and obj.targetUser = :targetUser");
-			if (isChecked != false) 
+			if (readStatus != -1)
 				buf.append(" and obj.isChecked = :isChecked");
 			if (checkedTime != null)
 				buf.append(" and obj.checkedTime = :checkedTime");
@@ -159,12 +160,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.creationUser = :creationUser");
 			if (creationDate != null) 
 				buf.append(" and obj.creationDate = :creationDate");
-			if (creationUser != null)
-				buf.append(" and obj.creationUser = :creationUser");
 			if (modificationUser != null)
 				buf.append(" and obj.modificationUser = :modificationUser");
-			if (modificarionDate != null)
-				buf.append(" and obj.modificarionDate = :modificarionDate");
+			if (modificationDate != null)
+				buf.append(" and obj.modificationDate = :modificationDate");
 			if (creationDateFrom != null)
 				buf.append(" and obj.creationDate > :creationDateFrom ");
 			if (creationDateTo != null)
@@ -182,18 +181,20 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				query.setString("sendUser", sendUser);
 			if (targetUser != null)
 				query.setString("targetUser", targetUser);
-			if (isChecked != false)
+			if (readStatus != -1) {
+				if(readStatus == 1) isChecked = true;
 				query.setBoolean("isChecked", isChecked);
+			}
 			if (checkedTime != null)
 				query.setTimestamp("checkedTime", checkedTime);
 			if (creationDate != null)
-				query.setDate("creationDate", creationDate);
+				query.setTimestamp("creationDate", creationDate);
 			if (creationUser != null)
 				query.setString("creationUser", creationUser);
 			if (modificationUser != null)
 				query.setString("modificationUser", modificationUser);			
-			if (modificarionDate != null)
-				query.setDate("modificarionDate", modificarionDate);
+			if (modificationDate != null)
+				query.setDate("modificationDate", modificationDate);
 			if (creationDateFrom != null)
 				query.setTimestamp("creationDateFrom", creationDateFrom);
 			if (creationDateTo != null)

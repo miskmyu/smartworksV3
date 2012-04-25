@@ -34,6 +34,7 @@ public class MessageCond extends MisObjectCond {
 	private String targetUser;
 	private boolean isChecked = false;
 	private Date checkedTime;
+	private int readStatus = -1;
 
 	public MessageCond(){
 		super();
@@ -236,6 +237,12 @@ public class MessageCond extends MisObjectCond {
 	}
 	public void setCheckedTime(Date checkedTime) {
 		this.checkedTime = checkedTime;
+	}
+	public int getReadStatus() {
+		return readStatus;
+	}
+	public void setReadStatus(int readStatus) {
+		this.readStatus = readStatus;
 	}
 
 }

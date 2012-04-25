@@ -108,6 +108,7 @@ public class SchManagerImpl extends AbstractManager implements ISchManager {
 		queryBuffer.append(" select usr.id, usr.name ");
 		queryBuffer.append(" 		, usr.pos as position ");
 		queryBuffer.append(" 		, usr.roleId as roleId ");
+		queryBuffer.append(" 		, usr.picture ");
 		queryBuffer.append(" 		, dept.id as deptId ");
 		queryBuffer.append(" 		, dept.name as deptName ");
 		queryBuffer.append(" 		, dept.description as deptDesc ");
@@ -131,6 +132,7 @@ public class SchManagerImpl extends AbstractManager implements ISchManager {
 			obj.setName((String)fields[j++]);
 			obj.setUserPosition((String)fields[j++]);
 			obj.setUserRole(((String)fields[j++]).equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
+			obj.setUserPicture((String)fields[j++]);
 			obj.setUserDeptId((String)fields[j++]);
 			obj.setUserDeptName((String)fields[j++]);
 			obj.setUserDeptDesc((String)fields[j++]);
