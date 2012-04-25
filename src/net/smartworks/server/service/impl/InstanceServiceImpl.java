@@ -33,6 +33,8 @@ import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -141,12 +143,9 @@ import net.smartworks.util.SmartUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.claros.intouch.webmail.services.SendReadReceiptMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOpt;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -5642,6 +5641,17 @@ public class InstanceServiceImpl implements IInstanceService {
 			Like like = likes[i];
 			likeMgr.removeLike(userId, like.getObjId());
 		}
+	}
+
+	@Override
+	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
+		return SmartTest.getMyMessageInstancesByType(type, maxSize);
+	}
+
+	@Override
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

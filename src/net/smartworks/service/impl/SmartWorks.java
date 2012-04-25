@@ -27,6 +27,8 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -1162,6 +1164,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception {
 		return seraService.getFriendInformsByType(type, userId, lastId, maxList);
+	}
+
+	@Override
+	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(type, maxSize);
+	}
+
+	@Override
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
 	}
 
 }

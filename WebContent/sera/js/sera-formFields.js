@@ -329,4 +329,42 @@ function loadSeraProfileField() {
 	}
 };
 
+function loadNewNoteFields() {
+	var newNoteFields = $('div.js_new_note_fields');
+	if(!isEmpty(newNoteFields)) {
+		for(var i=0; i<newNoteFields.length; i++) {
+			var newNoteField = $(newNoteFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			newNoteField.html(gridTable.html(gridRow));
+			
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtReceiver",
+				fieldName: "받는사람",
+				columns: 1,
+				friendOnly: true,
+				multiUsers: false,
+				required: true
+			});
+			gridRow.hide();
+
+			var gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtNoteContent",
+				fieldName: "쪽지내용",
+				columns: 1,
+				multiLines: 4,
+				required: true
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value textarea').removeClass('fieldline').attr('placeholder', "보내고 싶은 쪽지를 적어 주세요!").attr('rows', 1);
+			
+		}		
+	}
+};
+
 
