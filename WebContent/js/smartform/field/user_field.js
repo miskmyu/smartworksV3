@@ -46,7 +46,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var usersHtml = '';
 	var href = (!isEmpty(options.courseId)) ? "course_member.sw?courseId=" + options.courseId : (options.friendOnly) ? "sera_user.sw" : "user_name.sw";
 	var icoClass = ' class="icon_fb_user"';
-	var userPicker = (!isEmpty(options.courseId)) ? 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"' : (options.friendOnly) ? 'class="js_friendpicker_button' : 'class="js_userpicker_button"';
+	var userPicker = (!isEmpty(options.courseId)) ? 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"' : (options.friendOnly) ? 'class="js_friendpicker_button"' : 'class="js_userpicker_button"';
 	
 	if(multiUsers === 'true'){
 		for(var i=0; i<users.length; i++)
