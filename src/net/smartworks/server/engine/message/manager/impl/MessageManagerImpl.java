@@ -122,6 +122,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		Date creationDate = null;
 		String modificationUser = null;
 		Date modificarionDate = null;
+		Date creationDateFrom = null;
+		Date creationDateTo = null;
 
 		if (cond != null) {
 			objId = cond.getObjId();
@@ -132,6 +134,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			checkedTime = cond.getCheckedTime();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
+			creationDateFrom = cond.getCreationDateFrom();
+			creationDateTo = cond.getCreationDateTo();
 			modificationUser = cond.getModificationUser();
 			modificarionDate = cond.getModificationDate();
 		}
@@ -161,6 +165,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.modificationUser = :modificationUser");
 			if (modificarionDate != null)
 				buf.append(" and obj.modificarionDate = :modificarionDate");
+			if (creationDateFrom != null)
+				buf.append(" and obj.creationDate > :creationDateFrom ");
+			if (creationDateTo != null)
+				buf.append(" and obj.creationDate < :creationDateTo ");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		
@@ -186,6 +194,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				query.setString("modificationUser", modificationUser);			
 			if (modificarionDate != null)
 				query.setDate("modificarionDate", modificarionDate);
+			if (creationDateFrom != null)
+				query.setTimestamp("creationDateFrom", creationDateFrom);
+			if (creationDateTo != null)
+				query.setTimestamp("creationDateTo", creationDateTo);
 		}
 
 		return query;

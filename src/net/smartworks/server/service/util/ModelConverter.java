@@ -2900,14 +2900,14 @@ public class ModelConverter {
 		return iWInstanceInfo;
 	}
 */
-	public static IWInstanceInfo getIWInstanceInfoBySwdRecord(IWInstanceInfo iWInstanceInfo, SwdRecord swdRecord) throws Exception {
-		if (swdRecord == null)
+	public static IWInstanceInfo getIWInstanceInfoByRecordId(IWInstanceInfo iWInstanceInfo, String recordId) throws Exception {
+		if (CommonUtil.isEmpty(recordId))
 			return null;
 		if (iWInstanceInfo == null) 
 			iWInstanceInfo = new IWInstanceInfo();
 
 		TskTaskCond tskCond = new TskTaskCond();
-		tskCond.setExtendedProperties(new Property[] {new Property("recordId", swdRecord.getRecordId())});
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
 		TskTask[] tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
 
 		String processInstId = "";
@@ -2921,6 +2921,14 @@ public class ModelConverter {
 		iWInstanceInfo.setLastTask(lastTask); 
 		
 		return iWInstanceInfo;
+	}
+	public static IWInstanceInfo getIWInstanceInfoBySwdRecord(IWInstanceInfo iWInstanceInfo, SwdRecord swdRecord) throws Exception {
+		if (swdRecord == null)
+			return null;
+		if (iWInstanceInfo == null) 
+			iWInstanceInfo = new IWInstanceInfo();
+
+		return getIWInstanceInfoByRecordId(iWInstanceInfo, swdRecord.getRecordId());
 	}
 
 	public static Instance getInstanceBySwdRecord(String userId, Instance instance, SwdRecord swdRecord) throws Exception {
