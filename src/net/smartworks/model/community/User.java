@@ -37,6 +37,7 @@ public class User extends WorkSpace {
 	private String cellPhoneNo;
 	private String company;
 	private String companyId;
+	private boolean online;
 	
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -88,7 +89,7 @@ public class User extends WorkSpace {
 		this.userLevel = userLevel;
 	}
 	public String getLongName() {
-		return (SmartUtil.isBlankObject(position)) ? super.getName() : position + " " + super.getName(); 
+		return (SmartUtil.isBlankObject(position)) ? getNickName() : position + " " + getNickName(); 
 	}
 	public String getPosition() {
 		return position;
@@ -126,6 +127,13 @@ public class User extends WorkSpace {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+	
 	public User(){
 		super();
 	}

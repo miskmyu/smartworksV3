@@ -19,6 +19,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
@@ -40,11 +41,13 @@ import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
+import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,6 +61,13 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private ISchManager getSchManager() {
 		return SwManagerFactory.getInstance().getSchManager();
+	}
+
+	private ISeraService seraService = null;
+
+	@Autowired
+	public void setSeraService(ISeraService seraService) {
+		this.seraService = seraService;
 	}
 
 	/*
@@ -700,7 +710,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			// Exception Handling Required			
 		}
 	}
-	
+
+	/*
+	 * 그룹 가입
+	 * @see net.smartworks.server.service.ICommunityService#joinGroupRequest(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
@@ -722,7 +736,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		groupMember.setGroupId(groupId);
 		groupMember.setUserId(userId);
 		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
-		
+
 		CourseDetail courseDetail = seraMgr.getCourseDetailById(groupId);
 		if (courseDetail == null) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
@@ -730,6 +744,8 @@ public class CommunityServiceImpl implements ICommunityService {
 			boolean autoApproval = courseDetail.isAutoApproval();
 			if (autoApproval) {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+				groupMember.setJoinDate(new LocalDate());
+				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 			} else {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 			}
@@ -739,7 +755,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
 		
 	}
-	
+
+	/*
+	 * 그룹 맴버 초대
+	 * @see net.smartworks.server.service.ICommunityService#inviteGroupMembers(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
@@ -787,9 +807,14 @@ public class CommunityServiceImpl implements ICommunityService {
 			group.addGroupMember(groupMember);
 			
 		}
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
-	
+
+	/*
+	 * 그룹 가입신청 승인
+	 * @see net.smartworks.server.service.ICommunityService#approvalJoinGroup(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
@@ -812,12 +837,18 @@ public class CommunityServiceImpl implements ICommunityService {
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		if (Boolean.parseBoolean(approval)) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			groupMember.setJoinDate(new LocalDate());
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 		} else {
 			group.removeGroupMember(groupMember);
 		}
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
-	
+
+	/*
+	 * 그룹 탈퇴
+	 * @see net.smartworks.server.service.ICommunityService#leaveGroup(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
@@ -840,10 +871,16 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
-		
+
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 	}
-	
+
+	/*
+	 * 그룹 강제탈퇴
+	 * @see net.smartworks.server.service.ICommunityService#pushoutGroupMember(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
 		/*{
@@ -863,8 +900,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
-		
+
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+
 	}
 
 }

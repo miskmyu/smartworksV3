@@ -472,6 +472,7 @@ $(function() {
 	
 	$('.js_report_content').live('click', function(e){
 		$(e.target).attr('rows', 24);
+		$('.js_report_content').die('click');
 	});
 	
 	$('.js_create_team_btn').live('click', function(e){
@@ -1002,7 +1003,7 @@ $(function() {
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
 		$.ajax({
-			url : "moreFriendInforms.sw",
+			url : "moreFriends.sw",
 			data : {
 				type: type,
 				userId: userId,
@@ -1307,15 +1308,19 @@ $(function() {
 		return false;
 	});
 	
-	$('textarea.js_sera_note_content').live('keyup', function(e){
-		if(e.keyCode>=9 && e.keyCode<=45) return;
-		var input = $(e.target);
-		var content = input.attr('value');
-		var iLength =  getByteLength(content);
-		if(iLength>500) return false;
-		
-		var seraNoteLength = input.parents('.js_sera_note_page').find('.js_note_content_length');
-		seraNoteLength.html(500-iLength);
+	$('textarea.js_report_content').live('keypress', function(e) {
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_mission_report_page').find('.js_report_content_length'));
 	});
+	$('textarea.js_report_content').live('keyup', function(e) {
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_mission_report_page').find('.js_report_content_length'));
+	});
+
+	$('textarea.js_sera_note_content').live('keypress', function(e) {
+		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+	});
+	$('textarea.js_sera_note_content').live('keyup', function(e) {
+		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+	});
+
 
 });

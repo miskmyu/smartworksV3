@@ -27,9 +27,11 @@ public interface ISeraService {
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-	
+
 	public abstract String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-	
+
+	public abstract void scoreCoursePointByType(String courseId, int type, int count, boolean isAdd) throws Exception;
+
 	public abstract String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

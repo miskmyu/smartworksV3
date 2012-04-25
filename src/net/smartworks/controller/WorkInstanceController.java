@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.work.FileCategory;
@@ -462,4 +463,30 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		smartworks.removeLikeFromInstance(requestBody, request);
 	}
 
+	@RequestMapping(value = "/create_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void createAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.createAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/remove_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/set_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/get_async_messages_by_user", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> getAsyncMessagesByUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		AsyncMessageInstanceInfo[] messages = new AsyncMessageInstanceInfo[]{};
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("events", messages);
+		return map;
+	}
 }
