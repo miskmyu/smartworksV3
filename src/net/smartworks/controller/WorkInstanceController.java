@@ -466,19 +466,19 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/create_async_message", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void createAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.createAsyncMessage(requestBody, request);
+		smartworks.createAsyncMessage(requestBody, request);
 	}
 
 	@RequestMapping(value = "/remove_async_message", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void removeAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeAsyncMessage(requestBody, request);
+		smartworks.removeAsyncMessage(requestBody, request);
 	}
 
 	@RequestMapping(value = "/set_async_message", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void setAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.setAsyncMessage(requestBody, request);
+		smartworks.setAsyncMessage(requestBody, request);
 	}
 
 	@RequestMapping(value = "/get_async_messages_by_user", method = RequestMethod.GET)

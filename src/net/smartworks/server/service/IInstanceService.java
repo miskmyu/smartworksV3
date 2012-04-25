@@ -118,4 +118,9 @@ public interface IInstanceService {
 
 	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }
