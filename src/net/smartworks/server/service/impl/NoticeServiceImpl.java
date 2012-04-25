@@ -278,7 +278,7 @@ public class NoticeServiceImpl implements INoticeService {
 							commentInstanceInfo.setWorkInstance(ModelConverter.getInstanceInfoByProcessInstId((String)recordIdPrcInstIdMap.get(opinion.getRefId())));
 						} else if (opinion.getRefType() == 2) {
 							//프로세스인스턴스
-							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_TASK_INSTANCE);
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE);
 							commentInstanceInfo.setWorkInstance(ModelConverter.getInstanceInfoByProcessInstId(opinion.getRefId()));
 						} else if (opinion.getRefType() == 6) {
 							//프로세스메뉴얼
