@@ -122,8 +122,8 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 				login.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 				login.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
-				login.setBigPictureName(rs.getString("picture"));
-				login.setSmallPictureName(rs.getString("picture"));
+				login.setBigPictureName(null);
+				login.setSmallPictureName(null);
 			}
 			login.setRole(rs.getString("roleId").equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
 			login.setUserLevel(login.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_DEFAULT);
