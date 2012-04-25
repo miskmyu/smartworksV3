@@ -9,7 +9,6 @@ public class CommentInstanceInfo extends InstanceInfo {
 
 	private int commentType=-1;
 	private InstanceInfo workInstance;
-	private TaskInstanceInfo taskInstance;
 	private UserInfo commentor;
 	private String comment;
 
@@ -27,14 +26,6 @@ public class CommentInstanceInfo extends InstanceInfo {
 
 	public void setWorkInstance(InstanceInfo workInstance) {
 		this.workInstance = workInstance;
-	}
-
-	public TaskInstanceInfo getTaskInstance() {
-		return taskInstance;
-	}
-
-	public void setTaskInstance(TaskInstanceInfo taskInstance) {
-		this.taskInstance = taskInstance;
 	}
 
 	public UserInfo getCommentor() {
