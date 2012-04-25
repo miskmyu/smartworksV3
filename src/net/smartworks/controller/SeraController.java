@@ -283,6 +283,18 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/course/invite_course_members.jsp", "");
 	}
 
+	@RequestMapping("/course_member")
+	public ModelAndView courseMember(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/search/course_member.jsp", "");
+	}
+
+	@RequestMapping("/sera_user")
+	public ModelAndView seraUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/search/sera_user.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
