@@ -8,6 +8,9 @@
 
 package net.smartworks.server.service.impl;
 
+import java.util.Date;
+
+import net.smartworks.model.community.User;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
@@ -16,10 +19,21 @@ import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
+import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Order;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.process.process.model.PrcProcessInst;
+import net.smartworks.server.engine.process.task.model.TskTask;
+import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.server.engine.worklist.model.TaskWork;
+import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
+import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,6 +119,8 @@ public class NoticeServiceImpl implements INoticeService {
 	public NoticeBox getNoticeBoxForMe10(int noticeType, String lastNoticeId) throws Exception {
 
 		try{
+			User user = SmartUtil.getCurrentUser();
+			
 			switch(noticeType){
 			case Notice.TYPE_MAILBOX:
 				RequestParams params = new RequestParams();
@@ -126,7 +142,72 @@ public class NoticeServiceImpl implements INoticeService {
 				return noticeBox;
 	
 			case Notice.TYPE_ASSIGNED:
+				
+				if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
+					return null;
+		
+				TaskWorkCond taskCond = new TaskWorkCond();
+				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+				
+				Date lastTaskCreationDate = null;
+				if (!CommonUtil.isEmpty(lastNoticeId)) {
+					TskTaskCond lastTaskCond = new TskTaskCond();	
+					lastTaskCond.setProcessInstId(lastNoticeId);
+					lastTaskCond.setAssignee(user.getId());
+					lastTaskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+					TskTask[] lastTasks = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), lastTaskCond, IManager.LEVEL_LITE);
+					if (lastTasks != null) {
+						lastTaskCreationDate = lastTasks[0].getCreationDate();
+					}
+				}
+				if (lastTaskCreationDate != null) {
+					taskCond.setLastInstanceDate(new LocalDate(lastTaskCreationDate.getTime()));
+				} else {
+					taskCond.setLastInstanceDate(new LocalDate());
+				}
+				taskCond.setTskAssignee(user.getId());
+				taskCond.setPageNo(0);
+				taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+				
+				long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+				
+				taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
+				
+				taskCond.setPageSize(10);
+				TaskWork[] tasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+				
+				if(tasks == null)
+					return null;
+				
+				InstanceInfo[] instInfos = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+				
+				NoticeBox assignTaskNoticeBox = new NoticeBox();
+				NoticeMessage[] assignTaskNotice = new NoticeMessage[instInfos.length];
+				for(int i=0; i<instInfos.length; i++){
+					assignTaskNotice[i] = new NoticeMessage(instInfos[i].getId(), 0, instInfos[i].getOwner(), instInfos[i].getCreatedDate());
+					assignTaskNotice[i].setInstance(instInfos[i]);
+				}
+				assignTaskNoticeBox.setNoticeMessages(assignTaskNotice);
+				assignTaskNoticeBox.setNoticeType(Notice.TYPE_ASSIGNED);
+				assignTaskNoticeBox.setDateOfLastNotice(new LocalDate(instInfos[instInfos.length -1].getCreatedDate().getTime()));
+				assignTaskNoticeBox.setRemainingLength((int)totalSize - instInfos.length);
+				return assignTaskNoticeBox;
+				
 			case Notice.TYPE_COMMENT:
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 			case Notice.TYPE_MESSAGE:
 			case Notice.TYPE_NOTIFICATION:
 			case Notice.TYPE_SAVEDBOX:

@@ -5635,4 +5635,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			likeMgr.removeLike(userId, like.getObjId());
 		}
 	}
+	
+	@Override
+	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+	}
+	@Override
+	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+	}
+	@Override
+	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		
+	}
+	
 }

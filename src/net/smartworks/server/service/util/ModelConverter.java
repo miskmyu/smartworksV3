@@ -933,7 +933,8 @@ public class ModelConverter {
 					tskInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 					tskInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));
 					tskInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
-
+					tskInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
+					
 					resultInfoList.add(tskInfo);
 				}
 			} else {
