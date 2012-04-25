@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.AsyncMessageInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -317,6 +318,13 @@
 									<dt class="icon_sm_notes">
 										<span>쪽지</span> 
 										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+										<%
+										if(message.getMsgStatus() == AsyncMessageInstance.MESSAGE_STATUS_UNREAD){
+										%>
+											<span class="icon_delete fr js_delete_instance_btn"><a href="" title="쪽지확인">쪽지확인</a></span>
+										<%	
+										}
+										%>
 									</dt>
 									<dd>
 										<div class="notes"><%=message.getMessage() %></div>
@@ -326,11 +334,15 @@
 								}
 								%>
 							
-								<%
-								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE ){
-								%>
-									<!-- Util -->
-									<dd class="util js_action_btns">
+								<!-- Util -->
+								<dd class="util js_action_btns">
+									<%
+									if(seraInstance.getType()==Instance.TYPE_ASYNC_MESSAGE ){
+									%>
+										<span><a href="" class="js_add_reply_note" >답글달기</a> | </span>
+									<%
+									{
+									%>
 										<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
 										<%
 										if(workInstance.doesCurrentUserLike()){
@@ -343,13 +355,13 @@
 										<%
 										}
 										%>
-										<span><a href="" class="js_show_more_content">더보기</a> | </span> 
-										<span class="date"><%=seraInstance.getLastModifiedDate().toLocalString() %></span>
-									</dd>
-									<!-- Util //-->
-								<%
-								}
-								%>
+									<%
+									}
+									%>
+									<span><a href="" class="js_show_more_content">더보기</a> | </span> 
+									<span class="date"><%=seraInstance.getLastModifiedDate().toLocalString() %></span>
+								</dd>
+								<!-- Util //-->
 							</dl>
 							
 							

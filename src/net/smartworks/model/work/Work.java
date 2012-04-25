@@ -10,6 +10,11 @@ public class Work extends BaseObject{
 	public final static int	TYPE_NOTIFICAITON	= 2;
 	public final static int	TYPE_COMMENTS		= 3;
 	public final static int	TYPE_MAIL_MESSAGE	= 4;
+	
+	public final static int TYPE_SERA_MISSION = 101;
+	public final static int TYPE_SERA_MISSION_REPORT = 102;
+	public final static int TYPE_SERA_REVIEW = 103;
+	public final static int TYPE_SERA_NOTE = 104;
 
 	public static final int PROVIDED_BY_USER = 0;
 	public static final int PROVIDED_BY_APPSTORE = 1;
