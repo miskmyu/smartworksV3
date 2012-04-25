@@ -72,6 +72,7 @@
 /* Input Type Align */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 .form_value .check_use { margin-left:10px}
+.form_value .check_use input[type="checkbox"] { vertical-align: bottom}
 .form_value .check_use label { line-height:18px}
 
 /* Form Space */
