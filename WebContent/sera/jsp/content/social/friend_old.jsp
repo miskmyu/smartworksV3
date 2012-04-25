@@ -1,4 +1,3 @@
-<%@page import="net.smartworks.model.sera.FriendInformList"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -13,12 +12,15 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	FriendInformList friendInforms = smartWorks.getMyFriendInformations(FriendInformList.MAX_FRIEND_LIST);
+	SeraUserInfo[] friendRequests = smartWorks.getFriendRequestsForMe(null, -1);
+	FriendList friendList = smartWorks.getFriendsById(cUser.getId(), FriendList.MAX_FRIEND_LIST);
+	int requestCount = (SmartUtil.isBlankObject(friendRequests)) ? 0 : friendRequests.length;
 	
 %>
 <!-- Header Title -->
 <div class="header_tit">
-	<div class="tit_friend">일상부터, 유용한 정보까지 함께 만들어가는자신의 친구들을 관리할 수 있습니다.</div>
+	<div class="tit_friend">일상부터, 유용한 정보까지 함께 만들어가는자신의 친구들을 관리할 수
+		있습니다.</div>
 </div>
 <!-- Header Title //-->
 
@@ -27,11 +29,10 @@
 	<!-- Panel1 -->
 	<div>
 		<div class="header mt10">
-			<div>새 친구 요청 <span class="t_orange tb js_requester_count" count="<%=friendInforms.getTotalRequesters()%>">(<%=friendInforms.getTotalRequesters() %>)</span></div>
+			<div>새 친구 요청 <span class="t_orange tb js_requester_count" count="<%=requestCount%>">(<%=requestCount %>)</span></div>
 		</div>
 		<div class="panel_area">
 			<%
-			SeraUserInfo[] friendRequests = friendInforms.getRequesters();
 			if(!SmartUtil.isBlankObject(friendRequests)){
 				for(int i=0; i<friendRequests.length; i++){
 					SeraUserInfo requester = friendRequests[i];
@@ -78,7 +79,7 @@
 	<!-- Panel2 -->
 	<div>
 		<div class="header mt20">
-			<div class="fl"><span class="t_myid"><%=cUser.getNickName() %>님</span>의 친구 (<span class="tb js_friend_count"><%=friendInforms.getTotalFriends() %></span>) </div>
+			<div class="fl"><span class="t_myid"><%=cUser.getNickName() %>님</span>의 친구 (<span class="tb js_friend_count"><%=friendList.getTotalFriends() %></span>) </div>
 			<div class="fr">
 				<input class="fl fieldline" style="width: 150px" type="text" />
 				<button type="button" class="fl ml5">검색</button>
@@ -87,9 +88,9 @@
 
 		<div class="panel_area js_friend_list">
 			<%
-			if(friendInforms.getTotalFriends()>0){
-				for(int i=0; i<friendInforms.getFriends().length; i++){
-					SeraUserInfo friend = friendInforms.getFriends()[i];
+			if(friendList.getTotalFriends()>0){
+				for(int i=0; i<friendList.getFriends().length; i++){
+					SeraUserInfo friend = friendList.getFriends()[i];
 			%>
 					<!-- 목록1-->
 					<div class="panel_rds_block mb10 js_friend_item" userId="<%=friend.getId()%>">
@@ -126,75 +127,9 @@
 	<!-- Panel2 //-->
 
 	<%
-	if (friendInforms.getTotalFriends() > 0) {
-		SeraUserInfo[] friends = friendInforms.getFriends();
-		if(friendInforms.getTotalFriends()>friends.length){
-			String lastId = friends[friends.length-1].getId(); 
-	%>
-			<!-- 더보기 -->
-			<div class="more js_more_friends_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
-				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
-				
-			</div>
-			<!-- 더보기 //-->
-	<%
-		}
-	}	
-	%>
-	<!-- Panel3 -->
-	<div>
-		<div class="header mt20">
-			<div class="fl"><span class="t_myid">친구요청이 가능한 세라인들</span> (<span class="tb js_non_friend_count"><%=friendInforms.getTotalNonFriends() %></span>) </div>
-			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
-			</div>
-		</div>
-
-		<div class="panel_area js_non_friend_list">
-			<%
-			if(friendInforms.getTotalNonFriends()>0){
-				for(int i=0; i<friendInforms.getNonFriends().length; i++){
-					SeraUserInfo friend = friendInforms.getNonFriends()[i];
-			%>
-					<!-- 목록1-->
-					<div class="panel_rds_block mb10 js_non_friend_item" userId="<%=friend.getId()%>">
-						<ul>
-							<li class="pl0pr10">
-								<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-									<img class="profile_size_m" src="<%=friend.getMinPicture() %>" />
-								</a>
-							</li>
-							<li class="w90">
-								<a href="othersPAGE.sw?userId=<%=friend.getId()%>">
-									<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
-								</a>
-							</li>
-							<li class="bo_l w370"><span><%=CommonUtil.toNotNull(friend.getGoal()) %><br /> <span class="t_id"><%=friend.getId() %></span>
-							</span>
-							</li>
-							<li class="fr bo_l">
-								<span> <!-- Btn -->
-									<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId()%>">
-										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
-									</div> <!-- Btn //--> 
-								</span>
-							</li>
-						</ul>
-					</div>
-					<!-- 목록1//-->
-			<%
-				}
-			}
-			%>
-		</div>
-	</div>
-	<!-- Panel2 //-->
-
-	<%
-	if (friendInforms.getTotalNonFriends() > 0) {
-		SeraUserInfo[] friends = friendInforms.getNonFriends();
-		if(friendInforms.getTotalNonFriends()>friends.length){
+	if (friendList.getFriends() != null) {
+		SeraUserInfo[] friends = friendList.getFriends();
+		if(friendList.getTotalFriends()>friends.length){
 			String lastId = friends[friends.length-1].getId(); 
 	%>
 			<!-- 더보기 -->

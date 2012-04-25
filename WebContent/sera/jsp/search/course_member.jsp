@@ -32,6 +32,7 @@
 	// 검색된 사용자가 있으면 목록을 만들어 보여준다...
 	if (users != null) {
 		for (UserInfo user : users) {
+			
 			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId();
 	%>
 			<li>

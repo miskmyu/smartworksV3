@@ -967,8 +967,7 @@ $(function() {
 					friend.remove();
 					var count = friendCount.html();
 					if(!isEmpty(count) && (count!=='0')){
-						count = parseInt(count)-1;
-						friendCount.html(count);
+						friendCount.html(parseInt(count)-1);
 					}
 				}else{
 					input.hide().siblings().show();
@@ -1002,8 +1001,17 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, "친구요청이 성공적으로 이루어 졌습니다.", function(){
-				});				
-				input.hide().siblings().show();
+				});
+				if(isEmpty(input.parents('.js_non_friend_list'))){
+					input.hide().siblings().show();
+				}else{
+					input.parents(',js_non_friend_item').remove();
+					if(!isEmpty(count) && (count!=='0')){
+						var nonFriendCount = input.parents('.js_friend_page').find('.js_non_friend_count');
+						var count = nonFriendCount.html();
+						nonFriendCount.html(parseInt(count)-1);
+					}
+				}
 			},
 			error : function(e) {
 				smartPop.closeProgress();

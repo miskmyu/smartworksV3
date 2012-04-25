@@ -30,8 +30,9 @@
 <ul>
 	<%
 	// 검색된 사용자가 있으면 목록을 만들어 보여준다...
-	if (users != null) {
+	if (users != null && !((users.length == 1 ) && users[0].getId().equals(cUser.getId()))) {
 		for (UserInfo user : users) {
+			if(user.getId().equals(cUser.getId())) continue;
 			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId();
 	%>
 			<li>
