@@ -17,7 +17,7 @@ function submitForms() {
 	if (SmartWorks.GridLayout.validate(newNote.find('form.js_validation_required'),  newNote.find('.sw_error_message'))) {
 		var forms = newNote.find('form');
 		var receiverId = forms.find('.js_community_item:first').attr('comId');
-		var message = forms.find('textarea[name="txtaNoteContent"]').attr('value');
+		var message = forms.find('textarea[name="txtNoteContent"]').attr('value');
 		var paramsJson = {};
 		var chatters = new Array();
 		chatters.push(receiverId);
@@ -36,7 +36,10 @@ function submitForms() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				window.location.href = "socialNote.sw";
+				smartPop.showInfo(smartPop.INFO, "쪽지가 성공적으로 전달되었습니다.", function(){
+					forms.find('.js_community_item').remove();
+					forms.find('textarea[name="txtNoteContent"]').attr('value', '');
+				});
 			},
 			error : function(e) {
 				smartPop.closeProgress();

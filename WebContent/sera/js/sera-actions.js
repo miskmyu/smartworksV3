@@ -620,7 +620,47 @@ $(function() {
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, "댓글달기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				smartPop.showInfo(smartPop.ERROR, "댓글달기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});
+			}
+			
+		});
+		
+	});
+	
+	$('.js_return_on_reply_note').live('keydown', function(e) {
+		if(e.which != $.ui.keyCode.ENTER) return;
+		var input = $(e.target);
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var message = input.attr('value');
+		if(isEmpty(message)) return false;
+		var receiverId = subInstanceList.attr('ownerId');
+		var paramsJson = {};
+		var chatters = new Array();
+		chatters.push(receiverId);
+		paramsJson['senderId'] = currentUser.userId;
+		paramsJson['receiverId'] = receiverId;
+		paramsJson['chatters'] = chatters;
+		paramsJson['message'] = message;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'create_async_message.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				var target = subInstanceList.find('.js_reply_list');
+				var newReply = target.find('.js_reply_instance').clone().show().removeClass('js_reply_instance');
+				newReply.find('.js_reply_content').html(message);
+				target.append(newReply);
+				input.attr('value', '');
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "답장 남기기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});
 			}
 			
@@ -750,6 +790,12 @@ $(function() {
 	$('a.js_add_sera_comment').live('click', function(e){
 		var input = $(e.target).removeAttr('href');
 		input.parents('.js_sub_instance_list').find('.js_return_on_sera_comment').show();
+		return false;
+	});
+
+	$('a.js_add_reply_note').live('click', function(e){
+		var input = $(e.target).removeAttr('href');
+		input.parents('.js_sub_instance_list').find('.js_return_on_reply_note').show();
 		return false;
 	});
 
