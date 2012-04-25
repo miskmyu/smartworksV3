@@ -5647,7 +5647,16 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
-		return SmartTest.getMyMessageInstancesByType(type, maxSize);
+
+		AsyncMessageList asyncMessageList = new AsyncMessageList();
+		AsyncMessageInstanceInfo[] messages = getMyMessageInstancesByType(type, null, maxSize);
+		int totalSize = 0;
+		if(!CommonUtil.isEmpty(messages))
+			totalSize = messages.length;
+		asyncMessageList.setTotalSize(totalSize);
+		asyncMessageList.setMessages(messages);
+
+		return asyncMessageList;
 	}
 
 	@Override
@@ -5657,7 +5666,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			String userId = user.getId();
 			MessageCond messageCond = new MessageCond();
 			messageCond.setTargetUser(userId);
-			messageCond.setCreationDateFrom(fromDate);
+			if(fromDate != null)
+				messageCond.setCreationDateFrom(fromDate);
 			messageCond.setPageNo(0);
 			messageCond.setPageSize(maxSize);
 			if(type == AsyncMessageInstance.MESSAGE_STATUS_UNREAD)
