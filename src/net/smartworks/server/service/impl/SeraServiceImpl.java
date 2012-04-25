@@ -664,8 +664,9 @@ public class SeraServiceImpl implements ISeraService {
 		
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 		
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, missionInstanceInfo.getType(), groupInfo, categoryInfo);
-	
+					//WorkInfo workInfo1 = new SmartWorkInfo(formId, formName, missionInstanceInfo.getWork().getType(), groupInfo, categoryInfo);
+					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					
 					missionInstanceInfo.setWork(workInfo);
 					//missionInstanceInfo.setViews(swdRecord.getHits());
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
@@ -2145,8 +2146,9 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), eventInstanceInfo.getType(), workGroupInfo, workCategoryInfo);
-
+					//WorkInfo workInfo1 = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), eventInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
+					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					
 					eventInstanceInfo.setWork(workInfo);
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
@@ -2855,8 +2857,9 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), noteInstanceInfo.getType(), workGroupInfo, workCategoryInfo);
-
+					//WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), noteInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
+					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					
 					noteInstanceInfo.setWork(workInfo);
 					noteInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					noteInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
@@ -3018,8 +3021,9 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), missionReportInstanceInfo.getType(), workGroupInfo, workCategoryInfo);
-
+					//WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), missionReportInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
+					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					
 					missionReportInstanceInfo.setWork(workInfo);
 					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					missionReportInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));

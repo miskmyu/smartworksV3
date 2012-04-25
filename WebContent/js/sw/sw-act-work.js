@@ -110,7 +110,7 @@ $(function() {
 			workId = planSWork.attr('workId');
 			target = planSWork.find('.js_upload_buttons');
 		}
-		if(!isEmpty(target.html())) return true;
+		if(isEmpty(target) || !isEmpty(target.html())) return true;
 		$.ajax({
 			url : 'upload_buttons.sw',
 			data : {

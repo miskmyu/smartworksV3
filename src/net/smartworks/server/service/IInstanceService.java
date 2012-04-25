@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -117,6 +119,10 @@ public interface IInstanceService {
 	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception;
+
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
 
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

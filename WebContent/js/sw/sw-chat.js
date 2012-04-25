@@ -171,8 +171,7 @@ function startChattingWindow(message) {
 			setRightPosition("new", $('#'+chatId));
 			updateChattingBoxTitle(chatId, chatterInfos);
 			for ( var i = 0; i < chatterInfos.length; i++){
-				updateChatterStatus(chatId, chatterInfos[i],
-						chatterInfos[i].status);
+				updateChatterStatus(chatId, chatterInfos[i], chatterInfos[i].status);
 			}
 			chattingBox.slideDown(1000);
 		},

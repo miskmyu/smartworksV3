@@ -43,8 +43,10 @@
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	if(SmartUtil.isBlankObject(work) || work.getId().equals(workId))
 		work = (SmartWork)smartWorks.getWorkById(workId);
-	if (SmartUtil.isBlankObject(work))
+	if (SmartUtil.isBlankObject(work)){
 		work = new SmartWork();
+		workId = Work.ID_EMPTY_WORK;
+	}
 	
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunities();
@@ -65,7 +67,7 @@
 			</a>
 		</span> 
 				
-		<span class="btn_gray fr ml3">
+		<span class="btn_gray ml3">
 			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
 			<a href="" class="js_cancel_action"> 
 				<span class="txt_btn_start"></span> 
@@ -104,7 +106,7 @@
 			<%
 			}else{
 			%>
-				<input name="selWorkSpaceType" type="hidden" <%if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
+				<input name="selWorkSpaceType" type="hidden" <%if(!SmartUtil.isBlankObject(workId) && workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
 				<select name="selWorkSpace" class="js_select_work_space">
 					<%
 					if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
