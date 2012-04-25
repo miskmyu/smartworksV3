@@ -420,6 +420,7 @@
 								</div>
 								<div class="reply_text">
 									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
+									<div class="t_refe">줄바꿈을 하려면 시프트(Shift)+엔터(Enter)키를 눌러주세요.</div>
 								</div>
 					        </div>
 						</div>
