@@ -5694,6 +5694,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					else asyncMessageInstanceInfo.setMsgStatus(AsyncMessageInstance.MESSAGE_STATUS_UNREAD);
 					asyncMessageInstanceInfo.setMessage(message.getContent());
 					asyncMessageInstanceInfo.setId(message.getObjId());
+					asyncMessageInstanceInfo.setType(Instance.TYPE_ASYNC_MESSAGE);
 					asyncMessageInstanceInfo.setSubject(StringUtil.subString(message.getContent(), 0, 30, "..."));
 					asyncMessageInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(message.getCreationUser()));
 					asyncMessageInstanceInfo.setCreatedDate(new LocalDate(message.getCreationDate().getTime()));
