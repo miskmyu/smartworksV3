@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -65,9 +66,9 @@
 						course = SmartUtil.isBlankObject(mission.getWorkSpace()) ? null : (CourseInfo)mission.getWorkSpace();
 				}
 			}
-			WorkInstanceInfo workInstance = (WorkInstanceInfo)seraInstance;
-			WorkInfo work = workInstance.getWork();
-			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
+			WorkInstanceInfo workInstance = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? (WorkInstanceInfo)seraInstance : null;
+			WorkInfo work = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? workInstance.getWork() : null;
+			int workType = (SmartUtil.isBlankObject(work)) ? (seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? Work.TYPE_ASYNC_MESSAGE : -1) : work.getType();
 			
 			if(i==MAX_SERA_INSTANCES){
 				String lastDateStr = (i>0) ? seraInstances[i-1].getLastModifiedDate().toLocalDateString2() : ""; 
@@ -102,7 +103,7 @@
 					</li>
 					<!-- photo//-->
 					<!-- comment -->
-					<li class="fr js_sub_instance_list" instanceId="<%=workInstance.getId() %>" workType="<%=workType%>"">
+					<li class="fr js_sub_instance_list" instanceId="<%=seraInstance.getId() %>" workType="<%=workType%>"">
 						<div class="point"></div>
 						<div class="panel_block fr">
 							<dl class="content">
@@ -389,25 +390,27 @@
 				            		</ul>
 				            		<div class="js_comment_list_target">
 										<%
-										if(workInstance.getSubInstanceCount()>0){
-											CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
-											//comments = SmartTest.getCommentInstances();
-											for(int j=0; j<comments.length; j++){
-												CommentInstanceInfo comment = comments[j];
+										if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
+											if(workInstance.getSubInstanceCount()>0){
+												CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
+												//comments = SmartTest.getCommentInstances();
+												for(int j=0; j<comments.length; j++){
+													CommentInstanceInfo comment = comments[j];
 										%>
-												<!-- Reply-->
-												<div class="reply_section">
-													<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
-														<div class="photo">
-															<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+													<!-- Reply-->
+													<div class="reply_section">
+														<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
+															<div class="photo">
+																<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+															</div>
+														</a>
+														<div class="reply_text">
+															<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 														</div>
-													</a>
-													<div class="reply_text">
-														<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 													</div>
-												</div>
-												<!-- Reply//-->
+													<!-- Reply//-->
 										<%
+												}
 											}
 										}
 										%>

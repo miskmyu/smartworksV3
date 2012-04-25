@@ -5742,7 +5742,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			String messageId = (String)requestBody.get("messageId");
+			String messageId = (String)requestBody.get("workInstanceId");
 
 			getMessageManager().removeMessage(userId, messageId);
 			
@@ -5759,7 +5759,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			String messageId = (String)requestBody.get("messageId");
+			String messageId = (String)requestBody.get("workInstanceId");
 
 			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
 			msg.setChecked(true);

@@ -1176,4 +1176,24 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
 	}
 
+	@Override
+	public void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		int workType = (Integer)requestBody.get("workType");
+		switch (workType) {
+		case Instance.TYPE_BOARD:
+			break;
+		case Instance.TYPE_EVENT:
+			break;
+		case Instance.TYPE_SERA_NOTE:
+			break;
+		case Instance.TYPE_SERA_MISSION_REPORT:
+			break;
+		case Instance.TYPE_ASYNC_MESSAGE:
+			instanceService.removeAsyncMessage(requestBody, request);
+			break;
+		default:
+			break;
+		}
+	}
+
 }
