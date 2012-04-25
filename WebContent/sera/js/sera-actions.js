@@ -441,6 +441,34 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_read_note_btn').live('click', function(e){
+		smartPop.confirm('쪽지읽기 확인을 하시겠습니까?', function(){
+			var input = $(e.target);
+			var subInstanceList = input.parents('.js_sub_instance_list');
+			var	instanceId = subInstanceList.attr('instanceId');
+			var paramsJson = {};
+			paramsJson['instanceId'] = instanceId;
+			paramsJson['msgStatus'] = 1;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'set_async_message.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					input.remove();
+					smartPop.closeProgress();
+				},
+				error : function(){
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "쪽지읽기 확인에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+				}
+			});
+		});
+		return false;
+	});
+	
 	$('.js_note_buttons').live('click', function(e){
 		var input = $(e.target);
 		var noteAttachmentTable = input.parents('.js_note_buttons').siblings('.js_note_attachment_table');
@@ -1071,7 +1099,6 @@ $(function() {
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
 		var isMultiUsers = userField.attr('multiUsers');
-		alert('in');
 		smartPop.selectUser(communityItems, target, width, isMultiUsers, null, true);
 		return false;
 	});

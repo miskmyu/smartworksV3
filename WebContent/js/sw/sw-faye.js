@@ -297,6 +297,9 @@ var smartTalk = {
 		}
 	},
 
+	fetchAsyncMessages : function(){
+	},
+
 	init : function() {
 		var fayeContext = serverUrl + swContext;
 		var reconnect = function() {

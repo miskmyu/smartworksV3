@@ -16,15 +16,15 @@ function submitForms() {
 	var newNote = $('.js_new_note_page');
 	if (SmartWorks.GridLayout.validate(newNote.find('form.js_validation_required'),  newNote.find('.sw_error_message'))) {
 		var forms = newNote.find('form');
+		var receiverId = forms.find('.js_community_item:first').attr('comId');
+		var message = forms.find('textarea[name="txtaNoteContent"]').attr('value');
 		var paramsJson = {};
-		for(var i=0; i<forms.length; i++){
-			var form = $(forms[i]);
-			if(form.attr('name') === 'frmSmartForm'){
-				paramsJson['formId'] = form.attr('formId');
-				paramsJson['formName'] = form.attr('formName');
-			}
-			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
-		}
+		var chatters = new Array();
+		chatters.push(receiverId);
+		paramsJson['senderId'] = currentUser.userId;
+		paramsJson['receiverId'] = receiverId;
+		paramsJson['chatters'] = chatters;
+		paramsJson['message'] = message;
 		console.log(JSON.stringify(paramsJson));
 		var progressSpan = newNote.find('.js_progress_span');
 		smartPop.progressCont(progressSpan);
