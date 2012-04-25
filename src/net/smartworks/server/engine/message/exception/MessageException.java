@@ -1,14 +1,7 @@
-/*	
- * $Id$
- * created by    : hsshin
- * creation-date : 2011. 11. 14.
- * =========================================================
- * Copyright (c) 2011 ManinSoft, Inc. All rights reserved.
- */
-
-package net.smartworks.server.engine.basicwork.message.exception;
+package net.smartworks.server.engine.message.exception;
 
 import net.smartworks.server.engine.common.exception.SwException;
+
 
 public class MessageException extends SwException {
 

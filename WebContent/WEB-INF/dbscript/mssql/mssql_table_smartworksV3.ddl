@@ -2260,3 +2260,19 @@ CREATE TABLE SwLike (
 	createdTime datetime,
 	primary key (id)
 );
+
+-- ¸Þ¼¼Áö
+CREATE TABLE SWMessage(
+	id varchar(50) NOT NULL,
+	content varchar(4000),
+	sendUserId varchar(50),
+	targetUserId varchar(50),
+	isChecked bit,
+	checkedTime datetime,
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);
+
