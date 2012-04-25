@@ -57,6 +57,8 @@ import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
+import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
@@ -1174,6 +1176,26 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
 		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
+	}
+
+	@Override
+	public void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		int workType = (Integer)requestBody.get("workType");
+		switch (workType) {
+		case SocialWork.TYPE_BOARD:
+			break;
+		case SocialWork.TYPE_EVENT:
+			break;
+		case Work.TYPE_SERA_NOTE:
+			break;
+		case Work.TYPE_SERA_MISSION_REPORT:
+			break;
+		case Work.TYPE_ASYNC_MESSAGE:
+			instanceService.removeAsyncMessage(requestBody, request);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

@@ -490,8 +490,7 @@ public class SeraController {
 	@RequestMapping(value = "/remove_sera_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void removeSeraInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.removeSeraInstane(requestBody, request);
-		// TO DO : Exception handler
+		smartworks.removeSeraInstane(requestBody, request);
 	}
 
 	@RequestMapping("/pop_select_course_member")

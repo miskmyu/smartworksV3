@@ -495,6 +495,8 @@ public interface ISmartWorks {
 
 	public abstract void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
