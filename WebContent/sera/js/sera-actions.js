@@ -1071,6 +1071,7 @@ $(function() {
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
 		var isMultiUsers = userField.attr('multiUsers');
+		alert('in');
 		smartPop.selectUser(communityItems, target, width, isMultiUsers, null, true);
 		return false;
 	});
@@ -1326,10 +1327,10 @@ $(function() {
 	});
 
 	$('textarea.js_sera_note_content').live('keypress', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 	$('textarea.js_sera_note_content').live('keyup', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 
 	$('.js_click_start_form').live('click', function(e){

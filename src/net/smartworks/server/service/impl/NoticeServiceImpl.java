@@ -8,9 +8,15 @@
 
 package net.smartworks.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.CommentInstance;
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
@@ -24,6 +30,8 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -38,6 +46,7 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class NoticeServiceImpl implements INoticeService {
@@ -199,16 +208,111 @@ public class NoticeServiceImpl implements INoticeService {
 				//댓글 타입
 				//프로세스인스턴스, 정보관리업무레코드, 프로세스메뉴얼
 				
-				CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+				//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
+				TskTaskCond myTaskCond = new TskTaskCond();
+				myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
+				myTaskCond.setAssignee(user.getId());
+				
+				TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
+				if (myTask == null)
+					return null;
+				List instanceIdList = new ArrayList();
+				
+				Map recordIdPrcInstIdMap = new HashMap();
+				
+				for (int i = 0; i < myTask.length; i++) {
+					TskTask task = myTask[i];
+					String tskType = task.getType();
+					if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+						String prcObjId = task.getProcessInstId();
+						if (!instanceIdList.contains(prcObjId)) {
+							instanceIdList.add(prcObjId);
+						}
+					} else if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+						String tskDef = task.getDef();
+						String tskForm = task.getForm();
+						if (CommonUtil.isEmpty(tskDef))
+							continue;
+						String[] temp = StringUtils.tokenizeToStringArray(tskDef, "|");
+						if (CommonUtil.isEmpty(temp) || temp.length != 2)
+							continue;
+						String formId = temp[0];
+						String recordId = temp[1];
+						if (!instanceIdList.contains(recordId)) {
+							instanceIdList.add(recordId);
+							recordIdPrcInstIdMap.put(recordId, task.getProcessInstId());
+						}
+					}
+				}
+				if (instanceIdList.size() == 0)
+					return null;
+				
+				String[] opinionRefIds = new String[instanceIdList.size()];
+				instanceIdList.toArray(opinionRefIds);
 				
 				
+				OpinionCond opinionCond = new OpinionCond();
+				opinionCond.setRefIdIns(opinionRefIds);
 				
+				long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
 				
+				opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
+				opinionCond.setPageNo(0);
+				opinionCond.setPageSize(10);
 				
+				Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+
+				List<CommentInstanceInfo> commentInstanceInfoList = new ArrayList<CommentInstanceInfo>();
+				CommentInstanceInfo[] commentInstanceInfos = null;
+				if(!CommonUtil.isEmpty(opinions)) {
+					int opinionLength = opinions.length;
+					for(int i=0; i<opinionLength; i++) {
+						Opinion opinion = opinions[i];
+						CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+						String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+						Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+						commentInstanceInfo.setId(opinion.getObjId());
+						if (opinion.getRefType() == 4) {
+							//정보관리 업무
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE);
+							commentInstanceInfo.setWorkInstance(ModelConverter.getInstanceInfoByProcessInstId((String)recordIdPrcInstIdMap.get(opinion.getRefId())));
+						} else if (opinion.getRefType() == 2) {
+							//프로세스인스턴스
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE);
+							commentInstanceInfo.setWorkInstance(ModelConverter.getInstanceInfoByProcessInstId(opinion.getRefId()));
+						} else if (opinion.getRefType() == 6) {
+							//프로세스메뉴얼
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+							//TODO
+						}
+						commentInstanceInfo.setComment(opinion.getOpinion());
+						commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+						commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+						commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+						commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+						
+						commentInstanceInfoList.add(commentInstanceInfo);
+					}
+				}
+				if(commentInstanceInfoList.size() > 0) {
+					commentInstanceInfos = new CommentInstanceInfo[commentInstanceInfoList.size()];
+					commentInstanceInfoList.toArray(commentInstanceInfos);
+				}
 				
+				NoticeBox commentNoticeBox = new NoticeBox();
+				NoticeMessage[] commentNotice = new NoticeMessage[commentInstanceInfos.length];
+				for(int i=0; i<commentInstanceInfos.length; i++){
+					commentNotice[i] = new NoticeMessage(commentInstanceInfos[i].getId(), 0, commentInstanceInfos[i].getOwner(), commentInstanceInfos[i].getCreatedDate());
+					commentNotice[i].setInstance(commentInstanceInfos[i]);
+				}
+				commentNoticeBox.setNoticeMessages(commentNotice);
+				commentNoticeBox.setNoticeType(Notice.TYPE_COMMENT);
+				commentNoticeBox.setDateOfLastNotice(new LocalDate(commentInstanceInfos[commentInstanceInfos.length -1].getCreatedDate().getTime()));
+				commentNoticeBox.setRemainingLength((int)totalCommentSize - commentInstanceInfos.length);
 				
-				
-				
+				return commentNoticeBox;
 				
 			case Notice.TYPE_MESSAGE:
 			case Notice.TYPE_NOTIFICATION:

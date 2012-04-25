@@ -87,28 +87,6 @@
 						</div>
 					</li>
 				<%
-				// 태스크 인스턴스 공간에 댓글을 남긴 경우   
-				} else if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_TASK_INSTANCE) {
-					work = commentInstance.getTaskInstance().getWorkInstance().getWork();
-					TaskInstanceInfo taskInstance = commentInstance.getTaskInstance();
-				%>
-					<li>
-					<div class="info_ms_section">
-						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>">
-								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
-						</div>
-						<div class="info_list">
-							<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=taskInstance.getWorkInstance().getWorkSpace()%>"><%=taskInstance.getSubject()%></a>
-							<%=commentInstance.getComment()%>
-							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-									<div class="btn_x js_remove_notice" ></div></a>
-							</div>
-						</div>
-						</div>
-					</li>
-				<%
 				// Community 및 업무 공간에 댓글을 남긴 경우   
 				} else if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_WORK_SPACE) {
 					WorkSpaceInfo workSpace = commentInstance.getWorkSpace();

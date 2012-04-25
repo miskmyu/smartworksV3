@@ -41,6 +41,7 @@ public class OpinionCond extends MisObjectCond {
 	private int refType;
 	private String groupId;
 	private String refId;
+	private String[] refIdIns;
 	private String refDomainId;
 	private String refFormId;
 	private String title;
@@ -269,6 +270,12 @@ public class OpinionCond extends MisObjectCond {
 	}
 	public void setWrittenDateTo(Date writtenDateTo) {
 		this.writtenDateTo = writtenDateTo;
+	}
+	public String[] getRefIdIns() {
+		return refIdIns;
+	}
+	public void setRefIdIns(String[] refIdIns) {
+		this.refIdIns = refIdIns;
 	}
 
 }

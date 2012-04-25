@@ -125,11 +125,11 @@
 						</div>
 						<div class="text m0" style="width:auto">
 							<ul class="cb">
-								<li class="tb"><%=mentor.getName()%></li>
-								<li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
+								<li class="tb mb5"><%=mentor.getName()%></li>
+								<%-- <li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
 									(<%=CommonUtil.toNotNull(mentor.getHomeTown())%>)</li>
 								<li><span class="bullet_dot">가족 :</span><%=CommonUtil.toNotNull(mentor.getFamily())%></li>
-								<li><span class="bullet_dot">주소 :</span><%=CommonUtil.toNotNull(mentor.getLiving())%></li>
+								<li><span class="bullet_dot">주소 :</span><%=CommonUtil.toNotNull(mentor.getLiving())%></li> --%>
 								<li><span class="bullet_dot">학력 :</span><%=CommonUtil.toNotNull(mentor.getEducations())%></li>
 								<li><span class="bullet_dot">경력 :</span><%=CommonUtil.toNotNull(mentor.getWorks())%></li>
 								<li><span class="bullet_dot">강의 :</span><%=CommonUtil.toNotNull(mentor.getLectures())%></li>
@@ -173,6 +173,7 @@
 							<span class="js_review_content" style="display:none"></span>
 							<div class="icon_date" style="display:none"><%=(new LocalDate()).toLocalString() %></div>
 							<textarea style="width:95%" class="up_textarea" name="txtaReviewContent" placeholder="리뷰 남겨주세요!"></textarea>
+							<div class="insert_text tr mr15 js_note_content_length">1000</div>
 						</div>
 						<div class="fr">
 							<div class="name fl mr5">별점</div>
