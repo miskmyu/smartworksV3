@@ -12,6 +12,7 @@ import java.util.Date;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -195,9 +196,10 @@ public class NoticeServiceImpl implements INoticeService {
 				
 			case Notice.TYPE_COMMENT:
 				
+				//댓글 타입
+				//프로세스인스턴스, 정보관리업무레코드, 프로세스메뉴얼
 				
-				
-				
+				CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
 				
 				
 				
