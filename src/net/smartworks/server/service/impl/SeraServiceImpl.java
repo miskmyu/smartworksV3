@@ -4376,7 +4376,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			Map resultMap = new HashMap();
 			for (SeraUserInfo userInfo : userInfos) {
-				resultMap.put(userInfo.getId(), userInfos);
+				resultMap.put(userInfo.getId(), userInfo);
 			}
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
@@ -4384,6 +4384,7 @@ public class SeraServiceImpl implements ISeraService {
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+				index += 1;
 			}
 			return tempUserInfos;
 		}
