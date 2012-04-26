@@ -51,11 +51,11 @@
 					<li>
 					<div class="info_ms_section">
 						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>">
+							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>"><%=work.getName()%></a>
+							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>"><%=work.getName()%></a>
 							<%=commentInstance.getComment()%>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
@@ -73,33 +73,11 @@
 					<li>
 					<div class="info_ms_section">
 						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"title="<%=owner.getLongName()%>">
+							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace()%>"><%=workInstance.getSubject()%></a>
-							<%=commentInstance.getComment()%>
-							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-									<div class="btn_x js_remove_notice" ></div></a>
-							</div>
-						</div>
-						</div>
-					</li>
-				<%
-				// 태스크 인스턴스 공간에 댓글을 남긴 경우   
-				} else if (commentInstance.getCommentType() == CommentInstance.COMMENT_TYPE_ON_TASK_INSTANCE) {
-					work = commentInstance.getTaskInstance().getWorkInstance().getWork();
-					TaskInstanceInfo taskInstance = commentInstance.getTaskInstance();
-				%>
-					<li>
-					<div class="info_ms_section">
-						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>">
-								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
-						</div>
-						<div class="info_list">
-							<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=taskInstance.getWorkInstance().getWorkSpace()%>"><%=taskInstance.getSubject()%></a>
+							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace()%>&workId=<%=work.getId() %>"><%=workInstance.getSubject()%></a>
 							<%=commentInstance.getComment()%>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
@@ -116,11 +94,11 @@
 					<li>
 					<div class="info_ms_section">
 						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>">
+							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><%=workSpace.getName()%></a>
+							<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=work.getId() %>"><%=workSpace.getName()%></a>
 							<%=commentInstance.getComment()%>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>

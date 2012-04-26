@@ -113,6 +113,7 @@ import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.sera.model.SeraUserDetail;
 import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
 import net.smartworks.server.service.ICommunityService;
+import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
@@ -120,6 +121,7 @@ import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -133,6 +135,12 @@ public class SeraServiceImpl implements ISeraService {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
 
+	private IInstanceService instanceService;
+
+	@Autowired
+	public void setInstanceService(IInstanceService instanceService) {
+		this.instanceService = instanceService;
+	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -3119,6 +3127,7 @@ public class SeraServiceImpl implements ISeraService {
 			InstanceInfo[] eventInfo = null;
 			InstanceInfo[] noteInfo = null;
 			InstanceInfo[] reportInfo = null;
+			InstanceInfo[] messageInfo = null;
 
 			switch (type) {
 			case Instance.TYPE_BOARD:
@@ -3132,6 +3141,9 @@ public class SeraServiceImpl implements ISeraService {
 				break;
 			case Instance.TYPE_SERA_MISSION_REPORT:
 				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, fromDate, maxList);
+				break;
+			case Instance.TYPE_ASYNC_MESSAGE:
+				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			default:
 				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, fromDate, maxList);
@@ -3166,6 +3178,12 @@ public class SeraServiceImpl implements ISeraService {
 					resultMap.put(createDate.getTime(), info);
 				}
 			}
+			if (messageInfo != null) {
+				for (InstanceInfo info : messageInfo) {
+					LocalDate createDate = info.getCreatedDate();
+					resultMap.put(createDate.getTime(), info);
+				}
+			}
 			if (resultMap.size() ==  0)
 				return null;
 
@@ -3184,7 +3202,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			InstanceInfo[] returnInstanceInfo = new InstanceInfo[returnInstanceInfoList.size()];
 			returnInstanceInfoList.toArray(returnInstanceInfo);
-			
+
 			//InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 			
 			return returnInstanceInfo;
@@ -3235,8 +3253,12 @@ public class SeraServiceImpl implements ISeraService {
 		String txtReportContent = null;
 		String selAccessLevel = null;
 		String txtNoteUrl = null;
-		String starPoint = null;
-		
+		String startPoint = null;
+		if(requestBody.get("starPoint").getClass().equals(Integer.class))
+			startPoint = String.valueOf((Integer)requestBody.get("starPoint"));
+		else if(requestBody.get("starPoint").getClass().equals(Double.class))
+			startPoint = String.valueOf((Double)requestBody.get("starPoint"));
+
 		Map<String, Object> txtNoteFile = null;
 		String fileGroupId = null;
 		Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
@@ -3252,7 +3274,6 @@ public class SeraServiceImpl implements ISeraService {
 		String videoFileName = null;
 		String videoFileSize = null;
 
-		
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
 			Object fieldValue = frmCreateSeraNoteMap.get(fieldId);
@@ -3339,7 +3360,7 @@ public class SeraServiceImpl implements ISeraService {
 			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_VIDEOFILESIZEFIELDID)) {
 				fieldData.setValue(videoFileSize);
 			}  else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_REPORT_STARPOINTFIELDID)) {
-				fieldData.setValue(starPoint);
+				fieldData.setValue(startPoint);
 			}
 			fieldDataList.add(fieldData);
 		}
@@ -3757,7 +3778,7 @@ public class SeraServiceImpl implements ISeraService {
 			String userId = user.getId();
 			CourseReviewCond courseReviewCond = new CourseReviewCond();
 			courseReviewCond.setCourseId(courseId);
-			courseReviewCond.setModificationDateFrom(new LocalDate(fromDate.getTime()));
+			courseReviewCond.setModificationDateFrom(fromDate);
 			courseReviewCond.setPageSize(maxList);
 			courseReviewCond.setPageNo(0);
 			courseReviewCond.setOrders(new Order[]{new Order(CourseReviewCond.A_MODIFICATIONDATE, false)});
@@ -4831,7 +4852,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		String[] requestFriendsIdArray = new String[requestFriends.length];
 		for (int i = 0; i < requestFriends.length; i++) {
-			requestFriendsIdArray[i] = requestFriends[i].getRequestName();
+			requestFriendsIdArray[i] = requestFriends[i].getRequestId();
 		}
 		
 		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, requestFriendsIdArray, null, maxList);
@@ -4849,15 +4870,16 @@ public class SeraServiceImpl implements ISeraService {
 		if (myFriends != null) {
 			for (int i = 0; i < myFriends.length; i++) {
 				SeraFriend myFriend = myFriends[i];
-				String myFriendName = null;
+				String myFriendId = null;
 				if (userId.equalsIgnoreCase(myFriend.getReceiveId())) {
-					myFriendName = myFriend.getRequestName();
+					myFriendId = myFriend.getRequestId();
 				} else {
-					myFriendName = myFriend.getReceiveName();
+					myFriendId = myFriend.getReceiveId();
 				}
-				myFriendsUserIdList.add(myFriendName);
+				myFriendsUserIdList.add(myFriendId);
 			}
 		}
+		myFriendsUserIdList.add(userId);
 		
 		String[] myFriendsUserIdArray = null;
 		if (myFriendsUserIdList != null && myFriendsUserIdList.size() != 0) {
@@ -4919,9 +4941,14 @@ public class SeraServiceImpl implements ISeraService {
 		seraUserCond.setUserIdNotIns(new String[]{userId});
 		long totalSeraUser = seraMgr.getSeraUserSize(userId, seraUserCond);
 		
+		SeraFriendCond relatedMyfriendCond = new SeraFriendCond();
+		relatedMyfriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+		relatedMyfriendCond.setRequestIdOrReceiveId(userId);
+		long relatedMyfriendSize = seraMgr.getFriendSize(userId, relatedMyfriendCond);
+		
 		friendInformList.setTotalRequesters((int)totalRequesters);
 		friendInformList.setTotalFriends((int)totalFriends);
-		friendInformList.setTotalNonFriends((int)(totalSeraUser-(totalRequesters + totalFriends)));
+		friendInformList.setTotalNonFriends((int)(totalSeraUser-(relatedMyfriendSize + totalFriends)));
 		
 		return friendInformList;
 	}

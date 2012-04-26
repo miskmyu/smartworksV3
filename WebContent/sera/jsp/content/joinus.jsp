@@ -379,6 +379,7 @@
 									<input name="txtUserId" type="text" class="fieldline fl required email" style="width:150px" value=""/>
 									<div class="btn_mid_l ml5 js_check_iddup_btn"><div class="btn_mid_r">중복확인</div></div>
 									<div class="btn_mid_l ml5 js_change_id_btn" style="display:none"><div class="btn_mid_r">아이디변경</div></div>
+									<div class="t_refe pt5 cb"> * 아이디는 이메일을 입력하여 주시기 바랍니다.</div>
 								</div>
 							</td>
 							<td rowspan="9" valign="top" class="m0">

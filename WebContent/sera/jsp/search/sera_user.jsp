@@ -21,7 +21,7 @@
 	// 전달된 키값으로 서버에서 사람을 찾아주는 기능을 호출한다.
 	String courseId = request.getParameter("courseId");
 	String key = request.getParameter("key");
-	UserInfo[] users = smartWorks.searchCommunityMember(courseId, key);
+	UserInfo[] users = smartWorks.searchUser(key);
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -30,9 +30,9 @@
 <ul>
 	<%
 	// 검색된 사용자가 있으면 목록을 만들어 보여준다...
-	if (users != null) {
+	if (users != null && !((users.length == 1 ) && users[0].getId().equals(cUser.getId()))) {
 		for (UserInfo user : users) {
-			
+			if(user.getId().equals(cUser.getId())) continue;
 			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId();
 	%>
 			<li>

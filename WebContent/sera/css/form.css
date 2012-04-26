@@ -17,13 +17,13 @@
 .icon_fb_space {padding-right: 28px; position: relative;} /* 아이콘이 들어가 있는 영역- 캘린더아이콘 영역 */
 .btn_fb_space {padding-right: 65px; position: relative;} /* 버튼4자 들어가 있는 영역 */
 .btn_fb_space5 {padding-right: 75px; position: relative;} /* 버튼5자 들어가 있는 영역 */
-.icon_fb_user {background: url("../images/btn_s_person.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_users {background: url("../images/btn_s_persons.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_date {background: url("../images/btn_s_calendar.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_time {background: url("../images/btn_s_time.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_work {background: url("../images/btn_s_work.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_depart {background: url("../images/btn_s_depart.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
-.icon_fb_group {background: url("../images/btn_s_group.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_user {background: url("../../images/btn_s_person.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_users {background: url("../../images/btn_s_persons.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_date {background: url("../../images/btn_s_calendar.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_time {background: url("../../images/btn_s_time.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_work {background: url("../../images/btn_s_work.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_depart {background: url("../../images/btn_s_depart.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
+.icon_fb_group {background: url("../../images/btn_s_group.jpg") no-repeat 0 0; height:18px; width:19px; position: absolute; right: 0; top: 0; display:inline-block; vertical-align:middle}
 
 /* 파일별 이미지 */
 .icon_file_asf {background: url("../../images/file/icon_asf.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
@@ -69,8 +69,11 @@
 .required_label span{padding-right:12px}
 
 
-/* Input Type */
+/* Input Type Align */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
+.form_value .check_use { margin-left:10px}
+.form_value .check_use input[type="checkbox"] { vertical-align: bottom}
+.form_value .check_use label { line-height:18px}
 
 /* Form Space */
 .form_space {padding-right:3px;}

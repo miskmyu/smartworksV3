@@ -297,6 +297,9 @@ var smartTalk = {
 		}
 	},
 
+	fetchAsyncMessages : function(){
+	},
+
 	init : function() {
 		var fayeContext = serverUrl + swContext;
 		var reconnect = function() {
@@ -485,7 +488,7 @@ var smartTalk = {
 			if ((chatterInfo.userId === currentUser.userId) || chatterInfo.userId === message.sender){
 				chatterInfo.status = userStatus.ONLINE;
 			}else{
-				//console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
+				console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
 				chatterInfo.onlineSub = chatManager.onlineSub(chatterInfo.userId);
 				if(!chatterInfo.onlineSub)
 					chatterInfo.onlineSub = smartTalk.subscribe(smartTalk.myChannel("/"
@@ -499,7 +502,7 @@ var smartTalk = {
 			}
 		}
 		smartTalk.publishJoinedChat(message.chatId);
-		//console.log(chatManager.chatList);
+		console.log(chatManager.chatList);
 	},
 
 	stopSubOnChatId : function(chatId) {

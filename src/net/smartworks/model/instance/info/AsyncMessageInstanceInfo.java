@@ -11,6 +11,7 @@ public class AsyncMessageInstanceInfo extends InstanceInfo {
 	private UserInfo[] chatters;
 	private LocalDate sendDate;
 	private int msgStatus;
+	private String briefMessage;
 	private String message;
 
 	public UserInfo getSender() {
@@ -24,6 +25,12 @@ public class AsyncMessageInstanceInfo extends InstanceInfo {
 	}
 	public void setSendDate(LocalDate sendDate) {
 		this.sendDate = sendDate;
+	}
+	public String getBriefMessage() {
+		return briefMessage;
+	}
+	public void setBriefMessage(String briefMessage) {
+		this.briefMessage = briefMessage;
 	}
 	public String getMessage() {
 		return message;

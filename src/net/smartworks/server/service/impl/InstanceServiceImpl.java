@@ -25,6 +25,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.AsyncMessageInstance;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.FieldData;
 import net.smartworks.model.instance.InformationWorkInstance;
@@ -106,6 +107,7 @@ import net.smartworks.server.engine.like.model.Like;
 import net.smartworks.server.engine.like.model.LikeCond;
 import net.smartworks.server.engine.message.manager.IMessageManager;
 import net.smartworks.server.engine.message.model.Message;
+import net.smartworks.server.engine.message.model.MessageCond;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
@@ -5645,13 +5647,72 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
-		return SmartTest.getMyMessageInstancesByType(type, maxSize);
+
+		AsyncMessageList asyncMessageList = new AsyncMessageList();
+		AsyncMessageInstanceInfo[] messages = getMyMessageInstancesByType(type, null, maxSize);
+		int totalSize = 0;
+		if(!CommonUtil.isEmpty(messages))
+			totalSize = messages.length;
+		asyncMessageList.setTotalSize(totalSize);
+		asyncMessageList.setMessages(messages);
+
+		return asyncMessageList;
 	}
 
 	@Override
 	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			MessageCond messageCond = new MessageCond();
+			messageCond.setTargetUser(userId);
+			if(fromDate != null)
+				messageCond.setCreationDateTo(fromDate);
+			messageCond.setPageNo(0);
+			messageCond.setPageSize(maxSize);
+			if(type == AsyncMessageInstance.MESSAGE_STATUS_UNREAD)
+				messageCond.setReadStatus(AsyncMessageInstance.MESSAGE_STATUS_UNREAD);
+			else if(type == AsyncMessageInstance.MESSAGE_STATUS_READ)
+				messageCond.setReadStatus(AsyncMessageInstance.MESSAGE_STATUS_READ);
+
+			Message[] messages = getMessageManager().getMessages(userId, messageCond, IManager.LEVEL_ALL);
+
+			if(CommonUtil.isEmpty(messages))
+				return null;
+
+			List<AsyncMessageInstanceInfo> asyncMessageInstanceInfoList = new ArrayList<AsyncMessageInstanceInfo>();
+			AsyncMessageInstanceInfo[] asyncMessageInstanceInfos = null;
+			if(!CommonUtil.isEmpty(messages)) {
+				for(Message message : messages) {
+					AsyncMessageInstanceInfo asyncMessageInstanceInfo = new AsyncMessageInstanceInfo();
+					asyncMessageInstanceInfo.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
+					asyncMessageInstanceInfo.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
+					asyncMessageInstanceInfo.setChatters(null);
+					asyncMessageInstanceInfo.setSendDate(new LocalDate(message.getCreationDate().getTime()));
+					boolean isChecked = message.getIsChecked();
+					if(isChecked) asyncMessageInstanceInfo.setMsgStatus(AsyncMessageInstance.MESSAGE_STATUS_READ);
+					else asyncMessageInstanceInfo.setMsgStatus(AsyncMessageInstance.MESSAGE_STATUS_UNREAD);
+					asyncMessageInstanceInfo.setMessage(message.getContent());
+					asyncMessageInstanceInfo.setId(message.getObjId());
+					asyncMessageInstanceInfo.setType(Instance.TYPE_ASYNC_MESSAGE);
+					asyncMessageInstanceInfo.setSubject(StringUtil.subString(message.getContent(), 0, 30, "..."));
+					asyncMessageInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(message.getCreationUser()));
+					asyncMessageInstanceInfo.setCreatedDate(new LocalDate(message.getCreationDate().getTime()));
+					asyncMessageInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(message.getModificationUser()));
+					asyncMessageInstanceInfo.setLastModifiedDate(new LocalDate(message.getModificationDate().getTime()));
+					asyncMessageInstanceInfoList.add(asyncMessageInstanceInfo);
+				}
+			}
+			if(asyncMessageInstanceInfoList.size() > 0) {
+				asyncMessageInstanceInfos = new AsyncMessageInstanceInfo[asyncMessageInstanceInfoList.size()];
+				asyncMessageInstanceInfoList.toArray(asyncMessageInstanceInfos);
+			}
+			return asyncMessageInstanceInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -5681,7 +5742,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			String messageId = (String)requestBody.get("messageId");
+			String messageId = (String)requestBody.get("workInstanceId");
 
 			getMessageManager().removeMessage(userId, messageId);
 			
@@ -5698,7 +5759,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			String messageId = (String)requestBody.get("messageId");
+			String messageId = (String)requestBody.get("workInstanceId");
 
 			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
 			msg.setChecked(true);

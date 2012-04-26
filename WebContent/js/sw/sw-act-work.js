@@ -38,6 +38,7 @@ $(function() {
 
 	$('a.js_cancel_action').live('click',function(e) {
 		var input = $('.js_select_action').find('a:first');
+		if(isEmpty(input)) return false;
 		$('.js_select_action').find('a').removeClass('current');
 		var currentAction = input.parents('.up_icon_list');
 		currentAction.find('a').addClass('current');
@@ -110,7 +111,7 @@ $(function() {
 			workId = planSWork.attr('workId');
 			target = planSWork.find('.js_upload_buttons');
 		}
-		if(isEmpty(target) || !isEmpty(target.html())) return true;
+		if(isEmpty(target) || !isEmpty(target.html())) return;
 		$.ajax({
 			url : 'upload_buttons.sw',
 			data : {

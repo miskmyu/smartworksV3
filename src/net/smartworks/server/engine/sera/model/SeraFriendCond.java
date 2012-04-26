@@ -21,7 +21,7 @@ public class SeraFriendCond extends Cond{
 	private String requestName;
 	private String receiveId;
 	private String receiveName;
-	private int acceptStatus;
+	private int acceptStatus = -1;
 	private Date requestDate;
 	private Date replyDate;
 	private String requestIdOrReceiveId;

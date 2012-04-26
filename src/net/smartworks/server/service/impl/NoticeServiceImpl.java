@@ -8,14 +8,23 @@
 
 package net.smartworks.server.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.instance.CommentInstance;
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
@@ -24,6 +33,10 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.message.model.Message;
+import net.smartworks.server.engine.message.model.MessageCond;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -38,6 +51,7 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class NoticeServiceImpl implements INoticeService {
@@ -143,9 +157,11 @@ public class NoticeServiceImpl implements INoticeService {
 				return noticeBox;
 	
 			case Notice.TYPE_ASSIGNED:
+
+				NoticeBox assignTaskNoticeBox = new NoticeBox();
 				
 				if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
-					return null;
+					return assignTaskNoticeBox;
 		
 				TaskWorkCond taskCond = new TaskWorkCond();
 				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
@@ -178,11 +194,10 @@ public class NoticeServiceImpl implements INoticeService {
 				TaskWork[] tasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 				
 				if(tasks == null)
-					return null;
+					return assignTaskNoticeBox;
 				
 				InstanceInfo[] instInfos = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
 				
-				NoticeBox assignTaskNoticeBox = new NoticeBox();
 				NoticeMessage[] assignTaskNotice = new NoticeMessage[instInfos.length];
 				for(int i=0; i<instInfos.length; i++){
 					assignTaskNotice[i] = new NoticeMessage(instInfos[i].getId(), 0, instInfos[i].getOwner(), instInfos[i].getCreatedDate());
@@ -195,23 +210,193 @@ public class NoticeServiceImpl implements INoticeService {
 				return assignTaskNoticeBox;
 				
 			case Notice.TYPE_COMMENT:
+
+				NoticeBox commentNoticeBox = new NoticeBox();
 				
 				//댓글 타입
 				//프로세스인스턴스, 정보관리업무레코드, 프로세스메뉴얼
 				
-				CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+				//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
+				TskTaskCond myTaskCond = new TskTaskCond();
+				myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
+				myTaskCond.setAssignee(user.getId());
+				
+				TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
+				if (myTask == null)
+					return commentNoticeBox;
+				List instanceIdList = new ArrayList();
+				
+				Map recordIdPrcInstIdMap = new HashMap();
+				for (int i = 0; i < myTask.length; i++) {
+					TskTask task = myTask[i];
+					String tskType = task.getType();
+					if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+						String prcObjId = task.getProcessInstId();
+						if (!instanceIdList.contains(prcObjId)) {
+							instanceIdList.add(prcObjId);
+						}
+					} else if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+						String tskDef = task.getDef();
+						String tskForm = task.getForm();
+						if (CommonUtil.isEmpty(tskDef))
+							continue;
+						String[] temp = StringUtils.tokenizeToStringArray(tskDef, "|");
+						if (CommonUtil.isEmpty(temp) || temp.length != 2)
+							continue;
+						String formId = temp[0];
+						String recordId = temp[1];
+						if (!instanceIdList.contains(recordId)) {
+							instanceIdList.add(recordId);
+							recordIdPrcInstIdMap.put(recordId, task.getProcessInstId());
+						}
+					}
+				}
+				if (instanceIdList.size() == 0)
+					return commentNoticeBox;
+				
+				String[] opinionRefIds = new String[instanceIdList.size()];
+				instanceIdList.toArray(opinionRefIds);
 				
 				
+				OpinionCond opinionCond = new OpinionCond();
+				opinionCond.setRefIdIns(opinionRefIds);
 				
+				long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
 				
+				opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
+				opinionCond.setPageNo(0);
+				opinionCond.setPageSize(10);
 				
+				if (!CommonUtil.isEmpty(lastNoticeId)) {
+					Opinion lastOpinion = SwManagerFactory.getInstance().getOpinionManager().getOpinion(user.getId(), lastNoticeId, null);
+					if (lastOpinion != null) {
+						opinionCond.setWrittenDateTo(lastOpinion.getCreationDate());
+					}
+				}
 				
+				Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+
+				List<CommentInstanceInfo> commentInstanceInfoList = new ArrayList<CommentInstanceInfo>();
+				CommentInstanceInfo[] commentInstanceInfos = null;
+				if(!CommonUtil.isEmpty(opinions)) {
+					int opinionLength = opinions.length;
+					for(int i=0; i<opinionLength; i++) {
+						Opinion opinion = opinions[i];
+						CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+						String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+						Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+						commentInstanceInfo.setId(opinion.getObjId());
+						if (opinion.getRefType() == 4) {
+							//정보관리 업무
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE);
+							//commentInstanceInfo.setWorkInstance(ModelConverter.getIWInstanceInfoByRecordId(null, opinion.getRefId()));
+							WorkInstanceInfo wInfo = ModelConverter.getWorkInstanceInfoByPrcProcessInstId((String)recordIdPrcInstIdMap.get(opinion.getRefId()));
+							wInfo.setId(opinion.getRefId());
+							commentInstanceInfo.setWorkInstance(wInfo);
+						} else if (opinion.getRefType() == 2) {
+							//프로세스인스턴스
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_INSTANCE);
+							WorkInstanceInfo pInfo = ModelConverter.getWorkInstanceInfoByPrcProcessInstId(opinion.getRefId());
+							pInfo.setId(opinion.getRefId());
+							commentInstanceInfo.setWorkInstance(pInfo);
+						} else if (opinion.getRefType() == 6) {
+							//프로세스메뉴얼
+							commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+							//TODO
+						}
+						commentInstanceInfo.setComment(opinion.getOpinion());
+						commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+						commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+						commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+						commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));
+						
+						commentInstanceInfoList.add(commentInstanceInfo);
+					}
+				}
+				if(commentInstanceInfoList.size() > 0) {
+					commentInstanceInfos = new CommentInstanceInfo[commentInstanceInfoList.size()];
+					commentInstanceInfoList.toArray(commentInstanceInfos);
+				}
 				
+				NoticeMessage[] commentNotice = new NoticeMessage[commentInstanceInfos.length];
+				for(int i=0; i<commentInstanceInfos.length; i++){
+					commentNotice[i] = new NoticeMessage(commentInstanceInfos[i].getId(), 0, commentInstanceInfos[i].getOwner(), commentInstanceInfos[i].getCreatedDate());
+					commentNotice[i].setInstance(commentInstanceInfos[i]);
+				}
+				commentNoticeBox.setNoticeMessages(commentNotice);
+				commentNoticeBox.setNoticeType(Notice.TYPE_COMMENT);
+				commentNoticeBox.setDateOfLastNotice(new LocalDate(commentInstanceInfos[commentInstanceInfos.length -1].getCreatedDate().getTime()));
+				commentNoticeBox.setRemainingLength((int)totalCommentSize - commentInstanceInfos.length);
 				
-				
+				return commentNoticeBox;
 				
 			case Notice.TYPE_MESSAGE:
+
+				NoticeBox messageNoticeBox = new NoticeBox();
+				
+				MessageCond messageCond = new MessageCond();
+				messageCond.setTargetUser(user.getId());
+				messageCond.setChecked(false);
+				
+				long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(user.getId(), messageCond);
+
+				messageCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
+				messageCond.setPageNo(0);
+				messageCond.setPageSize(10);
+				
+				if (!CommonUtil.isEmpty(lastNoticeId)) {
+					Message lastMessage = SwManagerFactory.getInstance().getMessageManager().getMessage(user.getId(), lastNoticeId, null);
+					if (lastMessage != null) {
+						messageCond.setCreationDateTo(lastMessage.getCreationDate());
+					}
+				}
+				
+				Message[] messages = SwManagerFactory.getInstance().getMessageManager().getMessages(user.getId(), messageCond, IManager.LEVEL_ALL);
+				
+				if (messages == null)
+					return messageNoticeBox;
+				
+				AsyncMessageInstanceInfo[] asyncMessageInstanceInfos = new AsyncMessageInstanceInfo[messages.length];
+				for (int i = 0; i < messages.length; i++) {
+					Message message = messages[i];
+					AsyncMessageInstanceInfo asyncMessage = new AsyncMessageInstanceInfo();
+					
+					asyncMessage.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
+					asyncMessage.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
+					asyncMessage.setChatters(null);
+					asyncMessage.setSendDate(new LocalDate(message.getCreationDate().getTime()));
+					asyncMessage.setMsgStatus(message.getStatus() == null || message.getStatus() == "" ? -1 : Integer.parseInt(message.getStatus()));
+					
+					asyncMessage.setMessage(message.getContent());
+					asyncMessage.setCreatedDate(new LocalDate(message.getCreationDate().getTime()));
+					asyncMessageInstanceInfos[i] = asyncMessage;
+				}
+				
+				NoticeMessage[] messageNotice = new NoticeMessage[asyncMessageInstanceInfos.length];
+				for(int i=0; i<asyncMessageInstanceInfos.length; i++){
+					messageNotice[i] = new NoticeMessage(asyncMessageInstanceInfos[i].getId(), 0, asyncMessageInstanceInfos[i].getOwner(), asyncMessageInstanceInfos[i].getCreatedDate());
+					messageNotice[i].setInstance(asyncMessageInstanceInfos[i]);
+				}
+				messageNoticeBox.setNoticeMessages(messageNotice);
+				messageNoticeBox.setNoticeType(Notice.TYPE_MESSAGE);
+				messageNoticeBox.setDateOfLastNotice(new LocalDate(asyncMessageInstanceInfos[asyncMessageInstanceInfos.length -1].getCreatedDate().getTime()));
+				messageNoticeBox.setRemainingLength((int)totalMessageSize - asyncMessageInstanceInfos.length);
+				
+				return messageNoticeBox;
+				
 			case Notice.TYPE_NOTIFICATION:
+				
+				NoticeMessage noticeMessate = new NoticeMessage();
+				
+				
+				
+				
+				
+				
+				
+				
 			case Notice.TYPE_SAVEDBOX:
 				return SmartTest.getNoticeBoxForMe10(noticeType);
 			}

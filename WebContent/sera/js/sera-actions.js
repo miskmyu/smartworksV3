@@ -441,6 +441,34 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_read_note_btn').live('click', function(e){
+		smartPop.confirm('쪽지읽기 확인을 하시겠습니까?', function(){
+			var input = $(e.target);
+			var subInstanceList = input.parents('.js_sub_instance_list');
+			var	instanceId = subInstanceList.attr('instanceId');
+			var paramsJson = {};
+			paramsJson['instanceId'] = instanceId;
+			paramsJson['msgStatus'] = 1;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'set_async_message.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					input.remove();
+					smartPop.closeProgress();
+				},
+				error : function(){
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "쪽지읽기 확인에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+				}
+			});
+		});
+		return false;
+	});
+	
 	$('.js_note_buttons').live('click', function(e){
 		var input = $(e.target);
 		var noteAttachmentTable = input.parents('.js_note_buttons').siblings('.js_note_attachment_table');
@@ -592,7 +620,47 @@ $(function() {
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, "댓글달기에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				smartPop.showInfo(smartPop.ERROR, "댓글달기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});
+			}
+			
+		});
+		
+	});
+	
+	$('.js_return_on_reply_note').live('keydown', function(e) {
+		if(e.which != $.ui.keyCode.ENTER) return;
+		var input = $(e.target);
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var message = input.attr('value');
+		if(isEmpty(message)) return false;
+		var receiverId = subInstanceList.attr('ownerId');
+		var paramsJson = {};
+		var chatters = new Array();
+		chatters.push(receiverId);
+		paramsJson['senderId'] = currentUser.userId;
+		paramsJson['receiverId'] = receiverId;
+		paramsJson['chatters'] = chatters;
+		paramsJson['message'] = message;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'create_async_message.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				var target = subInstanceList.find('.js_reply_list');
+				var newReply = target.find('.js_reply_instance').clone().show().removeClass('js_reply_instance');
+				newReply.find('.js_reply_content').html(message);
+				target.append(newReply);
+				input.attr('value', '');
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "답장 남기기에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
 				});
 			}
 			
@@ -722,6 +790,12 @@ $(function() {
 	$('a.js_add_sera_comment').live('click', function(e){
 		var input = $(e.target).removeAttr('href');
 		input.parents('.js_sub_instance_list').find('.js_return_on_sera_comment').show();
+		return false;
+	});
+
+	$('a.js_add_reply_note').live('click', function(e){
+		var input = $(e.target).removeAttr('href');
+		input.parents('.js_sub_instance_list').find('.js_return_on_reply_note').show();
 		return false;
 	});
 
@@ -893,8 +967,7 @@ $(function() {
 					friend.remove();
 					var count = friendCount.html();
 					if(!isEmpty(count) && (count!=='0')){
-						count = parseInt(count)-1;
-						friendCount.html(count);
+						friendCount.html(parseInt(count)-1);
 					}
 				}else{
 					input.hide().siblings().show();
@@ -928,8 +1001,17 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, "친구요청이 성공적으로 이루어 졌습니다.", function(){
-				});				
-				input.hide().siblings().show();
+				});
+				if(isEmpty(input.parents('.js_non_friend_list'))){
+					input.hide().siblings().show();
+				}else{
+					input.parents(',js_non_friend_item').remove();
+					if(!isEmpty(count) && (count!=='0')){
+						var nonFriendCount = input.parents('.js_friend_page').find('.js_non_friend_count');
+						var count = nonFriendCount.html();
+						nonFriendCount.html(parseInt(count)-1);
+					}
+				}
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -1326,10 +1408,10 @@ $(function() {
 	});
 
 	$('textarea.js_sera_note_content').live('keypress', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 	$('textarea.js_sera_note_content').live('keyup', function(e) {
-		return textareaMaxSize(e, 500, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 
 	$('.js_click_start_form').live('click', function(e){
@@ -1344,7 +1426,7 @@ $(function() {
 			newNote.find('form[name="frmNewNote"]').addClass('form_title');
 			target = newNote.find('.js_upload_buttons');
 		}
-		if(isEmpty(target) || !isEmpty(target.html())) return true;
+		if(isEmpty(target) || !isEmpty(target.html())) return;
 		$.ajax({
 			url : 'upload_buttons.sw',
 			data : {
@@ -1360,7 +1442,21 @@ $(function() {
 				
 			}
 		});			
-		return true;
+		return false;
 	});
 
+	$('a.js_cancel_action').live('click',function(e) {
+		var input = $(e.target);
+		var newNote = input.parents('.js_new_note_page');
+		var newEvent = input.parents('.js_new_event_page');
+		var newBoard = input.parents('.js_new_board_page');
+		if(!isEmpty(newNote)){
+			newNote.find('.js_community_item').remove();
+			newNote.find('input.js_auto_complete').attr('value', '');
+			newNote.find('textarea').attr("value", "");
+		}else if(!isEmpty(newEvent)){
+		}else if(!isEmpty(newBoard)){
+		}
+		return false;
+	});
 });

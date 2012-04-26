@@ -126,6 +126,7 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 		String objId = null;
 		int refType = 0;
 		String refId = null;
+		String[] refIdIns = null;
 		String groupId = null;
 		String title = null;
 		String opinion = null;
@@ -143,6 +144,7 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 			refType = cond.getRefType();
 			groupId = cond.getGroupId();
 			refId = cond.getRefId();
+			refIdIns = cond.getRefIdIns();
 			refDomainId = cond.getRefDomainId();
 			refFormId = cond.getRefFormId();
 			title = cond.getTitle();
@@ -166,6 +168,15 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 				buf.append(" and obj.groupId = :groupId");
 			if (refId != null) 
 				buf.append(" and obj.refId = :refId");
+			if (refIdIns != null && refIdIns.length != 0) {
+				buf.append(" and obj.refId in (");
+				for (int i=0; i<refIdIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":refIdIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (refDomainId != null) 
 				buf.append(" and obj.refDomainId = :refDomainId");
 			if (refFormId != null)
@@ -195,6 +206,11 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 				query.setString("objId", objId);
 			if (refType != 0)
 				query.setInteger("refType", refType);
+			if (refIdIns != null && refIdIns.length != 0) {
+				for (int i=0; i<refIdIns.length; i++) {
+					query.setString("refIdIn"+i, refIdIns[i]);
+				}
+			}
 			if (groupId != null)
 				query.setString("groupId", groupId);
 			if (refId != null)

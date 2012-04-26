@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.work.Work"%>
+<%@page import="net.smartworks.model.instance.AsyncMessageInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.work.info.WorkInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -65,9 +67,9 @@
 						course = SmartUtil.isBlankObject(mission.getWorkSpace()) ? null : (CourseInfo)mission.getWorkSpace();
 				}
 			}
-			WorkInstanceInfo workInstance = (WorkInstanceInfo)seraInstance;
-			WorkInfo work = workInstance.getWork();
-			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
+			WorkInstanceInfo workInstance = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? (WorkInstanceInfo)seraInstance : null;
+			WorkInfo work = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? workInstance.getWork() : null;
+			int workType = (SmartUtil.isBlankObject(work)) ? (seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? Work.TYPE_ASYNC_MESSAGE : -1) : work.getType();
 			
 			if(i==MAX_SERA_INSTANCES){
 				String lastDateStr = (i>0) ? seraInstances[i-1].getLastModifiedDate().toLocalDateString2() : ""; 
@@ -102,7 +104,7 @@
 					</li>
 					<!-- photo//-->
 					<!-- comment -->
-					<li class="fr js_sub_instance_list" instanceId="<%=workInstance.getId() %>" workType="<%=workType%>"">
+					<li class="fr js_sub_instance_list" instanceId="<%=seraInstance.getId() %>" workType="<%=workType%>" ownerId="<%=seraInstance.getOwner().getId()%>">
 						<div class="point"></div>
 						<div class="panel_block fr">
 							<dl class="content">
@@ -317,20 +319,34 @@
 									<dt class="icon_sm_notes">
 										<span>쪽지</span> 
 										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
+										<%
+										if(message.getMsgStatus() == AsyncMessageInstance.MESSAGE_STATUS_UNREAD){
+										%>
+											<span class="icon_delete fr js_read_note_btn"><a href="" title="읽기확인">읽기확인</a></span>
+										<%	
+										}
+										%>
 									</dt>
 									<dd>
-										<div class="notes"><%=message.getMessage() %></div>
+										<div class="text js_brief_content"><%=message.getMessage() %></div>
+<%-- 										<div class="text js_brief_content"><%=message.getBriefMessage() %></div>
+ --%>
+										<div class="notes" style="display:none"><%=message.getMessage() %></div>
 									</dd>
 								<%
 									break;
 								}
 								%>
 							
-								<%
-								if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE ){
-								%>
-									<!-- Util -->
-									<dd class="util js_action_btns">
+								<!-- Util -->
+								<dd class="util js_action_btns">
+									<%
+									if(seraInstance.getType()==Instance.TYPE_ASYNC_MESSAGE ){
+									%>
+										<span><a href="" class="js_add_reply_note" >답장하기</a> | </span>
+									<%
+									}else{
+									%>
 										<span><a href="" class="js_add_sera_comment" >댓글달기</a> | </span>
 										<%
 										if(workInstance.doesCurrentUserLike()){
@@ -342,86 +358,118 @@
 											<span><a href="" class="js_add_sera_like" >공감하기</a> | </span>
 										<%
 										}
-										%>
-										<span><a href="" class="js_show_more_content">더보기</a> | </span> 
-										<span class="date"><%=seraInstance.getLastModifiedDate().toLocalString() %></span>
-									</dd>
-									<!-- Util //-->
-								<%
-								}
-								%>
+									}
+									%>
+									<span><a href="" class="js_show_more_content">더보기</a> | </span> 
+									<span class="date"><%=seraInstance.getLastModifiedDate().toLocalString() %></span>
+								</dd>
+								<!-- Util //-->
 							</dl>
 							
-							
-							<!-- Reply -->
-							<div class="js_comment_list">
-								<div class="reply_section js_comment_instance" style="display:none">
+							<%
+							if(seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE){
+							%>						
+								<!-- Reply -->
+								<div class="js_comment_list">
+									<div class="reply_section js_comment_instance" style="display:none">
+										<div class="photo">
+											<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
+										</div>
+										<div class="reply_text">
+											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+										</div>
+									</div>
+									<div class="stat_notice">
+										<ul class="js_likes_count_shown">
+											<%
+											if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
+												if(!SmartUtil.isBlankObject(workInstance.getLikers())){
+											%>
+													<li>
+														<span class="icon_like"></span><span class="t_blue js_likes_count"><%=workInstance.getLikers().length %></span>명이 공감합니다.
+													</li>
+												<%
+												}
+												if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+												%>
+													<li>
+														<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
+															<span class="icon_reply"></span>											
+															<span class="t_blue"><%=workInstance.getSubInstanceCount() %></span>개의 댓글 모두보기
+									            		</a>
+								            		</li>
+								            <%
+												}
+											}
+								            %>
+					            		</ul>
+					            		<div class="js_comment_list_target">
+											<%
+											if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE) {
+												if(workInstance.getSubInstanceCount()>0){
+													CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
+													//comments = SmartTest.getCommentInstances();
+													for(int j=0; j<comments.length; j++){
+														CommentInstanceInfo comment = comments[j];
+											%>
+														<!-- Reply-->
+														<div class="reply_section">
+															<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
+																<div class="photo">
+																	<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
+																</div>
+															</a>
+															<div class="reply_text">
+																<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+															</div>
+														</div>
+														<!-- Reply//-->
+											<%
+													}
+												}
+											}
+											%>
+										</div>
+					            	</div>									
+								</div>
+						        <div class="reply_section js_return_on_sera_comment" style="display:none">
 									<div class="photo">
-										<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
+										<img src="<%=cUser.getMinPicture()%>" class="profile_size_m"/>
 									</div>
 									<div class="reply_text">
-										<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+										<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
+										<div class="t_refe">줄바꿈을 하려면 시프트(Shift)+엔터(Enter)키를 눌러주세요.</div>
 									</div>
-								</div>
-								<div class="stat_notice">
-									<ul class="js_likes_count_shown">
-										<%
-										if(seraInstance.getType()!=Instance.TYPE_ASYNC_MESSAGE){
-											if(!SmartUtil.isBlankObject(workInstance.getLikers())){
-										%>
-												<li>
-													<span class="icon_like"></span><span class="t_blue js_likes_count"><%=workInstance.getLikers().length %></span>명이 공감합니다.
-												</li>
-											<%
-											}
-											if(workInstance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
-											%>
-												<li>
-													<a href="comments_in_instance.sw?instanceId=<%=workInstance.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_sera_comments">
-														<span class="icon_reply"></span>											
-														<span class="t_blue"><%=workInstance.getSubInstanceCount() %></span>개의 댓글 모두보기
-								            		</a>
-							            		</li>
-							            <%
-											}
-										}
-							            %>
-				            		</ul>
-				            		<div class="js_comment_list_target">
-										<%
-										if(workInstance.getSubInstanceCount()>0){
-											CommentInstanceInfo[] comments = (CommentInstanceInfo[])workInstance.getSubInstances();
-											//comments = SmartTest.getCommentInstances();
-											for(int j=0; j<comments.length; j++){
-												CommentInstanceInfo comment = comments[j];
-										%>
-												<!-- Reply-->
-												<div class="reply_section">
-													<a <%if(!comment.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=comment.getOwner().getId()%>" <%} %>>
-														<div class="photo">
-															<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
-														</div>
-													</a>
-													<div class="reply_text">
-														<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
-													</div>
-												</div>
-												<!-- Reply//-->
-										<%
-											}
-										}
-										%>
+						        </div>
+					        <%
+							}else{
+					        %>
+								<!-- Reply -->
+								<div class="js_reply_list">
+									<div class="reply_section js_reply_instance" style="display:none">
+										<div class="photo">
+											<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
+										</div>
+										<div class="reply_text">
+											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_reply_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+										</div>
 									</div>
-				            	</div>									
-							</div>
-					        <div class="reply_section js_return_on_sera_comment" style="display:none">
-								<div class="photo">
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_m"/>
+									<div class="stat_notice">
+					            		<div class="js_reply_list_target"></div>
+					            	</div>									
 								</div>
-								<div class="reply_text">
-									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="댓글을 남겨주세요!"></textarea>
-								</div>
-					        </div>
+						        <div class="reply_section js_return_on_reply_note" style="display:none">
+									<div class="photo">
+										<img src="<%=cUser.getMinPicture()%>" class="profile_size_m"/>
+									</div>
+									<div class="reply_text">
+										<textarea style="width:95%" class="up_textarea" name="txtaReplyContent" placeholder="답장을 남겨주세요!"></textarea>
+										<div class="t_refe">줄바꿈을 하려면 시프트(Shift)+엔터(Enter)키를 눌러주세요.</div>
+									</div>
+						        </div>
+							<%
+							}
+							%>
 						</div>
 					</li>
 					<!-- comment //-->

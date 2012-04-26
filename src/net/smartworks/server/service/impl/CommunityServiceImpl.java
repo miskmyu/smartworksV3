@@ -654,6 +654,16 @@ public class CommunityServiceImpl implements ICommunityService {
 				userInfo.setName(schUser.getName());
 				userInfo.setPosition(schUser.getPosition());
 				userInfo.setRole(schUser.getRole());
+				String picture = CommonUtil.toNotNull(schUser.getUserPicture());
+				if(!picture.equals("")) {
+					String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+					String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+					userInfo.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+					userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				} else {
+					userInfo.setBigPictureName(null);
+					userInfo.setSmallPictureName(null);
+				}
 				DepartmentInfo departmentInfo = new DepartmentInfo();
 				departmentInfo.setId(schUser.getUserDeptId());
 				departmentInfo.setName(schUser.getUserDeptName());
