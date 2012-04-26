@@ -326,9 +326,14 @@
 										<%	
 										}
 										%>
-									</dt>
+									</dt> 
 									<dd>
-										<div class="text js_brief_content"><%=message.getMessage() %></div>
+										<div class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></div>
+										<div class="text not_read js_brief_content">
+											<span class="sm_notes">
+												<%=message.getMessage() %>
+											</span>
+										</div>
 <%-- 										<div class="text js_brief_content"><%=message.getBriefMessage() %></div>
  --%>
 										<div class="notes" style="display:none"><%=message.getMessage() %></div>

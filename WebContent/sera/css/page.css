@@ -249,8 +249,6 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_reply {} /*background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px*/
 .icon_answer a {color:#608eba !important}
 .icon_link_s {background: url("../images/icon_link.gif") no-repeat 0 0; height:16px; padding:0 0 0 20px; line-height:18px; float:left}
-
-.icon_sm_notes, .icon_sm_notes a {color:#006699 !important; font-weight:bold; background: url("../images/icon.png") no-repeat scroll -165px -157px; height:15px;  padding-left:19px}
 .icon_open a { background: url("../images/icon.png") no-repeat scroll -166px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
 .icon_open a:hover {background-position:-180px -117px}
 .icon_close a {background: url("../images/icon.png") no-repeat scroll -165px -129px; width:11px; height:11px; display:block; font-size:0}
@@ -359,6 +357,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
 .icon_close_area div { padding:3px 10px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
+
+/* Note */
+.sm_notes {background: url("../images/icon.png") no-repeat scroll -585px -423px; height:15px; display:inline-block; padding:0 0 0 15px; line-height:17px; color:#939393}
+.not_read .sm_notes { background-position:-585px -398px; color:#2268bd !important}
 
 /* Event */
 .panel_block .event_info { width:70%; float:left}
