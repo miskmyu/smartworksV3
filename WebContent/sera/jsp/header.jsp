@@ -11,7 +11,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 %>
 
-<div class="hd_shadow">
+<div class="hd_shadow js_header_page">
 	<!-- GNB -->
 	<div class="gnb">
 		<div class="top_logo"><a href="logins.sw"></a></div>
@@ -57,7 +57,7 @@
 		<!-- Global Navi Icon -->
 		<div class="gni fr">
 			<ul>
-				<li class="icon_alarm"><a class="js_sera_content" title="알림"></a></li>
+				<li class="icon_alarm"><a href="" class="js_notification_list_btn" title="알림"></a></li>
 				<li class="icon_mycourse"><a href="myCourses.sw" class="js_sera_content" title="내코스"></a></li>
 				<li class="icon_friend"><a href="socialFriend.sw" class="js_sera_content" title="친구"></a></li>
 				<li class="icon_notes"><a href="socialNote.sw" class="js_sera_content" title="쪽지"></a></li>
@@ -68,4 +68,5 @@
 		</div>
 	</div>
 	<!-- Top Navi //-->
+	<div class="js_notification_list_box"></div>
 </div>

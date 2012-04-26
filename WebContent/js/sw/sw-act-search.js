@@ -16,9 +16,9 @@ $(function() {
 		var target;
 		if (!isEmpty(startWork)){
 			target = startWork.find('#upload_work_list');
-			listWidth = input.parent().outerWidth();
 		}else if(!isEmpty(chatter_name)){
 			target = chatter_name.siblings('div.js_chatter_list');
+			listWidth = target.width();
 		}else{
 			target = input.parent().next('div');
 		}
