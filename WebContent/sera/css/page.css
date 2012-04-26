@@ -80,6 +80,7 @@
 .nick_name {}
 .bul_down a {background: url("../images/icon.png") no-repeat scroll -70px -35px transparent; width:9px; height:9px; display:inline-block; margin-left:3px}
 .bul_down a:hover { background-position: -90px -35px}
+.gni { float:right; margin-right:5px}
 .gni li { float:left; margin-left:15px; font-size:0}
 .top_srch_section { float:right; height:28px}
 .top_srch { border:2px solid #a7a7a7; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background-color:#FFF; margin:3px 0 0 0; padding:2px 17px 0 5px; width:147px !important; height:15px} 
@@ -359,8 +360,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
 
 /* Note */
-.sm_notes {background: url("../images/icon.png") no-repeat scroll -585px -423px; height:15px; display:inline-block; padding:0 0 0 15px; line-height:17px; color:#939393}
-.not_read .sm_notes { background-position:-585px -398px; color:#2268bd !important}
+.sm_notes {background: url("../images/ico_note_on.png") no-repeat 0 0; display:inline-block; padding:0 0 0 19px; line-height:17px; color:#939393}
+.not_read .sm_notes { background: url("../images/ico_note_on.png") no-repeat 0 0; color:#2268bd !important}
 
 /* Event */
 .panel_block .event_info { width:70%; float:left}
@@ -630,6 +631,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* User Select */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 5px 0; margin: 1px 0 1px 3px;
 -webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;font-size:11px;}
+
+/* Header Alarm Number */
+.num_ic { background: url("../images/icon.png") no-repeat scroll -678px -96px transparent; color: #FFFFFF; display: inline-block; font-family: Tahoma,dotum; font-size: 9px; height: 12px; left:11px; letter-spacing: 0; line-height: 12px; padding: 0 2px; position: relative; text-indent: 4px; top: 25px}
+.num_ic span { background: url("../images/icon.png") no-repeat scroll -737px -96px transparent !important; display: inline-block; font-size: 0; height: 12px; line-height: 0; overflow: hidden; position: absolute; right: -3px; top: 0; width: 5px;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}

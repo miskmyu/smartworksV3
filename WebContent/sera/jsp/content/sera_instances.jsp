@@ -316,7 +316,8 @@
 								case Instance.TYPE_ASYNC_MESSAGE:
 									AsyncMessageInstanceInfo message = (AsyncMessageInstanceInfo)seraInstance;
 								%>
-									<dt class="icon_sm_notes">
+								<!-- 아래 dt부분은 삭제 -->
+									<%-- <dt class="icon_sm_notes">
 										<span>쪽지</span> 
 										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
 										<%
@@ -326,7 +327,7 @@
 										<%	
 										}
 										%>
-									</dt> 
+									</dt>  --%>
 									<dd>
 										<div class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></div>
 										<div class="text not_read js_brief_content">
@@ -336,7 +337,7 @@
 										</div>
 <%-- 										<div class="text js_brief_content"><%=message.getBriefMessage() %></div>
  --%>
-										<div class="notes" style="display:none"><%=message.getMessage() %></div>
+										<div class="note" style="display:none"><span class="sm_notes"><%=message.getMessage() %></span></div>
 									</dd>
 								<%
 									break;
