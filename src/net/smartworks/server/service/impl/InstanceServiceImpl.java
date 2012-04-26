@@ -47,6 +47,7 @@ import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -5730,6 +5731,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			getMessageManager().createMessage(senderId, msg);
 
+			SmartUtil.increaseNoticeCountByNoticeType(receiverId, Notice.TYPE_MESSAGE);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -8,19 +8,23 @@
 
 package net.smartworks.util;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.lang.reflect.Array;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 
@@ -37,8 +41,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sun.xml.internal.bind.v2.TODO;
 
 public class SmartUtil {
 
@@ -368,7 +370,8 @@ public class SmartUtil {
 	}
 	
 	public static String getSubjectString(String userId){
-		return userId.replaceAll(".", "_");
+		String temp = userId.replaceAll(".", "_");
+		return "kmyu@maninsoft_co_kr";
 	}
 
 	public static boolean isBlankObject(Object obj){
@@ -421,9 +424,19 @@ public class SmartUtil {
 		
 		publishMessage(SUBJECT_BROADCASTING, MSG_TYPE_AVAILABLE_CHATTERS, userInfos);		
 	}
-	
-	public static void publishNoticeCount(String userId, int noticeType, int count){
-		publishMessage( SmartUtil.getSubjectString(userId), MSG_TYPE_NOTICE_COUNT, count );
+	public static void increaseNoticeCountByNoticeType(String targetUserId, int noticeType) throws Exception {
+		if (noticeType == Notice.TYPE_INVALID)
+			return;
+		Notice[] notice = SwServiceFactory.getInstance().getNoticeService().getNotices(targetUserId, noticeType);
+		if (CommonUtil.isEmpty(notice))
+			return;
+		publishNoticeCount(targetUserId, notice[0]);
+	}
+	public static void publishNoticeCount(String userId, Notice message){
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("type", message.getType());
+		data.put("count", message.getLength());
+		publishMessage( SmartUtil.getSubjectString(userId), MSG_TYPE_NOTICE_COUNT, data );
 	}
 	
 	static Thread messageAgent = null;
@@ -438,7 +451,7 @@ public class SmartUtil {
 						httpClient.start();
 						Map<String, Object> options = new HashMap<String, Object>();
 						ClientTransport transport = LongPollingTransport.create(options, httpClient);
-						ClientSession client = new BayeuxClient("http://localhost:8000/faye", transport);
+						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
 						client.handshake();
 				
 						MessageModel message = null;
@@ -454,7 +467,8 @@ public class SmartUtil {
 									}
 								}
 								
-								String pubChannel = SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + message.channel; 
+								//String pubChannel = SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + message.channel; 
+								String pubChannel = SUBJECT_SMARTWORKS + "/" + "Maninsoft/" + message.channel; 
 								Map<String, Object> data = new HashMap<String, Object>();
 								data.put("msgType", message.msgType);
 								data.put("sender", "smartServer");
@@ -462,11 +476,11 @@ public class SmartUtil {
 								
 								client.getChannel(pubChannel).publish(data);
 							} catch(Exception e){
-//								e.printStackTrace();
+								e.printStackTrace();
 							}
 						}
 					}catch(Exception e){
-//						e.printStackTrace();
+						e.printStackTrace();
 					}
 				}
 			});
