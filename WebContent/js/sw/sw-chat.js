@@ -251,13 +251,14 @@ $(function() {
 		var input = $(e.target).parents('a');
 		if(isEmpty(input)) input = $(e.target);
 		var userId = input.attr('userId');
-		var comId = input.attr('comId');
+		//var comId = input.attr('comId');
 		var img = input.find('img');
 		var longName = img.attr('title');
 		var minPicture = img.attr('src');
+		var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 		smartTalk.chattingRequest(new Array({
 			userId : currentUserId,
-			longName : currentUser.longName,
+			longName : nickNameBase ? currentUser.nickName : currentUser.longName,
 			minPicture : currentUser.minPicture
 		}, {
 			userId : userId,
@@ -391,11 +392,10 @@ $(function() {
 		smartTalk.publishWritingStatus(chatId);
 	});
 	
-	$('.js_select_chatter').live( 'click', function(e) {
-		alert('js_select_chatter');
+	$('.js_invite_chatter a').live( 'click', function(e) {
 		var input = $(e.target);
-		var comName = input.attr('comName');
-		var comId = input.attr('comId');
+		var comId = input.attr('userId');
+		var comName = input.children('img').attr('title');
 		var minPicture = input.children('img').attr('src');
 		var target = input.parents('div.js_chatter_list').siblings('div.js_chatter_names').find('div.js_selected_chatters');
 		var oldHTML = target.html();

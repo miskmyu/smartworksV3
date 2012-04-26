@@ -822,7 +822,6 @@ public class SmartTest {
 
 		CommentInstanceInfo commentsInstance4 = new CommentInstanceInfo("comments4", CommentInstance.COMMENT_TYPE_ON_TASK_INSTANCE, "재 기안해 주시기 바랍니다...",
 				SmartTest.getUserInfo3(), new LocalDate());
-		commentsInstance4.setTaskInstance(SmartTest.getTaskInstanceInfoPA());
 		notice4 = new NoticeMessage("notice24", 0, SmartTest.getUserInfo3(), new LocalDate());
 		notice4.setInstance(commentsInstance4);
 

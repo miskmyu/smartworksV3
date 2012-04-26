@@ -22,6 +22,8 @@ public class User extends WorkSpace {
 
 	public static final String USER_ID_SYSTEM = "system@smartworks.net";
 	public static final String USER_ID_NONE_EXISTING = "noneexisting@smartworks.net";
+	
+	public static final String NAMING_NICKNAME_BASE = "NickNameBase";
 
 	private String nickName;
 	private int	userLevel = USER_LEVEL_DEFAULT;

@@ -16,11 +16,13 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	String userNaming = (String)session.getAttribute("userNaming"); 
+	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 채팅 -->
-<div class="chat_section js_chatting_box" style="display: none">
+<div class="chat_section js_chatting_box js_chatting_box_page" style="display: none" nickNameBase="<%=nickNameBase%>">
 	<!-- 상단 -->
 	<div class="top_group js_chatting_header">
 
@@ -62,7 +64,7 @@
 						<span class="txt_btn_end"></span> </span> </a>
 			</div>
 
-			<div class="js_chatter_list chatter_list_area" style="display: none"></div>
+			<div class="chatter_list_area js_chatter_list js_invite_chatter" style="display: none"></div>
 		</div>
 		<!-- 친구 검색, 추가//-->
 		
