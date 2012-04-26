@@ -4878,8 +4878,8 @@ public class SeraServiceImpl implements ISeraService {
 				}
 				myFriendsUserIdList.add(myFriendId);
 			}
-			myFriendsUserIdList.add(userId);
 		}
+		myFriendsUserIdList.add(userId);
 		
 		String[] myFriendsUserIdArray = null;
 		if (myFriendsUserIdList != null && myFriendsUserIdList.size() != 0) {
