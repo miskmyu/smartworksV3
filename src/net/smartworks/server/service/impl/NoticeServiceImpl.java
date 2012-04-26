@@ -60,6 +60,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.oreilly.servlet.MailMessage;
+
 @Service
 public class NoticeServiceImpl implements INoticeService {
 
@@ -69,44 +71,38 @@ public class NoticeServiceImpl implements INoticeService {
 	public void setMailService(IMailService mailService){
 		this.mailService = mailService;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * net.smartworks.service.impl.ISmartWorks#getNoticesForMe(java.lang.String)
-	 * 
-	 * 현재사용자에게 알려줄 모든 Notice 들의 갯수만 제공해주는 서비스이다.
-	 * 
-	 * Notice[] : return
-	 * 		
-	 */
-	@Override
-	public Notice[] getNoticesForMe() throws Exception {
-
-		try{
-			
-			User user = SmartUtil.getCurrentUser();
-			
-			//---------------------------------------------------------------------------------------
-			Notice message = new Notice();
+	public Notice[] getNotices(String userId, int noticeType) throws Exception {
+		
+		Notice message = null;
+		Notice comment = null;
+		Notice assigned = null;
+		Notice notificationMessage = null;
+		Notice mailBox = null;
+		Notice savedBox = null;
+		
+		//---------------------------------------------------------------------------------------
+		if (noticeType == Notice.TYPE_MESSAGE || noticeType == Notice.TYPE_INVALID) {
+			message = new Notice();
 			message.setType(Notice.TYPE_MESSAGE);
 			
 			MessageCond messageCond = new MessageCond();
-			messageCond.setTargetUser(user.getId());
+			messageCond.setTargetUser(userId);
 			messageCond.setChecked(false);
-			long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(user.getId(), messageCond);
+			long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(userId, messageCond);
 			message.setLength((int)totalMessageSize);
+		}
+		//---------------------------------------------------------------------------------------
+
+		if (noticeType == Notice.TYPE_COMMENT || noticeType == Notice.TYPE_INVALID) {
 			
-			//---------------------------------------------------------------------------------------
-			Notice comment = new Notice();
+			comment = new Notice();
 			comment.setType(Notice.TYPE_COMMENT);
 			//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
 			TskTaskCond myTaskCond = new TskTaskCond();
 			myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
-			myTaskCond.setAssignee(user.getId());
+			myTaskCond.setAssignee(userId);
 			
-			TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
+			TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(userId, myTaskCond, IManager.LEVEL_LITE);
 			if (myTask != null) {
 				List instanceIdList = new ArrayList();
 				
@@ -142,7 +138,7 @@ public class NoticeServiceImpl implements INoticeService {
 					OpinionCond opinionCond = new OpinionCond();
 					opinionCond.setRefIdIns(opinionRefIds);
 					
-					long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+					long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(userId, opinionCond);
 					comment.setLength((int)totalCommentSize);
 					
 				} else {
@@ -152,46 +148,50 @@ public class NoticeServiceImpl implements INoticeService {
 			} else {
 				comment.setLength(0);
 			}
-			
-			//---------------------------------------------------------------------------------------
-			
-			Notice assigned = new Notice();
+		}
+		
+		//---------------------------------------------------------------------------------------
+
+		if (noticeType == Notice.TYPE_ASSIGNED || noticeType == Notice.TYPE_INVALID) {
+			assigned = new Notice();
 			assigned.setType(Notice.TYPE_ASSIGNED);
 			
 			TaskWorkCond taskCond = new TaskWorkCond();
 			taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 			
 			Date lastTaskCreationDate = null;
-			taskCond.setTskAssignee(user.getId());
+			taskCond.setTskAssignee(userId);
 			taskCond.setPageNo(0);
 			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, taskCond);
 			
 			assigned.setLength((int)totalSize);
-			
-			
-			//---------------------------------------------------------------------------------------
+		}
+		
+		
+		//---------------------------------------------------------------------------------------
 
-			Notice notificationMessage = new Notice();
+		if (noticeType == Notice.TYPE_NOTIFICATION || noticeType == Notice.TYPE_INVALID) {
+
+			notificationMessage = new Notice();
 			notificationMessage.setType(Notice.TYPE_NOTIFICATION);
-			
 			
 			// TOTAL DELAYED TASK
 			TaskWorkCond delayedTaskCond = new TaskWorkCond();
 			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 			
 			Date lastDelayedTaskCreationDate = null;
-			delayedTaskCond.setTskAssignee(user.getId());
+			delayedTaskCond.setTskAssignee(userId);
 			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			delayedTaskCond.setExpectEndDateTo(new LocalDate());
 			
-			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), delayedTaskCond);
+			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
 			
 			// TOTAL REQUESTER
 			SwoGroupCond groupCond = new SwoGroupCond();
-			groupCond.setGroupLeader(user.getId());
-			SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), groupCond, IManager.LEVEL_ALL);
+			groupCond.setGroupLeader(userId);
+			SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(userId, groupCond, IManager.LEVEL_ALL);
 			
 			long totalRequestSize = 0;
 			if (groups != null) {
@@ -213,26 +213,79 @@ public class NoticeServiceImpl implements INoticeService {
 			}
 			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
 			
-			//---------------------------------------------------------------------------------------
-			
-			Notice mailBox = new Notice();
+		}
+		//---------------------------------------------------------------------------------------
+
+		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
+			mailBox = new Notice();
 			mailBox.setType(Notice.TYPE_MAILBOX);
 			mailBox.setLength(0);
-			//---------------------------------------------------------------------------------------
-			
-			Notice savedBox = new Notice();
+		}
+		//---------------------------------------------------------------------------------------
+
+		if (noticeType == Notice.TYPE_SAVEDBOX || noticeType == Notice.TYPE_INVALID) {
+			savedBox = new Notice();
 			savedBox.setType(Notice.TYPE_SAVEDBOX);
 			savedBox.setLength(0);
-			
-			//---------------------------------------------------------------------------------------
-			Notice[] returnNotice = new Notice[6];
+		}
+		
+		//---------------------------------------------------------------------------------------
+		
+		Notice[] returnNotice = null;
+		switch (noticeType) {
+		case Notice.TYPE_MESSAGE:
+			returnNotice = new Notice[1];
+			returnNotice[0] = message;
+			break;
+		case Notice.TYPE_COMMENT:
+			returnNotice = new Notice[1];
+			returnNotice[0] = comment;
+			break;
+		case Notice.TYPE_ASSIGNED:
+			returnNotice = new Notice[1];
+			returnNotice[0] = assigned;
+			break;
+		case Notice.TYPE_NOTIFICATION:
+			returnNotice = new Notice[1];
+			returnNotice[0] = notificationMessage;
+			break;
+		case Notice.TYPE_MAILBOX:
+			returnNotice = new Notice[1];
+			returnNotice[0] = mailBox;
+			break;
+		case Notice.TYPE_SAVEDBOX:
+			returnNotice = new Notice[1];
+			returnNotice[0] = savedBox;
+			break;
+		case Notice.TYPE_INVALID:
+			returnNotice = new Notice[6];
 			returnNotice[0] = notificationMessage;
 			returnNotice[1] = message;
 			returnNotice[2] = comment;
 			returnNotice[3] = assigned;
 			returnNotice[4] = mailBox;
 			returnNotice[5] = savedBox;
-			return returnNotice;
+			break;
+		}
+		return returnNotice;
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * net.smartworks.service.impl.ISmartWorks#getNoticesForMe(java.lang.String)
+	 * 
+	 * 현재사용자에게 알려줄 모든 Notice 들의 갯수만 제공해주는 서비스이다.
+	 * 
+	 * Notice[] : return
+	 * 		
+	 */
+	@Override
+	public Notice[] getNoticesForMe() throws Exception {
+
+		try{
+			User user = SmartUtil.getCurrentUser();
+			return getNotices(user.getId(), Notice.TYPE_INVALID);
 			//return new Notice[] {};//SmartTest.getNoticesForMe();
 		}catch (Exception e){
 			// Exception Handling Required
