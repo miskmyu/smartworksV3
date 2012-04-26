@@ -29,6 +29,7 @@
 			String online = "chat_offline";
 			if(community.getClass().equals(UserInfo.class)){
 				UserInfo user = (UserInfo)community;
+				if(user.getId().equals(cUser.getId())) continue;
 				comName = (nickNameBase) ? user.getNickName() : user.getLongName();
 				userId = user.getId();
 				online = (user.isOnline()) ? "chat_online" : "chat_offline";
