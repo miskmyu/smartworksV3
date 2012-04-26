@@ -38,10 +38,10 @@
 .msg_section .ic_add_friend {background: url("../../images/chat_img.png") no-repeat scroll 0 -49px transparent; display:inline-block; padding-right:4px; height:16px; width:14px;}
 
 .addfriend_section {background-color:#FFF; overflow:hidden; margin: 0 2px;}
-.addfriend_group {padding: 5px 0 0 5px; background-color:#FFF; margin-bottom: -2px;}
+.addfriend_group {padding: 5px 0 0 5px; background-color:#FFF; overflow: hidden}
 .addfriend_h { padding-bottom:4px;}
 .user_sel_area {float:left; padding:0 2px;}
-.addf_line {border:1px solid #c7c7c7; left:0px; margin:0 2px 4px 0; width: 200px; padding: 1px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; float:left; overflow:hidden;}
+.addf_line {border:1px solid #c7c7c7; left:0px; margin:0 2px 2px 0; width: 200px; padding: 1px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; float:left; overflow:hidden;}
 
 .info_list {padding:0 0 2px 18px; line-height:16px; }
 
@@ -72,6 +72,15 @@
 .chat_duck {margin: 0 15px;}
 .chat_duck_right {left: auto;}
 
+/* Btn - Chatting */
+.btn_wh {clear: both; display:inline-block;}
+.btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
+			float:left; height:20px; width:5px;}
+.btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
+.btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
+    		float:left; height:20px; width:5px;}
+    		
 /* layout에서 발췌해옴 ysjung */
 .noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in { margin-left:25px; line-height: 16px;}
