@@ -4852,7 +4852,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		String[] requestFriendsIdArray = new String[requestFriends.length];
 		for (int i = 0; i < requestFriends.length; i++) {
-			requestFriendsIdArray[i] = requestFriends[i].getRequestName();
+			requestFriendsIdArray[i] = requestFriends[i].getRequestId();
 		}
 		
 		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, requestFriendsIdArray, null, maxList);
@@ -4870,14 +4870,15 @@ public class SeraServiceImpl implements ISeraService {
 		if (myFriends != null) {
 			for (int i = 0; i < myFriends.length; i++) {
 				SeraFriend myFriend = myFriends[i];
-				String myFriendName = null;
+				String myFriendId = null;
 				if (userId.equalsIgnoreCase(myFriend.getReceiveId())) {
-					myFriendName = myFriend.getRequestName();
+					myFriendId = myFriend.getRequestId();
 				} else {
-					myFriendName = myFriend.getReceiveName();
+					myFriendId = myFriend.getReceiveId();
 				}
-				myFriendsUserIdList.add(myFriendName);
+				myFriendsUserIdList.add(myFriendId);
 			}
+			myFriendsUserIdList.add(userId);
 		}
 		
 		String[] myFriendsUserIdArray = null;
@@ -4940,9 +4941,14 @@ public class SeraServiceImpl implements ISeraService {
 		seraUserCond.setUserIdNotIns(new String[]{userId});
 		long totalSeraUser = seraMgr.getSeraUserSize(userId, seraUserCond);
 		
+		SeraFriendCond relatedMyfriendCond = new SeraFriendCond();
+		relatedMyfriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
+		relatedMyfriendCond.setRequestIdOrReceiveId(userId);
+		long relatedMyfriendSize = seraMgr.getFriendSize(userId, relatedMyfriendCond);
+		
 		friendInformList.setTotalRequesters((int)totalRequesters);
 		friendInformList.setTotalFriends((int)totalFriends);
-		friendInformList.setTotalNonFriends((int)(totalSeraUser-(totalRequesters + totalFriends)));
+		friendInformList.setTotalNonFriends((int)(totalSeraUser-(relatedMyfriendSize + totalFriends)));
 		
 		return friendInformList;
 	}
