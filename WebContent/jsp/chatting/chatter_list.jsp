@@ -13,14 +13,16 @@
 <%@ page import="net.smartworks.model.work.*"%>
 <%@ page import="net.smartworks.util.LocalDate"%>
 <script>
-	function updateAvailableChatters(userInfos) {
+	function updateAvailableChatters(messasge) {
+		var userInfos = message.userInfos;
 		if (userInfos != null) {
+			var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 			var data = "";
 			var length = userInfos.length;
 			for ( var i = 0; i < length; i++) {
 				data = data + "<li>" +
 									"<a href='' userId='" + userInfos[i].userId + "'>" +
-										"<span><img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s chat_online' title='" + userInfos[i].longName + "'/>" + userInfos[i].longName + "</span>" +
+										"<span><img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s chat_online' title='" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "'/>" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "</span>" +
 									"</a>" +
 								"</li>";
 			}
@@ -31,7 +33,7 @@
 <%
 	User cUser = SmartUtil.getCurrentUser();
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	String userNaming = (String)session.getAttribute("userNaming"); 
+	String userNaming = (String)session.getAttribute("userNaming");  
 	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 	UserInfo[] chatters = smartWorks.getAvailableChatter();
 %>

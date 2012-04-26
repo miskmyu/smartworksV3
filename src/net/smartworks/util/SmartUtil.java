@@ -370,10 +370,9 @@ public class SmartUtil {
 	}
 	
 	public static String getSubjectString(String userId){
-		String temp = userId.replaceAll(".", "_");
-		return "kmyu@maninsoft_co_kr";
+		return userId.replace('.' , '_');
 	}
-
+	
 	public static boolean isBlankObject(Object obj){
 		if(obj==null) return true;
 		if(obj.equals("null")) return true;
@@ -399,30 +398,31 @@ public class SmartUtil {
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
 	
+	private static String getMessageChannel(String channel){
+		return SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + "/" + channel; 
+	}
+
 	public static void publishBcast(String[] messages){
-		publishMessage(SUBJECT_BROADCASTING, MSG_TYPE_BROADCASTING, messages);
+		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
 	
 	public static void publishAChatters(UserInfo[] users){
 
-		class UserInformation{
-			String userId;
-			String longName;
-			String minPicture;
-		}
-		
 		if(SmartUtil.isBlankObject(users)) return;
-		UserInformation[] userInfos = new UserInformation[users.length];
+		Object[] userInfos = new Object[users.length];
 		for(int i=0; i<users.length; i++){
 			UserInfo user = users[i];
-			UserInformation userInfo = new UserInformation();
-			userInfo.userId = user.getId();
-			userInfo.longName = user.getLongName();
-			userInfo.minPicture = user.getMinPicture();
+			Map<String, Object> userInfo = new HashMap<String, Object>();
+			userInfo.put("userId", user.getId());
+			userInfo.put("longName", user.getLongName());
+			userInfo.put("nickName", user.getNickName());
+			userInfo.put("minPicture", user.getMinPicture());
 			userInfos[i] = userInfo;
 		}
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("userInfos", userInfos);
 		
-		publishMessage(SUBJECT_BROADCASTING, MSG_TYPE_AVAILABLE_CHATTERS, userInfos);		
+		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_AVAILABLE_CHATTERS, data);		
 	}
 	public static void increaseNoticeCountByNoticeType(String targetUserId, int noticeType) throws Exception {
 		if (noticeType == Notice.TYPE_INVALID)
@@ -436,7 +436,7 @@ public class SmartUtil {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("type", message.getType());
 		data.put("count", message.getLength());
-		publishMessage( SmartUtil.getSubjectString(userId), MSG_TYPE_NOTICE_COUNT, data );
+		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data );
 	}
 	
 	static Thread messageAgent = null;
@@ -467,14 +467,12 @@ public class SmartUtil {
 									}
 								}
 								
-								//String pubChannel = SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + message.channel; 
-								String pubChannel = SUBJECT_SMARTWORKS + "/" + "Maninsoft/" + message.channel; 
 								Map<String, Object> data = new HashMap<String, Object>();
 								data.put("msgType", message.msgType);
 								data.put("sender", "smartServer");
 								data.put("body", message.message);
 								
-								client.getChannel(pubChannel).publish(data);
+								client.getChannel(message.channel).publish(data);
 							} catch(Exception e){
 								e.printStackTrace();
 							}

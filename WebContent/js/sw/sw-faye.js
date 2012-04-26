@@ -118,94 +118,6 @@ var chatHistory = {
 	}		
 };
 
-var asyncMessage = {
-
-	getUnreads : function(chatId){
-		$.ajax({
-			url : "get_async_message_by_id.sw",
-			data : {
-				key : input[0].value,
-				communityId : communityId
-			},
-			context : input,
-			success : function(data, status, jqXHR) {
-				target.html(data).width(listWidth);
-				target.show();
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-			}
-		});		
-	},
-	
-		chatInfoById : function(chatId){
-		for(var i=0; i<chatListStatus.length; i++)
-			if(chatHistory.chatInfos.chatId === chatId)
-				return chatHistory.chatInfos[i];
-		return null;
-	},
-	
-	restore : function(){
-		var chatInfos = $.jStorage.get(currentUserId);
-		if(chatInfos) chatHistory.chatInfos = chatInfos;
-		var index = $.jStorage.index();
-	},
-	
-	updateChatList : function(chatList){
-		if(!chatList) return;
-		var newChatInfos = new Array();
-		for(var i=0; i<chatList.length; i++){
-			var thisChat = chatList[i];
-			var newChat = {sender: currentUserId, chatId : thisChat.chatId, chatterInfos : new Array()};
-			for(var j=0; j<thisChat.users.length; j++){
-				var thisUser = thisChat.users[j];
-				newChat.chatterInfos.push({userId : thisUser.userId, longName : thisUser.longName, minPicture : thisUser.minPicture});
-			}
-			newChatInfos.push(newChat);
-		}
-		chatHistory.chatInfos = newChatInfos;
-		$.jStorage.set(currentUserId, chatHistory.chatInfos);
-		//console.log(chatHistory.chatInfos);
-	},
-
-	existInHistory : function(chatId){
-		for(var i=0; i<chatHistory.chatInfos.length; i++)
-			if(chatHistory.chatInfos[i].chatId === chatId)
-				return true;
-		return false;
-	},
-
-	getHistories : function(chatId){
-		var histories = null;
-		if(chatHistory.existInHistory(chatId)){
-			histories = $.jStorage.get(currentUserId + chatId);
-			if(!histories) histories = new Array();
-		}
-		return histories;
-	},
-		
-	setHistory : function(chatId, history){
-		var histories = chatHistory.getHistories(chatId);
-		if(histories){
-			histories.push(history);
-			$.jStorage.set(currentUserId+chatId, histories);
-			//console.log(histories);
-		}
-	},
-		
-	removeHistories : function(chatId){
-		$.jStorage.deleteKey(currentUserId+chatId);
-	},
-		
-	flushHistory : function(){
-		chatHistory.chatInfos = null;
-		var chatInfos = $.jStorage(currentUserId);
-		if(chatInfos)
-			for(var i=0; i<chatInfos.length; i++)
-				$.jStorage.deleteKey(currentUserId+chatInfos[i].chatId);
-		$.jStorage.deleteKey(currentUserId);
-	}		
-};
-
 var chatManager = {
 	//
 	// chatList[] : {
@@ -385,9 +297,6 @@ var smartTalk = {
 		}
 	},
 
-	fetchAsyncMessages : function(){
-	},
-
 	init : function() {
 		var fayeContext = serverUrl + swContext;
 		var reconnect = function() {
@@ -426,10 +335,10 @@ var smartTalk = {
 
 	startBcastSub : function() {
 		smartTalk.subscribe(smartTalk.myChannel(swSubject.BROADCASTING), function(message) {
-			if (message.msgType === msgType.BROADCASTING)
+			if (message.msgType === msgType.BROADCASTING && !isEmpty(message.body))
 				updateBcastBoard(message.body);
-			else if (message.msgType === msgType.AVAILABLE_CHATTERS) 
-				updateAvailableChatters(message.userInfos);
+			else if (message.msgType === msgType.AVAILABLE_CHATTERS && !isEmpty(message.body)) 
+				updateAvailableChatters(message.body);
 		});
 
 	},
@@ -441,7 +350,7 @@ var smartTalk = {
 			// 서버에서 받은 메시지가 NOTICE_COUNT이면, 
 			// header.jsp에 있는 updateNoticeCount()를 호출하여 알림 숫자들을 업데이트하게 한다.
 			if (message.msgType === msgType.NOTICE_COUNT){
-				updateNoticeCount(message);
+				updateNoticeCount(message.body);
 				
 			// 받은 메시지가 채팅메시지이면 채팅처리를 위해 smartTalk.startSubOnChatId()를 호출한다.
 			} else if (message.msgType === msgType.JOIN_CHAT){
@@ -637,8 +546,15 @@ var smartTalk = {
 				chatters.push(users[i].userId);
 			}
 		}
+		var senderInfo = {};
+		senderInfo['userId'] = currentUser.userId;
+		senderInfo['longName'] = currentUser.longName;
+		senderInfo['nickName'] = currentUser.nickName;
+		senderInfo['minPicture'] = currentUser.minPicture;
+		
 		paramsJson['senderId'] = currentUser.userId;
 		paramsJson['chatId'] = chatId;
+		paramsJson['senderInfo'] = senderInfo;
 		paramsJson['chatters'] = chatters;
 		paramsJson['message'] = message;
 		for(var i=0; i<users.length; i++){

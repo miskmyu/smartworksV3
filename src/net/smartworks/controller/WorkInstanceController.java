@@ -486,7 +486,16 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	public @ResponseBody Map<String, Object> getAsyncMessagesByUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		AsyncMessageInstanceInfo[] messages = new AsyncMessageInstanceInfo[]{};
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("events", messages);
+		map.put("messages", messages);
+		return map;
+	}
+
+	@RequestMapping(value = "/read_async_messages_by_chatid", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> readAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		AsyncMessageInstanceInfo[] messages = new AsyncMessageInstanceInfo[]{};
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("messages", messages);
 		return map;
 	}
 }

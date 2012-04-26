@@ -23,6 +23,28 @@ function updateChattingBoxTitle(chatId, chatterInfos) {
 
 }
 
+function fetchAllasyncMessages(chatId){
+
+	$.ajax({
+		url : "read_async_messages_by_chatid.sw",
+		data : {
+			chatId : chatId,
+			receiverId : currentUser.userId
+		},
+		success : function(data, status, jqXHR) {
+			if(!isEmpty(data.messages)){
+				for(var i=0; i<messages.length; i++){
+					receivedMessageOnChatId(message[i]);
+				}
+			}
+		},
+		error : function(xhr, ajaxOptions, thrownError){
+		}
+	});		
+};
+
+
+
 var chattingBoxPadding = 3;
 
 function getGroupPrevWidth(){
@@ -170,6 +192,7 @@ function startChattingWindow(message) {
 			target.append(chattingBox);
 			setRightPosition("new", $('#'+chatId));
 			updateChattingBoxTitle(chatId, chatterInfos);
+			fetchAllasyncMessages(chatId);
 			for ( var i = 0; i < chatterInfos.length; i++){
 				updateChatterStatus(chatId, chatterInfos[i], chatterInfos[i].status);
 			}

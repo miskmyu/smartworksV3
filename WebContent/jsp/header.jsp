@@ -15,8 +15,8 @@
 
 // 서버에서 SmartUtil.publishMessage()로 NOTICE_COUNT를 현재사용자에게 메시지를 보내면 처리하는 함수이다.
 function updateNoticeCount(message){
-	var type = message.body.type;
-	var count = message.body.count;
+	var type = message.type;
+	var count = message.count;
 	var data = "<span></span>";
 	if (count > 0)
 		data = "<em class='icon_number'>" + count + "<span></span></em>";
