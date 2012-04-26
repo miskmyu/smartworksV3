@@ -31,13 +31,15 @@
 <%
 	User cUser = SmartUtil.getCurrentUser();
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	String userNaming = (String)session.getAttribute("userNaming"); 
+	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 	UserInfo[] chatters = smartWorks.getAvailableChatter();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 채팅Default -->	 
-<div class="chat_de_section js_chatter_list">
+<div class="chat_de_section js_chatter_list js_chatter_list_page" nickNameBase="<%=nickNameBase%>">
 	<!-- 상단 -->
 	<div class="top_group">
 		<a href="" class="js_toggle_chatter_list">
@@ -59,10 +61,11 @@
 			<ul>
 				<%
 				for (UserInfo chatter : chatters) {
+					String userName = (nickNameBase) ? chatter.getNickName() : chatter.getLongName();
 				%>
 					<li>
 						<a href="" userId="<%=chatter.getId()%>">
-							<span><img src="<%=chatter.getMinPicture()%>" class="mr2 profile_size_s chat_offline" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%></span>
+							<span><img src="<%=chatter.getMinPicture()%>" class="mr2 profile_size_s chat_offline" title="<%=userName%>" /><%=userName%></span>
 						</a>
 					</li>
 				<%

@@ -134,6 +134,7 @@ $(function() {
 	});
 
 	$('.js_select_community').live( 'click', function(e) {
+		alert('1');
 		var input = $(e.target);
 		if(!input.hasClass('js_select_community')) input.parents('.js_select_community:first');
 		var comName = input.attr('comName');
@@ -145,6 +146,7 @@ $(function() {
 			inputTarget.parents('.sw_required').removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
 		}
+		alert('2');
 		if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
 			communityItems.remove();
 		var isSameId = false;
@@ -155,11 +157,14 @@ $(function() {
 				break;
 			}
 		}
+		alert('2');
 		if(!isSameId){
 			$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
 					+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
 		}
+		alert('4');
 		inputTarget.focus().parents('.js_community_names').change();
+		alert('5');
 		return false;
 	});
 

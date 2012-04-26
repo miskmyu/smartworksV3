@@ -10,6 +10,9 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	String userNaming = (String)session.getAttribute("userNaming"); 
+	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
+
 	String key = request.getParameter("key");
 	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key);
 %>
@@ -26,7 +29,7 @@
 			String online = "chat_offline";
 			if(community.getClass().equals(UserInfo.class)){
 				UserInfo user = (UserInfo)community;
-				comName = user.getLongName();
+				comName = (nickNameBase) ? user.getNickName() : user.getLongName();
 				userId = user.getId();
 				online = (user.isOnline()) ? "chat_online" : "chat_offline";
 			}else{

@@ -488,7 +488,7 @@ var smartTalk = {
 			if ((chatterInfo.userId === currentUser.userId) || chatterInfo.userId === message.sender){
 				chatterInfo.status = userStatus.ONLINE;
 			}else{
-				console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
+				//console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
 				chatterInfo.onlineSub = chatManager.onlineSub(chatterInfo.userId);
 				if(!chatterInfo.onlineSub)
 					chatterInfo.onlineSub = smartTalk.subscribe(smartTalk.myChannel("/"
@@ -502,7 +502,7 @@ var smartTalk = {
 			}
 		}
 		smartTalk.publishJoinedChat(message.chatId);
-		console.log(chatManager.chatList);
+		//console.log(chatManager.chatList);
 	},
 
 	stopSubOnChatId : function(chatId) {
@@ -523,12 +523,13 @@ var smartTalk = {
 	},
 
 	publishChatMessage : function(chatId, message) {
+		var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 		smartTalk.publish(smartTalk.myChannel("/" + chatId), {
 			msgType : msgType.CHAT_MESSAGE,
 			senderInfo : {
 				userId : currentUserId,
 				minPicture : currentUser.minPicture,
-				longName : currentUser.longName
+				longName : nickNameBase ? currentUser.nickName : currentUser.longName
 			},
 			chatId : chatId,
 			chatMessage : message
@@ -563,7 +564,6 @@ var smartTalk = {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					console.log('Async Messag Stored for userId=', user.userId);
 				},
 				error : function(){
 					console.log('ERROR at Async Messag Stored for userId=', user.userId);			
