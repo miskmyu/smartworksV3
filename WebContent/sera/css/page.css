@@ -635,6 +635,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Header Alarm Number */
 .num_ic { background: url("../images/icon.png") no-repeat scroll -678px -96px transparent; color: #FFFFFF; display: inline-block; font-family: Tahoma,dotum; font-size: 9px; height: 12px; left:11px; letter-spacing: 0; line-height: 12px; padding: 0 2px; position: relative; text-indent: 4px; top: 25px}
 .num_ic span { background: url("../images/icon.png") no-repeat scroll -737px -96px transparent !important; display: inline-block; font-size: 0; height: 12px; line-height: 0; overflow: hidden; position: absolute; right: -3px; top: 0; width: 5px;}
+.num_ic.course {left:17px}
+.num_ic.friend {left:17px}
+.num_ic.notes {left:20px}
+.num_ic.calendar {left:24px}
+.num_ic.badge {left:15px}
+.num_ic.event {left:19px}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}

@@ -62,7 +62,7 @@
 
 .form_date_input {width:65px !important} /*date input 사이즈, 상세필터 공용*/
 .form_time_input {width:65px !important} /*time input 사이즈, 상세필터 공용*/
-.form_datetime_input {width:92px !important}
+.form_datetime_input {width:100px !important}
 
 /* label check icon add */
 .required_label{background: url("../images/icon_check.png") 93% 3px no-repeat;}
