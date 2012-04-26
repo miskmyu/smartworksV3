@@ -295,6 +295,12 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/search/sera_user.jsp", "");
 	}
 
+	@RequestMapping("/pop_notification_list")
+	public ModelAndView popNotificationList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "sera/jsp/popup/pop_notification_list.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

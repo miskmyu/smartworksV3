@@ -1001,17 +1001,17 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, "친구요청이 성공적으로 이루어 졌습니다.", function(){
-				});
-				if(isEmpty(input.parents('.js_non_friend_list'))){
-					input.hide().siblings().show();
-				}else{
-					input.parents(',js_non_friend_item').remove();
-					if(!isEmpty(count) && (count!=='0')){
+					if(isEmpty(input.parents('.js_non_friend_list'))){
+						input.hide().siblings().show();
+					}else{
 						var nonFriendCount = input.parents('.js_friend_page').find('.js_non_friend_count');
 						var count = nonFriendCount.html();
-						nonFriendCount.html(parseInt(count)-1);
+						if(!isEmpty(count) && (count!=='0')){
+							nonFriendCount.html(parseInt(count)-1);
+						}
+						input.parents('.js_non_friend_item').remove();
 					}
-				}
+				});
 			},
 			error : function(e) {
 				smartPop.closeProgress();
@@ -1458,5 +1458,30 @@ $(function() {
 		}else if(!isEmpty(newBoard)){
 		}
 		return false;
+	});
+	
+	$('a.js_notification_list_btn').live('click', function(e){
+		var input = $(e.target);
+		var target = input.parents('.js_header_page').find('.js_notification_list_box');
+		$.ajax({
+			url : 'pop_notification_list.sw',
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown();
+				target.focusin();
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+	});
+	
+	$('.js_shown_notice_btn').live('click', function(e){
+		input = $(e.target).parent().slideUp();
+		return false;
+	});
+	
+	$('.js_notification_list_box').live('focusout', function(e){
+		alert('in');
+		$(e.target).slideUp();
 	});
 });
