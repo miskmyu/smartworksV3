@@ -18,8 +18,8 @@
 #wrap.bb #container {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
 
 /* Intro */
-#inro_ct_section {clear: both; height: 1250px; margin: 0 auto; padding: 0 15px 0 30px; width: 948px; position: relative}
-.intro_category {height: 1100px; width: 470px}
+#inro_ct_section {clear: both; margin: 0 auto; padding: 0 15px 0 30px; width: 948px; position: relative}
+.intro_category {width: 470px}
 .ct_tit_01 {background: url("../images/header.png") no-repeat scroll 0 -1143px transparent; width:34px; height:20px; display:inline-block}
 .ct_tit_02 {background: url("../images/header.png") no-repeat scroll -50px -1143px transparent; width:34px; height:20px; display:inline-block}
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
@@ -159,7 +159,7 @@ a.b_next:hover { background-position:-30px -535px}
 .tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
-#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 980px}
+#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 530px; margin: 0 auto; position: relative; width: 980px}
 #container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 980px}
 #container:after {clear: both; content: ""; display: block}
