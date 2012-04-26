@@ -9,12 +9,16 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.Instance;
@@ -37,6 +41,9 @@ import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.message.model.MessageCond;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
+import net.smartworks.server.engine.organization.model.SwoGroup;
+import net.smartworks.server.engine.organization.model.SwoGroupCond;
+import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -78,7 +85,155 @@ public class NoticeServiceImpl implements INoticeService {
 	public Notice[] getNoticesForMe() throws Exception {
 
 		try{
-			return new Notice[] {};//SmartTest.getNoticesForMe();
+			
+			User user = SmartUtil.getCurrentUser();
+			
+			//---------------------------------------------------------------------------------------
+			Notice message = new Notice();
+			message.setType(Notice.TYPE_MESSAGE);
+			
+			MessageCond messageCond = new MessageCond();
+			messageCond.setTargetUser(user.getId());
+			messageCond.setChecked(false);
+			long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(user.getId(), messageCond);
+			message.setLength((int)totalMessageSize);
+			
+			//---------------------------------------------------------------------------------------
+			Notice comment = new Notice();
+			comment.setType(Notice.TYPE_COMMENT);
+			//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
+			TskTaskCond myTaskCond = new TskTaskCond();
+			myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
+			myTaskCond.setAssignee(user.getId());
+			
+			TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
+			if (myTask != null) {
+				List instanceIdList = new ArrayList();
+				
+				Map recordIdPrcInstIdMap = new HashMap();
+				for (int i = 0; i < myTask.length; i++) {
+					TskTask task = myTask[i];
+					String tskType = task.getType();
+					if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+						String prcObjId = task.getProcessInstId();
+						if (!instanceIdList.contains(prcObjId)) {
+							instanceIdList.add(prcObjId);
+						}
+					} else if (tskType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+						String tskDef = task.getDef();
+						String tskForm = task.getForm();
+						if (CommonUtil.isEmpty(tskDef))
+							continue;
+						String[] temp = StringUtils.tokenizeToStringArray(tskDef, "|");
+						if (CommonUtil.isEmpty(temp) || temp.length != 2)
+							continue;
+						String formId = temp[0];
+						String recordId = temp[1];
+						if (!instanceIdList.contains(recordId)) {
+							instanceIdList.add(recordId);
+							recordIdPrcInstIdMap.put(recordId, task.getProcessInstId());
+						}
+					}
+				}
+				if (instanceIdList.size() != 0) {
+					String[] opinionRefIds = new String[instanceIdList.size()];
+					instanceIdList.toArray(opinionRefIds);
+					
+					OpinionCond opinionCond = new OpinionCond();
+					opinionCond.setRefIdIns(opinionRefIds);
+					
+					long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+					comment.setLength((int)totalCommentSize);
+					
+				} else {
+					comment.setLength(0);
+				}
+				
+			} else {
+				comment.setLength(0);
+			}
+			
+			//---------------------------------------------------------------------------------------
+			
+			Notice assigned = new Notice();
+			assigned.setType(Notice.TYPE_ASSIGNED);
+			
+			TaskWorkCond taskCond = new TaskWorkCond();
+			taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+			
+			Date lastTaskCreationDate = null;
+			taskCond.setTskAssignee(user.getId());
+			taskCond.setPageNo(0);
+			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			
+			long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			
+			assigned.setLength((int)totalSize);
+			
+			
+			//---------------------------------------------------------------------------------------
+
+			Notice notificationMessage = new Notice();
+			notificationMessage.setType(Notice.TYPE_NOTIFICATION);
+			
+			
+			// TOTAL DELAYED TASK
+			TaskWorkCond delayedTaskCond = new TaskWorkCond();
+			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+			
+			Date lastDelayedTaskCreationDate = null;
+			delayedTaskCond.setTskAssignee(user.getId());
+			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			delayedTaskCond.setExpectEndDateTo(new LocalDate());
+			
+			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), delayedTaskCond);
+			
+			// TOTAL REQUESTER
+			SwoGroupCond groupCond = new SwoGroupCond();
+			groupCond.setGroupLeader(user.getId());
+			SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), groupCond, IManager.LEVEL_ALL);
+			
+			long totalRequestSize = 0;
+			if (groups != null) {
+				Map<Long, Map<SwoGroupMember, SwoGroup>> joinRequestDateMap = new HashMap<Long, Map<SwoGroupMember, SwoGroup>>();
+				for (int i = 0; i < groups.length; i++) {
+					SwoGroup group = groups[i];
+					SwoGroupMember[] groupMember = group.getSwoGroupMembers();
+					if (groupMember == null || groupMember.length == 0)
+						continue;
+					for (int j = 0; j < groupMember.length; j++) {
+						SwoGroupMember member = groupMember[j];
+						String joinType = member.getJoinType();
+						String joinStatus = member.getJoinStatus();
+						if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST) && joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
+							totalRequestSize += 1;
+						}
+					}
+				}
+			}
+			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
+			
+			//---------------------------------------------------------------------------------------
+			
+			Notice mailBox = new Notice();
+			mailBox.setType(Notice.TYPE_MAILBOX);
+			mailBox.setLength(0);
+			//---------------------------------------------------------------------------------------
+			
+			Notice savedBox = new Notice();
+			savedBox.setType(Notice.TYPE_SAVEDBOX);
+			savedBox.setLength(0);
+			
+			//---------------------------------------------------------------------------------------
+			Notice[] returnNotice = new Notice[6];
+			returnNotice[0] = notificationMessage;
+			returnNotice[1] = message;
+			returnNotice[2] = comment;
+			returnNotice[3] = assigned;
+			returnNotice[4] = mailBox;
+			returnNotice[5] = savedBox;
+			return returnNotice;
+			//return new Notice[] {};//SmartTest.getNoticesForMe();
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -387,15 +542,112 @@ public class NoticeServiceImpl implements INoticeService {
 				return messageNoticeBox;
 				
 			case Notice.TYPE_NOTIFICATION:
+
+				NoticeBox notificationNoticeBox = new NoticeBox();
 				
-				NoticeMessage noticeMessate = new NoticeMessage();
+				//NoticeMessage noticeMessate = new NoticeMessage();
+				//TYPE_SYSTEM_NOTICE 	= 1;  //기능없음
+				//TYPE_EVENT_ALARM 		= 2;	//알람?
+				//TYPE_TASK_DELAYED 		= 3;
+				//TYPE_JOIN_REQUEST 		= 4;
+				//TYPE_INSTANCE_CREATED 	= 5;	//??
 				
+				if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
+					return notificationNoticeBox;
+		
+				Map<Long, NoticeMessage> NoticeMessageMap = new HashMap<Long, NoticeMessage>();
 				
+				//------------------------Delayed Task---------------------------------------------------------------
 				
+				TaskWorkCond delayedTaskCond = new TaskWorkCond();
+				delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 				
+				Date lastDelayedTaskCreationDate = null;
+				delayedTaskCond.setTskAssignee(user.getId());
+				delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+				delayedTaskCond.setExpectEndDateTo(new LocalDate());
 				
+				long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), delayedTaskCond);
+				TaskWork[] delayedTasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), delayedTaskCond);
 				
+				if(delayedTasks != null) {
+					InstanceInfo[] delayedTaskInstInfos = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), delayedTasks);
+					for(int i=0; i<delayedTaskInstInfos.length; i++){
+						NoticeMessage delayedTaskNotice = new NoticeMessage(delayedTaskInstInfos[i].getId(), 0, delayedTaskInstInfos[i].getOwner(), delayedTaskInstInfos[i].getCreatedDate());
+						delayedTaskNotice.setInstance(delayedTaskInstInfos[i]);
+						delayedTaskNotice.setType(NoticeMessage.TYPE_TASK_DELAYED);
+						//NoticeMessageList.add(delayedTaskNotice);
+						NoticeMessageMap.put(delayedTaskInstInfos[i].getCreatedDate().getTime(), delayedTaskNotice);
+					}
+				}
+					
+				//---------------------------Join Request---------------------------------------------------------------------------------------
 				
+				//내가 운영하는 그룹정보
+				SwoGroupCond groupCond = new SwoGroupCond();
+				groupCond.setGroupLeader(user.getId());
+				SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), groupCond, IManager.LEVEL_ALL);
+				
+				long totalRequestSize = 0;
+				if (groups != null) {
+					Map<Long, Map<SwoGroupMember, SwoGroup>> joinRequestDateMap = new HashMap<Long, Map<SwoGroupMember, SwoGroup>>();
+					for (int i = 0; i < groups.length; i++) {
+						SwoGroup group = groups[i];
+						SwoGroupMember[] groupMember = group.getSwoGroupMembers();
+						if (groupMember == null || groupMember.length == 0)
+							continue;
+						for (int j = 0; j < groupMember.length; j++) {
+							SwoGroupMember member = groupMember[j];
+							String joinType = member.getJoinType();
+							String joinStatus = member.getJoinStatus();
+							if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST) && joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
+								
+								UserInfo memberInfo = ModelConverter.getUserInfoByUserId(member.getUserId());
+								NoticeMessage joinRequestNotice = new NoticeMessage(group.getId() + "_" + member.getUserId(), 0, memberInfo, new LocalDate(member.getCreationDate().getTime()));
+								joinRequestNotice.setGroup(ModelConverter.getGroupInfoBySwoGroup(null, group));
+								joinRequestNotice.setType(NoticeMessage.TYPE_JOIN_REQUEST);
+								joinRequestNotice.setMessage(memberInfo.getLongName());
+								//NoticeMessageList.add(joinRequestNotice);
+								NoticeMessageMap.put(member.getCreationDate().getTime(), joinRequestNotice);
+								totalRequestSize += 1;
+							}
+						}
+					}
+				}	
+				//---------------------------------------------------------------------------------------------------------
+						
+				TreeMap resultTreeMap = new TreeMap(Collections.reverseOrder());
+				resultTreeMap.putAll(NoticeMessageMap);
+				Iterator itr = resultTreeMap.keySet().iterator();
+				
+				boolean lastFlag = true;
+				if (!CommonUtil.isEmpty(lastNoticeId))
+					lastFlag = false;
+				
+				List NoticeMessageList = new ArrayList();
+				
+				while (itr.hasNext()) {
+					NoticeMessage message = (NoticeMessage)resultTreeMap.get(itr.next());
+					if (message.getId().equalsIgnoreCase(lastNoticeId)) {
+						lastFlag = true;
+						continue;
+					}
+					if (lastFlag) {
+						NoticeMessageList.add(message);
+						if (NoticeMessageList.size() == 10)
+							break;
+					}
+				}
+				
+				NoticeMessage[] resultNoticeMessage = new NoticeMessage[NoticeMessageList.size()];
+				NoticeMessageList.toArray(resultNoticeMessage);
+				
+				notificationNoticeBox.setNoticeMessages(resultNoticeMessage);
+				notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
+				notificationNoticeBox.setDateOfLastNotice(resultNoticeMessage[resultNoticeMessage.length -1].getIssuedDate());
+				notificationNoticeBox.setRemainingLength((int)(totalRequestSize + totalDelayedTaskSize) - resultNoticeMessage.length);
+				
+				return notificationNoticeBox;
 				
 			case Notice.TYPE_SAVEDBOX:
 				return SmartTest.getNoticeBoxForMe10(noticeType);

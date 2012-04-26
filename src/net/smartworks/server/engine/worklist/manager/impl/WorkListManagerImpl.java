@@ -37,6 +37,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		Date fromDate = cond.getTskModifyDateFrom();
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
+		Date expectEndDateFrom = cond.getExpectEndDateFrom();
+		Date expectEndDateTo = cond.getExpectEndDateTo();
 		
 		queryBuffer.append(" from ");
 		queryBuffer.append(" (  ");
@@ -79,8 +81,13 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 				and tsktype not in ('SUBFLOW','xor','route','and') ");
 		queryBuffer.append(" 				and tskassignee != '' ");
 		queryBuffer.append(" 			) tsktask ");
+		queryBuffer.append(" 			where 1=1 ");
 		if (fromDate != null)
-			queryBuffer.append(" 			where tsktask.tskModifyDate < :fromDate ");
+			queryBuffer.append(" 			and tsktask.tskModifyDate < :fromDate ");
+		if (expectEndDateFrom != null)
+			queryBuffer.append(" 			and tsktask.tskExpectEndDate > :expectEndDateFrom ");
+		if (expectEndDateTo != null)
+			queryBuffer.append(" 			and tsktask.tskExpectEndDate < :expectEndDateTo ");
 		queryBuffer.append(" 		) task,  ");
 		queryBuffer.append(" 		swform form  ");
 		queryBuffer.append(" 		left outer join  ");
@@ -156,6 +163,10 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 
 		if (fromDate != null)
 			query.setTimestamp("fromDate", fromDate);
+		if (expectEndDateFrom != null)
+			query.setTimestamp("expectEndDateFrom", expectEndDateFrom);
+		if (expectEndDateTo != null)
+			query.setTimestamp("expectEndDateTo", expectEndDateTo);
 		
 		if (pageSize > 0|| pageNo >= 0) {
 			query.setFirstResult(pageNo * pageSize);

@@ -76,6 +76,7 @@ public class NoticeMessage{
 		super();
 	}
 	public NoticeMessage(String id, int type, UserInfo issuer, LocalDate issuedDate){
+		this.id = id;
 		this.type = type;
 		this.issuer = issuer;
 		this.issuedDate = issuedDate;
