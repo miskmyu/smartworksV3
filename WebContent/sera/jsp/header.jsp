@@ -57,13 +57,13 @@
 		<!-- Global Navi Icon -->
 		<div class="gni">
 			<ul>
-				<li class="icon_alarm"><a href="" class="js_notification_list_btn" title="알림"><em class="num_ic">867<span> </span></em></a></li>
-				<li class="icon_mycourse"><a href="myCourses.sw" class="js_sera_content" title="내코스"><em class="num_ic" style="left:17px">567<span> </span></em></a></li>
-				<li class="icon_friend"><a href="socialFriend.sw" class="js_sera_content" title="친구"><em class="num_ic" style="left:17px">567<span> </span></em></a></li>
-				<li class="icon_notes"><a href="socialNote.sw" class="js_sera_content" title="쪽지"><em class="num_ic" style="left:20px">567<span> </span></em></a></li>
-				<li class="icon_calendar"><a class="js_sera_content" title="캘린더"><em class="num_ic" style="left:24px">567<span> </span></em></a></li>
-				<li class="icon_badge"><a class="js_sera_content" title="뱃지"><em class="num_ic" style="left:15px">567<span> </span></em></a></li>
-				<li class="icon_event"><a href="socialEvent.sw" class="js_sera_content" title="이벤트"><em class="num_ic" style="left:19px">567<span> </span></em></a></li>
+				<li class="icon_alarm"><a href="" class="js_notification_list_btn" title="알림"><%if(false){ %><em class="num_ic">867<span> </span></em><%} %></a></li>
+				<li class="icon_mycourse"><a href="myCourses.sw" class="js_sera_content" title="내코스"><%if(false){ %><em class="num_ic" style="left:17px">567<span> </span></em><%} %></a></li>
+				<li class="icon_friend"><a href="socialFriend.sw" class="js_sera_content" title="친구"><%if(false){ %><em class="num_ic" style="left:17px">567<span> </span></em><%} %></a></li>
+				<li class="icon_notes"><a href="socialNote.sw" class="js_sera_content" title="쪽지"><%if(false){ %><em class="num_ic" style="left:20px">567<span> </span></em><%} %></a></li>
+				<li class="icon_calendar"><a class="js_sera_content" title="캘린더"><%if(false){ %><em class="num_ic" style="left:24px">567<span> </span></em><%} %></a></li>
+				<li class="icon_badge"><a class="js_sera_content" title="뱃지"><%if(false){ %><em class="num_ic" style="left:15px">567<span> </span></em><%} %></a></li>
+				<li class="icon_event"><a href="socialEvent.sw" class="js_sera_content" title="이벤트"><%if(false){ %><em class="num_ic" style="left:19px">567<span> </span></em><%} %></a></li>
 			</ul>
 		</div>
 	</div>
