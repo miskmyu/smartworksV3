@@ -18,8 +18,8 @@
 #wrap.bb #container {background: url("../images/mypage_body_bg_b.gif") repeat-y scroll 0 0 transparent; overflow:hidden}
 
 /* Intro */
-#inro_ct_section {clear: both; height: 1250px; margin: 0 auto; padding: 0 15px 0 30px; width: 948px; position: relative}
-.intro_category {height: 1100px; width: 470px}
+#inro_ct_section {clear: both; margin: 0 auto; padding: 0 15px 0 30px; width: 948px; position: relative}
+.intro_category {width: 470px}
 .ct_tit_01 {background: url("../images/header.png") no-repeat scroll 0 -1143px transparent; width:34px; height:20px; display:inline-block}
 .ct_tit_02 {background: url("../images/header.png") no-repeat scroll -50px -1143px transparent; width:34px; height:20px; display:inline-block}
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
@@ -80,6 +80,7 @@
 .nick_name {}
 .bul_down a {background: url("../images/icon.png") no-repeat scroll -70px -35px transparent; width:9px; height:9px; display:inline-block; margin-left:3px}
 .bul_down a:hover { background-position: -90px -35px}
+.gni { float:right; margin-right:5px}
 .gni li { float:left; margin-left:15px; font-size:0}
 .top_srch_section { float:right; height:28px}
 .top_srch { border:2px solid #a7a7a7; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; background-color:#FFF; margin:3px 0 0 0; padding:2px 17px 0 5px; width:147px !important; height:15px} 
@@ -159,7 +160,7 @@ a.b_next:hover { background-position:-30px -535px}
 .tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
-#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; margin: 0 auto; position: relative; width: 980px}
+#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 530px; margin: 0 auto; position: relative; width: 980px}
 #container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 980px}
 #container:after {clear: both; content: ""; display: block}
@@ -249,8 +250,6 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_reply {} /*background: url("../images/icon.png") no-repeat scroll -181px -96px; height:12px; display: inline-block; height:12px; width:15px*/
 .icon_answer a {color:#608eba !important}
 .icon_link_s {background: url("../images/icon_link.gif") no-repeat 0 0; height:16px; padding:0 0 0 20px; line-height:18px; float:left}
-
-.icon_sm_notes, .icon_sm_notes a {color:#006699 !important; font-weight:bold; background: url("../images/icon.png") no-repeat scroll -165px -157px; height:15px;  padding-left:19px}
 .icon_open a { background: url("../images/icon.png") no-repeat scroll -166px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
 .icon_open a:hover {background-position:-180px -117px}
 .icon_close a {background: url("../images/icon.png") no-repeat scroll -165px -129px; width:11px; height:11px; display:block; font-size:0}
@@ -359,6 +358,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_close_area, .icon_open_area { border-bottom:1px dotted #cccccc; overflow:hidden}
 .icon_close_area div { padding:3px 10px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
+
+/* Note */
+.sm_notes {background: url("../images/ico_note_on.png") no-repeat 0 0; display:inline-block; padding:0 0 0 19px; line-height:17px; color:#939393}
+.not_read .sm_notes { background: url("../images/ico_note_on.png") no-repeat 0 0; color:#2268bd !important}
 
 /* Event */
 .panel_block .event_info { width:70%; float:left}
@@ -628,6 +631,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* User Select */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 5px 0; margin: 1px 0 1px 3px;
 -webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;font-size:11px;}
+
+/* Header Alarm Number */
+.num_ic { background: url("../images/icon.png") no-repeat scroll -678px -96px transparent; color: #FFFFFF; display: inline-block; font-family: Tahoma,dotum; font-size: 9px; height: 12px; left:11px; letter-spacing: 0; line-height: 12px; padding: 0 2px; position: relative; text-indent: 4px; top: 25px}
+.num_ic span { background: url("../images/icon.png") no-repeat scroll -737px -96px transparent !important; display: inline-block; font-size: 0; height: 12px; line-height: 0; overflow: hidden; position: absolute; right: -3px; top: 0; width: 5px;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
