@@ -1840,30 +1840,34 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, String currentUserId, String userId, String courseId, String missionId) throws Exception {
+	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, String currentUserId, String userId, String courseId, String missionId, String teamId) throws Exception {
 		try {
 			String workSpaceIdIns = null;
 			if(!SmartUtil.isBlankObject(courseId)) {
 				if(!SmartUtil.isBlankObject(userId)) {
 					swdRecordCond.setCreationUser(userId);
 				}
-				if(SmartUtil.isBlankObject(missionId)) {
-					Course course = getCourseById(courseId);
-					if(course != null) {
-						workSpaceIdIns = "(";
-						MissionInstanceInfo[] missionInstanceInfos = course.getMissions();
-						if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
-							for(int j=0; j<missionInstanceInfos.length; j++) {
-								MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
-								String missionInstanceId = missionInstanceInfo.getId();
-								workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
-							}
-						}
-						workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
-					}
-					swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+				if(!SmartUtil.isBlankObject(teamId)) {
+					swdRecordCond.setWorkSpaceIdIns("('"+teamId+"')");
 				} else {
-					swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
+					if(SmartUtil.isBlankObject(missionId)) {
+						Course course = getCourseById(courseId);
+						if(course != null) {
+							workSpaceIdIns = "(";
+							MissionInstanceInfo[] missionInstanceInfos = course.getMissions();
+							if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
+								for(int j=0; j<missionInstanceInfos.length; j++) {
+									MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
+									String missionInstanceId = missionInstanceInfo.getId();
+									workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
+								}
+							}
+							workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
+						}
+						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+					} else {
+						swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
+					}
 				}
 			} else {
 				if(!SmartUtil.isBlankObject(userId)) {
@@ -1951,7 +1955,7 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	private BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+	private BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
@@ -1986,7 +1990,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
+			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
 			Filter[] filters = new Filter[1];
 
@@ -2083,7 +2087,7 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required
 		}
 	}
-	private EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+	private EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
@@ -2123,7 +2127,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
+			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
 			Filter[] filters = new Filter[1];
 			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
@@ -2244,8 +2248,8 @@ public class SeraServiceImpl implements ISeraService {
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		try{
 			//공지사항(getCommunityRecentBoardInstances) + 이벤트(getEventInstanceInfosByWorkSpaceId)
-			InstanceInfo[] noticeInfo = getBoardInstancesByCourseId(null, courseId, null, fromDate, maxList);
-			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(null, courseId, null, fromDate, maxList);
+			InstanceInfo[] noticeInfo = getBoardInstancesByCourseId(null, courseId, null, null, fromDate, maxList);
+			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(null, courseId, null, null, fromDate, maxList);
 			
 			Map<Long, InstanceInfo> resultMap = new HashMap<Long, InstanceInfo>();
 			if (noticeInfo != null) {
@@ -2613,6 +2617,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		String spaceType = (String)requestBody.get("spaceType");
 		String spaceId = (String)requestBody.get("spaceId");
+		String teamId = (String)requestBody.get("teamId");
 		Map<String, Object> frmCreateSeraNoteMap = (Map<String, Object>)requestBody.get("frmCreateSeraNote");
 
 		Set<String> keySet = frmCreateSeraNoteMap.keySet();
@@ -2738,7 +2743,9 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setDataFields(fieldDatas);
 		obj.setRecordId("dr_" + CommonUtil.newId());
 
-		obj.setWorkSpaceId(spaceId);
+		if(!SmartUtil.isBlankObject(teamId)) obj.setWorkSpaceId(teamId);
+		else obj.setWorkSpaceId(spaceId);
+
 		obj.setWorkSpaceType(spaceType);
 		obj.setAccessLevel(selAccessLevel);
 		obj.setAccessValue(null);
@@ -2791,7 +2798,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		return recordId;
 	}
-	private NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+	private NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
@@ -2833,7 +2840,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
+			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
 			//Filter[] filters = new Filter[1];
 			//filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
@@ -2955,7 +2962,7 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}
 	}
-	private MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
+	private MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
@@ -2997,7 +3004,7 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId);
+			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
 			Filter[] filters = new Filter[1];
 			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());
@@ -3084,7 +3091,7 @@ public class SeraServiceImpl implements ISeraService {
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_LINKURLFIELDID)) {
 							missionReportInstanceInfo.setLinkUrl(value);
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_STARPOINTFIELDID)) {
-							missionReportInstanceInfo.setStarPoint(value != null ? Integer.parseInt(value) : 0);
+							missionReportInstanceInfo.setStarPoint(value != null ? Double.parseDouble(value) : 0);
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_FILEGROUPIDFIELDID)) {
 							missionReportInstanceInfo.setFileGroupId(value);
 							
@@ -3132,25 +3139,25 @@ public class SeraServiceImpl implements ISeraService {
 
 			switch (type) {
 			case Instance.TYPE_BOARD:
-				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, fromDate, maxList);
+				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_EVENT:
-				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, fromDate, maxList);
+				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_SERA_NOTE:
-				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, fromDate, maxList);
+				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_SERA_MISSION_REPORT:
-				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, fromDate, maxList);
+				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_ASYNC_MESSAGE:
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			default:
-				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, fromDate, maxList);
-				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, fromDate, maxList);
-				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, fromDate, maxList);
-				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, fromDate, maxList);
+				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, fromDate, maxList);
+				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
+				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
+				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			}
 
