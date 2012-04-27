@@ -132,14 +132,15 @@ $(function() {
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var userId = input.attr('userId');
-		var courseInstanceList = input.parents('.js_course_instance_list_page');
-		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
+		var courseId = input.attr('courseId');
+		var teamId = input.attr('teamId');
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {
 				userId : userId,
-				courseId : courseId
+				courseId : courseId,
+				teamId : teamId
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
@@ -156,13 +157,14 @@ $(function() {
 		var input = $(e.target);
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
-		var courseInstanceList = input.parents('.js_course_instance_list_page');
-		var courseId = (isEmpty(courseInstanceList)) ? null : courseInstanceList.attr('courseId');
+		var courseId = input.attr('courseId');
+		var teamId = input.attr('teamId');
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'seraInstances.sw',
 			data : {
-				courseId : courseId
+				courseId : courseId,
+				teamId : teamId
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_user_instance_list').html(data);
