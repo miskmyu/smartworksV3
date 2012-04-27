@@ -19,6 +19,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
@@ -748,8 +749,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
 
 		CourseDetail courseDetail = seraMgr.getCourseDetailById(groupId);
+		
+		boolean isNoticeToGroupLeader = false;
 		if (courseDetail == null) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+			isNoticeToGroupLeader = true;
 		} else {
 			boolean autoApproval = courseDetail.isAutoApproval();
 			if (autoApproval) {
@@ -758,12 +762,15 @@ public class CommunityServiceImpl implements ICommunityService {
 				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 			} else {
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+				isNoticeToGroupLeader = true;
 			}
 		}
 		group.addGroupMember(groupMember);
 		
 		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
 		
+		if (isNoticeToGroupLeader)
+			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
 	}
 
 	/*
