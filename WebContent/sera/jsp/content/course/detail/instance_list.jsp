@@ -13,7 +13,8 @@
 <!-- Panel Section -->
 <div class="panel_section js_course_instance_list_page" courseId="<%=courseId %>" >
 	<div class="header">
-		<div class="icon_mytext"><a href="" class="js_view_user_instances current" userId="<%=cUser.getId()%>">내글보기</a></div><div> | <a href="" class="js_view_all_instances">전체보기</a></div>
+		<div class="icon_mytext"><a href="" class="js_view_user_instances current" userId="<%=cUser.getId()%>" courseId="<%=courseId%>">내글보기</a></div>
+		<div> | <a href="" class="js_view_all_instances" courseId="<%=courseId%>">전체보기</a></div>
 	</div>
 
 	<div class="js_user_instance_list">
