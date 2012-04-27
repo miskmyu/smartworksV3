@@ -70,7 +70,7 @@
 .hd_shadow.bg_join {background: url("../images/top_bg_im_out.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_about {background: url("../images/top_bg_im_about.jpg") no-repeat scroll 0 0 transparent !important}
 .hd_shadow.bg_no { background:none}
-.top_navi {width:980px; clear:both; padding:5px 0 0 0; overflow:hidden}
+.top_navi {width:980px; clear:both; padding:5px 0 0 0}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
 .pofile_con { float:left;line-height:28px; margin:15px 10px 0 0}
@@ -328,7 +328,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .grade { float:left; margin:5px 0 0 0}
 .grade div { margin-bottom:6px}
 .point {background: url("../images/pb_point.png") no-repeat; width:14px; height:20px; float:left; position:relative; left:1px; top:23px}
-.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold}
+.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold; text-align:center}
 .grade_star { padding-top:15px; color:#ffb833; font-weight:bold}
 
 /* Panel Block */
@@ -633,8 +633,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 -webkit-border-radius:7px;-moz-border-radius:7px;border-radius:7px;font-size:11px;}
 
 /* Header Alarm Number */
-.icon_number { background: url("../images/icon.png") no-repeat scroll -678px -96px transparent; color: #FFFFFF; display: inline-block; font-family: Tahoma,dotum; font-size: 9px; height: 12px; left:11px; letter-spacing: 0; line-height: 12px; padding: 0 2px; position: relative; text-indent: 4px; top: 25px}
-.icon_number span { background: url("../images/icon.png") no-repeat scroll -737px -96px transparent !important; display: inline-block; font-size: 0; height: 12px; line-height: 0; overflow: hidden; position: absolute; right: -3px; top: 0; width: 5px;}
+.icon_number { background: url("../images/icon.png") no-repeat scroll -678px -150px transparent; color: #FFFFFF; display: inline-block; font-family: Tahoma,dotum; font-size: 9px; height: 16px; left:11px; letter-spacing: 0; line-height: 16px; padding: 0 0 0 3px; position: relative; text-indent: 4px; top: 25px}
+.icon_number span { background: url("../images/icon.png") no-repeat scroll -736px -150px transparent; display: inline-block; font-size: 0; height: 16px;  overflow: hidden; position: absolute; right: -8px; top: 0; width: 8px;}
 .icon_number.course {left:17px}
 .icon_number.friend {left:17px}
 .icon_number.message {left:20px}
