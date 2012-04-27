@@ -315,6 +315,7 @@
 									break;
 								case Instance.TYPE_ASYNC_MESSAGE:
 									AsyncMessageInstanceInfo message = (AsyncMessageInstanceInfo)seraInstance;
+									String readClass = (message.getMsgStatus() == AsyncMessageInstance.MESSAGE_STATUS_UNREAD) ? "not_read" : "";
 								%>
 								<!-- 아래 dt부분은 삭제 -->
 									<%-- <dt class="icon_sm_notes">
@@ -330,13 +331,9 @@
 									</dt>  --%>
 									<dd>
 										<div class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></div>
-										<div class="text not_read js_brief_content">
-											<span class="sm_notes">
-												<%=message.getMessage() %>
-											</span>
-										</div>
-<%-- 										<div class="text js_brief_content"><%=message.getBriefMessage() %></div>
- --%>
+										<a href="" class="js_brief_message js_read_note_btn"><div class="text <%=readClass %>">
+											<span class="sm_notes"><%=message.getBriefMessage() %></span>
+										</div></a>
 										<div class="note" style="display:none"><span class="sm_notes"><%=message.getMessage() %></span></div>
 									</dd>
 								<%
