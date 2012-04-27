@@ -25,7 +25,7 @@
 	<jsp:include page="/sera/jsp/content/social/start/new_note.jsp"/>
 </div>
 <!-- Panel Section -->
-<div class="panel_section">
+<div class="panel_section js_social_note_page">
 	<div class="js_user_instance_list">
 		<jsp:include page="/sera/jsp/content/sera_instances.jsp">
 			<jsp:param value="<%=Instance.TYPE_ASYNC_MESSAGE %>" name="instanceType"/>

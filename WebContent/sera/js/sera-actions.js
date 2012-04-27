@@ -444,29 +444,29 @@ $(function() {
 	});
 	
 	$('.js_read_note_btn').live('click', function(e){
-		smartPop.confirm('쪽지읽기 확인을 하시겠습니까?', function(){
-			var input = $(e.target);
-			var subInstanceList = input.parents('.js_sub_instance_list');
-			var	instanceId = subInstanceList.attr('instanceId');
-			var paramsJson = {};
-			paramsJson['instanceId'] = instanceId;
-			paramsJson['msgStatus'] = 1;
-			console.log(JSON.stringify(paramsJson));
-			smartPop.progressCenter();				
-			$.ajax({
-				url : 'set_async_message.sw',
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					input.remove();
-					smartPop.closeProgress();
-				},
-				error : function(){
-					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, "쪽지읽기 확인에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
-				}
-			});
+		var input = $(e.target).parents('.js_read_note_btn');
+		if(isEmpty(input.find('.not_read'))) return false;
+		
+		var subInstanceList = input.parents('.js_sub_instance_list');
+		var	instanceId = subInstanceList.attr('instanceId');
+		var paramsJson = {};
+		paramsJson['instanceId'] = instanceId;
+		paramsJson['msgStatus'] = 1;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'set_async_message.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				input.hide().next().show();
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, "쪽지읽기 확인에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.");
+			}
 		});
 		return false;
 	});
@@ -820,10 +820,13 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var likesCountShown = subInstanceList.find('.js_likes_count_shown');
 				var target = likesCountShown.find(".js_likes_count");
+				var heartCount = subInstanceList.parents('.js_sera_instance_item').find('.js_heart_count');
 				if(isEmpty(target) || isEmpty(target.html())){
 					likesCountShown.html('<li><span class="icon_like"></span><span class="t_blue js_likes_count">1</span>명이 공감합니다.</li>');
+					heartCount.html(1).parent().addClass('current');
 				}else{
 					target.html(parseInt(target.html()) + 1);
+					heartCount.html(target.html());
 				}
 				input.removeClass('js_add_sera_like').addClass('js_remove_sera_like').html('공감취소');
 				smartPop.closeProgress();
@@ -857,13 +860,16 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var likesCountShown = subInstanceList.find('.js_likes_count_shown');
 				var target = likesCountShown.find(".js_likes_count");
+				var heartCount = subInstanceList.parents('.js_sera_instance_item').find('.js_heart_count');
 				if(isEmpty(target) || isEmpty(target.html())){
 				}else{
 					var likesCount = parseInt(target.html());
 					if(likesCount<=1){
 						target.parent().remove();
+						heartCount.html('').parent().removeClass('current');
 					}else{
 						target.html(likesCount - 1);
+						heartCount.html(target.html());
 					}
 				}
 				input.addClass('js_add_sera_like').removeClass('js_remove_sera_like').html('공감하기');
@@ -1399,6 +1405,9 @@ $(function() {
 		var seraInstanceItem = input.parents('.js_sera_instance_item');
 		seraInstanceItem.find('.js_brief_content').hide().next().show();
 		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
+		if(!isEmpty(seraInstanceItem.parents('.js_social_note_page'))){
+			seraInstanceItem.find('.js_read_note_btn span').click();
+		}
 		return false;
 	});
 	
