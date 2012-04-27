@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
@@ -104,4 +105,6 @@ public interface ISeraService {
 
 	public abstract SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception;
 	
+	public abstract Notice[] getSeraNoticesForMe() throws Exception;
+
 }

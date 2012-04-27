@@ -34,7 +34,7 @@ function fetchAllasyncMessages(chatId){
 		success : function(data, status, jqXHR) {
 			if(!isEmpty(data.messages)){
 				for(var i=0; i<messages.length; i++){
-					receivedMessageOnChatId(message[i]);
+					chatHistory.setHistory(chatId, messages[i]);
 				}
 			}
 		},

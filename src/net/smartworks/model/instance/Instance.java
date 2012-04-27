@@ -20,6 +20,8 @@ public class Instance {
 	public final static int TYPE_BOARD = 11;
 	public final static int TYPE_LINK = 12;
 	public final static int TYPE_YTVIDEO = 13;
+	public final static int TYPE_CHAT_MESSAGE = 14;
+	
 	public final static int TYPE_SERA_MISSION = 21;
 	public final static int TYPE_SERA_MISSION_REPORT = 22;
 	public final static int TYPE_SERA_REVIEW = 23;

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.work.FileCategory;
@@ -481,19 +482,10 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		smartworks.setAsyncMessage(requestBody, request);
 	}
 
-	@RequestMapping(value = "/get_async_messages_by_user", method = RequestMethod.GET)
+	@RequestMapping(value = "/fetch_async_messages_by_chatid", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> getAsyncMessagesByUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		AsyncMessageInstanceInfo[] messages = new AsyncMessageInstanceInfo[]{};
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("messages", messages);
-		return map;
-	}
-
-	@RequestMapping(value = "/read_async_messages_by_chatid", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> readAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		AsyncMessageInstanceInfo[] messages = new AsyncMessageInstanceInfo[]{};
+	public @ResponseBody Map<String, Object> fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ChatInstanceInfo[] messages = new ChatInstanceInfo[]{};
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("messages", messages);
 		return map;

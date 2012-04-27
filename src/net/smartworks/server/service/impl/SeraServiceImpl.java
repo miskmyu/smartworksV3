@@ -36,6 +36,7 @@ import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
@@ -4966,6 +4967,11 @@ public class SeraServiceImpl implements ISeraService {
 		default:
 			return null;
 		}
+	}
+	@Override
+	public Notice[] getSeraNoticesForMe() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

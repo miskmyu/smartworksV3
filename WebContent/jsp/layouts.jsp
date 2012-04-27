@@ -68,6 +68,7 @@ currentUser = {
 	userId : "<%=currentUser.getId()%>",
 	name : "<%=currentUser.getName()%>",
 	longName : "<%=currentUser.getLongName()%>",
+	nickName : "<%=currentUser.getNickName()%>",
 	companyId : "<%=currentUser.getCompanyId()%>",
 	department : "<%=currentUser.getDepartment()%>",
 	departmentId : "<%=currentUser.getDepartmentId()%>",

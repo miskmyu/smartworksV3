@@ -1198,4 +1198,9 @@ public class SmartWorks implements ISmartWorks {
 		}
 	}
 
+	@Override
+	public Notice[] getSeraNoticesForMe() throws Exception {
+		return seraService.getSeraNoticesForMe();
+	}
+
 }
