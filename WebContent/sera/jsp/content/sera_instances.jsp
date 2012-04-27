@@ -331,7 +331,7 @@
 									</dt>  --%>
 									<dd>
 										<div class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></div>
-										<a href="" class="js_brief_message js_read_note_btn"><div class="text <%=readClass %>">
+										<a href="" class="js_brief_content js_read_note_btn"><div class="text <%=readClass %>">
 											<span class="sm_notes"><%=message.getBriefMessage() %></span>
 										</div></a>
 										<div class="note" style="display:none"><span class="sm_notes"><%=message.getMessage() %></span></div>
