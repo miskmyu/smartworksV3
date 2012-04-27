@@ -5812,10 +5812,6 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		//TODO 
-		if (true)
-			return new ChatInstanceInfo[]{new ChatInstanceInfo()};
-		
 		String chatId = request.getParameter("chatId");
 		String receiverId = request.getParameter("receiverId");
 		
@@ -5840,7 +5836,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			chatInstInfo.setSenderId(message.getSendUser());
 			chatInstInfo.setSenderInfo(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 			chatInstInfo.setChatMessage(message.getContent());
+			
+			chatInstInfo.setLastModifiedDate(new LocalDate(message.getCreationDate().getTime()));
+			
 			chatInstInfos[i] = chatInstInfo;
+		}
+		for (int i = 0; i < messages.length; i++) {
+			//imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
 		}
 		return chatInstInfos;
 	}
