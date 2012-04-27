@@ -30,6 +30,7 @@ import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
@@ -1201,6 +1202,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public Notice[] getSeraNoticesForMe() throws Exception {
 		return seraService.getSeraNoticesForMe();
+	}
+
+	@Override
+	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return instanceService.fetchAsyncMessagesByChatid(request, response);
 	}
 
 }

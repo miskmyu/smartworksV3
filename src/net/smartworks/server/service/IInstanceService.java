@@ -3,6 +3,7 @@ package net.smartworks.server.service;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.RunningCounts;
@@ -10,6 +11,7 @@ import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
@@ -129,4 +131,6 @@ public interface IInstanceService {
 	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }
