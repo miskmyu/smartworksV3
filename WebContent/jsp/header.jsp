@@ -20,8 +20,6 @@ function updateNoticeCount(message){
 	var data = "<span></span>";
 	if (count > 0)
 		data = "<em class='icon_number'>" + count + "<span></span></em>";
-	else
-		data = "";
 		
 	if (type == 0) {
 		$('#notification_count').html(data);

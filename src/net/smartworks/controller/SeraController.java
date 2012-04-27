@@ -382,13 +382,17 @@ public class SeraController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int spaceType = Integer.parseInt((String)requestBody.get("spaceType"));
 		String spaceId = (String)requestBody.get("spaceId");
+		String teamId = (String)requestBody.get("teamId");
 		String href = "";
 		switch(spaceType){
 		case ISmartWorks.SPACE_TYPE_USER:
 			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
 			break;
 		case ISmartWorks.SPACE_TYPE_GROUP:
-			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;
+			if(!SmartUtil.isBlankObject(teamId))
+				href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "courseTeamActivity.sw?courseId=" + spaceId;
+			else
+				href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "courseHome.sw?courseId=" + spaceId;
 			break;
 		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE:
 			href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + spaceId;

@@ -26,7 +26,7 @@ function updateChattingBoxTitle(chatId, chatterInfos) {
 function fetchAllasyncMessages(chatId){
 
 	$.ajax({
-		url : "read_async_messages_by_chatid.sw",
+		url : "fetch_async_messages_by_chatid.sw",
 		data : {
 			chatId : chatId,
 			receiverId : currentUser.userId
