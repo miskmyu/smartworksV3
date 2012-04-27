@@ -485,7 +485,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/fetch_async_messages_by_chatid", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ChatInstanceInfo[] messages = new ChatInstanceInfo[]{};
+		ChatInstanceInfo[] messages = smartworks.fetchAsyncMessagesByChatid(request, response);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("messages", messages);
 		return map;

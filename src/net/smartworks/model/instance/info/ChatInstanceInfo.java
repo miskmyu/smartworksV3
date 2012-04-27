@@ -7,7 +7,7 @@ public class ChatInstanceInfo extends InstanceInfo {
 
 	private String chatId;
 	private String senderId;
-	private UserInfo[] senderInfo;
+	private UserInfo senderInfo;
 	private String chatMessage;
 
 	public String getChatId() {
@@ -26,11 +26,11 @@ public class ChatInstanceInfo extends InstanceInfo {
 		this.senderId = senderId;
 	}
 
-	public UserInfo[] getSenderInfo() {
+	public UserInfo getSenderInfo() {
 		return senderInfo;
 	}
 
-	public void setSenderInfo(UserInfo[] senderInfo) {
+	public void setSenderInfo(UserInfo senderInfo) {
 		this.senderInfo = senderInfo;
 	}
 

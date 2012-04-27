@@ -18,6 +18,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
@@ -37,6 +38,7 @@ import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.IWInstanceInfo;
@@ -5718,17 +5720,49 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-
+		/*{
+			senderId=kmyu@maninsoft.co.kr, 
+			chatId=chatId1335500111869, 
+			senderInfo=
+				{
+					userId=kmyu@maninsoft.co.kr, 
+					longName=1 유광민, 
+					nickName=유광민, 
+					minPicture=http://localhost:8081/imageServer/Maninsoft/Profiles/kmyu@maninsoft.co.kr_thumb.jpg
+				}, 
+			chatters=[hsshin@maninsoft.co.kr], 
+			message=hello, 
+			receiverId=hsshin@maninsoft.co.kr
+		}*/
 		try {
 			String senderId = (String)requestBody.get("senderId");
 			String message = (String)requestBody.get("message");
 			String receiverId = (String)requestBody.get("receiverId");
-
+			String chatId = (String)requestBody.get("chatId");
+			List chattersList = (ArrayList)requestBody.get("chatters");
+			
 			Message msg = new Message();
 			msg.setContent(message);
 			msg.setSendUser(senderId);
 			msg.setTargetUser(receiverId);
-
+			
+			StringBuffer chattersBuff = null;
+			if (chattersList != null && chattersList.size() != 0) {
+				chattersBuff = new StringBuffer();
+				boolean first = true;
+				for (int i = 0; i < chattersList.size(); i++) {
+					String chattersId = (String)chattersList.get(i);
+					if (first) {
+						chattersBuff.append(chattersId);	
+						first = false;
+					} else {
+						chattersBuff.append(",").append(chattersId);
+					}
+				}
+				msg.setChattersId(chattersBuff.toString());
+			}
+			msg.setChatId(chatId);
+			
 			getMessageManager().createMessage(senderId, msg);
 
 			SmartUtil.increaseNoticeCountByNoticeType(receiverId, Notice.TYPE_MESSAGE);
@@ -5775,5 +5809,39 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 
 	}
-
+	@Override
+	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		//TODO 
+		if (true)
+			return new ChatInstanceInfo[]{new ChatInstanceInfo()};
+		
+		String chatId = request.getParameter("chatId");
+		String receiverId = request.getParameter("receiverId");
+		
+		User user = SmartUtil.getCurrentUser();
+		
+		IMessageManager imsgMgr = SwManagerFactory.getInstance().getMessageManager();
+		MessageCond msgCond = new MessageCond();
+		msgCond.setChecked(false);
+		msgCond.setTargetUser(receiverId);
+		msgCond.setChatId(chatId);
+		
+		Message[] messages = imsgMgr.getMessages(user.getId(), msgCond, null);
+		
+		if (messages == null || messages.length == 0)
+			return null;
+		
+		ChatInstanceInfo[] chatInstInfos = new ChatInstanceInfo[messages.length];
+		for (int i = 0; i < messages.length; i++) {
+			Message message = messages[i];
+			ChatInstanceInfo chatInstInfo = new ChatInstanceInfo();
+			chatInstInfo.setChatId(chatId);
+			chatInstInfo.setSenderId(message.getSendUser());
+			chatInstInfo.setSenderInfo(ModelConverter.getUserInfoByUserId(message.getSendUser()));
+			chatInstInfo.setChatMessage(message.getContent());
+			chatInstInfos[i] = chatInstInfo;
+		}
+		return chatInstInfos;
+	}
 }
