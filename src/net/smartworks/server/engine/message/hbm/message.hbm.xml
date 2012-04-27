@@ -15,6 +15,6 @@
 		<property name="modificationUser" column="modifier" type="string" length="30"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 		<property name="chatId" column="chatId" type="string" length="50"/>
-		<property name="chattersId" column="chattersId" type="string" length="50"/>
+		<property name="chattersId" column="chattersId" type="string" length="2000"/>
 	</class>
 </hibernate-mapping>

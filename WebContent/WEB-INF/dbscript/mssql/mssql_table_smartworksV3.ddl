@@ -2269,7 +2269,7 @@ CREATE TABLE SWMessage(
 	targetUserId varchar(50),
 	isChecked bit,
 	chatId varchar(50),
-	chattersId varchar(50),
+	chattersId varchar(2000),
 	checkedTime datetime,
 	creator varchar (50),
 	createdTime datetime,
