@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.sera.info.MissionInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -525,6 +526,11 @@ public class SeraController {
 	@RequestMapping(value = "/defective_course_report", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void defectiveCourseReport(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	}
+
+	@RequestMapping("/search_sera_user_by_type")
+	public ModelAndView search_sera_userByType(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/search/sera_user_by_type.jsp", "");
 	}
 
 }

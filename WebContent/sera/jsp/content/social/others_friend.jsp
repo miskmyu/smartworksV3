@@ -53,8 +53,8 @@
 			<div class="fl"><span class="t_myid"><%=otherUser.getNickName() %>님</span>의 친구 (<span class="tb js_friend_count"><%=friendList.getTotalFriends() %></span>)</div>
 
 			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
+				<input class="fl fieldline js_friend_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_friend_search_btn">검색</button>
 			</div>
 		</div>
 

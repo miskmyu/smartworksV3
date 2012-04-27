@@ -1492,7 +1492,26 @@ $(function() {
 	});
 	
 	$('.js_notification_list_box').live('focusout', function(e){
-		alert('in');
 		$(e.target).slideUp();
+	});
+	
+	$('.js_friend_search_btn').live('click', function(e){
+		var input = $(e.target);
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var friendPage = input.parents('.js_friend_page');
+		var othersFriendPage = input.parents('.js_others_friend_page');
+		$.ajax({
+			url : 'search_sera_user_by_type.sw',
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown();
+				target.focusin();
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
 	});
 });

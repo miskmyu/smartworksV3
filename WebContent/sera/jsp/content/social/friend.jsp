@@ -80,8 +80,8 @@
 		<div class="header mt20">
 			<div class="fl"><span class="t_myid"><%=cUser.getNickName() %>님</span>의 친구 (<span class="tb js_friend_count"><%=friendInforms.getTotalFriends() %></span>) </div>
 			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
+				<input class="fl fieldline js_friend_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_friend_search_btn">검색</button>
 			</div>
 		</div>
 
@@ -146,8 +146,8 @@
 		<div class="header mt20">
 			<div class="fl"><span class="t_myid">친구요청이 가능한 세라인들</span> (<span class="tb js_non_friend_count"><%=friendInforms.getTotalNonFriends() %></span>) </div>
 			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
+				<input class="fl fieldline js_non_friend_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_non_friend_search_btn">검색</button>
 			</div>
 		</div>
 

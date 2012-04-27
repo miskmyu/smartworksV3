@@ -4980,5 +4980,10 @@ public class SeraServiceImpl implements ISeraService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public SeraUserInfo[] searchSeraUserByType(int userType, String key) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
