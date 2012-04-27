@@ -328,7 +328,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .grade { float:left; margin:5px 0 0 0}
 .grade div { margin-bottom:6px}
 .point {background: url("../images/pb_point.png") no-repeat; width:14px; height:20px; float:left; position:relative; left:1px; top:23px}
-.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold}
+.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold; text-align:center}
 .grade_star { padding-top:15px; color:#ffb833; font-weight:bold}
 
 /* Panel Block */
