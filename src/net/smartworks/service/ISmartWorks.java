@@ -32,6 +32,7 @@ import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
@@ -446,6 +447,8 @@ public interface ISmartWorks {
 	public abstract void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	

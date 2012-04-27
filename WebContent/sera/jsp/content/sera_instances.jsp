@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.model.instance.AsyncMessageInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
@@ -70,6 +71,14 @@
 			WorkInstanceInfo workInstance = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? (WorkInstanceInfo)seraInstance : null;
 			WorkInfo work = seraInstance.getType() != Instance.TYPE_ASYNC_MESSAGE ? workInstance.getWork() : null;
 			int workType = (SmartUtil.isBlankObject(work)) ? (seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? Work.TYPE_ASYNC_MESSAGE : -1) : work.getType();
+
+			String mentorClass = (!SmartUtil.isBlankObject(course) && cUser.getId().equals(course.getLeader().getId())) ? "current" : "";
+			String heartClass = "";
+			int likes = 0;
+			if(!SmartUtil.isBlankObject(workInstance) && !SmartUtil.isBlankObject(workInstance.getLikers()) && workInstance.getLikers().length>0){
+				heartClass = "current";
+				likes = workInstance.getLikers().length;
+			}
 			
 			if(i==MAX_SERA_INSTANCES){
 				String lastDateStr = (i>0) ? seraInstances[i-1].getLastModifiedDate().toLocalDateString2() : ""; 
@@ -96,9 +105,9 @@
 								<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
 							</div>
 							<div class="grade">
-								<div class="icon_mentor"></div>
-								<div class="icon_star"></div>
-								<div class="icon_heart"></div>
+								<div class="icon_mentor <%=mentorClass%>"></div>
+								<div class="icon_star"><div></div></div>
+								<div class="icon_heart <%=heartClass%>"><div class="grade_heart js_heart_count"><%if(likes>0){ %><%=likes %><%} %></div></div>
 							</div>
 						</a>
 					</li>
@@ -315,28 +324,15 @@
 									break;
 								case Instance.TYPE_ASYNC_MESSAGE:
 									AsyncMessageInstanceInfo message = (AsyncMessageInstanceInfo)seraInstance;
+									String readClass = (message.getMsgStatus() == AsyncMessageInstance.MESSAGE_STATUS_UNREAD) ? "not_read" : "";
 								%>
-								<!-- 아래 dt부분은 삭제 -->
-									<%-- <dt class="icon_sm_notes">
-										<span>쪽지</span> 
-										<span class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></span>
-										<%
-										if(message.getMsgStatus() == AsyncMessageInstance.MESSAGE_STATUS_UNREAD){
-										%>
-											<span class="icon_delete fr js_read_note_btn"><a href="" title="읽기확인">읽기확인</a></span>
-										<%	
-										}
-										%>
-									</dt>  --%>
 									<dd>
 										<div class="icon_delete fr js_delete_instance_btn"><a href="" title="항목삭제">삭제</a></div>
-										<div class="text not_read js_brief_content">
-											<span class="sm_notes">
-												<%=message.getMessage() %>
-											</span>
-										</div>
-<%-- 										<div class="text js_brief_content"><%=message.getBriefMessage() %></div>
- --%>
+										<a href="" class="js_brief_content js_read_note_btn">
+											<div class="text <%=readClass %>">
+												<span class="sm_notes"><%=message.getBriefMessage() %></span>
+											</div>
+										</a>
 										<div class="note" style="display:none"><span class="sm_notes"><%=message.getMessage() %></span></div>
 									</dd>
 								<%
