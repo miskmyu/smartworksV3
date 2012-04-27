@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.smartworks.model.notice.Notice;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
@@ -45,6 +46,7 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 import org.springframework.util.StringUtils;
 
@@ -709,6 +711,10 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 					task.setExtendedAttributeValue("extValues", extValues);		
 				}
 				this.getTskManager().setTask("linkadvisor", task, null);
+				
+				if (task.getType().equals(TskTask.TASKTYPE_COMMON) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL))
+					SmartUtil.increaseNoticeCountByNoticeType(task.getAssignee(), Notice.TYPE_ASSIGNED);
+				
 				linkList.add(newLink(obj, task, action, extProps));
 			}
 		}
