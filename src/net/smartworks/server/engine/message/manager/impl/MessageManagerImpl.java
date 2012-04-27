@@ -64,7 +64,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update Message set ");
-				buf.append(" content=:content, sendUser=:sendUser, targerUser=:targetUser, isChecked=:isChecked, checkedTime=:checkedTime, checkedTime=:checkedTime");
+				buf.append(" content=:content, sendUser=:sendUser, targerUser=:targetUser, isChecked=:isChecked, checkedTime=:checkedTime, checkedTime=:checkedTime, chatId=:chatId, chattersId=:chattersId");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(Message.A_CONTENT, obj.getContent());
@@ -72,6 +72,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				query.setString(Message.A_TARGETUSER, obj.getTargetUser());
 				query.setBoolean(Message.A_ISCHECKED, obj.isChecked());
 				query.setDate(Message.A_CHECKEDTIME, obj.getCheckedTime());
+				query.setString(Message.A_CHATID, obj.getChatId());
+				query.setString(Message.A_CHATTERSID, obj.getChattersId());
 				query.setString(Message.A_OBJID, obj.getObjId());
 				query.executeUpdate();
 			}
@@ -118,6 +120,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		String targetUser = null;
 		boolean isChecked = false;
 		int readStatus = -1;
+		String chatId = null;
+		String chattersId = null;
 		Date checkedTime = null;
 		String creationUser = null;
 		Date creationDate = null;
@@ -132,6 +136,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			sendUser = cond.getSendUser();
 			targetUser = cond.getTargetUser();
 			readStatus = cond.getReadStatus();
+			chatId = cond.getChatId();
+			chattersId = cond.getChattersId();
 			checkedTime = cond.getCheckedTime();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
@@ -154,6 +160,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.targetUser = :targetUser");
 			if (readStatus != -1)
 				buf.append(" and obj.isChecked = :isChecked");
+			if (chatId != null)
+				buf.append(" and obj.chatId = :chatId");
+			if (chattersId != null)
+				buf.append(" and obj.chattersId = :chattersId");
 			if (checkedTime != null)
 				buf.append(" and obj.checkedTime = :checkedTime");
 			if (creationUser != null) 
@@ -185,6 +195,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				if(readStatus == 1) isChecked = true;
 				query.setBoolean("isChecked", isChecked);
 			}
+			if (chatId != null)
+				query.setString("chatId", chatId);
+			if (chattersId != null)
+				query.setString("chattersId", chattersId);
 			if (checkedTime != null)
 				query.setTimestamp("checkedTime", checkedTime);
 			if (creationDate != null)
@@ -233,7 +247,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId,");
-				buf.append(" obj.content, obj.sendUser, obj.targetUser, obj.isChecked, obj.checkedTime,");
+				buf.append(" obj.content, obj.sendUser, obj.targetUser, obj.isChecked, obj.chatId, obj.chattersId, obj.checkedTime,");
 				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -252,6 +266,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 					obj.setSendUser((String)fields[j++]);
 					obj.setTargetUser((String)fields[j++]);
 					obj.setCheckedTime((Timestamp)fields[j++]);
+					obj.setChatId((String)fields[j++]);
+					obj.setChattersId((String)fields[j++]);
 					obj.setChecked(CommonUtil.toBoolean(fields[j++]));
 					obj.setCreationUser((String)fields[j++]);
 					obj.setCreationDate((Timestamp)fields[j++]);

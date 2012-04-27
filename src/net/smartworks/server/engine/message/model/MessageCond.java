@@ -28,6 +28,8 @@ public class MessageCond extends MisObjectCond {
 	public static final String A_TARGETUSER = "targetUser";
 	public static final String A_ISCHECKED = "isChecked";	
 	public static final String A_CHECKEDTIME = "checkedTime";	
+	public static final String A_CHATID = "chatId";	
+	public static final String A_CHATTERSID = "chattersId";	
 	
 	private String content;
 	private String sendUser;
@@ -35,6 +37,8 @@ public class MessageCond extends MisObjectCond {
 	private boolean isChecked = false;
 	private Date checkedTime;
 	private int readStatus = -1;
+	private String chatId;
+	private String chattersId;
 
 	public MessageCond(){
 		super();
@@ -61,6 +65,8 @@ public class MessageCond extends MisObjectCond {
 		appendAttributeString(A_TARGETUSER, targetUser, buf);
 		appendAttributeString(A_ISCHECKED, isChecked, buf);
 		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
+		appendAttributeString(A_CHATID, chatId, buf);
+		appendAttributeString(A_CHATTERSID, chattersId, buf);
 				
 		return buf.toString();
 	}
@@ -90,6 +96,8 @@ public class MessageCond extends MisObjectCond {
 			Node sendUser = attrMap.getNamedItem(A_SENDUSER);
 			Node isChecked = attrMap.getNamedItem(A_ISCHECKED);
 			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
+			Node chatId = attrMap.getNamedItem(A_CHATID);
+			Node chattersId = attrMap.getNamedItem(A_CHATTERSID);
 
 			if(content != null)
 				obj.setContent(content.getNodeValue());
@@ -101,6 +109,10 @@ public class MessageCond extends MisObjectCond {
 				obj.setChecked(CommonUtil.toBoolean(isChecked.getNodeValue()));
 			if (checkedTime != null)
 				obj.setCheckedTime(DateUtil.toDate(checkedTime.getNodeValue()));
+			if (chatId != null)
+				obj.setChatId(chatId.getNodeValue());
+			if (chattersId != null)
+				obj.setChattersId(chattersId.getNodeValue());
 		}		
 		
 		return  obj;
@@ -244,5 +256,16 @@ public class MessageCond extends MisObjectCond {
 	public void setReadStatus(int readStatus) {
 		this.readStatus = readStatus;
 	}
-
+	public String getChatId() {
+		return chatId;
+	}
+	public void setChatId(String chatId) {
+		this.chatId = chatId;
+	}
+	public String getChattersId() {
+		return chattersId;
+	}
+	public void setChattersId(String chattersId) {
+		this.chattersId = chattersId;
+	}
 }

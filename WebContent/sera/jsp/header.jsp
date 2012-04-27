@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.SeraNotice"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -97,10 +98,12 @@ function updateNoticeCount(message){
 				<li class="icon_alarm">
 					<a href="" id="notification_count" class="js_notification_list_btn" title="알림">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_NOTIFICATION && notices[SeraNotice.INDEX_NOTIFICATION].getLength() > 0) {
 			 			%> 
 							<em class="num_ic"><%=notices[SeraNotice.INDEX_NOTIFICATION].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
@@ -108,10 +111,12 @@ function updateNoticeCount(message){
 				<li class="icon_mycourse">
 					<a href="myCourses.sw" id="my_course_count" class="js_sera_content" title="내코스">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_MY_COURSE && notices[SeraNotice.INDEX_MY_COURSE].getLength() > 0) {
 			 			%> 
 							<em class="num_ic course"><%=notices[SeraNotice.INDEX_MY_COURSE].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
@@ -119,6 +124,7 @@ function updateNoticeCount(message){
 				<li class="icon_friend">
 					<a href="socialFriend.sw" id="friend_count" class="js_sera_content" title="친구">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_FRIEND && notices[SeraNotice.INDEX_FRIEND].getLength() > 0) {
 			 			%> 
 							<em class="num_ic friend"><%=notices[SeraNotice.INDEX_FRIEND].getLength() %><span> </span></em>
@@ -134,6 +140,7 @@ function updateNoticeCount(message){
 			 			%> 
 							<em class="num_ic message"><%=notices[SeraNotice.INDEX_MESSAGE].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
@@ -141,10 +148,12 @@ function updateNoticeCount(message){
 				<li class="icon_calendar">
 					<a class="js_sera_content" id="calendar_count" title="캘린더">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_CALENDAR && notices[SeraNotice.INDEX_CALENDAR].getLength() > 0) {
 			 			%> 
 							<em class="num_ic calendar"><%=notices[SeraNotice.INDEX_CALENDAR].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
@@ -152,10 +161,12 @@ function updateNoticeCount(message){
 				<li class="icon_badge">
 					<a class="js_sera_content" id="badge_count" title="뱃지">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_BADGE && notices[SeraNotice.INDEX_BADGE].getLength() > 0) {
 			 			%> 
 							<em class="num_ic badge"><%=notices[SeraNotice.INDEX_BADGE].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
@@ -163,10 +174,12 @@ function updateNoticeCount(message){
 				<li class="icon_event">
 					<a href="socialEvent.sw" id="event_count" class="js_sera_content" title="이벤트">
 						<%
+						if(!CommonUtil.isEmpty(notices)) {
 			 			if (notices.length > SeraNotice.INDEX_EVENT && notices[SeraNotice.INDEX_EVENT].getLength() > 0) {
 			 			%> 
 							<em class="num_ic event"><%=notices[SeraNotice.INDEX_EVENT].getLength() %><span> </span></em>
 						<%
+			 			}
 						} 
 						%>
 					</a>
