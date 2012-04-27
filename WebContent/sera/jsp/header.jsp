@@ -13,24 +13,27 @@ function updateNoticeCount(message){
 	var type = message.type;
 	var count = message.count;
 	var data = "<span></span>";
-	if (count > 0)
-		data = "<em class='icon_number'>" + count + "<span></span></em>";
-	else
-		data = "";
 	
 	if (type == 0) {
+		if(count >0 ) data = "<em class='num_ic'>" + count +  "<span> </span></em>";
 		$('#notification_count').html(data);
 	} else if (type == 11) {
+		if(count >0 ) data = "<em class='num_ic course'>" + count +  "<span> </span></em>";
 		$('#my_course_count').html(data);
 	} else if (type == 12) {
+		if(count >0 ) data = "<em class='num_ic friend'>" + count +  "<span> </span></em>";
 		$('#friend_count').html(data);
 	} else if (type == 1) {
+		if(count >0 ) data = "<em class='num_ic message'>" + count +  "<span> </span></em>";
 		$('#message_count').html(data);
 	} else if (type == 13) {
+		if(count >0 ) data = "<em class='num_ic calendar'>" + count +  "<span> </span></em>";
 		$('#calendar_count').html(data);
 	} else if (type == 14) {
+		if(count >0 ) data = "<em class='num_ic badge'>" + count +  "<span> </span></em>";
 		$('#badge_count').html(data);
 	} else if (type == 15) {
+		if(count >0 ) data = "<em class='num_ic event'>" + count +  "<span> </span></em>";
 		$('#event_count').html(data);
 	}
 };
@@ -41,6 +44,7 @@ function updateNoticeCount(message){
 	User cUser = SmartUtil.getCurrentUser();
 
 	Notice[] notices = smartWorks.getSeraNoticesForMe();
+	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
 	
 %>
 
@@ -106,7 +110,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_MY_COURSE && notices[SeraNotice.INDEX_MY_COURSE].getLength() > 0) {
 			 			%> 
-							<em class="num_ic"><%=notices[SeraNotice.INDEX_MY_COURSE].getLength() %><span> </span></em>
+							<em class="num_ic course"><%=notices[SeraNotice.INDEX_MY_COURSE].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
@@ -117,7 +121,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_FRIEND && notices[SeraNotice.INDEX_FRIEND].getLength() > 0) {
 			 			%> 
-							<em class="num_ic" style="left:17px"><%=notices[SeraNotice.INDEX_FRIEND].getLength() %><span> </span></em>
+							<em class="num_ic friend"><%=notices[SeraNotice.INDEX_FRIEND].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
@@ -128,7 +132,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_MESSAGE && notices[SeraNotice.INDEX_MESSAGE].getLength() > 0) {
 			 			%> 
-							<em class="num_ic" style="left:20px"><%=notices[SeraNotice.INDEX_MESSAGE].getLength() %><span> </span></em>
+							<em class="num_ic message"><%=notices[SeraNotice.INDEX_MESSAGE].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
@@ -139,7 +143,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_CALENDAR && notices[SeraNotice.INDEX_CALENDAR].getLength() > 0) {
 			 			%> 
-							<em class="num_ic" style="left:24px"><%=notices[SeraNotice.INDEX_CALENDAR].getLength() %><span> </span></em>
+							<em class="num_ic calendar"><%=notices[SeraNotice.INDEX_CALENDAR].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
@@ -150,7 +154,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_BADGE && notices[SeraNotice.INDEX_BADGE].getLength() > 0) {
 			 			%> 
-							<em class="num_ic" style="left:15px"><%=notices[SeraNotice.INDEX_BADGE].getLength() %><span> </span></em>
+							<em class="num_ic badge"><%=notices[SeraNotice.INDEX_BADGE].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
@@ -161,7 +165,7 @@ function updateNoticeCount(message){
 						<%
 			 			if (notices.length > SeraNotice.INDEX_EVENT && notices[SeraNotice.INDEX_EVENT].getLength() > 0) {
 			 			%> 
-							<em class="num_ic" style="left:19px"><%=notices[SeraNotice.INDEX_EVENT].getLength() %><span> </span></em>
+							<em class="num_ic event"><%=notices[SeraNotice.INDEX_EVENT].getLength() %><span> </span></em>
 						<%
 						} 
 						%>
