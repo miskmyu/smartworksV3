@@ -2268,6 +2268,8 @@ CREATE TABLE SWMessage(
 	sendUserId varchar(50),
 	targetUserId varchar(50),
 	isChecked bit,
+	chatId varchar(50),
+	chattersId varchar(50),
 	checkedTime datetime,
 	creator varchar (50),
 	createdTime datetime,
