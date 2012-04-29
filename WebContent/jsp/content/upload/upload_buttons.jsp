@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
@@ -89,7 +90,7 @@
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT %>">
 			<%
-			}else if(workSpace.getClass().equals(Group.class)){
+			}else if(workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Course.class)){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_GROUP %>">
@@ -115,7 +116,7 @@
 					<%
 					}
 					%>
-					<optgroup label="<fmt:message key="common.upload.space.department"/>">
+					<optgroup class="js_optgroup_department" label="<fmt:message key="common.upload.space.department"/>">
 						<%
 						// 현재사용자가 속해있는 부서들을 선택하는 옵션들을 구성한다..
 						for (CommunityInfo community : communities) {
@@ -127,7 +128,7 @@
 						}
 						%>
 					</optgroup>
-					<optgroup label="<fmt:message key="common.upload.space.group"/>">
+					<optgroup class="js_optgroup_group" label="<fmt:message key="common.upload.space.group"/>">
 						<%
 						// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
 						for (CommunityInfo community : communities) {
@@ -155,13 +156,13 @@
 				%>
 					<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
 					<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-					<option value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
 				<%
 				// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
 				} else if (accessLevel == AccessPolicy.LEVEL_CUSTOM) {
 				%>
 					<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-					<option selected value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<option selected class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
 				<%
 				// 읽기권한이 비공개이면, 비공개만 해당된다...
 				} else if (accessLevel == AccessPolicy.LEVEL_PRIVATE) {

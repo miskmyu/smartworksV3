@@ -238,9 +238,9 @@ a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -
 a .icon_delete:hover {background-position:-219px -117px}
 .icon_mentor {background: url("../images/icon.png") no-repeat scroll -29px -139px; width:16px; height:15px; display: block}
 .icon_mentor.current { background-position:-63px -139px}
-.icon_star {background: url("../images/icon.png") no-repeat scroll -29px -161px; width:16px; height:15px; display: block}
+.icon_star {background: url("../images/icon.png") no-repeat scroll -29px -161px; width:16px; display: block}
 .icon_star.current { background-position:-63px -161px}
-.icon_heart {background: url("../images/icon.png") no-repeat scroll -29px -203px; width:16px; height:15px; display: block}
+.icon_heart {background: url("../images/icon.png") no-repeat scroll -29px -203px; width:16px; display: block}
 .icon_heart.current { background-position:-63px -203px}
 .icon_more {background: url("../images/icon.png") no-repeat scroll -166px -175px; padding-left:10px}
 .icon_bul_select {background: url("../images/icon.png") no-repeat scroll 0 -80px; width:6px; height:7px; display:inline-block}
@@ -304,7 +304,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:72px; float: left; padding: 5px 15px 0 4px}
 .photo_bg .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
 .grade { float:left; margin:5px 0 0 0; text-align:center}
-.grade div { margin-bottom:6px}
+.grade div { margin-bottom:5px}
 .point {background: url("../images/pb_point.png") no-repeat; width:14px; height:20px; float:left; position:relative; left:1px; top:23px}
 .grade_heart { padding-top:15px; color:#7fccff; font-weight:bold; margin:0 !important}
 .grade_star { padding-top:15px; color:#ffb833; font-weight:bold; margin:0 !important}
