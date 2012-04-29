@@ -240,7 +240,7 @@ a .icon_delete:hover {background-position:-219px -117px}
 .icon_mentor.current { background-position:-63px -139px}
 .icon_star {background: url("../images/icon.png") no-repeat scroll -29px -161px; width:16px; height:15px; display: block}
 .icon_star.current { background-position:-63px -161px}
-.icon_heart {background: url("../images/icon.png") no-repeat scroll -29px -203px; width:16px; display: block}
+.icon_heart {background: url("../images/icon.png") no-repeat scroll -29px -203px; width:16px; height:15px; display: block}
 .icon_heart.current { background-position:-63px -203px}
 .icon_more {background: url("../images/icon.png") no-repeat scroll -166px -175px; padding-left:10px}
 .icon_bul_select {background: url("../images/icon.png") no-repeat scroll 0 -80px; width:6px; height:7px; display:inline-block}
