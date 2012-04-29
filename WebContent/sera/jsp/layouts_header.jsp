@@ -154,27 +154,12 @@
 
 <body>
 
-	<script type="">smartPop.progressCenter();</script>
 	<div id="wrap">
 		<!-- Header -->
 		<div id="sera_header">
 			<tiles:insertAttribute name="sera_header" />
 		</div>
 		<!-- Header//-->
-		
-		<!-- Container -->
-		<div id="container">
-			<tiles:insertAttribute name="container" />
-		</div>
-		<!-- Container// -->
-
-		<!--  Footer -->
-		<div id="sera_footer">
-			<tiles:insertAttribute name="sera_footer" />
-		</div>
-		<!--  Footer// -->
-
 	</div>
-	<script type="">smartPop.closeProgress();</script>
 </body>
 </html>

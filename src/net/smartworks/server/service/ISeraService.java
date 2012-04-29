@@ -67,11 +67,13 @@ public interface ISeraService {
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 	
-	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -106,5 +108,9 @@ public interface ISeraService {
 	public abstract SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception;
 	
 	public abstract Notice[] getSeraNoticesForMe() throws Exception;
+
+	public abstract SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception;
+
+	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
 
 }

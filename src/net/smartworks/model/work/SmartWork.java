@@ -25,7 +25,11 @@ public class SmartWork extends Work {
 	public final static String ID_CONTACTS_MANAGEMENT = "pkg_dde3f719c50143cd821e6c46e8df8655";
 	public final static String ID_MESSAGE_MANAGEMENT = "";
 	public final static String ID_ALL_WORKS = "allSmartWorks";
-		
+
+	public final static String ID_SERA_MISSION_MANAGEMENT = "pkg_dc3edb6efa47418cbd1f8fef889b4818";
+	public final static String ID_SERA_MISSION_REPORT_MANAGEMENT = "pkg_8fc9ed30a64b467eb89fd35097cc6212";
+	public final static String ID_SERA_NOTE_MANAGEMENT = "pkg_e4c34f837ea64b1c994d4827d8a4bb51";
+
 	private WorkCategory myGroup = null;
 	private WorkCategory myCategory = null;
 	private AccessPolicy accessPolicy = new AccessPolicy();

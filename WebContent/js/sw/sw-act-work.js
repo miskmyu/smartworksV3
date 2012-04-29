@@ -16,7 +16,7 @@ $(function() {
 	}
 
 	$('.js_select_action a').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		$('.js_select_action').find('a').removeClass('current');
 		var currentAction = input.parents('.up_icon_list');
 		currentAction.find('a').addClass('current');
@@ -59,7 +59,7 @@ $(function() {
 	});
 	
 	$('.js_click_start_form').live('click', function(e){
-		var input = $(e.target).parents('.js_click_start_form:first');
+		var input = $(targetElement(e)).parents('.js_click_start_form:first');
 		var newMemo = input.parents('.js_new_memo_page');
 		var newPicture = input.parents('.js_new_picture_page');
 		var newFile = input.parents('.js_new_file_page');
@@ -119,6 +119,16 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(newBoard) && newBoard.attr('seraBoard')==="true"){
+					target.find('.js_select_work_space').hide();
+					target.find('.js_select_access_level option.js_access_level_custom').remove();
+					
+				}else if(!isEmpty(newEvent) && newEvent.attr('seraEvent')==="true"){
+					var selectWorkSpace = target.find('.js_select_work_space');
+					selectWorkSpace.find('.js_optgroup_department').remove();
+					selectWorkSpace.find('.js_optgroup_group').attr('label', '나의 코스공간');					
+					target.find('.js_select_access_level option.js_access_level_custom').remove();					
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				
@@ -135,11 +145,11 @@ $(function() {
 		before : function(event) {
 			smartPop.progressCenter();
 			$('#form_works').html('');
-			$(event.target).parents(".js_start_work_page").hide();
+			$(targetElement(event)).parents(".js_start_work_page").hide();
 		},
 		target : 'form_works',
 		after : function(event) {
-			var input = $(event.target).parents('li:first').children('a');
+			var input = $(targetElement(event)).parents('li:first').children('a');
 			var formContent = $('#form_works').find('div.js_form_content');
 			var workId = input.attr('workId');
 			new SmartWorks.GridLayout({
@@ -175,8 +185,8 @@ $(function() {
 //	});
 	
 	$('input.js_toggle_schedule_work').live('click', function(e) {
-		var input = $(e.target);
-		var target = $(e.target).parent().next('span');
+		var input = $(targetElement(e));
+		var target = $(targetElement(e)).parent().next('span');
 		if(input.is(':checked')){
 			loadCheckScheduleFields();
 			target.show();
@@ -188,7 +198,7 @@ $(function() {
 	
 	var ACCESS_LEVEL_CUSTOM = '2';
 	$('select.js_select_access_level').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_upload_buttons_page').find('.js_access_level_custom');
 		var accessLevel = input.attr('value');
 		if(accessLevel === ACCESS_LEVEL_CUSTOM)
@@ -198,13 +208,13 @@ $(function() {
 	});
 	
 	$('select.js_select_work_space').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_upload_buttons_page').find('input[name="selWorkSpaceType"]');
 		target.attr('value', input.find('option:selected').attr('workSpaceType'));
 	});
 	
 	$('a.js_create_new_work').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var url = input.attr('href');
 		var target = input.parents('.js_work_list_page').find('div.js_new_work_form');
 		$('a.js_search_filter_close').click();
@@ -227,7 +237,7 @@ $(function() {
 	});
 
 	$('input.js_whole_day').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parent().siblings('div.js_start_time').toggle();
 		var endtime = input.parent().siblings('div.js_end_datetime').find('div.js_end_time').hide();
 		if(input[0].checked) endtime.hide();
@@ -237,7 +247,7 @@ $(function() {
 		{
 			target : 'form_import',
 			after : function(event) {
-				var input = $(event.target);
+				var input = $(targetElement(e));
 				input.parents('.js_file_detail_form').parent().prev().slideToggle(500);
 				input.parent().toggle().siblings().toggle();
 				var form = input.parents('form[name="frmNewFile"]');
@@ -284,7 +294,7 @@ $(function() {
 		});
 
 	$('a.js_view_work_manual').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents("div.js_work_list_page").find('#work_manual').slideToggle(500);
 		input.hide();
 		input.siblings().show();
@@ -332,7 +342,7 @@ $(function() {
 	});
 
 	$('.js_select_task_manual').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!input.hasClass('js_select_task_manual')) input = input.parents('.js_select_task_manual:first');
 		var target = $("#"+input.attr("taskId"));
 		var target_point = $(target).find("div.up_point:first");
@@ -345,7 +355,7 @@ $(function() {
 	});
 	
 	$('a.js_manual_tasks_right').live('click', function(e){
-		var input = $(e.target).parents('a:first');
+		var input = $(targetElement(e)).parents('a:first');
 		var pworkManual = input.parents('.js_pwork_manual_page');
 		var manualTasksHolder = pworkManual.find('.js_manual_tasks_holder');
 		var manualLeft = pworkManual.find('.js_manual_tasks_left');	
@@ -401,7 +411,7 @@ $(function() {
 	
 	$('a.js_manual_tasks_left').live('click', function(e){
 
-		var input = $(e.target).parents('a:first');
+		var input = $(targetElement(e)).parents('a:first');
 		var pworkManual = input.parents('.js_pwork_manual_page');
 		var manualTasksHolder = pworkManual.find('.js_manual_tasks_holder');
 		var manualLeft = pworkManual.find('.js_manual_tasks_left');	
@@ -445,14 +455,14 @@ $(function() {
 	
 	$('.js_select_task_instance').live("click", function(e){
 		smartPop.progressCenter();
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!input.hasClass('js_select_task_instance')) input = input.parents('.js_select_task_instance:first');		
 		clickOnTask(input);
 		return false;
 	});
 
 	$('a.js_instance_tasks_right').live('click', function(e){
-		var input = $(e.target).parents('a:first');
+		var input = $(targetElement(e)).parents('a:first');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var instanceTasksHolder = pworkSpace.find('.js_instance_tasks_holder');
 		var instanceLeft = pworkSpace.find('.js_instance_tasks_left');	
@@ -511,7 +521,7 @@ $(function() {
 	
 	$('a.js_instance_tasks_left').live('click', function(e){
 		
-		var input = $(e.target).parents('a:first');
+		var input = $(targetElement(e)).parents('a:first');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var instanceTasksHolder = pworkSpace.find('.js_instance_tasks_holder');
 		var instanceLeft = pworkSpace.find('.js_instance_tasks_left');	
@@ -556,7 +566,7 @@ $(function() {
 	});
 
 	$('a.js_modify_iwork_instance').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var iworkSpace = input.parents('.js_iwork_space_page');
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
@@ -577,7 +587,7 @@ $(function() {
 	});
 
 	$('a.js_cancel_iwork_instance').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var iworkSpace = input.parents('.js_iwork_space_page');
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
@@ -600,7 +610,7 @@ $(function() {
 	});
 
 	$('a.js_save_iwork_instance').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var iworkSpace = input.parents('.js_iwork_space_page');
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
@@ -683,7 +693,7 @@ $(function() {
 	});
 
 	$('a.js_forward_iwork_instance').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var iworkSpace = input.parents('.js_iwork_space_page');
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
@@ -749,7 +759,7 @@ $(function() {
 
 	$('a.js_delete_iwork_instance').live('click', function(e){
 		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var iworkSpace = input.parents('.js_iwork_space_page');
 			var workId = iworkSpace.attr("workId");
 			var instId = iworkSpace.attr("instId");
@@ -797,7 +807,7 @@ $(function() {
 	});
 
 	$('a.js_perform_task_instance').live('click', function(e){
-		var input = $(e.target).parents('a.js_perform_task_instance');
+		var input = $(targetElement(e)).parents('a.js_perform_task_instance');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var instId = pworkSpace.attr("instId");
@@ -863,7 +873,7 @@ $(function() {
 	});
 
 	$('a.js_return_task_instance').live('click', function(e){
-		var input = $(e.target).parents('a.js_return_task_instance');
+		var input = $(targetElement(e)).parents('a.js_return_task_instance');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var instId = pworkSpace.attr("instId");
@@ -927,7 +937,7 @@ $(function() {
 	});
 
 	$('a.js_temp_save_task_instance').live('click', function(e){
-		var input = $(e.target).parents('a.js_temp_save_task_instance');
+		var input = $(targetElement(e)).parents('a.js_temp_save_task_instance');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var instId = pworkSpace.attr("instId");
@@ -990,7 +1000,7 @@ $(function() {
 	});
 
 	$('a.js_reassign_task_instance').live('click', function(e){
-		var input = $(e.target).parents('a.js_reassign_task_instance');
+		var input = $(targetElement(e)).parents('a.js_reassign_task_instance');
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var instId = pworkSpace.attr("instId");
@@ -1054,7 +1064,7 @@ $(function() {
 	});
 
 	$('input.js_file_upload').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var newInput = document.createElement( 'input' );
 		newInput.type = 'file';
 		$(newInput).addClass('js_file_upload');
@@ -1067,23 +1077,23 @@ $(function() {
 			oldHTML = "";		
 		var newHTML = oldHTML
 		+ "<span class='js_file_item user_select' >"
-		+ input[0].value
+		+ input.attr('value')
 		+ "<span class='btn_x_gr'><a class='js_remove_file' href=''> x</a></span></span>";
 		target.html(newHTML);
-		$(target).find('span.js_file_item').add(e.target);
+		$(target).find('span.js_file_item').add(targetElement(e));
 	});
 
 	$('.qq-delete-text').live('click', function(e) {
 		$.ajax({
 			url : "delete_file.sw",
 			data : {
-				fileId : $(e.target).parent('li').attr('fileId'),
-				fileName : $(e.target).siblings('a').attr('filename')
+				fileId : $(targetElement(e)).parent('li').attr('fileId'),
+				fileName : $(targetElement(e)).siblings('a').attr('filename')
 			},
 			type : "POST",
 			context : this,
 			success : function(data, status, jqXHR) {
-				$(e.target).parent().remove();
+				$(targetElement(e)).parent().remove();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				
@@ -1102,7 +1112,7 @@ $(function() {
     });
 
 	$('.js_pop_all_works').live('click', function(e) {
-		var startWork = $(e.target).parents('.js_start_work_page');
+		var startWork = $(targetElement(e)).parents('.js_start_work_page');
 		var target = startWork.find('.js_all_work_popup');
 		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
 		smartPop.selectWork(target, width);
@@ -1110,25 +1120,25 @@ $(function() {
 	});
 
 	$('a.js_todaypicker_button').live('click', function(e) {
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.prev('.js_todaypicker').datepicker("show");
 		return false;
 	});
 
 	$('a.js_timepicker_button').live('click', function(e) {
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.prev('.js_timepicker').timepicker("show");
 		return false;
 	});
 	
 	$('a.js_todaytimepicker_button').live('click', function(e) {
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.prev('.js_todaytimepicker').datetimepicker("show");
 		return false;
 	});
 
 	$('a.js_userpicker_button').live('click', function(e) {
-		var userField = $(e.target).parents('.js_type_userField:first');
+		var userField = $(targetElement(e)).parents('.js_type_userField:first');
 		var communityItems = userField.find('.js_community_item');
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
@@ -1138,14 +1148,14 @@ $(function() {
 	});
 
 	$('a.js_workitempicker_button').live('click', function(e) {
-		var target = $(e.target).parents('td.js_type_refFormField:first');
+		var target = $(targetElement(e)).parents('td.js_type_refFormField:first');
 		var formId = target.attr('refForm');
 		smartPop.selectWorkItem(formId, target);
 		return false;
 	});
 	
 	$('.js_type_radioButton input').live('click', function(e){
-		var target = $(e.target).parents('.js_type_radioButton').find('.sw_required');
+		var target = $(targetElement(e)).parents('.js_type_radioButton').find('.sw_required');
 		if(target.hasClass('sw_error')){
 			target.removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
@@ -1153,7 +1163,7 @@ $(function() {
 	});
 
 	$('a.js_toggle_forward_btn').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_form_header').siblings('.js_form_task_forward');
 		if(target.is(':visible')){
 			target.hide().html('');
@@ -1184,7 +1194,7 @@ $(function() {
 	});
 
 	$('a.js_view_my_running_instances').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');
 		var target = input.parents('.js_my_running_instance_list_page').find('table');  
 		$.ajax({
@@ -1203,7 +1213,7 @@ $(function() {
 	});
 
 	$('a.js_view_assigned_instances').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');
 		var target = input.parents('.js_my_running_instance_list_page').find('table');  
 		$.ajax({
@@ -1227,7 +1237,7 @@ $(function() {
 			clearTimeout(filesDetailTimer);
 			filesDetailTimer = null;
 		}
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var picture = input;
 		var top = picture.offset().top+ picture.height() + 5;
 		var left = picture.offset().left + picture.width() + 5;

@@ -60,11 +60,17 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "세라노트가 성공적으로 등록되었습니다!", function(){
+						if(!isEmpty(seraNote.attr('teamId')) && (seraNote.attr('teamId') !== 'null')){
+							$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+						}else{
+							document.location.href = data.href;						
+						}						
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createSeraNoteError'));
+					smartPop.showInfo(smartPop.ERROR, "세라노트등록에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}

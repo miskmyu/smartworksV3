@@ -17,6 +17,8 @@ CREATE TABLE CourseDetail (
 	lastMissionIndex int,
 	createDate datetime,
 	coursePoint int,
+	startPoint decimal(18,3),
+	scorePointUsers int,
 	primary key (courseId)
 );
 CREATE TABLE MentorDetail (
@@ -54,6 +56,8 @@ CREATE TABLE Mission (
 	starPoint varchar(255),
 	content text,
 	files varchar(255),
+	startPoint decimal(18,3),
+	scorePointUsers int,
 	primary key (id)
 );
 INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880e3368c3af901368c3ccd690004', '40288afb1b25f00b011b25f3c7950001', 'pkg_dc3edb6efa47418cbd1f8fef889b4818', 1, '미션관리', 'SINGLE', 'DEPLOYED', 'Y', 'admin', getdate(), 'admin', getdate(), '미션관리');
@@ -223,6 +227,7 @@ CREATE TABLE Friends (
 
 CREATE TABLE SeraUserDetail (
 	userId varchar(50) NOT NULL,
+	userName varchar(50),
 	email varchar(50),
 	birthday datetime,
 	sex int,
@@ -724,9 +729,6 @@ update swform set content='<form id="sera_mission" version="1" name="미션관�
 	</graphic>
 </form>' where formid='sera_mission'
 
-
-
-
 CREATE TABLE CourseReview (
 	objId varchar(50) NOT NULL,
 	courseId varchar(50),
@@ -757,3 +759,11 @@ CREATE TABLE CourseTeamUser (
 	memberSeq int,
 	primary key(objId, userId)
 );
+
+ALTER TABLE SeraUserDetail add userName varchar(50);
+
+ALTER TABLE CourseDetail add startPoint decimal(18,3);
+ALTER TABLE CourseDetail add scorePointUsers int;
+
+ALTER TABLE Mission add startPoint decimal(18,3);
+ALTER TABLE Mission add scorePointUsers int;

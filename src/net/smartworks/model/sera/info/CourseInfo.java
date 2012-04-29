@@ -17,7 +17,7 @@ public class CourseInfo extends GroupInfo{
 	private LocalDate openDate;
 	private LocalDate closeDate;
 	private int numberOfGroupMember;
-	
+
 	public String getCategory() {
 		return category;
 	}

@@ -186,12 +186,12 @@
 	</definition>
 
 	<definition name="Course" template="/sera/jsp/layouts_nouser.jsp">
-		<put-attribute name="sera_header_join" value="/sera/jsp/header_nouser.jsp" />
+		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
 		<put-attribute name="container" value="/sera/jsp/content/course.jsp" />
 		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
 	</definition>
 	<definition name="Header" template="/sera/jsp/layouts_header.jsp">
-		<put-attribute name="sera_header_join" value="/sera/jsp/header_header.jsp" />
+		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
 	</definition>
 	<definition name="joinUs" extends="Course">
 		<put-attribute name="container" value="/sera/jsp/content/joinus.jsp" />

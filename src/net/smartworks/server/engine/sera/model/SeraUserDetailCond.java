@@ -15,6 +15,7 @@ import net.smartworks.server.engine.common.model.Cond;
 public class SeraUserDetailCond extends Cond {
 	
 	private String userId;
+	private String userName;
 	private String[] userIdIns;
 	private String[] userIdNotIns;
 	private String email;
@@ -29,12 +30,19 @@ public class SeraUserDetailCond extends Cond {
 	private String fbUserId;
 	private String fbPassword;
 	private String nickName;
-	
+	private String key;
+
 	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String[] getUserIdIns() {
 		return userIdIns;
@@ -120,5 +128,11 @@ public class SeraUserDetailCond extends Cond {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-	
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+
 }

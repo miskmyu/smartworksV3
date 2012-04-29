@@ -37,7 +37,7 @@ $(function() {
 	};
 		
 	$('form[name="frmSmartForm"] .form_value > input').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -56,7 +56,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value fieldset input').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -75,7 +75,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value > select').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -94,7 +94,7 @@ $(function() {
 	});
 	
 	$('form[name="frmSmartForm"] .form_value input.js_number_input').live('blur', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -113,7 +113,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value input.js_currency_input').live('blur', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -132,7 +132,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value input.js_percent_input').live('blur', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -151,7 +151,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value .js_community_names').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -170,7 +170,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value input.js_todaypicker').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -189,7 +189,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value input.js_todaytimepicker').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -208,7 +208,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .form_value input.js_timepicker').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
@@ -227,7 +227,7 @@ $(function() {
 	});
 
 	$('form[name="frmSmartForm"] .js_refFormField').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){

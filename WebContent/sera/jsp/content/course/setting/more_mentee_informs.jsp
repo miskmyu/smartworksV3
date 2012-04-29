@@ -58,13 +58,13 @@
 					<ul>
 						<li class="pl0pr10"><img src="<%=user.getMidPicture() %>" /></li>
 						<li class="w90"><span><%=user.getNickName() %><br /> <span class="cb t_id"><%=user.getId() %></span> </span></li>
-						<li class="bo_l" style="width: 15%"><span> 미션수행 20 </span></li>
-						<li class="bo_l" style="width: 15%"><span> 받은 게시물 15<br />댓글쓰기 20<br /> 공감 + 19 </span></li>
-						<li class="bo_l" style="width: 15%"><span> 참여 90일째 </span></li>
+						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
+						<li class="bo_l" style="width: 15%"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
+						<li class="bo_l" style="width: 15%"><span> 참여 0일째 </span></li>>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_green_l js_pushout_mentee_btn">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 강퇴</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 강퇴</div>
 								</div>
 							</span>
 						</li>
@@ -94,7 +94,7 @@
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
 								<div class="btn_green_l js_invite_mentee_btn" userId="<%=user.getId() %>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 초대</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 초대</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>

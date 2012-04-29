@@ -488,7 +488,7 @@ public interface ISmartWorks {
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 
-	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception;
 
 	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
 
@@ -549,5 +549,9 @@ public interface ISmartWorks {
 	public abstract AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
 	
 	public abstract Notice[] getSeraNoticesForMe() throws Exception;
+
+	public abstract SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception;
+
+	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
 
 }

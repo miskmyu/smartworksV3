@@ -16,7 +16,7 @@ $(function() {
 	});
 
 	$('.js_course_menu').live('click', function(e){
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.siblings().removeClass('current');
 		input.addClass('current');
 		var courseHome = input.parents('.js_course_home_page');
@@ -65,7 +65,7 @@ $(function() {
 	});
 	
 	$('.js_course_setting_menu').live('click', function(e){
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.siblings().removeClass('current');
 		input.addClass('current');
 		var courseHome = input.parents('.js_course_home_page');
@@ -96,7 +96,7 @@ $(function() {
 	});
 
 	$('.js_course_mission_menu').live('click', function(e){
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		input.siblings().removeClass('current');
 		input.addClass('current');
 		var courseHome = input.parents('.js_course_home_page');
@@ -128,7 +128,7 @@ $(function() {
 	});
 
 	$('.js_view_user_instances').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var userId = input.attr('userId');
@@ -154,7 +154,7 @@ $(function() {
 	});
 
 	$('.js_view_all_instances').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parent().siblings().find('a').removeClass('current');
 		input.addClass('current');
 		var courseId = input.attr('courseId');
@@ -178,7 +178,7 @@ $(function() {
 	});
 	
 	$('.js_mentor_form_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_mentor_form_btn');
+		var input = $(targetElement(e)).parents('.js_mentor_form_btn');
 		var createCourse = input.parents('.js_create_course_page');
 		if(createCourse.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
 			createCourse.find('input[name="txtCourseStartDate"]').addClass('required');
@@ -220,7 +220,7 @@ $(function() {
 	});
 	
 	$('.js_invite_course_members_btn').live('click', function(e){
-		var courseId = $(e.target).parents('.js_course_home_page').attr('courseId');
+		var courseId = $(targetElement(e)).parents('.js_course_home_page').attr('courseId');
 		var target = $('.js_course_content');
 		smartPop.progressCenter();				
 		$.ajax({
@@ -241,7 +241,7 @@ $(function() {
 	
 	$('.js_remove_course_btn').live('click', function(e){
 		smartPop.confirm('코스를 삭제하시려고 합니다. 정말로 삭제하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var courseId = input.parents('.js_setting_profile_page').attr('courseId');
 			var paramsJson = {};
 			paramsJson['courseId'] = courseId;
@@ -271,7 +271,7 @@ $(function() {
 	});
 	
 	$('.js_modify_course_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_modify_course_btn');
+		var input = $(targetElement(e)).parents('.js_modify_course_btn');
 		var settingProfile = input.parents('.js_setting_profile_page');
 		if(settingProfile.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
 			settingProfile.find('input[name="txtCourseStartDate"]').addClass('required');
@@ -296,7 +296,7 @@ $(function() {
 	});
 	
 	$('.js_back_to_create_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_back_to_create_btn');		
+		var input = $(targetElement(e)).parents('.js_back_to_create_btn');		
 		input.parents('.js_mentor_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
 		var createCourse = input.parents('.js_create_course_page');
 		createCourse.find('.js_create_course_table').show();
@@ -305,7 +305,7 @@ $(function() {
 	});
 
 	$('.js_join_course_request').live('click', function(e){
-		var input = $(e.target).parents('.js_join_course_request');
+		var input = $(targetElement(e)).parents('.js_join_course_request');
 		var paramsJson = {};
 		paramsJson["courseId"] = input.parents('.js_course_content').attr('courseId');
 		paramsJson["userId"] = currentUserId;
@@ -332,7 +332,7 @@ $(function() {
 	});
 	
 	$('.js_select_mission').live('click', function(e){
-		var input = $(e.target).parent('a');
+		var input = $(targetElement(e)).parent('a');
 		var missionList = input.parents('.js_mission_list_page');
 		var courseId = missionList.attr('courseId');
 		var missionId = input.attr('missionId');
@@ -355,7 +355,7 @@ $(function() {
 	});
 	
 	$('.js_show_modify_mission').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var performMission = input.parents('.js_perform_mission_page');
 		var courseId = performMission.attr('courseId');
 		var missionId = performMission.attr('missionId');
@@ -389,7 +389,7 @@ $(function() {
 	
 	$('.js_delete_mission_btn').live('click', function(e){
 		smartPop.confirm('미션을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var performMission = input.parents('.js_perform_mission_page');
 			var courseId = performMission.attr('courseId');
 			var paramsJson = {};
@@ -416,7 +416,7 @@ $(function() {
 	
 	$('.js_delete_instance_btn').live('click', function(e){
 		smartPop.confirm('항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var subInstanceList = input.parents('.js_sub_instance_list');
 			var	workInstanceId = subInstanceList.attr('instanceId');
 			var	workType = subInstanceList.attr('workType');
@@ -444,7 +444,7 @@ $(function() {
 	});
 	
 	$('.js_read_note_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_read_note_btn');
+		var input = $(targetElement(e)).parents('.js_read_note_btn');
 		if(isEmpty(input.find('.not_read'))) return false;
 		
 		var subInstanceList = input.parents('.js_sub_instance_list');
@@ -472,7 +472,7 @@ $(function() {
 	});
 	
 	$('.js_note_buttons').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var noteAttachmentTable = input.parents('.js_note_buttons').siblings('.js_note_attachment_table');
 		var targetTable = [];
 		if(!isEmpty(input.hasClass('js_note_file_btn')))
@@ -501,7 +501,7 @@ $(function() {
 	});
 	
 	$('.js_report_content').live('click', function(e){
-		$(e.target).attr('rows', 24);
+		$(targetElement(e)).attr('rows', 24);
 		$('.js_report_content').die('click');
 	});
 	
@@ -517,7 +517,7 @@ $(function() {
 
 	$('.js_remove_team_btn').live('click', function(e){
 		smartPop.confirm('코스팀을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var form = input.parents('.js_course_setting_page').find('form');
 			var courseId = form.attr('courseId');
 			var teamId = form.attr('teamId');
@@ -534,7 +534,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀이 성공적으로 삭제 되었습니다.", function(){
-						document.location.href = "courseHome.sw?courseId=" + courseId;						
+						$('.js_course_home_page .js_course_main_menu .js_create_team').click();						
 					});
 				},
 				error : function(e) {
@@ -557,7 +557,7 @@ $(function() {
 	
 	$('.js_leave_sera_btn').live('click', function(e){
 		smartPop.confirm('세라캠퍼스 회원을 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var userId = input.parents('.js_my_profile_page').attr('userId');
 			var paramsJson = {};
 			paramsJson['userId'] = userId;
@@ -586,8 +586,17 @@ $(function() {
 	});
 	
 	$('.js_return_on_sera_comment').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
-		var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
+		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
+			e.keyCode = $.ui.keyCode.ENTER;
+			e.which = $.ui.keyCode.ENTER
+			return true;
+		}else if(keyCode != $.ui.keyCode.ENTER){
+			return;
+		}
+		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');
 		if(isEmpty(comment)) return false;
@@ -627,12 +636,15 @@ $(function() {
 			}
 			
 		});
+		return false;
 		
 	});
 	
 	$('.js_return_on_reply_note').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
-		var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode != $.ui.keyCode.ENTER) return;
+		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var message = input.attr('value');
 		if(isEmpty(message)) return false;
@@ -671,14 +683,14 @@ $(function() {
 	});
 	
 	$('.js_view_new_course_review').live('click', function(e) {
-		var courseReview = $(e.target).parents('.js_course_general_page').find('.js_return_on_course_review');
+		var courseReview = $(targetElement(e)).parents('.js_course_general_page').find('.js_return_on_course_review');
 		courseReview.parent().prepend(courseReview.clone());
 		courseReview.show();
 		return false;
 	});
 	
 	$('.js_star_point_btn').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(input.hasClass('full')){
 			input.removeClass('full').addClass('half');
 			input.nextAll().removeClass('full').removeClass('half');
@@ -694,8 +706,10 @@ $(function() {
 	});
 	
 	$('.js_return_on_course_review').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
-		var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode != $.ui.keyCode.ENTER) return;
+		var input = $(targetElement(e));
 		var courseGeneral = input.parents('.js_course_general_page');
 		var review = input.attr('value');
 		if(isEmpty(review)) return false;
@@ -739,8 +753,8 @@ $(function() {
 	});
 	
 	$('.js_more_course_reviews_btn').live('click', function(e) {
-		var input = $(e.target).parents('.js_more_course_reviews_btn');
-		console.log('input=', input, ', target=', $(e.target));
+		var input = $(targetElement(e)).parents('.js_more_course_reviews_btn');
+		console.log('input=', input, ', target=', $(targetElement(e)));
 		var courseId = input.attr('courseId');
 		var fromDate = input.attr('fromDate');
 		smartPop.progressCont(input.find('.js_progress_span'));
@@ -763,8 +777,8 @@ $(function() {
 	});
 	
 	$('.js_show_all_sera_comments').live('click', function(e) {
-		var input = $(e.target).parents('.js_show_all_sera_comments');
-		if(isEmpty(input)) input = $(e.target);
+		var input = $(targetElement(e)).parents('.js_show_all_sera_comments');
+		if(isEmpty(input)) input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
 		smartPop.progressCenter();				
@@ -790,19 +804,19 @@ $(function() {
 	});
 	
 	$('a.js_add_sera_comment').live('click', function(e){
-		var input = $(e.target).removeAttr('href');
+		var input = $(targetElement(e)).removeAttr('href');
 		input.parents('.js_sub_instance_list').find('.js_return_on_sera_comment').show();
 		return false;
 	});
 
 	$('a.js_add_reply_note').live('click', function(e){
-		var input = $(e.target).removeAttr('href');
+		var input = $(targetElement(e)).removeAttr('href');
 		input.parents('.js_sub_instance_list').find('.js_return_on_reply_note').show();
 		return false;
 	});
 
 	$('a.js_add_sera_like').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var	workInstanceId = subInstanceList.attr('instanceId');
 		var	workType = subInstanceList.attr('workType');
@@ -842,7 +856,7 @@ $(function() {
 	});
 	
 	$('a.js_remove_sera_like').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var	workInstanceId = subInstanceList.attr('instanceId');
 		var	workType = subInstanceList.attr('workType');
@@ -886,7 +900,7 @@ $(function() {
 	});
 	
 	$('.js_accept_friend_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_accept_friend_btn');
+		var input = $(targetElement(e)).parents('.js_accept_friend_btn');
 		var friendRequest = input.parents('.js_friend_request_item');
 		var requesterCount = input.parents('.js_friend_page').find('.js_requester_count');
 		var userId = friendRequest.attr('userId');
@@ -921,7 +935,7 @@ $(function() {
 	});
 
 	$('.js_deny_friend_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_deny_friend_btn');
+		var input = $(targetElement(e)).parents('.js_deny_friend_btn');
 		var friendRequest = input.parents('.js_friend_request_item');
 		var requesterCount = input.parents('.js_friend_page').find('.js_requester_count');
 		var userId = friendRequest.attr('userId');
@@ -956,7 +970,7 @@ $(function() {
 	});
 
 	$('.js_destroy_friendship_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_destroy_friendship_btn');
+		var input = $(targetElement(e)).parents('.js_destroy_friendship_btn');
 		var friend = input.parents('.js_friend_item');
 		var friendCount = input.parents('.js_friend_page').find('.js_friend_count');
 		var userId = friend.attr('userId');
@@ -995,7 +1009,7 @@ $(function() {
 	});
 
 	$('.js_friend_request_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_friend_request_btn');
+		var input = $(targetElement(e)).parents('.js_friend_request_btn');
 		var userId = input.attr('userId');
 		var paramsJson = {};
 		paramsJson['userId'] = userId;
@@ -1032,7 +1046,7 @@ $(function() {
 	});
 
 	$('.js_select_course_btn').live('click', function(e) {
-		var input = $(e.target).parents('.js_select_course_btn');
+		var input = $(targetElement(e)).parents('.js_select_course_btn');
 		var courseType = input.attr('courseType');
 		var categoryName = (courseType === "14") ? input.find('a').html() : "";
 		
@@ -1058,7 +1072,7 @@ $(function() {
 	});
 	
 	$('.js_more_sera_instances_btn').live('click', function(e) {
-		var input = $(e.target).parents('.js_more_sera_instances_btn');
+		var input = $(targetElement(e)).parents('.js_more_sera_instances_btn');
 		var instanceType = input.attr('instanceType');
 		var userId = input.attr('userId');
 		var courseId = input.attr('courseId');
@@ -1087,7 +1101,7 @@ $(function() {
 	});
 	
 	$('.js_more_friends_btn').live('click', function(e) {
-		var input = $(e.target).parents('.js_more_friends_btn');
+		var input = $(targetElement(e)).parents('.js_more_friends_btn');
 		var type = input.attr('requestType');
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');
@@ -1118,7 +1132,7 @@ $(function() {
 	});
 	
 	$('.js_more_course_by_type').live('click', function(e) {
-		var input = $(e.target).parents('.js_more_course_by_type');
+		var input = $(targetElement(e)).parents('.js_more_course_by_type');
 		var courseType = input.attr('courseType');
 		var categoryName = (courseType === "14") ? input.attr('categoryName') : "";
 		var lastId = input.attr('lastId');
@@ -1144,8 +1158,8 @@ $(function() {
 	});
 	
 	$('a.js_coursememberpicker_button').live('click', function(e) {
-		var input = $(e.target).parents('.js_coursememberpicker_button');
-		var userField = $(e.target).parents('.js_type_userField:first');
+		var input = $(targetElement(e)).parents('.js_coursememberpicker_button');
+		var userField = $(targetElement(e)).parents('.js_type_userField:first');
 		var communityItems = userField.find('.js_community_item');
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
@@ -1156,7 +1170,7 @@ $(function() {
 	});
 
 	$('a.js_friendpicker_button').live('click', function(e) {
-		var userField = $(e.target).parents('.js_type_userField:first');
+		var userField = $(targetElement(e)).parents('.js_type_userField:first');
 		var communityItems = userField.find('.js_community_item');
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
@@ -1166,7 +1180,7 @@ $(function() {
 	});
 
 	$('.js_more_mentee_informs_btn').live('click', function(e) {
-		var input = $(e.target).parents('.js_more_mentee_informs_btn');
+		var input = $(targetElement(e)).parents('.js_more_mentee_informs_btn');
 		var requestType = input.attr('requestType');
 		var courseId = input.attr('courseId');
 		var lastId = input.attr('lastId');
@@ -1196,7 +1210,7 @@ $(function() {
 	});
 	
 	$('.js_approve_join_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_join_requester_item');
+		var input = $(targetElement(e)).parents('.js_join_requester_item');
 		var courseId = input.attr('courseId');
 		var userId = input.attr('userId');
 		var paramsJson = {};
@@ -1226,7 +1240,7 @@ $(function() {
 	});
 
 	$('.js_reject_join_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_join_requester_item');
+		var input = $(targetElement(e)).parents('.js_join_requester_item');
 		var courseId = input.attr('courseId');
 		var userId = input.attr('userId');
 		var paramsJson = {};
@@ -1256,7 +1270,7 @@ $(function() {
 	});
 
 	$('.js_pushout_mentee_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_mentee_item');
+		var input = $(targetElement(e)).parents('.js_mentee_item');
 		var courseId = input.attr('courseId');
 		var userId = input.attr('userId');
 		var paramsJson = {};
@@ -1285,7 +1299,7 @@ $(function() {
 	});
 
 	$('.js_invite_mentee_btn').live('click', function(e){
-		var input = $(e.target).parents('.js_non_mentee_item');
+		var input = $(targetElement(e)).parents('.js_non_mentee_item');
 		var courseId = input.attr('courseId');
 		var userId = input.attr('userId');
 		var paramsJson = {};
@@ -1317,13 +1331,13 @@ $(function() {
 	});
 
 	$('.js_toggle_course_setting_btn').live('click', function(e){
-		$(e.target).parent().next().toggle();
+		$(targetElement(e)).parent().next().toggle();
 		return false;
 	});
 
 	$('.js_leave_course_btn').live('click', function(e){
 		smartPop.confirm('코스를 탈퇴하시려고 합니다. 정말로 탈퇴하시겠습니까??', function(){
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var courseSetting = input.parents('.js_course_setting_page');
 			var courseId = courseSetting.attr('courseId');
 			var leaveReason = courseSetting.find('textarea[name="txtaLeaveReason"]').attr('value');
@@ -1355,7 +1369,7 @@ $(function() {
 	});
 
 	$('.js_defective_report_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var courseSetting = input.parents('.js_course_setting_page');
 		var courseId = courseSetting.attr('courseId');
 		var defectiveReport = courseSetting.find('textarea[name="txtaDefectiveReport"]').attr('value');
@@ -1390,7 +1404,7 @@ $(function() {
 	});
 
 	$('.js_toggle_mission_btn').live('click', function(e){
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		if(input.hasClass('icon_close_red')){
 			input.removeClass('icon_close_red').addClass('icon_open_red');
 		}else{
@@ -1401,7 +1415,7 @@ $(function() {
 	});
 
 	$('.js_show_more_content').live('click', function(e){
-		var input = $(e.target).removeAttr('href').removeClass('js_show_more_content');
+		var input = $(targetElement(e)).removeAttr('href').removeClass('js_show_more_content');
 		var seraInstanceItem = input.parents('.js_sera_instance_item');
 		seraInstanceItem.find('.js_brief_content').hide().next().show();
 		seraInstanceItem.find('.js_thum_image').removeClass('thum_image').addClass('detail_image');
@@ -1412,21 +1426,21 @@ $(function() {
 	});
 	
 	$('textarea.js_report_content').live('keypress', function(e) {
-		return textareaMaxSize(e, 1000, $(e.target).parents('.js_mission_report_page').find('.js_report_content_length'));
+		return textareaMaxSize(e, 1000, $(targetElement(e)).parents('.js_mission_report_page').find('.js_report_content_length'));
 	});
 	$('textarea.js_report_content').live('keyup', function(e) {
-		return textareaMaxSize(e, 1000, $(e.target).parents('.js_mission_report_page').find('.js_report_content_length'));
+		return textareaMaxSize(e, 1000, $(targetElement(e)).parents('.js_mission_report_page').find('.js_report_content_length'));
 	});
 
 	$('textarea.js_sera_note_content').live('keypress', function(e) {
-		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(targetElement(e)).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 	$('textarea.js_sera_note_content').live('keyup', function(e) {
-		return textareaMaxSize(e, 1000, $(e.target).parents('.js_sera_note_page').find('.js_note_content_length'));
+		return textareaMaxSize(e, 1000, $(targetElement(e)).parents('.js_sera_note_page').find('.js_note_content_length'));
 	});
 
 	$('.js_click_start_form').live('click', function(e){
-		var input = $(e.target).parents('.js_click_start_form:first');
+		var input = $(targetElement(e)).parents('.js_click_start_form:first');
 		var newNote = input.parents('.js_new_note_page');
 		var target = [];
 		if(!isEmpty(newNote)){
@@ -1447,6 +1461,7 @@ $(function() {
 				if(!isEmpty(newNote)){
 					target.find('.js_select_access_level').hide();
 					target.find('.js_select_work_space').hide();
+					target.find('.js_complete_action .txt_btn_center').html('보내기');
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -1457,7 +1472,7 @@ $(function() {
 	});
 
 	$('a.js_cancel_action').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var newNote = input.parents('.js_new_note_page');
 		var newEvent = input.parents('.js_new_event_page');
 		var newBoard = input.parents('.js_new_board_page');
@@ -1472,7 +1487,7 @@ $(function() {
 	});
 	
 	$('a.js_notification_list_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_header_page').find('.js_notification_list_box');
 		$.ajax({
 			url : 'pop_notification_list.sw',
@@ -1487,12 +1502,184 @@ $(function() {
 	});
 	
 	$('.js_shown_notice_btn').live('click', function(e){
-		input = $(e.target).parent().slideUp();
+		input = $(targetElement(e)).parent().slideUp();
 		return false;
 	});
 	
 	$('.js_notification_list_box').live('focusout', function(e){
-		alert('in');
-		$(e.target).slideUp();
+		$(targetElement(e)).slideUp();
 	});
+	
+	var TYPE_FRIENDS = 2;
+	var TYPE_NON_FRIENDS = 3;
+	$('.js_friend_search_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var userId = null;
+		var target = null;
+		var friendCount = null;
+		var friendPage = input.parents('.js_friend_page');
+		var othersFriendPage = input.parents('.js_others_friend_page');
+		if(!isEmpty(friendPage)){
+			userId = currentUser.userId;
+			target = friendPage.find('.js_friend_list');
+			friendCount = friendPage.find('.js_friend_count');
+			
+		}else if(!isEmpty(othersFriendPage)){
+			userId = othersFriendPage.attr('userId');
+			target = othersFriendPage.find('js_friend_list');
+			friendCount = othersFriendPage.find('.js_friend_count');
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_sera_user_by_type.sw',
+			data : {
+				userId : userId,
+				type : TYPE_FRIENDS,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					friendCount.html(0);
+				}
+				else{
+					friendCount.html(target.find('.js_friend_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
+	});
+	
+	$('.js_non_friend_search_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var userId = null;
+		var target = null;
+		var nonFriendCount = null;
+		var friendPage = input.parents('.js_friend_page');
+		var othersFriendPage = input.parents('.js_others_friend_page');
+		if(!isEmpty(friendPage)){
+			userId = currentUser.userId;
+			target = friendPage.find('.js_non_friend_list');
+			nonFriendCount = friendPage.find('.js_non_friend_count');
+		}else if(!isEmpty(othersFriendPage)){
+			userId = othersFriendPage.attr('userId');
+			target = othersFriendPage.find('js_non_friend_list');
+			nonFriendCount = othersFriendPage.find('.js_non_friend_count');
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_sera_user_by_type.sw',
+			data : {
+				userId : userId,
+				type : TYPE_NON_FRIENDS,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					nonFriendCount.html(0);
+				}
+				else{
+					nonFriendCount.html(target.find('.js_non_friend_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
+	});
+
+	var TYPE_MENTEES = 2;
+	var TYPE_NON_MENTEES = 3;
+	$('.js_mentee_search_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var courseSettingMentee = input.parents('.js_course_setting_mentee_page');
+		var inviteCourseMembers = input.parents('.js_invite_course_members_page');
+		var courseId = null;
+		var	target = null;
+		var	menteeCount = null;
+		if(!isEmpty(courseSettingMentee)){
+			courseId = courseSettingMentee.attr('courseId');
+			target = courseSettingMentee.find('.js_course_mentees_list');
+			menteeCount = courseSettingMentee.find('.js_mentee_count');			
+		}else if(!isEmpty(inviteCourseMembers)){
+			courseId = inviteCourseMembers.attr('courseId');
+			target = inviteCourseMembers.find('.js_course_mentees_list');
+			menteeCount = inviteCourseMembers.find('.js_mentee_count');						
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_course_member_by_type.sw',
+			data : {
+				type : TYPE_MENTEES,
+				courseId : courseId,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					menteeCount.html(0);
+				}
+				else{
+					menteeCount.html(target.find('.js_mentee_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
+	});
+	
+	$('.js_non_mentee_search_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var courseSettingMentee = input.parents('.js_course_setting_mentee_page');
+		var inviteCourseMembers = input.parents('.js_invite_course_members_page');
+		var courseId = null;
+		var	target = null;
+		var	nonMenteeCount = null;
+		if(!isEmpty(courseSettingMentee)){
+			courseId = courseSettingMentee.attr('courseId');
+			target = courseSettingMentee.find('.js_course_non_mentees_list');
+			nonMenteeCount = courseSettingMentee.find('.js_non_mentee_count');			
+		}else if(!isEmpty(inviteCourseMembers)){
+			courseId = inviteCourseMembers.attr('courseId');
+			target = inviteCourseMembers.find('.js_course_non_mentees_list');
+			nonMenteeCount = inviteCourseMembers.find('.js_non_mentee_count');						
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_course_member_by_type.sw',
+			data : {
+				type : TYPE_NON_MENTEES,
+				courseId : courseId,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					nonMenteeCount.html(0);
+				}
+				else{
+					nonMenteeCount.html(target.find('.js_non_mentee_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;	
+	});
+	
 });

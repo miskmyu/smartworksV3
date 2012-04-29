@@ -33,6 +33,7 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 
 <%
+
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
@@ -47,7 +48,7 @@
 	if(missionId!=null && missionId.equals("null")) missionId = null;
 	String teamId = request.getParameter("teamId");
 	if(teamId!=null && teamId.equals("null")) teamId = null;
-	String fromDateStr = request.getParameter("fromDate");
+	String fromDateStr = request.getParameter("lastDate");
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
 	int MAX_SERA_INSTANCES = 10;
@@ -106,7 +107,7 @@
 							</div>
 							<div class="grade">
 								<div class="icon_mentor <%=mentorClass%>"></div>
-								<div class="icon_star"><div></div></div>
+								<div class="icon_star"><div class="grade_star js_star_count"></div></div>
 								<div class="icon_heart <%=heartClass%>"><div class="grade_heart js_heart_count"><%if(likes>0){ %><%=likes %><%} %></div></div>
 							</div>
 						</a>
@@ -144,7 +145,9 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=board.getSubject() %></div>
+										<div class="text">
+											<div class="name">[공지.<%=board.getSubject() %>]</div>
+										</div>
 										<div class="text js_brief_content"><%=board.getBriefContent() %></div>
 										<div class="text" style="display:none"><%=board.getContent() %></div>
 									</dd>
@@ -169,7 +172,7 @@
 										<div class="text">
 											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
-												<span>이벤트 기간 : <%=event.getStart().toLocalDateTimeSimpleString() %></span>
+												<span>이벤트 기간 : <%if(!SmartUtil.isBlankObject(event.getStart())){ %><%=event.getStart().toLocalDateTimeSimpleString() %><%}%></span>
 												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
 												<span>~<%=event.getEnd().toLocalDateTimeSimpleString() %></span>
 												<div>이벤트 장소 : </div>

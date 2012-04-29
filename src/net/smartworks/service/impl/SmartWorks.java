@@ -58,8 +58,6 @@ import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
-import net.smartworks.model.work.SmartWork;
-import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
@@ -1001,8 +999,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
-		return seraService.getFriendsById(userId, lastId, maxList);
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception {
+		return seraService.getFriendsById(userId, lastId, maxList, key);
 	}
 
 	@Override
@@ -1183,18 +1181,11 @@ public class SmartWorks implements ISmartWorks {
 	public void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		int workType = (Integer)requestBody.get("workType");
 		switch (workType) {
-		case SocialWork.TYPE_BOARD:
-			break;
-		case SocialWork.TYPE_EVENT:
-			break;
-		case Work.TYPE_SERA_NOTE:
-			break;
-		case Work.TYPE_SERA_MISSION_REPORT:
-			break;
 		case Work.TYPE_ASYNC_MESSAGE:
 			instanceService.removeAsyncMessage(requestBody, request);
 			break;
 		default:
+			seraService.removeSeraInstane(requestBody, request);
 			break;
 		}
 	}
@@ -1207,6 +1198,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return instanceService.fetchAsyncMessagesByChatid(request, response);
+	}
+
+	@Override
+	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
+		return seraService.searchSeraUserByType(type, userId, key);
+	}
+
+	@Override
+	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
+		return seraService.searchCourseMemberByType(type, courseId, key);
 	}
 
 }

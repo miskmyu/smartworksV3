@@ -60,7 +60,7 @@
 										<div class="btn_mid_r pr5pl5"><span class="icon_blu_down mr3"></span>확 인</div>
 									</div>
 									<div class="btn_mid_l ml5 js_deny_friend_btn">
-										<div class="btn_mid_r"><span class="icon_after_check mr3"></span>나중에 확인</div>
+										<div class="btn_mid_r"><span class="icon_after_check"></span>나중에 확인</div>
 									</div>
 								</span>
 							</li>
@@ -80,14 +80,14 @@
 		<div class="header mt20">
 			<div class="fl"><span class="t_myid"><%=cUser.getNickName() %>님</span>의 친구 (<span class="tb js_friend_count"><%=friendInforms.getTotalFriends() %></span>) </div>
 			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
+				<input class="fl fieldline js_friend_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_friend_search_btn">검색</button>
 			</div>
 		</div>
 
 		<div class="panel_area js_friend_list">
 			<%
-			if(friendInforms.getTotalFriends()>0){
+			if(friendInforms.getTotalFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getFriends())){
 				for(int i=0; i<friendInforms.getFriends().length; i++){
 					SeraUserInfo friend = friendInforms.getFriends()[i];
 			%>
@@ -110,7 +110,7 @@
 							<li class="fr bo_l">
 								<span> <!-- Btn -->
 									<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
-										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
+										<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
 									</div> <!-- Btn //--> 
 								</span>
 							</li>
@@ -126,7 +126,7 @@
 	<!-- Panel2 //-->
 
 	<%
-	if (friendInforms.getTotalFriends() > 0) {
+	if (friendInforms.getTotalFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getFriends())) {
 		SeraUserInfo[] friends = friendInforms.getFriends();
 		if(friendInforms.getTotalFriends()>friends.length){
 			String lastId = friends[friends.length-1].getId(); 
@@ -146,14 +146,14 @@
 		<div class="header mt20">
 			<div class="fl"><span class="t_myid">친구요청이 가능한 세라인들</span> (<span class="tb js_non_friend_count"><%=friendInforms.getTotalNonFriends() %></span>) </div>
 			<div class="fr">
-				<input class="fl fieldline" style="width: 150px" type="text" />
-				<button type="button" class="fl ml5">검색</button>
+				<input class="fl fieldline js_non_friend_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_non_friend_search_btn">검색</button>
 			</div>
 		</div>
 
 		<div class="panel_area js_non_friend_list">
 			<%
-			if(friendInforms.getTotalNonFriends()>0){
+			if(friendInforms.getTotalNonFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())){
 				for(int i=0; i<friendInforms.getNonFriends().length; i++){
 					SeraUserInfo friend = friendInforms.getNonFriends()[i];
 			%>
@@ -176,7 +176,7 @@
 							<li class="fr bo_l">
 								<span> <!-- Btn -->
 									<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId()%>">
-										<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
+										<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
 									</div> <!-- Btn //--> 
 								</span>
 							</li>
@@ -192,7 +192,7 @@
 	<!-- Panel2 //-->
 
 	<%
-	if (friendInforms.getTotalNonFriends() > 0) {
+	if (friendInforms.getTotalNonFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())) {
 		SeraUserInfo[] friends = friendInforms.getNonFriends();
 		if(friendInforms.getTotalNonFriends()>friends.length){
 			String lastId = friends[friends.length-1].getId(); 
