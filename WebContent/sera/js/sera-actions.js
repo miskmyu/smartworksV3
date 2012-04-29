@@ -1461,6 +1461,7 @@ $(function() {
 				if(!isEmpty(newNote)){
 					target.find('.js_select_access_level').hide();
 					target.find('.js_select_work_space').hide();
+					target.find('.js_complete_action .txt_btn_center').html('보내기');
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){

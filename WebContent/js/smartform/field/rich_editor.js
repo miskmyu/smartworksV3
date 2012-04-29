@@ -17,7 +17,6 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 	var value = (options.dataField && options.dataField.value) || '';
-console.log('dataField=', options.dataField, ', dataField.vale=', options.dataField.value, ', value=', value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';

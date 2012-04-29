@@ -106,7 +106,7 @@ function submitForms() {
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
-<div class="up_wrap js_new_board_page" workId="<%=SmartWork.ID_BOARD_MANAGEMENT%>">
+<div class="up_wrap js_new_board_page" workId="<%=SmartWork.ID_BOARD_MANAGEMENT%>" seraBoard="true">
 	<div class="up_point pos_works js_up_pointer"></div>
 	<div class="form_wrap up up_padding">
 
