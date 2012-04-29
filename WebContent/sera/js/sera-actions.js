@@ -1681,4 +1681,8 @@ $(function() {
 		return false;	
 	});
 	
+	$('.js_course_board_btn').live('click', function(e){
+		$('.js_course_home_page .js_course_main_menu .js_course_board').click();
+	});
+	
 });

@@ -50,11 +50,13 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "코스미션이 성공적으로 등록되었습니다!", function(){
+						$('.js_course_home_page .js_course_main_menu .js_course_mission').click();												
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createMissionError'));
+					smartPop.showInfo(smartPop.ERROR, "코스미션등록에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}

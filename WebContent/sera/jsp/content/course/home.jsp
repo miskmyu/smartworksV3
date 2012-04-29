@@ -25,19 +25,27 @@
 	
 	session.setAttribute("course", course);
 	
+	String mentorPage = (course.isMyRunningCourse()) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + mentorId;
+	
 %>
 <!-- Course Define -->
 <div class="course_df_section js_course_home_page" courseId="<%=courseId%>">
 	<div class="course_df_block">
 		<div class="course_df_img">
-			<img class="profile_size_b" src="<%=course.getMidPicture() %>" />
+			<a href="courseHome.sw?courseId=<%=courseId%>">
+				<img class="profile_size_b" src="<%=course.getMidPicture() %>" />
+			</a>
 		</div>
 		<div class="course_df">
-			<h1><%=course.getName() %></h1>
+			<a href="courseHome.sw?courseId=<%=courseId%>">
+				<h1><%=course.getName() %></h1>
+			</a>
 			<ul class="mt8">
 				<li>
-					<div class="icon_cs_mentorname"><span>멘토명</span></div> 
-					<span class="t_s14"><%=mentorName%></span>
+					<a href="<%=mentorPage %>">
+						<div class="icon_cs_mentorname"><span>멘토명</span></div> 
+						<span class="t_s14"><%=mentorName%></span>
+					</a>
 				</li>
 				<li>
 					<div class="icon_cs_openday">
@@ -58,27 +66,29 @@
 				</li>
 			</ul>
 		</div>
-		<div class="course_info">
-			<dl>
-				<dt>코스 게시판</dt>
-				<%
-				if(!SmartUtil.isBlankObject(notices)){
-					for(int i=0; i<notices.length; i++){
-						InstanceInfo notice = notices[i];
-						if(notice.getType()==Instance.TYPE_BOARD){
-				%>
-							<dd>[알림] <%=notice.getSubject() %></dd>
-						<%
-						}else if(notice.getType()==Instance.TYPE_EVENT){
-						%>
-							<dd>[이벤트] <%=notice.getSubject() %></dd>
-						<%
+		<a href="" class="js_course_board_btn">
+			<div class="course_info">
+				<dl>
+					<dt>코스 게시판</dt>
+					<%
+					if(!SmartUtil.isBlankObject(notices)){
+						for(int i=0; i<notices.length; i++){
+							InstanceInfo notice = notices[i];
+							if(notice.getType()==Instance.TYPE_BOARD){
+					%>
+								<dd>[알림] <%=notice.getSubject() %></dd>
+							<%
+							}else if(notice.getType()==Instance.TYPE_EVENT){
+							%>
+								<dd>[이벤트] <%=notice.getSubject() %></dd>
+							<%
+							}
 						}
 					}
-				}
-				%>
-			</dl>
-		</div>
+					%>
+				</dl>
+			</div>
+		</a>
 	</div>
 	<div class="course_menu js_course_main_menu">
 		<%

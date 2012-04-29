@@ -56,9 +56,10 @@
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					document.location.href = data.href;
 					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, "코스미션이 성공적으로 수정되었습니다!", function(){
+						$('.js_course_home_page .js_course_main_menu .js_course_mission').click();												
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();

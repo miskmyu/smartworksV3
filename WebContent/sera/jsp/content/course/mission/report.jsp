@@ -76,7 +76,7 @@
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('performMissionReportError'));
+					smartPop.showInfo(smartPop.ERROR, "코스미션 수행에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
