@@ -147,8 +147,8 @@ function updateNoticeCount(message){
 						%>
 					</a>
 				</li>
-				<li class="icon_calendar" style="display:none">
-					<a class="js_sera_content" id="calendar_count" title="캘린더">
+				<li class="icon_calendar">
+					<a id="calendar_count" title="캘린더">
 						<%
 						if(!CommonUtil.isEmpty(notices)) {
 				 			if (notices.length > SeraNotice.INDEX_CALENDAR && notices[SeraNotice.INDEX_CALENDAR].getLength() > 0) {
@@ -160,8 +160,8 @@ function updateNoticeCount(message){
 						%>
 					</a>
 				</li>
-				<li class="icon_badge" style="display:none">
-					<a class="js_sera_content" id="badge_count" title="뱃지">
+				<li class="icon_badge">
+					<a id="badge_count" title="뱃지">
 						<%
 						if(!CommonUtil.isEmpty(notices)) {
 				 			if (notices.length > SeraNotice.INDEX_BADGE && notices[SeraNotice.INDEX_BADGE].getLength() > 0) {

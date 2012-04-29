@@ -30,7 +30,7 @@
 </div>
 <!-- Header Title //-->
 <!-- Course Section -->
-<div class="content_section js_course_setting_mentee_page">
+<div class="content_section js_course_setting_mentee_page" courseId="<%=courseId%>">
 	<!-- 목록1-->
 	<div class="t_redb mb10">* 가입을 신청한 멘티가 <%=menteeInformations.getTotalJoinRequesters()%>명 있습니다</div>
 	<div class="js_join_requesters_list">
