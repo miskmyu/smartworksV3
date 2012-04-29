@@ -11,28 +11,28 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreSeraInstances.find('span').trigger('click');
 					moreSeraInstances.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}else if(!isEmpty(moreFriends) && !moreFriends.isWaiting){
 				moreFriends.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreFriends.find('span').trigger('click');
 					moreFriends.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}else if(!isEmpty(moreOthersFriends) && !moreOthersFriends.isWaiting){
 				moreOthersFriends.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreOthersFriends.find('span').trigger('click');
 					moreOthersFriends.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}else if(!isEmpty(moreCourseReviews) && !moreCourseReviews.isWaiting){
 				moreCourseReviews.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourseReviews.find('span').trigger('click');
 					moreCourseReviews.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}
 		}
 	});
