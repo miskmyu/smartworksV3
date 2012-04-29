@@ -1540,6 +1540,7 @@ $(function() {
 			friendCount = othersFriendPage.find('.js_friend_count');
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_sera_user_by_type.sw',
 			data : {
@@ -1555,8 +1556,11 @@ $(function() {
 				else{
 					friendCount.html(target.find('.js_friend_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1582,6 +1586,7 @@ $(function() {
 			nonFriendCount = othersFriendPage.find('.js_non_friend_count');
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_sera_user_by_type.sw',
 			data : {
@@ -1597,8 +1602,11 @@ $(function() {
 				else{
 					nonFriendCount.html(target.find('.js_non_friend_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1626,6 +1634,7 @@ $(function() {
 			menteeCount = inviteCourseMembers.find('.js_mentee_count');						
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_course_member_by_type.sw',
 			data : {
@@ -1641,8 +1650,11 @@ $(function() {
 				else{
 					menteeCount.html(target.find('.js_mentee_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1668,6 +1680,7 @@ $(function() {
 			nonMenteeCount = inviteCourseMembers.find('.js_non_mentee_count');						
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_course_member_by_type.sw',
 			data : {
@@ -1683,8 +1696,11 @@ $(function() {
 				else{
 					nonMenteeCount.html(target.find('.js_non_mentee_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;	
 	});
