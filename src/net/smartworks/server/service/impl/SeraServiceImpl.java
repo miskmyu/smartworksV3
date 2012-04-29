@@ -3148,7 +3148,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			switch (type) {
 			case Instance.TYPE_BOARD:
-				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, fromDate, maxList);
+				boardInfo = getBoardInstancesByCourseId(null, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_EVENT:
 				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
