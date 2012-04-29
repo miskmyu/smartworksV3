@@ -69,7 +69,8 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String accessLevel;
 	private String accessValue;
 	private int hits;
-	
+	private Date fromDate;
+
 	private String searchKey;
 	public SwdRecordCond() {
 		super();
@@ -398,6 +399,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setHits(int hits) {
 		this.hits = hits;
+	}
+	public Date getFromDate() {
+		return fromDate;
+	}
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
 
 }

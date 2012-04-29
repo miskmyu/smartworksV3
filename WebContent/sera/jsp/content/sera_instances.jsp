@@ -48,7 +48,7 @@
 	if(missionId!=null && missionId.equals("null")) missionId = null;
 	String teamId = request.getParameter("teamId");
 	if(teamId!=null && teamId.equals("null")) teamId = null;
-	String fromDateStr = request.getParameter("fromDate");
+	String fromDateStr = request.getParameter("lastDate");
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
 	int MAX_SERA_INSTANCES = 10;
