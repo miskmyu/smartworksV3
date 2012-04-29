@@ -18,8 +18,8 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 
 	var value = (options.dataField && options.dataField.value) || '';
 	var $entity = options.entity;
-	var $graphic = $entity.children('graphic');
-	var $format = $entity.children('format');
+	var $graphic = $entity.find('graphic');
+	var $format = $entity.find('format');
 
 	var readOnly = $graphic.attr('readOnly') == 'true' || options.mode == 'view';
 	var id = $entity.attr('id');
@@ -28,7 +28,7 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = " class='form_select_box required' ";

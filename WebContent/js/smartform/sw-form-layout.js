@@ -66,9 +66,9 @@ SmartWorks.GridLayout = function(config) {
 	this.getLayout = function(formXml, formValues, mySelf, refreshTarget ,refreshOnly){
 		var this_ = this;
 		if(!isEmpty(mySelf)) this_ = mySelf;
-		var $htmlForm = $('<form name="frmSmartForm" class="js_validation_required form_layout"><table></table></form>');
+		var $htmlForm = $($.parseXML('<form name="frmSmartForm" class="js_validation_required form_layout"><table></table></form>'));
 		this_.$table = $htmlForm.find('table');
-		var $form = $(this_.options.formXml);
+		var $form = $($.parseXML(this_.options.formXml));
 		if(!isEmpty(formXml)) $form = $(formXml);
 		
 		$htmlForm.attr("formId", $form.attr('id'));
