@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.sera.info.MissionInstanceInfo;
-import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
