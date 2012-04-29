@@ -60,6 +60,7 @@ function updateNoticeCount(message){
 <%
 if(isAuthenticated){
 %>
+<div class="case_login">
 	<div class="hd_shadow bg_no js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
@@ -203,9 +204,11 @@ if(isAuthenticated){
 		<!-- Top Navi //-->
 		<div class="js_notification_list_box"></div>
 	</div>
+</div>
 <%
 }else{
 %>
+<div class="case_logout">
 	<div class="hd_shadow bg_no">
 		<!-- GNB -->
 		<div class="gnb">
@@ -260,6 +263,7 @@ if(isAuthenticated){
 	     </div>
 	     <!-- Top Navi //-->
 	</div>
+</div>
 	<script type="text/javascript">
 	$(function() {
 		$(document).keypress(function(e) {
