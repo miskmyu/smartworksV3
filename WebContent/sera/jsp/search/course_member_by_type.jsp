@@ -43,7 +43,7 @@
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_green_l js_pushout_mentee_btn" userId="<%=courseMember.getId()%>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 강퇴</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 강퇴</div>
 								</div>
 							</span>
 						</li>
@@ -74,7 +74,7 @@
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
 								<div class="btn_green_l js_invite_mentee_btn" userId="<%=courseMember.getId() %>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 초대</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 초대</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>
