@@ -51,7 +51,7 @@
 	String fromDateStr = request.getParameter("lastDate");
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
-	int MAX_SERA_INSTANCES = 2;
+	int MAX_SERA_INSTANCES = 10;
 	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId,  fromDate, MAX_SERA_INSTANCES);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
