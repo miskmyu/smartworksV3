@@ -231,9 +231,11 @@ public class SeraServiceImpl implements ISeraService {
 			if(!CommonUtil.isEmpty(swoGroupMembers)) {
 				//groupMemberList.add(ModelConverter.getUserInfoByUserId(swoGroup.getGroupLeader()));
 				for(SwoGroupMember swoGroupMember : swoGroupMembers) {
-					if(!swoGroupMember.getUserId().equals(swoGroup.getGroupLeader())) {
-						UserInfo groupMember = ModelConverter.getUserInfoByUserId(swoGroupMember.getUserId());
-						groupMemberList.add(groupMember);
+					if(swoGroupMember != null) {
+						if(!swoGroupMember.getUserId().equals(swoGroup.getGroupLeader())) {
+							UserInfo groupMember = ModelConverter.getUserInfoByUserId(swoGroupMember.getUserId());
+							groupMemberList.add(groupMember);
+						}
 					}
 				}
 				UserInfo[] groupMembers = new UserInfo[groupMemberList.size()];
@@ -297,7 +299,10 @@ public class SeraServiceImpl implements ISeraService {
 		UserInfo[] members = null;
 		if(!CommonUtil.isEmpty(swoGroupMembers)) {
 			for(SwoGroupMember swoGroupMember : swoGroupMembers) {
-				userinfoList.add(ModelConverter.getUserInfoByUserId(swoGroupMember.getUserId()));
+				if(swoGroupMember != null) {
+					if(!swoGroupMember.getUserId().equals(swoGroup.getGroupLeader()))
+						userinfoList.add(ModelConverter.getUserInfoByUserId(swoGroupMember.getUserId()));
+				}
 			}
 		}
 		if(userinfoList.size() > 0) {
@@ -1330,15 +1335,18 @@ public class SeraServiceImpl implements ISeraService {
 		if(!CommonUtil.isEmpty(txtCourseMentor)) {
 			for(int i=0; i < txtCourseMentor.subList(0, txtCourseMentor.size()).size(); i++) {
 				Map<String, String> userMap = txtCourseMentor.get(i);
-				swoGroupMember = new SwoGroupMember();
-				swoGroupMember.setUserId(userMap.get("id"));
-				swoGroupMember.setJoinType("I");
-				swoGroupMember.setJoinStatus("P");
-				swoGroupMember.setJoinDate(new LocalDate());
-				swoGroup.addGroupMember(swoGroupMember);
+				String groupUserId = userMap.get("id");
+				if(!mentorUserId.equals(groupUserId)) {
+					swoGroupMember = new SwoGroupMember();
+					swoGroupMember.setUserId(groupUserId);
+					swoGroupMember.setJoinType("I");
+					swoGroupMember.setJoinStatus("P");
+					swoGroupMember.setJoinDate(new LocalDate());
+					swoGroup.addGroupMember(swoGroupMember);
+				}
 			}
 		}
-		
+
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
 			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
@@ -4383,19 +4391,21 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
-			String joinType = groupMember.getJoinType();
-			String joinStatus = groupMember.getJoinStatus();
-			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
-				if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
-					joinRequesterIdList.add(userId);
-					if (!CommonUtil.isEmpty(lastId)) {
-						SwoGroupMember lastMember = group.getGroupMember(lastId);
-						long lastMemberCreationDateLong = lastMember.getCreationDate().getTime();
-						if (lastMemberCreationDateLong > groupMember.getCreationDate().getTime()) {
+			if(groupMember != null) {
+				String joinType = groupMember.getJoinType();
+				String joinStatus = groupMember.getJoinStatus();
+				if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
+					if (joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+						joinRequesterIdList.add(userId);
+						if (!CommonUtil.isEmpty(lastId)) {
+							SwoGroupMember lastMember = group.getGroupMember(lastId);
+							long lastMemberCreationDateLong = lastMember.getCreationDate().getTime();
+							if (lastMemberCreationDateLong > groupMember.getCreationDate().getTime()) {
+								joinRequesterIdMap.put(groupMember.getCreationDate().getTime(), groupMember);
+							}
+						} else {
 							joinRequesterIdMap.put(groupMember.getCreationDate().getTime(), groupMember);
 						}
-					} else {
-						joinRequesterIdMap.put(groupMember.getCreationDate().getTime(), groupMember);
 					}
 				}
 			}
@@ -4481,17 +4491,19 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
-			String joinStatus = groupMember.getJoinStatus();
-			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
-				menteesIdList.add(groupMember.getUserId());
-				if (!CommonUtil.isEmpty(lastId)) {
-					SwoGroupMember lastMember = group.getGroupMember(lastId);
-					long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
-					if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
+			if(groupMember != null) {
+				String joinStatus = groupMember.getJoinStatus();
+				if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+					menteesIdList.add(groupMember.getUserId());
+					if (!CommonUtil.isEmpty(lastId)) {
+						SwoGroupMember lastMember = group.getGroupMember(lastId);
+						long lastMemberJoinDateLong = lastMember.getJoinDate().getTime();
+						if (lastMemberJoinDateLong > groupMember.getJoinDate().getTime()) {
+							menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
+						} 
+					} else {
 						menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
-					} 
-				} else {
-					menteesIdMap.put(groupMember.getJoinDate().getTime(), groupMember);
+					}
 				}
 			}
 		}
@@ -4587,9 +4599,11 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
-			if (group.getGroupLeader().equalsIgnoreCase(groupMember.getUserId()))
-				continue;
-			courseRelatedUserIdList.add(groupMember.getUserId());
+			if(groupMember != null) {
+				if (group.getGroupLeader().equalsIgnoreCase(groupMember.getUserId()))
+					continue;
+				courseRelatedUserIdList.add(groupMember.getUserId());
+			}
 		}
 
 		String[] courseRelatedUserIds = new String[courseRelatedUserIdList.size()];
@@ -4662,12 +4676,14 @@ public class SeraServiceImpl implements ISeraService {
 		
 		for (int i = 0; i < groupMembers.length; i++) {
 			SwoGroupMember groupMember = groupMembers[i];
-			String joinStatus = groupMember.getJoinStatus();
-			String joinType = groupMember.getJoinType();
-			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
-				totalMentee += 1;
-			} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY) && joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
-				totalJoinRequester += 1;
+			if(groupMember != null) {
+				String joinStatus = groupMember.getJoinStatus();
+				String joinType = groupMember.getJoinType();
+				if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+					totalMentee += 1;
+				} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY) && joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+					totalJoinRequester += 1;
+				}
 			}
 		}
 		SeraUserDetailCond cond = new SeraUserDetailCond();
@@ -5121,24 +5137,40 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
 
-			if(CommonUtil.isEmpty(swoGroupMembers))
-				return null;
-
-			String[] memberIds = new String[swoGroupMembers.length];
-			int i;
-			for(i=0; i<swoGroupMembers.length; i++) {
-				SwoGroupMember swoGroupMember =  swoGroupMembers[i];
-				String memberId = swoGroupMember.getUserId();
-				memberIds[i] = memberId;
-			}
-			memberIds[i+1] = swoGroup.getGroupLeader();
-
 			SeraUserDetailCond cond = new SeraUserDetailCond();
-			if(type == 2) {
-				cond.setUserIdIns(memberIds);
-			} else if(type == 3) {
-				cond.setUserIdNotIns(memberIds);
+
+			List<String> memberList = new ArrayList<String>();
+			String[] memberIds = null;
+
+			if(CommonUtil.isEmpty(swoGroupMembers)) {
+				if(type == 2) {
+					return null;
+				} else if(type == 3) {
+					memberIds = new String[1];
+					memberIds[0] = swoGroup.getGroupLeader();
+					cond.setUserIdNotIns(memberIds);
+				}
+			} else {
+				for(int i=0; i<swoGroupMembers.length; i++) {
+					SwoGroupMember swoGroupMember =  swoGroupMembers[i];
+					String memberId = swoGroupMember.getUserId();
+					if(!memberId.equals(swoGroup.getGroupLeader()))
+						memberList.add(memberId);
+				}
+				if(memberList.size() > 0) {
+					if(type == 2) {
+						memberIds = new String[memberList.size()];
+						memberList.toArray(memberIds);
+						cond.setUserIdIns(memberIds);
+					} else if(type == 3) {
+						memberIds = new String[memberList.size()+1];
+						memberList.toArray(memberIds);
+						memberIds[memberList.size()] = swoGroup.getGroupLeader();
+						cond.setUserIdNotIns(memberIds);
+					}
+				}
 			}
+
 			if(key != null)
 				cond.setKey(key);
 

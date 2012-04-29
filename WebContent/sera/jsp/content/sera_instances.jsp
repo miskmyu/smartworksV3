@@ -171,7 +171,7 @@
 										<div class="text">
 											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
-												<span>이벤트 기간 : <%=event.getStart().toLocalDateTimeSimpleString() %></span>
+												<span>이벤트 기간 : <%if(!SmartUtil.isBlankObject(event.getStart())){ %><%=event.getStart().toLocalDateTimeSimpleString() %><%}%></span>
 												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
 												<span>~<%=event.getEnd().toLocalDateTimeSimpleString() %></span>
 												<div>이벤트 장소 : </div>
