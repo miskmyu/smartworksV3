@@ -107,15 +107,15 @@
 .icon_listing {background: url("../images/icon.png") no-repeat scroll -586px -376px; height:12px; font-weight:bold; padding:0 0 0 16px}
 
 /* Header Title */
-.header_tit {width:700px; margin-bottom:15px; color:#858585; overflow:hidden}
+.header_tit {width:700px; margin-bottom:15px; color:#858585; line-height: 16px; overflow:hidden}
 .header_tit .tit_course {background: url("../images/header.png") no-repeat scroll 0 0; height:35px; padding:52px 25px 0}
-.header_tit .tit_event {background: url("../images/header.png") no-repeat scroll 0 -88px; height:38px; padding:49px 25px 0}
+.header_tit .tit_event {background: url("../images/header.png") no-repeat scroll 0 -88px; height:38px; padding:45px 25px 0}
 .header_tit .tit_notes {background: url("../images/header.png") no-repeat scroll 0 -175px; height:35px; padding:52px 25px 0}
 .header_tit .tit_friend {background: url("../images/header.png") no-repeat scroll 0 -261px; height:35px; padding:52px 25px 0}
-.header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:38px; padding:49px 25px 0}
-.header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:38px; padding:49px 25px 0}
-.header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:49px 25px 0}
-.header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:49px 25px 0}
+.header_tit .tit_newcourse {background: url("../images/header.png") no-repeat scroll 0 -349px; height:38px; padding:45px 25px 0}
+.header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:38px; padding:45x 25px 0}
+.header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:45px 25px 0}
+.header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:45px 25px 0}
 .header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
 .header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
 .title_srch {margin:25px 0 10px; overflow:hidden; vertical-align: middle; line-height:22px}
@@ -184,10 +184,6 @@ a.b_next:hover { background-position:-30px -535px}
 .attach_file li {float:left}
 .attach_file_detail {background: url("../images/line_dashed.png") repeat-x scroll 0 100% #f5f5f5; padding:5px}
 .fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%;}
-.profile_photo .qq-uploader {width:118px; left:40px; top:123px} /* Joinus.jsp */
-.profile_photo img, .myaccount_photo img {display:block; outline:1px solid #cccccc}
-.myaccount_photo .qq-uploader {left:38px; top:121px} /* my_profile.jsp = my account */
-.myaccount_photo table { border:none}
 
 /* Btn in Body*/
 .btn_wstyle_l {background: url("../images/btn_wstyle_l.gif") no-repeat scroll 0 0; height:24px; float:left; cursor:pointer}
@@ -231,15 +227,15 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_cs_mentorname {background: url("../images/icon.png") no-repeat scroll -166px -393px; padding:0 0 0 40px}
 .icon_cs_openday {background: url("../images/icon.png") no-repeat scroll -166px -443px; padding:0 0 0 40px}
 .icon_cs_menteenum {background: url("../images/icon.png") no-repeat scroll -166px -502px; padding:0 0 0 40px}
-.icon_blu_down {background: url("../images/icon.png") no-repeat scroll 0 -237px; width:8px; height:8px !important; display:inline-block !important}
+.icon_blu_down {background: url("../images/icon.png") no-repeat scroll 0 -238px; width:8px; height:8px !important; display:inline-block !important}
 .icon_facebook a {background: url("../images/icon.png") no-repeat scroll 0 -257px; width:22px; height:22px; display:block; font-size:0}
 .icon_twitter a {background: url("../images/icon.png") no-repeat scroll -27px -257px; width:22px; height:22px; display:block; font-size:0}
 .icon_star_score {background: url("../images/icon.png") no-repeat scroll -17px -293px; width:9px; height:9px; display:block; margin-right:3px}
 .icon_star_score.full {background-position:0 -293px}
 .icon_star_score.half {background-position:-37px -293px}
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
-.icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; display:inline-block !important}
-.icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; display:inline-block !important}
+.icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
 

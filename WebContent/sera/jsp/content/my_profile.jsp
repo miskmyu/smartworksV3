@@ -69,7 +69,7 @@
 <div class="js_my_profile_page" userId="<%=seraUser.getId()%>">
 	<!-- Header Title -->
 	<div class="header_tit">
-		<div class="tit_account">닉네임, 프로필 사진, 비밀번호 등 프로필 정보를 수정할 수 있습니다.<br /> * 선택 입력란입니다.</div>
+		<div class="tit_account">닉네임, 프로필 사진, 비밀번호 등 프로필 정보를 수정할 수 있습니다.</div>
 	</div>
 	<!-- Header Title //-->
 	<!-- Input Section -->
@@ -80,7 +80,7 @@
 				<td rowspan="12" valign="top" width="150px">
 					<!-- 사진 올리기 -->
 					<div class="js_sera_profile_field js_auto_load_profile myaccount_photo"></div>
-					<div class="t_refe" style="margin: 15px 0 0 33px">
+					<div class="t_refe" style="margin: 15px 0 0 13px">
 						* 사진은 자동으로<br /> 118x118으로 변경됩니다
 					</div> <!-- 사진 올리기 //-->
 				</td>
