@@ -46,6 +46,7 @@ import net.smartworks.model.sera.FriendList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraNotice;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
@@ -5076,7 +5077,32 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public Notice[] getSeraNoticesForMe() throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Notice[] resultNotice = new Notice[SeraNotice.NUMBER_OF_NOTICES];
+		
+		SeraNotice seraNotificationNotice = new SeraNotice(SeraNotice.TYPE_NOTIFICATION, 0);
+		
+		SeraNotice seraMyCourseNotice = new SeraNotice(SeraNotice.TYPE_MY_COURSE, 0);
+		
+		SeraNotice seraFriendNotice = new SeraNotice(SeraNotice.TYPE_FRIEND, 0);
+		
+		SeraNotice seraMessageNotice = new SeraNotice(SeraNotice.TYPE_MESSAGE ,0);
+		
+		SeraNotice seraCalendarNotice = new SeraNotice(SeraNotice.TYPE_CALENDAR ,0);
+		
+		SeraNotice seraBadgeNotice = new SeraNotice(SeraNotice.TYPE_BADGE ,0);
+		
+		SeraNotice seraEventNotice = new SeraNotice(SeraNotice.TYPE_EVENT ,0);
+		
+		resultNotice[SeraNotice.INDEX_NOTIFICATION] = seraNotificationNotice;
+		resultNotice[SeraNotice.INDEX_MY_COURSE] = seraMyCourseNotice;
+		resultNotice[SeraNotice.INDEX_FRIEND] = seraFriendNotice;
+		resultNotice[SeraNotice.INDEX_MESSAGE] = seraMessageNotice;
+		resultNotice[SeraNotice.INDEX_CALENDAR] = seraCalendarNotice;
+		resultNotice[SeraNotice.INDEX_BADGE] = seraBadgeNotice;
+		resultNotice[SeraNotice.INDEX_EVENT] = seraEventNotice;
+		
+		return resultNotice;
 	}
 	@Override
 	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
