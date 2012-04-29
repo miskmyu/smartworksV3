@@ -321,10 +321,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_area .cb li { float:none}
 .photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:72px; float: left; padding: 5px 15px 0 4px}
 .photo_bg .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
-.grade { float:left; margin:5px 0 0 0}
+.grade { float:left; margin:5px 0 0 0; text-align:center}
 .grade div { margin-bottom:6px}
 .point {background: url("../images/pb_point.png") no-repeat; width:14px; height:20px; float:left; position:relative; left:1px; top:23px}
-.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold; text-align:center}
+.grade_heart { padding-top:15px; color:#7fccff; font-weight:bold}
 .grade_star { padding-top:15px; color:#ffb833; font-weight:bold}
 
 /* Panel Block */
