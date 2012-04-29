@@ -87,7 +87,7 @@
 
 		<div class="panel_area js_friend_list">
 			<%
-			if(friendInforms.getTotalFriends()>0){
+			if(friendInforms.getTotalFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getFriends())){
 				for(int i=0; i<friendInforms.getFriends().length; i++){
 					SeraUserInfo friend = friendInforms.getFriends()[i];
 			%>
@@ -126,7 +126,7 @@
 	<!-- Panel2 //-->
 
 	<%
-	if (friendInforms.getTotalFriends() > 0) {
+	if (friendInforms.getTotalFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getFriends())) {
 		SeraUserInfo[] friends = friendInforms.getFriends();
 		if(friendInforms.getTotalFriends()>friends.length){
 			String lastId = friends[friends.length-1].getId(); 
@@ -153,7 +153,7 @@
 
 		<div class="panel_area js_non_friend_list">
 			<%
-			if(friendInforms.getTotalNonFriends()>0){
+			if(friendInforms.getTotalNonFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())){
 				for(int i=0; i<friendInforms.getNonFriends().length; i++){
 					SeraUserInfo friend = friendInforms.getNonFriends()[i];
 			%>
@@ -192,7 +192,7 @@
 	<!-- Panel2 //-->
 
 	<%
-	if (friendInforms.getTotalNonFriends() > 0) {
+	if (friendInforms.getTotalNonFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())) {
 		SeraUserInfo[] friends = friendInforms.getNonFriends();
 		if(friendInforms.getTotalNonFriends()>friends.length){
 			String lastId = friends[friends.length-1].getId(); 

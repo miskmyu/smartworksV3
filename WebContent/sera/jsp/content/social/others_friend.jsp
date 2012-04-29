@@ -61,7 +61,7 @@
 		<div class="panel_area js_friend_list">
 
 			<%
-			if(friendList.getTotalFriends()>0){
+			if(friendList.getTotalFriends()>0 && !SmartUtil.isBlankObject(friendList.getFriends())){
 				for(int i=0; i<friendList.getFriends().length; i++){
 					SeraUserInfo friend = friendList.getFriends()[i];
 					String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
