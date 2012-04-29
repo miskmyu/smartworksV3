@@ -107,7 +107,7 @@
 							</div>
 							<div class="grade">
 								<div class="icon_mentor <%=mentorClass%>"></div>
-								<div class="icon_star"><div></div></div>
+								<div class="icon_star"><div class="grade_star js_star_count"></div></div>
 								<div class="icon_heart <%=heartClass%>"><div class="grade_heart js_heart_count"><%if(likes>0){ %><%=likes %><%} %></div></div>
 							</div>
 						</a>
