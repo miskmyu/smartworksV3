@@ -96,9 +96,8 @@ $(function() {
 	%>
 	
     $(document).keypress(function (e) {
-    	var e = window.event || e;
     	var keyCode = e.which || e.keyCode;
-        if (keyCode == $.ui.keyCode.ENTER) {
+        if (keyCode == 13) {
             $('input[type="submit"]').click();
             return false;
         } else {

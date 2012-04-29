@@ -266,7 +266,7 @@ String.prototype.cut = function(len){
 };
 
 var textareaMaxSize = function(keyEvent, maxChars, countTarget){
-	var input = $(keyEvent.target);
+	var input = $(targetElement(keyEvent));
 	var tval = input.val();
 	var tlength = getByteLength(tval); 
 	var remain = parseInt(maxChars - tlength);	    
@@ -293,4 +293,8 @@ var printDateTime = function(date){
 		return date.format("mm.dd HH:MM");
 	}
 	return date.format("HH:MM");
+};
+
+var targetElement = function(e){
+	return (typeof e.target != 'undefined') ? e.target : e.srcElement;
 };

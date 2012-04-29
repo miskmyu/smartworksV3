@@ -32,6 +32,7 @@ function fetchAllasyncMessages(chatId){
 			receiverId : currentUser.userId
 		},
 		success : function(data, status, jqXHR) {
+			console.log('fetched messages =', data.messages);
 			if(!isEmpty(data.messages)){
 				for(var i=0; i<messages.length; i++){
 					chatHistory.setHistory(chatId, messages[i]);
@@ -271,8 +272,8 @@ function updateChatterStatus(chatId, chatterInfo, status) {
 }
 $(function() {
 	$('#available_chatter_list a').live('click', function(e) {
-		var input = $(e.target).parents('a');
-		if(isEmpty(input)) input = $(e.target);
+		var input = $(targetElement(e)).parents('a');
+		if(isEmpty(input)) input = $(targetElement(e));
 		var userId = input.attr('userId');
 		//var comId = input.attr('comId');
 		var img = input.find('img');
@@ -296,7 +297,7 @@ $(function() {
 	});
 	
 	$('a.js_close_chatting_box').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('div.js_chatting_box:first');
 		var chatId = target.attr('id');
 		setRightPosition("remove", target);
@@ -306,7 +307,7 @@ $(function() {
 	});
 	
 	$('a.js_min_chatting_box').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parents('div.js_chatting_title_icons:first').hide().parents('div.js_chatting_header').siblings('div.js_chatting_body').slideUp(500);
 		var target = input.parents('div.js_chatting_box');
 		setTimeout(function(){
@@ -316,7 +317,7 @@ $(function() {
 	});
 	
 	$('div.js_chatting_header').live('click',function(e) {
-		var input = $(e.target).parents('div.js_chatting_box:first').children('div.js_chatting_header');
+		var input = $(targetElement(e)).parents('div.js_chatting_box:first').children('div.js_chatting_header');
 		if (input.children('div.js_chatting_title_icons').css("display") === "none") {
 			input.children('div.js_chatting_title_icons:first').show().parents('div.js_chatting_header').siblings('div.js_chatting_body').slideDown(500);
 			var target = input.parents('div.js_chatting_box');
@@ -328,13 +329,13 @@ $(function() {
 	});
 	
 	$('a.js_admin_chatting_box').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parents('div.js_chatting_header:first').siblings('div.js_chatting_body').children('div.js_chatters_search_box').slideDown(500);
 		return false;
 	});
 	
 	$('a.js_toggle_chatter_list').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var chatterList = input.parents('div.js_chatter_list');
 		var target = chatterList.find('div.js_chatter_search_area');
 		var display = target.css('display');
@@ -349,7 +350,7 @@ $(function() {
 	});
 	
 	$('div.js_chatting_group_prev a').live('click',function(e) {
-		var input = $(e.target).parents('div.js_chatting_group_prev');
+		var input = $(targetElement(e)).parents('div.js_chatting_group_prev');
 		var lastChattingBox = input.children('div.js_chatting_box:last');
 		if(isEmpty(lastChattingBox)) return false;
 		var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
@@ -362,7 +363,7 @@ $(function() {
 	});
 	
 	$('div.js_chatting_group_next a').live('click',function(e) {
-		var input = $(e.target).parents('div.js_chatting_group_next');
+		var input = $(targetElement(e)).parents('div.js_chatting_group_next');
 		var firstChattingBox = input.children('div.js_chatting_box:first');
 		if(isEmpty(firstChattingBox)) return false;
 		var chattingBoxs = $('div.js_chatting_box_list').children('div.js_chatting_box');
@@ -375,7 +376,7 @@ $(function() {
 	});
 	
 	$('a.js_add_chatters').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var chatId = input.parents('div.js_chatting_box:first').attr('id');
 		var target = input.parents('div.js_chatter_names').find(
 				'div.js_selected_chatters');
@@ -399,7 +400,7 @@ $(function() {
 		var e = window.event || e;
 		var keyCode = e.which || e.keyCode;
 		if (keyCode == $.ui.keyCode.ENTER) {
-			var input = $(e.target);
+			var input = $(targetElement(e));
 			var chattingBox = input.parents('div.js_chatting_box:first');
 			var chatId = chattingBox.attr('id');
 			var message = input.attr('value');
@@ -412,13 +413,13 @@ $(function() {
 	});
 	
 	$('div.js_chat_input textarea').live('focusin', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var chatId = input.parents('div.js_chatting_box:first').attr('id');
 		smartTalk.publishWritingStatus(chatId);
 	});
 	
 	$('.js_invite_chatter a').live( 'click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var comId = input.attr('userId');
 		var comName = input.children('img').attr('title');
 		var minPicture = input.children('img').attr('src');
@@ -453,7 +454,7 @@ $(function() {
 	});
 	
 	$('.js_remove_chatter').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var selected_users = input.parents('div.js_selected_chatters');
 		input.parents('span.js_chatter_item').remove();
 		selected_users.next().focus();

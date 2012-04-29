@@ -1,6 +1,6 @@
 
 	$('.js_more_list').live('click', function(e) {
-		var anchor = $(e.target);
+		var anchor = $(targetElement(e));
 		if(!isEmpty(anchor.siblings('.js_progress_span').find('.js_progress_icon'))) 
 			return false;
 		smartPop.progressCont(anchor.siblings('.js_progress_span'));

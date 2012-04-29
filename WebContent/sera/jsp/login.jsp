@@ -346,9 +346,8 @@ $(function() {
 			top.document.location.href = "logins.sw";
 	<%}%>
 	$(document).keypress(function(e) {
-		var e = window.event || e;
 		var keyCode = e.which || e.keyCode;
-		if(keyCode == $.ui.keyCode.ENTER) {
+		if(keyCode == 13) {
 			if ($('.login_section').is(':visible')) {
 				$('input[type="submit"]').click();
 				return false;

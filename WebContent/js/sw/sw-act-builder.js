@@ -1,7 +1,7 @@
 $(function() {
 	
 	$('a.js_start_work_service').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = $('#content');
 		var workId = input.parents('.js_tab_workbench_page').attr('workId');
 		$.ajax({
@@ -14,7 +14,7 @@ $(function() {
 	});
 
 	$('a.js_stop_work_service').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = $('#content');
 		var workId = input.parents('.js_tab_workbench_page').attr('workId');
 		$.ajax({
@@ -27,7 +27,7 @@ $(function() {
 	});
 
 	$('a.js_start_work_editing').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = $('#content');
 		var workId = input.parents('.js_tab_workbench_page').attr('workId');
 		$.ajax({
@@ -40,7 +40,7 @@ $(function() {
 	});
 
 	$('a.js_stop_work_editing').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = $('#content');
 		var workId = input.parents('.js_tab_workbench_page').attr('workId');
 		$.ajax({
@@ -53,7 +53,7 @@ $(function() {
 	});
 	
 	$('a.js_tab_smart_builder').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = $('#content');
 		var url = input.attr('href');
 		$.ajax({
@@ -71,7 +71,7 @@ $(function() {
 	});
 	
 	$('.js_text_work_category').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var categoryId = input.attr('categoryId');
 		var categoryName = input.attr('categoryName');
 		var categoryDesc = input.attr('categoryDesc');
@@ -80,7 +80,7 @@ $(function() {
 	});
 	
 	$('.js_remove_work_category').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var categoryId = input.attr('categoryId');
 		var categoryName = input.attr('categoryName');
 		var paramsJson = {};
@@ -112,7 +112,7 @@ $(function() {
 	});
 	
 	$('.js_add_work_definition').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var parentId = input.attr('parentId');
 		var parentName = input.attr('parentName');
 		smartPop.createWorkDefinition(parentId, parentName, "", "", "", "", "", "");
@@ -120,7 +120,7 @@ $(function() {
 	});
 	
 	$('.js_change_work_definition').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var workId = input.attr('workId');
 		var workName = input.attr('workName');
 		var workTypeName = input.attr('workTypeName');
@@ -132,7 +132,7 @@ $(function() {
 	});
 	
 	$('.js_remove_work_definition').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var workId = input.attr('workId');
 		var workName = input.attr('workName');
 		var paramsJson = {};
@@ -164,7 +164,7 @@ $(function() {
 	});
 	
 	$('.js_select_work_category').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_new_work_definition_page').find('.js_work_group_target');
 		var categoryId = input.find('option:selected').attr('value');
 		$.ajax({
@@ -180,7 +180,7 @@ $(function() {
 	});
 
 	$('.js_up_field_item').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var selectedItem = input.parents('tr:first');
 		var prevs = selectedItem.prevAll('tr').length;
 		var nexts = selectedItem.nextAll('tr').length;
@@ -203,7 +203,7 @@ $(function() {
 	});
 
 	$('.js_down_field_item').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var selectedItem = input.parents('tr:first');
 		var prevs = selectedItem.prevAll('tr').length;
 		var nexts = selectedItem.nextAll('tr').length;
@@ -227,7 +227,7 @@ $(function() {
 
 	$('.js_hide_field_item').live('click', function(e) {
 		
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var selectedItem = input.parents('tr:first');
 		var prevs = selectedItem.prevAll('tr').length;
 		var nexts = selectedItem.nextAll('tr').length;
@@ -257,7 +257,7 @@ $(function() {
 
 	$('.js_show_field_item').live('click', function(e) {
 
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var selectedItem = input.parents('tr:first');
 		var displayItemList = selectedItem.parents('.js_tab_work_settings_page').find('.js_display_field_list');
 		var displayFieldItems = selectedItem.parents('.js_tab_work_settings_page').find('.js_display_field_items');
@@ -285,7 +285,7 @@ $(function() {
 	});
 	
 	$('a .js_key_field').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(input.hasClass('checked')) return false;
 		input.addClass('checked').parents('.key_option').addClass('checked');
 		input.parents('tr:first').siblings().find('.key_option').removeClass('checked').find('.js_key_field').removeClass('checked');

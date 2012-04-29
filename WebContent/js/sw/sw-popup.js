@@ -323,7 +323,7 @@ smartPop = {
 					$('a.js_pop_select_users').die('click');
 					if(isEmpty(isMultiUsers) || isMultiUsers!== 'true'){
 						$('a.js_pop_select_user').live('click', function(e){
-							var input = $(e.target);
+							var input = $(targetElement(e));
 							var comId = input.attr('userId');
 							var comName = input.text();
 							selectionProc(comId, comName);
@@ -391,7 +391,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work').die('click');
 					$('.js_pop_select_work').live( 'click', function(e){
-						var input = $(e.target).parents('li:first').find('a');
+						var input = $(targetElement(e)).parents('li:first').find('a');
 						$('#form_works').html('').hide();
 						$('#upload_work_list').hide().parents(".js_start_work_page").hide();
 						var href = input.attr('href');
@@ -438,7 +438,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
-						var input = $(e.target);
+						var input = $(targetElement(e));
 						var recordId = input.attr('instId');
 						var fieldId = target.attr('refFormField');
 						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
@@ -446,7 +446,7 @@ smartPop = {
 						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
-						inputTarget[0].value = value;
+						inputTarget.attr('value', value);
 						if(inputTarget.hasClass('sw_required') && inputTarget.hasClass('sw_error')){
 							inputTarget.removeClass('sw_error');
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
@@ -574,7 +574,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
-						var input = $(e.target);
+						var input = $(targetElement(e));
 						var recordId = input.attr('instId');
 						var fieldId = target.attr('refFormField');
 						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
@@ -582,7 +582,7 @@ smartPop = {
 						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
-						inputTarget[0].value = value;
+						inputTarget.attr('value', value);
 						if(inputTarget.hasClass('sw_required') && inputTarget.hasClass('sw_error')){
 							inputTarget.removeClass('sw_error');
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
