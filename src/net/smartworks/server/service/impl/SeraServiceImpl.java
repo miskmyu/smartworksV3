@@ -1890,7 +1890,10 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			} else {
 				if(!SmartUtil.isBlankObject(userId)) {
-					swdRecordCond.setCreationUser(userId);
+					if(!currentUserId.equals(userId))
+						swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
+					else
+						swdRecordCond.setCreationUser(userId);
 				} else {
 					SwoGroupCond attendingCourseCond = new SwoGroupCond();
 					SwoGroupMember[] courseMembers = new SwoGroupMember[1];
@@ -2011,11 +2014,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
-			Filter[] filters = new Filter[1];
-
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
-
-			swdRecordCond.setFilter(filters);
+			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
@@ -2146,10 +2145,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
-			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());		
-			
-			swdRecordCond.setFilter(filters);
+			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
@@ -2848,10 +2844,9 @@ public class SeraServiceImpl implements ISeraService {
 			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
 	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			swdRecordCond.setCompanyId(user.getCompanyId());
 			swdRecordCond.setFormId(swdDomain.getFormId());
 			swdRecordCond.setDomainId(swdDomain.getObjId());
-	
+
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 	
 			swdRecordCond.setPageNo(0);
@@ -2859,10 +2854,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
-			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
-
-			swdRecordCond.setFilter(filters);
+			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
@@ -3023,10 +3015,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
-			Filter[] filters = new Filter[1];
-			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString2());
-
-			swdRecordCond.setFilter(filters);
+			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 

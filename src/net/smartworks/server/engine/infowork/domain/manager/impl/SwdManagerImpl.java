@@ -998,6 +998,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		String accessLevel = cond.getAccessLevel();
 		String accessValue = cond.getAccessValue();
 		int hits = cond.getHits();
+		Date fromDate = cond.getFromDate();
 
 		if (recordId != null)
 			cond.addFilter(new Filter("=", "obj.id", recordId));
@@ -1033,6 +1034,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			cond.addFilter(new Filter("=", "obj.accessValue", accessValue));
 		if (hits > 0)
 			cond.addFilter(new Filter("=", "obj.hits", String.valueOf(hits)));
+		if (fromDate != null)
+			cond.addFilter(new Filter("<", "obj.createdTime", Filter.OPERANDTYPE_DATE, DateUtil.toXsdDateTimeString(fromDate)));
 
 		Map<String, Filter> filterMap = new HashMap<String, Filter>();
 		Map<String, String> paramTypeMap = new HashMap<String, String>();
