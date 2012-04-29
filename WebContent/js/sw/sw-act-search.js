@@ -7,7 +7,9 @@ $(function() {
 	var requestedValue = "";
 	var timeoutId = null;
 	$('input.js_auto_complete').live('keyup', function(e) {
-		if(e.keyCode>=9 && e.keyCode<=45) return;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode>=9 && keyCode<=45) return;
 		var input = $(e.target);
 		var listWidth = input.parent().outerWidth();
 		var startWork = input.parents('div.js_start_work_page');
@@ -77,7 +79,9 @@ $(function() {
 	});
 	
 	$('input.js_auto_complete').live('keydown', function(e) {
-		if(e.which == $.ui.keyCode.UP || e.which == $.ui.keyCode.DOWN  ){
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == $.ui.keyCode.UP || keyCode == $.ui.keyCode.DOWN  ){
 			var input = $(e.target);
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
@@ -89,19 +93,19 @@ $(function() {
 			var list = target.find('li');
 			if(isEmpty(list)) return;
 			var sw_hover = target.find('.sw_hover');
-			if(e.which == $.ui.keyCode.DOWN){
+			if(keyCode == $.ui.keyCode.DOWN){
 				if(isEmpty(sw_hover) || isEmpty(sw_hover.next()))
 					$(list[0]).addClass('sw_hover').siblings().removeClass('sw_hover');					
 				else
 					sw_hover.next().first().addClass('sw_hover').siblings().removeClass('sw_hover');
 				
-			}else if(e.which == $.ui.keyCode.UP){
+			}else if(keyCode == $.ui.keyCode.UP){
 				if(isEmpty(sw_hover) || isEmpty(sw_hover.prev()))
 					$(list[list.length-1]).addClass('sw_hover').siblings().removeClass('sw_hover');					
 				else
 					sw_hover.prev().first().addClass('sw_hover').siblings().removeClass('sw_hover');					
 			}
-		}else if(e.which == $.ui.keyCode.ENTER){
+		}else if(keyCode == $.ui.keyCode.ENTER){
 			var input = $(e.target);
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');

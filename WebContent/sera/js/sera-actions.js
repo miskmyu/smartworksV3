@@ -534,7 +534,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀이 성공적으로 삭제 되었습니다.", function(){
-						document.location.href = "courseHome.sw?courseId=" + courseId;						
+						$('.js_course_home_page .js_course_main_menu .js_create_team').click();						
 					});
 				},
 				error : function(e) {
@@ -586,7 +586,16 @@ $(function() {
 	});
 	
 	$('.js_return_on_sera_comment').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
+		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
+			e.keyCode = $.ui.keyCode.ENTER;
+			e.which = $.ui.keyCode.ENTER
+			return true;
+		}else if(keyCode != $.ui.keyCode.ENTER){
+			return;
+		}
 		var input = $(e.target);
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');
@@ -627,11 +636,14 @@ $(function() {
 			}
 			
 		});
+		return false;
 		
 	});
 	
 	$('.js_return_on_reply_note').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode != $.ui.keyCode.ENTER) return;
 		var input = $(e.target);
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var message = input.attr('value');
@@ -694,7 +706,9 @@ $(function() {
 	});
 	
 	$('.js_return_on_course_review').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode != $.ui.keyCode.ENTER) return;
 		var input = $(e.target);
 		var courseGeneral = input.parents('.js_course_general_page');
 		var review = input.attr('value');
@@ -1495,23 +1509,176 @@ $(function() {
 		$(e.target).slideUp();
 	});
 	
+	var TYPE_FRIENDS = 2;
+	var TYPE_NON_FRIENDS = 3;
 	$('.js_friend_search_btn').live('click', function(e){
 		var input = $(e.target);
 		var key = input.prev().attr('value');
 		if(isEmpty(key)) return false;
 		
+		var userId = null;
+		var target = null;
+		var friendCount = null;
 		var friendPage = input.parents('.js_friend_page');
 		var othersFriendPage = input.parents('.js_others_friend_page');
+		if(!isEmpty(friendPage)){
+			userId = currentUser.userId;
+			target = friendPage.find('.js_friend_list');
+			friendCount = friendPage.find('.js_friend_count');
+			
+		}else if(!isEmpty(othersFriendPage)){
+			userId = othersFriendPage.attr('userId');
+			target = othersFriendPage.find('js_friend_list');
+			friendCount = othersFriendPage.find('.js_friend_count');
+		}
+		if(isEmpty(target)) return false;
 		$.ajax({
 			url : 'search_sera_user_by_type.sw',
-			data : {},
+			data : {
+				userId : userId,
+				type : TYPE_FRIENDS,
+				key : key
+			},
 			success : function(data, status, jqXHR) {
-				target.html(data).slideDown();
-				target.focusin();
+				target.html(data);
+				if(isEmpty(data)){
+					friendCount.html(0);
+				}
+				else{
+					friendCount.html(target.find('.js_friend_item').length);
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){}
 		});
 		return false;
 		
 	});
+	
+	$('.js_non_friend_search_btn').live('click', function(e){
+		var input = $(e.target);
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var userId = null;
+		var target = null;
+		var nonFriendCount = null;
+		var friendPage = input.parents('.js_friend_page');
+		var othersFriendPage = input.parents('.js_others_friend_page');
+		if(!isEmpty(friendPage)){
+			userId = currentUser.userId;
+			target = friendPage.find('.js_non_friend_list');
+			nonFriendCount = friendPage.find('.js_non_friend_count');
+		}else if(!isEmpty(othersFriendPage)){
+			userId = othersFriendPage.attr('userId');
+			target = othersFriendPage.find('js_non_friend_list');
+			nonFriendCount = othersFriendPage.find('.js_non_friend_count');
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_sera_user_by_type.sw',
+			data : {
+				userId : userId,
+				type : TYPE_NON_FRIENDS,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					nonFriendCount.html(0);
+				}
+				else{
+					nonFriendCount.html(target.find('.js_non_friend_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
+	});
+
+	var TYPE_MENTEES = 2;
+	var TYPE_NON_MENTEES = 3;
+	$('.js_mentee_search_btn').live('click', function(e){
+		var input = $(e.target);
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var courseSettingMentee = input.parents('.js_course_setting_mentee_page');
+		var inviteCourseMembers = input.parents('.js_invite_course_members_page');
+		var courseId = null;
+		var	target = null;
+		var	menteeCount = null;
+		if(!isEmpty(courseSettingMentee)){
+			courseId = courseSettingMentee.attr('courseId');
+			target = courseSettingMentee.find('.js_course_mentees_list');
+			menteeCount = courseSettingMentee.find('.js_mentee_count');			
+		}else if(!isEmpty(inviteCourseMembers)){
+			courseId = inviteCourseMembers.attr('courseId');
+			target = inviteCourseMembers.find('.js_course_mentees_list');
+			menteeCount = inviteCourseMembers.find('.js_mentee_count');						
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_course_member_by_type.sw',
+			data : {
+				type : TYPE_MENTEES,
+				courseId : courseId,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					menteeCount.html(0);
+				}
+				else{
+					menteeCount.html(target.find('.js_mentee_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;
+		
+	});
+	
+	$('.js_non_mentee_search_btn').live('click', function(e){
+		var input = $(e.target);
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var courseSettingMentee = input.parents('.js_course_setting_mentee_page');
+		var inviteCourseMembers = input.parents('.js_invite_course_members_page');
+		var courseId = null;
+		var	target = null;
+		var	nonMenteeCount = null;
+		if(!isEmpty(courseSettingMentee)){
+			courseId = courseSettingMentee.attr('courseId');
+			target = courseSettingMentee.find('.js_course_non_mentees_list');
+			nonMenteeCount = courseSettingMentee.find('.js_non_mentee_count');			
+		}else if(!isEmpty(inviteCourseMembers)){
+			courseId = inviteCourseMembers.attr('courseId');
+			target = inviteCourseMembers.find('.js_course_non_mentees_list');
+			nonMenteeCount = inviteCourseMembers.find('.js_non_mentee_count');						
+		}
+		if(isEmpty(target)) return false;
+		$.ajax({
+			url : 'search_course_member_by_type.sw',
+			data : {
+				type : TYPE_NON_MENTEES,
+				courseId : courseId,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				if(isEmpty(data)){
+					nonMenteeCount.html(0);
+				}
+				else{
+					nonMenteeCount.html(target.find('.js_non_mentee_item').length);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){}
+		});
+		return false;	
+	});
+	
 });

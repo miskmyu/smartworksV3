@@ -272,8 +272,8 @@ var textareaMaxSize = function(keyEvent, maxChars, countTarget){
 	var remain = parseInt(maxChars - tlength);	    
 	countTarget.text(remain);
 	
-    //if (remain < 0 && keyEvent.which !== 0 && (keyEvent.charCode !== 0 || (keyEvent.charCode === 0 && keyEvent.which<=90 && keyEvent.which>=65))) {
-	if (remain < 0 && keyEvent.which !== 0 ){
+	var keyCode = keyEvent.which || keyEvent.keyCode;
+	if (remain < 0 && (keyCode) !== 0 ){
         input.val((tval).cut(tlength + remain));			
         tlength = getByteLength(input.val()); 
 		remain = parseInt(maxChars - tlength);

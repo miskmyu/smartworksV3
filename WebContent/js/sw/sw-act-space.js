@@ -317,7 +317,16 @@ $(function() {
 	});
 	
 	$('.js_return_on_comment').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
+		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
+			e.keyCode = $.ui.keyCode.ENTER;
+			e.which = $.ui.keyCode.ENTER;
+			return true;
+		}else if(keyCode != $.ui.keyCode.ENTER){
+			return;
+		}
 		var input = $(e.target);
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');

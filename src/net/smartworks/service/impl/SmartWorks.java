@@ -1210,8 +1210,13 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SeraUserInfo[] searchSeraUserByType(int userType, String key) throws Exception {
-		return seraService.searchSeraUserByType(userType, key);
+	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
+		return seraService.searchSeraUserByType(type, userId, key);
+	}
+
+	@Override
+	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
+		return seraService.searchCourseMemberByType(type, courseId, key);
 	}
 
 }

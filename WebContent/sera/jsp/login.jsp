@@ -346,19 +346,21 @@ $(function() {
 			top.document.location.href = "logins.sw";
 	<%}%>
 	$(document).keypress(function(e) {
-			if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-				if ($('.login_section').is(':visible')) {
-					$('input[type="submit"]').click();
-					return false;
-				}
-			} else {
-				return true;
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == $.ui.keyCode.ENTER) {
+			if ($('.login_section').is(':visible')) {
+				$('input[type="submit"]').click();
+				return false;
 			}
-		});
-
-		$('.j_btn_login_form').live('click', function(e) {
-			$('.login_section').show();
-			return false;
-		});
+		}else{
+			return true;
+		}
 	});
+
+	$('.j_btn_login_form').live('click', function(e) {
+		$('.login_section').show();
+		return false;
+	});
+});
 </script>

@@ -13,10 +13,11 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String userId = request.getParameter("userId");
 	int type = Integer.parseInt(request.getParameter("type"));
 	String key = request.getParameter("key");
 	
-	SeraUserInfo[] friends = smartWorks.searchSeraUserByType(type, key);
+	SeraUserInfo[] friends = smartWorks.searchSeraUserByType(type, userId, key);
 	
 	if(!SmartUtil.isBlankObject(friends)){
 		for(int i=0; i<friends.length; i++){
@@ -46,7 +47,7 @@
 								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
 								</div> <!-- Btn //--> 
-								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
+								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>" <%if(!friend.isFriend()){%>style="display:none"<%} %>>
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
 								</div> <!-- Btn //--> 
 							</span>
@@ -76,7 +77,7 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>">
+								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
 									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
 								</div> <!-- Btn //--> 
 								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId()%>" <%if(!friend.isFriend()){%>style="display:none"<%} %>>

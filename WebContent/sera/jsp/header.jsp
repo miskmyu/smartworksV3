@@ -147,7 +147,7 @@ function updateNoticeCount(message){
 						%>
 					</a>
 				</li>
-				<li class="icon_calendar">
+				<li class="icon_calendar" style="display:none">
 					<a class="js_sera_content" id="calendar_count" title="캘린더">
 						<%
 						if(!CommonUtil.isEmpty(notices)) {
@@ -160,7 +160,7 @@ function updateNoticeCount(message){
 						%>
 					</a>
 				</li>
-				<li class="icon_badge">
+				<li class="icon_badge" style="display:none">
 					<a class="js_sera_content" id="badge_count" title="뱃지">
 						<%
 						if(!CommonUtil.isEmpty(notices)) {

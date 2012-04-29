@@ -161,13 +161,13 @@ public class SeraController {
 	@RequestMapping("/courseMissionPerform")
 	public ModelAndView courseMissionPerform(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "courseMissionPerform.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/mission/perform.jsp", "");
 	}
 
 	@RequestMapping("/courseTeamActivity")
 	public ModelAndView courseTeamActivity(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "courseTeamActivity.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/detail/team_activity.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")
@@ -391,7 +391,7 @@ public class SeraController {
 			break;
 		case ISmartWorks.SPACE_TYPE_GROUP:
 			if(!SmartUtil.isBlankObject(teamId))
-				href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "courseTeamActivity.sw?courseId=" + spaceId;
+				href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "";
 			else
 				href = (SmartUtil.getCurrentUser().getId().equals(spaceId)) ? "myPAGE.sw" : "courseHome.sw?courseId=" + spaceId;
 			break;
@@ -531,6 +531,11 @@ public class SeraController {
 	@RequestMapping("/search_sera_user_by_type")
 	public ModelAndView search_sera_userByType(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnv(request, "sera/jsp/search/sera_user_by_type.jsp", "");
+	}
+
+	@RequestMapping("/search_course_member_by_type")
+	public ModelAndView searchCourseMemberByType(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/search/course_member_by_type.jsp", "");
 	}
 
 }

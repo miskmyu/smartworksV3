@@ -172,7 +172,9 @@ smartPop = {
 
 		$('#sw_pop_show_info .js_btn_close').focus();
 		$('#sw_pop_show_info').keypress(function (e) {
-	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+			var e = window.event || e;
+			var keyCode = e.which || e.keyCode;
+	        if(keyCode == $.ui.keyCode.ENTER) {
 	            $('#sw_pop_show_info .js_btn_close').click();
 	            return false;
 	        } else {
@@ -224,7 +226,9 @@ smartPop = {
 		});
 		$('#sw_pop_confirm .js_btn_ok').focus();
 		$('#sw_pop_confirm').keypress(function (e) {
-	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+			var e = window.event || e;
+			var keyCode = e.which || e.keyCode;
+	        if (keyCode == $.ui.keyCode.ENTER) {
 	            $('#sw_pop_confirm .js_btn_ok').click();
 	            return false;
 	        } else {
@@ -329,7 +333,9 @@ smartPop = {
 						});
 						$('a.js_pop_select_user').focus();
 						$('a.js_pop_select_user').keypress(function (e) {
-					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
 					            $('a.js_pop_select_user').click();
 					            return false;
 					        } else {
@@ -353,7 +359,9 @@ smartPop = {
 						});
 						$('a.js_pop_select_users').focus();
 						$('a.js_pop_select_users').keypress(function (e) {
-					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
 					            $('a.js_pop_select_users').click();
 					            return false;
 					        } else {
@@ -472,7 +480,9 @@ smartPop = {
 					});
 					$('.js_close_new_group').focus();
 					$('.js_close_new_group').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_group').click();
 				            return false;
 				        } else {
@@ -502,7 +512,9 @@ smartPop = {
 					});
 					$('.js_close_new_category').focus();
 					$('.js_close_new_category').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_category').click();
 				            return false;
 				        } else {
@@ -534,7 +546,9 @@ smartPop = {
 					});
 					$('.js_close_new_work').focus();
 					$('.js_close_new_work').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_category').click();
 				            return false;
 				        } else {

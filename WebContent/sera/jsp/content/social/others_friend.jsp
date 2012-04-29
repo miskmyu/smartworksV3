@@ -45,7 +45,7 @@
 </div>
 
 <!-- Panel Section -->
-<div class="content_section js_others_friend_page">
+<div class="content_section js_others_friend_page" userId="<%=otherUser.getId()%>">
 
 	<!-- Panel2 -->
 	<div>

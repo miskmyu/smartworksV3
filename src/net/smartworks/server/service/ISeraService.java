@@ -107,6 +107,8 @@ public interface ISeraService {
 	
 	public abstract Notice[] getSeraNoticesForMe() throws Exception;
 
-	public abstract SeraUserInfo[] searchSeraUserByType(int userType, String key) throws Exception;
+	public abstract SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception;
+
+	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
 
 }

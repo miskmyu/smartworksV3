@@ -396,7 +396,9 @@ $(function() {
 	});
 	
 	$('div.js_chat_input textarea').live('keypress', function(e) {
-		if (e.keyCode == 13) {
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if (keyCode == $.ui.keyCode.ENTER) {
 			var input = $(e.target);
 			var chattingBox = input.parents('div.js_chatting_box:first');
 			var chatId = chattingBox.attr('id');
