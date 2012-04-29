@@ -45,7 +45,7 @@
 				request.getSession().setAttribute("loginId", ((Login) auth.getPrincipal()).getId());
 			}
 		}
-	} else {
+	} else if(!request.getRequestURI().equals("Header.sw")) {
 		response.sendRedirect("logins.sw");
 		return;
 	}
@@ -122,7 +122,7 @@
 	<script type="text/javascript" src="js/jquery/jquery.numberformatter-1.2.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
-	<script type="text/javascript" src="js/jquery/fullcalendar.min.js"></script>
+	<script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 	
 	<script type="text/javascript" src="js/jstorage/jstorage.js"></script>
 	<script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
