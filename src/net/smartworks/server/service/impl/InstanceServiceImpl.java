@@ -1757,6 +1757,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					refType = 4;
 				} else if(workType == SmartWork.TYPE_PROCESS) {
 					refType = 2;
+					
 				}
 			}
 
@@ -1768,7 +1769,23 @@ public class InstanceServiceImpl implements IInstanceService {
 			opinion.setOpinion(comment);
 
 			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
-
+			
+			if (workType == SmartWork.TYPE_INFORMATION || workType == SocialWork.TYPE_MEMO || workType == SocialWork.TYPE_EVENT || workType == SocialWork.TYPE_BOARD
+					 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_YTVIDEO) {
+				if (tskTask != null)
+					SmartUtil.increaseNoticeCountByNoticeType(tskTask.getAssignee(), Notice.TYPE_COMMENT);
+			} else if (workType == SmartWork.TYPE_PROCESS) {
+				TskTaskCond cond = new TskTaskCond();
+				cond.setProcessInstId(workInstanceId);
+				cond.setType(TskTask.TASKTYPE_COMMON);
+				TskTask[] tasks = getTskManager().getTasks(userId, cond, IManager.LEVEL_LITE);
+				if (tasks != null) {
+					for (int i = 0; i < tasks.length; i++) {
+						SmartUtil.increaseNoticeCountByNoticeType(tasks[i].getAssignee(), Notice.TYPE_COMMENT);
+					}
+				}
+			}
+			
 		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -5812,10 +5829,6 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		//TODO 
-		if (true)
-			return new ChatInstanceInfo[]{new ChatInstanceInfo()};
-		
 		String chatId = request.getParameter("chatId");
 		String receiverId = request.getParameter("receiverId");
 		
@@ -5840,7 +5853,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			chatInstInfo.setSenderId(message.getSendUser());
 			chatInstInfo.setSenderInfo(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 			chatInstInfo.setChatMessage(message.getContent());
+			
+			chatInstInfo.setLastModifiedDate(new LocalDate(message.getCreationDate().getTime()));
+			
 			chatInstInfos[i] = chatInstInfo;
+		}
+		for (int i = 0; i < messages.length; i++) {
+			//imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
 		}
 		return chatInstInfos;
 	}

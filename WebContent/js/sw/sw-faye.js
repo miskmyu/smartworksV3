@@ -96,8 +96,10 @@ var chatHistory = {
 	},
 		
 	setHistory : function(chatId, history){
+		console.log('setHistory=', history);
 		var histories = chatHistory.getHistories(chatId);
 		if(histories){
+			console.log('pushed');
 			histories.push(history);
 			$.jStorage.set(currentUserId+chatId, histories);
 			//console.log(histories);

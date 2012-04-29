@@ -22,8 +22,8 @@ $(function() {
 	updateNowString();
 
 	$('a.js_space_tab_index').live('click',function(e) {
-		var input = $(e.target).parents('a:first');
-		if(isEmpty(input)) input = $(e.target);
+		var input = $(targetElement(e)).parents('a:first');
+		if(isEmpty(input)) input = $(targetElement(e));
 		var target = input.parents('.js_space_instance_list');
 		var url = input.attr('href');
 		$.ajax({
@@ -39,13 +39,13 @@ $(function() {
 	});
 
 	$('a.js_space_datepicker_button').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parents('.js_space_instance_list').find('.js_space_datepicker').datepicker("show");
 		return false;
 	});
 
 	$('select.js_space_select_scope').live('change',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_space_instance_list');
 		var url = input.find(':selected').attr('value');
 		$.ajax({
@@ -61,7 +61,7 @@ $(function() {
 	});
 	
 	$('a.js_space_more_history').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
 			return false;
 		smartPop.progressCont(input.siblings('.js_progress_span'));
@@ -128,7 +128,7 @@ $(function() {
 	});
 	
 	$('a.js_space_more_instance').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
 			return false;
 		smartPop.progressCont(input.siblings('.js_progress_span'));
@@ -156,7 +156,7 @@ $(function() {
 	});
 	
 	$('a.js_view_instance_diagram').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parent().hide().next().show();
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var target = pworkSpace.find('.js_process_instance_viewer');
@@ -169,7 +169,7 @@ $(function() {
 	});
 
 	$('a.js_close_instance_diagram').live('click',function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.parent().hide().prev().show();
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var target = pworkSpace.find('.js_process_instance_viewer');
@@ -183,7 +183,7 @@ $(function() {
 			clearTimeout(userInfoTimer);
 			userInfoTimer = null;
 		}
-		var input = $(e.target).parents('.js_pop_user_info');
+		var input = $(targetElement(e)).parents('.js_pop_user_info');
 		if(input.attr('userId') === currentUser.userId)
 			return;
 		
@@ -222,7 +222,7 @@ $(function() {
 	});
 	
 	$('.js_image_display_by').live('change', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var displayType = input.attr('value');
 		$.ajax({
 			url : "image_instance_list.sw",
@@ -241,7 +241,7 @@ $(function() {
 		
 	});
 	$('a.js_image_instance_list').live('click', function(e){
-		var input = $(e.target).parents('a');
+		var input = $(targetElement(e)).parents('a');
 		var imageInstanceList = input.parents('.js_image_instance_list_page');
 		var parentId = input.attr('categoryId');
 		var displayType = imageInstanceList.attr('displayType');
@@ -263,7 +263,7 @@ $(function() {
 	});
 	
 	$('.js_file_display_by').live('change', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var fileList = input.parents('.js_file_list_page');
 		var displayType = input.attr('value');
 		var wid = fileList.attr("workSpaceId");
@@ -288,14 +288,14 @@ $(function() {
 		
 	});
 	$('.js_file_category_list').live('click', function(e){
-		var input = $(e.target).parents('a');
+		var input = $(targetElement(e)).parents('a');
 		input.parents('.js_file_list_page').attr('categoryId', input.attr('categoryId'));
 		selectListParam();
 		return false;		
 	});
 	
 	$('a.js_file_instance_list').live('click', function(e){
-		var input = $(e.target).parents('a');
+		var input = $(targetElement(e)).parents('a');
 		var fileList = input.parents('.js_file_list_page');
 		var categoryId = input.attr('categoryId');
 		var displayType = fileList.attr('displayType');
@@ -317,8 +317,17 @@ $(function() {
 	});
 	
 	$('.js_return_on_comment').live('keydown', function(e) {
-		if(e.which != $.ui.keyCode.ENTER) return;
-		var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
+		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
+			e.keyCode = $.ui.keyCode.ENTER;
+			e.which = $.ui.keyCode.ENTER;
+			return true;
+		}else if(keyCode != $.ui.keyCode.ENTER){
+			return;
+		}
+		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');
 		if(isEmpty(comment)) return false;
@@ -376,7 +385,7 @@ $(function() {
 	});
 	
 	$('.js_show_all_comments').live('click', function(e) {
-		var input = $(e.target).parents('.js_show_all_comments');
+		var input = $(targetElement(e)).parents('.js_show_all_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var href = input.attr('href');
 		$.ajax({
@@ -400,7 +409,7 @@ $(function() {
 	});
 	
 	$('a.js_add_comment').live('click', function(e){
-		var input = $(e.target).parents('a.js_add_comment').removeAttr('href').addClass('no_hover_line');
+		var input = $(targetElement(e)).parents('a.js_add_comment').removeAttr('href').addClass('no_hover_line');
 		input.find('.t_action').addClass('t_action_disabled');
 		input.parents('.js_action_btns').prev('.js_comments_box').show().find('.js_return_on_comment').show();
 		
@@ -408,7 +417,7 @@ $(function() {
 	});
 
 	$('a.js_add_like').live('click', function(e){
-		var input = $(e.target).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
+		var input = $(targetElement(e)).parents('a.js_add_like').removeAttr('href').addClass('no_hover_line');
 		input.find('.t_action').addClass('t_action_disabled');
 		
 	});

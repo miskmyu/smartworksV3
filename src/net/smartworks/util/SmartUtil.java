@@ -474,11 +474,11 @@ public class SmartUtil {
 								
 								client.getChannel(message.channel).publish(data);
 							} catch(Exception e){
-								e.printStackTrace();
+								//e.printStackTrace();
 							}
 						}
 					}catch(Exception e){
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 				}
 			});

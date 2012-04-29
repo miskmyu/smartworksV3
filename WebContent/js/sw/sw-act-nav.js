@@ -8,8 +8,8 @@ $(function() {
 	$('.js_nav_tab_work a').swnavi({
 		history : false,
 		before : function(event){
-			smartPop.progressNavGray($(event.target).parents('.js_nav_tab_work span.js_progress_span:first'));
-			var input = $(event.target);
+			smartPop.progressNavGray($(targetElement(event)).parents('.js_nav_tab_work span.js_progress_span:first'));
+			var input = $(targetElement(event));
 			input.addClass('current');
 			input.parent().siblings().find('span').removeClass('current');
 		},
@@ -28,8 +28,8 @@ $(function() {
 	$('.js_nav_tab_com a').swnavi({
 		history : false,
 		before : function(event){
-			smartPop.progressNavGray($(event.target).parents('.js_nav_tab_com span.js_progress_span:first'));
-			var input = $(event.target).parent('a');
+			smartPop.progressNavGray($(targetElement(event)).parents('.js_nav_tab_com span.js_progress_span:first'));
+			var input = $(targetElement(event)).parent('a');
 			input.find('span:first').addClass('current');
 			input.find('.btn_add_group').show();
 			
@@ -49,7 +49,7 @@ $(function() {
 	$('a.js_content').swnavi({
 		history : true,
 		before : function(event){
-			var input = $(event.target);
+			var input = $(targetElement(event));
 			if(!isEmpty(input.parents('.js_nav_my_works')) || !isEmpty(input.parents('.js_nav_my_com'))){
 				smartPop.progressNavGray(input.parents('li:first').find('span:last'));
 			}else if(!isEmpty(input.parents('.js_srch_my_works'))){
@@ -77,7 +77,7 @@ $(function() {
 
 	$('a.js_location').live('click', function(e){
 		
-		var input = $(event.target);
+		var input = $(targetElement(e));
 		if(!isEmpty(input.parents('.js_srch_my_com'))){
 			smartPop.progressNavGray(input.parents('.js_srch_my_com').prev('li').find('span:last'));
 			var target = input.parent().next('div');
@@ -117,7 +117,7 @@ $(function() {
 			$('.js_notice_count').find('a').removeClass('current');
 		},
 		after : function(event) {
-			$(event.target).parents('.js_notice_count:first').find('a')
+			$(targetElement(event)).parents('.js_notice_count:first').find('a')
 					.addClass('current');
 			smartPop.closeProgress();
 			$('#notice_message_box').show();
@@ -128,7 +128,7 @@ $(function() {
 	// 선택된 항목에서, noticeId, noticeType, lastNoticeId 를 가져와서, ajax 호출을 한다.
 	// 서버에서는 항목을 삭제하고, 삭제된 상태에서의 10개의 항목을 가져다고 전달해준다.
 	$('.js_remove_notice').live('click', function(e) {
-		var input = $(e.target).parent('a');
+		var input = $(targetElement(e)).parent('a');
 		var noticeId = input.attr('noticeId');
 		var noticeType = input.attr('noticeType');
 		var lastNoticeId = input.attr('lastNoticeId');
@@ -167,7 +167,7 @@ $(function() {
 	 * js_collapsible class를 찾아서, 위로 닫고 아래로 여는것을 한번씩 실행해준다.
 	 */
 	$('.js_collapse_parent_siblings').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(input.hasClass('arr_on')){
 			input.removeClass('arr_on').addClass('arr_off');
 			
@@ -183,13 +183,13 @@ $(function() {
 	 * js_collapsible class를 찾아서, 위로 닫고 아래로 여는것을 한번씩 실행해준다.
 	 */
 	$('.js_collapse_siblings').live('click', function(e) {
-		$(e.target).siblings('.js_collapsible').toggle();
+		$(targetElement(e)).siblings('.js_collapsible').toggle();
 		return false;
 	});
 
 	$('.js_drill_down').live('click', function(e) {
-		if($(e.target).hasClass('js_checkbox')) return true;
-		var input = $(e.target).parents('li.js_drill_down:first').find('a');
+		if($(targetElement(e)).hasClass('js_checkbox')) return true;
+		var input = $(targetElement(e)).parents('li.js_drill_down:first').find('a');
 		var target = input.siblings('div.js_drill_down_target:first');
 		if(input.hasClass('js_popup')) target = input.parent().siblings('div.js_drill_down_target:first');
 		if(input.parent().hasClass('ctgr_action_item') || input.parent().hasClass('group_action_item')){
@@ -246,7 +246,7 @@ $(function() {
 	});
 	
 	$('.js_check_favorite_work').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var workId = input.attr('workId');
 		var favoriteWorks = input.parents('li.js_favorite_works:first');
 		var url = 'remove_a_favorite_work.sw';
@@ -288,7 +288,7 @@ $(function() {
 	});
 	
 	$('span.js_collapse_detail').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!input.hasClass('js_collapse_detail')) return;
 		if(input.hasClass('arr_on')){
 			input.removeClass('arr_on').addClass('arr_off');

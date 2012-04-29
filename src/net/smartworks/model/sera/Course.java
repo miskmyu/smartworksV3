@@ -40,7 +40,21 @@ public class Course extends Group {
 	private Team team;
 	private MissionInstanceInfo[] missions;
 	private int lastMissionIndex=-1;
+	private int starPoint;
+	private int likes;
 	
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	public int getStarPoint() {
+		return starPoint;
+	}
+	public void setStarPoint(int starPoint) {
+		this.starPoint = starPoint;
+	}
 	public int getLastMissionIndex() {
 		return lastMissionIndex;
 	}

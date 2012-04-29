@@ -266,14 +266,14 @@ String.prototype.cut = function(len){
 };
 
 var textareaMaxSize = function(keyEvent, maxChars, countTarget){
-	var input = $(keyEvent.target);
+	var input = $(targetElement(keyEvent));
 	var tval = input.val();
 	var tlength = getByteLength(tval); 
 	var remain = parseInt(maxChars - tlength);	    
 	countTarget.text(remain);
 	
-    //if (remain < 0 && keyEvent.which !== 0 && (keyEvent.charCode !== 0 || (keyEvent.charCode === 0 && keyEvent.which<=90 && keyEvent.which>=65))) {
-	if (remain < 0 && keyEvent.which !== 0 ){
+	var keyCode = keyEvent.which || keyEvent.keyCode;
+	if (remain < 0 && (keyCode) !== 0 ){
         input.val((tval).cut(tlength + remain));			
         tlength = getByteLength(input.val()); 
 		remain = parseInt(maxChars - tlength);
@@ -293,4 +293,8 @@ var printDateTime = function(date){
 		return date.format("mm.dd HH:MM");
 	}
 	return date.format("HH:MM");
+};
+
+var targetElement = function(e){
+	return (typeof e.target != 'undefined') ? e.target : e.srcElement;
 };

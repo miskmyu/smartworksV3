@@ -13,6 +13,7 @@
 
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
+
 %>
 <script type="text/javascript">
 

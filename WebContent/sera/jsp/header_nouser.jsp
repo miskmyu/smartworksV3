@@ -67,7 +67,9 @@
 <script type="text/javascript">
 $(function() {
 	$(document).keypress(function(e) {
-		if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+        if (keyCode == $.ui.keyCode.ENTER) {
 			if ($('.login_section').is(':visible')) {
 				$('input[type="submit"]').click();
 				return false;

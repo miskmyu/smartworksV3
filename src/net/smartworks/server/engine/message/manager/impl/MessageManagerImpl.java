@@ -265,10 +265,10 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 					obj.setContent((String)fields[j++]);
 					obj.setSendUser((String)fields[j++]);
 					obj.setTargetUser((String)fields[j++]);
-					obj.setCheckedTime((Timestamp)fields[j++]);
+					obj.setChecked(CommonUtil.toBoolean(fields[j++]));
 					obj.setChatId((String)fields[j++]);
 					obj.setChattersId((String)fields[j++]);
-					obj.setChecked(CommonUtil.toBoolean(fields[j++]));
+					obj.setCheckedTime((Timestamp)fields[j++]);
 					obj.setCreationUser((String)fields[j++]);
 					obj.setCreationDate((Timestamp)fields[j++]);
 					obj.setModificationUser((String)fields[j++]);

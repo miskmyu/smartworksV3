@@ -65,7 +65,7 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 };
 
 $('input.js_percent_input').live('blur', function(e) {
-	$input = $(e.target);
+	$input = $(targetElement(e));
 	
 	var value = $input.attr('value');
 	
@@ -78,7 +78,7 @@ $('input.js_percent_input').live('blur', function(e) {
 });
 
 $('input.js_percent_input').live('focusin', function(e) {
-	$input = $(e.target);
+	$input = $(targetElement(e));
 	
 	var value = $input.attr('value');
 	
