@@ -30,7 +30,7 @@
 </div>
 <!-- Header Title //-->
 <!-- Course Section -->
-<div class="content_section js_course_setting_mentee_page">
+<div class="content_section js_course_setting_mentee_page" courseId="<%=courseId%>">
 	<!-- 목록1-->
 	<div class="t_redb mb10">* 가입을 신청한 멘티가 <%=menteeInformations.getTotalJoinRequesters()%>명 있습니다</div>
 	<div class="js_join_requesters_list">
@@ -114,7 +114,7 @@
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_green_l js_pushout_mentee_btn">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 강퇴</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 강퇴</div>
 								</div>
 							</span>
 						</li>
@@ -174,7 +174,7 @@
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
 								<div class="btn_green_l js_invite_mentee_btn" userId="<%=nonMentee.getId() %>">
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티 초대</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 초대</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>

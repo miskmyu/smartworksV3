@@ -25,10 +25,10 @@
 		</div>
 		<!-- Btn -->
 		<div class="btn_green_l cb js_friend_request_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px; <%if(otherUser.isFriend()){%>display:none;<%}%>">
-			<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구요청</div>
+			<div class="btn_green_r"><span class="icon_green_down"></span>친구요청</div>
 		</div>
 		<div class="btn_green_l cb js_destroy_friendship_btn" userId="<%=otherUser.getId() %>" style="margin: 8px 0 0 10px; <%if(!otherUser.isFriend()){%>display:none;<%}%>">
-			<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구끊기</div>
+			<div class="btn_green_r"><span class="icon_green_down"></span>친구끊기</div>
 		</div>
 		<!-- Btn //-->
 	</div>
@@ -61,7 +61,7 @@
 		<div class="panel_area js_friend_list">
 
 			<%
-			if(friendList.getTotalFriends()>0){
+			if(friendList.getTotalFriends()>0 && !SmartUtil.isBlankObject(friendList.getFriends())){
 				for(int i=0; i<friendList.getFriends().length; i++){
 					SeraUserInfo friend = friendList.getFriends()[i];
 					String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
@@ -88,10 +88,10 @@
 							%>
 							<span> <!-- Btn -->
 								<div class="btn_green_l js_friend_request_btn" userId="<%=friend.getId() %>" <%if(friend.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 요청</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
 								</div> <!-- Btn //--> 
 								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=friend.getId() %>" <%if(!friend.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down mr5"></span>친구 끊기</div>
+									<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
 								</div> <!-- Btn //-->
 							</span>
 							<%

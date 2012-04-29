@@ -144,7 +144,9 @@
 									}
 									%>
 									<dd>
-										<div class="text"><%=board.getSubject() %></div>
+										<div class="text">
+											<div class="name">[공지.<%=board.getSubject() %>]</div>
+										</div>
 										<div class="text js_brief_content"><%=board.getBriefContent() %></div>
 										<div class="text" style="display:none"><%=board.getContent() %></div>
 									</dd>

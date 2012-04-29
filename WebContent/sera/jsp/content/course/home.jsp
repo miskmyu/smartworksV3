@@ -85,7 +85,7 @@
 		if(course.isMyAttendingCourse() || course.isMyRunningCourse()){
 		%>
 			<div class="btn_green_l mt8 fl js_invite_course_members_btn">
-				<div class="btn_green_r"><span class="icon_green_down mr5"></span>멘티초대</div>
+				<div class="btn_green_r"><span class="icon_green_down"></span>멘티초대</div>
 			</div>
 		<%
 		}

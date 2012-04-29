@@ -5,7 +5,7 @@
 .form_layout table {background-color:#ededed; border-bottom:1px solid #73afd3; padding:10px 5px 10px}
 .form_layout table td,
 .form_layout table th {padding:7px 10px}
-.form_label { font-weight:bold; width:90px; line-height:21px}
+.form_label { font-weight:bold; width:90px; line-height:21px; float:left !important}
 .form_value {}
 .form_label, .form_value {float:left; font-size:12px}
 .form_value input[type="text"], .form_value input[type="submit"], .form_value input[type="password"] {width:100%; vertical-align:middle; text-align:left; height:14px; padding:1px 2px !important}
@@ -79,3 +79,11 @@
 .form_space {padding-right:3px;}
 .icon_space { padding-right:26px; position:relative;}
 .space_data {text-align:center; margin-right:5px; width:70px;}
+
+/* File Uploader */
+.profile_photo .qq-uploader {width:118px; left:40px; top:123px} /* Joinus.jsp */
+.profile_photo img, .myaccount_photo img {display:block; outline:1px solid #cccccc; width:118px !important}
+.myaccount_photo .form_label { width:0; height:0} /* my_profile.jsp = my account */
+.myaccount_photo .qq-uploader {left:25px; top:121px} 
+.myaccount_photo table { border:none; width:150px}
+.myaccount_photo {width:150px}
