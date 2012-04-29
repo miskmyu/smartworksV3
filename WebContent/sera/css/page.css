@@ -2,7 +2,7 @@
 .main_bg {background-color:#f4f4f4; margin: 0 auto}
 #sera_header .case_login {background: url("../images/top_bg.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
 #sera_header .case_logout {background: url("../images/top_bg_out.jpg") repeat-x scroll 0 0 transparent; clear: both; height:91px; margin: 0 auto;  width: 100%;}
-.hd_shadow {width:980px; height:91px; margin:0 auto; position:relative}
+.header_section {width:980px; height:91px; margin:0 auto; position:relative}
 
 /* Intro */
 #inro_ct_section {clear: both; margin: 0 auto; padding: 0 15px 0 30px; width: 948px; position: relative}

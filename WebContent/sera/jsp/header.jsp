@@ -61,7 +61,7 @@ function updateNoticeCount(message){
 if(isAuthenticated){
 %>
 <div class="case_login">
-	<div class="hd_shadow bg_no js_header_page">
+	<div class="header_section js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
 			<div class="top_logo"><a href="logins.sw"></a></div>
@@ -209,7 +209,7 @@ if(isAuthenticated){
 }else{
 %>
 <div class="case_logout">
-	<div class="hd_shadow bg_no">
+	<div class="header_section">
 		<!-- GNB -->
 		<div class="gnb">
 			
