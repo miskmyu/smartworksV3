@@ -1070,10 +1070,19 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			}
 		}
 		if (workSpaceIdIns != null) {
-			if(first) buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
-			else buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+			if(first) {
+				buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+				first = false;
+			} else {
+				buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+			}
 		}
-
+		if(first) {
+			buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+			first = false;
+		} else {
+			buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+		}
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);

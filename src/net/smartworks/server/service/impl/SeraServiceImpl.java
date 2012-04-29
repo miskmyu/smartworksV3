@@ -36,6 +36,7 @@ import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
@@ -121,7 +122,6 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2018,7 +2018,7 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setFilter(filters);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
-	
+
 			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
 	
 			BoardInstanceInfo[] boardInstanceInfos = null;
@@ -2138,9 +2138,7 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setCompanyId(user.getCompanyId());
 			swdRecordCond.setFormId(swdDomain.getFormId());
 			swdRecordCond.setDomainId(swdDomain.getObjId());
-	
-			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-	
+
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxList);
 			
@@ -2858,15 +2856,13 @@ public class SeraServiceImpl implements ISeraService {
 	
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxList);
-			
-			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
-			//Filter[] filters = new Filter[1];
-			//filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
-			
-			//swdRecordCond.setFilter(filters);
+			Filter[] filters = new Filter[1];
+			filters[0] = new Filter("<", "createdTime", Filter.OPERANDTYPE_DATE, fromDate.toGMTDateString());		
+
+			swdRecordCond.setFilter(filters);
 
 			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
@@ -3019,12 +3015,10 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setCompanyId(user.getCompanyId());
 			swdRecordCond.setFormId(swdDomain.getFormId());
 			swdRecordCond.setDomainId(swdDomain.getObjId());
-	
-			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
-	
+
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxList);
-			
+
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
@@ -3223,7 +3217,7 @@ public class SeraServiceImpl implements ISeraService {
 			Map<Long, InstanceInfo> sortMap = new TreeMap<Long, InstanceInfo>(Collections.reverseOrder());
 			sortMap.putAll(resultMap);
 
-			List<InstanceInfo> returnInstanceInfoList = new ArrayList<InstanceInfo>();
+			List returnInstanceInfoList = new ArrayList();
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int i = 0;
 			while (itr.hasNext()) {
@@ -3233,11 +3227,12 @@ public class SeraServiceImpl implements ISeraService {
 				i++;
 			}
 
+			if(sortMap.size() > maxList)
+				returnInstanceInfoList.add(new WorkInstanceInfo());
 			InstanceInfo[] returnInstanceInfo = new InstanceInfo[returnInstanceInfoList.size()];
 			returnInstanceInfoList.toArray(returnInstanceInfo);
-
 			//InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
-			
+
 			return returnInstanceInfo;
 		}catch (Exception e){
 			// Exception Handling Required

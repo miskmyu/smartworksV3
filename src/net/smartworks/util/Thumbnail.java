@@ -31,7 +31,6 @@ public class Thumbnail {
 		if(sizeType.equals("thumb")) {
 			if(width > 300 || height > 300) {
 				width = 300;
-				height = 300;
 			}
 		}
 		//가로, 세로 사이즈 유지
