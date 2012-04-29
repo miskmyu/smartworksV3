@@ -1104,8 +1104,8 @@ $(function() {
 		return false;
 	});
 	
-	$('.js_more_friends_btn').live('click', function(e) {
-		var input = $(targetElement(e)).parents('.js_more_friends_btn');
+	$('.js_more_friend_informs_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_friend_informs_btn');
 		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
 			return false;
 		
@@ -1114,7 +1114,7 @@ $(function() {
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
 		$.ajax({
-			url : "moreFriends.sw",
+			url : "moreFriendInforms.sw",
 			data : {
 				type: type,
 				userId: userId,
@@ -1188,6 +1188,9 @@ $(function() {
 
 	$('.js_more_mentee_informs_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_mentee_informs_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+
 		var requestType = input.attr('requestType');
 		var courseId = input.attr('courseId');
 		var lastId = input.attr('lastId');
