@@ -60,21 +60,21 @@
 	};
 	
 	$('a.js_select_paging').live("click", function(e){
-		var input = $(e.target).parents('a.js_select_paging');
+		var input = $(targetElement(e)).parents('a.js_select_paging');
 		input.find('input').attr('value', 'true');
 		selectListParam();
 		return false;
 	});
 	
 	$('a.js_select_current_page').live("click", function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		input.siblings('input[name="hdnCurrentPage"]').attr('value', input.text());
 		selectListParam();
 		return false;
 	});
 	
 	$('a.js_select_field_sorting').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var sortingField = $('form[name="frmSortingField"]').find('input[name="hdnSortingFieldId"]');
 		var sortingIsAscending = $('form[name="frmSortingField"]').find('input[name="hdnSortingIsAscending"]');
 		console.log("input...=", input, sortingField, sortingIsAscending);
@@ -90,7 +90,7 @@
 	});
 
 	$('a.js_search_filter_execute').live("click", function(e){
-		var input = $(e.target).parents('a.js_search_filter_execute');
+		var input = $(targetElement(e)).parents('a.js_search_filter_execute');
 		selectListParam();
 		return false;
 	});	

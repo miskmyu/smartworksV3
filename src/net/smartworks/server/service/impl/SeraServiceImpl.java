@@ -120,6 +120,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -4979,6 +4980,15 @@ public class SeraServiceImpl implements ISeraService {
 	public Notice[] getSeraNoticesForMe() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
+		// TODO Auto-generated method stub
+		return SeraTest.getFriendRequestsForMe(null, 0);
+	}
+	@Override
+	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
+		return SeraTest.getFriendRequestsForMe(null, 0);
 	}
 
 }

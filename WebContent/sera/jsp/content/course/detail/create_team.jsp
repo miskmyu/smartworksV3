@@ -50,11 +50,13 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "팀이 정상적으로 만들어졌습니다!", function(){
+						$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createTeamError'));
+					smartPop.showInfo(smartPop.ERROR, "팀생성에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
@@ -82,7 +84,6 @@
 					<div class="form_label w101">팀 이름</div>
 					<div class="form_value">
 						<input name="txtTeamName" type="text" class="fieldline fl required" style="width: 493px">
-						<span class="insert_text ml5 js_note_content_length">50</span>
 					</div>
 				</td>
 			</tr>
@@ -90,7 +91,6 @@
 				<td><div class="form_label w101">팀설명</div>
 					<div class="form_value">
 						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 491px"></textarea>
-						<span class="insert_text ml5 js_note_content_length">150</span>
 					</div>
 				</td>
 			</tr>

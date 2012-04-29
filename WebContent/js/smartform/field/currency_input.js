@@ -97,6 +97,7 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.buildEx = function(config){
 
 $('input.js_currency_input').live('keyup', function(e) {
 	var e = window.event || e;
+	var keyCode = e.which || e.keyCode;
 	var keyUnicode = e.charCode || e.keyCode;
 	if (e !== undefined) {
 		switch (keyUnicode) {

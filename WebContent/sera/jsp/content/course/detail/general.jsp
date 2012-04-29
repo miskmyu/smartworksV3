@@ -45,12 +45,14 @@
 				</div>
 				<div class="grade">
 					<!-- 왕관-->
-					<div class="icon_mentor"></div>
+					<div class="icon_mentor current"></div>
 					<!-- 별 -->
-					<div class="icon_star"></div>
+					<div class="icon_star <%if(course.getStarPoint()>=0){%>current<%}%>">
+						<div class="grade_star"><%if(course.getStarPoint()>=0){%><%=course.getStarPoint()%><%}%></div>
+					</div>
 					<!-- 하트 -->
-					<div class="icon_heart current">
-						<div class="grade_heart">34</div>
+					<div class="icon_heart <%if(course.getLikes()>=0){%>current<%}%>">
+						<div class="grade_heart"><%if(course.getLikes()>=0){%><%=course.getLikes()%><%}%></div>
 					</div>
 				</div>
 			</li>
@@ -153,13 +155,19 @@
 			<div>코스리뷰</div>
 		</div>
 		<ul class="panel_area">
-			<li class="fl">
-				<div class="btn_large_l">
-					<div class="btn_large_r js_view_new_course_review" >
-						<span class="icon_blu_down2 mr5"></span>리뷰 남기기
+			<%
+			if(!course.getLeader().getId().equals(cUser.getId())){
+			%>
+				<li class="fl">
+					<div class="btn_large_l">
+						<div class="btn_large_r js_view_new_course_review" >
+							<span class="icon_blu_down2 mr5"></span>리뷰 남기기
+						</div>
 					</div>
-				</div>
-			</li>
+				</li>
+			<%
+			}
+			%>
 			<!-- 리뷰 -->
 			<li class="fr">
 				<div class="panel_block fr js_course_review_list">

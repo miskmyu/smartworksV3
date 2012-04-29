@@ -96,7 +96,8 @@ $(function() {
 	%>
 	
     $(document).keypress(function (e) {
-        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+    	var keyCode = e.which || e.keyCode;
+        if (keyCode == 13) {
             $('input[type="submit"]').click();
             return false;
         } else {

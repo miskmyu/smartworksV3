@@ -28,19 +28,20 @@
 </div>
 <!-- Header Title //-->
 <!-- Course Section -->
-<div class="content_section">
+<div class="content_section js_invite_course_members_page">
 
 	<div class="title_srch">
-	<div class="t_redb fl">* 등록가능한 멤버가 <%=menteeInformations.getTotalNonMentees() %>명 있습니다</div>
+	<div class="t_redb fl">* 등록가능한 멤버가 <span class="js_non_mentee_count"><%=menteeInformations.getTotalNonMentees() %></span>명 있습니다</div>
 	<!-- 검색 -->
 	<div class="fr">
-		<span class="fl tb mr5">멤버검색</span> <input class="fl fieldline" style="width: 150px" type="text" />
-		<button type="button" class="fl ml5">검색</button>
+		<span class="fl tb mr5">멤버검색</span> 
+		<input class="fl fieldline js_non_mentee_search_key" style="width: 150px" type="text" />
+		<button type="button" class="fl ml5 js_non_mentee_search_btn">검색</button>
 	</div>
 	<!-- 검색 //-->
 	</div>
 	
-	<div class="js_course_non_mentees_list">
+	<div class="js_course_non_mentees_list" courseId="<%=courseId%>">
 		<%
 		SeraUserInfo[] nonMentees = menteeInformations.getNonMentees();
 		if(!SmartUtil.isBlankObject(nonMentees)){

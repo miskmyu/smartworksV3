@@ -1,6 +1,6 @@
 $(function() {
 	$('select.js_select_filter_operand').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var pageName = input.children('option:selected').attr('page');
 		var url = pageName + ".sw";
 		var target = input.next('span.js_filter_operator');
@@ -18,14 +18,14 @@ $(function() {
 	});
 
 	$('select.js_select_filter_operator').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.children('option:selected').attr('type');
 		input.siblings('span.' + target).show().siblings('span.js_right_operand').hide();
 		return false;
 	});
 	
 	$('a.js_edit_search_filter').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		smartPop.progressCont(input.next('span:first'));
 		var target = $('#search_filter');
 		var url = input.attr('href') + "&filterId=" + $('form.js_form_filter_name').children('select').attr('value');
@@ -48,7 +48,7 @@ $(function() {
 	
 	$('a.js_select_paging').live("click", function(e){
 		$('#search_filter').slideUp(500).html('');
-		var input = $(e.target).parents('a.js_select_paging');
+		var input = $(targetElement(e)).parents('a.js_select_paging');
 		input.find('input').attr('value', 'true');
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		selectListParam(progressSpan, false);
@@ -56,7 +56,7 @@ $(function() {
 	});
 	
 	$('a.js_select_current_page').live("click", function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		$('#search_filter').slideUp(500).html('');
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		input.siblings('input[name="hdnCurrentPage"]').attr('value', input.text());
@@ -65,7 +65,7 @@ $(function() {
 	});
 	
 	$('.js_select_page_size').live("change", function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		$('#search_filter').slideUp(500).html('');
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		selectListParam(progressSpan, false);
@@ -73,7 +73,7 @@ $(function() {
 	});
 	
 	$('a.js_select_field_sorting').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		$('#search_filter').slideUp(500).html('');
 		var sortingField = $('form[name="frmSortingField"]').find('input[name="hdnSortingFieldId"]');
 		var sortingIsAscending = $('form[name="frmSortingField"]').find('input[name="hdnSortingIsAscending"]');

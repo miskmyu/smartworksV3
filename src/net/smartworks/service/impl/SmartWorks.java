@@ -1209,4 +1209,14 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.fetchAsyncMessagesByChatid(request, response);
 	}
 
+	@Override
+	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
+		return seraService.searchSeraUserByType(type, userId, key);
+	}
+
+	@Override
+	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
+		return seraService.searchCourseMemberByType(type, courseId, key);
+	}
+
 }

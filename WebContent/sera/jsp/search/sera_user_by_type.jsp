@@ -13,26 +13,16 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	int type = Integer.parseInt(request.getParameter("type"));
 	String userId = request.getParameter("userId");
-	String lastId = request.getParameter("lastId");
+	int type = Integer.parseInt(request.getParameter("type"));
+	String key = request.getParameter("key");
 	
-	SeraUserInfo[] friends = smartWorks.getFriendInformsByType(type, userId, lastId, FriendInformList.MAX_FRIEND_LIST);
+	SeraUserInfo[] friends = smartWorks.searchSeraUserByType(type, userId, key);
 	
 	if(!SmartUtil.isBlankObject(friends)){
 		for(int i=0; i<friends.length; i++){
 			SeraUserInfo friend = friends[i];
 			String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
-			if(i==FriendInformList.MAX_FRIEND_LIST){
-	%>
-				<!-- 더보기 -->
-				<div class="more js_more_friends_btn js_friend_item" requestType="<%=type %>" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
-					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
-				</div>
-				<!-- 더보기 //-->
-			<%
-				break;
-			}
 			switch(type){
 			case FriendInformList.TYPE_FRIENDS:
 			%>
