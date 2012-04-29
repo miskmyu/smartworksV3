@@ -241,10 +241,10 @@ function loadSeraNoteFields() {
 			fieldId: "imgNoteImage",
 			fieldName: "note image",
 			columns: 1,
-			pictureWidth: 300,
 			required: false
 		});
 		noteImageField.find('.form_label').removeClass('form_label').css({width:"100%", padding:"0 0 2px 0"});
+		noteImageField.find('.form_value img').css({width:"auto", "max-width":"300px"});
 		
 	}
 	
