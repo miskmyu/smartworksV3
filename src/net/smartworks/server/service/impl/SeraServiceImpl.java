@@ -55,6 +55,7 @@ import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
@@ -134,6 +135,12 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	private ISwoManager getSwoManager() {
 		return SwManagerFactory.getInstance().getSwoManager();
+	}
+	private ISwfManager getSwfManager() {
+		return SwManagerFactory.getInstance().getSwfManager();
+	}
+	private ISwdManager getSwdManager() {
+		return SwManagerFactory.getInstance().getSwdManager();
 	}
 
 	private IInstanceService instanceService;
@@ -2039,7 +2046,7 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
 
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
 
 					boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
@@ -2138,6 +2145,8 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
 
+			String formName = swdDomain.getFormName();
+
 			List<EventInstanceInfo> eventInstanceInfoList = new ArrayList<EventInstanceInfo>();
 			EventInstanceInfo[] eventInstanceInfos = null;
 			if(swdRecords != null) {
@@ -2159,8 +2168,8 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					//WorkInfo workInfo1 = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), eventInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
-					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_EVENT, workGroupInfo, workCategoryInfo);
+					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
 					
 					eventInstanceInfo.setWork(workInfo);
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
@@ -2806,7 +2815,7 @@ public class SeraServiceImpl implements ISeraService {
 			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
 
-			String workId = "pkg_e4c34f837ea64b1c994d4827d8a4bb51";
+			String workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
 
@@ -2851,6 +2860,8 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
 
+			String formName = swdDomain.getFormName();
+
 			List<NoteInstanceInfo> NoteInstanceInfoList = new ArrayList<NoteInstanceInfo>();
 			NoteInstanceInfo[] noteInstanceInfos = null;
 			if(swdRecords != null) {
@@ -2873,9 +2884,9 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					//WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), noteInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
-					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
-					
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, Work.TYPE_SERA_NOTE, workGroupInfo, workCategoryInfo);
+					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+
 					noteInstanceInfo.setWork(workInfo);
 					noteInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					noteInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
@@ -2969,8 +2980,8 @@ public class SeraServiceImpl implements ISeraService {
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
 			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
-			
-			String workId = "pkg_8fc9ed30a64b467eb89fd35097cc6212";
+
+			String workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
 
@@ -3015,6 +3026,8 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
 
+			String formName = swdDomain.getFormName();
+
 			List<MissionReportInstanceInfo> missionReportInstanceInfoList = new ArrayList<MissionReportInstanceInfo>();
 			MissionReportInstanceInfo[] missionReportInstanceInfos = null;
 			if(swdRecords != null) {
@@ -3037,8 +3050,8 @@ public class SeraServiceImpl implements ISeraService {
 
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
-					//WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), missionReportInstanceInfo.getWork().getType(), workGroupInfo, workCategoryInfo);
-					WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, Work.TYPE_SERA_MISSION_REPORT, workGroupInfo, workCategoryInfo);
+					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
 					
 					missionReportInstanceInfo.setWork(workInfo);
 					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
@@ -3222,6 +3235,57 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 		
 	}
+
+	@Override
+	public void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+
+			int workType = (Integer)requestBody.get("workType");
+			String workInstanceId = (String)requestBody.get("workInstanceId");
+			String workId = null;
+
+			switch (workType) {
+			case SocialWork.TYPE_BOARD:
+				workId = SmartWork.ID_BOARD_MANAGEMENT;
+				break;
+			case SocialWork.TYPE_EVENT:
+				workId = SmartWork.ID_EVENT_MANAGEMENT;
+				break;
+			case Work.TYPE_SERA_NOTE:
+				workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
+				break;
+			case Work.TYPE_SERA_MISSION_REPORT:
+				workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
+				break;
+			}
+
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setPackageId(workId);
+			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+
+			SwfForm swfForm = null;
+			if(!CommonUtil.isEmpty(swfForms)) {
+				swfForm = swfForms[0];
+			}
+
+			String formId = swfForm.getId();
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setFormId(formId);
+			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
+			String domainId = swdDomain.getObjId();
+
+			getSwdManager().removeRecord(userId, domainId, workInstanceId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
 	//TODO
 	@Override
 	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
