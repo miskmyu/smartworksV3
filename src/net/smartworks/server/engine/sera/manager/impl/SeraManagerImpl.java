@@ -403,6 +403,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		int acceptStatus = -1;
 		String requestIdOrReceiveId = null;
 		String lastRequestName = null;
+
 		if (cond != null) {
 			objId = cond.getObjId();
 			requestId = cond.getRequestId();
@@ -495,6 +496,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 
 		String friendId = userId;
 		String lastFriendName = null;
+		String key = null;
 		int acceptStatus = -1;
 		int pageSize = -1;
 		int pageNo = -1;
@@ -502,6 +504,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if(cond != null) {
 			lastFriendName = cond.getLastFriendName();
 			acceptStatus = cond.getAcceptStatus();
+			key = cond.getKey();
 			pageSize = cond.getPageSize();
 			pageNo = cond.getPageNo();
 		}
@@ -527,6 +530,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			queryBuffer.append(" and friendInfo.acceptStatus =:acceptStatus ");
 		if(lastFriendName != null)
 			queryBuffer.append(" and friendInfo.friendName >:lastFriendName ");
+		if(key != null)
+			queryBuffer.append(" and friendInfo.friendName like :key ");
 		queryBuffer.append(" order by friendInfo.friendName asc ");
 
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
@@ -540,7 +545,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			query.setInteger("acceptStatus", acceptStatus);
 		if(lastFriendName != null)
 			query.setString("lastFriendName", lastFriendName);
-
+		if (key != null)
+			query.setString("key", CommonUtil.toLikeString(key));
 		List list = query.list();
 		if (list == null || list.isEmpty())
 			return null;
@@ -578,11 +584,13 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String email = null;
 		String[] userIdIns = null;
 		String[] userIdNotIns = null;
+		String key = null;
 		if (cond != null) {
 			userId = cond.getUserId();
 			email = cond.getEmail();
 			userIdIns = cond.getUserIdIns();
 			userIdNotIns = cond.getUserIdNotIns();
+			key = cond.getKey();
 		}
 		buf.append(" from SeraUserDetail obj");
 		buf.append(" where obj.userId is not null");
@@ -609,6 +617,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				}
 				buf.append(")");
 			}
+			if(key != null)
+				buf.append(" and obj.userName like :key ");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);
@@ -628,6 +638,9 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					query.setString("userIdNotIn"+i, userIdNotIns[i]);
 				}
 			}
+			if (key != null)
+				query.setString("key", CommonUtil.toLikeString(key));
+				
 		}
 		return query;
 	}

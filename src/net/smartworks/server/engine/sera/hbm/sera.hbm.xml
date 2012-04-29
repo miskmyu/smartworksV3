@@ -44,6 +44,7 @@
 		<id name="userId" column="userId" type="string" length="50">
 			<generator class="assigned"/>
 		</id>
+		<property name="userName" type="string" length="50"/>
 		<property name="email" type="string" length="50"/>
 		<property name="birthday" type="timestamp"/>
 		<property name="sex" type="int"/>

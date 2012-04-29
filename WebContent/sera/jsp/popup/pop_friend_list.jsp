@@ -20,7 +20,7 @@
 	boolean isMultiSelectable = false;
 	isMultiSelectable = Boolean.parseBoolean(request.getParameter("multiUsers"));
 	
-	SeraUserInfo[] friends = smartWorks.getFriendsById(cUser.getId(), null,  -1);
+	SeraUserInfo[] friends = smartWorks.getFriendsById(cUser.getId(), null,  -1, null);
 	String iconType = null;
 %>
 

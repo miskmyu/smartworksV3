@@ -488,7 +488,7 @@ public interface ISmartWorks {
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 
-	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception;
 
 	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
 

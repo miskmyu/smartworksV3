@@ -999,8 +999,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
-		return seraService.getFriendsById(userId, lastId, maxList);
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception {
+		return seraService.getFriendsById(userId, lastId, maxList, key);
 	}
 
 	@Override

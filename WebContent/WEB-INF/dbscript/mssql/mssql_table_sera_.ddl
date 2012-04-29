@@ -223,6 +223,7 @@ CREATE TABLE Friends (
 
 CREATE TABLE SeraUserDetail (
 	userId varchar(50) NOT NULL,
+	userName varchar(50),
 	email varchar(50),
 	birthday datetime,
 	sex int,
@@ -724,9 +725,6 @@ update swform set content='<form id="sera_mission" version="1" name="미션관�
 	</graphic>
 </form>' where formid='sera_mission'
 
-
-
-
 CREATE TABLE CourseReview (
 	objId varchar(50) NOT NULL,
 	courseId varchar(50),
@@ -757,3 +755,5 @@ CREATE TABLE CourseTeamUser (
 	memberSeq int,
 	primary key(objId, userId)
 );
+
+ALTER TABLE SeraUserDetail add userName varchar(50);
