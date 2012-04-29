@@ -119,6 +119,10 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(newBoard) && newBoard.attr('seraBoard')==="true"){
+					target.find('.js_select_work_space').hide();
+					target.find('.js_select_access_level options').
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				
