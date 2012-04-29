@@ -25,7 +25,7 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 	var value = (options.dataField && options.dataField.value) || '';
 	options.container.attr('refForm', refFormId).attr('refFormField', refFormFieldId).attr('refRecordId', refRecordId);
 
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
@@ -33,7 +33,7 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = " class='fieldline sw_required' ";
@@ -81,13 +81,13 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.buildEx = function(config){
 
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="refFormField" viewingType="refFormField"/>' +
 				        	'<refForm id="'+ options.refFormId +'" ver="0">' +
 								'<name>null</name><category id="null">null</category><field id="' + refFormFieldId + '"></field>' +
 							'</refForm>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '"/>' +
-					'</formEntity>');
+					'</formEntity>'));
 	var $formCol = $('<td class="form_col js_type_refFormField" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.RefFormFieldBuilder.build({

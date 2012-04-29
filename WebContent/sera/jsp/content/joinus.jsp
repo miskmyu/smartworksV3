@@ -565,7 +565,7 @@ function submitForms() {
 
 $(function() {
 	$('.js_joinus_first_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var joinusFirst = input.parents('.js_joinus_first');
 		var userAgreement = joinusFirst.find('input[name="rdoUserAgreement"]:checked').attr('value');
 		if(userAgreement !== "agree"){
@@ -591,7 +591,7 @@ $(function() {
 	});
 	
 	$('.js_joinus_second_btn').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var joinUs = $('.js_joinus_page');
 		if(!joinUs.find('input[name="txtUserId"]').hasClass('sw_dup_checked')){
 			smartPop.showInfo(smartPop.WARN, "아이디 중복확인을 수행하지않았습니다. 중복확인을 수행바랍니다!");
@@ -637,7 +637,7 @@ $(function() {
 	});
 	
 	$('.js_check_iddup_btn').live('click', function(e){
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		var target = input.siblings('input[name="txtUserId"]');
 		var userId = target.attr('value');
 		if(!target.valid()){
@@ -662,7 +662,7 @@ $(function() {
 	});
 	
 	$('.js_change_id_btn').live('click', function(e) {
-		var input = $(e.target).parent();
+		var input = $(targetElement(e)).parent();
 		var target = input.siblings('input[name="txtUserId"]');
 		target.removeClass('sw_dup_checked').attr('readonly', false);
 		input.hide().siblings('.js_check_iddup_btn').show();;

@@ -21,7 +21,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	var value = (options.dataField && options.dataField.value) || '';
 	var isTempfile = (options.dataField && options.dataField.isTempfile) || false;
 	var $entity = options.entity;
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
@@ -30,7 +30,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = ' class="sw_required"';
@@ -77,10 +77,10 @@ SmartWorks.FormRuntime.FileFieldBuilder.buildEx = function(config){
 
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="fileField" viewingType="fileField"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '"/>' +
-					'</formEntity>');
+					'</formEntity>'));
 	var $formCol = $('<td class="form_col js_type_fileField" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.FileFieldBuilder.build({

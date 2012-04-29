@@ -104,7 +104,7 @@ qq.contains = function(parent, descendant){
 qq.toElement = (function(){
     var div = document.createElement('div');
     return function(html){
-        div.innerHTML = html;
+        $(div).html(html);
         var element = div.firstChild;
         div.removeChild(element);
         return element;
@@ -521,7 +521,7 @@ qq.FileUploader = function(o){
     qq.extend(this._options, o);       
 
     this._element = this._options.element;
-    this._element.innerHTML = this._options.template;        
+    $(this._element).html(this._options.template);        
     this._listElement = this._options.listElement || this._find(this._element, 'list');
     
     this._classes = this._options.classes;
