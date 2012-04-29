@@ -13,6 +13,7 @@ import java.util.Date;
 public class SeraUserDetail {
 	
 	private String userId;
+	private String userName;
 	private String email;
 	private Date birthday;
 	private int sex = 0;
@@ -31,6 +32,12 @@ public class SeraUserDetail {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getEmail() {
 		return email;

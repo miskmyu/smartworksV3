@@ -15,7 +15,7 @@
 	String userId = request.getParameter("userId");
 	String lastId = request.getParameter("lastId");
 	
-	SeraUserInfo[] friends = smartWorks.getFriendsById(userId, lastId, FriendList.MAX_FRIEND_LIST);
+	SeraUserInfo[] friends = smartWorks.getFriendsById(userId, lastId, FriendList.MAX_FRIEND_LIST, null);
 	
 	if(!SmartUtil.isBlankObject(friends)){
 		for(int i=0; i<friends.length; i++){

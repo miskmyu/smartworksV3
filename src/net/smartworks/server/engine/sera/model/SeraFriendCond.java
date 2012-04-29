@@ -27,6 +27,7 @@ public class SeraFriendCond extends Cond{
 	private String requestIdOrReceiveId;
 	private String lastFriendName;
 	private String lastRequestName;
+	private String key;
 
 	public String getObjId() {
 		return objId;
@@ -93,6 +94,12 @@ public class SeraFriendCond extends Cond{
 	}
 	public void setLastRequestName(String lastRequestName) {
 		this.lastRequestName = lastRequestName;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 }
