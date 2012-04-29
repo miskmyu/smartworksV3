@@ -87,7 +87,7 @@
 	<!--
 	<script type="text/javascript" src="js/jquery/gcal.js"></script>
 	-->
-	<script type="text/javascript" src="js/jquery/fullcalendar.min.js"></script>
+	<script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 	
 	<script type="text/javascript" src="js/jstorage/jstorage.js"></script>
 	<script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
