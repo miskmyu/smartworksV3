@@ -60,7 +60,7 @@ function updateNoticeCount(message){
 <%
 if(isAuthenticated){
 %>
-	<div class="hd_shadow js_header_page">
+	<div class="hd_shadow bg_no js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
 			<div class="top_logo"><a href="logins.sw"></a></div>
