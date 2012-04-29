@@ -55,11 +55,13 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('setMyProfileSucceed'));
+					smartPop.showInfo(smartPop.INFO, "계정정보가 정상적으로 수정되었습니다!", function(){
+						document.location.href = "myPAGE.sw";
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('setMyProfileError'));
+					smartPop.showInfo(smartPop.ERROR, "계정정보 수정에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
