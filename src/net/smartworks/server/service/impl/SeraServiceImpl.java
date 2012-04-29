@@ -1669,14 +1669,15 @@ public class SeraServiceImpl implements ISeraService {
 			seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 
+			boolean isFriend = false;
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
+
 			List userInfoList = new ArrayList();
 			if(finalUserExtends != null) {
 				for(SwoUserExtend swoUserExtend : finalUserExtends) {
 					SeraUserInfo member = new SeraUserInfo();
 					String id = swoUserExtend.getId();
 					member.setId(id);
-					boolean isFriend = false;
-					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -1712,7 +1713,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	
 	@Override
-	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception{
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception{
 		try {
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
@@ -1724,6 +1725,8 @@ public class SeraServiceImpl implements ISeraService {
 				seraFriendCond.setLastFriendName(lastFriendName);
 			}
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			if(key != null)
+				seraFriendCond.setKey(key);
 			seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setPageNo(0);
 			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
@@ -1758,6 +1761,8 @@ public class SeraServiceImpl implements ISeraService {
 			User currentUser = SmartUtil.getCurrentUser();
 			String currentUserId = currentUser.getId();
 
+			boolean isFriend = false;
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 			seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 
@@ -1768,8 +1773,6 @@ public class SeraServiceImpl implements ISeraService {
 					SeraUserInfo member = new SeraUserInfo();
 					String id = swoUserExtend.getId();
 					member.setId(id);
-					boolean isFriend = false;
-					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -4111,10 +4114,11 @@ public class SeraServiceImpl implements ISeraService {
 		swoUser.setNickName(txtNickName);
 		
 		swoMgr.setUser(txtUserId, swoUser, IManager.LEVEL_ALL);
-		
+
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		SeraUserDetail seraUser = new SeraUserDetail();
 		seraUser.setUserId(txtUserId);
+		seraUser.setUserName(hdnUserName);
 		seraUser.setEmail(txtUserId);
 		if (!CommonUtil.isEmpty(txtBirthYear) && !CommonUtil.isEmpty(txtBirthMonth) && !CommonUtil.isEmpty(txtBirthDay)) {
 			String birthDayString = txtBirthYear + (txtBirthMonth.length() == 1 ? "0" + txtBirthMonth : txtBirthMonth) + (txtBirthDay.length() == 1 ? "0" + txtBirthDay : txtBirthDay) + "0000";
@@ -4128,7 +4132,7 @@ public class SeraServiceImpl implements ISeraService {
 		seraUser.setGoal(txtChallengingTarget);
 		
 		seraMgr.setSeraUser(txtUserId, seraUser);
-		
+
 		return txtUserId;
 	}
 	@Override
@@ -4883,16 +4887,42 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		List userInfoList = new ArrayList();
 		SeraUserInfo[] requestUsers = null;
+
+		User currentUser = SmartUtil.getCurrentUser();
+		String currentUserId = currentUser.getId();
+
+		SeraFriendCond seraFriendCond = new SeraFriendCond();
+		seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
+		boolean isFriend = false;
+		SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
+
 		if(userExtends != null) {
 			for(int i = 0; i < userExtends.length; i++) {
 				SwoUserExtend swoUserExtend = userExtends[i];
-				UserInfo member = new SeraUserInfo();
-				member.setId(swoUserExtend.getId());
+				SeraUserInfo member = new SeraUserInfo();
+				String id = swoUserExtend.getId();
+				member.setId(id);
 				member.setName(swoUserExtend.getName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
 				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				member.setId(id);
+				if(!CommonUtil.isEmpty(mySeraFriends)) {
+					for(SeraFriend seraFriend : mySeraFriends) {
+						if(id.equals(seraFriend.getFriendId())) {
+							isFriend = true;
+							break;
+						}
+					}
+				}
+				member.setFriend(isFriend);
+				SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(currentUserId, id);
+				String goal = null;
+				if(seraUserDetail != null)
+					goal = seraUserDetail.getGoal();
+				member.setGoal(goal);
 				userInfoList.add(member);
 				
 				if (maxList > 0) {
@@ -4931,7 +4961,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, requestFriendsIdArray, null, maxList);
 	}
-	private SeraUserInfo[] getNotMyFrined (String userId, String lastId, int maxList) throws Exception {
+	private SeraUserInfo[] getNotMyFrined(String userId, String lastId, int maxList, String key) throws Exception {
 
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -4939,7 +4969,7 @@ public class SeraServiceImpl implements ISeraService {
 		SeraFriendCond friendCond = new SeraFriendCond();
 		friendCond.setRequestIdOrReceiveId(userId);
 		SeraFriend[] myFriends = seraMgr.getFriends(userId, friendCond);
-		
+
 		List myFriendsUserIdList = new ArrayList();
 		if (myFriends != null) {
 			for (int i = 0; i < myFriends.length; i++) {
@@ -4965,6 +4995,9 @@ public class SeraServiceImpl implements ISeraService {
 		String[] notMyFriendsArray = null;
 		SeraUserDetailCond cond = new SeraUserDetailCond();
 		cond.setUserIdNotIns(myFriendsUserIdArray);
+		if(key != null)
+			cond.setKey(key);
+
 		SeraUserDetail[] notMyFrinedsUser = seraMgr.getSeraUserDetails(userId, cond);
 		if (notMyFrinedsUser == null || notMyFrinedsUser.length == 0) {
 			return null;
@@ -4997,8 +5030,8 @@ public class SeraServiceImpl implements ISeraService {
 		
 		FriendInformList friendInformList = new FriendInformList();
 		
-		friendInformList.setFriends(getFriendsById(userId, null, maxList));
-		friendInformList.setNonFriends(getNotMyFrined(userId, null, maxList));
+		friendInformList.setFriends(getFriendsById(userId, null, maxList, null));
+		friendInformList.setNonFriends(getNotMyFrined(userId, null, maxList, null));
 		friendInformList.setRequesters(getRequestFriend(userId, null, maxList));
 		
 		SeraFriendCond friendCond = new SeraFriendCond();
@@ -5033,9 +5066,9 @@ public class SeraServiceImpl implements ISeraService {
 		case FriendInformList.TYPE_FRIEND_REQUESTERS:
 			return getRequestFriend(userId, lastId, maxList);
 		case FriendInformList.TYPE_FRIENDS:
-			return getFriendsById(userId, lastId, maxList);
+			return getFriendsById(userId, lastId, maxList, null);
 		case FriendInformList.TYPE_NON_FRIENDS:
-			return getNotMyFrined(userId, lastId, maxList);
+			return getNotMyFrined(userId, lastId, maxList, null);
 		default:
 			return null;
 		}
@@ -5047,12 +5080,89 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getFriendRequestsForMe(null, 0);
+		try {
+			if(CommonUtil.isEmpty(userId))
+				return null;
+
+			SeraUserInfo[] seraUserInfos = null;
+
+			if(type == 2) {
+				seraUserInfos = getFriendsById(userId, null, -1, key);
+			} else if(type == 3) {
+				seraUserInfos = getNotMyFrined(userId, null, -1, key);
+			}
+
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
+
 	@Override
 	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
-		return SeraTest.getFriendRequestsForMe(null, 0);
+		try {
+			if(CommonUtil.isEmpty(courseId))
+				return null;
+
+			SeraUserInfo[] seraUserInfos = null;
+
+			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			swoGroupCond.setId(courseId);
+
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			SwoGroup swoGroup = getSwoManager().getGroup(userId, swoGroupCond, IManager.LEVEL_ALL);
+
+			if(SmartUtil.isBlankObject(swoGroup))
+				return null;
+
+			SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+
+			if(CommonUtil.isEmpty(swoGroupMembers))
+				return null;
+
+			String[] memberIds = new String[swoGroupMembers.length];
+			int i;
+			for(i=0; i<swoGroupMembers.length; i++) {
+				SwoGroupMember swoGroupMember =  swoGroupMembers[i];
+				String memberId = swoGroupMember.getUserId();
+				memberIds[i] = memberId;
+			}
+			memberIds[i+1] = swoGroup.getGroupLeader();
+
+			SeraUserDetailCond cond = new SeraUserDetailCond();
+			if(type == 2) {
+				cond.setUserIdIns(memberIds);
+			} else if(type == 3) {
+				cond.setUserIdNotIns(memberIds);
+			}
+			if(key != null)
+				cond.setKey(key);
+
+			SeraUserDetail[] seraUserDetails = getSeraManager().getSeraUserDetails(userId, cond);
+
+			if(CommonUtil.isEmpty(seraUserDetails))
+				return null;
+
+			memberIds = new String[seraUserDetails.length];
+
+			for(int j=0; j<seraUserDetails.length; j++) {
+				SeraUserDetail seraUserDetail = seraUserDetails[j];
+				memberIds[j] = seraUserDetail.getUserId();
+			}
+
+			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, -1);
+
+			return seraUserInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

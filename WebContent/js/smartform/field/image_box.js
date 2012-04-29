@@ -55,7 +55,6 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	}
 
 	if (!readOnly) {
-		var a = $('#' + id);
 		createUploader(value, $('#'+id), false, true);
 	}
 	return options.container;
@@ -81,7 +80,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.buildEx = function(config){
 	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="imageBox" viewingType="imageBox"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly + '" labelWidth="'+ labelWidth + '" pictureWidth="'+ options.pictureWidth + '" pictureHeight="' + options.pictureHeight + '"/>' +
-					'</formEntity>'));
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_imageBox" fieldid="' + options.fieldId + '"  colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.ImageBoxBuilder.build({
