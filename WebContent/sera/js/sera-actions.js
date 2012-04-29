@@ -754,7 +754,9 @@ $(function() {
 	
 	$('.js_more_course_reviews_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_course_reviews_btn');
-		console.log('input=', input, ', target=', $(targetElement(e)));
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var courseId = input.attr('courseId');
 		var fromDate = input.attr('fromDate');
 		smartPop.progressCont(input.find('.js_progress_span'));
@@ -1073,6 +1075,8 @@ $(function() {
 	
 	$('.js_more_sera_instances_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_sera_instances_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
 		var instanceType = input.attr('instanceType');
 		var userId = input.attr('userId');
 		var courseId = input.attr('courseId');
@@ -1102,6 +1106,9 @@ $(function() {
 	
 	$('.js_more_friends_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_friends_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var type = input.attr('requestType');
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');
