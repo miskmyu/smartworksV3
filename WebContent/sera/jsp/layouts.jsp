@@ -45,7 +45,7 @@
 				request.getSession().setAttribute("loginId", ((Login) auth.getPrincipal()).getId());
 			}
 		}
-	} else {
+	} else if(!request.getRequestURI().equals("Header.sw")) {
 		response.sendRedirect("logins.sw");
 		return;
 	}

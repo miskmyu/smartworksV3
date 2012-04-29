@@ -77,7 +77,13 @@ public class SeraController {
 	@RequestMapping("/Course")
 	public ModelAndView Course(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course.jsp", "Course.tiles");
+		return SmartUtil.returnMnv(request, "", "Course.tiles");
+	}
+
+	@RequestMapping("/Header")
+	public ModelAndView Header(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "", "Header.tiles");
 	}
 
 	@RequestMapping("/createCourse")
