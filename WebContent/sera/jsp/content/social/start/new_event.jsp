@@ -115,12 +115,16 @@ function submitForms() {
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+	
+	session.setAttribute("wid", "");
+	session.setAttribute("cid", "");
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="up_wrap js_new_event_page" workId="<%=SmartWork.ID_EVENT_MANAGEMENT%>">
+<div class="up_wrap js_new_event_page" workId="<%=SmartWork.ID_EVENT_MANAGEMENT%>" seraEvent="true">
 	<div class="up_point pos_works js_up_pointer"></div>
 	<div class="form_wrap up up_padding">
 		<!-- 폼- 확장 -->
