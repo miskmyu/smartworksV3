@@ -1547,7 +1547,9 @@ public class SeraServiceImpl implements ISeraService {
 			CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
 
 			Course course = this.convertSwoGroupToCourse(group, courseDetail);
-			//Course course = SeraTest.getCourseById(courseId);
+
+			getStarPointAndScorePointUsers(course, courseId);
+
 			return course;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -2350,6 +2352,7 @@ public class SeraServiceImpl implements ISeraService {
 				courseReviewCond.setCourseId(keyId);
 				CourseReview[] courseReviews = getSeraManager().getCourseReviews(userId, courseReviewCond);
 				if(!CommonUtil.isEmpty(courseReviews)) {
+					starPointUsers = courseReviews.length;
 					for(CourseReview courseReview : courseReviews) {
 						Double reviewStarPoint = courseReview.getStarPoint();
 						starPoint = starPoint + (reviewStarPoint != null ? reviewStarPoint : 0);
@@ -2367,7 +2370,7 @@ public class SeraServiceImpl implements ISeraService {
 
 	@Override
 	public MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception {
-		try{
+		try {
 
 			//코스에 속한 미션들을 가져온다
 			User user = SmartUtil.getCurrentUser();
@@ -2437,14 +2440,14 @@ public class SeraServiceImpl implements ISeraService {
 			User user = SmartUtil.getCurrentUser();
 			if(user == null)
 				return null;
-	
+
 			SwfFormCond swfCond = new SwfFormCond();
 			swfCond.setCompanyId(user.getCompanyId());
 			swfCond.setId(SeraConstant.MISSION_FORMID);
-	
+
 			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 			SwfForm swfForm = swfMgr.getForms(user.getId(), swfCond, IManager.LEVEL_LITE)[0];
-			
+
 			RequestParams params = new RequestParams();
 			InstanceInfoList infoList = getIWorkInstanceList(swfForm.getPackageId(), missionId, params);
 
@@ -2452,8 +2455,11 @@ public class SeraServiceImpl implements ISeraService {
 				return null;
 
 			MissionInstanceInfo[] missions = (MissionInstanceInfo[])infoList.getInstanceDatas();
-			
-			return missions[0];
+
+			MissionInstanceInfo missionInstancInfo = missions[0];
+			getStarPointAndScorePointUsers(missionInstancInfo, missionInstancInfo.getId());
+
+			return missionInstancInfo;
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -4379,7 +4385,6 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	
 	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
@@ -4495,12 +4500,6 @@ public class SeraServiceImpl implements ISeraService {
 		CourseInfo[] courseInfo = this.convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		return courseInfo;
 	}
-	
-	
-	
-	
-	
-	
 
 	private SeraUserInfo[] getJoinRequesterByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
 		User user = SmartUtil.getCurrentUser();
@@ -4710,7 +4709,7 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 
 		String lastUserName = null;
-		if (CommonUtil.isEmpty(lastId)) {
+		if(!CommonUtil.isEmpty(lastId)) {
 			SwoUser lastUser = swoMgr.getUser(userId, lastId, IManager.LEVEL_LITE);
 			if (lastUser != null)
 				lastUserName = lastUser.getName();
