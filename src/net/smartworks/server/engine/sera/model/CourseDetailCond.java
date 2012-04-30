@@ -40,7 +40,14 @@ public class CourseDetailCond extends Cond {
 	private Date createDateFrom;
 	private Date createDateTo;
 	private int coursePointFrom = -1;
+	private int coursePointTo = -1;
 
+	public int getCoursePointTo() {
+		return coursePointTo;
+	}
+	public void setCoursePointTo(int coursePointTo) {
+		this.coursePointTo = coursePointTo;
+	}
 	public LocalDate getStartFrom() {
 		return startFrom;
 	}
