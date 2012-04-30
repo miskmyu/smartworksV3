@@ -1104,12 +1104,16 @@ $(function() {
 		return false;
 	});
 	
+	var TYPE_FRIENDS = 2;
+	var TYPE_NON_FRIENDS = 3;
+
 	$('.js_more_friend_informs_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_friend_informs_btn');
 		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
 			return false;
 		
 		var type = input.attr('requestType');
+		var typeInt = parseInt(type);
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
@@ -1124,9 +1128,12 @@ $(function() {
 				var friendPage = input.parents('.js_friend_page');
 				var othersFriendPage = input.parents('.js_others_friend_page');
 				if(!isEmpty(friendPage)){
-					friendPage.find('.js_friend_list').append(data);					
+					if(typeInt == TYPE_FRIENDS)
+						friendPage.find('.js_friend_list').append(data);
+					else if(typeInt == TYPE_NON_FRIENDS)
+						friendPage.find('.js_non_friend_list').append(data);
 				}else if(!isEmpty(othersFriendPage)){
-					othersFriendPage.find('.js_friend_list').append(data);					
+					othersFriendPage.find('.js_friend_list').append(data);
 				}
 				input.remove();
 				smartPop.closeProgress();
@@ -1519,9 +1526,7 @@ $(function() {
 	$('.js_notification_list_box').live('focusout', function(e){
 		$(targetElement(e)).slideUp();
 	});
-	
-	var TYPE_FRIENDS = 2;
-	var TYPE_NON_FRIENDS = 3;
+
 	$('.js_friend_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');

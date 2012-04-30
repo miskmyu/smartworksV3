@@ -15,7 +15,7 @@ public class CourseReview extends MisObject {
 	private static final long serialVersionUID = 1L;
 	private String courseId;
 	private String content;
-	private double startPoint;
+	private double starPoint;
 
 	public String getCourseId() {
 		return courseId;
@@ -29,11 +29,11 @@ public class CourseReview extends MisObject {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public double getStartPoint() {
-		return startPoint;
+	public double getStarPoint() {
+		return starPoint;
 	}
-	public void setStartPoint(double startPoint) {
-		this.startPoint = startPoint;
+	public void setStarPoint(double starPoint) {
+		this.starPoint = starPoint;
 	}
 
 }

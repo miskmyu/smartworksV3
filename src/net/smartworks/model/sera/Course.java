@@ -41,6 +41,7 @@ public class Course extends Group {
 	private MissionInstanceInfo[] missions;
 	private int lastMissionIndex=-1;
 	private double starPoint;
+	private int starPointUsers;
 	private int likes;
 
 	public int getLikes() {
@@ -54,6 +55,12 @@ public class Course extends Group {
 	}
 	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
+	}
+	public int getStarPointUsers() {
+		return starPointUsers;
+	}
+	public void setStarPointUsers(int starPointUsers) {
+		this.starPointUsers = starPointUsers;
 	}
 	public int getLastMissionIndex() {
 		return lastMissionIndex;
