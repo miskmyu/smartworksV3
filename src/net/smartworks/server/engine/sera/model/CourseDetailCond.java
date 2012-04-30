@@ -23,6 +23,8 @@ public class CourseDetailCond extends Cond {
 	private String[] keywords;
 	private int duration;
 	private LocalDate start;
+	private LocalDate startFrom;
+	private LocalDate startTo;
 	private LocalDate end;
 	private LocalDate endFrom;
 	private LocalDate endTo;
@@ -39,6 +41,18 @@ public class CourseDetailCond extends Cond {
 	private Date createDateTo;
 	private int coursePointFrom = -1;
 
+	public LocalDate getStartFrom() {
+		return startFrom;
+	}
+	public void setStartFrom(LocalDate startFrom) {
+		this.startFrom = startFrom;
+	}
+	public LocalDate getStartTo() {
+		return startTo;
+	}
+	public void setStartTo(LocalDate startTo) {
+		this.startTo = startTo;
+	}
 	public String getCourseId() {
 		return courseId;
 	}
