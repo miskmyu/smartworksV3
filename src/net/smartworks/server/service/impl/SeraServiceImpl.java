@@ -3888,16 +3888,19 @@ public class SeraServiceImpl implements ISeraService {
 	public CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
-		courseDetailCond.setEndFrom(new LocalDate());
-		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false)});
-		courseDetailCond.setPageNo(0);
-		courseDetailCond.setPageSize(maxList);
-		
+
 		if (fromCourseId != null) {
 			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
 			if (lastCourseDetailInfo != null)
-				courseDetailCond.setCoursePointFrom(lastCourseDetailInfo.getCoursePoint());
+				courseDetailCond.setCoursePointTo(lastCourseDetailInfo.getCoursePoint());
 		}
+
+		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
+		
+		//courseDetailCond.setEndFrom(new LocalDate());
+		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false)});
+		courseDetailCond.setPageNo(0);
+		courseDetailCond.setPageSize(maxList);
 		
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 		if (courseDetails == null || courseDetails.length == 0) 
@@ -3914,8 +3917,20 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 	    
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		CourseInfo[] result = null;
+		
+		if (totalSize > maxList) {
+			result = new CourseInfo[courses.length + 1];
+			for (int i = 0; i < courses.length; i++) {
+				result[i] = courses[i];
+			}
+			result[courses.length] = new CourseInfo();
+		} else {
+			result = courses;
+		}
+		
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
-		return courses;
+		return result;
 	}
 	@Override
 	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
@@ -3926,16 +3941,19 @@ public class SeraServiceImpl implements ISeraService {
 		//추천 받은 코스중에 날짜순으로 maxList 만큼
 	    CourseDetailCond courseDetailCond = new CourseDetailCond();
 	    courseDetailCond.setRecommended(true);
-	    courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
-	    courseDetailCond.setEndFrom(new LocalDate());
-	    courseDetailCond.setPageNo(0);
-	    courseDetailCond.setPageSize(maxList);
 	    
 		if (fromCourseId != null) {
 			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
 			if (lastCourseDetailInfo != null)
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
+
+		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
+	    
+	    courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
+	    //courseDetailCond.setEndFrom(new LocalDate());
+	    courseDetailCond.setPageNo(0);
+	    courseDetailCond.setPageSize(maxList);
 		
 	    CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 	    if (courseDetails == null || courseDetails.length == 0) 
@@ -3948,12 +3966,24 @@ public class SeraServiceImpl implements ISeraService {
 	    
 	    SwoGroupCond groupCond = new SwoGroupCond();
 	    groupCond.setGroupIdIns(courseIds);
+		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
 	    ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 	    SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 	    
 	    CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+	    CourseInfo[] result = null;
+		
+		if (totalSize > maxList) {
+			result = new CourseInfo[courses.length + 1];
+			for (int i = 0; i < courses.length; i++) {
+				result[i] = courses[i];
+			}
+			result[courses.length] = new CourseInfo();
+		} else {
+			result = courses;
+		}
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
-	    return courses;
+	    return result;
 	}
 	@Override
 	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
@@ -4312,9 +4342,6 @@ public class SeraServiceImpl implements ISeraService {
 	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
-		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
-		courseDetailCond.setPageNo(0);
-		courseDetailCond.setPageSize(maxList);
 		
 		if (fromCourseId != null) {
 			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
@@ -4322,6 +4349,11 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
 		
+		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
+
+		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
+		courseDetailCond.setPageNo(0);
+		courseDetailCond.setPageSize(maxList);
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 		if (courseDetails == null || courseDetails.length == 0) 
 			return null;
@@ -4338,22 +4370,38 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 	    
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		CourseInfo[] result = null;
+
+		if (totalSize > maxList) {
+			result = new CourseInfo[courses.length + 1];
+			for (int i = 0; i < courses.length; i++) {
+				result[i] = courses[i];
+			}
+			result[courses.length] = new CourseInfo();
+		} else {
+			result = courses;
+		}
+		
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
-		return courses;
+		return result;
 	}
 	public CourseInfo[] getClosedCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		
+		if (fromCourseId != null) {
+			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
+			if (lastCourseDetailInfo != null)
+				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
+		}
+
+		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
+		
 		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
 		courseDetailCond.setPageNo(0);
 		courseDetailCond.setPageSize(maxList);
 		courseDetailCond.setEndTo(new LocalDate());
 
-		if (fromCourseId != null) {
-			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
-			if (lastCourseDetailInfo != null)
-				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
-		}
 		
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 		if (courseDetails == null || courseDetails.length == 0) 
@@ -4371,8 +4419,20 @@ public class SeraServiceImpl implements ISeraService {
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 	    
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		CourseInfo[] result = null;
+		
+		if (totalSize > maxList) {
+			result = new CourseInfo[courses.length + 1];
+			for (int i = 0; i < courses.length; i++) {
+				result[i] = courses[i];
+			}
+			result[courses.length] = new CourseInfo();
+		} else {
+			result = courses;
+		}
+		
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
-		return courses;
+		return result;
 	}
 	
 	@Override
@@ -4399,14 +4459,19 @@ public class SeraServiceImpl implements ISeraService {
 		
 		CourseDetailCond cond = new CourseDetailCond();
 		cond.setCategories(new String[]{categoryName});
-		cond.setOrders(new Order[]{new Order("createDate", false)});
-		cond.setPageNo(0);
-		cond.setPageSize(maxList);
+		
 		if (!CommonUtil.isEmpty(lastId)) {
 			CourseDetail lastCoureDetail = seraMgr.getCourseDetailById(lastId);
 			if (lastCoureDetail != null)
 				cond.setCreateDateTo(lastCoureDetail.getCreateDate());
 		}
+
+		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", cond);
+		
+		cond.setOrders(new Order[]{new Order("createDate", false)});
+		cond.setPageNo(0);
+		cond.setPageSize(maxList);
+		
 		CourseDetail[] courseDetails = seraMgr.getCourseDetails("", cond);
 		
 		if (courseDetails == null)
@@ -4419,18 +4484,23 @@ public class SeraServiceImpl implements ISeraService {
 		
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setGroupIdIns(groupIdIns);
-		
+		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		CourseInfo[] courseInfo = this.convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
-		return courseInfo;
+		
+		CourseInfo[] result = null;
+		if (totalSize > maxList) {
+			result = new CourseInfo[courseInfo.length + 1];
+			for (int i = 0; i < courseInfo.length; i++) {
+				result[i] = courseInfo[i];
+			}
+			result[courseInfo.length] = new CourseInfo();
+		} else {
+			result = courseInfo;
+		}
+		return result;
 	}
 	
-	
-	
-	
-	
-	
-
 	private SeraUserInfo[] getJoinRequesterByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
@@ -5146,20 +5216,39 @@ public class SeraServiceImpl implements ISeraService {
 	public Notice[] getSeraNoticesForMe() throws Exception {
 		// TODO Auto-generated method stub
 		
+		String userId = null;
+		
+		User user = SmartUtil.getCurrentUser();
+		if (user != null)
+			userId = user.getId();
+		
 		Notice[] resultNotice = new Notice[SeraNotice.NUMBER_OF_NOTICES];
 		
+		Notice[] noticeNotices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, Notice.TYPE_NOTIFICATION);
 		SeraNotice seraNotificationNotice = new SeraNotice(SeraNotice.TYPE_NOTIFICATION, 0);
-		
+		if (noticeNotices != null) {
+			Notice notice = noticeNotices[0];
+			//seraNotificationNotice.setLength(notice.getLength());
+		}
+		//보류
 		SeraNotice seraMyCourseNotice = new SeraNotice(SeraNotice.TYPE_MY_COURSE, 0);
+		
 		
 		SeraNotice seraFriendNotice = new SeraNotice(SeraNotice.TYPE_FRIEND, 0);
 		
+		
+		Notice[] messageNotices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, Notice.TYPE_MESSAGE);
 		SeraNotice seraMessageNotice = new SeraNotice(SeraNotice.TYPE_MESSAGE ,0);
+		if (messageNotices != null) {
+			Notice notice = messageNotices[0];
+			//seraMessageNotice.setLength(notice.getLength());
+		}
 		
+		//보류
 		SeraNotice seraCalendarNotice = new SeraNotice(SeraNotice.TYPE_CALENDAR ,0);
-		
+		//보류
 		SeraNotice seraBadgeNotice = new SeraNotice(SeraNotice.TYPE_BADGE ,0);
-		
+		//보류
 		SeraNotice seraEventNotice = new SeraNotice(SeraNotice.TYPE_EVENT ,0);
 		
 		resultNotice[SeraNotice.INDEX_NOTIFICATION] = seraNotificationNotice;
