@@ -64,7 +64,7 @@ if(isAuthenticated){
 	<div class="header_section js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
-			<div class="top_logo"><a href="logins.sw"></a></div>
+			<div class="top_logo"><a href="login.sw"></a></div>
 			<ul class="top_menu2">
 				<li class="fl">
 					<a href="Course.sw"><img width="101" height="28" title="Course" alt="Course" src="sera/images/sera2_main_btnTopMenu1_off.png"></a>
