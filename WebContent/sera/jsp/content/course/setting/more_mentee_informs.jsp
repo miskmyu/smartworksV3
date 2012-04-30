@@ -26,8 +26,7 @@
 	%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs" requestType="<%=type %>" courseId="<%=courseId %>" lastId="<%=users[i-1].getId()%>">
-					<div class="icon_more">더보기</div>
-					<span class="js_progress_span"></span>
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 			<%
@@ -38,8 +37,16 @@
 			%>
 				<div class="panel_rds_block mb20 js_join_requester_item" courseId="<%=courseId%>" userId="<%=user.getId()%>">
 					<ul>
-						<li class="pl0pr10"><img src="<%=user.getMidPicture() %>" /></li>
-						<li class="w470"><span> <%=user.getNickName() %><br /> <%=user.getName() %><br /><%=user.getId()%></span></li>
+						<li class="pl0pr10">
+							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
+								<img class="profile_size_m" src="<%=user.getMidPicture() %>" />
+							</a>
+						</li>
+						<li class="w470">
+							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
+								<span> <%=user.getNickName() %><br /> <%=user.getName() %><br /><%=user.getId()%></span>
+							</a>
+						</li>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_default_l mr5 js_approve_join_btn"><div class="btn_default_r">승 인</div></div>
@@ -56,8 +63,16 @@
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10 cb js_mentee_item" courseId="<%=courseId%>" userId="<%=user.getId()%>">
 					<ul>
-						<li class="pl0pr10"><img src="<%=user.getMidPicture() %>" /></li>
-						<li class="w90"><span><%=user.getNickName() %><br /> <span class="cb t_id"><%=user.getId() %></span> </span></li>
+						<li class="pl0pr10">
+							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
+								<img class="profile_size_m" src="<%=user.getMidPicture() %>" />
+							</a>
+						</li>
+						<li class="w90">
+							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
+								<span><%=user.getNickName() %><br /> <span class="cb t_id"><%=user.getId() %></span> </span>
+							</a>
+						</li>
 						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
 						<li class="bo_l" style="width: 15%"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
 						<li class="bo_l" style="width: 15%"><span> 참여 0일째 </span></li>>
@@ -80,7 +95,7 @@
 					<ul>
 						<li class="pl0pr10">
 							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
-								<img src="<%=user.getMidPicture() %>" />
+								<img class="profile_size_m" src="<%=user.getMidPicture() %>" />
 							</a>
 						</li>
 						<li class="w90">

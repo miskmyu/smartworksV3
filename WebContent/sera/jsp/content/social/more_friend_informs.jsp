@@ -26,7 +26,7 @@
 			if(i==FriendInformList.MAX_FRIEND_LIST){
 	%>
 				<!-- 더보기 -->
-				<div class="more js_more_friends_btn js_friend_item" requestType="<%=type %>" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
+				<div class="more js_more_friend_informs_btn" requestType="<%=type %>" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->

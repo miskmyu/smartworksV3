@@ -337,7 +337,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .bottom_info_space { clear:both; padding-top:10px; overflow:hidden}
 
 /* Note */
-.sm_notes {background: url("../images/ico_note_on.png") no-repeat 0 0; display:inline-block; padding:0 0 0 19px; line-height:17px; color:#939393}
+.sm_notes {background: url("../images/ico_note_off.png") no-repeat 0 0; display:inline-block; padding:0 0 0 19px; line-height:15px; color:#939393}
 .not_read .sm_notes { background: url("../images/ico_note_on.png") no-repeat 0 0; color:#2268bd !important}
 
 /* Event */

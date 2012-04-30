@@ -269,9 +269,9 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/more_courses.jsp", "");
 	}
 
-	@RequestMapping("/moreFriends")
-	public ModelAndView moreFriends(HttpServletRequest request, HttpServletResponse response) {
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/more_friends.jsp", "");
+	@RequestMapping("/moreFriendInforms")
+	public ModelAndView moreFriendInforms(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/more_friend_informs.jsp", "");
 	}
 
 	@RequestMapping("/moreMenteeInforms")
