@@ -180,6 +180,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		String courseId = null;
 		String[] courseIdIns = null;
 		Date fromDate = null;
+		Date startTo = null;
 		Date endDateTo = null;
 		Date endDateFrom = null;
 		boolean recommended = false;
@@ -191,6 +192,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if (cond != null) {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
+			startTo = cond.getStartTo();
 			fromDate = cond.getStart();
 			endDateFrom = cond.getEndFrom();
 			endDateTo = cond.getEndTo();
@@ -216,6 +218,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				}
 				buf.append(")");
 			}
+			if (startTo != null) 
+				buf.append(" and obj.start < :startTo");
 			if (fromDate != null) 
 				buf.append(" and obj.start > :fromDate");
 			if (endDateFrom != null) 
@@ -253,6 +257,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					query.setString("courseIdIn"+i, courseIdIns[i]);
 				}
 			}
+			if (startTo != null)
+				query.setTimestamp("startTo", startTo);
 			if (fromDate != null)
 				query.setTimestamp("fromDate", fromDate);
 			if (endDateFrom != null) 
