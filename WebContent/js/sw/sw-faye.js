@@ -102,7 +102,7 @@ var chatHistory = {
 			console.log('pushed');
 			histories.push(history);
 			$.jStorage.set(currentUserId+chatId, histories);
-			//console.log(histories);
+			console.log(histories);
 		}
 	},
 		
@@ -265,6 +265,7 @@ var smartTalk = {
 	restoreChatting : function(chatInfo, histories){
 		
 		smartTalk.startSubOnChatId(chatInfo);
+		console.log('called in restoreChatting chatinfo=', chatInfo, ', histories=', histories);
 		startChattingWindow(chatInfo);
 		var waitForChattingBox = function(){
 			//console.log("retries");
@@ -412,6 +413,7 @@ var smartTalk = {
 		} else if (type === msgType.WRITING_CHAT_MESSAGE) {
 
 		} else if (type === msgType.CHAT_MESSAGE) {
+				message['sendDate'] = (new Date());
 				receivedMessageOnChatId(message);
 				chatHistory.setHistory(chatId, message);
 		} else if( type === msgType.CHATTERS_INVITED){
@@ -538,6 +540,7 @@ var smartTalk = {
 	
 	storeAsyncMessage : function(chatId, message){
 		var chat = chatManager.chatById(chatId);
+		if(isEmpty(chat)) return;
 		var users = chat.users;
 		var paramsJson = {};
 		var chatters = new Array();
@@ -557,6 +560,7 @@ var smartTalk = {
 		paramsJson['senderId'] = currentUser.userId;
 		paramsJson['chatId'] = chatId;
 		paramsJson['senderInfo'] = senderInfo;
+		paramsJson['sendDate'] = (new Date());
 		paramsJson['chatters'] = chatters;
 		paramsJson['message'] = message;
 		for(var i=0; i<users.length; i++){

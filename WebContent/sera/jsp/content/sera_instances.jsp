@@ -87,8 +87,7 @@
 				<div class="js_sera_instance_item" >
 					<!-- 더보기 -->
 					<div class="more js_more_sera_instances_btn" instanceType="<%=instanceType %>"  userId="<%=userId %>" courseId="<%=courseId %>" missionId="<%=missionId %>" teamId="<%=teamId %>" lastDate="<%=lastDateStr%>">
-						<div class="icon_more">더보기</div>
-						<span class="js_progress_span"></span>
+						<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 					</div>
 					<!-- 더보기 //-->
 				</div>
@@ -381,7 +380,9 @@
 											<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
 										</div>
 										<div class="reply_text">
-											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+<!-- 											<div class="icon_delete fr js_delete_comment_btn"><a href="" title="댓글삭제">삭제</a></div>
+											<div class="icon_delete fr js_modify_comment_btn"><a href="" title="댓글수정">수정</a></div>
+ -->											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
 										</div>
 									</div>
 									<div class="stat_notice">
@@ -425,6 +426,14 @@
 																</div>
 															</a>
 															<div class="reply_text">
+																<%
+																if(comment.getOwner().getId().equals(cUser.getId())){
+																%>
+<!-- 																	<div class="icon_delete fr js_delete_comment_btn"><a href="" title="댓글삭제">삭제</a></div>
+																	<div class="icon_delete fr js_modify_comment_btn"><a href="" title="댓글수정">수정</a></div>
+ -->																<%
+																}
+																%>
 																<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 															</div>
 														</div>

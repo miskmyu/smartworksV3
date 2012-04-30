@@ -754,7 +754,9 @@ $(function() {
 	
 	$('.js_more_course_reviews_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_course_reviews_btn');
-		console.log('input=', input, ', target=', $(targetElement(e)));
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var courseId = input.attr('courseId');
 		var fromDate = input.attr('fromDate');
 		smartPop.progressCont(input.find('.js_progress_span'));
@@ -1073,6 +1075,8 @@ $(function() {
 	
 	$('.js_more_sera_instances_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_sera_instances_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
 		var instanceType = input.attr('instanceType');
 		var userId = input.attr('userId');
 		var courseId = input.attr('courseId');
@@ -1100,14 +1104,17 @@ $(function() {
 		return false;
 	});
 	
-	$('.js_more_friends_btn').live('click', function(e) {
-		var input = $(targetElement(e)).parents('.js_more_friends_btn');
+	$('.js_more_friend_informs_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_friend_informs_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var type = input.attr('requestType');
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');
 		smartPop.progressCont(input.find('.js_progress_span'));
 		$.ajax({
-			url : "moreFriends.sw",
+			url : "moreFriendInforms.sw",
 			data : {
 				type: type,
 				userId: userId,
@@ -1181,6 +1188,9 @@ $(function() {
 
 	$('.js_more_mentee_informs_btn').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_mentee_informs_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+
 		var requestType = input.attr('requestType');
 		var courseId = input.attr('courseId');
 		var lastId = input.attr('lastId');
@@ -1533,6 +1543,7 @@ $(function() {
 			friendCount = othersFriendPage.find('.js_friend_count');
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_sera_user_by_type.sw',
 			data : {
@@ -1548,8 +1559,11 @@ $(function() {
 				else{
 					friendCount.html(target.find('.js_friend_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1575,6 +1589,7 @@ $(function() {
 			nonFriendCount = othersFriendPage.find('.js_non_friend_count');
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_sera_user_by_type.sw',
 			data : {
@@ -1590,8 +1605,11 @@ $(function() {
 				else{
 					nonFriendCount.html(target.find('.js_non_friend_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1619,6 +1637,7 @@ $(function() {
 			menteeCount = inviteCourseMembers.find('.js_mentee_count');						
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_course_member_by_type.sw',
 			data : {
@@ -1634,8 +1653,11 @@ $(function() {
 				else{
 					menteeCount.html(target.find('.js_mentee_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;
 		
@@ -1661,6 +1683,7 @@ $(function() {
 			nonMenteeCount = inviteCourseMembers.find('.js_non_mentee_count');						
 		}
 		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
 		$.ajax({
 			url : 'search_course_member_by_type.sw',
 			data : {
@@ -1676,8 +1699,11 @@ $(function() {
 				else{
 					nonMenteeCount.html(target.find('.js_non_mentee_item').length);
 				}
+				smartPop.closeProgress();
 			},
-			error : function(xhr, ajaxOptions, thrownError){}
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
 		});
 		return false;	
 	});

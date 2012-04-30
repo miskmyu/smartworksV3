@@ -5859,7 +5859,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			chatInstInfos[i] = chatInstInfo;
 		}
 		for (int i = 0; i < messages.length; i++) {
-			//imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
+			imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
 		}
 		return chatInstInfos;
 	}
