@@ -34,8 +34,20 @@ function fetchAllasyncMessages(chatId){
 		success : function(data, status, jqXHR) {
 			console.log('fetched messages =', data.messages);
 			if(!isEmpty(data.messages)){
-				for(var i=0; i<messages.length; i++){
-					chatHistory.setHistory(chatId, messages[i]);
+				for(var i=0; i<data.messages.length; i++){
+					var message = {};
+					message['chatId'] = data.messages[i].chatId;
+					message['chatMessage'] = data.messages[i].chatMessage;
+					message['msgType'] = msgType.CHAT_MESSAGE;
+					var senderInfo = {};
+					senderInfo['userId'] = data.messages[i].senderInfo.userId;
+					senderInfo['longName'] = data.messages[i].senderInfo.longName;
+					senderInfo['nickName'] = data.messages[i].senderInfo.nickName;
+					senderInfo['minPicture'] = data.messages[i].senderInfo.minPicture;
+					message['senderInfo'] = senderInfo;
+					message['sendDate'] = (new Date((new Date(data.messages[i].lastModifiedDate)).getTime() + currentUser.timeOffset*1000*60*60));
+					receivedMessageOnChatId(message);
+					chatHistory.setHistory(chatId, message);
 				}
 			}
 		},
@@ -177,14 +189,19 @@ function shiftBoxFromGroup(type, chattingBox){
 }
 
 function startChattingWindow(message) {
+	var target = $('div.js_chatting_box_list');
+	var chattingBoxs = target.find('div.js_chatting_box');
+	console.log('chattingBoxs=', chattingBoxs);
+	for(var i=0; i<chattingBoxs.length; i++ )
+		if($(chattingBoxs[i]).attr('id') === message.chatId)
+			return;
+	
 	var chatId = message.chatId;
 	var chatterInfos = chatManager.chatterInfos(message.chatId);
 	$.ajax({
 		url : "chatting_box.sw",
 		data : {},
 		success : function(data, status, jqXHR) {
-			var target = $('div.js_chatting_box_list');
-			var chattingBoxs = target.children('div.js_chatting_box');
 			if(chattingBoxs.length == 3){
 				shiftBoxToGroup("prev", $(chattingBoxs[0]));
 			}
@@ -224,12 +241,14 @@ function receivedMessageOnChatId(message) {
 	var chatId = message.chatId;
 	var senderInfo = message.senderInfo;
 	var chatMessage = message.chatMessage;
+	var sendDate = new Date(message.sendDate);
+//	console.log('message=', message.sendDate, ', parsed date=', Date.parse(message.sendDate), ', sendDate=', sendDate);
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
 	var data = "<li>" + 
 					"<div class='noti_pic'>" +
 						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + 
 					"</div>" + 
-					"<div class='noti_in'>" + chatMessage + "<span class='t_date ml3' >" + printDateTime(new Date()) + "</span></div>" +
+					"<div class='noti_in'>" + chatMessage + "<span class='t_date ml3' >" + printDateTime(sendDate) + "</span></div>" +
 				"</li>";
 	target.find('ul').append(data);
 	target[0].scrollTop = target[0].scrollHeight;

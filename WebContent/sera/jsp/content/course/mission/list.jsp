@@ -148,8 +148,7 @@ $(document).ready(function(){
 	    	var tokens = titleText.split('&amp;');
 	    	var titleHtml = (tokens.length==3) ? '<a href="" class="js_select_mission" missionId="' + tokens[2] + '"><span class="' + tokens[0] + '" title="' + tokens[1] + '">' +  tokens[1] + '</span></a>' : token[0]; 
 	    	title.html(titleHtml);
-	    	var eventTime = $(element).find('.fc-event-time').addClass("fl").html();
-	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
+	    	$(element).find('.fc-event-time').addClass("fl").html('');
 	    },
 		firstDay: 1,
 		weekMode: 'liquid',
