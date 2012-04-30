@@ -2306,8 +2306,20 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 	}
 
-	private void getStarPoint(Object object, String missionId) throws Exception {
-		
+	private void getStarPointAndScorePointUsers(Object object, String keyId) throws Exception {
+		try {
+			if(object.getClass().equals(MissionInstance.class)) {
+			} else if(object.getClass().equals(MissionInstanceInfo.class)) {
+			}
+
+			SwdRecordCond recordCond = new SwdRecordCond();
+			recordCond.setFormId(SeraConstant.MISSION_REPORT_FORMID);
+			recordCond.setWorkSpaceId(keyId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
