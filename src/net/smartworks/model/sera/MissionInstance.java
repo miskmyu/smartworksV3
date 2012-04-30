@@ -20,7 +20,7 @@ public class MissionInstance extends WorkInstance {
 	private MissionInstance prevMission;
 	private String[] missionClearers;
 	private double starPoint;
-	private int scorePointUsers;
+	private int starPointUsers;
 
 	public int getIndex() {
 		return index;
@@ -76,11 +76,11 @@ public class MissionInstance extends WorkInstance {
 	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
-	public int getScorePointUsers() {
-		return scorePointUsers;
+	public int getStarPointUsers() {
+		return starPointUsers;
 	}
-	public void setScorePointUsers(int scorePointUsers) {
-		this.scorePointUsers = scorePointUsers;
+	public void setStarPointUsers(int starPointUsers) {
+		this.starPointUsers = starPointUsers;
 	}
 	public MissionInstance(){
 		super();
