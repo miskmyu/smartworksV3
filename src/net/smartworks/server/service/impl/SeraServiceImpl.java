@@ -2304,6 +2304,11 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}		
 	}
+
+	private void getStarPoint(Object object, String missionId) throws Exception {
+		
+	}
+
 	@Override
 	public MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception {
 		try{
@@ -2326,7 +2331,6 @@ public class SeraServiceImpl implements ISeraService {
 			formField.setId(FormField.ID_CREATED_DATE);
 			formField.setName("createdTime");
 			formField.setType(FormField.TYPE_DATE);
-			
 
 			FormField courseIdFormField = new FormField();
 			courseIdFormField.setId("workSpaceId");
@@ -3449,8 +3453,7 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setAccessValue(null);
 
 		String recordId = SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
-		
-		
+
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
 		tskCond.setModificationUser(userId);
@@ -3492,7 +3495,7 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			}
 		}
-		
+
 		return recordId;
 	}
 
@@ -3816,22 +3819,35 @@ public class SeraServiceImpl implements ISeraService {
 			String userId = user.getId();
 			String courseId = (String)requestBody.get("courseId");
 			String content = (String)requestBody.get("reviewContent");
-			Double startPoint = null;
+			Double starPoint = null;
 			if(requestBody.get("starPoint").getClass().equals(Integer.class))
-				startPoint = Double.parseDouble(String.valueOf((Integer)requestBody.get("starPoint")));
+				starPoint = Double.parseDouble(String.valueOf((Integer)requestBody.get("starPoint")));
 			else if(requestBody.get("starPoint").getClass().equals(Double.class))
-				startPoint = (Double)requestBody.get("starPoint");
+				starPoint = (Double)requestBody.get("starPoint");
 
 			CourseReview courseReview = new CourseReview();
 			courseReview.setCourseId(courseId);
 			courseReview.setContent(content);
-			courseReview.setStartPoint(startPoint);
+			courseReview.setStarPoint(starPoint);
 			courseReview.setCreationUser(userId);
 			courseReview.setCreationDate(new LocalDate());
 			courseReview.setModificationUser(userId);
 			courseReview.setModificationDate(new LocalDate());
 
 			getSeraManager().setCourseReview(userId, courseReview);
+
+			/*CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+
+			Double courseStarPoint = courseDetail.getStarPoint();
+			int courseScorePointUsers = courseDetail.getScorePointUsers();
+
+			courseStarPoint = (courseStarPoint + starPoint) / (courseScorePointUsers + 1);
+			courseScorePointUsers = courseScorePointUsers + 1;
+
+			courseDetail.setStarPoint(courseStarPoint);
+			courseDetail.setScorePointUsers(courseScorePointUsers);
+
+			getSeraManager().setCourseDetail(courseDetail);*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -3860,7 +3876,7 @@ public class SeraServiceImpl implements ISeraService {
 					CourseReview courseReview = courseReviews[i];
 					ReviewInstanceInfo reviewInstanceInfo = new ReviewInstanceInfo();
 					reviewInstanceInfo.setContent(courseReview.getContent());
-					reviewInstanceInfo.setStarPoint(courseReview.getStartPoint());
+					reviewInstanceInfo.setStarPoint(courseReview.getStarPoint());
 					String creationUser = courseReview.getCreationUser();
 					Date creationDate = courseReview.getCreationDate();
 					String modificationUser = courseReview.getModificationUser();

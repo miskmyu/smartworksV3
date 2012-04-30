@@ -21,6 +21,7 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 	private MissionInstanceInfo prevMission;
 	private String[] missionClearers;
 	private double starPoint;
+	private int scorePointUsers;
 
 	public String getBriefContent() {
 		return briefContent;
@@ -83,6 +84,12 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 		this.starPoint = starPoint;
 	}
 	
+	public int getScorePointUsers() {
+		return scorePointUsers;
+	}
+	public void setScorePointUsers(int scorePointUsers) {
+		this.scorePointUsers = scorePointUsers;
+	}
 	public MissionInstanceInfo(){
 		super();
 		super.setType(Instance.TYPE_SERA_MISSION);

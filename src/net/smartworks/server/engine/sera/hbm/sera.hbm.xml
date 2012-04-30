@@ -76,7 +76,7 @@
 		</id>
 		<property name="courseId" type="string" length="50"/>
 		<property name="content" type="string" length="4000"/>
-		<property name="startPoint" type="double"/>
+		<property name="starPoint" type="double"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
