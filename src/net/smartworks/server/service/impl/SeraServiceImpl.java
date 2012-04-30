@@ -1412,6 +1412,7 @@ public class SeraServiceImpl implements ISeraService {
 		//courseDetail.setTeamId("teamId");
 		courseDetail.setTargetPoint(10);
 		courseDetail.setAchievedPoint(10);
+		courseDetail.setCreateDate(new LocalDate());
 		
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		seraMgr.setCourseDetail(courseDetail);
@@ -4335,6 +4336,73 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
+	
+	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
+		courseDetailCond.setPageNo(0);
+		courseDetailCond.setPageSize(maxList);
+		
+		if (fromCourseId != null) {
+			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
+			if (lastCourseDetailInfo != null)
+				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
+		}
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		String[] courseIds = new String[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			courseIds[i] = courseDetails[i].getCourseId();
+		}
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setGroupIdIns(courseIds);
+		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+	    
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
+		return courses;
+	}
+	public CourseInfo[] getClosedCourses(String fromCourseId, int maxList) throws Exception {
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
+		courseDetailCond.setPageNo(0);
+		courseDetailCond.setPageSize(maxList);
+		courseDetailCond.setEndTo(new LocalDate());
+
+		if (fromCourseId != null) {
+			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
+			if (lastCourseDetailInfo != null)
+				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
+		}
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		String[] courseIds = new String[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			courseIds[i] = courseDetails[i].getCourseId();
+		}
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setGroupIdIns(courseIds);
+		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+	    
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
+		return courses;
+	}
+	
 	@Override
 	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
 		switch(courseType){
@@ -4343,9 +4411,9 @@ public class SeraServiceImpl implements ISeraService {
 		case Course.TYPE_RECOMMENDED_COURSES:
 			return this.getRecommendedCourses(lastId, maxList);
 		case Course.TYPE_ALL_COURSES:
-			return this.getRecommendedCourses(lastId, maxList);
+			return this.getAllCourses(lastId, maxList);
 		case Course.TYPE_CLOSED_COURSES:
-			return this.getRecommendedCourses(lastId, maxList);
+			return this.getClosedCourses(lastId, maxList);
 		}
 		return null;
 	}
