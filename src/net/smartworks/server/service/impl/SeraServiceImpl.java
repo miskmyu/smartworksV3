@@ -5172,7 +5172,7 @@ public class SeraServiceImpl implements ISeraService {
 		friendInformList.setFriends(getFriendsById(userId, null, maxList, null));
 		friendInformList.setNonFriends(getNotMyFrined(userId, null, maxList, null));
 		friendInformList.setRequesters(getRequestFriend(userId, null, maxList));
-		
+
 		SeraFriendCond friendCond = new SeraFriendCond();
 		friendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 		friendCond.setRequestIdOrReceiveId(userId);
