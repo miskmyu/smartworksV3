@@ -73,7 +73,7 @@
 								<dd class="makeDate"><%=course.getOpenDate().toLocalDateSimpleString() %></dd>
 								<dd class="category"><%=course.getCategory() %></dd>
 							</dl></li>
-						<li class="detail"><a href="/courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
+						<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 						<!-- Gauge -->
 						<li class="gauge_box w_auto mt5">
 							<dl>

@@ -67,8 +67,7 @@
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_JOIN_REQUESTERS %>" courseId="<%=courseId %>" lastId="<%=requesters[requesters.length-1].getId()%>">
-					<div class="icon_more">더보기</div>
-					<span class="js_progress_span"></span>
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 		<%
@@ -127,8 +126,7 @@
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_MENTEES %>" courseId="<%=courseId %>" lastId="<%=mentees[mentees.length-1].getId()%>">
-					<div class="icon_more">더보기</div>
-					<span class="js_progress_span"></span>
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 		<%
@@ -187,8 +185,7 @@
 			%>
 				<!-- 더보기 -->
 				<div class="more js_more_mentee_informs_btn" requestType="<%=MenteeInformList.TYPE_NON_MENTEES %>" courseId="<%=courseId %>" lastId="<%=nonMentees[nonMentees.length-1].getId()%>">
-					<div class="icon_more">더보기</div>
-					<span class="js_progress_span"></span>
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 		<%

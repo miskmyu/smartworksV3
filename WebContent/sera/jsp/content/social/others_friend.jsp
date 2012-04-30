@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.FriendInformList"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.SeraUser"%>
@@ -116,7 +117,7 @@
 			String lastId = friends[friends.length-1].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friends_btn" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+			<div class="more js_more_friend_informs_btn" requestType="<%=FriendInformList.TYPE_FRIENDS%>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				
 			</div>

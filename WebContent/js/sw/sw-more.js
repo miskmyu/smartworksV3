@@ -47,14 +47,14 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_anchor.trigger('click');
 					more_anchor.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}else if(!isEmpty(more_smartcaster) && !more_smartcaster.isWaiting){
 				more_smartcaster.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_smartcaster.trigger('click');
 					more_smartcaster.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}
 		}
 	});

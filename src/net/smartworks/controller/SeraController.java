@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.sera.info.MissionInstanceInfo;
-import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -270,9 +269,9 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/content/more_courses.jsp", "");
 	}
 
-	@RequestMapping("/moreFriends")
-	public ModelAndView moreFriends(HttpServletRequest request, HttpServletResponse response) {
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/more_friends.jsp", "");
+	@RequestMapping("/moreFriendInforms")
+	public ModelAndView moreFriendInforms(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/more_friend_informs.jsp", "");
 	}
 
 	@RequestMapping("/moreMenteeInforms")

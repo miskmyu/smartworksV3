@@ -121,7 +121,13 @@ $(function() {
 				target.html(data);
 				if(!isEmpty(newBoard) && newBoard.attr('seraBoard')==="true"){
 					target.find('.js_select_work_space').hide();
-					target.find('.js_select_access_level options').
+					target.find('.js_select_access_level option.js_access_level_custom').remove();
+					
+				}else if(!isEmpty(newEvent) && newEvent.attr('seraEvent')==="true"){
+					var selectWorkSpace = target.find('.js_select_work_space');
+					selectWorkSpace.find('.js_optgroup_department').remove();
+					selectWorkSpace.find('.js_optgroup_group').attr('label', '나의 코스공간');					
+					target.find('.js_select_access_level option.js_access_level_custom').remove();					
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
