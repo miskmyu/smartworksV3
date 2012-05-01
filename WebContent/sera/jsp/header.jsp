@@ -146,7 +146,7 @@ if(isAuthenticated){
 							</a>
 						</li>
 						<li class="icon_mycourse">
-							<a href="myCourses.sw" id="my_course_count" class="js_sera_content" title="내코스">
+							<a href="myCourses.sw" id="my_course_count" title="내코스">
 								<%
 								if(!CommonUtil.isEmpty(notices)) {
 						 			if (notices.length > SeraNotice.INDEX_MY_COURSE && notices[SeraNotice.INDEX_MY_COURSE].getLength() > 0) {
@@ -159,7 +159,7 @@ if(isAuthenticated){
 							</a>
 						</li>
 						<li class="icon_friend">
-							<a href="socialFriend.sw" id="friend_count" class="js_sera_content" title="친구">
+							<a href="socialFriend.sw" id="friend_count" title="친구">
 								<%
 								if(!CommonUtil.isEmpty(notices)) {
 						 			if (notices.length > SeraNotice.INDEX_FRIEND && notices[SeraNotice.INDEX_FRIEND].getLength() > 0) {
@@ -172,7 +172,7 @@ if(isAuthenticated){
 							</a>
 						</li>
 						<li class="icon_notes">
-							<a href="socialNote.sw" id="message_count" class="js_sera_content" title="쪽지">
+							<a href="socialNote.sw" id="message_count" title="쪽지">
 								<%
 								if(!CommonUtil.isEmpty(notices)) {
 						 			if (notices.length > SeraNotice.INDEX_MESSAGE && notices[SeraNotice.INDEX_MESSAGE].getLength() > 0) {
@@ -211,7 +211,7 @@ if(isAuthenticated){
 							</a>
 						</li>
 						<li class="icon_event">
-							<a href="socialEvent.sw" id="event_count" class="js_sera_content" title="이벤트">
+							<a href="socialEvent.sw" id="event_count" title="이벤트">
 								<%
 								if(!CommonUtil.isEmpty(notices)) {
 						 			if (notices.length > SeraNotice.INDEX_EVENT && notices[SeraNotice.INDEX_EVENT].getLength() > 0) {

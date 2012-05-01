@@ -55,8 +55,7 @@
 					if(i==Course.LIST_PAGE_SIZE){
 			%>
 						<li class="js_more_course_by_type" courseType="<%=courseType%>" categoryName="<%=categoryName%>" lastId="<%=courses[i-1].getId()%>">
-							<div class="icon_more">더보기</div>
-							<span class="js_progress_span"></span>
+							<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 						</li>
 					<%
 						break;

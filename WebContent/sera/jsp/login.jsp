@@ -129,7 +129,7 @@
 				<li class="lst_normal">
 					<dl class="">
 						<dt>
-							<div class="icon_mn_news fl">SERA 소식</div>
+							<a href="seraNews.sw"><div class="icon_mn_news fl">SERA 소식</div></a>
 							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
 						</dt>
 						<dd>
@@ -147,8 +147,8 @@
 				<li class="lst_normal end mt20">
 					<dl class="">
 						<dt>
-							<div class="icon_as_srtrend fl">트렌드 세라</div>
-							<div class="icon_mn_more" style="display:none"><a href="" class="mt13"> </a></div>
+							<a href="seraNews.sw"><div class="icon_as_srtrend fl">트렌드 세라</div></a>
+							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
 						</dt>
 						<dd>
 							<ul>

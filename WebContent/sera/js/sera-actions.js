@@ -1187,6 +1187,9 @@ $(function() {
 	
 	$('.js_more_course_by_type').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_course_by_type');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var courseType = input.attr('courseType');
 		var categoryName = (courseType === "14") ? input.attr('categoryName') : "";
 		var lastId = input.attr('lastId');
