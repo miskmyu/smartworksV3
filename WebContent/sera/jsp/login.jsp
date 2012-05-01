@@ -174,6 +174,8 @@
 				if(!SmartUtil.isBlankObject(favoriteCourses)){
 					for(int i=0; i<favoriteCourses.length; i++){
 						CourseInfo course = favoriteCourses[i];
+						if (course.getId() == null)
+							continue;
 						String achievedPoint =course.getAchievedRatio() + "%";
 				%>
 						<ul class="category_box intro_margin">
@@ -223,6 +225,8 @@
 				if(!SmartUtil.isBlankObject(recommendedCourses)){
 					for(int i=0; i<recommendedCourses.length; i++){
 						CourseInfo course = recommendedCourses[i];
+						if (course.getId() == null)
+							continue;
 						String achievedPoint =course.getAchievedRatio() + "%";
 				%>
 						<ul class="category_box intro_margin">
