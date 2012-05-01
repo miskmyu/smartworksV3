@@ -32,6 +32,8 @@
 <!-- For Development Purpose -->
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	session.setAttribute("currentMenu", "Course");
+	session.setAttribute("headerOnly", false);
 
 %>
 
@@ -176,5 +178,11 @@
 
 	</div>
 	<script type="">smartPop.closeProgress();</script>
+	<script type="text/javascript">
+		function NavigateParent(url){
+		    document.location.href = url;   
+		};
+	</script>
 </body>
 </html>
+

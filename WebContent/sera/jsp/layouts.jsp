@@ -58,6 +58,8 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
 	session.setAttribute("userNaming", User.NAMING_NICKNAME_BASE);
+	session.setAttribute("currentMenu", "none");
+	session.setAttribute("headerOnly", false);
 
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
@@ -223,5 +225,11 @@
 	</div>
  	<jsp:include page="/jsp/chatting/chatter_list.jsp"/>
 	<script type="">smartPop.closeProgress();</script>
+	<script type="text/javascript">
+		function NavigateParent(url){
+		    document.location.href = url;   
+		};
+	</script>
 </body>
 </html>
+
