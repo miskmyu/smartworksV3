@@ -49,15 +49,15 @@ function updateNoticeCount(message){
 	}
 		
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
-	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
 	User cUser = (isAuthenticated) ? SmartUtil.getCurrentUser() : null;;
-
-	Notice[] notices = (isAuthenticated) ? smartWorks.getSeraNoticesForMe() : null;
-	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
 	
 	String currentMenu = (String)session.getAttribute("currentMenu");
 	if(SmartUtil.isBlankObject(currentMenu)) currentMenu = "none";
-	Boolean headerOnly = (Boolean)session.getAttribute("headerOnly");
+	Boolean noUser = (Boolean)session.getAttribute("noUser");
+
+	Notice[] notices = (isAuthenticated && !noUser) ? smartWorks.getSeraNoticesForMe() : null;
+	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
 	
 %>
 
@@ -72,17 +72,17 @@ if(isAuthenticated){
 			<ul class="top_menu2">
 				<li class="fl">
 					<a href="javascript:NavigateParent('Course.sw');"><img width="101" height="28" title="Course" alt="Course" 
-						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off/<%} %>.png">
+						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off<%} %>.png">
 					</a>
 				</li>
 				<li class="fl">
 					<a href="javascript:NavigateParent('myPAGE.sw');"><img width="101" height="28" title="myPAGE" alt="myPAGE" 
-						src="sera/images/sera2_main_btnTopMenu2_<%if(currentMenu.equals("myPAGE")){ %>on<%}else{ %>off/<%} %>.png">
+						src="sera/images/sera2_main_btnTopMenu2_<%if(currentMenu.equals("myPAGE")){ %>on<%}else{ %>off<%} %>.png">
 					</a>
 				</li>
 				<li class="fl">
 					<a href="javascript:NavigateParent('http://blog.seracampus.com');"><img width="101" height="28" title="seraCLUB" alt="seraCLUB" 
-						src="sera/images/sera2_main_btnTopMenu3_<%if(currentMenu.equals("seraCLUB")){ %>on<%}else{ %>off/<%} %>.png">
+						src="sera/images/sera2_main_btnTopMenu3_<%if(currentMenu.equals("seraCLUB")){ %>on<%}else{ %>off<%} %>.png">
 					</a>
 				</li>
 			</ul>
@@ -101,7 +101,7 @@ if(isAuthenticated){
 		</div>
 		<!-- GNB //-->
 		<%
-		if(headerOnly){
+		if(noUser){
 		%>
 		     <!-- Top Navi -->
 		     <div class="logo_srch">
@@ -242,9 +242,19 @@ if(isAuthenticated){
 		<div class="gnb">
 			
 			<ul class="top_menu2" style="margin-left: 340px">
-				<li class="fl"><a href="javascript:NavigateParent('Course.sw');"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu1_off.png" /></a></li>
-				<li class="fl"><a href="" class="j_btn_login_form"> <img width="101" height="28" src="sera/images/sera2_main_btnTopMenu2_off.png" /></a></li>
-				<li class="fl"><a href="javascript:NavigateParent('http://blog.seracampus.com');"> <img width="101" height="28"src="sera/images/sera2_main_btnTopMenu3_off.png" /> </a></li>
+				<li class="fl">
+					<a href="javascript:NavigateParent('Course.sw');"> <img width="101" height="28" 
+						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off<%} %>.png" />
+					</a>
+				</li>
+				<li class="fl">
+					<a href="" class="j_btn_login_form"> <img width="101" height="28" 
+						src="sera/images/sera2_main_btnTopMenu2_<%if(currentMenu.equals("myPAGE")){ %>on<%}else{ %>off<%} %>.png" />
+					</a>
+				</li>
+				<li class="fl">
+					<a href="javascript:NavigateParent('http://blog.seracampus.com');"> <img width="101" height="28"
+						src="sera/images/sera2_main_btnTopMenu3_<%if(currentMenu.equals("seraCLUB")){ %>on<%}else{ %>off<%} %>.png" /> </a></li>
 			</ul>
 			<ul class="util_menu fr">
 				<li class="about"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>

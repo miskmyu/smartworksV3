@@ -32,8 +32,7 @@
 <!-- For Development Purpose -->
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	session.setAttribute("currentMenu", "none");
-	session.setAttribute("headerOnly", true);
+	session.setAttribute("noUser", true);
 %>
 
 <head>

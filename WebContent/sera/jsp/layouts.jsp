@@ -58,8 +58,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
 	session.setAttribute("userNaming", User.NAMING_NICKNAME_BASE);
-	session.setAttribute("currentMenu", "none");
-	session.setAttribute("headerOnly", false);
+	session.setAttribute("noUser", false);
 
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />

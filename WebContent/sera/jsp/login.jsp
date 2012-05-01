@@ -35,7 +35,7 @@
 	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
 	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
 	session.setAttribute("currentMenu", "none");
-	session.setAttribute("headerOnly", false);
+	session.setAttribute("noUser", true);
 %>
 
 	<script type="text/javascript">
