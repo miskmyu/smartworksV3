@@ -535,7 +535,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .logo_srch {clear: both; height: 36px; margin: 10px auto; width: 980px; position: relative}
 .logo_srch .srch li {float: left}
 .logo_srch .logo {float: left; height: 36px; width: 201px}
-.logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 290px; border:none}
+.logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 280px; border:none}
 .icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
 
 /* Course List Section */
