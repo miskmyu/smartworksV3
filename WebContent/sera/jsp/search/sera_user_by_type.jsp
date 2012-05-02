@@ -22,7 +22,7 @@
 	if(!SmartUtil.isBlankObject(friends)){
 		for(int i=0; i<friends.length; i++){
 			SeraUserInfo friend = friends[i];
-			String userHref = (friend.getId().equals(cUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
+			String userHref = (cUser.getId().equals(friend.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
 			switch(type){
 			case FriendInformList.TYPE_FRIENDS:
 			%>
