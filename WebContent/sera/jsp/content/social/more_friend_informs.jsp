@@ -23,10 +23,11 @@
 		for(int i=0; i<friends.length; i++){
 			SeraUserInfo friend = friends[i];
 			String userHref = (cUser.getId().equals(friend.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + friend.getId();
+			String btnClass = type == FriendInformList.TYPE_FRIENDS ? "js_more_friend_btn" : "js_more_non_friend_btn";
 			if(i==FriendInformList.MAX_FRIEND_LIST){
 	%>
 				<!-- 더보기 -->
-				<div class="more js_more_friend_informs_btn" requestType="<%=type %>" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
+				<div class="more js_more_friend_informs_btn <%=btnClass%>" requestType="<%=type %>" userId="<%=userId%>" lastId="<%=friends[i-1].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->

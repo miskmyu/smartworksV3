@@ -1168,10 +1168,11 @@ $(function() {
 				var friendPage = input.parents('.js_friend_page');
 				var othersFriendPage = input.parents('.js_others_friend_page');
 				if(!isEmpty(friendPage)){
-					if(typeInt == TYPE_FRIENDS)
+					if(typeInt == TYPE_FRIENDS) {
 						friendPage.find('.js_friend_list').append(data);
-					else if(typeInt == TYPE_NON_FRIENDS)
+					} else if(typeInt == TYPE_NON_FRIENDS) {
 						friendPage.find('.js_non_friend_list').append(data);
+					}
 				}else if(!isEmpty(othersFriendPage)){
 					othersFriendPage.find('.js_friend_list').append(data);
 				}
@@ -1587,7 +1588,7 @@ $(function() {
 			
 		}else if(!isEmpty(othersFriendPage)){
 			userId = othersFriendPage.attr('userId');
-			target = othersFriendPage.find('js_friend_list');
+			target = othersFriendPage.find('.js_friend_list');
 			friendCount = othersFriendPage.find('.js_friend_count');
 		}
 		if(isEmpty(target)) return false;
@@ -1601,6 +1602,11 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(friendPage)){
+					friendPage.find('.js_more_friend_btn').remove();
+				} else if(!isEmpty(othersFriendPage)){
+					othersFriendPage.find('.js_more_friend_btn').remove();
+				}
 				if(isEmpty(data)){
 					friendCount.html(0);
 				}
@@ -1647,6 +1653,9 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(friendPage)){
+					friendPage.find('.js_more_non_friend_btn').remove();
+				}
 				if(isEmpty(data)){
 					nonFriendCount.html(0);
 				}
@@ -1695,6 +1704,9 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(courseSettingMentee)){
+					courseSettingMentee.find('.js_more_mentee_btn').remove();
+				}
 				if(isEmpty(data)){
 					menteeCount.html(0);
 				}
@@ -1741,6 +1753,11 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
+				if(!isEmpty(courseSettingMentee)){
+					courseSettingMentee.find('.js_more_non_mentee_btn').remove();
+				} else if(!isEmpty(inviteCourseMembers)) {
+					inviteCourseMembers.find('.js_more_non_mentee_btn').remove();
+				}
 				if(isEmpty(data)){
 					nonMenteeCount.html(0);
 				}
