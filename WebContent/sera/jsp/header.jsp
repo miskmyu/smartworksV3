@@ -111,7 +111,7 @@ if(isAuthenticated){
 		         <li> <div class="icon_srch_m"> </div></li>
 		       </ul>
 		     </div> -->
-		     <div class="sera_slogun">
+		     <div class="sera_slogun" style="margin:12px auto">
 				<img src="sera/images/main_slogun_blue.png">
 			</div>
 		     <!-- Top Navi //-->
