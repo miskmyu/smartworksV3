@@ -104,13 +104,16 @@ if(isAuthenticated){
 		if(noUser){
 		%>
 		     <!-- Top Navi -->
-		     <div class="logo_srch">
+		     <!-- <div class="logo_srch">
 		       <h1 class="logo"> <a href="javascript:NavigateParent('logins.sw');"> <img width="201" height="36" alt="" src="sera/images/sera2_logo.png"> </a> </h1>
 		       <ul class="srch">
 		         <li><input type="text" placeholder="SERA를 검색하세요." style="width:235px; height:20px" title="검색"></li>
 		         <li> <div class="icon_srch_m"> </div></li>
 		       </ul>
-		     </div>
+		     </div> -->
+		     <div class="sera_slogun">
+				<img src="sera/images/main_slogun_blue.png">
+			</div>
 		     <!-- Top Navi //-->
 		<%
 		}else{

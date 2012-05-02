@@ -12,7 +12,7 @@
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
 .ribbon_mission {background: url("../images/header.png") no-repeat scroll -127px -1185px transparent; width:56px; height:56px}
 
-#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 15px auto 40px; width: 980px; position: relative}
+#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 980px; position: relative}
 .sera_guide {background: url("../images/main_guide_bg.png") repeat-x scroll 0 0 transparent; float: left; height: 435px; padding: 6px 0 0 6px; width: 286px;}
 .sera_guide .btn_start {clear: both; height: 65px; width: 285px;}
 .sera_guide .img_guide { clear: both; height: 74px; width: 285px;}
@@ -28,7 +28,7 @@
 .sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 263px;}
 .sera_news .lst_normal {clear: both; padding: 0 15px 20px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
-.sera_news .lst_normal dt { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
+.sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
@@ -48,10 +48,10 @@
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
 .gnb .top_logo a {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:107px; height:17px; margin:5px 125px 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
-.gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
-.gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
-.gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
-.gnb .util_menu .about.current a, .gnb .util_menu .news.current a {background-color: #666; padding: 4px; color: #FFF; border-radius: 4px;}
+.gnb .util_menu {float: left; overflow: hidden; padding-top: 5px; margin-left:68px; font-size:11px;}
+.gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 3px}
+.gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 3px}
+.gnb .util_menu .about.current a, .gnb .util_menu .news.current a {background-color: #666; padding: 4px 4px 3px; color: #FFF; border-radius: 4px;}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
 .top_navi {width:980px; clear:both; padding:5px 0 0 0}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}

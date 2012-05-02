@@ -51,6 +51,11 @@
 		<div id="sera_header">
 			<jsp:include page="/sera/jsp/header.jsp" />
 		</div>
+		<!-- Slogun -->
+		<div class="sera_slogun mb5">
+			<img src="sera/images/main_slogun.jpg">
+		</div>
+		<!-- Slogun//-->
 		<!-- Intro AD -->
 		<div id="intro_main_section">
 			<!-- Left-->
