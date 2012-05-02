@@ -95,8 +95,8 @@ if(isAuthenticated){
 				</li>
 			</ul>
 			<ul class="util_menu">
-				<li class="about"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
-				<li class="news"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
+				<li class="about <%if(currentMenu.equals("aboutSera")){ %>current<%}%>"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
+				<li class="news <%if(currentMenu.equals("seraNews")){ %>current<%}%>"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
 				<li class="btn_login"><a href="javascript:NavigateParent('logout');"><img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png"></a></li>
 			</ul>
 	
@@ -271,8 +271,8 @@ if(isAuthenticated){
 						src="sera/images/sera2_main_btnTopMenu3_<%if(currentMenu.equals("seraCLUB")){ %>on<%}else{ %>off<%} %>.png" /> </a></li>
 			</ul>
 			<ul class="util_menu fr">
-				<li class="about"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
-				<li class="news"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
+				<li class="about  <%if(currentMenu.equals("aboutSera")){ %>current<%}%>"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
+				<li class="news  <%if(currentMenu.equals("seraNews")){ %>current<%}%>"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
 				<li class="btn_login">
 					<a href="" class="j_btn_login_form">
 						<img width="49" height="19" title="로그인" alt="로그인" src="sera/images/sera2_main_btnLogin.png" /> 

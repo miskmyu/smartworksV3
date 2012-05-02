@@ -189,6 +189,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		Date createDateTo = null;
 		int coursePointFrom = -1;
 		int coursePointTo = -1;
+		int coursePoint =  -1;
 		String[] categorys = null;
 		if (cond != null) {
 			courseId = cond.getCourseId();
@@ -201,6 +202,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			createDate = cond.getCreateDate();
 			createDateFrom = cond.getCreateDateFrom();
 			createDateTo = cond.getCreateDateTo();
+			coursePoint = cond.getCoursePoint();
 			coursePointFrom = cond.getCoursePointFrom();
 			coursePointTo = cond.getCoursePointTo();
 			categorys = cond.getCategories();
@@ -236,6 +238,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.createDate > :createDateFrom");
 			if (createDateTo != null)
 				buf.append(" and obj.createDate < :createDateTo");
+			if (coursePoint != -1)
+				buf.append(" and obj.coursePoint = :coursePoint");
 			if (coursePointFrom != -1)
 				buf.append(" and obj.coursePoint > :coursePointFrom");
 			if (coursePointTo != -1)
@@ -277,6 +281,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setTimestamp("createDateFrom", createDateFrom);
 			if (createDateTo != null)
 				query.setTimestamp("createDateTo", createDateTo);
+			if (coursePoint != -1)
+				query.setInteger("coursePoint", coursePoint);
 			if (coursePointFrom != -1)
 				query.setInteger("coursePointFrom", coursePointFrom);
 			if (coursePointTo != -1)
