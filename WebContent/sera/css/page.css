@@ -51,7 +51,7 @@
 .gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
 .gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
 .gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
-.gnb .util_menu .about.current a, .gnb .util_menu .news a {background-color: #666; padding: 3px; color: #FFF; border-radius: 3px;}
+.gnb .util_menu .about.current a, .gnb .util_menu .news a {background-color: #666; padding: 4px; color: #FFF; border-radius: 4px;}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
 .top_navi {width:980px; clear:both; padding:5px 0 0 0}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
