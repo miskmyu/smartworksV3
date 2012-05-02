@@ -3975,14 +3975,21 @@ public class SeraServiceImpl implements ISeraService {
 
 		if (fromCourseId != null) {
 			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
-			if (lastCourseDetailInfo != null)
-				courseDetailCond.setCoursePointTo(lastCourseDetailInfo.getCoursePoint());
+			if (lastCourseDetailInfo != null) {
+				int coursePoint = lastCourseDetailInfo.getCoursePoint();
+				if (coursePoint == 0) {
+					courseDetailCond.setCoursePoint(0);
+				} else {
+					courseDetailCond.setCoursePointTo(lastCourseDetailInfo.getCoursePoint());
+				}
+				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
+			}
 		}
 
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
 		
 		//courseDetailCond.setEndFrom(new LocalDate());
-		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false)});
+		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false) , new Order("createDate", false)});
 		courseDetailCond.setPageNo(0);
 		courseDetailCond.setPageSize(maxList);
 		
@@ -3999,7 +4006,19 @@ public class SeraServiceImpl implements ISeraService {
 		groupCond.setGroupIdIns(courseIds);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
-	    
+
+		SwoGroup[] tempGroups = new SwoGroup[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			String courseId = courseDetails[i].getCourseId();
+			for (int j = 0; j < groups.length; j++) {
+				if (groups[j].getId().equalsIgnoreCase(courseId)) {
+					tempGroups[i] = groups[j];
+					break;
+				}
+			}
+		}
+		groups = tempGroups;
+		
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		CourseInfo[] result = null;
 		
@@ -4050,9 +4069,20 @@ public class SeraServiceImpl implements ISeraService {
 	    
 	    SwoGroupCond groupCond = new SwoGroupCond();
 	    groupCond.setGroupIdIns(courseIds);
-		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
 	    ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 	    SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+
+		SwoGroup[] tempGroups = new SwoGroup[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			String courseId = courseDetails[i].getCourseId();
+			for (int j = 0; j < groups.length; j++) {
+				if (groups[j].getId().equalsIgnoreCase(courseId)) {
+					tempGroups[i] = groups[j];
+					break;
+				}
+			}
+		}
+		groups = tempGroups;
 	    
 	    CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 	    CourseInfo[] result = null;
@@ -4452,6 +4482,18 @@ public class SeraServiceImpl implements ISeraService {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 	    
+		SwoGroup[] tempGroups = new SwoGroup[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			String courseId = courseDetails[i].getCourseId();
+			for (int j = 0; j < groups.length; j++) {
+				if (groups[j].getId().equalsIgnoreCase(courseId)) {
+					tempGroups[i] = groups[j];
+					break;
+				}
+			}
+		}
+		groups = tempGroups;
+		
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		CourseInfo[] result = null;
 
@@ -4497,10 +4539,21 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setGroupIdIns(courseIds);
-		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
-	    
+
+		SwoGroup[] tempGroups = new SwoGroup[courseDetails.length];
+		for (int i = 0; i < courseDetails.length; i++) {
+			String courseId = courseDetails[i].getCourseId();
+			for (int j = 0; j < groups.length; j++) {
+				if (groups[j].getId().equalsIgnoreCase(courseId)) {
+					tempGroups[i] = groups[j];
+					break;
+				}
+			}
+		}
+		groups = tempGroups;
+		
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		CourseInfo[] result = null;
 		
@@ -5453,11 +5506,174 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public CourseInfo[] searchCourseByType(int type, String key) throws Exception {
+		
+		switch (type) {
+		case Course.TYPE_FAVORITE_COURSES:
+			return this.searchCourses(key);
+		case Course.TYPE_RECOMMENDED_COURSES:
+			return this.searchRecommendedCourses(key);
+		case Course.TYPE_ALL_COURSES:
+			return this.searchCourses(key);
+		case Course.TYPE_CLOSED_COURSES:
+			return this.searchClosedCourses(key);
+		}
 		return null;
+	}
+	public CourseInfo[] searchCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		//courseDetailCond.setEndFrom(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
+	}
+	public CourseInfo[] searchRecommendedCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setRecommended(true);
+		//courseDetailCond.setEndFrom(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
+	}
+	public CourseInfo[] searchClosedCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setEndTo(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
 	}
 	@Override
 	public CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception {
-		return null;
+		
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setCategories(new String[]{categoryName});
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
 	}
 
 }
