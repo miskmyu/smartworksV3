@@ -97,7 +97,7 @@ public class SeraController {
 	@RequestMapping("/myCourses")
 	public ModelAndView myCourses(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "", "myCourses.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/my_courses.jsp", "myCourses.tiles");
 	}
 
 	@RequestMapping("/courseHome")
@@ -199,19 +199,19 @@ public class SeraController {
 	@RequestMapping("/socialCalendar")
 	public ModelAndView socialCalendar(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "", "socialCalendar.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/calendar.jsp", "socialCalendar.tiles");
 	}
 
 	@RequestMapping("/socialEvent")
 	public ModelAndView socialEvent(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "", "socialEvent.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/event.jsp", "socialEvent.tiles");
 	}
 
 	@RequestMapping("/socialFriend")
 	public ModelAndView socialFriend(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "", "socialFriend.tiles");
+		return SmartUtil.returnMnv(request, "sera/jsp/content/social/friend.jsp", "socialFriend.tiles");
 	}
 
 	@RequestMapping("/othersPAGE")
