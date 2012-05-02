@@ -39,40 +39,61 @@
 		break;
 	}
 %>
-
-<ul class="search">
-	<li><input id="txtSearchIn" class="srch_style1 fl" type="text"></li>
-	<li><img id="btnSearchIn" height="34" width="62" style="cursor: pointer;" alt="검색" src="sera/images/btn_srch3.gif"></li>
-</ul>
-
-<div class="tit_header"><h2><%=courseName %></h2></div>
-<div class="course_listbox1">
-	<ul class="course_list js_course_by_type_list">
-		<%
-		if(!SmartUtil.isBlankObject(courses)){
-			for(int i=0; i<courses.length; i++){
-				CourseInfo course = courses[i];
-				if(i==Course.LIST_PAGE_SIZE){
-		%>
-					<li class="js_more_course_by_type" courseType="<%=courseType%>" categoryName="<%=categoryName%>" lastId="<%=courses[i-1].getId()%>">
-						<div class="icon_more">더보기</div>
-						<span class="js_progress_span"></span>
-					</div>
-					</li>
-				<%
-					break;
-				}
-				%>
-				<li>
-					<dl>
-						<dd class="mb10"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <img height="100" width="120" src="<%=course.getOrgPicture()%>"></a></dd>
-						<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate()) %>Days</dd>
-						<dd class="mb3"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <strong><%=course.getName() %></strong></a></dd>
-					</dl>
-				</li>
-		<%
-			}
-		}
-		%>
+<div class="js_course_by_type_page" courseType="<%=courseType%>" categoryName="<%=categoryName%>">
+	<ul class="search">
+		<li><input class="srch_style1 fl js_search_course_key" type="text"></li>
+		<li><img class="js_search_course_btn" id="btnSearchIn" height="34" width="62" style="cursor: pointer;" alt="검색" src="sera/images/btn_srch3.gif"></li>
 	</ul>
+	
+	<div class="tit_header"><h2><%=courseName %></h2></div>
+	<div class="course_listbox1">
+		<ul class="course_list js_course_by_type_list">
+			<%
+			if(!SmartUtil.isBlankObject(courses)){
+				for(int i=0; i<courses.length; i++){
+					CourseInfo course = courses[i];
+					if(i==Course.LIST_PAGE_SIZE){
+			%>
+						<li class="js_more_course_by_type" courseType="<%=courseType%>" categoryName="<%=categoryName%>" lastId="<%=courses[i-1].getId()%>">
+							<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
+						</li>
+					<%
+						break;
+					}
+					%>
+					<li>
+						<dl>
+							<dd class="mb10"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <img height="100" width="120" src="<%=course.getOrgPicture()%>"></a></dd>
+							<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate()) %>Days</dd>
+							<dd class="mb3"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <strong><%=course.getName() %></strong></a></dd>
+						</dl>
+					</li>
+			<%
+				}
+			}
+			%>
+		</ul>
+	</div>
 </div>
+
+
+<script type="text/javascript">
+$(function() {
+	$(document).keypress(function(e) {
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			if (!$('.login_section').is(':visible')) {
+				$('.js_course_by_type_page .js_search_course_btn').click();
+				return false;
+			}
+		}else{
+			return true;
+		}
+	});
+
+	$('.j_btn_login_form').live('click', function(e) {
+		$('.login_section').show();
+		return false;
+	});
+});
+</script>

@@ -34,6 +34,8 @@
 	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
 	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
+	session.setAttribute("currentMenu", "none");
+	session.setAttribute("noUser", true);
 %>
 
 	<script type="text/javascript">
@@ -127,7 +129,7 @@
 				<li class="lst_normal">
 					<dl class="">
 						<dt>
-							<div class="icon_mn_news fl">SERA 소식</div>
+							<a href="seraNews.sw"><div class="icon_mn_news fl">SERA 소식</div></a>
 							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
 						</dt>
 						<dd>
@@ -145,8 +147,8 @@
 				<li class="lst_normal end mt20">
 					<dl class="">
 						<dt>
-							<div class="icon_as_srtrend fl">트렌드 세라</div>
-							<div class="icon_mn_more" style="display:none"><a href="" class="mt13"> </a></div>
+							<a href="seraNews.sw"><div class="icon_as_srtrend fl">트렌드 세라</div></a>
+							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
 						</dt>
 						<dd>
 							<ul>
@@ -271,44 +273,14 @@
 		<!-- Content Section//-->
 		<!-- Footer -->
 		<div id="sera_footer">
-			<ul class="footer_box">
-				<li class="copyright"><img width="270" height="20" src="sera/images/sera2_footer_Copyright.png" /></li>
-				<li class="policy"><a href="">회사소개</a> | <a href="">이용약관</a> | <a href="">개인정보취급방침</a> | <a href="">고객센터</a></li>
-			</ul>
+			<jsp:include page="/sera/jsp/footer.jsp" />
 		</div>
 		<!-- Footer //-->
 	</div>
+	<script type="text/javascript">
+		function NavigateParent(url){
+		    document.location.href = url;   
+		};
+	</script>
 </body>
 </html>
-
-<%
-	String type = (String) request.getAttribute("type");
-%>
-<script type="text/javascript">
-$(function() {
-	<%if (type.equals("failedLogin")) {%>
-		smartPop.showInfo(smartPop.ERROR, '로그인정보가 잘못되었습니다. 확인 후 다시 시도하시기 바랍니다.');
-	<%} else if (type.equals("logout")) {%>
-		smartPop.showInfo(smartPop.INFO, '성공적으로 로그아웃 되었습니다.');
-	<%} else if (type.equals("expiredSession")) {%>
-		if (top.document.location.href !== "logins.sw")
-			top.document.location.href = "logins.sw";
-	<%}%>
-	$(document).keypress(function(e) {
-		var keyCode = e.which || e.keyCode;
-		if(keyCode == 13) {
-			if ($('.login_section').is(':visible')) {
-				$('input[type="submit"]').click();
-				return false;
-			}
-		}else{
-			return true;
-		}
-	});
-
-	$('.j_btn_login_form').live('click', function(e) {
-		$('.login_section').show();
-		return false;
-	});
-});
-</script>

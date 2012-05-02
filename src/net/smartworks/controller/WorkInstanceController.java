@@ -344,43 +344,43 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/add_comment_on_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.addCommentOnWork(requestBody, request);
-		return null;
+		String commentId = smartworks.addCommentOnWork(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentId", commentId);
+		return map;		
 	}
 
 	@RequestMapping(value = "/update_comment_on_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody void updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.updateCommentOnWork(requestBody, request);
-		return null;
 	}
 
-	@RequestMapping(value = "/remove_comment_on_work", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_comment_from_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> removeCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeCommentOnWork(requestBody, request);
-		return null;
+	public @ResponseBody void removeCommentFromWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentFromWork(requestBody, request);
 	}
 
 	@RequestMapping(value = "/add_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.addCommentOnInstance(requestBody, request);
-		return null;
+		String commentId = smartworks.addCommentOnInstance(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentId", commentId);
+		return map;
 	}
 
 	@RequestMapping(value = "/update_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody void updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.updateCommentOnInstance(requestBody, request);
-		return null;
 	}
 
-	@RequestMapping(value = "/remove_comment_on_instance", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_comment_from_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> removeCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeCommentOnInstance(requestBody, request);
-		return null;
+	public @ResponseBody void removeCommentFromInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentFromInstance(requestBody, request);
 	}
 
 	@RequestMapping(value = "/get_events_by_dates", method = RequestMethod.GET)

@@ -43,6 +43,7 @@ public class SeraController {
 	@RequestMapping("/seraCampus")
 	public ModelAndView seraCampus(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "searCampus");
 		return SmartUtil.returnMnv(request, "sera/jsp/layouts.jsp", "seraCampus.tiles");
 	}
 
@@ -64,6 +65,7 @@ public class SeraController {
 	@RequestMapping("/myPAGE")
 	public ModelAndView myPAGE(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "myPAGE");
 		return SmartUtil.returnMnv(request, "sera/jsp/content/my_page.jsp", "myPAGE.tiles");
 	}
 
@@ -76,6 +78,7 @@ public class SeraController {
 	@RequestMapping("/Course")
 	public ModelAndView Course(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "Course");
 		return SmartUtil.returnMnv(request, "", "Course.tiles");
 	}
 
@@ -94,7 +97,7 @@ public class SeraController {
 	@RequestMapping("/myCourses")
 	public ModelAndView myCourses(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/course/my_courses.jsp", "myCourses.tiles");
+		return SmartUtil.returnMnv(request, "", "myCourses.tiles");
 	}
 
 	@RequestMapping("/courseHome")
@@ -178,37 +181,37 @@ public class SeraController {
 	@RequestMapping("/socialNote")
 	public ModelAndView socialNote(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/note.jsp", "socialNote.tiles");
+		return SmartUtil.returnMnv(request, "", "socialNote.tiles");
 	}
 
 	@RequestMapping("/socialBadge")
 	public ModelAndView socialBadge(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/badge.jsp", "socialBadge.tiles");
+		return SmartUtil.returnMnv(request, "", "socialBadge.tiles");
 	}
 
 	@RequestMapping("/socialBoard")
 	public ModelAndView socialBoard(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/board.jsp", "socialBoard.tiles");
+		return SmartUtil.returnMnv(request, "", "socialBoard.tiles");
 	}
 
 	@RequestMapping("/socialCalendar")
 	public ModelAndView socialCalendar(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/calendar.jsp", "socialCalendar.tiles");
+		return SmartUtil.returnMnv(request, "", "socialCalendar.tiles");
 	}
 
 	@RequestMapping("/socialEvent")
 	public ModelAndView socialEvent(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/event.jsp", "socialEvent.tiles");
+		return SmartUtil.returnMnv(request, "", "socialEvent.tiles");
 	}
 
 	@RequestMapping("/socialFriend")
 	public ModelAndView socialFriend(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "sera/jsp/content/social/friend.jsp", "socialFriend.tiles");
+		return SmartUtil.returnMnv(request, "", "socialFriend.tiles");
 	}
 
 	@RequestMapping("/othersPAGE")
@@ -220,24 +223,28 @@ public class SeraController {
 	@RequestMapping("/aboutSera")
 	public ModelAndView aboutSera(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "aboutSera");
 		return SmartUtil.returnMnv(request, "", "aboutSera.tiles");
 	}
 
 	@RequestMapping("/seraNews")
 	public ModelAndView seraNews(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "seraNews");
 		return SmartUtil.returnMnv(request, "", "seraNews.tiles");
 	}
 
 	@RequestMapping("/helpCenter")
 	public ModelAndView helpCenter(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "helpCenter");
 		return SmartUtil.returnMnv(request, "", "helpCenter.tiles");
 	}
 
 	@RequestMapping("/helpFAQ")
 	public ModelAndView helpFAQ(HttpServletRequest request, HttpServletResponse response) {
 
+		request.getSession().setAttribute("currentMenu", "helpFAQ");
 		return SmartUtil.returnMnv(request, "", "helpFAQ.tiles");
 	}
 
@@ -541,6 +548,11 @@ public class SeraController {
 	@RequestMapping("/search_course_member_by_type")
 	public ModelAndView searchCourseMemberByType(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnv(request, "sera/jsp/search/course_member_by_type.jsp", "");
+	}
+
+	@RequestMapping("/search_course_by_type")
+	public ModelAndView searchCourseByType(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/search/course_by_type.jsp", "");
 	}
 
 }

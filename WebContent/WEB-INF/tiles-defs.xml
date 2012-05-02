@@ -151,6 +151,9 @@
 	<definition name="myPAGE" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/my_page.jsp" />
 	</definition>
+	<definition name="myCourses" extends="seraCampus">
+		<put-attribute name="sera_content" value="/sera/jsp/content/course/my_courses.jsp" />
+	</definition>
 	<definition name="othersPAGE" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/others_page.jsp" />
 		<put-attribute name="aside" value="/sera/jsp/aside/aside_others_page.jsp" />

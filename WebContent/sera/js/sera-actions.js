@@ -618,10 +618,10 @@ $(function() {
 				var target = subInstanceList.find('.js_comment_list');
 				var showAllComments = target.find('.js_show_all_sera_comments');
 				if(!isEmpty(showAllComments)){
-					showAllComments.find('div').click();
+					showAllComments.find('span').click();
 					input.attr('value', '');
 				}else{
-					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance').attr('commentId', data.commentId);
 					newComment.find('.js_comment_content').html(comment);
 					target.append(newComment);
 					input.attr('value', '');
@@ -635,6 +635,46 @@ $(function() {
 				});
 			}
 			
+		});
+		return false;
+		
+	});
+
+	$('.js_delete_comment_btn').live('click', function(e) {
+		smartPop.confirm('댓글을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
+			var input = $(targetElement(e));
+			var subInstanceList = input.parents('.js_sub_instance_list');
+			var commentItem = input.parents('.js_comment_item');
+			var paramsJson = {};
+			paramsJson['workType'] = parseInt(subInstanceList.attr('workType'));
+			paramsJson['workInstanceId'] = subInstanceList.attr('instanceId');
+			paramsJson['commentId'] = commentItem.attr('commentId');
+			url = "remove_comment_from_instance.sw";
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					var showAllComments = subInstanceList.find('.js_show_all_sera_comments');
+					console.log('show=', showAllComments);
+					if(!isEmpty(showAllComments)){
+						showAllComments.find('span').click();
+					}else{
+						commentItem.remove();
+					}
+					smartPop.closeProgress();
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "댓글삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});
+				}
+				
+			});
 		});
 		return false;
 		
@@ -1147,6 +1187,9 @@ $(function() {
 	
 	$('.js_more_course_by_type').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_more_course_by_type');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
 		var courseType = input.attr('courseType');
 		var categoryName = (courseType === "14") ? input.attr('categoryName') : "";
 		var lastId = input.attr('lastId');
@@ -1704,6 +1747,33 @@ $(function() {
 				else{
 					nonMenteeCount.html(target.find('.js_non_mentee_item').length);
 				}
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;	
+	});
+	
+	$('.js_search_course_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var courseByType = input.parents('.js_course_by_type_page');
+		var key = courseByType.find('.js_search_course_key').attr('value');
+		if(isEmpty(key)) return false;
+
+		var courseType = courseByType.attr('courseType');
+		var categoryName = courseByType.attr('categoryName');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'search_course_by_type.sw',
+			data : {
+				courseType : courseType,
+				categoryName : categoryName,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				courseByType.find('.js_course_by_type_list').html(data);
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){

@@ -123,6 +123,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -5449,6 +5450,14 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 
+	}
+	@Override
+	public CourseInfo[] searchCourseByType(int type, String key) throws Exception {
+		return null;
+	}
+	@Override
+	public CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception {
+		return null;
 	}
 
 }

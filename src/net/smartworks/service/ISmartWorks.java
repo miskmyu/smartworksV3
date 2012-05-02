@@ -426,17 +426,17 @@ public interface ISmartWorks {
 
 	public abstract void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void updateCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeCommentFromWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract String addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void updateCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeCommentFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -553,5 +553,9 @@ public interface ISmartWorks {
 	public abstract SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception;
 
 	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
+
+	public abstract CourseInfo[] searchCourseByType(int type, String key) throws Exception;
+
+	public abstract CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception;
 
 }

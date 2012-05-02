@@ -32,7 +32,7 @@
 <!-- For Development Purpose -->
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-
+	session.setAttribute("noUser", true);
 %>
 
 <head>
@@ -163,3 +163,9 @@
 	</div>
 </body>
 </html>
+
+<script type="text/javascript">
+	function NavigateParent(url){
+	    parent.location.href = url;   
+	};
+</script>
