@@ -5453,11 +5453,174 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public CourseInfo[] searchCourseByType(int type, String key) throws Exception {
+		
+		switch (type) {
+		case Course.TYPE_FAVORITE_COURSES:
+			return this.searchCourses(key);
+		case Course.TYPE_RECOMMENDED_COURSES:
+			return this.searchRecommendedCourses(key);
+		case Course.TYPE_ALL_COURSES:
+			return this.searchCourses(key);
+		case Course.TYPE_CLOSED_COURSES:
+			return this.searchClosedCourses(key);
+		}
 		return null;
+	}
+	public CourseInfo[] searchCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		//courseDetailCond.setEndFrom(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
+	}
+	public CourseInfo[] searchRecommendedCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setRecommended(true);
+		//courseDetailCond.setEndFrom(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
+	}
+	public CourseInfo[] searchClosedCourses(String key) throws Exception {
+
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setEndTo(new LocalDate());
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
 	}
 	@Override
 	public CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception {
-		return null;
+		
+		SwoGroupCond groupCond = new SwoGroupCond();
+		groupCond.setNameLike(key);
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
+		
+		if (groups == null || groups.length == 0)
+			return null;
+
+		String[] courseIds = new String[groups.length];
+		for (int i = 0; i < groups.length; i++) {
+			courseIds[i] = groups[i].getId();
+		}
+		
+		CourseDetailCond courseDetailCond = new CourseDetailCond();
+		courseDetailCond.setCourseIdIns(courseIds);
+		courseDetailCond.setCategories(new String[]{categoryName});
+		
+		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+		
+		if (courseDetails == null || courseDetails.length == 0) 
+			return null;
+	    
+		List resultGroupsList = new ArrayList();
+		for (int i = 0; i < courseDetails.length; i++) {
+			CourseDetail courseDetail = courseDetails[i];
+			
+			for (int j = 0; j < groups.length; j++) {
+				SwoGroup group = groups[i];
+				if (group.getId().equalsIgnoreCase(courseDetail.getCourseId()))
+					resultGroupsList.add(group);
+			}
+		}
+
+		SwoGroup[] resultGroups = new SwoGroup[resultGroupsList.size()];
+		resultGroupsList.toArray(resultGroups);
+		
+		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
+		
+		return courses;
 	}
 
 }
