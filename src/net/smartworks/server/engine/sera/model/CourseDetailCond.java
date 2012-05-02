@@ -39,6 +39,7 @@ public class CourseDetailCond extends Cond {
 	private Date createDate;
 	private Date createDateFrom;
 	private Date createDateTo;
+	private int coursePoint = -1;
 	private int coursePointFrom = -1;
 	private int coursePointTo = -1;
 
@@ -191,6 +192,12 @@ public class CourseDetailCond extends Cond {
 	}
 	public void setCoursePointFrom(int coursePointFrom) {
 		this.coursePointFrom = coursePointFrom;
+	}
+	public int getCoursePoint() {
+		return coursePoint;
+	}
+	public void setCoursePoint(int coursePoint) {
+		this.coursePoint = coursePoint;
 	}
 
 }
