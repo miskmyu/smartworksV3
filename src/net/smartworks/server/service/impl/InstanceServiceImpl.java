@@ -1675,6 +1675,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
 
+			return opinion.getObjId();
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1786,7 +1788,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
-			
+			return opinion.getObjId();
 		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

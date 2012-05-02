@@ -5358,9 +5358,9 @@ public class SeraServiceImpl implements ISeraService {
 			SeraUserInfo[] seraUserInfos = null;
 
 			if(type == 2) {
-				seraUserInfos = getFriendsById(userId, null, -1, key);
+				seraUserInfos = getFriendsById(userId, null, FriendInformList.MAX_FRIEND_LIST, key);
 			} else if(type == 3) {
-				seraUserInfos = getNotMyFrined(userId, null, -1, key);
+				seraUserInfos = getNotMyFrined(userId, null, FriendInformList.MAX_FRIEND_LIST, key);
 			}
 
 			return seraUserInfos;
