@@ -55,6 +55,8 @@ function updateNoticeCount(message){
 	String currentMenu = (String)session.getAttribute("currentMenu");
 	if(SmartUtil.isBlankObject(currentMenu)) currentMenu = "none";
 	Boolean noUser = (Boolean)session.getAttribute("noUser");
+	Boolean headerOnly = (Boolean)session.getAttribute("headerOnly");
+	
 
 	Notice[] notices = (isAuthenticated && !noUser) ? smartWorks.getSeraNoticesForMe() : null;
 	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
@@ -64,11 +66,17 @@ function updateNoticeCount(message){
 <%
 if(isAuthenticated){
 %>
-<div class="case_login">
+<div class="<%if(noUser){ %>case_logout<%}else{%>case_login<%}%>">
 	<div class="header_section js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
-			<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
+			<%
+			if(!noUser){
+			%>
+				<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
+			<%
+			}
+			%>
 			<ul class="top_menu2">
 				<li class="fl">
 					<a href="javascript:NavigateParent('Course.sw');"><img width="101" height="28" title="Course" alt="Course" 
@@ -92,12 +100,18 @@ if(isAuthenticated){
 				<li class="btn_login"><a href="javascript:NavigateParent('logout');"><img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png"></a></li>
 			</ul>
 	
-			<!-- Search -->
-			<div class="top_srch_section">
-				<input type="text" class="top_srch" />
-				<div class="icon_srch"></div>
-			</div>
-			<!-- Search //-->
+			<%
+			if(!noUser){
+			%>
+				<!-- Search -->
+				<div class="top_srch_section">
+					<input type="text" class="top_srch" />
+					<div class="icon_srch"></div>
+				</div>
+				<!-- Search //-->
+			<%
+			}
+			%>
 		</div>
 		<!-- GNB //-->
 		<%
@@ -265,12 +279,6 @@ if(isAuthenticated){
 					</a>
 				</li>
 			</ul>
-			<!-- Search -->
-			<div class="top_srch_section" style="display: none">
-				<input type="text" class="top_srch" />
-				<div class="icon_srch"></div>
-			</div>
-			<!-- Search //-->
 		</div>
 		<!-- GNB //-->
 		<div class="login_section" style="display: none; z-index: 1000;">
@@ -291,6 +299,7 @@ if(isAuthenticated){
 				</form>
 			</div>
 		</div>
+
 	     <!-- Top Navi -->
 	     <div class="logo_srch">
 	       <h1 class="logo"> <a href="javascript:NavigateParent('logins.sw');"> <img width="201" height="36" alt="" src="sera/images/sera2_logo.png"> </a> </h1>
@@ -318,7 +327,17 @@ $(function() {
 	});
 
 	$('.j_btn_login_form').live('click', function(e) {
+<%
+if(headerOnly){
+%>
+		parent.location.href = "logins.sw";
+<%
+}else{
+%>
 		$('.login_section').show();
+<%
+}
+%>
 		return false;
 	});
 });
