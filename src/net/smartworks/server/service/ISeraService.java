@@ -113,4 +113,8 @@ public interface ISeraService {
 
 	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
 
+	public abstract CourseInfo[] searchCourseByType(int type, String key) throws Exception;
+
+	public abstract CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception;
+
 }

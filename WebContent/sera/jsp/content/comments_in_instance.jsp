@@ -39,11 +39,18 @@
 				continue;
 	%>
 			<!-- Reply-->
-			<div class="reply_section">
+			<div class="reply_section js_comment_item" commentId="<%=comment.getId()%>">
 				<div class="photo">
 					<img src="<%=comment.getOwner().getMinPicture() %>"  class="profile_size_m"/>
 				</div>
 				<div class="reply_text">
+					<%
+					if(comment.getOwner().getId().equals(cUser.getId())){
+					%>
+							<div class="icon_delete fr"><a href="" class=" js_delete_comment_btn" title="댓글삭제">삭제</a></div>
+						<%
+					}
+					%>
 					<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 				</div>
 			</div>

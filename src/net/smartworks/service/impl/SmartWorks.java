@@ -896,8 +896,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.addCommentOnWork(requestBody, request);
+	public String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.addCommentOnWork(requestBody, request);
 	}
 
 	@Override
@@ -906,13 +906,13 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.updateCommentOnWork(requestBody, request);
+	public void removeCommentFromWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeCommentFromWork(requestBody, request);
 	}
 
 	@Override
-	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.addCommentOnInstance(requestBody, request);
+	public String addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.addCommentOnInstance(requestBody, request);
 	}
 
 	@Override
@@ -921,8 +921,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.removeCommentOnInstance(requestBody, request);
+	public void removeCommentFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeCommentFromInstance(requestBody, request);
 	}
 	@Override
 	public String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -1208,6 +1208,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
 		return seraService.searchCourseMemberByType(type, courseId, key);
+	}
+
+	@Override
+	public CourseInfo[] searchCourseByType(int type, String key) throws Exception {
+		return seraService.searchCourseByType(type, key);
+	}
+
+	@Override
+	public CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception {
+		return seraService.searchCourseByCategory(categoryName, key);
 	}
 
 }

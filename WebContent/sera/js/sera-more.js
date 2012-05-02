@@ -6,6 +6,7 @@
 		var moreCourseMembers = $('.js_invite_course_member_page .js_more_mentee_informs_btn');
 		var moreCourseMentees = $('.js_course_setting_mentee_page .js_more_mentee_informs_btn');
 		var moreCourseReviews = $('.js_course_general_page .js_more_course_reviews_btn');
+		var moreCourse = $('.js_course_page .js_more_course_by_type');
 		if ($(window).scrollTop() == $(document).height() - $(window).height()){
 			if(!isEmpty(moreSeraInstances) && !moreSeraInstances.isWaiting){
 				moreSeraInstances.isWaiting = true;
@@ -48,6 +49,13 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourseReviews.find('span').trigger('click');
 					moreCourseReviews.isWaiting = false;
+				}, 3000);
+			}else if(!isEmpty(moreCourse) && !moreCourse.isWaiting){
+				moreCourse.isWaiting = true;
+				setTimeout(function() {
+					if ($(window).scrollTop() == $(document).height() - $(window).height())
+						moreCourse.find('span').trigger('click');
+					moreCourse.isWaiting = false;
 				}, 3000);
 			}
 		}

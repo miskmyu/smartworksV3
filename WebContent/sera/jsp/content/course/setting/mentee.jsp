@@ -107,9 +107,9 @@
 								<span><%=mentee.getNickName() %><br /> <span class="cb t_id"><%=mentee.getId() %></span> </span>
 							</a>
 						</li>
-						<li class="bo_l" style="width: 15%"><span> 미션수행 20 </span></li>
-						<li class="bo_l" style="width: 15%"><span> 받은 게시물 15<br />댓글쓰기 20<br /> 공감 + 19 </span></li>
-						<li class="bo_l" style="width: 10%"><span> 참여 90일째 </span></li>
+						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
+						<li class="bo_l" style="width: 15%"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
+						<li class="bo_l" style="width: 10%"><span> 참여 0일째 </span></li>
 						<li class="fr bo_l">
 							<span>
 								<div class="btn_green_l js_pushout_mentee_btn">

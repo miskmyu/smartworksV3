@@ -26,9 +26,9 @@
 %>
 <div class="aside_block">
 	<div class="header">
-		<div class="icon_as_mycourse fl">
-			<%=otherUser.getNickName()%>님의 코스 <span class="num_cus">(<%=courseList.getRunnings() + courseList.getAttendings()%>)</span>
-		</div>
+		<a href="othersCourses.sw?userId=<%=otherUser.getId() %>" class="js_sera_content">
+			<div class="icon_as_mycourse fl"><%=otherUser.getNickName()%>님의 코스 <span class="num_cus">(<%=courseList.getRunnings() + courseList.getAttendings()%>)</span></div>
+		</a>
 		<div class="icon_as_more">
 			<a href="othersCourses.sw?userId=<%=otherUser.getId()%>" class="mt10 js_sera_content"> </a>
 		</div>
@@ -115,7 +115,7 @@
 <!-- Aside Block3 -->
 <div class="aside_block m0">
 	<div class="header">
-		<div class=" icon_as_friend fl"><%=otherUser.getNickName()%>님의 친구 (<%=friendList.getTotalFriends()%>)</div>
+		<a href="othersFriend.sw?userId=<%=otherUser.getId() %>" class="js_sera_content"><div class=" icon_as_friend fl"><%=otherUser.getNickName()%>님의 친구 (<%=friendList.getTotalFriends()%>)</div></a>
 		<div class="icon_as_more">
 			<a href="othersFriend.sw?userId=<%=otherUser.getId()%>"
 				class="mt10 js_sera_content"> </a>

@@ -6,7 +6,6 @@ import java.util.Map;
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.WorkInstance;
-import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -21,7 +20,8 @@ public class MissionInstance extends WorkInstance {
 	private MissionInstance prevMission;
 	private String[] missionClearers;
 	private double starPoint;
-	
+	private int starPointUsers;
+
 	public int getIndex() {
 		return index;
 	}
@@ -76,7 +76,12 @@ public class MissionInstance extends WorkInstance {
 	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
-	
+	public int getStarPointUsers() {
+		return starPointUsers;
+	}
+	public void setStarPointUsers(int starPointUsers) {
+		this.starPointUsers = starPointUsers;
+	}
 	public MissionInstance(){
 		super();
 		super.setType(Instance.TYPE_SERA_MISSION);

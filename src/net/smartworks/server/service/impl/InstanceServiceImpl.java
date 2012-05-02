@@ -1657,12 +1657,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 			if(CommonUtil.isEmpty(userId))
-				return;
+				return null;
 
 			String workId = (String)requestBody.get("workId");
 			String comment = (String)requestBody.get("comment");
@@ -1680,6 +1680,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			// Exception Handling Required			
 		}
+		return null;
 	}
 
 	@Override
@@ -1705,7 +1706,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public void removeCommentFromWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
@@ -1725,12 +1726,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 			if(CommonUtil.isEmpty(userId))
-				return;
+				return null;
 
 			int workType = (Integer)requestBody.get("workType");
 			String workInstanceId = (String)requestBody.get("workInstanceId");
@@ -1791,6 +1792,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			// Exception Handling Required			
 		}
+		return null;
 	}
 
 	@Override
@@ -1816,7 +1818,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public void removeCommentFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
