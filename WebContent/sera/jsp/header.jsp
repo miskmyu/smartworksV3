@@ -74,10 +74,14 @@ if(isAuthenticated){
 			if(!noUser){
 			%>
 				<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
+				<ul class="top_menu2">
+			<%
+			}else{
+			%>
+				<ul class="top_menu2" style="margin-left: 340px">
 			<%
 			}
 			%>
-			<ul class="top_menu2">
 				<li class="fl">
 					<a href="javascript:NavigateParent('Course.sw');"><img width="101" height="28" title="Course" alt="Course" 
 						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off<%} %>.png">
@@ -94,7 +98,7 @@ if(isAuthenticated){
 					</a>
 				</li>
 			</ul>
-			<ul class="util_menu">
+			<ul class="util_menu fr">
 				<li class="about <%if(currentMenu.equals("aboutSera")){ %>current<%}%>"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
 				<li class="news <%if(currentMenu.equals("seraNews")){ %>current<%}%>"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
 				<li class="btn_login"><a href="javascript:NavigateParent('logout');"><img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png"></a></li>
