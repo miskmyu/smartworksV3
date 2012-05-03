@@ -198,8 +198,10 @@ public class SeraServiceImpl implements ISeraService {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
 			groupInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			groupInfo.setBigPictureName(pictureId + Community.IMAGE_TYPE_ORIGINAL + "." + extension);
 		} else {
 			groupInfo.setSmallPictureName(picture);
+			groupInfo.setBigPictureName(picture);
 		}
 
 		return groupInfo;

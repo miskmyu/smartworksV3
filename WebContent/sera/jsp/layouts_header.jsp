@@ -34,6 +34,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	session.setAttribute("currentMenu", "seraCLUB");
 	session.setAttribute("noUser", true);
+	session.setAttribute("headerOnly", true);
 %>
 
 <head>

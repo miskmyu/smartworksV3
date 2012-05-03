@@ -55,6 +55,9 @@ function updateNoticeCount(message){
 	String currentMenu = (String)session.getAttribute("currentMenu");
 	if(SmartUtil.isBlankObject(currentMenu)) currentMenu = "none";
 	Boolean noUser = (Boolean)session.getAttribute("noUser");
+	Boolean headerOnly = (Boolean)session.getAttribute("headerOnly");
+	if(headerOnly==null) headerOnly=false;
+	
 
 	Notice[] notices = (isAuthenticated && !noUser) ? smartWorks.getSeraNoticesForMe() : null;
 	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
@@ -64,12 +67,12 @@ function updateNoticeCount(message){
 <%
 if(isAuthenticated){
 %>
-<div class="case_login">
+<div class="<%if(noUser){ %>case_logout<%}else{ %>case_login<%}%>">
 	<div class="header_section js_header_page">
 		<!-- GNB -->
 		<div class="gnb">
-			<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
-			<ul class="top_menu2">
+				<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
+				<ul class="top_menu2">
 				<li class="fl">
 					<a href="javascript:NavigateParent('Course.sw');"><img width="101" height="28" title="Course" alt="Course" 
 						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off<%} %>.png">
@@ -104,13 +107,9 @@ if(isAuthenticated){
 		if(noUser){
 		%>
 		     <!-- Top Navi -->
-		     <div class="logo_srch">
-		       <h1 class="logo"> <a href="javascript:NavigateParent('logins.sw');"> <img width="201" height="36" alt="" src="sera/images/sera2_logo.png"> </a> </h1>
-		       <ul class="srch">
-		         <li><input type="text" placeholder="SERA를 검색하세요." style="width:235px; height:20px" title="검색"></li>
-		         <li> <div class="icon_srch_m"> </div></li>
-		       </ul>
-		     </div>
+		     <div class="sera_slogun" style="margin:15px auto 0">
+				<img src="sera/images/main_slogun.jpg">
+			</div>
 		     <!-- Top Navi //-->
 		<%
 		}else{
@@ -240,8 +239,8 @@ if(isAuthenticated){
 	<div class="header_section">
 		<!-- GNB -->
 		<div class="gnb">
-			
-			<ul class="top_menu2" style="margin-left: 340px">
+			<div class="top_logo"><a href="javascript:NavigateParent('logins.sw');"></a></div>
+			<ul class="top_menu2">
 				<li class="fl">
 					<a href="javascript:NavigateParent('Course.sw');"> <img width="101" height="28" 
 						src="sera/images/sera2_main_btnTopMenu1_<%if(currentMenu.equals("Course")){ %>on<%}else{ %>off<%} %>.png" />
@@ -256,7 +255,7 @@ if(isAuthenticated){
 					<a href="javascript:NavigateParent('http://blog.seracampus.com');"> <img width="101" height="28"
 						src="sera/images/sera2_main_btnTopMenu3_<%if(currentMenu.equals("seraCLUB")){ %>on<%}else{ %>off<%} %>.png" /> </a></li>
 			</ul>
-			<ul class="util_menu fr">
+			<ul class="util_menu">
 				<li class="about  <%if(currentMenu.equals("aboutSera")){ %>current<%}%>"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
 				<li class="news  <%if(currentMenu.equals("seraNews")){ %>current<%}%>"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
 				<li class="btn_login">
@@ -265,12 +264,14 @@ if(isAuthenticated){
 					</a>
 				</li>
 			</ul>
-			<!-- Search -->
-			<div class="top_srch_section" style="display: none">
-				<input type="text" class="top_srch" />
-				<div class="icon_srch"></div>
-			</div>
-			<!-- Search //-->
+			
+		<!-- Search -->
+		<div class="top_srch_section">
+			<input type="text" class="top_srch" />
+			<div class="icon_srch"></div>
+		</div>
+		<!-- Search //-->
+		
 		</div>
 		<!-- GNB //-->
 		<div class="login_section" style="display: none; z-index: 1000;">
@@ -291,15 +292,13 @@ if(isAuthenticated){
 				</form>
 			</div>
 		</div>
-	     <!-- Top Navi -->
-	     <div class="logo_srch">
-	       <h1 class="logo"> <a href="javascript:NavigateParent('logins.sw');"> <img width="201" height="36" alt="" src="sera/images/sera2_logo.png"> </a> </h1>
-	       <ul class="srch">
-	         <li><input type="text" placeholder="SERA를 검색하세요." style="width:235px; height:20px" title="검색"></li>
-	         <li> <div class="icon_srch_m"> </div></li>
-	       </ul>
-	     </div>
+
+	 	<!-- Top Navi -->
+	    <div class="sera_slogun" style="margin:15px auto 0">
+			<img src="sera/images/main_slogun.jpg">
+		</div>
 	     <!-- Top Navi //-->
+
 	</div>
 </div>
 
@@ -318,7 +317,17 @@ $(function() {
 	});
 
 	$('.j_btn_login_form').live('click', function(e) {
+<%
+if(headerOnly){
+%>
+		parent.location.href = "logins.sw";
+<%
+}else{
+%>
 		$('.login_section').show();
+<%
+}
+%>
 		return false;
 	});
 });
