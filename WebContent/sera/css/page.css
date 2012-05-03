@@ -525,7 +525,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Gauge Box */
 .gauge_box {clear: both; height: 10px; width:390px;}
-.gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 390px}
+.gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 390px; overflow: hidden;}
 .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px; display:block}
 .process {float: right; height: 12px; color:#999999}
 .mission_info { float:left; margin: 5px 0 0 0; color:#999999}
