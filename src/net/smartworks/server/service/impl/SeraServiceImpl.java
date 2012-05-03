@@ -5704,6 +5704,27 @@ public class SeraServiceImpl implements ISeraService {
 		//
 		// courseType : Course.MY_RUNNING_COURSE or Course.MY_ATTENDING_COURSE
 		//
+		
+		switch (courseType) {
+		case Course.MY_RUNNING_COURSE:
+			
+			
+			
+			
+			break;
+		case Course.MY_ATTENDING_COURSE:
+			
+			
+			
+			
+			
+			
+			
+			
+			break;
+		}
+		
+		
 		return SeraTest.getCoursesById(userId, courseType, null, maxList);
 	}
 
