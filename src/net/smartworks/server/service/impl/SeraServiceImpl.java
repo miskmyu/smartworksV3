@@ -1496,6 +1496,23 @@ public class SeraServiceImpl implements ISeraService {
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
 
+			if (runningCoursesArray != null && runningCourseCnt > maxList) {
+				CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
+				for (int i = 0; i < runningCoursesArray.length; i++) {
+					tempRunningCourseInfos[i] = runningCoursesArray[i];
+				}
+				tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
+				runningCoursesArray = tempRunningCourseInfos;
+			}
+			if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
+				CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
+				for (int i = 0; i < attendingCoursesArray.length; i++) {
+					tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+				}
+				tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
+				attendingCoursesArray = tempAttendingCourseInfos;
+			}
+			
 			courseList.setRunnings((int)runningCourseCnt);
 			courseList.setRunningCourses(runningCoursesArray);
 			courseList.setAttendings((int)attendingCourseCnt);
