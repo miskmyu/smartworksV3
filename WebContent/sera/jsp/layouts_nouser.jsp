@@ -124,6 +124,7 @@
 	
 	<script type="text/javascript" src="sera/js/sera-actions.js"></script>
 	<script type="text/javascript" src="sera/js/sera-formFields.js"></script>
+	<script type="text/javascript" src="sera/js/sera-more.js"></script>
 	<script type="text/javascript" src="sera/js/window_popup.js"></script>
 	
 	<script type="text/javascript" src='js/smartform/smartworks.js'></script>

@@ -22,10 +22,11 @@
 	if(!SmartUtil.isBlankObject(users)){
 		for(int i=0; i<users.length; i++){
 			SeraUserInfo user = users[i];
+			String btnClass = type == MenteeInformList.TYPE_MENTEES ? "js_more_mentee_btn" : "js_more_non_mentee_btn";
 			if(i==MenteeInformList.MAX_USER_LIST){
 	%>
 				<!-- 더보기 -->
-				<div class="more js_more_mentee_informs" requestType="<%=type %>" courseId="<%=courseId %>" lastId="<%=users[i-1].getId()%>">
+				<div class="more js_more_mentee_informs_btn <%=btnClass%>" requestType="<%=type %>" courseId="<%=courseId %>" lastId="<%=users[i-1].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->

@@ -5,7 +5,7 @@ import net.smartworks.model.sera.info.CourseInfo;
 public class CourseList{
 
 	public static final int MAX_BRIEF_COURSE_LIST = 3;
-	public static final int MAX_COURSE_LIST = 6;
+	public static final int MAX_COURSE_LIST = 1;
 	
 	private int runnings = 0;
 	private int attendings = 0;

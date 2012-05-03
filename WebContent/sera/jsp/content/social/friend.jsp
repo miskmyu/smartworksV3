@@ -134,7 +134,7 @@
 			String lastId = friends[friends.length-2].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_informs_btn" requestType="<%=FriendInformList.TYPE_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+			<div class="more js_more_friend_informs_btn js_more_friend_btn" requestType="<%=FriendInformList.TYPE_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				
 			</div>
@@ -202,7 +202,7 @@
 			String lastId = friends[friends.length-2].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_informs_btn" requestType="<%=FriendInformList.TYPE_NON_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+			<div class="more js_more_friend_informs_btn js_more_non_friend_btn" requestType="<%=FriendInformList.TYPE_NON_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				
 			</div>

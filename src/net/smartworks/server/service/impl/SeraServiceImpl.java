@@ -5682,5 +5682,12 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return courses;
 	}
+	@Override
+	public CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception {
+		//
+		// courseType : Course.MY_RUNNING_COURSE or Course.MY_ATTENDING_COURSE
+		//
+		return SeraTest.getCoursesById(userId, courseType, null, maxList);
+	}
 
 }

@@ -1220,4 +1220,9 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.searchCourseByCategory(categoryName, key);
 	}
 
+	@Override
+	public CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByUser(userId, courseType, lastId, maxList);
+	}
+
 }
