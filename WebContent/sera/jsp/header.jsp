@@ -56,6 +56,7 @@ function updateNoticeCount(message){
 	if(SmartUtil.isBlankObject(currentMenu)) currentMenu = "none";
 	Boolean noUser = (Boolean)session.getAttribute("noUser");
 	Boolean headerOnly = (Boolean)session.getAttribute("headerOnly");
+	if(headerOnly==null) headerOnly=false;
 	
 
 	Notice[] notices = (isAuthenticated && !noUser) ? smartWorks.getSeraNoticesForMe() : null;
