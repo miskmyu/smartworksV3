@@ -6,6 +6,10 @@ import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.model.SwoCompany;
+import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
@@ -62,9 +66,23 @@ public class CommunityInfo extends BaseObject {
 		return getPath() + this.getSmallPictureName();
 	}
 	public String getPath(){
-		if(SmartUtil.getCurrentUser() == null)
-			return null;
-		return Community.PICTURE_PATH + SmartUtil.getCurrentUser().getCompanyId() + "/" + Community.PROFILES_DIR + "/";
+		if(SmartUtil.getCurrentUser() == null) {
+			try {
+				SwoCompanyCond cond = new SwoCompanyCond();
+				cond.setPageNo(0);
+				cond.setPageSize(1);
+				SwoCompany[] company = SwManagerFactory.getInstance().getSwoManager().getCompanys("", cond, IManager.LEVEL_LITE);
+				if (company == null) {
+					return null;
+				} else {
+					return Community.PICTURE_PATH + company[0].getId() + "/" + Community.PROFILES_DIR + "/";
+				}
+			} catch (Exception e) {
+				return null;
+			}
+		} else {
+			return Community.PICTURE_PATH + SmartUtil.getCurrentUser().getCompanyId() + "/" + Community.PROFILES_DIR + "/";
+		}
 	}
 	public String getIconClass(){
 		if(this.getClass().equals(DepartmentInfo.class))
