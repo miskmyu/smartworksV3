@@ -92,6 +92,8 @@
 		SeraUserInfo[] mentees = menteeInformations.getMentees();
 		if(!SmartUtil.isBlankObject(mentees)){
 			for(int i=0; i<mentees.length; i++){
+				if (i == MenteeInformList.MAX_USER_LIST)
+					break;
 				SeraUserInfo mentee = mentees[i];
 		%>
 				<!-- 목록1-->
@@ -125,7 +127,7 @@
 			if(menteeInformations.getTotalMentees()>mentees.length){
 			%>
 				<!-- 더보기 -->
-				<div class="more js_more_mentee_informs_btn js_more_mentee_btn" requestType="<%=MenteeInformList.TYPE_MENTEES %>" courseId="<%=courseId %>" lastId="<%=mentees[mentees.length-1].getId()%>">
+				<div class="more js_more_mentee_informs_btn js_more_mentee_btn" requestType="<%=MenteeInformList.TYPE_MENTEES %>" courseId="<%=courseId %>" lastId="<%=mentees[mentees.length-2].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
@@ -151,6 +153,8 @@
 		SeraUserInfo[] nonMentees = menteeInformations.getNonMentees();
 		if(!SmartUtil.isBlankObject(nonMentees)){
 			for(int i=0; i<nonMentees.length; i++){
+				if (i == MenteeInformList.MAX_USER_LIST)
+					break;
 				SeraUserInfo nonMentee = nonMentees[i];
 		%>
 				<!-- 목록1-->
@@ -184,7 +188,7 @@
 			if(menteeInformations.getTotalNonMentees()>nonMentees.length){
 			%>
 				<!-- 더보기 -->
-				<div class="more js_more_mentee_informs_btn js_more_non_mentee_btn" requestType="<%=MenteeInformList.TYPE_NON_MENTEES %>" courseId="<%=courseId %>" lastId="<%=nonMentees[nonMentees.length-1].getId()%>">
+				<div class="more js_more_mentee_informs_btn js_more_non_mentee_btn" requestType="<%=MenteeInformList.TYPE_NON_MENTEES %>" courseId="<%=courseId %>" lastId="<%=nonMentees[nonMentees.length-2].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
