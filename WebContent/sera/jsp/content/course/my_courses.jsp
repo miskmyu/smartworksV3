@@ -63,7 +63,7 @@
 		if(courseList.getRunningCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
-			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_RUNNING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
+			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_RUNNING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST-1].getId()%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 			</div>
 			<!-- 더보기 //-->
@@ -121,7 +121,7 @@
 		if(courseList.getAttendingCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
-			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_ATTENDING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
+			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_ATTENDING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST-1].getId()%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 			</div>
 			<!-- 더보기 //-->
