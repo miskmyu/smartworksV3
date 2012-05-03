@@ -154,6 +154,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.dataField = function(config){
 
 	SmartWorks.extend(options, config);
 	$formXml = $(options.formXml);
+	//$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
 	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
