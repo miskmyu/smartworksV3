@@ -1783,4 +1783,32 @@ $(function() {
 		return false;	
 	});
 	
+	$('.js_more_courses_by_user').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_courses_by_user');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
+		var courseType = parseInt(input.attr('courseType'));
+		var userId = input.attr('userId');
+		var lastId = input.attr('lastId');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreCoursesByUser.sw",
+			data : {
+				courseType: courseType,
+				userId: userId,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {				
+				input.parents('.js_course_list').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+		
 });

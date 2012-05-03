@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.info.CourseInfo"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
@@ -23,7 +24,7 @@
 		<div><%=cUser.getName() %>님의 운영코스</div>
 	</div>
 	<!-- 리스트1 -->
-	<div class="category_list">
+	<div class="category_list js_course_list">
 		<%
 		if(courseList.getRunnings()>0){
 			for(int i=0; i<courseList.getRunningCourses().length; i++){
@@ -57,11 +58,11 @@
 		<%
 			}
 		}
-		if(courseList.getRunnings()>CourseList.MAX_COURSE_LIST){
+		if(courseList.getRunningCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
-			<div class="more cb">
-				<div class="icon_more">더보기</div>
+			<div class="more cb" courseType="<%=Course.MY_RUNNING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
+				<div class="icon_more js_more_courses_by_user">더보기<span class="ml3 js_progress_span"></span></div>
 			</div>
 			<!-- 더보기 //-->
 		<%
@@ -79,7 +80,7 @@
 		<div><%=cUser.getName() %>님의 참여코스</div>
 	</div>
 	<!-- 리스트1 -->
-	<div class="category_list">
+	<div class="category_list js_course_list">
 		<%
 		if(courseList.getAttendings()>0){
 			for(int i=0; i<courseList.getAttendingCourses().length; i++){
@@ -113,11 +114,11 @@
 		<%
 			}
 		}
-		if(courseList.getAttendings()>CourseList.MAX_COURSE_LIST){
+		if(courseList.getAttendingCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
-			<div class="more cb">
-				<div class="icon_more">더보기</div>
+			<div class="more cb" courseType="<%=Course.MY_ATTENDING_COURSE%>" useId="<%=cUser.getId() %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
+				<div class="icon_more js_more_courses_by_user">더보기<span class="ml3 js_progress_span"></span></div>
 			</div>
 			<!-- 더보기 //-->
 		<%
