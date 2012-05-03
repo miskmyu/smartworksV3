@@ -38,7 +38,6 @@ function submitForms() {
 			success : function(formXml, status, jqXHR) {
 
 				// 화면 xml을 가져오면 가져온 값과 입력된 사진정보 및 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
-				var formXml = $(formXml);
 				new SmartWorks.GridLayout({
 					target : formContent,
 					formXml : formXml,
@@ -81,14 +80,15 @@ function submitForms() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-						console.log('target=', newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board'));
- 						newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();
 						smartPop.closeProgress();
+						smartPop.showInfo(smartPop.INFO, "공지가 성공적으로 만들어졌습니다.", function(){
+							newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();							
+						});
 					},
 					error : function(e) {
 						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, smartMessage.get("createBoardError"));
+						smartPop.showInfo(smartPop.ERROR, "공지를 생성하는데 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 					}
 				});
 			}

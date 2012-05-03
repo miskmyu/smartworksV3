@@ -1804,7 +1804,7 @@ $(function() {
 		var input = $(targetElement(e)).parents('.js_more_courses_by_user');
 		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
 			return false;
-		
+
 		var courseType = parseInt(input.attr('courseType'));
 		var userId = input.attr('userId');
 		var lastId = input.attr('lastId');

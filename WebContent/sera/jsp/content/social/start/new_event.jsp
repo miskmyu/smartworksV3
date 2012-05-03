@@ -51,7 +51,6 @@ function submitForms() {
 			success : function(formXml, status, jqXHR) {
 
 				// 화면 xml을 가져오면 가져온 값과 입력된 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
-				var formXml = $(formXml);
 				new SmartWorks.GridLayout({
 					target : formContent,
 					formXml : formXml,
@@ -96,12 +95,14 @@ function submitForms() {
 					success : function(data, status, jqXHR) {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 						smartPop.closeProgress();
-//						document.location.href = data.href;
+						smartPop.showInfo(smartPop.INFO, "이벤트가 성공적으로 만들어졌습니다.", function(){
+							document.location.href = "socialEvent.sw";							
+						});
 					},
 					error : function(e) {
 						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
+						smartPop.showInfo(smartPop.ERROR, "이벤트생성에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 					}
 				});
 			}
