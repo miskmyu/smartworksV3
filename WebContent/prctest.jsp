@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
+<%@page import="net.smartworks.server.engine.sera.manager.ISeraManager"%>
+<%@page import="net.smartworks.server.engine.organization.model.SwoGroup"%>
+<%@page import="net.smartworks.server.engine.organization.model.SwoGroupCond"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDataField"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdRecord"%>
 <%@page import="net.smartworks.server.service.IInstanceService"%>
@@ -67,32 +71,95 @@ public static Object getBean(String beanName, HttpServletRequest request) {
 
 %>
 <%
-	IInstanceService is = (IInstanceService)getBean("instanceServiceImpl", request);
+/* 
+	ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+	ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 
+	SwoGroupCond cond = new SwoGroupCond();
+	//runningCourseCond.setGroupLeader("");
+	String[] idIns = new String[43];
+	idIns[0] = "group_78";
+	idIns[1] = "group_80";
+	idIns[2] = "group_81";
+	idIns[3] = "group_93";
+	idIns[4] = "group_94";
+	idIns[5] = "group_96";
+	idIns[6] = "group_97";
+	idIns[7] = "group_98";
+	idIns[8] = "group_100";
+	idIns[9] = "group_112";
+	idIns[10] = "group_115";
+	idIns[11] = "group_116";
+	idIns[12] = "group_117";
+	idIns[13] = "group_119";
+	idIns[14] = "group_127";
+	idIns[15] = "group_129";
+	idIns[16] = "group_136";
+	idIns[17] = "group_137";
+	idIns[18] = "group_140";
+	idIns[19] = "group_146";
+	idIns[20] = "group_155";
+	idIns[21] = "group_164";
+	idIns[22] = "group_165";
+	idIns[23] = "group_188";
+	idIns[24] = "group_200";
+	idIns[25] = "group_201";
+	idIns[26] = "group_205";
+	idIns[27] = "group_209";
+	idIns[28] = "group_218";
+	idIns[29] = "group_225";
+	idIns[30] = "group_227";
+	idIns[31] = "group_229";
+	idIns[32] = "group_230";
+	idIns[33] = "group_231";
+	idIns[34] = "group_232";
+	idIns[35] = "group_233";
+	idIns[36] = "group_234";
+	idIns[37] = "group_236";
+	idIns[38] = "group_237";
+	idIns[39] = "group_238";
+	idIns[40] = "group_239";
+	idIns[41] = "group_241";
+	idIns[42] = "group_242";
+	cond.setGroupIdIns(idIns);
+	
 
-	SwdRecord record = new SwdRecord();
-	record.setFormId("frm_5a08a4c62def404db0302fb3cf8f6d45");
-	record.setCreationDate(new Date());
-	record.setDataFieldValue("3", "string", null);
-	record.setDataFieldValue("2", "string", null);
-	record.setDataFieldValue("1", "string", null);
-	record.setDataFieldValue("0", "string", null);
-	record.setDataFieldValue("26", "string", null);
+	for (int i = 42 ; i > -1; i--) {
+		
+		SwoGroup group = swoMgr.getGroup("", idIns[i], IManager.LEVEL_ALL);
+		
+		Date date = group.getCreationDate();
+		
+		//Date date = new Date();		
+		
+		long longDate = date.getTime();
+		long resultDate = longDate - (i * 10000);
+		date.setTime(resultDate);
+		group.setCreationDate(date);
+		group.setPicture(null);
+		
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+		System.out.println(i + "번째 Group : " + group.getId());
+		
+		
+		Thread.sleep(300);
+		
+		CourseDetail couresDetail = seraMgr.getCourseDetailById(group.getId());
+		couresDetail.setCreateDate(date);
+		couresDetail.setStart(date);
+		couresDetail.setEnd(date);
+		
+		seraMgr.setCourseDetail(couresDetail);
+		System.out.println(i + "번째 CourseDetail : " + group.getId());
+
+		Thread.sleep(300);
+	}
 	
 	
-	System.out.println(record);
-	/* SwdDataField dataField = new SwdDataField();
-	dataField.setId("1");
-	dataField.setType("string");
-	dataField.setRefRecordId(null);
-	dataField.setRefForm(null);
-	dataField.setRefFormField(null);
-	dataField.setValue("test");
-	record.setDataField("1", dataField); */
+	 */
 	
 	
-	
-	is.refreshDataFields(record);
+
 %>
 
 </body>
