@@ -53,7 +53,7 @@
 		</div>
 
 		<!-- Intro AD -->
-		<div id="intro_main_section mt5">
+		<div id="intro_main_section">
 			<!-- Left-->
 			<ul class="sera_guide">
 				<li class="btn_start">
