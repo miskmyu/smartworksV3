@@ -1496,6 +1496,23 @@ public class SeraServiceImpl implements ISeraService {
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
 
+			if (runningCoursesArray != null && runningCourseCnt > maxList) {
+				CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
+				for (int i = 0; i < runningCoursesArray.length; i++) {
+					tempRunningCourseInfos[i] = runningCoursesArray[i];
+				}
+				tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
+				runningCoursesArray = tempRunningCourseInfos;
+			}
+			if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
+				CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
+				for (int i = 0; i < attendingCoursesArray.length; i++) {
+					tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+				}
+				tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
+				attendingCoursesArray = tempAttendingCourseInfos;
+			}
+			
 			courseList.setRunnings((int)runningCourseCnt);
 			courseList.setRunningCourses(runningCoursesArray);
 			courseList.setAttendings((int)attendingCourseCnt);
@@ -4805,9 +4822,12 @@ public class SeraServiceImpl implements ISeraService {
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+				index += 1;
 			}
 			SeraUserInfo[] resultInfo = new SeraUserInfo[tempUserInfos.length + 1];
 			for (int i = 0; i < tempUserInfos.length; i++) {
@@ -4827,6 +4847,8 @@ public class SeraServiceImpl implements ISeraService {
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
@@ -5682,6 +5704,27 @@ public class SeraServiceImpl implements ISeraService {
 		//
 		// courseType : Course.MY_RUNNING_COURSE or Course.MY_ATTENDING_COURSE
 		//
+		
+		switch (courseType) {
+		case Course.MY_RUNNING_COURSE:
+			
+			
+			
+			
+			break;
+		case Course.MY_ATTENDING_COURSE:
+			
+			
+			
+			
+			
+			
+			
+			
+			break;
+		}
+		
+		
 		return SeraTest.getCoursesById(userId, courseType, null, maxList);
 	}
 
