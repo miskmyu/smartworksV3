@@ -505,7 +505,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .category_box {float: left; height: 325px; margin: 0 20px 20px 0; width: 220px;}
 .category_box.intro_margin {margin: 0 15px 55px 0 !important}
 .category_box .photo {border: 1px solid #D1D1D1; clear: both; height: 148px; margin-bottom: 13px; width: 218px;}
-.category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 12px; margin-bottom: 10px; width: 220px;}
+.category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; width: 220px; overflow: hidden}
 .category_box .subject a {color: #333333;}
 .category_box .subject a:hover {color: #666666;}
 .category_box .maker {background: url("../images/sera2_main_ico_creator.png") no-repeat scroll 0 0 transparent; clear: both; color: #559FCC; font: bold 12px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; padding-left: 20px; width: 200px;}
