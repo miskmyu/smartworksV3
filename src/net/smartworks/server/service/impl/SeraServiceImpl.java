@@ -4800,14 +4800,17 @@ public class SeraServiceImpl implements ISeraService {
 			
 			Map resultMap = new HashMap();
 			for (SeraUserInfo userInfo : userInfos) {
-				resultMap.put(userInfo.getId(), userInfos);
+				resultMap.put(userInfo.getId(), userInfo);
 			}
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+				index += 1;
 			}
 			SeraUserInfo[] resultInfo = new SeraUserInfo[tempUserInfos.length + 1];
 			for (int i = 0; i < tempUserInfos.length; i++) {
@@ -4827,6 +4830,8 @@ public class SeraServiceImpl implements ISeraService {
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
