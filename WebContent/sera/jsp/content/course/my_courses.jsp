@@ -75,7 +75,7 @@
 
 <!-- Content Section2 -->
 <div class="content_section">
-	<div class="header mt10">
+	<div class="header mt25">
 		<div><%=cUser.getName() %>님의 참여코스</div>
 	</div>
 	<!-- 리스트1 -->

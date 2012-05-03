@@ -33,6 +33,7 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	session.setAttribute("noUser", true);
+	session.setAttribute("headerOnly", true);
 %>
 
 <head>

@@ -28,7 +28,7 @@
 .sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 263px;}
 .sera_news .lst_normal {clear: both; padding: 0 15px 20px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
-.sera_news .lst_normal dt { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
+.sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
@@ -48,10 +48,10 @@
 .gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
 .gnb .top_logo a {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:107px; height:17px; margin:5px 125px 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
-.gnb .util_menu {float: left; height: 19px; overflow: hidden; padding-top: 5px; margin-left:70px; font-size:11px;}
-.gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
-.gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 4px}
-.gnb .util_menu .about.current a, .gnb .util_menu .news.current a {background-color: #666; padding: 4px; color: #FFF; border-radius: 4px;}
+.gnb .util_menu {float: left; overflow: hidden; padding-top: 5px; margin-left:68px; font-size:11px;}
+.gnb .util_menu .about {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 3px}
+.gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 3px}
+.gnb .util_menu .about.current a, .gnb .util_menu .news.current a {background-color: #666; padding: 4px 4px 3px; color: #FFF; border-radius: 4px;}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
 .top_navi {width:980px; clear:both; padding:5px 0 0 0}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
@@ -505,7 +505,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .category_box {float: left; height: 325px; margin: 0 20px 20px 0; width: 220px;}
 .category_box.intro_margin {margin: 0 15px 55px 0 !important}
 .category_box .photo {border: 1px solid #D1D1D1; clear: both; height: 148px; margin-bottom: 13px; width: 218px;}
-.category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 12px; margin-bottom: 10px; width: 220px;}
+.category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; width: 220px; overflow: hidden}
 .category_box .subject a {color: #333333;}
 .category_box .subject a:hover {color: #666666;}
 .category_box .maker {background: url("../images/sera2_main_ico_creator.png") no-repeat scroll 0 0 transparent; clear: both; color: #559FCC; font: bold 12px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; padding-left: 20px; width: 200px;}
@@ -535,7 +535,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .logo_srch {clear: both; height: 36px; margin: 10px auto; width: 980px; position: relative}
 .logo_srch .srch li {float: left}
 .logo_srch .logo {float: left; height: 36px; width: 201px}
-.logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 290px; border:none}
+.logo_srch .srch {background: url("../images/sera2_srchbarbg.png") no-repeat scroll 0 0 transparent; float: right; height: 36px; padding: 5px 0 5px 10px; width: 280px; border:none}
 .icon_srch_m {background: url("../images/sera2_main_btnsrch.png") no-repeat scroll 0 0 transparent; width:25px; height:25px; cursor:pointer; margin-right:10px; float:right}
 
 /* Course List Section */

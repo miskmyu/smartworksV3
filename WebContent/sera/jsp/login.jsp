@@ -51,8 +51,9 @@
 		<div id="sera_header">
 			<jsp:include page="/sera/jsp/header.jsp" />
 		</div>
+
 		<!-- Intro AD -->
-		<div id="intro_main_section">
+		<div id="intro_main_section mt5">
 			<!-- Left-->
 			<ul class="sera_guide">
 				<li class="btn_start">

@@ -59,6 +59,7 @@
 	User currentUser = SmartUtil.getCurrentUser();
 	session.setAttribute("userNaming", User.NAMING_NICKNAME_BASE);
 	session.setAttribute("noUser", false);
+	session.setAttribute("headerOnly", false);
 
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
