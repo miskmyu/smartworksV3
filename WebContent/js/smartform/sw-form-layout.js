@@ -68,12 +68,11 @@ SmartWorks.GridLayout = function(config) {
 		if(!isEmpty(mySelf)) this_ = mySelf;
 		var $htmlForm = $($.parseXML('<form name="frmSmartForm" class="js_validation_required form_layout"><table></table></form>')).find('form');
 		this_.$table = $htmlForm.find('table');
-		var $form = $($.parseXML(this_.options.formXml).find('form'));
+		var $form = $($.parseXML(this_.options.formXml)).find('form');
 		if(!isEmpty(formXml)) $form = $(formXml);
 		
 		$htmlForm.attr("formId", $form.attr('id'));
 		$htmlForm.attr("formName", $form.attr('name'));
-		
 		var mode = this_.options.mode;
 		if(isEmpty(refreshTarget) && !refreshOnly){
 			$htmlForm.appendTo(this_.options.target);			

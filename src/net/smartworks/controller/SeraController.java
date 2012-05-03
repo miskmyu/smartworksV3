@@ -555,4 +555,9 @@ public class SeraController {
 		return SmartUtil.returnMnv(request, "sera/jsp/search/course_by_type.jsp", "");
 	}
 
+	@RequestMapping("/moreCoursesByUser")
+	public ModelAndView moreCoursesByUser(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "sera/jsp/content/course/more_courses_by_user.jsp", "");
+	}
+
 }
