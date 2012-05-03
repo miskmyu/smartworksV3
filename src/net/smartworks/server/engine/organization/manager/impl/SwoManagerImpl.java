@@ -2673,6 +2673,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String status = null;
 		String creationUser = null;
 		Date creationDate = null;
+		Date creationDateTo = null;
 		String modificationUser = null;
 		Date modificationDate = null;
 		String nameLike = null;
@@ -2689,6 +2690,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			status = cond.getStatus();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
+			creationDateTo = cond.getCreateDateTo();
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
 			nameLike = cond.getNameLike();
@@ -2732,6 +2734,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.creationUser = :creationUser");
 			if (creationDate != null)
 				buf.append(" and obj.creationDate = :creationDate");
+			if (creationDateTo != null)
+				buf.append(" and obj.creationDate < :creationDateTo");
 			if (modificationUser != null)
 				buf.append(" and obj.modificationUser = :modificationUser");
 			if (modificationDate != null)
@@ -2790,6 +2794,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("creationUser", creationUser);
 			if (creationDate != null)
 				query.setTimestamp("creationDate", creationDate);
+			if (creationDateTo != null)
+				query.setTimestamp("creationDateTo", creationDateTo);
 			if (modificationUser != null)
 				query.setString("modificationUser", modificationUser);
 			if (modificationDate != null)

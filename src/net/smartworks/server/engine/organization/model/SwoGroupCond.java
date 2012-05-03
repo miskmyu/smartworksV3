@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
@@ -41,6 +43,7 @@ public class SwoGroupCond extends SwoObjectCond {
 	private String description;
 	private String nameLike;
 	private String picture;
+	private Date createDateTo;
 	private SwoGroupMember[] swoGroupMembers;
 
 	public SwoGroupMember[] getSwoGroupMembers() {
@@ -96,6 +99,12 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setGroupIdIns(String[] groupIdIns) {
 		this.groupIdIns = groupIdIns;
+	}
+	public Date getCreateDateTo() {
+		return createDateTo;
+	}
+	public void setCreateDateTo(Date createDateTo) {
+		this.createDateTo = createDateTo;
 	}
 	public SwoGroupCond() {
 		super();

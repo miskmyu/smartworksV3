@@ -89,6 +89,8 @@
 			<%
 			if(friendInforms.getTotalFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getFriends())){
 				for(int i=0; i<friendInforms.getFriends().length; i++){
+					if (i == FriendInformList.MAX_FRIEND_LIST)
+						break;
 					SeraUserInfo friend = friendInforms.getFriends()[i];
 			%>
 					<!-- 목록1-->
@@ -129,10 +131,10 @@
 	if (friendInforms.getTotalFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getFriends())) {
 		SeraUserInfo[] friends = friendInforms.getFriends();
 		if(friendInforms.getTotalFriends()>friends.length){
-			String lastId = friends[friends.length-1].getId(); 
+			String lastId = friends[friends.length-2].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_informs_btn" requestType="<%=FriendInformList.TYPE_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+			<div class="more js_more_friend_informs_btn js_more_friend_btn" requestType="<%=FriendInformList.TYPE_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				
 			</div>
@@ -155,6 +157,8 @@
 			<%
 			if(friendInforms.getTotalNonFriends()>0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())){
 				for(int i=0; i<friendInforms.getNonFriends().length; i++){
+					if (i == FriendInformList.MAX_FRIEND_LIST)
+						break;
 					SeraUserInfo friend = friendInforms.getNonFriends()[i];
 			%>
 					<!-- 목록1-->
@@ -195,10 +199,10 @@
 	if (friendInforms.getTotalNonFriends() > 0 && !SmartUtil.isBlankObject(friendInforms.getNonFriends())) {
 		SeraUserInfo[] friends = friendInforms.getNonFriends();
 		if(friendInforms.getTotalNonFriends()>friends.length){
-			String lastId = friends[friends.length-1].getId(); 
+			String lastId = friends[friends.length-2].getId(); 
 	%>
 			<!-- 더보기 -->
-			<div class="more js_more_friend_informs_btn" requestType="<%=FriendInformList.TYPE_NON_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
+			<div class="more js_more_friend_informs_btn js_more_non_friend_btn" requestType="<%=FriendInformList.TYPE_NON_FRIENDS %>" userId="<%=cUser.getId()%>" lastId="<%=lastId%>">
 				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				
 			</div>

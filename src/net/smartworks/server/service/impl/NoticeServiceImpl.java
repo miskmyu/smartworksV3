@@ -691,14 +691,16 @@ public class NoticeServiceImpl implements INoticeService {
 							break;
 					}
 				}
-				
-				NoticeMessage[] resultNoticeMessage = new NoticeMessage[NoticeMessageList.size()];
-				NoticeMessageList.toArray(resultNoticeMessage);
-				
+				NoticeMessage[] resultNoticeMessage = null;
+				if(NoticeMessageList.size() > 0) {
+					resultNoticeMessage = new NoticeMessage[NoticeMessageList.size()];
+					NoticeMessageList.toArray(resultNoticeMessage);
+					notificationNoticeBox.setDateOfLastNotice(resultNoticeMessage[resultNoticeMessage.length-1].getIssuedDate());
+					notificationNoticeBox.setRemainingLength((int)(totalRequestSize + totalDelayedTaskSize) - resultNoticeMessage.length);
+				}
+
 				notificationNoticeBox.setNoticeMessages(resultNoticeMessage);
 				notificationNoticeBox.setNoticeType(Notice.TYPE_NOTIFICATION);
-				notificationNoticeBox.setDateOfLastNotice(resultNoticeMessage[resultNoticeMessage.length -1].getIssuedDate());
-				notificationNoticeBox.setRemainingLength((int)(totalRequestSize + totalDelayedTaskSize) - resultNoticeMessage.length);
 				
 				return notificationNoticeBox;
 				

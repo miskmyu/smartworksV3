@@ -1496,6 +1496,23 @@ public class SeraServiceImpl implements ISeraService {
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
 
+			if (runningCoursesArray != null && runningCourseCnt > maxList) {
+				CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
+				for (int i = 0; i < runningCoursesArray.length; i++) {
+					tempRunningCourseInfos[i] = runningCoursesArray[i];
+				}
+				tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
+				runningCoursesArray = tempRunningCourseInfos;
+			}
+			if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
+				CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
+				for (int i = 0; i < attendingCoursesArray.length; i++) {
+					tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+				}
+				tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
+				attendingCoursesArray = tempAttendingCourseInfos;
+			}
+			
 			courseList.setRunnings((int)runningCourseCnt);
 			courseList.setRunningCourses(runningCoursesArray);
 			courseList.setAttendings((int)attendingCourseCnt);
@@ -4800,14 +4817,17 @@ public class SeraServiceImpl implements ISeraService {
 			
 			Map resultMap = new HashMap();
 			for (SeraUserInfo userInfo : userInfos) {
-				resultMap.put(userInfo.getId(), userInfos);
+				resultMap.put(userInfo.getId(), userInfo);
 			}
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
+				index += 1;
 			}
 			SeraUserInfo[] resultInfo = new SeraUserInfo[tempUserInfos.length + 1];
 			for (int i = 0; i < tempUserInfos.length; i++) {
@@ -4827,6 +4847,8 @@ public class SeraServiceImpl implements ISeraService {
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int index = 0;
 			while (itr.hasNext()) {
+				if (index == maxList)
+					break;
 				SwoGroupMember member = sortMap.get(itr.next());
 				String id = member.getUserId();
 				tempUserInfos[index] = (SeraUserInfo)resultMap.get(id);
@@ -5676,6 +5698,117 @@ public class SeraServiceImpl implements ISeraService {
 		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
 		
 		return courses;
+	}
+	@Override
+	public CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception {
+		//
+		// courseType : Course.MY_RUNNING_COURSE or Course.MY_ATTENDING_COURSE
+		//
+		ISwoManager swoManager = SwManagerFactory.getInstance().getSwoManager();
+		
+		
+		if (courseType == Course.MY_RUNNING_COURSE) {
+			SwoGroupCond runningCourseCond = new SwoGroupCond();
+			runningCourseCond.setGroupLeader(userId);
+			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
+			runningCourseCond.setPageSize(maxList);
+			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
+			
+			if (!CommonUtil.isEmpty(lastId)) {
+				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
+				if (lastGroup != null) {
+					Date lastDate = lastGroup.getCreationDate();
+					runningCourseCond.setCreateDateTo(lastDate);
+				}
+			}
+			
+			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
+
+			List<String> runningCourseIdList = new ArrayList<String>();
+			if (runningCourses != null) {
+				for(int i = 0; i < runningCourses.length; i++) {
+					SwoGroup course = runningCourses[i];
+					String courseId = course.getId();
+					runningCourseIdList.add(courseId);
+				}
+			}
+
+			String[] runningCourseIds = new String[runningCourseIdList.size()];
+			runningCourseIdList.toArray(runningCourseIds);
+
+			CourseDetailCond runningCourseDetailCond = new CourseDetailCond();
+			runningCourseDetailCond.setCourseIdIns(runningCourseIds);
+			CourseDetail[] runningCourseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails(userId, runningCourseDetailCond);
+
+			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, runningCourseDetails);
+
+			if (runningCoursesArray != null && runningCourseCnt > maxList) {
+				CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
+				for (int i = 0; i < runningCoursesArray.length; i++) {
+					tempRunningCourseInfos[i] = runningCoursesArray[i];
+				}
+				tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
+				runningCoursesArray = tempRunningCourseInfos;
+			}
+			
+			return runningCoursesArray;
+			
+		} else if (courseType == Course.MY_ATTENDING_COURSE) {
+			
+			SwoGroupCond attendingCourseCond = new SwoGroupCond();
+			SwoGroupMember[] courseMembers = new SwoGroupMember[1];
+			SwoGroupMember courseMember = new SwoGroupMember();
+			courseMember.setUserId(userId);
+			courseMembers[0] = courseMember;
+			attendingCourseCond.setSwoGroupMembers(courseMembers);
+			attendingCourseCond.setNotGroupLeader(userId);
+			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
+			attendingCourseCond.setPageSize(maxList);
+			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
+			
+			if (!CommonUtil.isEmpty(lastId)) {
+				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
+				if (lastGroup != null) {
+					Date lastDate = lastGroup.getCreationDate();
+					attendingCourseCond.setCreateDateTo(lastDate);
+				}
+			}
+			
+			SwoGroup[] attendingCourses = swoManager.getGroups(userId, attendingCourseCond, IManager.LEVEL_ALL);
+
+			List<String> attendingCourseIdList = new ArrayList<String>();
+			if (attendingCourses != null) {
+				for(int i = 0; i < attendingCourses.length; i++) {
+					SwoGroup course = attendingCourses[i];
+					String courseId = course.getId();
+					attendingCourseIdList.add(courseId);
+				}
+			}
+			
+			String[] attendingCourseIds = new String[attendingCourseIdList.size()];
+			attendingCourseIdList.toArray(attendingCourseIds);
+
+			
+			CourseDetailCond attendingCourseDetailCond = new CourseDetailCond();
+			attendingCourseDetailCond.setCourseIdIns(attendingCourseIds);
+			CourseDetail[] attendingCourseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails(userId, attendingCourseDetailCond);
+
+			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, attendingCourseDetails);
+
+			if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
+				CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
+				for (int i = 0; i < attendingCoursesArray.length; i++) {
+					tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+				}
+				tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
+				attendingCoursesArray = tempAttendingCourseInfos;
+			}
+			
+			return attendingCoursesArray;
+		} else {
+			return null;
+		}
+		//return SeraTest.getCoursesById(userId, courseType, null, maxList);
 	}
 
 }
