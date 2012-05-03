@@ -12,7 +12,7 @@
 .ribbon_like {background: url("../images/header.png") no-repeat scroll 0 -1185px transparent; width:56px; height:56px}
 .ribbon_mission {background: url("../images/header.png") no-repeat scroll -127px -1185px transparent; width:56px; height:56px}
 
-#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 0 auto 40px; width: 980px; position: relative}
+#intro_main_section {border: 1px solid #CBCBCB; clear: both; height: 435px; margin: 15px auto 40px; width: 980px; position: relative}
 .sera_guide {background: url("../images/main_guide_bg.png") repeat-x scroll 0 0 transparent; float: left; height: 435px; padding: 6px 0 0 6px; width: 286px;}
 .sera_guide .btn_start {clear: both; height: 65px; width: 285px;}
 .sera_guide .img_guide { clear: both; height: 74px; width: 285px;}
