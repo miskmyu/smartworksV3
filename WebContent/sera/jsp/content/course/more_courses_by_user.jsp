@@ -19,12 +19,14 @@
 
 	if(!SmartUtil.isBlankObject(courses)){
 		for(int i=0; i<courses.length; i++){
+			if (i == CourseList.MAX_COURSE_LIST)
+				break;
 			CourseInfo course = courses[i];
 			String endClass = ((i+1) % 3 == 0) ? "end" : "";
 			String achievedPoint =course.getAchievedRatio() + "%";
 			if(i==CourseList.MAX_COURSE_LIST){
 	%>
-				<div class="js_more_courses_by_user more cb" courseType="<%=courseType%>" useId="<%=userId %>" lastId="<%=courses[i-1].getId()%>">
+				<div class="js_more_courses_by_user more cb" courseType="<%=courseType%>" useId="<%=userId %>" lastId="<%=courses[i-2].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 			<%
