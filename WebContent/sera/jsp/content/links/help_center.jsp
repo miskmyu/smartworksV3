@@ -24,15 +24,7 @@
 	<!-- SNB Left//-->
 	<!-- Content -->
 	<div id="content_list_section">
-		<!-- Arrow -->
-		<div style="width: auto; padding: 0 14px 10px 0; float: right;">
-			<ul>
-				<li class="fl"><label class="mr10"> <img id="btnPrev" width="9" height="9" style="cursor: pointer;" src="sera/images/arrow_pre.gif"> </label></li>
-				<li class="fl"><strong id="spanNav">2</strong> / <span id="spanNavFull">3</span></li>
-				<li class="fl"><label class="ml10"> <img id="btnNext" width="9" height="9" style="cursor: pointer;" src="sera/images/arrow_next.gif"> </label></li>
-			</ul>
-		</div>
-		<!-- Arrow //-->
+		
 		<!-- Tutorial -->
 		<div id="menu1" class="content_box" style="display: block;">
 			<div class="tutorial_menu">
@@ -71,17 +63,15 @@
 					</li>
 				</ul>
 			</div>
-			<div id="divHelpPage" class="tutorial_visual" style="width: 587px; height: 690px;">
-				<!-- 튜토리얼 이미지 삽입 공간 W:587px H:690px -->
-				<div>
-					<object class="thum_image_size">
-					<param value="http://www.youtube.com/watch?v=LoWlnAzML88" name="movie">
-					<param value="always" name="allowScriptAccess">
-					<param value="true" name="allowFullScreen">
-					<embed allowfullscreen="true" allowscriptaccess="always" type="application/x-shockwave-flash" src="http://www.youtube.com/watch?v=LoWlnAzML88">
-					</object>
+			<div id="divHelpPage" class="tutorial_visual" style="width: 587px">
+				<!-- 코스 개설하기 -->
+				<div id="img1_1" class="helpImg">
+					<iframe width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
 				</div>
-
+				<!-- 코스 참여하기 -->
+				<div id="img2_1" class="helpImg" style="display:none">
+					<iframe id="img2_1" class="helpImg" width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
+				</div>
 			</div>
 		</div>
 		<!-- Tutorial //-->
