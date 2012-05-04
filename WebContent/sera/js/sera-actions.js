@@ -177,6 +177,30 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_view_my_note').live('click', function(e){
+		var input = $(targetElement(e));
+		input.parent().siblings().find('a').removeClass('current');
+		input.addClass('current');
+		var instanceType = input.attr('instanceType');
+		var userId = input.attr('userId');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'seraInstances.sw',
+			data : {
+				userId : userId,
+				instanceType : instanceType,
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_user_instance_list').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 	$('.js_mentor_form_btn').live('click', function(e){
 		var input = $(targetElement(e)).parents('.js_mentor_form_btn');
 		var createCourse = input.parents('.js_create_course_page');
