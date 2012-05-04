@@ -101,7 +101,7 @@
 							<img id="eventBtnOn2" width="9" height="9" alt="" src="sera/images/main_indicator_on.png" style=""> 
 							<img id="eventBtnOff2" width="9" height="9" alt="" style="display: none;" src="sera/images/main_indicator_off.png">
 						</a> 
-						<a id="eventBtn3" href="http://www.seracampus.com/Course/Detail/242"> 
+						<a id="eventBtn3" href="http://www.seracampus.com/courseHome.sw?courseId=group_242"> 
 							<img id="eventBtnOn3" width="9" height="9" alt="" src="sera/images/main_indicator_on.png" style="display: none;">
 							<img id="eventBtnOff3" width="9" height="9" alt="" style="" src="sera/images/main_indicator_off.png"> 
 						</a> 

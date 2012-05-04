@@ -99,7 +99,7 @@
 .header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:38px; padding:45x 25px 0}
 .header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:45px 25px 0}
 .header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:45px 25px 0}
-.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px}
+.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px; min-height: 28px}
 .header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
 .title_srch {margin:25px 0 10px; overflow:hidden; vertical-align: middle; line-height:22px}
 /* Title - Course Admin */
@@ -149,7 +149,7 @@ a.b_next:hover { background-position:-30px -535px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
-#sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%}
+#sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%; overflow-y: auto;}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
 
@@ -158,8 +158,8 @@ a.b_next:hover { background-position:-30px -535px}
 .photo_section { float:left}
 .my_photo,.photo_line { float:left; width:118px; height:118px; border:1px solid #b4b2b2; margin-right:15px}
 .my_comment { float:left; width:564px}
-.my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:14px}
-.my_comment .comment_txt {line-height:18px; height:88px}
+.my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:6px}
+.my_comment .comment_txt {line-height:18px; height:85px}
 .option { float:right; display:block}
 .option .txt { font-size:11px; float:left; margin:7px 5px 0 0; color:#dddddd}
 .option .txt a {color:#868686}
@@ -303,7 +303,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_area li { float:left}
 .panel_area .cb li { float:none}
 .photo_bg {background: url("../images/photo_default_bg.png") no-repeat; width:72px; float: left; padding: 5px 15px 0 4px}
-.photo_bg .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
+.photo_bg .rgt_name, .my_photo .rgt_name { font-weight:bold; margin:10px 0 0 0; text-align:center}
 .grade { float:left; margin:5px 0 0 0; text-align:center}
 .grade div { margin-bottom:5px}
 .point {background: url("../images/pb_point.png") no-repeat; width:14px; height:20px; float:left; position:relative; left:1px; top:23px}
@@ -525,7 +525,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Gauge Box */
 .gauge_box {clear: both; height: 10px; width:390px;}
-.gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 390px}
+.gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 390px; overflow: hidden;}
 .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px; display:block}
 .process {float: right; height: 12px; color:#999999}
 .mission_info { float:left; margin: 5px 0 0 0; color:#999999}
