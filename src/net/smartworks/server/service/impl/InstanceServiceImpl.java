@@ -5689,15 +5689,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 			MessageCond messageCond = new MessageCond();
-			messageCond.setTargetUser(userId);
 			if(fromDate != null)
 				messageCond.setCreationDateTo(fromDate);
 			messageCond.setPageNo(0);
 			messageCond.setPageSize(maxSize);
-			if(type == AsyncMessageInstance.MESSAGE_STATUS_UNREAD)
-				messageCond.setReadStatus(AsyncMessageInstance.MESSAGE_STATUS_UNREAD);
-			else if(type == AsyncMessageInstance.MESSAGE_STATUS_READ)
-				messageCond.setReadStatus(AsyncMessageInstance.MESSAGE_STATUS_READ);
+			if(type == Instance.TYPE_ASYNC_MESSAGE) {
+				messageCond.setTargetUser(userId);
+			} else if(type == Instance.TYPE_SENT_ASYNC_MESSAGE) {
+				messageCond.setCreationUser(userId);
+			}
 
 			Message[] messages = getMessageManager().getMessages(userId, messageCond, IManager.LEVEL_ALL);
 

@@ -3256,9 +3256,8 @@ public class SeraServiceImpl implements ISeraService {
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			case Instance.TYPE_SENT_ASYNC_MESSAGE:
-				/// 구현 바람 : 쪽지 중에서 내가 보낸 쪽지만 가져다 주면 됨..
-				return messageInfo;
-				/// 구현 바람 : 쪽지 중에서 내가 보낸 쪽지만 가져다 주면 됨..
+				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
+				break;
 			default:
 				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, fromDate, maxList);
 				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
