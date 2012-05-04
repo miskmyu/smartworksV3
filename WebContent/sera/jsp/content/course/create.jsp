@@ -104,7 +104,7 @@
 				<td>
 					<div class="form_label w110">상세설명</div>
 					<div class="form_value">
-						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="3" style="width: 490px"></textarea>
+						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="7" style="width: 490px"></textarea>
 						<div class="cb t_refe pt2">* 선택입력란입니다</div>
 					</div>
 				</td>

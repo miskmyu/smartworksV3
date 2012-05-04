@@ -149,7 +149,7 @@ a.b_next:hover { background-position:-30px -535px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:700px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
-#sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%}
+#sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%; overflow-y: auto;}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
 
