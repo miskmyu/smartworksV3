@@ -3,7 +3,7 @@
 .content_box {clear: both; height: auto; margin-bottom: 30px; overflow: hidden; width: 703px}
 .content_box .tutorial_menu {float: left; height: 404px; margin-right: 16px; width: 90px}
 .content_box .tutorial_menu ul li {margin-bottom: 10px;}
-.content_box .tutorial_visual {border: 2px solid #DCDCDC; float: left; height: 690px; padding: 2px; width: 587px}
+.content_box .tutorial_visual {border: 2px solid #DCDCDC; float: left; padding: 2px; width: 587px}
 .content_box .tutorial_menu {float: left; height: 404px; margin-right: 16px; width: 90px}
 
 /* FAQ */
