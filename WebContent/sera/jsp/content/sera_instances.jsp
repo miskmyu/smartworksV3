@@ -99,10 +99,10 @@
 				<ul class="panel_area">
 					<!-- photo-->
 					<li>
-						<a <%if(!seraInstance.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=seraInstance.getOwner().getId()%>" <%} %>>
+						<a <%if(seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? !((AsyncMessageInstanceInfo)seraInstance).getReceiver().getId().equals(cUser.getId()) : !seraInstance.getOwner().getId().equals(cUser.getId())){ %>href="othersPAGE.sw?userId=<%=seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? ((AsyncMessageInstanceInfo)seraInstance).getReceiver().getId() : seraInstance.getOwner().getId()%>" <%} %>>
 							<div class="photo_bg">
-								<img class="profile_size_72" src="<%=seraInstance.getOwner().getMidPicture() %>" />
-								<div class="rgt_name"><%=seraInstance.getOwner().getNickName() %></div>
+								<img class="profile_size_72" src="<%=seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? ((AsyncMessageInstanceInfo)seraInstance).getReceiver().getMidPicture() : seraInstance.getOwner().getMidPicture() %>" />
+								<div class="rgt_name"><%=seraInstance.getType() == Instance.TYPE_ASYNC_MESSAGE ? ((AsyncMessageInstanceInfo)seraInstance).getReceiver().getNickName() : seraInstance.getOwner().getNickName() %></div>
 							</div>
 							<div class="grade">
 								<div class="icon_mentor <%=mentorClass%>"></div>
