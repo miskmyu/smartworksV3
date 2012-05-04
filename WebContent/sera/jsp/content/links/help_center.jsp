@@ -73,48 +73,15 @@
 			</div>
 			<div id="divHelpPage" class="tutorial_visual" style="width: 587px; height: 690px;">
 				<!-- 튜토리얼 이미지 삽입 공간 W:587px H:690px -->
-				<a target="_blank" href="sera/images/helpcenter/help_course_making1.png"> 
-					<img id="img1_1" class="helpImg" width="587" height="690" src="sera/images/helpcenter/help_course_making1.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_making2.png"> 
-					<img id="img1_2" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_making2.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_making3.png">
-					<img id="img1_3" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_making3.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_making4.png">
-					<img id="img1_4" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_making4.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_making5.png">
-					<img id="img1_5" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_making5.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_making6.png">
-					<img id="img1_6" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_making6.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_part1.png">
-					<img id="img2_1" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_part1.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_part1.png">
-					<img id="img2_2" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_part2.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_course_part1.png">
-					<img id="img2_3" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_course_part3.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_setting_friend1.png"> 
-					<img id="img3_1" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_setting_friend1.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_setting_friend1.png"> 
-					<img id="img3_2" class="helpImg" width="587" height="690" style="display: none" src="sera/images/helpcenter/help_setting_friend2.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_setting_friend1.png"> 
-					<img id="img3_3" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_setting_friend3.png"> 
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_mypage1.png"> 
-					<img id="img4_1" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_mypage1.png">
-				</a> 
-				<a target="_blank" href="sera/images/helpcenter/help_mypage1.png">
-					<img id="img4_2" class="helpImg" width="587" height="690" style="display: none;" src="sera/images/helpcenter/help_mypage2.png">
-				</a>
+				<div>
+					<object class="thum_image_size">
+					<param value="http://www.youtube.com/watch?v=LoWlnAzML88" name="movie">
+					<param value="always" name="allowScriptAccess">
+					<param value="true" name="allowFullScreen">
+					<embed allowfullscreen="true" allowscriptaccess="always" type="application/x-shockwave-flash" src="http://www.youtube.com/watch?v=LoWlnAzML88">
+					</object>
+				</div>
+
 			</div>
 		</div>
 		<!-- Tutorial //-->
