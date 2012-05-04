@@ -5696,9 +5696,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(type == Instance.TYPE_ASYNC_MESSAGE) {
 				messageCond.setTargetUser(userId);
 			} else if(type == Instance.TYPE_SENT_ASYNC_MESSAGE) {
-				messageCond.setCreationUser(userId);
+				messageCond.setSendUser(userId);
 			}
 
+			messageCond.setOrders(new Order[]{new Order(MessageCond.A_CREATIONDATE, false)});
 			Message[] messages = getMessageManager().getMessages(userId, messageCond, IManager.LEVEL_ALL);
 
 			if(CommonUtil.isEmpty(messages))
