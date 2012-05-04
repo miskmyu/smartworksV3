@@ -91,12 +91,12 @@ if(SmartUtil.isBlankObject(team)){
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td><div class="form_label w101">팀 이름</div>
-					<div class="form_value"><%=team.getName() %></div></td>
+					<div class="form_value w570"><%=team.getName() %></div></td>
 			</tr>
 			<tr>
 				<td><div class="form_label w101">팀 설명</div>
-					<div class="form_value w569">
-						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 491px"><%=team.getDesc() %></textarea>
+					<div class="form_value w570">
+						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3"><%=team.getDesc() %></textarea>
 					</div>
 				</td>
 			</tr>

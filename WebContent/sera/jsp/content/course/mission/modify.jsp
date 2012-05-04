@@ -85,8 +85,8 @@
 			<tr>
 				<td>
 					<div class="form_label">미션<%=mission.getIndex()+1 %> 제목</div>
-					<div class="form_value">
-						<input name="txtMissionName" type="text" class="fieldline fl required" style="width: 574px" value="<%=mission.getSubject()%>">
+					<div class="form_value w560">
+						<input name="txtMissionName" type="text" class="fieldline fl required" value="<%=mission.getSubject()%>">
 					</div>
 				</td>
 			</tr>
@@ -126,15 +126,15 @@
 			</tr>
 			<tr>
 				<td><div class="form_label">미션 내용</div>
-					<div class="form_value">
-						<div class="fl js_mission_content_field" width="490px" content="<%=StringEscapeUtils.escapeHtml(mission.getContent())%>"></div>
+					<div class="form_value w560">
+						<div class="fl js_mission_content_field" content="<%=StringEscapeUtils.escapeHtml(mission.getContent())%>"></div>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><div class="form_label">첨부 파일</div>
 					<div class="form_value">
-						<div class="fl js_mission_attachment_field" groupId="<%=mission.getFileGroupId() %>" width="490px"></div>
+						<div class="fl js_mission_attachment_field" groupId="<%=mission.getFileGroupId() %>"></div>
 					</div>
 				</td>
 			</tr>

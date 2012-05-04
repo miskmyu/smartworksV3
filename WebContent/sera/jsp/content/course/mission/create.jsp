@@ -79,8 +79,8 @@
 			<tr>
 				<td>
 					<div class="form_label">미션<%=course.getLastMissionIndex()+2 %> 제목</div>
-					<div class="form_value">
-						<input name="txtMissionName" type="text" class="fieldline fl required" style="width: 574px">
+					<div class="form_value w560">
+						<input name="txtMissionName" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
@@ -118,8 +118,8 @@
 			</tr>
 			<tr>
 				<td><div class="form_label">미션 내용</div>
-					<div class="form_value">
-						<div class="fl js_mission_content_field" width="490px"></div>
+					<div class="form_value w560">
+						<div class="fl js_mission_content_field"></div>
 					</div>
 				</td>
 			</tr>

@@ -87,24 +87,24 @@
 			<tr>
 				<td>
 					<div class="form_label w110">코스 제목</div>
-					<div class="form_value">
-						<input name="txtCourseName" type="text" class="fieldline fl required" style="width: 490px">
+					<div class="form_value w540">
+						<input name="txtCourseName" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<div class="form_label w110">코스 목적</div>
-					<div class="form_value">
-						<input name="txtCourseObject" type="text" class="fieldline fl required" style="width: 490px">
+					<div class="form_value w540">
+						<input name="txtCourseObject" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<div class="form_label w110">상세설명</div>
-					<div class="form_value">
-						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="7" style="width: 490px"></textarea>
+					<div class="form_value w540">
+						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="7" style="width: 100%"></textarea>
 						<div class="cb t_refe pt2">* 선택입력란입니다</div>
 					</div>
 				</td>
@@ -155,8 +155,8 @@
 			<tr>
 				<td>
 					<div class="form_label w110">키워드</div>
-					<div class="form_value">
-						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" />
+					<div class="form_value w540">
+						<input name="txtCourseKeywords" type="text" class="fieldline fl required" />
 						<div class="cb t_refe pt2">* 코스의 이해를 도울수 있는 키워드 입력 (코스 검색 또는 추천코스에 사용 됨), 2개이상은 콤마(,)로 구분</div>
 					</div>
 				</td>
@@ -233,7 +233,7 @@
 			<tr>
 				<td>
 					<div class="form_label">학 력</div>
-					<div class="form_value w580">
+					<div class="form_value w570">
 						<textarea name="txtaMentorEducations" class="fieldline required" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getEducations()) %></textarea>
 					</div>
 				</td>
@@ -241,7 +241,7 @@
 			<tr>
 				<td>
 					<div class="form_label">경 력</div>
-					<div class="form_value w580">
+					<div class="form_value w570">
 						<textarea name="txtaMentorWorks" class="fieldline required" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getWorks()) %></textarea>
 					</div>
 				</td>
@@ -262,7 +262,7 @@
 			<tr>
 				<td>
 					<div class="form_label">강의활동 *</div>
-					<div class="form_value w580">
+					<div class="form_value w570">
 						<textarea name="txtaMentorLectures" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getLectures()) %></textarea>
 					</div>
 				</td>
@@ -270,7 +270,7 @@
 			<tr>
 				<td>
 					<div class="form_label">수상경력*</div>
-					<div class="form_value w580">
+					<div class="form_value w570">
 						<textarea name="txtaMentorAwards" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getAwards()) %></textarea>
 					</div>
 				</td>
@@ -278,7 +278,7 @@
 			<tr>
 				<td>
 					<div class="form_label">기타활동*</div>
-					<div class="form_value w580">
+					<div class="form_value w570">
 						<textarea name="txtaMentorEtc" class="fieldline" name="textarea" rows="3"><%=CommonUtil.toNotNull(mentor.getEtc()) %></textarea>
 					</div>
 				</td>

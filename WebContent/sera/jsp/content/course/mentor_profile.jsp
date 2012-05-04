@@ -43,32 +43,32 @@
 		</tr>
 		<tr>
 			<td><div class="form_label">멘토닉네임 *</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<input type="text" class="fieldline">
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><div class="form_label">학 력</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<textarea class="fieldline" name="textarea" rows="3" value=""></textarea>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><div class="form_label">경 력</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<textarea class="fieldline" name="textarea" rows="3" value=""></textarea>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><div class="form_label">세라활동 *</div>
-				<div class="form_value" style="width: 580px">
-					<div class="fl" style="width: 285px">
+				<div class="form_value w570">
+					<div class="fl" style="width: 280px">
 						<textarea class="fieldline" name="" rows="3" value="">멘토활동</textarea>
 					</div>
-					<div class="fr" style="width: 285px">
+					<div class="fr" style="width: 280px">
 						<textarea class="fieldline" name="" rows="3" value="">멘티활동</textarea>
 					</div>
 				</div>
@@ -76,21 +76,21 @@
 		</tr>
 		<tr>
 			<td><div class="form_label">강의활동 *</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<textarea class="fieldline" name="textarea" rows="3" value=""></textarea>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><div class="form_label">수상경력*</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<textarea class="fieldline" name="textarea" rows="3" value=""></textarea>
 				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><div class="form_label">기타활동*</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<textarea class="fieldline" name="textarea" rows="3" value=""></textarea>
 				</div>
 			</td>

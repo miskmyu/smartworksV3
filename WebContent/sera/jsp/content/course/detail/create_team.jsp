@@ -82,15 +82,15 @@
 			<tr>
 				<td>
 					<div class="form_label w101">팀 이름</div>
-					<div class="form_value">
-						<input name="txtTeamName" type="text" class="fieldline fl required" style="width: 493px">
+					<div class="form_value w570">
+						<input name="txtTeamName" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><div class="form_label w101">팀설명</div>
-					<div class="form_value">
-						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 491px"></textarea>
+					<div class="form_value w570">
+						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 100%"></textarea>
 					</div>
 				</td>
 			</tr>

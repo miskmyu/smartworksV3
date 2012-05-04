@@ -25,7 +25,7 @@
 		<tr>
 			<td>
 				<div class="form_label">받는사람</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<div class="icon_fb_space">
 						<div class="fieldline community_names js_community_names">
 							<input class="m0 js_auto_complete" type="text"
