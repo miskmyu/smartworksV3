@@ -45,7 +45,7 @@
 .id_focus, .pw_focus {background-color: #ECECEC; border: 1px solid #D7D7D7; color: #333333; height: 11px; padding: 4px 5px; width: 125px}
 
 /* Global Navigation Bar*/
-.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:980px;}
+.gnb {clear: both; height:29px; margin: 0 auto; position: relative; width:970px; margin: 0 5px}
 .gnb .top_logo a {float: left; background: url("../images/top_logo.gif") no-repeat 0 0 transparent; width:107px; height:17px; margin:5px 125px 0 0}
 .gnb .top_menu2 {float: left; height: 28px; width: 303px;}
 .gnb .util_menu {float: left; overflow: hidden; padding-top: 5px; margin-left:68px; font-size:11px;}
@@ -53,7 +53,7 @@
 .gnb .util_menu .news {color: #333333; float: left; height: 19px; margin-right: 10px; padding-top: 3px}
 .gnb .util_menu .about.current a, .gnb .util_menu .news.current a {background-color: #666; padding: 4px 4px 3px; color: #FFF; border-radius: 4px;}
 .gnb .util_menu .btn_login {float: left; height: 19px; width: 49px;}
-.top_navi {width:980px; clear:both; padding:5px 0 0 0}
+.top_navi {width:970px; clear:both; padding:5px 0 0 0; margin: 0 5px}
 .personal_info { font-size:11px; color:#FFF; font-weight:bold}
 .profile_pic {width:34px; height:34px; margin-right:5px; border:1px solid #5b5d5f}
 .pofile_con { float:left;line-height:28px; margin:15px 10px 0 0}
@@ -143,11 +143,11 @@ a.b_next:hover { background-position:-30px -535px}
 .tab li.current span a {color: #4e90b7; font-weight: bold; line-height:30px}
 
 /* Body */
-#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 530px; margin: 0 auto; position: relative; width: 980px}
+#container {background: url("../images/mypage_body_bg.gif") repeat-y scroll -10px 0 transparent; clear: both; height: auto; min-height: 530px; margin: 0 auto; position: relative; width: 970px}
 #container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 980px}
 #container:after {clear: both; content: ""; display: block}
-#sera_content {float: left; height: auto; padding: 15px 0; width:700px}
+#sera_content {float: left; height: auto; padding: 15px 0; width:690px}
 /* .snb {background: url("../images/mypage_snb_bg.gif") no-repeat scroll 0 0 transparent; float: left; height: auto; margin-bottom: 30px; overflow: hidden; padding: 0 9px 0 25px; position: relative; width: 205px} */
 #sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%; overflow-y: auto;}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
@@ -157,7 +157,7 @@ a.b_next:hover { background-position:-30px -535px}
 .my_comment_section { overflow:hidden; margin-bottom:20px}
 .photo_section { float:left}
 .my_photo,.photo_line { float:left; width:118px; height:118px; border:1px solid #b4b2b2; margin-right:15px}
-.my_comment { float:left; width:564px}
+.my_comment { float:left; width:554px}
 .my_comment .header { font-size:14px; color:#333333; font-weight:bold; margin-bottom:6px}
 .my_comment .comment_txt {line-height:18px; height:85px}
 .option { float:right; display:block}
@@ -480,8 +480,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .w420 {width:420px !important}
 .w470 {width:470px !important}
 .w530 {width:530px !important}
-.w569 {width:569px !important}
-.w580 {width:580px !important}
+.w540 {width:540px !important}
+.w560 {width:560px !important}
+.w570 {width:570px !important}
 .w635 {width:635px !important}
 
 /* Image Size */

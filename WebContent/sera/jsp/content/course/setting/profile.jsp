@@ -79,16 +79,16 @@
 			<tr>
 				<td>
 					<div class="form_label w110">코스 목적</div>
-					<div class="form_value">
-						<input name="txtCourseObject" type="text" class="fieldline fl required" style="width: 490px" value="<%=course.getObject()%>">
+					<div class="form_value w540">
+						<input name="txtCourseObject" type="text" class="fieldline fl required" value="<%=course.getObject()%>">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<div class="form_label w110">상세설명</div>
-					<div class="form_value">
-						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="7" style="width: 490px"><%=CommonUtil.toNotNull(course.getDesc()) %></textarea>
+					<div class="form_value w540">
+						<textarea name="txtaCourseDesc" class="fieldline fl" style="width: 100%" name="textarea" rows="7"><%=CommonUtil.toNotNull(course.getDesc()) %></textarea>
 						<div class="cb t_refe pt2">* 선택입력란입니다</div>
 					</div>
 				</td>
@@ -105,8 +105,8 @@
 			<tr>
 				<td>
 					<div class="form_label w110">키워드</div>
-					<div class="form_value">
-						<input name="txtCourseKeywords" type="text" style="width: 490px" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywordsAsCommaString())%>"/>
+					<div class="form_value w540">
+						<input name="txtCourseKeywords" type="text" class="fieldline fl required" value="<%=CommonUtil.toNotNull(course.getKeywordsAsCommaString())%>"/>
 						<div class="cb t_refe pt2">* 코스의 이해를 도울수 있는 키워드 입력 (코스 검색 또는 추천코스에 사용 됨), 2개이상은 콤마(,)로 구분</div>
 					</div>
 				</td>
