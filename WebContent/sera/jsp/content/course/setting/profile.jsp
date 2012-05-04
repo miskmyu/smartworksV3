@@ -88,7 +88,7 @@
 				<td>
 					<div class="form_label w110">상세설명</div>
 					<div class="form_value">
-						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="3" style="width: 490px"><%=CommonUtil.toNotNull(course.getDesc()) %></textarea>
+						<textarea name="txtaCourseDesc" class="fieldline fl" name="textarea" rows="7" style="width: 490px"><%=CommonUtil.toNotNull(course.getDesc()) %></textarea>
 						<div class="cb t_refe pt2">* 선택입력란입니다</div>
 					</div>
 				</td>
@@ -168,6 +168,9 @@
 		<div style="clear: both; display: inline-block">
 			<div class="btn_blu_l mr10 js_modify_course_btn">
 				<div class="btn_blu_r">코스 수정</div>
+			</div>
+			<div class="btn_blu_l mr10">
+				<div class="btn_blu_r">멘토프로필 수정</div>
 			</div>
 			<div class="btn_red_l js_remove_course_btn">
 				<div class="btn_red_r">코스 삭제</div>
