@@ -20,7 +20,7 @@
 <div class="header_tit">
 	<div class="tit_dep2 m0">
 		<h2>팀 명</h2>
-		<div>팀설명이 나오는 자리입니다. 이 팀은...</div>
+		<div><%=course.getTeam().getName() %></div>
 	</div>
 </div>
 <div class="my_comment_section">

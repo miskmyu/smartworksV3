@@ -55,6 +55,7 @@ import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
+import net.smartworks.model.sera.info.TeamInfo;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.SocialWork;
@@ -3254,6 +3255,10 @@ public class SeraServiceImpl implements ISeraService {
 			case Instance.TYPE_ASYNC_MESSAGE:
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
+			case Instance.TYPE_SENT_ASYNC_MESSAGE:
+				/// 구현 바람 : 쪽지 중에서 내가 보낸 쪽지만 가져다 주면 됨..
+				return messageInfo;
+				/// 구현 바람 : 쪽지 중에서 내가 보낸 쪽지만 가져다 주면 됨..
 			default:
 				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, fromDate, maxList);
 				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
@@ -5809,6 +5814,21 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 		//return SeraTest.getCoursesById(userId, courseType, null, maxList);
+	}
+	@Override
+	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Team getMyTeamByCourse(String courseId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Team getTeamById(String teamId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -80,7 +80,7 @@
 <%
 if(SmartUtil.isBlankObject(team)){
 %>
-	<<jsp:include page="/sera/jsp/content/course/detail/create_team.jsp">
+	<jsp:include page="/sera/jsp/content/course/detail/create_team.jsp">
 		<jsp:param value="<%=courseId %>" name="courseId"/>
 	</jsp:include>
 <%
