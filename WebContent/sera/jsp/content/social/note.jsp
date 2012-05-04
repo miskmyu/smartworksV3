@@ -25,7 +25,7 @@
 	<jsp:include page="/sera/jsp/content/social/start/new_note.jsp"/>
 </div>
 <!-- Panel Section -->
-<div class="panel_section js_social_note_page">
+<div class="panel_section mt20 js_social_note_page">
 	<div class="header">
 		<div class="icon_mytext"><a href="" class="js_view_my_note current" instanceType="<%=Instance.TYPE_ASYNC_MESSAGE %>" userId="<%=cUser.getId()%>">받은 쪽지함</a></div>
 		<div> | <a href="" class="js_view_my_note" instanceType="<%=Instance.TYPE_SENT_ASYNC_MESSAGE %>" userId="<%=cUser.getId()%>">보낸 쪽지함</a></div>

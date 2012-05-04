@@ -290,7 +290,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
-.panel_section .header {border-bottom:5px solid #559fcc; height:21px} /* Mypage Header */
+.panel_section .header {border-bottom:1px solid #559fcc; height:21px} /* Mypage Header */
 .panel_section .header .current { color:#608eba}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
 .panel_section .header div a {color:#333333; font-weight:bold}
