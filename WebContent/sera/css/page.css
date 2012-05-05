@@ -503,7 +503,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Category List */
 .category_list { margin:10px 0 0 0; overflow:hidden}
-.category_box {float: left; height: 325px; margin: 0 20px 20px 0; width: 220px;}
+.category_box {float: left; height: 325px; margin: 0 10px 20px 0; width: 220px;}
 .category_box.intro_margin {margin: 0 15px 55px 0 !important}
 .category_box .photo {border: 1px solid #D1D1D1; clear: both; height: 148px; margin-bottom: 13px; width: 218px;}
 .category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; width: 220px; overflow: hidden}
@@ -543,7 +543,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 #course_list_section {background: url("../images/courselist_container_bg.gif") repeat-y scroll 0 0 transparent; clear: both; height: auto; min-height: 100px; position: relative; width: auto; overflow:hidden}
 
 /* Content List Section */
-#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 715px;}
+#content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 705px;}
 #content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
 #content_list_section .search {margin: 0 auto; width: 460px;}
 #content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 26px; margin-right: 5px; width: 375px;}
