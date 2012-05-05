@@ -165,27 +165,22 @@
 
 	<definition name="socialNote" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/social/note.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 	</definition>
 
 	<definition name="socialFriend" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/social/friend.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 	</definition>
 
 	<definition name="socialEvent" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/social/event.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 	</definition>
 
 	<definition name="socialCalendar" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/social/calendar.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 	</definition>
 
 	<definition name="socialBadge" extends="seraCampus">
 		<put-attribute name="sera_content" value="/sera/jsp/content/social/badge.jsp" />
-		<put-attribute name="aside" value="/sera/jsp/aside/aside_my_page.jsp" />
 	</definition>
 
 	<definition name="Course" template="/sera/jsp/layouts_nouser.jsp">

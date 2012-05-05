@@ -5826,12 +5826,12 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public Team getMyTeamByCourse(String courseId) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return SeraTest.getTeam();
 	}
 	@Override
 	public Team getTeamById(String teamId) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return SeraTest.getTeam();
 	}
 
 }
