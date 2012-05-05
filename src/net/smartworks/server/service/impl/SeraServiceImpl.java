@@ -337,6 +337,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeamUser[] courseTeamUsers = courseTeam.getCourseTeamUsers();
 			SeraFriendCond seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
 			if(!CommonUtil.isEmpty(courseTeamUsers)) {
 				for(CourseTeamUser courseTeamUser : courseTeamUsers) {
 					SeraUserInfo seraUserInfo = new SeraUserInfo();
@@ -355,7 +356,6 @@ public class SeraServiceImpl implements ISeraService {
 					boolean isFriend = false;
 					if(seraUserDetail != null)
 						goal = seraUserDetail.getGoal();
-					SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -1903,19 +1903,16 @@ public class SeraServiceImpl implements ISeraService {
 					swdRecordCond.setWorkSpaceIdIns("('"+teamId+"')");
 				} else {
 					if(SmartUtil.isBlankObject(missionId)) {
-						Course course = getCourseById(courseId);
-						if(course != null) {
-							workSpaceIdIns = "(";
-							MissionInstanceInfo[] missionInstanceInfos = course.getMissions();
-							if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
-								for(int j=0; j<missionInstanceInfos.length; j++) {
-									MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
-									String missionInstanceId = missionInstanceInfo.getId();
-									workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
-								}
+						workSpaceIdIns = "(";
+						MissionInstanceInfo[] missionInstanceInfos = getMissionInstanceList(courseId, null, null);
+						if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
+							for(int j=0; j<missionInstanceInfos.length; j++) {
+								MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
+								String missionInstanceId = missionInstanceInfo.getId();
+								workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
 							}
-							workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
 						}
+						workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
 						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 					} else {
 						swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
