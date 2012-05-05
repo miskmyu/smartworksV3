@@ -12,8 +12,15 @@ public class Team extends BaseObject {
 	private LocalDate end;
 	private int accessPolicy;
 	private int maxMembers;
+	private SeraUserInfo[] leader;
 	private SeraUserInfo[] members;
 	
+	public SeraUserInfo[] getLeader() {
+		return leader;
+	}
+	public void setLeader(SeraUserInfo[] leader) {
+		this.leader = leader;
+	}
 	public String getCourseId() {
 		return courseId;
 	}
