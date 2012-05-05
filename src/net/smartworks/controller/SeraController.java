@@ -513,6 +513,10 @@ public class SeraController {
 
 	@RequestMapping("/course_by_type")
 	public ModelAndView courseByType(HttpServletRequest request, HttpServletResponse response) {
+		if(SmartUtil.getCurrentUser().isAnonymusUser()){
+	 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+			return new ModelAndView("sera/jsp/content/course_by_type.jsp", "smartWorks", smartworks);
+		}
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course_by_type.jsp", "");
 	}
 
