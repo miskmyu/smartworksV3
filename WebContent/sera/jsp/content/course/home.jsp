@@ -45,7 +45,7 @@
 			<ul class="mt8">
 				<li>
 					<div class="icon_cs_mentorname"><span>멘토명</span></div> 
-					<span class="t_s14"><%=mentorName%></span>
+					<a href="<%if(!mentorId.equals(cUser.getId())){%>othersPAGE.sw?userId=<%=mentorId%><%}%>"><span class="t_s14"><%=mentorName%></span></a>
 				</li>
 				<li>
 					<div class="icon_cs_openday">

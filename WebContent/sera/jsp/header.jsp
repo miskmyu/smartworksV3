@@ -41,13 +41,13 @@ function updateNoticeCount(message){
 	}
 };
 </script>
-<%
+<%		
+
 	boolean isAuthenticated = false;
 	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-	if (!SmartUtil.isBlankObject(context)) {
+	if(context != null)
 		isAuthenticated = true;
-	}
-		
+
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
 	User cUser = (isAuthenticated) ? SmartUtil.getCurrentUser() : null;;
@@ -317,18 +317,18 @@ $(function() {
 	});
 
 	$('.j_btn_login_form').live('click', function(e) {
-<%
-if(headerOnly){
-%>
-		parent.location.href = "logins.sw";
-<%
-}else{
-%>
-		$('.login_section').toggle();
-<%
-}
-%>
-		return false;
+		<%
+		if(headerOnly){
+		%>
+				parent.location.href = "logins.sw";
+		<%
+		}else{
+		%>
+				$('.login_section').toggle();
+		<%
+		}
+		%>
+				return false;
 	});
 });
 </script>

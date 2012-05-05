@@ -20,7 +20,7 @@
 	<!-- Photo Section -->
 	<div class="photo_section">
 		<a href="othersPAGE.sw?userId=<%=otherUser.getId() %>">
-			<div class="my_photo"><img src="<%=otherUser.getMidPicture() %>" /></div>
+			<div class="my_photo"><img class="profile_size_b" src="<%=otherUser.getMidPicture() %>" /></div>
 		</a>
 		<!-- Btn -->
 		<%
