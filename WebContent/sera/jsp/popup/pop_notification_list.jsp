@@ -15,6 +15,7 @@
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다.
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	User cUser = SmartUtil.getCurrentUser();
 
 	// 호출될때 전달되는 lastNoticeId를 가져온다.
 	String lastNoticeId = request.getParameter("lastNoticeId");

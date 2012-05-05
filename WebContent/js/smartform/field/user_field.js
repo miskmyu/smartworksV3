@@ -128,8 +128,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			courseId: options.courseId,
 			friendOnly: options.friendOnly,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				users : options.users
 			})
 	});
@@ -171,15 +170,16 @@ SmartWorks.FormRuntime.UserFieldBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			users: new Array() //{userId: '',longName: ''}
 	};
 
 	console.log("options.users :::: ", options.users);
 	SmartWorks.extend(options, config);
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
 	
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
 	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
 	dataField = {

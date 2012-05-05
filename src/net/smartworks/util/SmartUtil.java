@@ -64,10 +64,29 @@ public class SmartUtil {
 	public static ModelAndView returnMnv(HttpServletRequest request, String ajaxPage, String defaultPage) {
 		String getHeader = request.getHeader("X-Requested-With");
  		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-		if (getHeader != null)
-			return new ModelAndView(ajaxPage, "smartWorks", smartworks);
-		else
+		if (getHeader != null){
+			SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+			if (SmartUtil.isBlankObject(context))
+				return new ModelAndView("home.tiles", "smartWorks", smartworks);
+			else
+				return new ModelAndView(ajaxPage, "smartWorks", smartworks);
+		}else{
 			return new ModelAndView(defaultPage, "smartWorks", smartworks);
+		}
+	}
+
+	public static ModelAndView returnMnvSera(HttpServletRequest request, String ajaxPage, String defaultPage) {
+		String getHeader = request.getHeader("X-Requested-With");
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		if (getHeader != null){
+			SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+			if (SmartUtil.isBlankObject(context))
+				return new ModelAndView("myPAGE.tiles", "smartWorks", smartworks);
+			else
+				return new ModelAndView(ajaxPage, "smartWorks", smartworks);
+		}else{
+			return new ModelAndView(defaultPage, "smartWorks", smartworks);
+		}
 	}
 
 	/* (non-Javadoc)

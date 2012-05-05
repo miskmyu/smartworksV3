@@ -324,7 +324,7 @@ if(headerOnly){
 <%
 }else{
 %>
-		$('.login_section').show();
+		$('.login_section').toggle();
 <%
 }
 %>

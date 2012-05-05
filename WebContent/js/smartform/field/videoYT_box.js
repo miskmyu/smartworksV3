@@ -93,8 +93,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.VideoYTBoxBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				videoYTId: options.videoYTId,
 				fileList: options.fileList
 			})
@@ -137,15 +136,16 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			videoYTId: '',
 			fileList: null
 	};
 
 	SmartWorks.extend(options, config);
 
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
 	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
 	

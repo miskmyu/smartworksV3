@@ -29,6 +29,7 @@
 	<script type="text/javascript" src='sera/js/window_popup.js'></script>
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
+
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
 	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
@@ -38,13 +39,16 @@
 	session.setAttribute("noUser", true);
 %>
 
-	<script type="text/javascript">
-		var currentUser = {
-			locale : "<%=java.util.Locale.getDefault().getLanguage()%>",
-			timeZone : "<%=TimeZone.getDefault().getID()%>",
-			timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>"
-		};
-	</script>
+<script type="text/javascript">
+	if(isEmpty(parent.location.pathname.match('logins.sw'))){
+	    parent.location.href = "logins.sw";
+	}
+	var currentUser = {
+		locale : "<%=java.util.Locale.getDefault().getLanguage()%>",
+		timeZone : "<%=TimeZone.getDefault().getID()%>",
+		timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>"
+	};
+</script>
 
 <body onload="javascript:startPopup()">
 	<div id="wrap" class="main_bg">
@@ -278,7 +282,23 @@
 		</div>
 		<!-- Footer //-->
 	</div>
-	<script type="text/javascript">
+	<%
+		String type = (String)request.getAttribute("type");
+		if(SmartUtil.isBlankObject(type)) type ="login";
+	%>
+	<script type="text/javascript">	
+		<%
+		if(type.equals("failedLogin")) {
+		%>
+			smartPop.showInfo(smartPop.ERROR, "아이디가 없거나 암호가 잘못되었습니다. 확인 후 다시 시도하시기 바랍니다!");
+		<%
+		} else if(type.equals("logout")) {
+		%>
+			smartPop.showInfo(smartPop.INFO, "정상적으로 계정 로그아웃이 처리되었습니다!");
+		<%
+		}
+		%>
+
 		function NavigateParent(url){
 		    document.location.href = url;   
 		};

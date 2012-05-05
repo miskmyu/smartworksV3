@@ -10,8 +10,7 @@ function createFileDataFields(config){
 
 	SmartWorks.extend(options, config);
 	
-	var formXml = $(options.formXml);
-	console.log("formXml", formXml);
+	var formXml = options.formXml;
 	var dataFields = new Array();
 	dataFields.push(SmartWorks.FormRuntime.TextInputBuilder.dataField({
 		fieldName: '제목',
@@ -60,7 +59,7 @@ function createMemoDataFields(config){
 
 	SmartWorks.extend(options, config);
 
-	var formXml = $(options.formXml);
+	var formXml = options.formXml;
 	console.log("formXml", formXml);
 	var dataFields = new Array();
 	dataFields.push(SmartWorks.FormRuntime.TextInputBuilder.dataField({
@@ -88,7 +87,7 @@ function createBoardDataFields(config){
 
 	SmartWorks.extend(options, config);
 	
-	var formXml = $(options.formXml);
+	var formXml = options.formXml;
 	console.log("formXml", formXml);
 	var dataFields = new Array();
 	dataFields.push(SmartWorks.FormRuntime.TextInputBuilder.dataField({
@@ -125,7 +124,7 @@ function createEventDataFields(config){
 
 	SmartWorks.extend(options, config);
 
-	var formXml = $(options.formXml);
+	var formXml = options.formXml;
 	console.log("formXml", formXml);
 	var dataFields = new Array();
 	dataFields.push(SmartWorks.FormRuntime.TextInputBuilder.dataField({

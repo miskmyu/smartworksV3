@@ -1,5 +1,3 @@
-<%@page import="org.springframework.security.web.context.HttpSessionSecurityContextRepository"%>
-<%@page import="org.springframework.security.core.context.SecurityContext"%>
 <%@page import="net.smartworks.model.sera.info.ReviewInstanceInfo"%>
 <%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
@@ -13,12 +11,6 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 
 <%
-	boolean isAuthenticated = false;
-	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
-	if (!SmartUtil.isBlankObject(context)) {
-		isAuthenticated = true;
-	}
-	
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
