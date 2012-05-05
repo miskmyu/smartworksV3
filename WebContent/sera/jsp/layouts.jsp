@@ -37,7 +37,7 @@
 		if(!SmartUtil.isBlankObject(auth)){
 			if (SmartUtil.isBlankObject(request.getSession().getAttribute("loginId"))) {
 				System.out.println("-------------------------------------------");
-				System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
+				System.out.println(((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
 				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
 				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
 				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
