@@ -124,11 +124,11 @@
 								Mentor mentor = smartWorks.getMentorById(course.getLeader().getId());
 						%>
 						<div class="photo_line">
-							<img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" />
+							<a href="<%if(!mentor.getId().equals(cUser.getId())){%>othersPAGE.sw?userId=<%=mentor.getId()%><%}%>"><img class="profile_size_b" src="<%=mentor.getMidPicture()%>" width="118" height="118" /></a>
 						</div>
 						<div class="text m0" style="width:auto">
 							<ul class="cb">
-								<li class="tb mb5"><%=mentor.getName()%></li>
+								<a href="<%if(!mentor.getId().equals(cUser.getId())){%>othersPAGE.sw?userId=<%=mentor.getId()%><%}%>"><li class="tb mb5"><%=mentor.getName()%></li></a>
 								<%-- <li><span class="bullet_dot">출생 :</span><%=CommonUtil.toNotNull(mentor.getBorn())%>
 									(<%=CommonUtil.toNotNull(mentor.getHomeTown())%>)</li>
 								<li><span class="bullet_dot">가족 :</span><%=CommonUtil.toNotNull(mentor.getFamily())%></li>

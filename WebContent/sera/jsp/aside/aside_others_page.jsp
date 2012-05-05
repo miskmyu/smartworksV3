@@ -47,7 +47,7 @@
 							CourseInfo course = courseList.getRunningCourses()[i];
 						%>
 							<li>
-								<a href="courseHome.sw?courseId=<%=course.getId()%>"><span class="t_blue"><%=course.getName()%></span></a>
+								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>
 							</li>
 						<%
 						}
@@ -73,7 +73,7 @@
 							CourseInfo course = courseList.getAttendingCourses()[i];
 						%>
 							<li>
-								<a href="courseHome.sw?courseId=<%=course.getId()%>"><span class="t_blue"><%=course.getName()%></span></a>
+								<a href="courseHome.sw?courseId=<%=course.getId()%>" class="js_sera_content"><span class="t_blue"><%=course.getName()%></span></a>
 							</li>
 						<%
 						}

@@ -67,27 +67,29 @@
 				</li>
 			</ul>
 		</div>
-		<div class="course_info">
-			<dl>
-				<dt>코스 게시판</dt>
-				<%
-				if(!SmartUtil.isBlankObject(notices)){
-					for(int i=0; i<notices.length; i++){
-						InstanceInfo notice = notices[i];
-						if(notice.getType()==Instance.TYPE_BOARD){
-				%>
-							<dd>[알림] <%=notice.getSubject() %></dd>
-						<%
-						}else if(notice.getType()==Instance.TYPE_EVENT){
-						%>
-							<dd>[이벤트] <%=notice.getSubject() %></dd>
-						<%
+		<a href="" class="js_course_board_list">
+			<div class="course_info">
+				<dl>
+					<dt>코스 게시판</dt>
+					<%
+					if(!SmartUtil.isBlankObject(notices)){
+						for(int i=0; i<notices.length; i++){
+							InstanceInfo notice = notices[i];
+							if(notice.getType()==Instance.TYPE_BOARD){
+					%>
+								<dd>[알림] <%=notice.getSubject() %></dd>
+							<%
+							}else if(notice.getType()==Instance.TYPE_EVENT){
+							%>
+								<dd>[이벤트] <%=notice.getSubject() %></dd>
+							<%
+							}
 						}
 					}
-				}
-				%>
-			</dl>
-		</div>
+					%>
+				</dl>
+			</div>
+		</a>
 	</div>
 	<div class="course_menu js_course_main_menu">
 		<%
@@ -105,9 +107,9 @@
 				<li class="<%if(!cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스 게시판</a></li>
-				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_create_team">팀활동</a></li>
+				<li ><a href="" class="js_create_team">팀활동</a></li>
 				<li class="<%if(cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
-				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_course_setting">코스설정</a></li>
+				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
 		<!-- Menu Dep1//-->

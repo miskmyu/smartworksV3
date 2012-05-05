@@ -22,6 +22,8 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +106,8 @@ public class SeraController {
 	public ModelAndView courseHome(HttpServletRequest request, HttpServletResponse response) {
 
 		if(SmartUtil.getCurrentUser().isAnonymusUser()){
-			return SmartUtil.returnMnvSera(request, "", "courseHomeNouser.tiles");
+	 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+			return new ModelAndView("courseHomeNouser.tiles", "smartWorks", smartworks);
 		}
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/home.jsp", "courseHome.tiles");
 	}

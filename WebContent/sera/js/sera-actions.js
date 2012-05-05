@@ -17,13 +17,18 @@ $(function() {
 
 	$('.js_course_menu').live('click', function(e){
 		var input = $(targetElement(e)).parent();
+		var pos = input.prevAll().length;
+		if(currentUser.isAnonymous==='true' && pos != 4){
+			smartPop.showInfo(smartPop.WARN, "비회원이거나 로그인하지 않았습니다. 로그인 후 사용하시기 바랍니다!");
+			return false;
+		}
+
 		input.siblings().removeClass('current');
 		input.addClass('current');
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
 		var subMenu = courseHome.find('.js_course_sub_menu').hide();
 		var subMenus = subMenu.children().hide();
-		var pos = input.prevAll().length;
 		$(subMenus[pos]).addClass('current');
 		if(!isEmpty($(subMenus[pos]).children())){
 			$(subMenus[pos]).show();
@@ -61,6 +66,11 @@ $(function() {
 		}else{
 			$('.js_course_setting_menu li.js_course_setting_profile a').click();			
 		}
+		return false;
+	});
+	
+	$('.js_course_board_list').live('click', function(e){
+		$(targetElement(e)).parents('.js_course_home_page').find('.js_course_board').click();
 		return false;
 	});
 	
