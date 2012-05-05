@@ -4384,9 +4384,14 @@ public class SeraServiceImpl implements ISeraService {
 
 			if(!CommonUtil.isEmpty(seraFriends)) {
 				SeraFriend seraFriend = seraFriends[0];
-				seraFriend.setAcceptStatus(accepted ? SeraFriend.ACCEPT_STATUS_ACCEPT : SeraFriend.ACCEPT_STATUS_REJECT);
-				seraFriend.setReplyDate(new LocalDate());
-				getSeraManager().setFriend(receiveId, seraFriend);
+				if(accepted) {
+					seraFriend.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+					seraFriend.setReplyDate(new LocalDate());
+					getSeraManager().setFriend(receiveId, seraFriend);
+				} else {
+					String objId = seraFriend.getObjId();
+					getSeraManager().removeFriend(receiveId, objId);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
