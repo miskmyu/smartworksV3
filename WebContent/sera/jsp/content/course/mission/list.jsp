@@ -98,22 +98,20 @@ $(document).ready(function(){
 	            success: function(data) {
 	                var missions = [];
 	                var missionInstances = data.missions;
-	                var courseId = data.courseId;
  	                if(!isEmpty(missionInstances)){
 		                for(var i=0; i<missionInstances.length; i++){
 		                	var mission = missionInstances[i];
 		                	var today = new Date();
-		                	var openDate = new Date(mission.openDate);
+		                	var openDate = new Date(mission.openLocalDate);
 		                	var iconClass = (openDate>today) ? "icon_reserve" : (mission.clearedByMe) ? "icon_mission" :  "icon_mission current";
             	
 	                		var title = iconClass + '&' + '[미션' + (mission.index+1) + '] ' + mission.subject + '&' + mission.id;
-
 	                		missions.push({
 			                 	id: mission.id,
 			            		title: title,
-			                	start: new Date(mission.openDate),
-			                 	end: new Date(mission.closeDate),
-			                 	allDay: isEmpty(mission.closeDate),
+			                	start: new Date(mission.openLocalDate),
+			                 	end: new Date(mission.closeLocalDate),
+			                 	allDay: isEmpty(mission.closeLocalDate),
 			                 	editable: false,
 			                 	backgroundColor: "#ffffff",
 			                 	textColor: "#000000",

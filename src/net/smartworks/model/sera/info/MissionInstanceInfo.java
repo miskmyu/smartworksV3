@@ -57,11 +57,19 @@ public class MissionInstanceInfo extends WorkInstanceInfo {
 	public LocalDate getOpenDate() {
 		return openDate;
 	}
+	public LocalDate getOpenLocalDate() {
+		if(SmartUtil.isBlankObject(openDate)) return null;
+		return new LocalDate(openDate.getLocalDate());
+	}
 	public void setOpenDate(LocalDate openDate) {
 		this.openDate = openDate;
 	}
 	public LocalDate getCloseDate() {
 		return closeDate;
+	}
+	public LocalDate getCloseLocalDate() {
+		if(SmartUtil.isBlankObject(closeDate)) return null;
+		return new LocalDate(closeDate.getLocalDate());
 	}
 	public void setCloseDate(LocalDate closeDate) {
 		this.closeDate = closeDate;
