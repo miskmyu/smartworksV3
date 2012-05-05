@@ -427,10 +427,12 @@ public class SeraServiceImpl implements ISeraService {
 		List<CourseInfo> courseInfoList = new ArrayList<CourseInfo>();
 		for (int i = 0; i < swoGroups.length; i++) {
 			SwoGroup swoGroup = swoGroups[i];
-			String groupId = swoGroup.getId();
-			CourseDetail courseDetail = CourseDetail.pickupCourseDetail(groupId, courseDetails);
-			CourseInfo courseInfo = convertSwoGroupToCourseInfo(swoGroup, courseDetail);
-			courseInfoList.add(courseInfo);
+			if(!CommonUtil.isEmpty(swoGroup)) {
+				String groupId = swoGroup.getId();
+				CourseDetail courseDetail = CourseDetail.pickupCourseDetail(groupId, courseDetails);
+				CourseInfo courseInfo = convertSwoGroupToCourseInfo(swoGroup, courseDetail);
+				courseInfoList.add(courseInfo);
+			}
 		}
 		CourseInfo[] result = new CourseInfo[courseInfoList.size()];
 		courseInfoList.toArray(result);
