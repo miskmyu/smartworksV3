@@ -279,6 +279,10 @@ public class SeraController {
 
 	@RequestMapping("/moreCourses")
 	public ModelAndView moreCourses(HttpServletRequest request, HttpServletResponse response) {
+		if(SmartUtil.getCurrentUser().isAnonymusUser()){
+	 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+			return new ModelAndView("sera/jsp/content/more_courses.jsp", "smartWorks", smartworks);
+		}
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/more_courses.jsp", "");
 	}
 
@@ -562,6 +566,10 @@ public class SeraController {
 
 	@RequestMapping("/search_course_by_type")
 	public ModelAndView searchCourseByType(HttpServletRequest request, HttpServletResponse response) {
+		if(SmartUtil.getCurrentUser().isAnonymusUser()){
+	 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+			return new ModelAndView("sera/jsp/search/course_by_type.jsp", "smartWorks", smartworks);
+		}
 		return SmartUtil.returnMnvSera(request, "sera/jsp/search/course_by_type.jsp", "");
 	}
 
