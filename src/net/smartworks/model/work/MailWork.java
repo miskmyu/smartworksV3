@@ -3,7 +3,7 @@ package net.smartworks.model.work;
 public class MailWork extends Work {
 
 	private FormField[] displayFields = new FormField[] {
-			new FormField(FormField.ID_OWNER, "from", FormField.TYPE_NUMBER),
+			new FormField(FormField.ID_OWNER, "from", FormField.TYPE_USER),
 			new FormField(FormField.ID_SUBJECT, "subject", FormField.TYPE_TEXT),
 			new FormField(FormField.ID_CREATED_DATE, "date", FormField.TYPE_DATETIME),
 			new FormField("mailSize", "size", FormField.TYPE_NUMBER),

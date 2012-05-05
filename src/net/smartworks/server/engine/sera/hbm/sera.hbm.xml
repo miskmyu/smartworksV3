@@ -36,14 +36,76 @@
 		<property name="targetPoint" type="int"/>
 		<property name="achievedPoint" type="int"/>
 		<property name="lastMissionIndex" type="int"/>
+		<property name="recommended" type="boolean"/>
+		<property name="createDate" type="timestamp"/>
+		<property name="coursePoint" type="int"/>
 	</class>
-	
+	<class name="SeraUserDetail" table="SeraUserDetail">
+		<id name="userId" column="userId" type="string" length="50">
+			<generator class="assigned"/>
+		</id>
+		<property name="userName" type="string" length="50"/>
+		<property name="email" type="string" length="50"/>
+		<property name="birthday" type="timestamp"/>
+		<property name="sex" type="int"/>
+		<property name="goal" type="string" length="500"/>
+		<property name="interests" type="string" length="500"/>
+		<property name="educations" type="string" length="500"/>
+		<property name="works" type="string" length="500"/>
+		<property name="twUserId" type="string" length="50"/>
+		<property name="twPassword" type="string" length="100"/>
+		<property name="fbUserId" type="string" length="50"/>
+		<property name="fbPassword" type="string" length="100"/>
+		<property name="nickName" type="string" length="100"/>
+	</class>
 	<class name="SeraFriend" table="Friends">
-		<id name="objId" type="string" length="100" unsaved-value="undefined">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
-		<property name="userId" type="string" length="50"/>
-		<property name="friendId" type="string" length="50"/>
-		<property name="friendName" type="string" length="50"/>
+		<property name="requestId" type="string" length="50"/>
+		<property name="requestName" type="string" length="50"/>
+		<property name="receiveId" type="string" length="50"/>
+		<property name="receiveName" type="string" length="50"/>
+		<property name="acceptStatus" type="int"/>
+		<property name="requestDate" type="timestamp"/>
+		<property name="replyDate" type="timestamp"/>
+	</class>
+	<class name="CourseReview" table="CourseReview">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="courseId" type="string" length="50"/>
+		<property name="content" type="string" length="4000"/>
+		<property name="starPoint" type="double"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+	<class name="CourseTeam" table="CourseTeam">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="name" type="string" length="100"/>
+		<property name="courseId" type="string" length="50"/>
+		<property name="description" type="string" length="4000"/>
+		<property name="accessPolicy" type="int"/>
+		<property name="memberSize" type="int"/>
+		<property name="startDate" column="startDate" type="timestamp"/>
+		<property name="endDate" column="endDate" type="timestamp"/>
+		<array name="courseTeamUsers" table="CourseTeamUser">
+			<key column="objId" foreign-key="FkCourseTeamUser" />
+			<list-index column="memberSeq" />
+			<composite-element class="net.smartworks.server.engine.sera.model.CourseTeamUser">
+				<property name="userId" type="string" length="50" not-null="true"/>
+			</composite-element>
+		</array>
+	</class>
+
+	<class name="CourseTeamUser" table="CourseTeamUser">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="userId" type="string" length="50" not-null="true"/>
 	</class>
 </hibernate-mapping>

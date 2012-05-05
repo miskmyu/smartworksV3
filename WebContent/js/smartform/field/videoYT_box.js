@@ -21,7 +21,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var value = (options.dataField && options.dataField.value) || '';
 	var fileList = (options.dataField && options.dataField.fileList) || '';
 	var $entity = options.entity;
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var videoWidth = parseFloat($graphic.attr('videoWidth'));
 	var videoHeight = parseFloat($graphic.attr('videoHeight'));
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -32,7 +32,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.build = function(config) {
 	var valueWidth = 100 - labelWidth;
 
 	var spanRequired = "";
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		spanRequired = '<div class="label_required"></div>';
 		required = ' class="form_value sw_required" ';
@@ -82,10 +82,10 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.buildEx = function(config){
 	SmartWorks.extend(options, config);
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="videoYTBox" viewingType="videoYTBox"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly + '" labelWidth="'+ labelWidth + '" videoWidth="'+ options.videoWidth + '" videoHeight="' + options.videoHeight + '"/>' +
-					'</formEntity>');
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_videoYTBox" fieldid="' + options.fieldId + '"  colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.VideoYTBoxBuilder.build({
@@ -93,8 +93,7 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.VideoYTBoxBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				videoYTId: options.videoYTId,
 				fileList: options.fileList
 			})
@@ -137,15 +136,16 @@ SmartWorks.FormRuntime.VideoYTBoxBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			videoYTId: '',
 			fileList: null
 	};
 
 	SmartWorks.extend(options, config);
 
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
 	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
 	

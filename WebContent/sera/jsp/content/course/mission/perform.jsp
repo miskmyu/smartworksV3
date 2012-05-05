@@ -21,7 +21,7 @@
 	Course course = (Course)mission.getWorkSpace();
 %>
 
-<div class="js_perform_mission_page">
+<div class="js_perform_mission_page" missionId="<%=missionId%>" courseId="<%=course.getId()%>">
 
 	<!-- Title -->
 	<div class="header_mission mb10">
@@ -42,46 +42,71 @@
 				<span class="tb ml5"><%=mission.getSubject() %></span>
 				<!-- 우측영역 -->
 				<div class="fr ">
-					<div class="icon_delete_red fr ml5">
-						<a href=""> </a>
-					</div>
 					<%
-					if(cUser.getId().equals(course.getLeader().getId())){
+					if(course.isMyRunningCourse()){
 					%>
-						<div class="btn_mid_l fr ml10">
+						<div class="icon_delete_red fr ml10 js_delete_mission_btn">
+							<a href="" title="미션삭제"> </a>
+						</div>
+						<div class="btn_mid_l fr ml10 js_show_modify_mission">
 							<div class="btn_mid_r">미션수정</div>
 						</div>
 					<%
 					}
 					LocalDate now = new LocalDate();
 					LocalDate closeDate = mission.getCloseDate();
-					String remainDays = (closeDate.getTime()<=now.getTime()) ? "종료됨" : LocalDate.getDiffDate(now, closeDate) + "일 남음";
+					String remainDays = (LocalDate.getDiffDate(closeDate, now)>0) ? LocalDate.getDiffDate(closeDate, now) + "일 지남" : LocalDate.getDiffDate(now, closeDate)+1 + "일 남음";
 					%>
 					<span class="t_redb"><%=remainDays%></span> <span class="t_refe ml5"><%=now.toLocalDateTimeSimpleString() %></span>
 				</div>
 			</dt>
-			<dd style="display: block">
+			<dd style="display: block" class="js_mission_content_item">
 				<div class="text w100"><%=mission.getContent() %></div>
+				<%
+				if(!SmartUtil.isBlankObject(mission.getFileGroupId())){
+				%>
+					<div><%=SmartUtil.getFilesDetailInfo(mission.getFiles()) %></div>
+				<%
+				}
+				%>
 				<!-- 별점 -->
-				<div class="util">
-					<span class="icon_mission fr"></span> <span class="icon_mission fr"></span>
-					<span class="icon_mission fr"></span> <span class="icon_mission fr"></span>
-					<span class="icon_mission fr"></span>
+				<div class="star_score fr">
+					<ul>
+						<%
+						for(int j=0; j<5; j++){
+							String pointClass = "";
+							if(mission.getStarPoint()>j)
+								if(mission.getStarPoint()>=(j+1))
+									pointClass = "full";
+								else
+									pointClass = "half";
+						%>
+							<li class="icon_star_score <%=pointClass%>"><a href=""> </a></li>
+						<%
+						}
+						%>
+					</ul>
 				</div>
 				<!-- 별점 //-->
 			</dd>
 			<!-- Icon Close -->
 			<div class="icon_close_area">
-				<div class="icon_close_red fr">
+				<div class="icon_close_red fr js_toggle_mission_btn">
 					<a href=""> </a>
 				</div>
 			</div>
-			<div>
-				<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
-					<jsp:param value="<%=course.getId() %>" name="courseId"/>
-					<jsp:param value="<%=missionId %>" name="missionId"/>
-				</jsp:include>
-			</div>
+			<%
+			if((course.isMyAttendingCourse() || course.isMyRunningCourse()) && !mission.isClearedByMe()){
+			%>
+				<div>
+					<jsp:include page="/sera/jsp/content/course/mission/report.jsp">
+						<jsp:param value="<%=course.getId() %>" name="courseId"/>
+						<jsp:param value="<%=missionId %>" name="missionId"/>
+					</jsp:include>
+				</div>
+			<%
+			}
+			%>
 		</dl>
 	</div>
 	<!-- 미션수행 //-->

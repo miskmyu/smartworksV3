@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.work.FileCategory;
@@ -342,43 +344,43 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/add_comment_on_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.addCommentOnWork(requestBody, request);
-		return null;
+		String commentId = smartworks.addCommentOnWork(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentId", commentId);
+		return map;		
 	}
 
 	@RequestMapping(value = "/update_comment_on_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody void updateCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.updateCommentOnWork(requestBody, request);
-		return null;
 	}
 
-	@RequestMapping(value = "/remove_comment_on_work", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_comment_from_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> removeCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeCommentOnWork(requestBody, request);
-		return null;
+	public @ResponseBody void removeCommentFromWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentFromWork(requestBody, request);
 	}
 
 	@RequestMapping(value = "/add_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.addCommentOnInstance(requestBody, request);
-		return null;
+		String commentId = smartworks.addCommentOnInstance(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("commentId", commentId);
+		return map;
 	}
 
 	@RequestMapping(value = "/update_comment_on_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public @ResponseBody void updateCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.updateCommentOnInstance(requestBody, request);
-		return null;
 	}
 
-	@RequestMapping(value = "/remove_comment_on_instance", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_comment_from_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Map<String, Object> removeCommentOnInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeCommentOnInstance(requestBody, request);
-		return null;
+	public @ResponseBody void removeCommentFromInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeCommentFromInstance(requestBody, request);
 	}
 
 	@RequestMapping(value = "/get_events_by_dates", method = RequestMethod.GET)
@@ -449,4 +451,43 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		map.put("events", events);
 		return map;
 	}	
+
+	@RequestMapping(value = "/add_like_to_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void addLikeToInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.addLikeToInstance(requestBody, request);
+	}
+
+	@RequestMapping(value = "/remove_like_from_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeLikeFromInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeLikeFromInstance(requestBody, request);
+	}
+
+	@RequestMapping(value = "/create_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void createAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.createAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/remove_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/set_async_message", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setAsyncMessage(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setAsyncMessage(requestBody, request);
+	}
+
+	@RequestMapping(value = "/fetch_async_messages_by_chatid", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ChatInstanceInfo[] messages = smartworks.fetchAsyncMessagesByChatid(request, response);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("messages", messages);
+		return map;
+	}
 }

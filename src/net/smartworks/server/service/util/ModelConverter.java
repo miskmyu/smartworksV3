@@ -30,6 +30,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.InstanceSpaceInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -110,6 +111,9 @@ import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormModel;
 import net.smartworks.server.engine.infowork.form.model.SwfFormat;
+import net.smartworks.server.engine.like.manager.ILikeManager;
+import net.smartworks.server.engine.like.model.Like;
+import net.smartworks.server.engine.like.model.LikeCond;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -142,7 +146,6 @@ import net.smartworks.server.engine.process.xpdl.xpdl2.Activity;
 import net.smartworks.server.engine.process.xpdl.xpdl2.PackageType;
 import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
-import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
@@ -200,9 +203,6 @@ public class ModelConverter {
 	private static IFdrManager getFdrManager() {
 		return SwManagerFactory.getInstance().getFdrManager();
 	}
-	private static IWorkListManager getWlmManager() {
-		return SwManagerFactory.getInstance().getWorkListManager();
-	}
 	private static IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
 	}
@@ -251,23 +251,126 @@ public class ModelConverter {
 	}
 	// #########################################  INFO  ########################################################################
 	
-	public static WorkSpaceInfo getWorkSpaceInfo(String workSpaceType, String workSpaceId) throws Exception {
-		if (workSpaceType == null || workSpaceId == null)
+	public static String[] getLikersUserIdArray(String userId, int refType, String refId) throws Exception {
+		if ( CommonUtil.isEmpty(refType) || CommonUtil.isEmpty(refId))
 			return null;
+		ILikeManager likeMgr = SwManagerFactory.getInstance().getLikeManager();
+		LikeCond cond = new LikeCond();
+		//cond.setRefType(refType);
+		cond.setRefId(refId);
+		Like[] likes = likeMgr.getLikes(userId, cond, IManager.LEVEL_ALL);
+		if (likes == null || likes.length == 0)
+			return null;
+		String[] likesArray = new String[likes.length];
+		for (int i = 0; i < likes.length; i++) {
+			Like like = likes[i];
+			String createUserId = like.getCreationUser();
+			likesArray[i] = createUserId;
+		}
+		return likesArray;
+	}
+	
+	
+	public static WorkSpaceInfo getWorkSpaceInfo(String workSpaceType, String workSpaceId) throws Exception {
+		if(CommonUtil.isEmpty(workSpaceType) || CommonUtil.isEmpty(workSpaceId))
+			return null;
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		WorkSpaceInfo workSpaceInfo = null;
 		switch (Integer.parseInt(workSpaceType)) {
 		case ISmartWorks.SPACE_TYPE_WORK_INSTANCE :
-			//workSpaceInfo = new WorkInstanceInfo(workSpaceId, null);
-			workSpaceInfo = null;
+			InstanceSpaceInfo instanceSpaceInfo = new InstanceSpaceInfo();
+			InstanceInfo instanceInfo = null;
+			WorkInfo workInfo = new WorkInfo();
+			TskTaskCond tskCond = new TskTaskCond();
+			tskCond.setExtendedProperties(new Property[] {new Property("recordId", workSpaceId)});
+			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+			WorkSpaceInfo wsInfo = null;
+			String instanceId = workSpaceId;
+			String subject = null;
+			String domainId = null;
+			String workId = null;
+			String workName = null;
+			String owner = null;
+			LocalDate createDate = null;
+			String lastModifier = null;
+			LocalDate lastModifiedDate = null;
+
+			if(!CommonUtil.isEmpty(tskTasks)) {
+				TskTask tskTask = tskTasks[0];
+				String refType = CommonUtil.toNotNull(tskTask.getRefType());
+				SwdRecord swdRecord = (SwdRecord)SwdRecord.toObject(tskTask.getDocument());
+				if(refType.equals(TskTask.TASKREFTYPE_BOARD)) {
+					instanceInfo = new BoardInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_EVENT)) {
+					instanceInfo = new EventInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_FILE)) {
+					instanceInfo = new FileInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_IMAGE)) {
+					instanceInfo = new ImageInstanceInfo();
+				} else if(refType.equals(TskTask.TASKREFTYPE_MEMO)) {
+					instanceInfo = new MemoInstanceInfo();
+				} else {
+					instanceInfo = new PWInstanceInfo();
+				}
+				if(swdRecord != null) {
+//					String wsType = swdRecord.getWorkSpaceType();
+//					String wsId = swdRecord.getWorkSpaceId();
+//					wsInfo = getWorkSpaceInfo(wsType, wsId);
+					subject = tskTask.getTitle();
+					domainId = swdRecord.getDomainId();
+					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
+					String formId = swdDomain.getFormId();
+					SwfFormCond swfFormCond = new SwfFormCond();
+					swfFormCond.setId(formId);
+					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+					if(!CommonUtil.isEmpty(swfForms)) {
+						SwfForm swfForm = swfForms[0];
+						workId = swfForm.getPackageId();
+						workName = swfForm.getName();
+					}
+					owner = swdRecord.getCreationUser();
+					createDate = new LocalDate(swdRecord.getCreationDate() != null ? swdRecord.getCreationDate().getTime() : new Date().getTime());
+					lastModifier = swdRecord.getModificationUser();
+					lastModifiedDate = new LocalDate(swdRecord.getModificationDate() != null ? swdRecord.getModificationDate().getTime() : new Date().getTime());
+				}
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
+			} else {
+				instanceInfo = new PWInstanceInfo();
+				PrcProcessInst prcProcessInst = getPrcManager().getProcessInst(userId, workSpaceId, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(prcProcessInst)) {
+					subject = prcProcessInst.getTitle();
+					workId = prcProcessInst.getDiagramId();
+					workName = prcProcessInst.getName();
+				}
+				workInfo.setType(SmartWork.TYPE_PROCESS);
+			}
+			workInfo.setId(workId);
+			workInfo.setName(workName);
+			instanceInfo.setId(instanceId);
+			instanceInfo.setSubject(subject);
+			instanceInfo.setWork(workInfo);
+			instanceInfo.setWorkSpace(wsInfo);
+			instanceInfo.setOwner(getUserInfoByUserId(owner));
+			instanceInfo.setCreatedDate(createDate);
+			instanceInfo.setLastModifier(getUserInfoByUserId(lastModifier));
+			instanceInfo.setLastModifiedDate(lastModifiedDate);
+			instanceSpaceInfo.setId(instanceId);
+			instanceSpaceInfo.setName(subject);
+			instanceSpaceInfo.setInstance(instanceInfo);
+			workSpaceInfo = instanceSpaceInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_DEPARTMENT :
-			workSpaceInfo = new DepartmentInfo(workSpaceId, null);
+			DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(workSpaceId);
+			workSpaceInfo = departmentInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_GROUP :
-			workSpaceInfo = new GroupInfo(workSpaceId, null);
+			GroupInfo groupInfo = getGroupInfoByGroupId(workSpaceId);
+			workSpaceInfo = groupInfo;
 			break;
 		case ISmartWorks.SPACE_TYPE_USER : 
-			workSpaceInfo = new UserInfo(workSpaceId, null);
+			UserInfo userInfo = getUserInfoByUserId(workSpaceId);
+			workSpaceInfo = userInfo;
 			break;
 		}
 		return workSpaceInfo;
@@ -323,9 +426,9 @@ public class ModelConverter {
 			taskInfo.setWork(workInfo); //workInfo
 
 			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-			
+
 			taskInfo.setStatus(task.getTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
-			
+
 			//taskInfo.setNumberOfAssociatedWorks(numberOfAssociatedWorks);
 			taskInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setLastModifiedDate(new LocalDate( task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getTskCreateDate().getTime() : task.getTaskLastModifyDate().getTime()));
@@ -336,7 +439,7 @@ public class ModelConverter {
 			taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
 			taskInfo.setFormId(task.getTskForm());
-			
+
 			resultInfoList.add(taskInfo);
 		}
 		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
@@ -484,7 +587,7 @@ public class ModelConverter {
 				filePath = StringUtils.replace(filePath, "\\", "/");
 				if(filePath.indexOf(companyId) != -1)
 					originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
-				filePath = filePath.replaceAll(extension, "_thumb" + extension);
+				filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 				if(filePath.indexOf(companyId) != -1)
 					imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 			}
@@ -830,7 +933,8 @@ public class ModelConverter {
 					tskInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 					tskInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));
 					tskInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
-
+					tskInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
+					
 					resultInfoList.add(tskInfo);
 				}
 			} else {
@@ -1295,7 +1399,57 @@ public class ModelConverter {
 		return workCtg;
 	}
 
-	public static boolean isAccessableForMe(Object object) throws Exception {
+	public static void setAccessPolicyByMember(String accessLevel, AccessPolicy accessPolicy, Set<CommunityInfo> communityInfoSet, String accessValue) throws Exception {
+		if(accessLevel.equals("1")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+		} else if(accessLevel.equals("2")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+			if(!CommonUtil.isEmpty(accessValue)) {
+				String[] accessValues = accessValue.split(";");
+				if(!CommonUtil.isEmpty(accessValues)) {
+					for(String accessUser : accessValues) {
+						UserInfo userInfo = getUserInfoByUserId(accessUser);
+						DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+						GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+						if(userInfo != null)
+							communityInfoSet.add(userInfo);
+						else if(departmentInfo != null)
+							communityInfoSet.add(departmentInfo);
+						else if(groupInfo != null)
+							communityInfoSet.add(groupInfo);
+					}
+				}
+			}
+		} else if(accessLevel.equals("3")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
+		}
+	}
+
+	public static void setAccessPolicyByNoMember(String accessLevel, AccessPolicy accessPolicy, Set<CommunityInfo> communityInfoSet, String accessValue) throws Exception {
+		if(accessLevel.equals("2")) {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
+			if(!CommonUtil.isEmpty(accessValue)) {
+				String[] accessValues = accessValue.split(";");
+				if(!CommonUtil.isEmpty(accessValues)) {
+					for(String accessUser : accessValues) {
+						UserInfo userInfo = getUserInfoByUserId(accessUser);
+						DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
+						GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
+						if(userInfo != null)
+							communityInfoSet.add(userInfo);
+						else if(departmentInfo != null)
+							communityInfoSet.add(departmentInfo);
+						else if(groupInfo != null)
+							communityInfoSet.add(groupInfo);
+					}
+				}
+			}
+		} else {
+			accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+		}
+	}
+
+	public static boolean isAccessableInstance(Object object) throws Exception {
 		if(object == null)
 			return false;
 		boolean isAccessableForMe = false;
@@ -1347,23 +1501,7 @@ public class ModelConverter {
 		CommunityInfo[] communitieInfos = null;
 
 		if(workSpaceType.equals("4")) { //사용자공간
-			if(accessLevel.equals("1")) {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-			} else if(accessLevel.equals("2")) {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-				if(!CommonUtil.isEmpty(accessValue)) {
-					String[] accessValues = accessValue.split(";");
-					if(!CommonUtil.isEmpty(accessValues)) {
-						for(String accessUser : accessValues) {
-							UserInfo userInfo = getUserInfoByUserId(accessUser);
-							if(userInfo != null)
-								communityInfoSet.add(userInfo);
-						}
-					}
-				}
-			} else {
-				accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-			}
+			setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 		} else if(workSpaceType.equals("5")) { //그룹공간
 			GroupInfo[] groupInfos = communityService.getMyGroups();
 			boolean isMember = false;
@@ -1376,54 +1514,12 @@ public class ModelConverter {
 				}
 			}
 			if(isMember) {
-				if(accessLevel.equals("1")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				} else if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-				}
+				setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			} else {
-				if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				}
+				setAccessPolicyByNoMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			}
 		} else if(workSpaceType.equals("6")) { //부서공간
-			DepartmentInfo[] departmentInfos = communityService.getMyChildDepartments();
+			DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
 			boolean isMember = false;
 			for(DepartmentInfo departmentInfo : departmentInfos) {
 				if(workSpaceId.equals(departmentInfo.getId())) {
@@ -1432,51 +1528,9 @@ public class ModelConverter {
 				}
 			}
 			if(isMember) {
-				if(accessLevel.equals("1")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				} else if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
-				}
+				setAccessPolicyByMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			} else {
-				if(accessLevel.equals("2")) {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
-					if(!CommonUtil.isEmpty(accessValue)) {
-						String[] accessValues = accessValue.split(";");
-						if(!CommonUtil.isEmpty(accessValues)) {
-							for(String accessUser : accessValues) {
-								UserInfo userInfo = getUserInfoByUserId(accessUser);
-								DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(accessUser);
-								GroupInfo groupInfo = getGroupInfoByGroupId(accessUser);
-								if(userInfo != null)
-									communityInfoSet.add(userInfo);
-								else if(departmentInfo != null)
-									communityInfoSet.add(departmentInfo);
-								else if(groupInfo != null)
-									communityInfoSet.add(groupInfo);
-							}
-						}
-					}
-				} else {
-					accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
-				}
+				setAccessPolicyByNoMember(accessLevel, accessPolicy, communityInfoSet, accessValue);
 			}
 		} else if(workSpaceType.equals("2")) { //업무인스턴스공간
 			 //workspaceid가 dr_로 시작하는 정보관리업무는 어떤 업무인지 알수가 없음. 업무정보가 TskTask에 추가된 후에 개발 예정...
@@ -1487,23 +1541,132 @@ public class ModelConverter {
 		}
 
 		accessPolicy.setCommunitiesToOpen(communitieInfos);
-		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId, AccessPolicy.TYPE_INSTANCE);
+		isAccessableForMe = accessPolicy.isAccessableForMe(ownerId, modifierId);
 
 		return isAccessableForMe;
 	}
 
+	public static boolean isAccessibleAllInstance(String resourceId, String userId) throws Exception {
+
+		if(CommonUtil.isEmpty(resourceId))
+			return true;
+
+		SwaResourceCond swaResourceCond = new SwaResourceCond();
+		swaResourceCond.setResourceId(resourceId);
+		swaResourceCond.setMode(SwaResource.MODE_READ);
+		SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+
+		if(!CommonUtil.isEmpty(swaResource)) {
+			String permission = swaResource.getPermission();
+			if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+				SwaUserCond swaUserCond = new SwaUserCond();
+				swaUserCond.setResourceId(resourceId);
+				swaUserCond.setMode(SwaResource.MODE_READ);
+				SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(swaUsers)) {
+					for(SwaUser swaUser : swaUsers) {
+						String authUserId = swaUser.getUserId();
+						String type = swaUser.getType();
+						if(type.equals(SwaUser.TYPE_USER)) {
+							if(authUserId.equals(userId))
+								return true;
+						} else if(type.equals(SwaUser.TYPE_DEPT)) {
+							DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
+							if(!CommonUtil.isEmpty(departmentInfos)) {
+								for(DepartmentInfo departmentInfo : departmentInfos) {
+									String deptId = departmentInfo.getId();
+									if(authUserId.equals(deptId))
+										return true;
+								}
+							}
+						} else if(type.equals(SwaUser.TYPE_GROUP)){
+							GroupInfo[] groupInfos = communityService.getMyGroups();
+							if(!CommonUtil.isEmpty(groupInfos)) {
+								for(GroupInfo groupInfo : groupInfos) {
+									String groupId = groupInfo.getId();
+									if(authUserId.equals(groupId))
+										return true;
+								}
+							}
+						}
+					}
+				}
+			} else if(permission.equals(SwaResource.PERMISSION_NO)) {
+				return false;
+			} else if(permission.equals(SwaResource.PERMISSION_ALL)) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isWritablePackage(String resourceId, String userId) throws Exception {
+
+		if(CommonUtil.isEmpty(resourceId))
+			return true;
+
+		SwaResourceCond swaResourceCond = new SwaResourceCond();
+		swaResourceCond.setResourceId(resourceId);
+		swaResourceCond.setMode(SwaResource.MODE_WRITE);
+		SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
+
+		if(!CommonUtil.isEmpty(swaResource)) {
+			String permission = swaResource.getPermission();
+			if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+				SwaUserCond swaUserCond = new SwaUserCond();
+				swaUserCond.setResourceId(resourceId);
+				swaUserCond.setMode(SwaResource.MODE_WRITE);
+				SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(swaUsers)) {
+					for(SwaUser swaUser : swaUsers) {
+						String authUserId = swaUser.getUserId();
+						String type = swaUser.getType();
+						if(type.equals(SwaUser.TYPE_USER)) {
+							if(authUserId.equals(userId))
+								return true;
+						} else if(type.equals(SwaUser.TYPE_DEPT)) {
+							DepartmentInfo[] departmentInfos = communityService.getMyDepartments();
+							if(!CommonUtil.isEmpty(departmentInfos)) {
+								for(DepartmentInfo departmentInfo : departmentInfos) {
+									String deptId = departmentInfo.getId();
+									if(authUserId.equals(deptId))
+										return true;
+								}
+							}
+						} else if(type.equals(SwaUser.TYPE_GROUP)){
+							GroupInfo[] groupInfos = communityService.getMyGroups();
+							if(!CommonUtil.isEmpty(groupInfos)) {
+								for(GroupInfo groupInfo : groupInfos) {
+									String groupId = groupInfo.getId();
+									if(authUserId.equals(groupId))
+										return true;
+								}
+							}
+						}
+					}
+				}
+			} else if(permission.equals(SwaResource.PERMISSION_ALL)) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
 	public static PkgPackage[] getMyWritablePackages(PkgPackage[] pkgs) throws Exception {
-/*		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
 		PkgPackage[] newPkgs = null;
 		if(!CommonUtil.isEmpty(pkgs)) {
 			for(PkgPackage pkg : pkgs) {
-				SmartWork smartWork = new SmartWork();
-				getWorkByPkgPackage(smartWork, pkg);
 				String resourceId = getResourceIdByPkgPackage(pkg);
 				if(!CommonUtil.isEmpty(resourceId)) {
-					setPolicyToWork(smartWork, resourceId);
-					boolean isAccessableForMe = smartWork.getAccessPolicy().isAccessableForMe(null, null, AccessPolicy.TYPE_WORK);
-					if(isAccessableForMe)
+					if(isWritablePackage(resourceId, userId))
 						newPkgSet.add(pkg);
 				} else {
 					newPkgSet.add(pkg);
@@ -1514,31 +1677,6 @@ public class ModelConverter {
 			newPkgs = new PkgPackage[newPkgSet.size()];
 			newPkgSet.toArray(newPkgs);
 		}
-		if(searchType == Work.SEARCH_TYPE_START_WORK) {*/
-			Set<PkgPackage> newPkgSet = new LinkedHashSet<PkgPackage>();
-			PkgPackage[] newPkgs = null;
-			if(!CommonUtil.isEmpty(pkgs)) {
-				for(PkgPackage pkg : pkgs) {
-					SmartWork smartWork = new SmartWork();
-					getWorkByPkgPackage(smartWork, pkg);
-					String resourceId = getResourceIdByPkgPackage(pkg);
-					if(!CommonUtil.isEmpty(resourceId)) {
-						setPolicyToWork(smartWork, resourceId);
-						boolean isWriteAccessForMe = smartWork.getWritePolicy().isWritableForMe();
-						if(isWriteAccessForMe)
-							newPkgSet.add(pkg);
-					} else {
-						newPkgSet.add(pkg);
-					}
-				}
-			}
-			if(newPkgSet.size() > 0) {
-				newPkgs = new PkgPackage[newPkgSet.size()];
-				newPkgSet.toArray(newPkgs);
-			} else {
-				newPkgs = null;
-			}
-		//}
 		return newPkgs;
 	}
 
@@ -1998,7 +2136,7 @@ public class ModelConverter {
 		if(!picture.equals("")) {
 			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-			groupInfo.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+			groupInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 		} else {
 			groupInfo.setSmallPictureName(picture);
 		}
@@ -2060,8 +2198,8 @@ public class ModelConverter {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				group.setBigPictureName(pictureId + "_thumb" + "." + extension);
-				group.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				group.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				group.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
 				group.setBigPictureName(picture);
 				group.setSmallPictureName(picture);
@@ -2762,14 +2900,14 @@ public class ModelConverter {
 		return iWInstanceInfo;
 	}
 */
-	public static IWInstanceInfo getIWInstanceInfoBySwdRecord(IWInstanceInfo iWInstanceInfo, SwdRecord swdRecord) throws Exception {
-		if (swdRecord == null)
+	public static IWInstanceInfo getIWInstanceInfoByRecordId(IWInstanceInfo iWInstanceInfo, String recordId) throws Exception {
+		if (CommonUtil.isEmpty(recordId))
 			return null;
 		if (iWInstanceInfo == null) 
 			iWInstanceInfo = new IWInstanceInfo();
 
 		TskTaskCond tskCond = new TskTaskCond();
-		tskCond.setExtendedProperties(new Property[] {new Property("recordId", swdRecord.getRecordId())});
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
 		TskTask[] tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
 
 		String processInstId = "";
@@ -2783,6 +2921,14 @@ public class ModelConverter {
 		iWInstanceInfo.setLastTask(lastTask); 
 		
 		return iWInstanceInfo;
+	}
+	public static IWInstanceInfo getIWInstanceInfoBySwdRecord(IWInstanceInfo iWInstanceInfo, SwdRecord swdRecord) throws Exception {
+		if (swdRecord == null)
+			return null;
+		if (iWInstanceInfo == null) 
+			iWInstanceInfo = new IWInstanceInfo();
+
+		return getIWInstanceInfoByRecordId(iWInstanceInfo, swdRecord.getRecordId());
 	}
 
 	public static Instance getInstanceBySwdRecord(String userId, Instance instance, SwdRecord swdRecord) throws Exception {
@@ -2971,7 +3117,7 @@ public class ModelConverter {
 							filePath = StringUtils.replace(filePath, "\\", "/");
 							if(filePath.indexOf(companyId) != -1)
 								originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
-							filePath = filePath.replaceAll(extension, "_thumb" + extension);
+							filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
@@ -3151,7 +3297,7 @@ public class ModelConverter {
 							filePath = StringUtils.replace(filePath, "\\", "/");
 							if(filePath.indexOf(companyId) != -1)
 								originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
-							filePath = filePath.replaceAll(extension, "_thumb" + extension);
+							filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
@@ -3274,7 +3420,7 @@ public class ModelConverter {
 							filePath = StringUtils.replace(filePath, "\\", "/");
 							if(filePath.indexOf(companyId) != -1)
 								originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
-							filePath = filePath.replaceAll(extension, "_thumb" + extension);
+							filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
@@ -3445,7 +3591,7 @@ public class ModelConverter {
 					filePath = StringUtils.replace(filePath, "\\", "/");
 					if(filePath.indexOf(companyId) != -1)
 						originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
-					filePath = filePath.replaceAll(extension, "_thumb" + extension);
+					filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
 					if(filePath.indexOf(companyId) != -1)
 						imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 				}
@@ -3590,7 +3736,7 @@ public class ModelConverter {
 				FdrFolder[] fdrFolders = getFdrManager().getFolders(userId, fdrFolderCond, IManager.LEVEL_ALL);
 				if(!CommonUtil.isEmpty(fileWorks)) {
 					for(FileWork fileWork : fileWorks) {
-						boolean isAccessableForMe = isAccessableForMe(fileWork);
+						boolean isAccessableForMe = isAccessableInstance(fileWork);
 						if(isAccessableForMe) {
 							int length = 1;
 							FileCategoryInfo fileCategoryInfo = new FileCategoryInfo();

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
@@ -18,6 +19,8 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.notice.Notice;
+import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
@@ -36,12 +39,16 @@ import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.sera.manager.ISeraManager;
+import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
+import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,6 +62,13 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private ISchManager getSchManager() {
 		return SwManagerFactory.getInstance().getSchManager();
+	}
+
+	private ISeraService seraService = null;
+
+	@Autowired
+	public void setSeraService(ISeraService seraService) {
+		this.seraService = seraService;
 	}
 
 	/*
@@ -408,7 +422,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					if(picture != null && !picture.equals("")) {
 						String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 						String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-						userInfo.setSmallPictureName(pictureId + "_small" + "." + extension);
+						userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 					}
 	
 					DepartmentInfo userDeptInfo = new DepartmentInfo();
@@ -590,7 +604,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	public UserInfo[] getAvailableChatter() throws Exception {
 		
 		try{
-			return SmartTest.getAvailableChatter();
+			return new UserInfo[]{};
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -641,6 +655,16 @@ public class CommunityServiceImpl implements ICommunityService {
 				userInfo.setName(schUser.getName());
 				userInfo.setPosition(schUser.getPosition());
 				userInfo.setRole(schUser.getRole());
+				String picture = CommonUtil.toNotNull(schUser.getUserPicture());
+				if(!picture.equals("")) {
+					String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+					String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+					userInfo.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+					userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				} else {
+					userInfo.setBigPictureName(null);
+					userInfo.setSmallPictureName(null);
+				}
 				DepartmentInfo departmentInfo = new DepartmentInfo();
 				departmentInfo.setId(schUser.getUserDeptId());
 				departmentInfo.setName(schUser.getUserDeptName());
@@ -697,15 +721,207 @@ public class CommunityServiceImpl implements ICommunityService {
 			// Exception Handling Required			
 		}
 	}
+
+	/*
+	 * 그룹 가입
+	 * @see net.smartworks.server.service.ICommunityService#joinGroupRequest(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			courseId=group_8e04540e1f8a4791bbef78eacd1acc1a, 
+			userId=kj@maninsoft.co.kr
+		}*/
+		String groupId = (String)requestBody.get("courseId");
+		String userId = (String)requestBody.get("userId");
 		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (group.isContainGroupMember(userId))
+			return;
+		SwoGroupMember groupMember = new SwoGroupMember();
+		groupMember.setGroupId(groupId);
+		groupMember.setUserId(userId);
+		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
+
+		CourseDetail courseDetail = seraMgr.getCourseDetailById(groupId);
+		
+		boolean isNoticeToGroupLeader = false;
+		if (courseDetail == null) {
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+			isNoticeToGroupLeader = true;
+		} else {
+			boolean autoApproval = courseDetail.isAutoApproval();
+			if (autoApproval) {
+				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+				groupMember.setJoinDate(new LocalDate());
+				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+			} else {
+				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+				isNoticeToGroupLeader = true;
+			}
+		}
+		group.addGroupMember(groupMember);
+		
+		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
+		
+		if (isNoticeToGroupLeader)
+			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
 	}
+
+	/*
+	 * 그룹 맴버 초대
+	 * @see net.smartworks.server.service.ICommunityService#inviteGroupMembers(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			users=
+				[
+					{
+						userId=ktsoo@maninsoft.co.kr
+					}
+				]
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		List<Map<String, String>> users = (ArrayList<Map<String,String>>)requestBody.get("users");
 		
+		if (users == null || users.size() == 0)
+			return;
+		
+		String[] userIdArray = new String[users.size()];
+		if(!CommonUtil.isEmpty(users)) {
+			for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+				Map<String, String> userMap = users.get(i);
+				userIdArray[i] = userMap.get("userId");
+			}
+		}
+		if (userIdArray == null || userIdArray.length == 0)
+			return;
+		
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup("", groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		for (int i = 0; i < userIdArray.length; i++) {
+			String userId = userIdArray[i];
+			if (group.isContainGroupMember(userId))
+				continue;
+
+			SwoGroupMember groupMember = new SwoGroupMember();
+			groupMember.setGroupId(groupId);
+			groupMember.setUserId(userId);
+			groupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			groupMember.setJoinDate(new LocalDate());
+
+			group.addGroupMember(groupMember);
+			
+		}
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+	}
+
+	/*
+	 * 그룹 가입신청 승인
+	 * @see net.smartworks.server.service.ICommunityService#approvalJoinGroup(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7,
+			userId=ktsoo@maninsoft.co.kr, 
+			approval=true
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		String userId = (String)requestBody.get("userId");
+		String approval = (String)requestBody.get("approval");
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		if (Boolean.parseBoolean(approval)) {
+			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			groupMember.setJoinDate(new LocalDate());
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+		} else {
+			group.removeGroupMember(groupMember);
+		}
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+	}
+
+	/*
+	 * 그룹 탈퇴
+	 * @see net.smartworks.server.service.ICommunityService#leaveGroup(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			userId=ktsoo@maninsoft.co.kr
+		}*/
+
+		User user = SmartUtil.getCurrentUser();
+		
+		String groupId = (String)requestBody.get("groupId");
+		String userId = user.getId();
+	
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		group.removeGroupMember(groupMember);
+
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+	}
+
+	/*
+	 * 그룹 강제탈퇴
+	 * @see net.smartworks.server.service.ICommunityService#pushoutGroupMember(java.util.Map, javax.servlet.http.HttpServletRequest)
+	 */
+	@Override
+	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {		
+		/*{
+			groupId=group_de3a8f11e0484cd2aa73a055338482f7, 
+			userId=ktsoo@maninsoft.co.kr
+		}*/
+		String groupId = (String)requestBody.get("groupId");
+		String userId = (String)requestBody.get("userId");
+
+		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+		
+		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		if (group == null)
+			return;
+		if (!group.isContainGroupMember(userId))
+			return;
+		
+		SwoGroupMember groupMember = group.getGroupMember(userId);
+		group.removeGroupMember(groupMember);
+
+		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+
+		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+
 	}
 
 }

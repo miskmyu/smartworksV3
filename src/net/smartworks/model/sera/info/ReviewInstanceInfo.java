@@ -8,30 +8,37 @@ import net.smartworks.util.LocalDate;
 
 public class ReviewInstanceInfo extends WorkInstanceInfo {
 
+	private String briefContent;
 	private String content;
-	private int startPoint;
+	private double starPoint;
 	
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
+	}
 	public String getContent() {
 		return content;
 	}
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public int getStartPoint() {
-		return startPoint;
+	public double getStarPoint() {
+		return starPoint;
 	}
-	public void setStartPoint(int startPoint) {
-		this.startPoint = startPoint;
+	public void setStarPoint(double starPoint) {
+		this.starPoint = starPoint;
 	}
 	
 	public ReviewInstanceInfo(){
 		super();
-		super.setType(Instance.TYPE_REVIEW);
+		super.setType(Instance.TYPE_SERA_REVIEW);
 	}
 
 	public ReviewInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject, owner, owner, lastModifiedDate);
-		super.setType(Instance.TYPE_REVIEW);
+		super.setType(Instance.TYPE_SERA_REVIEW);
 	}
 
 }

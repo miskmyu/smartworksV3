@@ -8,6 +8,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		container : $('<td></td>'),
 		entity : null,
 		dataField : '',
+		courseId : null,
+		friendOnly : false,
 		refreshData : false,
 		layoutInstance : null
 	};
@@ -19,7 +21,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var users = (options.dataField && options.dataField.users) || new Array();
 
 	var $entity = options.entity;
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var multiUsers = $graphic.attr('multipleUsers');
 	options.container.attr('multiUsers', multiUsers);
@@ -29,7 +31,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = " class='fieldline community_names js_community_names sw_required'";
@@ -42,13 +44,14 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var $user = null;
 	
 	var usersHtml = '';
-	var href = "user_name.sw";
+	var href = (!isEmpty(options.courseId)) ? "course_member.sw?courseId=" + options.courseId : (options.friendOnly) ? "sera_user.sw" : "user_name.sw";
 	var icoClass = ' class="icon_fb_user"';
-
+	var userPicker = (!isEmpty(options.courseId)) ? 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"' : (options.friendOnly) ? 'class="js_friendpicker_button"' : 'class="js_userpicker_button"';
+	
 	if(multiUsers === 'true'){
 		for(var i=0; i<users.length; i++)
 			usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
-		href = "community_name.sw";
+		href = (isEmpty(options.courseId)) ? "community_name.sw" : "course_member.sw?courseId=" + options.courseId;
 		icoClass = ' class="icon_fb_users"';
 	}else if (!isEmpty(users)) {
 		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
@@ -59,7 +62,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 						' + usersHtml + '\
 						<input class="m0 js_auto_complete" style="width:100px" href="' + href + '" type="text">\
 					</div>\
-					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span ' + icoClass + '></span></a></div></div>');
+					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href=""' + userPicker + '><span ' + icoClass + '></span></a></div></div>');
 
 	if(readOnly){
 		$user = $('<div class="form_value" style="width:' + valueWidth + '%"></div>');
@@ -103,6 +106,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			columns: 1,
 			colSpan: 1,
 			multiUsers: false,
+			courseId: null,
+			friendOnly: false,
 			required: false,
 			readOnly: false		
 	};
@@ -110,19 +115,20 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="userField" viewingType="userField"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '" multipleUsers="' + options.multiUsers+ '"/>' +
-					'</formEntity>');
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_userField" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.UserFieldBuilder.build({
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
+			courseId: options.courseId,
+			friendOnly: options.friendOnly,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				users : options.users
 			})
 	});
@@ -164,15 +170,16 @@ SmartWorks.FormRuntime.UserFieldBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			users: new Array() //{userId: '',longName: ''}
 	};
 
 	console.log("options.users :::: ", options.users);
 	SmartWorks.extend(options, config);
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
 	
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
 	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
 	dataField = {

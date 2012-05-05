@@ -792,6 +792,7 @@ CREATE TABLE prcprc (
     prcdver varchar(100),
     prcprcid varchar(100),
     prcdiagram text,
+    prcType varchar(100),
 	primary key(prcobjid)
 );
 
@@ -2218,6 +2219,10 @@ CREATE TABLE SWOrgGroupMember (
 	joinTime	datetime,
 	outTime 	datetime,
 	memberSeq	int,
+	creator varchar(50),
+	createdtime datetime ,
+	modifier varchar(50),
+	modifiedtime datetime ,
 	primary key (groupId, userId)
 );
 
@@ -2255,3 +2260,21 @@ CREATE TABLE SwLike (
 	createdTime datetime,
 	primary key (id)
 );
+
+-- ¸Þ¼¼Áö
+CREATE TABLE SWMessage(
+	id varchar(50) NOT NULL,
+	content varchar(4000),
+	sendUserId varchar(50),
+	targetUserId varchar(50),
+	isChecked bit,
+	chatId varchar(50),
+	chattersId varchar(2000),
+	checkedTime datetime,
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);
+

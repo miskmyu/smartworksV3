@@ -8,19 +8,23 @@
 
 package net.smartworks.util;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.lang.reflect.Array;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 
@@ -37,8 +41,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sun.xml.internal.bind.v2.TODO;
 
 public class SmartUtil {
 
@@ -62,10 +64,29 @@ public class SmartUtil {
 	public static ModelAndView returnMnv(HttpServletRequest request, String ajaxPage, String defaultPage) {
 		String getHeader = request.getHeader("X-Requested-With");
  		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-		if (getHeader != null)
-			return new ModelAndView(ajaxPage, "smartWorks", smartworks);
-		else
+		if (getHeader != null){
+			SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+			if (SmartUtil.isBlankObject(context))
+				return new ModelAndView("home.tiles", "smartWorks", smartworks);
+			else
+				return new ModelAndView(ajaxPage, "smartWorks", smartworks);
+		}else{
 			return new ModelAndView(defaultPage, "smartWorks", smartworks);
+		}
+	}
+
+	public static ModelAndView returnMnvSera(HttpServletRequest request, String ajaxPage, String defaultPage) {
+		String getHeader = request.getHeader("X-Requested-With");
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		if (getHeader != null){
+			SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+			if (SmartUtil.isBlankObject(context))
+				return new ModelAndView("myPAGE.tiles", "smartWorks", smartworks);
+			else
+				return new ModelAndView(ajaxPage, "smartWorks", smartworks);
+		}else{
+			return new ModelAndView(defaultPage, "smartWorks", smartworks);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -305,21 +326,33 @@ public class SmartUtil {
 				}
 				return user;
 			} else {
-				return null;
+				return SmartUtil.getAnonymousUser();
 			}
 		}
-		return null;
+		return SmartUtil.getAnonymousUser();
 	}
-
+	
 	public static User getSystemUser(){
 
 		User user = new User();
-		user.setId("systemUser");
-		user.setName("System");
+		user.setId(User.USER_ID_SYSTEM);
+		user.setName(SmartMessage.getString("common.title.system_user"));
 		user.setPosition("");
 		user.setDepartment("");
-		user.setCompany("");
+		user.setCompany("SmartWorks.net");
 		user.setUserLevel(User.USER_LEVEL_AMINISTRATOR);
+		return user;
+	}
+	
+	public static User getAnonymousUser(){
+
+		User user = new User();
+		user.setId(User.USER_ID_ANONYMOUS);
+		user.setName("Anonymous User");
+		user.setPosition("");
+		user.setDepartment("");
+		user.setCompany("SmartWorks.net");
+		user.setUserLevel(User.USER_LEVEL_EXTERNAL_USER);
 		return user;
 	}
 	
@@ -351,7 +384,7 @@ public class SmartUtil {
 			String fileType = file.get("fileType");
 			String fileSize = file.get("fileSize");
 			long size = (SmartUtil.isBlankObject(fileSize)) ? 0 : Long.parseLong(fileSize);
-			html = html + "<li><span class='vm icon_file_" + (SmartUtil.isBlankObject(fileType) ? "" : fileType.toLowerCase()) + "'></span><a href='download_file.sw?fileId=" + fileId + 
+			html = html + "<li><span class='vm icon_file_" + (SmartUtil.isBlankObject(fileType) ? "none" : fileType.toLowerCase()) + "'></span><a href='download_file.sw?fileId=" + fileId + 
 							"&fileName=" + fileName + "' class='qq-upload-file'>" + fileName + "</a><span class='qq-upload-size'>" + SmartUtil.getBytesAsString(size) + "</span></li>";
 		}
 		return html = html + "</ul>";
@@ -368,11 +401,12 @@ public class SmartUtil {
 	}
 	
 	public static String getSubjectString(String userId){
-		return userId.replaceAll(".", "_");
+		return userId.replace('.' , '_');
 	}
-
+	
 	public static boolean isBlankObject(Object obj){
 		if(obj==null) return true;
+		if(obj.equals("null")) return true;
 		if(obj.getClass().equals(String.class)) return StringUtils.isEmpty((String)obj);
 		if(obj.getClass().isArray()) return (obj==null || Array.getLength(obj)==0) ? true : false;
 		return false;
@@ -395,34 +429,45 @@ public class SmartUtil {
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
 	
+	private static String getMessageChannel(String channel){
+		return SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + "/" + channel; 
+	}
+
 	public static void publishBcast(String[] messages){
-		publishMessage(SUBJECT_BROADCASTING, MSG_TYPE_BROADCASTING, messages);
+		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
 	
 	public static void publishAChatters(UserInfo[] users){
 
-		class UserInformation{
-			String userId;
-			String longName;
-			String minPicture;
-		}
-		
 		if(SmartUtil.isBlankObject(users)) return;
-		UserInformation[] userInfos = new UserInformation[users.length];
+		Object[] userInfos = new Object[users.length];
 		for(int i=0; i<users.length; i++){
 			UserInfo user = users[i];
-			UserInformation userInfo = new UserInformation();
-			userInfo.userId = user.getId();
-			userInfo.longName = user.getLongName();
-			userInfo.minPicture = user.getMinPicture();
+			Map<String, Object> userInfo = new HashMap<String, Object>();
+			userInfo.put("userId", user.getId());
+			userInfo.put("longName", user.getLongName());
+			userInfo.put("nickName", user.getNickName());
+			userInfo.put("minPicture", user.getMinPicture());
 			userInfos[i] = userInfo;
 		}
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("userInfos", userInfos);
 		
-		publishMessage(SUBJECT_BROADCASTING, MSG_TYPE_AVAILABLE_CHATTERS, userInfos);		
+		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_AVAILABLE_CHATTERS, data);		
 	}
-	
-	public static void publishNoticeCount(String userId, int noticeType, int count){
-		publishMessage( SmartUtil.getSubjectString(userId), MSG_TYPE_NOTICE_COUNT, count );
+	public static void increaseNoticeCountByNoticeType(String targetUserId, int noticeType) throws Exception {
+		if (noticeType == Notice.TYPE_INVALID)
+			return;
+		Notice[] notice = SwServiceFactory.getInstance().getNoticeService().getNotices(targetUserId, noticeType);
+		if (CommonUtil.isEmpty(notice))
+			return;
+		publishNoticeCount(targetUserId, notice[0]);
+	}
+	public static void publishNoticeCount(String userId, Notice message){
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("type", message.getType());
+		data.put("count", message.getLength());
+		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data );
 	}
 	
 	static Thread messageAgent = null;
@@ -437,7 +482,7 @@ public class SmartUtil {
 						httpClient.start();
 						Map<String, Object> options = new HashMap<String, Object>();
 						ClientTransport transport = LongPollingTransport.create(options, httpClient);
-						ClientSession client = new BayeuxClient("http://localhost:8000/faye", transport);
+						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
 						client.handshake();
 				
 						MessageModel message = null;
@@ -453,19 +498,18 @@ public class SmartUtil {
 									}
 								}
 								
-								String pubChannel = SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + message.channel; 
 								Map<String, Object> data = new HashMap<String, Object>();
 								data.put("msgType", message.msgType);
 								data.put("sender", "smartServer");
 								data.put("body", message.message);
 								
-								client.getChannel(pubChannel).publish(data);
+								client.getChannel(message.channel).publish(data);
 							} catch(Exception e){
-//								e.printStackTrace();
+								//e.printStackTrace();
 							}
 						}
 					}catch(Exception e){
-//						e.printStackTrace();
+						//e.printStackTrace();
 					}
 				}
 			});

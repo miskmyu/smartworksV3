@@ -52,5 +52,10 @@ public interface ICommunityService {
 
 	public abstract void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 }

@@ -24,7 +24,7 @@
 %>
 
 <div class="my_comment_section">
-	<div class="my_photo"><img src="<%=cUser.getMidPicture() %>" width="120px" height="120px"/></div>
+	<div class="my_photo"><img class="profile_size_b" src="<%=cUser.getMidPicture() %>" /></div>
 	<!-- My Comment -->
 	<div class="my_comment">
 		<div class="header"><%=cUser.getNickName() %>님</div>
@@ -38,7 +38,8 @@
 <!-- Comment Pannel-->
 <div class="panel_section js_my_instance_list_page">
 	<div class="header">
-		<div class="icon_mytext"><a href="" class="js_view_user_instances current" userId="<%=cUser.getId()%>">내글보기</a></div><div> | <a href="" class="js_view_all_instances">전체보기</a></div>
+		<div class="icon_mytext"><a href="" class="js_view_user_instances current" userId="<%=cUser.getId()%>">내글보기</a></div>
+		<div> | <a href="" class="js_view_all_instances">전체보기</a></div>
 	</div>
 
 	<div class="js_user_instance_list">

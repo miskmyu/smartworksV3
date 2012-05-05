@@ -242,3 +242,59 @@ isEmailAddress = function(emailAddress){
 	}
 	return false;		
 };
+
+function getByteLength(s){
+	var len = 0;
+	if ( s == null ) return 0;
+	for(var i=0;i<s.length;i++){
+		var c = escape(s.charAt(i));
+		if ( c.length == 1 ) len ++;
+		else if ( c.indexOf("%u") != -1 ) len += 2;
+		else if ( c.indexOf("%") != -1 ) len += c.length/3;
+	}
+	return len;
+};
+
+String.prototype.cut = function(len){
+	var str = this;
+	var l = 0;
+	for(var i=0; i<str.length; i++){
+		l += (str.charCodeAt(i)>128) ? 2:1;
+		if(l>=len) return str.substring(0,i);
+	}
+	return str;
+};
+
+var textareaMaxSize = function(keyEvent, maxChars, countTarget){
+	var input = $(targetElement(keyEvent));
+	var tval = input.val();
+	var tlength = getByteLength(tval); 
+	var remain = parseInt(maxChars - tlength);	    
+	countTarget.text(remain);
+	
+	var keyCode = keyEvent.which || keyEvent.keyCode;
+	if (remain < 0 && (keyCode) !== 0 ){
+        input.val((tval).cut(tlength + remain));			
+        tlength = getByteLength(input.val()); 
+		remain = parseInt(maxChars - tlength);
+        countTarget.text(remain);
+    }
+};
+
+var printDateTime = function(date){
+	var today = new Date();
+	if(isEmpty(date)) return "";
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var day = date.getDate();
+	if(year != today.getFullYear()){
+		return date.format("yyyy.mm.dd HH:MM");
+	}else if(month != today.getMonth()+1 || day != today.getDate()){
+		return date.format("mm.dd HH:MM");
+	}
+	return date.format("HH:MM");
+};
+
+var targetElement = function(e){
+	return (typeof e.target != 'undefined') ? e.target : e.srcElement;
+};

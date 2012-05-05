@@ -33,9 +33,19 @@
 		var missionReport = $('.js_mission_report_page');
 		if (SmartWorks.GridLayout.validate(missionReport.find('form.js_validation_required'),  missionReport.find('.sw_error_message'))) {
 			var forms = missionReport.find('form');
+			var starPointList = forms.find('.js_star_point_list:visible li');
+			var starPoint = 0;
+			for(var i=0; i<starPointList.length; i++){
+				var item = $(starPointList[i]);
+				if(item.hasClass('full'))
+					starPoint = starPoint + 1;
+				else if(item.hasClass('half'))
+					starPoint = starPoint + 0.5;
+			}
 			var paramsJson = {};
 			paramsJson['courseId'] = missionReport.attr('courseId');
 			paramsJson['missionId'] = missionReport.attr('missionId');
+			paramsJson['starPoint'] = starPoint;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -79,33 +89,8 @@
 			<textarea name="txtReportContent" class="required js_report_content" rows="3" placeholder="미션을 수행하세요!"></textarea>
 		</div>
 	
-		<div class="cb mt6">
-			<!-- 좌측 영역 -->
-			<div class="option">
-				<!-- 버튼 -->
-				<div class="btn_wstyle_l">
-					<div class="btn_wstyle_r">텍스트</div>
-				</div>
-				<!-- 버튼 //-->
-				<!-- 전체공개 -->
-				<div class="txt ml10">
-					<select name="selAccessLevel" class="ml5">
-						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
-						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
-					</select>
-				</div>
-				<!-- 전체공개 //-->
-	
-				<!-- 태그넣기 -->
-				<div class="txt">
-					<a href=""> 태그넣기<span class="icon_bul_select ml5"></span> </a>
-				</div>
-				<!-- 태그넣기//-->
-				<div class="txt t_s11"><span class="t_red">0</span> /1000kbyte</div>
-			</div>
-			<!-- 좌측 영역//-->
-	
-			<table class="js_note_attachment_table" border="0" cellspacing="0" cellpadding="0" style="display:none">
+		<div class="cb" style="margin:2px 5px 5px; overflow: hidden">	
+			<table class="js_note_attachment_table cb attach_file_detail" border="0" cellspacing="0" cellpadding="0" style="display:none">
 				<tr class="js_note_file" style="display:none">
 					<td>
 						<div class="form_label w101">첨부파일</div>
@@ -141,9 +126,19 @@
 			</table>
 	
 			<div class="sw_error_message tl" style="color: red"></div>
+
 			<!-- 우측 버튼 영역 -->
-			<div class="attach_file js_note_buttons">
+			<div class="attach_file js_note_buttons" style="margin:3px">
 				<ul>
+					<li>
+						<span class="insert_text js_report_content_length">1000</span>
+					</li>
+					<li class="ml5">
+						<select name="selAccessLevel" >
+						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
+						</select>
+					</li>
 					<li class="icon_memo ml10"><a href="" class="js_note_file_btn" title="첨부파일"> </a></li>
 					<li class="icon_video"><a href="" class="js_note_video_btn" title="동영상"> </a></li>
 					<li class="icon_photo"><a href="" class="js_note_image_btn" title="사진"> </a></li>
@@ -154,13 +149,25 @@
 					</li>
 					<!-- Btn 등록//-->
 					<!-- Btn 취소-->
-					<li class="btn_default_l ml10 js_create_note_btn">
+					<li class="btn_default_l ml5 js_create_note_btn">
 						<div class="btn_default_r">취소</div>
 					</li>
 					<!-- Btn 취소//-->
 				</ul>
 			</div>
 			<!-- 우측 버튼 영역 //-->
+			<div class="fl mt4">
+				<div class="name fl mr5">별점</div>
+				<div class="star_score fr">
+					<ul class="js_star_point_list js_star_point_btn">
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+						<li class="icon_star_score"><a href=""></a></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>

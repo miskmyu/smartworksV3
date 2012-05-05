@@ -13,6 +13,7 @@ import java.sql.Types;
 
 import javax.sql.DataSource;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.security.manager.LoginDao;
@@ -118,11 +119,11 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			if(!picture.equals("")) {
 				String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
 				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-				login.setBigPictureName(pictureId + "_thumb" + "." + extension);
-				login.setSmallPictureName(pictureId + "_thumb" + "." + extension);
+				login.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				login.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 			} else {
-				login.setBigPictureName(rs.getString("picture"));
-				login.setSmallPictureName(rs.getString("picture"));
+				login.setBigPictureName(null);
+				login.setSmallPictureName(null);
 			}
 			login.setRole(rs.getString("roleId").equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
 			login.setUserLevel(login.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_DEFAULT);

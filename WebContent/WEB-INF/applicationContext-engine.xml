@@ -51,9 +51,11 @@
 
 	<beans:bean id="instanceService" class="net.smartworks.server.service.impl.InstanceServiceImpl"/>
 	<beans:bean id="communityService" class="net.smartworks.server.service.impl.CommunityServiceImpl"/>
+	<beans:bean id="noticeService" class="net.smartworks.server.service.impl.NoticeServiceImpl"/>
 	<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
 		<beans:property name="instanceService" ref="instanceService"/>
 		<beans:property name="communityService" ref="communityService"/>
+		<beans:property name="noticeService" ref="noticeService"/>
 	</beans:bean>
 	
 	<beans:bean id="swManagerFactory" class="net.smartworks.server.engine.factory.SwManagerFactory" factory-method="createInstance">
@@ -81,6 +83,7 @@
 		<beans:property name="opinionManager" ref="opinionManager"/>
 		<beans:property name="likeManager" ref="likeManager"/>
 		<beans:property name="seraManager" ref="seraManager"/>
+		<beans:property name="messageManager" ref="messageManager"/>
 
 		<beans:property name="designtimeManager" ref="resourceDesigntimeManager"/>
 		<beans:property name="runtimeManager" ref="resourceRuntimeManager"/>
@@ -90,6 +93,7 @@
 		<beans:property name="updManager" ref="updManager"/-->
 	</beans:bean>
 
+	<beans:bean id="messageManager" class="net.smartworks.server.engine.message.manager.impl.MessageManagerImpl"/>
 	<beans:bean id="seraManager" class="net.smartworks.server.engine.sera.manager.impl.SeraManagerImpl"/>
 	
 	<beans:bean id="schManager" class="net.smartworks.server.engine.common.searcher.manager.impl.SchManagerImpl"/>

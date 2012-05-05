@@ -1,7 +1,7 @@
 $(function() {
 	
 	$('a.js_new_work_hour').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_company_work_hour_page').find('div.js_new_work_hour');
 		$.ajax({
 			url : "edit_work_hour.sw",
@@ -13,7 +13,7 @@ $(function() {
 	});
 
 	$('.js_edit_work_hour').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_company_work_hour_page').find('div.js_new_work_hour');
 		var policyId = input.parents('.js_edit_work_hour').attr('policyId');
 		$.ajax({
@@ -26,7 +26,7 @@ $(function() {
 	});
 
 	$('.js_delete_work_hour').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var policyId = input.parents('.js_edit_work_hour').attr('policyId');
@@ -39,7 +39,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeWorkHourSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkHourSucceed'), function(){
 						document.location.href = "company_work_hour.sw";					
 					});					
 				},
@@ -56,7 +56,7 @@ $(function() {
 	});
 
 	$('a.js_new_company_event').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_company_event_page').find('div.js_new_company_event');
 		$.ajax({
 			url : "edit_company_event.sw",
@@ -68,7 +68,7 @@ $(function() {
 	});
 
 	$('.js_edit_company_event').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_company_event_page').find('div.js_new_company_event');
 		var eventId = input.parents('.js_edit_company_event').attr('eventId');
 		$.ajax({
@@ -81,7 +81,7 @@ $(function() {
 	});
 
 	$('.js_delete_company_event').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var eventId = input.parents('.js_edit_company_event').attr('eventId');
@@ -94,7 +94,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeCompanyEventSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCompanyEventSucceed'), function(){
 						document.location.href = "company_event.sw";					
 					});					
 				},
@@ -111,7 +111,7 @@ $(function() {
 	});
 
 	$('a.js_new_approval_line').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_approval_line_page').find('div.js_new_approval_line');
 		$.ajax({
 			url : "edit_approval_line.sw",
@@ -123,7 +123,7 @@ $(function() {
 	});
 
 	$('.js_edit_approval_line').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_approval_line_page').find('div.js_new_approval_line');
 		var lineId = input.parents('.js_edit_approval_line').attr('lineId');
 		$.ajax({
@@ -136,7 +136,7 @@ $(function() {
 	});
 
 	$('.js_delete_approval_line').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var lineId = input.parents('.js_edit_approval_line').attr('lineId');
@@ -149,7 +149,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeApprovalLineSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeApprovalLineSucceed'), function(){
 						document.location.href = "approval_line.sw";					
 					});					
 				},
@@ -166,7 +166,7 @@ $(function() {
 	});
 
 	$('select.js_approval_line_level').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var approvalLevel = parseInt(input.attr('value'));
 		var approvalLine = input.parents('.js_approval_line_page');
 		var approvalLevelNames = approvalLine.find('.js_approval_level_name').hide();
@@ -181,7 +181,7 @@ $(function() {
 	});
 
 	$('select.js_approval_approver_type').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(input.attr('value') === '3')
 			input.next('.js_type_userField').show();
 		else
@@ -190,7 +190,7 @@ $(function() {
 	});
 
 	$('a.js_new_web_service').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_web_service_page').find('div.js_new_web_service');
 		$.ajax({
 			url : "edit_web_service.sw",
@@ -202,7 +202,7 @@ $(function() {
 	});
 
 	$('.js_edit_web_service').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_web_service_page').find('div.js_new_web_service');
 		var serviceId = input.parents('.js_edit_web_service').attr('serviceId');
 		$.ajax({
@@ -215,7 +215,7 @@ $(function() {
 	});
 
 	$('.js_delete_web_service').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var serviceId = input.parents('.js_edit_web_service').attr('serviceId');
@@ -228,7 +228,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeWebServiceSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWebServiceSucceed'), function(){
 						document.location.href = "web_service.sw";					
 					});					
 				},
@@ -245,7 +245,7 @@ $(function() {
 	});
 
 	$('a.js_new_external_form').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_external_form_page').find('div.js_new_external_form');
 		$.ajax({
 			url : "edit_external_form.sw",
@@ -257,7 +257,7 @@ $(function() {
 	});
 
 	$('.js_edit_external_form').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_external_form_page').find('div.js_new_external_form');
 		var formId = input.parents('.js_edit_external_form').attr('formId');
 		$.ajax({
@@ -270,7 +270,7 @@ $(function() {
 	});
 
 	$('.js_delete_external_form').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var formId = input.parents('.js_edit_external_form').attr('formId');
@@ -283,7 +283,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeExternalFormSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeExternalFormSucceed'), function(){
 						document.location.href = "external_form.sw";					
 					});					
 				},
@@ -300,7 +300,7 @@ $(function() {
 	});
 
 	$('a.js_new_department').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var organizationManagement = input.parents('.js_organization_management_page');
 		var parentId = organizationManagement.find('.js_edit_department_page').attr('departId');
 		if(isEmpty(parentId)) parentId = currentUser.companyId;
@@ -315,7 +315,7 @@ $(function() {
 	});
 
 	$('a.js_delete_department').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var departId = input.parents('.js_edit_department_page').attr('departId');
@@ -328,7 +328,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeDepartmentSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeDepartmentSucceed'), function(){
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -345,7 +345,7 @@ $(function() {
 	});
 
 	$('a.js_new_member').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var organizationManagement = input.parents('.js_organization_management_page');
 		var departId = organizationManagement.find('.js_edit_department_page').attr('departId');
 		if(isEmpty(departId)) departId = currentUser.companyId;
@@ -360,7 +360,7 @@ $(function() {
 	});
 
 	$('a.js_delete_member').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var userId = input.parents('.js_edit_member_page').attr('userId');
@@ -373,7 +373,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('removeMemberSucceed'), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeMemberSucceed'), function(){
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -390,7 +390,7 @@ $(function() {
 	});
 	
 	$('a.js_check_id_duplication').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_edit_member_page').find('input[name="txtMemberId"]');
 		var userId = target.attr('value');
 		$.ajax({
@@ -400,7 +400,7 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				console.log("success");
-				smartPop.showInfo(smartPop.INFORM, smartMessage.get('usableUserId'));
+				smartPop.showInfo(smartPop.INFO, smartMessage.get('usableUserId'));
 				target.addClass('sw_dup_checked').attr('readonly', true);
 				input.hide().siblings().show();;
 			},
@@ -413,7 +413,7 @@ $(function() {
 	});
 
 	$('a.js_change_id').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_edit_member_page').find('input[name="txtMemberId"]');
 		target.removeClass('sw_dup_checked').attr('readonly', false);
 		input.hide().siblings().show();;
@@ -421,7 +421,7 @@ $(function() {
 	});
 
 	$('a.js_fetch_webservice_wsdl').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_webservice_wsdl:first input');
 		var wsdlUri = target.attr('value');
 		$.ajax({
@@ -430,7 +430,7 @@ $(function() {
 				wsdlUri : wsdlUri
 			},
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFORM, smartMessage.get('fetchWsdlSucceed'));
+				smartPop.showInfo(smartPop.INFO, smartMessage.get('fetchWsdlSucceed'));
 				target.addClass('sw_fetched').attr('readonly', true);
 				input.hide().siblings().show();
 				var tbody = input.parents('.js_edit_webservice_tbody');
@@ -445,7 +445,7 @@ $(function() {
 	});
 
 	$('a.js_change_webservice_wsdl').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var target = input.parents('.js_webservice_wsdl:first input');
 		target.removeClass('sw_fetched').attr('readonly', false);
 		input.hide().siblings().show();;
@@ -453,7 +453,7 @@ $(function() {
 	});
 
 	$('select.js_webservice_port').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var tbody = input.parents('.js_edit_webservice_tbody');
 		var selectedPort = input.find('option:selected').attr('index');
 		$.ajax({
@@ -470,7 +470,7 @@ $(function() {
 	});
 
 	$('select.js_webservice_operation').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var tbody = input.parents('.js_edit_webservice_tbody');
 		var selectedPort = tbody.find('select.js_webservice_port:first').find('option:selected').attr('index');
 		var selectedOperation = input.find('option:selected').attr('index');
@@ -489,7 +489,7 @@ $(function() {
 	});
 
 	$('select.js_first_day_of_week').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var editWorkHour = input.parents('.js_edit_work_hour_page');
 		var firstDay = parseInt(input.attr('value'));
 		var workingDays = parseInt(editWorkHour.find('.js_working_days').attr('value'));
@@ -511,7 +511,7 @@ $(function() {
 	});
 
 	$('select.js_working_days').live('change', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var editWorkHour = input.parents('.js_edit_work_hour_page');
 		var workingDays = parseInt(input.attr('value'));
 		var firstDay = parseInt(editWorkHour.find('.js_first_day_of_week').attr('value'));
@@ -533,7 +533,7 @@ $(function() {
 	});
 	
 	$('.js_organization_member').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var organizationManagement = input.parents('.js_organization_management_page');
 		var target = organizationManagement.find('.js_edit_member');
 		var userId = input.attr('userId');
@@ -548,7 +548,7 @@ $(function() {
 	});
 
 	$('a.js_add_variable_item').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var hiddenItem = input.parents('tr:first').next('tr');
 		var varCount = parseInt(hiddenItem.attr('varCount')) + 1;
 		hiddenItem.attr('varCount', varCount);
@@ -568,7 +568,7 @@ $(function() {
 	});
 
 	$('a.js_remove_variable_item').live('click', function(e){
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		var itemTable = input.parents('table:first');
 		input.parents('tr:first').remove();
 		if(itemTable.find('tr').length == 2){

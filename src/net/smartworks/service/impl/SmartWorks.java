@@ -27,7 +27,10 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
@@ -42,13 +45,16 @@ import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -890,8 +896,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.addCommentOnWork(requestBody, request);
+	public String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.addCommentOnWork(requestBody, request);
 	}
 
 	@Override
@@ -900,13 +906,13 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.updateCommentOnWork(requestBody, request);
+	public void removeCommentFromWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeCommentFromWork(requestBody, request);
 	}
 
 	@Override
-	public void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.addCommentOnInstance(requestBody, request);
+	public String addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.addCommentOnInstance(requestBody, request);
 	}
 
 	@Override
@@ -915,10 +921,17 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		instanceService.removeCommentOnInstance(requestBody, request);
+	public void removeCommentFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeCommentFromInstance(requestBody, request);
 	}
-
+	@Override
+	public String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeMission(requestBody, request);
+	}
+	@Override
+	public String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.modifyMission(requestBody, request);
+	}
 	@Override
 	public String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewMission(requestBody, request);
@@ -927,7 +940,38 @@ public class SmartWorks implements ISmartWorks {
 	public String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewCourse(requestBody, request);
 	}
-	
+	@Override
+	public String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setCourseProfile(requestBody, request);
+	}
+	@Override
+	public String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.removeCourse(requestBody, request);
+	}
+	@Override
+	public String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.performMissionReport(requestBody, request);
+	}
+	@Override
+	public String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.setSeraNote(requestBody, request);
+	}
+	@Override
+	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createNewTeam(requestBody, request);
+	}
+	@Override
+	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.modifyCourseTeam(requestBody, request);
+	}
+	@Override
+	public void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.removeCourseTeam(requestBody, request);
+	}
+	@Override
+	public String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.updateSeraProfile(requestBody, request);
+	}
 	
 	@Override
 	public CourseList getCoursesById(String userId, int maxList) throws Exception {
@@ -955,10 +999,15 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception {
-		return seraService.getFriendsById(userId, lastId, maxList);
+	public SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception {
+		return seraService.getFriendsById(userId, lastId, maxList, key);
 	}
 
+	@Override
+	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsForMe(lastId, maxList);
+	}
+	
 	@Override
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getCourseNotices(courseId, fromDate, maxList);
@@ -970,10 +1019,15 @@ public class SmartWorks implements ISmartWorks {
 	}
 	
 	@Override
-	public InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception {
-		return seraService.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
+	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+		return seraService.getSeraInstances(type, userId, courseId, missionId, teamId, fromDate, maxList);
 	}
-	
+
+	@Override
+	public void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.addReviewOnCourse(requestBody, request);
+	}
+
 	@Override
 	public ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception {
 		return seraService.getReviewInstancesByCourse(courseId, fromDate, maxList);
@@ -982,13 +1036,26 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		communityService.joinGroupRequest(requestBody, request);
-		
 	}
 
 	@Override
 	public void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		communityService.inviteGroupMembers(requestBody, request);
-		
+		communityService.inviteGroupMembers(requestBody, request);		
+	}
+
+	@Override
+	public void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.approvalJoinGroup(requestBody, request);		
+	}
+
+	@Override
+	public void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.pushoutGroupMember(requestBody, request);		
+	}
+
+	@Override
+	public void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.leaveGroup(requestBody, request);		
 	}
 
 	@Override
@@ -1005,4 +1072,157 @@ public class SmartWorks implements ISmartWorks {
 	public SeraUser getSeraUserById(String userId) throws Exception {
 		return seraService.getSeraUserById(userId);
 	}
+
+	@Override
+	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
+		return seraService.getFavoriteCourses(maxList);
+	}
+
+	@Override
+	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
+		return seraService.getRecommendedCourses(maxList);
+	}
+
+	@Override
+	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.replyFriendRequest(requestBody, request);
+	}
+
+	@Override
+	public void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.friendRequest(requestBody, request);
+	}
+
+	@Override
+	public void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.destroyFriendship(requestBody, request);
+		
+	}
+
+	@Override
+	public CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByType(courseType, lastId, maxList);
+	}
+
+	@Override
+	public void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.addLikeToInstance(requestBody, request);
+	}
+
+	@Override
+	public void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeLikeFromInstance(requestBody, request);
+	}
+
+	@Override
+	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.createAsyncMessage(requestBody, request);
+	}
+	
+	@Override
+	public void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeAsyncMessage(requestBody, request);
+	}
+
+	@Override
+	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.setAsyncMessage(requestBody, request);
+	}
+	
+	public CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception {
+		return seraService.getSubInstancesByRefId(refId, maxSize);
+	}
+
+	@Override
+	public String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.createSeraUser(requestBody, request);
+	}
+	@Override
+	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return seraService.leaveSeraUser(requestBody, request);
+	}
+
+	@Override
+	public CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByCategory(categoryName, lastId, maxList);
+	}
+
+	@Override
+	public MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception {
+		return seraService.getCourseMenteeInformations(courseId, maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception {
+		return seraService.getCourseMenteeInformsByType(type, courseId, lastId, maxList);
+	}
+
+	@Override
+	public FriendInformList getMyFriendInformations(int maxList) throws Exception {
+		return seraService.getMyFriendInformations(maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendInformsByType(type, userId, lastId, maxList);
+	}
+
+	@Override
+	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(type, maxSize);
+	}
+
+	@Override
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
+	}
+
+	@Override
+	public void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		int workType = (Integer)requestBody.get("workType");
+		switch (workType) {
+		case Work.TYPE_ASYNC_MESSAGE:
+			instanceService.removeAsyncMessage(requestBody, request);
+			break;
+		default:
+			seraService.removeSeraInstane(requestBody, request);
+			break;
+		}
+	}
+
+	@Override
+	public Notice[] getSeraNoticesForMe() throws Exception {
+		return seraService.getSeraNoticesForMe();
+	}
+
+	@Override
+	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return instanceService.fetchAsyncMessagesByChatid(request, response);
+	}
+
+	@Override
+	public SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception {
+		return seraService.searchSeraUserByType(type, userId, key);
+	}
+
+	@Override
+	public SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception {
+		return seraService.searchCourseMemberByType(type, courseId, key);
+	}
+
+	@Override
+	public CourseInfo[] searchCourseByType(int type, String key) throws Exception {
+		return seraService.searchCourseByType(type, key);
+	}
+
+	@Override
+	public CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception {
+		return seraService.searchCourseByCategory(categoryName, key);
+	}
+
+	@Override
+	public CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception {
+		return seraService.getCoursesByUser(userId, courseType, lastId, maxList);
+	}
+
 }

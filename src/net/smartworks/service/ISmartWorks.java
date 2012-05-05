@@ -29,7 +29,10 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
+import net.smartworks.model.instance.info.AsyncMessageList;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.ChatInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
@@ -44,13 +47,16 @@ import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
+import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -194,7 +200,6 @@ public interface ISmartWorks {
 	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
-	
 	/*
 	 * 현재 스마트웍스에 접속되어 있는 유저들에 대한 정보를 리턴한다 (채팅가능 유져)
 	 * 채팅가능 유저목록의 갱신을 위하여 서버에서는 세션정보를 리스닝하고 있으면서 세션의 접속과 끊김 이벤트가
@@ -421,25 +426,61 @@ public interface ISmartWorks {
 
 	public abstract void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void updateCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeCommentFromWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract String addCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void updateCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeCommentOnInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeCommentFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void addLikeToInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeLikeFromInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
 	public abstract String createNewMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String modifyMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String removeMission(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String performMissionReport(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String updateSeraProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract String createNewCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String setCourseProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String removeCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getFavoriteCourses(int maxList) throws Exception;
+
+	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
 	public abstract Course getCourseById(String courseId) throws Exception;
 
@@ -447,23 +488,77 @@ public interface ISmartWorks {
 
 	public abstract FriendList getFriendsById(String userId, int maxList) throws Exception;
 
-	public abstract UserInfo[] getFriendsById(String userId, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception;
+
+	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
+
+	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void friendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void destroyFriendship(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void removeSeraInstane(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
 	public abstract FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception;
 
-	public abstract InstanceInfo[] getSeraInstances(String userId, String courseId, String missionId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract ReviewInstanceInfo[] getReviewInstancesByCourse(String courseId, LocalDate fromDate, int maxList) throws Exception;
 
-	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void addReviewOnCourse(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void inviteGroupMembers(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void approvalJoinGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByCategory(String categoryName, String lastId, int maxList) throws Exception;
+
+	public abstract CommentInstanceInfo[] getSubInstancesByRefId(String refId, int maxSize) throws Exception;
+	
+	public abstract String createSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract MenteeInformList getCoursesMenteeInformations(String courseId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getCourseMenteeInformsByType(int type, String courseId, String lastId, int maxList) throws Exception;
+	
+	public abstract FriendInformList getMyFriendInformations(int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getFriendInformsByType(int type, String userId, String lastId, int maxList) throws Exception;
+	
+	public abstract AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception;
+	
+	public abstract AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
+	
+	public abstract Notice[] getSeraNoticesForMe() throws Exception;
+
+	public abstract SeraUserInfo[] searchSeraUserByType(int type, String userId, String key) throws Exception;
+
+	public abstract SeraUserInfo[] searchCourseMemberByType(int type, String courseId, String key) throws Exception;
+
+	public abstract CourseInfo[] searchCourseByType(int type, String key) throws Exception;
+
+	public abstract CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception;
+
+	public abstract CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception;
+
+
 }

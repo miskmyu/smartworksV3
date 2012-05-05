@@ -55,8 +55,7 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					alert('wait');
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('setMyProfileSucceed'));
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('setMyProfileSucceed'));
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -67,10 +66,10 @@
 	};
 </script>
 
-<div class="js_my_profile_page">
+<div class="js_my_profile_page" userId="<%=seraUser.getId()%>">
 	<!-- Header Title -->
 	<div class="header_tit">
-		<div class="tit_account">닉네임, 프로필 사진, 비밀번호 등 프로필 정보를 수정할 수 있습니다.<br /> * 선택 입력란입니다.</div>
+		<div class="tit_account">닉네임, 프로필 사진, 비밀번호 등 프로필 정보를 수정할 수 있습니다.</div>
 	</div>
 	<!-- Header Title //-->
 	<!-- Input Section -->
@@ -80,15 +79,19 @@
 			<tr>
 				<td rowspan="12" valign="top" width="150px">
 					<!-- 사진 올리기 -->
-					<div class="js_my_profile_field js_auto_load_profile"></div>
-					<div class="t_refe mt10">
-						* 사진은 자동으로<br /> 77x77으로 변경됩니다
+					<div class="js_sera_profile_field js_auto_load_profile myaccount_photo"></div>
+					<div class="t_refe" style="margin: 15px 0 0 13px">
+						* 사진은 자동으로<br /> 118x118으로 변경됩니다
 					</div> <!-- 사진 올리기 //-->
 				</td>
 				<td>
 					<div class="form_label">이름</div>
 					<div class="form_value">
 						<span class="t_blueb"><%=seraUser.getName() %></span>
+						<span class="check_use">
+							<input type="checkbox">
+							<label>사용</label>
+						</span>
 					</div>
 				</td>
 	
@@ -98,6 +101,10 @@
 					<div class="form_label">회원ID</div>
 					<div class="form_value">
 						<span class="t_blueb"><%=seraUser.getId() %></span>
+						<span class="check_use">
+							<input type="checkbox">
+							<label>사용</label>
+						</span>
 					</div>
 				</td>
 			</tr>
@@ -106,8 +113,13 @@
 					<div class="form_label">닉네임*</div>
 					<div class="form_value">
 						<input name="txtNickName" type="text" class="fieldline fl mr5" style="width: 150px" value="<%=CommonUtil.toNotNull(seraUser.getNickName())%>">
-						<div class="t_refe mt5">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
+						<span class="check_use">
+							<input type="checkbox">
+							<label>사용</label>
+						</span>
+						<div class="t_refe mt5 cb">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
 					</div>
+					<div class="cb t_red pt5">* 이름, 아이디, 닉네임 중 하나를 선택하시면, 세라캠퍼스 서비스에서 사용됩니다.</div>
 				</td>
 			</tr>
 			<tr>
@@ -124,7 +136,7 @@
 					<div class="form_label">생일/성별</div>
 					<div class="form_value">
 						<%
-						LocalDate birthDate = new LocalDate();//seraUser.getBirthday();
+						LocalDate birthDate = seraUser.getBirthday();
 						String birthYear = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalYearString();
 						String birthMonth = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalMonthOnlyString();
 						String birthDay = (SmartUtil.isBlankObject(birthDate)) ? "" : birthDate.toLocalDateOnlyString();
@@ -133,9 +145,8 @@
 						<input name="txtBirthMonth" class="fieldline form_date_input number tr" type="text" value="<%=birthMonth%>"/> 월
 						<input name="txtBirthDay" class="fieldline form_date_input number tr" type="text" value="<%=birthDay%>"/> 일
 						<select name="selSex" class="required">
-							<option value="0">성별</option>
-							<option value="<%=SeraUser.SEX_MALE%>">남자</option>
-							<option value="<%=SeraUser.SEX_FEMALE %>">여자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_FEMALE){ %>selected<%} %> value="<%=SeraUser.SEX_FEMALE %>">여자</option>
+							<option <%if(seraUser.getSex()==SeraUser.SEX_MALE){ %>selected<%} %> value="<%=SeraUser.SEX_MALE%>">남자</option>
 						</select>
 					</div>
 				</td>
@@ -190,10 +201,7 @@
 				<td>
 					<div class="form_label">비밀번호</div>
 					<div class="form_value">
-						<input type="password" class="fieldline fl" style="width: 100px" value="<%=cUser.getPassword() %>" />
-						<div class="btn_mid_l ml5">
-							<div class="btn_mid_r">비밀번호 변경</div>
-						</div>
+						<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" value="<%=cUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>
@@ -201,7 +209,7 @@
 				<td>
 					<div class="form_label">비밀번호 확인</div>
 					<div class="form_value">
-						<input type="passwordConfirm" class="fieldline" style="width: 100px" value="<%=cUser.getPassword() %>" />
+						<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" value="<%=cUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>
@@ -217,7 +225,7 @@
 			<div href="myPAGE.sw" class="btn_blu_l mr10 js_sera_content">
 				<div class="btn_blu_r">취 소</div>
 			</div>
-			<div class="btn_red_l">
+			<div class="btn_red_l js_leave_sera_btn">
 				<div class="btn_red_r">회원탈퇴</div>
 			</div>
 		</div>
@@ -226,5 +234,5 @@
 </div>
 
 <script type="text/javascript">
-	loadMyProfileField();
+	loadSeraProfileField();
 </script>

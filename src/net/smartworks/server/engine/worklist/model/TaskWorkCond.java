@@ -65,6 +65,9 @@ public class TaskWorkCond extends Cond {
 	private String lastTskCount;
 	private String lastTskDef;
 	private LocalDate lastInstanceDate; 
+	private Date expectEndDateFrom;
+	private Date expectEndDateTo;
+	
 	
 	public LocalDate getLastInstanceDate() {
 		return lastInstanceDate;
@@ -353,6 +356,18 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setLastTskDef(String lastTskDef) {
 		this.lastTskDef = lastTskDef;
+	}
+	public Date getExpectEndDateFrom() {
+		return expectEndDateFrom;
+	}
+	public void setExpectEndDateFrom(Date expectEndDateFrom) {
+		this.expectEndDateFrom = expectEndDateFrom;
+	}
+	public Date getExpectEndDateTo() {
+		return expectEndDateTo;
+	}
+	public void setExpectEndDateTo(Date expectEndDateTo) {
+		this.expectEndDateTo = expectEndDateTo;
 	}
 
 

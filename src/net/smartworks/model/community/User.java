@@ -21,7 +21,10 @@ public class User extends WorkSpace {
 	public static final String  NO_USER_PICTURE  = "no_user_picture";
 
 	public static final String USER_ID_SYSTEM = "system@smartworks.net";
+	public static final String USER_ID_ANONYMOUS = "anonymous@smartworks.net";
 	public static final String USER_ID_NONE_EXISTING = "noneexisting@smartworks.net";
+	
+	public static final String NAMING_NICKNAME_BASE = "NickNameBase";
 
 	private String nickName;
 	private int	userLevel = USER_LEVEL_DEFAULT;
@@ -37,6 +40,7 @@ public class User extends WorkSpace {
 	private String cellPhoneNo;
 	private String company;
 	private String companyId;
+	private boolean online;
 	
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -88,8 +92,7 @@ public class User extends WorkSpace {
 		this.userLevel = userLevel;
 	}
 	public String getLongName() {
-		if(!position.equals("")) return position + " " + super.getName();
-		else return super.getName();
+		return (SmartUtil.isBlankObject(position)) ? getNickName() : position + " " + getNickName(); 
 	}
 	public String getPosition() {
 		return position;
@@ -127,6 +130,13 @@ public class User extends WorkSpace {
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+	
 	public User(){
 		super();
 	}
@@ -152,5 +162,10 @@ public class User extends WorkSpace {
 		userInfo.setPosition(getPosition());
 		userInfo.setRole(getRole());
 		return userInfo;
+	}
+	
+	public boolean isAnonymusUser(){
+		if(USER_ID_ANONYMOUS.equals(getId())) return true;
+		return false;
 	}
 }

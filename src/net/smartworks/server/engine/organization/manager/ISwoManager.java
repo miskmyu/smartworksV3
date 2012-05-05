@@ -24,6 +24,7 @@ import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
+import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoTeam;
 import net.smartworks.server.engine.organization.model.SwoTeamCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
@@ -120,6 +121,10 @@ public interface ISwoManager {
 	public SwoUserExtend getUserExtend(String userId, String id, boolean inMemory) throws SwoException;
 	
 	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException;
+	
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName) throws SwoException;
+
+	public SwoUserExtend[] getUsersExtendNotIn(String userId, String[] ids, String lastName) throws SwoException;
 
 	public SwoDepartmentExtend getDepartmentExtend(String userId, String departmentId, boolean inMemory) throws SwoException;
 

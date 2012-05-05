@@ -25,13 +25,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -44,6 +47,11 @@ import net.smartworks.server.engine.docfile.model.HbDocumentModel;
 import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.exception.SwoException;
+import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.model.SwoCompany;
+import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.util.LocalDate;
@@ -61,6 +69,7 @@ import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.media.MediaFileSource;
@@ -494,9 +503,14 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
         } catch (IOException ex) {
             throw new DocFileException(ex.getMessage());
         }
-
+        String agentInfo = request.getHeader("User-Agent");
         try {
-            is = request.getInputStream();
+    		if(agentInfo.indexOf("MSIE") > 0) { //IE
+    			MultipartFile multipartFile = formFile.getMultipartFile();
+    			is = multipartFile.getInputStream();
+    		} else {
+                is = request.getInputStream();
+    		}
             fos = new FileOutputStream(new File(formFile.getFilePath()));
             IOUtils.copy(is, fos);
             response.setStatus(HttpServletResponse.SC_OK);
@@ -539,6 +553,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String ytUserId = request.getParameter("ytUserId");
 		String ytPassword = request.getParameter("ytPassword");
 
+		//MultipartRequest multipartRequest = (MultipartRequest)request;
         try {
             writer = response.getWriter();
         } catch (IOException ex) {
@@ -593,6 +608,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			mg.setPrivate(false);
 
 			MediaFileSource ms = new MediaFileSource(new File(formFile.getFilePath()), "video/quicktime");
+			//MediaFileSource ms = new MediaFileSource(multipartRequest.getFile("file"), "video/quicktime");
 			newEntry.setMediaSource(ms);	
 			String uploadUrl = "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads";
 			try{
@@ -714,42 +730,76 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	@Override
 	public void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
 		IFileModel formFile = new HbFileModel();
-		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
-		formFile.setId(fileId);
 
 		//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
 		this.setFileDirectory(OSValidator.getImageDirectory());
-		String companyId = SmartUtil.getCurrentUser().getCompanyId();
+		User user = SmartUtil.getCurrentUser();
+		String companyId = null;
+		SwoCompany[] swoCompanies = null;
+		if(user == null) {
+			try {
+				swoCompanies = SwManagerFactory.getInstance().getSwoManager().getCompanys("", null, IManager.LEVEL_LITE);
+			} catch (SwoException e) {
+				e.printStackTrace();
+			} finally {
+				if(!CommonUtil.isEmpty(swoCompanies)) {
+					SwoCompany swoCompany = swoCompanies[0];
+					companyId = swoCompany.getId();
+				}
+			}
+		} else {
+			companyId = user.getCompanyId();
+		}
 
+		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
 		String fileDivision = "Temps";
 		File repository = this.getFileRepository(companyId, fileDivision);
 		String filePath = "";
 		String imagerServerPath = "";
 		String extension = "";
-		if (formFile != null) {
-			String fileName = "";
+
+
+		String fileName = "";
+		String agentInfo = request.getHeader("User-Agent");
+		if(agentInfo.indexOf("MSIE") > 0) { //IE
+			List<IFileModel> docList = new ArrayList<IFileModel>();
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			Map<String, MultipartFile> filesMap = multipartRequest.getFileMap();
+			for(String key : filesMap.keySet()) {
+	        	MultipartFile mf = filesMap.get(key);
+	        	IFileModel doc = new HbFileModel();
+	        	doc.setMultipartFile(mf);
+	        	docList.add(doc);
+			}
+			formFile = docList.get(0);
+			MultipartFile multipartFile = formFile.getMultipartFile();
+			fileName = multipartFile.getOriginalFilename();
+			formFile.setFileSize(multipartFile.getSize());
+			formFile.setMultipartFile(multipartFile);
+		} else {
 			try {
 				fileName = URLDecoder.decode(request.getHeader("X-File-Name"), "UTF-8");
+				formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			if (fileName.indexOf(File.separator) > 1)
-				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-			formFile.setFileName(fileName);
-			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
-			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
-
-			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
-			formFile.setImageServerPath(imagerServerPath);
-
-			if (extension != null) {
-				filePath = filePath + "." + extension;
-			}
-			formFile.setFileSize(Long.parseLong(request.getHeader("Content-Length")));
-
-			formFile.setFilePath(filePath);
-
 		}
+
+		if (fileName.indexOf(File.separator) > 1)
+			fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
+		formFile.setFileName(fileName);
+		extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+		filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
+
+		imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+		formFile.setImageServerPath(imagerServerPath);
+
+		if (extension != null) {
+			filePath = filePath + "." + extension;
+		}
+
+		formFile.setFilePath(filePath);
+		formFile.setId(fileId);
 
 		this.writeAjaxFile(request, response, formFile);
 
@@ -816,8 +866,20 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				extension = extension.toLowerCase();
 
 			User user = SmartUtil.getCurrentUser();
-	
-			File repository = this.getFileRepository(user.getCompanyId(), "Profiles");
+			String companyId = "Maninsoft";
+			if (user != null) {
+				companyId = user.getCompanyId();
+			} else {
+				ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+				
+				SwoCompanyCond cond = new SwoCompanyCond();
+				SwoCompany[] companys = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+				if (companys != null) {
+					companyId = companys[0].getId();
+				}				
+			}
+			
+			File repository = this.getFileRepository(companyId, "Profiles");
 	
 			String communityPictureId = communityId + "." + extension;
 			//String bigId = null;
@@ -825,14 +887,14 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String originId = null;
 			//String realFile1 = null;
 			String realFile2 = null;
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + "Temps" + "/" + fileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
 
-			if(communityId.equals(user.getCompanyId())) {
+			if(communityId.equals(companyId)) {
 				originId = communityId;
 			} else {
 				//bigId = communityId + "_big";
-				thumbId = communityId + "_thumb";
-				originId = communityId + "_origin";
+				thumbId = communityId + Community.IMAGE_TYPE_THUMB;
+				originId = communityId + Community.IMAGE_TYPE_ORIGINAL;
 				//realFile1 = repository.getAbsolutePath() + "/" + bigId + "." + extension;
 				realFile2 = repository.getAbsolutePath() + "/" + thumbId + "." + extension;
 				//Thumbnail.createImage(tempFile, realFile1, "big", extension);
@@ -866,16 +928,27 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 
 			User user = SmartUtil.getCurrentUser();
-
-			File repository = this.getFileRepository(user.getCompanyId(), workType);
+			String companyId = "Maninsoft";
+			if (user != null) {
+				companyId = user.getCompanyId();
+			} else {
+				ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+				
+				SwoCompanyCond cond = new SwoCompanyCond();
+				SwoCompany[] companys = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+				if (companys != null) {
+					companyId = companys[0].getId();
+				}
+			}
+			File repository = this.getFileRepository(companyId, workType);
 			String fileId = tempFileId.split("temp_")[tempFileId.split("temp_").length-1];
 			if(workType.equals("Pictures")) fileId = "pic_" + fileId;
 			else fileId = "file_" + fileId;
 
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + "Temps" + "/" + tempFileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + tempFileId + "." + extension;
 			String realFile = repository.getAbsolutePath() + File.separator + fileId + "." + extension;
 			if(workType.equals("Pictures")) {
-				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + "_thumb." + extension;
+				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + Community.IMAGE_TYPE_THUMB + "." + extension;
 				Thumbnail.createImage(tempFile, thumbFile, "thumb", extension);
 			}
 
@@ -888,7 +961,6 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			} catch (Exception e) {
 				throw new DocFileException("Failed to copy file [" + tempFile + "]!");
 			}
-
 
 			// 그룹 아이디가 넘어 오지 않았다면 그룹아이디 설정
 			if (groupId == null)
@@ -1064,10 +1136,11 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, task.tskprcinstid ");
 		queryBuffer.append("		, task.tskform ");
 		queryBuffer.append("		, task.isStartActivity ");
-		queryBuffer.append("		, task.tskWorkSpaceId ");//workSpaceId
+		queryBuffer.append("		, task.tskWorkSpaceId ");
+		queryBuffer.append("		, task.tskWorkSpaceType ");
 		queryBuffer.append("		, task.tskAccessLevel ");
 		queryBuffer.append("		, task.tskAccessValue ");
-		queryBuffer.append("		, task.tskDef ");//workSpaceId
+		queryBuffer.append("		, task.tskDef ");
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
 		queryBuffer.append("		, ctg.id as childCtgId ");
@@ -1157,7 +1230,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, prcInst.prcDid ");
 		queryBuffer.append("		, prcInst.prcPrcId ");
 		queryBuffer.append("		, prcInst.prcCreateDate ");
-		queryBuffer.append("		, prcInst.prcWorkSpaceId "); //workSpaceId
+		queryBuffer.append("		, prcInst.prcWorkSpaceId ");
+		queryBuffer.append("		, prcInst.prcWorkSpaceType ");
 		queryBuffer.append("		, prcInst.prcAccessLevel ");
 		queryBuffer.append("		, prcInst.prcAccessValue ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskobjid ");
@@ -1171,7 +1245,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, prcInstInfo.lastTask_tskexecuteDate ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskduedate ");
 		queryBuffer.append("		, prcInstInfo.lastTask_tskform ");
-		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceId "); //workSpaceId
+		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceId ");
+		queryBuffer.append("		, prcInstInfo.lastTask_tskWorkSpaceType ");
 		queryBuffer.append("		, (select count(*) from tsktask where tskstatus='11' and tsktype='common' and tskprcInstId = prcInst.prcObjid) as lastTaskCount ");
 		queryBuffer.append("	from  ");
 		queryBuffer.append("		prcprcinst prcInst,  ");
@@ -1188,7 +1263,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("					, task.tskexecuteDate as lastTask_tskexecuteDate ");
 		queryBuffer.append("					, task.tskduedate as lastTask_tskduedate ");
 		queryBuffer.append("					, task.tskform as lastTask_tskform ");
-		queryBuffer.append("					, task.tskWorkSpaceId as lastTask_tskWorkSpaceId "); //workSpaceId
+		queryBuffer.append("					, task.tskWorkSpaceId as lastTask_tskWorkSpaceId ");
+		queryBuffer.append("					, task.tskWorkSpaceType as lastTask_tskWorkSpaceType ");
 		queryBuffer.append("			from ( ");
 		queryBuffer.append("					select tskprcinstId , max(tskCreatedate) as createDate  ");
 		queryBuffer.append("					from tsktask  ");
@@ -1343,6 +1419,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setTskForm((String)fields[j++]);
 				obj.setIsStartActivity((String)fields[j++]);
 				obj.setTskWorkSpaceId((String)fields[j++]);
+				obj.setTskWorkSpaceType((String)fields[j++]);
 				obj.setTskAccessLevel((String)fields[j++]);
 				obj.setTskAccessValue((String)fields[j++]);
 				obj.setTskDef((String)fields[j++]);
@@ -1361,6 +1438,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setPrcPrcId((String)fields[j++]);
 				obj.setPrcCreateDate((Timestamp)fields[j++]);
 				obj.setPrcWorkSpaceId((String)fields[j++]);
+				obj.setPrcWorkSpaceType((String)fields[j++]);
 				obj.setPrcAccessLevel((String)fields[j++]);
 				obj.setPrcAccessValue((String)fields[j++]);
 				obj.setLastTskObjId((String)fields[j++]);                       
@@ -1374,7 +1452,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setLastTskExecuteDate((Timestamp)fields[j++]);                 
 				obj.setLastTskDueDate((Timestamp)fields[j++]); 
 				obj.setLastTskForm((String)fields[j++]);    
-				obj.setLastTskWorkSpaceId((String)fields[j++]);                    
+				obj.setLastTskWorkSpaceId((String)fields[j++]);
+				obj.setLastTskWorkSpaceType((String)fields[j++]);
 				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);

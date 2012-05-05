@@ -80,6 +80,7 @@ function fileUploader(groupId, target) {
         	
         	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
+        	console.log('ext=', ext, ', fileName=', fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
         	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);
         	file.find('.qq-delete-text').show();
@@ -144,8 +145,6 @@ function videoYTUploader(target) {
         			break;
         		}
         	}
-        	console.log('id=', id, ', filename=', fileName, ', json=', responseJSON.videoYTId);
-        	alert('wait');
         	if(isEmpty(file) || !responseJSON.success) return;
         	file.attr('videoYTId', responseJSON.videoYTId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
         	var ext = getExt(fileName);
@@ -275,7 +274,7 @@ function viewFiles(groupId, target){
 				}
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
-				alert(xhr);
+				console.log(xhr);
 			}
 		});
 	}

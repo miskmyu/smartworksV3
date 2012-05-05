@@ -971,6 +971,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			buf.append(", swdataref");
 		}
 		// where
+		String workSpaceIdIns = cond.getWorkSpaceIdIns();
 		boolean first = true;
 		if (refFormId != null || refRecordId != null) {
 			first = false;
@@ -997,6 +998,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		String accessLevel = cond.getAccessLevel();
 		String accessValue = cond.getAccessValue();
 		int hits = cond.getHits();
+		Date fromDate = cond.getFromDate();
 
 		if (recordId != null)
 			cond.addFilter(new Filter("=", "obj.id", recordId));
@@ -1032,6 +1034,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			cond.addFilter(new Filter("=", "obj.accessValue", accessValue));
 		if (hits > 0)
 			cond.addFilter(new Filter("=", "obj.hits", String.valueOf(hits)));
+		if (fromDate != null)
+			cond.addFilter(new Filter("<", "obj.createdTime", Filter.OPERANDTYPE_DATE, DateUtil.toXsdDateTimeString(fromDate)));
 
 		Map<String, Filter> filterMap = new HashMap<String, Filter>();
 		Map<String, String> paramTypeMap = new HashMap<String, String>();
@@ -1068,7 +1072,20 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(")");
 			}
 		}
-		
+		if (workSpaceIdIns != null) {
+			if(first) {
+				buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+				first = false;
+			} else {
+				buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+			}
+		}
+		if(first) {
+			buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+			first = false;
+		} else {
+			buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+		}
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);

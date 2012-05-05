@@ -18,15 +18,14 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.build = function(config) {
 
 	var value = (options.dataField && options.dataField.value) || '';
 	var $entity = options.entity;
-	//var $graphic = $entity.children('graphic');
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<div class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = " class='fieldline js_todaytimepicker required' ";
@@ -76,10 +75,10 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.buildEx = function(config){
 
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="datetime" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="datetime" required="' + options.required + '" system="false">' +
 						'<format type="datetimeChooser" viewingType="datetimeChooser"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '"/>' +
-					'</formEntity>');
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_datetimeChooser" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.DateTimeChooserBuilder.build({
@@ -87,8 +86,7 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.DateTimeChooserBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				value: options.value				
 			})
 	});
@@ -99,15 +97,16 @@ SmartWorks.FormRuntime.DateTimeChooserBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			value: ''
 	};
 
 	SmartWorks.extend(options, config);
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,

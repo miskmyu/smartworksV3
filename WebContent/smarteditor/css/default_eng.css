@@ -38,8 +38,8 @@
 #smart_editor .input_area iframe{}
 #smart_editor .input_area textarea{ *margin:0 -10px; _margin-bottom:-2px;}
 #smart_editor .input_area textarea.blind{ display:none;}
-#smart_editor .input_control{ position:relative; display:block; width:100%;height:1px; clear:both; text-align:center; /*background:#fbfbfb url(../img/btn_expand.gif) no-repeat center center;*/ cursor:n-resize;}
-#smart_editor .input_control span{ display:block; height:0px; border-top:1px solid #dfdfdf; visibility:visible; font-size:0; line-height:200%; white-space:nowrap; color:#fff;}
+#smart_editor .input_control{ position:relative; display:block; width:100%; height:15px; border-top:1px solid #dfdfdf; clear:both; text-valign:top; text-align:center; background:#fbfbfb url(../img/btn_expand.gif) no-repeat center center; cursor:s-resize;}
+#smart_editor .input_control span{ display:block; height:0px; visibility:visible; font-size:0; line-height:200%; white-space:nowrap; color:#fff;}
 
 #smart_editor .tool{ position:relative; overflow:visible; padding:5px 0 6px 0; *padding:5px 0 8px 0; z-index:40; clear:both; background:#f8f8f8 url(../img/bg_tool.gif) repeat-x left bottom; border:0; *zoom:1;}
 #smart_editor .tool:after{ content:""; display:block; clear:both;}
@@ -48,7 +48,7 @@
 #smart_editor .tool ul.type{ width:auto; white-space:nowrap;}
 #smart_editor .tool ul.style{ width:169px; z-index:3;}
 #smart_editor .tool ul.paragraph{ width:169px; z-index:2;}
-#smart_editor .tool ul.extra{ width:111px; z-index:1;}
+#smart_editor .tool ul.extra{ width:163px; z-index:1;}
 #smart_editor .tool li{ position:relative; float:left; left:8px;}
 #smart_editor .tool li button{ width:21px; height:21px; background:url(../img/btn_set_e.gif) no-repeat 0 0; vertical-align:top;}
 #smart_editor .tool li button span{ position:absolute; top:0; left:0; width:0; height:0; overflow:hidden; visibility:hidden;}
@@ -60,8 +60,8 @@
 #smart_editor .tool .html span{ position:absolute; top:0; left:0; width:0; height:0; overflow:hidden; visibility:hidden;}
 
 /* Content > Tool > Button Default */
-#smart_editor .tool li.undo button{ width:22px; background-position:0 0;}
-#smart_editor .tool li.redo button{ background-position:-22px 0;}
+#smart_editor .tool li.imgupload button{ width:21px; background-position:0 0}
+#smart_editor .tool li.videoupload button{ width:21px; background-position:-22px 0;}
 #smart_editor .tool li.bold button{ width:22px; background-position:-43px 0;}
 #smart_editor .tool li.underline button{ background-position:-65px 0;}
 #smart_editor .tool li.italic button{ background-position:-86px 0;}
@@ -86,8 +86,8 @@
 #smart_editor .tool .html{ background-position:0 0;}
 
 /* Content > Tool > Button Hover */
-#smart_editor .tool li.undo button.hover{ width:22px; background-position:0 -21px;}
-#smart_editor .tool li.redo button.hover{ background-position:-22px -21px;}
+#smart_editor .tool li.imgupload button.hover{ background-position:0 -21px}
+#smart_editor .tool li.videoupload button.hover{ background-position:-22px -21px;}
 #smart_editor .tool li.bold button.hover{ width:22px; background-position:-43px -21px;}
 #smart_editor .tool li.underline button.hover{ background-position:-65px -21px;}
 #smart_editor .tool li.italic button.hover{ background-position:-86px -21px;}
@@ -222,6 +222,18 @@
 #smart_editor .tool li.url .layer fieldset p{ position:absolute; left:12px; top:44px;}
 #smart_editor .tool li.url .layer fieldset p input{ width:13px; height:13px; vertical-align:middle; margin-right:3px;}
 #smart_editor .tool li.url .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
+
+#smart_editor .tool li.imgupload .layer{ width:231px; height:125px; background-image:url(../img/bx_url.gif); background-repeat:no-repeat; background-position:10px 14px;}
+#smart_editor .tool li.imgupload .layer fieldset{ position:absolute; width:212px; left:10px; top:14px;}
+#smart_editor .tool li.imgupload .layer fieldset h3{ position:absolute; top:-4px; left:15px; color:#404040; visibility:visible; font-size:12px; line-height:normal; width:auto; height:auto; background:none; margin:0; padding:0; font-weight:normal;}
+#smart_editor .tool li.imgupload .layer fieldset input{ position:absolute; left:12px; top:19px; width:179px; padding:2px 0 1px 6px; *margin:-1px 0; font-size:11px; height:15px;}
+#smart_editor .tool li.imgupload .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
+
+#smart_editor .tool li.videoupload .layer{ width:231px; height:125px; background-image:url(../img/bx_url.gif); background-repeat:no-repeat; background-position:10px 14px;}
+#smart_editor .tool li.videoupload .layer fieldset{ position:absolute; width:212px; left:10px; top:14px;}
+#smart_editor .tool li.videoupload .layer fieldset h3{ position:absolute; top:-4px; left:15px; color:#404040; visibility:visible; font-size:12px; line-height:normal; width:auto; height:auto; background:none; margin:0; padding:0; font-weight:normal;}
+#smart_editor .tool li.videoupload .layer fieldset input{ position:absolute; left:12px; top:19px; width:179px; padding:2px 0 1px 6px; *margin:-1px 0; font-size:11px; height:15px;}
+#smart_editor .tool li.videoupload .layer .btn_area{ position:absolute; bottom:12px; padding:0;}
 
 #smart_editor .tool li.table .layer{ width:242px; height:239px; background-image:url(../img/bx_table.gif); background-repeat:no-repeat; background-position:10px 14px;}
 #smart_editor .tool li.table .layer fieldset{ position:absolute; width:222px; left:10px;}

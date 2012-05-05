@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
@@ -43,8 +44,10 @@
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	if(SmartUtil.isBlankObject(work) || work.getId().equals(workId))
 		work = (SmartWork)smartWorks.getWorkById(workId);
-	if (SmartUtil.isBlankObject(work))
+	if (SmartUtil.isBlankObject(work)){
 		work = new SmartWork();
+		workId = Work.ID_EMPTY_WORK;
+	}
 	
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunities();
@@ -65,7 +68,7 @@
 			</a>
 		</span> 
 				
-		<span class="btn_gray">
+		<span class="btn_gray ml3">
 			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
 			<a href="" class="js_cancel_action"> 
 				<span class="txt_btn_start"></span> 
@@ -87,7 +90,7 @@
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT %>">
 			<%
-			}else if(workSpace.getClass().equals(Group.class)){
+			}else if(workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Course.class)){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_GROUP %>">
@@ -104,7 +107,7 @@
 			<%
 			}else{
 			%>
-				<input name="selWorkSpaceType" type="hidden" <%if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
+				<input name="selWorkSpaceType" type="hidden" <%if(!SmartUtil.isBlankObject(workId) && workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ %>value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>" <%}else{ %>value="<%=ISmartWorks.SPACE_TYPE_USER %>"<%} %>>
 				<select name="selWorkSpace" class="js_select_work_space">
 					<%
 					if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
@@ -113,7 +116,7 @@
 					<%
 					}
 					%>
-					<optgroup label="<fmt:message key="common.upload.space.department"/>">
+					<optgroup class="js_optgroup_department" label="<fmt:message key="common.upload.space.department"/>">
 						<%
 						// 현재사용자가 속해있는 부서들을 선택하는 옵션들을 구성한다..
 						for (CommunityInfo community : communities) {
@@ -125,7 +128,7 @@
 						}
 						%>
 					</optgroup>
-					<optgroup label="<fmt:message key="common.upload.space.group"/>">
+					<optgroup class="js_optgroup_group" label="<fmt:message key="common.upload.space.group"/>">
 						<%
 						// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
 						for (CommunityInfo community : communities) {
@@ -153,13 +156,13 @@
 				%>
 					<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
 					<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-					<option value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
 				<%
 				// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
 				} else if (accessLevel == AccessPolicy.LEVEL_CUSTOM) {
 				%>
 					<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-					<option selected value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<option selected class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
 				<%
 				// 읽기권한이 비공개이면, 비공개만 해당된다...
 				} else if (accessLevel == AccessPolicy.LEVEL_PRIVATE) {
@@ -172,40 +175,28 @@
 		</div>
 
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
-		<div class="fr form_space js_access_level_custom" <%if(work.getAccessPolicy().getLevel() != AccessPolicy.LEVEL_CUSTOM){ %> style="display:none"<%} %>>
-			<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
-				<div class="form_value">
-					<div class="icon_fb_space">
-						<div class="fieldline community_names js_community_names sw_required">
-							<div class="js_selected_communities user_sel_area">
-								<%
-								if(!SmartUtil.isBlankObject(work.getAccessPolicy().getCommunitiesToOpen())){
-									String comName = "";
-									for(CommunityInfo community : work.getAccessPolicy().getCommunitiesToOpen()){	
-										if(community.getClass().equals(UserInfo.class))
-											comName = ((UserInfo)community).getLongName();
-										else 
-											comName = community.getName();
-									%>
-										<span>
-											<span class="js_community_item user_select" comId="<%=community.getId()%>"><%=comName %>
-												<span class='btn_x_gr'><a class='js_remove_community' href=''> x</a></span>
-											</span>
-										</span>
-									<%
-									}
-								}
-								%>
+		<%
+		if(accessLevel == AccessPolicy.LEVEL_PUBLIC){
+		%>
+			<div class="fr form_space js_access_level_custom" style="display:none">
+				<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+					<div class="form_value">
+						<div class="icon_fb_space">
+							<div class="fieldline community_names js_community_names sw_required">
+								<div class="js_selected_communities user_sel_area">
+								</div>
+								<input class="js_auto_complete" href="community_name.sw" type="text">
+								<div class="js_srch_x"></div>
 							</div>
-							<input class="js_auto_complete" href="community_name.sw" type="text">
-							<div class="js_srch_x"></div>
+							<div class="js_community_list com_list" style="display: none"></div>
+							<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
 						</div>
-						<div class="js_community_list com_list" style="display: none"></div>
-						<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
 					</div>
-				</div>
-			</span>
-		</div>
+				</span>
+			</div>
+		<%
+		}
+		%>
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
 		
 		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->

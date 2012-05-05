@@ -25,14 +25,14 @@
 	<!-- 팝업 타이틀 -->
 	<div class="pop_title_space w_margin"> 
 		<div class="txt_btn">
-			<div class="title_work">업무항목</div>
+			<div class="title_work"><fmt:message key="popup.select.work_item"/></div>
 			
 			<!-- 검색 -->
 			<form class="po_left" name="frmSearchInstance">
 				<span class="js_progress_span"></span>
 				<div class="srch_wh srch_wsize">
-					<input class="nav_input" type="text" placeholder="항목 찾기" name="txtSearchInstance">
-					<button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="항목 찾기"></button>
+					<input class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance'/>" name="txtSearchInstance">
+					<button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="<fmt:message key='search.search_instance'/>"></button>
 				</div>
 			</form>
 			
@@ -53,7 +53,7 @@
 
 		<div class="fr">
 			<span class="btn_gray"> <a onclick="$.modal.close();return false;" href=""> <span
-					class="txt_btn_start"></span> <span class="txt_btn_center">닫기</span> <span
+					class="txt_btn_start"></span> <span class="txt_btn_center"><fmt:message key="common.button.close"/></span> <span
 					class="txt_btn_end"></span> </a> </span>
 		</div>
 

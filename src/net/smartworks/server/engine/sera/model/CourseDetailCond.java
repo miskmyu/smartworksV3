@@ -8,10 +8,14 @@
 
 package net.smartworks.server.engine.sera.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.Cond;
 import net.smartworks.util.LocalDate;
 
-public class CourseDetailCond extends Cond{
+public class CourseDetailCond extends Cond {
+	private static final long serialVersionUID = 1L;
+
 	private String courseId;
 	private String[] courseIdIns;
 	private String object;
@@ -19,7 +23,11 @@ public class CourseDetailCond extends Cond{
 	private String[] keywords;
 	private int duration;
 	private LocalDate start;
+	private LocalDate startFrom;
+	private LocalDate startTo;
 	private LocalDate end;
+	private LocalDate endFrom;
+	private LocalDate endTo;
 	private int maxMentees;
 	private boolean autoApproval;
 	private boolean payable;
@@ -27,8 +35,32 @@ public class CourseDetailCond extends Cond{
 	private String teamId;
 	private int targetPoint;
 	private int achievedPoint;
-	
+	private boolean recommended;
+	private Date createDate;
+	private Date createDateFrom;
+	private Date createDateTo;
+	private int coursePoint = -1;
+	private int coursePointFrom = -1;
+	private int coursePointTo = -1;
 
+	public int getCoursePointTo() {
+		return coursePointTo;
+	}
+	public void setCoursePointTo(int coursePointTo) {
+		this.coursePointTo = coursePointTo;
+	}
+	public LocalDate getStartFrom() {
+		return startFrom;
+	}
+	public void setStartFrom(LocalDate startFrom) {
+		this.startFrom = startFrom;
+	}
+	public LocalDate getStartTo() {
+		return startTo;
+	}
+	public void setStartTo(LocalDate startTo) {
+		this.startTo = startTo;
+	}
 	public String getCourseId() {
 		return courseId;
 	}
@@ -119,6 +151,53 @@ public class CourseDetailCond extends Cond{
 	public void setAchievedPoint(int achievedPoint) {
 		this.achievedPoint = achievedPoint;
 	}
-	
-	
+	public boolean isRecommended() {
+		return recommended;
+	}
+	public void setRecommended(boolean recommended) {
+		this.recommended = recommended;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public Date getCreateDateFrom() {
+		return createDateFrom;
+	}
+	public void setCreateDateFrom(Date createDateFrom) {
+		this.createDateFrom = createDateFrom;
+	}
+	public Date getCreateDateTo() {
+		return createDateTo;
+	}
+	public void setCreateDateTo(Date createDateTo) {
+		this.createDateTo = createDateTo;
+	}
+	public LocalDate getEndFrom() {
+		return endFrom;
+	}
+	public void setEndFrom(LocalDate endFrom) {
+		this.endFrom = endFrom;
+	}
+	public LocalDate getEndTo() {
+		return endTo;
+	}
+	public void setEndTo(LocalDate endTo) {
+		this.endTo = endTo;
+	}
+	public int getCoursePointFrom() {
+		return coursePointFrom;
+	}
+	public void setCoursePointFrom(int coursePointFrom) {
+		this.coursePointFrom = coursePointFrom;
+	}
+	public int getCoursePoint() {
+		return coursePoint;
+	}
+	public void setCoursePoint(int coursePoint) {
+		this.coursePoint = coursePoint;
+	}
+
 }

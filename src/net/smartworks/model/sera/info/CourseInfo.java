@@ -1,6 +1,5 @@
 package net.smartworks.model.sera.info;
 
-import net.smartworks.model.community.Community;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Course;
@@ -12,12 +11,19 @@ public class CourseInfo extends GroupInfo{
 
 	public static final String DEFAULT_COURSE_PICTURE  = "default_course_picture";
 
+	private String category;
 	private UserInfo owner;
 	private UserInfo leader;
 	private LocalDate openDate;
 	private LocalDate closeDate;
 	private int numberOfGroupMember;
-	
+
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public UserInfo getOwner() {
 		return owner;
 	}
@@ -52,30 +58,36 @@ public class CourseInfo extends GroupInfo{
 		return getDesc();
 	}	
 	public int getTargetPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
-		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return 0;
+		int point = (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		return (point<0) ? 0 : point;
 	}
 	public int getAchievedPoint() {
 		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
+		int point = (int)LocalDate.getDiffDate(openDate, new LocalDate())+1;
+		return (point<0) ? getTargetPoint() : point;
+	}
+	public double getAchievedRatio(){
+		if(getTargetPoint()==0 || getAchievedPoint()==0) return 0;
+		return (getAchievedPoint() * 100 / getTargetPoint());
 	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getBigPictureName();
 	}
 
 	public String getMidPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_mid.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}
 
 	public String getMinPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_min.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}

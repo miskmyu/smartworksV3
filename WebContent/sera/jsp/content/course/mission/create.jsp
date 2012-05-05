@@ -78,23 +78,23 @@
 		<table class="js_create_mission_table" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td>
-					<div class="form_label w101">미션<%=course.getLastMissionIndex()+2 %> 제목</div>
-					<div class="form_value">
-						<input name="txtMissionName" type="text" class="fieldline fl required" style="width: 490px">
+					<div class="form_label">미션<%=course.getLastMissionIndex()+2 %> 제목</div>
+					<div class="form_value w560">
+						<input name="txtMissionName" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td><div class="form_label w101">미션 기간</div>
+				<td><div class="form_label">미션 기간</div>
 					<div class="form_value">
-						<div class="fl js_mission_open_date_field" width="110px"></div>
-						<div class="fl mr10">~</div> 
-						<div class="fl js_mission_close_date_field" width="110px"></div>
+						<div class="fl js_mission_open_date_field"></div>
+						<div class="fl mr5" style="line-height: 20px"> ~ </div> 
+						<div class="fl js_mission_close_date_field"></div>
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td><div class="form_label w101">선행 미션*</div>
+				<td><div class="form_label">선행 미션*</div>
 					<div class="form_value">
 						<select name="selPrevMission">
 							<option value="">없 음</option>
@@ -117,9 +117,16 @@
 				</td>
 			</tr>
 			<tr>
-				<td><div class="form_label w101">미션 내용</div>
+				<td><div class="form_label">미션 내용</div>
+					<div class="form_value w560">
+						<div class="fl js_mission_content_field"></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><div class="form_label">첨부 파일</div>
 					<div class="form_value">
-						<div class="fl js_mission_content_field" width="490px"></div>
+						<div class="fl js_mission_attachment_field" width="490px"></div>
 					</div>
 				</td>
 			</tr>
@@ -132,7 +139,7 @@
 	<div class="btn_space">
 		<div style="clear: both; display: inline-block">
 			<div href="" class="btn_blu_l mr10 js_create_mission_btn">
-				<div class="btn_blu_r">미션 만들기</div>
+				<div class="btn_blu_r">미션 등록</div>
 			</div>
 		
 			<div href="" class="btn_blu_l js_create_mission">

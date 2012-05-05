@@ -1,7 +1,9 @@
 package net.smartworks.model.sera;
 
-import net.smartworks.model.community.Community;
+import java.text.DecimalFormat;
+
 import net.smartworks.model.community.Group;
+import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.util.LocalDate;
@@ -10,16 +12,29 @@ import net.smartworks.util.SmartUtil;
 
 public class Course extends Group {
 
+	public static final String NO_PICTURE_PATH = "sera/images/";
 	public static final String DEFAULT_COURSE_PICTURE  = "default_course_picture";
 	public static final int MY_ALL_COURSES = 0;
 	public static final int MY_RUNNING_COURSE = 1;
 	public static final int MY_ATTENDING_COURSE = 2;
+	public static final int TYPE_ALL_COURSES = -1;
+	public static final int TYPE_FAVORITE_COURSES = 11;
+	public static final int TYPE_RECOMMENDED_COURSES = 12;
+	public static final int TYPE_CLOSED_COURSES = 13;
+	public static final int TYPE_CATEGORIES = 14;
+
+	public static final int TYPE_COURSEPOINT_MEMBER = 1;
+	public static final int TYPE_COURSEPOINT_CONTENT = 2;
+
+	public static final int POINT_MEMBER = 5;
+	public static final int POINT_CONTENT = 1;
+
+	public static final int LIST_PAGE_SIZE = 20;
 
 	private String object;
 	private String[] categories;
 	private String[] keywords;
 	private int duration;
-	private LocalDate openDate;
 	private LocalDate closeDate;
 	private int maxMentees;
 	private boolean payable;
@@ -27,7 +42,28 @@ public class Course extends Group {
 	private Team team;
 	private MissionInstanceInfo[] missions;
 	private int lastMissionIndex=-1;
-	
+	private double starPoint;
+	private int starPointUsers;
+	private int likes;
+
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	public double getStarPoint() {
+		return starPoint;
+	}
+	public void setStarPoint(double starPoint) {
+		this.starPoint = starPoint;
+	}
+	public int getStarPointUsers() {
+		return starPointUsers;
+	}
+	public void setStarPointUsers(int starPointUsers) {
+		this.starPointUsers = starPointUsers;
+	}
 	public int getLastMissionIndex() {
 		return lastMissionIndex;
 	}
@@ -41,12 +77,18 @@ public class Course extends Group {
 		this.missions = missions;
 	}
 	public int getTargetPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime()) return -1;
-		return (int)LocalDate.getDiffDate(openDate, closeDate)+1;
+		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime()) return 0;
+		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), closeDate)+1;
+		return (point<0) ? 0 : point;
 	}
 	public int getAchievedPoint() {
-		if(SmartUtil.isBlankObject(openDate) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<openDate.getTime() || openDate.getTime()>(new LocalDate()).getTime()) return 0;
-		return (int)LocalDate.getDiffDate(openDate, new LocalDate());
+		if(SmartUtil.isBlankObject(super.getOpenDate()) || SmartUtil.isBlankObject(closeDate) || closeDate.getTime()<super.getOpenDate().getTime() || super.getOpenDate().getTime()>(new LocalDate()).getTime()) return 0;
+		int point = (int)LocalDate.getDiffDate(super.getOpenDate(), new LocalDate())+1;
+		return (point<0) ? getTargetPoint() : point;
+	}
+	public double getAchievedRatio(){
+		if(getTargetPoint()==0 || getAchievedPoint()==0) return 0;
+		return (getAchievedPoint() * 100 / getTargetPoint());
 	}
 	public String getObject() {
 		return object;
@@ -71,12 +113,6 @@ public class Course extends Group {
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
-	}
-	public LocalDate getOpenDate() {
-		return openDate;
-	}
-	public void setOpenDate(LocalDate openDate) {
-		this.openDate = openDate;
 	}
 	public LocalDate getCloseDate() {
 		return closeDate;
@@ -108,21 +144,33 @@ public class Course extends Group {
 	public void setTeam(Team team) {
 		this.team = team;
 	}
+	public boolean isMyRunningCourse(){
+		return this.getLeader().getId().equals(SmartUtil.getCurrentUser().getId());
+	}
+	public boolean isMyAttendingCourse(){
+		UserInfo[] members = this.getMembers();
+		User currentUser = SmartUtil.getCurrentUser();
+		if(SmartUtil.isBlankObject(members) || SmartUtil.isBlankObject(currentUser)) return false;
+		for(int i=0; i<members.length; i++)
+			if(members[i].getId().equals(currentUser.getId()))
+				return true;
+		return false;
+	}
 	public String getOrgPicture() {
 		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getBigPictureName();
 	}
 	public String getMidPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_mid.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}
 	public String getMinPicture() {
 		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			return Community.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + "_min.gif";
+			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}
@@ -140,5 +188,18 @@ public class Course extends Group {
 	public Course(String id, String name, UserInfo[] mentees, Mentor mentor){
 		
 		super(id, name, mentees, mentor);
+	}
+	
+	public String getKeywordsAsCommaString(){
+		String str = "";
+		if(SmartUtil.isBlankObject(this.getKeywords())) return str;
+		for(int i=0; i<this.getKeywords().length; i++)
+			str = str + this.getKeywords()[i] + ((i==this.getKeywords().length-1) ? "" : ", ");
+		return str;
+	}
+	
+	public String getStarPointString(){
+		DecimalFormat df = new DecimalFormat("#.#");
+		return df.format(getStarPoint());
 	}
 }

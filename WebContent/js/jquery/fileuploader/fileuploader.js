@@ -104,7 +104,7 @@ qq.contains = function(parent, descendant){
 qq.toElement = (function(){
     var div = document.createElement('div');
     return function(html){
-        div.innerHTML = html;
+        $(div).html(html);
         var element = div.firstChild;
         div.removeChild(element);
         return element;
@@ -368,7 +368,7 @@ qq.FileUploaderBasic.prototype = {
         this._filesInProgress--;        
     },
     _onInputChange: function(input){
-        if (this._handler instanceof qq.UploadHandlerXhr){                
+        if (this._handler instanceof qq.UploadHandlerXhr){
             this._uploadFileList(input.files);                   
         } else {             
             if (this._validateFile(input)){                
@@ -388,7 +388,7 @@ qq.FileUploaderBasic.prototype = {
             this._uploadFile(files[i]);        
         }        
     },       
-    _uploadFile: function(fileContainer){      
+    _uploadFile: function(fileContainer){ 
         var id = this._handler.add(fileContainer);
         var fileName = this._handler.getName(id);
         
@@ -521,7 +521,7 @@ qq.FileUploader = function(o){
     qq.extend(this._options, o);       
 
     this._element = this._options.element;
-    this._element.innerHTML = this._options.template;        
+    $(this._element).html(this._options.template);        
     this._listElement = this._options.listElement || this._find(this._element, 'list');
     
     this._classes = this._options.classes;
@@ -1148,7 +1148,6 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         if (!(file instanceof File)){
             throw new Error('Passed obj in not a File (in qq.UploadHandlerXhr)');
         }
-                
         return this._files.push(file) - 1;        
     },
     getName: function(id){        

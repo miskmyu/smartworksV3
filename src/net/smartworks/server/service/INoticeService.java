@@ -16,6 +16,8 @@ public interface INoticeService {
 	/* (non-Javadoc)
 	 * @see net.smartworks.service.impl.ISmartWorks#getNoticesForMe(java.lang.String)
 	 */
+	public Notice[] getNotices(String userId, int noticeType) throws Exception;
+
 	public Notice[] getNoticesForMe() throws Exception;
 
 	public void removeNoticeInstance(String noticeId) throws Exception;

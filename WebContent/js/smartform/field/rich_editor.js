@@ -16,11 +16,9 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
-
 	var value = (options.dataField && options.dataField.value) || '';
 	var $entity = options.entity;
-	//var $graphic = $entity.children('graphic');
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var height = $graphic.attr('height');
 	var id = $entity.attr('id');
@@ -29,7 +27,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	var labelWidth = (isEmpty(options.layoutInstance)) ? parseInt($graphic.attr('labelWidth')) : options.layoutInstance.getLabelWidth(id);
 	var valueWidth = 100 - labelWidth;
 	var $label = $('<span class="form_label" style="width:' + labelWidth + '%"><span>' + name + '</span></div>');
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
 		required = " class='sw_required js_rich_editor_event' ";
@@ -84,17 +82,20 @@ SmartWorks.FormRuntime.RichEditorBuilder.buildEx = function(config){
 
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="richEditor" viewingType="richEditor"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly +'" labelWidth="'+ labelWidth + '"/>' +
-					'</formEntity>');
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_richEditor" fieldid="' + options.fieldId+ '" colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.RichEditorBuilder.build({
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
-			dataField : options.value			
+			dataField : SmartWorks.FormRuntime.RichEditorBuilder.dataField({
+				fieldId: options.fieldId,
+				value: options.value
+			})
 	});
 	
 };
@@ -107,7 +108,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.serializeObject = function(richEditors,
 		if(valueChanged && !isEmpty(oEditors) && !isEmpty(oEditors.getById[id])){
 			oEditors.getById[id].exec("UPDATE_IR_FIELD", []);
 		}
-		richEditorsJson[richEditor.attr('fieldId')] = richEditor.find('textarea')[0].value;
+		var valueField = richEditor.find('textarea');
+		if(!isEmpty(valueField)) richEditorsJson[richEditor.attr('fieldId')] = valueField[0].value;
 	}
 	return richEditorsJson;
 };
@@ -134,15 +136,16 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			value: ''
 	};
 
 	SmartWorks.extend(options, config);
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,
@@ -150,3 +153,5 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	};
 	return dataField;
 };
+
+// oEditors.getById[id].exec("PASTE_HTML", [sHTML]);

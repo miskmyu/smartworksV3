@@ -103,4 +103,22 @@ public class CommunityController {
 		smartworks.inviteGroupMembers(requestBody, request);
 	}
 
+	@RequestMapping(value = "/approval_join_group", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void approvalJoinGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.approvalJoinGroup(requestBody, request);
+	}
+
+	@RequestMapping(value = "/pushout_group_member", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void pushout_group_member(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.pushoutGroupMember(requestBody, request);
+	}
+
+	@RequestMapping(value = "/leave_group", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void leaveGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.leaveGroup(requestBody, request);
+	}
+
 }

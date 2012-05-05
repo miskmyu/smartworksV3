@@ -1,9 +1,5 @@
 
-<!-- Name 			: nav.jsp										 		 -->
-<!-- Description	: 화면 왼쪽의 Navigation Bar 를 구성하는 화면  				 -->
-<!-- Author			: Y.S. JUNG												 -->
-<!-- Created Date	: 2011.9.												 -->
-
+<%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -26,7 +22,7 @@
 	<!-- Aside Block1 -->
 	<div class="aside_block">
 		<div class="header">
-			<div class="icon_as_mycourse fl">내 코스 <span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span></div>
+			<a href="myCourses.sw" class="js_sera_content"><div class="icon_as_mycourse fl">내 코스 <span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span></div></a>
 			<div class="icon_as_more"><a href="myCourses.sw" class="mt10 js_sera_content"> </a></div>
 		</div>
 		<div class="content">
@@ -42,7 +38,7 @@
 								if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 								CourseInfo course = courseList.getRunningCourses()[i];
 							%>
-									<li ><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span></a></li>
+									<li ><a href="courseHome.sw?courseId=<%=course.getId() %>"><span class="t_blue"><%=course.getName() %></span></a></li>
 							<%
 							}
 							%>
@@ -66,7 +62,7 @@
 								if(i==CourseList.MAX_BRIEF_COURSE_LIST) break;
 								CourseInfo course = courseList.getAttendingCourses()[i];
 							%>
-									<li><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><span class="t_blue"><%=course.getName() %></span></a></li>
+									<li><a href="courseHome.sw?courseId=<%=course.getId() %>"><span class="t_blue"><%=course.getName() %></span></a></li>
 							<%
 							}
 							%>
@@ -83,11 +79,13 @@
 	  <!-- Aside Block2 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class=" icon_as_badge fl">뱃 지 (16)</div>
-			<div class="icon_as_more"><a href="socialBadge.sw" class="mt10 js_sera_content"> </a></div>
+			<div class=" icon_as_badge fl">뱃 지 (0)</div>
+			<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
 		</div>
 		<div class="list">
 			<dl>
+<!--
+ 				<dd><div class="badge_df"> </div></dd>
 				<dd><div class="badge_df"> </div></dd>
 				<dd><div class="badge_df"> </div></dd>
 				<dd><div class="badge_df"> </div></dd>
@@ -98,8 +96,8 @@
 				<dd><div class="badge_df"> </div></dd>
 				<dd><div class="badge_df"> </div></dd>
 				<dd><div class="badge_df"> </div></dd>
-				<dd><div class="badge_df"> </div></dd>
-			</dl>
+ -->
+ 			</dl>
 		</div>
 	</div>
 	<!-- Aside Block2 //-->
@@ -107,7 +105,7 @@
 	<!-- Aside Block3 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class=" icon_as_friend fl">친 구 (<%=friendList.getTotalFriends() %>)</div>
+			<a href="socialFriend.sw" class="js_sera_content"><div class=" icon_as_friend fl">친 구 (<%=friendList.getTotalFriends() %>)</div></a>
 			<div class="icon_as_more"><a href="socialFriend.sw" class="mt10 js_sera_content"> </a></div>
 		</div>
 		<div class="list">
@@ -115,9 +113,9 @@
 				<%
 				if (friendList.getFriends() != null || friendList.getTotalFriends() != 0) {
 					for(int i=0; i<friendList.getFriends().length; i++){
-						UserInfo friend = friendList.getFriends()[i];
+						SeraUserInfo friend = friendList.getFriends()[i];
 				%>
-					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>"></dd></a>
+					<a href="othersPAGE.sw?userId=<%=friend.getId()%>"><dd><img class="friend_df" src="<%=friend.getMinPicture()%>" title="<%=friend.getNickName()%>"></dd></a>
 				<%
 					}
 				}
@@ -128,18 +126,20 @@
 	<!-- Aside Block3 //-->
 	
 	 <!-- Aside Block4 -->
-	<div class="aside_block">
+	<div class="aside_block m0">
 		<div class="header">
-			<div class="icon_as_srtrend fl">트렌드 세라 (23)</div>
-			<div class="icon_as_more"><a href="" class="mt10"> </a></div>
+			<div class="icon_as_srtrend fl">트렌드 세라 (0)</div>
+			<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
 		</div>
 		<div class="content">
 			<dl>
 				<dd>
 					<ul>
-						<li>[정치인 공부하기] 새누리당으로...</li>
+<!--
+ 						<li>[정치인 공부하기] 새누리당으로...</li>
 						<li>[정치인 공부하기] 한나라당이...</li>
-					</ul>
+-->
+ 					</ul>
 				</dd>
 			</dl>
 		</div>

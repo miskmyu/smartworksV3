@@ -23,6 +23,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	int spaceType = Integer.parseInt(request.getParameter("spaceType"));
 	String spaceId = request.getParameter("spaceId");
+	String teamId = request.getParameter("teamId");
 %>
 
 <script type="text/javascript">
@@ -33,9 +34,12 @@
 		var seraNote = $('.js_sera_note_page');
 		if (SmartWorks.GridLayout.validate(seraNote.find('form.js_validation_required'),  seraNote.find('.sw_error_message'))) {
 			var forms = seraNote.find('form');
+			var teamId = seraNote.attr('teamId');
+			if(isEmpty(teamId)) teamId="";
 			var paramsJson = {};
 			paramsJson['spaceType'] = seraNote.attr('spaceType');
 			paramsJson['spaceId'] = seraNote.attr('spaceId');
+			paramsJson['teamId'] = seraNote.attr('teamId');
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -56,54 +60,35 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					alert('wait');
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "세라노트가 성공적으로 등록되었습니다!", function(){
+						if(!isEmpty(seraNote.attr('teamId')) && (seraNote.attr('teamId') !== 'null')){
+							$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+						}else{
+							document.location.href = data.href;						
+						}						
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createSeraNoteError'));
+					smartPop.showInfo(smartPop.ERROR, "세라노트등록에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
 	};
 </script>
 
-<div class="js_sera_note_page" spaceType="<%=spaceType%>" spaceId="<%=spaceId%>">
+<div class="js_sera_note_page" spaceType="<%=spaceType%>" spaceId="<%=spaceId%>" teamId="<%=teamId%>">
 	<form name="frmCreateSeraNote" class="js_validation_required">	
 		<div class="comment_txt">
-			<textarea name="txtNoteContent" class="required" rows="5" placeholder="남기고 싶은 이야기를 적어 주세요!"></textarea>
+			<textarea name="txtNoteContent" class="required js_sera_note_content" rows="5" placeholder="남기고 싶은 이야기를 적어 주세요!"></textarea>
 		</div>
 	
 		<div class="cb mt6">
-			<!-- 좌측 영역 -->
-			<div class="option">
-				<!-- 버튼 -->
-				<div class="btn_wstyle_l">
-					<div class="btn_wstyle_r">텍스트</div>
-				</div>
-				<!-- 버튼 //-->
-				<!-- 전체공개 -->
-				<div class="txt ml10">
-					<select name="selAccessLevel" class="ml5">
-						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
-						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
-					</select>
-				</div>
-				<!-- 전체공개 //-->
-	
-				<!-- 태그넣기 -->
-				<div class="txt">
-					<a href=""> 태그넣기<span class="icon_bul_select ml5"></span> </a>
-				</div>
-				<!-- 태그넣기//-->
-				<div class="txt t_s11"><span class="t_red">0</span> /1000kbyte</div>
-			</div>
-			<!-- 좌측 영역//-->
-	
-			<table class="js_note_attachment_table" border="0" cellspacing="0" cellpadding="0" style="display:none">
+			
+			<table class="js_note_attachment_table cb attach_file_detail" border="0" cellspacing="0" cellpadding="0" style="display:none">
 				<tr class="js_note_file" style="display:none">
 					<td>
-						<div class="form_label w101">첨부파일</div>
+						<div class="form_label">첨부파일</div>
 						<div class="form_value">
 							<div class="js_note_file_field"></div>
 						</div>
@@ -111,7 +96,7 @@
 				</tr>
 				<tr class="js_note_video" style="display:none">
 					<td>
-						<div class="form_label w101">동영상</div>
+						<div class="form_label">동영상</div>
 						<div class="form_value">
 							<div class="js_note_video_field"></div>
 						</div>
@@ -119,7 +104,7 @@
 				</tr>
 				<tr class="js_note_image" style="display:none">
 					<td>
-						<div class="form_label w101">이미지</div>
+						<div class="form_label">이미지</div>
 						<div class="form_value">
 							<div class="js_note_image_field"></div>
 						</div>
@@ -127,18 +112,29 @@
 				</tr>
 				<tr class="js_note_link" style="display:none">
 					<td>
-						<div class="form_label w101">링크</div>
+						<div class="form_label">링크</div>
 						<div class="form_value">
-							<input name="txtNoteUrl" type="text" class="fieldline url" style="width:470px;display:block"/>
+							<input name="txtNoteUrl" type="text" class="fieldline url" style="width:450px;display:block"/>
 						</div>
 					</td>
 				</tr>
 			</table>
+			
 	
 			<div class="sw_error_message tl" style="color: red"></div>
 			<!-- 우측 버튼 영역 -->
+
 			<div class="attach_file js_note_buttons">
 				<ul>
+					<li>
+						<span class="insert_text js_note_content_length">1000</span>
+					</li>
+					<li class="ml5">
+						<select name="selAccessLevel" >
+						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>">전체공개</option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>">비공개</option>
+						</select>
+					</li>
 					<li class="icon_memo ml10"><a href="" class="js_note_file_btn" title="첨부파일"> </a></li>
 					<li class="icon_video"><a href="" class="js_note_video_btn" title="동영상"> </a></li>
 					<li class="icon_photo"><a href="" class="js_note_image_btn" title="사진"> </a></li>
@@ -150,6 +146,7 @@
 					<!-- Btn 등록//-->
 				</ul>
 			</div>
+
 			<!-- 우측 버튼 영역 //-->
 		</div>
 	</form>

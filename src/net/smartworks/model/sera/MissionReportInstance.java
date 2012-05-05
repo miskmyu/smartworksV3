@@ -7,58 +7,31 @@ import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 
-public class MissionReportInstance extends WorkInstance {
+public class MissionReportInstance extends NoteInstance {
 		
-	private int index;
-	private String content;
-	private LocalDate openDate;
-	private LocalDate closeDate;
-	private MissionReportInstance prevMission;
-	private UserInfo[] missionClearers;
+	private MissionInstance mission;
+	private double starPoint;
 	
-	public int getIndex() {
-		return index;
+	public MissionInstance getMission() {
+		return mission;
 	}
-	public void setIndex(int index) {
-		this.index = index;
+	public void setMission(MissionInstance mission) {
+		this.mission = mission;
 	}
-	public String getContent() {
-		return content;
+	public double getStarPoint() {
+		return starPoint;
 	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public LocalDate getOpenDate() {
-		return openDate;
-	}
-	public void setOpenDate(LocalDate openDate) {
-		this.openDate = openDate;
-	}
-	public LocalDate getCloseDate() {
-		return closeDate;
-	}
-	public void setCloseDate(LocalDate closeDate) {
-		this.closeDate = closeDate;
-	}
-	public MissionReportInstance getPrevMission() {
-		return prevMission;
-	}
-	public void setPrevMission(MissionReportInstance prevMission) {
-		this.prevMission = prevMission;
-	}
-	public UserInfo[] getMissionClearers() {
-		return missionClearers;
-	}
-	public void setMissionClearers(UserInfo[] missionClearers) {
-		this.missionClearers = missionClearers;
-	}
-	public MissionReportInstance(){
-		super();
-		super.setType(Instance.TYPE_MISSION_REPORT);
+	public void setStarPoint(double starPoint) {
+		this.starPoint = starPoint;
 	}
 
-	public MissionReportInstance(String id, String subject, Work work, User owner, LocalDate lastModifiedDate){
-			super(id, subject, work, owner, owner, lastModifiedDate);
-			super.setType(Instance.TYPE_MISSION_REPORT);
+	public MissionReportInstance(){
+		super();
+		super.setType(Instance.TYPE_SERA_MISSION_REPORT);
+	}
+
+	public MissionReportInstance(String id, String subject, User owner, LocalDate lastModifiedDate){
+			super(id, subject, owner, lastModifiedDate);
+			super.setType(Instance.TYPE_SERA_MISSION_REPORT);
 	}
 }

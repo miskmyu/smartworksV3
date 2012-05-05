@@ -20,10 +20,13 @@ public class Instance {
 	public final static int TYPE_BOARD = 11;
 	public final static int TYPE_LINK = 12;
 	public final static int TYPE_YTVIDEO = 13;
-	public final static int TYPE_MISSION = 21;
-	public final static int TYPE_MISSION_REPORT = 22;
-	public final static int TYPE_REVIEW = 23;
-	public final static int TYPE_NOTE = 24;
+	public final static int TYPE_CHAT_MESSAGE = 14;
+	public final static int TYPE_SENT_ASYNC_MESSAGE = 15;
+	
+	public final static int TYPE_SERA_MISSION = 21;
+	public final static int TYPE_SERA_MISSION_REPORT = 22;
+	public final static int TYPE_SERA_REVIEW = 23;
+	public final static int TYPE_SERA_NOTE = 24;
 	
 	public final static int STATUS_NOT_YET = 0;
 	public final static int STATUS_RUNNING = 1;

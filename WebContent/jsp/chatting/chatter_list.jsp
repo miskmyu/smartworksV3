@@ -13,41 +13,43 @@
 <%@ page import="net.smartworks.model.work.*"%>
 <%@ page import="net.smartworks.util.LocalDate"%>
 <script>
-	function updateAvailableChatters(userInfos) {
+	function updateAvailableChatters(messasge) {
+		var userInfos = message.userInfos;
 		if (userInfos != null) {
+			var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 			var data = "";
 			var length = userInfos.length;
 			for ( var i = 0; i < length; i++) {
-				data = data
-						+ "<li><a href='' userId='" + userInfos[i].userId + "'><span><img src='" + userInfos[i].minPicture + "' title='" + userInfos[i].longName + "' class='online'/>"
-						+ userInfos[i].longName + "</span></a></li>";
+				data = data + "<li>" +
+									"<a href='' userId='" + userInfos[i].userId + "'>" +
+										"<span><img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s chat_online' title='" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "'/>" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "</span>" +
+									"</a>" +
+								"</li>";
 			}
-			$("#available_chatter_list").html(data).parents(
-					'div.js_chatter_list').find('span.js_chatters_number')
-					.html("(" + length + ")");
+			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + length + ")");
 		}
 	}
 </script>
 <%
 	User cUser = SmartUtil.getCurrentUser();
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	String userNaming = (String)session.getAttribute("userNaming");  
+	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 	UserInfo[] chatters = smartWorks.getAvailableChatter();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 채팅Default -->	 
-<div class="chat_de_section js_chatter_list">
+<div class="chat_de_section js_chatter_list js_chatter_list_page" nickNameBase="<%=nickNameBase%>">
 	<!-- 상단 -->
 	<div class="top_group">
 		<a href="" class="js_toggle_chatter_list">
-			<div class="chatic_titl"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=chatters.length%>)</span></div>
+			<div class="chatic_titl sera"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=chatters.length%>)</span></div>
 		</a>
 		<!-- 상단우측 아이콘-->
 		<div class="txt_btn">
-			<div class="ch_right btn_admin">
-				<a href=""><span></span></a>
-			</div>
+			<div class="ch_right btn_admin"><a><span></span></a></div>
 		</div>
 		<!-- 상단 우측 아이콘//-->
 	</div>
@@ -61,11 +63,11 @@
 			<ul>
 				<%
 				for (UserInfo chatter : chatters) {
+					String userName = (nickNameBase) ? chatter.getNickName() : chatter.getLongName();
 				%>
 					<li>
 						<a href="" userId="<%=chatter.getId()%>">
-							<img src="<%=chatter.getMinPicture()%>" class="profile_size_s" title="<%=chatter.getLongName()%>" /><%=chatter.getLongName()%>
-							<span class="chat_offline"></span>
+							<span><img src="<%=chatter.getMinPicture()%>" class="mr2 profile_size_s chat_offline" title="<%=userName%>" /><%=userName%></span>
 						</a>
 					</li>
 				<%
@@ -78,7 +80,7 @@
 		<!-- 검색영역 -->
 		<div class="chat_input_section js_chatter_names">
 			<div class="chat_input_area">
-				<input id="" class="input js_auto_complete" type="text" href="chatter_name.sw" placeholder="<fmt:message key='search.search_people_depart_group'/>" title="<fmt:message key='search.search_people_depart_group'/>">
+				<input id="" class="input js_auto_complete" type="text" href="chatter_name.sw" placeholder="<fmt:message key='search.search_chatter'/>" title="<fmt:message key='search.search_chatter'/>">
 			</div>
 		</div>
 	</div>

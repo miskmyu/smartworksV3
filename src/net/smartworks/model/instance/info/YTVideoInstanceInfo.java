@@ -8,6 +8,7 @@ public class YTVideoInstanceInfo extends WorkInstanceInfo {
 
 	private String fileName;
 	private String category;
+	private String briefContent;
 	private String content;
 	
 	public String getFileName() {
@@ -21,6 +22,12 @@ public class YTVideoInstanceInfo extends WorkInstanceInfo {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public String getBriefContent() {
+		return briefContent;
+	}
+	public void setBriefContent(String briefContent) {
+		this.briefContent = briefContent;
 	}
 	public String getContent() {
 		return content;

@@ -14,7 +14,6 @@ public class CommentInstance extends Instance {
 
 	private int commentType=-1;
 	private WorkInstance workInstance;
-	private TaskInstance taskInstance;
 	private User commentor;
 	private String comment;
 
@@ -32,14 +31,6 @@ public class CommentInstance extends Instance {
 
 	public void setWorkInstance(WorkInstance workInstance) {
 		this.workInstance = workInstance;
-	}
-
-	public TaskInstance getTaskInstance() {
-		return taskInstance;
-	}
-
-	public void setTaskInstance(TaskInstance taskInstance) {
-		this.taskInstance = taskInstance;
 	}
 
 	public User getCommentor() {

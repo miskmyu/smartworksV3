@@ -31,6 +31,7 @@
 			}
 		}
 	}
+	
 	window.onload = function() {
 		//toggleToolBars();
 	}
@@ -250,6 +251,40 @@
 					</div>
 					<!-- /인용 레이어 -->
 				</li>
+		        <li class="imgupload husky_seditor_ui_imgupload">
+					<button type="button" title="이미지삽입"><span>이미지삽입</span></button>
+					<!-- 이미지삽입 레이어 -->
+					<div class="layer husky_seditor_imgupload_layer" style="display:none;">
+				      	<form name="frmUploadSEImage" id="frmUploadSEImage">
+							<fieldset>
+								<h3>이미지삽입</h3>
+								<input name="fileSelectImage" id="fileSelectImage" type="file"/>
+							</fieldset>
+							<div class="btn_area">
+								<button type="button" class="confirm" title="확인"><span>확인</span></button>
+								<button type="button" class="cancel" title="취소"><span>취소</span></button>		
+							</div>
+						</form>
+					</div>
+					<!-- /이미지삽입 레이어 -->
+		        </li>
+		        <li class="videoupload husky_seditor_ui_videoupload">
+					<button type="button" title="유튜브동영상삽입"><span>유튜브동영상삽입</span></button>
+					<!-- 이미지삽입 레이어 -->
+					<div class="layer husky_seditor_videoupload_layer" style="display:none;">
+				      	<form name="frmUploadSEVideo" id="frmUploadSEVideo">
+							<fieldset>
+								<h3>유튜브동영상삽입</h3>
+								<input name="fileSelectVideo" id="fileSelectVideo" type="file"/>
+							</fieldset>
+							<div class="btn_area">
+								<button type="button" class="confirm" title="확인"><span>확인</span></button>
+								<button type="button" class="cancel" title="취소"><span>취소</span></button>		
+							</div>
+						</form>
+					</div>
+					<!-- /이미지삽입 레이어 -->
+		        </li>
 				<li class="url husky_seditor_ui_hyperlink">
 					<button type="button" title="링크"><span>URL</span></button>
 					<!-- URL 레이어 -->
@@ -428,7 +463,10 @@
 			<button type="button" class="html husky_seditor_mode_toggle_button" title="HTML 편집기"><span>MOBILE</span></button>
 		</div>
 		
-		<div id="c_tool" title="Toggle Editor ToolBars" style="width:auto;color:#666666;cursor:pointer;font-size:9px;*margin-top:-2px;" onclick="toggleToolBars()">
+<!--
+  		<div id="c_tool" class="toolbarToggler husky_seditor_ui_toolbarToggler" title="Toggle ToolBar" style="width:auto;color:#666666;cursor:pointer;font-size:9px;*margin-top:-2px;">
+ -->
+ 		<div id="c_tool" title="Toggle Editor ToolBars" style="width:auto;color:#666666;cursor:pointer;font-size:9px;*margin-top:-2px;" onclick="toggleToolBars()">
 			▼
 		</div>
 		<hr />
@@ -439,10 +477,12 @@
 			<textarea name="" cols="" rows="" class="blind" title="데이터 전송을 위한 숨은 콘트롤" style="display:none;"></textarea>
 		</div>
 		<!-- /입력 -->
-		<!-- 
 		<button type="button" class="input_control husky_seditor_editingArea_verticalResizer" title="입력창 크기 조절"><span>입력창 크기 조절</span></button>
-		-->
 	</div>
 </div>
 </body>
 </html>
+<script type="text/javascript">
+
+
+</script>

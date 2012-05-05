@@ -42,7 +42,6 @@
 .pop_i_info .info_list {padding:0 0 0 5px;width:215px}
 
 /* icon */
-.icon_pop_info {background: url("../../images/header_nico.png") no-repeat -159px -267px transparent; height:20px; display: inline-block;}
 .icon_pop_event {background: url("../../images/header_nico.png") no-repeat -195px -267px transparent; height:20px; display: inline-block;}
 
 /* close btn */

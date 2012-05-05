@@ -6,7 +6,7 @@ $(document).ready(function(){
 });
 
 // 채팅서버의 연결할 url, faye Context, etc...
-var serverUrl = "http://localhost:8000";
+var serverUrl = "http://" + document.domain + ":8011";
 var swContext = "/faye";
 var currentUserId = currentUser.userId;
 
@@ -76,7 +76,7 @@ var chatHistory = {
 		}
 		chatHistory.chatInfos = newChatInfos;
 		$.jStorage.set(currentUserId, chatHistory.chatInfos);
-		console.log(chatHistory.chatInfos);
+		//console.log(chatHistory.chatInfos);
 	},
 
 	existInHistory : function(chatId){
@@ -96,8 +96,10 @@ var chatHistory = {
 	},
 		
 	setHistory : function(chatId, history){
+		console.log('setHistory=', history);
 		var histories = chatHistory.getHistories(chatId);
 		if(histories){
+			console.log('pushed');
 			histories.push(history);
 			$.jStorage.set(currentUserId+chatId, histories);
 			console.log(histories);
@@ -263,21 +265,24 @@ var smartTalk = {
 	restoreChatting : function(chatInfo, histories){
 		
 		smartTalk.startSubOnChatId(chatInfo);
+		console.log('called in restoreChatting chatinfo=', chatInfo, ', histories=', histories);
 		startChattingWindow(chatInfo);
 		var waitForChattingBox = function(){
-			console.log("retries");
+			//console.log("retries");
 			var target = $("#"+chatInfo.chatId);
 			if(!isEmpty(target)){
-				console.log('found');
-				for(var i=0; i<histories.length; i++){
-					receivedMessageOnChatId(histories[i]);			
+				//console.log('found');
+				if(!isEmpty(histories)){
+					for(var i=0; i<histories.length; i++){
+						receivedMessageOnChatId(histories[i]);			
+					}
 				}
 			}else if(1){
 				setTimeout(function(){
 					waitForChattingBox();
 				}, 2000);
 			}else{
-				console.log('retries timeout');
+				//console.log('retries timeout');
 			}
 		};
 		setTimeout(function(){
@@ -298,7 +303,7 @@ var smartTalk = {
 	init : function() {
 		var fayeContext = serverUrl + swContext;
 		var reconnect = function() {
-			console.log("creating Client!!");
+			//console.log("creating Client!!");
 			smartMsgClient = new Faye.Client(fayeContext, {
 				timeout : 5
 			});
@@ -333,10 +338,10 @@ var smartTalk = {
 
 	startBcastSub : function() {
 		smartTalk.subscribe(smartTalk.myChannel(swSubject.BROADCASTING), function(message) {
-			if (message.msgType === msgType.BROADCASTING)
+			if (message.msgType === msgType.BROADCASTING && !isEmpty(message.body))
 				updateBcastBoard(message.body);
-			else if (message.msgType === msgType.AVAILABLE_CHATTERS) 
-				updateAvailableChatters(message.userInfos);
+			else if (message.msgType === msgType.AVAILABLE_CHATTERS && !isEmpty(message.body)) 
+				updateAvailableChatters(message.body);
 		});
 
 	},
@@ -345,17 +350,17 @@ var smartTalk = {
 	startSubOnMe : function() {
 		smartTalk.subscribe(smartTalk.myChannel(swSubject.USERID), function(message) {
 			
-					// 서버에서 받은 메시지가 NOTICE_COUNT이면, 
-					// header.jsp에 있는 updateNoticeCount()를 호출하여 알림 숫자들을 업데이트하게 한다.
-					if (message.msgType === msgType.NOTICE_COUNT){
-						updateNoticeCount(message);
-						
-					// 받은 메시지가 채팅메시지이면 채팅처리를 위해 smartTalk.startSubOnChatId()를 호출한다.
-					} else if (message.msgType === msgType.JOIN_CHAT){
-						smartTalk.startSubOnChatId(message);
-						startChattingWindow(message);
-					}
-				});
+			// 서버에서 받은 메시지가 NOTICE_COUNT이면, 
+			// header.jsp에 있는 updateNoticeCount()를 호출하여 알림 숫자들을 업데이트하게 한다.
+			if (message.msgType === msgType.NOTICE_COUNT){
+				updateNoticeCount(message.body);
+				
+			// 받은 메시지가 채팅메시지이면 채팅처리를 위해 smartTalk.startSubOnChatId()를 호출한다.
+			} else if (message.msgType === msgType.JOIN_CHAT){
+				smartTalk.startSubOnChatId(message);
+				startChattingWindow(message);
+			}
+		});
 	},
 
 	// 현재 시스템을 사용하고있는 모든 사용자에게 동시에 전달하는 메시지를 보낸다.
@@ -408,6 +413,7 @@ var smartTalk = {
 		} else if (type === msgType.WRITING_CHAT_MESSAGE) {
 
 		} else if (type === msgType.CHAT_MESSAGE) {
+				message['sendDate'] = (new Date());
 				receivedMessageOnChatId(message);
 				chatHistory.setHistory(chatId, message);
 		} else if( type === msgType.CHATTERS_INVITED){
@@ -451,7 +457,7 @@ var smartTalk = {
 			var chatterInfo = chatManager.chatterInfo(chatId, userId);
 			if(chatterInfo != null) updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
 		}
-		console.log("ONLINE : " + userId);		
+		//console.log("ONLINE : " + userId);		
 	},
 	
 	subOnChatterOffline : function(userId){
@@ -461,7 +467,7 @@ var smartTalk = {
 			var chatterInfo = chatManager.chatterInfo(chatId, userId);
 			if(chatterInfo != null) updateChatterStatus(chatId, chatterInfo, userStatus.OFFLINE);
 		}
-		console.log("OFFLINE : " + userId);		
+		//console.log("OFFLINE : " + userId);		
 	},
 	
 	startSubOnChatId : function(message) {
@@ -483,6 +489,7 @@ var smartTalk = {
 			if ((chatterInfo.userId === currentUser.userId) || chatterInfo.userId === message.sender){
 				chatterInfo.status = userStatus.ONLINE;
 			}else{
+				//console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
 				chatterInfo.onlineSub = chatManager.onlineSub(chatterInfo.userId);
 				if(!chatterInfo.onlineSub)
 					chatterInfo.onlineSub = smartTalk.subscribe(smartTalk.myChannel("/"
@@ -496,7 +503,7 @@ var smartTalk = {
 			}
 		}
 		smartTalk.publishJoinedChat(message.chatId);
-		console.log(chatManager.chatList);
+		//console.log(chatManager.chatList);
 	},
 
 	stopSubOnChatId : function(chatId) {
@@ -513,21 +520,67 @@ var smartTalk = {
 		smartTalk.publishLeavingChat(chatId);
 		smartMsgClient.unsubscribe(chat.subscription);
 		chatManager.removeChat(chatId);
-		console.log(chatManager.chatList);
+		//console.log(chatManager.chatList);
 	},
 
 	publishChatMessage : function(chatId, message) {
-		smartTalk.publish(smartTalk.myChannel("/"
-				+ chatId), {
+		var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
+		smartTalk.publish(smartTalk.myChannel("/" + chatId), {
 			msgType : msgType.CHAT_MESSAGE,
 			senderInfo : {
 				userId : currentUserId,
 				minPicture : currentUser.minPicture,
-				longName : currentUser.longName
+				longName : nickNameBase ? currentUser.nickName : currentUser.longName
 			},
 			chatId : chatId,
 			chatMessage : message
 		});
+		smartTalk.storeAsyncMessage(chatId, message);
+	},
+	
+	storeAsyncMessage : function(chatId, message){
+		var chat = chatManager.chatById(chatId);
+		if(isEmpty(chat)) return;
+		var users = chat.users;
+		var paramsJson = {};
+		var chatters = new Array();
+		if(!isEmpty(users)){
+			for(var i=0; i<users.length; i++){
+				if(users[i].userId === currentUser.userId)
+					continue;
+				chatters.push(users[i].userId);
+			}
+		}
+		var senderInfo = {};
+		senderInfo['userId'] = currentUser.userId;
+		senderInfo['longName'] = currentUser.longName;
+		senderInfo['nickName'] = currentUser.nickName;
+		senderInfo['minPicture'] = currentUser.minPicture;
+		
+		paramsJson['senderId'] = currentUser.userId;
+		paramsJson['chatId'] = chatId;
+		paramsJson['senderInfo'] = senderInfo;
+		paramsJson['sendDate'] = (new Date());
+		paramsJson['chatters'] = chatters;
+		paramsJson['message'] = message;
+		for(var i=0; i<users.length; i++){
+			var user = users[i];
+			if(user.status != userStatus.OFFLINE) continue;
+
+			paramsJson['receiverId'] = user.userId;
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "create_async_message.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+				},
+				error : function(){
+					console.log('ERROR at Async Messag Stored for userId=', user.userId);			
+				}
+			});
+		}
 	},
 
 	publishWritingStatus : function(chatId) {

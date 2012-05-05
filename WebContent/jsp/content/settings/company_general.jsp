@@ -55,7 +55,7 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFORM, smartMessage.get('setCompanyGeneralSucceed'));
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('setCompanyGeneralSucceed'));
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -75,7 +75,7 @@
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_company title_noico"><fmt:message key="settings.title.company.general"/></div>
+				<div class="body_titl_area ti_company title_noico"><fmt:message key="settings.title.company.general"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 //-->

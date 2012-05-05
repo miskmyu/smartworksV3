@@ -36,15 +36,16 @@ smartPop = {
 	INFO : 'Info',
 	WARN : 'Warn',
 	ERROR: 'Error',
+	CONFIRM: 'Confirm',
 
 	overlay : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		$('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; background-color:#000000; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; opacity:0.2"></span>').appendTo($(target));
+		$('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; background-color:#000000; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; opacity:0.2; filter: alpha(opacity = 20);"></span>').appendTo($(target));
 	},
 	
 	overlayDark : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		$('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; background-color:#000000; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; opacity:0.5"></span>').appendTo($(target));
+		$('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; background-color:#000000; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; opacity:0.5; filter: alpha(opacity = 50);"></span>').appendTo($(target));
 	},
 	
 	closeOverlay : function(){
@@ -100,7 +101,11 @@ smartPop = {
 				return false;
 			});
 		}
+		popUserInfo.find('img').attr('src', profile);
 		popUserInfo.find('.js_user_information').html(userDetail);
+		popUserInfo.find('.js_send_mail_to_user').attr('userId', userId);
+		popUserInfo.find('.js_leave_message_for_user').attr('userId', userId);
+		popUserInfo.find('.js_start_chat_with_user').attr('userId', userId);
 		if(directionUp){
 			popUserInfo.find('.up_point_b').hide();
 			popUserInfo.find('.up_point').show();
@@ -167,7 +172,9 @@ smartPop = {
 
 		$('#sw_pop_show_info .js_btn_close').focus();
 		$('#sw_pop_show_info').keypress(function (e) {
-	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+			var e = window.event || e;
+			var keyCode = e.which || e.keyCode;
+	        if(keyCode == $.ui.keyCode.ENTER) {
 	            $('#sw_pop_show_info .js_btn_close').click();
 	            return false;
 	        } else {
@@ -185,6 +192,7 @@ smartPop = {
 		smartPop.overlayDark();
 		$('<div id="sw_pop_confirm" class="pop_corner_all smart_pop_section" style="z-index:10001; position:absolute;">' + 
 					'<div class="pop_contents">' + 
+						'<div class="icon_pop_Confirm">' + smartMessage.get('popTypeConfirm') + '</div>' +
 					 	'<div class="pop_notice_section mt10">' + message + '</div>' +
 					 '</div>' +
 					 '<div class="glo_btn_space">' +
@@ -218,7 +226,9 @@ smartPop = {
 		});
 		$('#sw_pop_confirm .js_btn_ok').focus();
 		$('#sw_pop_confirm').keypress(function (e) {
-	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+			var e = window.event || e;
+			var keyCode = e.which || e.keyCode;
+	        if (keyCode == $.ui.keyCode.ENTER) {
 	            $('#sw_pop_confirm .js_btn_ok').click();
 	            return false;
 	        } else {
@@ -264,10 +274,13 @@ smartPop = {
 		$.modal.close();
 	},
 	
-	selectUser : function(communityItems, target, width, isMultiUsers){
+	selectUser : function(communityItems, target, width, isMultiUsers, courseId, friendOnly){
 		target.html('');
 		var conWidth = (!isEmpty(width) && width>0) ? width : 360;
-		$.get("pop_select_user.sw?multiUsers="+isMultiUsers, function(data){
+		var url = (!isEmpty(courseId)) ? "pop_select_course_member.sw?multiUsers="+isMultiUsers + "&courseId=" + courseId 
+					: (!isEmpty(friendOnly) && friendOnly) ? "pop_select_friend.sw?multiUsers=" + isMultiUsers 
+					: "pop_select_user.sw?multiUsers="+isMultiUsers; 
+		$.get(url, function(data){
 			$(data).modal({
 				appendTo: target,
 				opacity: 0,
@@ -310,7 +323,7 @@ smartPop = {
 					$('a.js_pop_select_users').die('click');
 					if(isEmpty(isMultiUsers) || isMultiUsers!== 'true'){
 						$('a.js_pop_select_user').live('click', function(e){
-							var input = $(e.target);
+							var input = $(targetElement(e));
 							var comId = input.attr('userId');
 							var comName = input.text();
 							selectionProc(comId, comName);
@@ -320,7 +333,9 @@ smartPop = {
 						});
 						$('a.js_pop_select_user').focus();
 						$('a.js_pop_select_user').keypress(function (e) {
-					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
 					            $('a.js_pop_select_user').click();
 					            return false;
 					        } else {
@@ -344,7 +359,9 @@ smartPop = {
 						});
 						$('a.js_pop_select_users').focus();
 						$('a.js_pop_select_users').keypress(function (e) {
-					        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+							var e = window.event || e;
+							var keyCode = e.which || e.keyCode;
+					        if (keyCode == $.ui.keyCode.ENTER) {
 					            $('a.js_pop_select_users').click();
 					            return false;
 					        } else {
@@ -374,7 +391,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work').die('click');
 					$('.js_pop_select_work').live( 'click', function(e){
-						var input = $(e.target).parents('li:first').find('a');
+						var input = $(targetElement(e)).parents('li:first').find('a');
 						$('#form_works').html('').hide();
 						$('#upload_work_list').hide().parents(".js_start_work_page").hide();
 						var href = input.attr('href');
@@ -386,7 +403,6 @@ smartPop = {
 							new SmartWorks.GridLayout({
 								target : formContent,
 								mode : "edit",
-								requiredOnly : 'true',
 								workId : workId,
 								onSuccess : function(){
 									$('#form_works').show().parent().show();
@@ -409,7 +425,6 @@ smartPop = {
 	},
 
 	selectWorkItem : function(formId, target){
-		console.log('formId=', formId, ', target=', target);
 		if(isEmpty(formId) || isEmpty(target)) return;
 		$.get("pop_select_work_item.sw", {formId: formId}, function(data){
 			$(data).modal({
@@ -423,7 +438,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
-						var input = $(e.target);
+						var input = $(targetElement(e));
 						var recordId = input.attr('instId');
 						var fieldId = target.attr('refFormField');
 						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
@@ -431,7 +446,7 @@ smartPop = {
 						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
-						inputTarget[0].value = value;
+						inputTarget.attr('value', value);
 						if(inputTarget.hasClass('sw_required') && inputTarget.hasClass('sw_error')){
 							inputTarget.removeClass('sw_error');
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
@@ -465,7 +480,9 @@ smartPop = {
 					});
 					$('.js_close_new_group').focus();
 					$('.js_close_new_group').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_group').click();
 				            return false;
 				        } else {
@@ -495,7 +512,9 @@ smartPop = {
 					});
 					$('.js_close_new_category').focus();
 					$('.js_close_new_category').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_category').click();
 				            return false;
 				        } else {
@@ -527,7 +546,9 @@ smartPop = {
 					});
 					$('.js_close_new_work').focus();
 					$('.js_close_new_work').keypress(function (e) {
-				        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
 				            $('.js_close_new_category').click();
 				            return false;
 				        } else {
@@ -553,7 +574,7 @@ smartPop = {
 				onShow: function(dialog){
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
-						var input = $(e.target);
+						var input = $(targetElement(e));
 						var recordId = input.attr('instId');
 						var fieldId = target.attr('refFormField');
 						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
@@ -561,7 +582,7 @@ smartPop = {
 						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
-						inputTarget[0].value = value;
+						inputTarget.attr('value', value);
 						if(inputTarget.hasClass('sw_required') && inputTarget.hasClass('sw_error')){
 							inputTarget.removeClass('sw_error');
 							$('form.js_validation_required').validate({ showErrors: showErrors}).form();

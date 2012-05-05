@@ -7,8 +7,10 @@ $(function() {
 	var requestedValue = "";
 	var timeoutId = null;
 	$('input.js_auto_complete').live('keyup', function(e) {
-		if(e.keyCode>=9 && e.keyCode<=45) return;
-		var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode>=9 && keyCode<=45) return;
+		var input = $(targetElement(e));
 		var listWidth = input.parent().outerWidth();
 		var startWork = input.parents('div.js_start_work_page');
 		var chatter_name = input.parents('div.js_chatter_names');
@@ -16,24 +18,24 @@ $(function() {
 		var target;
 		if (!isEmpty(startWork)){
 			target = startWork.find('#upload_work_list');
-			listWidth = input.parent().outerWidth();
 		}else if(!isEmpty(chatter_name)){
 			target = chatter_name.siblings('div.js_chatter_list');
+			listWidth = target.width();
 		}else{
 			target = input.parent().next('div');
 		}
 		var url = input.attr('href');
-		var lastValue = input[0].value;
+		var lastValue = input.attr('value');
 		if(timeoutId != null) clearTimeout(timeoutId);
 		timeoutId = setTimeout(function() {
 			timeoutId = null;
-			var currentValue = input[0].value;
+			var currentValue = input.attr('value');
 			if (lastValue === currentValue && currentValue !== requestedValue) {
 				requestedValue = currentValue;
 				$.ajax({
 					url : url,
 					data : {
-						key : input[0].value,
+						key : input.attr('value'),
 						communityId : communityId
 					},
 					context : input,
@@ -53,8 +55,8 @@ $(function() {
 	 * 검색 입력창에서 검색을 하고나서, 포커스가 다른곳으로 이동을 하면, 500ms후에 검색결과 창을 숨긴다.
 	 */
 	$('input.js_auto_complete').live('focusout', function(e) {
-		var input = $(e.target);
-		input[0].value = '';
+		var input = $(targetElement(e));
+		input.attr('value', '');
 		requestedValue = "";
 		var startWork = input.parents('div.js_start_work_page');
 		var user_name = input.parents('div.js_community_names');
@@ -77,8 +79,10 @@ $(function() {
 	});
 	
 	$('input.js_auto_complete').live('keydown', function(e) {
-		if(e.which == $.ui.keyCode.UP || e.which == $.ui.keyCode.DOWN  ){
-			var input = $(e.target);
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == $.ui.keyCode.UP || keyCode == $.ui.keyCode.DOWN  ){
+			var input = $(targetElement(e));
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
 
@@ -89,20 +93,20 @@ $(function() {
 			var list = target.find('li');
 			if(isEmpty(list)) return;
 			var sw_hover = target.find('.sw_hover');
-			if(e.which == $.ui.keyCode.DOWN){
+			if(keyCode == $.ui.keyCode.DOWN){
 				if(isEmpty(sw_hover) || isEmpty(sw_hover.next()))
 					$(list[0]).addClass('sw_hover').siblings().removeClass('sw_hover');					
 				else
 					sw_hover.next().first().addClass('sw_hover').siblings().removeClass('sw_hover');
 				
-			}else if(e.which == $.ui.keyCode.UP){
+			}else if(keyCode == $.ui.keyCode.UP){
 				if(isEmpty(sw_hover) || isEmpty(sw_hover.prev()))
 					$(list[list.length-1]).addClass('sw_hover').siblings().removeClass('sw_hover');					
 				else
 					sw_hover.prev().first().addClass('sw_hover').siblings().removeClass('sw_hover');					
 			}
-		}else if(e.which == $.ui.keyCode.ENTER){
-			var input = $(e.target);
+		}else if(keyCode == $.ui.keyCode.ENTER){
+			var input = $(targetElement(e));
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
 
@@ -115,26 +119,26 @@ $(function() {
 	});
 	
 	$('.nav_srch_list').find('li').live('hover', function(e){
-		$(e.target).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
+		$(targetElement(e)).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
 	});
 	
 	$('#upload_work_list').find('li').live('hover', function(e){
-		$(e.target).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
+		$(targetElement(e)).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
 	});
 	
 	$('div.js_chatter_list').find('li').live('hover', function(e){
-		$(e.target).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
+		$(targetElement(e)).parents('li:first').addClass('sw_hover').siblings().removeClass('sw_hover');
 	});
 
 	$('div.js_srch_x').live('click', function(e) {
-		var input = $(e.target).prev();
+		var input = $(targetElement(e)).prev();
 		input.value = "";
 		input.next('div').removeClass('btn_x').addClass('srch_icon');
 		return false;
 	});
 
 	$('.js_select_community').live( 'click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		if(!input.hasClass('js_select_community')) input.parents('.js_select_community:first');
 		var comName = input.attr('comName');
 		var comId = input.attr('comId');
@@ -164,7 +168,7 @@ $(function() {
 	});
 
 	$('.js_remove_community').live('click', function(e) {
-		var input = $(e.target);
+		var input = $(targetElement(e));
 		
 		var userField = input.parents('.js_type_userField');
 		if(!isEmpty(userField) && userField.attr('multiUsers') !== 'true') {

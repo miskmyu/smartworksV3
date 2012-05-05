@@ -4,12 +4,15 @@ function loadCreateCourseFields() {
 	if(!isEmpty(courseProfileField)) {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseProfileField.html(gridRow);
+		var imgSrc = courseProfileField.attr('imgSrc');
+		if(isEmpty(imgSrc)) imgSrc =	"sera/images/default_img_course.gif";
+		
 
 		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
 			container: gridRow,
 			fieldId: "imgCourseProfile",
 			fieldName: "course profile",
-			imgSource: "sera/images/default_img_course.gif",
+			imgSource: imgSrc,
 			columns: 1,
 			pictureWidth: 110,
 			pictureHeight: 110,
@@ -26,7 +29,9 @@ function loadCreateCourseFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseStartDateField.html(gridRow);
 
-		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		var startDateStr = courseStartDateField.attr('openDate');
+		if(isEmpty(startDateStr)) startDateStr = (new Date()).format('yyyy.mm.dd');
+
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtCourseStartDate",
@@ -36,7 +41,7 @@ function loadCreateCourseFields() {
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();
 	}
 	
@@ -45,37 +50,21 @@ function loadCreateCourseFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		courseEndDateField.html(gridRow);
-
+		var endDateStr = courseEndDateField.attr('closeDate');
+		if(isEmpty(endDateStr)) endDateStr = "";
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtCourseEndDate",
 			fieldName: "course end date",
-			value: "",
+			value: endDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: false
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_label').hide();		
 	}
 
-	var courseMentorField = $('div.js_course_mentor_field');
-	if(!isEmpty(courseMentorField)) {
-		
-		var gridRow = SmartWorks.GridLayout.newGridRow();
-		courseMentorField.html(gridRow);
-
-		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
-			container: gridRow,
-			fieldId: "txtCourseMentor",
-			fieldName: "course mentor",
-			columns: 1,
-			multiUsers: false,
-			required: true
-		});
-		gridRow.find('.form_col').css({width:"300px", padding:"0px"});
-		gridRow.find('.form_label').hide();		
-	}
 };
 
 function loadCreateMissionFields() {
@@ -85,7 +74,10 @@ function loadCreateMissionFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionOpenDateField.html(gridRow);
 
-		var openDateStr = (new Date()).format('yyyy.mm.dd');
+		var openDateStr = missionOpenDateField.attr('openDate');
+		if(isEmpty(openDateStr)) openDateStr = (new Date()).format('yyyy.mm.dd');
+		console.log('openDateStr=', openDateStr);
+
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtMissionOpenDate",
@@ -95,7 +87,7 @@ function loadCreateMissionFields() {
 			colSpan: 1,
 			required: true
 		});
-		gridRow.find('.form_col').css({width:"110px", padding:"0px"});
+		gridRow.find('.form_col').css({width:"100px", padding:"0px"});
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();
 	}
@@ -106,11 +98,13 @@ function loadCreateMissionFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionCloseDateField.html(gridRow);
 
+		var closeDateStr = missionCloseDateField.attr('closeDate');
+		if(isEmpty(closeDateStr)) closeDateStr = "";
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtMissionCloseDate",
 			fieldName: "mission close date",
-			value: "",
+			value: closeDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: true
@@ -125,18 +119,45 @@ function loadCreateMissionFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		missionContentField.html(gridRow);
+		
+		var missionContent = missionContentField.attr('content');
+		if(isEmpty(missionContent)) missionContent = "";
 
+		console.log('content=', missionContent);
 		SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtaMissionContent",
 			fieldName: "mission content",
-			value: "",
+			value: missionContent,
 			columns: 1,
 			colSpan: 1,
 			required: true
 		});
-		gridRow.find('.form_col').css({width:"490px", padding:"0px"});
-		gridRow.find('textarea').css({height:"600px"});
+		gridRow.find('.form_col').css({width:"580px", padding:"0px"});
+		gridRow.find('textarea').css({height:"300px"});
+		gridRow.find('.form_value').css({width:"100%"});
+		gridRow.find('.form_label').hide();		
+	}
+
+	var missionAttachmentField = $('div.js_mission_attachment_field');
+	if(!isEmpty(missionAttachmentField)) {
+		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		missionAttachmentField.html(gridRow);
+		
+		var groupId = missionAttachmentField.attr('groupId');
+		if(isEmpty(groupId)) groupId = "";
+
+		SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtFileField",
+			fieldName: "attachment",
+			groupId: groupId,
+			columns: 1,
+			colSpan: 1,
+			required: false
+		});
+		gridRow.find('.form_col').css({width:"100%", padding:"0px"});
 		gridRow.find('.form_value').css({width:"100%"});
 		gridRow.find('.form_label').hide();		
 	}
@@ -149,7 +170,8 @@ function loadCreateTeamFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamStartDateField.html(gridRow);
 
-		var startDateStr = (new Date()).format('yyyy.mm.dd');
+		var startDateStr = teamStartDateField.attr('startDate');
+		if(isEmpty(startDateStr)) startDateStr = (new Date()).format('yyyy.mm.dd');
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtTeamStartDate",
@@ -170,11 +192,13 @@ function loadCreateTeamFields() {
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamEndDateField.html(gridRow);
 
+		var endDateStr = teamEndDateField.attr('endDate');
+		if(isEmpty(endDateStr)) endDateStr = "";
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtTeamEndDate",
 			fieldName: "team end date",
-			value: "",
+			value: endDateStr,
 			columns: 4,
 			colSpan: 1,
 			required: true
@@ -189,6 +213,7 @@ function loadCreateTeamFields() {
 		
 		var gridRow = SmartWorks.GridLayout.newGridRow();
 		teamMembersField.html(gridRow);
+		var courseId = teamMembersField.attr('courseId');
 
 		SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 			container: gridRow,
@@ -196,6 +221,7 @@ function loadCreateTeamFields() {
 			fieldName: "team members invite",
 			columns: 1,
 			multiUsers: true,
+			courseId: courseId,
 			required: true
 		});
 		gridRow.find('.form_col').css({width:"491px", padding:"0px"});
@@ -215,10 +241,10 @@ function loadSeraNoteFields() {
 			fieldId: "imgNoteImage",
 			fieldName: "note image",
 			columns: 1,
-			pictureWidth: 300,
 			required: false
 		});
 		noteImageField.find('.form_label').removeClass('form_label').css({width:"100%", padding:"0 0 2px 0"});
+		noteImageField.find('.form_value img').css({width:"auto", "max-width":"300px"});
 		
 	}
 	
@@ -253,6 +279,92 @@ function loadSeraNoteFields() {
 			required: false
 		});
 		
-		gridRow.find('.form_label').hide();		
+		gridRow.find('.form_label').hide();
+		gridRow.find('.form_value').css({width:"100%"});
 	}
 };
+
+function loadJoinUsFields() {
+	var joinusProfileField = $('div.js_joinus_profile_field');
+	if(!isEmpty(joinusProfileField)) {
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		joinusProfileField.html(gridRow);
+
+		SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+			container: gridRow,
+			fieldId: "imgUserProfile",
+			fieldName: "join us profile",
+			imgSource: "",
+			columns: 1,
+			pictureWidth: 118,
+			pictureHeight: 118,
+			required: false
+		});
+//		joinusProfileField.find('.form_col').css({padding:"0"});
+//		joinusProfileField.find('.form_label').css({width:"100%", padding:"0 0 2px 20px"});
+//		joinusProfileField.find('.form_value').css({width:"100%"});
+	}
+};
+
+function loadSeraProfileField() {
+	var seraProfileFields = $('div.js_sera_profile_field');
+	if(!isEmpty(seraProfileFields)) {
+		for(var i=0; i<seraProfileFields.length; i++) {
+			var seraProfileField = $(seraProfileFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			seraProfileField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgMyProfile",
+				fieldName: "picture profile",
+				imgSource: currentUser.orgPicture,
+				pictureWidth: 118,
+				pictureHeight: 118,
+				required: false
+			});
+		}		
+	}
+};
+
+function loadNewNoteFields() {
+	var newNoteFields = $('div.js_new_note_fields');
+	if(!isEmpty(newNoteFields)) {
+		for(var i=0; i<newNoteFields.length; i++) {
+			var newNoteField = $(newNoteFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			newNoteField.html(gridTable.html(gridRow));
+			
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtReceiver",
+				fieldName: "받는사람",
+				columns: 1,
+				friendOnly: true,
+				multiUsers: false,
+				required: true
+			});
+			gridRow.hide();
+
+			var gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtNoteContent",
+				fieldName: "쪽지내용",
+				columns: 1,
+				multiLines: 4,
+				required: true
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value textarea').removeClass('fieldline').attr('placeholder', "보내고 싶은 쪽지를 적어 주세요!").attr('rows', 1);
+			
+		}		
+	}
+};
+
+

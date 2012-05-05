@@ -8,6 +8,8 @@ import net.smartworks.model.work.SocialWork;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartUtil;
 
 public class WorkInstanceInfo extends InstanceInfo {
 
@@ -15,7 +17,14 @@ public class WorkInstanceInfo extends InstanceInfo {
 	private int lastTaskCount = -1;
 	private int subInstanceCount;
 	private InstanceInfo[] subInstances;
+	private String[] likers;
 
+	public String[] getLikers() {
+		return likers;
+	}
+	public void setLikers(String[] likers) {
+		this.likers = likers;
+	}
 	public TaskInstanceInfo getLastTask() {
 		return lastTask;
 	}
@@ -98,6 +107,15 @@ public class WorkInstanceInfo extends InstanceInfo {
 	}	
 	public WorkInstanceInfo(String id, String subject, UserInfo owner, UserInfo lastModifier, LocalDate lastModifiedDate) {
 		super(id, subject, Instance.TYPE_WORK, owner, lastModifier, lastModifiedDate);
+	}
+	
+	public boolean doesCurrentUserLike(){
+		if(SmartUtil.isBlankObject(this.likers)) return false;
+		String cUserId = SmartUtil.getCurrentUser().getId();
+		for(int i=0; i<likers.length; i++)
+			if(cUserId.equals(likers[i]))
+				return true;
+		return false;
 	}
 	
 }

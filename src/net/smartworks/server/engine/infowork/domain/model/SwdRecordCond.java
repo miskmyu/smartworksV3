@@ -64,11 +64,13 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String referencedRecordId;
 	private boolean displayableDataFieldsOnly;
 	private String workSpaceId;
+	private String workSpaceIdIns;
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
 	private int hits;
-	
+	private Date fromDate;
+
 	private String searchKey;
 	public SwdRecordCond() {
 		super();
@@ -368,6 +370,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	public void setWorkSpaceId(String workSpaceId) {
 		this.workSpaceId = workSpaceId;
 	}
+	public String getWorkSpaceIdIns() {
+		return workSpaceIdIns;
+	}
+	public void setWorkSpaceIdIns(String workSpaceIdIns) {
+		this.workSpaceIdIns = workSpaceIdIns;
+	}
 	public String getWorkSpaceType() {
 		return workSpaceType;
 	}
@@ -391,6 +399,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setHits(int hits) {
 		this.hits = hits;
+	}
+	public Date getFromDate() {
+		return fromDate;
+	}
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
 
 }

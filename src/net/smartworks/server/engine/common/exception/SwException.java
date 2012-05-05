@@ -10,7 +10,7 @@ public class SwException extends Exception {
 	protected static final String PREFIX = "Mis";
 	private static final String NAME = CommonUtil.toName(SwException.class, PREFIX);
 	private String errorCode;
-	public SwException() {
+	public SwException() { 
 		super();
 	}
 	public SwException(String message) {

@@ -21,7 +21,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	var value = (options.dataField && options.dataField.value) || '';
 	var imgSource = (options.dataField && options.dataField.imgSource) || '';
 	var $entity = options.entity;
-	var $graphic = $entity.children('graphic');
+	var $graphic = $entity.find('graphic');
 	var picWidth = parseFloat($graphic.attr('pictureWidth'));
 	var picHeight = parseFloat($graphic.attr('pictureHeight'));
 
@@ -33,7 +33,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	var valueWidth = 100 - labelWidth;
 
 	var spanRequired = "";
-	var required = $entity[0].getAttribute('required');
+	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		spanRequired = '<div class="label_required"></div>';
 		required = ' class="form_value sw_required" ';
@@ -77,10 +77,10 @@ SmartWorks.FormRuntime.ImageBoxBuilder.buildEx = function(config){
 	SmartWorks.extend(options, config);
 	var labelWidth = 12;
 	if(options.columns >= 1 && options.columns <= 4 && options.colSpan <= options.columns) labelWidth = 12 * options.columns/options.colSpan;
-	$formEntity =  $('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
+	$formEntity =  $($.parseXML('<formEntity id="' + options.fieldId + '" name="' + options.fieldName + '" systemType="string" required="' + options.required + '" system="false">' +
 						'<format type="imageBox" viewingType="imageBox"/>' +
 					    '<graphic hidden="false" readOnly="'+ options.readOnly + '" labelWidth="'+ labelWidth + '" pictureWidth="'+ options.pictureWidth + '" pictureHeight="' + options.pictureHeight + '"/>' +
-					'</formEntity>');
+					'</formEntity>')).find('formEntity');
 	var $formCol = $('<td class="form_col js_type_imageBox" fieldid="' + options.fieldId + '"  colspan="' + options.colSpan + '" width="' + options.colSpan/options.columns*100 + '%" rowspan="1">');
 	$formCol.appendTo(options.container);
 	SmartWorks.FormRuntime.ImageBoxBuilder.build({
@@ -88,8 +88,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.buildEx = function(config){
 			container : $formCol,
 			entity : $formEntity,
 			dataField : SmartWorks.FormRuntime.ImageBoxBuilder.dataField({
-				fieldName: options.fieldName,
-				formXml: $formEntity,
+				fieldId: options.fieldId,
 				groupId: options.groupId,
 				imgSource: options.imgSource
 			})
@@ -135,6 +134,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.dataField = function(config){
 	var options = {
 			fieldName: '',
 			formXml: '',
+			fieldId: '',
 			groupId: '',
 			imgSource: '',
 			isTempfile: false,
@@ -144,9 +144,9 @@ SmartWorks.FormRuntime.ImageBoxBuilder.dataField = function(config){
 
 	SmartWorks.extend(options, config);
 
-	$formXml = $(options.formXml);
+	$formXml = isEmpty(options.formXml) ? [] : $($.parseXML(options.formXml)).find('form');
 	var dataField = {};
-	var fieldId = $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id');
+	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
 	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
 	

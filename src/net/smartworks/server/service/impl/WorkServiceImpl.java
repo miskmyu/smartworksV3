@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
@@ -34,7 +35,6 @@ import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
-import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.category.model.CtgCategoryCond;
@@ -74,7 +74,6 @@ import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
-import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -120,9 +119,6 @@ public class WorkServiceImpl implements IWorkService {
 	private IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
 	}
-	private IPrcManager getPrcManager() {
-		return SwManagerFactory.getInstance().getPrcManager();
-	}
 	private ITskManager getTskManager() {
 		return SwManagerFactory.getInstance().getTskManager();
 	}
@@ -131,9 +127,6 @@ public class WorkServiceImpl implements IWorkService {
 	}
 	private IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
-	}
-	private ISwaManager getSwaManager() {
-		return SwManagerFactory.getInstance().getSwaManager();
 	}
 
 	private AuthenticationManager authenticationManager;
@@ -197,6 +190,10 @@ public class WorkServiceImpl implements IWorkService {
 		}
 	}
 
+	/*
+	 * 전체 카테고리 조회 (서비스시작 상태인 업무 조회)
+	 * @see net.smartworks.server.service.IWorkService#getMyAllWorksByCategoryId(java.lang.String)
+	 */
 	@Override
 	public WorkInfo[] getMyAllWorksByCategoryId(String categoryId) throws Exception {
 
@@ -264,10 +261,8 @@ public class WorkServiceImpl implements IWorkService {
 
 				PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_LITE);
 
-				//PkgPackage[] newPkgs = ModelConverter.getMyViewPackages(pkgs, Work.SEARCH_TYPE_LIST_WORK);
-
 				WorkInfo[] workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
-	
+
 				int workCtgsSize = newWorkCtgs == null? 0 : newWorkCtgs.length;
 				int pkgPkgsSize = workPkgs == null? 0 : workPkgs.length;
 				
@@ -296,6 +291,10 @@ public class WorkServiceImpl implements IWorkService {
 		}
 	}
 
+	/*
+	 * 스마트빌더 전체 카테고리 조회
+	 * @see net.smartworks.server.service.IWorkService#getAllWorksByCategoryId(java.lang.String)
+	 */
 	@Override
 	public WorkInfo[] getAllWorksByCategoryId(String categoryId) throws Exception {
 
@@ -873,7 +872,14 @@ public class WorkServiceImpl implements IWorkService {
 						userInfo.setName(swoUserExtend.getName());
 						userInfo.setPosition(swoUserExtend.getPosition());
 						userInfo.setRole(swoUserExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
-						userInfo.setSmallPictureName(swoUserExtend.getPictureName());
+						String picture = swoUserExtend.getPictureName();
+						if(!CommonUtil.isEmpty(picture)) {
+							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+						} else {
+							userInfo.setSmallPictureName(picture);
+						}
 						resultList.add(userInfo);
 					} else {
 						DepartmentInfo departmentInfo = new DepartmentInfo();

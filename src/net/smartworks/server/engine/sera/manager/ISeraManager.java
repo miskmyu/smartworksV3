@@ -14,10 +14,16 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.sera.exception.SeraException;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.engine.sera.model.CourseDetailCond;
+import net.smartworks.server.engine.sera.model.CourseReview;
+import net.smartworks.server.engine.sera.model.CourseReviewCond;
+import net.smartworks.server.engine.sera.model.CourseTeam;
+import net.smartworks.server.engine.sera.model.CourseTeamCond;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.MentorDetailCond;
 import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
+import net.smartworks.server.engine.sera.model.SeraUserDetail;
+import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
 
 public interface ISeraManager extends IManager{
 
@@ -39,4 +45,27 @@ public interface ISeraManager extends IManager{
 	public void removeFriend(String userId, String objId) throws SeraException;
 	public long getFriendSize(String userId, SeraFriendCond friendCond) throws SeraException;
 	public SeraFriend[] getFriends(String userId, SeraFriendCond friendCond) throws SeraException;
+	public SeraFriend[] getMyFriends(String userId, SeraFriendCond cond) throws SeraException;
+
+	public SeraUserDetail getSeraUserById(String userId, String objId) throws SeraException;
+	public SeraUserDetail[] getSeraUserDetails(String userId, SeraUserDetailCond cond) throws SeraException;
+	public SeraUserDetail setSeraUser(String userId, SeraUserDetail seraUser) throws SeraException;
+	public void removeSeraUser(String userId, String objId) throws SeraException;
+	public long getSeraUserSize(String userId, SeraUserDetailCond cond) throws SeraException;
+
+	public CourseReview getCourseReviewById(String userId, String objId) throws SeraException;
+	public CourseReview setCourseReview(String userId, CourseReview courseReview) throws SeraException;
+	public void removeCourseReview(String userId, String objId) throws SeraException;
+	public long getCourseReviewSize(String userId, CourseReviewCond courseReviewCond) throws SeraException;
+	public CourseReview[] getCourseReviews(String userId, CourseReviewCond courseReviewCond) throws SeraException;
+
+	public CourseTeam getCourseTeam(String user, String id, String level) throws SeraException;
+	public CourseTeam getCourseTeam(String user, CourseTeamCond cond, String level) throws SeraException;
+	public CourseTeam setCourseTeam(String user, CourseTeam obj) throws SeraException;
+	public CourseTeam createCourseTeam(String user, CourseTeam obj) throws SeraException;
+	public void removeCourseTeam(String user, String id) throws SeraException;
+	public void removeCourseTeam(String user, CourseTeamCond cond) throws SeraException;
+	public long getCourseTeamSize(String user, CourseTeamCond cond) throws SeraException;
+	public CourseTeam[] getCourseTeams(String user, CourseTeamCond cond, String level) throws SeraException;
+
 }

@@ -68,12 +68,15 @@ SmartWorks.GridLayout = function(config) {
 		if(!isEmpty(mySelf)) this_ = mySelf;
 		var $htmlForm = $('<form name="frmSmartForm" class="js_validation_required form_layout"><table></table></form>');
 		this_.$table = $htmlForm.find('table');
-		var $form = $(this_.options.formXml);
-		if(!isEmpty(formXml)) $form = $(formXml);
+		$form = [];
+		if(!isEmpty(formXml)){
+			$form = $($.parseXML(formXml)).find('form');
+		}else{
+			$form = $($.parseXML(this_.options.formXml)).find('form');
+		}
 		
 		$htmlForm.attr("formId", $form.attr('id'));
 		$htmlForm.attr("formName", $form.attr('name'));
-		
 		var mode = this_.options.mode;
 		if(isEmpty(refreshTarget) && !refreshOnly){
 			$htmlForm.appendTo(this_.options.target);			
@@ -132,9 +135,9 @@ SmartWorks.GridLayout = function(config) {
 					$html_cell.attr('rowspan', rowspan);
 				if(id) {
 					var $entity = $form.find('#' + id);
-					if(this_.options.requiredOnly !== 'true' || $entity[0].getAttribute('required') === 'true'){
-						SmartWorks.FormFieldBuilder.build(mode, $html_cell, $entity, dataField, this_, refreshOnly);
-					}
+//					if(this_.options.requiredOnly !== 'true' || $entity[0].getAttribute('required') === 'true'){
+					SmartWorks.FormFieldBuilder.build(mode, $html_cell, $entity, dataField, this_, refreshOnly);
+//					}
 				}
 			}
 		}
@@ -220,14 +223,12 @@ SmartWorks.GridLayout = function(config) {
 								// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 								paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 							}
-							console.log(JSON.stringify(paramsJson));
 							$.ajax({
 								url : "refresh_record.sw",
 								contentType : 'application/json',
 								type : 'POST',
 								data : JSON.stringify(paramsJson),
 								success : function(refreshData, status, jqXHR) {
-console.log('refreshData=', refreshData);
 									if(this_.options.mode==="edit"){
 										this_.options.target.show();
 										return getLayout(formXml, refreshData.record, this_, null, true);
@@ -276,7 +277,6 @@ console.log('refreshData=', refreshData);
 									// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 									paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 								}
-								console.log(JSON.stringify(paramsJson));
 								$.ajax({
 									url : "refresh_record.sw",
 									contentType : 'application/json',
@@ -323,7 +323,6 @@ console.log('refreshData=', refreshData);
 						// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 						paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 					}
-					console.log(JSON.stringify(paramsJson));
 					$.ajax({
 						url : "refresh_record.sw",
 						contentType : 'application/json',
@@ -382,7 +381,6 @@ console.log('refreshData=', refreshData);
 					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form, false));
 				}
-				console.log(JSON.stringify(paramsJson));
 				$.ajax({
 					url : "refresh_record.sw",
 					contentType : 'application/json',

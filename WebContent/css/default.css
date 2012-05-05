@@ -76,6 +76,8 @@ span.sw_error {
 	display: block;
 }
 
+label.error {display:none !important; width:0px}
+
 em, cite, address, optgroup {
 	font-style: normal;
 }
@@ -100,7 +102,9 @@ input[type="password"], textarea {
 	resize: none;
 }
 
-input[type="radio"] {margin:0 5px 2px 0}
+input[type="image"]	{padding:0}
+
+input[type="radio"] {margin:0 4px 2px 0}
 	
 ul, ol, li {
 	list-style: none outside none;
@@ -165,6 +169,7 @@ mark, rp, rt, ruby, summary, time {
 .ml20 {margin-left: 20px !important}
 .ml25 {margin-left: 25px !important}
 .ml70 {margin-left: 70px !important}
+.mlr5 {margin:0 5px !important}
 
 .mt2 {margin-top:2px !important}
 .mt3 {margin-top:3px !important}

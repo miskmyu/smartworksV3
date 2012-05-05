@@ -1,6 +1,6 @@
 
 	$('.js_more_list').live('click', function(e) {
-		var anchor = $(e.target);
+		var anchor = $(targetElement(e));
 		if(!isEmpty(anchor.siblings('.js_progress_span').find('.js_progress_icon'))) 
 			return false;
 		smartPop.progressCont(anchor.siblings('.js_progress_span'));
@@ -47,14 +47,14 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_anchor.trigger('click');
 					more_anchor.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}else if(!isEmpty(more_smartcaster) && !more_smartcaster.isWaiting){
 				more_smartcaster.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_smartcaster.trigger('click');
 					more_smartcaster.isWaiting = false;
-				}, 2000);
+				}, 3000);
 			}
 		}
 	});

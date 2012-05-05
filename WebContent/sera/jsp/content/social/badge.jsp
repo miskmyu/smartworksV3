@@ -25,7 +25,7 @@
 		<tr>
 			<td>
 				<div class="form_label">받는사람</div>
-				<div class="form_value w580">
+				<div class="form_value w570">
 					<div class="icon_fb_space">
 						<div class="fieldline community_names js_community_names">
 							<input class="m0 js_auto_complete" type="text"
@@ -121,7 +121,7 @@
 					<!-- Reply-->
 					<div class="reply_section">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 						</div>
 						<div class="reply_text">
 							<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
@@ -135,7 +135,7 @@
 					<!-- Reply-->
 					<div class="reply_section">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 						</div>
 						<div class="reply_text">
 							<span class="name">닉네임은 일곱자 : </span> 점점 시간이 지날수록 얼굴이 찐빵으로
@@ -149,7 +149,7 @@
 					<!-- Reply-->
 					<div class="reply_section end">
 						<div class="photo">
-							<img src="../images/photo_mid48.jpg" />
+							<img class="profile_size_m" src="../images/photo_mid48.jpg" />
 							<div class="name mt2">닉네임은</div>
 						</div>
 						<div class="reply_text">

@@ -8,7 +8,8 @@ public class SeraUser extends User {
 
 	public static final int SEX_MALE = 1;
 	public static final int SEX_FEMALE = 2;
-	
+
+	private boolean isFriend;
 	private String email;
 	private LocalDate birthday;
 	private int sex;
@@ -21,6 +22,12 @@ public class SeraUser extends User {
 	private String fbUserId;
 	private String fbPassword;
 
+	public boolean isFriend() {
+		return isFriend;
+	}
+	public void setFriend(boolean isFriend) {
+		this.isFriend = isFriend;
+	}
 	public String getEmail() {
 		if(SmartUtil.isBlankObject(email)) return getId();
 		return this.email ;

@@ -1,9 +1,12 @@
 package net.smartworks.model.sera;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Map;
+
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.WorkInstance;
-import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -11,12 +14,15 @@ public class MissionInstance extends WorkInstance {
 		
 	private int index;
 	private String content;
+	private String fileGroupId;
+	private List<Map<String, String>> files;
 	private LocalDate openDate;
 	private LocalDate closeDate;
 	private MissionInstance prevMission;
 	private String[] missionClearers;
-	private int starPoint;
-	
+	private double starPoint;
+	private int starPointUsers;
+
 	public int getIndex() {
 		return index;
 	}
@@ -28,6 +34,18 @@ public class MissionInstance extends WorkInstance {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getFileGroupId() {
+		return fileGroupId;
+	}
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
+	}
+	public List<Map<String, String>> getFiles() {
+		return files;
+	}
+	public void setFiles(List<Map<String, String>> files) {
+		this.files = files;
 	}
 	public LocalDate getOpenDate() {
 		return openDate;
@@ -53,21 +71,26 @@ public class MissionInstance extends WorkInstance {
 	public void setMissionClearers(String[] missionClearers) {
 		this.missionClearers = missionClearers;
 	}	
-	public int getStarPoint() {
+	public double getStarPoint() {
 		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
+	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
-	
+	public int getStarPointUsers() {
+		return starPointUsers;
+	}
+	public void setStarPointUsers(int starPointUsers) {
+		this.starPointUsers = starPointUsers;
+	}
 	public MissionInstance(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_MISSION);
 	}
 
 	public MissionInstance(String id, String subject, Course course, User owner, LocalDate lastModifiedDate){
 			super(id, subject, null, owner, owner, lastModifiedDate);
-			super.setType(Instance.TYPE_MISSION);
+			super.setType(Instance.TYPE_SERA_MISSION);
 			super.setWorkSpace(course);
 	}
 
@@ -80,4 +103,8 @@ public class MissionInstance extends WorkInstance {
 		return false;
 	}
 
+	public String getStarPointString(){
+		DecimalFormat df = new DecimalFormat("#.#");
+		return df.format(getStarPoint());
+	}	
 }

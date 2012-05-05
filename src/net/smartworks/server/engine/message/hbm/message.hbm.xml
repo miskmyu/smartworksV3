@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.message.model" default-lazy="false">
+	<class name="Message" table="SWMessage">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="content" type="string" length="4000"/>
+		<property name="sendUser" column="sendUserId" type="string" length="50"/>
+		<property name="targetUser" column="targetUserId" type="string" length="50"/>
+		<property name="isChecked" type="boolean"/>
+		<property name="checkedTime" column="checkedTime" type="timestamp"/>
+		<property name="creationUser" column="creator" type="string" length="30"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="30"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+		<property name="chatId" column="chatId" type="string" length="50"/>
+		<property name="chattersId" column="chattersId" type="string" length="2000"/>
+	</class>
+</hibernate-mapping>

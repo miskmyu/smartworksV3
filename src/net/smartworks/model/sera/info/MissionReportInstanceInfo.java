@@ -6,38 +6,31 @@ import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.util.LocalDate;
 
-public class MissionReportInstanceInfo extends WorkInstanceInfo {
+public class MissionReportInstanceInfo extends NoteInstanceInfo {
 
 	private MissionInstanceInfo mission;
-	private String content;
-	private int starPoint;
+	private double starPoint;
 	
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
 	public MissionInstanceInfo getMission() {
 		return mission;
 	}
 	public void setMission(MissionInstanceInfo mission) {
 		this.mission = mission;
 	}
-	public int getStarPoint() {
+	public double getStarPoint() {
 		return starPoint;
 	}
-	public void setStarPoint(int starPoint) {
+	public void setStarPoint(double starPoint) {
 		this.starPoint = starPoint;
 	}
 	
 	public MissionReportInstanceInfo(){
 		super();
-		super.setType(Instance.TYPE_MISSION);
+		super.setType(Instance.TYPE_SERA_MISSION_REPORT);
 	}
 
 	public MissionReportInstanceInfo(String id, String subject, UserInfo owner, LocalDate lastModifiedDate){
-		super(id, subject,  owner, owner, lastModifiedDate);
-		super.setType(Instance.TYPE_MISSION);
+		super(id, subject, owner, lastModifiedDate);
+		super.setType(Instance.TYPE_SERA_MISSION_REPORT);
 	}
 }

@@ -50,12 +50,13 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
-					alert('wait');
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "팀이 정상적으로 만들어졌습니다!", function(){
+						$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createTeamError'));
+					smartPop.showInfo(smartPop.ERROR, "팀생성에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
@@ -81,16 +82,15 @@
 			<tr>
 				<td>
 					<div class="form_label w101">팀 이름</div>
-					<div class="form_value">
-						<input name="txtTeamName" type="text" class="fieldline fl required" style="width: 493px">
-						<div class="fr ml5"><span class="t_red">0</span> /150kbyte</div>
+					<div class="form_value w570">
+						<input name="txtTeamName" type="text" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><div class="form_label w101">팀설명</div>
-					<div class="form_value">
-						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 491px"></textarea>
+					<div class="form_value w570">
+						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 100%"></textarea>
 					</div>
 				</td>
 			</tr>
@@ -98,7 +98,7 @@
 				<td>
 					<div class="form_label w101">팀원 초대</div>
 					<div class="form_value">
-						<div class="js_team_members_field"></div> 
+						<div class="js_team_members_field" courseId="<%=courseId%>"></div> 
 						<div class="cb t_refe pt2">* 팀 구성원은 해당 코스에서 활동하는 코스친구만 초대가 가능합니다</div>
 					</div>
 				</td>
