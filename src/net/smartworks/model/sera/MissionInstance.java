@@ -1,5 +1,6 @@
 package net.smartworks.model.sera;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -102,4 +103,8 @@ public class MissionInstance extends WorkInstance {
 		return false;
 	}
 
+	public String getStarPointString(){
+		DecimalFormat df = new DecimalFormat("#.#");
+		return df.format(getStarPoint());
+	}	
 }

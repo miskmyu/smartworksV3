@@ -326,21 +326,33 @@ public class SmartUtil {
 				}
 				return user;
 			} else {
-				return null;
+				return SmartUtil.getAnonymousUser();
 			}
 		}
-		return null;
+		return SmartUtil.getAnonymousUser();
 	}
 	
 	public static User getSystemUser(){
 
 		User user = new User();
-		user.setId("systemUser");
-		user.setName("System");
+		user.setId(User.USER_ID_SYSTEM);
+		user.setName(SmartMessage.getString("common.title.system_user"));
 		user.setPosition("");
 		user.setDepartment("");
-		user.setCompany("");
+		user.setCompany("SmartWorks.net");
 		user.setUserLevel(User.USER_LEVEL_AMINISTRATOR);
+		return user;
+	}
+	
+	public static User getAnonymousUser(){
+
+		User user = new User();
+		user.setId(User.USER_ID_ANONYMOUS);
+		user.setName("Anonymous User");
+		user.setPosition("");
+		user.setDepartment("");
+		user.setCompany("SmartWorks.net");
+		user.setUserLevel(User.USER_LEVEL_EXTERNAL_USER);
 		return user;
 	}
 	

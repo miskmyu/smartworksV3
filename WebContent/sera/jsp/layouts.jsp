@@ -80,7 +80,8 @@
 			orgPicture : "<%=currentUser.getOrgPicture()%>",
 			locale : "<%=currentUser.getLocale()%>",
 			timeZone : "<%=currentUser.getTimeZone()%>",
-			timeOffset : "<%=currentUser.getTimeOffsetInHour()%>"
+			timeOffset : "<%=currentUser.getTimeOffsetInHour()%>",
+			isAnonymous : <%=currentUser.isAnonymusUser()%>
 		};
 	</script>
 	

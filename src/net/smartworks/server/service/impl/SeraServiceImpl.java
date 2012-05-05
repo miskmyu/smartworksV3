@@ -4055,7 +4055,6 @@ public class SeraServiceImpl implements ISeraService {
 			result = courses;
 		}
 		
-	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 		return result;
 	}
 	@Override

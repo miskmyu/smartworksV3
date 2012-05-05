@@ -1,5 +1,7 @@
 package net.smartworks.model.sera;
 
+import java.text.DecimalFormat;
+
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
@@ -194,5 +196,10 @@ public class Course extends Group {
 		for(int i=0; i<this.getKeywords().length; i++)
 			str = str + this.getKeywords()[i] + ((i==this.getKeywords().length-1) ? "" : ", ");
 		return str;
+	}
+	
+	public String getStarPointString(){
+		DecimalFormat df = new DecimalFormat("#.#");
+		return df.format(getStarPoint());
 	}
 }

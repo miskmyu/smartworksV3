@@ -212,4 +212,11 @@
 		<put-attribute name="container" value="/sera/jsp/content/links/help_faq.jsp" />
 	</definition>
 
+	<definition name="courseHomeNouser" template="/sera/jsp/layouts_course.jsp">
+		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
+		<put-attribute name="sera_content" value="/sera/jsp/content/course/home.jsp" />
+		<put-attribute name="aside" value="/sera/jsp/aside/aside_course.jsp" />
+		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
+	</definition>
+
 </tiles-definitions>

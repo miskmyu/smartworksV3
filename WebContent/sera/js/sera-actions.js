@@ -329,10 +329,15 @@ $(function() {
 	});
 
 	$('.js_join_course_request').live('click', function(e){
+		if(currentUser.isAnonymous==='true'){
+			smartPop.showInfo(smartPop.WARN, "비회원이거나 로그인하지 않았습니다. 로그인 후 사용하시기 바랍니다!");
+			return false;
+		}
 		var input = $(targetElement(e)).parents('.js_join_course_request');
+		var courseId = input.parents('.js_course_content').attr('courseId');
 		var paramsJson = {};
-		paramsJson["courseId"] = input.parents('.js_course_content').attr('courseId');
-		paramsJson["userId"] = currentUserId;
+		paramsJson["courseId"] = courseId
+		paramsJson["userId"] = currentUser.userId;
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'join_group_request.sw',
@@ -342,9 +347,13 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
 				if(input.attr('autoApproval')==="true")
-					smartPop.showInfo(smartPop.INFO, "코스가입 정상적으로 처리되었습니다. 코스에 방문하시면 미션들을 수행할 수 있습니다.");
+					smartPop.showInfo(smartPop.INFO, "코스가입 정상적으로 처리되었습니다. 코스에 방문하시면 미션들을 수행할 수 있습니다.", function(){
+						document.location.href = "courseHome.sw?courseId=" + courseId;
+					});
 				else
-					smartPop.showInfo(smartPop.INFO, "코스가입 신청이 정상적으로 처리되었으며, 멘토의 가입승인을 기다리고 있습니다.");
+					smartPop.showInfo(smartPop.INFO, "코스가입 신청이 정상적으로 처리되었으며, 멘토의 가입승인을 기다리고 있습니다.", function(){
+						document.location.href = "courseHome.sw?courseId=" + courseId;
+					});
 				input.remove();
 			},
 			error : function(){
@@ -747,6 +756,10 @@ $(function() {
 	});
 	
 	$('.js_view_new_course_review').live('click', function(e) {
+		if(currentUser.isAnonymous==='true'){
+			smartPop.showInfo(smartPop.WARN, "비회원이거나 로그인하지 않았습니다. 로그인 후 사용하시기 바랍니다!");
+			return false;
+		}		
 		var courseReview = $(targetElement(e)).parents('.js_course_general_page').find('.js_return_on_course_review');
 		courseReview.parent().prepend(courseReview.clone());
 		courseReview.show();

@@ -31,14 +31,13 @@
 
 <!-- For Development Purpose -->
 <%
-	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	session.setAttribute("noUser", true);
+	session.setAttribute("userNaming", User.NAMING_NICKNAME_BASE);
+	session.setAttribute("noUser", false);
 	session.setAttribute("headerOnly", false);
 
 %>
 
 <head>
-
 	<script type="text/javascript">
 		var currentUser = {
 			locale : "<%=java.util.Locale.getDefault().getLanguage()%>",
@@ -50,6 +49,7 @@
 	
 	<link href="css/default.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/pop.css" type="text/css" rel="stylesheet" />
+	<link href="sera/css/chat.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/form.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/page.css" type="text/css" rel="stylesheet" />
 	<link href="sera/css/help_center.css" type="text/css" rel="stylesheet" />
@@ -87,9 +87,6 @@
 	<script type="text/javascript" src="js/jquery/jquery.numberformatter-1.2.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>
 	<script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
-	<!--
-	<script type="text/javascript" src="js/jquery/gcal.js"></script>
-	-->
 	<script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 	
 	<script type="text/javascript" src="js/ext/bootstrap.js"></script>
@@ -105,6 +102,7 @@
 	<script type="text/javascript" src="js/sw/sw-validate.js"></script>
 	<script type="text/javascript" src="js/sw/sw-flash.js"></script>
 	<script type="text/javascript" src="sera/js/sera-nav.js"></script>
+	<script type="text/javascript" src="sera/js/sera-more.js"></script>
 	
 	<script type="text/javascript" src="js/sw/sw-report.js"></script>
 	<script type="text/javascript" src="js/sw/sw-file.js"></script>
@@ -123,7 +121,6 @@
 	
 	<script type="text/javascript" src="sera/js/sera-actions.js"></script>
 	<script type="text/javascript" src="sera/js/sera-formFields.js"></script>
-	<script type="text/javascript" src="sera/js/sera-more.js"></script>
 	<script type="text/javascript" src="sera/js/window_popup.js"></script>
 	
 	<script type="text/javascript" src='js/smartform/smartworks.js'></script>
@@ -153,9 +150,8 @@
 	
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
-
-<body>
-
+	
+<body>	
 	<script type="">smartPop.progressCenter();</script>
 	<div id="wrap">
 		<!-- Header -->
@@ -166,7 +162,17 @@
 		
 		<!-- Container -->
 		<div id="container">
-			<tiles:insertAttribute name="container" />
+		    <!-- Content -->
+		    <div id="sera_content">
+				<tiles:insertAttribute name="sera_content" />
+		    </div>
+		    <!-- Content //-->
+		    
+			<!-- Aside -->
+			<div class="aside">
+				<tiles:insertAttribute name="aside" />
+			</div>
+			<!-- Aside //-->
 		</div>
 		<!-- Container// -->
 
@@ -175,7 +181,6 @@
 			<tiles:insertAttribute name="sera_footer" />
 		</div>
 		<!--  Footer// -->
-
 	</div>
 	<script type="">smartPop.closeProgress();</script>
 	<script type="text/javascript">

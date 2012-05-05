@@ -186,12 +186,12 @@
 						<ul class="category_box intro_margin">
 							<li class="photo">
 								<label style="position: absolute;" class="ribbon_mission"></label> 
-								<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content">
+								<a href="courseHome.sw?courseId=<%=course.getId() %>">
 									<img width="218" height="148" src="<%=course.getOrgPicture()%>">
 								</a>
 							</li>
 							<li class="subject">
-								<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><%=course.getName() %></a>
+								<a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a>
 							</li>
 							<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getNickName() %></a>
 							</li>
@@ -202,7 +202,7 @@
 									<dd class="category"></dd>
 								</dl>
 							</li>
-							<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><%=course.getBriefDesc() %></a>
+							<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a>
 							</li>
 							<!-- Gauge -->
 							<li class="gauge_box w_auto mt5">
@@ -237,12 +237,12 @@
 						<ul class="category_box intro_margin">
 							<li class="photo">
 								<label style="position: absolute;" class="ribbon_like"></label> 
-								<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"> 
+								<a href="courseHome.sw?courseId=<%=course.getId() %>"> 
 									<img width="218" height="148" src="<%=course.getOrgPicture()%>"> 
 								</a>
 							</li>
 							<li class="subject">
-								<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><%=course.getName() %></a>
+								<a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a>
 							</li>
 							<li class="maker">
 								<a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getNickName() %></a>
@@ -255,7 +255,7 @@
 								</dl>
 							</li>
 							<li class="detail">
-								<a href="courseHome.sw?courseId=<%=course.getId() %>" class="js_sera_content"><%=course.getBriefDesc() %></a>
+								<a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a>
 							</li>
 							<!-- Gauge -->
 							<li class="gauge_box w_auto mt5">

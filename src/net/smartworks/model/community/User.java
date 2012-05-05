@@ -21,6 +21,7 @@ public class User extends WorkSpace {
 	public static final String  NO_USER_PICTURE  = "no_user_picture";
 
 	public static final String USER_ID_SYSTEM = "system@smartworks.net";
+	public static final String USER_ID_ANONYMOUS = "anonymous@smartworks.net";
 	public static final String USER_ID_NONE_EXISTING = "noneexisting@smartworks.net";
 	
 	public static final String NAMING_NICKNAME_BASE = "NickNameBase";
@@ -161,5 +162,10 @@ public class User extends WorkSpace {
 		userInfo.setPosition(getPosition());
 		userInfo.setRole(getRole());
 		return userInfo;
+	}
+	
+	public boolean isAnonymusUser(){
+		if(USER_ID_ANONYMOUS.equals(getId())) return true;
+		return false;
 	}
 }

@@ -39,15 +39,17 @@
 			<!-- photo-->
 			<li class="">
 				<div class="photo_bg">
-					<img class="profile_size_72" src="<%=course.getOwner().getMinPicture()%>" />
-					<div class="rgt_name"><%=course.getOwner().getNickName()%></div>
+					<a href="<%if(!cUser.getId().equals(course.getOwner().getId())) {%>othersPAGE.sw?userId=<%=course.getOwner().getId() %><%} %>">
+						<img class="profile_size_72" src="<%=course.getOwner().getMinPicture()%>" />
+						<div class="rgt_name"><%=course.getOwner().getNickName()%></div>
+					</a>
 				</div>
 				<div class="grade">
 					<!-- 왕관-->
 					<div class="icon_mentor current"></div>
 					<!-- 별 -->
 					<div class="icon_star <%if(course.getStarPoint()>=0){%>current<%}%>">
-						<div class="grade_star"><%if(course.getStarPoint()>=0){%><%=course.getStarPoint()%><%}%></div>
+						<div class="grade_star"><%if(course.getStarPoint()>=0){%><%=course.getStarPointString()%><%}%></div>
 					</div>
 					<!-- 하트 -->
 					<div class="icon_heart <%if(course.getLikes()>=0){%>current<%}%>">

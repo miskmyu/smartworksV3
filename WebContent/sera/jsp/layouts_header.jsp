@@ -43,7 +43,8 @@
 		var currentUser = {
 			locale : "<%=java.util.Locale.getDefault().getLanguage()%>",
 			timeZone : "<%=TimeZone.getDefault().getID()%>",
-			timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>"
+			timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>",
+			isAnonymous : "true"
 		};
 	</script>
 	

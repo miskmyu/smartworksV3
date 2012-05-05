@@ -103,6 +103,9 @@ public class SeraController {
 	@RequestMapping("/courseHome")
 	public ModelAndView courseHome(HttpServletRequest request, HttpServletResponse response) {
 
+		if(SmartUtil.getCurrentUser().isAnonymusUser()){
+			return SmartUtil.returnMnvSera(request, "", "courseHomeNouser.tiles");
+		}
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/home.jsp", "courseHome.tiles");
 	}
 

@@ -25,12 +25,13 @@
 	
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
-	InstanceInfo[] notices = smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
+	
+	InstanceInfo[] notices = (cUser.isAnonymusUser()) ? null : smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
 	String mentorName = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getName();
-	boolean myRunningCourse = course.isMyRunningCourse();
-	boolean myAttendingCourse = course.isMyAttendingCourse();
-	
+	boolean myRunningCourse = (cUser.isAnonymusUser()) ? false : course.isMyRunningCourse();
+	boolean myAttendingCourse = (cUser.isAnonymusUser()) ? false : course.isMyAttendingCourse();
+
 	session.setAttribute("course", course);
 	
 %>
@@ -101,11 +102,11 @@
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu">
-				<li class="current"><a href="" class="js_course_home">홈</a></li>
+				<li class="<%if(!cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스 게시판</a></li>
 				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_create_team">팀활동</a></li>
-				<li><a href="" class="js_course_general">코스개요</a></li>
+				<li class="<%if(cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
 				<li <% if(!myRunningCourse && !myAttendingCourse){ %>style="display:none"<%} %> ><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
@@ -145,8 +146,20 @@
 <!-- Course Define //-->
 <!-- Course Section -->
 <div class="course_section js_course_content" courseId="<%=courseId%>">
-	<jsp:include page="/sera/jsp/content/course/detail/instance_list.jsp">
-		<jsp:param value="<%=courseId %>" name="courseId"/>
-	</jsp:include>
+	<%
+	if(cUser.isAnonymusUser()){
+	%>
+		<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
+			<jsp:param value="<%=courseId %>" name="courseId"/>
+		</jsp:include>
+	<%
+	}else{
+	%>
+		<jsp:include page="/sera/jsp/content/course/detail/instance_list.jsp">
+			<jsp:param value="<%=courseId %>" name="courseId"/>
+		</jsp:include>
+	<%
+	}
+	%>
 </div>
 <!-- Comment Pannel-->
