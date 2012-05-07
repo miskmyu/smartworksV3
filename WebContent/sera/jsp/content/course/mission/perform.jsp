@@ -24,14 +24,15 @@
 <div class="js_perform_mission_page" missionId="<%=missionId%>" courseId="<%=course.getId()%>">
 
 	<!-- Title -->
-	<div class="header_mission mb10">
-		<div>미션 수행하기</div>
+	<div class="header_tit">
+		<div class="tit_dep2 m0">
+			<h2>미션 수행하기</h2>
+			<div>* 미션 마감일을 확인하고 수행하여 주십시오. 마감일이 지난 미션도 수행 가능합니다.</div>
+		</div>
 	</div>
 	<!-- Title //-->
 
 	<!-- 미션 수행 -->
-	<div class="t_refe">* 미션 마감일을 확인하고 수행하여 주십시오. 마감일이 지난 미션도 수행
-		가능합니다.</div>
 	<div class="panel_block m10" style="width: 698px">
 		<dl class="content_mission">
 			<dt>
