@@ -51,7 +51,7 @@
 						<%
 					}
 					%>
-					<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+					<span class="name"><%=comment.getOwner().getNickName() %> : </span><span><%=comment.getComment() %></span><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 				</div>
 			</div>
 			<!-- Reply//-->

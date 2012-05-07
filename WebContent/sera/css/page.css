@@ -421,7 +421,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
 .course_info { width:193px; float:right; margin-top:10px; line-height:20px; height:108px; overflow:hidden}
-.course_info dt {background: url("../images/icon.png") no-repeat -166px -764px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
+.course_info dt {background: url("../images/icon.png") no-repeat -166px -765px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
+.course_info dd {height: 18px; overflow: hidden}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
 .course_menu_d1 { float: left; margin:0 0 0 22px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
@@ -503,7 +504,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Category List */
 .category_list { margin:10px 0 0 0; overflow:hidden}
-.category_box {float: left; height: 325px; margin: 0 10px 20px 0; width: 220px;}
+.category_box {float: left; height: 325px; margin: 0 15px 20px 0; width: 220px;}
 .category_box.intro_margin {margin: 0 15px 55px 0 !important}
 .category_box .photo {border: 1px solid #D1D1D1; clear: both; height: 148px; margin-bottom: 13px; width: 218px;}
 .category_box .subject {clear: both; color: #333333; font: bold 13px 'dotum','Helvetica','sans-serif'; height: 14px; margin-bottom: 10px; width: 220px; overflow: hidden}
