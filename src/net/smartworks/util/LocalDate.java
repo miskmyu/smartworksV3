@@ -366,7 +366,7 @@ public class LocalDate extends Date{
 	public static LocalDate convertGMTStringToLocalDate(String yyyyMMddHHmmssSSS) throws Exception{
 		if(SmartUtil.isBlankObject(yyyyMMddHHmmssSSS) || yyyyMMddHHmmssSSS.length() < 21) return null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		return new LocalDate((df.parse(yyyyMMddHHmmssSSS)).getTime());
+		return new LocalDate((df.parse(yyyyMMddHHmmssSSS)).getTime() + TimeZone.getTimeZone(SmartUtil.getCurrentUser().getTimeZone()).getRawOffset());
 	}
 
 	public static LocalDate convertGMTSimpleStringToLocalDate(String yyyyMMdd) throws Exception{
