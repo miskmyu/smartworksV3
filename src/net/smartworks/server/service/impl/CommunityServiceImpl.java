@@ -289,9 +289,9 @@ public class CommunityServiceImpl implements ICommunityService {
 					} else if(fieldId.equals("selGroupProfileType")) {
 						selGroupProfileType = (String)frmNewGroupProfile.get("selGroupProfileType");
 						if(selGroupProfileType.equals(Group.GROUP_TYPE_OPEN))
-							selGroupProfileType = "O";
+							selGroupProfileType = SwoGroup.GROUP_STATUS_OPEN;
 						else
-							selGroupProfileType = "C";
+							selGroupProfileType = SwoGroup.GROUP_STATUS_CLOSED;
 					} else if(fieldId.equals("txtGroupLeader")) {
 						txtGroupLeader = (String)frmNewGroupProfile.get("txtGroupLeader");
 					}
@@ -307,21 +307,15 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
 
-			SwoGroupMember swoGroupMember = new SwoGroupMember();
-			swoGroupMember.setUserId(txtGroupLeader);
-			swoGroupMember.setJoinType("I");
-			swoGroupMember.setJoinStatus("P");
-			swoGroupMember.setJoinDate(new LocalDate());
-			swoGroup.addGroupMember(swoGroupMember);
 			if(!CommonUtil.isEmpty(users)) {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");
 					if(!txtGroupLeader.equals(groupUserId)) {
-						swoGroupMember = new SwoGroupMember();
+						SwoGroupMember swoGroupMember = new SwoGroupMember();
 						swoGroupMember.setUserId(groupUserId);
-						swoGroupMember.setJoinType("I");
-						swoGroupMember.setJoinStatus("P");
+						swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+						swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 						swoGroupMember.setJoinDate(new LocalDate());
 						swoGroup.addGroupMember(swoGroupMember);
 					}
@@ -341,7 +335,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			swoGroup.setCompanyId(user.getCompanyId());
 			swoGroup.setName(txtGroupName);
 			swoGroup.setDescription(txtaGroupDesc);
-			swoGroup.setStatus("C");
+			swoGroup.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			swoGroup.setGroupType(selGroupProfileType);
 			swoGroup.setGroupLeader(txtGroupLeader);
 

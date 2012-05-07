@@ -1159,8 +1159,8 @@ public class SeraServiceImpl implements ISeraService {
 		
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup group = swoMgr.getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
-		group.setStatus(Group.GROUP_TYPE_CLOSED);
-		
+		group.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
+
 		swoMgr.setGroup(user.getId(), group, IManager.LEVEL_ALL);
 		
 		//SwManagerFactory.getInstance().getSwoManager().removeGroup(user.getId(), courseId);
@@ -1326,32 +1326,10 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 
 		if(!CommonUtil.isEmpty(txtCourseMentor)) {
-			for(int i=0; i < txtCourseMentor.subList(0, txtCourseMentor.size()).size(); i++) {
-				Map<String, String> userMap = txtCourseMentor.get(i);
-				mentorUserId = userMap.get("id");
-			}
+			Map<String, String> userMap = txtCourseMentor.get(0);
+			mentorUserId = userMap.get("id");
 		} else {
 			mentorUserId = user.getId();
-		}
-
-		SwoGroupMember swoGroupMember = new SwoGroupMember();
-		swoGroupMember.setUserId(mentorUserId);
-		swoGroupMember.setJoinType("I");
-		swoGroupMember.setJoinStatus("P");
-		swoGroupMember.setJoinDate(new LocalDate());
-		if(!CommonUtil.isEmpty(txtCourseMentor)) {
-			for(int i=0; i < txtCourseMentor.subList(0, txtCourseMentor.size()).size(); i++) {
-				Map<String, String> userMap = txtCourseMentor.get(i);
-				String groupUserId = userMap.get("id");
-				if(!mentorUserId.equals(groupUserId)) {
-					swoGroupMember = new SwoGroupMember();
-					swoGroupMember.setUserId(groupUserId);
-					swoGroupMember.setJoinType("I");
-					swoGroupMember.setJoinStatus("P");
-					swoGroupMember.setJoinDate(new LocalDate());
-					swoGroup.addGroupMember(swoGroupMember);
-				}
-			}
 		}
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
@@ -1367,7 +1345,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setCompanyId(user.getCompanyId());
 		swoGroup.setName(txtCourseName);
 		swoGroup.setDescription(txtaCourseDesc);
-		swoGroup.setStatus("O");
+		swoGroup.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		swoGroup.setGroupType(selGroupProfileType);
 		swoGroup.setGroupLeader(mentorUserId);
 
@@ -1452,6 +1430,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwoGroupCond runningCourseCond = new SwoGroupCond();
 			runningCourseCond.setGroupLeader(userId);
+			runningCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
 			runningCourseCond.setPageSize(maxList);
 			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
@@ -1464,6 +1443,7 @@ public class SeraServiceImpl implements ISeraService {
 			courseMembers[0] = courseMember;
 			attendingCourseCond.setSwoGroupMembers(courseMembers);
 			attendingCourseCond.setNotGroupLeader(userId);
+			attendingCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
 			attendingCourseCond.setPageSize(maxList);
 			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
@@ -5525,7 +5505,7 @@ public class SeraServiceImpl implements ISeraService {
 				memberIds[j] = seraUserDetail.getUserId();
 			}
 
-			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, -1);
+			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, MenteeInformList.MAX_USER_LIST);
 
 			return seraUserInfos;
 
