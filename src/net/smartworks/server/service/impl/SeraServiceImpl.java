@@ -5697,10 +5697,6 @@ public class SeraServiceImpl implements ISeraService {
 		if (courseType == Course.MY_RUNNING_COURSE) {
 			SwoGroupCond runningCourseCond = new SwoGroupCond();
 			runningCourseCond.setGroupLeader(userId);
-			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
-			runningCourseCond.setPageSize(maxList);
-			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
-			
 			if (!CommonUtil.isEmpty(lastId)) {
 				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
 				if (lastGroup != null) {
@@ -5708,6 +5704,10 @@ public class SeraServiceImpl implements ISeraService {
 					runningCourseCond.setCreateDateTo(lastDate);
 				}
 			}
+			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
+
+			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
+			runningCourseCond.setPageSize(maxList);
 			
 			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
 
@@ -5749,10 +5749,6 @@ public class SeraServiceImpl implements ISeraService {
 			courseMembers[0] = courseMember;
 			attendingCourseCond.setSwoGroupMembers(courseMembers);
 			attendingCourseCond.setNotGroupLeader(userId);
-			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
-			attendingCourseCond.setPageSize(maxList);
-			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
-			
 			if (!CommonUtil.isEmpty(lastId)) {
 				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
 				if (lastGroup != null) {
@@ -5760,6 +5756,10 @@ public class SeraServiceImpl implements ISeraService {
 					attendingCourseCond.setCreateDateTo(lastDate);
 				}
 			}
+			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
+
+			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
+			attendingCourseCond.setPageSize(maxList);
 			
 			SwoGroup[] attendingCourses = swoManager.getGroups(userId, attendingCourseCond, IManager.LEVEL_ALL);
 
