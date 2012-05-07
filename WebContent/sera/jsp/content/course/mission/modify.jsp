@@ -112,7 +112,7 @@
 									MissionInstanceInfo prevMission = missions[i];
 									if(prevMission.getId().equals(mission.getId())) continue;
 							%>
-								<option <%if(prevMission.getId().equals(prevMissionId)){ %>selected<%} %> value="<%=mission.getId() %>">미션<%=prevMission.getIndex()+1 %> <%=prevMission.getSubject() %></option>
+								<option <%if(prevMission.getId().equals(prevMissionId)){ %>selected<%} %> value="<%=prevMission.getId() %>">미션<%=prevMission.getIndex()+1 %> <%=prevMission.getSubject() %></option>
 							<%
 								}
 							}
