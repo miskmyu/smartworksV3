@@ -33,7 +33,7 @@
 	<!-- Title //-->
 
 	<!-- 미션 수행 -->
-	<div class="panel_block m10" style="width: 698px">
+	<div class="panel_block" style="width: 688px">
 		<dl class="content_mission">
 			<dt>
 				<!-- title -->
