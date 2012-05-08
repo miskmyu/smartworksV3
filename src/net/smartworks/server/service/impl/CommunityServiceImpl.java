@@ -835,7 +835,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		}*/
 		String groupId = (String)requestBody.get("groupId");
 		String userId = (String)requestBody.get("userId");
-		String approval = (String)requestBody.get("approval");
+		boolean approval = (Boolean)requestBody.get("approval");
 
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		
@@ -846,7 +846,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			return;
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
-		if (Boolean.parseBoolean(approval)) {
+		if (approval) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 			groupMember.setJoinDate(new LocalDate());
 			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);

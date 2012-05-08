@@ -114,7 +114,7 @@
 			<tr>
 				<td><div class="form_label w110">코스 기간</div>
 					<div class="form_value">
-						<input name="txtCourseDays" type="text" style="width: 100px" class="fieldline fl tr number" />
+						<input name="txtCourseDays" type="text" style="width: 100px" class="fieldline fl tr number" value="<%=course.getDuration()%>" />
 						<div class="fl mt2 ml2"> 일(Days)</div>
 						<div class="t_refe pt2 fl"> * 코스 기간은 6개월 이내로 설정해 주세요</div>
 						

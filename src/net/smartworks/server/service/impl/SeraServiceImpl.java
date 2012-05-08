@@ -328,6 +328,7 @@ public class SeraServiceImpl implements ISeraService {
 		if(courseTeam != null) {
 			team = new Team();
 			team.setId(courseTeam.getObjId());
+			team.setName(courseTeam.getName());
 			team.setCourseId(courseTeam.getCourseId());
 			team.setDesc(courseTeam.getDescription());
 			team.setStart(new LocalDate(courseTeam.getStartDate().getTime()));
@@ -1091,7 +1092,6 @@ public class SeraServiceImpl implements ISeraService {
 		}
 
 		swoGroup.setDescription(txtaCourseDesc);
-		swoGroup.setStatus("C");
 		swoGroup.setGroupType(selGroupProfileType);
 		
 		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
@@ -1112,7 +1112,7 @@ public class SeraServiceImpl implements ISeraService {
 		boolean isUserDefineDays = !CommonUtil.isEmpty(chkUserDefineDays) && chkUserDefineDays.equalsIgnoreCase("on") ? true : false;
 		
 		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
-		if (isUserDefineDays) {
+		/*if (isUserDefineDays) {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		} else {
@@ -1132,7 +1132,19 @@ public class SeraServiceImpl implements ISeraService {
 				endDate.setTime(endDateLong);
 			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		}*/
+		Date startDate = null;
+		Date endDate = null;
+
+		if(!CommonUtil.isEmpty(txtCourseDays)) {
+			startDate =  LocalDate.convertLocalDateStringToLocalDate(new LocalDate().toLocalDateSimpleString());
+			endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtCourseDays)-1));
+		} else {
+			startDate = LocalDate.convertLocalDateStringToLocalDate(txtCourseStartDate);
+			endDate = LocalDate.convertLocalDateStringToLocalDate(txtCourseEndDate);
 		}
+		courseDetail.setStart(startDate);
+		courseDetail.setEnd(endDate);
 		if (chkCourseUsers != null && chkCourseUsers.equalsIgnoreCase("unlimited")) {
 			courseDetail.setMaxMentees(-1);
 		} else {
@@ -1363,7 +1375,7 @@ public class SeraServiceImpl implements ISeraService {
 		courseDetail.setCategories(chkCourseCategories);
 		courseDetail.setKeywords(txtCourseKeywords);
 		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
-		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
+/*		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
 		} else {
@@ -1383,13 +1395,26 @@ public class SeraServiceImpl implements ISeraService {
 				endDate.setTime(endDateLong);
 			}
 			courseDetail.setEnd(new LocalDate(endDate.getTime()));
+		}*/
+		Date startDate = null;
+		Date endDate = null;
+
+		if(!CommonUtil.isEmpty(txtCourseDays)) {
+			startDate =  LocalDate.convertLocalDateStringToLocalDate(new LocalDate().toLocalDateSimpleString());
+			endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtCourseDays)-1));
+		} else {
+			startDate = LocalDate.convertLocalDateStringToLocalDate(txtCourseStartDate);
+			endDate = LocalDate.convertLocalDateStringToLocalDate(txtCourseEndDate);
 		}
+		courseDetail.setStart(startDate);
+		courseDetail.setEnd(endDate);
+
 		if (chkCourseUsers != null && chkCourseUsers.equalsIgnoreCase("unlimited")) {
 			courseDetail.setMaxMentees(-1);
 		} else {
 			courseDetail.setMaxMentees(txtCourseUsers == null || txtCourseUsers.equals("") ? -1 : Integer.parseInt(txtCourseUsers));
 		}
-			
+
 		courseDetail.setAutoApproval(chkJoinApproval != null ? chkJoinApproval.equalsIgnoreCase("autoApporval") ? true : false : true);
 		courseDetail.setPayable(chkCourseFee != null ? chkCourseFee.equalsIgnoreCase("free") ? false : true : false);
 		courseDetail.setFee(txtCourseFee == null || txtCourseFee.equals("") ? 0 : Integer.parseInt(txtCourseFee));
@@ -3623,7 +3648,7 @@ public class SeraServiceImpl implements ISeraService {
 			Date endDate = null;
 	
 			if(!CommonUtil.isEmpty(txtTeamDays)) {
-				startDate = new LocalDate();
+				startDate =  LocalDate.convertLocalDateStringToLocalDate(new LocalDate().toLocalDateSimpleString());
 				endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtTeamDays)-1));
 			} else {
 				startDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamStartDate);
@@ -3701,7 +3726,7 @@ public class SeraServiceImpl implements ISeraService {
 			Date endDate = null;
 
 			if(!CommonUtil.isEmpty(txtTeamDays)) {
-				startDate = new LocalDate();
+				startDate =  LocalDate.convertLocalDateStringToLocalDate(new LocalDate().toLocalDateSimpleString());
 				endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtTeamDays)-1));
 			} else {
 				startDate = LocalDate.convertLocalDateStringToLocalDate(txtTeamStartDate);
