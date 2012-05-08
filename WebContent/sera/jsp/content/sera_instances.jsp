@@ -384,7 +384,7 @@
 										</div>
 										<div class="reply_text">
  											<div class="icon_delete fr"><a href="" class="js_delete_comment_btn" title="댓글삭제">삭제</a></div>
-											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_comment_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+											<span class="name"><%=cUser.getNickName() %> : </span><span class="js_comment_content"></span><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
 										</div>
 									</div>
 									<div class="stat_notice">
@@ -435,7 +435,7 @@
  																<%
 																}
 																%>
-																<span class="name"><%=comment.getOwner().getNickName() %> : </span><div><%=comment.getComment() %></div><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
+																<span class="name"><%=comment.getOwner().getNickName() %> : </span><span><%=comment.getComment() %></span><div class="icon_date"><%=comment.getLastModifiedDate().toLocalString() %></div>
 															</div>
 														</div>
 														<!-- Reply//-->
@@ -466,7 +466,7 @@
 											<img src="<%=cUser.getMinPicture() %>"  class="profile_size_m"/>
 										</div>
 										<div class="reply_text">
-											<span class="name"><%=cUser.getNickName() %> : </span><div class="js_reply_content"></div><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
+											<span class="name"><%=cUser.getNickName() %> : </span><span class="js_reply_content"></span><div class="icon_date"><%=(new LocalDate()).toLocalString() %></div>
 										</div>
 									</div>
 									<div class="stat_notice">

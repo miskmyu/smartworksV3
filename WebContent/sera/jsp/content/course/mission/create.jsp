@@ -142,8 +142,8 @@
 				<div class="btn_blu_r">미션 등록</div>
 			</div>
 		
-			<div href="" class="btn_blu_l js_create_mission">
-				<div class="btn_blu_r">취 소</div>
+			<div href="" class="btn_red_l js_create_mission">
+				<div class="btn_red_r">취 소</div>
 			</div>
 		</div>
 	</div>

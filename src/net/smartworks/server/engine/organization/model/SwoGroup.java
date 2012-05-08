@@ -39,6 +39,9 @@ public class SwoGroup extends SwoObject {
 	public static final String A_GROUP_MEMBER = "swoGroupMember";
 	public static final String A_GROUP_MEMBERS = "swoGroupMembers";
 
+	public static final String GROUP_STATUS_OPEN = "O";
+	public static final String GROUP_STATUS_CLOSED = "C";
+
 	private String groupLeader;
 	private String groupType;
 	private String status;

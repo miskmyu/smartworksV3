@@ -50,7 +50,7 @@
 	};
 </script>
 
-<body onload="javascript:startPopup()">
+<body>
 	<div id="wrap" class="main_bg">
 		<div id="sera_header">
 			<jsp:include page="/sera/jsp/header.jsp" />
@@ -120,7 +120,7 @@
 					<a href="http://club.seracampus.com/?p=1017"> 
 						<img id="eventBanner2" width="405" height="435" alt="" style="position: absolute; z-index: 9;" src="sera/images/N_visual_02.png"> 
 					</a> 
-					<a href="http://www.seracampus.com/Course/Detail/242"> 
+					<a href="http://www.seracampus.com/courseHome.sw?courseId=group_242"> 
 						<img id="eventBanner3" width="405" height="435" alt="" style="position: absolute; z-index: 8;" src="sera/images/N_visual_03.png"> 
 					</a>
 					<a href="http://www.youtube.com/watch?v=KneS3Mstmes" target="_blank"> 

@@ -66,7 +66,7 @@ public class CommunityInfo extends BaseObject {
 		return getPath() + this.getSmallPictureName();
 	}
 	public String getPath(){
-		if(SmartUtil.getCurrentUser() == null) {
+		if(SmartUtil.getCurrentUser() == null || SmartUtil.getCurrentUser().isAnonymusUser()) {
 			try {
 				SwoCompanyCond cond = new SwoCompanyCond();
 				cond.setPageNo(0);
