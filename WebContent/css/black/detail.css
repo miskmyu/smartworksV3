@@ -19,15 +19,16 @@
 .body_titl_iworks {background: url("../../images/body_title_inform.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px;}
 .body_titl_set {background: url("../../images/body_title_set.png") no-repeat 0 -2px transparent; padding:22px 0 0 53px; line-height:18px;}
 .body_titl_area {background: url("../../images/body_title.jpg") no-repeat 0 0 transparent; padding:22px 0 0 68px; line-height:18px;}
-.body_titl_area.ti_company { background-position:0 0}
-.body_titl_area.ti_organization { background-position:0 -52px}
-.body_titl_area.ti_approval { background-position:0 -156px}
-.body_titl_area.ti_webservice { background-position:0 -208px}
-.body_titl_area.ti_externalform { background-position:0 -260px}
-.body_titl_area.ti_picture { background-position:0 -312px}
-.body_titl_area.ti_file { background-position:0 -364px}
-.body_titl_area.ti_event { background-position:0 -416px}
-.body_titl_area.ti_memo { background-position:0 -468px}
+.body_titl_area.ti_company {background-position:0 0}
+.body_titl_area.ti_organization {background-position:0 -52px}
+.body_titl_area.ti_approval {background-position:0 -156px}
+.body_titl_area.ti_webservice {background-position:0 -208px}
+.body_titl_area.ti_externalform {background-position:0 -260px}
+.body_titl_area.ti_picture {background-position:0 -312px}
+.body_titl_area.ti_file {background-position:0 -364px}
+.body_titl_area.ti_event {background-position:0 -416px}
+.body_titl_area.ti_memo {background-position:0 -468px}
+.body_titl_area.ti_mail {background-position:0 -520px}
 
 .body_titl .t_name {color:#23579e; line-height:12px; position: relative; vertical-align: bottom;}
 .body_titl .t_date {font-size:11px; color:#999897; line-height:12px; position: relative; vertical-align: bottom;}
