@@ -339,7 +339,7 @@ public class SmartUtil {
 		user.setName(SmartMessage.getString("common.title.system_user"));
 		user.setPosition("");
 		user.setDepartment("");
-		user.setCompany("SmartWorks.net");
+		user.setCompany("");
 		user.setUserLevel(User.USER_LEVEL_AMINISTRATOR);
 		return user;
 	}
@@ -351,7 +351,7 @@ public class SmartUtil {
 		user.setName("Anonymous User");
 		user.setPosition("");
 		user.setDepartment("");
-		user.setCompany("SmartWorks.net");
+		user.setCompany("");
 		user.setUserLevel(User.USER_LEVEL_EXTERNAL_USER);
 		return user;
 	}
