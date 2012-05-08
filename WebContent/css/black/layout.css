@@ -554,12 +554,15 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 td.pic{width:85px}
 
 /* Mail */
-.buttonSet { margin-bottom:10px}
+.buttonSet {margin:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 3px 2px; text-decoration: none !important; vertical-align: middle}
-.mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -499px; width:13px; height:15px} 
-.mail_list_section .icon_important.checked { background-position:-115px -524px}
+.mail_list_section .not_read {color:#0459C1}
+.mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
+.mail_list_section .not_read .icon_important,
+.tit_bg th .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -524px; width:13px; height:15px}
 .mail_list_section .icon_mail_read {background: url("../../images/nav_img.png") no-repeat -115px -595px; width:15px; height:15px}
-.mail_list_section .icon_mail_read.not_read {background-position:-115px -565px}
+.mail_list_section .not_read .icon_mail_read,
+.tit_bg th .icon_mail_read {background: url("../../images/nav_img.png") no-repeat -115px -565px; width:15px; height:15px}
 .mail_list_section .icon_file {background: url("../../images/nav_img.png") no-repeat -115px -471px; width:16px; height:17px}
 
 /* Icon */
