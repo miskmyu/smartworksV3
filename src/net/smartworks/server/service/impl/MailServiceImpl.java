@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
@@ -369,8 +370,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							tmp = (EmailHeader)headers.get(i);
 							InternetAddress from = (InternetAddress)tmp.getFrom()[0];
 							MailInstanceInfo mailInstance = new MailInstanceInfo(Integer.toString(tmp.getMessageId()),
-									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()));						
+									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset()));						
 							mailInstance.setSize(tmp.getSize());
+							mailInstance.setUnread(tmp.getUnread());
+							mailInstance.setPriority(tmp.getPriority());
 							instanceInfos[i] = mailInstance;
 						}
 					} else {
@@ -382,9 +385,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							tmp = (EmailHeader)headers.get(i);
 							InternetAddress from = (InternetAddress)tmp.getFrom()[0];
 							MailInstanceInfo mailInstance = new MailInstanceInfo(Integer.toString(tmp.getMessageId()),
-									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()));						
+									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset()));						
 							mailInstance.setSize(tmp.getSize());
+							mailInstance.setUnread(tmp.getUnread());
+							mailInstance.setPriority(tmp.getPriority());
 							instanceInfos[i-startIdx] = mailInstance;
+							
 						}
 					}
 					instanceInfoList.setInstanceDatas(instanceInfos);

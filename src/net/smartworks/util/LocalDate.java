@@ -282,7 +282,7 @@ public class LocalDate extends Date{
 	}
 	
 	public boolean isNew(){
-		if(this.getTime() >= ((new LocalDate(localNow)).getTime() - 2*LocalDate.ONE_DAY))
+		if(this.getTime() >= ((new LocalDate()).getTime() - 2*LocalDate.ONE_DAY))
 			return true;
 		return false;		
 	}
@@ -450,13 +450,13 @@ public class LocalDate extends Date{
 	}
 
 	private boolean isToday(){
-		if(getLocalDateOnly(this).getTime() == getLocalDateOnly(new LocalDate(localNow)).getTime())
+		if(getLocalDateOnly(this).getTime() == getLocalDateOnly(new LocalDate()).getTime())
 			return true;
 		return false;
 	}
 
 	private boolean isThisYear(){
-		if(getLocalYearOnly(this).getTime() == getLocalYearOnly(new LocalDate(localNow)).getTime())
+		if(getLocalYearOnly(this).getTime() == getLocalYearOnly(new LocalDate()).getTime())
 			return true;
 		return false;
 	}
