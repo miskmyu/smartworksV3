@@ -1,6 +1,5 @@
 package net.smartworks.server.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -117,6 +116,7 @@ import net.smartworks.server.engine.sera.model.SeraFriend;
 import net.smartworks.server.engine.sera.model.SeraFriendCond;
 import net.smartworks.server.engine.sera.model.SeraUserDetail;
 import net.smartworks.server.engine.sera.model.SeraUserDetailCond;
+import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
@@ -148,10 +148,15 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	private IInstanceService instanceService;
+	private ICalendarService calendarService;
 
 	@Autowired
 	public void setInstanceService(IInstanceService instanceService) {
 		this.instanceService = instanceService;
+	}
+	@Autowired
+	public void setCalendarService(ICalendarService calendarService) {
+		this.calendarService = calendarService;
 	}
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
@@ -382,6 +387,30 @@ public class SeraServiceImpl implements ISeraService {
 
 		course.setTeam(team);
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
+
+		boolean isJoinCourse = false;
+		CourseList courseList = getCoursesById(userId, -1);
+		if(!SmartUtil.isBlankObject(courseList)) {
+			CourseInfo[] attendingCourses = courseList.getAttendingCourses();
+			CourseInfo[] runningCourses = courseList.getRunningCourses();
+			if(!CommonUtil.isEmpty(attendingCourses)) {
+				for(CourseInfo courseInfo : attendingCourses) {
+					if(courseId.equals(courseInfo.getId())) {
+						isJoinCourse = true;
+						break;
+					}		
+				}
+				if(isJoinCourse != true) {
+					for(CourseInfo courseInfo : runningCourses) {
+						if(courseId.equals(courseInfo.getId())) {
+							isJoinCourse = true;
+							break;
+						}		
+					}
+				}
+			}
+		}
+		course.setJoinCourse(isJoinCourse);
 
 		return course;
 	}
@@ -1457,7 +1486,8 @@ public class SeraServiceImpl implements ISeraService {
 			runningCourseCond.setGroupLeader(userId);
 			runningCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			long runningCourseCnt = swoManager.getGroupSize(userId, runningCourseCond);
-			runningCourseCond.setPageSize(maxList);
+			if(maxList != -1)
+				runningCourseCond.setPageSize(maxList);
 			runningCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] runningCourses = swoManager.getGroups(userId, runningCourseCond, IManager.LEVEL_ALL);
 
@@ -1470,7 +1500,8 @@ public class SeraServiceImpl implements ISeraService {
 			attendingCourseCond.setNotGroupLeader(userId);
 			attendingCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			long attendingCourseCnt = swoManager.getGroupSize(userId, attendingCourseCond);
-			attendingCourseCond.setPageSize(maxList);
+			if(maxList != -1)
+				attendingCourseCond.setPageSize(maxList);
 			attendingCourseCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] attendingCourses = swoManager.getGroups(userId, attendingCourseCond, IManager.LEVEL_ALL);
 
@@ -1504,23 +1535,25 @@ public class SeraServiceImpl implements ISeraService {
 			CourseInfo[] runningCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(runningCourses, courseDetails);
 			CourseInfo[] attendingCoursesArray = this.convertSwoGroupArrayToCourseInfoArray(attendingCourses, courseDetails);
 
-			if (runningCoursesArray != null && runningCourseCnt > maxList) {
-				CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
-				for (int i = 0; i < runningCoursesArray.length; i++) {
-					tempRunningCourseInfos[i] = runningCoursesArray[i];
+			if(maxList != -1) {
+				if (runningCoursesArray != null && runningCourseCnt > maxList) {
+					CourseInfo[] tempRunningCourseInfos = new CourseInfo[runningCoursesArray.length + 1];
+					for (int i = 0; i < runningCoursesArray.length; i++) {
+						tempRunningCourseInfos[i] = runningCoursesArray[i];
+					}
+					tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
+					runningCoursesArray = tempRunningCourseInfos;
 				}
-				tempRunningCourseInfos[runningCoursesArray.length] = new CourseInfo();
-				runningCoursesArray = tempRunningCourseInfos;
-			}
-			if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
-				CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
-				for (int i = 0; i < attendingCoursesArray.length; i++) {
-					tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+				if (attendingCoursesArray != null && attendingCourseCnt > maxList) {
+					CourseInfo[] tempAttendingCourseInfos = new CourseInfo[attendingCoursesArray.length + 1];
+					for (int i = 0; i < attendingCoursesArray.length; i++) {
+						tempAttendingCourseInfos[i] = attendingCoursesArray[i];
+					}
+					tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
+					attendingCoursesArray = tempAttendingCourseInfos;
 				}
-				tempAttendingCourseInfos[attendingCoursesArray.length] = new CourseInfo();
-				attendingCoursesArray = tempAttendingCourseInfos;
 			}
-			
+
 			courseList.setRunnings((int)runningCourseCnt);
 			courseList.setRunningCourses(runningCoursesArray);
 			courseList.setAttendings((int)attendingCourseCnt);
@@ -1925,10 +1958,12 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			} else {
 				if(!SmartUtil.isBlankObject(userId)) {
-					if(!currentUserId.equals(userId))
-						swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
-					else
-						swdRecordCond.setCreationUser(userId);
+					if(!userId.equals("EVENT")) {
+						if(!currentUserId.equals(userId))
+							swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
+						else
+							swdRecordCond.setCreationUser(userId);
+					}
 				} else {
 					SwoGroupCond attendingCourseCond = new SwoGroupCond();
 					SwoGroupMember[] courseMembers = new SwoGroupMember[1];
@@ -2178,7 +2213,10 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
+			//if(userId == null && courseId == null && missionId == null && teamId == null)
+				
+			//else
+				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 
 			swdRecordCond.setFromDate(fromDate);
 
@@ -2271,14 +2309,20 @@ public class SeraServiceImpl implements ISeraService {
 								}
 							}
 							eventInstanceInfo.setRelatedUsers(relatedUsers);
+						} else if(swdDataField.getId().equals("4")) {
+							eventInstanceInfo.setPlace(value);
 						}
 					}
-/*					CommunityInfo[] relatedUsers = eventInstanceInfo.getRelatedUsers();
-					boolean isParticipant = false;
-					if(!CommonUtil.isEmpty(relatedUsers))
-						isParticipant = isParticipant(relatedUsers);
-					if(isParticipant || swdRecord.getCreationUser().equals(userId) || swdRecord.getModificationUser().equals(userId))*/
+					if(TskTask.TASKREFTYPE_EVENT.equals(userId)) {
+						CommunityInfo[] relatedUsers = eventInstanceInfo.getRelatedUsers();
+						boolean isParticipant = false;
+						if(!CommonUtil.isEmpty(relatedUsers))
+							isParticipant = calendarService.isParticipant(relatedUsers);
+						if(isParticipant || swdRecord.getCreationUser().equals(user.getId()) || swdRecord.getModificationUser().equals(user.getId()))
+							eventInstanceInfoList.add(eventInstanceInfo);
+					} else {
 						eventInstanceInfoList.add(eventInstanceInfo);
+					}
 				}
 			}
 			if(eventInstanceInfoList.size() != 0) {

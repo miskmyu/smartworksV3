@@ -45,6 +45,7 @@ public class Course extends Group {
 	private double starPoint;
 	private int starPointUsers;
 	private int likes;
+	private boolean isJoinCourse;
 
 	public int getLikes() {
 		return likes;
@@ -143,6 +144,12 @@ public class Course extends Group {
 	}
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+	public boolean isJoinCourse() {
+		return isJoinCourse;
+	}
+	public void setJoinCourse(boolean isJoinCourse) {
+		this.isJoinCourse = isJoinCourse;
 	}
 	public boolean isMyRunningCourse(){
 		return this.getLeader().getId().equals(SmartUtil.getCurrentUser().getId());

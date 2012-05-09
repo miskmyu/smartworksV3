@@ -10,6 +10,7 @@ public class EventInstanceInfo extends WorkInstanceInfo {
 	private int 			views;
 	private String			briefContent;
 	private String			content;
+	private String			place;
 	private CommunityInfo[]	relatedUsers;
 	private LocalDate		start;
 	private LocalDate		end;
@@ -31,6 +32,12 @@ public class EventInstanceInfo extends WorkInstanceInfo {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place = place;
 	}
 	public CommunityInfo[] getRelatedUsers() {
 		return relatedUsers;

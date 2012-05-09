@@ -29,7 +29,7 @@
 	%>
 				<li>
 					<a comName="<%=comName%>" comId="<%=comId %>" class="js_select_community">
-						<img src="<%=picName%>" class="profile_size_s"><%=comName%></a>
+						<img src="<%=picName%>" class="profile_size_s"><%=comName%> (<%=comId%>)</a>
 				</li>
 	<%
 		}
