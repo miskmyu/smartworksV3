@@ -374,6 +374,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							mailInstance.setSize(tmp.getSize());
 							mailInstance.setUnread(tmp.getUnread());
 							mailInstance.setPriority(tmp.getPriority());
+							mailInstance.setMultipart(tmp.isMultipart());
 							instanceInfos[i] = mailInstance;
 						}
 					} else {
@@ -389,6 +390,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							mailInstance.setSize(tmp.getSize());
 							mailInstance.setUnread(tmp.getUnread());
 							mailInstance.setPriority(tmp.getPriority());
+							mailInstance.setMultipart(tmp.isMultipart());
 							instanceInfos[i-startIdx] = mailInstance;
 							
 						}

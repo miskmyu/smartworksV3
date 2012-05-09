@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.claros.chat.controllers.TrafficController;
-import org.claros.chat.threads.ChatListener;
-import org.claros.chat.threads.ChatSender;
+//import org.claros.chat.controllers.TrafficController;
+//import org.claros.chat.threads.ChatListener;
+//import org.claros.chat.threads.ChatSender;
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
@@ -107,41 +107,41 @@ public class LogoutService extends HttpServlet {
 	 * @param request
 	 */
 	public static void logoutChat(HttpSession sess) {
-		if (sess != null) {
-			String user = null;
-			try {
-				XMPPConnection conn = (XMPPConnection)sess.getAttribute("conn");
-				if (conn != null) {
-					user = conn.getUser();
-					conn.disconnect();
-					sess.setAttribute("conn", null);
-				}
-			} catch (Throwable e) {}
-
-			try {
-				ChatListener listener = TrafficController.getListener(user);
-				if (listener != null) {
-					listener.terminate();
-					if (user != null) {
-						TrafficController.removeListener(user);
-					}
-				}
-			} catch (Throwable e) {}
-			
-			try {
-				ChatSender sender = TrafficController.getSender(user);
-				if (sender != null) {
-					sender.terminate();
-					if (user != null) {
-						TrafficController.removeSender(user);
-					}
-				}
-			} catch (Throwable e) {}
-
-			try {
-//				sess.invalidate();
-			} catch (Throwable e) {}
-		}
+//		if (sess != null) {
+//			String user = null;
+//			try {
+//				XMPPConnection conn = (XMPPConnection)sess.getAttribute("conn");
+//				if (conn != null) {
+//					user = conn.getUser();
+//					conn.disconnect();
+//					sess.setAttribute("conn", null);
+//				}
+//			} catch (Throwable e) {}
+//
+//			try {
+//				ChatListener listener = TrafficController.getListener(user);
+//				if (listener != null) {
+//					listener.terminate();
+//					if (user != null) {
+//						TrafficController.removeListener(user);
+//					}
+//				}
+//			} catch (Throwable e) {}
+//			
+//			try {
+//				ChatSender sender = TrafficController.getSender(user);
+//				if (sender != null) {
+//					sender.terminate();
+//					if (user != null) {
+//						TrafficController.removeSender(user);
+//					}
+//				}
+//			} catch (Throwable e) {}
+//
+//			try {
+////				sess.invalidate();
+//			} catch (Throwable e) {}
+//		}
 	}
 
 	/**
