@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.process.task.model.TskTask"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.info.EventInstanceInfo"%>
 <%@page import="net.smartworks.util.LocalDate"%>
@@ -31,7 +32,7 @@
 	<div class="js_user_instance_list">
 		<jsp:include page="/sera/jsp/content/sera_instances.jsp">
 			<jsp:param value="<%=Instance.TYPE_EVENT %>" name="instanceType"/>
-			<jsp:param value="<%=cUser.getId() %>" name="userId"/>
+			<jsp:param value="<%=TskTask.TASKREFTYPE_EVENT%>" name="userId"/>
 		</jsp:include>
 	</div>
 </div>

@@ -1,3 +1,17 @@
+<%@page import="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl"%>
+<%@page import="javax.mail.Authenticator"%>
+<%@page import="java.io.UnsupportedEncodingException"%>
+<%@page import="javax.mail.MessagingException"%>
+<%@page import="javax.mail.internet.MimeMessage"%>
+<%@page import="javax.mail.Message"%>
+<%@page import="javax.mail.PasswordAuthentication"%>
+<%@page import="javax.mail.Transport"%>
+<%@page import="javax.mail.internet.InternetAddress"%>
+<%@page import="javax.mail.Session"%>
+<%@page import="java.util.Properties"%>
+<%@page import="javax.mail.internet.AddressException"%>
+<%@page import="net.smartworks.server.engine.common.util.PasswordGenerator"%>
+<%@page import="java.util.Random"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDomain"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdDomainCond"%>
@@ -38,7 +52,6 @@
 <%@page import="javax.xml.namespace.QName"%>
 <%@page import="javax.wsdl.Part"%>
 <%@page import="java.util.Set"%>
-<%@page import="javax.wsdl.Message"%>
 <%@page import="javax.wsdl.Output"%>
 <%@page import="javax.wsdl.Input"%>
 <%@page import="javax.wsdl.Operation"%>
@@ -150,11 +163,11 @@
 		out.println(str);
 	} */
 
-	ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+/* 	ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 
 	DepartmentInfo[] departmentInfos = smartworks.getMyChildDepartments();
 
-	System.out.println(departmentInfos);
+	System.out.println(departmentInfos); */
 	//InformationWork infoWork = (InformationWork)smartworks.getWorkById("Maninsoft", "hsshin@maninsoft.co.kr", "pkg_af2c5abbdc694feab78b2706c31f3bde");
 	//Work work = smartworks.getWorkById("Maninsoft", "hsshin@maninsoft.co.kr", "pkg_af2c5abbdc694feab78b2706c31f3bde");
 
@@ -477,6 +490,43 @@
 		}
 	} */
 
+/* 	TskManagerMailAdvisorImpl tskManagerMailAdvisorImpl = (TskManagerMailAdvisorImpl)SmartUtil.getBean("tskManagerMailAdvisorImpl", request);
+
+	PasswordGenerator passwordGenerator = new PasswordGenerator(8);
+	SwoUser[] swoUsers = SwManagerFactory.getInstance().getSwoManager().getUsers(userId, null, null);
+	if(!CommonUtil.isEmpty(swoUsers)) {
+		for(SwoUser swoUser : swoUsers) {
+			String id = swoUser.getId();
+			String password = swoUser.getPassword();
+			String name = swoUser.getName();
+			String[] strings = id.split("@");
+			if(strings.length == 2 && name != null) {
+				StringBuffer stringBuffer = new StringBuffer();
+				stringBuffer.append("<b>" + name + "</b> 님 안녕하세요. <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("SERA Campus를 방문해 주셔서 감사합니다. <br>");
+				stringBuffer.append("저희 세라캠퍼스가 기능을 강화하여, 개편이 되었습니다. <br>");
+				stringBuffer.append("아래의 링크를 클릭하여 SERA Campus 로그인을 하시어, 귀하의 정보 보호를 위하여 계정을 재설정하여 주십시오. <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("<b><a href='http://www.seracampus.com'>http://www.seracampus.com</a></b> <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("로그인 하신 후 메뉴 상단에 위치한 귀하의 아이디 옆에 v 표시를 클릭하시면 [계정설정]이 가능하십니다. <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("귀하의 아이디 : <b>" + id + "</b> <br>");
+				stringBuffer.append("임시 비밀번호 : <b>" + password + "</b> <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("* 또한 회원님께서 저희 ㈜세라인재개발원(전화 번호 : 02-701-0564)에 문의하시면, 신속히 처리해 드리도록 하겠습니다. <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("많은 이용 부탁드리며 귀하께 감사드립니다. <br>");
+				stringBuffer.append("<br>");
+				stringBuffer.append("이 메시지는 SERA와 관련된 서비스 이메일입니다. <br>");
+				stringBuffer.append("일반적인 문의는 SERA홈페이지 고객센터 또는 sera@seracampus.com 혹은 admin@seracampus.com 으로 문의하시기 바랍니다. <br>");
+	
+				String content = stringBuffer.toString();
+				tskManagerMailAdvisorImpl.sendMailByUserInfo(userId, "admin@seracampus.com", id, "SERA Campus 개편에 따른 재인증 관련 안내메일입니다.", content);
+			}
+		}
+	} */
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

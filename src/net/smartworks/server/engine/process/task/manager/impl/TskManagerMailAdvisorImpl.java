@@ -270,11 +270,16 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 		Properties mailProps = new Properties();
 		mailProps.put("mail.smtp.host", mailServerName);
 		mailProps.put("mail.smtp.auth", "true");
-
+		if(mailServerName.equals("smtp.gmail.com")) {
+			mailProps.put("mail.smtp.startls.enable", "true");
+			mailProps.put("mail.transport.protocol", "smtp");
+			mailProps.put("mail.smtp.port", "465");
+			mailProps.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		}
 		Session mailSession = Session.getInstance(mailProps, auth);
 
 		InternetAddress toAddrs = new InternetAddress(to);
-		InternetAddress fromAddr = new InternetAddress(id, "SmartWorks");
+		InternetAddress fromAddr = new InternetAddress(id, "스마트웍스닷넷");
 
 		Message message = new MimeMessage(mailSession);
 		message.setFrom(fromAddr);

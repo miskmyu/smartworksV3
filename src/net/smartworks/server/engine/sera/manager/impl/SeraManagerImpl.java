@@ -335,6 +335,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		buf.append("	coursedetail courseDetail, ");
 		buf.append("	sworggroupmember grpMem ");
 		buf.append("where  ");
+		buf.append("	grp.status = 'O' ");
 		buf.append("	grp.id = courseDetail.courseId ");
 		buf.append("	grp.id = grpMem.groupId ");
 		if (fromDate != null)

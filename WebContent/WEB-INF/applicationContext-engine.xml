@@ -106,5 +106,6 @@
 	<beans:bean id="fdrManager" class="net.smartworks.server.engine.folder.manager.impl.FdrManagerImpl"/>
 	<beans:bean id="opinionManager" class="net.smartworks.server.engine.opinion.manager.impl.OpinionManagerImpl"/>
 	<beans:bean id="likeManager" class="net.smartworks.server.engine.like.manager.impl.LikeManagerImpl"/>
+	<beans:bean id="tskManagerMailAdvisorImpl" class="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl"/>
 
 </beans:beans>

@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.work.Work"%>
@@ -175,10 +176,24 @@
 											<div class="name">[이벤트. <%=event.getSubject() %>]</div>
 											<div class="event_more_info">
 												<span>이벤트 기간 : <%if(!SmartUtil.isBlankObject(event.getStart())){ %><%=event.getStart().toLocalDateTimeSimpleString() %><%}%></span>
-												<%if(!SmartUtil.isBlankObject(event.getEnd())){ %>
+												<%if(!SmartUtil.isBlankObject(event.getEnd())) {%>
 												<span>~<%=event.getEnd().toLocalDateTimeSimpleString() %></span>
-												<div>이벤트 장소 : </div>
-											</div><%} %>
+												<%}%>
+												<div>이벤트 장소 : <%=event.getPlace() %></div>
+												<div>이벤트 참여자 :
+												<%
+													CommunityInfo[] communityInfos = event.getRelatedUsers();
+													if(communityInfos != null) {
+														for(int j=0; j<communityInfos.length; j++) {
+															CommunityInfo communityInfo = communityInfos[j];
+															out.print(communityInfo.getName());
+															if(j != communityInfos.length-1)
+																out.print(", ");
+														}
+													}
+												%>
+												</div>
+											</div>
 										</div>
 										<div class="text js_brief_content"><%=event.getBriefContent() %></div>
 										<div class="text" style="display:none"><%=event.getContent() %></div>

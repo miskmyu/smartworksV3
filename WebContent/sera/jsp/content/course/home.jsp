@@ -104,11 +104,11 @@
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu">
-				<li class="<%if(!cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
+				<li class="<%if(!cUser.isAnonymusUser() && course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스 게시판</a></li>
-				<li ><a href="" class="js_create_team">팀활동</a></li>
-				<li class="<%if(cUser.isAnonymusUser()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
+				<li><a href="" class="js_create_team">팀활동</a></li>
+				<li class="<%if(cUser.isAnonymusUser() || !course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
@@ -149,7 +149,7 @@
 <!-- Course Section -->
 <div class="course_section js_course_content" courseId="<%=courseId%>">
 	<%
-	if(cUser.isAnonymusUser()){
+	if(cUser.isAnonymusUser() || !course.isJoinCourse()) {
 	%>
 		<jsp:include page="/sera/jsp/content/course/detail/general.jsp">
 			<jsp:param value="<%=courseId %>" name="courseId"/>
