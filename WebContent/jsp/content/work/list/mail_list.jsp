@@ -114,7 +114,7 @@
 		<ul class="portlet_r" style="display: block;">
 
 			<!-- 타이틀 -->
-			<div class="body_titl" style="overflow: inherit">
+			<div class="body_titl">
 				<div class="body_titl_area ti_mail title">
 					<div class="title myspace_h">받은 메일함
 						<span class="t_mail"><span class="t_s11">안읽음</span><span class="new_mail">7</span><span class="bar"> / </span>255</span><span class=" t_s11"> 통</span>

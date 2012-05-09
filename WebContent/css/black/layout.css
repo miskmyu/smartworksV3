@@ -127,7 +127,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 /*global Menu */
 .global_menu {position:absolute; right:10px; top:11px;  font-family:'돋움',Dotum; font-size: 11px; color:#c5c5c5;}
 .global_menu div { float:left; margin-left:8px;}
-.global_menu .pop {border:1px solid #acacac; border-top:none; background-color:#414041; position:absolute; top:23px; right:0; padding:8px; z-index:39;}
+.global_menu .pop {border:1px solid #acacac; border-top:none; background-color:#414041; position:absolute; top:23px; right:0; padding:4px 8px; width:66px; z-index:39;}
 .global_menu .pop_admin {position:absolute; top:23px; right:0; z-index:38;}
 
 /*Personal Info*/
@@ -576,7 +576,7 @@ td.pic{width:85px}
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e;}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
-.icon_in_down a {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:5px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_down {background: url("../../images/nav_img.png") no-repeat -114px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
 .icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}

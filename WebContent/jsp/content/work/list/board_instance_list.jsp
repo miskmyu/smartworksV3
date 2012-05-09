@@ -71,17 +71,17 @@
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
-			 		<%
+			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
-					%>
+						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-					<fmt:message key='common.title.last_modified_date' /> <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
-						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %>
+					<span class="<fmt:message key='common.title.last_modified_date' /> <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>
@@ -140,17 +140,18 @@
 			</th>
 			<th class="r_line">
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
-			 		<%
+			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} 
-					%>
+						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-					<fmt:message key='common.title.last_modified_date' /> <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
-						if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %>
+					<fmt:message key='common.title.last_modified_date' />
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>
