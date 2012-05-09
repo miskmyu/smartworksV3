@@ -50,7 +50,7 @@
 	};
 </script>
 
-<body onload="javascript:startPopup()">
+<body>
 	<div id="wrap" class="main_bg">
 		<div id="sera_header">
 			<jsp:include page="/sera/jsp/header.jsp" />
