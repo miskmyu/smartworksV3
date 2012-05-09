@@ -103,119 +103,60 @@
 	String folderId = SmartUtil.getSpaceIdFromContentContext(cid);
 	User cUser = SmartUtil.getCurrentUser();
 	MailWork work = new MailWork(folderId, MailFolder.getFolderNameById(folderId), "");
-
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet">
-	<div class="portlet_t">
-		<div class="portlet_tl"></div>
-	</div>
+	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 
 			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_iworks title"><%=work.getName()%></div>
-
-				<!-- 우측 버튼 -->
-				<div class="txt_btn">
-
-					<!-- 수정하기 -->
-					<div class="fr ml5">
-					<%
-					if (cUser.getUserLevel() == User.USER_LEVEL_AMINISTRATOR) {
-					%>
-						<span class="btn_gray"> 
-							<span class="txt_btn_start"></span> 
-							<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span>
-							<span class="txt_btn_end"></span>
-						</span>
-					<%
-					}
-					%>
+			<div class="body_titl" style="overflow: inherit">
+				<div class="body_titl_area ti_mail title">
+					<div class="title myspace_h">받은 메일함
+						<span class="t_mail"><span class="t_s11">안읽음</span><span class="new_mail">7</span><span class="bar"> / </span>255</span><span class=" t_s11"> 통</span>
 					</div>
-					<!-- 수정하기 //-->
-
-<%-- 					<!-- 최종수정자 -->
-					<div class="fr">
-						<img class="pho_user" title="<fmt:message key="common.title.last_modifier" />"
-							src="<%=work.getLastModifier().getMinPicture()%>"> 
-						<span class="t_name"><%=work.getLastModifier().getLongName()%></span>
-						<span class="t_date"><%=work.getLastModifiedDate().toLocalString()%></span>
-					</div>
-					<!-- 최종수정자 //-->
- --%>
 				</div>
-				<!-- 우측 버튼 //-->
 
-				<div class="solid_line"></div>
+				<!-- 메일 검색 -->
+				<div class="mail_srch">
+					<div class="srch_wh srch_wsize_mail">
+						<input id="" class="nav_input" type="text" href="" placeholder="메일 검색" title="메일 검색">
+						<button onclick="" title="검색"></button>
+					</div>
+				</div>
+				<!-- 메일 검색//-->
+
+
+				<div class="solid_line cb"></div>
 			</div>
-			<!-- 타이틀 -->
+			<!-- 타이틀 //-->
 
-
-			<!-- 목록영역  -->
+			<!-- 컨텐츠 -->
 			<div class="contents_space">
+				<div class="buttonSet">
+					<button>전체선택<span class="icon_in_down"><a href=""></a></span></button>
+					<button><span class="icon_mail_delet"></span>삭제</button>
+					<button>스팸신고</button>
+					<button>답장</button>
+					<button>전달</button>
+					<button>이동<span class="icon_in_down"><a href=""> </a></span></button>
+					<button class="fr t_bold"><span class="icon_mail_write"></span>새 메일쓰기</button>
+				</div>
 
-				<!-- 목록보기 -->
-				<div>
-
-					<!-- 목록보기 타이틀-->
-					<div class="list_title_space js_work_list_title">
-						<div class="txt_btn">
-							<div class="title"><fmt:message key="common.title.instance_list" /></div>
-							<form name="frmSearchInstance" class="po_left">
-								<div class="srch_wh srch_wsize">
-									<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
- 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam();return false;"></button>
-								</div>
-							</form>
-
-							<div class="po_left">
-								<form class="form_space" name="frmIworkFilterName">
-									<select name="selFilterName" onchange="$('#search_filter').slideUp(500).html('');$('a.js_search_filter').show();selectListParam();
-									return false;">
-										<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" selected><fmt:message key='filter.name.all_instances' /></option>
-										<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"><fmt:message key='filter.name.my_instances' /></option>
-										<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"><fmt:message key='filter.name.recent_instances' /></option>
-										<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"><fmt:message key='filter.name.my_recent_instances' /></option>
-										<%
-										SearchFilterInfo[] filters = null;//work.getSearchFilters();
-										if (filters != null) {
-											for (SearchFilterInfo filter : filters) {
-										%>
-											<option value="<%=filter.getId()%>"><%=filter.getName()%></option>
-										<%
-											}
-										}
-										%>
-									</select>
-								</form>
-							</div>
-							<a href="search_filter.sw?workId=<%=work.getId()%>" class="js_search_filter">
-								<div class="po_left"><fmt:message key='filter.button.search_filter' /></div>
-							</a>
-						</div>
-
+				<!-- 메일 리스트-->
+				<div class="list_contents mail_list_section">
+					<div id='mail_list_page' >
+						<jsp:include page="/jsp/content/work/list/mail_instance_list.jsp"></jsp:include>
 					</div>
-					<!-- 목록보기 타이틀-->
+				</div>
+				<!-- 메일 리스트//-->
+			</div>
+			<!-- 컨텐츠 //-->
 
-					<!-- 상세필터 -->
-					<div id="search_filter" class="filter_section js_new_work_form"></div>
-					<!-- 상세필터 -->
-
-					<!-- 목록 테이블 -->
-					<div class="list_contents">
-						<div id='mail_list_page' >
-							<jsp:include page="/jsp/content/work/list/mail_instance_list.jsp"></jsp:include>
-						</div>
-
-						<!-- 목록 테이블 //-->
-
-					</div>
-					<!-- 목록영역 // -->
 		</ul>
 	</div>
 	<div class="portlet_b" style="display: block;"></div>

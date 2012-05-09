@@ -42,62 +42,71 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
+
+
+
 <!-- 목록 테이블 -->
 <table>
-	<%
-	SortingField sortedField = null;
-	int pageSize = 0, totalPages = 0, currentPage = 0;
-	if (instanceList != null
-			&& (instanceList.getInstanceDatas() != null)
-			&& (work != null)) {
-		int type = instanceList.getType();
-		sortedField = instanceList.getSortedField();
-		if(sortedField==null) sortedField = new SortingField();
-		pageSize = instanceList.getPageSize();
-		totalPages = instanceList.getTotalPages();
-		currentPage = instanceList.getCurrentPage();
-		currentPage = 1;
-		FormField[] displayFields = work.getDisplayFields();
-		MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
-	%>
-	<tr class="tit_bg">
+	<colgroup>
+		<col width="37px" />
+		<col width="24px" />
+		<col width="26px" />
+		<col width="30px" />
+		<col width="137px" />
+		<col width="" />
+		<col width="200px" />
+	</colgroup>
+	<tbody>
 		<%
-			FormField[] fields = work.getDisplayFields();
-			if (fields != null) {
-				for (FormField field : fields) {
-			%>
- 		<th class="r_line"><a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%> <%if(sortedField.getFieldId().equals(field.getId())){
- 				if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %></a>
-		</th>
-<%-- 		<th class="r_line"><%=field.getName()%> <img class="icon_btn_arrb">
-		</th>
- --%>			<%
-				}
-			}
-			%>
-	</tr>
-
-
-		<%
-		for (MailInstanceInfo instanceInfo : instanceInfos) {
-			UserInfo owner = instanceInfo.getOwner();
-			UserInfo lastModifier = instanceInfo.getLastModifier();
-			cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
-			wid = instanceInfo.getWorkSpace().getId();
-			String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
+		SortingField sortedField = null;
+		int pageSize = 0, totalPages = 0, currentPage = 0;
+		if (instanceList != null && (instanceList.getInstanceDatas() != null) && (work != null)) {
+			int type = instanceList.getType();
+			sortedField = instanceList.getSortedField();
+			if(sortedField==null) sortedField = new SortingField();
+			pageSize = instanceList.getPageSize();
+			totalPages = instanceList.getTotalPages();
+			currentPage = instanceList.getCurrentPage();
+			currentPage = 1;
+			FormField[] displayFields = work.getDisplayFields();
+			MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 		%>
-	<tr>
-		<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
-		<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
-		<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocaleString())%></a></td>
-		<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSize())%>B</a></td>
-		<td><a href="<%=target%>" class="js_content"></a></td>
-	</tr>
-	<%
+
+			<tr class="tit_bg">
+				<th><input type="checkbox" /></th>
+				<th><div class="icon_important"></div></th>
+				<th><div class="icon_mail_read"></div></th>
+				<th class="r_line"><div class="icon_file checked"></div></th>
+				<th class="r_line">보낸이</th>
+				<th class="r_line">제 목</th>
+				<th>날 짜</th>
+			</tr>
+
+
+			<%
+			for (MailInstanceInfo instanceInfo : instanceInfos) {
+				UserInfo owner = instanceInfo.getOwner();
+				UserInfo lastModifier = instanceInfo.getLastModifier();
+				cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
+				wid = instanceInfo.getWorkSpace().getId();
+				String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
+			%>
+				<tr class="<%if(instanceInfo.isUnread()){%>not_read<%}%>">
+					<td class="tc"><input type="checkbox" /></td>
+					<td><div class="<%=instanceInfo.getPriority()%><%if(instanceInfo.getPriority()>0){ %>icon_important<%}%>"></div></td>
+					<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
+					<td><div class="<%if(!SmartUtil.isBlankObject(instanceInfo.getAttachments())){ %>icon_file<%}%>"></div></td>
+					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
+					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
+					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocaleString())%></a></td>
+				</tr>
+		<%
+			}
 		}
-	}
-	%>
+		%>
+	</tbody>
 </table>
+
 <form name="frmSortingField">
 <%-- 	<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>" >
 	<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>" >
