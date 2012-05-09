@@ -555,7 +555,7 @@ td.pic{width:85px}
 
 /* Mail */
 .buttonSet {margin:5px 0 7px}
-.buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 3px 2px; text-decoration: none !important; vertical-align: middle}
+.buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
 .mail_list_section .not_read {color:#0459C1}
 .mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
 .mail_list_section .not_read .icon_important,
@@ -564,13 +564,22 @@ td.pic{width:85px}
 .mail_list_section .not_read .icon_mail_read,
 .tit_bg th .icon_mail_read {background: url("../../images/nav_img.png") no-repeat -115px -565px; width:15px; height:15px}
 .mail_list_section .icon_file {background: url("../../images/nav_img.png") no-repeat -115px -471px; width:16px; height:17px}
-
+.mail_list_section textarea { width:99.5%; height:360px; overflow-y: auto}
+.mail_list_section .view_title {border-bottom: 1px solid #E8E8E8; color: #454545; overflow: hidden; position: relative; width: auto}
+.mail_list_section .view_title h1 {color: #333333; font-size: 13px; font-weight: bold; line-height: 18px; margin: 10px 0 5px 0; overflow: hidden; float:left; padding:0; line-height:18px}
+.mail_list_section .view_title dl { clear:both; font-size:12px; color:#777777; margin:0 0 10px; overflow:hidden}
+.mail_list_section .view_title dt, .mail_list_section .view_title dd { float:left}
+.mail_list_section .view_title dt { clear:both}
+.mail_list_section .view_title dd { margin:0 0 0 5px}
+.mail_list_section .read_frame { margin:10px}
+	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e;}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
 .icon_in_down a {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:5px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
 .icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
+.icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
 
 /* Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute;}
@@ -643,6 +652,7 @@ td.form_col .btn_x {display:none;}
 .t_name {color:#23579e; position: relative;}
 .t_woname {color:#23579e; font-weight:bold;}
 .t_size11 {font-size:11px}
+.t_size12 {font-size:12px}
 .t_action {color:#23579e; font-size:10px; text-decoration:underline;}
 .t_action_disabled {color:#454545 !important; text-decoration:none !important;}
 .t_date, .t_text_s11, .t_s11,
@@ -650,7 +660,7 @@ td.form_col .btn_x {display:none;}
 .t_white {font-size:12px; font-weight:normal;}
 .t_nav {font-size:14px; font-weight:bold; color:#FFF}
 .t_nowork { text-align:center; padding:8px 0 !important; color:#b2b2b2}
-.t_mail { font-size:12px; color:#333333}
+.t_mail { font-size:11px; color:#333333}
 .new_mail {color:#f38f1b}
 .bar { font-weight:normal; color:#999999}
 .arr {font-size:10px; margin-right:2px;}
@@ -659,7 +669,7 @@ td.form_col .btn_x {display:none;}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}
-.table_line { border-top:2px solid #e5e5e5; width:100%;}
+.table_line { border-top:2px solid #7f7f7f; width:100%;}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%;}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%;}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px;}
