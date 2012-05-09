@@ -1543,7 +1543,7 @@ public class SeraServiceImpl implements ISeraService {
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 			String[] courseIds = seraMgr.getCourseIdArrayByCondition(courseType, userId, fromDate, maxList, 0);
-			
+
 			SwoGroupCond groupCond = new SwoGroupCond();
 			groupCond.setGroupIdIns(courseIds);
 			
