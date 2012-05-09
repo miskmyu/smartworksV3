@@ -1617,7 +1617,7 @@ public class SeraServiceImpl implements ISeraService {
 	private Mentor getUserByUserId(String userId) throws Exception {
 		if (CommonUtil.isEmpty(userId))
 			return null;
-		SwoUserExtend userExtend = SwManagerFactory.getInstance().getSwoManager().getUserExtend(userId, userId, true);
+		SwoUserExtend userExtend = SwManagerFactory.getInstance().getSwoManager().getUserExtend(userId, userId, false);
 		return getUserBySwoUserExtend(null, userExtend);
 	}
 	@Override

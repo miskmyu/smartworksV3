@@ -201,7 +201,7 @@
 				<td>
 					<div class="form_label">비밀번호</div>
 					<div class="form_value">
-						<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" value="<%=cUser.getPassword() %>" />
+						<input name="txtPassword" type="password" class="fieldline fl" style="width: 100px" value="<%=seraUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>
@@ -209,7 +209,7 @@
 				<td>
 					<div class="form_label">비밀번호 확인</div>
 					<div class="form_value">
-						<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" value="<%=cUser.getPassword() %>" />
+						<input name="txtConfirmPassword" type="password" class="fieldline" style="width: 100px" value="<%=seraUser.getPassword() %>" />
 					</div>
 				</td>
 			</tr>

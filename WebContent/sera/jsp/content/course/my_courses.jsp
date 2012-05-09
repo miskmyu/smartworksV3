@@ -27,10 +27,11 @@
 	<div class="category_list js_course_list">
 		<%
 		if(courseList.getRunnings()>0){
-			for(int i=0; i<courseList.getRunningCourses().length; i++){
+			CourseInfo[] runningCourses = courseList.getRunningCourses();
+			for(int i=0; i<runningCourses.length; i++){
 				if (i == CourseList.MAX_COURSE_LIST)
 					break;
-				CourseInfo course = courseList.getRunningCourses()[i];
+				CourseInfo course = runningCourses[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 				String achievedPoint =course.getAchievedRatio() + "%";
 		%>
@@ -60,7 +61,7 @@
 		<%
 			}
 		}
-		if(courseList.getRunningCourses().length==CourseList.MAX_COURSE_LIST+1){
+		if(courseList.getRunningCourses() != null && courseList.getRunningCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
 			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_RUNNING_COURSE%>" userId="<%=cUser.getId() %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST-1].getId()%>">
@@ -85,12 +86,13 @@
 	<div class="category_list js_course_list">
 		<%
 		if(courseList.getAttendings()>0){
-			for(int i=0; i<courseList.getAttendingCourses().length; i++){
+			CourseInfo[] attendingCourses = courseList.getAttendingCourses();
+			for(int i=0; i<attendingCourses.length; i++){
 				if (i == CourseList.MAX_COURSE_LIST)
 					break;
-				CourseInfo course = courseList.getAttendingCourses()[i];
+				CourseInfo course = attendingCourses[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
-				String achievedPoint =course.getAchievedRatio() + "%";
+				String achievedPoint = course.getAchievedRatio() + "%";
 		%>
 				<ul class="category_box <%=endClass%>">
 					<li class="photo">
@@ -118,7 +120,7 @@
 		<%
 			}
 		}
-		if(courseList.getAttendingCourses().length==CourseList.MAX_COURSE_LIST+1){
+		if(courseList.getAttendingCourses() != null && courseList.getAttendingCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
 			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_ATTENDING_COURSE%>" userId="<%=cUser.getId() %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST-1].getId()%>">
