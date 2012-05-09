@@ -52,9 +52,9 @@
 		<col width="24px" />
 		<col width="26px" />
 		<col width="30px" />
-		<col width="137px" />
-		<col width="" />
 		<col width="200px" />
+		<col width="" />
+		<col width="160px" />
 	</colgroup>
 	<tbody>
 		<%
@@ -91,14 +91,14 @@
 				wid = instanceInfo.getWorkSpace().getId();
 				String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
 			%>
-				<tr class="<%if(instanceInfo.isUnread()){%>not_read<%}%>">
+				<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
 					<td class="tc"><input type="checkbox" /></td>
 					<td><div class="<%if(instanceInfo.getPriority()>0){ %>icon_important<%}%>"><%=instanceInfo.getPriority()%></div></td>
 					<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
 					<td><div class="<%if(!SmartUtil.isBlankObject(instanceInfo.getAttachments())){ %>icon_file<%}%>"></div></td>
 					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
-					<td><a href="<%=target%>" class="hr js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
+					<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
 				</tr>
 		<%
 			}
