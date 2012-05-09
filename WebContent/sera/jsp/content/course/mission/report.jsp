@@ -42,6 +42,12 @@
 				else if(item.hasClass('half'))
 					starPoint = starPoint + 0.5;
 			}
+			
+			if(starPoint==0){
+				smartPop.showInfo(smartPop.WARN, '미션별점을 선택하셔야 미션을 완료할 수 있습니다.', function(){});
+				return false;
+			}
+
 			var paramsJson = {};
 			paramsJson['courseId'] = missionReport.attr('courseId');
 			paramsJson['missionId'] = missionReport.attr('missionId');
