@@ -22,8 +22,14 @@
 	<!-- Aside Block1 -->
 	<div class="aside_block">
 		<div class="header">
-			<a href="myCourses.sw" class="js_sera_content"><div class="icon_as_mycourse fl">내 코스 <span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span></div></a>
-			<div class="icon_as_more"><a href="myCourses.sw" class="mt10 js_sera_content"> </a></div>
+			
+			<span class="icon_as_mycourse">
+				<a href="myCourses.sw" class="js_sera_content">
+				내 코스 <span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span>
+				<span class="icon_as_more"></span>
+				</a>
+			</span>
+			
 		</div>
 		<div class="content">
 			<dl>
@@ -105,8 +111,13 @@
 	<!-- Aside Block3 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<a href="socialFriend.sw" class="js_sera_content"><div class=" icon_as_friend fl">친 구 (<%=friendList.getTotalFriends() %>)</div></a>
-			<div class="icon_as_more"><a href="socialFriend.sw" class="mt10 js_sera_content"> </a></div>
+			<span class=" icon_as_friend">
+				<a href="socialFriend.sw" class="js_sera_content">
+					친 구 (<%=friendList.getTotalFriends() %>)
+					<span class="icon_as_more"></span>
+				</a>
+			</div>
+			
 		</div>
 		<div class="list">
 			<dl>

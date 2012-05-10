@@ -285,13 +285,13 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
-.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:70%}
-.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -166px -237px; height:25px; padding-left:30px; width:70%}
-.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -166px -276px; height:25px; padding-left:30px; width:70%}
+.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
+.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -545px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
+.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
 .icon_as_srtrend {background: url("../images/icon.png") no-repeat scroll -166px -310px; height:25px; padding-left:30px; width:70%}
 .icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; width:70%}
 
-.icon_as_more a {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right}
+.icon_as_more {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right; margin-top: 5px}
 .icon_as_more a:hover { background-position:-166px -357px}
 .icon_mn_more a {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
 .icon_mn_more a:hover { background-position:-221px -724px}
@@ -392,8 +392,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Aside */
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
-.aside_block .header { font-size:14px; color:#333333; line-height:27px; font-weight:bold}
-.aside_block .content { clear:both; padding:10px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
+.aside_block .header { font-size:14px; color:#333333; line-height:20px; font-weight:bold}
+.aside_block .content { clear:both; padding:8px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
 .aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
