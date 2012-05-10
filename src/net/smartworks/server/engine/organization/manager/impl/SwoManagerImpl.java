@@ -2965,4 +2965,76 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		}
 	}
 
+	public SwoUserExtend[] getUserExtends(String[] idIns, String lastName, Date lastModifiedTime, String orderKey, boolean isAsc) throws SwoException {
+
+		String order = isAsc ? "asc" : "desc";
+
+		StringBuffer queryBuffer = new StringBuffer();
+
+		queryBuffer.append(" select usr.id, usr.name, usr.nickName ");
+		queryBuffer.append(" 		, usr.pos as position ");
+		queryBuffer.append(" 		, usr.roleId as roleId ");
+		queryBuffer.append(" 		, usr.picture ");
+		queryBuffer.append(" 		, dept.id as deptId ");
+		queryBuffer.append(" 		, dept.name as deptName ");
+		queryBuffer.append(" 		, dept.description as deptDesc ");
+		queryBuffer.append("  from sworguser usr, sworgdept dept ");
+		queryBuffer.append(" where usr.deptId = dept.id ");
+		if(!CommonUtil.isEmpty(idIns)) {
+			if (idIns != null && idIns.length != 0) {
+				queryBuffer.append(" and usr.id in (");
+				for (int i=0; i<idIns.length; i++) {
+					if (i != 0)
+						queryBuffer.append(", ");
+					queryBuffer.append(":idIn").append(i);
+				}
+				queryBuffer.append(")");
+			}
+		}
+		if(!CommonUtil.isEmpty(lastName)) {
+			queryBuffer.append(" and usr.name >= '" + lastName + "' ");
+			queryBuffer.append(" and usr.id not in (select id from sworguser where name = '" + lastName + "' and modifiedTime >= '" + lastModifiedTime + "' )");
+		}
+		queryBuffer.append(" order by ").append(orderKey).append(" ").append(order).append(", usr.modifiedTime desc");
+
+		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
+
+		if(!CommonUtil.isEmpty(idIns)) {
+			if (idIns != null && idIns.length != 0) {
+				for (int i=0; i<idIns.length; i++) {
+					query.setString("idIn"+i, idIns[i]);
+				}
+			}
+		}
+
+		List list = query.list();
+		if (list == null || list.isEmpty())
+			return null;
+		List objList = new ArrayList();
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			Object[] fields = (Object[]) itr.next();
+			SwoUserExtend obj = new SwoUserExtend();
+			int j = 0;
+			obj.setId((String)fields[j++]);    
+			obj.setName((String)fields[j++]);
+			obj.setNickName((String)fields[j++]);
+			obj.setPosition((String)fields[j++]);
+			obj.setAuthId((String)fields[j++]);
+			String picture = CommonUtil.toNotNull((String)fields[j++]);
+			if(!picture.equals("")) {
+				String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+				String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+				obj.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+				obj.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			}
+			obj.setDepartmentId((String)fields[j++]);
+			obj.setDepartmentName((String)fields[j++]);
+			obj.setDepartmentDesc((String)fields[j++]);
+			objList.add(obj);
+		}
+		list = objList;
+		SwoUserExtend[] objs = new SwoUserExtend[list.size()];
+		list.toArray(objs);
+		return objs;
+	}
 }
