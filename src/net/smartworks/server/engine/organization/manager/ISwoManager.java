@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.organization.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import net.smartworks.server.engine.organization.exception.SwoException;
@@ -24,7 +25,6 @@ import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
-import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoTeam;
 import net.smartworks.server.engine.organization.model.SwoTeamCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
@@ -199,5 +199,7 @@ public interface ISwoManager {
 	public void createGroupMember(String user, String groupId, String userId, String joinType) throws SwoException;
 
 	public void setGroupMember(String user, String groupId, String userId) throws SwoException;
+
+	public SwoUserExtend[] getUserExtends(String[] idIns, String lastName, Date lastModifiedTime, String orderKey, boolean isAsc) throws SwoException;
 
 }
