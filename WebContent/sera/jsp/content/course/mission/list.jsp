@@ -51,7 +51,7 @@
 					LocalDate closeDate = mission.getCloseDate();
 					String remainDays = (LocalDate.getDiffDate(closeDate, now)>0) ? LocalDate.getDiffDate(closeDate, now) + "일 지남" : LocalDate.getDiffDate(now, closeDate)+1 + "일 남음";
 					%>
-					<span class="t_redb"><%=remainDays%></span> <span class="t_refe ml5"><%=now.toLocalDateTimeSimpleString() %></span>
+					<span class="t_redb"><%=remainDays%></span> <span class="t_refe ml5"><%=closeDate.toLocalDateTimeSimpleString() %></span>
 				</div>
 			</dt>
 			<dd style="display: block" class="js_mission_content_item">

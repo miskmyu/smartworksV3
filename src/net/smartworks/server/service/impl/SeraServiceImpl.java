@@ -324,7 +324,7 @@ public class SeraServiceImpl implements ISeraService {
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
 		String courseId = swoGroup.getId();
-		CourseTeamCond courseTeamCond = new CourseTeamCond();
+		/*CourseTeamCond courseTeamCond = new CourseTeamCond();
 		courseTeamCond.setCourseId(courseId);
 		CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
 		Team team = null;
@@ -385,7 +385,7 @@ public class SeraServiceImpl implements ISeraService {
 			team.setMembers(seraUserInfos);
 		}
 
-		course.setTeam(team);
+		course.setTeam(team);*/
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
 
 		boolean isJoinCourse = false;
@@ -1766,6 +1766,7 @@ public class SeraServiceImpl implements ISeraService {
 						goal = seraUserDetail.getGoal();
 					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
+					member.setNickName(swoUserExtend.getNickName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -1865,6 +1866,7 @@ public class SeraServiceImpl implements ISeraService {
 						goal = seraUserDetail.getGoal();
 					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
+					member.setNickName(swoUserExtend.getNickName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -2360,8 +2362,10 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			if (resultMap.size() ==  0)
 				return null;
-			Map<Long, InstanceInfo> sortMap = new TreeMap<Long, InstanceInfo>(resultMap);
-			
+
+			Map<Long, InstanceInfo> sortMap = new TreeMap<Long, InstanceInfo>(Collections.reverseOrder());
+			sortMap.putAll(resultMap);
+
 			List<InstanceInfo> returnInstanceInfoList = new ArrayList<InstanceInfo>();
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int i = 0;
@@ -4863,6 +4867,7 @@ public class SeraServiceImpl implements ISeraService {
 			SeraUserInfo member = new SeraUserInfo();
 			member.setId(swoUserExtend.getId());
 			member.setName(swoUserExtend.getName());
+			member.setNickName(swoUserExtend.getNickName());
 			member.setPosition(swoUserExtend.getPosition());
 			member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 			member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -5048,6 +5053,7 @@ public class SeraServiceImpl implements ISeraService {
 				UserInfo member = new SeraUserInfo();
 				member.setId(swoUserExtend.getId());
 				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -5331,6 +5337,7 @@ public class SeraServiceImpl implements ISeraService {
 				String id = swoUserExtend.getId();
 				member.setId(id);
 				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());

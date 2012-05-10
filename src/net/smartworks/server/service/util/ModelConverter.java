@@ -1720,6 +1720,7 @@ public class ModelConverter {
 		
 		userInfo.setId(userExtend.getId());
 		userInfo.setName(userExtend.getName());
+		userInfo.setNickName(userExtend.getNickName());
 		userInfo.setDepartment(new DepartmentInfo(userExtend.getDepartmentId(), userExtend.getDepartmentName(), userExtend.getDepartmentDesc()));
 		userInfo.setSmallPictureName(userExtend.getSmallPictureName());
 		userInfo.setBigPictureName(userExtend.getBigPictureName());
