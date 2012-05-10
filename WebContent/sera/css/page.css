@@ -192,6 +192,8 @@ a.b_next:hover { background-position:-30px -535px}
 
 button {border: 1px solid #A1A1A1; border-radius: 4px; color: #777777; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 4px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px; height:19px; line-height:12px; background-image: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background-image: -moz-linear-gradient(center top,white,#EBEBEB); background-image: -o-linear-gradient(top,white,#EBEBEB)}
 button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; background-image: none !important}
+.buttonSet {margin: 5px 0 7px}
+.buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle; font-size:12px; height:auto}
 
 /* Text Btn */
 .txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal;}
@@ -259,6 +261,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_mscalendar.current {background-position:-585px -412px}
 .icon_mslist {background: url("../images/icon.png") no-repeat scroll -585px -493px; height:13px; display:block; padding:0 0 0 18px; margin:0 0 0 4px; float:right}
 .icon_mslist.current {background-position:-585px -470px}
+.icon_in_down {background: url("../images/icon.png") no-repeat scroll -586px -521px transparent; display: inline-block; height: 7px; margin: 0 0 0 5px; width: 7px}
+.icon_txt_delet {background: url("../../images/nav_img.png") no-repeat scroll -115px -453px transparent; display: inline-block; height: 8px; margin: 0 3px 0 0; width: 7px;}
 
 /* Icon in Mypage */
 .icon_memo a {background: url("../images/icon.png") no-repeat scroll -18px -75px; width:34px; height:28px; display:block}
@@ -413,6 +417,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .srch { border:3px solid #8d8d8d; width:160px; float:left; background-color:#FFF}
 .srch input[type="text"] { width:130px; float:left; margin:2px}
 
+/*Search-white */
+.srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px;}
+.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px;}
+.srch_wh button, .srch_wh .srch_icon, .mail_srch  button {background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
+	width:13px; right:2px; padding:0; position:relative; float: right; top:1px}
+	
 /* Course */
 /* Course Define */
 .course_df_section { position:relative; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 25px 0; border:1px solid #cccccc}
@@ -559,6 +569,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 #content_list_section .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
 #content_list_section .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 11px/14px 'dotum','Helvetica','sans-serif'; height: 180px;  margin: 0 7px 20px 0; padding: 5px; width: 120px}
 #content_list_section .course_list li a {color: #666666; text-decoration: none;}
+#content_list_section table { border-bottom:1px solid #cccccc}
+#content_list_section table .tit_bg {background: url("../../images/bg_thGradient.gif") repeat-x scroll 0 100% transparent}
+#content_list_section table .tit_bg th {border-bottom: 1px solid #CCCCCC; border-top: 2px solid #7F7F7F;}
+#content_list_section table td {padding: 3px 5px}
+#content_list_section table th {text-align: center}
+.r_line {border-right: 1px solid #CCCCCC}
 
 .workshop_list {clear: both; height: auto; width: auto}
 .workshop_list li {border-bottom: 1px dotted #CCCCCC; overflow: hidden; padding: 20px;}
@@ -625,6 +641,24 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_number.calendar {left:24px}
 .icon_number.badge {left:15px}
 .icon_number.event {left:19px}
+
+/* ∆‰¿Ã¬° */
+.paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold;}
+.paginate strong {color:#ed1c24}
+.paginate .num {margin-right:1px; padding: 2px 3px; text-decoration: none; vertical-align: middle;}
+
+.spr { cursor: pointer; display: inline-block; overflow: hidden; vertical-align: middle;}
+.paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -344px transparent; display: inline-block; height: 20px; width:20px; position:relative; left:4px;}
+.paginate a.pre span {background: url("../../images/header_nico.png") no-repeat scroll -20px -344px transparent; display: inline-block; height: 20px; width: 19px; margin-right:11px;}
+.paginate a.next span { background: url("../../images/header_nico.png") no-repeat scroll -45px -344px transparent; display: inline-block; height: 20px; width: 20px; margin-left:11px;}
+.paginate a.next_end span { background: url("../../images/header_nico.png") no-repeat scroll -65px -344px transparent; display: inline-block; height: 20px; width: 19px; position:relative; right:4px;}
+
+.paginate a.pre_end span:hover {background-position: 0 -376px}
+.paginate a.pre span:hover {background-position: -20px -376px}
+.paginate a.next span:hover {background-position: -45px -376px}
+.paginate a.next_end span:hover {background-position: -65px -376px}
+
+.num_box {float:right; margin: -20px 5px 0; position:relative;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
