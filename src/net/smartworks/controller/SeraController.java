@@ -148,10 +148,22 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/setting/mentee.jsp", "");
 	}
 
-	@RequestMapping("/courseSettingTeam")
-	public ModelAndView courseSettingTeam(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/courseTeamManagement")
+	public ModelAndView courseTeamManagement(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/setting/team.jsp", "");
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/management.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamModify")
+	public ModelAndView courseTeamModify(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/modify.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamMembers")
+	public ModelAndView courseTeamMembers(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/members.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionHome")
@@ -590,4 +602,22 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/more_courses_by_user.jsp", "");
 	}
 
+	@RequestMapping(value = "/team_member_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void teamMemberRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.teamMemberRequest(requestBody, request);
+	}
+
+	@RequestMapping(value = "/reply_team_member_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void replyTeamMemberRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.replyTeamMemberRequest(requestBody, request);
+	}
+
+	@RequestMapping(value = "/destroy_team_membership", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void destroyTeamMembership(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.destroyTeamMembership(requestBody, request);
+	}
+	
 }

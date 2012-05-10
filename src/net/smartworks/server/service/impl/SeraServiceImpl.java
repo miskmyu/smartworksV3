@@ -42,6 +42,7 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
@@ -5880,6 +5881,36 @@ public class SeraServiceImpl implements ISeraService {
 	public Team getTeamById(String teamId) throws Exception {
 		// TODO Auto-generated method stub
 		return SeraTest.getTeam();
+	}
+	@Override
+	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return SeraTest.getTeamMemberInformations(teamId, maxList);
+	}
+	@Override
+	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {
+		// TODO Auto-generated method stub
+		return SeraTest.getCourseMenteeInformsByType(type, teamId, lastId, maxList);
+	}
+	@Override
+	public SeraUserInfo[] searchTeamMemberByType(int type, String teamId, String key) throws Exception {
+		// TODO Auto-generated method stub
+		return SeraTest.getCourseMenteeInformsByType(type, teamId, null, 0);
+	}
+	@Override
+	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

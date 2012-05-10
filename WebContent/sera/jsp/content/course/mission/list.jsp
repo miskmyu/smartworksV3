@@ -26,7 +26,7 @@
 			MissionInstanceInfo mission = missions[i];
 %>
 	<!-- 미션 수행 -->
-	<div class="panel_block mt10" style="width: 688px">
+	<div class="panel_block mt10 js_mission_list_item" style="width: 688px" courseId="<%=courseId%>" missionId="<%=mission.getId()%>">
 		<dl class="content_mission">
 			<dt>
 				<!-- title -->

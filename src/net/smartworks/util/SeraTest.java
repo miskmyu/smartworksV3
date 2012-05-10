@@ -7,6 +7,7 @@ import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
@@ -167,6 +168,18 @@ public class SeraTest {
 		menteeInformList.setTotalMentees(43);
 		menteeInformList.setTotalNonMentees(57);
 		return menteeInformList;		
+	}
+	
+	
+	public static MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception{
+		MemberInformList memberInformList = new MemberInformList();
+		memberInformList.setRequesters(SeraTest.getFriendRequestsForMe(null, -1));
+		memberInformList.setMembers(SeraTest.getFriendRequestsForMe(null, -1));
+		memberInformList.setNonMembers(SeraTest.getFriendRequestsForMe(null, -1));
+		memberInformList.setTotalRequesters(31);
+		memberInformList.setTotalMembers(43);
+		memberInformList.setTotalNonMembers(57);
+		return memberInformList;		
 	}
 	
 	

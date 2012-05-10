@@ -49,6 +49,7 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
@@ -567,6 +568,18 @@ public interface ISmartWorks {
 	public abstract Team getMyTeamByCourse(String courseId) throws Exception;
 	
 	public abstract Team getTeamById(String teamId) throws Exception;
+
+	public abstract MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] searchTeamMemberByType(int type, String teamId, String key) throws Exception;
+
+	public abstract void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 
 }

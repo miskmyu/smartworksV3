@@ -43,10 +43,12 @@ $(function() {
 			url = "courseMissionHome.sw";
 		}else if(pos==2){
 			url = "courseBoard.sw";
+		}else if(pos==3){
+			url = "courseTeamManagement.sw";
 		}else if(pos==4){
 			url = "courseGeneral.sw";
 		}
-		if(pos<3 || pos==4 || (pos==5 && isEmpty($(subMenus[pos]).children()))){
+		if(pos<3 || pos==4 || (pos==5 && isEmpty($(subMenus[pos]).children())) || (pos==3 && isEmpty($('.js_course_team_menu li.js_course_team_activity a')))){
 			smartPop.progressCenter();				
 			$.ajax({
 				url : url,
@@ -60,7 +62,7 @@ $(function() {
 				}
 			});
 		}else if(pos==3){
-			$('.js_course_team_menu li.js_course_team_activity a').click();			
+			$('.js_course_team_menu li.js_course_team_activity a').click();
 		}else if(pos==5){
 			$('.js_course_setting_menu li.js_course_setting_profile a').click();			
 		}
@@ -79,15 +81,45 @@ $(function() {
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
 		var url ="";
+		var teamId = "";
 		if(input.hasClass('js_course_team_activity')){
 			url = "courseTeamActivity.sw";		
 		}else if(input.hasClass('js_course_team_management')){
 			url = "courseTeamManagement.sw";
+			teamId = input.attr('teamId');
 		}
 		smartPop.progressCenter();
 		$.ajax({
 			url : url,
-			data : {courseId : courseId},
+			data : {
+				courseId : courseId,
+				teamId : teamId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_select_course_team').live('change', function(e){
+		var input = $(targetElement(e)).parent();
+		input.siblings().removeClass('current');
+		input.addClass('current');
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		var teamId = input.find('select > option:selected').val();
+		smartPop.progressCenter();
+		$.ajax({
+			url : "courseTeamManagement.sw",
+			data : {
+				courseId : courseId,
+				teamId : teamId
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_course_content').html(data);
 				smartPop.closeProgress();
@@ -263,6 +295,35 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_view_team_management').live('click', function(e){
+		var input = $(targetElement(e));
+		input.parent().siblings().find('a').removeClass('current');
+		input.addClass('current');
+		var courseId = input.attr('courseId');
+		var teamId = input.attr('teamId');
+		var url = "";
+		if(input.hasClass('js_team_modify'))
+			url = "courseTeamModify.sw";
+		else if(input.hasClass('js_team_members'))
+			url = "courseTeamMembers.sw";
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			data : {
+				courseId : courseId,
+				teamId : teamId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_team_management_target').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+
 	$('.js_mentor_form_btn').live('click', function(e){
 		var input = $(targetElement(e)).parents('.js_mentor_form_btn');
 		var createCourse = input.parents('.js_create_course_page');
@@ -449,6 +510,7 @@ $(function() {
 	$('.js_show_modify_mission').live('click', function(e){
 		var input = $(targetElement(e));
 		var performMission = input.parents('.js_perform_mission_page');
+		if(isEmpty(performMission)) performMission = input.parents('.js_mission_list_item');
 		var courseId = performMission.attr('courseId');
 		var missionId = performMission.attr('missionId');
 		smartPop.progressCenter();				
@@ -483,6 +545,7 @@ $(function() {
 		smartPop.confirm('미션을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
 			var input = $(targetElement(e));
 			var performMission = input.parents('.js_perform_mission_page');
+			if(isEmpty(performMission)) performMission = input.parents('.js_mission_list_item');
 			var courseId = performMission.attr('courseId');
 			var paramsJson = {};
 			paramsJson["courseId"] = courseId;
@@ -1572,7 +1635,11 @@ $(function() {
 		}else{
 			input.addClass('icon_close_red').removeClass('icon_open_red');			
 		}
-		input.parents('.js_perform_mission_page').find('.js_mission_content_item').toggle();
+		if(!isEmpty(input.parents('.js_mission_list_item'))){
+			input.parents('.js_mission_list_item').find('.js_mission_content_item').toggle();
+		}else{ 
+			input.parents('.js_perform_mission_page').find('.js_mission_content_item').toggle();
+		}
 		return false;
 	});
 

@@ -148,11 +148,11 @@
 	<a href="" class="js_toggle_course_setting_btn"><div class="tit_cus3 mt20"></div></a>
 	<!-- 설정 상세 -->
 	<%
-	if(!SmartUtil.isBlankObject(course.getTeam())){
-		Team team = course.getTeam();
+	Team myTeam = smartWorks.getMyTeamByCourse(courseId);
+	if(!SmartUtil.isBlankObject(myTeam)){
 	%>
 		<div class="panel_block w635 mt5 js_create_team_detail" style="display:none">
-			<form name="frmSetTeam" class="content js_validation_required" courseId="<%=courseId %>" teamId="<%=team.getId() %>" >
+			<form name="frmSetTeam" class="content js_validation_required" courseId="<%=courseId %>" teamId="<%=myTeam.getId() %>" >
 				<table class="mt5">
 					<tr>
 						<td>
@@ -164,7 +164,7 @@
 						<td>
 							<div class="form_label w101">팀 설명</div>
 							<div class="form_value" style="width: 510px">
-								<textarea name="txtaTeamDesc" cols="" rows=""><%=CommonUtil.toNotNull(team.getDesc()) %></textarea>
+								<textarea name="txtaTeamDesc" cols="" rows=""><%=CommonUtil.toNotNull(myTeam.getDesc()) %></textarea>
 							</div>
 						</td>
 					</tr>
@@ -176,10 +176,10 @@
 								<span class="fl mr15">일(DAYS)</span>
 								<div class="t_refe pt2 fl">* 기간은 해당코스 기간을 넘을 수 없습니다</div>
 								<div class="cb pt10">
-									<label> <input name="chkUserDefineDays" type="checkbox" <%if(!SmartUtil.isBlankObject(team.getStart())){ %>checked<%} %>/> 사용자 정의</label>
-									<div class="fl js_team_start_date_field" startDate="<%=team.getStart().toLocalDateSimpleString() %>" style="width:110px"></div>
+									<label> <input name="chkUserDefineDays" type="checkbox" <%if(!SmartUtil.isBlankObject(myTeam.getStart())){ %>checked<%} %>/> 사용자 정의</label>
+									<div class="fl js_team_start_date_field" startDate="<%=myTeam.getStart().toLocalDateSimpleString() %>" style="width:110px"></div>
 									<div class="fl mr10">~</div> 
-									<div class="fl js_team_end_date_field" endDate="<%=team.getEnd().toLocalDateSimpleString() %>" style="width:110px"></div>
+									<div class="fl js_team_end_date_field" endDate="<%=myTeam.getEnd().toLocalDateSimpleString() %>" style="width:110px"></div>
 								</div>
 							</div>
 						</td>
@@ -188,8 +188,8 @@
 						<td>
 							<div class="form_label w101">팀 공개 설정</div>
 							<div class="form_value">
-								<label><input name="chkTeamSecurity" <%if(team.getAccessPolicy()==AccessPolicy.LEVEL_PUBLIC){ %>checked<%} %> type="checkbox" value="<%=AccessPolicy.LEVEL_PUBLIC %>" /> 공개</label>
-								<label><input name="chkTeamSecurity" <%if(team.getAccessPolicy()==AccessPolicy.LEVEL_PRIVATE){ %>checked<%} %> type="checkbox" value="<%=AccessPolicy.LEVEL_PRIVATE %>" /> 비공개</label>
+								<label><input name="chkTeamSecurity" <%if(myTeam.getAccessPolicy()==AccessPolicy.LEVEL_PUBLIC){ %>checked<%} %> type="checkbox" value="<%=AccessPolicy.LEVEL_PUBLIC %>" /> 공개</label>
+								<label><input name="chkTeamSecurity" <%if(myTeam.getAccessPolicy()==AccessPolicy.LEVEL_PRIVATE){ %>checked<%} %> type="checkbox" value="<%=AccessPolicy.LEVEL_PRIVATE %>" /> 비공개</label>
 								<div class="cb t_refe pt2">* 비공개 설정 시, 코스의 멘토 외에는 팀의 모든 활동이 노출되지 않습니다</div>
 							</div>
 						</td>
@@ -198,7 +198,7 @@
 						<td>
 							<div class="form_label w101">구성 인원</div>
 							<div class="form_value">
-								<input name="txtTeamUsers" class="fieldline number required tr" type="text" value="<%=team.getMaxMembers() %>" style="width: 80px" /> 명
+								<input name="txtTeamUsers" class="fieldline number required tr" type="text" value="<%=myTeam.getMaxMembers() %>" style="width: 80px" /> 명
 							</div>
 						</td>
 					</tr>

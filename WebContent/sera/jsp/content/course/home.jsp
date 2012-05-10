@@ -143,9 +143,9 @@
 				if(myRunningCourse){
 					TeamInfo[] courseTeams = smartWorks.getTeamsByCourse(courseId);
 				%>
-					<li class="end">
-						<select class="js_course_team_management">
-							<option value="createNewTeam">새팀구성하기</option>
+					<li class="end js_select_course_team">
+						<select>
+							<option value="">팀구성하기</option>
 							<%
 							if(!SmartUtil.isBlankObject(courseTeams)){
 								for(int i=0; i<courseTeams.length; i++){
@@ -162,7 +162,7 @@
 				<%
 				}else if(!SmartUtil.isBlankObject(myTeam)){
 				%>
-					<li class="end js_course_team_management"><a href="" ><span></span>팀관리 </a></li>
+					<li class="end js_course_team_management" teamId="<%=myTeam.getId()%>"><a href="" ><span></span>팀관리 </a></li>
 				<%
 				} 
 				%>
