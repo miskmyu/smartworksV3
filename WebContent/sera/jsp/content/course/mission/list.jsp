@@ -26,7 +26,7 @@
 			MissionInstanceInfo mission = missions[i];
 %>
 	<!-- 미션 수행 -->
-	<div class="panel_block" style="width: 688px">
+	<div class="panel_block mt10" style="width: 688px">
 		<dl class="content_mission">
 			<dt>
 				<!-- title -->
@@ -92,7 +92,7 @@
 			<%
 			if((course.isMyAttendingCourse() || course.isMyRunningCourse()) && !mission.isClearedByMe()){
 			%>
-				<div class="btn_default_l cb fr mt8 js_select_mission" missionId="<%=mission.getId()%>">
+				<div class="btn_default_l cb fr js_select_mission" style="margin:5px 10px" missionId="<%=mission.getId()%>">
 					<div class="btn_default_r">미션수행</div>
 				</div>
 			<%
