@@ -154,10 +154,22 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/setting/team.jsp", "");
 	}
 
+	@RequestMapping("/courseMissionHome")
+	public ModelAndView courseMissionHome(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/mission/home.jsp", "");
+	}
+
+	@RequestMapping("/courseMissionCalendar")
+	public ModelAndView courseMissionCalendar(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/mission/calendar.jsp", "");
+	}
+
 	@RequestMapping("/courseMissionList")
 	public ModelAndView courseMissionList(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/mission/list.jsp", "courseMissionList.tiles");
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/mission/list.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionCreate")
@@ -393,7 +405,7 @@ public class SeraController {
 		// TO DO : Exception handler
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "courseMissionList.sw?courseId=" + courseId);
+		map.put("href", "courseMissionHome.sw?courseId=" + courseId);
 		return map;
 	}
 

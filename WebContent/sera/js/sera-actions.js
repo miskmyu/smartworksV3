@@ -40,7 +40,7 @@ $(function() {
 			url = "courseHome.sw";
 			target = "#sera_content";
 		}else if(pos==1){
-			url = "courseMissionList.sw";
+			url = "courseMissionHome.sw";
 		}else if(pos==2){
 			url = "courseBoard.sw";
 		}else if(pos==3){
@@ -118,7 +118,7 @@ $(function() {
 		}else if(input.hasClass('js_course_mission_create')){
 			url = "courseMissionCreate.sw";
 		}else if(input.hasClass('js_course_mission_list')){
-			url = "courseMissionList.sw";
+			url = "courseMissionHome.sw";
 		}else if(input.hasClass('js_course_mission_mine')){
 			url = "courseMissionMine.sw";
 		}
@@ -187,6 +187,33 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_view_mission_list').live('click', function(e){
+		var input = $(targetElement(e));
+		input.parent().siblings().find('a').removeClass('current');
+		input.addClass('current');
+		var courseId = input.attr('courseId');
+		var url = "";
+		if(input.hasClass('js_mission_calendar'))
+			url = "courseMissionCalendar.sw";
+		else if(input.hasClass('js_mission_list'))
+			url = "courseMissionList.sw";
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			data : {
+				courseId : courseId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_mission_list_target').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+
 	$('.js_view_my_note').live('click', function(e){
 		var input = $(targetElement(e));
 		input.parent().siblings().find('a').removeClass('current');
@@ -375,15 +402,12 @@ $(function() {
 	});
 	
 	$('.js_select_mission').live('click', function(e){
-		var input = $(targetElement(e)).parent('a');
-		var missionList = input.parents('.js_mission_list_page');
-		var courseId = missionList.attr('courseId');
+		var input = $(targetElement(e)).parent();
 		var missionId = input.attr('missionId');
 		smartPop.progressCenter();				
 		$.ajax({
 			url : 'courseMissionPerform.sw',
 			data : {
-				courseId :courseId,
 				missionId : missionId
 			},
 			success : function(data, status, jqXHR) {
@@ -810,6 +834,10 @@ $(function() {
 			else if(item.hasClass('half'))
 				starPoint = starPoint + 0.5;
 		}
+		if(starPoint==0){
+			smartPop.showInfo(smartPop.WARN, '코스별점을 선택하셔야 리뷰를 남길 수 있습니다.', function(){});
+			return false;
+		}
 		var paramsJson = {};
 		paramsJson['courseId'] = courseId;
 		paramsJson['reviewContent'] = review;
@@ -836,6 +864,7 @@ $(function() {
 				});
 			}			
 		});
+		return false;
 		
 	});
 	

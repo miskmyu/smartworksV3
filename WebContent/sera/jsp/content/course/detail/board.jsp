@@ -28,7 +28,7 @@
 <div class="header_tit">
 	<div class="tit_dep2 m0">
 		<h2>코스 게시판</h2>
-		<div>* 본 코스에 대한 공지사항 및 멘티들에게 전하는 소식을 입력할 수 있습니다.</div>
+		<div>본 코스에 대한 공지사항 및 멘티들에게 전하는 소식을 입력할 수 있습니다.</div>
 	</div>
 </div>
 <!-- Header Title //-->

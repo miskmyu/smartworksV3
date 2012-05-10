@@ -15,7 +15,7 @@ public class MailInstanceInfo extends InstanceInfo {
 	private UserInfo[] ccReceivers;
 	private int priority;
 	private long size;
-	private MailAttachment[] attachments;
+	private boolean multipart;
 	private boolean unread;
 	private MailFolder mailFolder;
 	private MailFolder parentMailFolder;
@@ -84,12 +84,12 @@ public class MailInstanceInfo extends InstanceInfo {
 		this.priority = priority;
 	}
 
-	public MailAttachment[] getAttachments() {
-		return attachments;
+	public boolean isMultipart() {
+		return multipart;
 	}
 
-	public void setAttachments(MailAttachment[] attachments) {
-		this.attachments = attachments;
+	public void setMultipart(boolean multipart) {
+		this.multipart = multipart;
 	}
 
 	public boolean isUnread() {

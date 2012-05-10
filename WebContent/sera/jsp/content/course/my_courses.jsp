@@ -37,9 +37,9 @@
 		%>
 				<ul class="category_box <%=endClass%>">
 					<li class="photo">
-						<a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 					</li>
-					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"><%=course.getName() %></a></li>
+					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
 					<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getName()%>"><%=course.getOwner().getName() %></a></li>
 					<li class="info">
 						<dl>
@@ -47,7 +47,7 @@
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalDateSimpleString() %><%} %></dd>
 							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
-					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>
@@ -96,9 +96,9 @@
 		%>
 				<ul class="category_box <%=endClass%>">
 					<li class="photo">
-						<a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
+						<a href="courseHome.sw?courseId=<%=course.getId() %>"> <img width="218" height="148" src="<%=course.getMidPicture()%>"></a>
 					</li>
-					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"><%=course.getName() %></a></li>
+					<li class="subject"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getName() %></a></li>
 					<li class="maker"><a href="othersPAGE.sw?userId=<%=course.getOwner().getId()%>"><%=course.getOwner().getName() %></a></li>
 					<li class="info">
 						<dl>
@@ -106,7 +106,7 @@
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalDateSimpleString() %><%} %></dd>
 							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
-					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"  class="js_sera_content"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>

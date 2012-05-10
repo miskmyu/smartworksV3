@@ -1,3 +1,4 @@
+<%@page import="org.claros.commons.mail.models.EmailPriority"%>
 <%@page import="net.smartworks.model.instance.info.MailInstanceInfo"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.work.MailWork"%>
@@ -93,9 +94,9 @@
 			%>
 				<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
 					<td class="tc"><input type="checkbox" /></td>
-					<td><div class="<%if(instanceInfo.getPriority()>0){ %>icon_important<%}%>"><%=instanceInfo.getPriority()%></div></td>
-					<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
-					<td><div class="<%if(!SmartUtil.isBlankObject(instanceInfo.getAttachments())){ %>icon_file<%}%>"></div></td>
+					<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
+					<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
+					<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
 					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 					<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
 					<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>

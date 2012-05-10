@@ -30,7 +30,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>" <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
@@ -55,7 +55,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block m0">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>"  <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
@@ -80,7 +80,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block m0">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>"  <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
@@ -105,7 +105,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block m0">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>"  <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
@@ -130,7 +130,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block m0">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>"  <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>
@@ -155,7 +155,7 @@
 	%>
 		<!-- AD Block1 -->
 		<div class="aside_block m0">
-			<a href="courseHome.sw?courseId=<%=course.getId() %>" <%if(!cUser.isAnonymusUser()){ %>class="js_sera_content"<%} %>>
+			<a href="courseHome.sw?courseId=<%=course.getId() %>">
 				<div class="header">
 					<div class=""><%=course.getName() %></div>
 				</div>

@@ -39,7 +39,7 @@
 <div class="course_df_section js_course_home_page" courseId="<%=courseId%>">
 	<div class="course_df_block">
 		<div class="course_df_img">
-			<img class="profile_size_b" src="<%=course.getMidPicture() %>" />
+			<a href="courseHome.sw?courseId=<%=courseId%>"><img class="profile_size_b" src="<%=course.getMidPicture() %>" /></a>
 		</div>
 		<div class="course_df">
 			<h1><%=course.getName() %></h1>
