@@ -532,17 +532,21 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		queryBuffer.append(" select *  ");
 		queryBuffer.append(" from  ");
 		queryBuffer.append(" ( ");
-		queryBuffer.append(" 	select requestId as friendId ");
-		queryBuffer.append(" 		, requestName as friendName ");
-		queryBuffer.append(" 		, acceptStatus ");
-		queryBuffer.append(" 	from friends ");
-		queryBuffer.append(" 	where receiveId =:friendId ");
+		queryBuffer.append(" 	select fri.requestId as friendId ");
+		queryBuffer.append(" 		, fri.requestName as friendName ");
+		queryBuffer.append(" 		, fri.acceptStatus ");
+		queryBuffer.append("		, usr.nickName ");
+		queryBuffer.append("	  from friends fri, sworguser usr ");
+		queryBuffer.append(" 	 where fri.requestId = usr.id ");
+		queryBuffer.append(" 	   and receiveId =:friendId ");
 		queryBuffer.append(" 	union ");
-		queryBuffer.append(" 	select receiveId as friendId ");
-		queryBuffer.append(" 		, receiveName as friendName ");
-		queryBuffer.append(" 		, acceptStatus ");
-		queryBuffer.append(" 	from friends ");
-		queryBuffer.append(" 	where requestId =:friendId ");
+		queryBuffer.append(" 	select fri.receiveId as friendId ");
+		queryBuffer.append(" 		, fri.receiveName as friendName ");
+		queryBuffer.append(" 		, fri.acceptStatus ");
+		queryBuffer.append("		, usr.nickName ");
+		queryBuffer.append("	  from friends fri, sworguser usr ");
+		queryBuffer.append(" 	 where fri.receiveId = usr.id ");
+		queryBuffer.append(" 	   and requestId =:friendId ");
 		queryBuffer.append(" ) friendInfo ");
 		queryBuffer.append(" where 1=1 ");
 		if(acceptStatus != -1)
@@ -550,7 +554,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if(lastFriendName != null)
 			queryBuffer.append(" and friendInfo.friendName >:lastFriendName ");
 		if(key != null)
-			queryBuffer.append(" and friendInfo.friendName like :key ");
+			queryBuffer.append(" and (friendInfo.friendId like :key or friendInfo.friendName like :key or friendInfo.nickName like :key)");
 		queryBuffer.append(" order by friendInfo.friendName asc ");
 
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
@@ -637,7 +641,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(")");
 			}
 			if(key != null)
-				buf.append(" and obj.userName like :key ");
+				buf.append(" and (obj.userId like :key or obj.userName like :key or obj.nickName like :key)");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		Query query = this.createQuery(buf.toString(), cond);

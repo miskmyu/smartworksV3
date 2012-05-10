@@ -164,26 +164,20 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20;}
 
 /* 페이징 */
-.paginate {padding-top: 10px; position: relative; text-align: center;}
+.paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold;}
+.paginate strong {color:#ed1c24}
 .paginate .num {margin-right:1px; padding: 2px 3px; text-decoration: none; vertical-align: middle;}
 
 .spr { cursor: pointer; display: inline-block; overflow: hidden; vertical-align: middle;}
-.paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -345px transparent; 
-display: inline-block; height: 16px; width:16px; position:relative; left:5px;}
-.paginate a.pre span {background: url("../../images/header_nico.png") no-repeat scroll -15px -345px transparent;
-display: inline-block; height: 16px; width: 16px; margin-right:11px;}
-.paginate a.next span { background: url("../../images/header_nico.png") no-repeat scroll -39px -345px transparent; 
-display: inline-block; height: 16px; width: 16px; margin-left:11px;}
-.paginate a.next_end span { background: url("../../images/header_nico.png") no-repeat scroll -54px -345px transparent;
-display: inline-block; height: 16px; width: 16px; position:relative; right:5px;}
+.paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -344px transparent; display: inline-block; height: 20px; width:20px; position:relative; left:4px;}
+.paginate a.pre span {background: url("../../images/header_nico.png") no-repeat scroll -20px -344px transparent; display: inline-block; height: 20px; width: 19px; margin-right:11px;}
+.paginate a.next span { background: url("../../images/header_nico.png") no-repeat scroll -45px -344px transparent; display: inline-block; height: 20px; width: 20px; margin-left:11px;}
+.paginate a.next_end span { background: url("../../images/header_nico.png") no-repeat scroll -65px -344px transparent; display: inline-block; height: 20px; width: 19px; position:relative; right:4px;}
 
-.paginate a.pre_end:hover span {background: url("../../images/header_nico.png") no-repeat scroll 0 -377px transparent;}
-.paginate a.pre:hover span {background: url("../../images/header_nico.png") no-repeat scroll -15px -377px transparent;
-display: inline-block; height: 16px; width: 16px; margin-right:11px;}
-.paginate a.next:hover span { background: url("../../images/header_nico.png") no-repeat scroll -39px -377px transparent; 
-display: inline-block; height: 16px; width: 16px; margin-left:11px;}
-.paginate a.next_end:hover span { background: url("../../images/header_nico.png") no-repeat scroll -54px -377px transparent;
-display: inline-block; height: 16px; width: 16px; position:relative; right:5px;}
+.paginate a.pre_end span:hover {background-position: 0 -376px}
+.paginate a.pre span:hover {background-position: -20px -376px}
+.paginate a.next span:hover {background-position: -45px -376px}
+.paginate a.next_end span:hover {background-position: -65px -376px}
 
 .num_box {float:right; margin: -20px 5px 0; position:relative;}
 

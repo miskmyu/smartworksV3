@@ -325,68 +325,6 @@ public class SeraServiceImpl implements ISeraService {
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
 		String courseId = swoGroup.getId();
-		CourseTeamCond courseTeamCond = new CourseTeamCond();
-		courseTeamCond.setCourseId(courseId);
-		CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
-		Team team = null;
-		List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
-		SeraUserInfo[] seraUserInfos = null;
-//		if(courseTeam != null) {
-//			team = new Team();
-//			team.setId(courseTeam.getObjId());
-//			team.setName(courseTeam.getName());
-//			team.setCourseId(courseTeam.getCourseId());
-//			team.setDesc(courseTeam.getDescription());
-//			team.setStart(new LocalDate(courseTeam.getStartDate().getTime()));
-//			team.setEnd(new LocalDate(courseTeam.getEndDate().getTime()));
-//			team.setAccessPolicy(courseTeam.getAccessPolicy());
-//			team.setMaxMembers(courseTeam.getMemberSize());
-//			CourseTeamUser[] courseTeamUsers = courseTeam.getCourseTeamUsers();
-//			SeraFriendCond seraFriendCond = new SeraFriendCond();
-//			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
-//			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
-//			if(!CommonUtil.isEmpty(courseTeamUsers)) {
-//				for(CourseTeamUser courseTeamUser : courseTeamUsers) {
-//					SeraUserInfo seraUserInfo = new SeraUserInfo();
-//					String id = courseTeamUser.getUserId();
-//					SwoUserExtend swoUserExtend = getSwoManager().getUserExtend(userId, id, false);
-//					String name = null;
-//					int role = -1;
-//					String smallPictureName = null;
-//					if(swoUserExtend != null) {
-//						name = swoUserExtend.getName();
-//						role = swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER;
-//						smallPictureName = swoUserExtend.getSmallPictureName();
-//					}
-//					SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, id);
-//					String goal = null;
-//					boolean isFriend = false;
-//					if(seraUserDetail != null)
-//						goal = seraUserDetail.getGoal();
-//					if(!CommonUtil.isEmpty(mySeraFriends)) {
-//						for(SeraFriend seraFriend : mySeraFriends) {
-//							if(id.equals(seraFriend.getFriendId())) {
-//								isFriend = true;
-//								break;
-//							}
-//						}
-//					}
-//					seraUserInfo.setName(name);
-//					seraUserInfo.setRole(role);
-//					seraUserInfo.setSmallPictureName(smallPictureName);
-//					seraUserInfo.setGoal(goal);
-//					seraUserInfo.setFriend(isFriend);
-//					seraUserInfoList.add(seraUserInfo);
-//				}
-//			}
-//			if(seraUserInfoList.size() > 0) {
-//				seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
-//				seraUserInfoList.toArray(seraUserInfos);
-//			}
-//			team.setMembers(seraUserInfos);
-//		}
-//
-//		course.setTeam(team);
 		course.setMissions(getMissionInstanceList(course.getId(), null, null));
 
 		boolean isJoinCourse = false;
@@ -1767,6 +1705,7 @@ public class SeraServiceImpl implements ISeraService {
 						goal = seraUserDetail.getGoal();
 					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
+					member.setNickName(swoUserExtend.getNickName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -1866,6 +1805,7 @@ public class SeraServiceImpl implements ISeraService {
 						goal = seraUserDetail.getGoal();
 					member.setGoal(goal);
 					member.setName(swoUserExtend.getName());
+					member.setNickName(swoUserExtend.getNickName());
 					member.setPosition(swoUserExtend.getPosition());
 					member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 					member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -2361,8 +2301,10 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			if (resultMap.size() ==  0)
 				return null;
-			Map<Long, InstanceInfo> sortMap = new TreeMap<Long, InstanceInfo>(resultMap);
-			
+
+			Map<Long, InstanceInfo> sortMap = new TreeMap<Long, InstanceInfo>(Collections.reverseOrder());
+			sortMap.putAll(resultMap);
+
 			List<InstanceInfo> returnInstanceInfoList = new ArrayList<InstanceInfo>();
 			Iterator<Long> itr = sortMap.keySet().iterator();
 			int i = 0;
@@ -4813,7 +4755,77 @@ public class SeraServiceImpl implements ISeraService {
 
 	private SeraUserInfo[] getMenteesByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
 
+		if (group == null)
+			return null;
+
 		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+
+		
+		List<String> idList = new ArrayList<String>();
+		String[] idIns = null;
+		if(!CommonUtil.isEmpty(groupMembers)) {
+			for(SwoGroupMember groupMember : groupMembers) {
+				if(groupMember != null) {
+					String id = groupMember.getUserId();
+					String joinStatus = groupMember.getJoinStatus();
+					if(joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE))
+						idList.add(id);
+				}
+			}
+		}
+		if(idList.size() > 0) {
+			idIns = new String[idList.size()];
+			idList.toArray(idIns);
+		}
+
+		if(CommonUtil.isEmpty(idIns))
+			return null;
+
+		String lastName = null;
+		Date lastModifiedTime = null;
+		if(!CommonUtil.isEmpty(lastId)) {
+			SwoUser swoUser = getSwoManager().getUser(userId, lastId, IManager.LEVEL_LITE);
+			lastName = swoUser.getName();
+			lastModifiedTime = swoUser.getModificationDate();
+		}
+		SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(idIns, lastName, lastModifiedTime, "name", true);
+
+		if(CommonUtil.isEmpty(swoUserExtends))
+			return null;
+
+		SeraUserInfo[] seraUserInfos = null;
+		List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
+
+		for(int i=0; i<swoUserExtends.length; i++) {
+			if(i == maxList)
+				break;
+			SwoUserExtend swoUserExtend = swoUserExtends[i];
+			SeraUserInfo member = new SeraUserInfo();
+			member.setId(swoUserExtend.getId());
+			member.setName(swoUserExtend.getName());
+			member.setNickName(swoUserExtend.getNickName());
+			member.setPosition(swoUserExtend.getPosition());
+			member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+			member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+			member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+			seraUserInfoList.add(member);
+		}
+
+		if(swoUserExtends.length > maxList) {
+			seraUserInfoList.add(new SeraUserInfo());
+		}
+
+		if(seraUserInfoList.size() > 0) {
+			seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
+			seraUserInfoList.toArray(seraUserInfos);
+		}
+
+		return seraUserInfos;
+
+		/*User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
 
 		if (group == null)
@@ -4912,7 +4924,7 @@ public class SeraServiceImpl implements ISeraService {
 				index += 1;
 			}
 			return tempUserInfos;
-		}
+		}*/
 	}
 
 	private SeraUserInfo[] getNotRelatedUserByCourseId(SwoGroup group, String lastId, int maxList) throws Exception {
@@ -4980,6 +4992,7 @@ public class SeraServiceImpl implements ISeraService {
 				UserInfo member = new SeraUserInfo();
 				member.setId(swoUserExtend.getId());
 				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -5263,6 +5276,7 @@ public class SeraServiceImpl implements ISeraService {
 				String id = swoUserExtend.getId();
 				member.setId(id);
 				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());

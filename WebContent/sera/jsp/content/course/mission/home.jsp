@@ -24,8 +24,8 @@
 <div class="panel_section js_misson_home_page" courseId="<%=courseId%>">
 
  	<div class="header mb5 js_view_mission_list">
-		<div><a href="" class="js_mission_calendar current" courseId="<%=courseId%>">미션캘린더</a></div>
-		<div> | <a href="" class="js_mission_list" courseId="<%=courseId%>">미션목록</a></div>
+		<div><a href="" class="icon_mscalendar current js_mission_calendar " courseId="<%=courseId%>">미션캘린더</a></div>
+		<div> | <a href="" class="icon_mslist js_mission_list" courseId="<%=courseId%>">미션목록</a></div>
 	</div>
 	<div class="t_gray mb10">* 미션 내용을 등록하려면 미션캘린더에서 일자를 클릭하여 등록합니다.</div>
 
