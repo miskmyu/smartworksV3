@@ -255,6 +255,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_ourfriend { width:100px}
 .icon_facebook { background: url("../images/icon.png") no-repeat scroll -166px -646px; width:22px; height:22px; display:block}
 .icon_twitter { background: url("../images/icon.png") no-repeat scroll -193px -646px; width:22px; height:22px; display:block}
+.icon_mscalendar {background: url("../images/icon.png") no-repeat scroll -585px -436px; height:13px; display:block; padding:0 0 0 18px}
+.icon_mscalendar.current {background-position:-585px -412px}
+.icon_mslist {background: url("../images/icon.png") no-repeat scroll -585px -493px; height:13px; display:block; padding:0 0 0 18px; margin:0 0 0 4px; float:right}
+.icon_mslist.current {background-position:-585px -470px}
 
 /* Icon in Mypage */
 .icon_memo a {background: url("../images/icon.png") no-repeat scroll -18px -75px; width:34px; height:28px; display:block}
