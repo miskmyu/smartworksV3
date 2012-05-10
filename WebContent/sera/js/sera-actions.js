@@ -43,14 +43,10 @@ $(function() {
 			url = "courseMissionHome.sw";
 		}else if(pos==2){
 			url = "courseBoard.sw";
-		}else if(pos==3){
-			url = "courseTeamActivity.sw";
 		}else if(pos==4){
 			url = "courseGeneral.sw";
-		}else if(pos==5){
-			url = "courseSetting.sw";
 		}
-		if(pos!=5 || (pos==5 && isEmpty($(subMenus[pos]).children()))){
+		if(pos<3 || pos==4 || (pos==5 && isEmpty($(subMenus[pos]).children()))){
 			smartPop.progressCenter();				
 			$.ajax({
 				url : url,
@@ -63,7 +59,9 @@ $(function() {
 					smartPop.closeProgress();
 				}
 			});
-		}else{
+		}else if(pos==3){
+			$('.js_course_team_menu li.js_course_team_activity a').click();			
+		}else if(pos==5){
 			$('.js_course_setting_menu li.js_course_setting_profile a').click();			
 		}
 		return false;
@@ -71,6 +69,33 @@ $(function() {
 	
 	$('.js_course_board_list').live('click', function(e){
 		$(targetElement(e)).parents('.js_course_home_page').find('.js_course_board').click();
+		return false;
+	});
+	
+	$('.js_course_team_menu').live('click', function(e){
+		var input = $(targetElement(e)).parent();
+		input.siblings().removeClass('current');
+		input.addClass('current');
+		var courseHome = input.parents('.js_course_home_page');
+		var courseId = courseHome.attr('courseId');
+		var url ="";
+		if(input.hasClass('js_course_team_activity')){
+			url = "courseTeamActivity.sw";		
+		}else if(input.hasClass('js_course_team_management')){
+			url = "courseTeamManagement.sw";
+		}
+		smartPop.progressCenter();
+		$.ajax({
+			url : url,
+			data : {courseId : courseId},
+			success : function(data, status, jqXHR) {
+				$('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
 		return false;
 	});
 	

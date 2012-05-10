@@ -19,6 +19,7 @@ import net.smartworks.model.sera.info.MissionReportInstanceInfo;
 import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
+import net.smartworks.model.sera.info.TeamInfo;
 
 public class SeraTest {
 
@@ -278,5 +279,9 @@ public class SeraTest {
 		team.setMaxMembers(10);
 		team.setMembers(SeraTest.getFriendRequestsForMe("", 1));
 		return team;
+	}
+	
+	public static TeamInfo[] getTeams() throws Exception{
+		return new TeamInfo[] {new TeamInfo("team1", "코스팀 1"), new TeamInfo("team2", "코스팀 2"), new TeamInfo("team3", "코스팀 3"), new TeamInfo("team4", "코스팀 4")};
 	}
 }

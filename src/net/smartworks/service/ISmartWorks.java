@@ -53,10 +53,12 @@ import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
+import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
+import net.smartworks.model.sera.info.TeamInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -559,6 +561,12 @@ public interface ISmartWorks {
 	public abstract CourseInfo[] searchCourseByCategory(String categoryName, String key) throws Exception;
 
 	public abstract CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception;
+
+	public abstract TeamInfo[] getTeamsByCourse(String courseId) throws Exception;
+	
+	public abstract Team getMyTeamByCourse(String courseId) throws Exception;
+	
+	public abstract Team getTeamById(String teamId) throws Exception;
 
 
 }

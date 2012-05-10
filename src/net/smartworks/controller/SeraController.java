@@ -193,7 +193,7 @@ public class SeraController {
 	@RequestMapping("/courseTeamActivity")
 	public ModelAndView courseTeamActivity(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/detail/team_activity.jsp", "");
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/activity.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")

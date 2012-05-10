@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.sera.Team"%>
+<%@page import="net.smartworks.model.sera.info.TeamInfo"%>
 <%@page import="org.springframework.security.web.context.HttpSessionSecurityContextRepository"%>
 <%@page import="org.springframework.security.core.context.SecurityContext"%>
 <%@page import="net.smartworks.model.sera.info.ReviewInstanceInfo"%>
@@ -25,6 +27,7 @@
 	
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
+	Team myTeam = null;//smartWorks.getMyTeamByCourse(courseId);
 	
 	InstanceInfo[] notices = (cUser.isAnonymusUser()) ? null : smartWorks.getCourseNotices(courseId, new LocalDate(), 5);
 	String mentorId = (SmartUtil.isBlankObject(course.getLeader())) ? "" : course.getLeader().getId();
@@ -106,7 +109,7 @@
 			<ul class="js_course_menu">
 				<li class="<%if(!cUser.isAnonymusUser() && course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
-				<li><a href="" class="js_course_board">코스 게시판</a></li>
+				<li><a href="" class="js_course_board">코스게시판</a></li>
 				<li><a href="" class="js_create_team">팀활동</a></li>
 				<li class="<%if(cUser.isAnonymusUser() || !course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
 				<li><a href="" class="js_course_setting">코스설정</a></li>
@@ -125,7 +128,46 @@
 		<div class="menu001 current" style="display:none"></div>
 		<div class="menu002" style="display:none"></div>
 		<div class="menu003" style="display:none"></div>
-		<div class="menu004" style="display:none"></div>
+		<div class="menu004 js_course_team_menu" style="display:none">
+			<ul>
+				<%
+				if(!SmartUtil.isBlankObject(myTeam)){
+				%>
+					<li class="js_course_team_activity"><a href="">팀활동</a></li>
+				<%
+				}else if(!myRunningCourse){ 
+				%>
+					<li class="js_course_team_activity"><a href="">팀구성하기</a></li>				
+				<%
+				}
+				if(myRunningCourse){
+					TeamInfo[] courseTeams = smartWorks.getTeamsByCourse(courseId);
+				%>
+					<li class="end">
+						<select class="js_course_team_management">
+							<option value="createNewTeam">새팀구성하기</option>
+							<%
+							if(!SmartUtil.isBlankObject(courseTeams)){
+								for(int i=0; i<courseTeams.length; i++){
+									TeamInfo courseTeam = courseTeams[i];
+							%>
+								<option value="<%=courseTeam.getId()%>"><%=courseTeam.getName() %></option>
+							<%
+								}
+							}
+							%>
+							
+						</select>
+					</li>
+				<%
+				}else if(!SmartUtil.isBlankObject(myTeam)){
+				%>
+					<li class="end js_course_team_management"><a href="" ><span></span>팀관리 </a></li>
+				<%
+				} 
+				%>
+			</ul>
+		</div>
 		<div class="menu005" style="display:none"></div>
 		<div class="menu006 js_course_setting_menu" style="display:none">
 			<%
@@ -134,9 +176,9 @@
 				<ul>
 					<li class="js_course_setting_profile"><a href="">코스관리</a></li>
 					<li class="js_create_mission"><a href="">미션등록</a></li>
-					<li  class="js_course_setting_mentee"><a href="">멘티관리</a></li>
-					<li class="end js_course_setting_team"><a href="" ><span class="icon_bul_select mr5"></span>팀관리 </a></li>
-				</ul>
+					<li  class="end js_course_setting_mentee"><a href="">멘티관리</a></li>
+<!-- 					<li class="end js_course_setting_team"><a href="" ><span class="icon_bul_select mr5"></span>팀관리 </a></li>
+ -->				</ul>
 			<%
 			}
 			%>

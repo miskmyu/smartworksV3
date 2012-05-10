@@ -51,10 +51,12 @@ import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
 import net.smartworks.model.sera.SeraUser;
+import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
+import net.smartworks.model.sera.info.TeamInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -1223,6 +1225,24 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CourseInfo[] getCoursesByUser(String userId, int courseType, String lastId, int maxList) throws Exception {
 		return seraService.getCoursesByUser(userId, courseType, lastId, maxList);
+	}
+
+	@Override
+	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
+		// TODO Auto-generated method stub
+		return seraService.getTeamsByCourse(courseId);
+	}
+
+	@Override
+	public Team getMyTeamByCourse(String courseId) throws Exception {
+		// TODO Auto-generated method stub
+		return seraService.getMyTeamByCourse(courseId);
+	}
+
+	@Override
+	public Team getTeamById(String teamId) throws Exception {
+		// TODO Auto-generated method stub
+		return seraService.getTeamById(teamId);
 	}
 
 }

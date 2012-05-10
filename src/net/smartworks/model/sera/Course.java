@@ -39,7 +39,6 @@ public class Course extends Group {
 	private int maxMentees;
 	private boolean payable;
 	private int fee;
-	private Team team;
 	private MissionInstanceInfo[] missions;
 	private int lastMissionIndex=-1;
 	private double starPoint;
@@ -138,12 +137,6 @@ public class Course extends Group {
 	}
 	public void setFee(int fee) {
 		this.fee = fee;
-	}
-	public Team getTeam() {
-		return team;
-	}
-	public void setTeam(Team team) {
-		this.team = team;
 	}
 	public boolean isJoinCourse() {
 		return isJoinCourse;
