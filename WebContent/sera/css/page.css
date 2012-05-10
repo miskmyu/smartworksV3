@@ -420,7 +420,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_df li div { border-bottom:1px solid #cccccc; height:34px; padding-bottom:7px; margin-bottom:10px}
 .course_df li div span { position:relative; top:22px; font-weight:normal; text-align:left}
 .course_df li span { font-weight:bold; display:block; text-align:right}
-.course_info { width:193px; float:right; margin-top:10px; line-height:20px; height:108px; overflow:hidden}
+.course_info { width:185px; float:right; margin:10px 10px 0 0; line-height:20px; height:100px; overflow:hidden}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -765px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
 .course_info dd {height: 18px; overflow: hidden}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}

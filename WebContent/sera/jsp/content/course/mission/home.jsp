@@ -21,13 +21,13 @@
 	
 %>
 <!-- Nav SNB -->
-<div class="t_gray mb5">* 미션 내용을 등록하려면 캘린더에서 일자를 클릭하여 등록합니다. 수정은 수행창에서 수정가능합니다. </div>
-<div id="panel_section" class="js_misson_home_page" courseId="<%=courseId%>">
+<div class="panel_section js_misson_home_page" courseId="<%=courseId%>">
 
- 	<div class="header js_view_mission_list">
-		<div class="icon_mytext"><a href="" class="js_mission_calendar current" courseId="<%=courseId%>">미션캘린더</a></div>
+ 	<div class="header mb5 js_view_mission_list">
+		<div><a href="" class="js_mission_calendar current" courseId="<%=courseId%>">미션캘린더</a></div>
 		<div> | <a href="" class="js_mission_list" courseId="<%=courseId%>">미션목록</a></div>
 	</div>
+	<div class="t_gray mb10">* 미션 내용을 등록하려면 미션캘린더에서 일자를 클릭하여 등록합니다.</div>
 
 	<div class="js_mission_list_target">
 		<jsp:include page="/sera/jsp/content/course/mission/calendar.jsp">
