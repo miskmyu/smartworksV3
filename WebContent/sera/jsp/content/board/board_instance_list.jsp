@@ -42,13 +42,11 @@
 		}
 	}
 	session.setAttribute("requestParams", params);
-	session.setAttribute("workId", SmartWork.ID_BOARD_MANAGEMENT);
 
 	User cUser = SmartUtil.getCurrentUser();
-	String cid = (String)session.getAttribute("cid");
 	String wid = (String)session.getAttribute("wid");
-	InstanceInfoList instanceList = smartWorks.getBoardInstanceList(wid, params);
-	
+
+	InstanceInfoList instanceList = smartWorks.getBoardInstanceList(null, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -80,12 +78,11 @@
 			</th>
 			<th class="r_line">
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' /> 
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+					<fmt:message key='common.title.last_modifier' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>/
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>"><fmt:message key='common.title.last_modified_date' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+					<span class=" <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
@@ -153,6 +150,10 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
+					<fmt:message key='common.title.last_modifier' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>/
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
 					<fmt:message key='common.title.last_modified_date' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
