@@ -71,13 +71,13 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>/				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>"><fmt:message key='common.title.created_date'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
 				<span class="js_progress_span"></span>
@@ -86,7 +86,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
@@ -95,7 +95,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_WORK)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
@@ -104,7 +104,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
 				<span class="js_progress_span"></span>
@@ -113,12 +113,12 @@
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
 					<fmt:message key='common.title.last_modifier' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>/
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
 					<fmt:message key='common.title.last_modified_date' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>
@@ -194,7 +194,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_WORK)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
@@ -203,13 +203,13 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>/				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>"><fmt:message key='common.title.created_date'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
 				<span class="js_progress_span"></span>
@@ -218,7 +218,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
@@ -227,7 +227,7 @@
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} 
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
 				<span class="js_progress_span"></span>
@@ -236,12 +236,12 @@
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
 					<fmt:message key='common.title.last_modifier' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>/
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
 					<fmt:message key='common.title.last_modified_date' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
-						if(sortedField.isAscending()){ %>icon_in_down<%}else{ %>icon_in_down<%}} %>"></span>
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>

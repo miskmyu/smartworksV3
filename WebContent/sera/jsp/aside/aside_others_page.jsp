@@ -26,13 +26,15 @@
 %>
 <div class="aside_block">
 	<div class="header">
-		<a href="othersCourses.sw?userId=<%=otherUser.getId() %>" class="js_sera_content">
-			<div class="icon_as_mycourse fl"><%=otherUser.getNickName()%>님의 코스 <span class="num_cus">(<%=courseList.getRunnings() + courseList.getAttendings()%>)</span></div>
-		</a>
-		<div class="icon_as_more">
-			<a href="othersCourses.sw?userId=<%=otherUser.getId()%>" class="mt10 js_sera_content"> </a>
-		</div>
+			<span class="icon_as_mycourse">
+				<a href="othersCourses.sw?userId=<%=otherUser.getId() %>" class="js_sera_content">
+					<%=otherUser.getNickName()%>님의 코스 
+					<span class="num_cus">(<%=courseList.getRunnings() + courseList.getAttendings()%>)</span>
+					<span class="icon_as_more"></span>
+				</a>
+			</span>
 	</div>
+		
 	<div class="content">
 		<dl>
 			<dt>운영코스 (<%=courseList.getRunnings()%>)</dt>
@@ -90,9 +92,12 @@
 <!-- Aside Block2 -->
 <div class="aside_block m0">
 	<div class="header">
-		<div class=" icon_as_badge fl"><%=otherUser.getNickName()%>님의 뱃지(0)</div>
-		<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
+		<span class=" icon_as_badge">
+			<%=otherUser.getNickName()%>님의 뱃지(0)
+			<span class="icon_as_more" style="display:none"></span>
+		</span>
 	</div>
+		
 	<div class="list">
 		<dl>
 <!--
@@ -115,12 +120,14 @@
 <!-- Aside Block3 -->
 <div class="aside_block m0">
 	<div class="header">
-		<a href="othersFriend.sw?userId=<%=otherUser.getId() %>" class="js_sera_content"><div class=" icon_as_friend fl"><%=otherUser.getNickName()%>님의 친구 (<%=friendList.getTotalFriends()%>)</div></a>
-		<div class="icon_as_more">
-			<a href="othersFriend.sw?userId=<%=otherUser.getId()%>"
-				class="mt10 js_sera_content"> </a>
-		</div>
+		<span class=" icon_as_friend">
+			<a href="othersFriend.sw?userId=<%=otherUser.getId() %>" class="js_sera_content">
+			<%=otherUser.getNickName()%>님의 친구 (<%=friendList.getTotalFriends()%>)
+			<span class="icon_as_more"></span>
+			</a>
+		</span>
 	</div>
+		
 	<div class="list">
 		<dl>
 			<%
@@ -142,8 +149,11 @@
 <!-- Aside Block4 -->
 <div class="aside_block m0">
 	<div class="header">
-		<div class="icon_as_srtrend fl">트렌드 세라 (0)</div>
-		<div class="icon_as_more" style="display:none"><a href="" class="mt10"> </a></div>
+			<span class=" icon_as_srtrend">
+				<a href="" class="">트렌드 세라 (0)
+					<span class="icon_as_more" style="display:none"></span>
+				</a>
+			</span>
 	</div>
 	<div class="content">
 		<dl>

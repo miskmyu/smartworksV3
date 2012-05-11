@@ -261,7 +261,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_mscalendar.current {background-position:-585px -412px}
 .icon_mslist {background: url("../images/icon.png") no-repeat scroll -585px -493px; height:13px; display:block; padding:0 0 0 18px; margin:0 0 0 4px; float:right}
 .icon_mslist.current {background-position:-585px -470px}
-.icon_in_down {background: url("../images/icon.png") no-repeat scroll -586px -521px transparent; display: inline-block; height: 7px; margin: 0 0 0 5px; width: 7px}
+.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_txt_delet {background: url("../../images/nav_img.png") no-repeat scroll -115px -453px transparent; display: inline-block; height: 8px; margin: 0 3px 0 0; width: 7px;}
 
 /* Icon in Mypage */
@@ -285,9 +286,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
-.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
-.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -545px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
-.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; width:200px; line-height: 18px; vertical-align: middle; display: table-cell}
+.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 203px; word-wrap: break-word}
+.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -546px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
+.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
 .icon_as_srtrend {background: url("../images/icon.png") no-repeat scroll -166px -310px; height:25px; padding-left:30px; width:70%}
 .icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; width:70%}
 
