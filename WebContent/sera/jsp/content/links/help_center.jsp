@@ -66,11 +66,17 @@
 			<div id="divHelpPage" class="tutorial_visual" style="width: 587px">
 				<!-- 코스 개설하기 -->
 				<div id="img1_1" class="helpImg">
-					<iframe width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
+					<iframe width="587" height="428" src="http://www.youtube.com/embed/pY15D-zSqgQ" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<!-- 코스 참여하기 -->
 				<div id="img2_1" class="helpImg" style="display:none">
-					<iframe id="img2_1" class="helpImg" width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
+					<iframe width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
+				</div>
+				<div id="img3_1" class="helpImg" style="display:none">
+					<iframe width="587" height="428" src="" frameborder="0" allowfullscreen></iframe>
+				</div>
+				<div id="img4_1" class="helpImg" style="display:none">
+					<iframe width="587" height="428" src="" frameborder="0" allowfullscreen></iframe>
 				</div>
 			</div>
 		</div>
@@ -94,7 +100,7 @@
 		$(".helpImg").hide();
 		$("#spanNav").html(navIdx);
 		$("#spanNavFull").html(navFullIdx);
-		$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
+		$("#img1_1").show();
 	});
 	$("#btnHelp2").click( function() {
 		navIdx = 1;
@@ -107,7 +113,7 @@
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_off.gif");
 		$("#spanNav").html(navIdx);
 		$("#spanNavFull").html(navFullIdx);
-		$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
+		$("#img2_1").show();
 	});
 	$("#btnHelp3").click( function() {
 		navIdx = 1;
@@ -120,7 +126,7 @@
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_off.gif");
 		$("#spanNav").html(navIdx);
 		$("#spanNavFull").html(navFullIdx);
-		$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
+		$("#img3_1").show();
 	});
 	$("#btnHelp4").click( function() {
 		navIdx = 1;
@@ -133,30 +139,7 @@
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_on.gif");
 		$("#spanNav").html(navIdx);
 		$("#spanNavFull").html(navFullIdx);
-		$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
+		$("#img4_1").show();
 	});
-	$("#btnPrev").click( function() {
-		if (navIdx > 1) {
-			navIdx--;
-			$(".helpImg").hide();
-			$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
-			$("#spanNav").html(navIdx);
-			$("#spanNavFull").html(navFullIdx);
-		} else {
-			alert("처음입니다.");
-		}
-	});
-	$("#btnNext").click(function() {
-		if (navIdx < navFullIdx) {
-			navIdx++;
-			$(".helpImg").hide();
-			$("#img" + navCategory.toString() + "_" + navIdx.toString()).show();
-			$("#spanNav").html(navIdx);
-			$("#spanNavFull").html(navFullIdx);
-		} else {
-			alert("마지막입니다.");
-		}
-	});
-
 </script>
 					
