@@ -44,7 +44,6 @@ function submitForms() {
 			success : function(formXml, status, jqXHR) {
 
 				// 화면 xml을 가져오면 가져온 값과 입력된 사진정보 및 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
-				var formXml = $(formXml);
 				new SmartWorks.GridLayout({
 					target : formContent,
 					formXml : formXml,
@@ -87,6 +86,7 @@ function submitForms() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+						alert('wait');
 						smartPop.closeProgress();
 						document.location.href = data.href;
 					},
