@@ -197,9 +197,6 @@
 	<definition name="aboutSera" extends="Course">
 		<put-attribute name="container" value="/sera/jsp/content/links/about_sera.jsp" />
 	</definition>
-	<definition name="seraNews" extends="Course">
-		<put-attribute name="container" value="/sera/jsp/content/links/sera_news.jsp" />
-	</definition>
 	<definition name="helpCenter" extends="Course">
 		<put-attribute name="container" value="/sera/jsp/content/links/help_center.jsp" />
 	</definition>
@@ -214,4 +211,13 @@
 		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
 	</definition>
 
+	<definition name="seraBoard" template="/sera/jsp/layouts_nouser.jsp">
+		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />
+		<put-attribute name="container" value="/sera/jsp/content/board/sera_news.jsp" />
+		<put-attribute name="sera_footer" value="/sera/jsp/footer.jsp" />
+	</definition>
+	<definition name="seraNews" extends="seraBoard" />
+	<definition name="seraTrend" extends="seraBoard">
+		<put-attribute name="container" value="/sera/jsp/content/board/sera_trend.jsp" />
+	</definition>
 </tiles-definitions>
