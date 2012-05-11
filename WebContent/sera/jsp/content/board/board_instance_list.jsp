@@ -62,6 +62,9 @@
 		if(sortedField==null) sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
+			<th class="r_line">
+          		<input name="" type="checkbox" value="" />
+            </th>
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
@@ -101,11 +104,12 @@
 			for (InstanceInfo instanceInfo : instanceInfos) {
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" 
-									+ ((WorkInstanceInfo)instanceInfo).getContextId() + "&wid=" + wid
-									+ "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
+				String target = "seraNewsItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + instanceInfo.getId();
 			%>
-				<tr class="instance_list js_content_work_space" href="<%=target%>">
+				<tr class="instance_list js_sera_container" href="<%=target%>">
+					<td>
+          				<input name="" type="checkbox" value="" />
+           	 		</td>
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<img src="<%=owner.getMidPicture()%>" class="profile_size_s"/>

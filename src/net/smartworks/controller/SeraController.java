@@ -269,6 +269,11 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "", "seraTrend.tiles");
 	}
 
+	@RequestMapping("/seraNewsItem")
+	public ModelAndView seraNewsItem(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/board/sera_news_item.jsp", "");
+	}
+
 	@RequestMapping("/helpCenter")
 	public ModelAndView helpCenter(HttpServletRequest request, HttpServletResponse response) {
 
