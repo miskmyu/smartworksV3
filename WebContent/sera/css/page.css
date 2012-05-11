@@ -286,9 +286,9 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Icon Aside */
 .icon_admin {background: url("../images/icon.png") no-repeat scroll 0 -357px; width:23px; height:21px; display:inline-block}
-.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 203px; word-wrap: break-word}
-.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -546px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
-.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; line-height: 18px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
+.icon_as_mycourse {background: url("../images/icon.png") no-repeat scroll -166px -199px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 203px; word-wrap: break-word}
+.icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -546px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
+.icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
 .icon_as_srtrend {background: url("../images/icon.png") no-repeat scroll -166px -310px; height:25px; padding-left:30px; width:70%}
 .icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; width:70%}
 
@@ -393,7 +393,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 /* Aside */
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
-.aside_block .header { font-size:14px; color:#333333; line-height:20px; font-weight:bold}
+.aside_block .header { font-size:14px; color:#333333; line-height:18px; font-weight:bold; margin-bottom: 5px; word-wrap: break-word}
 .aside_block .content { clear:both; padding:8px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
 .aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
