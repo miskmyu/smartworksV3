@@ -576,7 +576,8 @@ td.pic{width:85px}
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e;}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
-.icon_in_down {background: url("../../images/nav_img.png") no-repeat -114px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
 .icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
