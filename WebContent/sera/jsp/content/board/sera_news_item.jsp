@@ -101,16 +101,16 @@
 		<!-- Btn -->
 		<div class="btn_space">
 			<div style="clear: both; display: inline-block">
-				<div class="btn_blu_l mr10 js_create_news_btn" href="">
+				<div class="btn_blu_l mr10 js_create_news_btn" href="" <%if(!SmartUtil.isBlankObject(instId)) { %>style="display:none"<%}%>>
 					<div class="btn_blu_r">등 록</div>
 				</div>
-				<div class="btn_blu_l mr10 js_save_news_btn" href="">
+				<div class="btn_blu_l mr10 js_save_news_btn" href="" style="display:none">
 					<div class="btn_blu_r">저 장</div>
 				</div>
-				<div class="btn_red_l js_modify_news_btn" href="">
+				<div class="btn_red_l js_modify_news_btn" href="" <%if(SmartUtil.isBlankObject(instId)) { %>style="display:none"<%}%>>
 					<div class="btn_red_r">수 정</div>
 				</div>
-				<div class="btn_red_l js_delete_news_btn" href="">
+				<div class="btn_red_l js_delete_news_btn" href="" <%if(SmartUtil.isBlankObject(instId)) { %>style="display:none"<%}%>>
 					<div class="btn_red_r">삭 제</div>
 				</div>
 				<div class="btn_red_l js_cancel_news_btn" href="">

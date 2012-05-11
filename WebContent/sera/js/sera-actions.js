@@ -2007,7 +2007,7 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_modify_news_btn').live('click', function(e){
+	$('.js_modify_news_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var newsItem = input.parents('.js_sera_news_item_page');
 		var workId = newsItem.attr("workId");
@@ -2021,11 +2021,188 @@ $(function() {
 			workId : workId,
 			recordId : instId
 		});
-		iworkSpace.find('.js_modify_news_btn').hide();
-		iworkSpace.find('.js_delete_news_btn').hide();
-		iworkSpace.find('.js_save_news_btn').show();
-		iworkSpace.find('.js_create_news_btn').hide();
-		iworkSpace.find('.js_cancel_news_btn').show();
+		newsItem.find('.js_modify_news_btn').hide();
+		newsItem.find('.js_delete_news_btn').hide();
+		newsItem.find('.js_save_news_btn').show();
+		newsItem.find('.js_create_news_btn').hide();
+		newsItem.find('.js_cancel_news_btn').show();
+		return false;
+	});
+
+	$('.js_cancel_news_btn').live('click', function(e){
+		alert("111");
+		var input = $(targetElement(e));
+		var newsItem = input.parents('.js_sera_news_item_page');
+		var workId = newsItem.attr("workId");
+		var instId = newsItem.attr("instId");
+		var formContent = newsItem.find('div.js_form_content');
+		formContent.html('');
+		formContent.addClass('list_contents');
+		new SmartWorks.GridLayout({
+			target : formContent,
+			mode : "view",
+			workId : workId,
+			recordId : instId
+		});
+		showErrors();
+		newsItem.find('.js_modify_news_btn').show().siblings().hide();
+		newsItem.find('.js_delete_news_btn').show();
+		return false;
+	});
+
+	$('.js_create_news_btn').live('click', function(e) {
+		var input = $(targetElement(e));
+		var url = input.attr('href');
+		var target = input.parents('.js_board_list_page').find('div.js_new_work_form');
+		$('a.js_search_filter_close').click();
+		$.ajax({
+			url : url,
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+				var formContent = target.find('div.js_form_content');
+				var workId = input.attr('workId');
+				new SmartWorks.GridLayout({
+					target : formContent,
+					mode : "edit",
+					workId : workId
+				});
+			}
+			
+		});
+		return false;
+	});
+
+	$('.js_save_news_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var newsItem = input.parents('.js_sera_news_item_page');
+		var workId = newsItem.attr("workId");
+		var instId = newsItem.attr("instId");
+		var formContent = newsItem.find('div.js_form_content');
+		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
+		if (!SmartWorks.GridLayout.validate(newsItem.find('form.js_validation_required'), $('.js_space_error_message'))) return false;
+		
+		smartPop.confirm(smartMessage.get("saveConfirmation"), function(){
+			var forms = newsItem.find('form');
+			var paramsJson = {};
+			paramsJson['workId'] = workId;
+			paramsJson['instanceId'] = instId;
+			for(var i=0; i<forms.length; i++){
+				var form = $(forms[i]);
+				
+				// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+				if(form.attr('name') === 'frmSmartForm'){
+					paramsJson['formId'] = form.attr('formId');
+					paramsJson['formName'] = form.attr('formName');
+				}
+				
+				// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			}
+			console.log(JSON.stringify(paramsJson));
+			var url = "set_iwork_instance.sw";
+			
+			// 서비스요청 프로그래스바를 나타나게 한다....
+			var progressSpan = newsItem.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
+			
+			// set_iwork_instance.sw서비스를 요청한다..
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					alert("111");
+					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("setIWorkInstanceSucceed"), function(){
+						// 서비스요청 프로그래스바를 나타나게 한다....
+						var progressSpan = newsItem.find('.js_progress_span');
+						smartPop.progressCont(progressSpan);
+						formContent.html('');
+						formContent.addClass('list_contents');
+						new SmartWorks.GridLayout({
+							target : formContent,
+							mode : "view",
+							workId : workId,
+							recordId : instId,
+							onSuccess : function(){
+								newsItem.find('.js_modify_news_btn').show();
+								newsItem.find('.js_delete_news_btn').show();
+								newsItem.find('.js_save_news_btn').hide();
+								newsItem.find('.js_create_news_btn').hide();
+								newsItem.find('.js_cancel_news_btn').show();
+								smartPop.closeProgress();								
+							},
+							onError : function(){
+								smartPop.closeProgress();																
+							}
+						});
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("setIWorkInstanceError"), function(){
+						return false;
+					});
+					
+				}
+			});
+		},
+		function(){
+			return false;
+		});
+		return false;
+	});
+
+	$('.js_delete_news_btn').live('click', function(e){
+		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
+			var input = $(targetElement(e));
+			var newsItem = input.parents('.js_sera_news_item_page');
+			var workId = newsItem.attr("workId");
+			var instId = newsItem.attr("instId");
+			var paramsJson = {};
+			paramsJson['workId'] = workId;
+			paramsJson['instanceId'] = instId;
+			console.log(JSON.stringify(paramsJson));
+			var url = "remove_iwork_instance.sw";
+			
+			// 서비스요청 프로그래스바를 나타나게 한다....
+			var progressSpan = newsItem.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
+			
+			// set_iwork_instance.sw서비스를 요청한다..
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					
+					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
+							function(){
+								// 정보관리업무 목록 페이지로 이동한다.....
+								document.location.href = "seraNews.sw";				
+							});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+						return false;
+					});
+					
+				}
+			});
+			
+		},
+		function(){
+			return false;
+		});
 		return false;
 	});
 

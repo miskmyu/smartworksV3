@@ -109,7 +109,6 @@ import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.CourseReview;
 import net.smartworks.server.engine.sera.model.CourseReviewCond;
 import net.smartworks.server.engine.sera.model.CourseTeam;
-import net.smartworks.server.engine.sera.model.CourseTeamCond;
 import net.smartworks.server.engine.sera.model.CourseTeamUser;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
@@ -5528,6 +5527,7 @@ public class SeraServiceImpl implements ISeraService {
 			SeraUserInfo[] seraUserInfos = null;
 
 			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			swoGroupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			swoGroupCond.setId(courseId);
 
 			User user = SmartUtil.getCurrentUser();
@@ -5618,6 +5618,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setNameLike(key);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		
@@ -5631,6 +5632,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
 		courseDetailCond.setCourseIdIns(courseIds);
+		
 		//courseDetailCond.setEndFrom(new LocalDate());
 		
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
@@ -5646,6 +5648,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setNameLike(key);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		
@@ -5689,6 +5692,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setNameLike(key);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		
@@ -5732,6 +5736,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setNameLike(key);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		
@@ -5781,6 +5786,7 @@ public class SeraServiceImpl implements ISeraService {
 		if (courseType == Course.MY_RUNNING_COURSE) {
 			SwoGroupCond runningCourseCond = new SwoGroupCond();
 			runningCourseCond.setGroupLeader(userId);
+			runningCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			if (!CommonUtil.isEmpty(lastId)) {
 				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
 				if (lastGroup != null) {
@@ -5833,6 +5839,7 @@ public class SeraServiceImpl implements ISeraService {
 			courseMembers[0] = courseMember;
 			attendingCourseCond.setSwoGroupMembers(courseMembers);
 			attendingCourseCond.setNotGroupLeader(userId);
+			attendingCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 			if (!CommonUtil.isEmpty(lastId)) {
 				SwoGroup lastGroup = swoManager.getGroup("", lastId, IManager.LEVEL_LITE);
 				if (lastGroup != null) {
