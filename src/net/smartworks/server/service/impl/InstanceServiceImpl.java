@@ -3491,7 +3491,48 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			taskWorkCond.setPageSize(pageSize);
 
-			taskWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
+			SortingField sf = params.getSortingField();
+			String fieldId = "";
+			boolean isAsc;
+
+			SortingField sortingField = new SortingField();
+			if (sf != null) {
+				fieldId = sf.getFieldId();
+				if(fieldId.equals(FormField.ID_SUBJECT))
+					fieldId = "tskTitle";
+				else if(fieldId.equals(FormField.ID_LAST_MODIFIER))
+					fieldId = "tskassignee";
+				else if(fieldId.equals(FormField.ID_LAST_MODIFIED_DATE))
+					fieldId = "taskLastModifyDate";
+				else if(fieldId.equals(FormField.ID_STATUS))
+					fieldId = "tskstatus";
+				else if(fieldId.equals(FormField.ID_TASK_NAME))
+					fieldId = "tskname";
+				else if(fieldId.equals(FormField.ID_LAST_TASK))
+					fieldId = "lastTask_tskname";
+				else if(fieldId.equals(FormField.ID_PROCESS_TIME))
+					fieldId = "tskExecuteDate";
+				else if(fieldId.equals(FormField.ID_PROCESS_TYPE))
+					fieldId = "prcType";
+				else if(fieldId.equals(FormField.ID_WORK_INSTANCE))
+					fieldId = "packageName";
+				else if(fieldId.equals(FormField.ID_WORK_SPACE))
+					fieldId = "tskWorkSpaceId";
+				else if(fieldId.equals(FormField.ID_OWNER))
+					fieldId = "tskassignee";
+				else if(fieldId.equals(FormField.ID_CREATED_DATE))
+					fieldId = "tskcreatedate";
+				isAsc = sf.isAscending();
+
+				sortingField.setFieldId(sf.getFieldId());
+				sortingField.setAscending(isAsc);
+
+			} else {
+				fieldId = "taskLastModifyDate";
+				isAsc = false;
+			}
+
+			taskWorkCond.setOrders(new Order[]{new Order(fieldId, isAsc)});
 
 			TaskWork[] taskWorks = getWlmManager().getTaskWorkList(userId, taskWorkCond);
 
@@ -3503,7 +3544,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			instanceInfoList.setPageSize(pageSize);
 			instanceInfoList.setTotalPages(totalPages);
 			instanceInfoList.setCurrentPage(currentPage);
-
+			instanceInfoList.setSortedField(sortingField);
 			return instanceInfoList;
 
 		} catch (Exception e) {

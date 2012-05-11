@@ -22,8 +22,6 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -262,6 +260,13 @@ public class SeraController {
 
 		request.getSession().setAttribute("currentMenu", "seraNews");
 		return SmartUtil.returnMnvSera(request, "", "seraNews.tiles");
+	}
+
+	@RequestMapping("/seraTrend")
+	public ModelAndView seraTrend(HttpServletRequest request, HttpServletResponse response) {
+		
+		request.getSession().setAttribute("currentMenu", "seraTrend");
+		return SmartUtil.returnMnvSera(request, "", "seraTrend.tiles");
 	}
 
 	@RequestMapping("/helpCenter")

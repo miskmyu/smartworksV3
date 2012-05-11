@@ -1,16 +1,73 @@
-<%@page import="net.smartworks.model.sera.Course"%>
-<%@page import="net.smartworks.model.sera.info.CourseInfo"%>
-<%@page import="net.smartworks.model.sera.CourseList"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
+<%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.service.ISmartWorks"%>
 <%@ page contentType="text/html; charset=utf-8"%>
+<script type="text/javascript">
+	getIntanceList = function(paramsJson, progressSpan, isGray){
+		if(isEmpty(progressSpan))
+			progressSpan = $('.js_work_list_title').find('.js_progress_span:first');
+		if(isGray)
+			smartPop.progressContGray(progressSpan);
+		else
+			smartPop.progressCont(progressSpan);
+		console.log(JSON.stringify(paramsJson));
+		var url = "set_instance_list_params.sw";
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				$('#board_instance_list_page').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get('workListError'));
+			}
+		});
+	};
 
+	selectListParam = function(progressSpan, isGray){
+		var boardList = $('.js_board_list_page');
+		var forms = boardList.find('form:visible');
+		var paramsJson = {};
+		var workId = boardList.attr('workId');
+		paramsJson["href"] = "jsp/content/work/list/board_instance_list.jsp?workId=" + workId;
+		var searchFilters = boardList.find('form[name="frmSearchFilter"]');
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			if(form.attr('name') !== "frmSearchFilter" && !(!isEmpty(searchFilters) && form.attr('name') === "frmSearchInstance")){
+				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			}
+		}
+		if(!isEmpty(searchFilters)){
+			var searchFilterArray = new Array();
+			for(var i=0; i<searchFilters.length; i++){
+				var searchFilter = $(searchFilters[i]);
+				if(searchFilter.is(':visible'))
+					searchFilterArray.push(searchFilter.find(':visible').serializeObject());
+			}
+			paramsJson['frmSearchFilters'] = searchFilterArray;
+		}
+		getIntanceList(paramsJson, progressSpan, isGray);		
+	};
+</script>
 <%
-	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-%>
+	String cid = request.getParameter("cid");
+	String wid = request.getParameter("wid");
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
+	
+	User cUser = SmartUtil.getCurrentUser();
+	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
+	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName(); 
 
+%>
+<fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
+<fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <div id="course_list_section">
 	<!-- SNB Left -->
 	<div class="snb2">
