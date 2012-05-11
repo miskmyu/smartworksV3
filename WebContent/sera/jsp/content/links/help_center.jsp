@@ -64,16 +64,15 @@
 				</ul>
 			</div>
 			<div id="divHelpPage" class="tutorial_visual" style="width: 587px">
-				<!-- 코스 개설하기 -->
+				<!-- 동영상 -->
 				<div id="img1_1" class="helpImg">
 					<iframe width="587" height="428" src="http://www.youtube.com/embed/pY15D-zSqgQ" frameborder="0" allowfullscreen></iframe>
 				</div>
-				<!-- 코스 참여하기 -->
 				<div id="img2_1" class="helpImg" style="display:none">
-					<iframe width="587" height="428" src="http://www.youtube-nocookie.com/embed/LoWlnAzML88" frameborder="0" allowfullscreen></iframe>
+					<iframe width="587" height="428" src="http://www.youtube.com/embed/Y_TK1KB-XL0" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<div id="img3_1" class="helpImg" style="display:none">
-					<iframe width="587" height="428" src="" frameborder="0" allowfullscreen></iframe>
+					<iframe width="587" height="428" src="http://www.youtube.com/embed/VN6mdQ8ptrY" frameborder="0" allowfullscreen></iframe>
 				</div>
 				<div id="img4_1" class="helpImg" style="display:none">
 					<iframe width="587" height="428" src="" frameborder="0" allowfullscreen></iframe>

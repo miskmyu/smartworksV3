@@ -37,43 +37,37 @@
 					// 받은편지함인 경우  
 					if(folder.getType() == MailFolder.TYPE_SYSTEM_INBOX){
 					%>
-						<span class="icon_mail_inbox"></span> 
-						<span class=""><fmt:message key="mail.title.folder.inbox"/></span>
+						<span class="icon_mail_inbox"></span><fmt:message key="mail.title.folder.inbox"/>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					// 보낸 편지함이니 경우 
 					}else if(folder.getType() == MailFolder.TYPE_SYSTEM_SENT){
 					%>
-						<span class="icon_mail_sent"></span> 
-						<span class=""><fmt:message key="mail.title.folder.sent"/></span>
+						<span class="icon_mail_sent"></span><fmt:message key="mail.title.folder.sent"/>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					// 휴지통인 경우 
 					}else if(folder.getType() == MailFolder.TYPE_SYSTEM_TRASH){
 					%>
-						<span class="icon_mail_trash"></span> 
-						<span class=""><fmt:message key="mail.title.folder.trash"/></span>
+						<span class="icon_mail_trash"></span><fmt:message key="mail.title.folder.trash"/>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					// 임시보관함인 경우  
 					}else if(folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS){
 					%>
-						<span class="icon_mail_drafts"></span> 
-						<span class=""><fmt:message key="mail.title.folder.drafts"/></span>
+						<span class="icon_mail_drafts"></span><fmt:message key="mail.title.folder.drafts"/>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					// 스팸함인 경우 
 					}else if(folder.getType() == MailFolder.TYPE_SYSTEM_JUNK){
 					%>
-						<span class="icon_mail_junk"></span> 
-						<span class="nav_sub_area"><fmt:message key="mail.title.folder.junk"/></span>
+						<span class="icon_mail_junk"></span><fmt:message key="mail.title.folder.junk"/>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					// 사용자 정의 폴더인 경우  
 					}else if(folder.getType() == MailFolder.TYPE_USER){
 					%>
-						<span class="icon_mail_folder_add"></span> 
-						<span class=""><%=folder.getName()%></span>
+						<span class="icon_mail_folder_add"></span><%=folder.getName()%>
 						<%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 					<%
 					}
