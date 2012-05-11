@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.IWInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.MemoInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.WorkInstanceInfo"%>
@@ -46,7 +47,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	String wid = (String)session.getAttribute("wid");
 
-	InstanceInfoList instanceList = smartWorks.getBoardInstanceList(null, params);
+	InstanceInfoList instanceList = smartWorks.getIWorkInstanceList(SmartWork.ID_BOARD_MANAGEMENT, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -101,7 +102,7 @@
 		int currentCount = instanceList.getTotalSize()-(currentPage-1)*pageSize;
 		if(instanceList.getInstanceDatas() != null) {
 			InstanceInfo[] instanceInfos = (InstanceInfo[])instanceList.getInstanceDatas();
-			for (InstanceInfo instanceInfo : instanceInfos) {
+			for (IWInstanceInfo instanceInfo : (IWInstanceInfo[])instanceInfos) {
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
 				String target = "seraNewsItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + instanceInfo.getId();
@@ -115,7 +116,7 @@
 						<img src="<%=owner.getMidPicture()%>" class="profile_size_s"/>
 					</td>
 					<td>
-						<%=((BoardInstanceInfo)instanceInfo).getSubject() %>
+						<%=instanceInfo.getSubject()%>
 					</td>
 					<td class="tr pr10">
 						<%
@@ -129,7 +130,7 @@
 						}
 						%>
 					</td>
-					<td class="tc"><%=((BoardInstanceInfo)instanceInfo).getViews() %>
+					<td class="tc"><%=instanceInfo.getViews() %>
 				</tr>
 	<%
 				currentCount--;
