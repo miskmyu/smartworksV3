@@ -22,14 +22,12 @@
 	<!-- Aside Block1 -->
 	<div class="aside_block">
 		<div class="header">
-			
 			<span class="icon_as_mycourse">
-				<a href="myCourses.sw" class="js_sera_content">
-				내 코스 <span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span>
-				<span class="icon_as_more"></span>
+				<a href="myCourses.sw" class="js_sera_content">내 코스 
+					<span class="num_cus">(<%=courseList.getRunnings()+courseList.getAttendings() %>)</span>
+					<span class="icon_as_more"></span>
 				</a>
 			</span>
-			
 		</div>
 		<div class="content">
 			<dl>
@@ -85,8 +83,11 @@
 	  <!-- Aside Block2 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class=" icon_as_badge fl">뱃 지 (0)</div>
-			<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
+			<span class=" icon_as_badge">
+				<a href="" class="">뱃 지
+					<span class="icon_as_more" style="display:none"></span>
+				</a>
+			</span>
 		</div>
 		<div class="list">
 			<dl>
@@ -112,13 +113,12 @@
 	<div class="aside_block m0">
 		<div class="header">
 			<span class=" icon_as_friend">
-				<a href="socialFriend.sw" class="js_sera_content">
-					친 구 (<%=friendList.getTotalFriends() %>)
+				<a href="socialFriend.sw" class="js_sera_content">친 구 (<%=friendList.getTotalFriends() %>)
 					<span class="icon_as_more"></span>
 				</a>
-			</div>
-			
+			</span>
 		</div>
+			
 		<div class="list">
 			<dl>
 				<%
@@ -139,8 +139,11 @@
 	 <!-- Aside Block4 -->
 	<div class="aside_block m0">
 		<div class="header">
-			<div class="icon_as_srtrend fl">트렌드 세라 (0)</div>
-			<div class="icon_as_more" style="display:none"><a class="mt10"> </a></div>
+			<span class=" icon_as_srtrend">
+				<a href="" class="">트렌드 세라 (0)
+					<span class="icon_as_more" style="display:none"></span>
+				</a>
+			</span>
 		</div>
 		<div class="content">
 			<dl>
