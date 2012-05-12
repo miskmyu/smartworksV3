@@ -80,7 +80,6 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				console.log('data = ', data);
 				$('#board_instance_list_page').html(data);
 				smartPop.closeProgress();
 			},

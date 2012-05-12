@@ -242,7 +242,6 @@ function receivedMessageOnChatId(message) {
 	var senderInfo = message.senderInfo;
 	var chatMessage = message.chatMessage;
 	var sendDate = new Date(message.sendDate);
-//	console.log('message=', message.sendDate, ', parsed date=', Date.parse(message.sendDate), ', sendDate=', sendDate);
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
 	var data = "<li>" + 
 					"<div class='noti_pic'>" +

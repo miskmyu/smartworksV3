@@ -1260,9 +1260,9 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SeraUserInfo[] searchTeamMemberByType(int type, String teamId, String key) throws Exception {
+	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
 		// TODO Auto-generated method stub
-		return seraService.searchTeamMemberByType(type, teamId, key);
+		return seraService.searchTeamMemberByType(type, courseId, teamId, key);
 	}
 
 	@Override

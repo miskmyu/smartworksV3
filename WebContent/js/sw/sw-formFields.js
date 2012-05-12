@@ -391,7 +391,6 @@ function loadGroupProfileField() {
 				pictureHeight: 110,
 				required: false
 			});
-			console.log("groupProfileField=", groupProfileField);
 		}		
 	}
 };
@@ -415,7 +414,6 @@ function loadNewGroupFields() {
 				multiUsers: true,
 				required: false
 			});
-			console.log('newGroupField=', newGroupField);			
 		}		
 	}
 };

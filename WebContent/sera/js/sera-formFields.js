@@ -76,7 +76,6 @@ function loadCreateMissionFields() {
 
 		var openDateStr = missionOpenDateField.attr('openDate');
 		if(isEmpty(openDateStr)) openDateStr = (new Date()).format('yyyy.mm.dd');
-		console.log('openDateStr=', openDateStr);
 
 		SmartWorks.FormRuntime.DateChooserBuilder.buildEx({
 			container: gridRow,
@@ -123,7 +122,6 @@ function loadCreateMissionFields() {
 		var missionContent = missionContentField.attr('content');
 		if(isEmpty(missionContent)) missionContent = "";
 
-		console.log('content=', missionContent);
 		SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 			container: gridRow,
 			fieldId: "txtaMissionContent",
@@ -311,11 +309,9 @@ function loadSeraProfileField() {
 	if(!isEmpty(seraProfileFields)) {
 		for(var i=0; i<seraProfileFields.length; i++) {
 			var seraProfileField = $(seraProfileFields[i]);
-			
 			var gridRow = SmartWorks.GridLayout.newGridRow();
 			var gridTable = SmartWorks.GridLayout.newGridTable();
 			seraProfileField.html(gridTable.html(gridRow));
-
 			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
 				container: gridRow,
 				fieldId: "imgMyProfile",

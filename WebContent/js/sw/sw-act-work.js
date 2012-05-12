@@ -277,7 +277,6 @@ $(function() {
 									fileList : fileList,
 									comments : comments								
 							});
-							console.log("record", record);
 							new SmartWorks.GridLayout({
 								target : formContent,
 								formXml : formXml,

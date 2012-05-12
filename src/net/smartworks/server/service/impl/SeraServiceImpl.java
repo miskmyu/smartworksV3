@@ -5916,9 +5916,9 @@ public class SeraServiceImpl implements ISeraService {
 		return SeraTest.getCourseMenteeInformsByType(type, teamId, lastId, maxList);
 	}
 	@Override
-	public SeraUserInfo[] searchTeamMemberByType(int type, String teamId, String key) throws Exception {
+	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
 		// TODO Auto-generated method stub
-		return SeraTest.getCourseMenteeInformsByType(type, teamId, null, 0);
+		return SeraTest.getCourseMenteeInformsByType(type, null, null, 0);
 	}
 	@Override
 	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {

@@ -574,7 +574,7 @@ public interface ISmartWorks {
 
 	public abstract SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception;
 
-	public abstract SeraUserInfo[] searchTeamMemberByType(int type, String teamId, String key) throws Exception;
+	public abstract SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception;
 
 	public abstract void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

@@ -77,7 +77,6 @@
 		var input = $(targetElement(e));
 		var sortingField = $('form[name="frmSortingField"]').find('input[name="hdnSortingFieldId"]');
 		var sortingIsAscending = $('form[name="frmSortingField"]').find('input[name="hdnSortingIsAscending"]');
-		console.log("input...=", input, sortingField, sortingIsAscending);
 		if(sortingField.attr('value') === input.attr('fieldId')){
 			var isAscending = sortingIsAscending.attr('value');
 			sortingIsAscending.attr('value', (isAscending === "true") ? "false" : "true");

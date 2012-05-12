@@ -24,7 +24,6 @@
 				assignedOnly : assignedOnly
 			},
 			success : function(data, status, jqXHR) {
-				console.log('data=', data, ", target=", runningPage.find('.js_instance_list_table'));
 				$(data).appendTo(runningPage.find('.js_instance_list_table'));
 				smartPop.closeProgress();
 			},

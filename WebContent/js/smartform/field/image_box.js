@@ -45,7 +45,6 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	var src = (isBlank(imgSource)) ? '' : ' src="' + imgSource + '" ';
 	var $image = $('<div ' + required + ' style="width:' + valueWidth + '%"><img class="js_auto_picture" ' + picSize + src + '></img><div>');
 	var $label = null;
-		
 	$label = $('<div class="form_label" style="width:' + labelWidth + '%"><span id="' + id + '"></span></div>').append(spanRequired);
 	$label.appendTo(options.container);
 	$image.appendTo(options.container);	
@@ -148,7 +147,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.dataField = function(config){
 	var dataField = {};
 	var fieldId = (isEmpty(options.fieldId)) ? $formXml.find('formEntity[name="'+options.fieldName+'"]').attr('id') : options.fieldId;
 	if(isEmpty(fieldId)) fieldId = ($formXml.attr("name") === options.fieldName) ? $formXml.attr('id') : "";
-	if(isEmpty($formXml) || isEmpty(fieldId)) return dataField;
+	if(isEmpty(fieldId)) return dataField;
 	
 	dataField = {
 			id: fieldId,

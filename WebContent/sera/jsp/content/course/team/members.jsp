@@ -15,6 +15,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String courseId = request.getParameter("courseId");
 	String teamId = request.getParameter("teamId");
 	Team team = SmartUtil.isBlankObject(teamId) ? null :  (Team)session.getAttribute("team");
 	if(!SmartUtil.isBlankObject(teamId) && SmartUtil.isBlankObject(team)) team = smartWorks.getTeamById(teamId);
@@ -23,7 +24,7 @@
 %>
 
 <!-- Panel Section -->
-<div class="content_section js_team_members_page">
+<div class="content_section js_team_members_page" courseId="<%=courseId %>" teamId="<%=teamId %>" >
 	<!-- Panel1 -->
 	<div>
 		<div class="header mt10">
@@ -37,7 +38,7 @@
 					SeraUserInfo requester = memberRequests[i];
 			%>
 					<!-- 목록1-->
-					<div class="panel_rds_block mb10 js_member_request_item" userId="<%=requester.getId()%>">
+					<div class="panel_rds_block mb10 js_member_request_item" userId="<%=requester.getId()%>" teamId="<%=teamId%>">
 						<ul>							
 							<li class="pl0pr10">
 								<a href="othersPAGE.sw?userId=<%=requester.getId()%>">
@@ -102,7 +103,7 @@
 					SeraUserInfo member = memberInforms.getMembers()[i];
 			%>
 					<!-- 목록1-->
-					<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>">
+					<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>" teamId="<%=teamId%>">
 						<ul>
 							<li class="pl0pr10">
 								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
@@ -195,7 +196,7 @@
 							</li>
 							<li class="fr bo_l">
 								<span> <!-- Btn -->
-									<div class="btn_green_l js_request_member_btn" userId="<%=member.getId()%>">
+									<div class="btn_green_l js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
 										<div class="btn_green_r"><span class="icon_green_down"></span>팀원 요청</div>
 									</div> <!-- Btn //--> 
 								</span>

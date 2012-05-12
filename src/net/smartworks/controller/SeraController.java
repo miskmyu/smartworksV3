@@ -339,6 +339,11 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/detail/more_course_reviews.jsp", "");
 	}
 
+	@RequestMapping("/moreMemberInforms")
+	public ModelAndView moreMemberInforms(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/more_member_informs.jsp", "");
+	}
+
 	@RequestMapping("/inviteCourseMembers")
 	public ModelAndView inviteCourseMembers(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/invite_course_members.jsp", "");
@@ -632,6 +637,11 @@ public class SeraController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void destroyTeamMembership(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.destroyTeamMembership(requestBody, request);
+	}
+
+	@RequestMapping("/search_team_member_by_type")
+	public ModelAndView searchTeamMemberByType(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnvSera(request, "sera/jsp/search/team_member_by_type.jsp", "");
 	}
 	
 }

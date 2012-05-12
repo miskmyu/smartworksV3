@@ -1,4 +1,5 @@
 <%@page import="net.smartworks.model.sera.MemberInformList"%>
+<%@page import="net.smartworks.model.sera.MenteeInformList"%>
 <%@page import="net.smartworks.model.sera.FriendInformList"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
@@ -15,29 +16,18 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	int type = Integer.parseInt(request.getParameter("type"));
+	String courseId = request.getParameter("courseId");
 	String teamId = request.getParameter("teamId");
-	String lastId = request.getParameter("lastId");
+	String key = request.getParameter("key");
+	
+	SeraUserInfo[] teamMembers = smartWorks.searchTeamMemberByType(type, courseId, teamId, key);
+	if(!SmartUtil.isBlankObject(teamMembers)){
+		for(int i=0; i<teamMembers.length; i++){
+			SeraUserInfo member = teamMembers[i];
 
-	SeraUserInfo[] members = smartWorks.getTeamMemberInformsByType(type, teamId, lastId, MemberInformList.MAX_MEMBER_LIST);
-
-	if(!SmartUtil.isBlankObject(members)){
-		for(int i=0; i<members.length; i++){
-			SeraUserInfo member = members[i];
-			String userHref = (cUser.getId().equals(member.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + member.getId();
-			String btnClass = type == MemberInformList.TYPE_MEMBERS ? "js_more_member_btn" : "js_more_non_member_btn";
-			if(i==MemberInformList.MAX_MEMBER_LIST){
-	%>
-				<!-- 더보기 -->
-				<div class="more js_more_member_informs_btn <%=btnClass%>" requestType="<%=type %>" teamId="<%=teamId%>" lastId="<%=members[i-1].getId()%>">
-					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
-				</div>
-				<!-- 더보기 //-->
-			<%
-				break;
-			}
 			switch(type){
 			case MemberInformList.TYPE_MEMBERS:
-			%>
+	%>
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>" teamId="<%=teamId%>">
 					<ul>
@@ -72,10 +62,10 @@
 					</ul>
 				</div>
 				<!-- 목록1//-->
-			<%
+	<%
 				break;
 			case MemberInformList.TYPE_NON_MEMBERS:
-			%>
+	%>
 				<!-- 목록1-->
 				<div class="panel_rds_block mb10 js_non_member_item" userId="<%=member.getId()%>">
 					<ul>
@@ -113,6 +103,6 @@
 	<%
 				break;
 			}
-		}
+		}		
 	}
 	%>

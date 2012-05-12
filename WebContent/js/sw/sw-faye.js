@@ -96,13 +96,10 @@ var chatHistory = {
 	},
 		
 	setHistory : function(chatId, history){
-		console.log('setHistory=', history);
 		var histories = chatHistory.getHistories(chatId);
 		if(histories){
-			console.log('pushed');
 			histories.push(history);
 			$.jStorage.set(currentUserId+chatId, histories);
-			console.log(histories);
 		}
 	},
 		
@@ -265,7 +262,6 @@ var smartTalk = {
 	restoreChatting : function(chatInfo, histories){
 		
 		smartTalk.startSubOnChatId(chatInfo);
-		console.log('called in restoreChatting chatinfo=', chatInfo, ', histories=', histories);
 		startChattingWindow(chatInfo);
 		var waitForChattingBox = function(){
 			//console.log("retries");
