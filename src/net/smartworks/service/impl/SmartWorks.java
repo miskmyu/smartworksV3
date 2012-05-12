@@ -51,6 +51,7 @@ import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraBoardList;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
@@ -1277,6 +1278,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		seraService.destroyTeamMembership(requestBody, request);
+	}
+
+	@Override
+	public SeraBoardList getSeraBoards(int maxList) throws Exception {
+		return seraService.getSeraBoards(maxList);
 	}
 
 }

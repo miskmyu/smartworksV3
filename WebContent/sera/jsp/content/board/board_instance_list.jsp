@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.Constants"%>
 <%@page import="net.smartworks.model.instance.info.IWInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.MemoInstanceInfo"%>
@@ -43,11 +44,12 @@
 		}
 	}
 	session.setAttribute("requestParams", params);
+	session.setAttribute("workId", SmartWork.ID_BOARD_MANAGEMENT);
 
 	User cUser = SmartUtil.getCurrentUser();
 	String wid = (String)session.getAttribute("wid");
 
-	InstanceInfoList instanceList = smartWorks.getIWorkInstanceList(SmartWork.ID_BOARD_MANAGEMENT, params);
+	InstanceInfoList instanceList = smartWorks.getBoardInstanceList(wid, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -63,9 +65,6 @@
 		if(sortedField==null) sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
-			<th class="r_line">
-          		<input name="" type="checkbox" value="" />
-            </th>
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
@@ -80,12 +79,15 @@
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
-			<th class="r_line">
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+	 		<th class="r_line" style="width:24px;">
+				<img src="images/icon_file.gif"/>
+			</th>
+			<th class="r_line" style="width:120px;">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">수정자
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>/
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>"><fmt:message key='common.title.last_modified_date' />
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">수정일
 					<span class=" <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
@@ -102,15 +104,12 @@
 		int currentCount = instanceList.getTotalSize()-(currentPage-1)*pageSize;
 		if(instanceList.getInstanceDatas() != null) {
 			InstanceInfo[] instanceInfos = (InstanceInfo[])instanceList.getInstanceDatas();
-			for (IWInstanceInfo instanceInfo : (IWInstanceInfo[])instanceInfos) {
+			for (InstanceInfo instanceInfo : instanceInfos) {
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
-				String target = "seraNewsItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + instanceInfo.getId();
+				String target = "seraBoardItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + instanceInfo.getId();
 			%>
 				<tr class="instance_list js_sera_container" href="<%=target%>">
-					<td>
-          				<input name="" type="checkbox" value="" />
-           	 		</td>
 					<td class="tc"><%=currentCount%></td>
 					<td>
 						<img src="<%=owner.getMidPicture()%>" class="profile_size_s"/>
@@ -118,19 +117,23 @@
 					<td>
 						<%=instanceInfo.getSubject()%>
 					</td>
+					<%
+					boolean fileAttached = (instanceInfo.getClass().equals(BoardInstanceInfo.class) && !SmartUtil.isBlankObject(((BoardInstanceInfo)instanceInfo).getFiles())) ? true : false;
+					%>
+					<td class="tc"><%if(fileAttached){%><img src="images/icon_file.gif"/><%} %></td>
 					<td class="tr pr10">
 						<%
 						if(!SmartUtil.isBlankObject(lastModifier)){
 						%>
 							<div class="noti_in">
-								<span class="t_name"><%=lastModifier.getLongName()%></span>
+								<span class="t_name"><%=lastModifier.getNickName()%></span>
 								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
 							</div>
 						<%
 						}
 						%>
 					</td>
-					<td class="tc"><%=instanceInfo.getViews() %>
+					<td class="tc"><%=((IWInstanceInfo)instanceInfo).getViews() %></td>
 				</tr>
 	<%
 				currentCount--;
@@ -154,13 +157,15 @@
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
-			<th class="r_line">
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+	 		<th class="r_line" style="width:24px;">
+				<img src="images/icon_file.gif"/>
+			</th>
+			<th class="r_line" style="width:120px">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">수정자
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>/
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-					<fmt:message key='common.title.last_modified_date' />
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">수정일
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>

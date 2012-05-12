@@ -70,9 +70,9 @@
 	<div class="snb2">
 		<ul class="snb_menu">
 			<li><img height="112" width="149"
-				src="/sera/images/function_title_admin.gif"></li>
-			<li class="selected"><a href="">세라소식</a></li>
-			<li class=""><a href="">트렌드 세라</a></li>
+				src="sera/images/function_title_admin.gif"></li>
+			<li class="selected"><a href="seraNews.sw">세라소식</a></li>
+			<li class=""><a href="seraTrend.sw">트렌드 세라</a></li>
 		</ul>
 	</div>
 	<!-- SNB Left//-->
@@ -98,14 +98,15 @@
 		<!-- Title //-->
 
 		<!-- Btn -->
-		<div class="buttonSet">
-			<button>
-				<span class="icon_txt_delet"></span>삭제
-			</button>
-			<button>글쓰기</button>
-			<button class="fr ml5">글숨기기</button>
-			<button class="fr">글보이기</button>
-		</div>
+		<%
+		if(cUser.getUserLevel()>=User.USER_LEVEL_AMINISTRATOR){
+		%>
+			<div class="buttonSet">
+				<button href="seraBoardItem.sw?workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>" class="js_sera_container">글쓰기</button>
+			</div>
+		<%
+		}
+		%>
 		<!-- Btn //-->
 		<!-- 조회 -->
 		<div class="list_contents">

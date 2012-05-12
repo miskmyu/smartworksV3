@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
+<%@page import="net.smartworks.model.sera.SeraBoardList"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -30,15 +32,6 @@
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
 
-<%
-	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
-	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
-	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
-	session.setAttribute("currentMenu", "none");
-	session.setAttribute("noUser", true);
-%>
-
 <script type="text/javascript">
 	if(isEmpty(parent.location.pathname.match('logins.sw'))){
 	    parent.location.href = "logins.sw";
@@ -49,6 +42,17 @@
 		timeOffset : "<%=TimeZone.getDefault().getRawOffset()%>"
 	};
 </script>
+
+<%
+	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
+	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
+	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
+	session.setAttribute("currentMenu", "none");
+	session.setAttribute("noUser", true);
+	
+	SeraBoardList seraBoards = smartWorks.getSeraBoards(SeraBoardList.MAX_BOARD_LIST);
+%>
 
 <body>
 	<div id="wrap" class="main_bg">
@@ -134,16 +138,21 @@
 				<li class="lst_normal">
 					<dl class="">
 						<dt>
-							<a href="seraNews.sw"><div class="icon_mn_news fl">SERA 소식</div></a>
-							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
+							<a href="seraNews.sw"><div class="icon_mn_news fl">SERA 소식</div>
+							<div class="icon_mn_more mt13"></div></a>
 						</dt>
 						<dd>
 							<ul>
-								<li>- 세라 캠퍼스가 기능을 강화하여 새롭...</li>
-								<li>- 장동인 대표의 [클라우드]코스가 신설...</li>
-								<li>- TEDx 과천 강의가 업로드...</li>
-								<li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
-								<li>- [세라소식] 게시글 제목은 최근 5개만...</li>
+								<%
+								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraNews())){									
+									for(int i=0; i<seraBoards.getSeraNews().length || i<SeraBoardList.MAX_BOARD_LIST; i++){
+										BoardInstanceInfo news = seraBoards.getSeraNews()[i];
+								%>
+										<li><%=news.getSubject() %></li>
+								<%
+									}
+								}
+								%>
 							</ul>
 						</dd>
 					</dl>
@@ -152,16 +161,21 @@
 				<li class="lst_normal end mt20">
 					<dl class="">
 						<dt>
-							<a href="seraNews.sw"><div class="icon_as_srtrend fl">트렌드 세라</div></a>
-							<div class="icon_mn_more"><a href="seraNews.sw" class="mt13"> </a></div>
+							<a href="seraTrend.sw"><div class="icon_as_srtrend fl">트렌드 세라</div>
+							<div class="icon_mn_more mt13"></div></a>
 						</dt>
 						<dd>
 							<ul>
-								<li>- 세라 캠퍼스가 기능을 강화하여 새롭...</li>
-								<li>- 장동인 대표의 [클라우드]코스가 신설...</li>
-								<li>- TEDx 과천 강의가 업로드...</li>
-								<li>- [전하진 칼럼] 스펙보다 열정을 봐라...</li>
-								<li>- [세라소식] 게시글 제목은 최근 5개만...</li>
+								<%
+								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraTrends())){
+									for(int i=0; i<seraBoards.getSeraTrends().length || i<SeraBoardList.MAX_BOARD_LIST; i++){
+										BoardInstanceInfo trend = seraBoards.getSeraTrends()[i];
+								%>
+										<li><%=trend.getSubject() %></li>
+								<%
+									}
+								}
+								%>
 							</ul>
 						</dd>
 					</dl>

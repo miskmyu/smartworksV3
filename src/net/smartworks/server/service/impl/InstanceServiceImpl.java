@@ -4063,7 +4063,13 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	public InstanceInfoList getBoardInstanceList(String workSpaceId, RequestParams params) throws Exception {
-		return getInstanceInfoListByRefType(workSpaceId, params, TskTask.TASKREFTYPE_BOARD, -1, "");
+		//return getInstanceInfoListByRefType(workSpaceId, params, TskTask.TASKREFTYPE_BOARD, -1, "");
+
+		// 위의 getInstanceInfoListByRefType()를 이용하여 수정바랍니다.
+		// 아래의 getIWorkInstanceList는 WorkSpace별로 인스턴스를 가져올수가 없으면 반환되는 인스턴스도 IWInstanceInfo[]이기때문에 사용할 수 없음.
+		// WorkSpace별로 BoardInstanceInfo[]로 가져올 수 있어야 함..
+		return getIWorkInstanceList(SmartWork.ID_BOARD_MANAGEMENT, params);
+
 	}
 
 	public InstanceInfoList getPWorkInstanceList_bak(String workId, RequestParams params) throws Exception {

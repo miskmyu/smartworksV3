@@ -87,11 +87,11 @@ var merge3Objects = function(obj1, obj2, obj3){
 };
 
 function isEmpty(str) {
-    return (!str || 0 === str.length);
+    return (!str || 0 === str.length || 'null' === str);
 };
 
 function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
+    return (!str || /^\s*$/.test(str) || 'null' === str);
 };
 
 // private method for UTF-8 encoding

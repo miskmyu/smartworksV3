@@ -470,7 +470,7 @@ $(function() {
 		var input = $(targetElement(e)).parents('.js_join_course_request');
 		var courseId = input.parents('.js_course_content').attr('courseId');
 		var paramsJson = {};
-		paramsJson["courseId"] = courseId
+		paramsJson["courseId"] = courseId;
 		paramsJson["userId"] = currentUser.userId;
 		smartPop.progressCenter();				
 		$.ajax({
@@ -757,7 +757,7 @@ $(function() {
 		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
 		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
 			e.keyCode = $.ui.keyCode.ENTER;
-			e.which = $.ui.keyCode.ENTER
+			e.which = $.ui.keyCode.ENTER;
 			return true;
 		}else if(keyCode != $.ui.keyCode.ENTER){
 			return;
@@ -2007,12 +2007,12 @@ $(function() {
 		return false;
 	});
 
-	$('.js_modify_news_btn').live('click', function(e){
+	$('.js_modify_sera_board_btn').live('click', function(e){
 		var input = $(targetElement(e));
-		var newsItem = input.parents('.js_sera_news_item_page');
-		var workId = newsItem.attr("workId");
-		var instId = newsItem.attr("instId");
-		var formContent = newsItem.find('div.js_form_content');
+		var boardItem = input.parents('.js_sera_board_item_page');
+		var workId = boardItem.attr("workId");
+		var instId = boardItem.attr("instId");
+		var formContent = boardItem.find('div.js_form_content');
 		formContent.html('');
 		formContent.removeClass('list_contents');			
 		new SmartWorks.GridLayout({
@@ -2021,21 +2021,21 @@ $(function() {
 			workId : workId,
 			recordId : instId
 		});
-		newsItem.find('.js_modify_news_btn').hide();
-		newsItem.find('.js_delete_news_btn').hide();
-		newsItem.find('.js_save_news_btn').show();
-		newsItem.find('.js_create_news_btn').hide();
-		newsItem.find('.js_cancel_news_btn').show();
+		boardItem.find('.js_modify_sera_board_btn').hide();
+		boardItem.find('.js_delete_sera_board_btn').hide();
+		boardItem.find('.js_save_sera_board_btn').show();
+		boardItem.find('.js_create_sera_board_btn').hide();
+		boardItem.find('.js_cancel_sera_baord_btn').show();
+		boardItem.find('.js_list_sera_board_btn').hide();
 		return false;
 	});
 
-	$('.js_cancel_news_btn').live('click', function(e){
-		alert("111");
+	$('.js_cancel_sera_board_btn').live('click', function(e){
 		var input = $(targetElement(e));
-		var newsItem = input.parents('.js_sera_news_item_page');
-		var workId = newsItem.attr("workId");
-		var instId = newsItem.attr("instId");
-		var formContent = newsItem.find('div.js_form_content');
+		var boardItem = input.parents('.js_sera_board_item_page');
+		var workId = boardItem.attr("workId");
+		var instId = boardItem.attr("instId");
+		var formContent = boardItem.find('div.js_form_content');
 		formContent.html('');
 		formContent.addClass('list_contents');
 		new SmartWorks.GridLayout({
@@ -2044,46 +2044,31 @@ $(function() {
 			workId : workId,
 			recordId : instId
 		});
-		showErrors();
-		newsItem.find('.js_modify_news_btn').show().siblings().hide();
-		newsItem.find('.js_delete_news_btn').show();
+		boardItem.find('.js_modify_sera_board_btn').show();
+		boardItem.find('.js_delete_sera_board_btn').show();
+		boardItem.find('.js_save_sera_board_btn').hide();
+		boardItem.find('.js_create_sera_board_btn').hide();
+		boardItem.find('.js_cancel_sera_board_btn').hide();
+		boardItem.find('.js_list_sera_board_btn').show();
 		return false;
 	});
 
-	$('.js_create_news_btn').live('click', function(e) {
-		var input = $(targetElement(e));
-		var url = input.attr('href');
-		var target = input.parents('.js_board_list_page').find('div.js_new_work_form');
-		$('a.js_search_filter_close').click();
-		$.ajax({
-			url : url,
-			data : {},
-			success : function(data, status, jqXHR) {
-				target.html(data).slideDown(500);
-				var formContent = target.find('div.js_form_content');
-				var workId = input.attr('workId');
-				new SmartWorks.GridLayout({
-					target : formContent,
-					mode : "edit",
-					workId : workId
-				});
-			}
-			
-		});
+	$('.js_create_sera_board_btn').live('click', function(e) {
+		submitForms();
 		return false;
 	});
 
-	$('.js_save_news_btn').live('click', function(e){
+	$('.js_save_sera_board_btn').live('click', function(e){
 		var input = $(targetElement(e));
-		var newsItem = input.parents('.js_sera_news_item_page');
-		var workId = newsItem.attr("workId");
-		var instId = newsItem.attr("instId");
-		var formContent = newsItem.find('div.js_form_content');
+		var boardItem = input.parents('.js_sera_board_item_page');
+		var workId = boardItem.attr("workId");
+		var instId = boardItem.attr("instId");
+		var formContent = boardItem.find('div.js_form_content');
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
-		if (!SmartWorks.GridLayout.validate(newsItem.find('form.js_validation_required'), $('.js_space_error_message'))) return false;
+		if (!SmartWorks.GridLayout.validate(boardItem.find('form.js_validation_required'), $('.js_space_error_message'))) return false;
 		
-		smartPop.confirm(smartMessage.get("saveConfirmation"), function(){
-			var forms = newsItem.find('form');
+		smartPop.confirm("항목을 수정하려고 합니다. 정말로 수정하시겠습니까?", function(){
+			var forms = boardItem.find('form');
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
@@ -2103,7 +2088,7 @@ $(function() {
 			var url = "set_iwork_instance.sw";
 			
 			// 서비스요청 프로그래스바를 나타나게 한다....
-			var progressSpan = newsItem.find('.js_progress_span');
+			var progressSpan = boardItem.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			
 			// set_iwork_instance.sw서비스를 요청한다..
@@ -2113,12 +2098,11 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					alert("111");
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("setIWorkInstanceSucceed"), function(){
+					smartPop.showInfo(smartPop.INFO, "항목이 정상적으로 수정되었습니다.", function(){
 						// 서비스요청 프로그래스바를 나타나게 한다....
-						var progressSpan = newsItem.find('.js_progress_span');
+						var progressSpan = boardItem.find('.js_progress_span');
 						smartPop.progressCont(progressSpan);
 						formContent.html('');
 						formContent.addClass('list_contents');
@@ -2128,11 +2112,12 @@ $(function() {
 							workId : workId,
 							recordId : instId,
 							onSuccess : function(){
-								newsItem.find('.js_modify_news_btn').show();
-								newsItem.find('.js_delete_news_btn').show();
-								newsItem.find('.js_save_news_btn').hide();
-								newsItem.find('.js_create_news_btn').hide();
-								newsItem.find('.js_cancel_news_btn').show();
+								boardItem.find('.js_modify_sera_board_btn').show();
+								boardItem.find('.js_delete_sera_board_btn').show();
+								boardItem.find('.js_save_sera_board_btn').hide();
+								boardItem.find('.js_create_sera_board_btn').hide();
+								boardItem.find('.js_cancel_sera_board_btn').hide();
+								boardItem.find('.js_list_sera_board_btn').show();
 								smartPop.closeProgress();								
 							},
 							onError : function(){
@@ -2144,7 +2129,7 @@ $(function() {
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("setIWorkInstanceError"), function(){
+					smartPop.showInfo(smartPop.ERROR, "항목수정에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
 						return false;
 					});
 					
@@ -2157,12 +2142,13 @@ $(function() {
 		return false;
 	});
 
-	$('.js_delete_news_btn').live('click', function(e){
-		smartPop.confirm(smartMessage.get('removeConfirmation'), function(){
+	$('.js_delete_sera_board_btn').live('click', function(e){
+		smartPop.confirm("항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까?", function(){
 			var input = $(targetElement(e));
-			var newsItem = input.parents('.js_sera_news_item_page');
-			var workId = newsItem.attr("workId");
-			var instId = newsItem.attr("instId");
+			var boardItem = input.parents('.js_sera_board_item_page');
+			var workId = boardItem.attr("workId");
+			var instId = boardItem.attr("instId");
+			var wid = boardItem.attr('wid');
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
@@ -2170,7 +2156,7 @@ $(function() {
 			var url = "remove_iwork_instance.sw";
 			
 			// 서비스요청 프로그래스바를 나타나게 한다....
-			var progressSpan = newsItem.find('.js_progress_span');
+			var progressSpan = boardItem.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			
 			// set_iwork_instance.sw서비스를 요청한다..
@@ -2183,16 +2169,16 @@ $(function() {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
+					smartPop.showInfo(smartPop.INFO, "항목이 정상적으로 삭제되었습니다.", 
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
-								document.location.href = "seraNews.sw";				
+								document.location.href = (wid === "seraNews") ? "seraNews.sw" : "seraTrend.sw";				
 							});
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
+					smartPop.showInfo(smartPop.ERROR, "항목삭제에 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
 						return false;
 					});
 					

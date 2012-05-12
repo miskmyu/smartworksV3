@@ -88,10 +88,6 @@
 					<div class="form_label">이름</div>
 					<div class="form_value">
 						<span class="t_blueb"><%=seraUser.getName() %></span>
-						<span class="check_use">
-							<input type="checkbox">
-							<label>사용</label>
-						</span>
 					</div>
 				</td>
 	
@@ -101,10 +97,6 @@
 					<div class="form_label">회원ID</div>
 					<div class="form_value">
 						<span class="t_blueb"><%=seraUser.getId() %></span>
-						<span class="check_use">
-							<input type="checkbox">
-							<label>사용</label>
-						</span>
 					</div>
 				</td>
 			</tr>
@@ -113,13 +105,9 @@
 					<div class="form_label">닉네임*</div>
 					<div class="form_value">
 						<input name="txtNickName" type="text" class="fieldline fl mr5" style="width: 150px" value="<%=CommonUtil.toNotNull(seraUser.getNickName())%>">
-						<span class="check_use">
-							<input type="checkbox">
-							<label>사용</label>
-						</span>
 						<div class="t_refe mt5 cb">* 닉네임은 한/영.숫자 최대 15자까지 가능합니다.</div>
 					</div>
-					<div class="cb t_red pt5">* 이름, 아이디, 닉네임 중 하나를 선택하시면, 세라캠퍼스 서비스에서 사용됩니다.</div>
+					<div class="cb t_red pt5">* 닉네임을 입력하시면 닉네임으로, 그렇지 않으면 이름으로 표시됩니다.</div>
 				</td>
 			</tr>
 			<tr>

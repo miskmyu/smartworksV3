@@ -53,6 +53,7 @@ import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraBoardList;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
@@ -581,5 +582,6 @@ public interface ISmartWorks {
 
 	public abstract void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-
+	public abstract SeraBoardList getSeraBoards(int maxList) throws Exception;
+	
 }

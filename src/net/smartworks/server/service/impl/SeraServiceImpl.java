@@ -46,6 +46,7 @@ import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.MissionInstance;
+import net.smartworks.model.sera.SeraBoardList;
 import net.smartworks.model.sera.SeraNotice;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
@@ -125,6 +126,7 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SeraTest;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -5932,6 +5934,13 @@ public class SeraServiceImpl implements ISeraService {
 	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public SeraBoardList getSeraBoards(int maxList) throws Exception {
+		SeraBoardList seraBoards = new SeraBoardList();
+		seraBoards.setSeraNews(SmartTest.getBoardInstances());
+		seraBoards.setSeraTrends(SmartTest.getBoardInstances());
+		return seraBoards;
 	}
 
 }
