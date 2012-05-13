@@ -35,9 +35,22 @@
 		var modifyMission = $('.js_modify_mission_page');
 		if (SmartWorks.GridLayout.validate(modifyMission.find('form.js_validation_required'),  modifyMission.find('.sw_error_message'))) {
 			var forms = modifyMission.find('form');
+			var courseOpenDate = new Date(modifyMission.attr('courseOpenDate'));
+			var courseCloseDate = new Date(modifyMission.attr('courseCloseDate'));
+			var openDate = new Date(forms.find('input[name="txtMissionOpenDate"]').attr('value'))
+			var closeDate = new Date(forms.find('input[name="txtMissionCloseDate"]').attr('value'))
+			if(openDate.getTime()>closeDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "미션기간의 시작일자가 종료일자보다 이후입니다. 시각일자를 종료일자보다 이전으로 수정바랍니다!");
+				return false;
+			}else if(openDate.getTime()<courseOpenDate.getTime() || closeDate.getTime()>courseCloseDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다!");
+				return false;
+			}
+			var courseId = modifyMission.attr('courseId');
+			var missionId = modifyMission.attr('missionId');
 			var paramsJson = {};
-			paramsJson['courseId'] = modifyMission.attr('courseId');
-			paramsJson['missionId'] = modifyMission.attr('missionId');
+			paramsJson['courseId'] = courseId;
+			paramsJson['missionId'] = missionId;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -57,8 +70,10 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					document.location.href = data.href;
-					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, '미션이 정상적으로 수정되었습니다!', function(){
+						$('.js_course_mission').click();
+						smartPop.closeProgress();						
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -69,7 +84,7 @@
 	};
 </script>
 
-<div class="js_modify_mission_page" courseId="<%=courseId%>" missionId="<%=mission.getId() %>">
+<div class="js_modify_mission_page" courseId="<%=courseId%>" missionId="<%=mission.getId() %>" courseOpenDate="<%=course.getOpenDate().toLocalDateSimpleString()%>" courseCloseDate="<%=course.getCloseDate().toLocalDateSimpleString()%>">
 	<!-- Header Title -->
 	<div class="header_tit">
 		<div class="tit_dep2 m0">
@@ -150,7 +165,7 @@
 				<div class="btn_blu_r">미션 수정하기</div>
 			</div>
 		
-			<div href="" class="btn_blu_l js_modify_mission">
+			<div href="" class="btn_blu_l js_cancel_modify_mission_btn">
 				<div class="btn_blu_r">취 소</div>
 			</div>
 		</div>

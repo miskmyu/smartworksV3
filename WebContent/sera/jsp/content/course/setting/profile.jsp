@@ -13,7 +13,7 @@
 
 	String courseId = request.getParameter("courseId");
 	Course course = smartWorks.getCourseById(courseId);
-
+	session.setAttribute("course", course);
 %>
 <script type="text/javascript">
 
@@ -23,6 +23,26 @@
 		var settingProfile = $('.js_setting_profile_page');
 		if (SmartWorks.GridLayout.validate(settingProfile.find('form.js_validation_required'),  settingProfile.find('.sw_error_message'))) {
 			var forms = settingProfile.find('form');
+			if(forms.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){			
+				var startDate = new Date(forms.find('input[name="txtCourseStartDate"]').attr('value'));
+				var endDate = new Date(forms.find('input[name="txtCourseEndDate"]').attr('value'));
+				if(startDate.getTime()>=endDate.getTime()){
+					smartPop.showInfo(smartPop.ERROR, '코스기간의 시작일자가 종료일자보다 이후이거나 같습니다. 종료일자가 시작일자보다 이후가되도록 수정바랍니다!', function(){
+					});
+					return false;
+				}else if((endDate.getTime()-startDate.getTime())>180*24*60*60*1000){
+					smartPop.showInfo(smartPop.ERROR, '코스기간은 6개월을 초과할 수 없습니다. 6개월이내로 수정바랍니다.!', function(){
+					});
+					return false;					
+				}
+			}else{
+				var courseDays = parseInt(forms.find('input[name="txtCourseDays"]').attr('value'));
+				if(courseDays>180){
+					smartPop.showInfo(smartPop.ERROR, '코스기간은 6개월을 초과할 수 없습니다. 6개월이내로 수정바랍니다.!', function(){
+					});
+					return false;										
+				}
+			}
 			var courseId = settingProfile.attr('courseId');
 			var paramsJson = {};
 			paramsJson['courseId'] = courseId;
@@ -45,8 +65,10 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, "코스정보가 정상적으로 수정되었습니다!", function(){
+						document.location.href = "courseHome.sw?courseId=" + courseId;						
+						smartPop.closeProgress();
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -169,7 +191,7 @@
 			<div class="btn_blu_l mr10 js_modify_course_btn">
 				<div class="btn_blu_r">코스 수정</div>
 			</div>
-			<div class="btn_blu_l mr10">
+			<div class="btn_blu_l mr10 js_modify_mentor_btn">
 				<div class="btn_blu_r">멘토프로필 수정</div>
 			</div>
 			<div class="btn_red_l js_remove_course_btn">

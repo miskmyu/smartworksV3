@@ -45,7 +45,7 @@
 						</li>
 						<li class="w470">
 							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
-								<span> <%=user.getNickName() %><br /> <%=user.getName() %><br /><%=user.getId()%></span>
+								<span> <%=CommonUtil.toNotNull(user.getNickName()) %><br /> <%=CommonUtil.toNotNull(user.getName()) %><br /><%=user.getId()%></span>
 							</a>
 						</li>
 						<li class="fr bo_l">
@@ -71,7 +71,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
-								<span><%=user.getNickName() %><br /> <span class="cb t_id"><%=user.getId() %></span> </span>
+								<span><%=CommonUtil.toNotNull(user.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(user.getName()) %></span> </span>
 							</a>
 						</li>
 						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
@@ -101,7 +101,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=user.getId()%>">
-								<span><%=user.getNickName() %><br /> <span class="cb t_id"><%=user.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(user.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(user.getName()) %></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(user.getGoal()) %><br /> <span class="t_id"><%=user.getId() %></span>

@@ -143,4 +143,6 @@ public interface ISeraService {
 
 	public abstract SeraBoardList getSeraBoards(int maxList) throws Exception;
 	
+	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

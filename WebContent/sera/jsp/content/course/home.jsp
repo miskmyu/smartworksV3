@@ -106,7 +106,7 @@
 		%>
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
-			<ul class="js_course_menu">
+			<ul class="js_course_menu" isJoinCourse=<%=course.isJoinCourse() %>>
 				<li class="<%if(!cUser.isAnonymusUser() && course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
 				<li><a href="" class="js_course_mission">미션</a></li>
 				<li><a href="" class="js_course_board">코스게시판</a></li>

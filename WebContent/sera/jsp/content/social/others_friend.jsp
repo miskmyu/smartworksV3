@@ -77,7 +77,7 @@
 						</li>
 						<li class="w90">
 							<a href="<%=userHref%>">
-								<span><%=friend.getNickName() %><br /> <span class="cb t_id"><%=friend.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(friend.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(friend.getName())%></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(friend.getGoal()) %><br /> <span class="t_id"><%=friend.getId() %></span>

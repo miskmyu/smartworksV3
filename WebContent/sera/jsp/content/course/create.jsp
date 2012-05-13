@@ -41,12 +41,14 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, '코스가 정상적으로 생성되었습니다!', function(){
+						document.location.href = data.href;						
+						smartPop.closeProgress();
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createCourseError'));
+					smartPop.showInfo(smartPop.ERROR, '코스를 생성하는데 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!');
 				}
 			});
 		}

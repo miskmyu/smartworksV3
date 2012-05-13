@@ -48,7 +48,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
-								<span><%=member.getNickName() %><br /> <span class="cb t_id"><%=member.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
@@ -86,7 +86,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
-								<span><%=member.getNickName() %><br /> <span class="cb t_id"><%=member.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>

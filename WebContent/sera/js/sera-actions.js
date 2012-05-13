@@ -29,8 +29,10 @@ $(function() {
 	$('.js_course_menu').live('click', function(e){
 		var input = $(targetElement(e)).parent();
 		var pos = input.prevAll().length;
-		if(currentUser.isAnonymous==='true' && pos != 4){
-			smartPop.showInfo(smartPop.WARN, "비회원이거나 로그인하지 않았습니다. 로그인 후 사용하시기 바랍니다!");
+		var isJoinCourse = input.parents('.js_course_menu').attr('isJoinCourse');
+		if((currentUser.isAnonymous==='true' || isJoinCourse !=='true') && pos != 4){
+			smartPop.showInfo(smartPop.WARN, (currentUser.isAnonymous==='true') ? '비회원이거나 로그인하지 않았습니다. 로그인 후 사용하시기 바랍니다!' :
+				  																  '가입하지 않은 코스입니다. 코스가입 후 이용하시기 바랍니다!');
 			return false;
 		}
 
@@ -153,10 +155,12 @@ $(function() {
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
 		var url ="";
+		var startDate = "";
 		if(input.hasClass('js_course_setting_profile')){
 			url = "courseSettingProfile.sw";		
 		}else if(input.hasClass('js_create_mission')){
 			url = "courseMissionCreate.sw";
+			startDate = input.find('a').attr('startDate');
 		}else if(input.hasClass('js_course_setting_mentee')){
 			url = "courseSettingMentee.sw";
 		}else if(input.hasClass('js_course_setting_team')){
@@ -165,7 +169,10 @@ $(function() {
 		smartPop.progressCenter();
 		$.ajax({
 			url : url,
-			data : {courseId : courseId},
+			data : {
+				courseId : courseId,
+				startDate : startDate
+			},
 			success : function(data, status, jqXHR) {
 				$('.js_course_content').html(data);
 				smartPop.closeProgress();
@@ -342,11 +349,10 @@ $(function() {
 	$('.js_mentor_form_btn').live('click', function(e){
 		var input = $(targetElement(e)).parents('.js_mentor_form_btn');
 		var createCourse = input.parents('.js_create_course_page');
-		if(createCourse.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
+		if(createCourse.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){			
 			createCourse.find('input[name="txtCourseStartDate"]').addClass('required');
 			createCourse.find('input[name="txtCourseEndDate"]').addClass('required');
 			createCourse.find('input[name="txtCourseDays"]').removeClass('required').removeClass('error');			
-			
 		}else{
 			createCourse.find('input[name="txtCourseStartDate"]').removeClass('required').removeClass('error');
 			createCourse.find('input[name="txtCourseEndDate"]').removeClass('required').removeClass('error');
@@ -368,6 +374,26 @@ $(function() {
 		}
 		
 		if (SmartWorks.GridLayout.validate(createCourse.find('form.js_validation_required'), createCourse.find('.sw_error_message'))) {		
+			if(createCourse.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){			
+				var startDate = new Date(createCourse.find('input[name="txtCourseStartDate"]').attr('value'));
+				var endDate = new Date(createCourse.find('input[name="txtCourseEndDate"]').attr('value'));
+				if(startDate.getTime()>=endDate.getTime()){
+					smartPop.showInfo(smartPop.ERROR, '코스기간의 시작일자가 종료일자보다 이후이거나 같습니다. 종료일자가 시작일자보다 이후가되도록 수정바랍니다!', function(){
+					});
+					return false;
+				}else if((endDate.getTime()-startDate.getTime())>180*24*60*60*1000){
+					smartPop.showInfo(smartPop.ERROR, '코스기간은 6개월을 초과할 수 없습니다. 6개월이내로 수정바랍니다.!', function(){
+					});
+					return false;					
+				}
+			}else{
+				var courseDays = parseInt(createCourse.find('input[name="txtCourseDays"]').attr('value'));
+				if(courseDays>180){
+					smartPop.showInfo(smartPop.ERROR, '코스기간은 6개월을 초과할 수 없습니다. 6개월이내로 수정바랍니다.!', function(){
+					});
+					return false;										
+				}
+			}
 			input.parents('.js_create_buttons').hide().siblings().css({clear:"both", display:"inline-block"});
 			createCourse.find('.js_create_course_table').hide();
 			createCourse.find('.js_mentor_profile_table').show();
@@ -402,58 +428,128 @@ $(function() {
 	});
 	
 	$('.js_remove_course_btn').live('click', function(e){
-		smartPop.confirm('코스를 삭제하시려고 합니다. 정말로 삭제하시겠습니까??', function(){
+		smartPop.confirm('코스를 삭제하려고 합니다. 정말로 삭제하시겠습니까?', function(){		
+			var removeAll = false;
 			var input = $(targetElement(e));
 			var courseId = input.parents('.js_setting_profile_page').attr('courseId');
 			var paramsJson = {};
 			paramsJson['courseId'] = courseId;
-			console.log(JSON.stringify(paramsJson));
-			smartPop.progressCenter();
-			$.ajax({
-				url : "remove_course.sw",
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					smartPop.closeProgress();					
-					smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
-						document.location.href = "myPAGE.sw";									
-					});
-				},
-				error : function(e) {
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
-					});
-				}
-				
+			smartPop.confirm('코스에 관련된 모든 정보를 평가자료로 사용되도록 남겨놓으시겠습니까? (취소를 선택하시면 모든정보가 삭제됩니다)', function(){
+				paramsJson['removeAll'] = false;
+				console.log(JSON.stringify(paramsJson));
+				smartPop.progressCenter();
+				$.ajax({
+					url : "remove_course.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						smartPop.closeProgress();					
+						smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
+							document.location.href = "myPAGE.sw";									
+						});
+					},
+					error : function(e) {
+						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+						smartPop.closeProgress();
+						smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
+						});
+					}
+					
+				});
+			}, function(){
+				paramsJson['removeAll'] = true;
+				console.log(JSON.stringify(paramsJson));
+				smartPop.progressCenter();
+				$.ajax({
+					url : "remove_course.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(paramsJson),
+					success : function(data, status, jqXHR) {
+						smartPop.closeProgress();					
+						smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
+							document.location.href = "myPAGE.sw";									
+						});
+					},
+					error : function(e) {
+						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+						smartPop.closeProgress();
+						smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
+						});
+					}
+					
+				});				
 			});
 		});
 		return false;
 	});
 	
 	$('.js_modify_course_btn').live('click', function(e){
-		var input = $(targetElement(e)).parents('.js_modify_course_btn');
-		var settingProfile = input.parents('.js_setting_profile_page');
-		if(settingProfile.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
-			settingProfile.find('input[name="txtCourseStartDate"]').addClass('required');
-			settingProfile.find('input[name="txtCourseEndDate"]').addClass('required');
-			settingProfile.find('input[name="txtCourseDays"]').removeClass('required').removeClass('error');			
+		smartPop.confirm('코스를 수정하시려고 합니다. 정말로 수정하시겠습니까??', function(){
+			var input = $(targetElement(e)).parents('.js_modify_course_btn');
+			var settingProfile = input.parents('.js_setting_profile_page');
+			if(settingProfile.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
+				settingProfile.find('input[name="txtCourseStartDate"]').addClass('required');
+				settingProfile.find('input[name="txtCourseEndDate"]').addClass('required');
+				settingProfile.find('input[name="txtCourseDays"]').removeClass('required').removeClass('error');			
+				
+			}else{
+				settingProfile.find('input[name="txtCourseStartDate"]').removeClass('required').removeClass('error');
+				settingProfile.find('input[name="txtCourseEndDate"]').removeClass('required').removeClass('error');
+				settingProfile.find('input[name="txtCourseDays"]').addClass('required');			
+			}
 			
-		}else{
-			settingProfile.find('input[name="txtCourseStartDate"]').removeClass('required').removeClass('error');
-			settingProfile.find('input[name="txtCourseEndDate"]').removeClass('required').removeClass('error');
-			settingProfile.find('input[name="txtCourseDays"]').addClass('required');			
-		}
-		
-		if(settingProfile.find('input[name="chkCourseUsers"]:checked').attr('value')==='userInput'){
-			settingProfile.find('input[name="txtCourseUsers"]').addClass('required');
+			if(settingProfile.find('input[name="chkCourseUsers"]:checked').attr('value')==='userInput'){
+				settingProfile.find('input[name="txtCourseUsers"]').addClass('required');
+				
+			}else{
+				settingProfile.find('input[name="txtCourseUsers"]').removeClass('required').removeClass('error');
+			}
 			
-		}else{
-			settingProfile.find('input[name="txtCourseUsers"]').removeClass('required').removeClass('error');
-		}
-		
-		submitForms(e);
+			submitForms(e);
+		});
+		return false;
+	});
+	
+	$('.js_modify_mentor_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var courseId = input.parents('.js_setting_profile_page').attr('courseId');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'courseSettingMentor.sw',
+			data : {courseId : courseId},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_cancel_modify_mentor_btn').live('click', function(e){
+		var input = $(targetElement(e));		
+		var courseId = input.parents('.js_setting_mentor_page').attr('courseId');
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'courseSettingProfile.sw',
+			data : {courseId : courseId},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_course_content').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
+	$('.js_complete_modify_mentor_btn').live('click', function(e){
+		submitForms();
 		return false;
 	});
 	
@@ -551,8 +647,23 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_cancel_create_mission_btn').live('click', function(e){
+		$('.js_course_mission').click();
+		return false;
+	});
+	
 	$('.js_modify_mission_btn').live('click', function(e){
 		submitForms(e);
+		return false;
+	});
+	
+	$('.js_cancel_modify_mission_btn').live('click', function(e){
+		$('.js_course_mission').click();
+		return false;
+	});
+	
+	$('.js_cancel_report_btn').live('click', function(e){
+		$('.js_course_mission').click();
 		return false;
 	});
 	
@@ -873,12 +984,10 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				var target = subInstanceList.find('.js_reply_list');
-				var newReply = target.find('.js_reply_instance').clone().show().removeClass('js_reply_instance');
-				newReply.find('.js_reply_content').html(message);
-				target.append(newReply);
-				input.attr('value', '');
-				smartPop.closeProgress();
+				input.attr('value', '').parents('.js_return_on_reply_note').hide();
+				smartPop.showInfo(smartPop.INFO, "답장이 보낸편지함에 성공적으로 남겨졌습니다..", function(){				
+					smartPop.closeProgress();
+				});
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1030,8 +1139,8 @@ $(function() {
 	});
 
 	$('a.js_add_reply_note').live('click', function(e){
-		var input = $(targetElement(e)).removeAttr('href');
-		input.parents('.js_sub_instance_list').find('.js_return_on_reply_note').show();
+		var input = $(targetElement(e));
+		input.parents('.js_sub_instance_list').find('.js_return_on_reply_note').toggle();
 		return false;
 	});
 

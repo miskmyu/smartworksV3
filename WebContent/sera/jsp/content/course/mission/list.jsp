@@ -39,9 +39,15 @@
 					<%
 					if(course.isMyRunningCourse()){
 					%>
-						<div class="icon_delete_red fr ml10 js_delete_mission_btn">
-							<a href="" title="미션삭제"> </a>
-						</div>
+						<%
+						if(SmartUtil.isBlankObject(mission.getMissionClearers())){
+						%>
+							<div class="icon_delete_red fr ml10 js_delete_mission_btn">
+								<a href="" title="미션삭제"> </a>
+							</div>
+						<%
+						}
+						%>
 						<div class="btn_mid_l fr ml10 js_show_modify_mission">
 							<div class="btn_mid_r">미션수정</div>
 						</div>

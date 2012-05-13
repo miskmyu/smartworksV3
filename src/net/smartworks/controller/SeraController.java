@@ -146,6 +146,12 @@ public class SeraController {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/setting/mentee.jsp", "");
 	}
 
+	@RequestMapping("/courseSettingMentor")
+	public ModelAndView courseSettingMentor(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/setting/mentor.jsp", "");
+	}
+
 	@RequestMapping("/courseTeamManagement")
 	public ModelAndView courseTeamManagement(HttpServletRequest request, HttpServletResponse response) {
 
@@ -387,6 +393,12 @@ public class SeraController {
 		return map;
 	}
 
+	@RequestMapping(value = "/set_mentor_profile", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void setMentorProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String mentorId = smartworks.setMentorProfile(requestBody, request);//smartworks.setCourse(requestBody, request);
+	}
+
 	@RequestMapping(value = "/remove_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> removeCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -400,12 +412,10 @@ public class SeraController {
 	@RequestMapping(value = "/create_new_mission", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewMission(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//smartworks.setMission(requestBody, request);
-		// TO DO : Exception handler
-		//String courseId = (String)requestBody.get("courseId");
-		String courseId = smartworks.createNewMission(requestBody, request);
+		String missionId = smartworks.createNewMission(requestBody, request);
+		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "courseHome.sw?courseId=" + courseId);
+		map.put("href", "courseMissionHome.sw?courseId=" + courseId);
 		return map;
 	}
 
@@ -415,7 +425,7 @@ public class SeraController {
 		String missionId = smartworks.modifyMission(requestBody, request);
 		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "courseMissionPerform.sw?courseId=" + courseId + "&missionId=" + missionId);
+		map.put("href", "courseMissionHome.sw?courseId=" + courseId);
 		return map;
 	}
 

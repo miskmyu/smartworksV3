@@ -19,6 +19,13 @@
 	Course course = (Course) session.getAttribute("course");
 	if (SmartUtil.isBlankObject(course) || !course.getId().equals(courseId))
 		course = smartWorks.getCourseById(courseId);
+	String startDateStr = request.getParameter("startDate");
+	if(!SmartUtil.isBlankObject(startDateStr)){
+		LocalDate startDate = LocalDate.convertLocalDateStringToLocalDate(startDateStr);
+		if(startDate.getTime()<course.getOpenDate().getTime() || startDate.getTime()>course.getCloseDate().getTime())
+			startDateStr = (new LocalDate()).toLocalDateSimpleString();
+	}
+	
 %>
 <script type="text/javascript">
 
@@ -28,6 +35,17 @@
 		var createMission = $('.js_create_mission_page');
 		if (SmartWorks.GridLayout.validate(createMission.find('form.js_validation_required'),  createMission.find('.sw_error_message'))) {
 			var forms = createMission.find('form');
+			var courseOpenDate = new Date(createMission.attr('courseOpenDate'));
+			var courseCloseDate = new Date(createMission.attr('courseCloseDate'));
+			var openDate = new Date(forms.find('input[name="txtMissionOpenDate"]').attr('value'))
+			var closeDate = new Date(forms.find('input[name="txtMissionCloseDate"]').attr('value'))
+			if(openDate.getTime()>closeDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "미션기간의 시작일자가 종료일자보다 이후입니다. 시각일자를 종료일자보다 이전으로 수정바랍니다!");
+				return false;
+			}else if(openDate.getTime()<courseOpenDate.getTime() || closeDate.getTime()>courseCloseDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다!");
+				return false;
+			}
 			var paramsJson = {};
 			paramsJson['courseId'] = createMission.attr('courseId');
 			for(var i=0; i<forms.length; i++){
@@ -49,19 +67,21 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.closeProgress();
-					document.location.href = data.href;
+					smartPop.showInfo(smartPop.INFO, '미션이 정상적으로 생성되었습니다!', function(){
+						$('.js_course_mission').click();
+						smartPop.closeProgress();						
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get('createMissionError'));
+					smartPop.showInfo(smartPop.ERROR, "미션을 생성하는데 문제가 발생하였습니다. 관리자에게 문의하시기 바랍니다!");
 				}
 			});
 		}
 	};
 </script>
 
-<div class="js_create_mission_page" courseId="<%=courseId%>">
+<div class="js_create_mission_page" courseId="<%=courseId%>" courseOpenDate="<%=course.getOpenDate().toLocalDateSimpleString()%>" courseCloseDate="<%=course.getCloseDate().toLocalDateSimpleString()%>">
 	<!-- Header Title -->
 	<div class="header_tit">
 		<div class="tit_dep2 m0">
@@ -87,7 +107,7 @@
 			<tr>
 				<td><div class="form_label">미션 기간</div>
 					<div class="form_value">
-						<div class="fl js_mission_open_date_field"></div>
+						<div class="fl js_mission_open_date_field" openDate="<%=startDateStr%>"></div>
 						<div class="fl mr5" style="line-height: 20px"> ~ </div> 
 						<div class="fl js_mission_close_date_field"></div>
 					</div>
@@ -142,7 +162,7 @@
 				<div class="btn_blu_r">미션 등록</div>
 			</div>
 		
-			<div href="" class="btn_red_l js_create_mission">
+			<div href="" class="btn_red_l js_cancel_create_mission_btn">
 				<div class="btn_red_r">취 소</div>
 			</div>
 		</div>

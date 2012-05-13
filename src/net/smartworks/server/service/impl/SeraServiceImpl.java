@@ -5942,5 +5942,10 @@ public class SeraServiceImpl implements ISeraService {
 		seraBoards.setSeraTrends(SmartTest.getBoardInstances());
 		return seraBoards;
 	}
+	@Override
+	public String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

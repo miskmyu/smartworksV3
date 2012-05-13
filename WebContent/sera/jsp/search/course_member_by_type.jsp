@@ -35,7 +35,7 @@
 							</a>
 						<li class="">
 							<a href="othersPAGE.sw?userId=<%=courseMember.getId()%>">
-								<span><%=courseMember.getNickName() %><br /> <span class="cb t_id"><%=courseMember.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(courseMember.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(courseMember.getName()) %></span></span>
 							</a>
 						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
 						<li class="bo_l" style="width: 15%"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
@@ -65,7 +65,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=courseMember.getId()%>">
-								<span><%=courseMember.getNickName() %><br /> <span class="cb t_id"><%=courseMember.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(courseMember.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(courseMember.getName()) %></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(courseMember.getGoal()) %><br /> <span class="t_id"><%=courseMember.getId() %></span>

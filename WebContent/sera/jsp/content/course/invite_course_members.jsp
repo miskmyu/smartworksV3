@@ -58,7 +58,7 @@
 						</li>
 						<li class="w90">
 							<a href="othersPAGE.sw?userId=<%=nonMentee.getId()%>">
-								<span><%=nonMentee.getNickName() %><br /> <span class="cb t_id"><%=nonMentee.getName() %></span></span>
+								<span><%=CommonUtil.toNotNull(nonMentee.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(nonMentee.getName()) %></span></span>
 							</a>
 						</li>
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(nonMentee.getGoal()) %><br /> <span class="t_id"><%=nonMentee.getId() %></span>
