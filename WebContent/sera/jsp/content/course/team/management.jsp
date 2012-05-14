@@ -26,11 +26,27 @@
 	%>
 	
 		<div class="panel_section js_team_management_page" courseId="<%=courseId%>">
-		
-		 	<div class="header mb5 js_view_team_management">
-				<div><a href="" class="js_team_modify current" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 설정</a></div>
-				<div> | <a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 구성원</a></div>
+			<!-- Header Title -->
+			<div class="header_tit">
+				<div class="tit_dep2 m0">
+					<h2>별별별별별팀 명</h2>
+				</div>
 			</div>
+			<!-- Header Title //-->
+			
+			<!--  Tab -->
+			<div id="" class="tab">
+				<ul class="clear">
+					<li class="current">
+						<span><a href="" class="js_team_modify current" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 설정</a></span>
+					</li>
+					<li class="">
+						<span><a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 구성원</a></span>
+					</li>
+				</ul>
+			</div>
+			<!--  Tab //-->
+
 			<div class="t_gray mb10">
 				<div>코스 개설자(멘토)는 본인이 구성한 팀 뿐만 아니라, 코스 내에 활동하는 모든 팀을 관리할 수 있습니다.</div>
 			</div>

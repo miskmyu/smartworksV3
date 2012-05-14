@@ -134,7 +134,7 @@ a.b_next:hover { background-position:-30px -535px}
 
 /* Tab */
 .tab {background: url("../images/tab.gif") repeat-x scroll left bottom transparent; height: 31px; margin: 15px 0 10px;}
-.tab ul { margin:0 0 0 13px}
+.tab ul {}
 .tab li {background: url("../images/tab_l.gif") no-repeat scroll 0 0 transparent; float: left; height: 31px; margin:0 0 0 -1px;}
 .tab li.current {background-position: left -31px;}
 .tab li span {background: url("../images/tab_r.gif") no-repeat scroll right top transparent; display: block; float: left; height: 31px;}
