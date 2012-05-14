@@ -126,7 +126,7 @@
 								<span>
 								<!-- Btn -->
 									<div class="btn_green_l mr7 js_destroy_membership_btn" userId="<%=member.getId()%>">
-										<div class="btn_green_r"><span class="icon_green_down"></span>팀원 삭제</div>
+										<div class="btn_green_r"><span class=icon_team_delete></span>팀원 삭제</div>
 									</div>
 								<!-- Btn //--> 
 
