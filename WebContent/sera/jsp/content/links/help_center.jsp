@@ -86,58 +86,44 @@
 
 <script type="text/javascript">
 	var navIdx = 1;
-	var navCategory = 1;
-	var navFullIdx = 6;
 	$("#btnHelp1").click( function() {
 		navIdx = 1;
-		navCategory = 1;
-		navFullIdx = 6;
+		$(".helpImg").hide();
 		$("#btnHelp1").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn1_on.gif");
 		$("#btnHelp2").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn2_off.gif");
 		$("#btnHelp3").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn3_off.gif");
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_off.gif");
-		$(".helpImg").hide();
 		$("#spanNav").html(navIdx);
-		$("#spanNavFull").html(navFullIdx);
 		$("#img1_1").show();
 	});
 	$("#btnHelp2").click( function() {
 		navIdx = 1;
-		navCategory = 2;
-		navFullIdx = 3;
 		$(".helpImg").hide();
 		$("#btnHelp1").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn1_off.gif");
 		$("#btnHelp2").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn2_on.gif");
 		$("#btnHelp3").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn3_off.gif");
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_off.gif");
 		$("#spanNav").html(navIdx);
-		$("#spanNavFull").html(navFullIdx);
 		$("#img2_1").show();
 	});
 	$("#btnHelp3").click( function() {
 		navIdx = 1;
-		navCategory = 3;
-		navFullIdx = 3;
 		$(".helpImg").hide();
 		$("#btnHelp1").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn1_off.gif");
 		$("#btnHelp2").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn2_off.gif");
 		$("#btnHelp3").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn3_on.gif");
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_off.gif");
 		$("#spanNav").html(navIdx);
-		$("#spanNavFull").html(navFullIdx);
 		$("#img3_1").show();
 	});
 	$("#btnHelp4").click( function() {
 		navIdx = 1;
-		navCategory = 4;
-		navFullIdx = 2;
 		$(".helpImg").hide();
 		$("#btnHelp1").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn1_off.gif");
 		$("#btnHelp2").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn2_off.gif");
 		$("#btnHelp3").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn3_off.gif");
 		$("#btnHelp4").find(".org").attr("src", "sera/images/helpcenter/helpcenter_guidebtn4_on.gif");
 		$("#spanNav").html(navIdx);
-		$("#spanNavFull").html(navFullIdx);
 		$("#img4_1").show();
 	});
 </script>

@@ -148,7 +148,7 @@
 		<!-- Title //-->
 
 		<!-- Input Form -->
-		<div class="form_layout js_form_content">
+		<div class="board_detail_section js_form_content">
 		</div>
 		<div class="sw_error_message tl" style="color: red"></div>
 

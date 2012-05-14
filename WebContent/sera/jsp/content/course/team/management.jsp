@@ -26,7 +26,26 @@
 	%>
 	
 		<div class="panel_section js_team_management_page" courseId="<%=courseId%>">
-		
+			<!-- Header Title -->
+			<div class="header_tit">
+				<div class="tit_dep2 m0">
+					<h2>별별별별별팀 명</h2>
+				</div>
+			</div>
+			<!-- Header Title //-->
+			
+			<!--  Tab 
+			<div id="" class="tab">
+				<ul class="clear">
+					<li class="current">
+						<span><a href="" class="js_team_modify current" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 설정</a></span>
+					</li>
+					<li class="">
+						<span><a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 구성원</a></span>
+					</li>
+				</ul>
+			</div>
+			<!--  Tab //-->
 		 	<div class="header mb5 js_view_team_management">
 				<div><a href="" class="js_team_modify current" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 설정</a></div>
 				<div> | <a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=teamId%>">팀 구성원</a></div>

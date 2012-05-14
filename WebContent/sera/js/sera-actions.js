@@ -104,6 +104,8 @@ $(function() {
 		}else if(input.hasClass('js_course_team_management')){
 			url = "courseTeamManagement.sw";
 			teamId = input.attr('teamId');
+		}else{
+			return false;
 		}
 		smartPop.progressCenter();
 		$.ajax({
@@ -165,6 +167,8 @@ $(function() {
 			url = "courseSettingMentee.sw";
 		}else if(input.hasClass('js_course_setting_team')){
 			url = "courseSettingTeam.sw";
+		}else{
+			return false;
 		}
 		smartPop.progressCenter();
 		$.ajax({
@@ -200,6 +204,8 @@ $(function() {
 			url = "courseMissionHome.sw";
 		}else if(input.hasClass('js_course_mission_mine')){
 			url = "courseMissionMine.sw";
+		}else{
+			return false;
 		}
 		smartPop.progressCenter();				
 		$.ajax({
@@ -276,6 +282,8 @@ $(function() {
 			url = "courseMissionCalendar.sw";
 		else if(input.hasClass('js_mission_list'))
 			url = "courseMissionList.sw";
+		else
+			return false;
 		smartPop.progressCenter();				
 		$.ajax({
 			url : url,
@@ -328,6 +336,8 @@ $(function() {
 			url = "courseTeamModify.sw";
 		else if(input.hasClass('js_team_members'))
 			url = "courseTeamMembers.sw";
+		else
+			return false;
 		smartPop.progressCenter();				
 		$.ajax({
 			url : url,
@@ -764,6 +774,8 @@ $(function() {
 			targetTable = noteAttachmentTable.find('.js_note_video');
 		else if(!isEmpty(input.hasClass('js_note_link_btn')))
 			targetTable = noteAttachmentTable.find('.js_note_link');
+		else
+			return false;
 		if(noteAttachmentTable.is(':visible')){
 			noteAttachmentTable.show();
 			targetTable.toggle();
