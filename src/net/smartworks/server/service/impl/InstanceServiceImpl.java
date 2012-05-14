@@ -140,6 +140,7 @@ import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
@@ -192,6 +193,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	private ICommunityService communityService;
 	private ICalendarService calendarService;
+	private ISeraService seraService;
 
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
@@ -200,6 +202,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Autowired
 	public void setCalendarService(ICalendarService calendarService) {
 		this.calendarService = calendarService;
+	}
+	@Autowired
+	public void setSeraService(ISeraService seraService) {
+		this.seraService = seraService;
 	}
 
 	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
@@ -3433,6 +3439,226 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			return null;			
 			// Exception Handling Required			
+		}
+	}
+
+	public InstanceInfoList getInstanceInfoListByWorkId(String workSpaceId, RequestParams params, String workId) throws Exception {
+
+		try {
+
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String companyId = cUser.getCompanyId();
+
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+			
+			SwdDomainCond swdDomainCond = new SwdDomainCond();
+			swdDomainCond.setCompanyId(companyId);
+
+			SwfFormCond swfFormCond = new SwfFormCond();
+			swfFormCond.setCompanyId(companyId);
+			swfFormCond.setPackageId(workId);
+			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+
+			if(CommonUtil.isEmpty(swfForms))
+				return null;
+
+			swdDomainCond.setFormId(swfForms[0].getId());
+
+			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
+
+			if(swdDomain == null)
+				return  null;
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(companyId);
+			swdRecordCond.setFormId(swdDomain.getFormId());
+			swdRecordCond.setDomainId(swdDomain.getObjId());
+
+			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				swdRecordCond.setPageNo(currentPage-1);
+
+			swdRecordCond.setPageSize(pageSize);
+
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = FormField.ID_LAST_MODIFIED_DATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+
+			swdRecordCond.setWorkSpaceId(workSpaceId);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+
+			List<WorkInstanceInfo> workInstanceInfoList = new ArrayList<WorkInstanceInfo>();
+			WorkInstanceInfo[] workInstanceInfos = null;
+
+			String subCtgId = swdRecordExtends[0].getSubCtgId();
+			String subCtgName = swdRecordExtends[0].getSubCtg();
+			String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			String parentCtgName = swdRecordExtends[0].getParentCtg();
+			String formId = swdDomain.getFormId();
+			String formName = swdDomain.getFormName();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				int swdRecordsLength = swdRecords.length;
+				for(int i=0; i < swdRecordsLength; i++) {
+					SwdRecord swdRecord = swdRecords[i];
+					String recordId = swdRecord.getRecordId();
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					WorkInstanceInfo workInstanceInfo = null;
+					if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT)) {
+						BoardInstanceInfo tempWorkInstanceInfo = new BoardInstanceInfo();
+						if(!CommonUtil.isEmpty(swdDataFields)) {
+							int swdDataFieldsLength = swdDataFields.length;
+							for(int j=0; j<swdDataFieldsLength; j++) {
+								SwdDataField swdDataField = swdDataFields[j];
+								String value = swdDataField.getValue();
+								if(swdDataField.getId().equals("0")) {
+									tempWorkInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+								} else if(swdDataField.getId().equals("1")) {
+									tempWorkInstanceInfo.setContent(value);
+									tempWorkInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
+								} else if(swdDataField.getId().equals("2")) {
+									if(!CommonUtil.isEmpty(value)) {
+										tempWorkInstanceInfo.setFileGroupId(value);
+										List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
+										List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+										int fileModelListSize = fileModelList.size();
+										if(fileList != null && fileModelListSize > 0) {
+											for(int k=0; k<fileModelListSize; k++) {
+												Map<String, String> fileMap = new LinkedHashMap<String, String>();
+												IFileModel fileModel = fileModelList.get(k);
+												String fileId = fileModel.getId();
+												String fileName = fileModel.getFileName();
+												String fileType = fileModel.getType();
+												String fileSize = fileModel.getFileSize() + "";
+												fileMap.put("fileId", fileId);
+												fileMap.put("fileName", fileName);
+												fileMap.put("fileType", fileType);
+												fileMap.put("fileSize", fileSize);
+												fileList.add(fileMap);
+											}
+											if(fileList.size() > 0)
+												tempWorkInstanceInfo.setFiles(fileList);
+										}
+									}
+								}
+							}
+							tempWorkInstanceInfo.setType(Instance.TYPE_BOARD);
+						}
+						workInstanceInfo = tempWorkInstanceInfo;
+					}/* else if() {
+					}*/
+
+					workInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_BOARD, swdRecord.getRecordId()));
+
+					workInstanceInfo.setId(recordId);
+					workInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
+					workInstanceInfo.setCreatedDate(new LocalDate((swdRecord.getCreationDate()).getTime()));
+
+					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+
+					workInstanceInfo.setWorkSpace(workSpaceInfo);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(subCtgId))
+						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+
+					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
+
+					workInstanceInfo.setWork(workInfo);
+					workInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+					workInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
+
+					CommentInstanceInfo[] subInstanceInfos = seraService.getSubInstancesByRefId(recordId, WorkInstance.FETCH_ALL_SUB_INSTANCE);
+					int subInstanceCount = 0;
+					if(!CommonUtil.isEmpty(subInstanceInfos)) {
+						subInstanceCount = subInstanceInfos.length;
+						if(subInstanceInfos.length > WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT) {
+							CommentInstanceInfo[] defaultInstanceInfos = new CommentInstanceInfo[WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT];
+							for(int j=0; j<WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT; j++) {
+								CommentInstanceInfo subInstanceInfo = subInstanceInfos[j];
+								defaultInstanceInfos[j] = subInstanceInfo;
+							}
+							workInstanceInfo.setSubInstances(defaultInstanceInfos);
+						} else {
+							workInstanceInfo.setSubInstances(subInstanceInfos);
+						}
+					}
+					workInstanceInfo.setSubInstanceCount(subInstanceCount);
+
+					workInstanceInfoList.add(workInstanceInfo);
+				}
+				if(workInstanceInfoList.size() > 0) {
+					workInstanceInfos = new WorkInstanceInfo[workInstanceInfoList.size()];
+					workInstanceInfoList.toArray(workInstanceInfos);
+				}
+				instanceInfoList.setInstanceDatas(workInstanceInfos);
+			}
+
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sortingField);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+
+			return instanceInfoList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
