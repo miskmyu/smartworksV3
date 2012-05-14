@@ -939,7 +939,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		buf.append(" where obj.objId is not null");
 		//TODO 시간 검색에 대한 확인 필요
 		if (cond != null) {
-			if (objId != null)
+			if (objId != null)	
 				buf.append(" and obj.objId = :objId");
 			if (courseId != null)
 				buf.append(" and obj.courseId = :courseId");
@@ -948,10 +948,13 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
 					String teamId = courseTeamUser.getObjId();
 					String userId = courseTeamUser.getUserId();
+					String joinStatus = courseTeamUser.getJoinStatus();
 					if (teamId != null)
 						buf.append(" and teamUser").append(i).append(".objId = :teamId").append(i);
 					if (userId != null)
 						buf.append(" and teamUser").append(i).append(".userId = :userId").append(i);
+					if (joinStatus != null)
+						buf.append(" and teamUser").append(i).append(".joinStatus = :joinStatus").append(i);
 				}
 			}
 		}
@@ -970,10 +973,13 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
 					String teamId = courseTeamUser.getObjId();
 					String userId = courseTeamUser.getUserId();
+					String joinStatus = courseTeamUser.getJoinStatus();
 					if (teamId != null)
 						query.setString("teamId"+i, teamId);
 					if (userId != null)
 						query.setString("userId"+i, userId);
+					if (joinStatus != null)
+						query.setString("joinStatus"+i, joinStatus);
 				}
 			}
 		}

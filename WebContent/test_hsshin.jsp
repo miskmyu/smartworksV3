@@ -1,3 +1,6 @@
+<%@page import="net.smartworks.model.sera.SeraBoardList"%>
+<%@page import="net.smartworks.server.service.ISeraService"%>
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl"%>
 <%@page import="javax.mail.Authenticator"%>
 <%@page import="java.io.UnsupportedEncodingException"%>
@@ -527,6 +530,15 @@
 			}
 		}
 	} */
+	//InstanceInfoList instanceInfoList = instanceService.getInstanceInfoListByWorkId("hsshin@maninsoft.co.kr", null, SmartWork.ID_BOARD_MANAGEMENT);
+
+	//System.out.println(instanceInfoList);
+	
+	ISeraService seraService = (ISeraService)SmartUtil.getBean("seraServiceImpl", request);
+
+	SeraBoardList seraBoardList = seraService.getSeraBoards(20);
+
+	System.out.println(seraBoardList);
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

@@ -133,7 +133,7 @@
 						}
 						%>
 					</td>
-					<td class="tc"><%=((IWInstanceInfo)instanceInfo).getViews() %></td>
+					<td class="tc"><%=((BoardInstanceInfo)instanceInfo).getViews() %></td>
 				</tr>
 	<%
 				currentCount--;

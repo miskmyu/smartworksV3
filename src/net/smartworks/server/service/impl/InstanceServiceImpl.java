@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import net.smartworks.model.instance.info.IWInstanceInfo;
 import net.smartworks.model.instance.info.ImageInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.info.MemoInstanceInfo;
 import net.smartworks.model.instance.info.PWInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
@@ -3475,6 +3477,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setFormId(swdDomain.getFormId());
 			swdRecordCond.setDomainId(swdDomain.getObjId());
 
+			if(userId.equals(workSpaceId))
+				swdRecordCond.setCreatorOrSpaceId(workSpaceId);
+			else
+				swdRecordCond.setWorkSpaceId(workSpaceId);
+
+			String searchKey = params.getSearchKey();
+			if(!CommonUtil.isEmpty(searchKey))
+				swdRecordCond.setSearchKey(searchKey);
+
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			int pageSize = params.getPageSize();
@@ -3519,23 +3530,30 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setPageSize(pageSize);
 
 			SortingField sf = params.getSortingField();
-			String columnName = "";
+			String fieldId = "";
 			boolean isAsc;
 
+			SortingField sortingField = new SortingField();
 			if (sf != null) {
-				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
+				fieldId = sf.getFieldId();
+				if(fieldId.equals(FormField.ID_SUBJECT)) {
+					if(workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
+						fieldId = "name";
+					else
+						fieldId = "title";
+				}
 				isAsc = sf.isAscending();
+
+				sortingField.setFieldId(sf.getFieldId());
+				sortingField.setAscending(isAsc);
+
 			} else {
-				columnName = FormField.ID_LAST_MODIFIED_DATE;
+				fieldId = FormField.ID_LAST_MODIFIED_DATE;
 				isAsc = false;
 			}
-			SortingField sortingField = new SortingField();
-			sortingField.setFieldId(columnName);
-			sortingField.setAscending(isAsc);
 
-			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+			swdRecordCond.setOrders(new Order[]{new Order(fieldId, isAsc)});
 
-			swdRecordCond.setWorkSpaceId(workSpaceId);
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
@@ -3559,6 +3577,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					WorkInstanceInfo workInstanceInfo = null;
 					if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT)) {
 						BoardInstanceInfo tempWorkInstanceInfo = new BoardInstanceInfo();
+						tempWorkInstanceInfo.setType(Instance.TYPE_BOARD);
+						tempWorkInstanceInfo.setViews(swdRecord.getHits());
+						tempWorkInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_BOARD, recordId));
 						if(!CommonUtil.isEmpty(swdDataFields)) {
 							int swdDataFieldsLength = swdDataFields.length;
 							for(int j=0; j<swdDataFieldsLength; j++) {
@@ -3595,13 +3616,67 @@ public class InstanceServiceImpl implements IInstanceService {
 									}
 								}
 							}
-							tempWorkInstanceInfo.setType(Instance.TYPE_BOARD);
 						}
 						workInstanceInfo = tempWorkInstanceInfo;
-					}/* else if() {
-					}*/
-
-					workInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_BOARD, swdRecord.getRecordId()));
+					} else if(workId.equals(SmartWork.ID_MEMO_MANAGEMENT)) {
+						MemoInstanceInfo tempWorkInstanceInfo = new MemoInstanceInfo();
+						tempWorkInstanceInfo.setType(Instance.TYPE_MEMO);
+						tempWorkInstanceInfo.setViews(swdRecord.getHits());
+						tempWorkInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_MEMO, recordId));
+						if(!CommonUtil.isEmpty(swdDataFields)) {
+							int swdDataFieldsLength = swdDataFields.length;
+							for(int j=0; j<swdDataFieldsLength; j++) {
+								SwdDataField swdDataField = swdDataFields[j];
+								String value = swdDataField.getValue();
+								if(swdDataField.getId().equals("4")) {
+									tempWorkInstanceInfo.setContent(value);
+									tempWorkInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
+								}
+							}
+						}
+						workInstanceInfo = tempWorkInstanceInfo;
+					} else if(workId.equals(SmartWork.ID_EVENT_MANAGEMENT)) {
+						EventInstanceInfo tempWorkInstanceInfo = new EventInstanceInfo();
+						tempWorkInstanceInfo.setType(Instance.TYPE_EVENT);
+						tempWorkInstanceInfo.setViews(swdRecord.getHits());
+						tempWorkInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_EVENT, recordId));
+						if(!CommonUtil.isEmpty(swdDataFields)) {
+							int swdDataFieldsLength = swdDataFields.length;
+							for(int j=0; j<swdDataFieldsLength; j++) {
+								SwdDataField swdDataField = swdDataFields[j];
+								String value = swdDataField.getValue();
+								LocalDate startLocalDate = null;
+								LocalDate endLocalDate = null;
+								UserInfo[] relatedUsers = null;
+								if(swdDataField.getId().equals("6")) {
+									tempWorkInstanceInfo.setContent(value);
+									tempWorkInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
+								} else if(swdDataField.getId().equals("1")) {
+									if (!CommonUtil.isEmpty(value)) {
+										Date startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:sss").parse(value);
+										startLocalDate = new LocalDate(startDate.getTime());
+									}
+									tempWorkInstanceInfo.setStart(startLocalDate);
+								} else if(swdDataField.getId().equals("2")) {
+									if (!CommonUtil.isEmpty(value)) {
+										Date endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:sss").parse(value);
+										endLocalDate = new LocalDate(endDate.getTime());
+									}
+									tempWorkInstanceInfo.setEnd(endLocalDate);
+								} else if(swdDataField.getId().equals("5")) {
+									if (value != null) {
+										String[] userIdArray = value.split(";");
+										relatedUsers = new UserInfo[userIdArray.length];
+										for(int k= 0; k<userIdArray.length; k++) {
+											relatedUsers[k] = ModelConverter.getUserInfoByUserId(userIdArray[k]);
+										}
+									}
+									tempWorkInstanceInfo.setRelatedUsers(relatedUsers);
+								}
+							}
+						}
+						workInstanceInfo = tempWorkInstanceInfo;
+					}
 
 					workInstanceInfo.setId(recordId);
 					workInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
@@ -3646,9 +3721,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					workInstanceInfos = new WorkInstanceInfo[workInstanceInfoList.size()];
 					workInstanceInfoList.toArray(workInstanceInfos);
 				}
-				instanceInfoList.setInstanceDatas(workInstanceInfos);
 			}
 
+			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setPageSize(pageSize);
@@ -4289,12 +4364,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	public InstanceInfoList getBoardInstanceList(String workSpaceId, RequestParams params) throws Exception {
-		//return getInstanceInfoListByRefType(workSpaceId, params, TskTask.TASKREFTYPE_BOARD, -1, "");
+		return getInstanceInfoListByWorkId(workSpaceId, params, SmartWork.ID_BOARD_MANAGEMENT);
 
 		// 위의 getInstanceInfoListByRefType()를 이용하여 수정바랍니다.
 		// 아래의 getIWorkInstanceList는 WorkSpace별로 인스턴스를 가져올수가 없으면 반환되는 인스턴스도 IWInstanceInfo[]이기때문에 사용할 수 없음.
 		// WorkSpace별로 BoardInstanceInfo[]로 가져올 수 있어야 함..
-		return getIWorkInstanceList(SmartWork.ID_BOARD_MANAGEMENT, params);
+		//return getIWorkInstanceList(SmartWork.ID_BOARD_MANAGEMENT, params);
 
 	}
 

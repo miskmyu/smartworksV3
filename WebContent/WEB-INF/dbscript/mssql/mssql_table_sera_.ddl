@@ -752,8 +752,11 @@ CREATE TABLE CourseTeam (
 CREATE TABLE CourseTeamUser (
 	objId varchar(50) NOT NULL,
 	userId varchar(50) NOT NULL,
+	joinStatus varchar(1) NOT NULL,
 	memberSeq int,
 	primary key(objId, userId)
 );
 
 ALTER TABLE SeraUserDetail add userName varchar(50);
+
+ALTER TABLE CourseTeamUser add joinStatus varchar(1);
