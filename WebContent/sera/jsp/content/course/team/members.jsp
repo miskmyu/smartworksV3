@@ -24,11 +24,11 @@
 %>
 
 <!-- Panel Section -->
-<div class="content_section js_team_members_page" courseId="<%=courseId %>" teamId="<%=teamId %>" >
+<div class="js_team_members_page" courseId="<%=courseId %>" teamId="<%=teamId %>" >
 	<!-- Panel1 -->
 	<div>
 		<div class="header mt10">
-			<div>팀원 요청 <span class="t_orange tb js_requester_count" count="<%=memberInforms.getTotalRequesters()%>">(<%=memberInforms.getTotalRequesters() %>)</span></div>
+			<div class="tit">팀원 요청 <span class="t_orange tb js_requester_count" count="<%=memberInforms.getTotalRequesters()%>">(<%=memberInforms.getTotalRequesters() %>)</span></div>
 		</div>
 		<div class="panel_area">
 			<%
@@ -45,32 +45,36 @@
 									<img class="profile_size_m" src="<%=requester.getMidPicture() %>" />
 								</a>
 							</li>
-							<li class="w90">
+							<li class="">
 								<a href="othersPAGE.sw?userId=<%=requester.getId()%>">
 									<span><%=CommonUtil.toNotNull(requester.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(requester.getName()) %></span></span>
 								</a>
 							</li>
-							<li class="bo_l w310">
+							<li class="bo_l">
 								<span><%=CommonUtil.toNotNull(requester.getGoal()) %><br/>
 									<span class="t_id"><%=requester.getId() %></span>
 								</span>
 							</li>
-							<li class="fr bo_l">
+							<li class="fr bo_l end">
 								<span>
-									<div class="btn_mid_l js_accept_member_btn">
-										<div class="btn_mid_r pr5pl5"><span class="icon_blu_down mr3"></span>승 인</div>
+								<!-- Btn -->
+									<div class="btn_mid_l mr7 js_accept_member_btn">
+										<div class="btn_mid_r"><span class="icon_blu_down mr3"></span>승 인</div>
 									</div>
-									<div class="btn_mid_l ml5 js_deny_member_btn">
+								<!-- Btn //-->
+								<!-- Btn -->
+									<div class="btn_mid_l mr7 js_deny_member_btn">
 										<div class="btn_mid_r"><span class="icon_after_check"></span>거 절</div>
 									</div>
-								</span>
-								<span>
-									<div class="btn_green_l js_friend_request_btn" userId="<%=requester.getId() %>" <%if(requester.isFriend()){%>style="display:none"<%} %>>
+								<!-- Btn //-->
+									<div class="btn_green_l mr7 js_friend_request_btn" userId="<%=requester.getId() %>" <%if(requester.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
-									</div> <!-- Btn //--> 
+									</div>
+								<!-- Btn -->
 									<div class="btn_green_l js_destroy_friendship_btn" userId="<%=requester.getId()%>" <%if(!requester.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
-									</div> <!-- Btn //--> 
+									</div> 
+								<!-- Btn //-->
 								</span>
 							</li>
 						</ul>
@@ -87,7 +91,7 @@
 	<!-- Panel2 -->
 	<div>
 		<div class="header mt20">
-			<div class="fl"><span class="t_myid"><%=team.getName() %>팀</span>의 팀원들 (<span class="tb js_member_count"><%=memberInforms.getTotalMembers() %></span>) </div>
+			<div class="fl tit"><%=team.getName() %>팀<span>의 팀원들</span> <span class="t_orange tb js_member_count">(<%=memberInforms.getTotalMembers() %>)</span> </div>
 			<div class="fr">
 				<input class="fl fieldline js_member_search_key" style="width: 150px" type="text" />
 				<button type="button" class="fl ml5 js_member_search_btn">검색</button>
@@ -110,27 +114,33 @@
 									<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
 								</a>
 							</li>
-							<li class="w90">
+							<li class="">
 								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 									<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 								</a>
 							</li>
-							<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+							<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 							</span>
 							</li>
-							<li class="fr bo_l">
-								<span> <!-- Btn -->
-									<div class="btn_green_l js_destroy_membership_btn" userId="<%=member.getId()%>">
-										<div class="btn_green_r"><span class="icon_green_down"></span>팀원 삭제</div>
-									</div> <!-- Btn //--> 
-								</span>
+							<li class="fr bo_l end">
 								<span>
-									<div class="btn_green_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+								<!-- Btn -->
+									<div class="btn_green_l mr7 js_destroy_membership_btn" userId="<%=member.getId()%>">
+										<div class="btn_green_r"><span class="icon_green_down"></span>팀원 삭제</div>
+									</div>
+								<!-- Btn //--> 
+
+								<!-- Btn -->
+									<div class="btn_green_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
-									</div> <!-- Btn //--> 
+									</div> 
+								<!-- Btn //-->
+
+								<!-- Btn //--> 
 									<div class="btn_green_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
-									</div> <!-- Btn //--> 
+									</div>
+								<!-- Btn //--> 
 								</span>
 							</li>
 						</ul>
@@ -163,7 +173,7 @@
 	<!-- Panel3 -->
 	<div>
 		<div class="header mt20">
-			<div class="fl"><span class="t_myid">초청이 가능한 코스멤버들</span> (<span class="tb js_non_member_count"><%=memberInforms.getTotalNonMembers() %></span>) </div>
+			<div class="fl tit">초청이 가능한 코스멤버들 <span class="t_orange tb js_non_member_count">(<%=memberInforms.getTotalNonMembers() %>)</span> </div>
 			<div class="fr">
 				<input class="fl fieldline js_non_member_search_key" style="width: 150px" type="text" />
 				<button type="button" class="fl ml5 js_non_member_search_btn">검색</button>
@@ -186,27 +196,33 @@
 									<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
 								</a>
 							</li>
-							<li class="w90">
+							<li class="">
 								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 									<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 								</a>
 							</li>
-							<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+							<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 							</span>
 							</li>
-							<li class="fr bo_l">
-								<span> <!-- Btn -->
-									<div class="btn_green_l js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+							<li class="fr bo_l end">
+								<span>
+								<!-- Btn -->
+									<div class="btn_green_l mr7 js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
 										<div class="btn_green_r"><span class="icon_green_down"></span>팀원 요청</div>
-									</div> <!-- Btn //--> 
-								</span>
-								<span> <!-- Btn -->
-									<div class="btn_green_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+									</div>
+								<!-- Btn //--> 
+								
+								<!-- Btn -->
+									<div class="btn_green_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
-									</div> <!-- Btn //--> 
+									</div> 
+								<!-- Btn //--> 
+							
+								<!-- Btn -->
 									<div class="btn_green_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
-									</div> <!-- Btn //--> 
+									</div>
+								<!-- Btn //--> 
 								</span>
 							</li>
 						</ul>

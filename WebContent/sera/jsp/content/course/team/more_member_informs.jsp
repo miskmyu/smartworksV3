@@ -46,12 +46,12 @@
 								<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
 							</a>
 						</li>
-						<li class="w90">
+						<li class="">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 							</a>
 						</li>
-						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+						<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 						</span>
 						</li>
 						<li class="fr bo_l">
@@ -84,12 +84,12 @@
 								<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
 							</a>
 						</li>
-						<li class="w90">
+						<li class="">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 							</a>
 						</li>
-						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+						<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 						</span>
 						</li>
 						<li class="fr bo_l">

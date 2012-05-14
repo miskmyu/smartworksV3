@@ -300,9 +300,10 @@ a .icon_bul_select:hover { background-position:0 -88px}
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
 .panel_section .header {border-bottom:1px solid #559fcc; height:21px} /* Mypage Header */
-.panel_section .header .current { color:#608eba}
-.panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
+.panel_section .header .current, .panel_section .header .tit {color:#608eba !important; font-weight:bold !important}
+.panel_section .header div { float:left; margin-right:5px; color:#dddddd; font-size:12px !important; font-weight:normal !important}
 .panel_section .header div a {color:#333333; font-weight:bold}
+.panel_section .header .tit span {color:#333333; font-weight:normal}
 .panel_section .header_mission div, .course_section .header_mission div { font-size:14px; color:#3174ad; font-weight:bold}
 
 .panel_section .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
@@ -359,6 +360,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .panel_rds_block { border:1px solid #cccccc; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0; border-radius:5px}
 .panel_rds_block ul { padding:5px; overflow:hidden}
 .panel_rds_block li { float:left; padding:0 10px}
+.panel_rds_block li.end {padding:0 0 0 10px !important}
 .panel_rds_block li.bo_r { border-right:1px solid #cccccc; height:48px}
 .panel_rds_block li.bo_l { border-left:1px solid #cccccc; height:48px}
 .panel_rds_block li span { display: table-cell; vertical-align:middle; height:48px}
@@ -449,7 +451,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_menu_d2 .menu001 {position:relative}
 .course_menu_d2 .menu002 {position:relative}
 .course_menu_d2 .menu003 {position:relative}
-.course_menu_d2 .menu004 {position:relative}
+.course_menu_d2 .menu004 {position:relative; float:right; right:209px}
 .course_menu_d2 .menu005 {position:relative}
 .course_menu_d2 .menu006 {position:relative; float:right; right:32px}
 .course_menu_d2 li { float:left; padding:0 10px; background: url("../images/li_gab.gif") no-repeat 100% 48%}
@@ -464,25 +466,25 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .select_box { width:60px; background-color:#FFF; padding:7px 10px; position:absolute; border:1px solid #cccccc; line-height:17px}
 
 /* Text Style */
-.t_s11 { font-size:11px}
-.t_s14 { font-size:14px}
-.t_red {color:#ed1c24}
-.t_redb {color:#ed1c24; font-weight:bold}
-.t_red2 {color:#c05252}
-.t_blue { color:#006699}
-.t_blueb { color:#006699; font-weight:bold}
-.t_skyblueb { color:#0066cc; font-weight:bold}
-.t_orange { color:#ff7c2a}
-.t_gray { color:#9a9a9a}
-.t_grayb { color:#9a9a9a; font-weight:bold}
-.t_gray2 { color:#666666}
-.t_link a {color:#788EB7}
+.t_s11 { font-size:11px !important}
+.t_s14 { font-size:14px !important}
+.t_red {color:#ed1c24 !important}
+.t_redb {color:#ed1c24 !important; font-weight:bold}
+.t_red2 {color:#c05252 !important}
+.t_blue { color:#006699 !important}
+.t_blueb { color:#006699 !important; font-weight:bold}
+.t_skyblueb { color:#0066cc !important; font-weight:bold}
+.t_orange { color:#ff7c2a !important}
+.t_gray { color:#9a9a9a !important}
+.t_grayb { color:#9a9a9a !important; font-weight:bold}
+.t_gray2 { color:#666666 !important}
+.t_link a {color:#788EB7 !important}
 .t_link a:hover {color:#788EB7; text-decoration:underline}
-.tb { font-weight:bold}
-.t_id, .t_email {color:#608eba; display:block !important; height: auto !important }
+.tb { font-weight:bold !important}
+.t_id, .t_email {color:#608eba !important; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999; line-height:15px}
 .insert_text {color: #B6B6B6; font: bold 16px 'Tahoma'}
-.t_help { font-size:11px; line-height:14px; color:#666666}
+.t_help { font-size:11px; line-height:14px; color:#666666 !important}
 .t_date, .t_s11, .t_date a, .t_s11 a {color: #999897 !important; font-size: 11px;}
 
 /* Width */
@@ -644,9 +646,12 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_number.badge {left:15px}
 .icon_number.event {left:19px}
 
-/* Tr List hover */
+/* Board Tr List hover */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#e8f7ff; cursor:pointer;}
+
+/* Sera Board */
+.board_detail_section table {background-color: #FFF}
 
 /* ∆‰¿Ã¬° */
 .paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold;}
