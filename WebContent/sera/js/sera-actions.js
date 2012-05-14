@@ -93,6 +93,7 @@ $(function() {
 	
 	$('.js_course_team_menu').live('click', function(e){
 		var input = $(targetElement(e)).parent();
+		if(input.hasClass('js_select_course_team')) return false;
 		input.siblings().removeClass('current');
 		input.addClass('current');
 		var courseHome = input.parents('.js_course_home_page');
