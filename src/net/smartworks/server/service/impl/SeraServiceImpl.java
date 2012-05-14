@@ -111,6 +111,7 @@ import net.smartworks.server.engine.sera.model.CourseDetailCond;
 import net.smartworks.server.engine.sera.model.CourseReview;
 import net.smartworks.server.engine.sera.model.CourseReviewCond;
 import net.smartworks.server.engine.sera.model.CourseTeam;
+import net.smartworks.server.engine.sera.model.CourseTeamCond;
 import net.smartworks.server.engine.sera.model.CourseTeamUser;
 import net.smartworks.server.engine.sera.model.MentorDetail;
 import net.smartworks.server.engine.sera.model.SeraConstant;
@@ -1684,7 +1685,6 @@ public class SeraServiceImpl implements ISeraService {
 			seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 
-			boolean isFriend = false;
 			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 
 			List userInfoList = new ArrayList();
@@ -1693,6 +1693,7 @@ public class SeraServiceImpl implements ISeraService {
 					SeraUserInfo member = new SeraUserInfo();
 					String id = swoUserExtend.getId();
 					member.setId(id);
+					boolean isFriend = false;
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -1781,7 +1782,6 @@ public class SeraServiceImpl implements ISeraService {
 			User currentUser = SmartUtil.getCurrentUser();
 			String currentUserId = currentUser.getId();
 
-			boolean isFriend = false;
 			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 			seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
@@ -1793,6 +1793,7 @@ public class SeraServiceImpl implements ISeraService {
 					SeraUserInfo member = new SeraUserInfo();
 					String id = swoUserExtend.getId();
 					member.setId(id);
+					boolean isFriend = false;
 					if(!CommonUtil.isEmpty(mySeraFriends)) {
 						for(SeraFriend seraFriend : mySeraFriends) {
 							if(id.equals(seraFriend.getFriendId())) {
@@ -5177,6 +5178,11 @@ public class SeraServiceImpl implements ISeraService {
 		for (SwdField field : fields) {
 			fieldInfoMap.put(field.getFormFieldId(), field);
 		}
+		
+		SwdRecordCond cond = new SwdRecordCond();
+		cond.setRecordId(missionId);
+		cond.setFormId(SeraConstant.MISSION_FORMID);
+		SwdRecord obj = SwManagerFactory.getInstance().getSwdManager().getRecord(user.getId(), cond, IManager.LEVEL_ALL);
 
 		List fieldDataList = new ArrayList();
 		for (SwdField field : fields) {
@@ -5206,29 +5212,14 @@ public class SeraServiceImpl implements ISeraService {
 			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_CONTENTFIELDID)) {
 				fieldData.setValue(txtaMissionContent);
 			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_INDEXFIELDID)) {
-				ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-				CourseDetail courseDetail = seraMgr.getCourseDetailById(courseId);
-				int lastMissionIndex = courseDetail.getLastMissionIndex();
-				if (lastMissionIndex == -1) {
-					lastMissionIndex = 0;
-				} else {
-					lastMissionIndex = lastMissionIndex + 1;
-				}
-				courseDetail.setLastMissionIndex(lastMissionIndex);
-				seraMgr.setCourseDetail(courseDetail);
-				
-				fieldData.setValue(lastMissionIndex + "");
+				String lastMissionIndex = obj.getDataFieldValue(SeraConstant.MISSION_INDEXFIELDID);
+			    fieldData.setValue(lastMissionIndex);
 			}
 			fieldDataList.add(fieldData);
 		}
 
 		SwdDataField[] fieldDatas = new SwdDataField[fieldDataList.size()];
 		fieldDataList.toArray(fieldDatas);
-		
-		SwdRecordCond cond = new SwdRecordCond();
-		cond.setRecordId(missionId);
-		cond.setFormId(SeraConstant.MISSION_FORMID);
-		SwdRecord obj = SwManagerFactory.getInstance().getSwdManager().getRecord(user.getId(), cond, IManager.LEVEL_ALL);
 		obj.setDataFields(fieldDatas);
 		
 		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
@@ -5274,7 +5265,6 @@ public class SeraServiceImpl implements ISeraService {
 		SeraFriendCond seraFriendCond = new SeraFriendCond();
 		seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
 
-		boolean isFriend = false;
 		SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
 
 		if(userExtends != null) {
@@ -5290,6 +5280,7 @@ public class SeraServiceImpl implements ISeraService {
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
 				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
 				member.setId(id);
+				boolean isFriend = false;
 				if(!CommonUtil.isEmpty(mySeraFriends)) {
 					for(SeraFriend seraFriend : mySeraFriends) {
 						if(id.equals(seraFriend.getFriendId())) {
@@ -5899,23 +5890,241 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getTeams();
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			TeamInfo[] teamInfos = null;
+			List<TeamInfo> teamInfoList = new ArrayList<TeamInfo>();
+
+			CourseTeamCond courseTeamCond = new CourseTeamCond();
+			courseTeamCond.setCourseId(courseId);
+
+			CourseTeam[] courseTeams = getSeraManager().getCourseTeams(userId, courseTeamCond, IManager.LEVEL_LITE);
+
+			if(!CommonUtil.isEmpty(courseTeams)) {
+				for(CourseTeam courseTeam : courseTeams) {
+					String teamId = courseTeam.getObjId();
+					String teamName = courseTeam.getName();
+					TeamInfo teamInfo = new TeamInfo(teamId, teamName);
+					teamInfoList.add(teamInfo);
+				}
+			}
+			if(teamInfoList.size() > 0) {
+				teamInfos = new TeamInfo[teamInfoList.size()];
+				teamInfoList.toArray(teamInfos);
+			}
+			return teamInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public Team convertCourseTeamToTeam(String userId, CourseTeam courseTeam) throws Exception {
+		try {
+			if(courseTeam == null)
+				return null;
+			Team team = null;
+			List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
+			SeraUserInfo[] seraUserInfos = null;
+			if(courseTeam != null) {
+				team = new Team();
+				team.setId(courseTeam.getObjId());
+				team.setCourseId(courseTeam.getCourseId());
+				team.setDesc(courseTeam.getDescription());
+				team.setStart(new LocalDate(courseTeam.getStartDate().getTime()));
+				team.setEnd(new LocalDate(courseTeam.getEndDate().getTime()));
+				team.setAccessPolicy(courseTeam.getAccessPolicy());
+				team.setMaxMembers(courseTeam.getMemberSize());
+				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
+				SeraFriendCond seraFriendCond = new SeraFriendCond();
+				seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+				if(!CommonUtil.isEmpty(teamUsers)) {
+					for(CourseTeamUser teamUser : teamUsers) {
+						SeraUserInfo seraUserInfo = new SeraUserInfo();
+						String id = teamUser.getUserId();
+						SwoUserExtend swoUserExtend = getSwoManager().getUserExtend(userId, id, false);
+						String name = null;
+						int role = -1;
+						String smallPictureName = null;
+						if(swoUserExtend != null) {
+							name = swoUserExtend.getName();
+							role = swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER;
+							smallPictureName = swoUserExtend.getSmallPictureName();
+						}
+						SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, id);
+						String goal = null;
+						boolean isFriend = false;
+						if(seraUserDetail != null)
+							goal = seraUserDetail.getGoal();
+						SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
+						if(!CommonUtil.isEmpty(mySeraFriends)) {
+							for(SeraFriend seraFriend : mySeraFriends) {
+								if(id.equals(seraFriend.getFriendId())) {
+									isFriend = true;
+									break;
+								}
+							}
+						}
+						seraUserInfo.setName(name);
+						seraUserInfo.setRole(role);
+						seraUserInfo.setSmallPictureName(smallPictureName);
+						seraUserInfo.setGoal(goal);
+						seraUserInfo.setFriend(isFriend);
+						seraUserInfoList.add(seraUserInfo);
+					}
+				}
+				if(seraUserInfoList.size() > 0) {
+					seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
+					seraUserInfoList.toArray(seraUserInfos);
+				}
+				team.setMembers(seraUserInfos);
+			}
+			return team;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public Team getMyTeamByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getTeam();
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			CourseTeamCond courseTeamCond = new CourseTeamCond();
+			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
+			CourseTeamUser courseTeamUser = new CourseTeamUser();
+			courseTeamUser.setUserId(userId);
+			courseTeamUsers[0] = courseTeamUser;
+			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
+			courseTeamCond.setCourseId(courseId);
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
+
+			return convertCourseTeamToTeam(userId, courseTeam);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public Team getTeamById(String teamId) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getTeam();
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
+
+			return convertCourseTeamToTeam(userId, courseTeam);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getTeamMemberInformations(teamId, maxList);
+		try {
+			MemberInformList memberInformList = new MemberInformList();
+
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			int totalRequesters = 0;
+			int totalMembers = 0;
+			int totalNonMembers = 0;
+			SeraUserInfo[] requesters = null;
+			SeraUserInfo[] members = null;
+			SeraUserInfo[] nonMembers = null;
+
+			CourseTeamCond courseTeamCond = new CourseTeamCond();
+			courseTeamCond.setObjId(teamId);
+			courseTeamCond.setPageNo(0);
+			courseTeamCond.setPageSize(maxList);
+			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
+			CourseTeamUser courseTeamUser = new CourseTeamUser();
+			courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_REQUEST);
+			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
+			courseTeamUsers[0] = courseTeamUser;
+			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
+
+			String[] userIds = null;
+			List<String> stringList = new ArrayList<String>();
+
+			if(courseTeam != null) {
+				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
+				if(teamUsers != null) {
+					totalRequesters = teamUsers.length;
+					userIds = new String[totalRequesters];
+					for(int i=0; i<totalRequesters; i++) {
+						CourseTeamUser requesterUser = teamUsers[i];
+						String requesterId = requesterUser.getUserId();
+						userIds[i] = requesterId;
+						stringList.add(requesterId);					}
+					requesters = getSeraUserInfos(userIds);
+				}
+			}
+
+			courseTeamUser.setJoinType(null);
+			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
+			courseTeamUsers[0] = courseTeamUser;
+			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
+
+			courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
+
+			if(courseTeam != null) {
+				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
+				if(teamUsers != null) {
+					totalMembers = teamUsers.length;
+					userIds = new String[totalMembers];
+					for(int i=0; i<totalMembers; i++) {
+						CourseTeamUser memberUser = teamUsers[i];
+						String memberId = memberUser.getUserId();
+						userIds[i] = memberId;
+						stringList.add(memberId);
+					}
+					members = getSeraUserInfos(userIds);
+				}
+			}
+
+			if(stringList.size() > 0) {
+				userIds = new String[stringList.size()];
+				stringList.toArray(userIds);
+			}
+
+			SeraUserDetailCond seraUserDetailCond = new SeraUserDetailCond();
+			seraUserDetailCond.setUserIdNotIns(userIds);
+
+			SeraUserDetail[] seraUserDetails = getSeraManager().getSeraUserDetails(userId, seraUserDetailCond);
+
+			if(seraUserDetails != null) {
+				totalNonMembers = seraUserDetails.length;
+				userIds = new String[totalNonMembers];
+				for(int i=0; i<totalNonMembers; i++) {
+					SeraUserDetail seraUserDetail = seraUserDetails[i];
+					String nonMemberId = seraUserDetail.getUserId();
+					userIds[i] = nonMemberId;
+				}
+				nonMembers = getSeraUserInfos(userIds);
+			}
+
+			memberInformList.setTotalRequesters(totalRequesters);
+			memberInformList.setTotalMembers(totalMembers);
+			memberInformList.setTotalNonMembers(totalNonMembers);
+			memberInformList.setRequesters(requesters);
+			memberInformList.setMembers(members);
+			memberInformList.setNonMembers(nonMembers);
+
+			return memberInformList;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {

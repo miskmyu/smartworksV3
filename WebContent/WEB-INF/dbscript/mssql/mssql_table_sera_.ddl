@@ -759,4 +759,5 @@ CREATE TABLE CourseTeamUser (
 
 ALTER TABLE SeraUserDetail add userName varchar(50);
 
+ALTER TABLE CourseTeamUser add joinType varchar(1);
 ALTER TABLE CourseTeamUser add joinStatus varchar(1);

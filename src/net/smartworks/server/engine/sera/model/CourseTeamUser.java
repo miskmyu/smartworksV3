@@ -18,10 +18,14 @@ public class CourseTeamUser extends MisObject {
 	private static final long serialVersionUID = 1L;
 	private static Log logger = LogFactory.getLog(CourseTeamUser.class);
 
+	public static final String JOINTYPE_INVITE = "I";
+	public static final String JOINTYPE_REQUEST = "R";
+
 	public static final String JOINSTATUS_COMPLETE = "C";
 	public static final String JOINSTATUS_READY = "R";
 
 	private String userId;
+	private String joinType;
 	private String joinStatus;
 
 	public String getUserId() {
@@ -29,6 +33,12 @@ public class CourseTeamUser extends MisObject {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getJoinType() {
+		return joinType;
+	}
+	public void setJoinType(String joinType) {
+		this.joinType = joinType;
 	}
 	public String getJoinStatus() {
 		return joinStatus;

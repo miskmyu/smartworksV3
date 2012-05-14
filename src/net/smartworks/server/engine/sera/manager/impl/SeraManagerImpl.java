@@ -948,11 +948,14 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
 					String teamId = courseTeamUser.getObjId();
 					String userId = courseTeamUser.getUserId();
+					String joinType = courseTeamUser.getJoinType();
 					String joinStatus = courseTeamUser.getJoinStatus();
 					if (teamId != null)
 						buf.append(" and teamUser").append(i).append(".objId = :teamId").append(i);
 					if (userId != null)
 						buf.append(" and teamUser").append(i).append(".userId = :userId").append(i);
+					if (joinType != null)
+						buf.append(" and teamUser").append(i).append(".joinType = :joinType").append(i);
 					if (joinStatus != null)
 						buf.append(" and teamUser").append(i).append(".joinStatus = :joinStatus").append(i);
 				}
@@ -973,11 +976,14 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
 					String teamId = courseTeamUser.getObjId();
 					String userId = courseTeamUser.getUserId();
+					String joinType = courseTeamUser.getJoinType();
 					String joinStatus = courseTeamUser.getJoinStatus();
 					if (teamId != null)
 						query.setString("teamId"+i, teamId);
 					if (userId != null)
 						query.setString("userId"+i, userId);
+					if (joinType != null)
+						query.setString("joinType"+i, joinType);
 					if (joinStatus != null)
 						query.setString("joinStatus"+i, joinStatus);
 				}
