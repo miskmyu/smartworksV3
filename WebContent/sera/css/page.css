@@ -419,10 +419,11 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .srch input[type="text"] { width:130px; float:left; margin:2px}
 
 /*Search-white */
-.srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px;}
-.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px;}
+.srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:18px;}
+.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:2px; margin:0}
 .srch_wh button, .srch_wh .srch_icon, .mail_srch  button {background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
-	width:13px; right:2px; padding:0; position:relative; float: right; top:1px}
+	width:13px; right:2px; padding:0; position:relative; float: right; top:2px}
+.srch_wsize {width:195px}
 	
 /* Course */
 /* Course Define */
@@ -643,10 +644,14 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_number.badge {left:15px}
 .icon_number.event {left:19px}
 
+/* Tr List hover */
+tr.instance_list {}
+tr.instance_list:hover {background-color:#e8f7ff; cursor:pointer;}
+
 /* ∆‰¿Ã¬° */
 .paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold;}
 .paginate strong {color:#ed1c24}
-.paginate .num {margin-right:1px; padding: 2px 3px; text-decoration: none; vertical-align: middle;}
+.paginate .num, .paginate strong {padding: 2px 3px; text-decoration: none; vertical-align: middle;}
 
 .spr { cursor: pointer; display: inline-block; overflow: hidden; vertical-align: middle;}
 .paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -344px transparent; display: inline-block; height: 20px; width:20px; position:relative; left:4px;}

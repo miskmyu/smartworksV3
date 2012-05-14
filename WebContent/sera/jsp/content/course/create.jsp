@@ -251,11 +251,11 @@
 			<tr>
 				<td>
 					<div class="form_label">세라활동 *</div>
-					<div class="form_value" style="width: 580px">
-						<div class="fl" style="width: 285px">
+					<div class="form_value" style="width: 567px">
+						<div class="fl" style="width: 280px">
 							<textarea name="txtaMentorHistory" class="fieldline" name="" rows="3" value="" placeholder="멘토활동"><%=CommonUtil.toNotNull(mentor.getMentorHistory()) %></textarea>
 						</div>
-						<div class="fr" style="width: 285px">
+						<div class="fr" style="width: 280px">
 							<textarea name="txtaMenteeHistory" class="fieldline" name="" rows="3" placeholder="멘티활동"><%=CommonUtil.toNotNull(mentor.getMenteeHistory()) %></textarea>
 						</div>
 					</div>
