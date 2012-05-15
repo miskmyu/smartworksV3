@@ -30,6 +30,7 @@
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
+.sera_news .lst_normal dd li {background: url("../images/icon.png") no-repeat -165px -818px; height:21px; overflow: hidden; padding: 0 0 0 8px}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
 .login_section { position:relative; width:980px; margin:0 auto}
@@ -295,7 +296,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 .icon_as_more {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right; margin-top: 5px}
 .icon_as_more a:hover { background-position:-166px -357px}
-.icon_mn_more a {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
+.icon_mn_more {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
 .icon_mn_more a:hover { background-position:-221px -724px}
 
 /* Panel Section */
