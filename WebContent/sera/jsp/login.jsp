@@ -145,7 +145,7 @@
 							<ul>
 								<%
 								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraNews())){									
-									for(int i=0; i<seraBoards.getSeraNews().length || i<SeraBoardList.MAX_BOARD_LIST; i++){
+									for(int i=0; i<seraBoards.getSeraNews().length; i++){
 										BoardInstanceInfo news = seraBoards.getSeraNews()[i];
 								%>
 										<li><%=news.getSubject() %></li>
@@ -168,7 +168,7 @@
 							<ul>
 								<%
 								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraTrends())){
-									for(int i=0; i<seraBoards.getSeraTrends().length || i<SeraBoardList.MAX_BOARD_LIST; i++){
+									for(int i=0; i<seraBoards.getSeraTrends().length; i++){
 										BoardInstanceInfo trend = seraBoards.getSeraTrends()[i];
 								%>
 										<li><%=trend.getSubject() %></li>

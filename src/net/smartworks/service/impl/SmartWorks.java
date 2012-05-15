@@ -1287,8 +1287,7 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return seraService.setMentorProfile(requestBody, request);
 	}
 
 }

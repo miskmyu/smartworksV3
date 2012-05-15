@@ -98,6 +98,8 @@
 			<list-index column="memberSeq" />
 			<composite-element class="net.smartworks.server.engine.sera.model.CourseTeamUser">
 				<property name="userId" type="string" length="50" not-null="true"/>
+				<property name="joinType" type="string" length="1"/>
+				<property name="joinStatus" type="string" length="1"/>
 			</composite-element>
 		</array>
 	</class>
@@ -107,5 +109,7 @@
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
 		<property name="userId" type="string" length="50" not-null="true"/>
+		<property name="joinType" type="string" length="1"/>
+		<property name="joinStatus" type="string" length="1"/>
 	</class>
 </hibernate-mapping>

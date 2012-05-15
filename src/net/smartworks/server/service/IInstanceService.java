@@ -50,6 +50,8 @@ public interface IInstanceService {
 
 	public InstanceInfoList getWorkInstanceList(String workSpaceId, RequestParams params) throws Exception;
 
+	public InstanceInfoList getInstanceInfoListByWorkId(String workSpaceId, RequestParams params, String workId) throws Exception;
+
 	public InstanceInfoList getImageInstanceList(String workSpaceId, RequestParams params) throws Exception;
 
 	public ImageInstanceInfo[] getImageInstancesByDate(int displayBy, String wid, String parentId, LocalDate lastDate, int maxCount) throws Exception;

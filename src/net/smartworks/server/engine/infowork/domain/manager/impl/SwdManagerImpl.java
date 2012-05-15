@@ -997,6 +997,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		String workSpaceType = cond.getWorkSpaceType();
 		String accessLevel = cond.getAccessLevel();
 		String accessValue = cond.getAccessValue();
+		String creatorOrSpaceId = cond.getCreatorOrSpaceId();
 		int hits = cond.getHits();
 		Date fromDate = cond.getFromDate();
 
@@ -1023,6 +1024,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					continue;
 				cond.addFilter(new Filter("like", "searchKey", field.getTableColumnName(), "", searchKey));
 			}
+			cond.addFilter(new Filter("like", "searchKey", "modifier", "", searchKey));
 		}
 		if (workSpaceId != null)
 			cond.addFilter(new Filter("=", "obj.workSpaceId", workSpaceId));
@@ -1043,14 +1045,6 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		Integer i = 0;
 		iWrap.setObj(i);
 		first = appendFilterConditions(cond.getFilter(), logicalOperator, first, true, iWrap, fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf);
-		String leftType = "";
-		if(cond.getFilter() != null) {
-			for(Filter f : cond.getFilter()) {
-				leftType = f.getLeftOperandType();
-			}
-			if(leftType.equals("searchKey"))
-				buf.append(") ");
-		}
 
 		i = (Integer)iWrap.getObj();
 
@@ -1070,6 +1064,14 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				boolean fFirst = true;
 				fFirst = appendFilterConditions(filter, logOper, fFirst, false, iWrap,  fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf);
 				buf.append(")");
+			}
+		}
+		if(creatorOrSpaceId != null) {
+			if(first) {
+				buf.append(" where (obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
+				first = false;
+			} else {
+				buf.append(" and (obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
 			}
 		}
 		if (workSpaceIdIns != null) {
@@ -1163,7 +1165,15 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			Map<String, Filter> filterMap, Map<String, String> paramTypeMap, StringBuffer buf) throws Exception {
 		if (CommonUtil.isEmpty(filter))
 			return first;
-		
+
+		int searchKeyCount = 0;
+		for (Filter f : filter) {
+			if(f.getLeftOperandType().equals("searchKey"))
+				searchKeyCount++;
+		}
+
+		int forSearchKeyCount = 0;
+
 		String operator;
 		String left;
 		String leftType;
@@ -1196,17 +1206,18 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} else {
 				left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
 			}
+			if(leftType.equals("searchKey")) {
+				forSearchKeyCount++;
+				logicalOperator = "or";
+			} else {
+				logicalOperator = "and";
+			}
 			if (first) {
 				if (where)
 					buf.append(" where");
 				first = false;
 			} else {
-				buf.append(CommonUtil.SPACE).append(logicalOperator);
-			}
-			if(leftType.equals("searchKey")) {
-				logicalOperator = "or";
-			} else {
-				logicalOperator = "and";
+					buf.append(CommonUtil.SPACE).append(logicalOperator);
 			}
 			String fieldType = (String)fieldTypeMap.get(left);
 			buf.append(CommonUtil.SPACE);
@@ -1249,6 +1260,10 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				}
 				buf.append(CommonUtil.SPACE).append(operator);
 				buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+			}
+			if(leftType.equals("searchKey")) {
+				if(searchKeyCount > 0 && searchKeyCount == forSearchKeyCount)
+					buf.append(")");
 			}
 		}
 		iWrap.setObj(i);
