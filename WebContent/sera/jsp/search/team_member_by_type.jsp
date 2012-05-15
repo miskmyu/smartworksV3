@@ -46,16 +46,16 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_destroy_membership_btn" userId="<%=member.getId()%>">
-									<div class="btn_green_r"><span class="icon_green_down"></span>팀원 삭제</div>
+								<div class="btn_fgreen_l js_destroy_membership_btn" userId="<%=member.getId()%>">
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>팀원 삭제</div>
 								</div> <!-- Btn //--> 
 							</span>
 							<span>
-								<div class="btn_green_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
+								<div class="btn_fgreen_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
 								</div> <!-- Btn //--> 
-								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
+								<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>
@@ -84,16 +84,16 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
-									<div class="btn_green_r"><span class="icon_green_down"></span>팀원 요청</div>
+								<div class="btn_fgreen_l js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>팀원 요청</div>
 								</div> <!-- Btn //--> 
 							</span>
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down"></span>친구 요청</div>
+								<div class="btn_fgreen_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
 								</div> <!-- Btn //--> 
-								<div class="btn_green_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_green_r"><span class="icon_green_down"></span>친구 끊기</div>
+								<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>

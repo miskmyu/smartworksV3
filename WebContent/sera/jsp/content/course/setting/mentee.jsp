@@ -109,16 +109,16 @@
 								<span><%=CommonUtil.toNotNull(mentee.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(mentee.getId()) %></span> </span>
 							</a>
 						</li>
-						<li class="bo_l" style="width: 15%"><span> 미션수행 0 </span></li>
-						<li class="bo_l" style="width: 15%"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
-						<li class="bo_l" style="width: 10%"><span> 참여 0일째 </span></li>
 						<li class="fr bo_l">
 							<span>
-								<div class="btn_green_l js_pushout_mentee_btn">
-									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 강퇴</div>
+								<div class="btn_fgreen_l js_pushout_mentee_btn">
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>멘티 강퇴</div>
 								</div>
 							</span>
 						</li>
+						<li class="bo_l fr" style="width: 65px"><span> 참여 0일째 </span></li>
+						<li class="bo_l fr" style="width: 80px"><span> 받은 게시물 0<br />댓글쓰기 0<br /> 공감 + 0 </span></li>
+						<li class="bo_l fr" style="width: 70px"><span> 미션수행 0 </span></li>
 					</ul>
 				</div>
 				<!-- 목록1//-->
@@ -175,8 +175,8 @@
 						</li>
 						<li class="fr bo_l">
 							<span> <!-- Btn -->
-								<div class="btn_green_l js_invite_mentee_btn" userId="<%=nonMentee.getId() %>">
-									<div class="btn_green_r"><span class="icon_green_down"></span>멘티 초대</div>
+								<div class="btn_fgreen_l js_invite_mentee_btn" userId="<%=nonMentee.getId() %>">
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>멘티 초대</div>
 								</div> <!-- Btn //--> 
 							</span>
 						</li>

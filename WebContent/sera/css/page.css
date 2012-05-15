@@ -182,8 +182,17 @@ a.b_next:hover { background-position:-30px -535px}
 .btn_mid_l {background: url("../images/btn_mid_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
 .btn_mid_r {background: url("../images/btn_mid_r.png") no-repeat scroll 100% 0; height:19px !important; padding: 0 10px 0 7px; position: relative; right: -3px; line-height:21px; font-size:12px; color:#555555; font-weight:normal}
 
-.btn_green_l {background: url("../images/btn_green_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
-.btn_green_r {background: url("../images/btn_green_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fgreen_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
+.btn_fgreen_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_gray_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -19px; height:19px !important; float:left; cursor:pointer}
+.btn_gray_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -19px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_fblu_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -39px; height:19px !important; float:left; cursor:pointer}
+.btn_fblu_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -39px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_fred_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -60px; height:19px !important; float:left; cursor:pointer}
+.btn_fred_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -60px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
 
 .btn_blu_l {background: url("../images/btn_blu_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
 .btn_blu_r {background: url("../images/btn_blu_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF; position:relative; right:-1px}
@@ -457,6 +466,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .course_menu_d2 .menu005 {position:relative}
 .course_menu_d2 .menu006 {position:relative; float:right; right:32px}
 .course_menu_d2 li { float:left; padding:0 10px; background: url("../images/li_gab.gif") no-repeat 100% 48%}
+.course_menu_d2 li select {margin: 9px 0}
 .course_menu_d2 li a:hover, .course_menu_d2 li.current a { font-weight:bold; color:#4e90b7}
 .course_menu_d2 li.end { background:none}
 
