@@ -5125,7 +5125,9 @@ public class SeraServiceImpl implements ISeraService {
 		String txtMissionCloseDate = null;
 		String selPrevMission = null;
 		String txtaMissionContent = null;
-		List<Map<String, String>> txtFileField = null;
+		Map<String, Object> txtFileField = null;
+		String fileGroupId = null;
+		Map<String, List<Map<String, String>>> fileGroupMap = new HashMap<String, List<Map<String, String>>>();
 		String missionFileId = null;
 		String missionFileName = null;
 		String selGroupProfileType = null;//공개 비공개
@@ -5146,9 +5148,15 @@ public class SeraServiceImpl implements ISeraService {
 					txtaMissionContent = (String)frmModifyMission.get("txtaMissionContent");
 				}
 			} else if (fieldValue instanceof LinkedHashMap) {
-				Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
-				if(fieldId.equals("txtFileField")) {
-					txtFileField = (ArrayList<Map<String,String>>)valueMap.get("files");
+				if (fieldId.equalsIgnoreCase("txtFileField")) {
+					txtFileField = (Map<String, Object>)fieldValue;
+					if(txtFileField != null && txtFileField.size() > 0) {
+						fileGroupId = (String)txtFileField.get("groupId");
+						List<Map<String, String>> files = (ArrayList<Map<String,String>>)txtFileField.get("files");
+						if(!CommonUtil.isEmpty(files)) {
+							fileGroupMap.put(fileGroupId, files);
+						}
+					}
 				}
 			}
 		}
@@ -5214,6 +5222,8 @@ public class SeraServiceImpl implements ISeraService {
 			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_INDEXFIELDID)) {
 				String lastMissionIndex = obj.getDataFieldValue(SeraConstant.MISSION_INDEXFIELDID);
 			    fieldData.setValue(lastMissionIndex);
+			} else if (fieldId.equalsIgnoreCase(SeraConstant.MISSION_FILESFIELDID)) {
+				fieldData.setValue(fileGroupId);
 			}
 			fieldDataList.add(fieldData);
 		}
@@ -5223,9 +5233,34 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setDataFields(fieldDatas);
 		
 		SwManagerFactory.getInstance().getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
-		
+
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setExtendedProperties(new Property[] {new Property("recordId", obj.getRecordId())});
+		tskCond.setModificationUser(userId);
+		tskCond.setOrders(new Order[]{new Order(TskTaskCond.A_CREATIONDATE, false)});
+		TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		String taskInstId = tskTasks[0].getObjId();
+
+		if(fileGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+				String fGroupId = entry.getKey();
+				List<Map<String, String>> fileGroups = entry.getValue();
+				try {
+					for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+						Map<String, String> file = fileGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						SwManagerFactory.getInstance().getDocManager().insertFiles("Files", taskInstId, fGroupId, fileId, fileName, fileSize);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("file upload fail...");
+				}
+			}
+		}
+
 		return missionId;
-		
+
 	}
 
 	@Override
@@ -5931,6 +5966,7 @@ public class SeraServiceImpl implements ISeraService {
 			if(courseTeam != null) {
 				team = new Team();
 				team.setId(courseTeam.getObjId());
+				team.setName(courseTeam.getName());
 				team.setCourseId(courseTeam.getCourseId());
 				team.setDesc(courseTeam.getDescription());
 				team.setStart(new LocalDate(courseTeam.getStartDate().getTime()));
@@ -6041,8 +6077,6 @@ public class SeraServiceImpl implements ISeraService {
 
 			CourseTeamCond courseTeamCond = new CourseTeamCond();
 			courseTeamCond.setObjId(teamId);
-			courseTeamCond.setPageNo(0);
-			courseTeamCond.setPageSize(maxList);
 			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
 			CourseTeamUser courseTeamUser = new CourseTeamUser();
 			courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_REQUEST);
@@ -6064,7 +6098,8 @@ public class SeraServiceImpl implements ISeraService {
 						CourseTeamUser requesterUser = teamUsers[i];
 						String requesterId = requesterUser.getUserId();
 						userIds[i] = requesterId;
-						stringList.add(requesterId);					}
+						stringList.add(requesterId);
+					}
 					requesters = getSeraUserInfos(userIds);
 				}
 			}
