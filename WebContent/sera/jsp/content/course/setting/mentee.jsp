@@ -111,8 +111,8 @@
 						</li>
 						<li class="fr bo_l">
 							<span>
-								<div class="btn_fgreen_l js_pushout_mentee_btn">
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>멘티 강퇴</div>
+								<div class="btn_fgray_l js_pushout_mentee_btn">
+									<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>멘티 강퇴</div>
 								</div>
 							</span>
 						</li>

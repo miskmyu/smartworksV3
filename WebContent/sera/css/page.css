@@ -233,7 +233,7 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
-.icon_team_delete {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:7px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:7px !important; margin: 0 5px 2px 0; display:inline-block !important}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -246,10 +246,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_open a:hover {background-position:-180px -117px}
 .icon_close a {background: url("../images/icon.png") no-repeat scroll -165px -129px; width:11px; height:11px; display:block; font-size:0}
 .icon_close a:hover {background-position:-180px -129px}
-.icon_delete a { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
-.icon_delete a:hover {background-position:-219px -117px}
-a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
-a .icon_delete:hover {background-position:-219px -117px}
+.icon_delete a, a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_delete a:hover, a .icon_delete:hover {background-position:-219px -117px}
 .icon_mentor {background: url("../images/icon.png") no-repeat scroll -29px -139px; width:16px; height:15px; display: block}
 .icon_mentor.current { background-position:-63px -139px}
 .icon_star {background: url("../images/icon.png") no-repeat scroll -29px -161px; width:16px; display: block}
