@@ -297,7 +297,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_as_more {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right; margin-top: 5px}
 .icon_as_more a:hover { background-position:-166px -357px}
 .icon_mn_more {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
-.icon_mn_more a:hover { background-position:-221px -724px}
+a .icon_mn_more:hover { background-position:-221px -724px}
 
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
