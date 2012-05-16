@@ -131,7 +131,7 @@
 							%>
 						</select>
 					</div>
-					<div class="cb">
+					<div class="cb" style="margin-left: 93px">
 						<div class="t_refe">* 선택사항 : 선행미션을 선택하면, 선택한 미션을 수행해야 해당 미션을 수행할 수 있습니다.</div>
 					</div>
 				</td>
