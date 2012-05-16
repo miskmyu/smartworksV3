@@ -70,8 +70,8 @@
 		</div>
 	</div>
 	<div class="course_menu js_course_main_menu">
-		<div class="btn_green_l mt8 fl">
-			<div class="btn_green_r">
+		<div class="btn_fgreen_l mt8 fl">
+			<div class="btn_fgreen_r">
 				<span class="icon_green_down"></span>친구초대
 			</div>
 		</div>

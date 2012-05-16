@@ -96,6 +96,9 @@
 			</div>
 			<!-- 타이틀 -->
 					 		            
+			<!-- 프로세스다이어그램 -->
+			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
+			
 			<!-- 프로세스 영역 -->
 			<div class="define_space" style="height:59px; padding: 0 45px;">
 			
