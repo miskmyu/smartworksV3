@@ -68,6 +68,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
+	private String creatorOrSpaceId;
 	private int hits;
 	private Date fromDate;
 
@@ -393,6 +394,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
+	}
+	public String getCreatorOrSpaceId() {
+		return creatorOrSpaceId;
+	}
+	public void setCreatorOrSpaceId(String creatorOrSpaceId) {
+		this.creatorOrSpaceId = creatorOrSpaceId;
 	}
 	public int getHits() {
 		return hits;

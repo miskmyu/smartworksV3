@@ -26,10 +26,11 @@
 .sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
 .sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
 .sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 263px;}
-.sera_news .lst_normal {clear: both; padding: 0 15px 20px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
+.sera_news .lst_normal {clear: both; padding: 0 15px 25px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
+.sera_news .lst_normal dd li {background: url("../images/icon.png") no-repeat -165px -818px; height:21px; overflow: hidden; padding: 0 0 0 8px}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
 .login_section { position:relative; width:980px; margin:0 auto}
@@ -181,8 +182,17 @@ a.b_next:hover { background-position:-30px -535px}
 .btn_mid_l {background: url("../images/btn_mid_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
 .btn_mid_r {background: url("../images/btn_mid_r.png") no-repeat scroll 100% 0; height:19px !important; padding: 0 10px 0 7px; position: relative; right: -3px; line-height:21px; font-size:12px; color:#555555; font-weight:normal}
 
-.btn_green_l {background: url("../images/btn_green_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
-.btn_green_r {background: url("../images/btn_green_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fgreen_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
+.btn_fgreen_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_fgray_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -20px; height:19px !important; float:left; cursor:pointer}
+.btn_fgray_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -20px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_fblu_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -39px; height:19px !important; float:left; cursor:pointer}
+.btn_fblu_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -39px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+
+.btn_fred_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -60px; height:19px !important; float:left; cursor:pointer}
+.btn_fred_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -60px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
 
 .btn_blu_l {background: url("../images/btn_blu_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
 .btn_blu_r {background: url("../images/btn_blu_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF; position:relative; right:-1px}
@@ -220,9 +230,11 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_star_score.half {background-position:-37px -293px}
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
 .icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_bludown_inbtn {background: url("../images/icon.png") no-repeat scroll -54 -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
+.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:7px !important; margin: 0 5px 2px 0; display:inline-block !important}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -235,10 +247,8 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_open a:hover {background-position:-180px -117px}
 .icon_close a {background: url("../images/icon.png") no-repeat scroll -165px -129px; width:11px; height:11px; display:block; font-size:0}
 .icon_close a:hover {background-position:-180px -129px}
-.icon_delete a { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
-.icon_delete a:hover {background-position:-219px -117px}
-a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
-a .icon_delete:hover {background-position:-219px -117px}
+.icon_delete a, a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_delete a:hover, a .icon_delete:hover {background-position:-219px -117px}
 .icon_mentor {background: url("../images/icon.png") no-repeat scroll -29px -139px; width:16px; height:15px; display: block}
 .icon_mentor.current { background-position:-63px -139px}
 .icon_star {background: url("../images/icon.png") no-repeat scroll -29px -161px; width:16px; display: block}
@@ -294,8 +304,8 @@ a .icon_bul_select:hover { background-position:0 -88px}
 
 .icon_as_more {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right; margin-top: 5px}
 .icon_as_more a:hover { background-position:-166px -357px}
-.icon_mn_more a {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
-.icon_mn_more a:hover { background-position:-221px -724px}
+.icon_mn_more {background: url("../images/icon.png") no-repeat scroll -221px -710px; height:5px; width:34px; display:inline-block; float:right}
+a .icon_mn_more:hover { background-position:-221px -724px}
 
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
@@ -455,6 +465,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .course_menu_d2 .menu005 {position:relative}
 .course_menu_d2 .menu006 {position:relative; float:right; right:32px}
 .course_menu_d2 li { float:left; padding:0 10px; background: url("../images/li_gab.gif") no-repeat 100% 48%}
+.course_menu_d2 li select {margin: 9px 0}
 .course_menu_d2 li a:hover, .course_menu_d2 li.current a { font-weight:bold; color:#4e90b7}
 .course_menu_d2 li.end { background:none}
 
