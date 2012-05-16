@@ -473,14 +473,17 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 	
 			TaskWorkCond taskCond = new TaskWorkCond();
-			if (assignedOnly)
+			if (assignedOnly) {
 				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+				taskCond.setTskAssignee(user.getId());
+			} else {
+				taskCond.setTskStartOrAssigned(user.getId());
+			}
 			if (lastInstanceDate != null) {
 				taskCond.setLastInstanceDate(lastInstanceDate);
 			} else {
 				taskCond.setLastInstanceDate(new LocalDate());
 			}
-			taskCond.setTskAssignee(user.getId());
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
 			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
@@ -513,16 +516,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
 				return null;
 			
-			TaskWorkCond taskCond = new TaskWorkCond();
-			taskCond.setTskAssignee(user.getId());
-			taskCond.setLastInstanceDate(new LocalDate());
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			TaskWorkCond totalTaskCond = new TaskWorkCond();
+			totalTaskCond.setTskStartOrAssigned(user.getId());
+			totalTaskCond.setLastInstanceDate(new LocalDate());
+			totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
 			
-			taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+			TaskWorkCond assignedTaskCond = new TaskWorkCond();
+
+			assignedTaskCond.setTskAssignee(user.getId());
+			assignedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 			
-			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), assignedTaskCond);
 			
 			RunningCounts runningCounts = new RunningCounts();
 			runningCounts.setTotal((int)totalTaskSize);
