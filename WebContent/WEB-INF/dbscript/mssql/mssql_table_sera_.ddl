@@ -752,6 +752,7 @@ CREATE TABLE CourseTeam (
 CREATE TABLE CourseTeamUser (
 	objId varchar(50) NOT NULL,
 	userId varchar(50) NOT NULL,
+	joinType varchar(1) NOT NULL,
 	joinStatus varchar(1) NOT NULL,
 	memberSeq int,
 	primary key(objId, userId)
