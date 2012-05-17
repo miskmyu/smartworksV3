@@ -757,8 +757,6 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String filePath = "";
 		String imagerServerPath = "";
 		String extension = "";
-
-
 		String fileName = "";
 		String agentInfo = request.getHeader("User-Agent");
 		if(agentInfo.indexOf("MSIE") > 0) { //IE

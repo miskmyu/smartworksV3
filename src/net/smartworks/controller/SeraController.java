@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class SeraController {
+public class SeraController extends ExceptionInterceptor {
 	
 	ISmartWorks smartworks;
 

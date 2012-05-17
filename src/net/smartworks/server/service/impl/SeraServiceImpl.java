@@ -131,6 +131,13 @@ import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -152,6 +159,7 @@ public class SeraServiceImpl implements ISeraService {
 
 	private IInstanceService instanceService;
 	private ICalendarService calendarService;
+	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	public void setInstanceService(IInstanceService instanceService) {
@@ -161,6 +169,10 @@ public class SeraServiceImpl implements ISeraService {
 	public void setCalendarService(ICalendarService calendarService) {
 		this.calendarService = calendarService;
 	}
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
 	private CourseInfo getCourseInfoById(String courseId) throws Exception {
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
@@ -1108,7 +1120,7 @@ public class SeraServiceImpl implements ISeraService {
 		Date startDate = null;
 		Date endDate = null;
 
-		if(!CommonUtil.isEmpty(txtCourseDays)) {
+		if(!isUserDefineDays) {
 			startDate =  LocalDate.convertLocalDateStringToLocalDate(new LocalDate().toLocalDateSimpleString());
 			endDate = new LocalDate(startDate.getTime() + LocalDate.ONE_DAY*(Integer.parseInt(txtCourseDays)-1));
 		} else {
@@ -2594,6 +2606,7 @@ public class SeraServiceImpl implements ISeraService {
 				UserInfo member = new SeraUserInfo();
 				member.setId(swoUserExtend.getId());
 				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
 				member.setPosition(swoUserExtend.getPosition());
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -3658,21 +3671,45 @@ public class SeraServiceImpl implements ISeraService {
 			courseTeam.setMemberSize(Integer.parseInt(txtTeamUsers));
 			courseTeam.setStartDate(startDate);
 			courseTeam.setEndDate(endDate);
-	
+
+			//멘티일 경우 - 팀생성자 포함
+			//멘토일 경우 - 팀생성자 미포함
+			SwoGroup swoGroup = getSwoManager().getGroup(userId, courseId, IManager.LEVEL_LITE);
+			String mentorId = swoGroup.getGroupLeader();
+
+			boolean isMentor = false;
+			if(!userId.equals(mentorId)) {
+				CourseTeamUser courseTeamLeader = new CourseTeamUser();
+				courseTeamLeader.setUserId(userId);
+				courseTeamLeader.setJoinType(CourseTeamUser.JOINTYPE_TEAMLEADER);
+				courseTeamLeader.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
+				courseTeam.addTeamMember(courseTeamLeader);
+			}
+
 			if(!CommonUtil.isEmpty(users)) {
-				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+				if(!isMentor) {
+					if(users.size()+1 > Integer.parseInt(txtTeamUsers))
+						throw new ArrayIndexOutOfBoundsException();
+				} else {
+					if(users.size() > Integer.parseInt(txtTeamUsers))
+						throw new ArrayIndexOutOfBoundsException();
+				}
+				for(int i=0; i<users.size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					String teamUserId = userMap.get("id");
 					CourseTeamUser courseTeamUser = new CourseTeamUser();
 					courseTeamUser.setUserId(teamUserId);
-					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
-					courseTeam.addGroupMember(courseTeamUser);
+					courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_INVITE);
+					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE); //초대에 대한 응답 구현 후 CourseTeamUser.JOINSTATUS_READY로 변경 예정
+					courseTeam.addTeamMember(courseTeamUser);
 				}
 			}
 
 			courseTeam = getSeraManager().setCourseTeam(userId, courseTeam);
 			return courseTeam.getObjId();
 			
+		} catch (ArrayIndexOutOfBoundsException ae) {
+			throw new ArrayIndexOutOfBoundsException("txtTeamUsers Exceed~!!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -3740,6 +3777,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("modify course team error...");
 		}
 	}
 
@@ -3900,7 +3938,15 @@ public class SeraServiceImpl implements ISeraService {
 		
 		swoMgr.setUser(userId, swoUser, IManager.LEVEL_ALL);
 		seraMgr.setSeraUser(userId, seraUserDetail);
-		
+
+		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(swoUser.getId(), swoUser.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authRequest);
+        SecurityContext securityContext = new SecurityContextImpl();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+        getSwoManager().getUserExtend(userId, userId, false);
+
 		return userId;
 	}
 
@@ -4346,6 +4392,7 @@ public class SeraServiceImpl implements ISeraService {
 							goal = seraUserDetail.getGoal();
 						member.setGoal(goal);
 						member.setName(swoUserExtend.getName());
+						member.setNickName(swoUserExtend.getNickName());
 						member.setPosition(swoUserExtend.getPosition());
 						member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 						member.setSmallPictureName(swoUserExtend.getSmallPictureName());
@@ -4989,7 +5036,7 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 		
-		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", courseNotRelatedUserIds, lastUserName);
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", courseNotRelatedUserIds, lastUserName, null);
 		
 		if (userExtends == null)
 			return null;
@@ -5287,8 +5334,8 @@ public class SeraServiceImpl implements ISeraService {
 	
 	private SeraUserInfo[] getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(String userId, String[] ids, String lastName, int maxList) throws Exception {
 		
-		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", ids, lastName);
-		
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", ids, lastName, null);
+
 		if (userExtends == null)
 			return null;
 		List userInfoList = new ArrayList();
@@ -5314,7 +5361,6 @@ public class SeraServiceImpl implements ISeraService {
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
 				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
-				member.setId(id);
 				boolean isFriend = false;
 				if(!CommonUtil.isEmpty(mySeraFriends)) {
 					for(SeraFriend seraFriend : mySeraFriends) {
@@ -6060,6 +6106,165 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
+	public SeraUserInfo[] getSeraUserInfos(List<String> seraUserIdList, int maxList, String lastId, String key) {
+		try {
+			SeraUserInfo[] seraUserInfos = null;
+			List<SeraUserInfo> seraUserInfosList = new ArrayList<SeraUserInfo>();
+			String[] seraUserIds = null;
+
+			SwoUserExtend[] userExtends = null;
+			if(seraUserIdList.size() > 0) {
+				seraUserIds = new String[seraUserIdList.size()];
+				seraUserIdList.toArray(seraUserIds);
+				userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(null, seraUserIds, lastId, key);
+			}
+
+			if(userExtends.length > maxList) {
+				seraUserInfos = new SeraUserInfo[maxList+1];
+				seraUserInfos[maxList] = new SeraUserInfo();
+			} else {
+				seraUserInfos = new SeraUserInfo[userExtends.length];
+			}
+
+			User currentUser = SmartUtil.getCurrentUser();
+			String currentUserId = currentUser.getId();
+
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
+
+			for(int i=0; i<seraUserInfos.length; i++) {
+				SwoUserExtend swoUserExtend = userExtends[i];
+				SeraUserInfo member = new SeraUserInfo();
+				String id = swoUserExtend.getId();
+				member.setId(swoUserExtend.getId());
+				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
+				member.setPosition(swoUserExtend.getPosition());
+				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				boolean isFriend = false;
+				if(!CommonUtil.isEmpty(mySeraFriends)) {
+					for(SeraFriend seraFriend : mySeraFriends) {
+						if(id.equals(seraFriend.getFriendId())) {
+							isFriend = true;
+							break;
+						}
+					}
+				}
+				member.setFriend(isFriend);
+				SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(currentUserId, id);
+				String goal = null;
+				if(seraUserDetail != null)
+					goal = seraUserDetail.getGoal();
+				member.setGoal(goal);
+				seraUserInfosList.add(member);
+			}
+
+			if(seraUserInfosList.size() > 0) {
+				seraUserInfos = new SeraUserInfo[seraUserInfosList.size()];
+				seraUserInfosList.toArray(seraUserInfos);
+			}
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public SeraUserInfo[] getRequestersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList) {
+		try {
+			if(CommonUtil.isEmpty(courseTeamUsers))
+				return null;
+
+			SeraUserInfo[] seraUserInfos = null;
+			List<String> requesterIdList = new ArrayList<String>();
+			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+				String teamUserId = courseTeamUser.getUserId();
+				String joinType = courseTeamUser.getJoinType();
+				String joinStatus = courseTeamUser.getJoinStatus();
+				if(CourseTeamUser.JOINTYPE_REQUEST.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
+					requesterIdList.add(teamUserId);
+				}
+			}
+			if(requesterIdList.size() > 0) {
+				memberInformList.setTotalRequesters(requesterIdList.size());
+				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
+			}
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public SeraUserInfo[] getMembersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
+		try {
+			if(CommonUtil.isEmpty(courseTeamUsers))
+				return null;
+
+			SeraUserInfo[] seraUserInfos = null;
+			List<String> memberIdList = new ArrayList<String>();
+			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+				String teamUserId = courseTeamUser.getUserId();
+				String joinStatus = courseTeamUser.getJoinStatus();
+				if(CourseTeamUser.JOINSTATUS_COMPLETE.equalsIgnoreCase(joinStatus)) {
+					memberIdList.add(teamUserId);
+				}
+			}
+			if(memberIdList.size() > 0) {
+				memberInformList.setTotalMembers(memberIdList.size());
+				seraUserInfos = getSeraUserInfos(memberIdList, maxList, lastId, key);
+			}
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public SeraUserInfo[] getNonMembersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			SeraUserInfo[] seraUserInfos = null;
+			SeraUserDetail[] seraUserDetails = null;
+			String[] relationIds = null;
+			List<String> relationIdList = new ArrayList<String>();
+			if(!CommonUtil.isEmpty(courseTeamUsers)) {
+				for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+					String teamUserId = courseTeamUser.getUserId();
+					relationIdList.add(teamUserId);
+				}
+				if(relationIdList.size() > 0) {
+					relationIds = new String[relationIdList.size()];
+					relationIdList.toArray(relationIds);
+				}
+			}
+
+			SeraUserDetailCond seraUserDetailCond = new SeraUserDetailCond();
+			seraUserDetailCond.setUserIdNotIns(relationIds);
+			seraUserDetails = getSeraManager().getSeraUserDetails(userId, seraUserDetailCond);
+
+			List<String> nonMemberIdList = new ArrayList<String>();
+
+			if(!CommonUtil.isEmpty(seraUserDetails)) {
+				for(SeraUserDetail seraUserDetail : seraUserDetails) {
+					String nonMemberId = seraUserDetail.getUserId();
+					nonMemberIdList.add(nonMemberId);
+				}
+			}
+
+			if(nonMemberIdList.size() > 0) {
+				memberInformList.setTotalNonMembers(nonMemberIdList.size());
+				seraUserInfos = getSeraUserInfos(nonMemberIdList, maxList, lastId, key);
+			}
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@Override
 	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
 		try {
@@ -6068,88 +6273,22 @@ public class SeraServiceImpl implements ISeraService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			int totalRequesters = 0;
-			int totalMembers = 0;
-			int totalNonMembers = 0;
 			SeraUserInfo[] requesters = null;
 			SeraUserInfo[] members = null;
 			SeraUserInfo[] nonMembers = null;
 
-			CourseTeamCond courseTeamCond = new CourseTeamCond();
-			courseTeamCond.setObjId(teamId);
-			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
-			CourseTeamUser courseTeamUser = new CourseTeamUser();
-			courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_REQUEST);
-			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
-			courseTeamUsers[0] = courseTeamUser;
-			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
 
-			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
-
-			String[] userIds = null;
-			List<String> stringList = new ArrayList<String>();
-
+			CourseTeamUser[] courseTeamUsers = null;
 			if(courseTeam != null) {
-				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
-				if(teamUsers != null) {
-					totalRequesters = teamUsers.length;
-					userIds = new String[totalRequesters];
-					for(int i=0; i<totalRequesters; i++) {
-						CourseTeamUser requesterUser = teamUsers[i];
-						String requesterId = requesterUser.getUserId();
-						userIds[i] = requesterId;
-						stringList.add(requesterId);
-					}
-					requesters = getSeraUserInfos(userIds);
+				courseTeamUsers = courseTeam.getCourseTeamUsers();
+				if(!CommonUtil.isEmpty(courseTeamUsers)) {
+					requesters = getRequestersOfTeam(memberInformList, courseTeamUsers, maxList);
+					members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 				}
+				nonMembers = getNonMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 			}
 
-			courseTeamUser.setJoinType(null);
-			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
-			courseTeamUsers[0] = courseTeamUser;
-			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
-
-			courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
-
-			if(courseTeam != null) {
-				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
-				if(teamUsers != null) {
-					totalMembers = teamUsers.length;
-					userIds = new String[totalMembers];
-					for(int i=0; i<totalMembers; i++) {
-						CourseTeamUser memberUser = teamUsers[i];
-						String memberId = memberUser.getUserId();
-						userIds[i] = memberId;
-						stringList.add(memberId);
-					}
-					members = getSeraUserInfos(userIds);
-				}
-			}
-
-			if(stringList.size() > 0) {
-				userIds = new String[stringList.size()];
-				stringList.toArray(userIds);
-			}
-
-			SeraUserDetailCond seraUserDetailCond = new SeraUserDetailCond();
-			seraUserDetailCond.setUserIdNotIns(userIds);
-
-			SeraUserDetail[] seraUserDetails = getSeraManager().getSeraUserDetails(userId, seraUserDetailCond);
-
-			if(seraUserDetails != null) {
-				totalNonMembers = seraUserDetails.length;
-				userIds = new String[totalNonMembers];
-				for(int i=0; i<totalNonMembers; i++) {
-					SeraUserDetail seraUserDetail = seraUserDetails[i];
-					String nonMemberId = seraUserDetail.getUserId();
-					userIds[i] = nonMemberId;
-				}
-				nonMembers = getSeraUserInfos(userIds);
-			}
-
-			memberInformList.setTotalRequesters(totalRequesters);
-			memberInformList.setTotalMembers(totalMembers);
-			memberInformList.setTotalNonMembers(totalNonMembers);
 			memberInformList.setRequesters(requesters);
 			memberInformList.setMembers(members);
 			memberInformList.setNonMembers(nonMembers);

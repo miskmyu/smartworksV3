@@ -66,17 +66,17 @@ public class CourseTeam extends MisObject {
 	public void setCourseTeamUsers(CourseTeamUser[] courseTeamUsers) {
 		this.courseTeamUsers = courseTeamUsers;
 	}
-	public void addGroupMember(CourseTeamUser courseTeamUser) {
+	public void addTeamMember(CourseTeamUser courseTeamUser) {
 		if (courseTeamUser == null)
 			return;
 		this.setCourseTeamUsers(CourseTeamUser.add(this.getCourseTeamUsers(), courseTeamUser));
 	}
-	public void removeGroupMember(CourseTeamUser courseTeamUser) {
+	public void removeTeamMember(CourseTeamUser courseTeamUser) {
 		if (courseTeamUser == null)
 			return;
 		this.setCourseTeamUsers(CourseTeamUser.remove(this.getCourseTeamUsers(), courseTeamUser));
 	}
-	public void resetGroupMembers() {
+	public void resetTeamMembers() {
 		this.courseTeamUsers = null;
 	}
 
