@@ -2270,7 +2270,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		}
 		return usersExtendsArray;
 	}
-	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, String key) throws SwoException {
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, Date lastModifiedTime, String key) throws SwoException {
 
 		if (CommonUtil.isEmpty(ids))
 			return null;
@@ -2285,8 +2285,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.companyId = company.id");
-		if (!CommonUtil.isEmpty(lastName))
-			buff.append(" and user.name > ").append("'").append(lastName).append("'");
+		if(!CommonUtil.isEmpty(lastName)) {
+			buff.append(" and user.name >= :lastName ");
+			buff.append(" and user.id not in (select id from SwoUser where name = :lastName and modificationDate >= :lastModifiedTime)");
+		}
 		if (!CommonUtil.isEmpty(key))
 			buff.append(" and (user.id like :key or user.name like :key or user.nickName like :key)");
 		buff.append(" and user.id in ( ");
@@ -2300,6 +2302,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		Query query = this.getSession().createQuery(buff.toString());
 
+		if (!CommonUtil.isEmpty(lastName))
+			query.setString("lastName", lastName);
+		if (!CommonUtil.isEmpty(lastModifiedTime))
+			query.setTimestamp("lastModifiedTime", lastModifiedTime);
 		if (!CommonUtil.isEmpty(key))
 			query.setString("key", CommonUtil.toLikeString(key));
 
@@ -2334,7 +2340,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	}
 	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException {
 
-		return getUsersExtend(userId, ids, null, null);
+		return getUsersExtend(userId, ids, null, null, null);
 	}
 
 	public SwoUserExtend getNoneExistingUser() throws SwoException {

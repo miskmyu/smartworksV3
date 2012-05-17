@@ -3592,7 +3592,7 @@ public class InstanceServiceImpl implements IInstanceService {
 								SwdDataField swdDataField = swdDataFields[j];
 								String value = swdDataField.getValue();
 								if(swdDataField.getId().equals("0")) {
-									tempWorkInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+									tempWorkInstanceInfo.setSubject(StringUtil.subString(value, 0, 32, "..."));
 								} else if(swdDataField.getId().equals("1")) {
 									tempWorkInstanceInfo.setContent(value);
 									tempWorkInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
