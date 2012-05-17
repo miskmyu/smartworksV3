@@ -29,8 +29,10 @@
 .sera_news .lst_normal {clear: both; padding: 0 15px 35px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
-.sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
-.sera_news .lst_normal dd li {background: url("../images/icon.png") no-repeat -165px -818px; height:21px; overflow: hidden; padding: 0 0 0 8px}
+.sera_news .lst_normal dd {line-height:21px; clear:both}
+.sera_news .lst_normal dd li {height:21px; overflow: hidden}
+.sera_news .lst_normal dd li a {color:#cdcdcd; background: url("../images/icon.png") no-repeat -165px -822px; padding: 0 0 0 8px}
+.sera_news .lst_normal dd li a:hover {color:#f7cc88}
 .sera_news .lst_normal dt .icon_as_srtrend {width:auto}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
