@@ -22,6 +22,8 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -278,10 +280,15 @@ public class SeraController extends ExceptionInterceptor {
 	@RequestMapping("/seraBoardItem")
 	public ModelAndView seraBoardItem(HttpServletRequest request, HttpServletResponse response) {
 		if(SmartUtil.getCurrentUser().isAnonymusUser()){
+			String getHeader = request.getHeader("X-Requested-With");
 	 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-			return new ModelAndView("sera/jsp/content/board/sera_board_item.jsp", "smartWorks", smartworks);
+			if (getHeader != null){
+				return new ModelAndView("sera/jsp/content/board/sera_board_item.jsp", "smartWorks", smartworks);
+			}else{
+				return new ModelAndView("seraBoardItem.tiles", "smartWorks", smartworks);
+			}
 		}
-		return SmartUtil.returnMnvSera(request, "sera/jsp/content/board/sera_board_item.jsp", "");
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/board/sera_board_item.jsp", "seraBoardItem.tiles");
 	}
 
 	@RequestMapping("/helpCenter")
