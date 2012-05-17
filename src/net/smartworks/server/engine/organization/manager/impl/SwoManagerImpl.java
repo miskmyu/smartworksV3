@@ -2270,7 +2270,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		}
 		return usersExtendsArray;
 	}
-	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName) throws SwoException {
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, String key) throws SwoException {
 
 		if (CommonUtil.isEmpty(ids))
 			return null;
@@ -2284,9 +2284,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("     	   user.empNo, user.email, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
+		buff.append(" and user.companyId = company.id");
 		if (!CommonUtil.isEmpty(lastName))
 			buff.append(" and user.name > ").append("'").append(lastName).append("'");
-		buff.append(" and user.companyId = company.id");
+		if (!CommonUtil.isEmpty(key))
+			buff.append(" and (user.id like :key or user.name like :key or user.nickName like :key)");
 		buff.append(" and user.id in ( ");
 		for (int i = 0; i < ids.length; i++) {
 			if (i != 0)
@@ -2297,7 +2299,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" order by user.name asc");
 		
 		Query query = this.getSession().createQuery(buff.toString());
-		
+
+		if (!CommonUtil.isEmpty(key))
+			query.setString("key", CommonUtil.toLikeString(key));
+
 		for (int i=0; i<ids.length; i++) {
 			query.setString("userIn"+i, ids[i]);
 		}
@@ -2329,7 +2334,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	}
 	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException {
 
-		return getUsersExtend(userId, ids, null);
+		return getUsersExtend(userId, ids, null, null);
 	}
 
 	public SwoUserExtend getNoneExistingUser() throws SwoException {

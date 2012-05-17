@@ -98,8 +98,8 @@
 						<%
 						}
 						%>
-						<div class="mission_info"><%=course.getTargetPoint()%>일 미션기간 중 <%=course.getAchievedPoint()%>일째가 진행중입니다</div>
-						<div class="process">(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)
+						<div class="mission_info"><%=course.getTargetPoint()%>일 미션기간 중 <%=course.getAchievedPoint()%>일째가 진행중입니다
+							<span class="tr process">(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)</span>
 						</div>
 					</dl>
 				</div>

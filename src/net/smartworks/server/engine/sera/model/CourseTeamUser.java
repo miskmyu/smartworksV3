@@ -20,6 +20,7 @@ public class CourseTeamUser extends MisObject {
 
 	public static final String JOINTYPE_INVITE = "I";
 	public static final String JOINTYPE_REQUEST = "R";
+	public static final String JOINTYPE_TEAMLEADER = "L";
 
 	public static final String JOINSTATUS_COMPLETE = "C";
 	public static final String JOINSTATUS_READY = "R";

@@ -29,7 +29,7 @@
 			<!-- Header Title -->
 			<div class="header_tit">
 				<div class="tit_dep2 m0">
-					<h2>별별별별별팀 명</h2>
+					<h2><%=team.getName()%></h2>
 				</div>
 			</div>
 			<!-- Header Title //-->

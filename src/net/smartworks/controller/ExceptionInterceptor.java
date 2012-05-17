@@ -21,10 +21,17 @@ public class ExceptionInterceptor {
 	public @ResponseBody String nullPointExceptionHandler(NullPointerException e) {
 		return  "nullPointerException";
 	}
-	
+
 	@ExceptionHandler(DuplicateKeyException.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody String duplicatekeyExceptionHandler(DuplicateKeyException e) {
 		return "duplicateKeyException";
-	}	
+	}
+
+	@ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody String arrayIndexOutOfBoundsExceptionHandler(ArrayIndexOutOfBoundsException e) {
+		return "arrayIndexOutOfBoundsException";
+	}
+
 }

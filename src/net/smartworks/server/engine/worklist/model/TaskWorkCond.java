@@ -25,6 +25,7 @@ public class TaskWorkCond extends Cond {
 	private String tskAssignee; 
 	private String tskAssigneeIdIns;
 	private String tskAssigneeOrSpaceId;
+	private String tskStartOrAssigned;
 	private Date taskLastModifyDate;
 	private String tskCreateUser;
 	private Date tskCreateDate;
@@ -368,6 +369,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setExpectEndDateTo(Date expectEndDateTo) {
 		this.expectEndDateTo = expectEndDateTo;
+	}
+	public String getTskStartOrAssigned() {
+		return tskStartOrAssigned;
+	}
+	public void setTskStartOrAssigned(String tskStartOrAssigned) {
+		this.tskStartOrAssigned = tskStartOrAssigned;
 	}
 
 
