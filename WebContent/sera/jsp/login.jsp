@@ -158,7 +158,7 @@
 					</dl>
 				</li>
 
-				<li class="lst_normal end mt30">
+				<li class="lst_normal end mt35">
 					<dl class="">
 						<dt>
 							<a href="seraTrend.sw"><div class="icon_as_srtrend fl">트렌드 세라</div>

@@ -25,12 +25,13 @@
 .sera_guide .sponsor .spon_lst label {border: 1px solid #e5e5e5; height: 42px; margin: 0 4px 4px 0; width: 119px; float:left}
 .sera_guide .sponsor .btn_pre {background: url("../images/btn_banner_pre.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 17px;}
 .sera_guide .sponsor .btn_next {background: url("../images/btn_banner_next.png") no-repeat 0 0; float: left; height: 13px; margin-top: 65px; width: 13px;}
-.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 362px; padding: 37px 9px; width: 263px;}
-.sera_news .lst_normal {clear: both; padding: 0 15px 25px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
+.sera_news {background: url("../images/element_bg.png") no-repeat scroll 0 0 transparent; float: right; height: 375px; padding: 35px 9px; width: 263px;}
+.sera_news .lst_normal {clear: both; padding: 0 15px 35px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
 .sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
 .sera_news .lst_normal dd li {background: url("../images/icon.png") no-repeat -165px -818px; height:21px; overflow: hidden; padding: 0 0 0 8px}
+.sera_news .lst_normal dt .icon_as_srtrend {width:auto}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
 .login_section { position:relative; width:980px; margin:0 auto}
@@ -299,7 +300,7 @@ a .icon_bul_select:hover { background-position:0 -88px}
 .icon_as_badge {background: url("../images/icon.png") no-repeat scroll -585px -546px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
 .icon_as_friend {background: url("../images/icon.png") no-repeat scroll -585px -709px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
 .icon_as_srtrend {background: url("../images/icon.png") no-repeat scroll -166px -310px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
-.icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; width:203px; max-width: 200px; word-wrap: break-word}
+.icon_mn_news {background: url("../images/icon.png") no-repeat scroll -215px -345px; height:25px; padding-left:30px; line-height: 17px; vertical-align: middle; display: table-cell; max-width: 200px; word-wrap: break-word}
 
 .icon_as_more {background: url("../images/icon.png") no-repeat scroll -166px -347px; height:5px; width:34px; display:inline-block; float:right; margin-top: 5px}
 .icon_as_more a:hover { background-position:-166px -357px}
