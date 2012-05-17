@@ -451,9 +451,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .course_df li span { font-weight:bold; display:block; text-align:right}
 .course_info { width:185px; float:right; margin:10px 10px 0 0; line-height:20px; height:100px; overflow:hidden}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -765px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
-.course_info dd {height: 18px; overflow: hidden}
+.course_info dd {height: 18px; overflow: hidden; margin: 0 0 0 10px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
-.course_menu_d1 { float: left; margin:0 0 0 22px}
+.course_menu_d1 { float: left; margin:0 0 0 14px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
 .course_menu_d1 li { float:left}
 .course_menu_d1 li a {color:#FFF; display:block; margin:0 2px; font-size:12px; font-weight:bold; color:#FFF; text-align:center; width:75px; line-height:25px; height:29px}
