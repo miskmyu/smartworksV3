@@ -687,7 +687,7 @@ tr.instance_list:hover {background-color:#e8f7ff; cursor:pointer;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
-.footer_box {clear: both; margin: 0 auto; width: 993px;}
+.footer_box {clear: both; margin: 0 auto; width: 980px}
 .footer_box .copyright {float: left; height: 20px; width: 270px; padding-top:5px}
 .footer_box .policy {color: #FFFFFF; float: right; font: 11px,'Dotum'; height: 10px; padding-top:9px}
 .footer_box .policy a {color: #FFFFFF;}
