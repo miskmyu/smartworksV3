@@ -307,7 +307,9 @@ $(function() {
 	$(document).keypress(function(e) {
 		var keyCode = e.which || e.keyCode;
 		if(keyCode == 13) {
-			if ($('.login_section').is(':visible')) {
+			var userName = $('#j_username').attr('value');
+			var password = $('#j_password').attr('value');
+			if ($('.login_section').is(':visible') && !isEmpty(userName) && !isEmpty(password)) {
 				$('input[type="submit"]').click();
 				return false;
 			}

@@ -120,7 +120,10 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-	String wid = (String)session.getAttribute("wid");
+	String wid = request.getParameter("wid");
+	if(SmartUtil.isBlankObject(wid)) wid = (String)session.getAttribute("wid");
+	else
+		session.setAttribute("wid", wid);
 	String workId = request.getParameter("workId");
 	String instId = request.getParameter("instId");
 %>
