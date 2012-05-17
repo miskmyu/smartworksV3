@@ -220,4 +220,7 @@
 	<definition name="seraTrend" extends="seraBoard">
 		<put-attribute name="container" value="/sera/jsp/content/board/sera_trend.jsp" />
 	</definition>
+	<definition name="seraBoardItem" extends="seraBoard">
+		<put-attribute name="container" value="/sera/jsp/content/board/sera_board_item.jsp" />
+	</definition>
 </tiles-definitions>

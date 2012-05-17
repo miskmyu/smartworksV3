@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.sera.Constants"%>
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
 <%@page import="net.smartworks.model.sera.SeraBoardList"%>
 <%@page import="java.util.TimeZone"%>
@@ -147,8 +149,9 @@
 								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraNews())){									
 									for(int i=0; i<seraBoards.getSeraNews().length; i++){
 										BoardInstanceInfo news = seraBoards.getSeraNews()[i];
+										String target = "seraBoardItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + news.getId() + "&wid=" + Constants.SERA_WID_SERA_NEWS;
 								%>
-										<li><%=news.getSubject() %></li>
+										<li><a href="<%=target%>"><%=news.getSubject() %></a></li>
 								<%
 									}
 								}
@@ -170,8 +173,9 @@
 								if(!SmartUtil.isBlankObject(seraBoards) && !SmartUtil.isBlankObject(seraBoards.getSeraTrends())){
 									for(int i=0; i<seraBoards.getSeraTrends().length; i++){
 										BoardInstanceInfo trend = seraBoards.getSeraTrends()[i];
+										String target = "seraBoardItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + trend.getId() + "&wid=" + Constants.SERA_WID_SERA_TREND;
 								%>
-										<li><%=trend.getSubject() %></li>
+										<li><a href="<%=target%>"><%=trend.getSubject() %></a></li>
 								<%
 									}
 								}
