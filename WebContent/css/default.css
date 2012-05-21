@@ -251,3 +251,6 @@ mark, rp, rt, ruby, summary, time {
 
 .oh {overflow:hidden !important}
 .psr { position:relative !important}
+
+.op20 { filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=20); opacity:0.2; }
+.op50 { filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity:0.5; }

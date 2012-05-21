@@ -40,13 +40,13 @@ smartPop = {
 
 	overlay : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		var curtain = $('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=20); opacity:0.2; background-color:#000000;"></span>');
+		var curtain = $('<span id="sw_overlay_span" class="op20" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#000000;"></span>');
 		curtain.appendTo($(target));
 	},
 	
 	overlayDark : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		var curtain = $('<span id="sw_overlay_span" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50); opacity:0.5; background-color:#000000;"></span>');
+		var curtain = $('<span id="sw_overlay_span" class="op50" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#000000;"></span>');
 		curtain.appendTo($(target));
 	},
 	
