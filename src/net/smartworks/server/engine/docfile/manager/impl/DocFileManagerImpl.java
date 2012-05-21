@@ -30,7 +30,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.FileCategory;
@@ -515,6 +514,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
             fos = new FileOutputStream(new File(formFile.getFilePath()));
             IOUtils.copy(is, fos);
             response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Content-Type", "text/html");
             /*JSONObject jsonObject = new JSONObject();
             jsonObject.put("success", true);
             jsonObject.put("fileId", formFile.getId());
