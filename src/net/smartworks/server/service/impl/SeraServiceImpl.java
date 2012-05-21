@@ -1533,7 +1533,8 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwoGroupCond groupCond = new SwoGroupCond();
 			groupCond.setGroupIdIns(courseIds);
-			
+			groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
+
 			SwoGroup[] groups = swoMgr.getGroups(userId, groupCond, IManager.LEVEL_ALL);
 			
 			CourseDetailCond courseDetailCond = new CourseDetailCond();
@@ -1927,6 +1928,7 @@ public class SeraServiceImpl implements ISeraService {
 					courseMember.setUserId(currentUserId);
 					courseMembers[0] = courseMember;
 					attendingCourseCond.setSwoGroupMembers(courseMembers);
+					attendingCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 					SwoGroup[] attendingCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(currentUserId, attendingCourseCond, IManager.LEVEL_ALL);
 					String[] courseIdIns = null;
 					if(!CommonUtil.isEmpty(attendingCourses)) {
@@ -2042,6 +2044,9 @@ public class SeraServiceImpl implements ISeraService {
 				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
 			else
 				swdRecordCond.setWorkSpaceId(workSpaceId);
+
+//			String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
+//			swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
 
 			if(fromDate != null)
 				swdRecordCond.setFromDate(fromDate);
@@ -4072,6 +4077,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setGroupIdIns(courseIds);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 
@@ -4136,6 +4142,7 @@ public class SeraServiceImpl implements ISeraService {
 	    
 	    SwoGroupCond groupCond = new SwoGroupCond();
 	    groupCond.setGroupIdIns(courseIds);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 	    ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 	    SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 
@@ -4526,61 +4533,51 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
-		
-		CourseDetailCond courseDetailCond = new CourseDetailCond();
-		
-		if (fromCourseId != null) {
-			CourseDetail lastCourseDetailInfo = SwManagerFactory.getInstance().getSeraManager().getCourseDetailById(fromCourseId);
-			if (lastCourseDetailInfo != null)
-				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
-		}
-		
-		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
-
-		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
-		courseDetailCond.setPageNo(0);
-		courseDetailCond.setPageSize(maxList);
-		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
-		if (courseDetails == null || courseDetails.length == 0) 
-			return null;
-	    
-		String[] courseIds = new String[courseDetails.length];
-		for (int i = 0; i < courseDetails.length; i++) {
-			courseIds[i] = courseDetails[i].getCourseId();
-		}
 
 		SwoGroupCond groupCond = new SwoGroupCond();
-		groupCond.setGroupIdIns(courseIds);
-		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
-	    
-		SwoGroup[] tempGroups = new SwoGroup[courseDetails.length];
-		for (int i = 0; i < courseDetails.length; i++) {
-			String courseId = courseDetails[i].getCourseId();
-			for (int j = 0; j < groups.length; j++) {
-				if (groups[j].getId().equalsIgnoreCase(courseId)) {
-					tempGroups[i] = groups[j];
-					break;
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
+		
+		if (fromCourseId != null) {
+			SwoGroup lastCourseDetailInfo = getSwoManager().getGroup("", fromCourseId, IManager.LEVEL_LITE);
+			if (lastCourseDetailInfo != null) {
+				groupCond.setLastCreateDateTo(lastCourseDetailInfo.getCreationDate());
+				groupCond.setLastName(lastCourseDetailInfo.getName());
+			}
+		}
+		long totalSize = getSwoManager().getGroupSize("", groupCond);
+		groupCond.setPageNo(0);
+		groupCond.setPageSize(maxList);
+		groupCond.setOrders(new Order[]{new Order("creationDate", false), new Order("name", true)});
+
+		SwoGroup[] swoGroups = getSwoManager().getGroups("", groupCond, IManager.LEVEL_ALL);
+
+		CourseInfo[] courses = null;
+		CourseInfo[] result = null;
+
+		if(!CommonUtil.isEmpty(swoGroups)) {
+			String[] courseIds = new String[swoGroups.length];
+			for (int i = 0; i < swoGroups.length; i++) {
+				courseIds[i] = swoGroups[i].getId();
+			}
+			CourseDetailCond courseDetailCond = new CourseDetailCond();
+			courseDetailCond.setCourseIdIns(courseIds);
+			CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
+			if(!CommonUtil.isEmpty(courseDetails)) {
+				courses = convertSwoGroupArrayToCourseInfoArray(swoGroups, courseDetails);
+				if(!CommonUtil.isEmpty(courses)) {
+					if (totalSize > maxList) {
+						result = new CourseInfo[courses.length + 1];
+						for (int i = 0; i < courses.length; i++) {
+							result[i] = courses[i];
+						}
+						result[courses.length] = new CourseInfo();
+					} else {
+						result = courses;
+					}
 				}
 			}
 		}
-		groups = tempGroups;
-		
-		CourseInfo[] courses = convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
-		CourseInfo[] result = null;
 
-		if (totalSize > maxList) {
-			result = new CourseInfo[courses.length + 1];
-			for (int i = 0; i < courses.length; i++) {
-				result[i] = courses[i];
-			}
-			result[courses.length] = new CourseInfo();
-		} else {
-			result = courses;
-		}
-		
-	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 		return result;
 	}
 	public CourseInfo[] getClosedCourses(String fromCourseId, int maxList) throws Exception {
@@ -4599,7 +4596,6 @@ public class SeraServiceImpl implements ISeraService {
 		courseDetailCond.setPageNo(0);
 		courseDetailCond.setPageSize(maxList);
 		courseDetailCond.setEndTo(new LocalDate());
-
 		
 		CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", courseDetailCond);
 		if (courseDetails == null || courseDetails.length == 0) 
@@ -4612,6 +4608,7 @@ public class SeraServiceImpl implements ISeraService {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setGroupIdIns(courseIds);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 
@@ -4690,9 +4687,10 @@ public class SeraServiceImpl implements ISeraService {
 		for (int i = 0; i < courseDetails.length; i++) {
 			groupIdIns[i] = courseDetails[i].getCourseId();
 		}
-		
+
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setGroupIdIns(groupIdIns);
+		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		groupCond.setOrders(new Order[]{new Order("creationDate", false)});
 		SwoGroup[] groups = swoMgr.getGroups("", groupCond, IManager.LEVEL_ALL);
 		CourseInfo[] courseInfo = this.convertSwoGroupArrayToCourseInfoArray(groups, courseDetails);
