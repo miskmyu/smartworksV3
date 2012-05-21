@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.SeraUser"%>
 <%@page import="net.smartworks.model.sera.info.CourseInfo"%>
@@ -59,6 +60,8 @@
 			<%
 			if(courseList.getRunnings()>0){
 				for(int i=0; i<courseList.getRunningCourses().length; i++){
+					if(i == CourseList.MAX_COURSE_LIST)
+						break;
 					CourseInfo course = courseList.getRunningCourses()[i];
 					String endClass = ((i+1) % 3 == 0) ? "end" : "";
 			%>
@@ -74,7 +77,7 @@
 								<dd class="makeDate"><%=course.getOpenDate().toLocalDateSimpleString() %></dd>
 								<dd class="category"><%=course.getCategory() %></dd>
 							</dl></li>
-						<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
+						<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></a></li>
 						<!-- Gauge -->
 						<li class="gauge_box w_auto mt5">
 							<dl>
@@ -91,8 +94,8 @@
 			if(courseList.getRunningCourses().length==CourseList.MAX_COURSE_LIST+1){
 			%>
 				<!-- 더보기 -->
-				<div class="more cb" courseType="<%=Course.MY_RUNNING_COURSE%>" userId="<%=otherUserId %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
-					<div class="icon_more js_more_courses_by_user">더보기<span class="ml3 js_progress_span"></span></div>
+				<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_RUNNING_COURSE%>" userId="<%=otherUserId %>" lastId="<%=courseList.getRunningCourses()[CourseList.MAX_COURSE_LIST-2].getId()%>">
+					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 				<!-- 더보기 //-->
 			<%
@@ -114,6 +117,8 @@
 		<%
 		if(courseList.getAttendings()>0){
 			for(int i=0; i<courseList.getAttendingCourses().length; i++){
+				if(i == CourseList.MAX_COURSE_LIST)
+					break;
 				CourseInfo course = courseList.getAttendingCourses()[i];
 				String endClass = ((i+1) % 3 == 0) ? "end" : "";
 		%>
@@ -129,7 +134,7 @@
 							<dd class="makeDate"><%=course.getOpenDate().toLocalDateSimpleString() %></dd>
 							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
-					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>
@@ -146,8 +151,8 @@
 		if(courseList.getAttendingCourses().length==CourseList.MAX_COURSE_LIST+1){
 		%>
 			<!-- 더보기 -->
-			<div class="more cb" courseType="<%=Course.MY_ATTENDING_COURSE%>" userId="<%=otherUserId %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST].getId()%>">
-				<div class="icon_more js_more_courses_by_user">더보기<span class="ml3 js_progress_span"></span></div>
+			<div class="more cb js_more_courses_by_user" courseType="<%=Course.MY_ATTENDING_COURSE%>" userId="<%=otherUserId %>" lastId="<%=courseList.getAttendingCourses()[CourseList.MAX_COURSE_LIST-2].getId()%>">
+				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 			</div>
 			<!-- 더보기 //-->
 		<%

@@ -972,6 +972,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}
 		// where
 		String workSpaceIdIns = cond.getWorkSpaceIdIns();
+		String workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
 		boolean first = true;
 		if (refFormId != null || refRecordId != null) {
 			first = false;
@@ -1080,6 +1081,14 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				first = false;
 			} else {
 				buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+			}
+		}
+		if (workSpaceIdNotIns != null) {
+			if(first) {
+				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
+				first = false;
+			} else {
+				buf.append(" and obj.workSpaceId not in " + workSpaceIdNotIns);
 			}
 		}
 		if(first) {

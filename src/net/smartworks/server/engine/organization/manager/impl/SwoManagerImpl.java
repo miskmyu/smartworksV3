@@ -2687,6 +2687,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		Date creationDateTo = null;
 		String modificationUser = null;
 		Date modificationDate = null;
+		Date lastCreateDateTo = null;
+		String lastName = null;
 		String nameLike = null;
 		SwoGroupMember[] swoGroupMembers = null;
 
@@ -2706,6 +2708,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			modificationDate = cond.getModificationDate();
 			nameLike = cond.getNameLike();
 			swoGroupMembers = cond.getSwoGroupMembers();
+			lastCreateDateTo = cond.getLastCreateDateTo();
+			lastName = cond.getLastName();
 		}
 		buf.append(" from SwoGroup obj");
 		if (swoGroupMembers != null && swoGroupMembers.length != 0) {
@@ -2751,6 +2755,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.modificationUser = :modificationUser");
 			if (modificationDate != null)
 				buf.append(" and obj.modificationDate = :modificationDate");
+			if (lastCreateDateTo != null && lastName != null) {
+				buf.append(" and (obj.creationDate <= :lastCreateDateTo");
+				buf.append(" and obj.id not in (select id from SwoGroup where creationDate = :lastCreateDateTo and name <= :lastName))");
+			}
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];
@@ -2811,6 +2819,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("modificationUser", modificationUser);
 			if (modificationDate != null)
 				query.setTimestamp("modificationDate", modificationDate);
+			if (lastCreateDateTo != null)
+				query.setTimestamp("lastCreateDateTo", lastCreateDateTo);
+			if (lastName != null)
+				query.setString("lastName", lastName);
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];

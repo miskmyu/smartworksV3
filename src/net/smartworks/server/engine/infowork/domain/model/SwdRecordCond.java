@@ -65,6 +65,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	private boolean displayableDataFieldsOnly;
 	private String workSpaceId;
 	private String workSpaceIdIns;
+	private String workSpaceIdNotIns;
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
@@ -376,6 +377,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setWorkSpaceIdIns(String workSpaceIdIns) {
 		this.workSpaceIdIns = workSpaceIdIns;
+	}
+	public String getWorkSpaceIdNotIns() {
+		return workSpaceIdNotIns;
+	}
+	public void setWorkSpaceIdNotIns(String workSpaceIdNotIns) {
+		this.workSpaceIdNotIns = workSpaceIdNotIns;
 	}
 	public String getWorkSpaceType() {
 		return workSpaceType;

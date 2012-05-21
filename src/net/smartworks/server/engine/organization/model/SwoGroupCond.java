@@ -44,6 +44,8 @@ public class SwoGroupCond extends SwoObjectCond {
 	private String nameLike;
 	private String picture;
 	private Date createDateTo;
+	private Date lastCreateDateTo;
+	private String lastName;
 	private SwoGroupMember[] swoGroupMembers;
 
 	public SwoGroupMember[] getSwoGroupMembers() {
@@ -105,6 +107,18 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setCreateDateTo(Date createDateTo) {
 		this.createDateTo = createDateTo;
+	}
+	public Date getLastCreateDateTo() {
+		return lastCreateDateTo;
+	}
+	public void setLastCreateDateTo(Date lastCreateDateTo) {
+		this.lastCreateDateTo = lastCreateDateTo;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public SwoGroupCond() {
 		super();
