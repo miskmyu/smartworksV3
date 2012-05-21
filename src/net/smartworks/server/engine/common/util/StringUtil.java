@@ -25,12 +25,21 @@ public class StringUtil {
 	public static String subString(String str, int startPoint, int endPoint, String tag) {
 
 		str = CommonUtil.toNotNull(str);
+		int engCount = 0;
 		if(!str.equals("")) {
+			for(int i=0; i<str.length(); i++) {
+			    if(Character.getType(str.charAt(i)) == 2)
+			    	engCount++;
+			}
+			if(engCount > 0) {
+				engCount = engCount / 2;
+			}
+			endPoint = (endPoint + engCount) < str.length() ? (endPoint + engCount) : endPoint;
 			if(str.length() > endPoint)
 				str = str.substring(startPoint, endPoint) + tag;
 		}
 
-		return str; 
+		return str;
 	}
 
 }

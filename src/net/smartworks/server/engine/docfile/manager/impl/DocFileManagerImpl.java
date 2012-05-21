@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.work.FileCategory;
@@ -514,7 +515,13 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
             fos = new FileOutputStream(new File(formFile.getFilePath()));
             IOUtils.copy(is, fos);
             response.setStatus(HttpServletResponse.SC_OK);
-            writer.print("{success: true, fileId: \"" + formFile.getId() + "\", pullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() + "\"}");
+            /*JSONObject jsonObject = new JSONObject();
+            jsonObject.put("success", true);
+            jsonObject.put("fileId", formFile.getId());
+            jsonObject.put("pullPathName", formFile.getImageServerPath());
+            jsonObject.put("fileSize", formFile.getFileSize());
+            writer.print(jsonObject.toString());*/
+            writer.print("{success: \"" + true + "\", fileId: \"" + formFile.getId() + "\", pullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() + "\"}");
         } catch (FileNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.print("{success: false}");

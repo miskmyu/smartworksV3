@@ -127,7 +127,6 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -3700,7 +3699,7 @@ public class SeraServiceImpl implements ISeraService {
 					CourseTeamUser courseTeamUser = new CourseTeamUser();
 					courseTeamUser.setUserId(teamUserId);
 					courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_INVITE);
-					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE); //초대에 대한 응답 구현 후 CourseTeamUser.JOINSTATUS_READY로 변경 예정
+					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY); //초대에 대한 응답 구현 후 CourseTeamUser.JOINSTATUS_READY로 변경 예정
 					courseTeam.addTeamMember(courseTeamUser);
 				}
 			}
@@ -4995,14 +4994,17 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 
 		String lastUserName = null;
+		Date lastModifiedTime = null;
 		if(!CommonUtil.isEmpty(lastId)) {
 			SwoUser lastUser = swoMgr.getUser(userId, lastId, IManager.LEVEL_LITE);
-			if (lastUser != null)
+			if (lastUser != null) {
 				lastUserName = lastUser.getName();
-		}	
-		
+				lastModifiedTime = lastUser.getModificationDate();
+			}
+		}
+
 		List courseRelatedUserIdList = new ArrayList();
-		
+
 		courseRelatedUserIdList.add(group.getGroupLeader());
 		
 		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
@@ -5036,7 +5038,7 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 		
-		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", courseNotRelatedUserIds, lastUserName, null);
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", courseNotRelatedUserIds, lastUserName, lastModifiedTime, null);
 		
 		if (userExtends == null)
 			return null;
@@ -5332,9 +5334,9 @@ public class SeraServiceImpl implements ISeraService {
 		return missionId;
 	}
 	
-	private SeraUserInfo[] getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(String userId, String[] ids, String lastName, int maxList) throws Exception {
+	private SeraUserInfo[] getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(String userId, String[] ids, String lastName, Date lastModifiedTime, int maxList) throws Exception {
 		
-		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", ids, lastName, null);
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend("", ids, lastName, lastModifiedTime, null);
 
 		if (userExtends == null)
 			return null;
@@ -5414,7 +5416,7 @@ public class SeraServiceImpl implements ISeraService {
 			requestFriendsIdArray[i] = requestFriends[i].getRequestId();
 		}
 		
-		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, requestFriendsIdArray, null, maxList);
+		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, requestFriendsIdArray, null, null, maxList);
 	}
 	private SeraUserInfo[] getNotMyFrined(String userId, String lastId, int maxList, String key) throws Exception {
 
@@ -5467,11 +5469,14 @@ public class SeraServiceImpl implements ISeraService {
 		}
 		
 		String lastUserName = null;
+		Date lastModifiedTime = null;
 		SwoUser lastSwoUser = swoMgr.getUser(userId, lastId, IManager.LEVEL_LITE);
-		if (lastSwoUser != null)
+		if (lastSwoUser != null) {
 			lastUserName = lastSwoUser.getName();
-		
-		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, notMyFriendsArray, lastUserName, maxList);
+			lastModifiedTime = lastSwoUser.getModificationDate();
+		}
+
+		return getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, notMyFriendsArray, lastUserName, lastModifiedTime, maxList);
 	}
 	
 	@Override
@@ -5670,7 +5675,7 @@ public class SeraServiceImpl implements ISeraService {
 				memberIds[j] = seraUserDetail.getUserId();
 			}
 
-			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, MenteeInformList.MAX_USER_LIST);
+			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, null, MenteeInformList.MAX_USER_LIST);
 
 			return seraUserInfos;
 
@@ -5710,7 +5715,7 @@ public class SeraServiceImpl implements ISeraService {
 		for (int i = 0; i < groups.length; i++) {
 			courseIds[i] = groups[i].getId();
 		}
-		
+
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
 		courseDetailCond.setCourseIdIns(courseIds);
 		
@@ -5969,6 +5974,21 @@ public class SeraServiceImpl implements ISeraService {
 		}
 		//return SeraTest.getCoursesById(userId, courseType, null, maxList);
 	}
+	public CourseTeamUser[] getCourseTeamUsers(String teamId) throws Exception {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
+			CourseTeamUser[] courseTeamUsers = null;
+			if(courseTeam != null)
+				courseTeamUsers = courseTeam.getCourseTeamUsers();
+			return courseTeamUsers;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@Override
 	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
 		try {
@@ -6113,17 +6133,28 @@ public class SeraServiceImpl implements ISeraService {
 			String[] seraUserIds = null;
 
 			SwoUserExtend[] userExtends = null;
+			String lastName = null;
+			Date lastModifiedTime = null;
+			SwoUser swoUser = null;
+			if(lastId != null) {
+				swoUser = getSwoManager().getUser(null, lastId, IManager.LEVEL_LITE);
+				lastName = swoUser.getName();
+				lastModifiedTime = swoUser.getModificationDate();
+			}
+
 			if(seraUserIdList.size() > 0) {
 				seraUserIds = new String[seraUserIdList.size()];
 				seraUserIdList.toArray(seraUserIds);
-				userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(null, seraUserIds, lastId, key);
+				userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(null, seraUserIds, lastName, lastModifiedTime, key);
 			}
 
-			if(userExtends.length > maxList) {
-				seraUserInfos = new SeraUserInfo[maxList+1];
-				seraUserInfos[maxList] = new SeraUserInfo();
-			} else {
-				seraUserInfos = new SeraUserInfo[userExtends.length];
+			seraUserInfos = new SeraUserInfo[userExtends.length];
+
+			if(maxList > 0) {
+				if(userExtends.length > maxList) {
+					seraUserInfos = new SeraUserInfo[maxList+1];
+					seraUserInfos[maxList] = new SeraUserInfo();
+				}
 			}
 
 			User currentUser = SmartUtil.getCurrentUser();
@@ -6184,12 +6215,13 @@ public class SeraServiceImpl implements ISeraService {
 				String teamUserId = courseTeamUser.getUserId();
 				String joinType = courseTeamUser.getJoinType();
 				String joinStatus = courseTeamUser.getJoinStatus();
-				if(CourseTeamUser.JOINTYPE_REQUEST.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
+				if(CourseTeamUser.JOINTYPE_INVITE.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
 					requesterIdList.add(teamUserId);
 				}
 			}
 			if(requesterIdList.size() > 0) {
-				memberInformList.setTotalRequesters(requesterIdList.size());
+				if(memberInformList != null)
+					memberInformList.setTotalRequesters(requesterIdList.size());
 				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
 			}
 			return seraUserInfos;
@@ -6213,7 +6245,8 @@ public class SeraServiceImpl implements ISeraService {
 				}
 			}
 			if(memberIdList.size() > 0) {
-				memberInformList.setTotalMembers(memberIdList.size());
+				if(memberInformList != null)
+					memberInformList.setTotalMembers(memberIdList.size());
 				seraUserInfos = getSeraUserInfos(memberIdList, maxList, lastId, key);
 			}
 			return seraUserInfos;
@@ -6256,7 +6289,8 @@ public class SeraServiceImpl implements ISeraService {
 			}
 
 			if(nonMemberIdList.size() > 0) {
-				memberInformList.setTotalNonMembers(nonMemberIdList.size());
+				if(memberInformList != null)
+					memberInformList.setTotalNonMembers(nonMemberIdList.size());
 				seraUserInfos = getSeraUserInfos(nonMemberIdList, maxList, lastId, key);
 			}
 			return seraUserInfos;
@@ -6270,24 +6304,14 @@ public class SeraServiceImpl implements ISeraService {
 		try {
 			MemberInformList memberInformList = new MemberInformList();
 
-			User user = SmartUtil.getCurrentUser();
-			String userId = user.getId();
-
 			SeraUserInfo[] requesters = null;
 			SeraUserInfo[] members = null;
 			SeraUserInfo[] nonMembers = null;
 
-			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
-
-			CourseTeamUser[] courseTeamUsers = null;
-			if(courseTeam != null) {
-				courseTeamUsers = courseTeam.getCourseTeamUsers();
-				if(!CommonUtil.isEmpty(courseTeamUsers)) {
-					requesters = getRequestersOfTeam(memberInformList, courseTeamUsers, maxList);
-					members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
-				}
-				nonMembers = getNonMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
-			}
+			CourseTeamUser[] courseTeamUsers = getCourseTeamUsers(teamId);
+			requesters = getRequestersOfTeam(memberInformList, courseTeamUsers, maxList);
+			members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
+			nonMembers = getNonMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 
 			memberInformList.setRequesters(requesters);
 			memberInformList.setMembers(members);
@@ -6302,13 +6326,39 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getCourseMenteeInformsByType(type, teamId, lastId, maxList);
+		try {
+			CourseTeamUser[] courseTeamUsers = getCourseTeamUsers(teamId);
+			switch (type) {
+			case MemberInformList.TYPE_MEMBERS:
+				return getMembersOfTeam(null, courseTeamUsers, maxList, lastId, null);
+			case MemberInformList.TYPE_NON_MEMBERS:
+				return getNonMembersOfTeam(null, courseTeamUsers, maxList, lastId, null);
+			default:
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	@Override
 	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
-		// TODO Auto-generated method stub
-		return SeraTest.getCourseMenteeInformsByType(type, null, null, 0);
+		try {
+
+			CourseTeamUser[] courseTeamUsers = getCourseTeamUsers(teamId);
+			switch (type) {
+			case MemberInformList.TYPE_MEMBERS:
+				return getMembersOfTeam(null, courseTeamUsers, 0, null, key);
+			case MemberInformList.TYPE_NON_MEMBERS:
+				return getNonMembersOfTeam(null, courseTeamUsers, 0, null, key);
+			default:
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {

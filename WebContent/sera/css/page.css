@@ -29,8 +29,10 @@
 .sera_news .lst_normal {clear: both; padding: 0 15px 35px 20px; background:url("../images/line_dashed.png") repeat-x 0 100%}
 .sera_news .lst_normal.end {background:none}
 .sera_news .lst_normal dt, .sera_news .lst_normal dt a { color:#FFF; font-size:14px; font-weight:bold; margin-bottom:15px; line-height:24px; overflow:hidden}
-.sera_news .lst_normal dd { color:#cdcdcd; line-height:21px; clear:both}
-.sera_news .lst_normal dd li {background: url("../images/icon.png") no-repeat -165px -818px; height:21px; overflow: hidden; padding: 0 0 0 8px}
+.sera_news .lst_normal dd {line-height:21px; clear:both}
+.sera_news .lst_normal dd li {height:21px; overflow: hidden}
+.sera_news .lst_normal dd li a {color:#cdcdcd; background: url("../images/icon.png") no-repeat -165px -822px; padding: 0 0 0 8px}
+.sera_news .lst_normal dd li a:hover {color:#f7cc88}
 .sera_news .lst_normal dt .icon_as_srtrend {width:auto}
 .sera_visual {border-left: 1px solid #CBCBCB; border-right: 1px solid #CBCBCB; float: left; height: 435px; position: relative; width: 405px}
 .sera_slogun {clear: both; height: 32px; margin: 20px auto 0; width: 892px}
@@ -451,9 +453,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .course_df li span { font-weight:bold; display:block; text-align:right}
 .course_info { width:185px; float:right; margin:10px 10px 0 0; line-height:20px; height:100px; overflow:hidden}
 .course_info dt {background: url("../images/icon.png") no-repeat -166px -765px; padding:0 0 0 38px; font-weight:bold; margin-bottom:3px; height:24px; line-height:26px}
-.course_info dd {height: 18px; overflow: hidden}
+.course_info dd {height: 18px; overflow: hidden; margin: 0 0 0 10px}
 .course_menu { clear:both; background: url("../images/cus_df_bg.gif") repeat-x scroll 0 0; height:35px; padding:0 10px; vertical-align:middle}
-.course_menu_d1 { float: left; margin:0 0 0 22px}
+.course_menu_d1 { float: left; margin:0 0 0 14px}
 .course_menu_d1 ul { vertical-align:middle; margin:6px 0 0 0}
 .course_menu_d1 li { float:left}
 .course_menu_d1 li a {color:#FFF; display:block; margin:0 2px; font-size:12px; font-weight:bold; color:#FFF; text-align:center; width:75px; line-height:25px; height:29px}
@@ -685,7 +687,7 @@ tr.instance_list:hover {background-color:#e8f7ff; cursor:pointer;}
 
 /* Footer */
 #sera_footer {background: none repeat scroll 0 0 #172537; clear: both; height:28px; width: 100%; font-size:11px}
-.footer_box {clear: both; margin: 0 auto; width: 993px;}
+.footer_box {clear: both; margin: 0 auto; width: 980px}
 .footer_box .copyright {float: left; height: 20px; width: 270px; padding-top:5px}
 .footer_box .policy {color: #FFFFFF; float: right; font: 11px,'Dotum'; height: 10px; padding-top:9px}
 .footer_box .policy a {color: #FFFFFF;}
