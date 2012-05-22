@@ -494,12 +494,13 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .t_gray2 { color:#666666 !important}
 .t_link a {color:#788EB7 !important}
 .t_link a:hover {color:#788EB7; text-decoration:underline}
-.tb { font-weight:bold !important}
 .t_id, .t_email {color:#608eba !important; display:block !important; height: auto !important }
 .t_refe { font-size:11px; color:#999999; line-height:15px}
 .insert_text {color: #B6B6B6; font: bold 16px 'Tahoma'}
 .t_help { font-size:11px; line-height:14px; color:#666666 !important}
 .t_date, .t_s11, .t_date a, .t_s11 a {color: #999897 !important; font-size: 11px;}
+.tb { font-weight:bold !important}
+.tn {font-weight:normal !important}
 
 /* Width */
 .w_auto { width:auto !important}
@@ -585,8 +586,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 #content_list_section .tit_header ul {float: right; padding-top: 30px}
 #content_list_section .course_listbox1 {clear: both; margin: 0 auto; width: 700px;}
 #content_list_section .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
-#content_list_section .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 11px/14px 'dotum','Helvetica','sans-serif'; height: 180px;  margin: 0 7px 20px 0; padding: 5px; width: 120px}
+#content_list_section .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 12px/15px 'dotum','Helvetica','sans-serif'; height: 165px;  margin: 0 7px 20px 0; padding: 5px; width: 120px}
 #content_list_section .course_list li a {color: #666666; text-decoration: none;}
+#content_list_section .course_list li .title {height: 38px; overflow: hidden; font-weight: bold; word-wrap: break-word}
 #content_list_section table { border-bottom:1px solid #cccccc}
 #content_list_section table .tit_bg {background: url("../../images/bg_thGradient.gif") repeat-x scroll 0 100% transparent}
 #content_list_section table .tit_bg th {border-bottom: 1px solid #CCCCCC; border-top: 2px solid #7F7F7F;}
