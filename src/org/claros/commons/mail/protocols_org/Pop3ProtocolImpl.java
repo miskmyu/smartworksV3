@@ -1,4 +1,4 @@
-package org.claros.commons.mail.protocols;
+package org.claros.commons.mail.protocols_org;
 
 import java.security.Security;
 import java.util.ArrayList;
@@ -32,7 +32,11 @@ import org.claros.commons.mail.utility.Constants;
 import org.claros.commons.mail.utility.Utility;
 import org.claros.commons.utility.Formatter;
 
+/**
+ * @author Umut Gokbayrak
+ */
 public class Pop3ProtocolImpl implements Protocol {
+	private static Log log = LogFactory.getLog(Pop3ProtocolImpl.class);
 	private ConnectionProfile profile;
 	private AuthProfile auth;
 	private ConnectionMetaHandler handler;
@@ -63,6 +67,11 @@ public class Pop3ProtocolImpl implements Protocol {
 			if (handler == null || !handler.getStore().isConnected()) {
 				Properties props = new Properties();
 
+				if (log.isDebugEnabled()) {
+					props.setProperty("mail.debug", "true");
+					System.setProperty("javax.net.debug", "all");
+				}
+				
 				if (profile.getFetchSSL() != null && profile.getFetchSSL().toLowerCase().equals("true")) {
 					Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider());
 					
@@ -78,25 +87,31 @@ public class Pop3ProtocolImpl implements Protocol {
 				}
 				
 				Session session = Session.getInstance(props);
+				log.debug("session instance initiated");
 				handler = new ConnectionMetaHandler();
 				handler.setStore(session.getStore(profile.getProtocol()));
+				log.debug("session store set");
 				handler.getStore().connect(profile.getFetchServer(), profile.getIFetchPort(), auth.getUsername(), auth.getPassword());
+				log.debug("Store has been connected... Successful");
 				handler.setMbox(handler.getStore().getDefaultFolder());
 				handler.setMbox(handler.getMbox().getFolder(Constants.FOLDER_INBOX(profile)));
+				log.debug("Got mailbox");
 				handler.getMbox().open(connectType);
+				log.debug("Mailbox open");
 					
 				// storing the folder in map
 				pop3Folders.put(auth.getUsername(), handler.getMbox());
 
 				handler.setTotalMessagesCount(handler.getMbox().getMessageCount());
+				log.debug("Message Count:" + handler.getTotalMessagesCount());
 			}
 		} catch (AuthenticationFailedException e) {
-			System.out.println("Pop3 Mailbox was busy with another session and there is a read write lock. A few minutes later when the lock is released everything will be fine.");
+			log.debug("Pop3 Mailbox was busy with another session and there is a read write lock. A few minutes later when the lock is released everything will be fine.", e);
 		} catch (NoSuchProviderException e) {
-			System.out.println(profile.getProtocol() + " provider could not be found.");
+			log.fatal(profile.getProtocol() + " provider could not be found.");
 			throw new SystemException(e);
 		} catch (MessagingException e) {
-			System.out.println("Connection could not be established.");
+			log.error("Connection could not be established.");
 			throw new ConnectionException(e);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,7 +138,7 @@ public class Pop3ProtocolImpl implements Protocol {
 			return handler;
 		} catch (Exception e) {
 			pop3Folders.put(auth.getUsername(), null);
-			System.out.println("Could not delete message ids: " + messageIds);
+			log.error("Could not delete message ids: " + messageIds, e);
 			throw new MailboxActionException(e);
 		}
 	}
@@ -182,11 +197,11 @@ public class Pop3ProtocolImpl implements Protocol {
 					// it is time to add it to the arraylist
 					headers.add(header);
 				} catch (MessagingException e1) {
-					System.out.println("Could not parse headers of e-mail. Message might be defuncted or illegal formatted.");
+					log.debug("Could not parse headers of e-mail. Message might be defuncted or illegal formatted.", e1);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Could not fetch message headers. Is mbox connection still alive???");
+			log.error("Could not fetch message headers. Is mbox connection still alive???", e);
 			throw new ConnectionException(e);
 		}
 		return headers;
@@ -222,7 +237,7 @@ public class Pop3ProtocolImpl implements Protocol {
 				headers.add(msg);
 			}
 		} catch (Exception e) {
-			System.out.println("Could not fetch message headers. Is mbox connection still alive???");
+			log.error("Could not fetch message headers. Is mbox connection still alive???", e);
 			throw new ConnectionException(e);
 		}
 		return headers;
@@ -236,7 +251,7 @@ public class Pop3ProtocolImpl implements Protocol {
 				fold = getFolder();
 				msg = fold.getMessage(messageId);
 			} catch (Exception e) {
-				System.out.println("Could not fetch message body from remote server.");
+				log.error("Could not fetch message body from remote server.", e);
 				throw new MailboxActionException(e);
 			}
 		} catch (Exception e) {
@@ -289,7 +304,7 @@ public class Pop3ProtocolImpl implements Protocol {
 				deleteMessages(ids);
 			}
 		} catch (Exception e) {
-			System.out.println("Could not delete all messages");
+			log.warn("Could not delete all messages");
 		}
 	}
 	
@@ -308,15 +323,15 @@ public class Pop3ProtocolImpl implements Protocol {
 			if (folder != null && handler != null) {
 				Store store = handler.getStore();
 				if (store == null || !store.isConnected()) {
-					System.out.println("Connection is closed. Restoring it...");
+					log.debug("Connection is closed. Restoring it...");
 					handler = connect(Constants.CONNECTION_READ_WRITE);
-					System.out.println("Connection re-established");
+					log.debug("Connection re-established");
 				}
 				fold = handler.getStore().getFolder(folder);
 				if (!fold.isOpen()) {
-					System.out.println("Folder :" + folder + " is closed. Opening again.");
+					log.debug("Folder :" + folder + " is closed. Opening again.");
 					fold.open(Constants.CONNECTION_READ_WRITE);
-					System.out.println("Folder is open again.");
+					log.debug("Folder is open again.");
 					
 					pop3Folders.put(auth.getUsername(), fold);
 				}
@@ -368,9 +383,12 @@ public class Pop3ProtocolImpl implements Protocol {
 			try {
 				if (f.isOpen()) {
 					f.close(true);
+					log.info("Folder: " + f.getName() + " was open and now closed.");
+				} else {
+					log.info("Folder: " + f.getName() + " was already closed.");
 				}
 			} catch (MessagingException e) {
-				System.out.println("Error while closing folder: " + f.getName());
+				log.info("Error while closing folder: " + f.getName(), e);
 			}
 		}
 		pop3Folders.put(auth.getUsername(), null);

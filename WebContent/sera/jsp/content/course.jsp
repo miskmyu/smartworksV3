@@ -16,39 +16,39 @@
 	<div class="snb2">
 		<ul class="snb_menu">
 			<li><img height="112" width="149" src="sera/images/function_title11.gif"></li>
-			<li class="selected js_select_course_btn" courseType="<%=Course.TYPE_RECOMMENDED_COURSES%>">추천코스</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_FAVORITE_COURSES%>">인기코스</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_ALL_COURSES%>">전체코스</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CLOSED_COURSES%>">지난코스</li>
+			<li class="selected js_select_course_btn" courseType="<%=Course.TYPE_RECOMMENDED_COURSES%>"><a href="">추천코스</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_FAVORITE_COURSES%>"><a href="">인기코스</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_ALL_COURSES%>"><a href="">전체코스</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CLOSED_COURSES%>"><a href=""> 지난코스</a></li>
 
 			<li class="categoryLine"></li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">예술</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">엔터테인먼트</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">스타일</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">생활</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">영화/애니메이션</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">게임</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">영화</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">이벤트</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">스포츠</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">이슈</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">시사</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">경제</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">비즈니스</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">미디어</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">환경</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">동물</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">비영리/사회운동</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">역사</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">문학</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">심리</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">인물</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">과학</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">첨단기술</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">의학</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">건축</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">교육</li>
-			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>">기타</li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">예술</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">엔터테인먼트</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">스타일</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">생활</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">영화/애니메이션</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">게임</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">영화</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">이벤트</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">스포츠</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">이슈</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">시사</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">경제</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">비즈니스</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">미디어</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">환경</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">동물</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">비영리/사회운동</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">역사</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">문학</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">심리</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">인물</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">과학</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">첨단기술</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">의학</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">건축</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">교육</a></li>
+			<li class="js_select_course_btn" courseType="<%=Course.TYPE_CATEGORIES%>"><a href="">기타</a></li>
 		</ul>
 	</div>
 	<!-- SNB Left//-->

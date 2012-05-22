@@ -23,6 +23,7 @@ import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.MailAuth;
@@ -69,77 +70,18 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		try{
 			MailFolder[] mailFolders = null;
 	
-		    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		    HttpServletRequest request = attr.getRequest();
-	
-			try {
-				HashMap map = ConnectionProfileList.getConList();
-				if (map != null) {
-					Set set = map.keySet();
-					if (set == null) {
-						throw new SystemException();
-					}
-					Object arr[] = set.toArray();
-					if (arr == null || arr.length <= 0) {
-						throw new SystemException();
-					}
-					ConnectionProfile profile = ConnectionProfileList.getProfileByShortName((String)arr[0]);
-					if (profile == null) {
-						throw new SystemException();
-					}
-					String username = SmartUtil.getCurrentUser().getId();
-					String password = SmartUtil.getCurrentUser().getPassword();
-	
-					if (username != null && password != null) {
-						AuthProfile auth = new AuthProfile();
-						auth.setUsername(username);
-						auth.setPassword(password);
-						ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-	
-						try {
-							handler = MailAuth.authenticate(profile, auth, handler);
-							if (handler != null) {
-								
-								request.getSession().setAttribute("handler", handler);
-								request.getSession().setAttribute("auth", auth);
-								request.getSession().setAttribute("profile", profile);
-	
-								// create default mailboxes if not exists
-								try {
-	
-									FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-									FolderController foldCont = factory.getFolderController();
-									foldCont.createDefaultFolders();
-								} catch (Exception e) {
-								}
-	
-							} else {
-							}
-						} catch (LoginInvalidException e) {
-							return null;
-						} catch (ServerDownException e) {
-							return null;
-						}
-					} else {
-					}
-				} else {
-					return null;
-				}
-			} catch (SystemException e) {
-				return null;
-			} catch (Throwable e) {
-				return null;
-			}
-		    	    
-		    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-			ConnectionProfile profile = getConnectionProfile(request);
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+		    if(handler == null) return null;
+		    
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
 			
-			String sFolder = null;
+			String sFolder = folderId;
 			if (sFolder == null || sFolder.equals("")) {
-				sFolder = org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile);
+				sFolder = Constants.FOLDER_INBOX(profile);
 			}
 	
-			FolderControllerFactory foldFact = new FolderControllerFactory(getAuthProfile(request), profile, handler);
+			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
 			FolderController folderCont = foldFact.getFolderController();
 			if (profile.getProtocol().equals(Constants.POP3)) {
 				if (sFolder == null || sFolder.equals("INBOX")) {
@@ -175,15 +117,19 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	
 		    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		    HttpServletRequest request = attr.getRequest();
-	
-			AuthProfile auth = getAuthProfile(request);
+
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+			if(handler == null)  return null;
+			
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			
+			
 			// get folder and set it into sesssion
 			String sFolder = MailFolder.getFolderNameById(folderId);
 	
 			// prepare variables
 			List headers = null;
-			ConnectionMetaHandler handler = getConnectionHandler(request);
-			ConnectionProfile profile = getConnectionProfile(request);
 	
 			FolderControllerFactory foldFact = null;
 			FolderController folderCont = null;
@@ -407,6 +353,156 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			return null;			
 			// Exception Handling Required			
 		}
+	}
+	
+	private ConnectionMetaHandler getConnectionMetaHandler() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return handler;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return handler;
+	}
+	
+	private ConnectionProfile getConnectionProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return profile;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return profile;
+	}
+	
+	private AuthProfile getAuthProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return auth;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return auth;
 	}
 	
 	private int findHtmlBody(ArrayList parts) {

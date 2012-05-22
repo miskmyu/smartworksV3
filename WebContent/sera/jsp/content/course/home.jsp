@@ -107,12 +107,12 @@
 		<!-- Menu Dep1-->
 		<div class="course_menu_d1">
 			<ul class="js_course_menu" isJoinCourse=<%=course.isJoinCourse() %>>
-				<li class="<%if(!cUser.isAnonymusUser() && course.isJoinCourse()) {%>current<%}%> js_course_home">홈</li>
-				<li class="js_course_mission">미션</li>
-				<li class="js_course_board">코스게시판</li>
-				<li class="js_create_team">팀활동</li>
-				<li class="<%if(cUser.isAnonymusUser() || !course.isJoinCourse()) {%>current<%}%> js_course_general">코스개요</li>
-				<li class="js_course_setting">코스설정</li>
+				<li class="<%if(!cUser.isAnonymusUser() && course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_home">홈</a></li>
+				<li><a href="" class="js_course_mission">미션</a></li>
+				<li><a href="" class="js_course_board">코스게시판</a></li>
+				<li><a href="" class="js_create_team">팀활동</a></li>
+				<li class="<%if(cUser.isAnonymusUser() || !course.isJoinCourse()) {%>current<%}%>"><a href="" class="js_course_general">코스개요</a></li>
+				<li><a href="" class="js_course_setting">코스설정</a></li>
 			</ul>
 		</div>
 		<!-- Menu Dep1//-->
@@ -133,11 +133,11 @@
 				<%
 				if(!SmartUtil.isBlankObject(myTeam)){
 				%>
-					<li class="js_course_team_activity">팀활동</li>
+					<li class="js_course_team_activity"><a href="">팀활동</a></li>
 				<%
 				}else if(!myRunningCourse){ 
 				%>
-					<li class="js_course_team_activity">팀구성하기</li>				
+					<li class="js_course_team_activity"><a href="">팀구성하기</a></li>				
 				<%
 				}
 				if(myRunningCourse){
@@ -162,7 +162,7 @@
 				<%
 				}else if(!SmartUtil.isBlankObject(myTeam)){
 				%>
-					<li class="end js_course_team_management" teamId="<%=myTeam.getId()%>"><span></span>팀관리</li>
+					<li class="end js_course_team_management" teamId="<%=myTeam.getId()%>"><a href="" ><span></span>팀관리 </a></li>
 				<%
 				} 
 				%>
@@ -174,10 +174,10 @@
 			if(myRunningCourse){
 			%>
 				<ul>
-					<li class="js_course_setting_profile">코스관리</li>
-					<li class="js_create_mission">미션등록</li>
-					<li  class="end js_course_setting_mentee">멘티관리</li>
-<!-- 					<li class="end js_course_setting_team"><span class="icon_bul_select mr5"></span>팀관리</li>
+					<li class="js_course_setting_profile"><a href="">코스관리</a></li>
+					<li class="js_create_mission"><a href="">미션등록</a></li>
+					<li  class="end js_course_setting_mentee"><a href="">멘티관리</a></li>
+<!-- 					<li class="end js_course_setting_team"><a href="" ><span class="icon_bul_select mr5"></span>팀관리 </a></li>
  -->				</ul>
 			<%
 			}

@@ -1,4 +1,4 @@
-package org.claros.commons.mail.protocols;
+package org.claros.commons.mail.protocols_org;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
