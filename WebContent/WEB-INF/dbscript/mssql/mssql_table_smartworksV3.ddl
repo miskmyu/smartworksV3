@@ -2197,7 +2197,7 @@ CREATE TABLE swwebserviceparameter(
 CREATE TABLE SWOrgGroup (
 	id	varchar(50) not null,
 	companyId	varchar(50),
-	name	varchar(50),
+	name	varchar(100),
 	groupLeader	varchar(50),
 	groupType	varchar(1),
 	status	varchar(1),
