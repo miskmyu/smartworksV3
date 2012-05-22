@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.info.CourseInfo"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
@@ -47,7 +48,7 @@
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalDateSimpleString() %><%} %></dd>
 							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
-					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>
@@ -106,7 +107,7 @@
 							<dd class="makeDate"><%if(!SmartUtil.isBlankObject(course.getOpenDate())){%><%=course.getOpenDate().toLocalDateSimpleString() %><%} %></dd>
 							<dd class="category"><%=course.getCategory() %></dd>
 						</dl></li>
-					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=course.getBriefDesc() %></a></li>
+					<li class="detail"><a href="courseHome.sw?courseId=<%=course.getId() %>"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></a></li>
 					<!-- Gauge -->
 					<li class="gauge_box w_auto mt5">
 						<dl>

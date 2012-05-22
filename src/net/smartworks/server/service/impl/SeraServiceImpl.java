@@ -2040,13 +2040,13 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			if(workSpaceId == null)
+			if(workSpaceId == null) {
 				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
-			else
+				String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
+				swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
+			} else {
 				swdRecordCond.setWorkSpaceId(workSpaceId);
-
-//			String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
-//			swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
+			}
 
 			if(fromDate != null)
 				swdRecordCond.setFromDate(fromDate);
@@ -2353,13 +2353,16 @@ public class SeraServiceImpl implements ISeraService {
 
 	private void getStarPointAndScorePointUsers(Object object, String keyId) throws Exception {
 		try {
+			if(object == null)
+				return;
+
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
 			double starPoint = 0;
 			int starPointUsers = 0;
 
-			if(object.getClass().equals(MissionInstance.class) || object.getClass().equals(MissionInstanceInfo.class)) {
+			if(MissionInstance.class.equals(object.getClass()) || MissionInstanceInfo.class.equals(object.getClass())) {
 
 				SwdRecordCond recordCond = new SwdRecordCond();
 				recordCond.setFormId(SeraConstant.MISSION_REPORT_FORMID);
@@ -2382,14 +2385,14 @@ public class SeraServiceImpl implements ISeraService {
 					}
 				}
 
-				if(object.getClass().equals(MissionInstance.class)) {
+				if(MissionInstance.class.equals(object.getClass())) {
 					((MissionInstance)object).setStarPoint(starPoint/starPointUsers);
 					((MissionInstance)object).setStarPointUsers(starPointUsers);
-				} else if(object.getClass().equals(MissionInstanceInfo.class)) {
+				} else if(MissionInstanceInfo.class.equals(object.getClass())) {
 					((MissionInstanceInfo)object).setStarPoint(starPoint/starPointUsers);
 					((MissionInstanceInfo)object).setStarPointUsers(starPointUsers);
 				}
-			} else if(object.getClass().equals(Course.class)) {
+			} else if(Course.class.equals(object.getClass())) {
 				CourseReviewCond courseReviewCond = new CourseReviewCond();
 				courseReviewCond.setCourseId(keyId);
 				CourseReview[] courseReviews = getSeraManager().getCourseReviews(userId, courseReviewCond);
@@ -2499,6 +2502,7 @@ public class SeraServiceImpl implements ISeraService {
 			MissionInstanceInfo[] missions = (MissionInstanceInfo[])infoList.getInstanceDatas();
 
 			MissionInstanceInfo missionInstancInfo = missions[0];
+
 			getStarPointAndScorePointUsers(missionInstancInfo, missionInstancInfo.getId());
 
 			return missionInstancInfo;
@@ -2589,8 +2593,9 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			String courseId = swdRecord.getWorkSpaceId();
 			missionInstance.setWorkSpace(getCourseById(courseId));
-			//MissionInstance mission = SeraTest.getMissionById(missionId);
+
 			getStarPointAndScorePointUsers(missionInstance, missionId);
+
 			return missionInstance;
 		}catch (Exception e){
 			// Exception Handling Required
