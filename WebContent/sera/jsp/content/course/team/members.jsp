@@ -71,8 +71,8 @@
 										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
 									</div>
 								<!-- Btn -->
-									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=requester.getId()%>" <%if(!requester.isFriend()){%>style="display:none"<%} %>>
-										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
+									<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=requester.getId()%>" <%if(!requester.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgray_r"><span class=icon_delete_inbtn></span>친구 끊기</div>
 									</div> 
 								<!-- Btn //-->
 								</span>
@@ -125,8 +125,8 @@
 							<li class="fr bo_l end">
 								<span>
 								<!-- Btn -->
-									<div class="btn_fgreen_l mr7 js_destroy_membership_btn" userId="<%=member.getId()%>">
-										<div class="btn_fgreen_r"><span class=icon_team_delete></span>팀원 삭제</div>
+									<div class="btn_fred_l mr7 js_destroy_membership_btn" userId="<%=member.getId()%>">
+										<div class="btn_fred_r"><span class="icon_delete_inbtn"></span>팀원 삭제</div>
 									</div>
 								<!-- Btn //--> 
 
@@ -138,7 +138,7 @@
 
 								<!-- Btn //--> 
 									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
+										<div class="btn_fgreen_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
 									</div>
 								<!-- Btn //--> 
 								</span>
@@ -207,8 +207,8 @@
 							<li class="fr bo_l end">
 								<span>
 								<!-- Btn -->
-									<div class="btn_fgreen_l mr7 js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
-										<div class="btn_fgreen_r"><span class="icon_green_down"></span>팀원 요청</div>
+									<div class="btn_fblu_l mr7 js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+										<div class="btn_fblu_r"><span class="icon_bludown_inbtn"></span>팀원초대</div>
 									</div>
 								<!-- Btn //--> 
 								
@@ -219,8 +219,8 @@
 								<!-- Btn //--> 
 							
 								<!-- Btn -->
-									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
+									<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
 									</div>
 								<!-- Btn //--> 
 								</span>
