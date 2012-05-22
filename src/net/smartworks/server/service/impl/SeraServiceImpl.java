@@ -1069,7 +1069,7 @@ public class SeraServiceImpl implements ISeraService {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
 				courseFileId = fileMap.get("fileId");
 				courseFileName = fileMap.get("fileName");
-				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, IDCreator.createId(SmartServerConstant.GROUP_PICTURE_ABBR));
 				swoGroup.setPicture(imgGroupProfile);
 			}
 		}
@@ -1332,7 +1332,7 @@ public class SeraServiceImpl implements ISeraService {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
 				courseFileId = fileMap.get("fileId");
 				courseFileName = fileMap.get("fileName");
-				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, IDCreator.createId(SmartServerConstant.GROUP_PICTURE_ABBR));
 				swoGroup.setPicture(imgGroupProfile);
 			}
 		}
@@ -3830,7 +3830,8 @@ public class SeraServiceImpl implements ISeraService {
 
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
-		
+		String companyId = user.getCompanyId();
+
 		Map<String, Object> frmSeraProfileMap = (Map<String, Object>)requestBody.get("frmSeraProfile");
 
 		Set<String> keySet = frmSeraProfileMap.keySet();
@@ -3914,6 +3915,17 @@ public class SeraServiceImpl implements ISeraService {
 
 		String txtUserProfilePicture = null;
 		if(imageGroupMap.size() > 0) {
+/*			if(!CommonUtil.isEmpty(swoUser.getPicture())) {
+				String prevFileName = swoUser.getPicture();
+				if (prevFileName.indexOf(File.separator) > 1)
+					prevFileName = prevFileName.substring(prevFileName.lastIndexOf(File.separator) + 1);
+
+				String extension = prevFileName.lastIndexOf(".") > 1 ? prevFileName.substring(prevFileName.lastIndexOf(".") + 1) : null;
+				if(!CommonUtil.isEmpty(extension))
+					extension = extension.toLowerCase();
+				String imageDirectory = OSValidator.getImageDirectory();
+				File imageFile = CommonUtil.getFileRepository(imageDirectory, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
+			}*/
 			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
 				List<Map<String, String>> imgGroups = entry.getValue();
 				try {
@@ -3921,7 +3933,7 @@ public class SeraServiceImpl implements ISeraService {
 						Map<String, String> file = imgGroups.get(i);
 						String fileId = file.get("fileId");
 						String fileName = file.get("fileName");
-						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.PICTURE_ABBR));
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.USER_PICTURE_ABBR));
 						swoUser.setPicture(txtUserProfilePicture);
 					}
 				} catch (Exception e) {
@@ -4283,7 +4295,7 @@ public class SeraServiceImpl implements ISeraService {
 						String fileId = file.get("fileId");
 						String fileName = file.get("fileName");
 						//String fileSize = file.get("fileSize");
-						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, txtUserId);
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.USER_PICTURE_ABBR));
 						//SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", null, imgGroupId, fileId, fileName, "0");
 					}
 				} catch (Exception e) {

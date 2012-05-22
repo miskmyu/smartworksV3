@@ -1,4 +1,5 @@
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
@@ -42,7 +43,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>
@@ -67,7 +68,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>
@@ -92,7 +93,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>
@@ -117,7 +118,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>
@@ -142,7 +143,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>
@@ -167,7 +168,7 @@
 					</div>
 					<!-- 코스 이미지//-->
 					<!-- 코스설명 -->
-					<div class="ad_text"><%=course.getBriefDesc() %></div>
+					<div class="ad_text"><%=CommonUtil.toNotNull(course.getBriefDesc()) %></div>
 					<!-- 코스설명 //-->
 				</div>
 			</a>

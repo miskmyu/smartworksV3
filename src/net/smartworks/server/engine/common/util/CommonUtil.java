@@ -1,6 +1,7 @@
 package net.smartworks.server.engine.common.util;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -703,6 +705,63 @@ public class CommonUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return isExistImage;
+		}
+	}
+
+	public static File getFileRepository(String fileDirectory, String companyId, String fileDivision) {
+
+		try {
+			// 파일 홈 디렉토리 선택
+			String storageDir = fileDirectory + File.separator + "SmartFiles";
+			File storage = new File(storageDir);
+	
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+	
+			// 사용자의 회사아이디의 디렉토리 선택
+			storageDir =  storageDir + File.separator + companyId;
+			storage = new File(storageDir);
+	
+			if (!storage.exists())
+				storage.mkdir();
+	
+			// 파일 형태 구분에 따른 디렉토리 선택
+			storageDir = storageDir + File.separator + fileDivision;
+			storage = new File(storageDir);
+	
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+	
+			if(!fileDivision.equals("Temps") && !fileDivision.equals("Profiles") && !fileDivision.equals("WorkImages")) {
+				// 현재 년, 월 정보를 얻는다.
+				Calendar currentDate = Calendar.getInstance();
+				int year = currentDate.get(Calendar.YEAR);
+				int month = currentDate.get(Calendar.MONTH) + 1;
+		
+				// 기본 파일 저장 디렉토리와 현재 년 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "Y" + year;
+				storage = new File(storageDir);
+		
+				// 없다면 생성한다.
+				if (!storage.exists())
+					storage.mkdir();
+	
+				// 기본 파일 저장 디렉토리와 현재 월 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "M" + month;
+		
+				// 만일 디렉토리가 없다면 생성한다.
+				storage = new File(storageDir);
+		
+				if (!storage.exists())
+					storage.mkdir();
+			}
+	
+			return storage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
