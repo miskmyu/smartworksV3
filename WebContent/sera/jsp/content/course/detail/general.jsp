@@ -80,11 +80,10 @@
 					</dl>
 					<!-- 코스 일정 -->
 					<dl class="content bor_no">
-						<dt class="name">코스일정</dt>
+						<dt class="name">코스일정 <span class="t_date">(<%=course.getOpenDate().toLocalDateSimpleString() %> ~ <%=course.getCloseDate().toLocalDateSimpleString() %>)</span></dt>
 						<dd class="gauge_box fl mt10">
 							<div class="gauge_outline">
-								<label class="gauge"
-									style="width: <%=course.getAchievedRatio()%>%;"></label>
+								<label class="gauge" style="width: <%=course.getAchievedRatio()%>%;"></label>
 							</div>
 						</dd>
 						<%
@@ -98,7 +97,18 @@
 						<%
 						}
 						%>
-						<div class="mission_info"><%=course.getTargetPoint()%>일 미션기간 중 <%=course.getAchievedPoint()%>일째가 진행중입니다
+						<div class="mission_info">
+						<%
+							int targetPoint = course.getTargetPoint();
+							int achievedPoint = course.getAchievedPoint();
+							String comment = "";
+							if(targetPoint >= achievedPoint) {
+								comment = targetPoint + "일의 코스기간 중 <span class=\"t_redb\">" + achievedPoint + "</span>일째 진행중입니다.";
+							} else if(targetPoint < achievedPoint) {
+								comment = "<span class=\"t_red\">마감된 코스입니다.</span>";
+							}
+						%>
+						<%=comment%>
 							<span class="tr process">(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)</span>
 						</div>
 					</dl>
