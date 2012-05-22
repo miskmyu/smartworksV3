@@ -89,7 +89,7 @@
 	<script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
 	<script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 	
-	<script type="text/javascript" src="js/ext/bootstrap.js"></script>
+	<!-- <script type="text/javascript" src="js/ext/bootstrap.js"></script> -->
 	<script type="text/javascript" src="js/ext/ext-all.js"></script>
 	
 	<script type="text/javascript" src="js/sw/sw-common.js"></script>

@@ -80,7 +80,7 @@
 					</dl>
 					<!-- 코스 일정 -->
 					<dl class="content bor_no">
-						<dt class="name">코스일정 <span class="t_date">(<%=course.getOpenDate().toLocalDateSimpleString() %> ~ <%=course.getCloseDate().toLocalDateSimpleString() %>)</span></dt>
+						<dt class="name">코스일정 <span class="t_date tn">(<%=course.getOpenDate().toLocalDateSimpleString() %> ~ <%=course.getCloseDate().toLocalDateSimpleString() %>)</span></dt>
 						<dd class="gauge_box fl mt10">
 							<div class="gauge_outline">
 								<label class="gauge" style="width: <%=course.getAchievedRatio()%>%;"></label>
@@ -143,11 +143,11 @@
 									(<%=CommonUtil.toNotNull(mentor.getHomeTown())%>)</li>
 								<li><span class="bullet_dot">가족 :</span><%=CommonUtil.toNotNull(mentor.getFamily())%></li>
 								<li><span class="bullet_dot">주소 :</span><%=CommonUtil.toNotNull(mentor.getLiving())%></li> --%>
-								<li><span class="bullet_dot">학력 :</span><%=CommonUtil.toNotNull(mentor.getEducations())%></li>
-								<li><span class="bullet_dot">경력 :</span><%=CommonUtil.toNotNull(mentor.getWorks())%></li>
-								<li><span class="bullet_dot">강의 :</span><%=CommonUtil.toNotNull(mentor.getLectures())%></li>
-								<li><span class="bullet_dot">수상 :</span><%=CommonUtil.toNotNull(mentor.getAwards())%></li>
-								<li><span class="bullet_dot">기타 :</span><%=CommonUtil.toNotNull(mentor.getEtc())%></li>
+								<li><span class="bullet_dot">학력 :</span> <%=CommonUtil.toNotNull(mentor.getEducations())%></li>
+								<li><span class="bullet_dot">경력 :</span> <%=CommonUtil.toNotNull(mentor.getWorks())%></li>
+								<li><span class="bullet_dot">강의 :</span> <%=CommonUtil.toNotNull(mentor.getLectures())%></li>
+								<li><span class="bullet_dot">수상 :</span> <%=CommonUtil.toNotNull(mentor.getAwards())%></li>
+								<li><span class="bullet_dot">기타 :</span> <%=CommonUtil.toNotNull(mentor.getEtc())%></li>
 							</ul>
 						</div>
 						<%
