@@ -66,7 +66,7 @@
 <div class="js_create_team_page" courseId="<%=courseId%>">
 	<!-- Header Title -->
 	<div class="header_tit">
-		<div class="tit_dep2 m0">
+		<div class="tit_dep2 team m0">
 			<h2>팀 구성하기</h2>
 			<div>
 				<span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료

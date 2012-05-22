@@ -103,7 +103,8 @@
 .header_tit .tit_badge {background: url("../images/header.png") no-repeat scroll 0 -435px; height:38px; padding:45x 25px 0}
 .header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:45px 25px 0}
 .header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:45px 25px 0}
-.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px; min-height: 28px}
+.header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px; min-height: 30px}
+.header_tit .tit_dep2.team {background-position: 0 -1298px !important; padding:5px 0 0 50px}
 .header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
 .title_srch {margin:25px 0 10px; overflow:hidden; vertical-align: middle; line-height:22px}
 /* Title - Course Admin */
