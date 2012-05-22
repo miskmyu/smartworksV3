@@ -1,8 +1,11 @@
 package net.smartworks.model.community;
 
 import net.smartworks.model.BaseObject;
+import net.smartworks.model.sera.Mentor;
+import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoCompanyCond;
@@ -51,8 +54,8 @@ public class Community extends BaseObject {
 	}
 
 	public String getOrgPicture() {
-		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
-			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class))
+		if(!CommonUtil.isExistImage(getPath() + this.getBigPictureName())) {
+			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class) || this.getClass().equals(SeraUser.class) || this.getClass().equals(Mentor.class))
 				return NO_PICTURE_PATH + User.NO_USER_PICTURE + ".jpg";
 			else if(this.getClass().equals(Department.class))
 				return NO_PICTURE_PATH + Department.DEFAULT_DEPART_PICTURE + ".gif";
@@ -63,8 +66,8 @@ public class Community extends BaseObject {
 	}
 
 	public String getMidPicture() {
-		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class))
+		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
+			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class) || this.getClass().equals(SeraUser.class) || this.getClass().equals(Mentor.class))
 				return NO_PICTURE_PATH + User.NO_USER_PICTURE + "_mid.jpg";
 			else if(this.getClass().equals(Department.class))
 				return NO_PICTURE_PATH + Department.DEFAULT_DEPART_PICTURE + "_mid.gif";
@@ -75,8 +78,8 @@ public class Community extends BaseObject {
 	}
 
 	public String getMinPicture() {
-		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
-			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class))
+		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
+			if(this.getClass().equals(Login.class) || this.getClass().equals(User.class) || this.getClass().equals(SeraUser.class) || this.getClass().equals(Mentor.class))
 				return NO_PICTURE_PATH + User.NO_USER_PICTURE + "_min.jpg";
 			else if(this.getClass().equals(Department.class))
 				return NO_PICTURE_PATH + Department.DEFAULT_DEPART_PICTURE + "_min.gif";

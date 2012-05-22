@@ -862,10 +862,10 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			//this.setFileDirectory(SmartConfUtil.getInstance().getImageServerDirectory());
 			//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
 			this.setFileDirectory(OSValidator.getImageDirectory());
-			
+
 			if (fileName.indexOf(File.separator) > 1)
 				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-	
+
 			String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 			if(!CommonUtil.isEmpty(extension))
 				extension = extension.toLowerCase();

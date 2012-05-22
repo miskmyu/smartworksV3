@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -682,4 +684,26 @@ public class CommonUtil {
 		t.printStackTrace(pWriter);
 		return sWriter.toString();
 	}
+
+	/**
+	 * 이미지 존재 여부
+	 * @param imagePath
+	 * @return
+	 */
+	public static boolean isExistImage(String imagePath) {
+
+		boolean isExistImage = false;
+		try {
+			URL url = new URL(imagePath);
+			HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+			if(urlConnection.getResponseCode() == 200) {
+				isExistImage = true; 
+			}
+			return isExistImage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return isExistImage;
+		}
+	}
+
 }

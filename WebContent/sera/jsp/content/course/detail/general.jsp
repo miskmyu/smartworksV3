@@ -80,7 +80,7 @@
 					</dl>
 					<!-- 코스 일정 -->
 					<dl class="content bor_no">
-						<dt class="name">코스일정 <span class="t_date">(<%=course.getOpenDate().toLocalDateSimpleString() %> ~ <%=course.getCloseDate().toLocalDateSimpleString() %>)</span></dt>
+						<dt class="name">코스일정 <span class="t_date tn">(<%=course.getOpenDate().toLocalDateSimpleString() %> ~ <%=course.getCloseDate().toLocalDateSimpleString() %>)</span></dt>
 						<dd class="gauge_box fl mt10">
 							<div class="gauge_outline">
 								<label class="gauge" style="width: <%=course.getAchievedRatio()%>%;"></label>

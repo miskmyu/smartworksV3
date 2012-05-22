@@ -3851,8 +3851,15 @@ public class SeraServiceImpl implements ISeraService {
 		String txtEducations = null;
 		String txtWorks = null;
 		String txtPassword = null;
-		String txtConfirmPassword = null;
-		
+
+		SwoUserCond cond = new SwoUserCond();
+		cond.setId(userId);
+		SwoUser swoUser = getSwoManager().getUser(userId, cond, IManager.LEVEL_ALL);
+		if (swoUser == null)
+			return null;
+
+		SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, userId);
+
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
 			Object fieldValue = frmSeraProfileMap.get(fieldId);
@@ -3871,8 +3878,12 @@ public class SeraServiceImpl implements ISeraService {
 			} else if(fieldValue instanceof String) {
 				if (fieldId.equals("txtNickName")) {
 					txtNickName = (String)frmSeraProfileMap.get("txtNickName");
+					swoUser.setNickName(txtNickName);
+					seraUserDetail.setNickName(txtNickName);
 				} else if (fieldId.equals("txtEmail")) {
 					txtEmail = (String)frmSeraProfileMap.get("txtEmail");
+					swoUser.setEmail(txtEmail);
+					seraUserDetail.setEmail(txtEmail);
 				} else if (fieldId.equals("txtBirthYear")) {
 					txtBirthYear = (String)frmSeraProfileMap.get("txtBirthYear");
 				} else if (fieldId.equals("txtConfirmPassword")) {
@@ -3881,72 +3892,52 @@ public class SeraServiceImpl implements ISeraService {
 					txtBirthDay = (String)frmSeraProfileMap.get("txtBirthDay");
 				} else if (fieldId.equals("selSex")) {
 					selSex = (String)frmSeraProfileMap.get("selSex");
+					seraUserDetail.setSex(CommonUtil.isEmpty(selSex) ? 0 : Integer.parseInt(selSex));
 				} else if (fieldId.equals("txtGoal")) {
 					txtGoal = (String)frmSeraProfileMap.get("txtGoal");
+					seraUserDetail.setGoal(txtGoal);
 				} else if (fieldId.equals("txtInterests")) {
 					txtInterests = (String)frmSeraProfileMap.get("txtInterests");
+					seraUserDetail.setInterests(txtInterests);
 				} else if (fieldId.equals("txtEducations")) {
 					txtEducations = (String)frmSeraProfileMap.get("txtEducations");
+					seraUserDetail.setEducations(txtEducations);
 				} else if (fieldId.equals("txtWorks")) {
 					txtWorks = (String)frmSeraProfileMap.get("txtWorks");
+					seraUserDetail.setWorks(txtWorks);
 				}	else if (fieldId.equals("txtPassword")) {
 					txtPassword = (String)frmSeraProfileMap.get("txtPassword");
-				}	else if (fieldId.equals("txtConfirmPassword")) {
-					txtConfirmPassword = (String)frmSeraProfileMap.get("txtConfirmPassword");
+					swoUser.setPassword(txtPassword);
 				}
 			}
 		}
+
 		String txtUserProfilePicture = null;
 		if(imageGroupMap.size() > 0) {
 			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
-				String imgGroupId = entry.getKey();
 				List<Map<String, String>> imgGroups = entry.getValue();
 				try {
 					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
 						Map<String, String> file = imgGroups.get(i);
 						String fileId = file.get("fileId");
 						String fileName = file.get("fileName");
-						//String fileSize = file.get("fileSize");
-						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, userId);
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.PICTURE_ABBR));
+						swoUser.setPicture(txtUserProfilePicture);
 					}
 				} catch (Exception e) {
 					throw new DocFileException("image upload fail...");
 				}
 			}
 		}
-		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-		
-		SwoUserCond cond = new SwoUserCond();
-		cond.setId(userId);
-		SwoUser swoUser = swoMgr.getUser(userId, cond, IManager.LEVEL_ALL);
-		if (swoUser == null)
-			return null;
 
-		swoUser.setNickName(txtNickName);
-		swoUser.setEmail(txtEmail);
-		swoUser.setPassword(txtPassword);
-		swoUser.setPicture(txtUserProfilePicture);
-		
-		SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(userId, userId);
-		
-		seraUserDetail.setNickName(txtNickName);
-		seraUserDetail.setEmail(txtEmail);
-		
 		if (!CommonUtil.isEmpty(txtBirthYear) && !CommonUtil.isEmpty(txtBirthMonth) && !CommonUtil.isEmpty(txtBirthDay)) {
 			String birthDayString = txtBirthYear + (txtBirthMonth.length() == 1 ? "0" + txtBirthMonth : txtBirthMonth) + (txtBirthDay.length() == 1 ? "0" + txtBirthDay : txtBirthDay) + "0000";
 			Date birthDay = LocalDate.convertStringToDate(birthDayString);
 			seraUserDetail.setBirthday(new LocalDate(birthDay.getTime()));
 		}
-		seraUserDetail.setSex(CommonUtil.isEmpty(selSex) ? 0 : Integer.parseInt(selSex));
-		seraUserDetail.setGoal(txtGoal);
-		seraUserDetail.setInterests(txtInterests);
-		seraUserDetail.setEducations(txtEducations);
-		seraUserDetail.setWorks(txtWorks);
-		
-		swoMgr.setUser(userId, swoUser, IManager.LEVEL_ALL);
-		seraMgr.setSeraUser(userId, seraUserDetail);
+
+		getSwoManager().setUser(userId, swoUser, IManager.LEVEL_ALL);
+		getSeraManager().setSeraUser(userId, seraUserDetail);
 
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(swoUser.getId(), swoUser.getPassword());
         Authentication authentication = authenticationManager.authenticate(authRequest);
