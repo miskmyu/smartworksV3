@@ -40,7 +40,7 @@ smartPop = {
 
 	overlay : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		var curtain = $('<span id="sw_overlay_span" class="op20" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#ffffff;"></span>');
+		var curtain = $('<span id="sw_overlay_span" class="op30" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#ffffff;"></span>');
 		curtain.appendTo($(target));
 	},
 	

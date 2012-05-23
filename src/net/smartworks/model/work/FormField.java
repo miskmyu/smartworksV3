@@ -23,6 +23,11 @@ public class FormField extends BaseObject{
 	public static final String ID_CREATED_DATE = "createdTime";
 	public static final String ID_LAST_MODIFIER = "modifier";
 	public static final String ID_LAST_MODIFIED_DATE = "modifiedTime";
+	
+	public static final String ID_SENDER = "from";
+	public static final String ID_RECEIVERS = "to";
+	public static final String ID_SEND_DATE = "date";
+	public static final String ID_MAIL_SIZE = "size";
 
 	public static final String TYPE_OBJECT_ID = "objectId"; // work
 	public static final String TYPE_TEXT = "textInput"; //string

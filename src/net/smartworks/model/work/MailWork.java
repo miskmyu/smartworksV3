@@ -1,5 +1,7 @@
 package net.smartworks.model.work;
 
+import net.smartworks.model.mail.MailFolder;
+
 public class MailWork extends Work {
 
 	private FormField[] displayFields = new FormField[] {
@@ -9,6 +11,7 @@ public class MailWork extends Work {
 			new FormField("mailSize", "size", FormField.TYPE_NUMBER),
 			new FormField("attachments", "file", FormField.TYPE_FILE)
 	};
+	private MailFolder mailFolder;
 	
 	public FormField[] getDisplayFields() {
 		return displayFields;
@@ -17,6 +20,12 @@ public class MailWork extends Work {
 		this.displayFields = displayFields;
 	}
 
+	public MailFolder getMailFolder() {
+		return mailFolder;
+	}
+	public void setMailFolder(MailFolder mailFolder) {
+		this.mailFolder = mailFolder;
+	}
 	public MailWork(){
 		super();
 		super.setType(Work.TYPE_MAIL_MESSAGE);

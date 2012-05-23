@@ -9,13 +9,13 @@ import org.claros.commons.mail.models.ConnectionProfile;
 /**
  * @author Umut Gokbayrak
  */
-public class ConnectionProfileList {
+public class ConnectionProfileList_old {
 	public static HashMap conList = new HashMap();
 
 	/**
 	 * 
 	 */
-	public ConnectionProfileList() {
+	public ConnectionProfileList_old() {
 		super();
 	}
 	

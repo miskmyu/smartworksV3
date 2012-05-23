@@ -586,4 +586,6 @@ public interface ISmartWorks {
 	
 	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract MailFolder getMailFolderById(String folderId) throws Exception;
+	
 }

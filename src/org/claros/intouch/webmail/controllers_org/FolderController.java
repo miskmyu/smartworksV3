@@ -1,10 +1,9 @@
-package org.claros.intouch.webmail.controllers;
+package org.claros.intouch.webmail.controllers_org;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.claros.intouch.webmail.models.FolderDbObject;
-import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
 
 /**
  * @author Umut Gokbayrak
@@ -12,7 +11,6 @@ import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
 public interface FolderController {
 	public List getFolders() throws Exception;
 	public FolderDbObject getFolder(String folder) throws Exception;
-	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception;
 	public List getMailsByFolder(String folder) throws Exception;
 	public void createFolder(FolderDbObject item) throws Exception;
 	public Integer countUnreadMessages(String folder) throws Exception;

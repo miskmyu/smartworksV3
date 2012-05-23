@@ -5,6 +5,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class MailFolder extends BaseObject {
@@ -31,16 +32,17 @@ public class MailFolder extends BaseObject {
 	public static final String NAME_JUNK 	= "Junk";
 	
 	public static final MailFolder[] SYSTEM_FOLDERS = {
-		new MailFolder( ID_INBOX, NAME_INBOX, TYPE_SYSTEM_INBOX),
-		new MailFolder( ID_SENT, NAME_SENT, TYPE_SYSTEM_SENT),
-		new MailFolder( ID_TRASH, NAME_TRASH, TYPE_SYSTEM_TRASH),
-		new MailFolder( ID_DRAFTS, NAME_DRAFTS, TYPE_SYSTEM_DRAFTS),
-		new MailFolder( ID_JUNK, NAME_JUNK, TYPE_SYSTEM_JUNK)
+		new MailFolder( ID_INBOX, SmartMessage.getString("mail.title.folder.inbox"), TYPE_SYSTEM_INBOX),
+		new MailFolder( ID_SENT, SmartMessage.getString("mail.title.folder.sent"), TYPE_SYSTEM_SENT),
+		new MailFolder( ID_TRASH, SmartMessage.getString("mail.title.folder.trash"), TYPE_SYSTEM_TRASH),
+		new MailFolder( ID_DRAFTS, SmartMessage.getString("mail.title.folder.drafts"), TYPE_SYSTEM_DRAFTS),
+		new MailFolder( ID_JUNK, SmartMessage.getString("mail.title.folder.junk"), TYPE_SYSTEM_JUNK)
 	};
 
 	private int type = TYPE_USER;
 	private String desc;
 	private int unreadItemCount = 0;
+	private int totalItemCount = 0;
 	
 	public int getType() {
 		return type;
@@ -61,6 +63,13 @@ public class MailFolder extends BaseObject {
 	}
 	public void setUnreadItemCount(int unreadItemCount) {
 		this.unreadItemCount = unreadItemCount;
+	}
+
+	public int getTotalItemCount() {
+		return totalItemCount;
+	}
+	public void setTotalItemCount(int totalItemCount) {
+		this.totalItemCount = totalItemCount;
 	}
 
 	public MailFolder() {

@@ -1,7 +1,5 @@
 package net.smartworks.server.service;
 
-import org.claros.commons.mail.models.ConnectionProfile;
-
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -14,5 +12,7 @@ public interface IMailService {
 	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception;
 
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception;
+	
+	public MailFolder getMailFolderById(String folderId) throws Exception;
 	
 }

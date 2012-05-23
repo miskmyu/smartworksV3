@@ -1,4 +1,4 @@
-package org.claros.intouch.webmail.controllers;
+package org.claros.intouch.webmail.controllers_org;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -315,11 +315,5 @@ public class ImapFolderControllerImpl implements FolderController {
 		Protocol protocol = factory.getProtocol(folder);
 		ArrayList headers = protocol.fetchHeaders(msgs);
 		return headers;
-	}
-
-	@Override
-	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
