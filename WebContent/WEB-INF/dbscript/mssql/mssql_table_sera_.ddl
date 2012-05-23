@@ -4,6 +4,7 @@ CREATE TABLE CourseDetail (
 	categories varchar(500),
 	keywords varchar(500),
 	duration int,
+	status varchar(1),
 	startDate datetime,
 	endDate datetime,
 	maxMentees int,
@@ -762,3 +763,5 @@ ALTER TABLE SeraUserDetail add userName varchar(50);
 
 ALTER TABLE CourseTeamUser add joinType varchar(1);
 ALTER TABLE CourseTeamUser add joinStatus varchar(1);
+
+ALTER TABLE CourseDetail add status varchar(1);

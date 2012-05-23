@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
 <%@page import="net.smartworks.model.sera.SeraBoardList"%>
 <%@page import="net.smartworks.server.service.ISeraService"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -533,12 +534,20 @@
 	//InstanceInfoList instanceInfoList = instanceService.getInstanceInfoListByWorkId("hsshin@maninsoft.co.kr", null, SmartWork.ID_BOARD_MANAGEMENT);
 
 	//System.out.println(instanceInfoList);
-	
-	ISeraService seraService = (ISeraService)SmartUtil.getBean("seraServiceImpl", request);
+	SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups("", null, null);
+	CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", null);
 
-	SeraBoardList seraBoardList = seraService.getSeraBoards(20);
-
-	System.out.println(seraBoardList);
+	for(SwoGroup swoGroup : swoGroups) {
+		String groupId = swoGroup.getId();
+		String status = swoGroup.getStatus();
+		for(CourseDetail courseDetail : courseDetails) {
+			String courseId = courseDetail.getCourseId();
+			if(groupId.equals(courseId)) {
+				courseDetail.setStatus(status);
+				SwManagerFactory.getInstance().getSeraManager().setCourseDetail(courseDetail);
+			}
+		}
+	}
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

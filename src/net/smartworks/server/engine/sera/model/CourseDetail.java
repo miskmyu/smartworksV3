@@ -16,6 +16,7 @@ public class CourseDetail {
 	private String categories;
 	private String keywords;
 	private int duration;
+	private String status;
 	private Date start;
 	private Date end;
 	private int maxMentees;
@@ -59,6 +60,12 @@ public class CourseDetail {
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public Date getStart() {
 		return start;

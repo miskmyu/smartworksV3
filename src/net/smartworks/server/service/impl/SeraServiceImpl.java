@@ -1165,16 +1165,18 @@ public class SeraServiceImpl implements ISeraService {
 		}*/
 		User user = SmartUtil.getCurrentUser();
 		String courseId = (String)requestBody.get("courseId");
-		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		SwoGroup group = swoMgr.getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
-		group.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
 
-		swoMgr.setGroup(user.getId(), group, IManager.LEVEL_ALL);
-		
+		SwoGroup group = getSwoManager().getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
+		group.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
+		getSwoManager().setGroup(user.getId(), group, IManager.LEVEL_ALL);
+
+		CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+		courseDetail.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
+		getSeraManager().setCourseDetail(courseDetail);
+
 		//SwManagerFactory.getInstance().getSwoManager().removeGroup(user.getId(), courseId);
 		//SwManagerFactory.getInstance().getSeraManager().removeCourseDetail(courseId);
-		
+
 		return courseId;
 	}
 
@@ -1372,6 +1374,7 @@ public class SeraServiceImpl implements ISeraService {
 		courseDetail.setCategories(chkCourseCategories);
 		courseDetail.setKeywords(txtCourseKeywords);
 		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
+		courseDetail.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 /*		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
@@ -1422,7 +1425,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		seraMgr.setCourseDetail(courseDetail);
-		
+
 		MentorDetail mentorDetail = new MentorDetail();
 		mentorDetail.setMentorId(mentorUserId);
 		mentorDetail.setBorn(null);
@@ -4052,9 +4055,9 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 			}
 		}
-
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
-		
+
 		//courseDetailCond.setEndFrom(new LocalDate());
 		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false) , new Order("createDate", false)});
 		courseDetailCond.setPageNo(0);
@@ -4118,6 +4121,7 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
 
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
 	    
 	    courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
@@ -4584,6 +4588,7 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
 
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
 		
 		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
