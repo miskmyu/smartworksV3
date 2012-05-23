@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -76,6 +77,7 @@ import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.manager.impl.DocFileManagerImpl;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
@@ -127,6 +129,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.OSValidator;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -994,6 +997,8 @@ public class SeraServiceImpl implements ISeraService {
 				}
 		}*/
 		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String companyId = user.getCompanyId();
 		Map<String, Object> frmSetCourseProfile = (Map<String, Object>)requestBody.get("frmSetCourseProfile");
 		String courseId = (String)requestBody.get("courseId");
 
@@ -1059,12 +1064,15 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 		
-		SwoGroup swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
+		SwoGroup swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, courseId, IManager.LEVEL_ALL);
 		
 		if (swoGroup == null)
 			return null;
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
+			String previousFileName = swoGroup.getPicture();
+			if(!CommonUtil.isEmpty(previousFileName))
+				CommonUtil.removePreviousImage(previousFileName, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
 			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
 				courseFileId = fileMap.get("fileId");
@@ -1077,7 +1085,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setGroupType(selGroupProfileType);
 		
-		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+		SwManagerFactory.getInstance().getSwoManager().setGroup(userId, swoGroup, IManager.LEVEL_ALL);
 
 		String groupId = swoGroup.getId();
 		if (CommonUtil.isEmpty(groupId))
@@ -1139,7 +1147,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		seraMgr.setCourseDetail(courseDetail);
-		
+
 		return groupId;
 		
 	}
@@ -3915,17 +3923,9 @@ public class SeraServiceImpl implements ISeraService {
 
 		String txtUserProfilePicture = null;
 		if(imageGroupMap.size() > 0) {
-/*			if(!CommonUtil.isEmpty(swoUser.getPicture())) {
-				String prevFileName = swoUser.getPicture();
-				if (prevFileName.indexOf(File.separator) > 1)
-					prevFileName = prevFileName.substring(prevFileName.lastIndexOf(File.separator) + 1);
-
-				String extension = prevFileName.lastIndexOf(".") > 1 ? prevFileName.substring(prevFileName.lastIndexOf(".") + 1) : null;
-				if(!CommonUtil.isEmpty(extension))
-					extension = extension.toLowerCase();
-				String imageDirectory = OSValidator.getImageDirectory();
-				File imageFile = CommonUtil.getFileRepository(imageDirectory, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
-			}*/
+			String previousFileName = swoUser.getPicture();
+			if(!CommonUtil.isEmpty(previousFileName))
+				CommonUtil.removePreviousImage(previousFileName, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
 			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
 				List<Map<String, String>> imgGroups = entry.getValue();
 				try {

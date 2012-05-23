@@ -23,6 +23,10 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.smartworks.model.community.Community;
+import net.smartworks.server.engine.docfile.manager.impl.DocFileManagerImpl;
+import net.smartworks.util.OSValidator;
+
 import org.springframework.util.StringUtils;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -765,4 +769,26 @@ public class CommonUtil {
 		}
 	}
 
+	public static void removePreviousImage(String previousFileName, String companyId, String fileDivision) {
+		try {
+			String extension = "";
+			if (previousFileName.indexOf(".") != -1) {
+				extension = previousFileName.substring(previousFileName.lastIndexOf(".") + 1);
+				previousFileName = previousFileName.substring(0, previousFileName.lastIndexOf("."));
+			}
+			String imageDirectory = OSValidator.getImageDirectory();
+			File imageFile = getFileRepository(imageDirectory, companyId, fileDivision);
+			String thumbFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_THUMB + "." + extension;
+			String originalFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_ORIGINAL + "." + extension;
+			File thumbFile = new File(thumbFilePath);
+			File originalFile = new File(originalFilePath);
+			if(thumbFile.exists())
+				thumbFile.delete();
+			if(originalFile.exists())
+				originalFile.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+	}
 }
