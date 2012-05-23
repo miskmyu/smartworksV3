@@ -91,6 +91,10 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			logger.info(this.getClass().getName() + " created");
 	}
 
+	public static final String FILE_DIVISION_PROFILES = "Profiles";
+	public static final String FILE_DIVISION_TEMPS = "Temps";
+	public static final String FILE_DIVISION_WORKIMAGES = "WorkImages";
+
 	private String dbType;
 
 	/**
@@ -145,7 +149,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		if (!storage.exists())
 			storage.mkdir();
 
-		if(!fileDivision.equals("Temps") && !fileDivision.equals("Profiles") && !fileDivision.equals("WorkImages")) {
+		if(!fileDivision.equals(FILE_DIVISION_TEMPS) && !fileDivision.equals(FILE_DIVISION_PROFILES) && !fileDivision.equals(FILE_DIVISION_WORKIMAGES)) {
 			// 현재 년, 월 정보를 얻는다.
 			Calendar currentDate = Calendar.getInstance();
 			int year = currentDate.get(Calendar.YEAR);
@@ -704,7 +708,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		String companyId = SmartUtil.getCurrentUser().getCompanyId();
 
-		String fileDivision = "Temps";
+		String fileDivision = FILE_DIVISION_TEMPS;
 
 		File repository = this.getFileRepository(companyId, fileDivision);
 		String filePath = "";
@@ -759,7 +763,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		}
 
 		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
-		String fileDivision = "Temps";
+		String fileDivision = FILE_DIVISION_TEMPS;
 		File repository = this.getFileRepository(companyId, fileDivision);
 		String filePath = "";
 		String imagerServerPath = "";
@@ -796,7 +800,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 		filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
 
-		imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+		imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
 		formFile.setImageServerPath(imagerServerPath);
 
 		if (extension != null) {
@@ -820,7 +824,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		this.setFileDirectory(OSValidator.getImageDirectory());
 		String companyId = SmartUtil.getCurrentUser().getCompanyId();
 
-		String fileDivision = "Temps";
+		String fileDivision = FILE_DIVISION_TEMPS;
 		File repository = this.getFileRepository(companyId, fileDivision);
 		String filePath = "";
 		String imagerServerPath = "";
@@ -840,7 +844,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 			filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
 
-			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+			imagerServerPath = SmartConfUtil.getInstance().getImageServer() + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
 			formFile.setImageServerPath(imagerServerPath);
 
 			if (extension != null) {
@@ -862,10 +866,10 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			//this.setFileDirectory(SmartConfUtil.getInstance().getImageServerDirectory());
 			//this.setFileDirectory(System.getenv("SMARTWORKS_FILE_DIRECTORY") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_DIRECTORY"));
 			this.setFileDirectory(OSValidator.getImageDirectory());
-			
+
 			if (fileName.indexOf(File.separator) > 1)
 				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
-	
+
 			String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 			if(!CommonUtil.isEmpty(extension))
 				extension = extension.toLowerCase();
@@ -884,7 +888,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				}				
 			}
 			
-			File repository = this.getFileRepository(companyId, "Profiles");
+			File repository = this.getFileRepository(companyId, FILE_DIVISION_PROFILES);
 	
 			String communityPictureId = communityId + "." + extension;
 			//String bigId = null;
@@ -892,7 +896,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String originId = null;
 			//String realFile1 = null;
 			String realFile2 = null;
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + fileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
 
 			if(communityId.equals(companyId)) {
 				originId = communityId;
@@ -950,7 +954,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			if(workType.equals("Pictures")) fileId = "pic_" + fileId;
 			else fileId = "file_" + fileId;
 
-			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + "Temps" + "/" + tempFileId + "." + extension;
+			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + tempFileId + "." + extension;
 			String realFile = repository.getAbsolutePath() + File.separator + fileId + "." + extension;
 			if(workType.equals("Pictures")) {
 				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + Community.IMAGE_TYPE_THUMB + "." + extension;
@@ -1003,7 +1007,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		this.setFileDirectory(OSValidator.getImageDirectory());
 
 		User user = SmartUtil.getCurrentUser();
-		String tempFilePath = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + "Temps" + "/";
+		String tempFilePath = this.getFileDirectory() + "/SmartFiles/" + user.getCompanyId() + "/" + FILE_DIVISION_TEMPS + "/";
 
 		try {
 			File tempFileDir = new File(tempFilePath);

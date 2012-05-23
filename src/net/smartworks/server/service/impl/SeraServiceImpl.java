@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -76,6 +77,7 @@ import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.manager.impl.DocFileManagerImpl;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
@@ -127,6 +129,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.OSValidator;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -994,6 +997,8 @@ public class SeraServiceImpl implements ISeraService {
 				}
 		}*/
 		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String companyId = user.getCompanyId();
 		Map<String, Object> frmSetCourseProfile = (Map<String, Object>)requestBody.get("frmSetCourseProfile");
 		String courseId = (String)requestBody.get("courseId");
 
@@ -1059,17 +1064,20 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 		
-		SwoGroup swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
+		SwoGroup swoGroup = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, courseId, IManager.LEVEL_ALL);
 		
 		if (swoGroup == null)
 			return null;
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
+			String previousFileName = swoGroup.getPicture();
+			if(!CommonUtil.isEmpty(previousFileName))
+				CommonUtil.removePreviousImage(previousFileName, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
 			for(int i=0; i < imgCourseProfile.subList(0, imgCourseProfile.size()).size(); i++) {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
 				courseFileId = fileMap.get("fileId");
 				courseFileName = fileMap.get("fileName");
-				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, IDCreator.createId(SmartServerConstant.GROUP_PICTURE_ABBR));
 				swoGroup.setPicture(imgGroupProfile);
 			}
 		}
@@ -1077,7 +1085,7 @@ public class SeraServiceImpl implements ISeraService {
 		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setGroupType(selGroupProfileType);
 		
-		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+		SwManagerFactory.getInstance().getSwoManager().setGroup(userId, swoGroup, IManager.LEVEL_ALL);
 
 		String groupId = swoGroup.getId();
 		if (CommonUtil.isEmpty(groupId))
@@ -1139,7 +1147,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		seraMgr.setCourseDetail(courseDetail);
-		
+
 		return groupId;
 		
 	}
@@ -1332,7 +1340,7 @@ public class SeraServiceImpl implements ISeraService {
 				Map<String, String> fileMap = imgCourseProfile.get(i);
 				courseFileId = fileMap.get("fileId");
 				courseFileName = fileMap.get("fileName");
-				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, swoGroup.getId());
+				imgGroupProfile = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(courseFileId, courseFileName, IDCreator.createId(SmartServerConstant.GROUP_PICTURE_ABBR));
 				swoGroup.setPicture(imgGroupProfile);
 			}
 		}
@@ -3830,7 +3838,8 @@ public class SeraServiceImpl implements ISeraService {
 
 		User user = SmartUtil.getCurrentUser();
 		String userId = user.getId();
-		
+		String companyId = user.getCompanyId();
+
 		Map<String, Object> frmSeraProfileMap = (Map<String, Object>)requestBody.get("frmSeraProfile");
 
 		Set<String> keySet = frmSeraProfileMap.keySet();
@@ -3851,8 +3860,15 @@ public class SeraServiceImpl implements ISeraService {
 		String txtEducations = null;
 		String txtWorks = null;
 		String txtPassword = null;
-		String txtConfirmPassword = null;
-		
+
+		SwoUserCond cond = new SwoUserCond();
+		cond.setId(userId);
+		SwoUser swoUser = getSwoManager().getUser(userId, cond, IManager.LEVEL_ALL);
+		if (swoUser == null)
+			return null;
+
+		SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, userId);
+
 		while (itr.hasNext()) {
 			String fieldId = (String)itr.next();
 			Object fieldValue = frmSeraProfileMap.get(fieldId);
@@ -3871,8 +3887,12 @@ public class SeraServiceImpl implements ISeraService {
 			} else if(fieldValue instanceof String) {
 				if (fieldId.equals("txtNickName")) {
 					txtNickName = (String)frmSeraProfileMap.get("txtNickName");
+					swoUser.setNickName(txtNickName);
+					seraUserDetail.setNickName(txtNickName);
 				} else if (fieldId.equals("txtEmail")) {
 					txtEmail = (String)frmSeraProfileMap.get("txtEmail");
+					swoUser.setEmail(txtEmail);
+					seraUserDetail.setEmail(txtEmail);
 				} else if (fieldId.equals("txtBirthYear")) {
 					txtBirthYear = (String)frmSeraProfileMap.get("txtBirthYear");
 				} else if (fieldId.equals("txtConfirmPassword")) {
@@ -3881,72 +3901,55 @@ public class SeraServiceImpl implements ISeraService {
 					txtBirthDay = (String)frmSeraProfileMap.get("txtBirthDay");
 				} else if (fieldId.equals("selSex")) {
 					selSex = (String)frmSeraProfileMap.get("selSex");
+					seraUserDetail.setSex(CommonUtil.isEmpty(selSex) ? 0 : Integer.parseInt(selSex));
 				} else if (fieldId.equals("txtGoal")) {
 					txtGoal = (String)frmSeraProfileMap.get("txtGoal");
+					seraUserDetail.setGoal(txtGoal);
 				} else if (fieldId.equals("txtInterests")) {
 					txtInterests = (String)frmSeraProfileMap.get("txtInterests");
+					seraUserDetail.setInterests(txtInterests);
 				} else if (fieldId.equals("txtEducations")) {
 					txtEducations = (String)frmSeraProfileMap.get("txtEducations");
+					seraUserDetail.setEducations(txtEducations);
 				} else if (fieldId.equals("txtWorks")) {
 					txtWorks = (String)frmSeraProfileMap.get("txtWorks");
+					seraUserDetail.setWorks(txtWorks);
 				}	else if (fieldId.equals("txtPassword")) {
 					txtPassword = (String)frmSeraProfileMap.get("txtPassword");
-				}	else if (fieldId.equals("txtConfirmPassword")) {
-					txtConfirmPassword = (String)frmSeraProfileMap.get("txtConfirmPassword");
+					swoUser.setPassword(txtPassword);
 				}
 			}
 		}
+
 		String txtUserProfilePicture = null;
 		if(imageGroupMap.size() > 0) {
+			String previousFileName = swoUser.getPicture();
+			if(!CommonUtil.isEmpty(previousFileName))
+				CommonUtil.removePreviousImage(previousFileName, companyId, DocFileManagerImpl.FILE_DIVISION_PROFILES);
 			for(Map.Entry<String, List<Map<String, String>>> entry : imageGroupMap.entrySet()) {
-				String imgGroupId = entry.getKey();
 				List<Map<String, String>> imgGroups = entry.getValue();
 				try {
 					for(int i=0; i < imgGroups.subList(0, imgGroups.size()).size(); i++) {
 						Map<String, String> file = imgGroups.get(i);
 						String fileId = file.get("fileId");
 						String fileName = file.get("fileName");
-						//String fileSize = file.get("fileSize");
-						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, userId);
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.USER_PICTURE_ABBR));
+						swoUser.setPicture(txtUserProfilePicture);
 					}
 				} catch (Exception e) {
 					throw new DocFileException("image upload fail...");
 				}
 			}
 		}
-		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-		
-		SwoUserCond cond = new SwoUserCond();
-		cond.setId(userId);
-		SwoUser swoUser = swoMgr.getUser(userId, cond, IManager.LEVEL_ALL);
-		if (swoUser == null)
-			return null;
 
-		swoUser.setNickName(txtNickName);
-		swoUser.setEmail(txtEmail);
-		swoUser.setPassword(txtPassword);
-		swoUser.setPicture(txtUserProfilePicture);
-		
-		SeraUserDetail seraUserDetail = seraMgr.getSeraUserById(userId, userId);
-		
-		seraUserDetail.setNickName(txtNickName);
-		seraUserDetail.setEmail(txtEmail);
-		
 		if (!CommonUtil.isEmpty(txtBirthYear) && !CommonUtil.isEmpty(txtBirthMonth) && !CommonUtil.isEmpty(txtBirthDay)) {
 			String birthDayString = txtBirthYear + (txtBirthMonth.length() == 1 ? "0" + txtBirthMonth : txtBirthMonth) + (txtBirthDay.length() == 1 ? "0" + txtBirthDay : txtBirthDay) + "0000";
 			Date birthDay = LocalDate.convertStringToDate(birthDayString);
 			seraUserDetail.setBirthday(new LocalDate(birthDay.getTime()));
 		}
-		seraUserDetail.setSex(CommonUtil.isEmpty(selSex) ? 0 : Integer.parseInt(selSex));
-		seraUserDetail.setGoal(txtGoal);
-		seraUserDetail.setInterests(txtInterests);
-		seraUserDetail.setEducations(txtEducations);
-		seraUserDetail.setWorks(txtWorks);
-		
-		swoMgr.setUser(userId, swoUser, IManager.LEVEL_ALL);
-		seraMgr.setSeraUser(userId, seraUserDetail);
+
+		getSwoManager().setUser(userId, swoUser, IManager.LEVEL_ALL);
+		getSeraManager().setSeraUser(userId, seraUserDetail);
 
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(swoUser.getId(), swoUser.getPassword());
         Authentication authentication = authenticationManager.authenticate(authRequest);
@@ -4292,7 +4295,7 @@ public class SeraServiceImpl implements ISeraService {
 						String fileId = file.get("fileId");
 						String fileName = file.get("fileName");
 						//String fileSize = file.get("fileSize");
-						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, txtUserId);
+						txtUserProfilePicture = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(fileId, fileName, IDCreator.createId(SmartServerConstant.USER_PICTURE_ABBR));
 						//SwManagerFactory.getInstance().getDocManager().insertFiles("Pictures", null, imgGroupId, fileId, fileName, "0");
 					}
 				} catch (Exception e) {

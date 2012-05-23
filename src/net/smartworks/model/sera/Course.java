@@ -6,6 +6,7 @@ import net.smartworks.model.community.Group;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
+import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -157,19 +158,19 @@ public class Course extends Group {
 		return false;
 	}
 	public String getOrgPicture() {
-		if(this.getBigPictureName() == null || this.getBigPictureName().equals("")) {
+		if(!CommonUtil.isExistImage(getPath() + this.getBigPictureName())) {
 			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getBigPictureName();
 	}
 	public String getMidPicture() {
-		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
+		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
 			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();
 	}
 	public String getMinPicture() {
-		if(this.getSmallPictureName() == null || this.getSmallPictureName().equals("")) {
+		if(!CommonUtil.isExistImage(getPath() + this.getSmallPictureName())) {
 			return Course.NO_PICTURE_PATH + Course.DEFAULT_COURSE_PICTURE + ".gif";
 		}
 		return getPath() + this.getSmallPictureName();

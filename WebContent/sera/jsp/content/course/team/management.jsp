@@ -28,7 +28,7 @@
 		<div class="panel_section js_team_management_page" courseId="<%=courseId%>">
 			<!-- Header Title -->
 			<div class="header_tit">
-				<div class="tit_dep2 m0">
+				<div class="tit_dep2 team m0">
 					<h2><%=team.getName()%></h2>
 				</div>
 			</div>

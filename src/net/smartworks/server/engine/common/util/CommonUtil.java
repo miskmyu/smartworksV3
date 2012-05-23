@@ -1,15 +1,19 @@
 package net.smartworks.server.engine.common.util;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +22,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.smartworks.model.community.Community;
+import net.smartworks.server.engine.docfile.manager.impl.DocFileManagerImpl;
+import net.smartworks.util.OSValidator;
 
 import org.springframework.util.StringUtils;
 import org.w3c.dom.NamedNodeMap;
@@ -681,5 +689,106 @@ public class CommonUtil {
 		PrintWriter pWriter = new PrintWriter(sWriter, true);
 		t.printStackTrace(pWriter);
 		return sWriter.toString();
+	}
+
+	/**
+	 * 이미지 존재 여부
+	 * @param imagePath
+	 * @return
+	 */
+	public static boolean isExistImage(String imagePath) {
+
+		boolean isExistImage = false;
+		try {
+			URL url = new URL(imagePath);
+			HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+			if(urlConnection.getResponseCode() == 200) {
+				isExistImage = true; 
+			}
+			return isExistImage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return isExistImage;
+		}
+	}
+
+	public static File getFileRepository(String fileDirectory, String companyId, String fileDivision) {
+
+		try {
+			// 파일 홈 디렉토리 선택
+			String storageDir = fileDirectory + File.separator + "SmartFiles";
+			File storage = new File(storageDir);
+	
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+	
+			// 사용자의 회사아이디의 디렉토리 선택
+			storageDir =  storageDir + File.separator + companyId;
+			storage = new File(storageDir);
+	
+			if (!storage.exists())
+				storage.mkdir();
+	
+			// 파일 형태 구분에 따른 디렉토리 선택
+			storageDir = storageDir + File.separator + fileDivision;
+			storage = new File(storageDir);
+	
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+	
+			if(!fileDivision.equals("Temps") && !fileDivision.equals("Profiles") && !fileDivision.equals("WorkImages")) {
+				// 현재 년, 월 정보를 얻는다.
+				Calendar currentDate = Calendar.getInstance();
+				int year = currentDate.get(Calendar.YEAR);
+				int month = currentDate.get(Calendar.MONTH) + 1;
+		
+				// 기본 파일 저장 디렉토리와 현재 년 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "Y" + year;
+				storage = new File(storageDir);
+		
+				// 없다면 생성한다.
+				if (!storage.exists())
+					storage.mkdir();
+	
+				// 기본 파일 저장 디렉토리와 현재 월 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "M" + month;
+		
+				// 만일 디렉토리가 없다면 생성한다.
+				storage = new File(storageDir);
+		
+				if (!storage.exists())
+					storage.mkdir();
+			}
+	
+			return storage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static void removePreviousImage(String previousFileName, String companyId, String fileDivision) {
+		try {
+			String extension = "";
+			if (previousFileName.indexOf(".") != -1) {
+				extension = previousFileName.substring(previousFileName.lastIndexOf(".") + 1);
+				previousFileName = previousFileName.substring(0, previousFileName.lastIndexOf("."));
+			}
+			String imageDirectory = OSValidator.getImageDirectory();
+			File imageFile = getFileRepository(imageDirectory, companyId, fileDivision);
+			String thumbFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_THUMB + "." + extension;
+			String originalFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_ORIGINAL + "." + extension;
+			File thumbFile = new File(thumbFilePath);
+			File originalFile = new File(originalFilePath);
+			if(thumbFile.exists())
+				thumbFile.delete();
+			if(originalFile.exists())
+				originalFile.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 }
