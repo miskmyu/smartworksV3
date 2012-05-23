@@ -1290,4 +1290,9 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.setMentorProfile(requestBody, request);
 	}
 
+	@Override
+	public MailFolder getMailFolderById(String folderId) throws Exception {
+		return mailService.getMailFolderById(folderId);
+	}
+
 }

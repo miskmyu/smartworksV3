@@ -2,16 +2,11 @@ package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.TimeZone;
-
-import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
-
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.MailInstance;
@@ -23,13 +18,13 @@ import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.exception.LoginInvalidException;
 import org.claros.commons.auth.models.AuthProfile;
-import org.claros.commons.configuration.PropertyFile;
-import org.claros.commons.exception.SystemException;
+import org.claros.commons.exception.NoPermissionException;
 import org.claros.commons.mail.comparator.ComparatorDate;
 import org.claros.commons.mail.comparator.ComparatorFrom;
 import org.claros.commons.mail.comparator.ComparatorSize;
@@ -39,14 +34,12 @@ import org.claros.commons.mail.exception.ProtocolNotAvailableException;
 import org.claros.commons.mail.exception.ServerDownException;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
-import org.claros.commons.mail.models.ConnectionProfileList;
 import org.claros.commons.mail.models.Email;
 import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.protocols.Protocol;
 import org.claros.commons.mail.protocols.ProtocolFactory;
 import org.claros.commons.mail.utility.Constants;
-import org.claros.commons.mail.utility.Utility;
 import org.claros.intouch.common.services.BaseService;
 import org.claros.intouch.webmail.controllers.FolderController;
 import org.claros.intouch.webmail.controllers.InboxController;
@@ -63,83 +56,29 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 public class MailServiceImpl extends BaseService implements IMailService {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
 
 		try{
 			MailFolder[] mailFolders = null;
 	
-		    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		    HttpServletRequest request = attr.getRequest();
-	
-			try {
-				HashMap map = ConnectionProfileList.getConList();
-				if (map != null) {
-					Set set = map.keySet();
-					if (set == null) {
-						throw new SystemException();
-					}
-					Object arr[] = set.toArray();
-					if (arr == null || arr.length <= 0) {
-						throw new SystemException();
-					}
-					ConnectionProfile profile = ConnectionProfileList.getProfileByShortName((String)arr[0]);
-					if (profile == null) {
-						throw new SystemException();
-					}
-					String username = SmartUtil.getCurrentUser().getId();
-					String password = SmartUtil.getCurrentUser().getPassword();
-	
-					if (username != null && password != null) {
-						AuthProfile auth = new AuthProfile();
-						auth.setUsername(username);
-						auth.setPassword(password);
-						ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-	
-						try {
-							handler = MailAuth.authenticate(profile, auth, handler);
-							if (handler != null) {
-								
-								request.getSession().setAttribute("handler", handler);
-								request.getSession().setAttribute("auth", auth);
-								request.getSession().setAttribute("profile", profile);
-	
-								// create default mailboxes if not exists
-								try {
-	
-									FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-									FolderController foldCont = factory.getFolderController();
-									foldCont.createDefaultFolders();
-								} catch (Exception e) {
-								}
-	
-							} else {
-							}
-						} catch (LoginInvalidException e) {
-							return null;
-						} catch (ServerDownException e) {
-							return null;
-						}
-					} else {
-					}
-				} else {
-					return null;
-				}
-			} catch (SystemException e) {
-				return null;
-			} catch (Throwable e) {
-				return null;
-			}
-		    	    
-		    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-			ConnectionProfile profile = getConnectionProfile(request);
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+		    if(handler == null) return null;
+		    
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
 			
-			String sFolder = null;
+			String sFolder = folderId;
 			if (sFolder == null || sFolder.equals("")) {
-				sFolder = org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile);
+				sFolder = Constants.FOLDER_INBOX(profile);
 			}
 	
-			FolderControllerFactory foldFact = new FolderControllerFactory(getAuthProfile(request), profile, handler);
+			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
 			FolderController folderCont = foldFact.getFolderController();
 			if (profile.getProtocol().equals(Constants.POP3)) {
 				if (sFolder == null || sFolder.equals("INBOX")) {
@@ -175,23 +114,27 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	
 		    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		    HttpServletRequest request = attr.getRequest();
-	
-			AuthProfile auth = getAuthProfile(request);
+
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+			if(handler == null)  return null;
+			
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			
+			
 			// get folder and set it into sesssion
 			String sFolder = MailFolder.getFolderNameById(folderId);
 	
 			// prepare variables
 			List headers = null;
-			ConnectionMetaHandler handler = getConnectionHandler(request);
-			ConnectionProfile profile = getConnectionProfile(request);
 	
 			FolderControllerFactory foldFact = null;
 			FolderController folderCont = null;
-			String currFolder = org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile);
+			String currFolder = Constants.FOLDER_INBOX(profile);
 	
 			try {
 				if (auth == null) {
-					throw new org.claros.commons.exception.NoPermissionException();
+					throw new NoPermissionException();
 				}
 				// if folder name is empty or it is inbox then do mail filtering. It is done by inbox controller
 				if (sFolder == null || sFolder.equals("") || sFolder.equals(currFolder)) {
@@ -206,7 +149,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 	
 					// get the id(pop3) or the mail folder name (imap)
-					if (profile.getProtocol().equals(org.claros.commons.mail.utility.Constants.POP3)) {
+					if (profile.getProtocol().equals(Constants.POP3)) {
 						currFolder = folderCont.getInboxFolder().getId().toString();
 					} else {
 						currFolder = folderCont.getInboxFolder().getFolderName();
@@ -223,8 +166,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				FolderDbObject myFolder = folderCont.getFolder(currFolder);
 	
 				// time to fetch the headers
-				if (profile.getProtocol().equals(org.claros.commons.mail.utility.Constants.POP3) && myFolder.getFolderType().equals(org.claros.intouch.common.utility.Constants.FOLDER_TYPE_INBOX)) {
-					currFolder = org.claros.commons.mail.utility.Constants.FOLDER_INBOX(null);
+				if (profile.getProtocol().equals(Constants.POP3) && myFolder.getFolderType().equals(org.claros.intouch.common.utility.Constants.FOLDER_TYPE_INBOX)) {
+					currFolder = Constants.FOLDER_INBOX(null);
 				}
 	
 				// get and set sort parameters
@@ -239,27 +182,19 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				ArrayList sortedHeaders = null;
 				boolean supportsServerSorting = false;
 				try {
-					// if the user doesn't want server side sorting for any reason(????) do not to server
-					// side imap sorting.
-					String disableImapSort = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.disable-imap-sort");
-					if (disableImapSort != null && (disableImapSort.toLowerCase().equals("yes") || disableImapSort.toLowerCase().equals("true"))) {
-						sortedHeaders = null;
-						supportsServerSorting = false;
-					} else {
-						// the user agrees on the performance enhancement imap sort offers. So go on.
-						// let's give a try if the user supports it or not.
-						ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
-						Protocol protocol = pFact.getProtocol(currFolder);
-						
-						sortedHeaders = protocol.getHeadersSortedList(mailSort, mailSortDirection);
-						
-						// profile has the boolean variable of it supports server side sorting or not!!!
-						// so set it to the session for future references. 
-						profile = protocol.getProfile();
-						request.getSession().setAttribute("profile", profile);
-						
-						supportsServerSorting = true;
-					}
+					// the user agrees on the performance enhancement imap sort offers. So go on.
+					// let's give a try if the user supports it or not.
+					ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
+					Protocol protocol = pFact.getProtocol(currFolder);
+					
+					sortedHeaders = protocol.getHeadersSortedList(mailSort, mailSortDirection);
+					
+					// profile has the boolean variable of it supports server side sorting or not!!!
+					// so set it to the session for future references. 
+					profile = protocol.getProfile();
+					request.getSession().setAttribute("profile", profile);
+					
+					supportsServerSorting = true;
 				} catch (ProtocolNotAvailableException p) {
 					sortedHeaders = null;
 					supportsServerSorting = false;
@@ -274,8 +209,21 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	
 				
 				// get and set pageNo
-				int pageNo = 1;
-				pageNo = params.getCurrentPage();
+				int pageNo = params.getCurrentPage();
+				switch(params.getPagingAction()){
+				case RequestParams.PAGING_ACTION_NEXT10:
+					pageNo = (((pageNo - 1) / 10) * 10) + 11;
+					break;
+				case RequestParams.PAGING_ACTION_NEXTEND:
+					pageNo = -1;
+					break;
+				case RequestParams.PAGING_ACTION_PREV10:
+					pageNo = ((pageNo - 1) / 10) * 10;
+					break;
+				case RequestParams.PAGING_ACTION_PREVEND:
+					pageNo = 1;
+					break;
+				}
 				
 				boolean isAscending = false;
 				if (mailSortDirection != null && mailSortDirection.equals("asc")) {
@@ -341,7 +289,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 					int pageCount = messageCount/pageSize;
 					if((messageCount%pageSize)>0) pageCount++;
-					if(pageNo > pageCount) pageNo = pageCount;
+					if(pageNo > pageCount || pageNo == -1) pageNo = pageCount;
 					int startIdx = (pageNo-1)*pageSize;
 					if (startIdx < 0) startIdx = 0;
 					int endIdx = startIdx+pageSize;
@@ -407,6 +355,156 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			return null;			
 			// Exception Handling Required			
 		}
+	}
+	
+	private ConnectionMetaHandler getConnectionMetaHandler() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return handler;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return handler;
+	}
+	
+	private ConnectionProfile getConnectionProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return profile;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return profile;
+	}
+	
+	private AuthProfile getAuthProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return auth;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return auth;
 	}
 	
 	private int findHtmlBody(ArrayList parts) {
@@ -555,4 +653,41 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		}
 	}
 
+	@Override
+	public MailFolder getMailFolderById(String folderId) throws Exception {
+		try{
+			MailFolder mailFolder = null;
+	
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+		    if(handler == null) return null;
+		    
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			
+			String sFolder = folderId;
+			if (sFolder == null || sFolder.equals("")) {
+				sFolder = Constants.FOLDER_INBOX(profile);
+			}
+	
+			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
+			FolderController folderCont = foldFact.getFolderController();
+			if (profile.getProtocol().equals(Constants.POP3)) {
+				if (sFolder == null || sFolder.equals("INBOX")) {
+					FolderDbObject foldObj = folderCont.getInboxFolder();
+					sFolder = foldObj.getId().toString();
+				}
+			}
+			
+			FolderDbObjectWrapper fld = folderCont.getFolderById(folderId);
+			mailFolder = new MailFolder(fld.getId().toString(), fld.getFolderName(), fld.getFolderType());
+			mailFolder.setUnreadItemCount(fld.getUnreadItemCount().intValue());
+			mailFolder.setTotalItemCount(fld.getTotalItemCount().intValue());
+			return mailFolder;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
 }
