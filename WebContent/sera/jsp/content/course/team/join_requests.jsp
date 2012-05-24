@@ -25,6 +25,69 @@
 
 <!-- Panel Section -->
 <div class="js_team_members_page" courseId="<%=courseId %>" teamId="<%=teamId %>" >
+	<!-- Panel1 -->
+	<div>
+		<div class="header mt10">
+			<div class="tit">팀초대 목록<span class="t_orange tb js_requester_count" count="<%=memberInforms.getTotalRequesters()%>">(<%=memberInforms.getTotalRequesters() %>)</span></div>
+		</div>
+		<div class="panel_area">
+			<%
+			SeraUserInfo[] memberRequests = memberInforms.getRequesters();
+			if(!SmartUtil.isBlankObject(memberRequests)){
+				for(int i=0; i<memberRequests.length; i++){
+					SeraUserInfo requester = memberRequests[i];
+			%>
+					<!-- 목록1-->
+					<div class="panel_rds_block mb10 js_member_request_item" userId="<%=requester.getId()%>" teamId="<%=teamId%>">
+						<ul>							
+							<li class="pl0pr10">
+								<a href="othersPAGE.sw?userId=<%=requester.getId()%>">
+									<img class="profile_size_m" src="<%=requester.getMidPicture() %>" />
+								</a>
+							</li>
+							<li class="">
+								<a href="othersPAGE.sw?userId=<%=requester.getId()%>">
+									<span><%=CommonUtil.toNotNull(requester.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(requester.getName()) %></span></span>
+								</a>
+							</li>
+							<li class="bo_l">
+								<span><%=CommonUtil.toNotNull(requester.getGoal()) %><br/>
+									<span class="t_id"><%=requester.getId() %></span>
+								</span>
+							</li>
+							<li class="fr bo_l end">
+								<span>
+								<!-- Btn -->
+									<div class="btn_mid_l mr7 js_accept_member_btn">
+										<div class="btn_mid_r"><span class="icon_blu_down mr3"></span>승 인</div>
+									</div>
+								<!-- Btn //-->
+								<!-- Btn -->
+									<div class="btn_mid_l mr7 js_deny_member_btn">
+										<div class="btn_mid_r"><span class="icon_after_check"></span>거 절</div>
+									</div>
+								<!-- Btn //-->
+									<div class="btn_fgreen_l mr7 js_friend_request_btn" userId="<%=requester.getId() %>" <%if(requester.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
+									</div>
+								<!-- Btn -->
+									<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=requester.getId()%>" <%if(!requester.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgray_r"><span class=icon_delete_inbtn></span>친구 끊기</div>
+									</div> 
+								<!-- Btn //-->
+								</span>
+							</li>
+						</ul>
+					</div>
+					<!-- 목록1//-->
+			<%
+				}
+			}
+			%>
+		</div>
+	</div>
+	<!-- Panel1 //-->
+
 	<!-- Panel2 -->
 	<div>
 		<div class="header mt20">
