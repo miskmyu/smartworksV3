@@ -1567,7 +1567,6 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public Course getCourseById(String courseId) throws Exception {
 		try{
-			System.out.println("getCourseById start ::: " + new Date());
 			ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
 			ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 
@@ -1578,7 +1577,6 @@ public class SeraServiceImpl implements ISeraService {
 
 			getStarPointAndScorePointUsers(course, courseId);
 
-			System.out.println("getCourseById end ::: " + new Date());
 			return course;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -3291,8 +3289,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception{
-		try{
-			System.out.println("getSeraInstances start ::: " + new Date());
+		try {
 			InstanceInfo[] boardInfo = null;
 			InstanceInfo[] eventInfo = null;
 			InstanceInfo[] noteInfo = null;
@@ -3378,8 +3375,6 @@ public class SeraServiceImpl implements ISeraService {
 			InstanceInfo[] returnInstanceInfo = new InstanceInfo[returnInstanceInfoList.size()];
 			returnInstanceInfoList.toArray(returnInstanceInfo);
 
-			System.out.println("getSeraInstances end ::: " + new Date());
-
 			return returnInstanceInfo;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -3396,40 +3391,25 @@ public class SeraServiceImpl implements ISeraService {
 
 			int workType = (Integer)requestBody.get("workType");
 			String workInstanceId = (String)requestBody.get("workInstanceId");
-			String workId = null;
+			String domainId = null;
 
 			switch (workType) {
 			case SocialWork.TYPE_BOARD:
-				workId = SmartWork.ID_BOARD_MANAGEMENT;
+				domainId = "frm_notice_SYSTEM";
 				break;
 			case SocialWork.TYPE_EVENT:
-				workId = SmartWork.ID_EVENT_MANAGEMENT;
+				domainId = "frm_event_SYSTEM";
 				break;
 			case Work.TYPE_SERA_NOTE:
-				workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
+				domainId = "sera_note";
 				break;
 			case Work.TYPE_SERA_MISSION_REPORT:
-				workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
+				domainId = "mission_report";
 				break;
 			}
 
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
-
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setPackageId(workId);
-			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
-
-			SwfForm swfForm = null;
-			if(!CommonUtil.isEmpty(swfForms)) {
-				swfForm = swfForms[0];
-			}
-
-			String formId = swfForm.getId();
-			SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setFormId(formId);
-			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
-			String domainId = swdDomain.getObjId();
 
 			getSwdManager().removeRecord(userId, domainId, workInstanceId);
 
@@ -3721,28 +3701,15 @@ public class SeraServiceImpl implements ISeraService {
 			courseTeam.setStartDate(startDate);
 			courseTeam.setEndDate(endDate);
 
-			//멘티일 경우 - 팀생성자 포함
-			//멘토일 경우 - 팀생성자 미포함
-			SwoGroup swoGroup = getSwoManager().getGroup(userId, courseId, IManager.LEVEL_LITE);
-			String mentorId = swoGroup.getGroupLeader();
-
-			boolean isMentor = false;
-			if(!userId.equals(mentorId)) {
-				CourseTeamUser courseTeamLeader = new CourseTeamUser();
-				courseTeamLeader.setUserId(userId);
-				courseTeamLeader.setJoinType(CourseTeamUser.JOINTYPE_TEAMLEADER);
-				courseTeamLeader.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
-				courseTeam.addTeamMember(courseTeamLeader);
-			}
+			CourseTeamUser courseTeamLeader = new CourseTeamUser();
+			courseTeamLeader.setUserId(userId);
+			courseTeamLeader.setJoinType(CourseTeamUser.JOINTYPE_TEAMLEADER);
+			courseTeamLeader.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
+			courseTeam.addTeamMember(courseTeamLeader);
 
 			if(!CommonUtil.isEmpty(users)) {
-				if(!isMentor) {
-					if(users.size()+1 > Integer.parseInt(txtTeamUsers))
-						throw new ArrayIndexOutOfBoundsException();
-				} else {
-					if(users.size() > Integer.parseInt(txtTeamUsers))
-						throw new ArrayIndexOutOfBoundsException();
-				}
+				if(users.size()+1 > Integer.parseInt(txtTeamUsers))
+					throw new ArrayIndexOutOfBoundsException();
 				for(int i=0; i<users.size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					String teamUserId = userMap.get("id");
@@ -6142,8 +6109,12 @@ public class SeraServiceImpl implements ISeraService {
 			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
 			courseTeamCond.setCourseId(courseId);
 
-			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, courseTeamCond, IManager.LEVEL_ALL);
+			CourseTeam[] courseTeams = getSeraManager().getCourseTeams(userId, courseTeamCond, IManager.LEVEL_ALL);
 
+			CourseTeam courseTeam = null;
+			if(!CommonUtil.isEmpty(courseTeams)) {
+				courseTeam = courseTeams[0];
+			}
 			return convertCourseTeamToTeam(userId, courseTeam);
 
 		} catch (Exception e) {

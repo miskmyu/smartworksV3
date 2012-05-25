@@ -27,8 +27,8 @@
 <div class="js_team_members_page" courseId="<%=courseId %>" teamId="<%=teamId %>" >
 	<!-- Panel2 -->
 	<div>
-		<div class="header mt20">
-			<div class="fl tit"><%=team.getName() %><span>팀의 팀원들</span> <span class="t_orange tb js_member_count">(<%=memberInforms.getTotalMembers() %>)</span> </div>
+		<div class="header 2dep mt20">
+			<div class="fl tit"><%=team.getName() %><span>팀의 팀원</span> <span class="t_orange tb js_member_count">(<%=memberInforms.getTotalMembers() %>)</span> </div>
 			<div class="fr">
 				<input class="fl fieldline js_member_search_key" style="width: 150px" type="text" />
 				<button type="button" class="fl ml5 js_member_search_btn">검색</button>
@@ -142,8 +142,8 @@
 	%>
 	<!-- Panel3 -->
 	<div>
-		<div class="header mt20">
-			<div>초청이 가능한 코스멤버들 <span class="t_orange tb js_non_member_count">(<%=memberInforms.getTotalNonMembers() %>)</span> </div>
+		<div class="header 2dep mt20">
+			<div class="tit">초대 가능한 멘티<span class="t_orange tb js_non_member_count">(<%=memberInforms.getTotalNonMembers() %>)</span> </div>
 			<div class="fr">
 				<input class="fl fieldline js_non_member_search_key" style="width: 150px" type="text" />
 				<button type="button" class="fl ml5 js_non_member_search_btn">검색</button>

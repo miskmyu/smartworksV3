@@ -939,7 +939,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		buf.append(" from CourseTeam obj");
 		if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 			for (int i=0; i<courseTeamUsers.length; i++) {
-				buf.append(" left join obj.courseTeamUsers as teamUser ").append(i);
+				buf.append(" left join obj.courseTeamUsers as teamUser").append(i);
 			}
 		}
 		buf.append(" where obj.objId is not null");
