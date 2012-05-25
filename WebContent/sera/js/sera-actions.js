@@ -481,58 +481,31 @@ $(function() {
 	});
 	
 	$('.js_remove_course_btn').live('click', function(e){
-		smartPop.confirm('코스를 삭제하려고 합니다. 정말로 삭제하시겠습니까?', function(){		
-			var removeAll = false;
+		smartPop.confirm('코스를 삭제 하면, 평가자료로 사용될수 있도록 모든 정보가 유지되며 코스만 비활성화 상태로 바뀝니다. 정말로 삭제하시겠습니까?', function(){		
 			var input = $(targetElement(e));
 			var courseId = input.parents('.js_setting_profile_page').attr('courseId');
 			var paramsJson = {};
 			paramsJson['courseId'] = courseId;
-			smartPop.confirm('코스에 관련된 모든 정보를 평가자료로 사용되도록 남겨놓으시겠습니까? (취소를 선택하시면 모든정보가 삭제됩니다)', function(){
-				paramsJson['removeAll'] = false;
-				console.log(JSON.stringify(paramsJson));
-				smartPop.progressCenter();
-				$.ajax({
-					url : "remove_course.sw",
-					contentType : 'application/json',
-					type : 'POST',
-					data : JSON.stringify(paramsJson),
-					success : function(data, status, jqXHR) {
-						smartPop.closeProgress();					
-						smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
-							document.location.href = "myPAGE.sw";									
-						});
-					},
-					error : function(e) {
-						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
-						});
-					}
-					
-				});
-			}, function(){
-				paramsJson['removeAll'] = true;
-				console.log(JSON.stringify(paramsJson));
-				smartPop.progressCenter();
-				$.ajax({
-					url : "remove_course.sw",
-					contentType : 'application/json',
-					type : 'POST',
-					data : JSON.stringify(paramsJson),
-					success : function(data, status, jqXHR) {
-						smartPop.closeProgress();					
-						smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
-							document.location.href = "myPAGE.sw";									
-						});
-					},
-					error : function(e) {
-						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
-						});
-					}
-					
-				});				
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();
+			$.ajax({
+				url : "remove_course.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.closeProgress();					
+					smartPop.showInfo(smartPop.INFO, "코스가 정상적으로 삭제되었습니다!", function(){
+						document.location.href = "myPAGE.sw";									
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, "코스를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다!", function(){
+					});
+				}
+				
 			});
 		});
 		return false;
