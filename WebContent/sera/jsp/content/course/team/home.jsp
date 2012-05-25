@@ -48,10 +48,10 @@
 	<%
 	}else{
 	%>
-		<div class="js_team_home_page" courseId="<%=courseId %>">		
+		<div class="panel_section js_team_home_page" courseId="<%=courseId %>">		
 			
 			<!--  Tab //-->
-		 	<div class="header mb5 js_view_team_home">
+		 	<div class="header mb15 js_view_team_home">
 				<div><a href="" class="js_team_create current" courseId="<%=courseId%>">팀 구성하기</a></div>
 				<div> | <a href="" class="js_team_join_requests" courseId="<%=courseId%>">팀원 초대 목록</a></div>
 			</div>
