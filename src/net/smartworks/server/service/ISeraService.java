@@ -147,6 +147,6 @@ public interface ISeraService {
 	
 	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception;
+	public abstract Team getJoinRequestTeamByCourseId(String courseId) throws Exception;
 	
 }

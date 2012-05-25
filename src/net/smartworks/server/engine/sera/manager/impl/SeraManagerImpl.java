@@ -929,11 +929,15 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	private Query appendQuery(StringBuffer buf, CourseTeamCond cond) throws Exception {
 		String objId = null;
 		String courseId = null;
+		String creationUser = null;
+		String modificationUser = null;
 		CourseTeamUser[] courseTeamUsers = null;
 
 		if (cond != null) {
 			objId = cond.getObjId();
 			courseId = cond.getCourseId();
+			creationUser = cond.getCreationUser();
+			modificationUser = cond.getModificationUser();
 			courseTeamUsers = cond.getCourseTeamUsers();
 		}
 		buf.append(" from CourseTeam obj");
@@ -949,6 +953,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.objId = :objId");
 			if (courseId != null)
 				buf.append(" and obj.courseId = :courseId");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
@@ -976,7 +984,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setString("objId", objId);
 			if (courseId != null)
 				query.setString("courseId", courseId);
-
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];

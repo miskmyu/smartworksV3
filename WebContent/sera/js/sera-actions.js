@@ -2295,8 +2295,8 @@ $(function() {
 		return false;	
 	});
 	
-	var TYPE_MEMBERS = 2;
-	var TYPE_NON_MEMBERS = 3;
+	var TYPE_MEMBERS = 1;
+	var TYPE_NON_MEMBERS = 2;
 	$('.js_member_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');

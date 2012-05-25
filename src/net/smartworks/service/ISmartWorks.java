@@ -582,7 +582,7 @@ public interface ISmartWorks {
 
 	public abstract MailFolder getMailFolderById(String folderId) throws Exception;
 	
-	public abstract Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception;
+	public abstract Team getJoinRequestTeamByCourseId(String courseId) throws Exception;
 
 	public abstract void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

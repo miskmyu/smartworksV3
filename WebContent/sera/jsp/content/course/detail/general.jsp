@@ -87,7 +87,17 @@
 							</div>
 						</dd>
 						<%
-						if(!isMyCourse){
+							boolean isEndCourse = false;
+							int targetPoint = course.getTargetPoint();
+							int achievedPoint = course.getAchievedPoint();
+							String comment = "";
+							if(targetPoint >= achievedPoint) {
+								comment = targetPoint + "일의 코스기간 중 <span class=\"t_redb\">" + achievedPoint + "</span>일째 진행중입니다.";
+							} else if(targetPoint < achievedPoint) {
+								comment = "<span class=\"t_red\">마감된 코스입니다.</span>";
+								isEndCourse = true;
+							}
+							if(!isMyCourse && !isEndCourse){
 						%>
 							<dd class="fr">
 								<div class="btn_large_l js_join_course_request" autoApproval="<%=course.isAutoApproval()%>">
@@ -98,16 +108,6 @@
 						}
 						%>
 						<div class="mission_info">
-						<%
-							int targetPoint = course.getTargetPoint();
-							int achievedPoint = course.getAchievedPoint();
-							String comment = "";
-							if(targetPoint >= achievedPoint) {
-								comment = targetPoint + "일의 코스기간 중 <span class=\"t_redb\">" + achievedPoint + "</span>일째 진행중입니다.";
-							} else if(targetPoint < achievedPoint) {
-								comment = "<span class=\"t_red\">마감된 코스입니다.</span>";
-							}
-						%>
 						<%=comment%>
 							<span class="tr process">(<%=course.getAchievedPoint()%>/<%=course.getTargetPoint()%>)</span>
 						</div>
