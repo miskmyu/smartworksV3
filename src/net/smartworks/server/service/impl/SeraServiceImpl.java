@@ -3330,11 +3330,11 @@ public class SeraServiceImpl implements ISeraService {
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			default:
-				boardInfo = getBoardInstancesByCourseId(null, userId, courseId, missionId, teamId, null, fromDate, maxList);
+/*				boardInfo = getBoardInstancesByCourseId(null, userId, courseId, missionId, teamId, null, fromDate, maxList);
 				eventInfo = getEventInstanceInfosByWorkSpaceId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				noteInfo = getSeraNoteByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
-				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
-				/*User currentUser = SmartUtil.getCurrentUser();
+				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);*/
+				User currentUser = SmartUtil.getCurrentUser();
 				Semaphore semaphore = new Semaphore(4);
 				Thread currentThread = Thread.currentThread();
 				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, fromDate, maxList);
@@ -3352,7 +3352,7 @@ public class SeraServiceImpl implements ISeraService {
 				boardInfo = (BoardInstanceInfo[])boardPP.getArrayResult();
 				eventInfo = (EventInstanceInfo[])eventPP.getArrayResult();
 				noteInfo = (NoteInstanceInfo[])seraNotePP.getArrayResult();
-				reportInfo = (MissionReportInstanceInfo[])missionReportPP.getArrayResult();*/
+				reportInfo = (MissionReportInstanceInfo[])missionReportPP.getArrayResult();
 
 				break;
 			}

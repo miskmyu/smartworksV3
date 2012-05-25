@@ -23,7 +23,6 @@ public class ParallelProcessing extends Thread implements IParallelProcessing{
 	public void run(){
 		try{
 
-			System.out.println("run() :::::::::::::::::::::::::::::: ");
 			doRun();
 			if(semaphore.getSemaphore() == 0){
 				synchronized (currentThread){
