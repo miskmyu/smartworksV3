@@ -82,7 +82,7 @@ function submitForms() {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 						smartPop.closeProgress();
 						smartPop.showInfo(smartPop.INFO, "공지가 성공적으로 만들어졌습니다.", function(){
-							newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();							
+							newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();
 						});
 					},
 					error : function(e) {

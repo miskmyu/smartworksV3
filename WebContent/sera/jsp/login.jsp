@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.CourseAdList"%>
 <%@page import="net.smartworks.model.sera.Constants"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
@@ -48,8 +49,9 @@
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
 	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
-	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
+	CourseAdList courseList = smartWorks.getCourseAds(6);
+	CourseInfo[] favoriteCourses = courseList.getFavoriteCourses();
+	CourseInfo[] recommendedCourses = courseList.getRecommendedCourses();
 	session.setAttribute("currentMenu", "none");
 	session.setAttribute("noUser", true);
 	

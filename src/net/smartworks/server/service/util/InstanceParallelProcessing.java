@@ -15,6 +15,7 @@ public class InstanceParallelProcessing extends ParallelProcessing {
 	private String courseId;
 	private String missionId;
 	private String teamId;
+	private String workSpaceId;
 	private LocalDate fromDate;
 	private int maxList;
 
@@ -26,7 +27,7 @@ public class InstanceParallelProcessing extends ParallelProcessing {
 		this.instanceType = instanceType;
 	}
 
-	public InstanceParallelProcessing(Semaphore semaphore, Thread currentThread, User currentUser, int instanceType, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList){
+	public InstanceParallelProcessing(Semaphore semaphore, Thread currentThread, User currentUser, int instanceType, String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList){
 		super(semaphore, currentThread);
 		this.currentUser = currentUser; 
 		this.instanceType = instanceType;
@@ -34,6 +35,7 @@ public class InstanceParallelProcessing extends ParallelProcessing {
 		this.courseId = courseId;
 		this.missionId = missionId;
 		this.teamId = teamId;
+		this.workSpaceId = workSpaceId;
 		this.fromDate = fromDate;
 		this.maxList = maxList;
 	}
@@ -44,7 +46,7 @@ public class InstanceParallelProcessing extends ParallelProcessing {
 		InstanceInfo[] instances = null;
 		switch(this.instanceType){
 		case Instance.TYPE_BOARD:
-			instances = seraService.getBoardInstancesByCourseId(currentUser, userId, courseId, missionId, teamId, null, fromDate, maxList);
+			instances = seraService.getBoardInstancesByCourseId(currentUser, userId, courseId, missionId, teamId, workSpaceId, fromDate, maxList);
 			break;
 		case Instance.TYPE_EVENT:			
 			instances = seraService.getEventInstanceInfosByWorkSpaceId(currentUser, userId, courseId, missionId, teamId, fromDate, maxList);

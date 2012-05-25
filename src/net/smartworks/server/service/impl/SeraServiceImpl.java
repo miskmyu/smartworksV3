@@ -40,6 +40,7 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.sera.Constants;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
@@ -121,6 +122,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.server.service.util.CourseParallelProcessing;
 import net.smartworks.server.service.util.InstanceParallelProcessing;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
@@ -2357,8 +2359,17 @@ public class SeraServiceImpl implements ISeraService {
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		try{
 			//공지사항(getCommunityRecentBoardInstances) + 이벤트(getEventInstanceInfosByWorkSpaceId)
-			InstanceInfo[] noticeInfo = getBoardInstancesByCourseId(null, null, courseId, null, null, null, fromDate, maxList);
-			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(null, null, courseId, null, null, fromDate, maxList);
+			Semaphore semaphore = new Semaphore(2);
+			Thread currentThread = Thread.currentThread();
+			InstanceParallelProcessing npp = new InstanceParallelProcessing(semaphore, currentThread, SmartUtil.getCurrentUser(), Instance.TYPE_BOARD, null, courseId, null, null, null, fromDate, maxList);
+			InstanceParallelProcessing epp = new InstanceParallelProcessing(semaphore, currentThread, SmartUtil.getCurrentUser(), Instance.TYPE_EVENT, null, courseId, null, null, null, fromDate, maxList);
+			npp.start();
+			epp.start();
+			synchronized (currentThread) {
+				currentThread.wait();
+			}
+			InstanceInfo[] noticeInfo = (BoardInstanceInfo[])npp.getArrayResult();
+			InstanceInfo[] eventInfo = (EventInstanceInfo[])epp.getArrayResult();
 			
 			Map<Long, InstanceInfo> resultMap = new HashMap<Long, InstanceInfo>();
 			if (noticeInfo != null) {
@@ -3337,10 +3348,10 @@ public class SeraServiceImpl implements ISeraService {
 				User currentUser = SmartUtil.getCurrentUser();
 				Semaphore semaphore = new Semaphore(4);
 				Thread currentThread = Thread.currentThread();
-				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing eventPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_EVENT, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing seraNotePP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_NOTE, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing missionReportPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_MISSION_REPORT, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, null, fromDate, maxList);
+				InstanceParallelProcessing eventPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_EVENT, userId, courseId, missionId, teamId, null, fromDate, maxList);
+				InstanceParallelProcessing seraNotePP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_NOTE, userId, courseId, missionId, teamId, null, fromDate, maxList);
+				InstanceParallelProcessing missionReportPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_MISSION_REPORT, userId, courseId, missionId, teamId, null, fromDate, maxList);
 				boardPP.start();
 				eventPP.start();
 				seraNotePP.start();
@@ -4083,6 +4094,7 @@ public class SeraServiceImpl implements ISeraService {
 		}		
 	}
 
+	@Override
 	public CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception {
 		
 		CourseDetailCond courseDetailCond = new CourseDetailCond();
@@ -4149,10 +4161,8 @@ public class SeraServiceImpl implements ISeraService {
 		
 		return result;
 	}
+
 	@Override
-	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
-		return getFavoriteCourses(null, maxList);
-	}
 	public CourseInfo[] getRecommendedCourses(String fromCourseId, int maxList) throws Exception {
 
 		//추천 받은 코스중에 날짜순으로 maxList 만큼
@@ -4214,10 +4224,6 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	    //CourseList courses = getCoursesById("ysjung@maninsoft.co.kr", 6);
 	    return result;
-	}
-	@Override
-	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
-		return getRecommendedCourses(null, maxList);
 	}
 	
 	public String leaveSeraUser(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -6441,8 +6447,17 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public SeraBoardList getSeraBoards(int maxList) throws Exception {
 		SeraBoardList seraBoards = new SeraBoardList();
-		seraBoards.setSeraNews(getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_NEWS, null, maxList));
-		seraBoards.setSeraTrends(getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList));
+		Semaphore sema = new Semaphore(2);
+		Thread currentThread = Thread.currentThread();
+		InstanceParallelProcessing snpp = new InstanceParallelProcessing(sema, currentThread, SmartUtil.getCurrentUser(), Instance.TYPE_BOARD, null, null, null, null, Constants.SERA_WID_SERA_NEWS, null, maxList);
+		InstanceParallelProcessing stpp = new InstanceParallelProcessing(sema, currentThread, SmartUtil.getCurrentUser(), Instance.TYPE_BOARD, null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList);
+		snpp.start();
+		stpp.start();
+		synchronized (currentThread) {
+			currentThread.wait();
+		}
+		seraBoards.setSeraNews((BoardInstanceInfo[])snpp.getArrayResult());
+		seraBoards.setSeraTrends((BoardInstanceInfo[])stpp.getArrayResult());
 		return seraBoards;
 	}
 	@Override
@@ -6680,6 +6695,22 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
 		return getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList);
+	}
+	@Override
+	public CourseAdList getCourseAds(int maxList) throws Exception {
+		Semaphore sema = new Semaphore(2);
+		Thread currentThread = Thread.currentThread();
+		CourseParallelProcessing fcpp = new CourseParallelProcessing(sema, currentThread, CourseAdList.class, CourseAdList.TYPE_FAVORITE, null, maxList);
+		CourseParallelProcessing rcpp = new CourseParallelProcessing(sema, currentThread, CourseAdList.class, CourseAdList.TYPE_RECOMMENDED, null, maxList);
+		fcpp.start();
+		rcpp.start();
+		synchronized (currentThread) {
+			currentThread.wait();
+		}
+		CourseAdList courseList = new CourseAdList();
+		courseList.setFavoriteCourses((CourseInfo[])fcpp.getArrayResult());
+		courseList.setRecommendedCourses((CourseInfo[])rcpp.getArrayResult());
+		return courseList;
 	}
 
 }

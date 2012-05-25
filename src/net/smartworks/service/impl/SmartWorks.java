@@ -44,6 +44,7 @@ import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
@@ -1078,16 +1079,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public CourseInfo[] getFavoriteCourses(int maxList) throws Exception {
-		return seraService.getFavoriteCourses(maxList);
-	}
-
-	@Override
-	public CourseInfo[] getRecommendedCourses(int maxList) throws Exception {
-		return seraService.getRecommendedCourses(maxList);
-	}
-
-	@Override
 	public void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		seraService.replyFriendRequest(requestBody, request);
 	}
@@ -1309,5 +1300,10 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
 		return seraService.getSeraTrends(maxList);
+	}
+
+	@Override
+	public CourseAdList getCourseAds(int maxList) throws Exception {
+		return seraService.getCourseAds(maxList);
 	}
 }

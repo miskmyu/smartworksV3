@@ -11,6 +11,7 @@ import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
@@ -60,11 +61,9 @@ public interface ISeraService {
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
+	public abstract CourseAdList getCourseAds(int maxList) throws Exception;
+
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
-
-	public abstract CourseInfo[] getFavoriteCourses(int maxList) throws Exception;
-
-	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception;
 
@@ -164,4 +163,8 @@ public interface ISeraService {
 
 	public abstract MissionReportInstanceInfo[] getSeraReportByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
+	public abstract CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getRecommendedCourses(String fromCourseId, int maxList) throws Exception;
+	
 }
