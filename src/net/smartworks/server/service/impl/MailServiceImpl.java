@@ -11,6 +11,8 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.info.BoardInstanceInfo;
+import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MailInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
@@ -62,43 +64,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
-
-//		class Semaphore{
-//			private int semaphoreCount = 0;
-//			public synchronized int getSemaphore() throws InterruptedException{
-//				if(this.semaphoreCount<=0) return 0;
-//				this.semaphoreCount--;
-//				return this.semaphoreCount;
-//			}
-//			public Semaphore(int semaphoreCount){
-//				this.semaphoreCount = semaphoreCount;
-//			}
-//		}
-//		
-//		Semaphore semaphore = new Semaphore(4);
-//		System.out.println("semaphore count = " + semaphore.getSemaphore());
-//		Thread pp1 = new Thread(new Runnable(){
-//			public void run(){
-//				System.out.println("sleep for 5 sec");
-//				try{
-//					Thread.sleep(5000);
-//				}catch(Exception e){
-//					System.out.println("5 sec passed!!");
-//				}
-//				this.notify();
-//				System.out.println("notified!!");
-//			}
-//		});
-//		pp1.start();
-//		
-//		System.out.println("wait for notify!!");
-//		try{
-//			this.wait();
-//		}catch(Exception e){
-//			System.out.println("awaked!!");
-//		}
-//		System.out.println("semaphore count = " + semaphore.getSemaphore());
-
+		
 		try{
 			MailFolder[] mailFolders = null;
 	

@@ -41,7 +41,7 @@ public class SwdDomain extends ClassObject {
 
 	public static final String A_FIELDS = "fields";
 	public static final String A_FIELD = "field";
-	
+
 	private String formId;
 	private int formVersion;
 	private String formName;

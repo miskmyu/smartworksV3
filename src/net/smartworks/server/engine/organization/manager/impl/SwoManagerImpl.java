@@ -2621,9 +2621,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoGroup.A_STATUS, obj.getStatus());
 				query.setString(SwoGroup.A_PICTUTRE, obj.getPicture());
 				query.setString(SwoGroup.A_DESCRIPTION, obj.getDescription());
-				query.setTimestamp(SwoGroup.A_CREATIONDATE, obj.getCreationDate());
 				query.setString(SwoGroup.A_CREATIONUSER, obj.getCreationUser());
-				query.setTimestamp(SwoGroup.A_MODIFICATIONUSER, obj.getModificationDate());
+				query.setTimestamp(SwoGroup.A_CREATIONDATE, obj.getCreationDate());
+				query.setString(SwoGroup.A_MODIFICATIONUSER, obj.getModificationUser());
 				query.setTimestamp(SwoGroup.A_MODIFICATIONDATE, obj.getModificationDate());
 				query.setString(SwoGroup.A_ID, obj.getId());
 				query.executeUpdate();
