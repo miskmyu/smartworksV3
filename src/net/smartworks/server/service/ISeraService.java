@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
+import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
@@ -21,6 +22,8 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
+import net.smartworks.model.sera.info.MissionReportInstanceInfo;
+import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.sera.info.TeamInfo;
@@ -151,5 +154,13 @@ public interface ISeraService {
 	public abstract Team getJoinRequestTeamByCourseId(String courseId) throws Exception;
 	
 	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
-	
+
+	public abstract BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
 }

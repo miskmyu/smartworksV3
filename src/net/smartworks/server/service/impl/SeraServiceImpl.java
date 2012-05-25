@@ -121,9 +121,11 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.server.service.util.InstanceParallelProcessing;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.Semaphore;
 import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
@@ -2044,7 +2046,8 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	private BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception {
+	@Override
+	public BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
@@ -2185,7 +2188,8 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required
 		}
 	}
-	private EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	@Override
+	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_EVENT_MANAGEMENT;
@@ -2971,7 +2975,8 @@ public class SeraServiceImpl implements ISeraService {
 
 		return recordId;
 	}
-	private NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	@Override
+	public NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
@@ -3129,7 +3134,8 @@ public class SeraServiceImpl implements ISeraService {
 			// Exception Handling Required			
 		}
 	}
-	private MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	@Override
+	public MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
@@ -3320,6 +3326,25 @@ public class SeraServiceImpl implements ISeraService {
 				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
 				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
 				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
+/*				Semaphore semaphore = new Semaphore(4);
+				Thread currentThread = Thread.currentThread();
+				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing eventPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_EVENT, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing seraNotePP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_SERA_NOTE, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing missionReportPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_SERA_MISSION_REPORT, userId, courseId, missionId, teamId, fromDate, maxList);
+				boardPP.start();
+				eventPP.start();
+				seraNotePP.start();
+				missionReportPP.start();
+
+				synchronized (currentThread) {
+					currentThread.wait();
+				}
+				boardInfo = (InstanceInfo[])boardPP.getArrayResult();
+				eventInfo = (InstanceInfo[])eventPP.getArrayResult();
+				noteInfo = (InstanceInfo[])seraNotePP.getArrayResult();
+				reportInfo = (InstanceInfo[])missionReportPP.getArrayResult();*/
+
 				break;
 			}
 
@@ -6091,6 +6116,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
 			CourseTeamUser courseTeamUser = new CourseTeamUser();
 			courseTeamUser.setUserId(userId);
+			courseTeamUser.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 			courseTeamUsers[0] = courseTeamUser;
 			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
 			courseTeamCond.setCourseId(courseId);
@@ -6468,12 +6494,46 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public Team getJoinRequestTeamByCourseId(String courseId) throws Exception {
-		return SeraTest.getTeam();
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			Team team = null;
+
+			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
+			CourseTeamUser courseTeamUser = new CourseTeamUser();
+			courseTeamUser.setUserId(userId);
+			courseTeamUser.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+			courseTeamUsers[0] = courseTeamUser;
+
+			CourseTeamCond courseTeamCond = new CourseTeamCond();
+			courseTeamCond.setCourseId(courseId);
+			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
+
+			CourseTeam[] courseTeams = getSeraManager().getCourseTeams(userId, courseTeamCond, IManager.LEVEL_ALL);
+			CourseTeam courseTeam = null;
+			if(!CommonUtil.isEmpty(courseTeams)) {
+				courseTeam = courseTeams[0];
+			}
+
+			team = convertCourseTeamToTeam(userId, courseTeam);
+
+			return team;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
 	public void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+
+			System.out.println("replyTeamJoinRequest");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
 	}
 	@Override
 	public void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -6507,13 +6567,21 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			System.out.println("leaveTeam");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	@Override
 	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			System.out.println("destroyMembership");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	@Override
 	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
