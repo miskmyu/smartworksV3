@@ -26,9 +26,9 @@
 <div class="js_join_requests_page" courseId="<%=courseId %>">
 	<!-- Panel1 -->
 	<div>
-		<div class="header mt10">
-			<div class="tit">팀 가입요청 목록<span class="t_orange tb js_join_request_count" count="<%=totalRequests%>">(<%=totalRequests %>)</span></div>
-		</div>
+		<%-- <div class="header mt10">
+			<div class="tit">팀원 초대 목록<span class="t_orange tb js_join_request_count" count="<%=totalRequests%>">(<%=totalRequests %>)</span></div>
+		</div> --%>
 		<div class="panel_area">
 			<%
 			if(!SmartUtil.isBlankObject(requestTeams)){
