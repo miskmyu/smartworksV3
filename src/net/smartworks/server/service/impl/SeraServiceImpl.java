@@ -121,12 +121,9 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
-import net.smartworks.server.service.util.InstanceParallelProcessing;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.Semaphore;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6116,7 +6113,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
 			CourseTeamUser courseTeamUser = new CourseTeamUser();
 			courseTeamUser.setUserId(userId);
-			courseTeamUser.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
 			courseTeamUsers[0] = courseTeamUser;
 			courseTeamCond.setCourseTeamUsers(courseTeamUsers);
 			courseTeamCond.setCourseId(courseId);
@@ -6503,7 +6500,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeamUser[] courseTeamUsers = new CourseTeamUser[1];
 			CourseTeamUser courseTeamUser = new CourseTeamUser();
 			courseTeamUser.setUserId(userId);
-			courseTeamUser.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+			courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
 			courseTeamUsers[0] = courseTeamUser;
 
 			CourseTeamCond courseTeamCond = new CourseTeamCond();
@@ -6514,9 +6511,19 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeam courseTeam = null;
 			if(!CommonUtil.isEmpty(courseTeams)) {
 				courseTeam = courseTeams[0];
+				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
+				CourseTeamUser[] resultTeamUsers = courseTeam.getCourseTeamUsers();
+				if(!CommonUtil.isEmpty(teamUsers)) {
+					for(CourseTeamUser teamUser : teamUsers) {
+						String joinStatus = teamUser.getJoinStatus();
+						if(joinStatus.equalsIgnoreCase(CourseTeamUser.JOINSTATUS_READY)) {
+							resultTeamUsers = CourseTeamUser.remove(resultTeamUsers, teamUser);
+						}
+					}
+					courseTeam.setCourseTeamUsers(resultTeamUsers);
+				}
+				team = convertCourseTeamToTeam(userId, courseTeam);
 			}
-
-			team = convertCourseTeamToTeam(userId, courseTeam);
 
 			return team;
 		} catch (Exception e) {
@@ -6527,8 +6534,32 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String teamId = (String)requestBody.get("teamId");
+			boolean accepted = (Boolean)requestBody.get("accepted");
 
-			System.out.println("replyTeamJoinRequest");
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
+
+			if(courseTeam != null) {
+				CourseTeamUser[] courseTeamUsers =  courseTeam.getCourseTeamUsers();
+				if(!CommonUtil.isEmpty(courseTeamUsers)) {
+					for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+						String courseTeamUserId = courseTeamUser.getUserId();
+						String joinStatus = courseTeamUser.getJoinStatus();
+						if(joinStatus.equalsIgnoreCase(CourseTeamUser.JOINSTATUS_READY) && userId.equals(courseTeamUserId)) {
+							if(accepted) {
+								courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_COMPLETE);
+							} else {
+								courseTeamUsers = CourseTeamUser.remove(courseTeamUsers, courseTeamUser);
+							}
+							courseTeam.setCourseTeamUsers(courseTeamUsers);
+							break;
+						}
+					}
+					getSeraManager().setCourseTeam(userId, courseTeam);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -6552,8 +6583,8 @@ public class SeraServiceImpl implements ISeraService {
 					CourseTeamUser courseTeamUser = new CourseTeamUser();
 					courseTeamUser.setObjId(teamId);
 					courseTeamUser.setUserId(userId);
-					courseTeamUser.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
-					courseTeamUser.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+					courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_INVITE);
+					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
 					courseTeamUsers = CourseTeamUser.add(courseTeamUsers, courseTeamUser);
 					courseTeam.setCourseTeamUsers(courseTeamUsers);
 					getSeraManager().setCourseTeam(user.getId(), courseTeam);
@@ -6568,7 +6599,28 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
-			System.out.println("leaveTeam");
+
+			User user = SmartUtil.getCurrentUser();
+
+			String teamId = (String)requestBody.get("teamId");
+			String userId = user.getId();
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(userId, teamId, IManager.LEVEL_ALL);
+
+			if(courseTeam != null) {
+				CourseTeamUser[] courseTeamUsers = courseTeam.getCourseTeamUsers();
+				if(courseTeamUsers != null) {
+					for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+						String courseTeamUserId = courseTeamUser.getUserId();
+						if(userId.equals(courseTeamUserId)) {
+							courseTeamUsers = CourseTeamUser.remove(courseTeamUsers, courseTeamUser);
+							courseTeam.setCourseTeamUsers(courseTeamUsers);
+							getSeraManager().setCourseTeam(userId, courseTeam);
+						}
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -6577,7 +6629,28 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
-			System.out.println("destroyMembership");
+
+			User user = SmartUtil.getCurrentUser();
+
+			String teamId = (String)requestBody.get("teamId");
+			String userId = (String)requestBody.get("userId");
+
+			CourseTeam courseTeam = getSeraManager().getCourseTeam(user.getId(), teamId, IManager.LEVEL_ALL);
+
+			if(courseTeam != null) {
+				CourseTeamUser[] courseTeamUsers = courseTeam.getCourseTeamUsers();
+				if(courseTeamUsers != null) {
+					for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+						String courseTeamUserId = courseTeamUser.getUserId();
+						if(userId.equals(courseTeamUserId)) {
+							courseTeamUsers = CourseTeamUser.remove(courseTeamUsers, courseTeamUser);
+							courseTeam.setCourseTeamUsers(courseTeamUsers);
+							getSeraManager().setCourseTeam(user.getId(), courseTeam);
+						}
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

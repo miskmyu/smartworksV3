@@ -19,18 +19,19 @@
 	String courseId = request.getParameter("courseId");
 
 	Team requestTeam = smartWorks.getJoinRequestTeamByCourseId(courseId);
+	int totalRequests = SmartUtil.isBlankObject(requestTeam) ? 0 : 1;
 %>
 
 <!-- Panel Section -->
 <div class="js_join_requests_page" courseId="<%=courseId %>">
 	<!-- Panel1 -->
 	<div>
-		<%-- <div class="header mt10">
-			<div class="tit">팀원 초대 목록<span class="t_orange tb js_join_request_count" count="<%=totalRequests%>">(<%=totalRequests %>)</span></div>
-		</div> --%>
+		<div class="header mt10">
+			<div class="tit">팀 가입요청 목록<span class="t_orange tb js_join_request_count" count="<%=totalRequests%>">(<%=totalRequests %>)</span></div>
+		</div>
 		<div class="panel_area">
 			<%
-			if(!SmartUtil.isBlankObject(requestTeam)){
+				if(!SmartUtil.isBlankObject(requestTeam)){
 					int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
 			%>
 					<!-- 목록1-->
@@ -73,7 +74,8 @@
 	<!-- Panel1 //-->
 
 	<%
-		int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
+		if(totalRequests>0){
+			int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
 	%>
 			<!-- Panel2 -->
 			<div>
@@ -132,5 +134,8 @@
 				</div>
 			</div>
 			<!-- Panel2 //-->
+	<%	
+		}
+	%>
 </div>
 <!-- Panel Section //-->
