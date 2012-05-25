@@ -234,11 +234,11 @@ if(!SmartUtil.isBlankObject(sortedField)){
 			}
 			if (!isLast10Pages) {
 			%>
-				<a class="next js_select_paging" title="<fmt:message key='common.title.next_10_pages'/> ">
+				<a href="" class="next js_select_paging" title="<fmt:message key='common.title.next_10_pages'/> ">
 					<span class="spr"></span>
 					<input name="hdnNext10" type="hidden" value="false"/>
 				</a>
-				<a class="next_end js_select_paging" title="<fmt:message key='common.title.last_page'/> ">
+				<a href="" class="next_end js_select_paging" title="<fmt:message key='common.title.last_page'/> ">
 					<span class="spr"><input name="hdnNextEnd" type="hidden" value="false"/></span> 
 				</a>
 		<%

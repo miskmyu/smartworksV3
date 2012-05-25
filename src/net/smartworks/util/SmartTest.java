@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.claros.commons.mail.models.ConnectionProfile;
+import org.cometd.bayeux.client.ClientSession;
+import org.cometd.client.BayeuxClient;
+import org.cometd.client.transport.ClientTransport;
+import org.cometd.client.transport.LongPollingTransport;
+import org.eclipse.jetty.client.HttpClient;
+
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHour;
@@ -1493,4 +1500,20 @@ public class SmartTest {
 		AsyncMessageInstanceInfo message1 = new AsyncMessageInstanceInfo("msg1", SmartTest.getUserInfo1(), new LocalDate(), "안녕하세요? 잘지내십니까??");
 		return new AsyncMessageInstanceInfo[] {message1};
 	}
+	
+	public static ConnectionProfile[] getMailConnectionProfiles() throws Exception{
+		ConnectionProfile profile = new ConnectionProfile();
+		profile.setShortName("paran openmail");
+		profile.setFetchServer("pop3.openmail.paran.com");
+		profile.setFetchPort("110");
+		profile.setProtocol("pop3");
+		profile.setFetchSSL("false");
+		profile.setSmtpServer("smtp.openmail.paran.com");
+		profile.setSmtpPort("25");
+		profile.setSmtpAuthenticated("true");
+		profile.setSmtpSSL("false");
+		profile.setFolderNameSpace("");
+		
+		return new ConnectionProfile[]{profile};
+	}	
 }

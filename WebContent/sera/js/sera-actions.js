@@ -100,7 +100,7 @@ $(function() {
 		var url ="";
 		var teamId = "";
 		if(input.hasClass('js_course_team_activity')){
-			url = "courseTeamActivity.sw";		
+			url = "courseTeamHome.sw";		
 		}else if(input.hasClass('js_course_team_management')){
 			url = "courseTeamManagement.sw";
 			teamId = input.attr('teamId');
@@ -332,10 +332,16 @@ $(function() {
 		var courseId = input.attr('courseId');
 		var teamId = input.attr('teamId');
 		var url = "";
-		if(input.hasClass('js_team_modify'))
+		if(input.hasClass('js_team_create'))
+			url = "courseTeamCreate.sw";
+		else if(input.hasClass('js_team_modify'))
 			url = "courseTeamModify.sw";
+		else if(input.hasClass('js_team_activity'))
+			url = "courseTeamActivity.sw";
 		else if(input.hasClass('js_team_members'))
 			url = "courseTeamMembers.sw";
+		else if(input.hasClass('js_team_join_requests'))
+			url = "courseTeamJoinRequests.sw";
 		else
 			return false;
 		smartPop.progressCenter();				
@@ -347,6 +353,43 @@ $(function() {
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_team_management_target').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+
+	$('.js_view_team_home').live('click', function(e){
+		var input = $(targetElement(e));
+		input.parent().siblings().find('a').removeClass('current');
+		input.addClass('current');
+		var courseId = input.attr('courseId');
+		var teamId = input.attr('teamId');
+		var url = "";
+		if(input.hasClass('js_team_create'))
+			url = "courseTeamCreate.sw";
+		else if(input.hasClass('js_team_activity'))
+			url = "courseTeamActivity.sw";
+		else if(input.hasClass('js_team_modify'))
+			url = "courseTeamModify.sw";
+		else if(input.hasClass('js_team_members'))
+			url = "courseTeamMembers.sw";
+		else if(input.hasClass('js_team_join_requests'))
+			url = "courseTeamJoinRequests.sw";
+		else
+			return false;
+		smartPop.progressCenter();				
+		$.ajax({
+			url : url,
+			data : {
+				courseId : courseId,
+				teamId : teamId
+			},
+			success : function(data, status, jqXHR) {
+				$('.js_team_home_target').html(data);
 				smartPop.closeProgress();
 			},
 			error : function(){
@@ -1300,6 +1343,159 @@ $(function() {
 		return false;
 	});
 
+	$('.js_accept_join_team_btn').live('click', function(e){
+		var input = $(targetElement(e)).parents('.js_accept_join_team_btn');
+		var joinRequest = input.parents('.js_join_request_item');
+		var teamId = joinRequest.attr('teamId');
+		var paramsJson = {};
+		paramsJson['teamId'] = teamId;
+		paramsJson['accepted'] = true;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'reply_team_join_request.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, "팀가입 승인이 정상적으로 이루어 졌습니다.", function(){
+//					input.parents('.js_course_home_page').find('.js_');
+					smartPop.closeProgress();					
+				});
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "팀가입 승인에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});	
+			}			
+		});
+		return false;
+	});
+
+	$('.js_deny_join_team_btn').live('click', function(e){
+		var input = $(targetElement(e)).parents('.js_deny_join_team_btn');
+		var joinRequest = input.parents('.js_join_request_item');
+		var teamId = joinRequest.attr('teamId');
+		var paramsJson = {};
+		paramsJson['teamId'] = teamId;
+		paramsJson['accepted'] = false;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'reply_team_join_request.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, "팀 가입 거절이 정상적으로 이루어 졌습니다.", function(){
+//					document.location.href = "socialFriend.sw";
+					smartPop.closeProgress();					
+				});
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "팀가입 거절에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_leave_team_btn').live('click', function(e){
+		var input = $(targetElement(e)).parents('.js_leave_team_btn');
+		var member = input.parents('.js_member_item');
+		var teamId = member.attr('teamId');
+		var paramsJson = {};
+		paramsJson['teamId'] = teamId;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'leave_team.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, "팀 탈퇴가 정상적으로 이루어 졌습니다.", function(){
+//					document.location.href = "socialFriend.sw";
+					smartPop.closeProgress();					
+				});
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "팀 탈퇴에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_join_team_request_btn').live('click', function(e){
+		var input = $(targetElement(e)).parents('.js_join_team_request_btn');
+		var nonMember = input.parents('.js_non_member_item');
+		var teamId = input.parents('.js_team_members_page').attr('teamId');
+		var userId = nonMember.attr('userId');
+		var paramsJson = {};
+		paramsJson['teamId'] = teamId;
+		paramsJson['userId'] = userId;
+		console.log(JSON.stringify(paramsJson));
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'team_join_request.sw',
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, "팀원초대가 정상적으로 이루어 졌습니다.", function(){
+//					document.location.href = "socialFriend.sw";
+					smartPop.closeProgress();					
+				});
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, "팀원초대에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+				});				
+			}
+		});
+		return false;
+	});
+
+	$('.js_destroy_membership_btn').live('click', function(e){
+		smartPop.confirm('팀원삭제를 하려고 합니다. 정말로 팀원삭제를 하시겠습니까??', function(){
+			var input = $(targetElement(e)).parents('.js_destroy_membership_btn');
+			var member = input.parents('.js_member_item');
+			var teamId = input.parents('.js_team_members_page').attr('teamId');
+			var userId = member.attr('userId');
+			var paramsJson = {};
+			paramsJson['teamId'] = teamId;
+			paramsJson['userId'] = userId;
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'destroy_membership.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, "팀원삭제가 정상적으로 이루어 졌습니다.", function(){
+//						document.location.href = "socialFriend.sw";
+						smartPop.closeProgress();
+					});
+				},
+				error : function(e) {
+					smartPop.closeProgress();
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, "팀원삭제에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
+					});				
+				}
+			});
+		});
+		return false;
+	});
+
 	$('.js_destroy_friendship_btn').live('click', function(e){
 		smartPop.confirm('친구끊기를 하려고 합니다. 정말로 친구끊기를 하시겠습니까??', function(){
 			var input = $(targetElement(e)).parents('.js_destroy_friendship_btn');
@@ -1373,179 +1569,8 @@ $(function() {
 		return false;
 	});
 
-	$('.js_accept_member_btn').live('click', function(e){
-		var input = $(targetElement(e)).parents('.js_accept_member_btn');
-		var memberRequest = input.parents('.js_member_request_item');
-		var requesterCount = input.parents('.js_team_members_page').find('.js_requester_count');
-		var teamId = memberRequest.attr('teamId');
-		var userId = memberRequest.attr('userId');
-		var paramsJson = {};
-		paramsJson['teamId'] = teamId;
-		paramsJson['userId'] = userId;
-		paramsJson['accepted'] = true;
-		console.log(JSON.stringify(paramsJson));
-		smartPop.progressCenter();				
-		$.ajax({
-			url : 'reply_team_member_request.sw',
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				var courseId = input.parents('.js_team_members_page').attr('courseId');
-				$.ajax({
-					url : "courseTeamMembers.sw",
-					data : {
-						courseId : courseId,
-						teamId : teamId
-					},
-					success : function(data, status, jqXHR) {
-						$('.js_team_management_target').html(data);
-						smartPop.closeProgress();
-					},
-					error : function(){
-						smartPop.closeProgress();
-					}
-				});
-			},
-			error : function(e) {
-				smartPop.closeProgress();
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, "팀원요청 수락에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
-				});	
-			}			
-		});
-		return false;
-	});
-
-	$('.js_deny_member_btn').live('click', function(e){
-		var input = $(targetElement(e)).parents('.js_deny_member_btn');
-		var memberRequest = input.parents('.js_member_request_item');
-		var requesterCount = input.parents('.js_team_members_page').find('.js_requester_count');
-		var teamId = memberRequest.attr('teamId');
-		var userId = memberRequest.attr('userId');
-		var paramsJson = {};
-		paramsJson['teamId'] = teamId;
-		paramsJson['userId'] = userId;
-		paramsJson['accepted'] = false;
-		console.log(JSON.stringify(paramsJson));
-		smartPop.progressCenter();				
-		$.ajax({
-			url : 'reply_team_member_request.sw',
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				var courseId = input.parents('.js_team_members_page').attr('courseId');
-				$.ajax({
-					url : "courseTeamMembers.sw",
-					data : {
-						courseId : courseId,
-						teamId : teamId
-					},
-					success : function(data, status, jqXHR) {
-						$('.js_team_management_target').html(data);
-						smartPop.closeProgress();
-					},
-					error : function(){
-						smartPop.closeProgress();
-					}
-				});
-			},
-			error : function(e) {
-				smartPop.closeProgress();
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, "팀원요청 거절에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
-				});				
-			}
-		});
-		return false;
-	});
-
-	$('.js_destroy_membership_btn').live('click', function(e){
-		smartPop.confirm('팀원삭제를 하려고 합니다. 정말로 팀원삭제를 하시겠습니까??', function(){
-			var input = $(targetElement(e)).parents('.js_destroy_membership_btn');
-			var member = input.parents('.js_member_item');
-			var memberCount = input.parents('.js_team_members_page').find('.js_member_count');
-			var teamId = member.attr('teamId');
-			var userId = member.attr('userId');
-			var paramsJson = {};
-			paramsJson['teamId'] = teamId;
-			paramsJson['userId'] = userId;
-			console.log(JSON.stringify(paramsJson));
-			smartPop.progressCenter();				
-			$.ajax({
-				url : 'destroy_team_membership.sw',
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					var courseId = input.parents('.js_team_members_page').attr('courseId');
-					$.ajax({
-						url : "courseTeamMembers.sw",
-						data : {
-							courseId : courseId,
-							teamId : teamId
-						},
-						success : function(data, status, jqXHR) {
-							$('.js_team_management_target').html(data);
-							smartPop.closeProgress();
-						},
-						error : function(){
-							smartPop.closeProgress();
-						}
-					});
-				},
-				error : function(e) {
-					smartPop.closeProgress();
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, "팀원삭제에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
-					});				
-				}
-			});
-		});
-		return false;
-	});
-
-	$('.js_member_request_btn').live('click', function(e){
-		var input = $(targetElement(e)).parents('.js_member_request_btn');
-		var teamId = input.attr('teamId');
-		var userId = input.attr('userId');
-		var paramsJson = {};
-		paramsJson['teamId'] = teamId;
-		paramsJson['userId'] = userId;
-		console.log(JSON.stringify(paramsJson));
-		smartPop.progressCenter();
-		$.ajax({
-			url : 'team_member_request.sw',
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFO, "팀원요청이 성공적으로 이루어 졌습니다.", function(){
-					if(isEmpty(input.parents('.js_non_member_list'))){
-						input.hide().siblings().show();
-					}else{
-						var nonMemberCount = input.parents('.js_team_members_page').find('.js_non_member_count');
-						var count = nonMemberCount.html();
-						if(!isEmpty(count) && (count!=='0')){
-							nonMemberCount.html(parseInt(count)-1);
-						}
-						input.parents('.js_non_member_item').remove();
-					}
-				});
-			},
-			error : function(e) {
-				smartPop.closeProgress();
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, "팀원요청에 오류가 발생하였습니다. 관리자에게 문의하시기 바랍니다.", function(){
-				});				
-			}
-		});
-		return false;
-	});
-
 	$('.js_select_course_btn').live('click', function(e) {
+
 		var input = $(targetElement(e)).parents('.js_select_course_btn');
 		var courseType = input.attr('courseType');
 		var categoryName = (courseType === "14") ? input.find('a').html() : "";

@@ -316,4 +316,10 @@ public class ImapFolderControllerImpl implements FolderController {
 		ArrayList headers = protocol.fetchHeaders(msgs);
 		return headers;
 	}
+
+	@Override
+	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

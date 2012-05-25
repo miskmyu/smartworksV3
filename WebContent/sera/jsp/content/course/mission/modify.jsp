@@ -43,7 +43,7 @@
 				smartPop.showInfo(smartPop.ERROR, "미션기간의 시작일자가 종료일자보다 이후입니다. 시각일자를 종료일자보다 이전으로 수정바랍니다!");
 				return false;
 			}else if(openDate.getTime()<courseOpenDate.getTime() || closeDate.getTime()>courseCloseDate.getTime()){
-				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다!");
+				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다! (코스기간 : " + courseOpenDate.format("yyyy.mm.dd") + " ~ " + courseCloseDate.format("yyyy.mm.dd") + ")");
 				return false;
 			}
 			var courseId = modifyMission.attr('courseId');

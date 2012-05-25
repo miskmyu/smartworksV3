@@ -19,8 +19,7 @@ import org.claros.commons.mail.utility.Constants;
  *
  */
 public class MailAuth {
-	private static Log log = LogFactory.getLog(MailAuth.class); 
-	
+
 	public static ConnectionMetaHandler authenticate(ConnectionProfile profile, AuthProfile auth, ConnectionMetaHandler handler) throws SystemException, LoginInvalidException, ServerDownException {
 		try {
 			ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
@@ -31,10 +30,10 @@ public class MailAuth {
 			}
 			return handler;
 		} catch (SystemException e) {
-			log.fatal("System Exception while authenticating user: " + ((auth == null) ? null : auth.getUsername()), e);
+			System.out.println("System Exception while authenticating user: " + ((auth == null) ? null : auth.getUsername()));
 			throw e;
 		} catch (ConnectionException e) {
-			log.debug("Login Failed of user: " + ((auth == null) ? null : auth.getUsername()), e);
+			System.out.println("Login Failed of user: " + ((auth == null) ? null : auth.getUsername()));
 			throw new LoginInvalidException(e);
 		}
 	}

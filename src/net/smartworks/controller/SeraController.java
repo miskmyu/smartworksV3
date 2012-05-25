@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.service.ISmartWorks;
@@ -166,10 +167,34 @@ public class SeraController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/modify.jsp", "");
 	}
 
+	@RequestMapping("/courseTeamCreate")
+	public ModelAndView courseTeamCreate(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/create.jsp", "");
+	}
+
 	@RequestMapping("/courseTeamMembers")
 	public ModelAndView courseTeamMembers(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/members.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamJoinRequests")
+	public ModelAndView courseTeamJoinRequests(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/join_requests.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamActivity")
+	public ModelAndView courseTeamActivity(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/activity.jsp", "");
+	}
+
+	@RequestMapping("/courseTeamHome")
+	public ModelAndView courseTeamHome(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/home.jsp", "");
 	}
 
 	@RequestMapping("/courseMissionHome")
@@ -206,12 +231,6 @@ public class SeraController extends ExceptionInterceptor {
 	public ModelAndView courseMissionPerform(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/mission/perform.jsp", "");
-	}
-
-	@RequestMapping("/courseTeamActivity")
-	public ModelAndView courseTeamActivity(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/team/activity.jsp", "");
 	}
 
 	@RequestMapping("/socialNote")
@@ -488,11 +507,11 @@ public class SeraController extends ExceptionInterceptor {
 	@RequestMapping(value = "/create_new_team", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.createNewTeam(requestBody, request);
+		Team team = smartworks.createNewTeam(requestBody, request);
 		// TO DO : Exception handler
-		String courseId = (String)requestBody.get("courseId");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "courseHome.sw?courseId=" + courseId);
+		map.put("teamId", team.getId());
+		map.put("teamName", team.getName());
 		return map;
 	}
 
@@ -569,6 +588,30 @@ public class SeraController extends ExceptionInterceptor {
 		smartworks.destroyFriendship(requestBody, request);
 	}
 
+	@RequestMapping(value = "/team_join_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void teamJoinRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.teamJoinRequest(requestBody, request);
+	}
+
+	@RequestMapping(value = "/reply_team_join_request", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void replyTeamJoinRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.replyTeamJoinRequest(requestBody, request);
+	}
+
+	@RequestMapping(value = "/leave_team", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void leaveTeam(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.leaveTeam(requestBody, request);
+	}
+
+	@RequestMapping(value = "/destroy_membership", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void destroyMembership(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.destroyMembership(requestBody, request);
+	}
+
 	@RequestMapping("/comments_in_instance")
 	public ModelAndView commentsInInstance(HttpServletRequest request, HttpServletResponse response) {
 		request.getSession().setAttribute("subComments", null);
@@ -636,24 +679,6 @@ public class SeraController extends ExceptionInterceptor {
 	@RequestMapping("/moreCoursesByUser")
 	public ModelAndView moreCoursesByUser(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/content/course/more_courses_by_user.jsp", "");
-	}
-
-	@RequestMapping(value = "/team_member_request", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void teamMemberRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.teamMemberRequest(requestBody, request);
-	}
-
-	@RequestMapping(value = "/reply_team_member_request", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void replyTeamMemberRequest(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.replyTeamMemberRequest(requestBody, request);
-	}
-
-	@RequestMapping(value = "/destroy_team_membership", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void destroyTeamMembership(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.destroyTeamMembership(requestBody, request);
 	}
 
 	@RequestMapping("/search_team_member_by_type")

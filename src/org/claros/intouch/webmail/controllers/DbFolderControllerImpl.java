@@ -182,6 +182,35 @@ public class DbFolderControllerImpl implements FolderController {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.claros.groupware.webmail.controllers.FolderController#getFolder(org.claros.commons.models.AuthProfile, java.lang.String)
+	 */
+	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception {
+		IGenericDao dao = null;
+		FolderDbObject fld = null;
+		FolderDbObjectWrapper fd = null;
+		try {
+			Long lFolder = new Long(folderId);
+			
+			dao = Utility.getDbConnection();
+			String username = auth.getUsername();
+			
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND ID = ?";
+			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, lFolder});
+			fd = new FolderDbObjectWrapper(fld);
+			try {
+				fd.setUnreadItemCount(countUnreadMessages(fld.getId().toString()));
+				fd.setTotalItemCount(countTotalMessages(fld.getId().toString()));
+			} catch (Exception f) {
+				log.debug("unable to fetch unread/total count for folder");
+			}
+		} finally {
+			JdbcUtil.close(dao);
+			dao = null;
+		}
+		return fd;
+	}
+
+	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#getMailsByFolder(org.claros.commons.models.AuthProfile, java.lang.String)
 	 */
 	public List getMailsByFolder(String folder) throws Exception {

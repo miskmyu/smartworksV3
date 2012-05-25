@@ -1,6 +1,5 @@
 package net.smartworks.server.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -129,7 +128,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
-import net.smartworks.util.OSValidator;
+import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,9 +157,13 @@ public class SeraServiceImpl implements ISeraService {
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
+	private IDocFileManager getDocManager() {
+		return SwManagerFactory.getInstance().getDocManager();
+	}
 
 	private IInstanceService instanceService;
 	private ICalendarService calendarService;
+	private ICommunityService communityService;
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
@@ -171,7 +174,11 @@ public class SeraServiceImpl implements ISeraService {
 	public void setCalendarService(ICalendarService calendarService) {
 		this.calendarService = calendarService;
 	}
-    @Autowired
+	@Autowired
+	public void setCommunityService(ICommunityService communityService) {
+		this.communityService = communityService;
+	}
+	@Autowired
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -1159,16 +1166,18 @@ public class SeraServiceImpl implements ISeraService {
 		}*/
 		User user = SmartUtil.getCurrentUser();
 		String courseId = (String)requestBody.get("courseId");
-		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		SwoGroup group = swoMgr.getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
-		group.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
 
-		swoMgr.setGroup(user.getId(), group, IManager.LEVEL_ALL);
-		
+		SwoGroup group = getSwoManager().getGroup(user.getId(), courseId, IManager.LEVEL_ALL);
+		group.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
+		getSwoManager().setGroup(user.getId(), group, IManager.LEVEL_ALL);
+
+		CourseDetail courseDetail = getSeraManager().getCourseDetailById(courseId);
+		courseDetail.setStatus(SwoGroup.GROUP_STATUS_CLOSED);
+		getSeraManager().setCourseDetail(courseDetail);
+
 		//SwManagerFactory.getInstance().getSwoManager().removeGroup(user.getId(), courseId);
 		//SwManagerFactory.getInstance().getSeraManager().removeCourseDetail(courseId);
-		
+
 		return courseId;
 	}
 
@@ -1366,6 +1375,7 @@ public class SeraServiceImpl implements ISeraService {
 		courseDetail.setCategories(chkCourseCategories);
 		courseDetail.setKeywords(txtCourseKeywords);
 		courseDetail.setDuration(txtCourseDays == null || txtCourseDays == "" ? 0 : Integer.parseInt(txtCourseDays));
+		courseDetail.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 /*		if (txtCourseStartDate != null && !txtCourseStartDate.equalsIgnoreCase("")) {
 			Date startDate = new SimpleDateFormat("yyyy.MM.dd").parse(txtCourseStartDate);
 			courseDetail.setStart(new LocalDate(startDate.getTime()));
@@ -1416,7 +1426,7 @@ public class SeraServiceImpl implements ISeraService {
 		
 		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
 		seraMgr.setCourseDetail(courseDetail);
-		
+
 		MentorDetail mentorDetail = new MentorDetail();
 		mentorDetail.setMentorId(mentorUserId);
 		mentorDetail.setBorn(null);
@@ -2015,10 +2025,7 @@ public class SeraServiceImpl implements ISeraService {
 
 	private BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception {
 		try{
-			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
-			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
-			
+
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
@@ -2026,14 +2033,14 @@ public class SeraServiceImpl implements ISeraService {
 			SwfFormCond swfFormCond = new SwfFormCond();
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
-			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+
 			if(swfForms == null)
 				return null;
 	
 			swdDomainCond.setFormId(swfForms[0].getId());
 	
-			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
 	
 			if(swdDomain == null)
 				return  null;
@@ -2059,9 +2066,9 @@ public class SeraServiceImpl implements ISeraService {
 			if(fromDate != null)
 				swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
-			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 	
 			BoardInstanceInfo[] boardInstanceInfos = null;
 
@@ -2090,7 +2097,7 @@ public class SeraServiceImpl implements ISeraService {
 					if(space == null)
 						space = user.getId();
 
-					WorkSpaceInfo workSpaceInfo = comSvc.getWorkSpaceInfoById(space);
+					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(space);
 
 					boardInstanceInfo.setWorkSpace(workSpaceInfo);
 
@@ -2151,10 +2158,6 @@ public class SeraServiceImpl implements ISeraService {
 	private EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
-			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
-			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
-			
 			String workId = SmartWork.ID_EVENT_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 
@@ -2165,7 +2168,7 @@ public class SeraServiceImpl implements ISeraService {
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 	
-			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
 	
 			if(swfForms == null)
 				return null;
@@ -2174,7 +2177,7 @@ public class SeraServiceImpl implements ISeraService {
 	
 			swdDomainCond.setFormId(formId);
 	
-			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
 	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
@@ -2193,9 +2196,9 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
-			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			String formName = swdDomain.getFormName();
 
@@ -2433,9 +2436,8 @@ public class SeraServiceImpl implements ISeraService {
 			SwfFormCond swfCond = new SwfFormCond();
 			swfCond.setCompanyId(user.getCompanyId());
 			swfCond.setId(SeraConstant.MISSION_FORMID);
-	
-			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
-			SwfForm swfForm = swfMgr.getForms(user.getId(), swfCond, IManager.LEVEL_LITE)[0];
+
+			SwfForm swfForm = getSwfManager().getForms(user.getId(), swfCond, IManager.LEVEL_LITE)[0];
 			
 			RequestParams params = new RequestParams();
 			SearchFilter searchFilter = new SearchFilter();
@@ -2939,11 +2941,6 @@ public class SeraServiceImpl implements ISeraService {
 	private NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
-			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
-			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
-			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
-
 			String workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
@@ -2955,7 +2952,7 @@ public class SeraServiceImpl implements ISeraService {
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 	
-			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
 	
 			if(swfForms == null)
 				return null;
@@ -2964,7 +2961,7 @@ public class SeraServiceImpl implements ISeraService {
 	
 			swdDomainCond.setFormId(formId);
 	
-			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
 	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setFormId(swdDomain.getFormId());
@@ -2979,9 +2976,9 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
-			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			String formName = swdDomain.getFormName();
 
@@ -3042,7 +3039,7 @@ public class SeraServiceImpl implements ISeraService {
 							noteInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.NOTE_IMAGEGROUPIDFIELDID)) {
 							
-							List<IFileModel> fileList = docMgr.findFileGroup(value);
+							List<IFileModel> fileList = getDocManager().findFileGroup(value);
 							if (fileList != null && fileList.size() != 0) {
 								IFileModel fileModel = fileList.get(0);
 								if(fileModel != null) {
@@ -3063,7 +3060,7 @@ public class SeraServiceImpl implements ISeraService {
 						} else if(swdDataField.getId().equals(SeraConstant.NOTE_FILEGROUPIDFIELDID)) {
 							noteInstanceInfo.setFileGroupId(value);
 							
-							List<IFileModel> docFileList = docMgr.findFileGroup(value);
+							List<IFileModel> docFileList = getDocManager().findFileGroup(value);
 							
 							if (docFileList != null && docFileList.size() != 0) {
 								List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
@@ -3099,11 +3096,6 @@ public class SeraServiceImpl implements ISeraService {
 	private MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
-			ISwdManager swdMgr = SwManagerFactory.getInstance().getSwdManager();
-			ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
-			IDocFileManager docMgr = SwManagerFactory.getInstance().getDocManager();
-			ICommunityService comSvc = SwServiceFactory.getInstance().getCommunityService();
-
 			String workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
@@ -3115,7 +3107,7 @@ public class SeraServiceImpl implements ISeraService {
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
 	
-			SwfForm[] swfForms = swfMgr.getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
 	
 			if(swfForms == null)
 				return null;
@@ -3124,7 +3116,7 @@ public class SeraServiceImpl implements ISeraService {
 	
 			swdDomainCond.setFormId(formId);
 	
-			SwdDomain swdDomain = swdMgr.getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
+			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
 	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
@@ -3140,9 +3132,9 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = swdMgr.getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
 
-			SwdRecordExtend[] swdRecordExtends = swdMgr.getCtgPkg(workId);
+			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			String formName = swdDomain.getFormName();
 
@@ -3203,7 +3195,7 @@ public class SeraServiceImpl implements ISeraService {
 							missionReportInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 120, "..."));
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_IMAGEGROUPIDFIELDID)) {
 							
-							List<IFileModel> fileList = docMgr.findFileGroup(value);
+							List<IFileModel> fileList = getDocManager().findFileGroup(value);
 							if (fileList != null && fileList.size() != 0) {
 								IFileModel fileModel = fileList.get(0);
 								if(fileModel != null) {
@@ -3226,7 +3218,7 @@ public class SeraServiceImpl implements ISeraService {
 						} else if(swdDataField.getId().equals(SeraConstant.MISSION_REPORT_FILEGROUPIDFIELDID)) {
 							missionReportInstanceInfo.setFileGroupId(value);
 							
-							List<IFileModel> docFileList = docMgr.findFileGroup(value);
+							List<IFileModel> docFileList = getDocManager().findFileGroup(value);
 							
 							if (docFileList != null && docFileList.size() != 0) {
 								List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
@@ -3261,7 +3253,6 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public InstanceInfo[] getSeraInstances(int type, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception{
 		try{
-
 			InstanceInfo[] boardInfo = null;
 			InstanceInfo[] eventInfo = null;
 			InstanceInfo[] noteInfo = null;
@@ -3346,7 +3337,6 @@ public class SeraServiceImpl implements ISeraService {
 				returnInstanceInfoList.add(new WorkInstanceInfo());
 			InstanceInfo[] returnInstanceInfo = new InstanceInfo[returnInstanceInfoList.size()];
 			returnInstanceInfoList.toArray(returnInstanceInfo);
-			//InstanceInfo[] instances = SeraTest.getSeraInstances(userId, courseId, missionId, fromDate, maxList);
 
 			return returnInstanceInfo;
 		}catch (Exception e){
@@ -3622,7 +3612,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	@Override
-	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public Team createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try {
 			User user = SmartUtil.getCurrentUser();
@@ -3631,7 +3621,7 @@ public class SeraServiceImpl implements ISeraService {
 			Map<String, Object> frmCreateTeamMap = (Map<String, Object>)requestBody.get("frmCreateTeam");
 
 			String txtTeamName = null;
-			String txaTeamDesc = null;
+			String txtTeamDesc = null;
 			String txtTeamDays = null;
 			String txtTeamStartDate = null;
 			String txtTeamEndDate = null;
@@ -3653,8 +3643,8 @@ public class SeraServiceImpl implements ISeraService {
 				} else if(fieldValue instanceof String) {
 					if(fieldId.equals("txtTeamName")) {
 						txtTeamName = (String)frmCreateTeamMap.get("txtTeamName");
-					} else if(fieldId.equals("txaTeamDesc")) {
-						txaTeamDesc = (String)frmCreateTeamMap.get("txaTeamDesc");
+					} else if(fieldId.equals("txtaTeamDesc")) {
+						txtTeamDesc = (String)frmCreateTeamMap.get("txtaTeamDesc");
 					} else if(fieldId.equals("txtTeamDays")) {
 						txtTeamDays = (String)frmCreateTeamMap.get("txtTeamDays");
 					} else if(fieldId.equals("txtTeamStartDate")) {
@@ -3683,7 +3673,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeam courseTeam = new CourseTeam();
 			courseTeam.setCourseId(courseId);
 			courseTeam.setName(txtTeamName);
-			courseTeam.setDescription(txaTeamDesc);
+			courseTeam.setDescription(txtTeamDesc);
 			courseTeam.setAccessPolicy(Integer.parseInt(chkTeamSecurity));
 			courseTeam.setMemberSize(Integer.parseInt(txtTeamUsers));
 			courseTeam.setStartDate(startDate);
@@ -3723,7 +3713,7 @@ public class SeraServiceImpl implements ISeraService {
 			}
 
 			courseTeam = getSeraManager().setCourseTeam(userId, courseTeam);
-			return courseTeam.getObjId();
+			return new Team(courseTeam.getObjId(), courseTeam.getName());
 			
 		} catch (ArrayIndexOutOfBoundsException ae) {
 			throw new ArrayIndexOutOfBoundsException("txtTeamUsers Exceed~!!");
@@ -3740,7 +3730,7 @@ public class SeraServiceImpl implements ISeraService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 			String teamId = (String)requestBody.get("teamId");
-			Map<String, Object> frmSetTeamMap = (Map<String, Object>)requestBody.get("frmSetTeam");
+			Map<String, Object> frmSetTeamMap = (Map<String, Object>)requestBody.get("frmModifyTeam");
 
 			String txtaTeamDesc = null;
 			String txtTeamDays = null;
@@ -4066,9 +4056,9 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 			}
 		}
-
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
-		
+
 		//courseDetailCond.setEndFrom(new LocalDate());
 		courseDetailCond.setOrders(new Order[]{new Order("coursePoint", false) , new Order("createDate", false)});
 		courseDetailCond.setPageNo(0);
@@ -4132,6 +4122,7 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
 
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
 	    
 	    courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
@@ -4598,6 +4589,7 @@ public class SeraServiceImpl implements ISeraService {
 				courseDetailCond.setCreateDateTo(lastCourseDetailInfo.getCreateDate());
 		}
 
+		courseDetailCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		Long totalSize = SwManagerFactory.getInstance().getSeraManager().getCourseDetailSize("", courseDetailCond);
 		
 		courseDetailCond.setOrders(new Order[]{new Order("createDate", false)});
@@ -6210,32 +6202,32 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-	public SeraUserInfo[] getRequestersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList) {
-		try {
-			if(CommonUtil.isEmpty(courseTeamUsers))
-				return null;
-
-			SeraUserInfo[] seraUserInfos = null;
-			List<String> requesterIdList = new ArrayList<String>();
-			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
-				String teamUserId = courseTeamUser.getUserId();
-				String joinType = courseTeamUser.getJoinType();
-				String joinStatus = courseTeamUser.getJoinStatus();
-				if(CourseTeamUser.JOINTYPE_INVITE.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
-					requesterIdList.add(teamUserId);
-				}
-			}
-			if(requesterIdList.size() > 0) {
-				if(memberInformList != null)
-					memberInformList.setTotalRequesters(requesterIdList.size());
-				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
-			}
-			return seraUserInfos;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	public SeraUserInfo[] getRequestersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList) {
+//		try {
+//			if(CommonUtil.isEmpty(courseTeamUsers))
+//				return null;
+//
+//			SeraUserInfo[] seraUserInfos = null;
+//			List<String> requesterIdList = new ArrayList<String>();
+//			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+//				String teamUserId = courseTeamUser.getUserId();
+//				String joinType = courseTeamUser.getJoinType();
+//				String joinStatus = courseTeamUser.getJoinStatus();
+//				if(CourseTeamUser.JOINTYPE_INVITE.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
+//					requesterIdList.add(teamUserId);
+//				}
+//			}
+//			if(requesterIdList.size() > 0) {
+//				if(memberInformList != null)
+//					memberInformList.setTotalRequesters(requesterIdList.size());
+//				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
+//			}
+//			return seraUserInfos;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	public SeraUserInfo[] getMembersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
 		try {
 			if(CommonUtil.isEmpty(courseTeamUsers))
@@ -6315,11 +6307,9 @@ public class SeraServiceImpl implements ISeraService {
 			SeraUserInfo[] nonMembers = null;
 
 			CourseTeamUser[] courseTeamUsers = getCourseTeamUsers(teamId);
-			requesters = getRequestersOfTeam(memberInformList, courseTeamUsers, maxList);
 			members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 			nonMembers = getNonMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 
-			memberInformList.setRequesters(requesters);
 			memberInformList.setMembers(members);
 			memberInformList.setNonMembers(nonMembers);
 
@@ -6366,21 +6356,7 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-	@Override
-	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public SeraBoardList getSeraBoards(int maxList) throws Exception {
 		SeraBoardList seraBoards = new SeraBoardList();
@@ -6452,6 +6428,30 @@ public class SeraServiceImpl implements ISeraService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	@Override
+	public Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception {
+		return new Team[]{SeraTest.getTeam(), SeraTest.getTeam(), SeraTest.getTeam()};
+	}
+	@Override
+	public void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

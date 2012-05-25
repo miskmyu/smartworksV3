@@ -961,7 +961,7 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.setSeraNote(requestBody, request);
 	}
 	@Override
-	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public Team createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return seraService.createNewTeam(requestBody, request);
 	}
 	@Override
@@ -1266,21 +1266,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		seraService.replyTeamMemberRequest(requestBody, request);
-	}
-
-	@Override
-	public void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		seraService.teamMemberRequest(requestBody, request);
-	}
-
-	@Override
-	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		seraService.destroyTeamMembership(requestBody, request);
-	}
-
-	@Override
 	public SeraBoardList getSeraBoards(int maxList) throws Exception {
 		return seraService.getSeraBoards(maxList);
 	}
@@ -1290,4 +1275,34 @@ public class SmartWorks implements ISmartWorks {
 		return seraService.setMentorProfile(requestBody, request);
 	}
 
+	@Override
+	public MailFolder getMailFolderById(String folderId) throws Exception {
+		return mailService.getMailFolderById(folderId);
+	}
+
+	@Override
+	public Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception {
+		// TODO Auto-generated method stub
+		return seraService.getJoinRequestTeamsByCourseId(courseId);
+	}
+
+	@Override
+	public void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.replyTeamJoinRequest(requestBody, request);
+	}
+
+	@Override
+	public void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.teamJoinRequest(requestBody, request);
+	}
+
+	@Override
+	public void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.leaveTeam(requestBody, request);
+	}
+
+	@Override
+	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		seraService.destroyMembership(requestBody, request);
+	}
 }

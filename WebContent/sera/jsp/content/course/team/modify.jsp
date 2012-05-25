@@ -13,9 +13,11 @@
 
 	String courseId = request.getParameter("courseId");
 	String teamId = request.getParameter("teamId");
-	Course course = smartWorks.getCourseById(courseId);
 	Team team = SmartUtil.isBlankObject(teamId) ? null :  (Team)session.getAttribute("team");
 	if(!SmartUtil.isBlankObject(teamId) && SmartUtil.isBlankObject(team)) team = smartWorks.getTeamById(teamId);
+	Course course = (Course)session.getAttribute("course");
+	if (SmartUtil.isBlankObject(course) || !course.getId().equals(courseId))
+		course = smartWorks.getCourseById(courseId);
 %>
 
 <script type="text/javascript">
@@ -25,7 +27,7 @@
 		if(courseTeamManagement.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
 			courseTeamManagement.find('input[name="txtTeamStartDate"]').addClass('required');
 			courseTeamManagement.find('input[name="txtTeamEndDate"]').addClass('required');
-			courseTeamManagement.find('input[name="txtTeamDays"]').removeClass('required').removeClass('error');			
+			courseTeamManagement.find('input[name="txtTeamDays"]').removeClass('required').removeClass('error').attr('value', '');			
 			
 		}else{
 			courseTeamManagement.find('input[name="txtTeamStartDate"]').removeClass('required').removeClass('error');
@@ -34,6 +36,26 @@
 		}
 		if (SmartWorks.GridLayout.validate(courseTeamManagement.find('form.js_validation_required'),  courseTeamManagement.find('.sw_error_message'))) {
 			var forms = courseTeamManagement.find('form');
+			var courseOpenDate = new Date(courseTeamManagement.attr('courseOpenDate'));
+			var courseCloseDate = new Date(courseTeamManagement.attr('courseCloseDate'));
+			var startDate = new Date(forms.find('input[name="txtTeamStartDate"]').attr('value'));
+			var endDate = new Date(forms.find('input[name="txtTeamEndDate"]').attr('value'));
+			if(courseTeamManagement.find('input[name="chkUserDefineDays"]').attr('checked')!=='checked'){
+				var teamDays = parseInt(courseTeamManagement.find('input[name="txtTeamDays"]').attr('value'));
+				if(teamDays <= 0){
+					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1 이상이여야 합니다!");
+					return false;					
+				}
+				startDate = new Date();
+				endDate = new Date(startDate.getTime() + (teamDays-1)*24*60*60*1000);
+			}
+			if(startDate.getTime()>endDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "팀기간의 시작일자가 종료일자보다 이후입니다. 시작일자를 종료일자보다 이전으로 수정바랍니다!");
+				return false;
+			}else if(startDate.getTime()<courseOpenDate.getTime() || endDate.getTime()>courseCloseDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "팀기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다! (코스기간 : " + courseOpenDate.format("yyyy.mm.dd") + " ~ " + courseCloseDate.format("yyyy.mm.dd") + ")");
+				return false;
+			}
 			var paramsJson = {};
 			paramsJson['courseId'] = courseTeamManagement.attr('courseId');
 			paramsJson['teamId'] = courseTeamManagement.attr('teamId');
@@ -70,8 +92,9 @@
 	};
 </script>
 
+<div class="js_course_team_management_page"  courseId="<%=courseId%>" teamId="<%=team.getId()%>" courseOpenDate="<%=course.getOpenDate().toLocalDateSimpleString()%>" courseCloseDate="<%=course.getCloseDate().toLocalDateSimpleString()%>">
 	<!-- Input Form -->
-	<form name="frmModifyTeam" class="form_layout js_validation_required js_course_team_management_page" courseId="<%=courseId%>" teamId="<%=team.getId()%>">
+	<form name="frmModifyTeam" class="form_layout js_validation_required">
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td><div class="form_label w101">팀 이름</div>
@@ -80,7 +103,7 @@
 			<tr>
 				<td><div class="form_label w101">팀 설명</div>
 					<div class="form_value w570">
-						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3"><%=team.getDesc() %></textarea>
+						<textarea name="txtaTeamDesc" class="fieldline fl required" name="textarea" rows="3"><%=team.getDesc() %></textarea>
 					</div>
 				</td>
 			</tr>
@@ -129,7 +152,8 @@
 	</div>
 	<!-- Btn //-->
 	<!-- Input Form //-->
+</div>
 
-	<script type="text/javascript">
-		loadCreateTeamFields();
-	</script>
+<script type="text/javascript">
+	loadCreateTeamFields();
+</script>

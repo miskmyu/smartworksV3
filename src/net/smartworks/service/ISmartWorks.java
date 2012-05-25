@@ -464,7 +464,7 @@ public interface ISmartWorks {
 
 	public abstract String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract Team createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -576,14 +576,20 @@ public interface ISmartWorks {
 
 	public abstract SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception;
 
-	public abstract void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-
-	public abstract void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-
-	public abstract void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-
 	public abstract SeraBoardList getSeraBoards(int maxList) throws Exception;
 	
 	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract MailFolder getMailFolderById(String folderId) throws Exception;
+	
+	public abstract Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception;
+
+	public abstract void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 }

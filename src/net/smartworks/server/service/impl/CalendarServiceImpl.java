@@ -20,8 +20,6 @@ import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.EventInstanceInfo;
-import net.smartworks.model.security.AccessPolicy;
-import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;

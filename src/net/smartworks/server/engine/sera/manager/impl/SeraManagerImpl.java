@@ -179,6 +179,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	private Query appendQuery(StringBuffer buf, CourseDetailCond cond) throws Exception {
 		String courseId = null;
 		String[] courseIdIns = null;
+		String status = null;
 		Date fromDate = null;
 		Date startTo = null;
 		Date endDateTo = null;
@@ -194,6 +195,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if (cond != null) {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
+			status = cond.getStatus();
 			startTo = cond.getStartTo();
 			fromDate = cond.getStart();
 			endDateFrom = cond.getEndFrom();
@@ -222,6 +224,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				}
 				buf.append(")");
 			}
+			if (status != null) 
+				buf.append(" and obj.status = :status");
 			if (startTo != null) 
 				buf.append(" and obj.start < :startTo");
 			if (fromDate != null) 
@@ -265,6 +269,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					query.setString("courseIdIn"+i, courseIdIns[i]);
 				}
 			}
+			if (status != null)
+				query.setString("status", status);
 			if (startTo != null)
 				query.setTimestamp("startTo", startTo);
 			if (fromDate != null)
