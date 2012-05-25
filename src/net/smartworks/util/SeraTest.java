@@ -173,10 +173,8 @@ public class SeraTest {
 	
 	public static MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception{
 		MemberInformList memberInformList = new MemberInformList();
-		memberInformList.setRequesters(SeraTest.getFriendRequestsForMe(null, -1));
 		memberInformList.setMembers(SeraTest.getFriendRequestsForMe(null, -1));
 		memberInformList.setNonMembers(SeraTest.getFriendRequestsForMe(null, -1));
-		memberInformList.setTotalRequesters(31);
 		memberInformList.setTotalMembers(43);
 		memberInformList.setTotalNonMembers(57);
 		return memberInformList;		

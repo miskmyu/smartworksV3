@@ -37,13 +37,13 @@
 			var forms = createMission.find('form');
 			var courseOpenDate = new Date(createMission.attr('courseOpenDate'));
 			var courseCloseDate = new Date(createMission.attr('courseCloseDate'));
-			var openDate = new Date(forms.find('input[name="txtMissionOpenDate"]').attr('value'))
-			var closeDate = new Date(forms.find('input[name="txtMissionCloseDate"]').attr('value'))
+			var openDate = new Date(forms.find('input[name="txtMissionOpenDate"]').attr('value'));
+			var closeDate = new Date(forms.find('input[name="txtMissionCloseDate"]').attr('value'));
 			if(openDate.getTime()>closeDate.getTime()){
-				smartPop.showInfo(smartPop.ERROR, "미션기간의 시작일자가 종료일자보다 이후입니다. 시각일자를 종료일자보다 이전으로 수정바랍니다!");
+				smartPop.showInfo(smartPop.ERROR, "미션기간의 시작일자가 종료일자보다 이후입니다. 시작일자를 종료일자보다 이전으로 수정바랍니다!");
 				return false;
 			}else if(openDate.getTime()<courseOpenDate.getTime() || closeDate.getTime()>courseCloseDate.getTime()){
-				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다!");
+				smartPop.showInfo(smartPop.ERROR, "미션기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다! (코스기간 : " + courseOpenDate.format("yyyy.mm.dd") + " ~ " + courseCloseDate.format("yyyy.mm.dd") + ")");
 				return false;
 			}
 			var paramsJson = {};
@@ -100,7 +100,7 @@
 				<td>
 					<div class="form_label">미션<%=course.getLastMissionIndex()+2 %> 제목</div>
 					<div class="form_value w560">
-						<input name="txtMissionName" type="text" class="fieldline fl required">
+						<input name="txtMissionName" type="text" maxLength="50" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>

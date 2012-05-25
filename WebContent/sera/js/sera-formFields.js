@@ -220,7 +220,7 @@ function loadCreateTeamFields() {
 			columns: 1,
 			multiUsers: true,
 			courseId: courseId,
-			required: true
+			required: false
 		});
 		gridRow.find('.form_col').css({width:"491px", padding:"0px"});
 		gridRow.find('.form_value').css({width:"100%"});
