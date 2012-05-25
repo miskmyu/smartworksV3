@@ -151,8 +151,6 @@
 			</span>
 		</div>
 		<div class="content trend">
-			<dl>
-				<dd>
 					<ul>
 						<%
 						if(!SmartUtil.isBlankObject(seraTrends)){
@@ -165,8 +163,6 @@
 						}
 						%>
  					</ul>
-				</dd>
-			</dl>
 		</div>
 	</div>
 	<!-- Aside Block4 //-->
