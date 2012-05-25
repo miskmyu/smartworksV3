@@ -19,17 +19,16 @@
 	Team myTeam = smartWorks.getMyTeamByCourse(courseId);
 	if(!SmartUtil.isBlankObject(myTeam)){
 %>
-		<div class="js_team_home_page" courseId="<%=courseId %>" teamId="<%=myTeam.getId() %>">		
+		<div class="panel_section js_team_home_page" courseId="<%=courseId %>" teamId="<%=myTeam.getId() %>">		
 			<div class="header_tit">
-				<div class="tit_dep2 m0">
-					<h2>팀 명</h2>
-					<div><%=myTeam.getName() %></div>
+				<div class="tit_dep2 team m0">
+					<h2><%=myTeam.getName() %></h2>
 				</div>
 			</div>
 			<!--  Tab //-->
 		 	<div class="header mb5 js_view_team_home">
 				<div><a href="" class="js_team_activity current" courseId="<%=courseId%>" teamId="<%=myTeam.getId()%>">팀 활동</a></div>
-				<div> | <a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=myTeam.getId()%>">팀 구성원/초대</a></div>
+				<div> | <a href="" class="js_team_members" courseId="<%=courseId%>" teamId="<%=myTeam.getId()%>">팀 구성원</a></div>
 				<%
 				if(cUser.getId().equals(myTeam.getLeader())){
 				%>
