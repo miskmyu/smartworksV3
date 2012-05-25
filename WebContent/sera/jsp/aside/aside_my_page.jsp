@@ -150,7 +150,7 @@
 				</a>
 			</span>
 		</div>
-		<div class="content">
+		<div class="content trend">
 			<dl>
 				<dd>
 					<ul>

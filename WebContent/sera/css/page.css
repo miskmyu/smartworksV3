@@ -411,8 +411,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
 .aside_block .header { font-size:14px; color:#333333; line-height:18px; font-weight:bold; margin-bottom: 5px; word-wrap: break-word}
 .aside_block .content { clear:both; padding:8px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
-.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
+.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
+.aside_block .content.trend li {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
 .aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}
