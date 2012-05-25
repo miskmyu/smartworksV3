@@ -111,8 +111,8 @@
 							</li>
 							<li class="fr bo_l">
 								<span> <!-- Btn -->
-									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
-										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
+									<div class="btn_fgray_l js_destroy_friendship_btn" userId="<%=friend.getId()%>">
+										<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
 									</div> <!-- Btn //--> 
 								</span>
 							</li>

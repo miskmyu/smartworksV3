@@ -106,8 +106,8 @@
 									<!-- Btn //-->
 	
 									<!-- Btn //--> 
-										<div class="btn_fgreen_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-											<div class="btn_fgreen_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
+										<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+											<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
 										</div>
 									<!-- Btn //--> 
 									</span>
