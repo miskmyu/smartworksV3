@@ -721,8 +721,12 @@ $(function() {
 	});
 	
 	$('.js_delete_mission_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		if(input.parent('.js_delete_mission_btn').attr('isEmpty')!=='true'){
+			smartPop.showInfo(smartPop.WARN, "한명이상의 멘티가 이미 미션을 수행하였으므로 삭제가 불가능합니다!");
+			return false;
+		}
 		smartPop.confirm('미션을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
-			var input = $(targetElement(e));
 			var performMission = input.parents('.js_perform_mission_page');
 			if(isEmpty(performMission)) performMission = input.parents('.js_mission_list_item');
 			var courseId = performMission.attr('courseId');

@@ -6466,5 +6466,9 @@ public class SeraServiceImpl implements ISeraService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
+		return getBoardInstancesByCourseId(null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList);
+	}
 
 }

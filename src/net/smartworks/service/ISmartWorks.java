@@ -592,4 +592,6 @@ public interface ISmartWorks {
 	
 	public abstract void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
+	
 }
