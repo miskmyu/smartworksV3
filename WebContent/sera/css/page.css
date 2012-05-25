@@ -587,7 +587,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 #content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 705px;}
 #content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
 #content_list_section .search {margin: 0 auto; width: 460px;}
-#content_list_section .search li #srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; margin-right: 5px; width: 369px; vertical-align: middle; padding: 6px 3px; height:17px}
+#content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; margin-right: 5px; width: 369px; vertical-align: middle; padding: 6px 3px; height:17px}
 #content_list_section .tit_header {border-bottom: 2px solid #74B3DD; height: 50px; margin: 20px 0;}
 #content_list_section .tit_header h2 {background: url("../images/ico_workshop.gif") no-repeat scroll 0 0 transparent; color: #333333; float: left; font-size: 16px; height: 22px; padding: 20px 0 0 50px}
 #content_list_section .tit_header ul {float: right; padding-top: 30px}
