@@ -94,7 +94,7 @@
 .icon_listing {background: url("../images/icon.png") no-repeat scroll -586px -376px; height:12px; font-weight:bold; padding:0 0 0 16px}
 
 /* Header Title */
-.header_tit {width:700px; margin-bottom:15px; color:#858585; line-height: 16px; overflow:hidden}
+.header_tit {width:690px; margin-bottom:15px; color:#858585; line-height: 16px; overflow:hidden}
 .header_tit .tit_course {background: url("../images/header.png") no-repeat scroll 0 0; height:35px; padding:52px 25px 0}
 .header_tit .tit_event {background: url("../images/header.png") no-repeat scroll 0 -88px; height:38px; padding:45px 25px 0}
 .header_tit .tit_notes {background: url("../images/header.png") no-repeat scroll 0 -175px; height:35px; padding:52px 25px 0}
@@ -105,8 +105,12 @@
 .header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:45px 25px 0}
 .header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px; min-height: 30px}
 .header_tit .tit_dep2.team {background-position: 0 -1298px !important; padding:5px 0 0 45px}
+.header_tit .tit_dep2.course {background-position: 0 -1416px !important; padding:5px 0 0 45px; border-bottom:2px solid #74B3DD}
+.header_tit .tit_dep2.friend {background-position: 0 -1553px !important; padding:5px 0 0 45px; border-bottom:2px solid #74B3DD}
 .header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
+.header_tit .tit_dep2.course h2, .header_tit .tit_dep2.friend h2 {line-height:21px}
 .title_srch {margin:25px 0 10px; overflow:hidden; vertical-align: middle; line-height:22px}
+
 /* Title - Course Admin */
 .tit_cus1 {background: url("../images/header_admin.png") no-repeat scroll 0 0; height:85px}
 .tit_cus2 {background: url("../images/header_admin.png") no-repeat scroll 0 -85px; height:85px}
@@ -510,6 +514,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .w110 {width:110px !important}
 .w170 {width:170px !important}
 .w310 {width:310px !important}
+.w365 {width:365px !important}
 .w370 {width:370px !important}
 .w375 {width:375px !important}
 .w415 {width:415px !important}
@@ -582,15 +587,15 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 #content_list_section {float: left; height: auto; min-height: 600px; padding: 40px 40px 25px; position: relative; width: 705px;}
 #content_list_section h3 {border-bottom: 2px solid #CCCCCC; clear: both; height: 20px; margin-bottom: 20px;}
 #content_list_section .search {margin: 0 auto; width: 460px;}
-#content_list_section .search li .srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; margin-right: 5px; width: 369px; vertical-align: middle; padding: 6px 3px; height:17px}
+#content_list_section .search li #srch_style1 {border: 3px solid #74B3DD; font: bold 13px 'dotum','Helvetica','sans-serif'; margin-right: 5px; width: 369px; vertical-align: middle; padding: 6px 3px; height:17px}
 #content_list_section .tit_header {border-bottom: 2px solid #74B3DD; height: 50px; margin: 20px 0;}
 #content_list_section .tit_header h2 {background: url("../images/ico_workshop.gif") no-repeat scroll 0 0 transparent; color: #333333; float: left; font-size: 16px; height: 22px; padding: 20px 0 0 50px}
 #content_list_section .tit_header ul {float: right; padding-top: 30px}
 #content_list_section .course_listbox1 {clear: both; margin: 0 auto; width: 700px;}
-#content_list_section .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
-#content_list_section .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 12px/15px 'dotum','Helvetica','sans-serif'; height: 165px;  margin: 0 7px 20px 0; padding: 5px; width: 120px}
-#content_list_section .course_list li a {color: #666666; text-decoration: none;}
-#content_list_section .course_list li .title {height: 38px; overflow: hidden; font-weight: bold; word-wrap: break-word}
+.course_listbox1 .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
+.course_listbox1 .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 12px/15px 'dotum','Helvetica','sans-serif'; height: 165px;  margin: 0 6px 20px 0; padding: 5px; width: 120px}
+.course_listbox1 .course_list li a {color: #666666; text-decoration: none;}
+.course_listbox1 .course_list li .title {height: 38px; overflow: hidden; font-weight: bold; word-wrap: break-word}
 #content_list_section table { border-bottom:1px solid #cccccc}
 #content_list_section table .tit_bg {background: url("../../images/bg_thGradient.gif") repeat-x scroll 0 100% transparent}
 #content_list_section table .tit_bg th {border-bottom: 1px solid #CCCCCC; border-top: 2px solid #7F7F7F;}
