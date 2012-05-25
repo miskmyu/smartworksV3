@@ -889,6 +889,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		try {
 			if(courseTeam == null)
 				return null;
+			this.fill(user, courseTeam);
 			this.set(courseTeam);
 			return courseTeam;
 		} catch (SeraException e) {
@@ -1033,7 +1034,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.objId, obj.name, obj.courseId, obj.description, obj.accessPolicy, obj.memberSize, obj.startDate, obj.endDate");
+				buf.append(" obj.objId, obj.name, obj.courseId, obj.description, obj.accessPolicy, obj.memberSize, obj.startDate, obj.endDate, obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1053,6 +1054,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					obj.setMemberSize((Integer)fields[j++]);
 					obj.setStartDate((Timestamp)fields[j++]);
 					obj.setEndDate((Timestamp)fields[j++]);
+					obj.setCreationUser((String)fields[j++]);
+					obj.setCreationDate((Timestamp)fields[j++]);
+					obj.setModificationUser((String)fields[j++]);
+					obj.setModificationDate((Timestamp)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;

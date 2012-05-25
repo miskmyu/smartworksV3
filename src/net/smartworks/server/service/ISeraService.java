@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.User;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.EventInstanceInfo;
@@ -155,12 +156,12 @@ public interface ISeraService {
 	
 	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
 
-	public abstract BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract BoardInstanceInfo[] getBoardInstancesByCourseId(User currentUser, String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception;
 
-	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
-	public abstract NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract NoteInstanceInfo[] getSeraNoteByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
-	public abstract MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+	public abstract MissionReportInstanceInfo[] getSeraReportByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
 
 }

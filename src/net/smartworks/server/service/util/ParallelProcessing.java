@@ -1,14 +1,20 @@
 package net.smartworks.server.service.util;
 
+import org.springframework.stereotype.Component;
+
 import net.smartworks.util.Semaphore;
 
+@Component
 public class ParallelProcessing extends Thread implements IParallelProcessing{
-	
+
 	Thread currentThread = null;
 	Semaphore semaphore = null;
 	Object result = null;
 	Object[] arrayResult = null;
-	
+
+	public ParallelProcessing() {
+	}
+
 	public ParallelProcessing(Semaphore semaphore, Thread currentThread){
 		this.semaphore = semaphore;
 		this.currentThread = currentThread;

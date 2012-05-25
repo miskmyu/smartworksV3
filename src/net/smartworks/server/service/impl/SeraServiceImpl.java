@@ -121,9 +121,11 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.server.service.util.InstanceParallelProcessing;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2044,11 +2046,13 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	@Override
-	public BoardInstanceInfo[] getBoardInstancesByCourseId(String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception {
+	public BoardInstanceInfo[] getBoardInstancesByCourseId(User currentUser, String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
-			User user = SmartUtil.getCurrentUser();
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
 			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -2186,11 +2190,13 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 	@Override
-	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_EVENT_MANAGEMENT;
-			User user = SmartUtil.getCurrentUser();
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
 
 			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
@@ -2351,8 +2357,8 @@ public class SeraServiceImpl implements ISeraService {
 	public InstanceInfo[] getCourseNotices(String courseId, LocalDate fromDate, int maxList) throws Exception{
 		try{
 			//공지사항(getCommunityRecentBoardInstances) + 이벤트(getEventInstanceInfosByWorkSpaceId)
-			InstanceInfo[] noticeInfo = getBoardInstancesByCourseId(null, courseId, null, null, null, fromDate, maxList);
-			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(null, courseId, null, null, fromDate, maxList);
+			InstanceInfo[] noticeInfo = getBoardInstancesByCourseId(null, null, courseId, null, null, null, fromDate, maxList);
+			InstanceInfo[] eventInfo = getEventInstanceInfosByWorkSpaceId(null, null, courseId, null, null, fromDate, maxList);
 			
 			Map<Long, InstanceInfo> resultMap = new HashMap<Long, InstanceInfo>();
 			if (noticeInfo != null) {
@@ -2973,13 +2979,14 @@ public class SeraServiceImpl implements ISeraService {
 		return recordId;
 	}
 	@Override
-	public NoteInstanceInfo[] getSeraNoteByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	public NoteInstanceInfo[] getSeraNoteByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
-			User user = SmartUtil.getCurrentUser();
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
-
 			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 	
@@ -3084,11 +3091,13 @@ public class SeraServiceImpl implements ISeraService {
 									String filePath = fileModel.getFilePath();
 									String extension = filePath.lastIndexOf(".") > 1 ? filePath.substring(filePath.lastIndexOf(".")) : null;
 									filePath = StringUtils.replace(filePath, "\\", "/");
-									if(filePath.indexOf(companyId) != -1)
-										noteInstanceInfo.setImageSrcOrigin(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
-									filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
-									if(filePath.indexOf(companyId) != -1)
-										noteInstanceInfo.setImageSrc(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
+									if(filePath != null) {
+										if(filePath.indexOf(companyId) != -1)
+											noteInstanceInfo.setImageSrcOrigin(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
+										filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
+										if(filePath.indexOf(companyId) != -1)
+											noteInstanceInfo.setImageSrc(Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length()));
+									}
 								}
 							}
 						} else if(swdDataField.getId().equals(SeraConstant.NOTE_VIDEOYTIDFIELDID)) {
@@ -3132,11 +3141,13 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 	@Override
-	public MissionReportInstanceInfo[] getSeraReportByMissionId(String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
+	public MissionReportInstanceInfo[] getSeraReportByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception {
 		try{
 
 			String workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
-			User user = SmartUtil.getCurrentUser();
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
 
 			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
@@ -3301,16 +3312,16 @@ public class SeraServiceImpl implements ISeraService {
 
 			switch (type) {
 			case Instance.TYPE_BOARD:
-				boardInfo = getBoardInstancesByCourseId(null, courseId, missionId, teamId, null, fromDate, maxList);
+				boardInfo = getBoardInstancesByCourseId(null, userId, courseId, missionId, teamId, null, fromDate, maxList);
 				break;
 			case Instance.TYPE_EVENT:
-				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
+				eventInfo = getEventInstanceInfosByWorkSpaceId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_SERA_NOTE:
-				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
+				noteInfo = getSeraNoteByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_SERA_MISSION_REPORT:
-				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
+				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_ASYNC_MESSAGE:
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
@@ -3319,16 +3330,17 @@ public class SeraServiceImpl implements ISeraService {
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			default:
-				boardInfo = getBoardInstancesByCourseId(userId, courseId, missionId, teamId, null, fromDate, maxList);
-				eventInfo = getEventInstanceInfosByWorkSpaceId(userId, courseId, missionId, teamId, fromDate, maxList);
-				noteInfo = getSeraNoteByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
-				reportInfo = getSeraReportByMissionId(userId, courseId, missionId, teamId, fromDate, maxList);
-/*				Semaphore semaphore = new Semaphore(4);
+				boardInfo = getBoardInstancesByCourseId(null, userId, courseId, missionId, teamId, null, fromDate, maxList);
+				eventInfo = getEventInstanceInfosByWorkSpaceId(null, userId, courseId, missionId, teamId, fromDate, maxList);
+				noteInfo = getSeraNoteByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
+				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
+				/*User currentUser = SmartUtil.getCurrentUser();
+				Semaphore semaphore = new Semaphore(4);
 				Thread currentThread = Thread.currentThread();
-				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing eventPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_EVENT, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing seraNotePP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_SERA_NOTE, userId, courseId, missionId, teamId, fromDate, maxList);
-				InstanceParallelProcessing missionReportPP = new InstanceParallelProcessing(semaphore, currentThread, Instance.TYPE_SERA_MISSION_REPORT, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing eventPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_EVENT, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing seraNotePP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_NOTE, userId, courseId, missionId, teamId, fromDate, maxList);
+				InstanceParallelProcessing missionReportPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_SERA_MISSION_REPORT, userId, courseId, missionId, teamId, fromDate, maxList);
 				boardPP.start();
 				eventPP.start();
 				seraNotePP.start();
@@ -3337,10 +3349,10 @@ public class SeraServiceImpl implements ISeraService {
 				synchronized (currentThread) {
 					currentThread.wait();
 				}
-				boardInfo = (InstanceInfo[])boardPP.getArrayResult();
-				eventInfo = (InstanceInfo[])eventPP.getArrayResult();
-				noteInfo = (InstanceInfo[])seraNotePP.getArrayResult();
-				reportInfo = (InstanceInfo[])missionReportPP.getArrayResult();*/
+				boardInfo = (BoardInstanceInfo[])boardPP.getArrayResult();
+				eventInfo = (EventInstanceInfo[])eventPP.getArrayResult();
+				noteInfo = (NoteInstanceInfo[])seraNotePP.getArrayResult();
+				reportInfo = (MissionReportInstanceInfo[])missionReportPP.getArrayResult();*/
 
 				break;
 			}
@@ -3702,7 +3714,7 @@ public class SeraServiceImpl implements ISeraService {
 					}
 				}
 			}
-	
+
 			Date startDate = null;
 			Date endDate = null;
 	
@@ -6054,6 +6066,15 @@ public class SeraServiceImpl implements ISeraService {
 				team.setEnd(new LocalDate(courseTeam.getEndDate().getTime()));
 				team.setAccessPolicy(courseTeam.getAccessPolicy());
 				team.setMaxMembers(courseTeam.getMemberSize());
+				String creationUser = courseTeam.getCreationUser();
+				if(creationUser != null) {
+					String[] userIds = new String[1];
+					userIds[0] = creationUser;
+					SeraUserInfo[] userInfos = getSeraUserInfos(userIds);
+					if(!CommonUtil.isEmpty(userInfos)) {
+						team.setLeader(userInfos[0]);
+					}
+				}
 				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
 				SeraFriendCond seraFriendCond = new SeraFriendCond();
 				seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
@@ -6420,8 +6441,8 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public SeraBoardList getSeraBoards(int maxList) throws Exception {
 		SeraBoardList seraBoards = new SeraBoardList();
-		seraBoards.setSeraNews(getBoardInstancesByCourseId(null, null, null, null, Constants.SERA_WID_SERA_NEWS, null, maxList));
-		seraBoards.setSeraTrends(getBoardInstancesByCourseId(null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList));
+		seraBoards.setSeraNews(getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_NEWS, null, maxList));
+		seraBoards.setSeraTrends(getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList));
 		return seraBoards;
 	}
 	@Override
@@ -6658,7 +6679,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 	@Override
 	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
-		return getBoardInstancesByCourseId(null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList);
+		return getBoardInstancesByCourseId(null, null, null, null, null, Constants.SERA_WID_SERA_TREND, null, maxList);
 	}
 
 }
