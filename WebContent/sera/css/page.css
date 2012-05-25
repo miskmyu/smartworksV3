@@ -104,7 +104,7 @@
 .header_tit .tit_calendar {background: url("../images/header.png") no-repeat scroll 0 -952px; height:38px; padding:45px 25px 0}
 .header_tit .tit_account {background: url("../images/header.png") no-repeat scroll 0 -1040px; height:38px; padding:45px 25px 0}
 .header_tit .tit_dep2 {background: url("../images/header.png") no-repeat scroll 0 -553px; padding:5px 0 0 50px; margin: 20px 0 0; line-height:17px; min-height: 30px}
-.header_tit .tit_dep2.team {background-position: 0 -1298px !important; padding:5px 0 0 50px}
+.header_tit .tit_dep2.team {background-position: 0 -1298px !important; padding:5px 0 0 45px}
 .header_tit .tit_dep2 h2, .header_tit h2 { font-size:14px; font-weight:bold; color:#454545}
 .title_srch {margin:25px 0 10px; overflow:hidden; vertical-align: middle; line-height:22px}
 /* Title - Course Admin */
@@ -187,16 +187,16 @@ a.b_next:hover { background-position:-30px -535px}
 .btn_mid_r {background: url("../images/btn_mid_r.png") no-repeat scroll 100% 0; height:19px !important; padding: 0 10px 0 7px; position: relative; right: -3px; line-height:21px; font-size:12px; color:#555555; font-weight:normal}
 
 .btn_fgreen_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 0; height:19px !important; float:left; cursor:pointer}
-.btn_fgreen_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fgreen_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% 0; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#595959; font-weight:normal; position:relative; right:-3px}
 
 .btn_fgray_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -20px; height:19px !important; float:left; cursor:pointer}
-.btn_fgray_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -20px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fgray_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -20px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#595959; font-weight:normal; position:relative; right:-3px}
 
 .btn_fblu_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -40px; height:19px !important; float:left; cursor:pointer}
-.btn_fblu_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -40px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fblu_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -40px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#595959; font-weight:normal; position:relative; right:-3px}
 
 .btn_fred_l {background: url("../images/btn_function_l.png") no-repeat scroll 0 -60px; height:19px !important; float:left; cursor:pointer}
-.btn_fred_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -60px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#717171; font-weight:normal; position:relative; right:-3px}
+.btn_fred_r {background: url("../images/btn_function_r.png") no-repeat scroll 100% -60px; height:19px !important; padding:0 17px 0 13px; line-height:21px; font-size:12px; color:#595959; font-weight:normal; position:relative; right:-3px}
 
 .btn_blu_l {background: url("../images/btn_blu_l.png") no-repeat scroll 0 0; height:34px; float:left; cursor:pointer}
 .btn_blu_r {background: url("../images/btn_blu_r.png") no-repeat scroll 100% 0; height:34px; padding:0 12px; line-height:36px; font-weight:bold; font-size:12px; color:#FFF; position:relative; right:-1px}
@@ -238,7 +238,7 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
-.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:7px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:8px !important; margin: 0 5px 2px 0; display:inline-block !important}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -313,10 +313,10 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
 .panel_section .header {border-bottom:1px solid #559fcc; height:21px} /* Mypage Header */
+.panel_section .header.dep2 {border-bottom:1px solid #aaaaaa !important}
 .panel_section .header .current, .panel_section .header .tit {color:#608eba !important; font-weight:bold !important}
-.panel_section .header div { float:left; margin-right:5px; color:#dddddd; font-size:12px !important; font-weight:normal !important}
-.panel_section .header div a {color:#333333; font-weight:bold}
-.panel_section .header .tit span {color:#333333; font-weight:normal}
+.panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
+.panel_section .header div a, .panel_section .header .tit span {color:#333333; font-weight:bold}
 .panel_section .header_mission div, .course_section .header_mission div { font-size:14px; color:#3174ad; font-weight:bold}
 
 .panel_section .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
@@ -411,8 +411,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
 .aside_block .header { font-size:14px; color:#333333; line-height:18px; font-weight:bold; margin-bottom: 5px; word-wrap: break-word}
 .aside_block .content { clear:both; padding:8px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
-.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
+.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
+.aside_block .content.trend li {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
 .aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}

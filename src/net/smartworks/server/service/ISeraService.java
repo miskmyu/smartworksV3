@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.notice.Notice;
@@ -148,5 +149,7 @@ public interface ISeraService {
 	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract Team getJoinRequestTeamByCourseId(String courseId) throws Exception;
+	
+	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
 	
 }

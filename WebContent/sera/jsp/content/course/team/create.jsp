@@ -89,15 +89,10 @@
 
 <div class="js_create_team_page" courseId="<%=courseId%>" courseOpenDate="<%=course.getOpenDate().toLocalDateSimpleString()%>" courseCloseDate="<%=course.getCloseDate().toLocalDateSimpleString()%>">
 	<!-- Header Title -->
-	<div class="header_tit">
-		<div class="tit_dep2 team m0">
-			<h2>팀 구성하기</h2>
-			<div>
-				<span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료
-				등 이용약관에 명시한 불법게시물을 올리실 경우 경고 없이 삭제될 수있으며, 서비스 이용 제한 및 법적인 처벌을 받을 수
-				있습니다.
-			</div>
-		</div>
+	<div class="mb10">
+		<span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료
+		등 이용약관에 명시한 불법게시물을 올리실 경우 경고 없이 삭제될 수있으며, 서비스 이용 제한 및 법적인 처벌을 받을 수
+		있습니다.
 	</div>
 	<!-- Header Title //-->
 	<!-- Input Form -->
