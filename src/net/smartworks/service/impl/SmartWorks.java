@@ -1305,4 +1305,9 @@ public class SmartWorks implements ISmartWorks {
 	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		seraService.destroyMembership(requestBody, request);
 	}
+
+	@Override
+	public BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception {
+		return seraService.getSeraTrends(maxList);
+	}
 }
