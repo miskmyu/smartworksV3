@@ -238,7 +238,7 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
-.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:7px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_delete_inbtn {background: url("../images/icon.png") no-repeat scroll -25px -345px; width:9px; height:8px !important; margin: 0 5px 2px 0; display:inline-block !important}
 
 .icon_mytext a {background: url("../images/icon.png") no-repeat scroll -165px -75px; height:15px; display:block; padding:0 0 0 20px}
 .icon_newsfeed a {}
@@ -411,8 +411,9 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .aside_block {display:block; margin-top:15px; padding:15px 12px; border-bottom:1px dotted #cdcdcd}
 .aside_block .header { font-size:14px; color:#333333; line-height:18px; font-weight:bold; margin-bottom: 5px; word-wrap: break-word}
 .aside_block .content { clear:both; padding:8px 0 0 5px; color:#666666; line-height:18px; overflow:hidden}
-.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -366px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
+.aside_block .content dt {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px; font-weight:bold; margin-bottom:3px}
 .aside_block .content dd { margin-left:5px}
+.aside_block .content.trend li {background: url("../images/icon.png") no-repeat -166px -369px; padding:0 0 0 8px}
 .aside_block .list { clear:both; padding:10px 0 0 0; color:#666666; line-height:18px}
 .aside_block .list dd { display: inline-block; margin:0 1px 5px}
 .aside_block .content .ad_photo { float:left; width:72px; height:72px; margin-right:5px; border:1px solid #B4B2B2; margin-right:10px}
