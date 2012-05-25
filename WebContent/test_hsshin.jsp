@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
 <%@page import="net.smartworks.model.sera.SeraBoardList"%>
 <%@page import="net.smartworks.server.service.ISeraService"%>
@@ -540,11 +541,16 @@
 	for(SwoGroup swoGroup : swoGroups) {
 		String groupId = swoGroup.getId();
 		String status = swoGroup.getStatus();
+		String creator = swoGroup.getCreationUser();
+		//swoGroup.setModificationUser(creator);
+		//SwManagerFactory.getInstance().getSwoManager().setGroup("", swoGroup, IManager.LEVEL_LITE);
 		for(CourseDetail courseDetail : courseDetails) {
 			String courseId = courseDetail.getCourseId();
+			Date creationDate = courseDetail.getCreateDate();
 			if(groupId.equals(courseId)) {
-				courseDetail.setStatus(status);
-				SwManagerFactory.getInstance().getSeraManager().setCourseDetail(courseDetail);
+				swoGroup.setCreationDate(creationDate);
+				swoGroup.setModificationDate(creationDate);
+				SwManagerFactory.getInstance().getSwoManager().setGroup("", swoGroup, IManager.LEVEL_LITE);
 			}
 		}
 	}
