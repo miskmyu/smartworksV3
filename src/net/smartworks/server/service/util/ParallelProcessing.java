@@ -17,14 +17,24 @@ public class ParallelProcessing extends Thread implements IParallelProcessing{
 	public void run(){
 		try{
 
+			System.out.println("run() :::::::::::::::::::::::::::::: ");
 			doRun();
 			if(semaphore.getSemaphore() == 0){
 				synchronized (currentThread){
-					currentThread.notify();
+					currentThread.notifyAll();
 				}	
 			}
 		}catch(Exception e){
-			e.getStackTrace();
+			e.printStackTrace();
+			try {
+				if(semaphore.getSemaphore() == 0){
+					synchronized (currentThread){
+						currentThread.notifyAll();
+					}	
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}				
 	}
 

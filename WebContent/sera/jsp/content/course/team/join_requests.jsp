@@ -18,8 +18,7 @@
 
 	String courseId = request.getParameter("courseId");
 
-	Team[] requestTeams = smartWorks.getJoinRequestTeamsByCourseId(courseId);
-	int totalRequests = SmartUtil.isBlankObject(requestTeams) ? 0 : requestTeams.length;
+	Team requestTeam = smartWorks.getJoinRequestTeamByCourseId(courseId);
 %>
 
 <!-- Panel Section -->
@@ -31,9 +30,7 @@
 		</div> --%>
 		<div class="panel_area">
 			<%
-			if(!SmartUtil.isBlankObject(requestTeams)){
-				for(int i=0; i<requestTeams.length; i++){
-					Team requestTeam = requestTeams[i];
+			if(!SmartUtil.isBlankObject(requestTeam)){
 					int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
 			%>
 					<!-- 목록1-->
@@ -70,17 +67,13 @@
 					<!-- 목록1//-->
 			<%
 				}
-			}
 			%>
 		</div>
 	</div>
 	<!-- Panel1 //-->
 
 	<%
-	if(totalRequests>0){
-		for(int i=0; i<requestTeams.length; i++){
-			Team requestTeam = requestTeams[i];
-			int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
+		int memberCount = (SmartUtil.isBlankObject(requestTeam.getMembers())) ? 0 : requestTeam.getMembers().length;
 	%>
 			<!-- Panel2 -->
 			<div>
@@ -139,9 +132,5 @@
 				</div>
 			</div>
 			<!-- Panel2 //-->
-	<%	
-		}
-	}
-	%>
 </div>
 <!-- Panel Section //-->

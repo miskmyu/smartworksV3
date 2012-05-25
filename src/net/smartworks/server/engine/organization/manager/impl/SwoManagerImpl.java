@@ -2544,18 +2544,14 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 	}
 
-	private static SizeMap groupMap = new SizeMap(100);
 	@Override
 	public SwoGroup getGroup(String user, String id, String level) throws SwoException {
 
 		try {
-			if (groupMap.containsKey(id))
-				return (SwoGroup)groupMap.get(id);
 			if (level == null)
 				level = LEVEL_ALL;
 			if (level.equals(LEVEL_ALL)) {
 				SwoGroup obj = (SwoGroup)this.get(SwoGroup.class, id);
-				groupMap.put(obj.getId(), obj);
 				return obj;
 			} else {
 				SwoGroupCond cond = new SwoGroupCond();
@@ -2563,7 +2559,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				SwoGroup[] objs = this.getGroups(user, cond, level);
 				if (objs == null || objs.length == 0)
 					return null;
-				groupMap.put(objs[0].getId(), objs[0]);
 				return objs[0];
 			}
 		} catch (Exception e) {

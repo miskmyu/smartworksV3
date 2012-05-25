@@ -94,6 +94,10 @@
 		<property name="memberSize" type="int"/>
 		<property name="startDate" column="startDate" type="timestamp"/>
 		<property name="endDate" column="endDate" type="timestamp"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 		<array name="courseTeamUsers" table="CourseTeamUser">
 			<key column="objId" foreign-key="FkCourseTeamUser" />
 			<list-index column="memberSeq" />

@@ -1281,9 +1281,9 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception {
+	public Team getJoinRequestTeamByCourseId(String courseId) throws Exception {
 		// TODO Auto-generated method stub
-		return seraService.getJoinRequestTeamsByCourseId(courseId);
+		return seraService.getJoinRequestTeamByCourseId(courseId);
 	}
 
 	@Override
