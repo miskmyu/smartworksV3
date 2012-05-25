@@ -1,16 +1,13 @@
 package net.smartworks.server.service.util;
 
+import java.util.Date;
+
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.info.InstanceInfo;
-import net.smartworks.server.service.ISeraService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
 public class InstanceParallelProcessing extends ParallelProcessing {
 	private User currentUser;
 	private int instanceType;
@@ -20,15 +17,6 @@ public class InstanceParallelProcessing extends ParallelProcessing {
 	private String teamId;
 	private LocalDate fromDate;
 	private int maxList;
-	private static ISeraService seraService;
-
-	public InstanceParallelProcessing() {
-	}
-
-	@Autowired(required=true)
-	public void setSeraService(ISeraService seraService) {
-		InstanceParallelProcessing.seraService = seraService;
-	}
 
 	public int getInstanceType() {
 		return instanceType;
