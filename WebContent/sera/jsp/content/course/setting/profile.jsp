@@ -23,7 +23,8 @@
 		var settingProfile = $('.js_setting_profile_page');
 		if (SmartWorks.GridLayout.validate(settingProfile.find('form.js_validation_required'),  settingProfile.find('.sw_error_message'))) {
 			var forms = settingProfile.find('form');
-			if(forms.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){			
+			if(forms.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){	
+				form.find('input[name="txtCourseDays"]').attr('value', '');
 				var startDate = new Date(forms.find('input[name="txtCourseStartDate"]').attr('value'));
 				var endDate = new Date(forms.find('input[name="txtCourseEndDate"]').attr('value'));
 				if(startDate.getTime()>=endDate.getTime()){

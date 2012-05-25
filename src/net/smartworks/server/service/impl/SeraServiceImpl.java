@@ -124,6 +124,7 @@ import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -3653,7 +3654,7 @@ public class SeraServiceImpl implements ISeraService {
 	}
 
 	@Override
-	public String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public Team createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try {
 			User user = SmartUtil.getCurrentUser();
@@ -3662,7 +3663,7 @@ public class SeraServiceImpl implements ISeraService {
 			Map<String, Object> frmCreateTeamMap = (Map<String, Object>)requestBody.get("frmCreateTeam");
 
 			String txtTeamName = null;
-			String txaTeamDesc = null;
+			String txtTeamDesc = null;
 			String txtTeamDays = null;
 			String txtTeamStartDate = null;
 			String txtTeamEndDate = null;
@@ -3684,8 +3685,8 @@ public class SeraServiceImpl implements ISeraService {
 				} else if(fieldValue instanceof String) {
 					if(fieldId.equals("txtTeamName")) {
 						txtTeamName = (String)frmCreateTeamMap.get("txtTeamName");
-					} else if(fieldId.equals("txaTeamDesc")) {
-						txaTeamDesc = (String)frmCreateTeamMap.get("txaTeamDesc");
+					} else if(fieldId.equals("txtaTeamDesc")) {
+						txtTeamDesc = (String)frmCreateTeamMap.get("txtaTeamDesc");
 					} else if(fieldId.equals("txtTeamDays")) {
 						txtTeamDays = (String)frmCreateTeamMap.get("txtTeamDays");
 					} else if(fieldId.equals("txtTeamStartDate")) {
@@ -3714,7 +3715,7 @@ public class SeraServiceImpl implements ISeraService {
 			CourseTeam courseTeam = new CourseTeam();
 			courseTeam.setCourseId(courseId);
 			courseTeam.setName(txtTeamName);
-			courseTeam.setDescription(txaTeamDesc);
+			courseTeam.setDescription(txtTeamDesc);
 			courseTeam.setAccessPolicy(Integer.parseInt(chkTeamSecurity));
 			courseTeam.setMemberSize(Integer.parseInt(txtTeamUsers));
 			courseTeam.setStartDate(startDate);
@@ -3754,7 +3755,7 @@ public class SeraServiceImpl implements ISeraService {
 			}
 
 			courseTeam = getSeraManager().setCourseTeam(userId, courseTeam);
-			return courseTeam.getObjId();
+			return new Team(courseTeam.getObjId(), courseTeam.getName());
 			
 		} catch (ArrayIndexOutOfBoundsException ae) {
 			throw new ArrayIndexOutOfBoundsException("txtTeamUsers Exceed~!!");
@@ -3771,7 +3772,7 @@ public class SeraServiceImpl implements ISeraService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 			String teamId = (String)requestBody.get("teamId");
-			Map<String, Object> frmSetTeamMap = (Map<String, Object>)requestBody.get("frmSetTeam");
+			Map<String, Object> frmSetTeamMap = (Map<String, Object>)requestBody.get("frmModifyTeam");
 
 			String txtaTeamDesc = null;
 			String txtTeamDays = null;
@@ -6243,32 +6244,32 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-	public SeraUserInfo[] getRequestersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList) {
-		try {
-			if(CommonUtil.isEmpty(courseTeamUsers))
-				return null;
-
-			SeraUserInfo[] seraUserInfos = null;
-			List<String> requesterIdList = new ArrayList<String>();
-			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
-				String teamUserId = courseTeamUser.getUserId();
-				String joinType = courseTeamUser.getJoinType();
-				String joinStatus = courseTeamUser.getJoinStatus();
-				if(CourseTeamUser.JOINTYPE_INVITE.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
-					requesterIdList.add(teamUserId);
-				}
-			}
-			if(requesterIdList.size() > 0) {
-				if(memberInformList != null)
-					memberInformList.setTotalRequesters(requesterIdList.size());
-				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
-			}
-			return seraUserInfos;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	public SeraUserInfo[] getRequestersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList) {
+//		try {
+//			if(CommonUtil.isEmpty(courseTeamUsers))
+//				return null;
+//
+//			SeraUserInfo[] seraUserInfos = null;
+//			List<String> requesterIdList = new ArrayList<String>();
+//			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+//				String teamUserId = courseTeamUser.getUserId();
+//				String joinType = courseTeamUser.getJoinType();
+//				String joinStatus = courseTeamUser.getJoinStatus();
+//				if(CourseTeamUser.JOINTYPE_INVITE.equals(joinType) && CourseTeamUser.JOINSTATUS_READY.equals(joinStatus)) {
+//					requesterIdList.add(teamUserId);
+//				}
+//			}
+//			if(requesterIdList.size() > 0) {
+//				if(memberInformList != null)
+//					memberInformList.setTotalRequesters(requesterIdList.size());
+//				seraUserInfos = getSeraUserInfos(requesterIdList, maxList, null, null);
+//			}
+//			return seraUserInfos;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	public SeraUserInfo[] getMembersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
 		try {
 			if(CommonUtil.isEmpty(courseTeamUsers))
@@ -6348,11 +6349,9 @@ public class SeraServiceImpl implements ISeraService {
 			SeraUserInfo[] nonMembers = null;
 
 			CourseTeamUser[] courseTeamUsers = getCourseTeamUsers(teamId);
-			requesters = getRequestersOfTeam(memberInformList, courseTeamUsers, maxList);
 			members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 			nonMembers = getNonMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 
-			memberInformList.setRequesters(requesters);
 			memberInformList.setMembers(members);
 			memberInformList.setNonMembers(nonMembers);
 
@@ -6399,21 +6398,7 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-	@Override
-	public void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public SeraBoardList getSeraBoards(int maxList) throws Exception {
 		SeraBoardList seraBoards = new SeraBoardList();
@@ -6485,6 +6470,30 @@ public class SeraServiceImpl implements ISeraService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	@Override
+	public Team[] getJoinRequestTeamsByCourseId(String courseId) throws Exception {
+		return new Team[]{SeraTest.getTeam(), SeraTest.getTeam(), SeraTest.getTeam()};
+	}
+	@Override
+	public void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

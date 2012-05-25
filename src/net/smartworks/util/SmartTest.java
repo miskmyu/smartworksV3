@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.claros.commons.mail.models.ConnectionProfile;
+import org.cometd.bayeux.client.ClientSession;
+import org.cometd.client.BayeuxClient;
+import org.cometd.client.transport.ClientTransport;
+import org.cometd.client.transport.LongPollingTransport;
+import org.eclipse.jetty.client.HttpClient;
 
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
@@ -1510,5 +1515,5 @@ public class SmartTest {
 		profile.setFolderNameSpace("");
 		
 		return new ConnectionProfile[]{profile};
-	}
+	}	
 }

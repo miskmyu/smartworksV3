@@ -90,7 +90,7 @@
 				<td>
 					<div class="form_label w110">코스 제목</div>
 					<div class="form_value w540">
-						<input name="txtCourseName" type="text" class="fieldline fl required">
+						<input name="txtCourseName" type="text" maxLength="50" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>

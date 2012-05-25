@@ -234,7 +234,7 @@ button.styl_bl {border: 1px solid #c5d0d6; background-color:#e0ecf3 !important; 
 .icon_star_score.half {background-position:-37px -293px}
 .icon_blu_down2 {background: url("../images/icon.png") no-repeat scroll 0 -320px; width:14px; height:11px !important; display:inline-block !important}
 .icon_green_down {background: url("../images/icon.png") no-repeat scroll 0 -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
-.icon_bludown_inbtn {background: url("../images/icon.png") no-repeat scroll -54px -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
+.icon_bludown_inbtn {background: url("../images/icon.png") no-repeat scroll -55px -346px; width:9px; height:6px !important; margin: 0 5px 2px 0; display:inline-block !important}
 .icon_after_check {background: url("../images/icon.png") no-repeat scroll 0 -216px; width:12px; height:10px !important; margin: 0 3px 2px 0; display:inline-block !important}
 .icon_cancel {background: url("../images/icon.png") no-repeat scroll -25px -320px; width:10px; height:10px !important; display:inline-block !important}
 .icon_register {background: url("../images/icon.png") no-repeat scroll -51px -320px; width:13px; height:10px !important; display:inline-block !important}
