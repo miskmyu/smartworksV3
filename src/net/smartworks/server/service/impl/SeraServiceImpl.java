@@ -3391,40 +3391,25 @@ public class SeraServiceImpl implements ISeraService {
 
 			int workType = (Integer)requestBody.get("workType");
 			String workInstanceId = (String)requestBody.get("workInstanceId");
-			String workId = null;
+			String domainId = null;
 
 			switch (workType) {
 			case SocialWork.TYPE_BOARD:
-				workId = SmartWork.ID_BOARD_MANAGEMENT;
+				domainId = "frm_notice_SYSTEM";
 				break;
 			case SocialWork.TYPE_EVENT:
-				workId = SmartWork.ID_EVENT_MANAGEMENT;
+				domainId = "frm_event_SYSTEM";
 				break;
 			case Work.TYPE_SERA_NOTE:
-				workId = SmartWork.ID_SERA_NOTE_MANAGEMENT;
+				domainId = "sera_note";
 				break;
 			case Work.TYPE_SERA_MISSION_REPORT:
-				workId = SmartWork.ID_SERA_MISSION_REPORT_MANAGEMENT;
+				domainId = "mission_report";
 				break;
 			}
 
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
-
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setPackageId(workId);
-			SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
-
-			SwfForm swfForm = null;
-			if(!CommonUtil.isEmpty(swfForms)) {
-				swfForm = swfForms[0];
-			}
-
-			String formId = swfForm.getId();
-			SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setFormId(formId);
-			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
-			String domainId = swdDomain.getObjId();
 
 			getSwdManager().removeRecord(userId, domainId, workInstanceId);
 
