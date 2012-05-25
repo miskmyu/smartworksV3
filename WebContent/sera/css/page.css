@@ -313,7 +313,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 /* Panel Section */
 .panel_section, .course_section, .content_section {clear:both}
 .panel_section .header {border-bottom:1px solid #559fcc; height:21px} /* Mypage Header */
-.panel_section .header.2dep {border-bottom:1px solid #858585 !important}
+.panel_section .header.dep2 {border-bottom:1px solid #aaaaaa !important}
 .panel_section .header .current, .panel_section .header .tit {color:#608eba !important; font-weight:bold !important}
 .panel_section .header div { float:left; margin-right:5px; color:#dddddd !important; font-size:12px !important; font-weight:normal !important}
 .panel_section .header div a, .panel_section .header .tit span {color:#333333; font-weight:bold}
