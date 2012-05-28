@@ -65,7 +65,7 @@ $(function() {
 		}else{
 			return false;
 		}
-		if(pos<3 || pos==4 || (pos==5 && isEmpty($(subMenus[pos]).children())) || (pos==3 && isEmpty($('.js_course_team_menu li.js_course_team_activity a')))){
+		if(pos<3 || pos==4 || (pos==5 && isEmpty($(subMenus[pos]).children())) || (pos==3 && !isEmpty($('.js_course_team_menu li')))){
 			smartPop.progressCenter();				
 			$.ajax({
 				url : url,
@@ -79,7 +79,7 @@ $(function() {
 				}
 			});
 		}else if(pos==3){
-			$('.js_course_team_menu li.js_course_team_activity a').click();
+			$('.js_course_team_menu').click();
 		}else if(pos==5){
 			$('.js_course_setting_menu li.js_course_setting_profile a').click();			
 		}
@@ -92,27 +92,15 @@ $(function() {
 	});
 	
 	$('.js_course_team_menu').live('click', function(e){
-		var input = $(targetElement(e)).parent();
-		input.siblings().removeClass('current');
-		input.addClass('current');
+		var input = $(targetElement(e));
 		var courseHome = input.parents('.js_course_home_page');
 		var courseId = courseHome.attr('courseId');
-		var url ="";
-		var teamId = "";
-		if(input.hasClass('js_course_team_activity')){
-			url = "courseTeamHome.sw";		
-		}else if(input.hasClass('js_course_team_management')){
-			url = "courseTeamManagement.sw";
-			teamId = input.attr('teamId');
-		}else{
-			return false;
-		}
+		var url = "courseTeamHome.sw";	
 		smartPop.progressCenter();
 		$.ajax({
 			url : url,
 			data : {
-				courseId : courseId,
-				teamId : teamId
+				courseId : courseId
 			},
 			success : function(data, status, jqXHR) {
 				$('.js_course_content').html(data);
@@ -831,9 +819,9 @@ $(function() {
 	$('.js_remove_team_btn').live('click', function(e){
 		smartPop.confirm('코스팀을 삭제하려고 합니다. 정말로 삭제하시겠습니까??', function(){
 			var input = $(targetElement(e));
-			var form = input.parents('.js_course_setting_page').find('form');
-			var courseId = form.attr('courseId');
-			var teamId = form.attr('teamId');
+			var courseTeamMangement = input.parents('.js_course_team_management_page');
+			var courseId = courseTeamMangement.attr('courseId');
+			var teamId = courseTeamMangement.attr('teamId');
 			var paramsJson = {};
 			paramsJson['courseId'] = courseId;
 			paramsJson['teamId'] = teamId;
@@ -847,7 +835,14 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀이 성공적으로 삭제 되었습니다.", function(){
-						$('.js_course_home_page .js_course_main_menu .js_create_team').click();						
+						var selectCourseTeam = $('.js_select_course_team select');
+						if(!isEmpty(selectCourseTeam)){
+							selectCourseTeam.find('option[value="' + teamId + '"]').remove();
+							selectCourseTeam.find('option:first').attr('selected', 'selected');
+							selectCourseTeam.change();
+						}else{
+							$('.js_course_team_menu').click();
+						}
 					});
 				},
 				error : function(e) {
@@ -1336,7 +1331,13 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, "팀가입 승인이 정상적으로 이루어 졌습니다.", function(){
-//					input.parents('.js_course_home_page').find('.js_');
+					var selectCourseTeam = $('.js_select_course_team select');
+					if(!isEmpty(selectCourseTeam)){
+						selectCourseTeam.find('option[value="' + teamId + '"]').attr('selected', 'selected');
+						selectCourseTeam.change();
+					}else{
+						$('.js_course_team_menu').click();
+					}
 					smartPop.closeProgress();					
 				});
 			},
@@ -1366,7 +1367,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, "팀 가입 거절이 정상적으로 이루어 졌습니다.", function(){
-//					document.location.href = "socialFriend.sw";
+					$('.js_team_join_requests').click();
 					smartPop.closeProgress();					
 				});
 			},
@@ -1395,7 +1396,13 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, "팀 탈퇴가 정상적으로 이루어 졌습니다.", function(){
-//					document.location.href = "socialFriend.sw";
+					var selectCourseTeam = $('.js_select_course_team select');
+					if(!isEmpty(selectCourseTeam)){
+						selectCourseTeam.find('option:first').attr('selected', 'selected');
+						selectCourseTeam.change();
+					}else{
+						$('.js_course_team_menu').click();
+					}
 					smartPop.closeProgress();					
 				});
 			},
@@ -1426,7 +1433,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, "팀원초대가 정상적으로 이루어 졌습니다.", function(){
-//					document.location.href = "socialFriend.sw";
+					$('.js_team_members').click();
 					smartPop.closeProgress();					
 				});
 			},
@@ -1458,7 +1465,7 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, "팀원삭제가 정상적으로 이루어 졌습니다.", function(){
-//						document.location.href = "socialFriend.sw";
+						$('.js_team_members').click();
 						smartPop.closeProgress();
 					});
 				},
@@ -1747,8 +1754,10 @@ $(function() {
 				lastId: lastId
 			},
 			success : function(data, status, jqXHR) {
-				if(requestType==="2")
+				if(requestType==="1")
 					input.parents('.js_team_members_page').find('.js_member_list').append(data);
+				else if(requestType==="2")
+					input.parents('.js_team_members_page').find('.js_invited_member_list').append(data);
 				else if(requestType==="3")
 					input.parents('.js_team_members_page').find('.js_non_member_list').append(data);
 				input.remove();
@@ -2298,10 +2307,10 @@ $(function() {
 				target.html(data);
 				teamMembers.find('.js_more_member_btn').remove();
 				if(isEmpty(data)){
-					memberCount.html(0);
+					memberCount.html('(0)');
 				}
 				else{
-					memberCount.html(target.find('.js_member_item').length);
+					memberCount.html('(' + target.find('.js_member_item').length + ')');
 				}
 				smartPop.closeProgress();
 			},
@@ -2338,10 +2347,49 @@ $(function() {
 				target.html(data);
 				teamMembers.find('.js_more_non_member_btn').remove();
 				if(isEmpty(data)){
-					nonMemberCount.html(0);
+					nonMemberCount.html('(0)');
 				}
 				else{
-					nonMemberCount.html(target.find('.js_non_member_item').length);
+					nonMemberCount.html('(' + target.find('.js_non_member_item').length + ')');
+				}
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;	
+	});
+	
+	$('.js_invited_member_search_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		var teamMembers = input.parents('.js_team_members_page');
+		courseId = teamMembers.attr('courseId');
+		teamId = teamMembers.attr('teamId');
+		target = teamMembers.find('.js_invited_member_list');
+		invitedMemberCount = teamMembers.find('.js_invited_member_count');			
+
+		if(isEmpty(target)) return false;
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'search_team_member_by_type.sw',
+			data : {
+				type : TYPE_INVITED_MEMBERS,
+				courseId : courseId,
+				teamId : teamId,
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data);
+				teamMembers.find('.js_more_invited_member_btn').remove();
+				if(isEmpty(data)){
+					invitedMemberCount.html('(0)');
+				}
+				else{
+					invitedMemberCount.html('(' + target.find('.js_invited_member_item').length + ')');
 				}
 				smartPop.closeProgress();
 			},

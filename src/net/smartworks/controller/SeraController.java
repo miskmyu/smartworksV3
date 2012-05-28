@@ -14,6 +14,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.instance.Instance;
+import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -686,4 +688,29 @@ public class SeraController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/search/team_member_by_type.jsp", "");
 	}
 	
+	@RequestMapping(value = "/get_course_notices", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> getCourseNotices(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String courseId = request.getParameter("courseId");
+		String fromDate = request.getParameter("fromDate");
+		String maxList = request.getParameter("maxList");
+		InstanceInfo[] notices = smartworks.getCourseNotices(courseId, LocalDate.convertLocalDateStringToLocalDate(fromDate), Integer.parseInt(maxList));
+		String data = "";
+		if(!SmartUtil.isBlankObject(notices)){
+			for(int i=0; i<notices.length; i++){
+				InstanceInfo notice = notices[i];
+				if(notice.getType()==Instance.TYPE_BOARD){
+					data = data + "<dd>[알림] " + notice.getSubject() + "</dd>";
+				}else if(notice.getType()==Instance.TYPE_EVENT){
+					data = data + "<dd>[이벤트] " + notice.getSubject() + "</dd>";
+				}
+			}
+		}
+
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("data", data);
+		return map;
+	}	
+
 }

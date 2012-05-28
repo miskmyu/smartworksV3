@@ -27,80 +27,163 @@
 
 			switch(type){
 			case MemberInformList.TYPE_MEMBERS:
-	%>
-				<!-- 목록1-->
-				<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>" teamId="<%=teamId%>">
-					<ul>
-						<li class="pl0pr10">
-							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
-								<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
-							</a>
-						</li>
-						<li class="w90">
-							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
-								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
-							</a>
-						</li>
-						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
-						</span>
-						</li>
-						<li class="fr bo_l">
-							<span> <!-- Btn -->
-								<div class="btn_fgreen_l js_destroy_membership_btn" userId="<%=member.getId()%>">
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>팀원 삭제</div>
-								</div> <!-- Btn //--> 
+				if(member.getId().equals(cUser.getId())){
+		%>
+					<!-- 목록1-->
+					<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+						<ul>
+							<li class="pl0pr10">
+								<a href="myPAGE.sw">
+									<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
+								</a>
+							</li>
+							<li class="">
+								<a href="myPAGE.sw">
+									<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
+								</a>
+							</li>
+							<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 							</span>
-							<span>
-								<div class="btn_fgreen_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
-								</div> <!-- Btn //--> 
-								<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
-								</div> <!-- Btn //--> 
+							</li>
+							<li class="fr bo_l end">
+								<span>
+								<!-- Btn -->
+									<div class="btn_fred_l mr7 js_leave_team_btn">
+										<div class="btn_fred_r"><span class="icon_delete_inbtn"></span>팀 탈퇴</div>
+									</div>
+								<!-- Btn //--> 
+								</span>
+							</li>
+						</ul>
+					</div>
+					<!-- 목록1//-->
+				<%
+				}else{
+				%>
+					<!-- 목록1-->
+					<div class="panel_rds_block mb10 js_member_item" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+						<ul>
+							<li class="pl0pr10">
+								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+									<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
+								</a>
+							</li>
+							<li class="">
+								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+									<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
+								</a>
+							</li>
+							<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 							</span>
-						</li>
-					</ul>
-				</div>
-				<!-- 목록1//-->
-	<%
+							</li>
+							<li class="fr bo_l end">
+								<span>
+								<!-- Btn -->
+									<div class="btn_fred_l mr7 js_destroy_membership_btn" userId="<%=member.getId()%>">
+										<div class="btn_fred_r"><span class="icon_delete_inbtn"></span>팀원 삭제</div>
+									</div>
+								<!-- Btn //--> 
+
+								<!-- Btn -->
+									<div class="btn_fgreen_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
+									</div> 
+								<!-- Btn //-->
+
+								<!-- Btn //--> 
+									<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
+									</div>
+								<!-- Btn //--> 
+								</span>
+							</li>
+						</ul>
+					</div>
+					<!-- 목록1//-->
+			<%
+				}
 				break;
-			case MemberInformList.TYPE_NON_MEMBERS:
-	%>
+			case MemberInformList.TYPE_INVITED_MEMBERS:
+			%>
 				<!-- 목록1-->
-				<div class="panel_rds_block mb10 js_non_member_item" userId="<%=member.getId()%>">
+				<div class="panel_rds_block mb10 js_invited_member_item" userId="<%=member.getId()%>">
 					<ul>
 						<li class="pl0pr10">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 								<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
 							</a>
 						</li>
-						<li class="w90">
+						<li class="">
 							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
 								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
 							</a>
 						</li>
-						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+						<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
 						</span>
 						</li>
-						<li class="fr bo_l">
-							<span> <!-- Btn -->
-								<div class="btn_fgreen_l js_member_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>팀원 요청</div>
-								</div> <!-- Btn //--> 
-							</span>
-							<span> <!-- Btn -->
-								<div class="btn_fgreen_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+						<li class="fr bo_l end">
+							<span>							
+							<!-- Btn -->
+								<div class="btn_fgreen_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
 									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
-								</div> <!-- Btn //--> 
-								<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
-									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
-								</div> <!-- Btn //--> 
+								</div> 
+							<!-- Btn //--> 
+						
+							<!-- Btn -->
+								<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
+								</div>
+							<!-- Btn //--> 
 							</span>
 						</li>
 					</ul>
 				</div>
 				<!-- 목록1//-->
-	<%
+		<%
+			break;
+		case MemberInformList.TYPE_NON_MEMBERS:
+		%>
+			<!-- 목록1-->
+			<div class="panel_rds_block mb10 js_non_member_item" userId="<%=member.getId()%>">
+				<ul>
+					<li class="pl0pr10">
+						<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+							<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
+						</a>
+					</li>
+					<li class="">
+						<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+							<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
+						</a>
+					</li>
+					<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+					</span>
+					</li>
+					<li class="fr bo_l end">
+						<span>
+						<!-- Btn -->
+							<div class="btn_fblu_l mr7 js_join_team_request_btn" userId="<%=member.getId()%>" teamId="<%=teamId%>">
+								<div class="btn_fblu_r"><span class="icon_bludown_inbtn"></span>팀원초대</div>
+							</div>
+						<!-- Btn //--> 
+						
+						<!-- Btn -->
+							<div class="btn_fgreen_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+								<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
+							</div> 
+						<!-- Btn //--> 
+					
+						<!-- Btn -->
+							<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+								<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
+							</div>
+						<!-- Btn //--> 
+						</span>
+					</li>
+				</ul>
+			</div>
+			<!-- 목록1//-->
+<%
 				break;
 			}
 		}		

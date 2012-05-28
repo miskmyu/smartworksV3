@@ -80,10 +80,30 @@ function submitForms() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.INFO, "공지가 성공적으로 만들어졌습니다.", function(){
-							newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();
-						});
+						newBoard.parents('.js_course_content').siblings('.js_course_home_page').find('.js_course_board').click();
+						var courseHome = $('.js_course_home_page');
+						var courseBoardList = courseHome.find('.js_course_board_list');
+						$.ajax({
+							url : "get_course_notices.sw",
+							data : {
+								courseId : courseHome.attr('courseId'),
+								fromDate : (new Date()).format('yyyy.mm.dd hh:MM:ss.l'),
+								maxList : 4
+							},
+							success : function(data, status, jqXHR){
+								courseBoardList.find('dd').remove();
+								courseBoardList.find('dl').append(data.data);
+								smartPop.showInfo(smartPop.INFO, "공지가 성공적으로 만들어졌습니다.", function(){
+									smartPop.closeProgress();
+								});
+							},
+							error : function(){
+								courseBoardList.find('dd').remove();
+								smartPop.showInfo(smartPop.INFO, "공지가 성공적으로 만들어졌습니다.", function(){
+									smartPop.closeProgress();
+								});
+							}
+						});							
 					},
 					error : function(e) {
 						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
