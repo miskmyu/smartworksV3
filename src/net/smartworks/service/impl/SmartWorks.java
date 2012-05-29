@@ -1308,11 +1308,11 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
-		return seraService.searchCourses(key, lastId, maxList);
+		return seraService.searchCourses(null, key, lastId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
-		return seraService.searchSeraUsers(key, lastId, maxList);
+		return seraService.searchSeraUsers(null, key, lastId, maxList);
 	}
 }

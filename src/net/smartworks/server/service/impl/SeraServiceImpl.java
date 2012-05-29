@@ -129,7 +129,6 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2089,9 +2088,7 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			if(workSpaceId == null) {
-				System.out.println("start :: " + new Date());
 				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
-				System.out.println("end :: " + new Date());
 				String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
 				swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
 			} else {
@@ -4589,7 +4586,7 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
+	public CourseInfo[] getAllCourses(GlobalSearchList searchResult, String fromCourseId, int maxList, String key) throws Exception {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
@@ -4601,7 +4598,12 @@ public class SeraServiceImpl implements ISeraService {
 				groupCond.setLastName(lastCourseDetailInfo.getName());
 			}
 		}
+		if(key != null)
+			groupCond.setNameLike(key);
+
 		long totalSize = getSwoManager().getGroupSize("", groupCond);
+		if(searchResult != null)
+			searchResult.setTotalCourses((int)totalSize);
 		groupCond.setPageNo(0);
 		groupCond.setPageSize(maxList);
 		groupCond.setOrders(new Order[]{new Order("creationDate", false), new Order("name", true)});
@@ -4707,7 +4709,7 @@ public class SeraServiceImpl implements ISeraService {
 		case Course.TYPE_RECOMMENDED_COURSES:
 			return this.getRecommendedCourses(lastId, maxList);
 		case Course.TYPE_ALL_COURSES:
-			return this.getAllCourses(lastId, maxList);
+			return this.getAllCourses(null, lastId, maxList, null);
 		case Course.TYPE_CLOSED_COURSES:
 			return this.getClosedCourses(lastId, maxList);
 		}
@@ -4902,7 +4904,11 @@ public class SeraServiceImpl implements ISeraService {
 			lastName = swoUser.getName();
 			lastModifiedTime = swoUser.getModificationDate();
 		}
-		SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(idIns, lastName, lastModifiedTime, "name", true);
+		SwoUserCond swoUserCond = new SwoUserCond();
+		swoUserCond.setLastName(lastName);
+		swoUserCond.setLastModifiedTime(lastModifiedTime);
+		swoUserCond.setOrders(new Order[]{new Order(SwoUserCond.A_NAME, true), new Order(SwoUserCond.A_MODIFICATIONDATE, false)});
+		SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(idIns, swoUserCond);
 
 		if(CommonUtil.isEmpty(swoUserExtends))
 			return null;
@@ -5735,7 +5741,7 @@ public class SeraServiceImpl implements ISeraService {
 				memberIds[j] = seraUserDetail.getUserId();
 			}
 
-			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, null, MenteeInformList.MAX_USER_LIST);
+			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, null, MenteeInformList.MAX_ALL_USER_LIST);
 
 			return seraUserInfos;
 
@@ -6764,20 +6770,105 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
 		GlobalSearchList searchResult = new GlobalSearchList();
-		
-		searchResult.setTotalCourses(230);
-		searchResult.setCourses(SeraTest.getCoursesById(null, 0, null, 0));
-		searchResult.setTotalSeraUsers(38);
-		searchResult.setSeraUsers(SeraTest.getFriendsById(null, 0).getFriends());
+		searchResult.setCourses(this.searchCourses(searchResult, key, null, maxCourseList));
+		searchResult.setSeraUsers(this.searchSeraUsers(searchResult, key, null, maxUserList));
 		return searchResult;
 	}
 	@Override
-	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
-		return SeraTest.getCoursesById(null, 0, null, maxList);
+	public CourseInfo[] searchCourses(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception {
+		try {
+			return this.getAllCourses(searchResult, lastId, maxList, key);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
-	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
-		return SeraTest.getFriendsById(null, maxList).getFriends();
+	public SeraUserInfo[] searchSeraUsers(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String currentUserId = user.getId();
+			String lastName = null;
+			Date lastModifiedTime = null;
+			if(!CommonUtil.isEmpty(lastId)) {
+				SwoUser swoUser = getSwoManager().getUser(currentUserId, lastId, IManager.LEVEL_LITE);
+				lastName = swoUser.getName();
+				lastModifiedTime = swoUser.getModificationDate();
+			}
+
+			SwoUserCond swoUserCond = new SwoUserCond();
+			swoUserCond.setLastName(lastName);
+			swoUserCond.setLastModifiedTime(lastModifiedTime);
+			if(key != null)
+				swoUserCond.setKey(key);
+			int totalSize = 0;
+			SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(null, swoUserCond);
+			if(CommonUtil.isEmpty(swoUserExtends))
+				return null;
+			totalSize = swoUserExtends.length;
+			if(searchResult != null)
+				searchResult.setTotalSeraUsers(totalSize);
+
+			swoUserCond.setPageNo(0);
+			swoUserCond.setPageSize(maxList);
+			swoUserCond.setOrders(new Order[]{new Order(SwoUserCond.A_NAME, true), new Order(SwoUserCond.A_MODIFICATIONDATE, false)});
+
+			swoUserExtends = getSwoManager().getUserExtends(null, swoUserCond);
+
+			SeraUserInfo[] seraUserInfos = null;
+			List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
+
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
+
+			for(int i=0; i<swoUserExtends.length; i++) {
+				if(i == maxList)
+					break;
+				SwoUserExtend swoUserExtend = swoUserExtends[i];
+				String id = swoUserExtend.getId();
+				SeraUserInfo member = new SeraUserInfo();
+				member.setId(swoUserExtend.getId());
+				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
+				member.setPosition(swoUserExtend.getPosition());
+				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				boolean isFriend = false;
+				if(!CommonUtil.isEmpty(mySeraFriends)) {
+					for(SeraFriend seraFriend : mySeraFriends) {
+						if(id.equals(seraFriend.getFriendId())) {
+							isFriend = true;
+							break;
+						}
+					}
+				}
+				member.setFriend(isFriend);
+				SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(currentUserId, id);
+				String goal = null;
+				if(seraUserDetail != null)
+					goal = seraUserDetail.getGoal();
+				member.setGoal(goal);
+				seraUserInfoList.add(member);
+			}
+
+			if(totalSize > maxList) {
+				seraUserInfoList.add(new SeraUserInfo());
+			}
+
+			if(seraUserInfoList.size() > 0) {
+				seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
+				seraUserInfoList.toArray(seraUserInfos);
+			}
+
+			return seraUserInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
