@@ -445,11 +445,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		//설명
 		String workContents = obj.getExtendedPropertyValue("workContents");
 		//프로젝트명
-		String projectName = obj.getExtendedPropertyValue("projectName");
+		//String projectName = obj.getExtendedPropertyValue("projectName");
 		//공개여부
 		String isPublic = obj.getExtendedPropertyValue("isPublic");
 		//중요도
-		String priority = obj.getPriority();
+		//String priority = obj.getPriority();
 		
 		TskTask refTask = null;
 		Set refUserSet = new HashSet();
@@ -462,20 +462,27 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask = new TskTask();
 			refTask.setProcessInstId(obj.getProcessInstId());
 			refTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "reference"));
-			refTask.setPriority(priority);
+			//refTask.setPriority(priority);
 //			refTask.setTitle(obj.getTitle());
 			refTask.setTitle(subject);
 			refTask.setName(obj.getName());
 			refTask.setAssigner(obj.getAssigner());
 			refTask.setAssignee(refUser);
+			refTask.setAssignmentDate(new LocalDate());
+			refTask.setStartDate(new LocalDate());
 			refTask.setForm(obj.getForm());
 			refTask.setFromRefId(obj.getObjId());
 			refTask.setFromRefType(obj.getType());
 			refTask.setExtendedPropertyValue("subject", subject);
 			refTask.setExtendedPropertyValue("taskRef", obj.getObjId());
 			refTask.setExtendedPropertyValue("workContents", workContents);
-			refTask.setExtendedPropertyValue("projectName", projectName);
+			//refTask.setExtendedPropertyValue("projectName", projectName);
 			refTask.setExtendedPropertyValue("isPublic", isPublic);
+			
+			//TODO 참조 업무의 workspaceid, accesslevel 값정의
+			refTask.setWorkSpaceId(refUser);
+			refTask.setWorkSpaceType("4");
+			refTask.setAccessLevel("3");
 			
 			this.getTskManager().setTask(user, refTask, null);
 			if (logger.isInfoEnabled()) {
@@ -494,7 +501,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		
 		TskTaskCond taskCond = new TskTaskCond();
 		taskCond.setProcessInstId(prcInstId);
-		taskCond.setTypeNotIns(new String[] {CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "refernece")});
+		if (!prcInst.getType().equalsIgnoreCase("SINGLE"))
+			taskCond.setTypeNotIns(new String[] {CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "refernece")});
 		taskCond.setStatusNotIns(CommonUtil.toStringArray(MisUtil.taskExecutedStatusSet()));
 		long taskSize = getTskManager().getTaskSize(user, taskCond);
 		

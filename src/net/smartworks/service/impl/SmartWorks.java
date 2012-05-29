@@ -1223,37 +1223,31 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamsByCourse(courseId);
 	}
 
 	@Override
 	public Team getMyTeamByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getMyTeamByCourse(courseId);
 	}
 
 	@Override
 	public Team getTeamById(String teamId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamById(teamId);
 	}
 
 	@Override
 	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformations(teamId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformsByType(type, teamId, lastId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.searchTeamMemberByType(type, courseId, teamId, key);
 	}
 
@@ -1274,7 +1268,6 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public Team getJoinRequestTeamByCourseId(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getJoinRequestTeamByCourseId(courseId);
 	}
 

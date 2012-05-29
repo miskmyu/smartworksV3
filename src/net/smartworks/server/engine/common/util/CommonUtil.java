@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -706,8 +707,9 @@ public class CommonUtil {
 				isExistImage = true; 
 			}
 			return isExistImage;
+		} catch (ConnectException ce) {
+			return isExistImage;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return isExistImage;
 		}
 	}

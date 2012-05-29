@@ -784,6 +784,8 @@ public class WorkServiceImpl implements IWorkService {
 			String profileFileId = null;
 			String profileFileName = null;
 			String txtUserProfilePicture = null;
+			String txtUserProfilePosition = null;
+			String txtUserProfileEmpId = null;
 			
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -810,6 +812,10 @@ public class WorkServiceImpl implements IWorkService {
 						txtUserProfilePhoneNo = (String)frmMyProfileSetting.get("txtUserProfilePhoneNo");
 					else if(fieldId.equals("txtUserProfileCellNo"))
 						txtUserProfileCellNo = (String)frmMyProfileSetting.get("txtUserProfileCellNo");
+					else if(fieldId.equals("txtUserProfilePosition"))
+						txtUserProfilePosition = (String)frmMyProfileSetting.get("txtUserProfilePosition");
+					else if(fieldId.equals("txtUserProfileEmpId"))
+						txtUserProfileEmpId = (String)frmMyProfileSetting.get("txtUserProfileEmpId");
 				}
 			}
 	
@@ -832,6 +838,8 @@ public class WorkServiceImpl implements IWorkService {
 			user.setEmail(txtUserProfileEmail);
 			user.setExtensionNo(txtUserProfilePhoneNo);
 			user.setMobileNo(txtUserProfileCellNo);
+			user.setPosition(txtUserProfilePosition);
+			user.setEmpNo(txtUserProfileEmpId);
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);
 				UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());

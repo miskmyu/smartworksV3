@@ -1410,9 +1410,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			Key Set : frmAccessSpace
 			key Set : formId
 			key Set : formName
+			key Set : frmTaskForward
 			*/
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
 	
 			String domainId = null; // domainId 가 없어도 내부 서버에서 폼아이디로 검색하여 저장
 			String formId = (String)requestBody.get("formId");
@@ -1590,6 +1592,49 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setAccessLevel(accessLevel);
 				obj.setAccessValue(accessValue);
 			}
+			
+			//참조 업무 데이터 생성
+			
+			if (frmTaskForwardMap != null) {
+				
+				keySet = frmTaskForwardMap.keySet();
+				itr = keySet.iterator();
+	
+				String txtForwardSubject = null;
+				String txtForwardComments = null;
+				String txtForwardForwardee = null;
+	
+				while (itr.hasNext()) {
+					String fieldId = (String)itr.next();
+					Object fieldValue = frmTaskForwardMap.get(fieldId);
+					if (fieldValue instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(users)) {
+							String symbol = ";";
+							if(users.size() == 1) {
+								txtForwardForwardee = users.get(0).get("id");
+							} else {
+								txtForwardForwardee = "";
+								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+									Map<String, String> user = users.get(i);
+									txtForwardForwardee += user.get("id") + symbol;
+								}
+							}
+						}
+					} else if(fieldValue instanceof String) {
+						if(fieldId.equals("txtForwardSubject")) {
+							txtForwardSubject = (String)fieldValue;
+						} else if(fieldId.equals("txtForwardComments")) {
+							txtForwardComments = (String)fieldValue;
+						} 
+					}
+				}
+				obj.setExtendedAttributeValue("txtForwardSubject", txtForwardSubject);
+				obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+				obj.setExtendedAttributeValue("txtForwardComments", txtForwardComments);
+			}
+			
 
 			//TODO 좋은방법이 멀까?
 			String servletPath = request.getServletPath();
