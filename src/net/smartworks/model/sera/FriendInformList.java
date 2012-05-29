@@ -4,9 +4,11 @@ import net.smartworks.model.sera.info.SeraUserInfo;
 
 public class FriendInformList{
 
+	public static final int MAX_ALL_FRIEND_LIST = -1;
 	public static final int MAX_BRIEF_FRIEND_LIST = 20;
 	public static final int MAX_FRIEND_LIST = 20;
-	
+
+	public static final int TYPE_ALL_FRIENDS = -1;
 	public static final int TYPE_FRIEND_REQUESTERS = 1;
 	public static final int TYPE_FRIENDS = 2;
 	public static final int TYPE_NON_FRIENDS = 3;
