@@ -963,6 +963,12 @@ public class ModelConverter {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
 				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+						workInfo.setType(SmartWork.TYPE_INFORMATION);
+					} else {
+						workInfo.setType(SmartWork.TYPE_PROCESS);
+					}
 				}
 				instInfo.setCreatedDate(new LocalDate(task.getPrcCreateDate().getTime()));
 				if (task.getParentCtgId() != null) {
