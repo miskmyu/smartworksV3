@@ -1682,6 +1682,59 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_more_search_user_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_search_user_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
+		var key = input.attr('key');
+		var lastId = input.attr('lastId');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreSearchSeraUsers.sw",
+			data : {
+				key: key,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_global_search_page').find('.js_sera_user_item').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_more_search_course_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_search_course_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
+		var key = input.attr('key');
+		var lastId = input.attr('lastId');
+		if(isEmpty(lastId)) lastId = "";
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreSearchCourses.sw",
+			data : {
+				key: key,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_search_course_list').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
 	$('a.js_coursememberpicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_coursememberpicker_button');
 		var userField = $(targetElement(e)).parents('.js_type_userField:first');
@@ -2640,4 +2693,33 @@ $(function() {
 		return false;
 	});
 
+	$('.js_global_search_btn').live('click', function(e){
+		var input = $(targetElement(e)).parent();
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'globalSearch.sw',
+			data : {
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				if(!isEmpty($('#sera_content'))) $('#sera_content').html(data);
+				else if(!isEmpty($('#container'))) $('#container').html(data);
+				else{
+					$('#sera_header').after('<div id="container">' + data + '</div>');
+					$('#inro_ct_section').remove();
+					$('#intro_main_section').remove();
+				}
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+		
+	});
+	
 });

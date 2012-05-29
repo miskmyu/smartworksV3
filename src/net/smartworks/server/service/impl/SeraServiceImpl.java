@@ -44,6 +44,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -128,6 +129,7 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
+import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6711,6 +6713,24 @@ public class SeraServiceImpl implements ISeraService {
 		courseList.setFavoriteCourses((CourseInfo[])fcpp.getArrayResult());
 		courseList.setRecommendedCourses((CourseInfo[])rcpp.getArrayResult());
 		return courseList;
+	}
+	@Override
+	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
+		GlobalSearchList searchResult = new GlobalSearchList();
+		
+		searchResult.setTotalCourses(230);
+		searchResult.setCourses(SeraTest.getCoursesById(null, 0, null, 0));
+		searchResult.setTotalSeraUsers(38);
+		searchResult.setSeraUsers(SeraTest.getFriendsById(null, 0).getFriends());
+		return searchResult;
+	}
+	@Override
+	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
+		return SeraTest.getCoursesById(null, 0, null, maxList);
+	}
+	@Override
+	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
+		return SeraTest.getFriendsById(null, maxList).getFriends();
 	}
 
 }

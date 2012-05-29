@@ -48,6 +48,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -1305,5 +1306,20 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CourseAdList getCourseAds(int maxList) throws Exception {
 		return seraService.getCourseAds(maxList);
+	}
+
+	@Override
+	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
+		return seraService.searchGlobal(key, maxCourseList, maxUserList);
+	}
+
+	@Override
+	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchCourses(key, lastId, maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchSeraUsers(key, lastId, maxList);
 	}
 }
