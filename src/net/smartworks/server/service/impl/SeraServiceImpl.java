@@ -1772,14 +1772,15 @@ public class SeraServiceImpl implements ISeraService {
 				seraFriendCond.setKey(key);
 
 			SeraFriend[] seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
+
+			if (CommonUtil.isEmpty(seraFriends)) 
+				return null;
+
 			int totalSize = seraFriends.length;
 
 			seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setPageNo(0);
 			seraFriends = seraMgr.getMyFriends(userId, seraFriendCond);
-
-			if (CommonUtil.isEmpty(seraFriends)) 
-				return null;
 
 			String[] ids = new String[seraFriends.length];
 
@@ -3758,11 +3759,13 @@ public class SeraServiceImpl implements ISeraService {
 				for(int i=0; i<users.size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					String teamUserId = userMap.get("id");
-					CourseTeamUser courseTeamUser = new CourseTeamUser();
-					courseTeamUser.setUserId(teamUserId);
-					courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_INVITE);
-					courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY); //초대에 대한 응답 구현 후 CourseTeamUser.JOINSTATUS_READY로 변경 예정
-					courseTeam.addTeamMember(courseTeamUser);
+					if(!teamUserId.equals(userId)) {
+						CourseTeamUser courseTeamUser = new CourseTeamUser();
+						courseTeamUser.setUserId(teamUserId);
+						courseTeamUser.setJoinType(CourseTeamUser.JOINTYPE_INVITE);
+						courseTeamUser.setJoinStatus(CourseTeamUser.JOINSTATUS_READY);
+						courseTeam.addTeamMember(courseTeamUser);
+					}
 				}
 			}
 
@@ -6084,16 +6087,19 @@ public class SeraServiceImpl implements ISeraService {
 				CourseTeamUser[] teamUsers = courseTeam.getCourseTeamUsers();
 				SeraFriendCond seraFriendCond = new SeraFriendCond();
 				seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+				SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
 				if(!CommonUtil.isEmpty(teamUsers)) {
 					for(CourseTeamUser teamUser : teamUsers) {
 						SeraUserInfo seraUserInfo = new SeraUserInfo();
 						String id = teamUser.getUserId();
 						SwoUserExtend swoUserExtend = getSwoManager().getUserExtend(userId, id, false);
 						String name = null;
+						String nickName = null;
 						int role = -1;
 						String smallPictureName = null;
 						if(swoUserExtend != null) {
 							name = swoUserExtend.getName();
+							nickName = swoUserExtend.getNickName();
 							role = swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER;
 							smallPictureName = swoUserExtend.getSmallPictureName();
 						}
@@ -6102,7 +6108,6 @@ public class SeraServiceImpl implements ISeraService {
 						boolean isFriend = false;
 						if(seraUserDetail != null)
 							goal = seraUserDetail.getGoal();
-						SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(userId, seraFriendCond);
 						if(!CommonUtil.isEmpty(mySeraFriends)) {
 							for(SeraFriend seraFriend : mySeraFriends) {
 								if(id.equals(seraFriend.getFriendId())) {
@@ -6111,7 +6116,9 @@ public class SeraServiceImpl implements ISeraService {
 								}
 							}
 						}
+						seraUserInfo.setId(id);
 						seraUserInfo.setName(name);
+						seraUserInfo.setNickName(nickName);
 						seraUserInfo.setRole(role);
 						seraUserInfo.setSmallPictureName(smallPictureName);
 						seraUserInfo.setGoal(goal);
@@ -6302,13 +6309,38 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
+	public SeraUserInfo[] getInvitedMembersOfTeam(MemberInformList memberInformList, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
+		try {
+			if(CommonUtil.isEmpty(courseTeamUsers))
+				return null;
+
+			SeraUserInfo[] seraUserInfos = null;
+			List<String> memberIdList = new ArrayList<String>();
+			for(CourseTeamUser courseTeamUser : courseTeamUsers) {
+				String teamUserId = courseTeamUser.getUserId();
+				String joinType = courseTeamUser.getJoinType();
+				String joinStatus = courseTeamUser.getJoinStatus();
+				if(CourseTeamUser.JOINTYPE_INVITE.equalsIgnoreCase(joinType) && CourseTeamUser.JOINSTATUS_READY.equalsIgnoreCase(joinStatus)) {
+					memberIdList.add(teamUserId);
+				}
+			}
+			if(memberIdList.size() > 0) {
+				if(memberInformList != null)
+					memberInformList.setTotalInvitedMembers(memberIdList.size());
+				seraUserInfos = getSeraUserInfos(memberIdList, maxList, lastId, key);
+			}
+			return seraUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public SeraUserInfo[] getNonMembersOfTeam(MemberInformList memberInformList, String courseId, CourseTeamUser[] courseTeamUsers, int maxList, String lastId, String key) {
 		try {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
 			SeraUserInfo[] seraUserInfos = null;
-			//SeraUserDetail[] seraUserDetails = null;
 			String[] relationIds = null;
 			List<String> relationIdList = new ArrayList<String>();
 			if(!CommonUtil.isEmpty(courseTeamUsers)) {
@@ -6364,6 +6396,7 @@ public class SeraServiceImpl implements ISeraService {
 			MemberInformList memberInformList = new MemberInformList();
 
 			SeraUserInfo[] members = null;
+			SeraUserInfo[] invitedMembers = null;
 			SeraUserInfo[] nonMembers = null;
 
 			User user = SmartUtil.getCurrentUser();
@@ -6378,9 +6411,11 @@ public class SeraServiceImpl implements ISeraService {
 			}
 
 			members = getMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
+			invitedMembers = getInvitedMembersOfTeam(memberInformList, courseTeamUsers, maxList, null, null);
 			nonMembers = getNonMembersOfTeam(memberInformList, courseId, courseTeamUsers, maxList, null, null);
 
 			memberInformList.setMembers(members);
+			memberInformList.setInvitedMembers(invitedMembers);
 			memberInformList.setNonMembers(nonMembers);
 
 			return memberInformList;
@@ -6407,6 +6442,8 @@ public class SeraServiceImpl implements ISeraService {
 			switch (type) {
 			case MemberInformList.TYPE_MEMBERS:
 				return getMembersOfTeam(null, courseTeamUsers, maxList, lastId, null);
+			case MemberInformList.TYPE_INVITED_MEMBERS:
+				return getInvitedMembersOfTeam(null, courseTeamUsers, maxList, lastId, null);
 			case MemberInformList.TYPE_NON_MEMBERS:
 				return getNonMembersOfTeam(null, courseId, courseTeamUsers, maxList, lastId, null);
 			default:
@@ -6433,6 +6470,8 @@ public class SeraServiceImpl implements ISeraService {
 			switch (type) {
 			case MemberInformList.TYPE_MEMBERS:
 				return getMembersOfTeam(null, courseTeamUsers, 0, null, key);
+			case MemberInformList.TYPE_INVITED_MEMBERS:
+				return getInvitedMembersOfTeam(null, courseTeamUsers, 0, null, key);
 			case MemberInformList.TYPE_NON_MEMBERS:
 				return getNonMembersOfTeam(null, courseId, courseTeamUsers, 0, null, key);
 			default:
