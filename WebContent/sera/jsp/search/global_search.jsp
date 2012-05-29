@@ -60,8 +60,8 @@
 								</dd>
 								<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate())%> Days</dd>
 								<dd class="mb3 title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
-							</dl></li>
-						<li>
+							</dl>
+						</li>
 				<%
 					}
 				}
@@ -85,6 +85,8 @@
 		SeraUserInfo[] seraUsers = searchList.getSeraUsers();
 		if(!SmartUtil.isBlankObject(seraUsers)){
 			for(int i=0; i<seraUsers.length; i++){
+				if(i == GlobalSearchList.MAX_SERA_USER_LIST)
+					break;
 				SeraUserInfo seraUser = seraUsers[i];
 				String userHref = (cUser.getId().equals(seraUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + seraUser.getId();
 		%>

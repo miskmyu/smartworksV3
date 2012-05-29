@@ -170,8 +170,8 @@ public interface ISeraService {
 	
 	public abstract GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception;
 
-	public abstract CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception;
+	public abstract CourseInfo[] searchCourses(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception;
 
-	public abstract SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] searchSeraUsers(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception;
 
 }
