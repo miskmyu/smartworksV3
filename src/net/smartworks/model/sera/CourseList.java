@@ -8,7 +8,11 @@ public class CourseList{
 	public static final int MAX_COURSE_LIST = 6;
 	public static final int TYPE_MY_RUNNING_COURSE = 1;
 	public static final int TYPE_MY_ATTENDING_COURSE = 2;
-	
+
+	public static final int TYPE_COURSE_REQUESTERS = 1;
+	public static final int TYPE_COURSE_MENTEES = 2;
+	public static final int TYPE_NON_COURSE_MENTEES = 3;
+
 	private int runnings = 0;
 	private int attendings = 0;
 	private CourseInfo[] runningCourses;
