@@ -59,7 +59,7 @@ public class ImapProtocolImpl implements Protocol {
 	 * @param auth
 	 * @param handler
 	 */
-	ImapProtocolImpl(ConnectionProfile profile, AuthProfile auth, ConnectionMetaHandler handler, String folder) {
+	public ImapProtocolImpl(ConnectionProfile profile, AuthProfile auth, ConnectionMetaHandler handler, String folder) {
 		this.profile = profile;
 		this.auth = auth;
 		this.handler = handler;

@@ -4,10 +4,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.User;
+import net.smartworks.model.instance.info.BoardInstanceInfo;
 import net.smartworks.model.instance.info.CommentInstanceInfo;
+import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
@@ -20,6 +24,8 @@ import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.CourseInfo;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
+import net.smartworks.model.sera.info.MissionReportInstanceInfo;
+import net.smartworks.model.sera.info.NoteInstanceInfo;
 import net.smartworks.model.sera.info.ReviewInstanceInfo;
 import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.model.sera.info.TeamInfo;
@@ -45,7 +51,7 @@ public interface ISeraService {
 
 	public abstract String setSeraNote(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract String createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract Team createNewTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void modifyCourseTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -55,11 +61,9 @@ public interface ISeraService {
 	
 	public abstract CourseList getCoursesById(String userId, int maxList) throws Exception;
 
+	public abstract CourseAdList getCourseAds(int maxList) throws Exception;
+
 	public abstract CourseInfo[] getCoursesById(String userId, int courseType, LocalDate fromDate, int maxList) throws Exception;
-
-	public abstract CourseInfo[] getFavoriteCourses(int maxList) throws Exception;
-
-	public abstract CourseInfo[] getRecommendedCourses(int maxList) throws Exception;
 
 	public abstract CourseInfo[] getCoursesByType(int courseType, String lastId, int maxList) throws Exception;
 
@@ -135,14 +139,32 @@ public interface ISeraService {
 
 	public abstract SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception;
 	
-	public abstract void replyTeamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void replyTeamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void teamMemberRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void teamJoinRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void destroyTeamMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void leaveTeam(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void destroyMembership(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract SeraBoardList getSeraBoards(int maxList) throws Exception;
 	
 	public abstract String setMentorProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract Team getJoinRequestTeamByCourseId(String courseId) throws Exception;
+	
+	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
+
+	public abstract BoardInstanceInfo[] getBoardInstancesByCourseId(User currentUser, String userId, String courseId, String missionId, String teamId, String workSpaceId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract NoteInstanceInfo[] getSeraNoteByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract MissionReportInstanceInfo[] getSeraReportByMissionId(User currentUser, String userId, String courseId, String missionId, String teamId, LocalDate fromDate, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getFavoriteCourses(String fromCourseId, int maxList) throws Exception;
+
+	public abstract CourseInfo[] getRecommendedCourses(String fromCourseId, int maxList) throws Exception;
+	
 }

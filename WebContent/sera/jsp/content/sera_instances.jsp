@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
@@ -179,7 +180,7 @@
 												<%if(!SmartUtil.isBlankObject(event.getEnd())) {%>
 												<span>~<%=event.getEnd().toLocalDateTimeSimpleString() %></span>
 												<%}%>
-												<div>이벤트 장소 : <%=event.getPlace() %></div>
+												<div>이벤트 장소 : <%=CommonUtil.toNotNull(event.getPlace()) %></div>
 												<div>이벤트 참여자 :
 												<%
 													CommunityInfo[] communityInfos = event.getRelatedUsers();

@@ -4,6 +4,10 @@
 <!-- Author			: Y.S. JUNG												 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.sera.Constants"%>
+<%@page import="net.smartworks.model.work.SmartWork"%>
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
 <%@page import="net.smartworks.model.sera.FriendList"%>
 <%@page import="net.smartworks.model.sera.CourseList"%>
@@ -23,6 +27,7 @@
 	User otherUser = (User) session.getAttribute("otherUser");
 	CourseList courseList = smartWorks.getCoursesById(otherUser.getId(), CourseList.MAX_BRIEF_COURSE_LIST);
 	FriendList friendList = smartWorks.getFriendsById(otherUser.getId(), FriendList.MAX_BRIEF_FRIEND_LIST);
+	BoardInstanceInfo[] seraTrends = smartWorks.getSeraTrends(10);
 %>
 <div class="aside_block">
 	<div class="header">
@@ -146,27 +151,32 @@
 	</div>
 </div>
 <!-- Aside Block3 //-->
-<!-- Aside Block4 -->
+ <!-- Aside Block4 -->
 <div class="aside_block m0">
 	<div class="header">
-			<span class=" icon_as_srtrend">
-				<a href="" class="">트렌드 세라 (0)
-					<span class="icon_as_more" style="display:none"></span>
-				</a>
-			</span>
+		<span class=" icon_as_srtrend">
+			<a href="seraTrend.sw" class="">트렌드 세라
+				<span class="icon_as_more"></span>
+			</a>
+		</span>
 	</div>
 	<div class="content">
 		<dl>
 			<dd>
 				<ul>
-<!--
- 					<li>[정치인 공부하기] 새누리당으로...</li>
-					<li>[정치인 공부하기] 한나라당이...</li>
- -->
- 				</ul>
+					<%
+					if(!SmartUtil.isBlankObject(seraTrends)){
+						for(int i=0; i<seraTrends.length; i++){
+							String target = "seraBoardItem.sw?workId=" + SmartWork.ID_BOARD_MANAGEMENT + "&instId=" + seraTrends[i].getId() + "&wid=" + Constants.SERA_WID_SERA_TREND;
+					%>
+								<li><a href="<%=target%>"><%=CommonUtil.toNotNull(seraTrends[i].getSubject()) %></a></li>							
+					<%
+						}
+					}
+					%>
+					</ul>
 			</dd>
 		</dl>
 	</div>
-	<!-- Aside Block4 //-->
 </div>
-<!-- Aside //-->
+<!-- Aside Block4 //-->

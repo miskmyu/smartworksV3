@@ -130,7 +130,7 @@
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
-		if(isEmpty(progressSpan)) grogressSpan = iworkList.find('.js_search_filter_page').next('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = iworkList.find('.js_search_filter_page').next('span.js_progress_span:first');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>

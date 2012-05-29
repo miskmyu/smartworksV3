@@ -15,56 +15,56 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreSeraInstances.find('span').trigger('click');
 					moreSeraInstances.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreFriends) && !moreFriends.isWaiting){
 				moreFriends.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreFriends.find('span').trigger('click');
 					moreFriends.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreMembers) && !moreMembers.isWaiting){
 				moreMembers.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreMembers.find('span').trigger('click');
 					moreMembers.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreOthersFriends) && !moreOthersFriends.isWaiting){
 				moreOthersFriends.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreOthersFriends.find('span').trigger('click');
 					moreOthersFriends.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreCourseMembers) && !moreCourseMembers.isWaiting){
 				moreCourseMembers.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourseMembers.find('span').trigger('click');
 					moreCourseMembers.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreCourseMentees) && !moreCourseMentees.isWaiting){
 				moreCourseMentees.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourseMentees.find('span').trigger('click');
 					moreCourseMentees.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreCourseReviews) && !moreCourseReviews.isWaiting){
 				moreCourseReviews.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourseReviews.find('span').trigger('click');
 					moreCourseReviews.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(moreCourse) && !moreCourse.isWaiting){
 				moreCourse.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						moreCourse.find('span').trigger('click');
 					moreCourse.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}
 		}
 	});

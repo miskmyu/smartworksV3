@@ -12,5 +12,7 @@ public interface IMailService {
 	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception;
 
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception;
-
+	
+	public MailFolder getMailFolderById(String folderId) throws Exception;
+	
 }

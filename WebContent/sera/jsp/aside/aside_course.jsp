@@ -1,4 +1,5 @@
 
+<%@page import="net.smartworks.model.sera.CourseAdList"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.sera.info.SeraUserInfo"%>
@@ -16,8 +17,9 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-	CourseInfo[] favoriteCourses = smartWorks.getCoursesByType(Course.TYPE_FAVORITE_COURSES, null, 3);
-	CourseInfo[] recommendedCourses = smartWorks.getCoursesByType(Course.TYPE_RECOMMENDED_COURSES, null, 3);
+	CourseAdList courseList = smartWorks.getCourseAds(3);
+	CourseInfo[] favoriteCourses = courseList.getFavoriteCourses();
+	CourseInfo[] recommendedCourses = courseList.getRecommendedCourses();
 %>
 
 <!-- Aside -->

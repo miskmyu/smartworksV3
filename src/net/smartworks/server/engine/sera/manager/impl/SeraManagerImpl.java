@@ -179,6 +179,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	private Query appendQuery(StringBuffer buf, CourseDetailCond cond) throws Exception {
 		String courseId = null;
 		String[] courseIdIns = null;
+		String status = null;
 		Date fromDate = null;
 		Date startTo = null;
 		Date endDateTo = null;
@@ -194,6 +195,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		if (cond != null) {
 			courseId = cond.getCourseId();
 			courseIdIns = cond.getCourseIdIns();
+			status = cond.getStatus();
 			startTo = cond.getStartTo();
 			fromDate = cond.getStart();
 			endDateFrom = cond.getEndFrom();
@@ -222,6 +224,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				}
 				buf.append(")");
 			}
+			if (status != null) 
+				buf.append(" and obj.status = :status");
 			if (startTo != null) 
 				buf.append(" and obj.start < :startTo");
 			if (fromDate != null) 
@@ -265,6 +269,8 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					query.setString("courseIdIn"+i, courseIdIns[i]);
 				}
 			}
+			if (status != null)
+				query.setString("status", status);
 			if (startTo != null)
 				query.setTimestamp("startTo", startTo);
 			if (fromDate != null)
@@ -883,6 +889,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 		try {
 			if(courseTeam == null)
 				return null;
+			this.fill(user, courseTeam);
 			this.set(courseTeam);
 			return courseTeam;
 		} catch (SeraException e) {
@@ -923,17 +930,21 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 	private Query appendQuery(StringBuffer buf, CourseTeamCond cond) throws Exception {
 		String objId = null;
 		String courseId = null;
+		String creationUser = null;
+		String modificationUser = null;
 		CourseTeamUser[] courseTeamUsers = null;
 
 		if (cond != null) {
 			objId = cond.getObjId();
 			courseId = cond.getCourseId();
+			creationUser = cond.getCreationUser();
+			modificationUser = cond.getModificationUser();
 			courseTeamUsers = cond.getCourseTeamUsers();
 		}
 		buf.append(" from CourseTeam obj");
 		if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 			for (int i=0; i<courseTeamUsers.length; i++) {
-				buf.append(" left join obj.courseTeamUsers as teamUser ").append(i);
+				buf.append(" left join obj.courseTeamUsers as teamUser").append(i);
 			}
 		}
 		buf.append(" where obj.objId is not null");
@@ -943,6 +954,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				buf.append(" and obj.objId = :objId");
 			if (courseId != null)
 				buf.append(" and obj.courseId = :courseId");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
@@ -970,7 +985,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 				query.setString("objId", objId);
 			if (courseId != null)
 				query.setString("courseId", courseId);
-
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
 			if (courseTeamUsers != null && courseTeamUsers.length != 0) {
 				for (int i=0; i<courseTeamUsers.length; i++) {
 					CourseTeamUser courseTeamUser = courseTeamUsers[i];
@@ -1016,7 +1034,7 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.objId, obj.name, obj.courseId, obj.description, obj.accessPolicy, obj.memberSize, obj.startDate, obj.endDate");
+				buf.append(" obj.objId, obj.name, obj.courseId, obj.description, obj.accessPolicy, obj.memberSize, obj.startDate, obj.endDate, obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1036,6 +1054,10 @@ public class SeraManagerImpl extends AbstractManager implements ISeraManager {
 					obj.setMemberSize((Integer)fields[j++]);
 					obj.setStartDate((Timestamp)fields[j++]);
 					obj.setEndDate((Timestamp)fields[j++]);
+					obj.setCreationUser((String)fields[j++]);
+					obj.setCreationDate((Timestamp)fields[j++]);
+					obj.setModificationUser((String)fields[j++]);
+					obj.setModificationDate((Timestamp)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;

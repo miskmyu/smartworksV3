@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.CourseAdList"%>
 <%@page import="net.smartworks.model.sera.Constants"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.instance.info.BoardInstanceInfo"%>
@@ -13,7 +14,7 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="net.smartworks.service.ISmartWorks"%>
+<%@ page import="net.smartworks.service.ISmartWorks"%> 
 <%@ page import="net.smartworks.model.community.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -48,8 +49,9 @@
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다
 	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
-	CourseInfo[] favoriteCourses = smartWorks.getFavoriteCourses(6);
-	CourseInfo[] recommendedCourses = smartWorks.getRecommendedCourses(6);
+	CourseAdList courseList = smartWorks.getCourseAds(6);
+	CourseInfo[] favoriteCourses = courseList.getFavoriteCourses();
+	CourseInfo[] recommendedCourses = courseList.getRecommendedCourses();
 	session.setAttribute("currentMenu", "none");
 	session.setAttribute("noUser", true);
 	

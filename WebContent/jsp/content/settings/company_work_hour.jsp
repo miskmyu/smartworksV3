@@ -37,7 +37,7 @@
 			var form = $(forms[i]);
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
-		grogressSpan = companyWorkHour.find('span.js_progress_span:first');
+		progressSpan = companyWorkHour.find('span.js_progress_span:first');
 		smartPop.progressCont(progressSpan);
 		console.log(JSON.stringify(paramsJson));
 		var url = "set_instance_list_params.sw";

@@ -26,6 +26,7 @@
 		<property name="categories" type="string" length="500"/>
 		<property name="keywords" type="string" length="500"/>
 		<property name="duration" type="int"/>
+		<property name="status" type="string" length="1"/>
 		<property name="start" column="startDate" type="timestamp"/>
 		<property name="end" column="endDate" type="timestamp"/>
 		<property name="maxMentees" type="int"/>
@@ -93,6 +94,10 @@
 		<property name="memberSize" type="int"/>
 		<property name="startDate" column="startDate" type="timestamp"/>
 		<property name="endDate" column="endDate" type="timestamp"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 		<array name="courseTeamUsers" table="CourseTeamUser">
 			<key column="objId" foreign-key="FkCourseTeamUser" />
 			<list-index column="memberSeq" />

@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
 <%@page import="net.smartworks.model.sera.SeraBoardList"%>
 <%@page import="net.smartworks.server.service.ISeraService"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -533,12 +535,25 @@
 	//InstanceInfoList instanceInfoList = instanceService.getInstanceInfoListByWorkId("hsshin@maninsoft.co.kr", null, SmartWork.ID_BOARD_MANAGEMENT);
 
 	//System.out.println(instanceInfoList);
-	
-	ISeraService seraService = (ISeraService)SmartUtil.getBean("seraServiceImpl", request);
+	SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups("", null, null);
+	CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", null);
 
-	SeraBoardList seraBoardList = seraService.getSeraBoards(20);
-
-	System.out.println(seraBoardList);
+	for(SwoGroup swoGroup : swoGroups) {
+		String groupId = swoGroup.getId();
+		String status = swoGroup.getStatus();
+		String creator = swoGroup.getCreationUser();
+		//swoGroup.setModificationUser(creator);
+		//SwManagerFactory.getInstance().getSwoManager().setGroup("", swoGroup, IManager.LEVEL_LITE);
+		for(CourseDetail courseDetail : courseDetails) {
+			String courseId = courseDetail.getCourseId();
+			Date creationDate = courseDetail.getCreateDate();
+			if(groupId.equals(courseId)) {
+				swoGroup.setCreationDate(creationDate);
+				swoGroup.setModificationDate(creationDate);
+				SwManagerFactory.getInstance().getSwoManager().setGroup("", swoGroup, IManager.LEVEL_LITE);
+			}
+		}
+	}
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

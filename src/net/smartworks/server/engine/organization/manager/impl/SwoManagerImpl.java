@@ -2544,18 +2544,14 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 	}
 
-	private static SizeMap groupMap = new SizeMap(100);
 	@Override
 	public SwoGroup getGroup(String user, String id, String level) throws SwoException {
 
 		try {
-			if (groupMap.containsKey(id))
-				return (SwoGroup)groupMap.get(id);
 			if (level == null)
 				level = LEVEL_ALL;
 			if (level.equals(LEVEL_ALL)) {
 				SwoGroup obj = (SwoGroup)this.get(SwoGroup.class, id);
-				groupMap.put(obj.getId(), obj);
 				return obj;
 			} else {
 				SwoGroupCond cond = new SwoGroupCond();
@@ -2563,7 +2559,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				SwoGroup[] objs = this.getGroups(user, cond, level);
 				if (objs == null || objs.length == 0)
 					return null;
-				groupMap.put(objs[0].getId(), objs[0]);
 				return objs[0];
 			}
 		} catch (Exception e) {
@@ -2621,9 +2616,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoGroup.A_STATUS, obj.getStatus());
 				query.setString(SwoGroup.A_PICTUTRE, obj.getPicture());
 				query.setString(SwoGroup.A_DESCRIPTION, obj.getDescription());
-				query.setTimestamp(SwoGroup.A_CREATIONDATE, obj.getCreationDate());
 				query.setString(SwoGroup.A_CREATIONUSER, obj.getCreationUser());
-				query.setTimestamp(SwoGroup.A_MODIFICATIONUSER, obj.getModificationDate());
+				query.setTimestamp(SwoGroup.A_CREATIONDATE, obj.getCreationDate());
+				query.setString(SwoGroup.A_MODIFICATIONUSER, obj.getModificationUser());
 				query.setTimestamp(SwoGroup.A_MODIFICATIONDATE, obj.getModificationDate());
 				query.setString(SwoGroup.A_ID, obj.getId());
 				query.executeUpdate();

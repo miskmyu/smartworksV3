@@ -6,23 +6,17 @@ public class MemberInformList{
 
 	public static final int MAX_MEMBER_LIST = 20;
 	
-	public static final int TYPE_MEMBER_REQUESTERS = 1;
-	public static final int TYPE_MEMBERS = 2;
-	public static final int TYPE_NON_MEMBERS = 3;
+	public static final int TYPE_MEMBERS = 1;
+	public static final int TYPE_NON_MEMBERS = 2;
+	public static final int TYPE_INVITED_MEMBERS = 3;
 	
-	private int totalRequesters;
 	private int totalMembers;
+	private int totalInvitedMembers;
 	private int totalNonMembers;
-	SeraUserInfo[] requesters;
 	SeraUserInfo[] members;
+	SeraUserInfo[] invitedMembers;
 	SeraUserInfo[] nonMembers;
 		
-	public int getTotalRequesters() {
-		return totalRequesters;
-	}
-	public void setTotalRequesters(int totalRequesters) {
-		this.totalRequesters = totalRequesters;
-	}
 	public int getTotalMembers() {
 		return totalMembers;
 	}
@@ -34,12 +28,6 @@ public class MemberInformList{
 	}
 	public void setTotalNonMembers(int totalNonMembers) {
 		this.totalNonMembers = totalNonMembers;
-	}
-	public SeraUserInfo[] getRequesters() {
-		return requesters;
-	}
-	public void setRequesters(SeraUserInfo[] requesters) {
-		this.requesters = requesters;
 	}
 	public SeraUserInfo[] getMembers() {
 		return members;
@@ -53,7 +41,18 @@ public class MemberInformList{
 	public void setNonMembers(SeraUserInfo[] nonMembers) {
 		this.nonMembers = nonMembers;
 	}
-
+	public int getTotalInvitedMembers() {
+		return totalInvitedMembers;
+	}
+	public void setTotalInvitedMembers(int totalInvitedMembers) {
+		this.totalInvitedMembers = totalInvitedMembers;
+	}
+	public SeraUserInfo[] getInvitedMembers() {
+		return invitedMembers;
+	}
+	public void setInvitedMembers(SeraUserInfo[] invitedMembers) {
+		this.invitedMembers = invitedMembers;
+	}
 	public MemberInformList(){
 		super();
 	}

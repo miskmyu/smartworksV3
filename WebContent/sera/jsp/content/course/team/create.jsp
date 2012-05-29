@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.security.AccessPolicy"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
@@ -10,6 +11,9 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String courseId = request.getParameter("courseId");
+	Course course = (Course)session.getAttribute("course");
+	if (SmartUtil.isBlankObject(course) || !course.getId().equals(courseId))
+		course = smartWorks.getCourseById(courseId);
 %>
 
 <script type="text/javascript">
@@ -19,8 +23,7 @@
 		if(createTeam.find('input[name="chkUserDefineDays"]').attr('checked')==='checked'){
 			createTeam.find('input[name="txtTeamStartDate"]').addClass('required');
 			createTeam.find('input[name="txtTeamEndDate"]').addClass('required');
-			createTeam.find('input[name="txtTeamDays"]').removeClass('required').removeClass('error');			
-			
+			createTeam.find('input[name="txtTeamDays"]').removeClass('required').removeClass('error').attr('value', '');			
 		}else{
 			createTeam.find('input[name="txtTeamStartDate"]').removeClass('required').removeClass('error');
 			createTeam.find('input[name="txtTeamEndDate"]').removeClass('required').removeClass('error');
@@ -28,6 +31,26 @@
 		}
 		if (SmartWorks.GridLayout.validate(createTeam.find('form.js_validation_required'),  createTeam.find('.sw_error_message'))) {
 			var forms = createTeam.find('form');
+			var courseOpenDate = new Date(createTeam.attr('courseOpenDate'));
+			var courseCloseDate = new Date(createTeam.attr('courseCloseDate'));
+			var startDate = new Date(forms.find('input[name="txtTeamStartDate"]').attr('value'));
+			var endDate = new Date(forms.find('input[name="txtTeamEndDate"]').attr('value'));
+			if(createTeam.find('input[name="chkUserDefineDays"]').attr('checked')!=='checked'){
+				var teamDays = parseInt(createTeam.find('input[name="txtTeamDays"]').attr('value'));
+				if(teamDays <= 0){
+					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1일 이상이여야 합니다!");
+					return false;					
+				}
+				startDate = new Date();
+				endDate = new Date(startDate.getTime() + (teamDays-1)*24*60*60*1000);
+			}
+			if(startDate.getTime()>endDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "팀기간의 시작일자가 종료일자보다 이후입니다. 시작일자를 종료일자보다 이전으로 수정바랍니다!");
+				return false;
+			}else if(startDate.getTime()<courseOpenDate.getTime() || endDate.getTime()>courseCloseDate.getTime()){
+				smartPop.showInfo(smartPop.ERROR, "팀기간은 코스기간 내에서만 설정가능합니다. 코스기간 내 일자로 수정바랍니다! (코스기간 : " + courseOpenDate.format("yyyy.mm.dd") + " ~ " + courseCloseDate.format("yyyy.mm.dd") + ")");
+				return false;
+			}
 			var paramsJson = {};
 			paramsJson['courseId'] = createTeam.attr('courseId');
 			for(var i=0; i<forms.length; i++){
@@ -51,7 +74,13 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀이 정상적으로 만들어졌습니다!", function(){
-						$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+						var selectCourseTeam = $('.js_select_course_team select');
+						if(!isEmpty(selectCourseTeam)){
+							selectCourseTeam.append('<option value="' + data.teamId + '" selected>' + data.teamName + '</option>' );
+							selectCourseTeam.change();
+						}else{
+							$('.js_create_team').click();
+						}
 					});
 				},
 				error : function(e) {
@@ -63,17 +92,12 @@
 	};
 </script>
 
-<div class="js_create_team_page" courseId="<%=courseId%>">
+<div class="js_create_team_page" courseId="<%=courseId%>" courseOpenDate="<%=course.getOpenDate().toLocalDateSimpleString()%>" courseCloseDate="<%=course.getCloseDate().toLocalDateSimpleString()%>">
 	<!-- Header Title -->
-	<div class="header_tit">
-		<div class="tit_dep2 team m0">
-			<h2>팀 구성하기</h2>
-			<div>
-				<span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료
-				등 이용약관에 명시한 불법게시물을 올리실 경우 경고 없이 삭제될 수있으며, 서비스 이용 제한 및 법적인 처벌을 받을 수
-				있습니다.
-			</div>
-		</div>
+	<div class="mb10">
+		<span class="t_red">지적재산권, 음란물, 청소년 유해매체</span>를 포함한 타인의 권리를 침해하는 자료
+		등 이용약관에 명시한 불법게시물을 올리실 경우 경고 없이 삭제될 수있으며, 서비스 이용 제한 및 법적인 처벌을 받을 수
+		있습니다.
 	</div>
 	<!-- Header Title //-->
 	<!-- Input Form -->
@@ -83,14 +107,14 @@
 				<td>
 					<div class="form_label w101">팀 이름</div>
 					<div class="form_value w570">
-						<input name="txtTeamName" type="text" class="fieldline fl required">
+						<input name="txtTeamName" type="text" maxLength="50" class="fieldline fl required">
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><div class="form_label w101">팀설명</div>
 					<div class="form_value w570">
-						<textarea name="txaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 100%"></textarea>
+						<textarea name="txtaTeamDesc" class="fieldline fl required" name="textarea" rows="3" style="width: 100%"></textarea>
 					</div>
 				</td>
 			</tr>
