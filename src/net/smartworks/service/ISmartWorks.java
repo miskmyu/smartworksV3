@@ -50,6 +50,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -592,4 +593,11 @@ public interface ISmartWorks {
 	public abstract BoardInstanceInfo[] getSeraTrends(int maxList) throws Exception; 
 	
 	public abstract CourseAdList getCourseAds(int maxList) throws Exception;
+
+	public abstract GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception;
+
+	public abstract CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception;
+
 }

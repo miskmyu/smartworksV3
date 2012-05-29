@@ -98,7 +98,7 @@ if(isAuthenticated){
 			<!-- Search -->
 			<div class="top_srch_section">
 				<input type="text" class="top_srch" placeholder="코스,사람 찾기"/>
-				<a href=""><div class="icon_srch"></div></a>
+				<a href="" class="js_global_search_btn"><div class="icon_srch"></div></a>
 			</div>
 			<!-- Search //-->
 		</div>
@@ -267,8 +267,8 @@ if(isAuthenticated){
 			
 		<!-- Search -->
 		<div class="top_srch_section">
-			<input type="text" class="top_srch" />
-			<div class="icon_srch"></div>
+			<input type="text" class="top_srch" placeholder="코스,사람 찾기"/>
+			<a href="" class="js_global_search_btn"><div class="icon_srch"></div></a>
 		</div>
 		<!-- Search //-->
 		
