@@ -153,7 +153,6 @@ a.b_next:hover { background-position:-30px -535px}
 
 /* Body */
 #container {background: url("../images/mypage_body_bg.gif") repeat-y scroll -5px 0 transparent; clear: both; height: auto; min-height: 530px; margin: 0 auto; position: relative; width: 970px; padding: 0 5px}
-#container.bg_no { background-image:none}
 #container_join {height: auto; margin: 0 auto; position: relative; width: 980px}
 #container:after {clear: both; content: ""; display: block}
 #sera_content {float: left; height: auto; padding: 15px 0; width:690px}
@@ -161,6 +160,10 @@ a.b_next:hover { background-position:-30px -535px}
 #sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%; overflow-y: auto;}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
+/* Global Search Container */
+.main_bg #container {background:none !important}
+.main_bg #container #sera_content {width:auto !important; float:none}
+.main_bg #container #sera_content .header_tit {width:auto !important}
 
 /* My Comment */
 .my_comment_section { overflow:hidden; margin-bottom:20px}
@@ -593,7 +596,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 #content_list_section .tit_header ul {float: right; padding-top: 30px}
 #content_list_section .course_listbox1 {clear: both; margin: 0 auto; width: 700px;}
 .course_listbox1 .course_list {clear: both; float: none; height: auto; list-style: none outside none; margin: 0; padding: 0; width: auto;}
-.course_listbox1 .course_list li {border: 1px solid #CCCCCC; color: #888888; float: left; font: 12px/15px 'dotum','Helvetica','sans-serif'; height: 165px;  margin: 0 6px 20px 0; padding: 5px; width: 120px}
+.course_listbox1 .course_list li {border: 1px solid #CCCCCC; color: #888888; background-color: #FFF; float: left; font: 12px/15px 'dotum','Helvetica','sans-serif'; height: 165px;  margin: 0 6px 20px 0; padding: 5px; width: 120px}
 .course_listbox1 .course_list li a {color: #666666; text-decoration: none;}
 .course_listbox1 .course_list li .title {height: 38px; overflow: hidden; font-weight: bold; word-wrap: break-word}
 #content_list_section table { border-bottom:1px solid #cccccc}

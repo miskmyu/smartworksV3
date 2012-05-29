@@ -72,7 +72,7 @@
 
 		<!-- 친구 검색 결과 -->
 		<!-- Header Title -->
-		<div class="header_tit">
+		<div class="header_tit cb">
 			<div class="tit_dep2 friend m0">
 				<h2>
 					친구 중 <span class="t_blue">"<%=key %>"</span> 검색결과 <span class="t_red">(<%=searchList.getTotalSeraUsers() %>)</span>건
@@ -106,22 +106,22 @@
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(seraUser.getGoal()) %><br /> <span class="t_id"><%=seraUser.getId() %></span>
 						</span>
 						</li>
-						<li class="fr bo_l">
-							<span> <!-- Btn -->
-								<%
+						<%
 								if(!cUser.isAnonymusUser()){
 								%>
+						<li class="fr bo_l">
+							<span> <!-- Btn -->
 									<div class="btn_fgreen_l js_friend_request_btn" userId="<%=seraUser.getId() %>" <%if(seraUser.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
 									</div> <!-- Btn //--> 
 									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=seraUser.getId()%>" <%if(!seraUser.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
 									</div> <!-- Btn //--> 
-								<%
-								}
-								%>
 							</span>
 						</li>
+						<%
+								}
+								%>
 					</ul>
 				</div>
 				<!-- 목록1//-->
