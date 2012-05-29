@@ -160,7 +160,7 @@ a.b_next:hover { background-position:-30px -535px}
 #sera_content textarea { border:1px solid #cccccc; width:99%; padding: 2px; height:100%; overflow-y: auto;}
 .aside {background: url("../images/aside_bar.jpg") no-repeat 0 0; float: right; height: auto; overflow: hidden; position: relative; width: 257px; margin:15px 0 0}
 .aside.srch_area {margin:45px 1px 0 !important}
-/* Search Container */
+/* Global Search Container */
 .main_bg #container {background:none !important}
 .main_bg #container #sera_content {width:auto !important; float:none}
 .main_bg #container #sera_content .header_tit {width:auto !important}
