@@ -60,8 +60,8 @@
 								</dd>
 								<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate())%> Days</dd>
 								<dd class="mb3 title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
-							</dl></li>
-						<li>
+							</dl>
+						</li>
 				<%
 					}
 				}
