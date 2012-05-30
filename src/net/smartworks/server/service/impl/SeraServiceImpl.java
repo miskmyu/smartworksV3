@@ -1236,6 +1236,9 @@ public class SeraServiceImpl implements ISeraService {
 		 */
 		
 		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String companyId = user.getCompanyId();
+
 		Map<String, Object> frmNewCourseProfile = (Map<String, Object>)requestBody.get("frmCreateCourse");
 
 		Set<String> keySet = frmNewCourseProfile.keySet();
@@ -1341,7 +1344,7 @@ public class SeraServiceImpl implements ISeraService {
 			Map<String, String> userMap = txtCourseMentor.get(0);
 			mentorUserId = userMap.get("id");
 		} else {
-			mentorUserId = user.getId();
+			mentorUserId = userId;
 		}
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
@@ -1354,14 +1357,21 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 
-		swoGroup.setCompanyId(user.getCompanyId());
+		swoGroup.setCompanyId(companyId);
 		swoGroup.setName(txtCourseName);
 		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		swoGroup.setGroupType(selGroupProfileType);
 		swoGroup.setGroupLeader(mentorUserId);
 
-		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+		SwoGroupMember swoGroupMember = new SwoGroupMember();
+		swoGroupMember.setUserId(mentorUserId);
+		swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+		swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+		swoGroupMember.setJoinDate(new LocalDate());
+		swoGroup.addGroupMember(swoGroupMember);
+
+		getSwoManager().setGroup(userId, swoGroup, IManager.LEVEL_ALL);
 
 		String groupId = swoGroup.getId();
 		if (CommonUtil.isEmpty(groupId))
@@ -1907,35 +1917,41 @@ public class SeraServiceImpl implements ISeraService {
 
 	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, String currentUserId, String userId, String courseId, String missionId, String teamId) throws Exception {
 		try {
-			String workSpaceIdIns = null;
+			List<String> workSpaceIdInList = new ArrayList<String>();
+			String[] workSpaceIdIns = null;
 			if(!SmartUtil.isBlankObject(courseId)) {
 				if(!SmartUtil.isBlankObject(userId)) {
 					swdRecordCond.setCreationUser(userId);
 				}
 				if(!SmartUtil.isBlankObject(teamId)) {
-					swdRecordCond.setWorkSpaceIdIns("('"+teamId+"')");
+					workSpaceIdInList.add(teamId);
+					//swdRecordCond.setWorkSpaceIdIns("('"+teamId+"')");
 				} else {
 					if(SmartUtil.isBlankObject(missionId)) {
-						workSpaceIdIns = "(";
+						//workSpaceIdIns = "(";
 						MissionInstanceInfo[] missionInstanceInfos = getMissionInstanceList(courseId, null, null);
 						if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
 							for(int j=0; j<missionInstanceInfos.length; j++) {
 								MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
 								String missionInstanceId = missionInstanceInfo.getId();
-								workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
+								workSpaceIdInList.add(missionInstanceId);
+								//workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
 							}
 						}
-						workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
-						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+						workSpaceIdInList.add(courseId);
+						//workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
+						//swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 					} else {
-						swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
+						workSpaceIdInList.add(missionId);
+						//swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
 					}
 				}
 			} else {
 				if(!SmartUtil.isBlankObject(userId)) {
 					if(!userId.equals("EVENT")) {
 						if(!currentUserId.equals(userId))
-							swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
+							//swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
+							workSpaceIdInList.add(userId);
 						else
 							swdRecordCond.setCreationUser(userId);
 					}
@@ -1978,7 +1994,7 @@ public class SeraServiceImpl implements ISeraService {
 
 					String[] courseIdIns = null;
 					if(!CommonUtil.isEmpty(allCourses)) {
-						workSpaceIdIns = "(";
+						//workSpaceIdIns = "(";
 						int allCourseLength = allCourses.length;
 						courseIdIns = new String[allCourseLength];
 						for(int i=0; i<allCourseLength; i++) {
@@ -2003,20 +2019,24 @@ public class SeraServiceImpl implements ISeraService {
 										for(int j=0; j<myMissionInstanceInfoLength; j++) {
 											MissionInstanceInfo myMissionInstanceInfo = myMissionInstanceInfos[j];
 											String myMissionId = myMissionInstanceInfo.getId();
-											workSpaceIdIns = workSpaceIdIns + "'" + myMissionId + "', ";
+											//workSpaceIdIns = workSpaceIdIns + "'" + myMissionId + "', ";
+											workSpaceIdInList.add(myMissionId);
 										}
 									}
-									if(i == myCourseLength - 1)								
-										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "'";
-									else
-										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "', ";
+//									if(i == myCourseLength - 1)								
+//										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "'";
+//									else
+//										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "', ";
+									workSpaceIdInList.add(myCourseId);
 								}
 							}
 						}
-						workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
-						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+						workSpaceIdInList.add(currentUserId);
+						//workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
+						//swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 					} else {
-						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
+						workSpaceIdInList.add(currentUserId);
+						//swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
 					}
 					/*if(!CommonUtil.isEmpty(attendingCourses)) {
 						workSpaceIdIns = "(";
@@ -2046,6 +2066,11 @@ public class SeraServiceImpl implements ISeraService {
 					}*/
 				}
 			}
+			if(workSpaceIdInList.size() > 0) {
+				workSpaceIdIns = new String[workSpaceIdInList.size()];
+				workSpaceIdInList.toArray(workSpaceIdIns);
+			}
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2089,7 +2114,9 @@ public class SeraServiceImpl implements ISeraService {
 
 			if(workSpaceId == null) {
 				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
-				String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
+				String[] workSpaceIdNotIns = new String[2];
+				workSpaceIdNotIns[0] = Constants.SERA_WID_SERA_NEWS;
+				workSpaceIdNotIns[1] = Constants.SERA_WID_SERA_TREND;
 				swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
 			} else {
 				swdRecordCond.setWorkSpaceId(workSpaceId);

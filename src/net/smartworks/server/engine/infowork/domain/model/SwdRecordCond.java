@@ -64,8 +64,10 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String referencedRecordId;
 	private boolean displayableDataFieldsOnly;
 	private String workSpaceId;
-	private String workSpaceIdIns;
-	private String workSpaceIdNotIns;
+	private String[] workSpaceIdIns;
+	//private String workSpaceIdIns;
+	private String[] workSpaceIdNotIns;
+	//private String workSpaceIdNotIns;
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
@@ -372,18 +374,30 @@ public class SwdRecordCond extends ClassObjectCond {
 	public void setWorkSpaceId(String workSpaceId) {
 		this.workSpaceId = workSpaceId;
 	}
-	public String getWorkSpaceIdIns() {
+	public String[] getWorkSpaceIdIns() {
+		return workSpaceIdIns;
+	}
+	public void setWorkSpaceIdIns(String[] workSpaceIdIns) {
+		this.workSpaceIdIns = workSpaceIdIns;
+	}
+	public String[] getWorkSpaceIdNotIns() {
+		return workSpaceIdNotIns;
+	}
+	public void setWorkSpaceIdNotIns(String[] workSpaceIdNotIns) {
+		this.workSpaceIdNotIns = workSpaceIdNotIns;
+	}
+	/*public String getWorkSpaceIdIns() {
 		return workSpaceIdIns;
 	}
 	public void setWorkSpaceIdIns(String workSpaceIdIns) {
 		this.workSpaceIdIns = workSpaceIdIns;
-	}
-	public String getWorkSpaceIdNotIns() {
+	}*/
+	/*public String getWorkSpaceIdNotIns() {
 		return workSpaceIdNotIns;
 	}
 	public void setWorkSpaceIdNotIns(String workSpaceIdNotIns) {
 		this.workSpaceIdNotIns = workSpaceIdNotIns;
-	}
+	}*/
 	public String getWorkSpaceType() {
 		return workSpaceType;
 	}

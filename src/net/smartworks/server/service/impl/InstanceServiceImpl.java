@@ -213,12 +213,12 @@ public class InstanceServiceImpl implements IInstanceService {
 	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
 
 		try {
-			String workId = SmartWork.ID_BOARD_MANAGEMENT;
+			//String workId = SmartWork.ID_BOARD_MANAGEMENT;
 	
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			SwdDomainCond swdDomainCond = new SwdDomainCond();
+/*			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 	
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -237,48 +237,54 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(swdDomain == null)
 				return  null;
 
-			String formId = swdDomain.getFormId();
+			String formId = swdDomain.getFormId();*/
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
-			swdRecordCond.setFormId(formId);
-			swdRecordCond.setDomainId(swdDomain.getObjId());
-			if(spaceId != null)
-				swdRecordCond.setWorkSpaceId(spaceId);
+			String domainId = "frm_notice_SYSTEM";
+			//swdRecordCond.setFormId(formId);
+			swdRecordCond.setDomainId(domainId);
+			String[] workSpaceIdIns = null;
+			if(spaceId == null)
+				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+			swdRecordCond.setWorkSpaceId(spaceId);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(5);
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
-			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
-			SwdRecord[] swdRecords = null;
-			if(!CommonUtil.isEmpty(totalSwdRecords)) {
-				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
-					if(isAccessForMe) {
-						swdRecordList.add(totalSwdRecord);
-					}
-				}
-			}
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
-			if(swdRecordList.size() > 0) {
-				swdRecords = new SwdRecord[swdRecordList.size()];
-				swdRecordList.toArray(swdRecords);
-			}
+//			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+//			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
+//			SwdRecord[] swdRecords = null;
+//			if(!CommonUtil.isEmpty(totalSwdRecords)) {
+//				for(SwdRecord totalSwdRecord : totalSwdRecords) {
+//					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
+//					if(isAccessForMe) {
+//						swdRecordList.add(totalSwdRecord);
+//					}
+//				}
+//			}
+//
+//			if(swdRecordList.size() > 0) {
+//				swdRecords = new SwdRecord[swdRecordList.size()];
+//				swdRecordList.toArray(swdRecords);
+//			}
 
-			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			List<BoardInstanceInfo> boardInstanceInfoList = new ArrayList<BoardInstanceInfo>();
 			BoardInstanceInfo[] boardInstanceInfos = null;
 
-			String subCtgId = swdRecordExtends[0].getSubCtgId();
-			String subCtgName = swdRecordExtends[0].getSubCtg();
-			String parentCtgId = swdRecordExtends[0].getParentCtgId();
-			String parentCtgName = swdRecordExtends[0].getParentCtg();
-			String formName = swdDomain.getFormName();
+			//String subCtgId = swdRecordExtends[0].getSubCtgId();
+			//String subCtgName = swdRecordExtends[0].getSubCtg();
+			//String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			//String parentCtgName = swdRecordExtends[0].getParentCtg();
+			//String formName = swdDomain.getFormName();
 
 			if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordLength = swdRecords.length;
-				if(swdRecordLength > 5)
-					swdRecordLength = 5;
 				for(int i=0; i < swdRecordLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
@@ -292,19 +298,19 @@ public class InstanceServiceImpl implements IInstanceService {
 					if(workSpaceId == null)
 						workSpaceId = user.getId();
 
-					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+					//WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+					//boardInstanceInfo.setWorkSpace(workSpaceInfo);
 
-					WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(subCtgId))
-						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+					//WorkCategoryInfo groupInfo = null;
+					//if (!CommonUtil.isEmpty(subCtgId))
+					//	groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
 
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+					//WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
 
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+					//WorkInfo workInfo = new SmartWorkInfo(workId, null, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
 
-					boardInstanceInfo.setWork(workInfo);
+					//boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
