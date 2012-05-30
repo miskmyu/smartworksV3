@@ -213,7 +213,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
 
 		try {
-			//String workId = SmartWork.ID_BOARD_MANAGEMENT;
+			String workId = SmartWork.ID_BOARD_MANAGEMENT;
 	
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
@@ -308,9 +308,9 @@ public class InstanceServiceImpl implements IInstanceService {
 
 					//WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
 
-					//WorkInfo workInfo = new SmartWorkInfo(workId, null, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
+					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 
-					//boardInstanceInfo.setWork(workInfo);
+					boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					boardInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
@@ -2690,25 +2690,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
 				swdRecordCond.setCreationUser(userId);
 
-			SortingField sf = params.getSortingField();
-			String columnName = "";
-			boolean isAsc;
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
-			if (sf != null) {
-				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
-				isAsc = sf.isAscending();
-			} else {
-				columnName = FormField.ID_LAST_MODIFIED_DATE;
-				isAsc = false;
-			}
-			SortingField sortingField = new SortingField();
-			sortingField.setFieldId(columnName);
-			sortingField.setAscending(isAsc);
-
-			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+/*			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
 			SwdRecord[] finalSwdRecords = null;
 			int viewCount = 0;
@@ -2724,7 +2712,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					finalSwdRecords = new SwdRecord[swdRecordList.size()];
 					swdRecordList.toArray(finalSwdRecords);
 				}
-			}
+			}*/
 
 			int pageSize = params.getPageSize();
 			if(pageSize == 0) pageSize = 20;
@@ -2732,19 +2720,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-/*			int totalPages = (int)totalCount % pageSize;
+			int totalPages = (int)totalCount % pageSize;
 
 			if(totalPages == 0)
 				totalPages = (int)totalCount / pageSize;
 			else
-				totalPages = (int)totalCount / pageSize + 1;*/
-
-			int totalPages = viewCount % pageSize;
-			
-			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
-			else
-				totalPages = viewCount / pageSize + 1;
+				totalPages = (int)totalCount / pageSize + 1;
 
 			int result = 0;
 
@@ -2766,15 +2747,35 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
 				currentPage = 1;
 
-			/*if (currentPage > 0)
+			if (currentPage > 0)
 				swdRecordCond.setPageNo(currentPage-1);
 
-			swdRecordCond.setPageSize(pageSize);*/
+			swdRecordCond.setPageSize(pageSize);
 
-			int pageNo = currentPage-1;
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = FormField.ID_LAST_MODIFIED_DATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			if(CommonUtil.isEmpty(swdRecords))
+				return null;
 
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
@@ -2788,162 +2789,157 @@ public class InstanceServiceImpl implements IInstanceService {
 			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
 			IWInstanceInfo[] iWInstanceInfos = null;
 
-			int startLength = pageNo * pageSize;
-			int endLength = startLength + pageSize;
+			int recordSize = swdRecords.length;
 
-			if(!CommonUtil.isEmpty(finalSwdRecords) && startLength < finalSwdRecords.length) {
-				if(endLength > finalSwdRecords.length)
-					endLength = finalSwdRecords.length;
-				for(int i=startLength; i<endLength; i++) {
-					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
-					SwdRecord swdRecord = finalSwdRecords[i];
-					String creationUser = swdRecord.getCreationUser();
-					Date creationDate = swdRecord.getCreationDate();
-					String modificationUser = swdRecord.getModificationUser();
-					Date modificationDate = swdRecord.getModificationDate();
-					if(creationUser == null)
-						creationUser = User.USER_ID_NONE_EXISTING;
-					if(creationDate == null)
-						creationDate = new Date();
-					UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
-					LocalDate createdDate = new LocalDate(creationDate.getTime());
-					UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
-					LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
+			for(int i=0; i<recordSize; i++) {
+				IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
+				SwdRecord swdRecord = swdRecords[i];
+				String creationUser = swdRecord.getCreationUser();
+				Date creationDate = swdRecord.getCreationDate();
+				String modificationUser = swdRecord.getModificationUser();
+				Date modificationDate = swdRecord.getModificationDate();
+				if(creationUser == null)
+					creationUser = User.USER_ID_NONE_EXISTING;
+				if(creationDate == null)
+					creationDate = new Date();
+				UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
+				LocalDate createdDate = new LocalDate(creationDate.getTime());
+				UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
+				LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
 
-					iWInstanceInfo.setId(swdRecord.getRecordId());
-					iWInstanceInfo.setOwner(owner);
-					iWInstanceInfo.setCreatedDate(createdDate);
-					iWInstanceInfo.setLastModifier(lastModifier);
-					iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
-					int type = WorkInstance.TYPE_INFORMATION;
-					iWInstanceInfo.setType(type);
-					iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					String workSpaceId = swdRecord.getWorkSpaceId();
-					if(CommonUtil.isEmpty(workSpaceId))
-						workSpaceId = userId;
+				iWInstanceInfo.setId(swdRecord.getRecordId());
+				iWInstanceInfo.setOwner(owner);
+				iWInstanceInfo.setCreatedDate(createdDate);
+				iWInstanceInfo.setLastModifier(lastModifier);
+				iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
+				int type = WorkInstance.TYPE_INFORMATION;
+				iWInstanceInfo.setType(type);
+				iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+				String workSpaceId = swdRecord.getWorkSpaceId();
+				if(CommonUtil.isEmpty(workSpaceId))
+					workSpaceId = userId;
 
-					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+				WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-					iWInstanceInfo.setWorkSpace(workSpaceInfo);
+				iWInstanceInfo.setWorkSpace(workSpaceInfo);
 
-					WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-						groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-		
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
-		
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+				WorkCategoryInfo groupInfo = null;
+				if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
+					groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
 	
-					iWInstanceInfo.setWork(workInfo);
-					iWInstanceInfo.setViews(swdRecord.getHits());
-					SwdDataField[] swdDataFields = swdRecord.getDataFields();
-					List<FieldData> fieldDataList = new ArrayList<FieldData>();
+				WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
+	
+				WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 
-					if(!CommonUtil.isEmpty(swdDataFields)) {
-						int swdDataFieldsLength = swdDataFields.length;
-						for(int j=0; j<swdDataFieldsLength; j++) {
-							SwdDataField swdDataField = swdDataFields[j];
-							if(swdDataField.getId().equals(titleFieldId))
-								iWInstanceInfo.setSubject(swdDataField.getValue());
-							if(!CommonUtil.isEmpty(swfFields)) {
-								int swfFieldsLength = swfFields.length;
-								for(int k=0; k<swfFieldsLength; k++) {
-									SwfField swfField = swfFields[k];
-									String formatType = swfField.getFormat().getType();
-									if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
-										if(swdDataField.getId().equals(swfField.getId())) {
-											FieldData fieldData = new FieldData();
-											fieldData.setFieldId(swdDataField.getId());
-											fieldData.setFieldType(formatType);
-											String value = swdDataField.getValue();
-											if(formatType.equals(FormField.TYPE_USER)) {
-												if(value != null) {
-													String[] users = value.split(";");
-													String resultUser = "";
-													if(!CommonUtil.isEmpty(users) && users.length > 0) {
-														if(users.length < 4) {
-															for(int l=0; l<users.length; l++) {
-																resultUser += users[l] + ", ";
-															}
-															resultUser = resultUser.substring(0, resultUser.length()-2);
-														} else if(users.length > 3) {
-															for(int l=0; l<3; l++) {
-																resultUser += users[l] + ", ";
-															}
-															resultUser = resultUser.substring(0, resultUser.length()-2);
-															resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
+				iWInstanceInfo.setWork(workInfo);
+				iWInstanceInfo.setViews(swdRecord.getHits());
+				SwdDataField[] swdDataFields = swdRecord.getDataFields();
+				List<FieldData> fieldDataList = new ArrayList<FieldData>();
+
+				if(!CommonUtil.isEmpty(swdDataFields)) {
+					int swdDataFieldsLength = swdDataFields.length;
+					for(int j=0; j<swdDataFieldsLength; j++) {
+						SwdDataField swdDataField = swdDataFields[j];
+						if(swdDataField.getId().equals(titleFieldId))
+							iWInstanceInfo.setSubject(swdDataField.getValue());
+						if(!CommonUtil.isEmpty(swfFields)) {
+							int swfFieldsLength = swfFields.length;
+							for(int k=0; k<swfFieldsLength; k++) {
+								SwfField swfField = swfFields[k];
+								String formatType = swfField.getFormat().getType();
+								if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
+									if(swdDataField.getId().equals(swfField.getId())) {
+										FieldData fieldData = new FieldData();
+										fieldData.setFieldId(swdDataField.getId());
+										fieldData.setFieldType(formatType);
+										String value = swdDataField.getValue();
+										if(formatType.equals(FormField.TYPE_USER)) {
+											if(value != null) {
+												String[] users = value.split(";");
+												String resultUser = "";
+												if(!CommonUtil.isEmpty(users) && users.length > 0) {
+													if(users.length < 4) {
+														for(int l=0; l<users.length; l++) {
+															resultUser += users[l] + ", ";
 														}
+														resultUser = resultUser.substring(0, resultUser.length()-2);
+													} else if(users.length > 3) {
+														for(int l=0; l<3; l++) {
+															resultUser += users[l] + ", ";
+														}
+														resultUser = resultUser.substring(0, resultUser.length()-2);
+														resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
 													}
-													value = resultUser;
 												}
-											} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
-												String symbol = swfField.getFormat().getCurrency();
-												fieldData.setSymbol(symbol);
-											} else if(formatType.equals(FormField.TYPE_PERCENT)) {
-												// TO-DO
-											} else if(formatType.equals(FormField.TYPE_DATE)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_TIME)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_DATETIME)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = localDateValue.toLocalDateTimeSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_FILE)) { 
-												List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
-												List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
-												int fileModelListLength = fileModelList.size();
-												for(int l=0; l<fileModelListLength; l++) {
-													Map<String, String> fileMap = new LinkedHashMap<String, String>();
-													IFileModel fileModel = fileModelList.get(l);
-													String fileId = fileModel.getId();
-													String fileName = fileModel.getFileName();
-													String fileType = fileModel.getType();
-													String fileSize = fileModel.getFileSize() + "";
-													fileMap.put("fileId", fileId);
-													fileMap.put("fileName", fileName);
-													fileMap.put("fileType", fileType);
-													fileMap.put("fileSize", fileSize);
-													fileList.add(fileMap);
-												}
-												if(fileList.size() > 0)
-													fieldData.setFiles(fileList);
-											} else if(formatType.equals(FormField.TYPE_TEXT)) {
-												value = StringUtil.subString(value, 0, 30, "...");
+												value = resultUser;
 											}
-											fieldData.setValue(value);
-											fieldDataList.add(fieldData);
+										} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
+											String symbol = swfField.getFormat().getCurrency();
+											fieldData.setSymbol(symbol);
+										} else if(formatType.equals(FormField.TYPE_PERCENT)) {
+											// TO-DO
+										} else if(formatType.equals(FormField.TYPE_DATE)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_TIME)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_DATETIME)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = localDateValue.toLocalDateTimeSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_FILE)) { 
+											List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
+											List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+											int fileModelListLength = fileModelList.size();
+											for(int l=0; l<fileModelListLength; l++) {
+												Map<String, String> fileMap = new LinkedHashMap<String, String>();
+												IFileModel fileModel = fileModelList.get(l);
+												String fileId = fileModel.getId();
+												String fileName = fileModel.getFileName();
+												String fileType = fileModel.getType();
+												String fileSize = fileModel.getFileSize() + "";
+												fileMap.put("fileId", fileId);
+												fileMap.put("fileName", fileName);
+												fileMap.put("fileType", fileType);
+												fileMap.put("fileSize", fileSize);
+												fileList.add(fileMap);
+											}
+											if(fileList.size() > 0)
+												fieldData.setFiles(fileList);
+										} else if(formatType.equals(FormField.TYPE_TEXT)) {
+											value = StringUtil.subString(value, 0, 30, "...");
 										}
+										fieldData.setValue(value);
+										fieldDataList.add(fieldData);
 									}
 								}
 							}
 						}
 					}
-					FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
-					fieldDataList.toArray(fieldDatas);
-					iWInstanceInfo.setDisplayDatas(fieldDatas);
+				}
+				FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
+				fieldDataList.toArray(fieldDatas);
+				iWInstanceInfo.setDisplayDatas(fieldDatas);
 
-					iWInstanceInfoList.add(iWInstanceInfo);
-				}
-				if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
-					iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
-					iWInstanceInfoList.toArray(iWInstanceInfos);
-				}
-				instanceInfoList.setInstanceDatas(iWInstanceInfos);
+				iWInstanceInfoList.add(iWInstanceInfo);
 			}
+			if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
+				iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
+				iWInstanceInfoList.toArray(iWInstanceInfos);
+			}
+			instanceInfoList.setInstanceDatas(iWInstanceInfos);
 
 			/*SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
@@ -3114,7 +3110,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				instanceInfoList.setInstanceDatas(iWInstanceInfos);
 			}*/
 
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
