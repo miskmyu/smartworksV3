@@ -17,6 +17,7 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 		options.container.html('');
 
 	var value = (options.dataField && options.dataField.value) || '';
+	
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var $format = $entity.find('format');
@@ -40,7 +41,17 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $staticItems = $format.find('list staticItems staticItem');
-	
+	// 가져오기 값이 1개이상일 경우 그값으로 staticItmes를 변경한다
+	if (options.dataField != null && options.dataField.dataFields != null) {
+		var staticItemsStr = '';
+		var subDataFields = options.dataField.dataFields;
+		for (var i = 0; i < subDataFields.length; i++) {
+			var subDataField = subDataFields[i];
+			staticItemsStr = staticItemsStr + '<staticItem>' + subDataField.value + '</staticItem>';
+		}
+		$staticItems = $(staticItemsStr);
+	}
+	//
 	var $input = $('<div class="form_value" style="width:' + valueWidth + '%"><select name="' + id + '"' + required + '></select><div>');
 
 	$input.attr('fieldId', id);

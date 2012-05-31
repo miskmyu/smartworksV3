@@ -162,8 +162,8 @@ a.b_next:hover { background-position:-30px -535px}
 .aside.srch_area {margin:45px 1px 0 !important}
 /* Global Search Container */
 .main_bg #container {background:none !important}
-.main_bg #container #sera_content {width:auto !important; float:none}
-.main_bg #container #sera_content .header_tit {width:auto !important}
+/* .main_bg #container #sera_content {width:auto !important; float:none}
+.main_bg #container #sera_content .header_tit {width:auto !important} */
 
 /* My Comment */
 .my_comment_section { overflow:hidden; margin-bottom:20px}
