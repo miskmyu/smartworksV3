@@ -6227,6 +6227,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
 
+			SmartUtil.publishCurrent(userId, Notice.TYPE_MESSAGE);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

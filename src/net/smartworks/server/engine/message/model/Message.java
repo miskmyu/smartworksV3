@@ -37,8 +37,7 @@ public class Message extends MisObject {
 	private Date checkedTime;
 	private String chatId;
 	private String chattersId;
-	
-	
+
 	public Message(){
 		super();
 	}

@@ -22,7 +22,10 @@ public class MessageCond extends MisObjectCond {
 
 	protected static final String PREFIX = "";
 	private static final String NAME = CommonUtil.toName(MessageCond.class, PREFIX);
-	
+
+	public static final int TYPE_STATUS_UNREAD = 0;
+	public static final int TYPE_STATUS_READ = 1;
+
 	public static final String A_CONTENT = "content";
 	public static final String A_SENDUSER = "sendUser";
 	public static final String A_TARGETUSER = "targetUser";
