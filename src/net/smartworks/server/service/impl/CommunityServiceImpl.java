@@ -306,13 +306,22 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup = new SwoGroup();
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
+			SwoGroupMember swoGroupMember = null;
+			if(!CommonUtil.isEmpty(txtGroupLeader)) {
+				swoGroupMember = new SwoGroupMember();
+				swoGroupMember.setUserId(txtGroupLeader);
+				swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+				swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+				swoGroupMember.setJoinDate(new LocalDate());
+				swoGroup.addGroupMember(swoGroupMember);
+			}
 
 			if(!CommonUtil.isEmpty(users)) {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");
 					if(!txtGroupLeader.equals(groupUserId)) {
-						SwoGroupMember swoGroupMember = new SwoGroupMember();
+						swoGroupMember = new SwoGroupMember();
 						swoGroupMember.setUserId(groupUserId);
 						swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
 						swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);

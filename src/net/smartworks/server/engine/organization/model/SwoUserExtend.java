@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import java.util.Date;
+
 public class SwoUserExtend {
 	public SwoUserExtend() {
 		super();
@@ -60,6 +62,7 @@ public class SwoUserExtend {
 	private String description = null;
 	private String bigPictureName = null;
 	private String smallPictureName = null;
+	private Date modifiedTime = null;
 
 	public String getEmployeeId() {
 		return employeeId;
@@ -199,4 +202,11 @@ public class SwoUserExtend {
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
+	public Date getModifiedTime() {
+		return modifiedTime;
+	}
+	public void setModifiedTime(Date modifiedTime) {
+		this.modifiedTime = modifiedTime;
+	}
+
 }

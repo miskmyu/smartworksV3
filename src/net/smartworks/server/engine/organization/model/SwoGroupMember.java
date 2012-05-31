@@ -25,15 +25,16 @@ public class SwoGroupMember extends SwoObject {
 
 	private static final long serialVersionUID = 1L;
 	private static Log logger = LogFactory.getLog(SwoGroupMember.class);
-	
+
 	private static final String NAME = CommonUtil.toName(SwoGroupMember.class, PREFIX);
 
 	public static final String JOINTYPE_INVITE = "I";
 	public static final String JOINTYPE_REQUEST = "R";
+	public static final String JOINTYPE_GROUPLEADER = "L";
 	public static final String JOINSTATUS_COMPLETE = "N";
 	public static final String JOINSTATUS_READY = "P";
 	public static final String JOINSTATUS_OUT = "O";
-	
+
 	public static final String A_GROUPID = "groupId";
 	public static final String A_USERID = "userId";
 	public static final String A_JOINTYPE = "joinType";

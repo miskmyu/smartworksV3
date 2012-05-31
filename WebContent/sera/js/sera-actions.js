@@ -1682,6 +1682,59 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_more_search_user_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_search_user_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
+		var key = input.attr('key');
+		var lastId = input.attr('lastId');
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreSearchSeraUsers.sw",
+			data : {
+				key: key,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_global_search_page').find('.js_sera_user_item').parent().append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
+	$('.js_more_search_course_btn').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_more_search_course_btn');
+		if(!isEmpty(input.find('.js_progress_span .js_progress_icon'))) 
+			return false;
+		
+		var key = input.attr('key');
+		var lastId = input.attr('lastId');
+		if(isEmpty(lastId)) lastId = "";
+		smartPop.progressCont(input.find('.js_progress_span'));
+		$.ajax({
+			url : "moreSearchCourses.sw",
+			data : {
+				key: key,
+				lastId: lastId
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_search_course_list').append(data);
+				input.remove();
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				smartPop.closeProgress();
+			}			
+		});
+		return false;
+	});
+	
 	$('a.js_coursememberpicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_coursememberpicker_button');
 		var userField = $(targetElement(e)).parents('.js_type_userField:first');
@@ -2078,6 +2131,15 @@ $(function() {
 	$('.js_notification_list_box').live('focusout', function(e){
 		$(targetElement(e)).slideUp();
 	});
+	
+	$('.js_friend_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
 
 	$('.js_friend_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
@@ -2131,6 +2193,15 @@ $(function() {
 		
 	});
 	
+	$('.js_non_friend_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_non_friend_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2182,6 +2253,15 @@ $(function() {
 
 	var TYPE_MENTEES = 2;
 	var TYPE_NON_MENTEES = 3;
+	$('.js_mentee_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_mentee_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2231,6 +2311,15 @@ $(function() {
 		
 	});
 	
+	$('.js_non_mentee_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_non_mentee_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2283,6 +2372,16 @@ $(function() {
 	
 	var TYPE_MEMBERS = 1;
 	var TYPE_NON_MEMBERS = 2;
+	var TYPE_INVITED_MEMBERS = 3;
+	$('.js_member_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_member_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2322,6 +2421,15 @@ $(function() {
 		
 	});
 	
+	$('.js_non_member_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_non_member_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2361,6 +2469,15 @@ $(function() {
 		return false;	
 	});
 	
+	$('.js_invited_member_search_key').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().click();
+		}
+		return true;		
+	});
+
 	$('.js_invited_member_search_btn').live('click', function(e){
 		var input = $(targetElement(e));
 		var key = input.prev().attr('value');
@@ -2639,5 +2756,43 @@ $(function() {
 		});
 		return false;
 	});
+	
+	$('.js_global_search').live('keydown', function(e){
+		var input = $(targetElement(e));
+		var keyCode = e.which || e.keyCode;
+		if(keyCode == 13) {
+			input.next().find('div').click();
+		}
+		return true;
+	});
 
+	$('.js_global_search_btn').live('click', function(e){
+		var input = $(targetElement(e)).parent();
+		var key = input.prev().attr('value');
+		if(isEmpty(key)) return false;
+		
+		smartPop.progressCenter();				
+		$.ajax({
+			url : 'globalSearch.sw',
+			data : {
+				key : key
+			},
+			success : function(data, status, jqXHR) {
+				if(!isEmpty($('#sera_content'))) $('#sera_content').html(data);
+				else if(!isEmpty($('#container'))) $('#container').html(data);
+				else{
+					$('#sera_header').after('<div id="container">' + data + '</div>');
+					$('#inro_ct_section').remove();
+					$('#intro_main_section').remove();
+				}
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+		
+	});
+	
 });

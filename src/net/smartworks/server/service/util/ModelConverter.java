@@ -223,7 +223,38 @@ public class ModelConverter {
 	public void setCommunityService(ICommunityService communityService) {
 		ModelConverter.communityService = communityService;
 	}
+	public static String[] getWorkSpaceIdIns() throws Exception {
+		try {
+			List<String> workSpaceIdInList = new ArrayList<String>();
+			String[] workSpaceIdIns = null;
+			// 나의 부서
+			DepartmentInfo[] myDepartments = communityService.getMyDepartments();
+			if(!CommonUtil.isEmpty(myDepartments)) {
+				for(DepartmentInfo myDepartment : myDepartments) {
+					String myDeptId = myDepartment.getId();
+					workSpaceIdInList.add(myDeptId);
+				}
+			}
+			// 나의 그룹
+			GroupInfo[] myGroups = communityService.getMyGroups();
+			if(!CommonUtil.isEmpty(myGroups)) {
+				for(GroupInfo myGroup : myGroups) {
+					String myGroupId = myGroup.getId();
+					workSpaceIdInList.add(myGroupId);
+				}
+			}
+			if(workSpaceIdInList.size() > 0) {
+				workSpaceIdIns = new String[workSpaceIdInList.size()];
+				workSpaceIdInList.toArray(workSpaceIdIns);
+			}
 
+			return workSpaceIdIns;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	private static PkgPackage getPkgPackageByPackageId(String packageId) throws Exception {
 		if (CommonUtil.isEmpty(packageId))
 			return null;
@@ -250,7 +281,7 @@ public class ModelConverter {
 		return new WorkSpace(workSpaceId, null);
 	}
 	// #########################################  INFO  ########################################################################
-	
+
 	public static String[] getLikersUserIdArray(String userId, int refType, String refId) throws Exception {
 		if ( CommonUtil.isEmpty(refType) || CommonUtil.isEmpty(refId))
 			return null;

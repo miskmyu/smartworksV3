@@ -48,6 +48,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -1222,37 +1223,31 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamsByCourse(courseId);
 	}
 
 	@Override
 	public Team getMyTeamByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getMyTeamByCourse(courseId);
 	}
 
 	@Override
 	public Team getTeamById(String teamId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamById(teamId);
 	}
 
 	@Override
 	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformations(teamId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformsByType(type, teamId, lastId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.searchTeamMemberByType(type, courseId, teamId, key);
 	}
 
@@ -1273,7 +1268,6 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public Team getJoinRequestTeamByCourseId(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getJoinRequestTeamByCourseId(courseId);
 	}
 
@@ -1305,5 +1299,20 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public CourseAdList getCourseAds(int maxList) throws Exception {
 		return seraService.getCourseAds(maxList);
+	}
+
+	@Override
+	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
+		return seraService.searchGlobal(key, maxCourseList, maxUserList);
+	}
+
+	@Override
+	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchCourses(null, key, lastId, maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchSeraUsers(null, key, lastId, maxList);
 	}
 }

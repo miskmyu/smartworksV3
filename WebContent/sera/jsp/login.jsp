@@ -24,14 +24,25 @@
 	<link type="text/css" rel="stylesheet" href="sera/css/pop.css"/>
 	<link type="text/css" rel="stylesheet" href="sera/css/form.css"/>
 	<link type="text/css" rel="stylesheet" href="sera/css/page.css"/>
+
 	<script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/history/jquery.history.js"></script>
+
+	<script type="text/javascript" src="js/sw/sw-common.js"></script>
+	<script type="text/javascript" src="js/sw/sw-util.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language-ko.js"></script>
 	<script type="text/javascript" src="js/sw/sw-language-en.js"></script>
+	<script type="text/javascript" src="js/sw/sw-more.js"></script>
+	<script type="text/javascript" src="js/sw/sw-nav.js"></script>
 	<script type="text/javascript" src="sera/js/rolling_img.js"></script>
-	<script type="text/javascript" src="js/sw/sw-util.js"></script>
 	<script type="text/javascript" src='js/sw/sw-popup.js'></script>
 	<script type="text/javascript" src='sera/js/window_popup.js'></script>
+
+	<script type="text/javascript" src="sera/js/sera-nav.js"></script>	
+	<script type="text/javascript" src="sera/js/sera-actions.js"></script>
+	<script type="text/javascript" src="sera/js/sera-more.js"></script>
+	<script type="text/javascript" src="sera/js/window_popup.js"></script>
 	<title>세라캠퍼스에 오신걸 환영합니다.</title>
 </head>
 

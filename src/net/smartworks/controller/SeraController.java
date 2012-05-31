@@ -401,6 +401,27 @@ public class SeraController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/popup/pop_notification_list.jsp", "");
 	}
 
+	@RequestMapping("/globalSearch")
+	public ModelAndView globalSearch(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/global_search.jsp", "smartWorks", smartworks);
+	}
+
+	@RequestMapping("/moreSearchCourses")
+	public ModelAndView moreSearchCourses(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/more_courses.jsp", "smartWorks", smartworks);
+	}
+
+	@RequestMapping("/moreSearchSeraUsers")
+	public ModelAndView moreSearchSeraUsers(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/more_sera_users.jsp", "smartWorks", smartworks);
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

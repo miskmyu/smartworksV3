@@ -15,6 +15,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -167,4 +168,10 @@ public interface ISeraService {
 
 	public abstract CourseInfo[] getRecommendedCourses(String fromCourseId, int maxList) throws Exception;
 	
+	public abstract GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception;
+
+	public abstract CourseInfo[] searchCourses(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception;
+
+	public abstract SeraUserInfo[] searchSeraUsers(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception;
+
 }

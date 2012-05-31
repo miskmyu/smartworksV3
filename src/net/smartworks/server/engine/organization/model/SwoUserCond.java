@@ -8,6 +8,8 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import java.util.Date;
+
 import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
@@ -63,6 +65,9 @@ public class SwoUserCond extends SwoObjectCond {
 	private String retiree;
 	private String mobileNo;
 	private String extensionNo;
+	private String key;
+	private String lastName;
+	private Date lastModifiedTime;
 
 	private String[] typeNotIns;
 	private String[] idIns;
@@ -409,6 +414,24 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setIdNotIns(String[] idNotIns) {
 		this.idNotIns = idNotIns;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public Date getLastModifiedTime() {
+		return lastModifiedTime;
+	}
+	public void setLastModifiedTime(Date lastModifiedTime) {
+		this.lastModifiedTime = lastModifiedTime;
 	}
 
 }
