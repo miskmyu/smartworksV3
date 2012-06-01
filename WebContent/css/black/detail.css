@@ -88,7 +88,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table .tit_bg2 th {background-color:#F5F5F5; font-weight:normal}
 .list_contents table .tit_bg2 td {background-color:#FFF}
 .r_line {border-right:1px solid #cccccc;}
-.po_left{display:inline-block}
+.po_left {display:inline-block; float: left}
 
 /* 새로 만들기 부분 타이틀 */
 .nmake_title_space {background-color:#F7F7F7; padding:5px; overflow:hidden;}
@@ -275,14 +275,15 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .t_text_s11{margin:30px 0 0 28px;text-align:center;width:110px}
 
 /* Icon button style */
-.title_line_btns{float:right;position:relative;top:-3px;}
-.title_line_options{float:left;position:relative;top:-3px;}
-.txt_btn .title_line_btns{margin-right:10px}
-.icon_btn_edit{background: url("../../images/bgBtnIcons.gif") 0 -21px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_create{background: url("../../images/bgBtnIcons.gif") 0 -42px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_excel{background: url("../../images/bgBtnIcons.gif") 0 -63px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_start{background: url("../../images/bgBtnIcons.gif") 0 -84px no-repeat;height:21px;display:inline-block;padding-left:5px}
-.icon_btn_tail{background: url("../../images/bgBtnIconsTail.gif") 100% 0 no-repeat;height:21px;display:inline-block;padding-right:5px;line-height:1.8; font-size:11px}
+.title_line_btns {float:right; position:relative; top:-3px;}
+.title_line_options {float:left; position:relative; top:0}
+.title_line_options select {margin:0}
+.txt_btn .title_line_btns {margin-right:10px}
+.icon_btn_edit {background: url("../../images/bgBtnIcons.gif") 0 -21px no-repeat;height:21px;display:inline-block;padding-left:22px}
+.icon_btn_create {background: url("../../images/bgBtnIcons.gif") 0 -42px no-repeat;height:21px;display:inline-block;padding-left:22px}
+.icon_btn_excel {background: url("../../images/bgBtnIcons.gif") 0 -63px no-repeat;height:21px;display:inline-block;padding-left:22px}
+.icon_btn_start {background: url("../../images/bgBtnIcons.gif") 0 -84px no-repeat;height:21px;display:inline-block;padding-left:5px}
+.icon_btn_tail {background: url("../../images/bgBtnIconsTail.gif") 100% 0 no-repeat;height:21px;display:inline-block;padding-right:5px;line-height:22px; font-size:11px}
 
 .btn_s_modi {background: url("../../images/btn_modi.gif") 0 0; height:21px; width:40px; display:inline-block;}
 .btn_s_del {background: url("../../images/bt_delete.gif") 0 0; height:21px; width:40px; display:inline-block;}
