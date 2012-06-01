@@ -71,7 +71,7 @@ smartPop = {
 					'<div class="up_point" style="left: 10px; top: 1px; position: relative;display:none;"></div>' + 
 					'<div class="pop_corner_all smart_userinfo_section">' + 
 						'<div class="pop_contents">' + 
-							'<img src="' + profile + '" class="profile_size_110 fl">' + 
+							'<img src="' + profile + '" class="profile_size_b fl">' + 
 							' <div class="pop_notice_section js_user_information"></div>' +
 						'</div>' +
 						'<div class="smartp_btn_space">' +

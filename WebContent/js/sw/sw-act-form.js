@@ -24,6 +24,7 @@ $(function() {
 		}
 		refreshData['workId'] = workId;
 		refreshData['recordId'] = recordId;
+		refreshData['firstTry'] = (target.attr('retry') === 'true') ? false : true;
 		new SmartWorks.GridLayout({
 			target : target,
 			mode : "edit",
@@ -32,6 +33,7 @@ $(function() {
 			taskInstId : taskInstId,
 			refreshData : refreshData,
 			onSuccess : function(){
+				target.attr('retry', true);
 			}
 		});
 	};

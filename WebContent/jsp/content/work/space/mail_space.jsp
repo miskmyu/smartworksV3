@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.instance.MailInstance"%>
 <%@page import="net.smartworks.model.work.MailWork"%>
@@ -79,13 +80,13 @@
 							if(!SmartUtil.isBlankObject(instance.getCcReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.cc_receivers"/> :</dt>
-						        <dd>&lt;<%=instance.getCcReceiversShown() %>&gt;</dd>
+						        <dd>&lt;<%=CommonUtil.toNotNull(instance.getCcReceiversShown()) %>&gt;</dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getBccReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.bcc_receivers"/> :</dt>
-						        <dd>&lt;<%=instance.getBccReceiversShown() %>&gt;</dd>
+						        <dd>&lt;<%=CommonUtil.toNotNull(instance.getBccReceiversShown()) %>&gt;</dd>
 							<%
 							}
 							%>

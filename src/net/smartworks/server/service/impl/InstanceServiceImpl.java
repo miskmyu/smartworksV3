@@ -2770,7 +2770,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-
+			
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
@@ -6304,6 +6304,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			msg.setCheckedTime(new LocalDate());
 
 			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+
+			SmartUtil.publishCurrent(userId, Notice.TYPE_MESSAGE);
 
 		} catch (Exception e) {
 			e.printStackTrace();

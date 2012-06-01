@@ -7,6 +7,9 @@
 <!--[if lte IE 8]><link rel="stylesheet" href="css/black/ie8.css" type="text/css" media="all"><![endif]-->
 
 <script type="text/javascript">
+	if(isEmpty(parent.location.pathname.match('login.sw'))){
+	    parent.location.href = "login.sw";
+	}
 	var currentUser = {
 		locale : "<%=java.util.Locale.getDefault().getLanguage()%>"
 	};
