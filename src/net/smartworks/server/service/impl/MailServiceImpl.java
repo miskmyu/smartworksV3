@@ -124,7 +124,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			
 			// get folder and set it into sesssion
-			String sFolder = MailFolder.getFolderNameById(folderId);
+			String sFolder = MailFolder.getFolderSIdById(folderId);
 	
 			// prepare variables
 			List headers = null;

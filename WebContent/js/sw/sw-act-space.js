@@ -178,29 +178,45 @@ $(function() {
 	});
 	
 	var userInfoTimer = null;
+	var onUserInfoTimer = null;
 	$('.js_pop_user_info').live('mouseenter', function(e){
 		if(userInfoTimer!=null){
 			clearTimeout(userInfoTimer);
 			userInfoTimer = null;
 		}
-		var input = $(targetElement(e)).parents('.js_pop_user_info');
-		if(input.attr('userId') === currentUser.userId)
-			return;
-		
-		var picture = input.find('img');
-		var top = picture.offset().top+ picture.height();
-		var scrollHeight = $(window).scrollTop() + window.innerHeight;
-		var directionUp = true;
-		var popUserInfo = $('#sw_pop_user_info');
-		if((top+popUserInfo.height()) > scrollHeight){
-			top = picture.offset().top;
-			directionUp = false;
+		if(onUserInfoTimer!=null){
+			clearTimeout(onUserInfoTimer);
+			onUserInfoTimer = null;
 		}
-		var left = picture.offset().left + picture.width()/2;
-		smartPop.showUserInfo(input, top, left, directionUp);		
+
+		var input = $(targetElement(e)).parents('.js_pop_user_info');
+		if(input.attr('userId') === currentUser.userId){
+			smartPop.closeUserInfo();
+			return;
+		}
+		onUserInfoTimer = setTimeout(function(){
+			onUserInfoTimer = null;
+			var picture = input.find('img');
+			var top = picture.offset().top+ picture.height();
+			var scrollHeight = $(window).scrollTop() + window.innerHeight;
+			var directionUp = true;
+			var popUserInfo = $('#sw_pop_user_info');
+			if((top+popUserInfo.height()) > scrollHeight){
+				top = picture.offset().top;
+				directionUp = false;
+			}
+			var left = picture.offset().left + picture.width()/2;
+			smartPop.showUserInfo(input, top, left, directionUp);		
+		}, 1000);
+		
 	});
 
 	$('a.js_pop_user_info').live('mouseleave', function(e){
+		if(onUserInfoTimer!=null){
+			clearTimeout(onUserInfoTimer);
+			onUserInfoTimer = null;
+			return;
+		}
 		userInfoTimer = setTimeout(function(){
 			smartPop.closeUserInfo();
 			userInfoTimer = null;
@@ -208,6 +224,10 @@ $(function() {
 	});
 	
 	$('#sw_pop_user_info').live('mouseenter', function(e){
+		if(onUserInfoTimer!=null){
+			clearTimeout(onUserInfoTimer);
+			onUserInfoTimer = null;
+		}
 		if(userInfoTimer!=null){
 			clearTimeout(userInfoTimer);
 			userInfoTimer = null;
@@ -215,6 +235,11 @@ $(function() {
 	});
 
 	$('#sw_pop_user_info').live('mouseleave', function(e){
+		if(onUserInfoTimer!=null){
+			clearTimeout(onUserInfoTimer);
+			onUserInfoTimer = null;
+			return;
+		}
 		userInfoTimer = setTimeout(function(){
 			smartPop.closeUserInfo();
 			userInfoTimer = null;
