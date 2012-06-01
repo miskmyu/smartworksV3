@@ -208,15 +208,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			User user = SmartUtil.getCurrentUser();
 			SwoGroupCond swoGroupCond = new SwoGroupCond();
 
-//           기존 소스			
-//			SwoGroupMember swoGroupMember = new SwoGroupMember();       
-//			swoGroupMember.setUserId(user.getId());		
-//			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
-//			swoGroupMembers[0] = swoGroupMember;
-//			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
-			
-			// 그룹 리더가 그룹 멤버로 되지 않아, GroupLeaderOrMember 메소드 추가
-			swoGroupCond.setGroupLeaderOrMember(user.getId());    
+			SwoGroupMember swoGroupMember = new SwoGroupMember();       
+			swoGroupMember.setUserId(user.getId());		
+			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+			swoGroupMembers[0] = swoGroupMember;
+			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
 			swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 			if(swoGroups != null) {

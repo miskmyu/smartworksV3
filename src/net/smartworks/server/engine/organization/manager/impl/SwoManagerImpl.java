@@ -2686,7 +2686,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		Date lastCreateDateTo = null;
 		String lastName = null;
 		String nameLike = null;
-		String groupLeaderOrMember = null;
 		SwoGroupMember[] swoGroupMembers = null;
 	
 		if (cond != null) {
@@ -2707,18 +2706,12 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			swoGroupMembers = cond.getSwoGroupMembers();
 			lastCreateDateTo = cond.getLastCreateDateTo();
 			lastName = cond.getLastName();
-			groupLeaderOrMember = cond.getGroupLeaderOrMember();
 		}
 		buf.append(" from SwoGroup obj");
 		
-		// 새로 추가된 메소드로 인해 조건 하나 추가 값이 양쪽다 들어올 경우에 문제 발생 할수도 있음 (확인필요)
-		if ( (swoGroupMembers != null && swoGroupMembers.length != 0 ) || groupLeaderOrMember != null ) {  
-			if (swoGroupMembers != null && swoGroupMembers.length != 0 ) {                                
-				for (int i=0; i<swoGroupMembers.length; i++) {
-					buf.append(" left join obj.swoGroupMembers as groupMember").append(i);
-				}
-			} else if (groupLeaderOrMember != null) {
-				buf.append(" left join obj.swoGroupMembers as groupMember");
+		if ( swoGroupMembers != null && swoGroupMembers.length != 0 ) {  
+			for (int i=0; i<swoGroupMembers.length; i++) {
+				buf.append(" left join obj.swoGroupMembers as groupMember").append(i);
 			}
 		}      
 		buf.append(" where obj.id is not null");
@@ -2786,9 +2779,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 						buf.append(" and groupMember").append(i).append(".outDate >= :outDate").append(i);
 				}
 			}
-			// 그룹리스트 조회 추가 쿼리
-			if(groupLeaderOrMember != null)
-				buf.append(" and obj.groupLeader= :groupLeaderOrMember or groupMember.userId = :groupLeaderOrMember ");
 		}
 
 		this.appendOrderQuery(buf, "obj", cond);
@@ -2854,8 +2844,6 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 						query.setTimestamp("outDate"+i, outDate);
 				}
 			}
-			if(groupLeaderOrMember != null)
-				query.setString("groupLeaderOrMember", groupLeaderOrMember);
 		}
 		return query;
 	}
@@ -2882,7 +2870,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level == null)
 				level = LEVEL_LITE;
 			StringBuffer buf = new StringBuffer();
-			buf.append("select distinct"); // 그룹id 중복 조회로 인한 distinct 추가
+			buf.append("select"); 
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
