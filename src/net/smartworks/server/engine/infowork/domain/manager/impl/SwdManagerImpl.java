@@ -1085,56 +1085,61 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				//buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
 			}
 		}*/
-		if (workSpaceIdIns != null) {
-			if(first) {
-				first = false;
-				buf.append(" where");
-			} else {
-				buf.append(" and");
-			}
-			buf.append(" ((obj.workSpaceType = 6 and obj.workSpaceId in (");
-			for (int j=0; j<workSpaceIdIns.length; j++) {
-				if (j != 0)
-					buf.append(", ");
-				buf.append(":workSpaceIdIn").append(j);
-			}
-			buf.append(")) or (obj.workSpaceType = 5 and obj.workSpaceId in (");
-			for (int j=0; j<workSpaceIdIns.length; j++) {
-				if (j != 0)
-					buf.append(", ");
-				buf.append(":workSpaceIdIn").append(j);
-			}
-			buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
-
-			//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
-			//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
-		}
-		if (workSpaceIdNotIns != null) {
-			if(first) {
-				buf.append(" where");
-				first = false;
-			} else {
-				buf.append(" and");
-			}
-			buf.append(" obj.workSpaceId not in (");
-			for (int j=0; j<workSpaceIdNotIns.length; j++) {
-				if (j != 0)
-					buf.append(", ");
-				buf.append(":workSpaceIdNotIn").append(j);
-			}
-			buf.append(")");
+		
+		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
 			
-//				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
-//			} else {
-//				buf.append(" and obj.workSpaceId not in " + workSpaceIdNotIns);
-//			}
-		}
-		if(first) {
-			buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
-			first = false;
-		} else {
-			buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
-		}
+			if (workSpaceIdIns != null) {
+				if(first) {
+					first = false;
+					buf.append(" where");
+				} else {
+					buf.append(" and");
+				}
+				buf.append(" ((obj.workSpaceType = 6 and obj.workSpaceId in (");
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdIn").append(j);
+				}
+				buf.append(")) or (obj.workSpaceType = 5 and obj.workSpaceId in (");
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdIn").append(j);
+				}
+				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
+	
+				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
+				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+			}
+			if (workSpaceIdNotIns != null) {
+				if(first) {
+					buf.append(" where");
+					first = false;
+				} else {
+					buf.append(" and");
+				}
+				buf.append(" obj.workSpaceId not in (");
+				for (int j=0; j<workSpaceIdNotIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdNotIn").append(j);
+				}
+				buf.append(")");
+				
+	//				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
+	//			} else {
+	//				buf.append(" and obj.workSpaceId not in " + workSpaceIdNotIns);
+	//			}
+			}
+			if(first) {
+				buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+				first = false;
+			} else {
+				buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+			}
+		}	
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);
@@ -1165,16 +1170,21 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			query.setString("refFormId", refFormId);
 		if (refRecordId != null)
 			query.setString("refRecordId", refRecordId);
-		if (workSpaceIdIns != null) {
-			for (int j=0; j<workSpaceIdIns.length; j++) {
-				query.setString("workSpaceIdIn"+j, workSpaceIdIns[j]);
+
+		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
+			if (workSpaceIdIns != null) {
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					query.setString("workSpaceIdIn"+j, workSpaceIdIns[j]);
+				}
+			}
+			if (workSpaceIdNotIns != null) {
+				for (int j=0; j<workSpaceIdNotIns.length; j++) {
+					query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
+				}
 			}
 		}
-		if (workSpaceIdNotIns != null) {
-			for (int j=0; j<workSpaceIdNotIns.length; j++) {
-				query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
-			}
-		}
+		
 		if (!CommonUtil.isEmpty(filterMap)) {
 			Filter f;
 			String operType;
