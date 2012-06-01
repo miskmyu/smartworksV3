@@ -108,7 +108,7 @@ a .btn_plus:hover {background-position:0 -16px}
 .approval_section .tit { float:left; font-size:14px; font-weight:bold}
 .approval_section .tit span { display:table-cell; vertical-align:middle; height:127px; width:130px; text-align: center}
 .approval_group { float:right; max-width:605px}
-.approval_area { width:110px; border:1px solid #cccccc; padding:5px; float:left; margin: 0 0 0 -1px}
+.approval_area { width:110px; border:1px solid #cccccc; padding:5px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
 .approval_area .approval {height:50px; height: 60px}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}

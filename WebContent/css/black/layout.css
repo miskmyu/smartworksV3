@@ -583,7 +583,7 @@ td.pic{width:85px}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
 
 /* Button */
-.btn {background-color:#666666; float:right; height:22px; position:absolute;}
+.btn {background-color:#666666; float:right; height:22px; position:absolute; line-height:19px}
 .btn .txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
@@ -591,7 +591,7 @@ td.pic{width:85px}
 .btn .txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 			
-.btn_wh {clear: both; display:inline-block;}
+.btn_wh {clear: both; display:inline-block; line-height:19px}
 .btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
 			float:left; height:20px; width:5px;}
 .btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
@@ -599,7 +599,7 @@ td.pic{width:85px}
 .btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
     		float:left; height:20px; width:5px;}
 			
-.btn_wh_ov {clear: both; display:inline-block;}
+.btn_wh_ov {clear: both; display:inline-block; line-height:19px}
 .btn_wh_ov .txt_btn_start {background: url("../../images/btn_wh_left_ov.gif") repeat scroll 0 0 transparent;
 			float:left; height:20px; width:5px;}
 .btn_wh_ov .txt_btn_center {background: url("../../images/btn_wh_center_ov.gif") repeat scroll 0 0 transparent;
@@ -607,7 +607,7 @@ td.pic{width:85px}
 .btn_wh_ov .txt_btn_end {background: url("../../images/btn_wh_right_ov.gif") repeat scroll 0 0 transparent;
     		float:left; height:20px; width:5px;}
 			
-.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative;}
+.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative; line-height:19px}
 .btn_black .txt_btn_start {background: url("../../images/btn_blk_bg_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_black .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
@@ -615,7 +615,7 @@ td.pic{width:85px}
 .btn_black .txt_btn_end {background: url("../../images/btn_blk_bg_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 			
-.btn_gray {display:inline-block;}
+.btn_gray {display:inline-block; line-height:19px}
 .btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
