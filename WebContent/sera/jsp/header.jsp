@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
 <%@page import="org.springframework.security.web.context.HttpSessionSecurityContextRepository"%>
 <%@page import="org.springframework.security.core.context.SecurityContext"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -63,7 +64,11 @@ function updateNoticeCount(message){
 	if(SmartUtil.isBlankObject(notices)) notices = new Notice[]{};
 	
 %>
-
+<script type="text/javascript">
+function logout() {
+	document.location.href = "logouts.sw?userId=<%=cUser != null ? cUser.getId() : null%>";
+}
+</script>
 <%
 if(isAuthenticated){
 %>
@@ -92,7 +97,7 @@ if(isAuthenticated){
 			<ul class="util_menu">
 				<li class="about <%if(currentMenu.equals("aboutSera")){ %>current<%}%>"><a href="javascript:NavigateParent('aboutSera.sw');">about SERA</a></li>
 				<li class="news <%if(currentMenu.equals("seraNews")){ %>current<%}%>"><a href="javascript:NavigateParent('seraNews.sw');">sera 소식</a></li>
-				<li class="btn_login"><a href="javascript:NavigateParent('logout');"><img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png"></a></li>
+				<li class="btn_login"><a href="javascript:logout();"><img width="49" height="19" title="로그아웃" alt="로그아웃" src="sera/images/sera2_main_btnLogout.png"></a></li>
 			</ul>
 	
 			<!-- Search -->

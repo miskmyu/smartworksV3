@@ -21,6 +21,8 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
+import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
@@ -62,6 +64,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private ISchManager getSchManager() {
 		return SwManagerFactory.getInstance().getSchManager();
+	}
+	private ILoginUserManager getLoginUserManager() {
+		return SwManagerFactory.getInstance().getLoginUserManager();
 	}
 
 	private ISeraService seraService = null;
@@ -393,7 +398,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	 * .String, java.lang.String)
 	 */
 	@Override
-	public WorkSpaceInfo[] searchCommunity(String key) throws Exception {
+	public WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception {
 
 		try{
 			if (CommonUtil.isEmpty(key))
@@ -409,16 +414,25 @@ public class CommunityServiceImpl implements ICommunityService {
 			List<DepartmentInfo> deptList = new ArrayList<DepartmentInfo>();
 			List<GroupInfo> groupList = new ArrayList<GroupInfo>();
 			List<UserInfo> userList = new ArrayList<UserInfo>();
-			
-			
+
+			UserInfo[] availableChatters = getAvailableChatter(request);
+
 			for (int i=0; i < workSpaceInfos.length; i++) {
 				SchWorkspace workSpaceInfo = workSpaceInfos[i];
 				
 				String type = workSpaceInfo.getType();
-				
+
 				if (type.equalsIgnoreCase("user")) {
 					UserInfo userInfo = new UserInfo();
-					userInfo.setId(workSpaceInfo.getId());
+					userInfo.setOnline(false);
+					String userId = workSpaceInfo.getId();
+					if(!CommonUtil.isEmpty(availableChatters)) {
+						for(UserInfo availableChatter : availableChatters) {
+							if(userId.equals(availableChatter.getId()))
+								userInfo.setOnline(true);
+						}
+					}
+					userInfo.setId(userId);
 					userInfo.setName(workSpaceInfo.getName());
 					userInfo.setPosition(workSpaceInfo.getUserPosition());
 					String picture = workSpaceInfo.getUserPicture();
@@ -604,15 +618,33 @@ public class CommunityServiceImpl implements ICommunityService {
 	 * @see net.smartworks.service.impl.ISmartWorks#getAvailableChatter()
 	 */
 	@Override
-	public UserInfo[] getAvailableChatter() throws Exception {
-		
+	public UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception {
+
 		try{
-			return new UserInfo[]{};
+		 	User user = SmartUtil.getCurrentUser();
+		 	String userId = user.getId();
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
+
+			UserInfo[] userInfos = null;
+			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			if(!CommonUtil.isEmpty(loginUsers)) {
+				for(LoginUser loginUser : loginUsers) {
+					String loginId = loginUser.getUserId();
+					UserInfo userInfo = ModelConverter.getUserInfoByUserId(loginId);
+					userInfo.setOnline(true);
+					userInfoList.add(userInfo);
+				}
+			}
+			if(userInfoList.size() > 0) {
+				userInfos = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(userInfos);
+			}
+
+			return userInfos;
 		}catch (Exception e){
-			// Exception Handling Required
 			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			return null;
 		}
 	}
 

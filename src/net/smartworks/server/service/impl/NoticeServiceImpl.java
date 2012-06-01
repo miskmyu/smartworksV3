@@ -239,7 +239,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == SeraNotice.TYPE_FRIEND) {
 			friend = new Notice();
 			friend.setType(SeraNotice.TYPE_FRIEND);
-			SeraUserInfo[] seraUserInfos = SwServiceFactory.getInstance().getSeraService().getFriendRequestsForMe(null, FriendInformList.MAX_ALL_FRIEND_LIST);
+			SeraUserInfo[] seraUserInfos = SwServiceFactory.getInstance().getSeraService().getFriendRequestsByUserId(userId, null, FriendInformList.MAX_ALL_FRIEND_LIST);
 			int length = 0;
 			if(!CommonUtil.isEmpty(seraUserInfos))
 				length = seraUserInfos.length;

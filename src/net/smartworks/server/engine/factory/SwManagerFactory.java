@@ -12,6 +12,7 @@ package net.smartworks.server.engine.factory;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.common.collection.manager.IColManager;
+import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.menuitem.manager.IItmManager;
 import net.smartworks.server.engine.common.script.manager.ISctManager;
 import net.smartworks.server.engine.common.searcher.manager.ISchManager;
@@ -66,9 +67,10 @@ public class SwManagerFactory {
 	private IOpinionManager opinionManager;
 	private ILikeManager likeManager;
 	private IMessageManager messageManager;
+	private ILoginUserManager loginUserManager;
 	private IResourceDesigntimeManager designtimeManager;
 	private IResourceRuntimeManager runtimeManager;
-	
+
 	//SERA
 	private ISeraManager seraManager;
 
@@ -231,6 +233,12 @@ public class SwManagerFactory {
 	}
 	public void setLikeManager(ILikeManager likeManager) {
 		this.likeManager = likeManager;
+	}
+	public ILoginUserManager getLoginUserManager() {
+		return loginUserManager;
+	}
+	public void setLoginUserManager(ILoginUserManager loginUserManager) {
+		this.loginUserManager = loginUserManager;
 	}
 	public IResourceDesigntimeManager getDesigntimeManager() {
 		return designtimeManager;

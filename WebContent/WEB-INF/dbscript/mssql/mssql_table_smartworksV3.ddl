@@ -2278,3 +2278,10 @@ CREATE TABLE SWMessage(
 	primary key (id)
 );
 
+-- 로그인 사용자
+CREATE TABLE SwLoginUser (
+	userId varchar(50) NOT NULL,
+	loginTime datetime,
+	primary key (userId)
+);
+

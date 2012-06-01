@@ -203,7 +203,7 @@ public interface ISmartWorks {
 
 	public abstract SmartWorkInfo[] searchWork(String key, int searchType) throws Exception;
 
-	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
+	public abstract WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception;
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
 	/*
@@ -212,7 +212,7 @@ public interface ISmartWorks {
 	 * 발생하였을경우 SmartUtil의 publishAChatters 메소드를 호출하여 채팅 가능 유저 목록을 갱신시켜준다
 	 * (세션의 접속,끊김 이벤트를 받을수 있나?, publishAChatters 을 이용할때 세션정보에서 사용자의 회사아이디를 가져올수 있나?)
 	 */
-	public abstract UserInfo[] getAvailableChatter() throws Exception;
+	public abstract UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception;
 
 	public abstract UserInfo[] searchAvailableChatter(String key) throws Exception;
 
@@ -492,7 +492,7 @@ public interface ISmartWorks {
 
 	public abstract SeraUserInfo[] getFriendsById(String userId, String lastId, int maxList, String key) throws Exception;
 
-	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -599,5 +599,7 @@ public interface ISmartWorks {
 	public abstract CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception;
 
 	public abstract SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception;
+
+	public abstract void logout(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 }

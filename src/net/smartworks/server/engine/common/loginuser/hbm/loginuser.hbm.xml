@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.common.loginuser.model" default-lazy="false">
+
+	<class name="LoginUser" table="SwLoginUser">
+		<id name="userId" type="string" length="50" unsaved-value="undefined"/>
+		<property name="loginTime" type="timestamp"/>
+	</class>
+
+</hibernate-mapping>

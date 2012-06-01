@@ -196,8 +196,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public WorkSpaceInfo[] searchCommunity(String key) throws Exception {
-		return communityService.searchCommunity(key);
+	public WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception {
+		return communityService.searchCommunity(key, request);
 	}
 
 	@Override
@@ -226,8 +226,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public UserInfo[] getAvailableChatter() throws Exception {
-		return communityService.getAvailableChatter();
+	public UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception {
+		return communityService.getAvailableChatter(request);
 	}
 
 	@Override
@@ -1010,8 +1010,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
-		return seraService.getFriendRequestsForMe(lastId, maxList);
+	public SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsByUserId(userId, lastId, maxList);
 	}
 	
 	@Override
@@ -1315,4 +1315,10 @@ public class SmartWorks implements ISmartWorks {
 	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
 		return seraService.searchSeraUsers(null, key, lastId, maxList);
 	}
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		seraService.logout(request, response);
+	}
+
 }

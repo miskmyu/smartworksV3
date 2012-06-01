@@ -25,8 +25,6 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +51,20 @@ public class SeraController extends ExceptionInterceptor {
 	}
 
 	@RequestMapping("/logins")
-	public ModelAndView logins(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView logins(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mnv = new ModelAndView();
 		String type = CommonUtil.toNotNull(request.getParameter("type"));
 		mnv.addObject("type", type);
 		mnv.setViewName("sera/jsp/login.jsp");
+		return mnv;
+	}
+
+	@RequestMapping("/logouts")
+	public ModelAndView logouts(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.logout(request, response);
+		ModelAndView mnv = new ModelAndView();
+		mnv.addObject("href", "logout");
+		mnv.setViewName("sera/jsp/movePage.jsp");
 		return mnv;
 	}
 

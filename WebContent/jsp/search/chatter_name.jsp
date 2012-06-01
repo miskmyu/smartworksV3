@@ -14,7 +14,7 @@
 	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 
 	String key = request.getParameter("key");
-	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key);
+	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key, request);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -40,7 +40,7 @@
 	%>
 			<li>
 				<a href="" comId="<%=comId %>" userId="<%=userId %>">
-					<img class="mr2 profile_size_s" src="<%=picName%>" title="<%=comName%>"><%=comName %>
+					<img class="mr2 profile_size_s" src="<%=picName%>"><%=comName %>
  					<span class="<%=online%>"></span>
 				</a>
 			</li>
