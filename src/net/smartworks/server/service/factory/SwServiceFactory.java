@@ -8,11 +8,10 @@
 
 package net.smartworks.server.service.factory;
 
-import net.smartworks.server.engine.basicwork.notice.manager.INoticeManager;
-import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.ISeraService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +39,7 @@ public class SwServiceFactory {
 	private IInstanceService instanceService;
 	private ICommunityService communityService;
 	private INoticeService noticeService;
+	private ISeraService seraService;
 
 	public ICommunityService getCommunityService() {
 		return communityService;
@@ -59,5 +59,11 @@ public class SwServiceFactory {
 	public void setNoticeService(INoticeService noticeService) {
 		this.noticeService = noticeService;
 	}
-	
+	public ISeraService getSeraService() {
+		return seraService;
+	}
+	public void setSeraService(ISeraService seraService) {
+		this.seraService = seraService;
+	}
+
 }
