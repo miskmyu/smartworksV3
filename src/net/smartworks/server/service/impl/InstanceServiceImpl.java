@@ -121,6 +121,8 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
+import net.smartworks.server.engine.process.approval.model.AprApproval;
+import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -901,9 +903,10 @@ public class InstanceServiceImpl implements IInstanceService {
 						if (valueFunc == null || valueFunc.equalsIgnoreCase("value")) {
 							SwdRecord[] mappingRecords = null;
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
-								SwdRecord mappingRecord = getSwdManager().getRecordByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
-								if (mappingRecord != null)
-									mappingRecords = new SwdRecord[] {mappingRecord};
+								//SwdRecord mappingRecord = getSwdManager().getRecordByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
+								mappingRecords = getSwdManager().getRecordsByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
+								//if (mappingRecord != null)
+								//	mappingRecords = new SwdRecord[] {mappingRecord};
 							} else {
 								mappingRecords = getSwdManager().getRecordsByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
 							}
@@ -913,10 +916,39 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
 								
+								//다수의 검색 결과가 온경우 기본적으로 처음 결과값으로 dataField를 생성하고 그 객체 안의 하위 dataField[]에 
+								//전체 결과값을 담아서 리턴한다.
+								//폼런타임에서는 그필드가 콤보박스 필드라면 해당 하위 dataField[]를 검색하고 존재한다면 콤보 형식으로 데이터를 표현한다
+								
+								SwdDataField[] subDataFields = null;
+								if (mappingRecords.length > 1) {
+									
+									subDataFields = new SwdDataField[mappingRecords.length];
+									for (int i = 0; i < mappingRecords.length; i++) {
+										SwdRecord subMappingRecord = mappingRecords[i];
+										SwdDataField subMappingDataField = subMappingRecord.getDataField(mappingFieldId);
+										SwdDataField subDataField = new SwdDataField();
+										
+										if (subMappingDataField == null) {
+											subDataField.setValue(null);
+											subDataField.setRefRecordId(null);
+										} else {
+											subDataField.setValue(subMappingDataField.getValue());
+											subDataField.setRefRecordId(subMappingDataField.getRefRecordId());
+										}
+										subDataFields[i] = subDataField;
+									}
+								}
+								
+								
 								SwdRecord mappingRecord = mappingRecords[0];
 								SwdDataField mappingDataField = mappingRecord.getDataField(mappingFieldId);
 								
 								SwdDataField dataField = oldRecord.getDataField(fieldId);
+								
+								if (subDataFields != null)
+									dataField.setDataFields(subDataFields);
+								
 								if (dataField == null) {
 									dataField = new SwdDataField();
 									dataField.setId(fieldId);
@@ -955,10 +987,12 @@ public class InstanceServiceImpl implements IInstanceService {
 									dataField.setRefRecordId(mappingRecord.getRecordId());
 								}
 								
+								
+								
 							} else {
 								//Sw 2.0 에서 구현 되어 있지만 3.0에서는 미구현! mappingFieldId 가 비어 있는 경우가 없어 보인다! 만약에 아래 오류를 발견한다면
 								//2.0의 executionService.jsp 소스에서 refreshData 부분을 참고하여 코드를 작성해야 한다
-								throw new Exception("InstanceServiceImpl Exception : mappingFieldId is Empty (InstanceServiceImpl.java 760Line)");
+								throw new Exception("InstanceServiceImpl Exception : mappingFieldId is Empty (InstanceServiceImpl.java)");
 							}
 						} else {
 							double value = getSwdManager().getRecordValueByMappingForm(userId, oldRecord, formLinkMap.get(formLinkId), mappingFieldId, valueFunc);
@@ -1641,6 +1675,50 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedAttributeValue("txtForwardComments", txtForwardComments);
 			}
 			
+			// 전자결재 업무 생성
+			
+			//전자 결재 정보를 바탕으로 approvalLine 을 생성한다
+			
+			String recId = obj.getRecordId();
+			if (CommonUtil.isEmpty(recId)) {
+				recId = CommonUtil.newId();
+				obj.setRecordId(recId);
+			}
+//			AprApprovalLine apprLine = new AprApprovalLine();
+//			apprLine.setStatus("created");
+//			
+//			AprApproval[] approvals = new AprApproval[3];
+//			AprApproval apr1 = new AprApproval();
+//			apr1.setName("firstApprovalName");
+//			apr1.setType("1th");
+//			apr1.setApprover("kmyu@maninsoft.co.kr");
+//			apr1.setMandatory(true);
+//			apr1.setModifiable(true);
+//			
+//			AprApproval apr2 = new AprApproval();
+//			apr2.setName("secondApprovalName");
+//			apr2.setType("2th");
+//			apr2.setApprover("kmyu@maninsoft.co.kr");
+//			apr2.setMandatory(true);
+//			apr2.setModifiable(true);
+//			
+//			AprApproval apr3 = new AprApproval();
+//			apr3.setName("thirdApprovalName");
+//			apr3.setType("3th");
+//			apr3.setApprover("kmyu@maninsoft.co.kr");
+//			apr3.setMandatory(true);
+//			apr3.setModifiable(true);
+//			
+//			approvals[0] = apr1;
+//			approvals[1] = apr2;
+//			approvals[2] = apr3;
+//			
+//			apprLine.setApprovals(approvals);
+//			apprLine.setExtendedPropertyValue("recordId", recId);
+//			SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+//			obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+			
+			// 전자결재 업무 끝
 
 			//TODO 좋은방법이 멀까?
 			String servletPath = request.getServletPath();
@@ -2692,7 +2770,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-
+			
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
@@ -6226,6 +6304,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			msg.setCheckedTime(new LocalDate());
 
 			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+
+			SmartUtil.publishCurrent(userId, Notice.TYPE_MESSAGE);
 
 		} catch (Exception e) {
 			e.printStackTrace();

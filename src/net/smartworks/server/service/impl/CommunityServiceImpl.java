@@ -38,6 +38,7 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
@@ -207,8 +208,8 @@ public class CommunityServiceImpl implements ICommunityService {
 			User user = SmartUtil.getCurrentUser();
 			SwoGroupCond swoGroupCond = new SwoGroupCond();
 
-			SwoGroupMember swoGroupMember = new SwoGroupMember();
-			swoGroupMember.setUserId(user.getId());
+			SwoGroupMember swoGroupMember = new SwoGroupMember();       
+			swoGroupMember.setUserId(user.getId());		
 			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
 			swoGroupMembers[0] = swoGroupMember;
 			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
@@ -248,6 +249,14 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
+	private SwoUser[] getUsersByDeptId(String userId, String departmentId) throws Exception {
+		
+		SwoUserCond swoUserCond = new SwoUserCond();
+		swoUserCond.setDeptId(departmentId);
+		
+		return getSwoManager().getUsers(userId, swoUserCond, IManager.LEVEL_LITE);
+		
+	}
 	public String setGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try{
@@ -306,9 +315,8 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup = new SwoGroup();
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
-			SwoGroupMember swoGroupMember = null;
 			if(!CommonUtil.isEmpty(txtGroupLeader)) {
-				swoGroupMember = new SwoGroupMember();
+				SwoGroupMember swoGroupMember = new SwoGroupMember();
 				swoGroupMember.setUserId(txtGroupLeader);
 				swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
 				swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
@@ -320,13 +328,35 @@ public class CommunityServiceImpl implements ICommunityService {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");
-					if(!txtGroupLeader.equals(groupUserId)) {
-						swoGroupMember = new SwoGroupMember();
-						swoGroupMember.setUserId(groupUserId);
-						swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
-						swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
-						swoGroupMember.setJoinDate(new LocalDate());
-						swoGroup.addGroupMember(swoGroupMember);
+					//그룹멤버가 부서 일경우 비교
+					if(userMap.get("id").matches(".*@.*")){
+						if(!txtGroupLeader.equals(groupUserId)) {
+							SwoGroupMember swoGroupMember = new SwoGroupMember();
+							swoGroupMember.setUserId(groupUserId);
+							swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+							swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+							swoGroupMember.setJoinDate(new LocalDate());
+							swoGroup.addGroupMember(swoGroupMember);
+						}
+					}else{
+						//부서 일 경우 추가식
+						String departmentId = groupUserId;
+						SwoUser[] deptUsers = getUsersByDeptId("", departmentId);
+						//그룹안에 그룹을 넣는 경우
+						if(deptUsers != null){
+							int getGroupDeptIdlength = deptUsers.length;
+							for (int j = 0; j < getGroupDeptIdlength; j++) {
+								String deptUser = deptUsers[j].getId();
+								if(!txtGroupLeader.equals(deptUser)){
+									SwoGroupMember swoGroupMember = new SwoGroupMember();
+									swoGroupMember.setUserId(deptUser);
+									swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+									swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+									swoGroupMember.setJoinDate(new LocalDate());
+									swoGroup.addGroupMember(swoGroupMember);
+								}
+							}
+						}
 					}
 				}
 			}

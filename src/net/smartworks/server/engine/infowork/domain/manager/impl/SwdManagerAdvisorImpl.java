@@ -202,7 +202,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 		// 결재자 / 수신자 / 참조자
 		
 		
-		String approvalLine = null;
+		String approvalLine = obj.getExtendedAttributeValue("approvalLine");
 		String forwardSubject = obj.getExtendedAttributeValue("txtForwardSubject");
 		String forwardForwardee = obj.getExtendedAttributeValue("txtForwardForwardee");
 		String forwardComments = obj.getExtendedAttributeValue("txtForwardComments");
