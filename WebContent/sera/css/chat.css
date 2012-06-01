@@ -52,7 +52,7 @@
 .chat_online {float: right; background: url("../../images/chat_img.png") no-repeat scroll 0 -99px transparent; display:inline-block; height: 10px; width: 10px;}
 .chat_offline {float: right; background: url("../../images/chat_img.png") no-repeat scroll 0 -117px transparent; display:inline-block; height: 10px; width: 10px;}
 .chatter_list_area li.chat_off_user, .chat_de_list li.chat_off_user {color:#b6b6b6;}
-.chatter_list_area.admin {bottom: 29px; position: fixed; right: 0; width: auto; margin: 0; padding:3px}
+.chatter_list_area.admin {bottom: 29px; position: fixed; right: 0; width: auto; margin: 0; padding:0}
 
 /* Chat Default Section */
 .chat_close_section, .chat_de_section {border:1px solid #232323; background-color:#454645; min-width: 105px; margin-left:10px; z-index:102; color:#FFF; bottom: 0; position: fixed; right: 0;}
