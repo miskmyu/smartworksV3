@@ -86,7 +86,7 @@ public class CommunityController {
 		String instanceId = smartworks.setGroup(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "group_space.sw?cid=" + SmartWorks.CONTEXT_PREFIX_GROUP_SPACE + instanceId);
+		map.put("href", "group_space.sw?cid=" + SmartWorks.CONTEXT_PREFIX_GROUP_SPACE + instanceId + "&wid=" + instanceId ); // wid 추가( 그룹 생성 후 멤버가 보이지 않는 현상 수정)
 		return map;
 	}
 

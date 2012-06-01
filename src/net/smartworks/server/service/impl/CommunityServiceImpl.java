@@ -38,6 +38,7 @@ import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
@@ -207,11 +208,15 @@ public class CommunityServiceImpl implements ICommunityService {
 			User user = SmartUtil.getCurrentUser();
 			SwoGroupCond swoGroupCond = new SwoGroupCond();
 
-			SwoGroupMember swoGroupMember = new SwoGroupMember();
-			swoGroupMember.setUserId(user.getId());
-			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
-			swoGroupMembers[0] = swoGroupMember;
-			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+//           기존 소스			
+//			SwoGroupMember swoGroupMember = new SwoGroupMember();       
+//			swoGroupMember.setUserId(user.getId());		
+//			SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+//			swoGroupMembers[0] = swoGroupMember;
+//			swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+			
+			// 그룹 리더가 그룹 멤버로 되지 않아, GroupLeaderOrMember 메소드 추가
+			swoGroupCond.setGroupLeaderOrMember(user.getId());    
 			swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 			SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 			if(swoGroups != null) {
@@ -248,6 +253,23 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
+	private SwoUser[] getGroupDeptId(String userId, String departmentId) throws Exception {
+		
+		SwoUserCond swoUserCond = new SwoUserCond();
+		swoUserCond.setDeptId(departmentId);
+		
+		return getSwoManager().getUsers(userId, swoUserCond, IManager.LEVEL_LITE);
+//		SwoUser[] user = null;
+//		
+//		if (!CommonUtil.isEmpty(users)){
+//			for (int i = 0; i <= users.length; i++) {
+//				user = users;
+//			}
+//		}
+//	
+//		return user;
+		
+	}
 	public String setGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try{
@@ -311,13 +333,35 @@ public class CommunityServiceImpl implements ICommunityService {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");
-					if(!txtGroupLeader.equals(groupUserId)) {
-						SwoGroupMember swoGroupMember = new SwoGroupMember();
-						swoGroupMember.setUserId(groupUserId);
-						swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
-						swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
-						swoGroupMember.setJoinDate(new LocalDate());
-						swoGroup.addGroupMember(swoGroupMember);
+					//그룹멤버가 부서 일경우 비교
+					if(userMap.get("id").matches(".*@.*")){
+						if(!txtGroupLeader.equals(groupUserId)) {
+							SwoGroupMember swoGroupMember = new SwoGroupMember();
+							swoGroupMember.setUserId(groupUserId);
+							swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+							swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+							swoGroupMember.setJoinDate(new LocalDate());
+							swoGroup.addGroupMember(swoGroupMember);
+						}
+					}else{
+						//부서 일 경우 추가식
+						String departmentId = groupUserId;
+						SwoUser[] getGroupDeptId = getGroupDeptId("", departmentId);
+						//그룹안에 그룹을 넣는 경우
+						if(getGroupDeptId != null){
+							int getGroupDeptIdlength = getGroupDeptId.length;
+								for (int j = 0; j < getGroupDeptIdlength; j++) {
+									String getDeptId = getGroupDeptId[j].getId();
+									if(!txtGroupLeader.equals(getDeptId)){
+										SwoGroupMember swoGroupMember = new SwoGroupMember();
+										swoGroupMember.setUserId(getDeptId);
+										swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+										swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+										swoGroupMember.setJoinDate(new LocalDate());
+										swoGroup.addGroupMember(swoGroupMember);
+									}
+							}
+						}
 					}
 				}
 			}

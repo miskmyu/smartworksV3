@@ -46,6 +46,7 @@ public class SwoGroupCond extends SwoObjectCond {
 	private Date createDateTo;
 	private Date lastCreateDateTo;
 	private String lastName;
+	private String groupLeaderOrMember;       // 그룹리스트를 위해 추가
 	private SwoGroupMember[] swoGroupMembers;
 
 	public SwoGroupMember[] getSwoGroupMembers() {
@@ -119,6 +120,12 @@ public class SwoGroupCond extends SwoObjectCond {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public String getGroupLeaderOrMember() {
+		return groupLeaderOrMember;
+	}
+	public void setGroupLeaderOrMember(String groupLeaderOrMember) {
+		this.groupLeaderOrMember = groupLeaderOrMember;
 	}
 	public SwoGroupCond() {
 		super();
