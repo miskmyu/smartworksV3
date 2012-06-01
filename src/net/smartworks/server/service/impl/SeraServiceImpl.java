@@ -129,7 +129,6 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
-import net.smartworks.util.SeraTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -253,7 +252,7 @@ public class SeraServiceImpl implements ISeraService {
 			group.setName(swoGroup.getName());
 			group.setDesc(swoGroup.getDescription());
 			group.setCreatedDate(new LocalDate(swoGroup.getCreationDate().getTime()));
-			group.setPublic(swoGroup.getGroupType().equals("O") ? true : false);
+			group.setPublic(swoGroup.getGroupType().equals(SwoGroup.GROUP_STATUS_OPEN) ? true : false);
 			//group.setContinue(swoGroup.getStatus().equals("C") ? true : false);
 			User leader = ModelConverter.getUserByUserId(swoGroup.getGroupLeader());
 			if(leader != null)
@@ -1237,6 +1236,9 @@ public class SeraServiceImpl implements ISeraService {
 		 */
 		
 		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String companyId = user.getCompanyId();
+
 		Map<String, Object> frmNewCourseProfile = (Map<String, Object>)requestBody.get("frmCreateCourse");
 
 		Set<String> keySet = frmNewCourseProfile.keySet();
@@ -1342,7 +1344,7 @@ public class SeraServiceImpl implements ISeraService {
 			Map<String, String> userMap = txtCourseMentor.get(0);
 			mentorUserId = userMap.get("id");
 		} else {
-			mentorUserId = user.getId();
+			mentorUserId = userId;
 		}
 
 		if(!CommonUtil.isEmpty(imgCourseProfile)) {
@@ -1355,14 +1357,21 @@ public class SeraServiceImpl implements ISeraService {
 			}
 		}
 
-		swoGroup.setCompanyId(user.getCompanyId());
+		swoGroup.setCompanyId(companyId);
 		swoGroup.setName(txtCourseName);
 		swoGroup.setDescription(txtaCourseDesc);
 		swoGroup.setStatus(SwoGroup.GROUP_STATUS_OPEN);
 		swoGroup.setGroupType(selGroupProfileType);
 		swoGroup.setGroupLeader(mentorUserId);
 
-		SwManagerFactory.getInstance().getSwoManager().setGroup(user.getId(), swoGroup, IManager.LEVEL_ALL);
+		SwoGroupMember swoGroupMember = new SwoGroupMember();
+		swoGroupMember.setUserId(mentorUserId);
+		swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+		swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+		swoGroupMember.setJoinDate(new LocalDate());
+		swoGroup.addGroupMember(swoGroupMember);
+
+		getSwoManager().setGroup(userId, swoGroup, IManager.LEVEL_ALL);
 
 		String groupId = swoGroup.getId();
 		if (CommonUtil.isEmpty(groupId))
@@ -1905,38 +1914,69 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
+	private String[] getMissionIdsByCourseIds(User currentUser, String[] courseIds) throws Exception {
 
-	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, String currentUserId, String userId, String courseId, String missionId, String teamId) throws Exception {
 		try {
-			String workSpaceIdIns = null;
+			String userId = currentUser.getId();
+			String companyId = currentUser.getCompanyId();
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			swdRecordCond.setCompanyId(companyId);
+			String domainId = "sera_mission";
+			swdRecordCond.setDomainId(domainId);
+			swdRecordCond.setWorkSpaceIdIns(courseIds);
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+
+			String[] missionIds = null;
+			List<String> missionIdList = new ArrayList<String>();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				for(SwdRecord swdRecord : swdRecords) {
+					String missionId = swdRecord.getRecordId();
+					missionIdList.add(missionId);
+				}
+			}
+
+			if(missionIdList.size() > 0) {
+				missionIds = new String[missionIdList.size()];
+				missionIdList.toArray(missionIds);
+			}
+
+			return missionIds;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	private void setSwdRecordCondBySpace(SwdRecordCond swdRecordCond, User currentUser, String userId, String courseId, String missionId) throws Exception {
+		try {
+			List<String> workSpaceIdInList = new ArrayList<String>();
+			String[] workSpaceIdIns = null;
 			if(!SmartUtil.isBlankObject(courseId)) {
 				if(!SmartUtil.isBlankObject(userId)) {
 					swdRecordCond.setCreationUser(userId);
 				}
-				if(!SmartUtil.isBlankObject(teamId)) {
-					swdRecordCond.setWorkSpaceIdIns("('"+teamId+"')");
-				} else {
-					if(SmartUtil.isBlankObject(missionId)) {
-						workSpaceIdIns = "(";
-						MissionInstanceInfo[] missionInstanceInfos = getMissionInstanceList(courseId, null, null);
-						if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
-							for(int j=0; j<missionInstanceInfos.length; j++) {
-								MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
-								String missionInstanceId = missionInstanceInfo.getId();
-								workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
-							}
+				if(SmartUtil.isBlankObject(missionId)) {
+					String[] courseIds = new String[1];
+					courseIds[0] = courseId;
+					String[] myMissionIds = getMissionIdsByCourseIds(currentUser, courseIds);
+					if(!CommonUtil.isEmpty(myMissionIds)) {
+						for(String myMissionId : myMissionIds) {
+							workSpaceIdInList.add(myMissionId);
 						}
-						workSpaceIdIns = workSpaceIdIns + "'" + courseId + "')";
-						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-					} else {
-						swdRecordCond.setWorkSpaceIdIns("('"+missionId+"')");
 					}
+					workSpaceIdInList.add(courseId);
+				} else {
+					workSpaceIdInList.add(missionId);
 				}
 			} else {
 				if(!SmartUtil.isBlankObject(userId)) {
 					if(!userId.equals("EVENT")) {
-						if(!currentUserId.equals(userId))
-							swdRecordCond.setWorkSpaceIdIns("('"+userId+"')");
+						if(!currentUser.getId().equals(userId))
+							workSpaceIdInList.add(userId);
 						else
 							swdRecordCond.setCreationUser(userId);
 					}
@@ -1944,16 +1984,17 @@ public class SeraServiceImpl implements ISeraService {
 					SwoGroupCond attendingCourseCond = new SwoGroupCond();
 					SwoGroupMember[] courseMembers = new SwoGroupMember[1];
 					SwoGroupMember courseMember = new SwoGroupMember();
-					courseMember.setUserId(currentUserId);
+					courseMember.setUserId(currentUser.getId());
 					courseMembers[0] = courseMember;
 					attendingCourseCond.setSwoGroupMembers(courseMembers);
+					attendingCourseCond.setNotGroupLeader(currentUser.getId());
 					attendingCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
-					SwoGroup[] attendingCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(currentUserId, attendingCourseCond, IManager.LEVEL_ALL);
+					SwoGroup[] attendingCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(currentUser.getId(), attendingCourseCond, IManager.LEVEL_LITE);
 
 					SwoGroupCond runningCourseCond = new SwoGroupCond();
-					runningCourseCond.setGroupLeader(currentUserId);
+					runningCourseCond.setGroupLeader(currentUser.getId());
 					runningCourseCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
-					SwoGroup[] runningCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(currentUserId, runningCourseCond, IManager.LEVEL_ALL);
+					SwoGroup[] runningCourses = SwManagerFactory.getInstance().getSwoManager().getGroups(currentUser.getId(), runningCourseCond, IManager.LEVEL_LITE);
 
 					int attendingCourseLength = 0;
 					if(!CommonUtil.isEmpty(attendingCourses))
@@ -1977,76 +2018,33 @@ public class SeraServiceImpl implements ISeraService {
 						}
 					}
 
-					String[] courseIdIns = null;
+					String[] courseIds = null;
 					if(!CommonUtil.isEmpty(allCourses)) {
-						workSpaceIdIns = "(";
 						int allCourseLength = allCourses.length;
-						courseIdIns = new String[allCourseLength];
+						courseIds = new String[allCourseLength];
 						for(int i=0; i<allCourseLength; i++) {
 							SwoGroup allCourse = allCourses[i];
 							String allCourseId = allCourse.getId();
-							courseIdIns[i] = allCourseId;
+							workSpaceIdInList.add(allCourseId);
+							courseIds[i] = allCourseId;
 						}
-						CourseDetailCond courseDetailCond = new CourseDetailCond();
-						courseDetailCond.setCourseIdIns(courseIdIns);
-						CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails(currentUserId, courseDetailCond);
-						Course[] myCourses = null;
-						if(!CommonUtil.isEmpty(courseDetails)) {
-							myCourses = convertSwoGroupArrayToCourseArray(allCourses, courseDetails);
-							int myCourseLength = myCourses.length;
-							if(!CommonUtil.isEmpty(myCourses)) {
-								for(int i=0; i<myCourseLength; i++) {
-									Course myCourse = myCourses[i];
-									String myCourseId = myCourse.getId();
-									MissionInstanceInfo[] myMissionInstanceInfos = myCourse.getMissions();
-									if(!CommonUtil.isEmpty(myMissionInstanceInfos)) {
-										int myMissionInstanceInfoLength = myMissionInstanceInfos.length;
-										for(int j=0; j<myMissionInstanceInfoLength; j++) {
-											MissionInstanceInfo myMissionInstanceInfo = myMissionInstanceInfos[j];
-											String myMissionId = myMissionInstanceInfo.getId();
-											workSpaceIdIns = workSpaceIdIns + "'" + myMissionId + "', ";
-										}
-									}
-									if(i == myCourseLength - 1)								
-										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "'";
-									else
-										workSpaceIdIns = workSpaceIdIns + "'" + myCourseId + "', ";
-								}
+						String[] myMissionIds = getMissionIdsByCourseIds(currentUser, courseIds);
+						if(!CommonUtil.isEmpty(myMissionIds)) {
+							for(String myMissionId : myMissionIds) {
+								workSpaceIdInList.add(myMissionId);
 							}
 						}
-						workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
-						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+						workSpaceIdInList.add(currentUser.getId());
 					} else {
-						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
+						workSpaceIdInList.add(currentUser.getId());
 					}
-					/*if(!CommonUtil.isEmpty(attendingCourses)) {
-						workSpaceIdIns = "(";
-						for(int i=0; i<attendingCourses.length; i++) {
-							SwoGroup attendingCourse = attendingCourses[i];
-							String attendingCourseId = attendingCourse.getId();
-							Course course = getCourseById(attendingCourseId);
-							if(course != null) {
-								MissionInstanceInfo[] missionInstanceInfos = course.getMissions();
-								if(!CommonUtil.isEmpty(missionInstanceInfos)) {									
-									for(int j=0; j<missionInstanceInfos.length; j++) {
-										MissionInstanceInfo missionInstanceInfo = missionInstanceInfos[j];
-										String missionInstanceId = missionInstanceInfo.getId();
-										workSpaceIdIns = workSpaceIdIns + "'" + missionInstanceId + "', ";
-									}
-								}
-							}
-							if(i == attendingCourses.length - 1)								
-								workSpaceIdIns = workSpaceIdIns + "'" + attendingCourseId + "'";
-							else
-								workSpaceIdIns = workSpaceIdIns + "'" + attendingCourseId + "', ";
-						}
-						workSpaceIdIns = workSpaceIdIns + ", '"+currentUserId+"')";
-						swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-					} else {
-						swdRecordCond.setWorkSpaceIdIns("('"+currentUserId+"')");
-					}*/
 				}
 			}
+			if(workSpaceIdInList.size() > 0) {
+				workSpaceIdIns = new String[workSpaceIdInList.size()];
+				workSpaceIdInList.toArray(workSpaceIdIns);
+			}
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2060,22 +2058,6 @@ public class SeraServiceImpl implements ISeraService {
 			User user = currentUser;
 			if(user == null)
 				user = SmartUtil.getCurrentUser();
-			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setCompanyId(user.getCompanyId());
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
-			swfFormCond.setPackageId(workId);
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-
-			if(swfForms == null)
-				return null;
-	
-			swdDomainCond.setFormId(swfForms[0].getId());
-	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
-	
-			if(swdDomain == null)
-				return  null;*/
 
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
@@ -2089,11 +2071,17 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			if(workSpaceId == null) {
-				System.out.println("start :: " + new Date());
-				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
-				System.out.println("end :: " + new Date());
-				String workSpaceIdNotIns = "('"+Constants.SERA_WID_SERA_NEWS+"', '"+Constants.SERA_WID_SERA_TREND+"')";
-				swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
+				if(teamId != null) {
+					swdRecordCond.setWorkSpaceId(teamId);
+					if(userId != null)
+						swdRecordCond.setCreationUser(userId);
+				} else {
+					setSwdRecordCondBySpace(swdRecordCond, user, userId, courseId, missionId);
+					String[] workSpaceIdNotIns = new String[2];
+					workSpaceIdNotIns[0] = Constants.SERA_WID_SERA_NEWS;
+					workSpaceIdNotIns[1] = Constants.SERA_WID_SERA_TREND;
+					swdRecordCond.setWorkSpaceIdNotIns(workSpaceIdNotIns);
+				}
 			} else {
 				swdRecordCond.setWorkSpaceId(workSpaceId);
 			}
@@ -2103,17 +2091,8 @@ public class SeraServiceImpl implements ISeraService {
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
-			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-
 			List<BoardInstanceInfo> boardInstanceInfoList = new ArrayList<BoardInstanceInfo>();
 			BoardInstanceInfo[] boardInstanceInfos = null;
-
-			/*String subCtgId = swdRecordExtends[0].getSubCtgId();
-			String subCtgName = swdRecordExtends[0].getSubCtg();
-			String parentCtgId = swdRecordExtends[0].getParentCtgId();
-			String parentCtgName = swdRecordExtends[0].getParentCtg();
-			String formId = swdDomain.getFormId();
-			String formName = swdDomain.getFormName();*/
 
 			if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordsLength = swdRecords.length;
@@ -2137,14 +2116,6 @@ public class SeraServiceImpl implements ISeraService {
 
 					boardInstanceInfo.setWorkSpace(workSpaceInfo);
 
-					/*WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(subCtgId))
-						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
-
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);*/
-
-					//WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_BOARD, groupInfo, categoryInfo);
-					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(workId);
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 
 					boardInstanceInfo.setWork(workInfo);
@@ -2207,24 +2178,6 @@ public class SeraServiceImpl implements ISeraService {
 			if(user == null)
 				user = SmartUtil.getCurrentUser();
 
-			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setCompanyId(user.getCompanyId());
-	
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
-			swfFormCond.setPackageId(workId);
-	
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
-			if(swfForms == null)
-				return null;
-			
-			String formId = swfForms[0].getId();
-	
-			swdDomainCond.setFormId(formId);
-	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);*/
-	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
 			String domainId = "frm_event_SYSTEM";
@@ -2236,18 +2189,17 @@ public class SeraServiceImpl implements ISeraService {
 			
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			//if(userId == null && courseId == null && missionId == null && teamId == null)
-				
-			//else
-				setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
+			if(teamId != null) {
+				swdRecordCond.setWorkSpaceId(teamId);
+				if(userId != null)
+					swdRecordCond.setCreationUser(userId);
+			} else {
+				setSwdRecordCondBySpace(swdRecordCond, user, userId, courseId, missionId);
+			}
 
 			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
-
-			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-
-			//String formName = swdDomain.getFormName();
 
 			List<EventInstanceInfo> eventInstanceInfoList = new ArrayList<EventInstanceInfo>();
 			EventInstanceInfo[] eventInstanceInfos = null;
@@ -2264,14 +2216,6 @@ public class SeraServiceImpl implements ISeraService {
 					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
 					eventInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
-					/*WorkCategoryInfo workGroupInfo = null;
-					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-
-					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());*/
-
-					//WorkInfo workInfo = new SmartWorkInfo(formId, formName, SocialWork.TYPE_EVENT, workGroupInfo, workCategoryInfo);
-					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(workId);
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_EVENT);
 
 					eventInstanceInfo.setWork(workInfo);
@@ -2891,7 +2835,7 @@ public class SeraServiceImpl implements ISeraService {
 		swdDomainCond.setFormId(SeraConstant.NOTE_FORMID);
 		SwdDomain swdDomain = SwManagerFactory.getInstance().getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
 		String domainId = swdDomain.getObjId();
-		
+
 		SwdFieldCond swdFieldCond = new SwdFieldCond();
 		swdFieldCond.setDomainObjId(domainId);
 		SwdField[] fields = SwManagerFactory.getInstance().getSwdManager().getFields(userId, swdFieldCond, IManager.LEVEL_LITE);
@@ -2912,7 +2856,7 @@ public class SeraServiceImpl implements ISeraService {
 			fieldData.setRefForm(null);
 			fieldData.setRefFormField(null);
 			fieldData.setRefRecordId(null);
-			
+
 			if (fieldId.equalsIgnoreCase(SeraConstant.NOTE_IMAGEGROUPIDFIELDID)) {
 				fieldData.setValue(imageGroupId);
 			} else if (fieldId.equalsIgnoreCase(SeraConstant.NOTE_LINKURLFIELDID)) {
@@ -3005,24 +2949,7 @@ public class SeraServiceImpl implements ISeraService {
 			if(user == null)
 				user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
-			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setCompanyId(user.getCompanyId());
-	
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
-			swfFormCond.setPackageId(workId);
-	
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
-			if(swfForms == null)
-				return null;
-			
-			String formId = swfForms[0].getId();
-	
-			swdDomainCond.setFormId(formId);
-	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);*/
-	
+
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			String domainId = "sera_note";
 			swdRecordCond.setCompanyId(companyId);
@@ -3034,15 +2961,17 @@ public class SeraServiceImpl implements ISeraService {
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(maxList);
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
+			if(teamId != null) {
+				swdRecordCond.setWorkSpaceId(teamId);
+				if(userId != null)
+					swdRecordCond.setCreationUser(userId);
+			} else {
+				setSwdRecordCondBySpace(swdRecordCond, user, userId, courseId, missionId);
+			}
 
 			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
-
-			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-
-			//String formName = swdDomain.getFormName();
 
 			List<NoteInstanceInfo> NoteInstanceInfoList = new ArrayList<NoteInstanceInfo>();
 			NoteInstanceInfo[] noteInstanceInfos = null;
@@ -3060,14 +2989,6 @@ public class SeraServiceImpl implements ISeraService {
 					noteInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
 					noteInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
-					/*WorkCategoryInfo workGroupInfo = null;
-					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-
-					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());*/
-
-					//WorkInfo workInfo = new SmartWorkInfo(formId, formName, Work.TYPE_SERA_NOTE, workGroupInfo, workCategoryInfo);
-					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(workId);
 					WorkInfo workInfo = new WorkInfo(workId, null, Work.TYPE_SERA_NOTE);
 
 					noteInstanceInfo.setWork(workInfo);
@@ -3167,24 +3088,6 @@ public class SeraServiceImpl implements ISeraService {
 			if(user == null)
 				user = SmartUtil.getCurrentUser();
 			String companyId = user.getCompanyId();
-
-			/*SwdDomainCond swdDomainCond = new SwdDomainCond();
-			swdDomainCond.setCompanyId(user.getCompanyId());
-	
-			SwfFormCond swfFormCond = new SwfFormCond();
-			swfFormCond.setCompanyId(user.getCompanyId());
-			swfFormCond.setPackageId(workId);
-	
-			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
-			if(swfForms == null)
-				return null;
-			
-			String formId = swfForms[0].getId();
-	
-			swdDomainCond.setFormId(formId);
-	
-			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);*/
 	
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(companyId);
@@ -3197,15 +3100,17 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			setSwdRecordCondBySpace(swdRecordCond, user.getId(), userId, courseId, missionId, teamId);
+			if(teamId != null) {
+				swdRecordCond.setWorkSpaceId(teamId);
+				if(userId != null)
+					swdRecordCond.setCreationUser(userId);
+			} else {
+				setSwdRecordCondBySpace(swdRecordCond, user, userId, courseId, missionId);
+			}
 
 			swdRecordCond.setFromDate(fromDate);
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
-
-			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
-
-			//String formName = swdDomain.getFormName();
 
 			List<MissionReportInstanceInfo> missionReportInstanceInfoList = new ArrayList<MissionReportInstanceInfo>();
 			MissionReportInstanceInfo[] missionReportInstanceInfos = null;
@@ -3223,14 +3128,6 @@ public class SeraServiceImpl implements ISeraService {
 					missionReportInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
 					missionReportInstanceInfo.setWorkSpace(getWorkSpaceInfoBySwdRecord(swdRecord));
 
-					/*WorkCategoryInfo workGroupInfo = null;
-					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-
-					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());*/
-
-					//WorkInfo workInfo = new SmartWorkInfo(formId, formName, Work.TYPE_SERA_MISSION_REPORT, workGroupInfo, workCategoryInfo);
-					//WorkInfo workInfo = ModelConverter.getWorkInfoByPackageId(swfForms[0].getPackageId());
 					WorkInfo workInfo = new WorkInfo(workId, null, Work.TYPE_SERA_MISSION_REPORT);
 					missionReportInstanceInfo.setWork(workInfo);
 					missionReportInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
@@ -3348,11 +3245,11 @@ public class SeraServiceImpl implements ISeraService {
 				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
 				break;
 			default:
+				User currentUser = SmartUtil.getCurrentUser();
 /*				boardInfo = getBoardInstancesByCourseId(null, userId, courseId, missionId, teamId, null, fromDate, maxList);
 				eventInfo = getEventInstanceInfosByWorkSpaceId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				noteInfo = getSeraNoteByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);*/
-				User currentUser = SmartUtil.getCurrentUser();
 				Semaphore semaphore = new Semaphore(4);
 				Thread currentThread = Thread.currentThread();
 				InstanceParallelProcessing boardPP = new InstanceParallelProcessing(semaphore, currentThread, currentUser, Instance.TYPE_BOARD, userId, courseId, missionId, teamId, null, fromDate, maxList);
@@ -3634,7 +3531,7 @@ public class SeraServiceImpl implements ISeraService {
 		obj.setRecordId("dr_" + CommonUtil.newId());
 		
 		obj.setWorkSpaceId(missionId);
-		obj.setWorkSpaceType("2");
+		obj.setWorkSpaceType("5");
 		obj.setAccessLevel(selAccessLevel);
 		obj.setAccessValue(null);
 
@@ -4415,7 +4312,7 @@ public class SeraServiceImpl implements ISeraService {
 			seraFriendCond.setReceiveId(userId);
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
 			seraFriendCond.setPageNo(0);
-			if(maxList != -1)
+			if(maxList != FriendInformList.MAX_ALL_FRIEND_LIST)
 				seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setOrders(new Order[]{new Order("requestDate", false), new Order("requestName", true)});
 
@@ -4503,6 +4400,9 @@ public class SeraServiceImpl implements ISeraService {
 					getSeraManager().removeFriend(receiveId, objId);
 				}
 			}
+
+			SmartUtil.publishCurrent(receiveId, SeraNotice.TYPE_FRIEND);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -4589,7 +4489,7 @@ public class SeraServiceImpl implements ISeraService {
 		}
 	}
 
-	public CourseInfo[] getAllCourses(String fromCourseId, int maxList) throws Exception {
+	public CourseInfo[] getAllCourses(GlobalSearchList searchResult, String fromCourseId, int maxList, String key) throws Exception {
 
 		SwoGroupCond groupCond = new SwoGroupCond();
 		groupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
@@ -4601,7 +4501,12 @@ public class SeraServiceImpl implements ISeraService {
 				groupCond.setLastName(lastCourseDetailInfo.getName());
 			}
 		}
+		if(key != null)
+			groupCond.setNameLike(key);
+
 		long totalSize = getSwoManager().getGroupSize("", groupCond);
+		if(searchResult != null)
+			searchResult.setTotalCourses((int)totalSize);
 		groupCond.setPageNo(0);
 		groupCond.setPageSize(maxList);
 		groupCond.setOrders(new Order[]{new Order("creationDate", false), new Order("name", true)});
@@ -4707,7 +4612,7 @@ public class SeraServiceImpl implements ISeraService {
 		case Course.TYPE_RECOMMENDED_COURSES:
 			return this.getRecommendedCourses(lastId, maxList);
 		case Course.TYPE_ALL_COURSES:
-			return this.getAllCourses(lastId, maxList);
+			return this.getAllCourses(null, lastId, maxList, null);
 		case Course.TYPE_CLOSED_COURSES:
 			return this.getClosedCourses(lastId, maxList);
 		}
@@ -4902,7 +4807,11 @@ public class SeraServiceImpl implements ISeraService {
 			lastName = swoUser.getName();
 			lastModifiedTime = swoUser.getModificationDate();
 		}
-		SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(idIns, lastName, lastModifiedTime, "name", true);
+		SwoUserCond swoUserCond = new SwoUserCond();
+		swoUserCond.setLastName(lastName);
+		swoUserCond.setLastModifiedTime(lastModifiedTime);
+		swoUserCond.setOrders(new Order[]{new Order(SwoUserCond.A_NAME, true), new Order(SwoUserCond.A_MODIFICATIONDATE, false)});
+		SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(idIns, swoUserCond);
 
 		if(CommonUtil.isEmpty(swoUserExtends))
 			return null;
@@ -5596,35 +5505,42 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public Notice[] getSeraNoticesForMe() throws Exception {
 		// TODO Auto-generated method stub
-		
+
 		String userId = null;
 		
 		User user = SmartUtil.getCurrentUser();
 		if (user != null)
 			userId = user.getId();
-		
+
 		Notice[] resultNotice = new Notice[SeraNotice.NUMBER_OF_NOTICES];
-		
+
 		Notice[] noticeNotices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, Notice.TYPE_NOTIFICATION);
 		SeraNotice seraNotificationNotice = new SeraNotice(SeraNotice.TYPE_NOTIFICATION, 0);
 		if (noticeNotices != null) {
 			Notice notice = noticeNotices[0];
-			//seraNotificationNotice.setLength(notice.getLength());
+			seraNotificationNotice.setType(notice.getType());
+			seraNotificationNotice.setLength(notice.getLength());
 		}
 		//보류
 		SeraNotice seraMyCourseNotice = new SeraNotice(SeraNotice.TYPE_MY_COURSE, 0);
-		
-		
+
+		//새 친구요청
+		Notice[] friendNotices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, SeraNotice.TYPE_FRIEND);
 		SeraNotice seraFriendNotice = new SeraNotice(SeraNotice.TYPE_FRIEND, 0);
-		
-		
+		if(!CommonUtil.isEmpty(friendNotices)) {
+			Notice notice = friendNotices[0];
+			seraFriendNotice.setType(notice.getType());
+			seraFriendNotice.setLength(notice.getLength());
+		}
+
 		Notice[] messageNotices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, Notice.TYPE_MESSAGE);
-		SeraNotice seraMessageNotice = new SeraNotice(SeraNotice.TYPE_MESSAGE ,0);
+		SeraNotice seraMessageNotice = new SeraNotice(SeraNotice.TYPE_MESSAGE, 0);
 		if (messageNotices != null) {
 			Notice notice = messageNotices[0];
-			//seraMessageNotice.setLength(notice.getLength());
+			seraMessageNotice.setType(notice.getType());
+			seraMessageNotice.setLength(notice.getLength());
 		}
-		
+
 		//보류
 		SeraNotice seraCalendarNotice = new SeraNotice(SeraNotice.TYPE_CALENDAR ,0);
 		//보류
@@ -5735,7 +5651,7 @@ public class SeraServiceImpl implements ISeraService {
 				memberIds[j] = seraUserDetail.getUserId();
 			}
 
-			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, null, MenteeInformList.MAX_USER_LIST);
+			seraUserInfos = getSeraUserInfoByIdArrayOrderByLastNameAndMaxList(userId, memberIds, null, null, MenteeInformList.MAX_ALL_USER_LIST);
 
 			return seraUserInfos;
 
@@ -6764,20 +6680,105 @@ public class SeraServiceImpl implements ISeraService {
 	@Override
 	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
 		GlobalSearchList searchResult = new GlobalSearchList();
-		
-		searchResult.setTotalCourses(230);
-		searchResult.setCourses(SeraTest.getCoursesById(null, 0, null, 0));
-		searchResult.setTotalSeraUsers(38);
-		searchResult.setSeraUsers(SeraTest.getFriendsById(null, 0).getFriends());
+		searchResult.setCourses(this.searchCourses(searchResult, key, null, maxCourseList));
+		searchResult.setSeraUsers(this.searchSeraUsers(searchResult, key, null, maxUserList));
 		return searchResult;
 	}
 	@Override
-	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
-		return SeraTest.getCoursesById(null, 0, null, maxList);
+	public CourseInfo[] searchCourses(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception {
+		try {
+			return this.getAllCourses(searchResult, lastId, maxList, key);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	@Override
-	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
-		return SeraTest.getFriendsById(null, maxList).getFriends();
+	public SeraUserInfo[] searchSeraUsers(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String currentUserId = user.getId();
+			String lastName = null;
+			Date lastModifiedTime = null;
+			if(!CommonUtil.isEmpty(lastId)) {
+				SwoUser swoUser = getSwoManager().getUser(currentUserId, lastId, IManager.LEVEL_LITE);
+				lastName = swoUser.getName();
+				lastModifiedTime = swoUser.getModificationDate();
+			}
+
+			SwoUserCond swoUserCond = new SwoUserCond();
+			swoUserCond.setLastName(lastName);
+			swoUserCond.setLastModifiedTime(lastModifiedTime);
+			if(key != null)
+				swoUserCond.setKey(key);
+			int totalSize = 0;
+			SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(null, swoUserCond);
+			if(CommonUtil.isEmpty(swoUserExtends))
+				return null;
+			totalSize = swoUserExtends.length;
+			if(searchResult != null)
+				searchResult.setTotalSeraUsers(totalSize);
+
+			swoUserCond.setPageNo(0);
+			swoUserCond.setPageSize(maxList);
+			swoUserCond.setOrders(new Order[]{new Order(SwoUserCond.A_NAME, true), new Order(SwoUserCond.A_MODIFICATIONDATE, false)});
+
+			swoUserExtends = getSwoManager().getUserExtends(null, swoUserCond);
+
+			SeraUserInfo[] seraUserInfos = null;
+			List<SeraUserInfo> seraUserInfoList = new ArrayList<SeraUserInfo>();
+
+			SeraFriendCond seraFriendCond = new SeraFriendCond();
+			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_ACCEPT);
+
+			SeraFriend[] mySeraFriends = getSeraManager().getMyFriends(currentUserId, seraFriendCond);
+
+			for(int i=0; i<swoUserExtends.length; i++) {
+				if(i == maxList)
+					break;
+				SwoUserExtend swoUserExtend = swoUserExtends[i];
+				String id = swoUserExtend.getId();
+				SeraUserInfo member = new SeraUserInfo();
+				member.setId(swoUserExtend.getId());
+				member.setName(swoUserExtend.getName());
+				member.setNickName(swoUserExtend.getNickName());
+				member.setPosition(swoUserExtend.getPosition());
+				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
+				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
+				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				boolean isFriend = false;
+				if(!CommonUtil.isEmpty(mySeraFriends)) {
+					for(SeraFriend seraFriend : mySeraFriends) {
+						if(id.equals(seraFriend.getFriendId())) {
+							isFriend = true;
+							break;
+						}
+					}
+				}
+				member.setFriend(isFriend);
+				SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(currentUserId, id);
+				String goal = null;
+				if(seraUserDetail != null)
+					goal = seraUserDetail.getGoal();
+				member.setGoal(goal);
+				seraUserInfoList.add(member);
+			}
+
+			if(totalSize > maxList) {
+				seraUserInfoList.add(new SeraUserInfo());
+			}
+
+			if(seraUserInfoList.size() > 0) {
+				seraUserInfos = new SeraUserInfo[seraUserInfoList.size()];
+				seraUserInfoList.toArray(seraUserInfos);
+			}
+
+			return seraUserInfos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

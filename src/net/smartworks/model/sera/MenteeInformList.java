@@ -4,6 +4,7 @@ import net.smartworks.model.sera.info.SeraUserInfo;
 
 public class MenteeInformList{
 
+	public static final int MAX_ALL_USER_LIST = -1;
 	public static final int MAX_USER_LIST = 20;
 	public static final int TYPE_JOIN_REQUESTERS = 1;
 	public static final int TYPE_MENTEES = 2;

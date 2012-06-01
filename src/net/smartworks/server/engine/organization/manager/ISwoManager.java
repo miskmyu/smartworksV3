@@ -200,6 +200,6 @@ public interface ISwoManager {
 
 	public void setGroupMember(String user, String groupId, String userId) throws SwoException;
 
-	public SwoUserExtend[] getUserExtends(String[] idIns, String lastName, Date lastModifiedTime, String orderKey, boolean isAsc) throws SwoException;
+	public SwoUserExtend[] getUserExtends(String[] idIns, SwoUserCond swoUserCond) throws SwoException;
 
 }

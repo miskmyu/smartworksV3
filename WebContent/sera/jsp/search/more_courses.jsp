@@ -26,7 +26,7 @@
 			CourseInfo course = courses[i];
 			if(i==GlobalSearchList.MAX_COURSE_LIST){
 	%>
-				<div class="js_more_search_course more cb" key="<%=key %>" lastId="<%=courses[i-1].getId()%>">
+				<div class="js_more_search_course_btn more cb" key="<%=key %>" lastId="<%=courses[i-1].getId()%>">
 					<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 				</div>
 			<%
@@ -36,12 +36,12 @@
 			<li>
 				<dl>
 					<dd class="mb10">
-						<a href=""> <img width="120" height="100" src="<%=course.getOrgPicture()%>"> </a>
+						<a href="courseHome.sw?courseId=<%=course.getId()%>"> <img width="120" height="100" src="<%=course.getOrgPicture()%>"> </a>
 					</dd>
 					<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate())%> Days</dd>
 					<dd class="mb3 title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
-				</dl></li>
-			<li>
+				</dl>
+			</li>
 	<%
 		}
 	}

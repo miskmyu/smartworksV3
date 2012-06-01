@@ -46,7 +46,7 @@
 						CourseInfo course = courses[i];
 						if(i==GlobalSearchList.MAX_COURSE_LIST){
 				%>
-							<div class="js_more_search_course more cb" key="<%=key %>" lastId="<%=courses[i-1].getId()%>">
+							<div class="js_more_search_course_btn more cb" key="<%=key %>" lastId="<%=courses[i-1].getId()%>">
 								<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
 							</div>
 						<%
@@ -56,12 +56,12 @@
 						<li>
 							<dl>
 								<dd class="mb10">
-									<a href=""> <img width="120" height="100" src="<%=course.getOrgPicture()%>"> </a>
+									<a href="courseHome.sw?courseId=<%=course.getId()%>"> <img width="120" height="100" src="<%=course.getOrgPicture()%>"> </a>
 								</dd>
 								<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate())%> Days</dd>
 								<dd class="mb3 title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
-							</dl></li>
-						<li>
+							</dl>
+						</li>
 				<%
 					}
 				}
@@ -72,7 +72,7 @@
 
 		<!-- 친구 검색 결과 -->
 		<!-- Header Title -->
-		<div class="header_tit">
+		<div class="header_tit cb mt30">
 			<div class="tit_dep2 friend m0">
 				<h2>
 					친구 중 <span class="t_blue">"<%=key %>"</span> 검색결과 <span class="t_red">(<%=searchList.getTotalSeraUsers() %>)</span>건
@@ -85,6 +85,8 @@
 		SeraUserInfo[] seraUsers = searchList.getSeraUsers();
 		if(!SmartUtil.isBlankObject(seraUsers)){
 			for(int i=0; i<seraUsers.length; i++){
+				if(i == GlobalSearchList.MAX_SERA_USER_LIST)
+					break;
 				SeraUserInfo seraUser = seraUsers[i];
 				String userHref = (cUser.getId().equals(seraUser.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + seraUser.getId();
 		%>
@@ -104,22 +106,22 @@
 						<li class="bo_l w370"><span><%=CommonUtil.toNotNull(seraUser.getGoal()) %><br /> <span class="t_id"><%=seraUser.getId() %></span>
 						</span>
 						</li>
-						<li class="fr bo_l">
-							<span> <!-- Btn -->
-								<%
+						<%
 								if(!cUser.isAnonymusUser()){
 								%>
+						<li class="fr bo_l">
+							<span> <!-- Btn -->
 									<div class="btn_fgreen_l js_friend_request_btn" userId="<%=seraUser.getId() %>" <%if(seraUser.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
 									</div> <!-- Btn //--> 
 									<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=seraUser.getId()%>" <%if(!seraUser.isFriend()){%>style="display:none"<%} %>>
 										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
 									</div> <!-- Btn //--> 
-								<%
-								}
-								%>
 							</span>
 						</li>
+						<%
+								}
+								%>
 					</ul>
 				</div>
 				<!-- 목록1//-->

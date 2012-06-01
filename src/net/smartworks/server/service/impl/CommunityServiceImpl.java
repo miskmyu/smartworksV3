@@ -253,21 +253,12 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
-	private SwoUser[] getGroupDeptId(String userId, String departmentId) throws Exception {
+	private SwoUser[] getUsersByDeptId(String userId, String departmentId) throws Exception {
 		
 		SwoUserCond swoUserCond = new SwoUserCond();
 		swoUserCond.setDeptId(departmentId);
 		
 		return getSwoManager().getUsers(userId, swoUserCond, IManager.LEVEL_LITE);
-//		SwoUser[] user = null;
-//		
-//		if (!CommonUtil.isEmpty(users)){
-//			for (int i = 0; i <= users.length; i++) {
-//				user = users;
-//			}
-//		}
-//	
-//		return user;
 		
 	}
 	public String setGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -328,6 +319,14 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup = new SwoGroup();
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
+			if(!CommonUtil.isEmpty(txtGroupLeader)) {
+				SwoGroupMember swoGroupMember = new SwoGroupMember();
+				swoGroupMember.setUserId(txtGroupLeader);
+				swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+				swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+				swoGroupMember.setJoinDate(new LocalDate());
+				swoGroup.addGroupMember(swoGroupMember);
+			}
 
 			if(!CommonUtil.isEmpty(users)) {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
@@ -346,20 +345,20 @@ public class CommunityServiceImpl implements ICommunityService {
 					}else{
 						//부서 일 경우 추가식
 						String departmentId = groupUserId;
-						SwoUser[] getGroupDeptId = getGroupDeptId("", departmentId);
+						SwoUser[] deptUsers = getUsersByDeptId("", departmentId);
 						//그룹안에 그룹을 넣는 경우
-						if(getGroupDeptId != null){
-							int getGroupDeptIdlength = getGroupDeptId.length;
-								for (int j = 0; j < getGroupDeptIdlength; j++) {
-									String getDeptId = getGroupDeptId[j].getId();
-									if(!txtGroupLeader.equals(getDeptId)){
-										SwoGroupMember swoGroupMember = new SwoGroupMember();
-										swoGroupMember.setUserId(getDeptId);
-										swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
-										swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
-										swoGroupMember.setJoinDate(new LocalDate());
-										swoGroup.addGroupMember(swoGroupMember);
-									}
+						if(deptUsers != null){
+							int getGroupDeptIdlength = deptUsers.length;
+							for (int j = 0; j < getGroupDeptIdlength; j++) {
+								String deptUser = deptUsers[j].getId();
+								if(!txtGroupLeader.equals(deptUser)){
+									SwoGroupMember swoGroupMember = new SwoGroupMember();
+									swoGroupMember.setUserId(deptUser);
+									swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+									swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+									swoGroupMember.setJoinDate(new LocalDate());
+									swoGroup.addGroupMember(swoGroupMember);
+								}
 							}
 						}
 					}

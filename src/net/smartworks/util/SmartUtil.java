@@ -436,7 +436,17 @@ public class SmartUtil {
 	public static void publishBcast(String[] messages){
 		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
-	
+
+	public static void publishCurrent(String userId, int type) throws Exception {
+
+		Notice[] notices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, type);
+
+		if(!CommonUtil.isEmpty(notices)) {
+			Notice notice = notices[0];
+			SmartUtil.publishNoticeCount(userId, notice);
+		}
+	}
+
 	public static void publishAChatters(UserInfo[] users){
 
 		if(SmartUtil.isBlankObject(users)) return;
@@ -484,9 +494,9 @@ public class SmartUtil {
 						ClientTransport transport = LongPollingTransport.create(options, httpClient);
 						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
 						client.handshake();
-				
+
 						MessageModel message = null;
-						
+
 						while(true) {
 							try {
 								message = null;

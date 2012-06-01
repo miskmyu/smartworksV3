@@ -33,6 +33,9 @@ import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
+import net.smartworks.model.sera.FriendInformList;
+import net.smartworks.model.sera.SeraNotice;
+import net.smartworks.model.sera.info.SeraUserInfo;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -51,6 +54,7 @@ import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
@@ -72,22 +76,23 @@ public class NoticeServiceImpl implements INoticeService {
 		this.mailService = mailService;
 	}
 	public Notice[] getNotices(String userId, int noticeType) throws Exception {
-		
+
 		Notice message = null;
 		Notice comment = null;
 		Notice assigned = null;
 		Notice notificationMessage = null;
 		Notice mailBox = null;
 		Notice savedBox = null;
-		
+		Notice friend = null;
+
 		//---------------------------------------------------------------------------------------
 		if (noticeType == Notice.TYPE_MESSAGE || noticeType == Notice.TYPE_INVALID) {
 			message = new Notice();
 			message.setType(Notice.TYPE_MESSAGE);
-			
+
 			MessageCond messageCond = new MessageCond();
 			messageCond.setTargetUser(userId);
-			messageCond.setChecked(false);
+			messageCond.setReadStatus(MessageCond.TYPE_STATUS_UNREAD);
 			long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(userId, messageCond);
 			message.setLength((int)totalMessageSize);
 		}
@@ -212,7 +217,7 @@ public class NoticeServiceImpl implements INoticeService {
 				}
 			}
 			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
-			
+
 		}
 		//---------------------------------------------------------------------------------------
 
@@ -228,9 +233,21 @@ public class NoticeServiceImpl implements INoticeService {
 			savedBox.setType(Notice.TYPE_SAVEDBOX);
 			savedBox.setLength(0);
 		}
-		
+
 		//---------------------------------------------------------------------------------------
-		
+
+		if (noticeType == SeraNotice.TYPE_FRIEND) {
+			friend = new Notice();
+			friend.setType(SeraNotice.TYPE_FRIEND);
+			SeraUserInfo[] seraUserInfos = SwServiceFactory.getInstance().getSeraService().getFriendRequestsForMe(null, FriendInformList.MAX_ALL_FRIEND_LIST);
+			int length = 0;
+			if(!CommonUtil.isEmpty(seraUserInfos))
+				length = seraUserInfos.length;
+			friend.setLength(length);
+		}
+
+		//---------------------------------------------------------------------------------------
+
 		Notice[] returnNotice = null;
 		switch (noticeType) {
 		case Notice.TYPE_MESSAGE:
@@ -256,6 +273,10 @@ public class NoticeServiceImpl implements INoticeService {
 		case Notice.TYPE_SAVEDBOX:
 			returnNotice = new Notice[1];
 			returnNotice[0] = savedBox;
+			break;
+		case SeraNotice.TYPE_FRIEND:
+			returnNotice = new Notice[1];
+			returnNotice[0] = friend;
 			break;
 		case Notice.TYPE_INVALID:
 			returnNotice = new Notice[6];
