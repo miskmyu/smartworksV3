@@ -564,7 +564,7 @@ a .icon_mn_more:hover { background-position:-221px -724px}
 .category_box .detail a:hover {color: #999999;}
 .category_box .gauge_box { clear: both; height: 10px; width: 220px;}
 .category_box .gauge_box .gauge_outline {background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #D2D2D2; border-radius: 10px 10px 10px 10px; float: left; height: 7px; padding: 1px; width: 170px; overflow:hidden}
-.category_box .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px;}
+.category_box .gauge_box .gauge_outline .gauge {background: none repeat scroll 0 0 #559FCC; border-radius: 10px 10px 10px 10px; height: 7px; max-width: 390px}
 .category_box .gauge_box .process {float: right; height: 12px; margin-left: 5px}
 .category_box.end { margin:0 0 20px 0 !important; float:right !important}
 

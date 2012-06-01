@@ -70,17 +70,20 @@
     
   <servlet>
     <servlet-name>InitiatorBase</servlet-name>
-    <servlet-class>org.claros.commons.configuration.Initiator</servlet-class>
+<!--     <display-name>InitiatorBase</display-name>
+ -->    <servlet-class>org.claros.commons.configuration.Initiator</servlet-class>
     <load-on-startup>3</load-on-startup>
   </servlet>
   <servlet>
     <servlet-name>InitiatorMail</servlet-name>
-    <servlet-class>org.claros.commons.mail.configuration.Initiator</servlet-class>
+<!--     <display-name>InitiatorMail</display-name>
+ -->    <servlet-class>org.claros.commons.mail.configuration.Initiator</servlet-class>
     <load-on-startup>4</load-on-startup>
   </servlet>
   <servlet>
     <servlet-name>InitiatorInTouch</servlet-name>
-    <servlet-class>org.claros.intouch.common.utility.Initiator</servlet-class>
+<!--     <display-name>InitiatorInTouch</display-name>
+ -->    <servlet-class>org.claros.intouch.common.utility.Initiator</servlet-class>
     <load-on-startup>5</load-on-startup>
   </servlet>
 

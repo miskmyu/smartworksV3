@@ -2770,7 +2770,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-
+			
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);

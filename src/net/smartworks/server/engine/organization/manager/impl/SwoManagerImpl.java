@@ -2669,6 +2669,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	}
 
 	private Query appendQuery(StringBuffer buf, SwoGroupCond cond) throws Exception {
+		
 		String id = null;
 		String[] idIns = null;
 		String companyId = null;
@@ -2686,7 +2687,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String lastName = null;
 		String nameLike = null;
 		SwoGroupMember[] swoGroupMembers = null;
-
+	
 		if (cond != null) {
 			id = cond.getId();
 			idIns = cond.getGroupIdIns();
@@ -2707,11 +2708,12 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			lastName = cond.getLastName();
 		}
 		buf.append(" from SwoGroup obj");
-		if (swoGroupMembers != null && swoGroupMembers.length != 0) {
+		
+		if ( swoGroupMembers != null && swoGroupMembers.length != 0 ) {  
 			for (int i=0; i<swoGroupMembers.length; i++) {
 				buf.append(" left join obj.swoGroupMembers as groupMember").append(i);
 			}
-		}
+		}      
 		buf.append(" where obj.id is not null");
 		//TODO 시간 검색에 대한 확인 필요
 		if (cond != null) {
@@ -2868,7 +2870,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level == null)
 				level = LEVEL_LITE;
 			StringBuffer buf = new StringBuffer();
-			buf.append("select");
+			buf.append("select"); 
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {

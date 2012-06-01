@@ -28,11 +28,29 @@
 	<%
 	if(folders != null){
 		for (MailFolder folder : folders) {
+			String iconClass = "";
+			switch(folder.getType()){
+			case MailFolder.TYPE_SYSTEM_INBOX :
+				iconClass = "icon_mail_inbox";
+				break;
+			case MailFolder.TYPE_SYSTEM_SENT :
+				iconClass = "icon_mail_sent";
+				break;
+			case MailFolder.TYPE_SYSTEM_JUNK :
+				iconClass = "icon_mail_junk";
+				break;
+			case MailFolder.TYPE_SYSTEM_TRASH :
+				iconClass = "icon_mail_trash";
+				break;
+			case MailFolder.TYPE_SYSTEM_DRAFTS :
+				iconClass = "icon_mail_drafts";
+				break;
+			}
 	%>
 			<li>
 				<!--  모든폴더에 공통으로 필요한 html -->
 				<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>"> 
-					<span class="icon_mail_inbox"></span><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
+					<span class="<%=iconClass%>"></span><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%><span>(<%=folder.getUnreadItemCount()%>)</span><%}%>						
 				</a>
 			</li>
 	<%
