@@ -15,7 +15,8 @@
 <script>
 	function updateAvailableChatters(message) {
 		var userInfos = message;
-		if (userInfos != null) {
+		var availableChatterList = $("#available_chatter_list");
+		if (userInfos != null && !(availableChatterList.hasClass('searching')) && (availableChatterList.parent().is(':visible'))) {
 			var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 			var data = "<ul>";
 			var length = userInfos.length;
@@ -29,6 +30,10 @@
 			}
 			data = data + "</ul>";
 			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length-1) + ")");
+		}else{
+			var length = isEmpty(userInfos) ? 0 : userInfos.length-1;
+			$("#available_chatter_list").parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length) + ")");
+			
 		}
 	}
 </script>
@@ -42,7 +47,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- POP-채팅 설정 -->
-	<div class="chatter_list_area admin" style="display:none">
+	<div class="chatter_list_area admin" style="display:block">
 		<!-- 오프라인으로 표시 클릭하면 <fmt:message key="chat.title.chatting"/> 앞에 아이콘도 class="chatic_titl off"처럼  클래스명"off"를 추가해줍니다  -->
 		<ul>
 			<li>
@@ -71,7 +76,7 @@
 
 		<!-- Body -->
 		<div class="chat_de_list js_chatter_list" id="available_chatter_list">
-			<ul>
+<%-- 			<ul>
 				<%
 				if(!SmartUtil.isBlankObject(chatters)) {
 					for (UserInfo chatter : chatters) {
@@ -91,7 +96,7 @@
 				}
 				%>
 			</ul>
-		</div>
+ --%>		</div>
 		<!-- Body //-->
 
 		<!-- 검색영역 -->
