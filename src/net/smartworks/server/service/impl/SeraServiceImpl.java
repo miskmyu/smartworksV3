@@ -6783,20 +6783,4 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-	@Override
-	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		try {
-			String userId = request.getParameter("userId");
-			request.getSession().removeAttribute(userId);
-			SwManagerFactory.getInstance().getLoginUserManager().removeLoginUser(userId, userId);
-
-			UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
-			SmartUtil.publishAChatters(userInfos);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
 }

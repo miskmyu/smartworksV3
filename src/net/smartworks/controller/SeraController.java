@@ -64,7 +64,7 @@ public class SeraController extends ExceptionInterceptor {
 		smartworks.logout(request, response);
 		ModelAndView mnv = new ModelAndView();
 		mnv.addObject("href", "logout");
-		mnv.setViewName("sera/jsp/movePage.jsp");
+		mnv.setViewName("jsp/movePage.jsp");
 		return mnv;
 	}
 

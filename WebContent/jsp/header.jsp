@@ -35,6 +35,12 @@ function updateNoticeCount(message){
 		$('#savedbox_count').html(data);
 	}
 };
+
+function logout() {
+	document.location.href = "logout.sw?userId=" + currentUser.userId;
+};
+
+</script>
 </script>
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
@@ -240,7 +246,7 @@ function updateNoticeCount(message){
 				href="my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
 						key="header.global_menu.edit_my_profile" /> </a>
 			</li>
-			<li><a href="logout"><fmt:message key="header.global_menu.logout" />
+			<li><a href="javascript:logout();"><fmt:message key="header.global_menu.logout" />
 			</a>
 			</li>
 		</ul>

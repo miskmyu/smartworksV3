@@ -175,6 +175,4 @@ public interface ISeraService {
 
 	public abstract SeraUserInfo[] searchSeraUsers(GlobalSearchList searchResult, String key, String lastId, int maxList) throws Exception;
 
-	public abstract void logout(HttpServletRequest request, HttpServletResponse response) throws Exception;
-
 }

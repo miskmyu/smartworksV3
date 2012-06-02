@@ -76,6 +76,7 @@ import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IDocFileService;
 import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.ILoginService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
@@ -94,6 +95,7 @@ import com.google.gdata.data.youtube.FormUploadToken;
 public class SmartWorks implements ISmartWorks {
 
 	ICommunityService communityService;
+	ILoginService loginService;
 	INoticeService noticeService;
 	ICalendarService calendarService;
 	IInstanceService instanceService;
@@ -108,6 +110,11 @@ public class SmartWorks implements ISmartWorks {
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
 		this.communityService = communityService;
+	}
+
+	@Autowired
+	public void setLoginService(ILoginService loginService) {
+		this.loginService = loginService;
 	}
 
 	@Autowired
@@ -1318,7 +1325,7 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		seraService.logout(request, response);
+		loginService.logout(request, response);
 	}
 
 }
