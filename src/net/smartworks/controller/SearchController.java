@@ -20,12 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-	@RequestMapping("/available_chatter")
-	public ModelAndView availableChatter(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		return SmartUtil.returnMnv(request, "jsp/search/available_chatter.jsp", "");
-	}
-
 	@RequestMapping("/community")
 	public ModelAndView community(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

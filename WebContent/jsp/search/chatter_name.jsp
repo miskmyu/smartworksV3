@@ -40,7 +40,7 @@
 	%>
 			<li>
 				<a href="" comId="<%=comId %>" userId="<%=userId %>">
-					<img class="mr2 profile_size_s" src="<%=picName%>"><%=comName %>
+					<img class="mr2 profile_size_s" src="<%=picName%>" title="<%=comName%>"><%=comName %>
  					<span class="<%=online%>"></span>
 				</a>
 			</li>

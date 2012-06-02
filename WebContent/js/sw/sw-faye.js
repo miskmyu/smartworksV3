@@ -345,7 +345,6 @@ var smartTalk = {
 	// 현재 사용자 계정으로 Subscribe를 하여, 현재사용자에게만 오는 메시지를 받아서 처리한다.
 	startSubOnMe : function() {
 		smartTalk.subscribe(smartTalk.myChannel(swSubject.USERID), function(message) {
-			
 			// 서버에서 받은 메시지가 NOTICE_COUNT이면, 
 			// header.jsp에 있는 updateNoticeCount()를 호출하여 알림 숫자들을 업데이트하게 한다.
 			if (message.msgType === msgType.NOTICE_COUNT){

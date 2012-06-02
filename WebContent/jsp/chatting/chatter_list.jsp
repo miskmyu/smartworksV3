@@ -24,7 +24,7 @@
 					continue;
 
 				data = data + "<li><a href='' comId='" + userInfos[i].userId + "' userId='" + userInfos[i].userId + "'>" +
-									"<img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s'>" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +
+									"<img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s' title='" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +  "'>" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +
 									"<span class='chat_online'></span></a></li>";
 			}
 			data = data + "</ul>";
@@ -82,7 +82,7 @@
 				%>
 						<li>
 							<a href="" comId="<%=chatter.getId() %>" userId="<%=chatter.getId() %>">
-								<img class="mr2 profile_size_s" src="<%=chatter.getMinPicture()%>"><%=chatter.getName() %>
+								<img class="mr2 profile_size_s" src="<%=chatter.getMinPicture()%>" title="<%=userName%>"><%=userName %>
 			 					<span class="<%=online%>"></span>
 							</a>
 						</li>
