@@ -47,7 +47,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- POP-채팅 설정 -->
-	<div class="chatter_list_area admin" style="display:block">
+	<div class="chatter_list_area admin" style="display:none">
 		<!-- 오프라인으로 표시 클릭하면 <fmt:message key="chat.title.chatting"/> 앞에 아이콘도 class="chatic_titl off"처럼  클래스명"off"를 추가해줍니다  -->
 		<ul>
 			<li>
