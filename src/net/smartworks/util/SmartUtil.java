@@ -399,6 +399,23 @@ public class SmartUtil {
 	    }
 	    return Long.toString(bytes) + Q[0];
 	}
+
+	public static String getFileExtension(String filename){
+		String extension = "none";
+		if(SmartUtil.isBlankObject(filename)) return extension;
+		int pos = filename.lastIndexOf('.');
+		String[] extTypes = new String[]{"asf", "avi", "bmp", "doc", "docx", "exe", "gif", "hwp", "jpg", "mid", "mp3",
+				"mpeg", "mpg", "pdf", "pds", "ppt", "pptx", "rar", "txt", "wav", "wma", "wmv", "word", "xls", "xlsx", "zip"};
+		if(pos != -1) {
+			String extTemp = filename.substring( pos + 1, filename.length()).toLowerCase();
+			for(int i=0; i<extTypes.length; i++) {
+				if(extTypes[i].equals(extTemp))
+					extension = extTemp;
+			}
+		}
+		return extension;
+		
+	}
 	
 	public static String getSubjectString(String userId){
 		return userId.replace('.' , '_');

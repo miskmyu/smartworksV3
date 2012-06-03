@@ -1328,4 +1328,9 @@ public class SmartWorks implements ISmartWorks {
 		loginService.logout(request, response);
 	}
 
+	@Override
+	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.sendMail(requestBody, request);
+	}
+
 }

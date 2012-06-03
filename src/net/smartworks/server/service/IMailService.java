@@ -1,5 +1,9 @@
 package net.smartworks.server.service;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
@@ -13,6 +17,8 @@ public interface IMailService {
 
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception;
 	
-	public MailFolder getMailFolderById(String folderId) throws Exception;
+	public MailFolder getMailFolderById(String folderId) throws Exception;	
+
+	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 }

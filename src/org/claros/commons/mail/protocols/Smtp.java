@@ -39,7 +39,6 @@ import com.sun.mail.smtp.SMTPMessage;
  *
  */
 public class Smtp {
-	private static Log log = LogFactory.getLog(ImapProtocolImpl.class);
 	private Session session = null;
 	private ConnectionProfile profile;
 	private AuthProfile auth;
@@ -48,11 +47,6 @@ public class Smtp {
 		Properties props = new Properties();
 		this.profile = profile;
 		this.auth = auth;
-
-		if (log.isDebugEnabled()) {
-			props.setProperty("mail.debug", "true");
-			System.setProperty("javax.net.debug", "all");
-		}
 
 		if (profile.getSmtpSSL() != null && profile.getSmtpSSL().toLowerCase().equals("true")) {
 			props.put("mail.smtps.host", profile.getSmtpServer());
@@ -73,10 +67,6 @@ public class Smtp {
 			session = Session.getInstance(props, authenticator);
 		} else {
 			session = Session.getInstance(props, null);
-		}
-
-		if (log.isDebugEnabled()) {
-			session.setDebug(true);
 		}
 	}
 
@@ -195,7 +185,7 @@ public class Smtp {
 			// setting the content and finished
 			mimeMsg.setContent(multipart);
 		}
-		mimeMsg.addHeader("X-Mailer", "Claros inTouch (http://www.claros.org)");
+		mimeMsg.addHeader("X-Mailer", "SmartWorks.net");
 		mimeMsg.saveChanges();
 
 		// we are sending the message and generating a sent report on the fly.
@@ -215,7 +205,6 @@ public class Smtp {
 					} catch (Exception f) {
 						if (f.getCause() != null) {
 							if (f.getCause() instanceof SSLException) {
-								log.error("an SSL exception occured. try to go on." + f);
 							} else {
 								throw f;
 							}
@@ -238,7 +227,6 @@ public class Smtp {
 			} catch (Exception f) {
 				// a bugfix for google mail. 
 				if (f.getCause() instanceof SSLException) {
-					log.error("an SSL exception occured. try to go on." + f);
 					Address[] sent = mimeMsg.getAllRecipients();
 					out.put("sent", sent);
 				} else {
