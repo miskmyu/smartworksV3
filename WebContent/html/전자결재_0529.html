@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+<link href="../css/default.css" type="text/css" rel="stylesheet" />
+</link>
+<link href="../css/black/layout.css" type="text/css" rel="stylesheet" />
+</link>
+<link href="../css/black/detail.css" type="text/css" rel="stylesheet" />
+</link>
+<link href="../css/black/chat.css" type="text/css" rel="stylesheet" />
+</link>
+<link href="../css/black/form.css" type="text/css" rel="stylesheet" />
+</link>
+<link href="../css/black/pop.css" type="text/css" rel="stylesheet" />
+</link>
+<body>
+<div id="content">
+  <!-- 컨텐츠 레이아웃-->
+  <div class="section_portlet">
+    <div class="portlet_t">
+      <div class="portlet_tl"></div>
+    </div>
+    <div class="portlet_l" style="display: block;">
+      <ul class="portlet_r" style="display: block;">
+        <!-- 타이틀 -->
+        <div class="body_titl">
+          <div class="body_titl_iworks title">게시판</div>
+          <!-- 우측 버튼 -->
+          <div class="txt_btn"> <a class="" href="">업무매뉴얼보기▼</a> <a class="" href="" style="display: none">업무매뉴얼닫기▼</a> </div>
+          <!-- 우측 버튼 //-->
+          <div class="solid_line"></div>
+        </div>
+        <!-- 타이틀 //-->
+        <!-- 목록영역 -->
+        <div class="contents_space">
+          <div>
+            <!-- 전체 레이아웃 -->
+            <div class="mt15">
+              <div class="list_title_space solid_line_sb">
+                <div class="title">보고서</div>
+                <div class="title_line_options ">
+                  <select class="" href="">
+                    <option selected="" value="none"> 선택된 보고서 없음 </option>
+                    <option charttype="bar" reporttype="1" value="chart.pcnt.monthly"> 총처리건수(월별) </option>
+                  </select>
+                </div>
+                <div class="title_line_btns"> <span class="po_left js_progress_span"></span>
+                  <div class="icon_btn_edit"> <a class="js_edit_work_report icon_btn_tail" href="work_report_edit.sw">보고서 편집하기</a> </div>
+                </div>
+              </div>
+              <div>
+                <!-- 컨텐츠 -->
+                <div class="" style="display:none"></div>
+                <div class="border_noTopLine" style="display:none"> </div>
+              </div>
+            </div>
+            <!-- 전체 레이아웃//-->
+          </div>
+          <!-- 업무목록 -->
+          <div>
+            <!-- 목록보기 타이틀-->
+            <div class="list_title_space mt15">
+              <div class="title">업무목록</div>
+              <div class="title_line_btns">
+                <div class="icon_btn_edit"> <a class="js_edit_search_filter icon_btn_tail" href="search_filter.sw?workId=pkg_af2c5abbdc694feab78b2706c31f3bde">상세필터편집</a> </div>
+                <div class="icon_btn_create"> <a class="js_create_new_work icon_btn_tail" workid="pkg_af2c5abbdc694feab78b2706c31f3bde" href="new_iwork.sw?workId=pkg_af2c5abbdc694feab78b2706c31f3bde">새항목 등록하기</a> </div>
+                <div class="icon_btn_excel"> <a class="icon_btn_tail" href="">엑셀로 등록하기</a> </div>
+              </div>
+              <div class="title_line_options">
+                <form class="po_left" name="frmSearchInstance">
+                  <span class="js_progress_span"></span>
+                  <div class="srch_wh srch_wsize">
+                    <input class="nav_input" type="text" placeholder="항목 찾기" name="txtSearchInstance">
+                    <button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="항목 찾기"></button>
+                  </div>
+                </form>
+                <form class="form_space po_left js_form_filter_name" name="frmIworkFilterName">
+                  <select class="js_select_search_filter" name="selFilterName">
+                    <option selected="" value="system.allInstances"> 모든 항목 </option>
+                    <option value="system.myInstances"> 나의 처리항목 </option>
+                    <option value="system.recentInstances"> 최근 처리항목 </option>
+                    <option value="system.myRecentInstances"> 나의 최근 처리항목 </option>
+                  </select>
+                </form>
+              </div>
+            </div>
+            <!-- 목록보기 타이틀-->
+            <!-- 폼 화면 -->
+            <div id="search_filter" class="filter_section">
+              <div class="form_wrap up mb2">
+                <div class="form_title">
+                  <!-- 해당 업무이름을 표시하는 곳 -->
+                  <div class="icon_forum_works title">기본 &gt; 게시판</div>
+                  <!-- 전자결재, 업무전달 버튼들 -->
+                  <div class="txt_btn mb2">
+                    <div class="fr image_pos"> <a class="" href=""> <img title="전자결재" src="../images/btn_approvep.gif"> </a> </div>
+                    <div class="fr image_pos"> <a class="" href=""> <img title="업무전달" src="../images/btn_referw.gif"> </a> </div>
+                  </div>
+                  <!-- 전자결재, 업무전달 버튼들 //-->
+                  <div class="solid_line"></div>
+                </div>
+                <!-- 전자결재 -->
+                <div class="js_form_task_approval">
+                  <!-- 결재선 Section -->
+                  <div class="approval_section">
+                    <div class="tit"><span>전자결재</span></div>
+                    <div class="approval_group">
+                      <div class="fr">
+                        <div class="fl icon_approval"> </div>
+                        <div class="fl">기본결재</div>
+                      </div>
+                      <!-- POP -->
+                      <div style="position:relative; clear:both; width:400px; float:right">
+                      <div class="pop_corner_all">
+                        <!-- 팝업 타이틀 -->
+                        <div class="form_title">
+                          <div class="pop_title">결재선 관리</div>
+                          <div class="txt_btn"> <a href="">
+                            <div class="pop_btn_x"></div>
+                            </a> </div>
+                          <div class="solid_line"></div>
+                        </div>
+                        <!-- 팝업 타이틀 //-->
+                        <!-- 팝업 컨텐츠 -->
+                        <div class="form_contents"> 팝업 컨텐츠 </div>
+                        <!-- 팝업 컨텐츠 //-->
+                        <!-- 페이징 -->
+                        <div class="paginate mb5"> <a class="pre_end"> <span class="spr"></span> </a> <a class="pre"> <span class="spr"></span> </a> <strong>1</strong> <a class="num" href="">2</a> <a class="num" href="">3</a> <a class="num" href="">4</a> <a class="num" href="">5</a> <a class="num" href="">6</a> <a class="next"> <span class="spr"></span> </a> <a class="next_end"> <span class="spr"></span> </a> </div>
+                        <!-- 페이징 //-->
+                        <!-- 하단버튼영역 -->
+                        <div class="glo_btn_space">
+                          <div class="fr"> <span class="btn_gray"> <a onclick="close();" href=""> <span class="txt_btn_start"></span> <span class="txt_btn_center">닫기</span> <span class="txt_btn_end"></span> </a> </span> </div>
+                        </div>
+                        <!-- 하단버튼영역 //-->
+                      </div>
+                      </div>
+                      <!-- POP //-->
+                      <div class="cb">
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">검 토</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">승 인</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">대표이사</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">승 인</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">승 인</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                        <!-- 결재선1 -->
+                        <div class="approval_area">
+                          <div class="label">승 인</div>
+                          <div class="approval"> </div>
+                          <div class="">
+                            <div class="icon_fb_space">
+                              <div class="fieldline community_names js_community_names sw_required">
+                                <input class="m0 js_auto_complete" type="text" href="community_name.sw">
+                              </div>
+                              <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                          </div>
+                        </div>
+                        <!-- 결재선1 //-->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 결재선 Section //-->
+                  <!-- 전자결재 화면이 나타나는 곳 -->
+                  <div class="cb">
+                    <form class="form_layout js_validation_required" name="frmTaskForward">
+                      <span>
+                      <!-- 전자결재를 위한 입력화면들을 자동으로 그려주는 곳 -->
+                      <div class="">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td class="form_col js_type_textInput" width="100%" rowspan="1" colspan="1" fieldid="txtForwardSubject"><div class="form_label required_label" style="width: 12%;"> <span>제 목</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <input class="fieldline required" type="text" maxlength="125" name="txtForwardSubject" value="">
+                                </div></td>
+                            </tr>
+                            <tr>
+                              <td class="form_col js_type_userField" width="100%" rowspan="1" colspan="1" fieldid="txtForwardForwardee" multiusers="true"><div class="form_label required_label" style="width: 12%;"> <span>참조자</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <div class="icon_fb_space">
+                                    <div class="fieldline community_names js_community_names sw_required">
+                                      <input class="m0 js_auto_complete" type="text" href="community_name.sw" style="width: 100px;">
+                                    </div>
+                                    <div class="js_community_list srch_list_nowid" style="display: none;"></div>
+                                    <span class="js_community_popup"></span> <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                                </div></td>
+                            </tr>
+                            <tr>
+                              <td class="form_col js_type_textInput" width="100%" rowspan="1" colspan="1" fieldid="txtForwardComments"><div class="form_label" style="width: 12%;"><span>내 용</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <textarea class="fieldline" name="txtForwardComments" rows="4" value=""></textarea>
+                                </div></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      </span>
+                    </form>
+                    <div class="dash_line"></div>
+                  </div>
+                </div>
+                <!-- 업무전달화면이 나타나는 곳 -->
+                <div class="js_form_task_forward" style="">
+                  <!-- 업무계획하기 -->
+                  <div>
+                    <form class="form_layout js_validation_required" name="frmTaskForward">
+                      <span>
+                      <!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
+                      <div class="js_task_forward_fields" commentstitle="" forwardeetitle="" subjecttitle="">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td class="form_col js_type_textInput" width="100%" rowspan="1" colspan="1" fieldid="txtForwardSubject"><div class="form_label required_label" style="width: 12%;"> <span>제 목</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <input class="fieldline required" type="text" maxlength="125" name="txtForwardSubject" value="">
+                                </div></td>
+                            </tr>
+                            <tr>
+                              <td class="form_col js_type_userField" width="100%" rowspan="1" colspan="1" fieldid="txtForwardForwardee" multiusers="true"><div class="form_label required_label" style="width: 12%;"> <span>참조자</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <div class="icon_fb_space">
+                                    <div class="fieldline community_names js_community_names sw_required">
+                                      <input class="m0 js_auto_complete" type="text" href="community_name.sw" style="width: 100px;">
+                                    </div>
+                                    <div class="js_community_list srch_list_nowid" style="display: none;"></div>
+                                    <span class="js_community_popup"></span> <a class="js_userpicker_button" href=""> <span class="icon_fb_users"></span> </a> </div>
+                                </div></td>
+                            </tr>
+                            <tr>
+                              <td class="form_col js_type_textInput" width="100%" rowspan="1" colspan="1" fieldid="txtForwardComments"><div class="form_label" style="width: 12%;"><span>내 용</span> </div>
+                                <div class="form_value" style="width: 88%;">
+                                  <textarea class="fieldline" name="txtForwardComments" rows="4" value=""></textarea>
+                                </div></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      </span>
+                    </form>
+                    <div class="dash_line"></div>
+                  </div>
+                  <!-- 업무계획하기 //-->
+                </div>
+                <!-- 스마트폼에서 해당 업무화면을 그려주는 곳 -->
+                <div class="js_form_content js_click_start_form" worktype="iwork" style="display: block;">
+                  <form class="js_validation_required form_layout" name="frmSmartForm" formid="frm_board_SYSTEM" formname="게시판">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td class="form_col js_type_textInput" width="100%" colspan="2" fieldid="2" rowspan="1"><div class="form_label required_label" style="width: 12%;"> <span>제목</span> </div>
+                            <div class="form_value" style="width: 88%;">
+                              <input class="fieldline required" type="text" maxlength="125" name="2" value="">
+                            </div></td>
+                        </tr>
+                        <tr>
+                          <td class="form_col" width="100%" colspan="2" fieldid="4" rowspan="1"><div class="form_label required_label" style="width: 12%;"> <span>중요도</span> </div>
+                            <div class="form_value" style="width: 88%;">
+                              <fieldset class="sw_required">
+                              <label>
+                              <input type="radio" value="상" name="4" fieldid="4">
+                              상 </label>
+                              <label>
+                              <input type="radio" value="중" name="4" fieldid="4">
+                              중 </label>
+                              <label>
+                              <input type="radio" value="하" name="4" fieldid="4">
+                              하 </label>
+                              </fieldset>
+                            </div></td>
+                        </tr>
+                        <tr>
+                          <td class="form_col" width="100%" colspan="2" fieldid="6" rowspan="1"><span class="form_label required_label" style="width: 12%;"> <span>내용</span> </span>
+                            <div class="form_value" style="width: 88%;"> <span class="sw_required">
+                              <!-- smarteditor -->
+                              <textarea id="6" style="width: 100%; height: 425px; display: none;" value=""></textarea>
+                              <iframe scrolling="no" frameborder="0" style="width: 100%; height: 457px;" src="smarteditor/SEditorSkinKOR.html">
+                              <html xmlns="http://www.w3.org/1999/xhtml">
+                              </iframe>
+                              <!-- smarteditor //-->
+                              </span> </div></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- 업무계획하기 -->
+            <div>
+              <div class="dash_line"></div>
+              <form class="form_layout" name="frmScheduleWork">
+                <!-- 계획업무를 선택하는 선택박스 -->
+                <div class="pr10">
+                  <input class="pl15 js_toggle_schedule_work" type="checkbox" name="chkScheduleWork">
+                  예정업무로 지정하기 </div>
+                <!-- 계획업무로 선택된경우 계획업무 지정을 위한 화면들을 스마트폼을 이용해 자동으로 그려준다.. -->
+                <!-- js_check_schedule_fields : js/sw-formFields.js의 loadCheckScheduleFields()에서 찾아서 폼을 그려준다. -->
+                <span style="display:none">
+              </form>
+            </div>
+            <!-- 업무계획하기 //-->
+            <!-- 새업무를 시작하기위한 완료 버튼과 취소 버튼 -->
+            <div class="js_upload_buttons">
+              <div class="glo_btn_space js_upload_buttons_page">
+                <!-- 완료 및 취소 버튼 -->
+                <div class="fr"> <span class="btn_gray">
+                  <!-- 완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
+                  <a class="js_complete_action" onclick="submitForms();return false;" href=""> <span class="txt_btn_start"></span> <span class="txt_btn_center">완료</span> <span class="txt_btn_end"></span> </a> </span> <span class="btn_gray">
+                  <!-- 취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
+                  <a class="js_cancel_action" href=""> <span class="txt_btn_start"></span> <span class="txt_btn_center">취소</span> <span class="txt_btn_end"></span> </a> </span> </div>
+                <!-- 완료 및 취소 버튼 //-->
+              </div>
+            </div>
+            <!-- 새업무를 시작하기위한 완료 버튼과 취소 버튼 //-->
+            <!-- 폼 화면 -->
+            <!-- 목록 테이블 -->
+            <div class="list_contents"> </div>
+            <!-- 목록 테이블 //-->
+          </div>
+          <!-- 업무목록 //-->
+        </div>
+        <!-- 목록영역 //-->
+      </ul>
+    </div>
+    <div class="portlet_b" style="display: block;"></div>
+  </div>
+</div>
+</body>
+</html>

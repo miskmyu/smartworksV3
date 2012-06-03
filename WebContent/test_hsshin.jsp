@@ -535,7 +535,7 @@
 	//InstanceInfoList instanceInfoList = instanceService.getInstanceInfoListByWorkId("hsshin@maninsoft.co.kr", null, SmartWork.ID_BOARD_MANAGEMENT);
 
 	//System.out.println(instanceInfoList);
-	SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups("", null, null);
+	/* SwoGroup[] swoGroups = SwManagerFactory.getInstance().getSwoManager().getGroups("", null, null);
 	CourseDetail[] courseDetails = SwManagerFactory.getInstance().getSeraManager().getCourseDetails("", null);
 
 	for(SwoGroup swoGroup : swoGroups) {
@@ -553,7 +553,7 @@
 				SwManagerFactory.getInstance().getSwoManager().setGroup("", swoGroup, IManager.LEVEL_LITE);
 			}
 		}
-	}
+	} */
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

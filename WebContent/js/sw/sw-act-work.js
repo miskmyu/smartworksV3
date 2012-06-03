@@ -1264,4 +1264,9 @@ $(function() {
 		}, 300);
 	});
 	
+	$('.js_send_mail_btn').live('click', function(e) {
+		submitForms();
+		return false;
+	});
+
 });

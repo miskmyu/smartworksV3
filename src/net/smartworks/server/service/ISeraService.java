@@ -3,6 +3,7 @@ package net.smartworks.server.service;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.info.BoardInstanceInfo;
@@ -94,7 +95,7 @@ public interface ISeraService {
 
 	public abstract SeraUser getSeraUserById(String userId) throws Exception;
 
-	public abstract SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception;
+	public abstract SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception;
 
 	public abstract void replyFriendRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

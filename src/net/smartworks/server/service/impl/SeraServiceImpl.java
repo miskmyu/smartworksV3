@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Group;
@@ -2208,7 +2209,7 @@ public class SeraServiceImpl implements ISeraService {
 					SwdRecord swdRecord = swdRecords[i];
 					EventInstanceInfo eventInstanceInfo = new EventInstanceInfo();
 					eventInstanceInfo.setLikers(ModelConverter.getLikersUserIdArray(userId, Instance.TYPE_EVENT, swdRecord.getRecordId()));
-					
+
 					String recordId = swdRecord.getRecordId();
 					eventInstanceInfo.setId(recordId);
 					eventInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(swdRecord.getCreationUser()));
@@ -4302,12 +4303,11 @@ public class SeraServiceImpl implements ISeraService {
 		return txtUserId;
 	}
 	@Override
-	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
+	public SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception {
 		try {
 			SeraUserInfo[] seraUserInfos = null;
 			List userInfosList = new ArrayList();
 			User user = SmartUtil.getCurrentUser();
-			String userId = user.getId();
 			SeraFriendCond seraFriendCond = new SeraFriendCond();
 			seraFriendCond.setReceiveId(userId);
 			seraFriendCond.setAcceptStatus(SeraFriend.ACCEPT_STATUS_YET);
@@ -4316,7 +4316,7 @@ public class SeraServiceImpl implements ISeraService {
 				seraFriendCond.setPageSize(maxList);
 			seraFriendCond.setOrders(new Order[]{new Order("requestDate", false), new Order("requestName", true)});
 
-			SeraFriend[] seraFriends = getSeraManager().getFriends(userId, seraFriendCond);
+			SeraFriend[] seraFriends = getSeraManager().getFriends(user.getId(), seraFriendCond);
 
 			if(!CommonUtil.isEmpty(seraFriends)) {
 				String[] ids = new String[seraFriends.length];
@@ -4325,7 +4325,7 @@ public class SeraServiceImpl implements ISeraService {
 					String id = seraFriend.getRequestId();
 					ids[j] = id;
 				}
-				SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, ids);
+				SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(user.getId(), ids);
 
 				SwoUserExtend[] finalUserExtends = new SwoUserExtend[userExtends.length];
 
@@ -4346,7 +4346,7 @@ public class SeraServiceImpl implements ISeraService {
 						SeraUserInfo member = new SeraUserInfo();
 						String id = swoUserExtend.getId();
 						member.setId(id);
-						SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(userId, id);
+						SeraUserDetail seraUserDetail = getSeraManager().getSeraUserById(user.getId(), id);
 						String goal = null;
 						if(seraUserDetail != null)
 							goal = seraUserDetail.getGoal();
@@ -4456,6 +4456,9 @@ public class SeraServiceImpl implements ISeraService {
 				seraFriend.setRequestDate(new LocalDate());	
 				getSeraManager().setFriend(requestId, seraFriend);
 			}
+
+			SmartUtil.publishCurrent(receiveId, SeraNotice.TYPE_FRIEND);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -6780,5 +6783,4 @@ public class SeraServiceImpl implements ISeraService {
 			return null;
 		}
 	}
-
 }

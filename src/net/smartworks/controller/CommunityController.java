@@ -80,6 +80,12 @@ public class CommunityController {
 		return SmartUtil.returnMnv(request, "jsp/chatting/chatting_box.jsp", "");
 	}
 
+	@RequestMapping("/available_chatter_list")
+	public ModelAndView availableChatterList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/chatting/available_chatter_list.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_group", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

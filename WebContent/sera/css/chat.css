@@ -41,7 +41,7 @@
 .addfriend_group {padding: 5px 0 0 5px; background-color:#FFF; overflow: hidden}
 .addfriend_h { padding-bottom:4px;}
 .user_sel_area {float:left; padding:0 2px;}
-.addf_line {border:1px solid #c7c7c7; left:0px; margin:0 2px 2px 0; width: 200px; padding: 1px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; float:left; overflow:hidden;}
+.addf_line {border:1px solid #c7c7c7; left:0px; margin:0 2px 2px 0; width: 198px; padding: 1px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; float:left; overflow:hidden;}
 
 .info_list {padding:0 0 2px 18px; line-height:16px; }
 
@@ -52,10 +52,13 @@
 .chat_online {float: right; background: url("../../images/chat_img.png") no-repeat scroll 0 -99px transparent; display:inline-block; height: 10px; width: 10px;}
 .chat_offline {float: right; background: url("../../images/chat_img.png") no-repeat scroll 0 -117px transparent; display:inline-block; height: 10px; width: 10px;}
 .chatter_list_area li.chat_off_user, .chat_de_list li.chat_off_user {color:#b6b6b6;}
+.chatter_list_area.admin {bottom: 29px; position: fixed; right: 0; width: auto; margin: 0; padding:0}
 
 /* Chat Default Section */
 .chat_close_section, .chat_de_section {border:1px solid #232323; background-color:#454645; min-width: 105px; margin-left:10px; z-index:102; color:#FFF; bottom: 0; position: fixed; right: 0;}
 .chatic_titl {background: url("../images/chat_img.png") no-repeat scroll 0 -74px transparent; display:inline-block; padding: 0 0 1px 24px; height:20px; color:#FFF; position:absolute;}
+.chatic_titl.off {background-position:0 -188px}
+.chatic_titl.off.pop {height:14px; position:relative; color:#555555; line-height:18px}
 .chat_close_section  a .top_group:hover { background:none; background-color:#454545;}
 .chat_de_section .chat_de_list {background-color:#FFF; margin: 0 2px; max-height:300px; width:190px; color:#454545; overflow-y:auto;}
 
@@ -77,7 +80,7 @@
 .btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
 			float:left; height:20px; width:5px;}
 .btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
-    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
+    		float:left; color:#747474; height:16px; padding:4px 3px 0; text-align:center; font-size:11px;}
 .btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
     		float:left; height:20px; width:5px;}
     		

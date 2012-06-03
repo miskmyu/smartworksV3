@@ -19,7 +19,7 @@ $(function() {
 		if (!isEmpty(startWork)){
 			target = startWork.find('#upload_work_list');
 		}else if(!isEmpty(chatter_name)){
-			target = chatter_name.siblings('div.js_chatter_list');
+			target = chatter_name.siblings('div.js_chatter_list').addClass('searching');
 			listWidth = target.width();
 		}else{
 			target = input.parent().next('div');

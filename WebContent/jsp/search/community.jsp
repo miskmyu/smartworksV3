@@ -20,7 +20,7 @@
 
 	// 전달된 키값으로 서버에서 커뮤너티를 찾아주는 기능을 호출한다.
 	String key = request.getParameter("key");
-	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key);
+	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key, request);
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
