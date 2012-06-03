@@ -190,7 +190,12 @@ public class SettingsServiceImpl implements ISettingsService {
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
 					imgCompanyLogo = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId);
-					getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
+						//  SWConfig DB에 id가 없을 경우, create, 있으면 update
+					if(getSwoManager().getLogo(userId, companyId) == null){
+						getSwoManager().createLogo(userId, companyId, imgCompanyLogo);
+					}else{
+						getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
+					}
 				}
 			}
 
