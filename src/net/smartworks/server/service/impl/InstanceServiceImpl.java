@@ -700,8 +700,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				userId = cuser.getId();
 			
 			String formId = (String)requestBody.get("formId");
+			String retry = (String)requestBody.get("retry");
 			
-			boolean isFirstSetMode = false; //초기 데이터 입력인지 수정인지를 판단한다
+			boolean isFirstSetMode = true; //초기 데이터 입력인지 수정인지를 판단한다
+			if (!CommonUtil.isEmpty(retry))
+				isFirstSetMode = false; //초기 데이터 입력인지 수정인지를 판단한다
 			
 			//레코드 폼정보를 가져온다
 			if (CommonUtil.isEmpty(formId))
