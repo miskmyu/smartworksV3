@@ -604,5 +604,6 @@ public interface ISmartWorks {
 
 	public abstract void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract UserInfo[] searchEmailAddress(String key) throws Exception;
 	
 }

@@ -10,6 +10,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		dataField : '',
 		courseId : null,
 		friendOnly : false,
+		emailAddress : false,
 		refreshData : false,
 		layoutInstance : null
 	};
@@ -44,14 +45,31 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var $user = null;
 	
 	var usersHtml = '';
-	var href = (!isEmpty(options.courseId)) ? "course_member.sw?courseId=" + options.courseId : (options.friendOnly) ? "sera_user.sw" : "user_name.sw";
+	var href = "user_name.sw";
+	if(!isEmpty(options.courseId))
+		href = "course_member.sw?courseId=" + options.courseId;
+	else if(options.friendOnly)
+		href = "sera_user.sw";
+	else if(options.emailAddress)
+		href = "email_address.sw";
+	
 	var icoClass = ' class="icon_fb_user"';
-	var userPicker = (!isEmpty(options.courseId)) ? 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"' : (options.friendOnly) ? 'class="js_friendpicker_button"' : 'class="js_userpicker_button"';
+	var userPicker = 'class="js_userpicker_button"';
+	if(!isEmpty(options.courseId))
+		userPicker = 'class="js_coursememberpicker_button" courseId="' + options.courseId + '"';
+	else if(options.friendOnly)
+		userPicker = 'class="js_friendpicker_button"';
+	else if(options.emailAddress)
+		userPicker = 'class="js_emailpicker_button"';
 	
 	if(multiUsers === 'true'){
 		for(var i=0; i<users.length; i++)
 			usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
-		href = (isEmpty(options.courseId)) ? "community_name.sw" : "course_member.sw?courseId=" + options.courseId;
+		href = "community_name.sw";
+		if(!isEmpty(options.courseId))
+			href =  "course_member.sw?courseId=" + options.courseId;
+		else if(options.emailAddress)
+			href = "email_address.sw";
 		icoClass = ' class="icon_fb_users"';
 	}else if (!isEmpty(users)) {
 		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
@@ -108,6 +126,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			multiUsers: false,
 			courseId: null,
 			friendOnly: false,
+			emailAddress: false,
 			required: false,
 			readOnly: false		
 	};
@@ -127,6 +146,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			entity : $formEntity,
 			courseId: options.courseId,
 			friendOnly: options.friendOnly,
+			emailAddress: options.emailAddress,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
 				fieldId: options.fieldId,
 				users : options.users
