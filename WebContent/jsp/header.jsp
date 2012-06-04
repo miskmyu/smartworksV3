@@ -61,7 +61,7 @@ function logout() {
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
-<!-- 로고 구현 하였으나, style 확인 필요함-->
+<!--  style 확인 필요함 -->
 <div>
 	<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
 		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyGeneral.getCompanyLogo()%>" />
