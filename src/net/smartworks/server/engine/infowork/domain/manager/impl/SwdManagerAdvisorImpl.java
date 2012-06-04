@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
@@ -82,7 +83,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 	private void populateRecord(String user, SwdRecord obj) throws Exception {
 		if (obj == null)
 			return;
-		
+
 		String formId = obj.getFormId();
 		String recordId = obj.getRecordId();
 		if (recordId == null)
