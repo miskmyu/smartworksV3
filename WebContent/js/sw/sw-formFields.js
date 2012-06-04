@@ -441,6 +441,7 @@ function loadWriteMailFields() {
 				fieldName: receiversTitle,
 				columns: 1,
 				multiUsers: true,
+				emailAddress: true,
 				required: true
 			});
 
@@ -451,6 +452,7 @@ function loadWriteMailFields() {
 				fieldName: ccReceiversTitle,
 				columns: 1,
 				multiUsers: true,
+				emailAddress: true,
 				required: false
 			});
 
@@ -461,6 +463,7 @@ function loadWriteMailFields() {
 				fieldName: bccReceiversTitle,
 				columns: 1,
 				multiUsers: true,
+				emailAddress: true,
 				required: false
 			});
 

@@ -163,10 +163,10 @@ public class Utility {
 	public static Address[] stringListToAddressArray(List<Map<String, String>> strList) throws Exception {
 		if (strList == null)
 			return null;
-		
-		if (strList.size() > 0) {
-			Address[] outAddr = new Address[strList.size()];
-			for(int counter=0; counter<strList.size(); counter++) {
+		int size = strList.size();
+		if (size > 0) {
+			Address[] outAddr = new Address[size];
+			for(int counter=0; counter<size; counter++) {
 				Map<String, String> addr = (Map<String, String>)strList.get(counter);
 				String fullname = addr.get("name");
 				String email = addr.get("id");
@@ -176,7 +176,6 @@ public class Utility {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
-				counter++;
 			}
 			return outAddr;
 		} else {

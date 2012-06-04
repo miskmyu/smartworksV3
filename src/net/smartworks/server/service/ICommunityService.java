@@ -58,4 +58,6 @@ public interface ICommunityService {
 
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract UserInfo[] searchEmailAddress(String key) throws Exception;
+
 }

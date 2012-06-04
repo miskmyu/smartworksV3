@@ -9,7 +9,7 @@ $(function() {
 	$('input.js_auto_complete').live('keyup', function(e) {
 		var e = window.event || e;
 		var keyCode = e.which || e.keyCode;
-		if(keyCode>=9 && keyCode<=45) return;
+		if(keyCode>=9 && keyCode<=45 && keyCode!=186 && keyCode!=188) return;
 		var input = $(targetElement(e));
 		var listWidth = input.parent().outerWidth();
 		var startWork = input.parents('div.js_start_work_page');
@@ -27,6 +27,16 @@ $(function() {
 		var url = input.attr('href');
 		var lastValue = input.attr('value');
 		if(timeoutId != null) clearTimeout(timeoutId);
+		if(keyCode==186 || keyCode==188){
+			if(url !== 'email_address.sw') return false;
+			var emailAddress = lastValue.substr(0, lastValue.length-1);
+			if(!isEmailAddress(emailAddress)) return false;
+			var data = '<ul><li> <a href="" comName="' + emailAddress + '" comId="' + emailAddress + '" class="js_select_community">' +
+						'<span>' + emailAddress + '</span></a></li></ul>';
+			target.html(data).width(listWidth);
+			target.show();
+			return;
+		}
 		timeoutId = setTimeout(function() {
 			timeoutId = null;
 			var currentValue = input.attr('value');
@@ -139,7 +149,7 @@ $(function() {
 
 	$('.js_select_community').live( 'click', function(e) {
 		var input = $(targetElement(e));
-		if(!input.hasClass('js_select_community')) input.parents('.js_select_community:first');
+		if(!input.hasClass('js_select_community')) input = input.parents('.js_select_community:first');
 		var comName = input.attr('comName');
 		var comId = input.attr('comId');
 		var communityItems = input.parents('.js_community_list').prev().find('.js_community_item');				
