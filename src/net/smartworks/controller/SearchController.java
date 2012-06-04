@@ -67,4 +67,10 @@ public class SearchController {
 
 		return SmartUtil.returnMnv(request, "jsp/search/user_name.jsp", "");
 	}
+
+	@RequestMapping("/email_address")
+	public ModelAndView emailAddress(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "jsp/search/email_address.jsp", "");
+	}
 }

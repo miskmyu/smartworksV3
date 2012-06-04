@@ -989,5 +989,15 @@ public class CommunityServiceImpl implements ICommunityService {
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 
 	}
+	@Override
+	public UserInfo[] searchEmailAddress(String key) throws Exception {
+		//
+		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
+		//
+		return searchUser(key);
+		//
+		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
+		//
+	}
 
 }

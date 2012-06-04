@@ -1333,4 +1333,9 @@ public class SmartWorks implements ISmartWorks {
 		mailService.sendMail(requestBody, request);
 	}
 
+	@Override
+	public UserInfo[] searchEmailAddress(String key) throws Exception {
+		return communityService.searchEmailAddress(key);
+	}
+
 }
