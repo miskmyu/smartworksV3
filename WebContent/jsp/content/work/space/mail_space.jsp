@@ -78,20 +78,20 @@
 					    <span class="fr t_date mt10"><%=instance.getSendDate().toLocalDateLongString() %></span>
 					    <dl>
 					    	<dt><fmt:message key="common.title.sender"/> :</dt>
-					        <dd>&lt;<%=instance.getSender().getEmailAddressShown() %>&gt;</dd>
+					        <dd><%=instance.getSender().getEmailAddressShown() %></dd>
 					        <dt><fmt:message key="common.title.receivers"/> :</dt>
-					        <dd>&lt;<%=instance.getReceiversShown() %>&gt;</dd>
+					        <dd><%=instance.getReceiversShown() %></dd>
 							<%
 							if(!SmartUtil.isBlankObject(instance.getCcReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.cc_receivers"/> :</dt>
-						        <dd>&lt;<%=CommonUtil.toNotNull(instance.getCcReceiversShown()) %>&gt;</dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getCcReceiversShown()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getBccReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.bcc_receivers"/> :</dt>
-						        <dd>&lt;<%=CommonUtil.toNotNull(instance.getBccReceiversShown()) %>&gt;</dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShown()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getAttachments())){

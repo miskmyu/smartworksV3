@@ -522,10 +522,10 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
             /*JSONObject jsonObject = new JSONObject();
             jsonObject.put("success", true);
             jsonObject.put("fileId", formFile.getId());
-            jsonObject.put("pullPathName", formFile.getImageServerPath());
+            jsonObject.put("fullPathName", formFile.getImageServerPath());
             jsonObject.put("fileSize", formFile.getFileSize());
             writer.print(jsonObject.toString());*/
-            writer.print("{success: \"" + true + "\", fileId: \"" + formFile.getId() + "\", pullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() + "\"}");
+            writer.print("{success: \"" + true + "\", fileId: \"" + formFile.getId() + "\", fullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() +"\", localFilePath: \"" + formFile.getFilePath() + "\"}");
         } catch (FileNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.print("{success: false}");
