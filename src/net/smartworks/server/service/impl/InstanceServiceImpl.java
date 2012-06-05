@@ -121,8 +121,6 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
-import net.smartworks.server.engine.process.approval.model.AprApproval;
-import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -247,7 +245,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setDomainId(domainId);
 			String[] workSpaceIdIns = null;
 			if(spaceId == null)
-				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceId(spaceId);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
@@ -2769,9 +2767,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
 				swdRecordCond.setCreationUser(userId);
 
-			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-			
+
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
@@ -6153,33 +6151,33 @@ public class InstanceServiceImpl implements IInstanceService {
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
 
 		AsyncMessageList asyncMessageList = new AsyncMessageList();
-		AsyncMessageInstanceInfo[] messages = getMyMessageInstancesByType(type, null, maxSize);
-		int totalSize = 0;
-		if(!CommonUtil.isEmpty(messages))
-			totalSize = messages.length;
-		asyncMessageList.setTotalSize(totalSize);
-		asyncMessageList.setMessages(messages);
+		getMyMessageInstancesByType(asyncMessageList, type, null, maxSize);
 
 		return asyncMessageList;
 	}
 
 	@Override
-	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception {
 		try {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 			MessageCond messageCond = new MessageCond();
 			if(fromDate != null)
 				messageCond.setCreationDateTo(fromDate);
-			messageCond.setPageNo(0);
-			messageCond.setPageSize(maxSize);
 			if(type == Instance.TYPE_ASYNC_MESSAGE) {
 				messageCond.setTargetUser(userId);
 			} else if(type == Instance.TYPE_SENT_ASYNC_MESSAGE) {
 				messageCond.setSendUser(userId);
 			}
 
-			messageCond.setOrders(new Order[]{new Order(MessageCond.A_CREATIONDATE, false)});
+			long totalSize = getMessageManager().getMessageSize(userId, messageCond);
+			if(asyncMessageList != null)
+				asyncMessageList.setTotalSize((int)totalSize);
+
+			messageCond.setPageNo(0);
+			messageCond.setPageSize(maxSize);
+			messageCond.setOrders(new Order[]{new Order(MessageCond.A_MODIFICATIONDATE, false)});
+
 			Message[] messages = getMessageManager().getMessages(userId, messageCond, IManager.LEVEL_ALL);
 
 			if(CommonUtil.isEmpty(messages))
@@ -6189,6 +6187,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			AsyncMessageInstanceInfo[] asyncMessageInstanceInfos = null;
 			if(!CommonUtil.isEmpty(messages)) {
 				for(Message message : messages) {
+					String deleteUser = message.getDeleteUser();
+					if(deleteUser != null && deleteUser.equals(userId))
+						continue;
 					AsyncMessageInstanceInfo asyncMessageInstanceInfo = new AsyncMessageInstanceInfo();
 					asyncMessageInstanceInfo.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 					asyncMessageInstanceInfo.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
@@ -6209,9 +6210,14 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}
 			if(asyncMessageInstanceInfoList.size() > 0) {
+				if(totalSize > maxSize)
+					asyncMessageInstanceInfoList.add(new AsyncMessageInstanceInfo());
 				asyncMessageInstanceInfos = new AsyncMessageInstanceInfo[asyncMessageInstanceInfoList.size()];
 				asyncMessageInstanceInfoList.toArray(asyncMessageInstanceInfos);
 			}
+			if(asyncMessageList != null)
+				asyncMessageList.setMessages(asyncMessageInstanceInfos);
+
 			return asyncMessageInstanceInfos;
 
 		} catch (Exception e) {
@@ -6222,53 +6228,41 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		/*{
-			senderId=kmyu@maninsoft.co.kr, 
-			chatId=chatId1335500111869, 
-			senderInfo=
-				{
-					userId=kmyu@maninsoft.co.kr, 
-					longName=1 유광민, 
-					nickName=유광민, 
-					minPicture=http://localhost:8081/imageServer/Maninsoft/Profiles/kmyu@maninsoft.co.kr_thumb.jpg
-				}, 
-			chatters=[hsshin@maninsoft.co.kr], 
-			message=hello, 
-			receiverId=hsshin@maninsoft.co.kr
-		}*/
 		try {
 			String senderId = (String)requestBody.get("senderId");
 			String message = (String)requestBody.get("message");
-			String receiverId = (String)requestBody.get("receiverId");
+			List receivers = (ArrayList)requestBody.get("receivers");
 			String chatId = (String)requestBody.get("chatId");
-			List chattersList = (ArrayList)requestBody.get("chatters");
-			
-			Message msg = new Message();
-			msg.setContent(message);
-			msg.setSendUser(senderId);
-			msg.setTargetUser(receiverId);
-			
-			StringBuffer chattersBuff = null;
-			if (chattersList != null && chattersList.size() != 0) {
-				chattersBuff = new StringBuffer();
-				boolean first = true;
-				for (int i = 0; i < chattersList.size(); i++) {
-					String chattersId = (String)chattersList.get(i);
-					if (first) {
-						chattersBuff.append(chattersId);	
-						first = false;
-					} else {
-						chattersBuff.append(",").append(chattersId);
+			List chattersList = (ArrayList)requestBody.get("chatters");		
+			if(receivers != null && receivers.size() != 0){
+				for(int index=0; index<receivers.size(); index++){
+					Message msg = new Message();
+					msg.setContent(message);
+					msg.setSendUser(senderId);
+					msg.setTargetUser((String)receivers.get(index));
+					
+					StringBuffer chattersBuff = null;
+					if (chattersList != null && chattersList.size() != 0) {
+						chattersBuff = new StringBuffer();
+						boolean first = true;
+						for (int i = 0; i < chattersList.size(); i++) {
+							String chattersId = (String)chattersList.get(i);
+							if (first) {
+								chattersBuff.append(chattersId);	
+								first = false;
+							} else {
+								chattersBuff.append(",").append(chattersId);
+							}
+						}
+						msg.setChattersId(chattersBuff.toString());
 					}
-				}
-				msg.setChattersId(chattersBuff.toString());
-			}
-			msg.setChatId(chatId);
-			
-			getMessageManager().createMessage(senderId, msg);
+					msg.setChatId(chatId);
+					
+					getMessageManager().createMessage(senderId, msg);
 
-			SmartUtil.increaseNoticeCountByNoticeType(receiverId, Notice.TYPE_MESSAGE);
-			
+					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -6283,8 +6277,21 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String messageId = (String)requestBody.get("workInstanceId");
 
-			getMessageManager().removeMessage(userId, messageId);
+			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
 			
+			String deleteUser = msg.getDeleteUser();
+			if(SmartUtil.isBlankObject(deleteUser)) {
+				String sendUser = msg.getSendUser();
+				String targetUser = msg.getTargetUser();
+				if(sendUser.equals(targetUser)){
+					getMessageManager().removeMessage(userId, messageId);
+				} else {
+					msg.setDeleteUser(userId);
+					getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);				
+				}
+			} else {
+				getMessageManager().removeMessage(userId, messageId);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -6304,7 +6311,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			msg.setChecked(true);
 			msg.setCheckedTime(new LocalDate());
 
-			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+			getMessageManager().setMessage(userId, msg, IManager.LEVEL_LITE);
 
 			SmartUtil.publishCurrent(userId, Notice.TYPE_MESSAGE);
 
@@ -6313,6 +6320,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 
 	}
+
 	@Override
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		

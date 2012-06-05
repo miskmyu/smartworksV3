@@ -548,7 +548,7 @@ public interface ISmartWorks {
 	
 	public abstract AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception;
 	
-	public abstract AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
+	public abstract AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception;
 	
 	public abstract Notice[] getSeraNoticesForMe() throws Exception;
 

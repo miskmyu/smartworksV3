@@ -342,7 +342,7 @@ function loadNewNoteFields() {
 				fieldName: "받는사람",
 				columns: 1,
 				friendOnly: true,
-				multiUsers: false,
+				multiUsers: true,
 				required: true
 			});
 			gridRow.hide();
