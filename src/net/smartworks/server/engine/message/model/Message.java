@@ -29,6 +29,7 @@ public class Message extends MisObject {
 	public static final String A_CHECKEDTIME = "checkedTime";
 	public static final String A_CHATID = "chatId";
 	public static final String A_CHATTERSID = "chattersId";
+	public static final String A_DELETEUSER = "deleteUser";
 	
 	private String content;
 	private String sendUser;
@@ -37,6 +38,7 @@ public class Message extends MisObject {
 	private Date checkedTime;
 	private String chatId;
 	private String chattersId;
+	private String deleteUser;
 
 	public Message(){
 		super();
@@ -65,6 +67,7 @@ public class Message extends MisObject {
 		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
 		appendAttributeString(A_CHATID, chatId, buf);
 		appendAttributeString(A_CHATTERSID, chattersId, buf);
+		appendAttributeString(A_DELETEUSER, deleteUser, buf);
 			
 		return buf.toString();
 	}
@@ -96,6 +99,7 @@ public class Message extends MisObject {
 			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
 			Node chatId = attrMap.getNamedItem(A_CHATID);
 			Node chattersId = attrMap.getNamedItem(A_CHATTERSID);
+			Node deleteUser = attrMap.getNamedItem(A_DELETEUSER);
 
 			if(content != null)
 				obj.setContent(content.getNodeValue());
@@ -111,6 +115,8 @@ public class Message extends MisObject {
 				obj.setChatId(chatId.getNodeValue());
 			if(chattersId != null)
 				obj.setChattersId(chattersId.getNodeValue());
+			if(deleteUser != null)
+				obj.setDeleteUser(deleteUser.getNodeValue());
 		}
 		
 		return  obj;
@@ -265,6 +271,12 @@ public class Message extends MisObject {
 	}
 	public void setChattersId(String chattersId) {
 		this.chattersId = chattersId;
+	}
+	public String getDeleteUser() {
+		return deleteUser;
+	}
+	public void setDeleteUser(String deleteUser) {
+		this.deleteUser = deleteUser;
 	}
 
 }

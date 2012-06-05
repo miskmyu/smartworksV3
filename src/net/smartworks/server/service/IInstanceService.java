@@ -126,7 +126,7 @@ public interface IInstanceService {
 	
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception;
 
-	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception;
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception;
 
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

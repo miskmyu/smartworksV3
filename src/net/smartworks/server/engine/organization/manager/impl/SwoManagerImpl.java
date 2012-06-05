@@ -3004,7 +3004,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			queryBuffer.append(" (select usr.id, usr.name, usr.nickName ");
 			queryBuffer.append(" 		, usr.pos as position ");
 			queryBuffer.append(" 		, usr.roleId as roleId ");
+			queryBuffer.append(" 		, usr.authId as authId ");
 			queryBuffer.append(" 		, usr.picture ");
+			queryBuffer.append(" 		, usr.mobileNo ");
+			queryBuffer.append(" 		, usr.internalNo ");
 			queryBuffer.append(" 		, usr.modifiedTime ");
 			queryBuffer.append(" 		, dept.id as deptId ");
 			queryBuffer.append(" 		, dept.name as deptName ");
@@ -3060,6 +3063,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				obj.setName((String)fields[j++]);
 				obj.setNickName((String)fields[j++]);
 				obj.setPosition((String)fields[j++]);
+				obj.setRoleId((String)fields[j++]);
 				obj.setAuthId((String)fields[j++]);
 				String picture = CommonUtil.toNotNull((String)fields[j++]);
 				if(!picture.equals("")) {
@@ -3068,6 +3072,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setBigPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 					obj.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
 				}
+				obj.setCellPhoneNo((String)fields[j++]);
+				obj.setPhoneNo((String)fields[j++]);
 				obj.setModifiedTime((Timestamp)fields[j++]);
 				obj.setDepartmentId((String)fields[j++]);
 				obj.setDepartmentName((String)fields[j++]);

@@ -37,7 +37,7 @@ function uploadImageFile(uploadForm, appId, maxWidth)
     		var responseJSON;
     		try{
 	    		responseJSON = eval("(" + xhr.responseText + ")");
-	    		var fileFullPath = responseJSON.pullPathName;
+	    		var fileFullPath = responseJSON.fullPathName;
 	    	    var sHTML = "<img src='" + fileFullPath + "' border='0' style='max-width:" +maxWidth + "px'>";
 	    	    parent.parent.oEditors.getById[appId].exec("PASTE_HTML", [sHTML]);
     		}catch (err){

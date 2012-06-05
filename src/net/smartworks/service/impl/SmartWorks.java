@@ -1176,8 +1176,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
-		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(null, type, fromDate, maxSize);
 	}
 
 	@Override

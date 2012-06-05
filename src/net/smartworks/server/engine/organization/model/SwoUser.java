@@ -25,6 +25,14 @@ public class SwoUser extends SwoObject {
 	
 	private static final String NAME = CommonUtil.toName(SwoUser.class, PREFIX);
 
+	public static final String USER_ROLE_DEPT_LEADER = "DEPT LEADER";
+	public static final String USER_ROLE_DEPT_MEMBER = "DEPT MEMBER";
+
+	public static final String USER_AUTH_ADMINISTRATOR = "ADMINISTRATOR";
+	public static final String USER_AUTH_OPERATOR = "OPERATOR";
+	public static final String USER_AUTH_USER = "USER";
+	public static final String USER_AUTH_EXTERNALUSER = "EXTERNALUSER";
+
 	public static final String A_NICKNAME = "nickName";
 	public static final String A_PASSWORD = "password";
 	public static final String A_COMPANYID = "companyId";
