@@ -37,10 +37,9 @@ SmartWorks.FormRuntime.CheckBoxBuilder.build = function(config) {
 		$label.appendTo(options.container);
 
 	var checked = (value) ? 'checked' : '' ;
-	
 	var $check = null;
 	if(readOnly){
-		$check = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"></div>').text(smartMessage.get((value==="true") ? "trueText" : "falseText"));
+		$check = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"></div>').text(smartMessage.get((value===true) ? "trueText" : "falseText"));
 	}else{	
 		$check = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><input type="checkbox" '+ checked + ' name="' + id + '"' + required +  '><div>');
 	}
@@ -53,7 +52,7 @@ SmartWorks.FormRuntime.CheckBoxBuilder.build = function(config) {
 		$check.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(smartMessage.get((value==="true") ? "trueText" : "falseText"));
+			options.container.find('.form_value').text(smartMessage.get((value===true) ? "trueText" : "falseText"));
 		else
 			options.container.find('.form_value input').attr('checked', value);
 	}
@@ -115,3 +114,4 @@ SmartWorks.FormRuntime.CheckBoxBuilder.dataField = function(config){
 	};
 	return dataField;
 };
+

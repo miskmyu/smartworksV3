@@ -32,7 +32,8 @@ public class MessageCond extends MisObjectCond {
 	public static final String A_ISCHECKED = "isChecked";	
 	public static final String A_CHECKEDTIME = "checkedTime";	
 	public static final String A_CHATID = "chatId";	
-	public static final String A_CHATTERSID = "chattersId";	
+	public static final String A_CHATTERSID = "chattersId";
+	public static final String A_DELETEUSER = "deleteUser";	
 	
 	private String content;
 	private String sendUser;
@@ -42,6 +43,7 @@ public class MessageCond extends MisObjectCond {
 	private int readStatus = -1;
 	private String chatId;
 	private String chattersId;
+	private String deleteUser;
 
 	public MessageCond(){
 		super();
@@ -70,6 +72,7 @@ public class MessageCond extends MisObjectCond {
 		appendAttributeString(A_CHECKEDTIME, checkedTime, buf);
 		appendAttributeString(A_CHATID, chatId, buf);
 		appendAttributeString(A_CHATTERSID, chattersId, buf);
+		appendAttributeString(A_DELETEUSER, deleteUser, buf);
 				
 		return buf.toString();
 	}
@@ -101,6 +104,7 @@ public class MessageCond extends MisObjectCond {
 			Node checkedTime = attrMap.getNamedItem(A_CHECKEDTIME);
 			Node chatId = attrMap.getNamedItem(A_CHATID);
 			Node chattersId = attrMap.getNamedItem(A_CHATTERSID);
+			Node deleteUser = attrMap.getNamedItem(A_DELETEUSER);
 
 			if(content != null)
 				obj.setContent(content.getNodeValue());
@@ -116,6 +120,8 @@ public class MessageCond extends MisObjectCond {
 				obj.setChatId(chatId.getNodeValue());
 			if (chattersId != null)
 				obj.setChattersId(chattersId.getNodeValue());
+			if(deleteUser != null)
+				obj.setDeleteUser(deleteUser.getNodeValue());
 		}		
 		
 		return  obj;
@@ -271,4 +277,11 @@ public class MessageCond extends MisObjectCond {
 	public void setChattersId(String chattersId) {
 		this.chattersId = chattersId;
 	}
+	public String getDeleteUser() {
+		return deleteUser;
+	}
+	public void setDeleteUser(String deleteUser) {
+		this.deleteUser = deleteUser;
+	}
+
 }

@@ -3240,10 +3240,10 @@ public class SeraServiceImpl implements ISeraService {
 				reportInfo = getSeraReportByMissionId(null, userId, courseId, missionId, teamId, fromDate, maxList);
 				break;
 			case Instance.TYPE_ASYNC_MESSAGE:
-				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
+				messageInfo = instanceService.getMyMessageInstancesByType(null, type, fromDate, maxList);
 				break;
 			case Instance.TYPE_SENT_ASYNC_MESSAGE:
-				messageInfo = instanceService.getMyMessageInstancesByType(type, fromDate, maxList);
+				messageInfo = instanceService.getMyMessageInstancesByType(null, type, fromDate, maxList);
 				break;
 			default:
 				User currentUser = SmartUtil.getCurrentUser();
@@ -3300,8 +3300,11 @@ public class SeraServiceImpl implements ISeraService {
 			}
 			if (messageInfo != null) {
 				for (InstanceInfo info : messageInfo) {
+					long createTime = 0;
 					LocalDate createDate = info.getCreatedDate();
-					resultMap.put(createDate.getTime(), info);
+					if(createDate != null)
+						createTime = createDate.getTime();
+					resultMap.put(createTime, info);
 				}
 			}
 			if (resultMap.size() ==  0)

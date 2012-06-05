@@ -78,7 +78,7 @@ function fileUploader(groupId, target) {
         	}
         	if(isEmpty(file) || !responseJSON.success) return;
         	
-        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
+        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize).attr('fullPathName', responseJSON.fullPathName).attr('localFilePath', responseJSON.localFilePath);
         	var ext = getExt(fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
         	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);
@@ -88,7 +88,7 @@ function fileUploader(groupId, target) {
 				$('form.js_validation_required').validate({ showErrors: showErrors}).form();
         	}
         	if(file.hasClass('qq-upload-success') && !isEmpty(file.parents('td.js_type_imageBox'))){
-	        	file.parents('td.js_type_imageBox:first').find('img.js_auto_picture').attr("src", responseJSON.pullPathName);
+	        	file.parents('td.js_type_imageBox:first').find('img.js_auto_picture').attr("src", responseJSON.fullPathName);
         	}
         },
         fileTemplate : uploadFileTemplate,

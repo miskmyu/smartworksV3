@@ -740,6 +740,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("receivers");
 			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("ccReceivers");
 			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("bccReceivers");
+			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("attachments");
 			String subject = (String)newMail.get("subject");
 			String body = (String)newMail.get("contents");
 			String requestReceiptNotification = (String)newMail.get("requestReceiptNotification");
@@ -781,7 +782,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //}
 			}
 			header.setSubject(subject);
-			header.setDate(new Date());
+			header.setDate(new LocalDate());
 
 //String replyTo = UserPrefsController.getUserSetting(auth, "replyTo");
 //if (replyTo != null && replyTo.trim().length() != 0) {
@@ -835,37 +836,38 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			bodyPart.setContent(body);
 			parts.add(0, bodyPart);
 			
+			ArrayList attList = Utility.stringListToEmailPartArray(attachments.get("files"));
 			// attach some files...
-//ArrayList attachments = (ArrayList)request.getSession().getAttribute("attachments");
-//if (attachments != null) {
-//	List newLst = new ArrayList();
-//	EmailPart tmp = null;
-//	for (int i=0;i<attachments.size();i++) {
-//		try {
-//			tmp = (EmailPart)attachments.get(i);
-//			String disp = tmp.getDisposition();
-//			File f = new File(disp);
-//			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-//			byte data[] = new byte[(int)f.length() + 2];
-//			bis.read(data);
-//			bis.close();
-//
-//			MimeBodyPart bp = new MimeBodyPart();
-//			DataSource ds = new ByteArrayDataSource(data, tmp.getContentType(), tmp.getFilename());
-//			bp.setDataHandler(new DataHandler(ds));
-//			bp.setDisposition("attachment; filename=\"" + tmp.getFilename() + "\"");
-//			tmp.setDisposition(bp.getDisposition());
-//			bp.setFileName(tmp.getFilename());
-//			tmp.setDataSource(ds);
-//			tmp.setContent(bp.getContent());
-//			newLst.add(tmp);
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	parts.addAll(newLst);
-//}
+			if (attList != null) {
+				List newLst = new ArrayList();
+				EmailPart tmp = null;
+				for (int i=0;i<attList.size();i++) {
+					try {
+						tmp = (EmailPart)attList.get(i);
+						String disp = tmp.getDisposition();
+						File f = new File(disp);
+						FileInputStream fis = new FileInputStream(f);
+						BufferedInputStream bis = new BufferedInputStream(fis);
+						byte data[] = new byte[(int)f.length() + 2];
+						bis.read(data);
+						bis.close();
+			
+						MimeBodyPart bp = new MimeBodyPart();
+						DataSource ds = new ByteArrayDataSource(data, tmp.getContentType(), tmp.getFilename());
+						bp.setDataHandler(new DataHandler(ds));
+						bp.setDisposition("attachment; filename=\"" + tmp.getFilename() + "\"");
+						tmp.setDisposition(bp.getDisposition());
+						bp.setFileName(tmp.getFilename());
+						tmp.setDataSource(ds);
+						tmp.setContent(bp.getContent());
+						newLst.add(tmp);
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				parts.addAll(newLst);
+			}
 			email.setParts(parts);
 			
 			// it is time to send the email object message

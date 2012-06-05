@@ -1,6 +1,9 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
@@ -24,6 +28,8 @@ import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Filter;
+import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.searcher.manager.ISchManager;
@@ -33,6 +39,11 @@ import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
+import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainFieldConstants;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
@@ -47,12 +58,16 @@ import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
+import net.smartworks.server.service.util.SearchParallelProcessing;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sun.xml.internal.bind.v2.TODO;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -68,6 +83,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private ILoginUserManager getLoginUserManager() {
 		return SwManagerFactory.getInstance().getLoginUserManager();
+	}
+	private ISwdManager getSwdManager() {
+		return SwManagerFactory.getInstance().getSwdManager();
 	}
 
 	private ISeraService seraService = null;
@@ -696,10 +714,15 @@ public class CommunityServiceImpl implements ICommunityService {
 		try{
 		 	User user = SmartUtil.getCurrentUser();
 		 	String userId = user.getId();
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			getLoginUserManager().deleteAllLoginUser(userId);
+
+			//TODO 현재 접속 유저로 업데이트
+
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {
@@ -1032,14 +1055,157 @@ public class CommunityServiceImpl implements ICommunityService {
 
 	}
 	@Override
+	public UserInfo[] searchCompanyUser(String key) throws Exception {
+		try {
+			UserInfo[] userInfos = null;
+			SwoUserCond swoUserCond = new SwoUserCond();
+			if(!CommonUtil.isEmpty(key))
+				swoUserCond.setKey(key);
+
+			swoUserCond.setOrders(new Order[]{new Order("name", true)});
+
+			SwoUserExtend[] swoUserExtends = getSwoManager().getUserExtends(null, swoUserCond);
+
+			userInfos = ModelConverter.convertSwoUserExtendsToUserInfos(swoUserExtends);
+
+			return userInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
+	public UserInfo[] searchContact(User currentUser, String key) throws Exception {
+		try {
+
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+			String companyId = user.getCompanyId();
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			String domainId = "md_4fbb944806f342a89a282b7cc441154f";
+			swdRecordCond.setCompanyId(companyId);
+			swdRecordCond.setDomainId(domainId);
+
+			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
+			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
+
+			if(!CommonUtil.isEmpty(key)) {
+				Filters fs1 = new Filters();
+				fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+				swdRecordCond.addFilters(fs1);
+				Filters fs2 = new Filters();
+				fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+				swdRecordCond.addFilters(fs2);
+				swdRecordCond.setOperator("or");
+			}
+
+			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
+				swdRecordCond.setCreationUser(userId);
+
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+
+			UserInfo[] userInfos = null;
+			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			if(!CommonUtil.isEmpty(swdRecords)) {
+				for(int i=0; i < swdRecords.length; i++) {
+					SwdRecord swdRecord = swdRecords[i];
+					UserInfo userInfo = new UserInfo();
+					SwdDataField[] swdDataFields = swdRecord.getDataFields();
+					for(SwdDataField swdDataField : swdDataFields) {
+						String fieldId = swdDataField.getId();
+						String value = swdDataField.getValue();
+						if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL)) {
+							userInfo.setId(value);
+						} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_NAME)) {
+							userInfo.setName(value);
+						} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_POSITION)) {
+							userInfo.setPosition(value);
+						} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_CELLPHONE)) {
+							userInfo.setCellPhoneNo(value);
+						} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_PHONE)) {
+							userInfo.setPhoneNo(value);
+						}
+					}
+					userInfo.setRole(User.USER_ROLE_EMAIL);
+					if(!CommonUtil.isEmpty(userInfo.getId()))
+						userInfoList.add(userInfo);
+				}
+			}
+			if(userInfoList.size() != 0) {
+				userInfos = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(userInfos);
+			}
+			return userInfos;
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
 	public UserInfo[] searchEmailAddress(String key) throws Exception {
-		//
-		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
-		//
-		return searchUser(key);
-		//
-		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
-		//
+		try {
+			User currentUser = SmartUtil.getCurrentUser();
+
+			Semaphore semaphore = new Semaphore(2);
+			Thread currentThread = Thread.currentThread();
+
+			SearchParallelProcessing upp = new SearchParallelProcessing(semaphore, currentThread, null, 1, key);
+			SearchParallelProcessing cpp = new SearchParallelProcessing(semaphore, currentThread, currentUser, 2, key);
+
+			upp.start();
+			cpp.start();
+
+			synchronized (currentThread) {
+				currentThread.wait();
+			}
+
+			UserInfo[] uUserInfos = (UserInfo[])upp.getArrayResult();
+			UserInfo[] cUserInfos = (UserInfo[])cpp.getArrayResult();
+
+			UserInfo[] finalUserInfos = null;
+			List<UserInfo> finalUserInfoList = new ArrayList<UserInfo>();
+
+			Map<String, Object> userInfoMap = new HashMap<String, Object>();
+
+			if(!CommonUtil.isEmpty(uUserInfos)) {
+				for(UserInfo uUserInfo : uUserInfos) {
+					userInfoMap.put(uUserInfo.getId(), uUserInfo);
+				}
+			}
+			if(!CommonUtil.isEmpty(cUserInfos)) {
+				for(UserInfo cUserInfo : cUserInfos) {
+					userInfoMap.put(cUserInfo.getId(), cUserInfo);
+				}
+			}
+
+			if(userInfoMap.size() > 0) {
+				for(Map.Entry<String, Object> entry : userInfoMap.entrySet()) {
+					UserInfo userInfo = (UserInfo)entry.getValue();
+					finalUserInfoList.add(userInfo);
+				}
+			}
+
+			if(finalUserInfoList.size() > 0) {
+				finalUserInfos = new UserInfo[finalUserInfoList.size()];
+				finalUserInfoList.toArray(finalUserInfos);
+			}
+
+			return finalUserInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

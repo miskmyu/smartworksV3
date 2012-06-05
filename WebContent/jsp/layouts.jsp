@@ -47,7 +47,6 @@
 				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
 				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
 				System.out.println("-------------------------------------------");
-				request.getSession().setAttribute("loginId", ((Login) auth.getPrincipal()).getId());
 				request.getSession().setAttribute(loginId, new LocalDate());
 				LoginUser loginUser = SwManagerFactory.getInstance().getLoginUserManager().getLoginUser(loginId, loginId, IManager.LEVEL_ALL);
 
