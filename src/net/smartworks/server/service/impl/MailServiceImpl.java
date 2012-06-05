@@ -782,7 +782,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //}
 			}
 			header.setSubject(subject);
-			header.setDate(new LocalDate());
+			header.setDate(new Date());
 
 //String replyTo = UserPrefsController.getUserSetting(auth, "replyTo");
 //if (replyTo != null && replyTo.trim().length() != 0) {

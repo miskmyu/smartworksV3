@@ -58,8 +58,8 @@
 		<col width="37px" />
 		<col width="24px" />
 		<col width="26px" />
-		<col width="30px" />
-		<col width="200px" />
+<!-- 		<col width="30px" />
+ -->		<col width="200px" />
 		<col width="" />
 		<col width="160px" />
 	</colgroup>
@@ -76,8 +76,8 @@
 				<th><input type="checkbox" /></th>
 				<th><div class="icon_important"></div></th>
 				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
@@ -160,8 +160,8 @@
 						<td class="tc"><input type="checkbox" /></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
-						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
-						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
+<%-- 						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
+ --%>						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
 					</tr>
@@ -176,8 +176,8 @@
 				<th><input type="checkbox" /></th>
 				<th><div class="icon_important"></div></th>
 				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
