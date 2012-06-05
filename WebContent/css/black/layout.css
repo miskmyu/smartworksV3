@@ -94,13 +94,13 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	width:25px;padding:0; position:relative;top:-23px;left:169px;border:0
 }
 .srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat;}
-.srch_wsize {width:195px;height:23px;margin: 0 10px;overflow:hidden}
+.srch_wsize {width:195px;height:23px;margin: 0 5px 0 0;overflow:hidden}
 .srch_wsize2{width:195px;height:23px;margin:0;margin-top:-2px;overflow:hidden}
 .srch_wsize_mail{width:195px;height:23px;margin: 28px 0 0; overflow:hidden}
 
 /*Search-white */
 .srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px;}
-.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px;}
+.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px; margin: 0}
 .srch_wh button, .srch_wh .srch_icon, .mail_srch  button {
 	background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
 	width:13px; right:2px; padding:0; position:relative; float: right; top:1px;

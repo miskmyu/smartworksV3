@@ -111,7 +111,7 @@
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
 							<span class="js_progress_span"></span>
-							<div class="srch_wh srch_wsize">
+							<div class="srch_wh mr5">
 								<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
