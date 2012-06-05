@@ -14,7 +14,7 @@
 	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
 
 	String key = request.getParameter("key");
-	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key);
+	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key, request);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

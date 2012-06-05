@@ -446,5 +446,14 @@ $(function() {
 		input.find('.t_action').addClass('t_action_disabled');
 		
 	});
-
+	
+	$('a.js_download_mail_attachment').live('click', function(e){
+		var input = $(targetElement(e));
+		var attachmentIframe = input.parents('.js_mail_space_page').find('#attachmentIframe');
+		var partId = input.attr('partId');
+		attachmentIframe.attr('src', 'webmail/dumpPart.service?partid=' + partId + '&dl=true');
+		return false;
+		
+	});
+	
 });

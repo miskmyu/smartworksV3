@@ -76,6 +76,7 @@ import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IDocFileService;
 import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.ILoginService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
@@ -94,6 +95,7 @@ import com.google.gdata.data.youtube.FormUploadToken;
 public class SmartWorks implements ISmartWorks {
 
 	ICommunityService communityService;
+	ILoginService loginService;
 	INoticeService noticeService;
 	ICalendarService calendarService;
 	IInstanceService instanceService;
@@ -108,6 +110,11 @@ public class SmartWorks implements ISmartWorks {
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
 		this.communityService = communityService;
+	}
+
+	@Autowired
+	public void setLoginService(ILoginService loginService) {
+		this.loginService = loginService;
 	}
 
 	@Autowired
@@ -196,8 +203,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public WorkSpaceInfo[] searchCommunity(String key) throws Exception {
-		return communityService.searchCommunity(key);
+	public WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception {
+		return communityService.searchCommunity(key, request);
 	}
 
 	@Override
@@ -226,8 +233,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public UserInfo[] getAvailableChatter() throws Exception {
-		return communityService.getAvailableChatter();
+	public UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception {
+		return communityService.getAvailableChatter(request);
 	}
 
 	@Override
@@ -1010,8 +1017,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
-		return seraService.getFriendRequestsForMe(lastId, maxList);
+	public SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsByUserId(userId, lastId, maxList);
 	}
 	
 	@Override
@@ -1315,4 +1322,20 @@ public class SmartWorks implements ISmartWorks {
 	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
 		return seraService.searchSeraUsers(null, key, lastId, maxList);
 	}
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		loginService.logout(request, response);
+	}
+
+	@Override
+	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.sendMail(requestBody, request);
+	}
+
+	@Override
+	public UserInfo[] searchEmailAddress(String key) throws Exception {
+		return communityService.searchEmailAddress(key);
+	}
+
 }

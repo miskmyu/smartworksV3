@@ -1,6 +1,9 @@
 package org.claros.commons.mail.utility;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.mail.Address;
@@ -150,6 +153,29 @@ public class Utility {
 					e.printStackTrace();
 				}
 				counter++;
+			}
+			return outAddr;
+		} else {
+			return null;
+		}
+	}
+
+	public static Address[] stringListToAddressArray(List<Map<String, String>> strList) throws Exception {
+		if (strList == null)
+			return null;
+		int size = strList.size();
+		if (size > 0) {
+			Address[] outAddr = new Address[size];
+			for(int counter=0; counter<size; counter++) {
+				Map<String, String> addr = (Map<String, String>)strList.get(counter);
+				String fullname = addr.get("name");
+				String email = addr.get("id");
+				try {
+					String charset = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.charset");
+					outAddr[counter] = new InternetAddress(email, fullname, charset);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 			}
 			return outAddr;
 		} else {

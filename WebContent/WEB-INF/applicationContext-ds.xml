@@ -62,6 +62,7 @@
 				<beans:value>classpath:/net/smartworks/server/engine/like/hbm</beans:value>
 				<beans:value>classpath:/net/smartworks/server/engine/sera/hbm</beans:value>
 				<beans:value>classpath:/net/smartworks/server/engine/message/hbm</beans:value>
+				<beans:value>classpath:/net/smartworks/server/engine/common/loginuser/hbm</beans:value>
 				<!-- engine -->
 				<beans:value>classpath:/net/smartworks/server/engine/resource/hbm</beans:value>
 			</beans:list>

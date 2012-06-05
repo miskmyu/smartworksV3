@@ -86,6 +86,7 @@
 		<beans:property name="likeManager" ref="likeManager"/>
 		<beans:property name="seraManager" ref="seraManager"/>
 		<beans:property name="messageManager" ref="messageManager"/>
+		<beans:property name="loginUserManager" ref="loginUserManager"/>
 
 		<beans:property name="designtimeManager" ref="resourceDesigntimeManager"/>
 		<beans:property name="runtimeManager" ref="resourceRuntimeManager"/>
@@ -95,6 +96,7 @@
 		<beans:property name="updManager" ref="updManager"/-->
 	</beans:bean>
 
+	<beans:bean id="loginUserManager" class="net.smartworks.server.engine.common.loginuser.manager.impl.LoginUserManagerImpl"/>
 	<beans:bean id="messageManager" class="net.smartworks.server.engine.message.manager.impl.MessageManagerImpl"/>
 	<beans:bean id="seraManager" class="net.smartworks.server.engine.sera.manager.impl.SeraManagerImpl"/>
 	

@@ -357,13 +357,24 @@ $(function() {
 		var chatterList = input.parents('div.js_chatter_list');
 		var target = chatterList.find('div.js_chatter_search_area');
 		var display = target.css('display');
-		target.slideToggle(500);
 		if (display !== "none") {
+			target.find('.js_chatter_list').html('').removeClass('searching');
 			setTimeout(function(){ setRightPosition("resize", null); }, 600);
 		}else{
-			setRightPosition("resize", null);				
+			setRightPosition("resize", null);
+			$.ajax({
+				url : 'available_chatter_list.sw',
+				data : {},
+				success : function(data, status, jqXHR) {
+					target.find('.js_chatter_list').html(data);
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+				}
+			});
+			
 			chatterList.find('input.js_auto_complete').focus();
 		}
+		target.slideToggle(500);
 		return false;
 	});
 	

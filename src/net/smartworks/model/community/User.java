@@ -18,6 +18,7 @@ public class User extends WorkSpace {
 
 	public static final int USER_ROLE_LEADER = 1;
 	public static final int USER_ROLE_MEMBER = 2;
+	public static final int USER_ROLE_EMAIL = 3;
 	public static final String  NO_USER_PICTURE  = "no_user_picture";
 
 	public static final String USER_ID_SYSTEM = "system@smartworks.net";

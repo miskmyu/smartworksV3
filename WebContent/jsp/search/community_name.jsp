@@ -11,7 +11,7 @@
 
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String key = request.getParameter("key");
-	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key);
+	WorkSpaceInfo[] communities = smartWorks.searchCommunity(key, request);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

@@ -6,14 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
 <!--[if lte IE 8]><link rel="stylesheet" href="css/black/ie8.css" type="text/css" media="all"><![endif]-->
 
-<script type="text/javascript">
-	if(isEmpty(parent.location.pathname.match('login.sw'))){
-	    parent.location.href = "login.sw";
-	}
-	var currentUser = {
-		locale : "<%=java.util.Locale.getDefault().getLanguage()%>"
-	};
-</script>
 <html>
 <fmt:setLocale value="<%=java.util.Locale.getDefault().getLanguage() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -31,6 +23,16 @@
 		<title><fmt:message key="login.head.title"/></title>
 		<link rel="shortcut icon" href="images/favicon/smartworks.ico"/>
 	</head>
+
+	<script type="text/javascript">
+		if(isEmpty(parent.location.pathname.match('login.sw'))){
+		    parent.location.href = "login.sw";
+		}
+		var currentUser = {
+			locale : "<%=java.util.Locale.getDefault().getLanguage()%>"
+		};
+	</script>
+
 	<body>
 		<div id="lo_wrap">
 	

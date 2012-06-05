@@ -79,6 +79,7 @@ a .btn_plus:hover {background-position:0 -16px}
 .icon_file_avi {background: url("../../images/file/icon_avi.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_bmp {background: url("../../images/file/icon_bmp.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_doc {background: url("../../images/file/icon_doc.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
+.icon_file_docx {background: url("../../images/file/icon_docx.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_exe {background: url("../../images/file/icon_exe.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_gif {background: url("../../images/file/icon_gif.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_hwp {background: url("../../images/file/icon_hwp.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
@@ -91,6 +92,7 @@ a .btn_plus:hover {background-position:0 -16px}
 .icon_file_pdf {background: url("../../images/file/icon_pdf.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_pds {background: url("../../images/file/icon_pds.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_ppt {background: url("../../images/file/icon_ppt.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
+.icon_file_pptx {background: url("../../images/file/icon_pptx.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_rar {background: url("../../images/file/icon_rar.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_txt {background: url("../../images/file/icon_txt.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_wav {background: url("../../images/file/icon_wav.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
@@ -98,6 +100,7 @@ a .btn_plus:hover {background-position:0 -16px}
 .icon_file_wmv {background: url("../../images/file/icon_wmv.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_word {background: url("../../images/file/icon_word.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_xls {background: url("../../images/file/icon_xls.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
+.icon_file_xlsx {background: url("../../images/file/icon_xlsx.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_zip {background: url("../../images/file/icon_zip.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 
 /* Input Type */

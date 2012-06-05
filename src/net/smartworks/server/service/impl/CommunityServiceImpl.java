@@ -21,6 +21,8 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
+import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
@@ -63,6 +65,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private ISchManager getSchManager() {
 		return SwManagerFactory.getInstance().getSchManager();
+	}
+	private ILoginUserManager getLoginUserManager() {
+		return SwManagerFactory.getInstance().getLoginUserManager();
 	}
 
 	private ISeraService seraService = null;
@@ -257,6 +262,18 @@ public class CommunityServiceImpl implements ICommunityService {
 		return getSwoManager().getUsers(userId, swoUserCond, IManager.LEVEL_LITE);
 		
 	}
+	
+	private SwoGroupMember[] getUsersByGroupId(String userId, String groupId) throws Exception {
+		
+		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
+		
+		if(group == null){
+			return null;
+		}else{
+			return group.getSwoGroupMembers();
+		}		
+	}
+		
 	public String setGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try{
@@ -265,7 +282,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 			Set<String> keySet = frmNewGroupProfile.keySet();
 			Iterator<String> itr = keySet.iterator();
-	
+			
+            //그룹 유저가 중복으로 들어가는걸 방지 하기 위한 리스트
+			List groupList = new ArrayList();
 			List<Map<String, String>> users = null;
 			List<Map<String, String>> files = null;
 			String groupId = null;
@@ -315,6 +334,7 @@ public class CommunityServiceImpl implements ICommunityService {
 				swoGroup = new SwoGroup();
 				swoGroup.setId(IDCreator.createId(SmartServerConstant.GROUP_APPR));
 			}
+			
 			if(!CommonUtil.isEmpty(txtGroupLeader)) {
 				SwoGroupMember swoGroupMember = new SwoGroupMember();
 				swoGroupMember.setUserId(txtGroupLeader);
@@ -328,7 +348,8 @@ public class CommunityServiceImpl implements ICommunityService {
 				for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 					Map<String, String> userMap = users.get(i);
 					groupUserId = userMap.get("id");
-					//그룹멤버가 부서 일경우 비교
+					
+					//그룹안에 유저를 추가할 때
 					if(userMap.get("id").matches(".*@.*")){
 						if(!txtGroupLeader.equals(groupUserId)) {
 							SwoGroupMember swoGroupMember = new SwoGroupMember();
@@ -336,13 +357,16 @@ public class CommunityServiceImpl implements ICommunityService {
 							swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
 							swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 							swoGroupMember.setJoinDate(new LocalDate());
-							swoGroup.addGroupMember(swoGroupMember);
+							//중복유저추가 방지소스
+							if(!groupList.contains(groupUserId)){
+								swoGroup.addGroupMember(swoGroupMember);
+								groupList.add(groupUserId);	
+							}
 						}
 					}else{
-						//부서 일 경우 추가식
+						//그룹안에 부서를 추가할 때
 						String departmentId = groupUserId;
 						SwoUser[] deptUsers = getUsersByDeptId("", departmentId);
-						//그룹안에 그룹을 넣는 경우
 						if(deptUsers != null){
 							int getGroupDeptIdlength = deptUsers.length;
 							for (int j = 0; j < getGroupDeptIdlength; j++) {
@@ -353,9 +377,32 @@ public class CommunityServiceImpl implements ICommunityService {
 									swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
 									swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 									swoGroupMember.setJoinDate(new LocalDate());
-									swoGroup.addGroupMember(swoGroupMember);
+									
+									if(!groupList.contains(deptUser)){
+										swoGroup.addGroupMember(swoGroupMember);
+										groupList.add(deptUser);	
+									}			
 								}
 							}
+						}else{
+							//그룹안에 그룹을 추가할 때
+							String GroupId = groupUserId;
+							SwoGroupMember[] Users = getUsersByGroupId("",GroupId);
+							for (int j = 0; j < Users.length; j++) {
+								String groupUser = Users[j].getUserId();
+								if(!txtGroupLeader.equals(groupUser)){
+									SwoGroupMember swoGroupMember = new SwoGroupMember();
+									swoGroupMember.setUserId(groupUser);
+									swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+									swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+									swoGroupMember.setJoinDate(new LocalDate());
+									
+									if(!groupList.contains(groupUser)){
+										swoGroup.addGroupMember(swoGroupMember);
+										groupList.add(groupUser);	
+									}
+								}
+							}				
 						}
 					}
 				}
@@ -423,7 +470,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	 * .String, java.lang.String)
 	 */
 	@Override
-	public WorkSpaceInfo[] searchCommunity(String key) throws Exception {
+	public WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception {
 
 		try{
 			if (CommonUtil.isEmpty(key))
@@ -439,17 +486,27 @@ public class CommunityServiceImpl implements ICommunityService {
 			List<DepartmentInfo> deptList = new ArrayList<DepartmentInfo>();
 			List<GroupInfo> groupList = new ArrayList<GroupInfo>();
 			List<UserInfo> userList = new ArrayList<UserInfo>();
-			
-			
+
+			UserInfo[] availableChatters = getAvailableChatter(request);
+
 			for (int i=0; i < workSpaceInfos.length; i++) {
 				SchWorkspace workSpaceInfo = workSpaceInfos[i];
 				
 				String type = workSpaceInfo.getType();
-				
+
 				if (type.equalsIgnoreCase("user")) {
 					UserInfo userInfo = new UserInfo();
-					userInfo.setId(workSpaceInfo.getId());
+					userInfo.setOnline(false);
+					String userId = workSpaceInfo.getId();
+					if(!CommonUtil.isEmpty(availableChatters)) {
+						for(UserInfo availableChatter : availableChatters) {
+							if(userId.equals(availableChatter.getId()))
+								userInfo.setOnline(true);
+						}
+					}
+					userInfo.setId(userId);
 					userInfo.setName(workSpaceInfo.getName());
+					userInfo.setNickName(workSpaceInfo.getUserNickName());
 					userInfo.setPosition(workSpaceInfo.getUserPosition());
 					String picture = workSpaceInfo.getUserPicture();
 					if(picture != null && !picture.equals("")) {
@@ -634,15 +691,33 @@ public class CommunityServiceImpl implements ICommunityService {
 	 * @see net.smartworks.service.impl.ISmartWorks#getAvailableChatter()
 	 */
 	@Override
-	public UserInfo[] getAvailableChatter() throws Exception {
-		
+	public UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception {
+
 		try{
-			return new UserInfo[]{};
+		 	User user = SmartUtil.getCurrentUser();
+		 	String userId = user.getId();
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
+
+			UserInfo[] userInfos = null;
+			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			if(!CommonUtil.isEmpty(loginUsers)) {
+				for(LoginUser loginUser : loginUsers) {
+					String loginId = loginUser.getUserId();
+					UserInfo userInfo = ModelConverter.getUserInfoByUserId(loginId);
+					userInfo.setOnline(true);
+					userInfoList.add(userInfo);
+				}
+			}
+			if(userInfoList.size() > 0) {
+				userInfos = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(userInfos);
+			}
+
+			return userInfos;
 		}catch (Exception e){
-			// Exception Handling Required
 			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			return null;
 		}
 	}
 
@@ -955,6 +1030,16 @@ public class CommunityServiceImpl implements ICommunityService {
 
 		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
 
+	}
+	@Override
+	public UserInfo[] searchEmailAddress(String key) throws Exception {
+		//
+		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
+		//
+		return searchUser(key);
+		//
+		// user와 연락처 정보관리업무를 같이 검색하여, emailId같은 연락처 정보관리업무는 버리고 UserInfo에 role=User.USER_ROLE_EMAIL로 설정하여 리스트를 제공해주기 바람.
+		//
 	}
 
 }
