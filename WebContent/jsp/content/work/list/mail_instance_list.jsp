@@ -54,15 +54,7 @@
 
 <!-- 목록 테이블 -->
 <table>
-	<colgroup>
-		<col width="37px" />
-		<col width="24px" />
-		<col width="26px" />
-		<col width="30px" />
-		<col width="200px" />
-		<col width="" />
-		<col width="160px" />
-	</colgroup>
+
 	<tbody>
 		<%
 		SortingField sortedField = null;

@@ -161,54 +161,54 @@
 				switch (work.getAccessPolicy().getLevel()) {
 				case AccessPolicy.LEVEL_PUBLIC:
 				%>
-					<div class="ch_right mt5"><fmt:message key="common.security.access.public" /></div>
+					<div class="ch_right"><fmt:message key="common.security.access.public" /></div>
 				<%
 					break;
 				case AccessPolicy.LEVEL_PRIVATE:
 				%>
-					<div class="ch_right mt5"><fmt:message key="common.security.access.private" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.access.private" /></div> 
 				<%
 					break;
 				case AccessPolicy.LEVEL_CUSTOM:
 				%>
-					<div class="ch_right mt5"><fmt:message key="common.security.access.custom" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.access.custom" /></div> 
 				<%
 					break;
 				}
 				%>
 					
-				<div class="fr mt5"><span class="icon_body_read" title="<fmt:message key='common.security.title.access'/>"></span></div>
+				<div class="fr ml5"><span class="icon_body_read" title="<fmt:message key='common.security.title.access'/>"></span></div>
 				<%
 				switch (work.getWritePolicy().getLevel()) {
 				case WritePolicy.LEVEL_PUBLIC:
 				%>
-					<div class="ch_right  mt5"><fmt:message key="common.security.write.public" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.write.public" /></div> 
 				<%
 					break;
 				case WritePolicy.LEVEL_CUSTOM:
 				%>
-					<div class="ch_right  mt5"><fmt:message key="common.security.write.custom" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.write.custom" /></div> 
 				<%
 					break;
 				}
 				%>
 					
-				<div class="fr mt5"><span class="icon_body_register"  title="<fmt:message key='common.security.title.write'/>"></span></div> 
+				<div class="fr ml5"><span class="icon_body_register"  title="<fmt:message key='common.security.title.write'/>"></span></div> 
 				<%
 				switch (work.getEditPolicy().getLevel()) {
 				case EditPolicy.LEVEL_WIKI:
 				 %>
-					<div class="ch_right mt5"><fmt:message key="common.security.edit.wiki" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.edit.wiki" /></div> 
 				<%
 					break;
 				case EditPolicy.LEVEL_BLOG:
 				%>
-					<div class="ch_right mt5"><fmt:message key="common.security.edit.blog" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.edit.blog" /></div> 
 				<%
 				 	break;
 				 }
 				 %>
-				<div class="fr  mt5"><span class="icon_body_modify"  title="<fmt:message key='common.security.title.edit'/>"></span></div> 
+				<div class="fr ml5"><span class="icon_body_modify"  title="<fmt:message key='common.security.title.edit'/>"></span></div> 
 			</span>
 			<!-- 우측 권한 아이콘-->
 		</div>
