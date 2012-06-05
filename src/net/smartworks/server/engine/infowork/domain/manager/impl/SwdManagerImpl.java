@@ -1134,10 +1134,10 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	//			}
 			}
 			if(first) {
-				buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+				buf.append(" where (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
 				first = false;
 			} else {
-				buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+				buf.append(" and (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
 			}
 		}	
 		// post query
@@ -1151,7 +1151,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				orderField = order.getField();
 				order.setField(CommonUtil.toDefault(fieldColumnMap.get(orderField), orderField));
 			}
-			appendOrderQuery(buf, null, cond);
+			appendOrderQuery(buf, "obj", cond);
 		}
 		
 		// pre query

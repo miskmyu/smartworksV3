@@ -3,6 +3,7 @@ package net.smartworks.server.service.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.util.Semaphore;
 
@@ -14,10 +15,15 @@ public class ParallelProcessing extends Thread implements IParallelProcessing{
 	Object result = null;
 	Object[] arrayResult = null;
 	public static ISeraService seraService;
+	public static ICommunityService communityService;
 
 	@Autowired(required=true)
 	public void setSeraService(ISeraService seraService) {
 		ParallelProcessing.seraService = seraService;
+	}
+	@Autowired(required=true)
+	public void setCommunityService(ICommunityService communityService) {
+		ParallelProcessing.communityService = communityService;
 	}
 
 	public ParallelProcessing() {
