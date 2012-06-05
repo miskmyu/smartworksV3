@@ -64,16 +64,17 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update Message set ");
-				buf.append(" content=:content, sendUser=:sendUser, targerUser=:targetUser, isChecked=:isChecked, checkedTime=:checkedTime, checkedTime=:checkedTime, chatId=:chatId, chattersId=:chattersId");
+				buf.append(" content=:content, sendUser=:sendUser, targetUser=:targetUser, isChecked=:isChecked, checkedTime=:checkedTime, chatId=:chatId, chattersId=:chattersId, deleteUser=:deleteUser");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(Message.A_CONTENT, obj.getContent());
 				query.setString(Message.A_SENDUSER, obj.getSendUser());
 				query.setString(Message.A_TARGETUSER, obj.getTargetUser());
 				query.setBoolean(Message.A_ISCHECKED, obj.isChecked());
-				query.setDate(Message.A_CHECKEDTIME, obj.getCheckedTime());
+				query.setTimestamp(Message.A_CHECKEDTIME, obj.getCheckedTime());
 				query.setString(Message.A_CHATID, obj.getChatId());
 				query.setString(Message.A_CHATTERSID, obj.getChattersId());
+				query.setString(Message.A_DELETEUSER, obj.getDeleteUser());
 				query.setString(Message.A_OBJID, obj.getObjId());
 				query.executeUpdate();
 			}
@@ -118,6 +119,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		String content = null;
 		String sendUser = null;
 		String targetUser = null;
+		String deleteUser = null;
 		boolean isChecked = false;
 		int readStatus = -1;
 		String chatId = null;
@@ -135,6 +137,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			content = cond.getContent();
 			sendUser = cond.getSendUser();
 			targetUser = cond.getTargetUser();
+			deleteUser = cond.getDeleteUser();
 			readStatus = cond.getReadStatus();
 			chatId = cond.getChatId();
 			chattersId = cond.getChattersId();
@@ -158,6 +161,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				buf.append(" and obj.sendUser = :sendUser");
 			if (targetUser != null) 
 				buf.append(" and obj.targetUser = :targetUser");
+			if (deleteUser != null) 
+				buf.append(" and obj.deleteUser = :deleteUser");
 			if (readStatus != -1)
 				buf.append(" and obj.isChecked = :isChecked");
 			if (chatId != null)
@@ -191,6 +196,8 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				query.setString("sendUser", sendUser);
 			if (targetUser != null)
 				query.setString("targetUser", targetUser);
+			if (deleteUser != null)
+				query.setString("deleteUser", deleteUser);
 			if (readStatus != -1) {
 				if(readStatus == 1) isChecked = true;
 				query.setBoolean("isChecked", isChecked);
@@ -248,7 +255,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			} else {
 				buf.append(" obj.objId,");
 				buf.append(" obj.content, obj.sendUser, obj.targetUser, obj.isChecked, obj.chatId, obj.chattersId, obj.checkedTime,");
-				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
+				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate, obj.deleteUser");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -273,6 +280,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 					obj.setCreationDate((Timestamp)fields[j++]);
 					obj.setModificationUser((String)fields[j++]);
 					obj.setModificationDate((Timestamp)fields[j++]);
+					obj.setDeleteUser((String)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;

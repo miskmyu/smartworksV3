@@ -2267,6 +2267,7 @@ CREATE TABLE SWMessage(
 	content varchar(4000),
 	sendUserId varchar(50),
 	targetUserId varchar(50),
+	deleteUserId varchar(50),
 	isChecked bit,
 	chatId varchar(50),
 	chattersId varchar(2000),
@@ -2277,6 +2278,8 @@ CREATE TABLE SWMessage(
 	modifiedTime datetime,
 	primary key (id)
 );
+
+ALTER TABLE SWMessage add deleteUserId varchar(50);
 
 -- 로그인 사용자
 CREATE TABLE SwLoginUser (
