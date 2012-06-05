@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Cond;
@@ -71,6 +73,7 @@ import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.util.LocalDate;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -1905,6 +1908,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		if (!CommonUtil.isEmpty(mappingRecordMap)) {
 			for (SwdRecord mappingRecord : mappingRecordMap.values()) {
 				populateRecord(user, mappingRecord);
+				//데이터 내보내기에서 연결되는 데이터가 없을경우 데이터를 새로 만든다
+				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
+				defaultSetRecord(user, mappingRecord);
 				setRecord(user, mappingRecord, null);
 				
 				if (!context.containsKey("task"))
@@ -1917,6 +1923,23 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					continue;
 				task.addExtendedProperty(new Property("mappingRecordId", mappingRecord.getRecordId()));
 			}
+		}
+	}
+	private void defaultSetRecord(String user, SwdRecord obj) throws Exception {
+		if (obj == null)
+			return;
+		if (obj.getCreationUser() == null)
+			obj.setCreationUser(user);
+		if (obj.getCreationDate() == null)
+			obj.setCreationDate(new LocalDate());
+		obj.setModificationUser(user);
+		obj.setModificationDate(new LocalDate());
+		
+		if (obj.getAccessLevel() == null)
+			obj.setAccessLevel(AccessPolicy.LEVEL_DEFAULT + "");
+		if (obj.getWorkSpaceId() == null && obj.getWorkSpaceType() == null) {
+			obj.setWorkSpaceId(user);
+			obj.setWorkSpaceType("4");//사용자 공간
 		}
 	}
 	private void populateRecord(String user, SwdRecord obj) throws Exception {

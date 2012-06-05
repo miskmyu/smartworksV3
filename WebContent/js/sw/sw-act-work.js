@@ -148,8 +148,8 @@ $(function() {
 			$(targetElement(event)).parents(".js_start_work_page").hide();
 		},
 		target : 'form_works',
-		after : function(event) {
-			var input = $(targetElement(event)).parents('li:first').children('a');
+		after : function(e) {
+			var input = $(targetElement(e)).parents('li:first').children('a');
 			var formContent = $('#form_works').find('div.js_form_content');
 			var workId = input.attr('workId');
 			new SmartWorks.GridLayout({
@@ -246,7 +246,7 @@ $(function() {
 	$('a.js_toggle_file_detail').swnavi(
 		{
 			target : 'form_import',
-			after : function(event) {
+			after : function(e) {
 				var input = $(targetElement(e));
 				input.parents('.js_file_detail_form').parent().prev().slideToggle(500);
 				input.parent().toggle().siblings().toggle();
