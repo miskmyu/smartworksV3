@@ -1096,7 +1096,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
 				swdRecordCond.setCreationUser(userId);
 
-			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
 			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});

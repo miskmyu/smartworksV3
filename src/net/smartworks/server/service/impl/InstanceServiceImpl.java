@@ -245,7 +245,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setDomainId(domainId);
 			String[] workSpaceIdIns = null;
 			if(spaceId == null)
-				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceId(spaceId);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
@@ -2767,9 +2767,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
 				swdRecordCond.setCreationUser(userId);
 
-			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns();
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
-			
+
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);

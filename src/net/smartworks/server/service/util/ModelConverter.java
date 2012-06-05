@@ -224,10 +224,19 @@ public class ModelConverter {
 	public void setCommunityService(ICommunityService communityService) {
 		ModelConverter.communityService = communityService;
 	}
-	public static String[] getWorkSpaceIdIns() throws Exception {
+	public static String[] getWorkSpaceIdIns(User currentUser) throws Exception {
 		try {
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+
 			List<String> workSpaceIdInList = new ArrayList<String>();
 			String[] workSpaceIdIns = null;
+
+			// 나의 공간
+			workSpaceIdInList.add(userId);
 			// 나의 부서
 			DepartmentInfo[] myDepartments = communityService.getMyDepartments();
 			if(!CommonUtil.isEmpty(myDepartments)) {
