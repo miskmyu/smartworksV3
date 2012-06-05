@@ -1,6 +1,8 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
@@ -63,6 +66,8 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sun.xml.internal.bind.v2.TODO;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -709,10 +714,15 @@ public class CommunityServiceImpl implements ICommunityService {
 		try{
 		 	User user = SmartUtil.getCurrentUser();
 		 	String userId = user.getId();
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			getLoginUserManager().deleteAllLoginUser(userId);
+
+			//TODO 현재 접속 유저로 업데이트
+
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {

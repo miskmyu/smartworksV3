@@ -208,4 +208,16 @@ public class LoginUserManagerImpl extends AbstractManager implements ILoginUserM
 		}
 	}
 
+	@Override
+	public void deleteAllLoginUser(String user) throws LoginUserException {
+		StringBuffer buff = new StringBuffer();
+
+		buff.append(" delete from SwLoginUser ");
+
+		Query query = this.getSession().createSQLQuery(buff.toString());
+
+		query.executeUpdate();
+
+	}
+
 }
