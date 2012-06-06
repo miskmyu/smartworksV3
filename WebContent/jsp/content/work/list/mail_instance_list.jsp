@@ -54,15 +54,6 @@
 
 <!-- 목록 테이블 -->
 <table>
-	<colgroup>
-		<col width="37px" />
-		<col width="24px" />
-		<col width="26px" />
-<!-- 		<col width="30px" />
- -->		<col width="200px" />
-		<col width="" />
-		<col width="160px" />
-	</colgroup>
 	<tbody>
 		<%
 		SortingField sortedField = null;
@@ -157,7 +148,7 @@
 					String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
-						<td class="tc"><input type="checkbox" /></td>
+						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
 <%-- 						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>

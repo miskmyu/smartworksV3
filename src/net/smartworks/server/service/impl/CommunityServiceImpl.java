@@ -1,6 +1,8 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
@@ -63,6 +66,8 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sun.xml.internal.bind.v2.TODO;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -709,10 +714,15 @@ public class CommunityServiceImpl implements ICommunityService {
 		try{
 		 	User user = SmartUtil.getCurrentUser();
 		 	String userId = user.getId();
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			getLoginUserManager().deleteAllLoginUser(userId);
+
+			//TODO 현재 접속 유저로 업데이트
+
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {
@@ -1195,6 +1205,97 @@ public class CommunityServiceImpl implements ICommunityService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(departmentId)) {
+				departmentId = cUser.getCompanyId();
+			}
+	
+			SwoUserExtend[] swoUserExtends = getSwoManager().getAllComsByDepartmentId(departmentId, departmentOnly);
+	
+			List<CommunityInfo> resultList = new ArrayList<CommunityInfo>();
+			for(SwoUserExtend swoUserExtend : swoUserExtends) {
+				String type = swoUserExtend.getType();
+				if(!departmentOnly) {
+					if(type.equals("u")) {
+						UserInfo userInfo = new UserInfo();
+						userInfo.setId(swoUserExtend.getId());
+						userInfo.setName(swoUserExtend.getName());
+						userInfo.setPosition(swoUserExtend.getPosition());
+						userInfo.setRole(swoUserExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
+						String picture = swoUserExtend.getPictureName();
+						if(!CommonUtil.isEmpty(picture)) {
+							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+						} else {
+							userInfo.setSmallPictureName(picture);
+						}
+						resultList.add(userInfo);
+					} else {
+						DepartmentInfo departmentInfo = new DepartmentInfo();
+						departmentInfo.setId(swoUserExtend.getId());
+						departmentInfo.setName(swoUserExtend.getName());
+						departmentInfo.setDesc(swoUserExtend.getDescription());
+						resultList.add(departmentInfo);
+					}
+				} else {
+					DepartmentInfo departmentInfo = new DepartmentInfo();
+					departmentInfo.setId(swoUserExtend.getId());
+					departmentInfo.setName(swoUserExtend.getName());
+					departmentInfo.setDesc(swoUserExtend.getDescription());
+					resultList.add(departmentInfo);
+				}
+			}
+			CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
+			resultList.toArray(communityInfos);
+	
+			return communityInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
+				return getMyGroups();
+			}else{
+				return SmartTest.getAvailableChatter();
+			}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+	@Override
+	public CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception {
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(categoryId) || categoryId.equals(cUser.getCompanyId())) {
+				return SmartTest.getMyGroups();
+			}else{
+				return SmartTest.getAvailableChatter();
+			}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
 		}
 	}
 

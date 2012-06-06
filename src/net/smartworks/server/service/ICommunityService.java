@@ -64,4 +64,10 @@ public interface ICommunityService {
 
 	public abstract UserInfo[] searchEmailAddress(String key) throws Exception;
 
+	public abstract CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception;
+
+	public abstract CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception;
+
+	public abstract CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception;
+
 }

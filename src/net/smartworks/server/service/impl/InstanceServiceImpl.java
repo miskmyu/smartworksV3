@@ -1483,8 +1483,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			for (SwdField field : fields) {
 				fieldInfoMap.put(field.getFormFieldId(), field);
 			}
-	
-			Set<String> keySet = frmSmartFormMap.keySet();
+			
+			//업무화면에서 폼데이터를 넘길때 모든 필드가 다 넘어오지 않는다. 예를 들면 checkbox 의 체크가 되어 있지 않으면 해당 필드 정보자체가
+			//자체가 넘어 오지 않기 때문에 그값을 셋팅할수가 없다 따라서 화면에서 넘어오는 필드를 기준으로 하는것이 아니라 데이터베이스에서 조회한
+			//필드 기준으로 Iterator 한다
+			//그리고 만약 해당 필드가 boolean(checkbox) 일경우 값이 없다면 기본적으로 false를 입력하도록 한다
+			
+			//Set<String> keySet = frmSmartFormMap.keySet();
+			//Iterator<String> itr = keySet.iterator();
+			
+			Set<String> keySet = fieldInfoMap.keySet();
 			Iterator<String> itr = keySet.iterator();
 			
 	//		SwdField[] fieldDatas = new SwdField[keySet.size()];
@@ -1564,8 +1572,13 @@ public class InstanceServiceImpl implements IInstanceService {
 				} else if(fieldValue instanceof Integer) {
 					value = (Integer)frmSmartFormMap.get(fieldId) + "";
 				}
-				if (CommonUtil.isEmpty(value))
-					continue;
+				if (CommonUtil.isEmpty(value)) {
+					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean")) {
+						value = "false";
+					} else {
+						continue;
+					}
+				}
 				SwdDataField fieldData = new SwdDataField();
 				fieldData.setId(fieldId);
 				fieldData.setName(fieldInfoMap.get(fieldId).getFormFieldName());

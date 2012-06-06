@@ -860,63 +860,6 @@ public class WorkServiceImpl implements IWorkService {
 	}
 
 	@Override
-	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
-
-		try{
-			User cUser = SmartUtil.getCurrentUser();
-			if(CommonUtil.isEmpty(departmentId)) {
-				departmentId = cUser.getCompanyId();
-			}
-	
-			SwoUserExtend[] swoUserExtends = getSwoManager().getAllComsByDepartmentId(departmentId, departmentOnly);
-	
-			List<CommunityInfo> resultList = new ArrayList<CommunityInfo>();
-			for(SwoUserExtend swoUserExtend : swoUserExtends) {
-				String type = swoUserExtend.getType();
-				if(!departmentOnly) {
-					if(type.equals("u")) {
-						UserInfo userInfo = new UserInfo();
-						userInfo.setId(swoUserExtend.getId());
-						userInfo.setName(swoUserExtend.getName());
-						userInfo.setPosition(swoUserExtend.getPosition());
-						userInfo.setRole(swoUserExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
-						String picture = swoUserExtend.getPictureName();
-						if(!CommonUtil.isEmpty(picture)) {
-							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
-							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
-							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
-						} else {
-							userInfo.setSmallPictureName(picture);
-						}
-						resultList.add(userInfo);
-					} else {
-						DepartmentInfo departmentInfo = new DepartmentInfo();
-						departmentInfo.setId(swoUserExtend.getId());
-						departmentInfo.setName(swoUserExtend.getName());
-						departmentInfo.setDesc(swoUserExtend.getDescription());
-						resultList.add(departmentInfo);
-					}
-				} else {
-					DepartmentInfo departmentInfo = new DepartmentInfo();
-					departmentInfo.setId(swoUserExtend.getId());
-					departmentInfo.setName(swoUserExtend.getName());
-					departmentInfo.setDesc(swoUserExtend.getDescription());
-					resultList.add(departmentInfo);
-				}
-			}
-			CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
-			resultList.toArray(communityInfos);
-	
-			return communityInfos;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}
-	}
-
-	@Override
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
 
 		try {
@@ -1584,5 +1527,4 @@ public class WorkServiceImpl implements IWorkService {
 		return new LocalDate(calendar.getTime().getTime()).toGMTSimpleDateString(); 
 
 	}
-
 }

@@ -22,5 +22,6 @@ public interface ILoginUserManager {
 	public void removeLoginUser(String user, LoginUserCond cond) throws LoginUserException;
 	public long getLoginUserSize(String user, LoginUserCond cond) throws LoginUserException;
 	public LoginUser[] getLoginUsers(String user, LoginUserCond cond, String level) throws LoginUserException;
+	public void deleteAllLoginUser(String user) throws LoginUserException;
 
 }

@@ -16,7 +16,7 @@
 <script type="text/javascript">
 
 //완료버튼 클릭시 create_new_board.sw 서비스를 실행하기 위해 submit하는 스크립트..
-function submitForms() {
+function submitForms(action) {
 
 	var newMail = $('.js_new_mail_page');
 
@@ -44,7 +44,11 @@ function submitForms() {
 	// 서비스요청 프로그래스바를 나타나게 한다....
 	var progressSpan = newMail.find('.js_progress_span');
 	smartPop.progressCont(progressSpan);
-	var url = "send_mail.sw";
+	var url = "";
+	if(action === "send")
+		url = "send_mail.sw";
+	else if(action === "save")
+		url = "save_mail.sw";
 	// send_mail.sw서비스를 요청한다..
 	$.ajax({
 		url : url,
@@ -108,8 +112,7 @@ function submitForms() {
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="t_bold js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
-					<button><fmt:message key="mail.button.preview"/></button>
-					<button><fmt:message key="mail.button.save"/></button>
+					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
 				</div>
 				<div class="table_line"></div>
 				<!-- 메일 리스트-->
@@ -128,11 +131,8 @@ function submitForms() {
 				<!-- 메일 리스트//-->
 				<div class="table_line"></div>
 				<div class="buttonSet">
-					<button class="t_bold">
-						<span class="icon_mail_send"></span>보내기
-					</button>
-					<button>미리보기</button>
-					<button>임시저장</button>
+					<button class="t_bold js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
+					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
 				</div>
 			</div>
 			<!-- 컨텐츠 //-->

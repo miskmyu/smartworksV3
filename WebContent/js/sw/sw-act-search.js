@@ -34,7 +34,8 @@ $(function() {
 			var data = '<ul><li> <a href="" comName="' + emailAddress + '" comId="' + emailAddress + '" class="js_select_community">' +
 						'<span>' + emailAddress + '</span></a></li></ul>';
 			target.html(data).width(listWidth);
-			target.show();
+			target.show().find('li:first a').click();
+			input.focusout();
 			return;
 		}
 		timeoutId = setTimeout(function() {
@@ -50,6 +51,13 @@ $(function() {
 					},
 					context : input,
 					success : function(data, status, jqXHR) {
+						if(isEmpty($(data).find('a')) && url === 'email_address.sw' && !isEmpty(requestedValue)){
+							var emailAddress = requestedValue;
+							if(isEmailAddress(emailAddress)){
+								data = '<ul><li> <a href="" comName="' + emailAddress + '" comId="' + emailAddress + '" class="js_select_community">' +
+										'<span>' + emailAddress + '</span></a></li></ul>';
+							}
+						}
 						target.html(data).width(listWidth);
 						target.show();
 					},

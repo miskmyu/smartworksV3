@@ -32,6 +32,12 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_select_user.jsp", "jsp/popup/pop_select_user.jsp");
 	}
 
+	@RequestMapping("/pop_select_email")
+	public ModelAndView popSelectEmail(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_select_email.jsp", "jsp/popup/pop_select_email.jsp");
+	}
+
 	@RequestMapping("/pop_select_work")
 	public ModelAndView popSelectWork(HttpServletRequest request, HttpServletResponse response) {
 
@@ -54,6 +60,18 @@ public class PopupController {
 	public ModelAndView popUserlistByDepart(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_userlist_by_depart.jsp", "");
+	}
+
+	@RequestMapping("/pop_userlist_by_group")
+	public ModelAndView popUserlistByGroup(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_userlist_by_group.jsp", "");
+	}
+
+	@RequestMapping("/pop_userlist_by_contact")
+	public ModelAndView popUserlistByContact(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_userlist_by_contact.jsp", "");
 	}
 
 	@RequestMapping("/pop_iwork_instance_list")
