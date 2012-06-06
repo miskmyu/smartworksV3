@@ -1,8 +1,8 @@
 function getExt(fileName) {
 	var pos = fileName.lastIndexOf('.');
 	var ext = 'none';
-	var extTypes = new Array("asf", "avi", "bmp", "doc", "exe", "gif", "hwp", "jpg", "mid", "mp3",
-			"mpeg", "mpg", "pdf", "pds", "ppt", "rar", "txt", "wav", "wma", "wmv", "word", "xls", "zip");
+	var extTypes = new Array("asf", "avi", "bmp", "doc", "docx", "exe", "gif", "hwp", "jpg", "mid", "mp3",
+			"mpeg", "mpg", "pdf", "pds", "ppt", "pptx", "rar", "txt", "wav", "wma", "wmv", "word", "xls", "xlsx", "zip");
 	if (pos != -1) {
 		var extTemp = fileName.substring( pos + 1, fileName.length).toLowerCase();
 		for(var i=0; i<extTypes.length; i++) {
@@ -78,7 +78,7 @@ function fileUploader(groupId, target) {
         	}
         	if(isEmpty(file) || !responseJSON.success) return;
         	
-        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize);
+        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize).attr('fullPathName', responseJSON.fullPathName).attr('localFilePath', responseJSON.localFilePath);
         	var ext = getExt(fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
         	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);
@@ -88,7 +88,7 @@ function fileUploader(groupId, target) {
 				$('form.js_validation_required').validate({ showErrors: showErrors}).form();
         	}
         	if(file.hasClass('qq-upload-success') && !isEmpty(file.parents('td.js_type_imageBox'))){
-	        	file.parents('td.js_type_imageBox:first').find('img.js_auto_picture').attr("src", responseJSON.pullPathName);
+	        	file.parents('td.js_type_imageBox:first').find('img.js_auto_picture').attr("src", responseJSON.fullPathName);
         	}
         },
         fileTemplate : uploadFileTemplate,

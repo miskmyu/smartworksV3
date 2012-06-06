@@ -13,20 +13,27 @@
 <%@ page import="net.smartworks.model.work.*"%>
 <%@ page import="net.smartworks.util.LocalDate"%>
 <script>
-	function updateAvailableChatters(messasge) {
-		var userInfos = message.userInfos;
-		if (userInfos != null) {
+	function updateAvailableChatters(message) {
+		var userInfos = message;
+		var availableChatterList = $("#available_chatter_list");
+		if (userInfos != null && !(availableChatterList.hasClass('searching')) && (availableChatterList.parent().is(':visible'))) {
 			var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
-			var data = "";
+			var data = "<ul>";
 			var length = userInfos.length;
-			for ( var i = 0; i < length; i++) {
-				data = data + "<li>" +
-									"<a href='' userId='" + userInfos[i].userId + "'>" +
-										"<span><img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s chat_online' title='" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "'/>" + nickNameBase ? userInfos[i].nickName : userInfos[i].longName + "</span>" +
-									"</a>" +
-								"</li>";
+			for (var i = 0; i < length; i++) {
+				if(userInfos[i].userId === currentUserId)
+					continue;
+
+				data = data + "<li><a href='' comId='" + userInfos[i].userId + "' userId='" + userInfos[i].userId + "'>" +
+									"<img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s' title='" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +  "'>" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +
+									"<span class='chat_online'></span></a></li>";
 			}
-			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + length + ")");
+			data = data + "</ul>";
+			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length-1) + ")");
+		}else{
+			var length = isEmpty(userInfos) ? 0 : userInfos.length-1;
+			$("#available_chatter_list").parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length) + ")");
+			
 		}
 	}
 </script>
@@ -34,18 +41,27 @@
 	User cUser = SmartUtil.getCurrentUser();
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String userNaming = (String)session.getAttribute("userNaming");  
-	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : userNaming.equals(User.NAMING_NICKNAME_BASE) ? true : false;
-	UserInfo[] chatters = smartWorks.getAvailableChatter();
+	boolean nickNameBase = SmartUtil.isBlankObject(userNaming) ? false : User.NAMING_NICKNAME_BASE.equals(userNaming) ? true : false;
+	UserInfo[] chatters = smartWorks.getAvailableChatter(request);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
-
+<!-- POP-채팅 설정 -->
+	<div class="chatter_list_area admin" style="display:none">
+		<!-- 오프라인으로 표시 클릭하면 <fmt:message key="chat.title.chatting"/> 앞에 아이콘도 class="chatic_titl off"처럼  클래스명"off"를 추가해줍니다  -->
+		<ul>
+			<li>
+			<a href=""><span class="chatic_titl off pop">오프라인으로 표시</span></a>
+			</li>
+		</ul>
+	</div>
+<!-- POP-채팅 설정 //-->
 <!-- 채팅Default -->	 
 <div class="chat_de_section js_chatter_list js_chatter_list_page" nickNameBase="<%=nickNameBase%>">
 	<!-- 상단 -->
 	<div class="top_group">
 		<a href="" class="js_toggle_chatter_list">
-			<div class="chatic_titl sera"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=chatters.length%>)</span></div>
+			<div class="chatic_titl sera"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=!SmartUtil.isBlankObject(chatters) ? chatters.length-1 : 0%>)</span></div>
 		</a>
 		<!-- 상단우측 아이콘-->
 		<div class="txt_btn">
@@ -60,21 +76,27 @@
 
 		<!-- Body -->
 		<div class="chat_de_list js_chatter_list" id="available_chatter_list">
-			<ul>
+<%-- 			<ul>
 				<%
-				for (UserInfo chatter : chatters) {
-					String userName = (nickNameBase) ? chatter.getNickName() : chatter.getLongName();
+				if(!SmartUtil.isBlankObject(chatters)) {
+					for (UserInfo chatter : chatters) {
+						if(chatter.getId().equals(cUser.getId()))
+							continue;
+						String userName = (nickNameBase) ? chatter.getNickName() : chatter.getLongName();
+						String online = (chatter.isOnline()) ? "chat_online" : "chat_offline";
 				%>
-					<li>
-						<a href="" userId="<%=chatter.getId()%>">
-							<span><img src="<%=chatter.getMinPicture()%>" class="mr2 profile_size_s chat_offline" title="<%=userName%>" /><%=userName%></span>
-						</a>
-					</li>
+						<li>
+							<a href="" comId="<%=chatter.getId() %>" userId="<%=chatter.getId() %>">
+								<img class="mr2 profile_size_s" src="<%=chatter.getMinPicture()%>" title="<%=userName%>"><%=userName %>
+			 					<span class="<%=online%>"></span>
+							</a>
+						</li>
 				<%
+					}
 				}
 				%>
 			</ul>
-		</div>
+ --%>		</div>
 		<!-- Body //-->
 
 		<!-- 검색영역 -->

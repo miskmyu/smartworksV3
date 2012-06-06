@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.server.engine.common.manager.IManager"%>
+<%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
+<%@page import="net.smartworks.server.engine.common.loginuser.model.LoginUser"%>
+<%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
 <%@page import="java.util.TimeZone"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -35,15 +39,31 @@
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
 		if(!SmartUtil.isBlankObject(auth)){
-			if (SmartUtil.isBlankObject(request.getSession().getAttribute("loginId"))) {
+			String loginId = ((Login) auth.getPrincipal()).getId();
+			if (SmartUtil.isBlankObject(request.getSession().getAttribute(loginId))) {
 				System.out.println("-------------------------------------------");
 				System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
 				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
 				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
 				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
 				System.out.println("-------------------------------------------");
-				request.getSession().setAttribute("loginId", ((Login) auth.getPrincipal()).getId());
+				request.getSession().setAttribute(loginId, new LocalDate());
+				LoginUser loginUser = SwManagerFactory.getInstance().getLoginUserManager().getLoginUser(loginId, loginId, IManager.LEVEL_ALL);
+
+				if(SmartUtil.isBlankObject(loginUser)) {
+					loginUser = new LoginUser();
+					loginUser.setUserId(loginId);
+					loginUser.setLoginTime(new LocalDate());
+					SwManagerFactory.getInstance().getLoginUserManager().createLoginUser(loginId, loginUser);
+					UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
+					SmartUtil.publishAChatters(userInfos);
+				} else {
+					loginUser.setLoginTime(new LocalDate());
+					SwManagerFactory.getInstance().getLoginUserManager().setLoginUser(loginId, loginUser);
+				}
+
 			}
+
 		}
 	} else {
 		response.sendRedirect("login.sw");
@@ -80,6 +100,9 @@ currentUser = {
 	timeOffset : "<%=currentUser.getTimeOffsetInHour()%>"
 };
 
+function logout() {
+	document.location.href = "logout.sw?userId=" + currentUser.userId;
+};
 
 </script>
 

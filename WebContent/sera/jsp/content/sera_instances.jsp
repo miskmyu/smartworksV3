@@ -55,7 +55,7 @@
 	LocalDate fromDate = (SmartUtil.isBlankObject(fromDateStr)) ? new LocalDate() : LocalDate.convertLocalStringToLocalDate(fromDateStr);
 	
 	int MAX_SERA_INSTANCES = 10;
-	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId,  fromDate, MAX_SERA_INSTANCES);
+	InstanceInfo[] seraInstances = smartWorks.getSeraInstances(instanceType, userId, courseId, missionId, teamId, fromDate, MAX_SERA_INSTANCES);
 
 	if(!SmartUtil.isBlankObject(seraInstances)){
 		for(int i=0; i<seraInstances.length; i++){	
@@ -99,6 +99,7 @@
 			}
 
 			UserInfo owner = (instanceType == Instance.TYPE_SENT_ASYNC_MESSAGE) ? ((AsyncMessageInstanceInfo)seraInstance).getReceiver() : seraInstance.getOwner();
+			if(SmartUtil.isBlankObject(owner)) owner = SmartUtil.getCurrentUser().getUserInfo();
 			%>
 			<div class="js_sera_instance_item">
 				<ul class="panel_area">

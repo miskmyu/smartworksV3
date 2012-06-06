@@ -64,8 +64,9 @@
 					<li>
 						<dl>
 							<dd class="mb10"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <img height="100" width="120" src="<%=course.getOrgPicture()%>"></a></dd>
-							<dd class="mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate()) %>Days</dd>
-							<dd class="mb3 title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
+							<dd class="t_s11 mb3"><%=LocalDate.getDiffDate(course.getOpenDate(), course.getCloseDate()) %>Days</dd>
+							<dd class="t_s11 mb3"><%=course.getOpenDate().toLocalDateSimpleString()%> ~ <%=course.getCloseDate().toLocalDateSimpleString()%></dd>
+							<dd class="title"><a href="courseHome.sw?courseId=<%=course.getId() %>"> <%=course.getName() %></a></dd>
 						</dl>
 					</li>
 			<%

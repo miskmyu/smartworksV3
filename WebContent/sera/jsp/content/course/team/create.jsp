@@ -38,7 +38,7 @@
 			if(createTeam.find('input[name="chkUserDefineDays"]').attr('checked')!=='checked'){
 				var teamDays = parseInt(createTeam.find('input[name="txtTeamDays"]').attr('value'));
 				if(teamDays <= 0){
-					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1 이상이여야 합니다!");
+					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1일 이상이여야 합니다!");
 					return false;					
 				}
 				startDate = new Date();
@@ -74,8 +74,13 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀이 정상적으로 만들어졌습니다!", function(){
-						$('.js_select_course_team select').append('<option value="' + data.teamId + '">' + data.teamName + '</option>' );
-						$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+						var selectCourseTeam = $('.js_select_course_team select');
+						if(!isEmpty(selectCourseTeam)){
+							selectCourseTeam.append('<option value="' + data.teamId + '" selected>' + data.teamName + '</option>' );
+							selectCourseTeam.change();
+						}else{
+							$('.js_create_team').click();
+						}
 					});
 				},
 				error : function(e) {

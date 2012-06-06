@@ -13,7 +13,9 @@ import java.util.Date;
 import net.smartworks.server.engine.common.model.Cond;
 
 public class SeraUserDetailCond extends Cond {
-	
+
+	private static final long serialVersionUID = 1L;
+
 	private String userId;
 	private String userName;
 	private String[] userIdIns;
@@ -31,6 +33,8 @@ public class SeraUserDetailCond extends Cond {
 	private String fbPassword;
 	private String nickName;
 	private String key;
+	private String lastName;
+	private Date lastModifiedTime;
 
 	public String getUserId() {
 		return userId;
@@ -133,6 +137,18 @@ public class SeraUserDetailCond extends Cond {
 	}
 	public void setKey(String key) {
 		this.key = key;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public Date getLastModifiedTime() {
+		return lastModifiedTime;
+	}
+	public void setLastModifiedTime(Date lastModifiedTime) {
+		this.lastModifiedTime = lastModifiedTime;
 	}
 
 }

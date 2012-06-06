@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
@@ -82,7 +83,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 	private void populateRecord(String user, SwdRecord obj) throws Exception {
 		if (obj == null)
 			return;
-		
+
 		String formId = obj.getFormId();
 		String recordId = obj.getRecordId();
 		if (recordId == null)
@@ -201,107 +202,11 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 		
 		// 결재자 / 수신자 / 참조자
 		
-		//superTask관련 내용이 없다...삭제예정
-		String superTaskId = obj.getExtendedAttributeValue("superTaskId");
-		String superForm = obj.getExtendedAttributeValue("superForm");
-		String superRecordId = obj.getExtendedAttributeValue("superRecordId");
+		
 		String approvalLine = obj.getExtendedAttributeValue("approvalLine");
-		//METADATA
-		//제목
-		String subject = obj.getExtendedAttributeValue("subject");//기본 제목
-
-		//참조, 기본 업무 설명
-		String workContents = obj.getExtendedAttributeValue("workContents");
-		//전달자의견, 전자결재 내용		
-		String m_Description = obj.getExtendedAttributeValue("receiptDescription");
-		
-		//프로젝트 팀명(ID?)
-		String projectName = obj.getExtendedAttributeValue("projectName");
-
-		//공개여부
-		String isPublic = obj.getExtendedAttributeValue("isPublic");
-
-		//중요도
-		String priority = obj.getExtendedAttributeValue("priority");
-
-		//수신자 업무
-		String receiptForm = obj.getExtendedAttributeValue("receiptForm");
-		
-		//수신자
-		String receiptUser = obj.getExtendedAttributeValue("receiptUser");
-
-		//참조자
-		String referenceUser = obj.getExtendedAttributeValue("referenceUser");
-
-		//희망완료날짜
-		String hopeEndDate = obj.getExtendedAttributeValue("hopeEndDate");
-
-		//METADATA END
-
-		String work_Title = obj.getExtendedAttributeValue("title");//업무 제목
-		
-		String fileGroupId = obj.getExtendedAttributeValue("fileGroupId");
-
-		String startTimeStr = obj.getExtendedAttributeValue("startDate");
-		String endTimeStr = obj.getExtendedAttributeValue("endDate");
-		
-//				if (!CommonUtil.isEmpty(superTaskId))
-//					obj.setExtendedAttributeValue("superTaskId", null);
-//				if (!CommonUtil.isEmpty(superForm))
-//					obj.setExtendedAttributeValue("superForm", null);
-//				if (!CommonUtil.isEmpty(superRecordId))
-//					obj.setExtendedAttributeValue("superRecordId", null);
-		if (!CommonUtil.isEmpty(approvalLine))
-			obj.setExtendedAttributeValue("approvalLine", null);
-		if (!CommonUtil.isEmpty(subject))
-			obj.setExtendedAttributeValue("subject", null);
-		if (!CommonUtil.isEmpty(workContents))
-			obj.setExtendedAttributeValue("workContents", null);
-		if (!CommonUtil.isEmpty(m_Description))
-			obj.setExtendedAttributeValue("receiptDescription", null);
-		if (!CommonUtil.isEmpty(projectName))
-			obj.setExtendedAttributeValue("projectName", null);
-		if (!CommonUtil.isEmpty(isPublic))
-			obj.setExtendedAttributeValue("isPublic", null);
-		if (!CommonUtil.isEmpty(priority))
-			obj.setExtendedAttributeValue("priority", null);
-		if (!CommonUtil.isEmpty(receiptForm))
-			obj.setExtendedAttributeValue("receiptForm", null);
-		if (!CommonUtil.isEmpty(receiptUser))
-			obj.setExtendedAttributeValue("receiptUser", null);
-		if (!CommonUtil.isEmpty(referenceUser))
-			obj.setExtendedAttributeValue("referenceUser", null);
-		if (!CommonUtil.isEmpty(hopeEndDate))
-			obj.setExtendedAttributeValue("hopeEndDate", null);
-		if (!CommonUtil.isEmpty(fileGroupId))
-			obj.setExtendedAttributeValue("fileGroupId", null);
-		if (!CommonUtil.isEmpty(startTimeStr))
-			obj.setExtendedAttributeValue("startDate", null);
-		if (!CommonUtil.isEmpty(endTimeStr))
-			obj.setExtendedAttributeValue("endDate", null);
-		
-//				superTaskId = CommonUtil.toNull(superTaskId);
-//				superForm = CommonUtil.toNull(superForm);
-//				superRecordId = CommonUtil.toNull(superRecordId);
-		approvalLine = CommonUtil.toNull(approvalLine);
-		receiptUser = CommonUtil.toNull(receiptUser);
-		referenceUser = CommonUtil.toNull(referenceUser);
-		subject = CommonUtil.toNull(subject);
-		workContents = CommonUtil.toNull(workContents);
-		
-		m_Description = CommonUtil.toNull(m_Description);
-		projectName = CommonUtil.toNull(projectName);
-		isPublic = CommonUtil.toNull(isPublic);
-		priority = CommonUtil.toNull(priority);
-		receiptForm = CommonUtil.toNull(receiptForm);
-		receiptUser = CommonUtil.toNull(receiptUser);
-		referenceUser = CommonUtil.toNull(referenceUser);
-		hopeEndDate = CommonUtil.toNull(hopeEndDate);
-		Date startDate = DateUtil.toDate(CommonUtil.toNull(startTimeStr), "yyyy-MM-dd HH:mm:ss");
-		Date endDate = DateUtil.toDate(CommonUtil.toNull(endTimeStr), "yyyy-MM-dd HH:mm:ss");
-		fileGroupId = CommonUtil.toNull(fileGroupId);
-		
-//				if (superTaskId != null || superForm != null || approvalLine != null || receiptUser != null || referenceUser != null) {
+		String forwardSubject = obj.getExtendedAttributeValue("txtForwardSubject");
+		String forwardForwardee = obj.getExtendedAttributeValue("txtForwardForwardee");
+		String forwardComments = obj.getExtendedAttributeValue("txtForwardComments");
 		
 		if (CommonUtil.isEmpty(obj.getExtendedAttributeValue("setMode")) || !obj.getExtendedAttributeValue("setMode").equals("process")) {
 			
@@ -334,55 +239,25 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 					task.setExtendedPropertyValue("approvalLine", null);
 				}
 				//MEATADATA
-				if (receiptUser != null) {
-					task.setExtendedPropertyValue("receiptUser", receiptUser);
-					task.setExtendedPropertyValue("receiptType", "SINGLE");
-					
-					if (receiptForm == null || receiptForm.equalsIgnoreCase(formId)) {
-		//				task.setExtendedPropertyValue("receiptForm", formId);
-						task.setExtendedPropertyValue("receiptForm", receiptForm);
-						task.setExtendedPropertyValue("receiptName", name);
-					} else {
-						task.setExtendedPropertyValue("receiptForm", receiptForm);
-						SwfForm receiptFormObj = getSwfManager().getForm(user, receiptForm);
-						String receiptName = null;
-						if (receiptFormObj == null) {
-							receiptName = name;
-						} else {
-							receiptName = receiptFormObj.getName();
-						}
-						task.setExtendedPropertyValue("receiptName", receiptName);
-					}
-				} else {
-					task.setExtendedPropertyValue("receiptUser", null);
-					task.setExtendedPropertyValue("receiptType", null);
-					task.setExtendedPropertyValue("receiptForm", null);
-					task.setExtendedPropertyValue("receiptName", null);
-				}
-				if (referenceUser != null) {
-					task.setExtendedPropertyValue("referenceUser", referenceUser);
+
+				task.setExpectStartDate(new LocalDate());
+				task.setRealStartDate(new LocalDate());
+				task.setExpectEndDate(null);
+				task.setRealEndDate(null);
+				
+				if (forwardForwardee != null) {
+					task.setExtendedPropertyValue("referenceUser", forwardForwardee);
 				} else {
 					task.setExtendedPropertyValue("referenceUser", null);
-				}
-				if (startDate != null) {
-					task.setExpectStartDate(startDate);
-					task.setRealStartDate(startDate);
-				}	
-				if (endDate != null) {
-					task.setExpectEndDate(endDate);
-					task.setRealEndDate(endDate);
 				}
 			} else {
 				task = new TskTask();
 
 				task.setName(name);
 				task.setType("SINGLE");
-				task.setPriority(priority);
+				task.setPriority(null);
 				
-				if (!CommonUtil.isEmpty(subject)) {
-					title = subject;
-				} 
-				task.setExtendedPropertyValue("subject", title);
+				task.setExtendedPropertyValue("subject", forwardSubject == null || forwardSubject.length() == 0 ? title : forwardSubject);
 				task.setTitle(title);
 				task.setDocument(obj.toString(null, null));
 				task.setAssigner(user);
@@ -394,63 +269,22 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 				task.setWorkSpaceType(obj.getWorkSpaceType());
 				task.setAccessLevel(obj.getAccessLevel());
 				task.setAccessValue(obj.getAccessValue());
-				task.setExtendedPropertyValue("superTaskId", superTaskId);
-				task.setExtendedPropertyValue("superForm", superForm);
-				task.setExtendedPropertyValue("superRecordId", superRecordId);
 				task.setExtendedPropertyValue("domainId", domainId);
 				task.setExtendedPropertyValue("recordId", recordId);
 				if (approvalLine != null)
 					task.setExtendedPropertyValue("approvalLine", approvalLine);
-				if (work_Title != null)
-					task.setTitle(work_Title);
-				//TODO 연결업무의 설명이다 변경 필요
-				if (m_Description != null)
-					task.setDescription(m_Description);
-				if (m_Description != null)
-					task.setExtendedPropertyValue("m_Description", m_Description);
-				
 		
 				//MEATADATA
-				if (receiptUser != null) {
-					task.setExtendedPropertyValue("receiptUser", receiptUser);
-					task.setExtendedPropertyValue("receiptType", "SINGLE");
+				
+				if (forwardComments != null)
+					task.setExtendedPropertyValue("workContents", forwardComments);
+				if (forwardForwardee != null)
+					task.setExtendedPropertyValue("referenceUser", forwardForwardee);
 					
-					if (receiptForm == null || receiptForm.equalsIgnoreCase(formId)) {
-		//				task.setExtendedPropertyValue("receiptForm", formId);
-						task.setExtendedPropertyValue("receiptForm", receiptForm);
-						task.setExtendedPropertyValue("receiptName", name);
-					} else {
-						task.setExtendedPropertyValue("receiptForm", receiptForm);
-						SwfForm receiptFormObj = getSwfManager().getForm(user, receiptForm);
-						String receiptName = null;
-						if (receiptFormObj == null) {
-							receiptName = name;
-						} else {
-							receiptName = receiptFormObj.getName();
-						}
-						task.setExtendedPropertyValue("receiptName", receiptName);
-					}
-				}
-				if (workContents != null)
-					task.setExtendedPropertyValue("workContents", workContents);
-				if (referenceUser != null)
-					task.setExtendedPropertyValue("referenceUser", referenceUser);
-				if (fileGroupId != null)
-					task.setExtendedPropertyValue("fileGroupId", fileGroupId);
-				if (projectName != null)
-					task.setExtendedPropertyValue("projectName", projectName);
-				if (isPublic != null)
-					task.setExtendedPropertyValue("isPublic", isPublic);
-				if (hopeEndDate != null)
-					task.setExtendedPropertyValue("hopeEndDate", hopeEndDate);
-				if (startDate != null) {
-					task.setExpectStartDate(startDate);
-					task.setRealStartDate(startDate);
-				}	
-				if (endDate != null) {
-					task.setExpectEndDate(endDate);
-					task.setRealEndDate(endDate);
-				}
+				task.setExpectStartDate(new LocalDate());
+				task.setRealStartDate(new LocalDate());
+				//task.setExpectEndDate(endDate);
+				//task.setRealEndDate(endDate);
 			}
 			if (obj.getExtendedAttributeValue("extValues") != null && obj.getExtendedAttributeValue("extValues").length() != 0)
 				task.setExtendedAttributeValue("extValues", obj.getExtendedAttributeValue("extValues"));

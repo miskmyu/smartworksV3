@@ -143,6 +143,82 @@
 	<!-- Panel3 -->
 	<div>
 		<div class="header dep2 mt20">
+			<div class="tit">팀원수락 대기 멘티 <span class="t_orange tb js_invited_member_count">(<%=memberInforms.getTotalInvitedMembers() %>)</span> </div>
+			<div class="fr">
+				<input class="fl fieldline js_invited_member_search_key" style="width: 150px" type="text" />
+				<button type="button" class="fl ml5 js_invited_member_search_btn">검색</button>
+			</div>
+		</div>
+
+		<div class="panel_area js_invited_member_list">
+			<%
+			if(memberInforms.getTotalInvitedMembers()>0 && !SmartUtil.isBlankObject(memberInforms.getInvitedMembers())){
+				for(int i=0; i<memberInforms.getInvitedMembers().length; i++){
+					if (i == MemberInformList.MAX_MEMBER_LIST)
+						break;
+					SeraUserInfo member = memberInforms.getInvitedMembers()[i];
+			%>
+					<!-- 목록1-->
+					<div class="panel_rds_block mb10 js_invited_member_item" userId="<%=member.getId()%>">
+						<ul>
+							<li class="pl0pr10">
+								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+									<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
+								</a>
+							</li>
+							<li class="">
+								<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+									<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
+								</a>
+							</li>
+							<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+							</span>
+							</li>
+							<li class="fr bo_l end">
+								<span>
+								<!-- Btn -->
+									<div class="btn_fgreen_l mr7 js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
+									</div> 
+								<!-- Btn //--> 
+							
+								<!-- Btn -->
+									<div class="btn_fgray_l mr7 js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+										<div class="btn_fgray_r"><span class="icon_delete_inbtn"></span>친구 끊기</div>
+									</div>
+								<!-- Btn //--> 
+								</span>
+							</li>
+						</ul>
+					</div>
+					<!-- 목록1//-->
+			<%
+				}
+			}
+			%>
+		</div>
+	</div>
+	<!-- Panel2 //-->
+
+	<%
+	if (memberInforms.getTotalInvitedMembers() > 0 && !SmartUtil.isBlankObject(memberInforms.getInvitedMembers())) {
+		SeraUserInfo[] members = memberInforms.getInvitedMembers();
+		if(memberInforms.getTotalInvitedMembers()>members.length){
+			String lastId = members[members.length-2].getId(); 
+	%>
+			<!-- 더보기 -->
+			<div class="more js_more_member_informs_btn js_more_invited_member_btn" requestType="<%=MemberInformList.TYPE_INVITED_MEMBERS %>" teamId="<%=teamId%>" lastId="<%=lastId%>">
+				<div class="icon_more">더보기<span class="ml3 js_progress_span"></span></div>
+				
+			</div>
+			<!-- 더보기 //-->
+	<%
+		}
+	}	
+	%>
+	<!-- Panel3 -->
+	<div>
+		<div class="header dep2 mt20">
 			<div class="tit">초대 가능한 멘티 <span class="t_orange tb js_non_member_count">(<%=memberInforms.getTotalNonMembers() %>)</span> </div>
 			<div class="fr">
 				<input class="fl fieldline js_non_member_search_key" style="width: 150px" type="text" />

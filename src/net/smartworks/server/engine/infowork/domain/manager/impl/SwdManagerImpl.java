@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.instance.WorkInstance;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Cond;
@@ -71,6 +73,7 @@ import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.util.LocalDate;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -971,8 +974,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			buf.append(", swdataref");
 		}
 		// where
-		String workSpaceIdIns = cond.getWorkSpaceIdIns();
-		String workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
+		String[] workSpaceIdIns = cond.getWorkSpaceIdIns();
+		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
 		boolean first = true;
 		if (refFormId != null || refRecordId != null) {
 			first = false;
@@ -1075,28 +1078,71 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(" and (obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
 			}
 		}
-		if (workSpaceIdIns != null) {
+		/*if (workSpaceIdIns != null) {
 			if(first) {
-				buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+				buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
+				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
 				first = false;
 			} else {
-				buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
+				buf.append(" and ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
+				//buf.append(" and obj.workSpaceId in " + workSpaceIdIns);
 			}
-		}
-		if (workSpaceIdNotIns != null) {
+		}*/
+		
+		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
+			
+			if (workSpaceIdIns != null) {
+				if(first) {
+					first = false;
+					buf.append(" where");
+				} else {
+					buf.append(" and");
+				}
+				buf.append(" ((obj.workSpaceType = 6 and obj.workSpaceId in (");
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdIn").append(j);
+				}
+				buf.append(")) or (obj.workSpaceType = 5 and obj.workSpaceId in (");
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdIn").append(j);
+				}
+				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2 or obj.workSpaceType is null)");
+	
+				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
+				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
+			}
+			if (workSpaceIdNotIns != null) {
+				if(first) {
+					buf.append(" where");
+					first = false;
+				} else {
+					buf.append(" and");
+				}
+				buf.append(" obj.workSpaceId not in (");
+				for (int j=0; j<workSpaceIdNotIns.length; j++) {
+					if (j != 0)
+						buf.append(", ");
+					buf.append(":workSpaceIdNotIn").append(j);
+				}
+				buf.append(")");
+				
+	//				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
+	//			} else {
+	//				buf.append(" and obj.workSpaceId not in " + workSpaceIdNotIns);
+	//			}
+			}
 			if(first) {
-				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
+				buf.append(" where (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
 				first = false;
 			} else {
-				buf.append(" and obj.workSpaceId not in " + workSpaceIdNotIns);
+				buf.append(" and (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
 			}
-		}
-		if(first) {
-			buf.append(" where (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
-			first = false;
-		} else {
-			buf.append(" and (obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
-		}
+		}	
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);
@@ -1108,7 +1154,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				orderField = order.getField();
 				order.setField(CommonUtil.toDefault(fieldColumnMap.get(orderField), orderField));
 			}
-			appendOrderQuery(buf, null, cond);
+			appendOrderQuery(buf, "obj", cond);
 		}
 		
 		// pre query
@@ -1127,6 +1173,21 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			query.setString("refFormId", refFormId);
 		if (refRecordId != null)
 			query.setString("refRecordId", refRecordId);
+
+		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
+			if (workSpaceIdIns != null) {
+				for (int j=0; j<workSpaceIdIns.length; j++) {
+					query.setString("workSpaceIdIn"+j, workSpaceIdIns[j]);
+				}
+			}
+			if (workSpaceIdNotIns != null) {
+				for (int j=0; j<workSpaceIdNotIns.length; j++) {
+					query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
+				}
+			}
+		}
+		
 		if (!CommonUtil.isEmpty(filterMap)) {
 			Filter f;
 			String operType;
@@ -1847,6 +1908,9 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		if (!CommonUtil.isEmpty(mappingRecordMap)) {
 			for (SwdRecord mappingRecord : mappingRecordMap.values()) {
 				populateRecord(user, mappingRecord);
+				//데이터 내보내기에서 연결되는 데이터가 없을경우 데이터를 새로 만든다
+				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
+				defaultSetRecord(user, mappingRecord);
 				setRecord(user, mappingRecord, null);
 				
 				if (!context.containsKey("task"))
@@ -1859,6 +1923,23 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					continue;
 				task.addExtendedProperty(new Property("mappingRecordId", mappingRecord.getRecordId()));
 			}
+		}
+	}
+	private void defaultSetRecord(String user, SwdRecord obj) throws Exception {
+		if (obj == null)
+			return;
+		if (obj.getCreationUser() == null)
+			obj.setCreationUser(user);
+		if (obj.getCreationDate() == null)
+			obj.setCreationDate(new LocalDate());
+		obj.setModificationUser(user);
+		obj.setModificationDate(new LocalDate());
+		
+		if (obj.getAccessLevel() == null)
+			obj.setAccessLevel(AccessPolicy.LEVEL_DEFAULT + "");
+		if (obj.getWorkSpaceId() == null && obj.getWorkSpaceType() == null) {
+			obj.setWorkSpaceId(user);
+			obj.setWorkSpaceType("4");//사용자 공간
 		}
 	}
 	private void populateRecord(String user, SwdRecord obj) throws Exception {

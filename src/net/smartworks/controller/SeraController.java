@@ -14,6 +14,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.instance.Instance;
+import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.sera.Team;
 import net.smartworks.model.sera.info.MissionInstanceInfo;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -23,8 +25,6 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,11 +51,20 @@ public class SeraController extends ExceptionInterceptor {
 	}
 
 	@RequestMapping("/logins")
-	public ModelAndView logins(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView logins(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mnv = new ModelAndView();
 		String type = CommonUtil.toNotNull(request.getParameter("type"));
 		mnv.addObject("type", type);
 		mnv.setViewName("sera/jsp/login.jsp");
+		return mnv;
+	}
+
+	@RequestMapping("/logouts")
+	public ModelAndView logouts(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.logout(request, response);
+		ModelAndView mnv = new ModelAndView();
+		mnv.addObject("href", "logout");
+		mnv.setViewName("jsp/movePage.jsp");
 		return mnv;
 	}
 
@@ -399,6 +408,27 @@ public class SeraController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/popup/pop_notification_list.jsp", "");
 	}
 
+	@RequestMapping("/globalSearch")
+	public ModelAndView globalSearch(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/global_search.jsp", "smartWorks", smartworks);
+	}
+
+	@RequestMapping("/moreSearchCourses")
+	public ModelAndView moreSearchCourses(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/more_courses.jsp", "smartWorks", smartworks);
+	}
+
+	@RequestMapping("/moreSearchSeraUsers")
+	public ModelAndView moreSearchSeraUsers(HttpServletRequest request, HttpServletResponse response) {
+
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("sera/jsp/search/more_sera_users.jsp", "smartWorks", smartworks);
+	}
+
 	@RequestMapping(value = "/create_new_course", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewCourse(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -686,4 +716,29 @@ public class SeraController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "sera/jsp/search/team_member_by_type.jsp", "");
 	}
 	
+	@RequestMapping(value = "/get_course_notices", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> getCourseNotices(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String courseId = request.getParameter("courseId");
+		String fromDate = request.getParameter("fromDate");
+		String maxList = request.getParameter("maxList");
+		InstanceInfo[] notices = smartworks.getCourseNotices(courseId, LocalDate.convertLocalDateStringToLocalDate(fromDate), Integer.parseInt(maxList));
+		String data = "";
+		if(!SmartUtil.isBlankObject(notices)){
+			for(int i=0; i<notices.length; i++){
+				InstanceInfo notice = notices[i];
+				if(notice.getType()==Instance.TYPE_BOARD){
+					data = data + "<dd>[알림] " + notice.getSubject() + "</dd>";
+				}else if(notice.getType()==Instance.TYPE_EVENT){
+					data = data + "<dd>[이벤트] " + notice.getSubject() + "</dd>";
+				}
+			}
+		}
+
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("data", data);
+		return map;
+	}	
+
 }

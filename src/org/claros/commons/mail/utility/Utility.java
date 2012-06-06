@@ -1,13 +1,19 @@
 package org.claros.commons.mail.utility;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.mail.Address;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import net.smartworks.util.SmartUtil;
+
 import org.claros.commons.configuration.PropertyFile;
+import org.claros.commons.mail.models.EmailPart;
 
 /**
  * @author Umut Gokbayrak
@@ -152,6 +158,51 @@ public class Utility {
 				counter++;
 			}
 			return outAddr;
+		} else {
+			return null;
+		}
+	}
+
+	public static Address[] stringListToAddressArray(List<Map<String, String>> strList) throws Exception {
+		if (strList == null)
+			return null;
+		int size = strList.size();
+		if (size > 0) {
+			Address[] outAddr = new Address[size];
+			for(int counter=0; counter<size; counter++) {
+				Map<String, String> addr = (Map<String, String>)strList.get(counter);
+				String fullname = addr.get("name");
+				String email = addr.get("id");
+				try {
+					String charset = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.charset");
+					outAddr[counter] = new InternetAddress(email, fullname, charset);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+			return outAddr;
+		} else {
+			return null;
+		}
+	}
+
+	public static ArrayList stringListToEmailPartArray(List<Map<String, String>> strList) throws Exception {
+		if (strList == null)
+			return null;
+		int size = strList.size();
+		if (size > 0) {
+			ArrayList outEmailPart = new ArrayList();
+			for(int counter=0; counter<size; counter++) {
+				Map<String, String> att = (Map<String, String>)strList.get(counter);
+				EmailPart tmp = new EmailPart();
+				tmp.setFilename(att.get("fileName"));
+				long fileSize = Long.parseLong(att.get("fileSize"));
+				tmp.setSize(fileSize);
+				tmp.setSizeReadable(SmartUtil.getBytesAsString(fileSize));
+				tmp.setDisposition(att.get("localFilePath"));
+				outEmailPart.add(tmp);
+			}
+			return outEmailPart;
 		} else {
 			return null;
 		}

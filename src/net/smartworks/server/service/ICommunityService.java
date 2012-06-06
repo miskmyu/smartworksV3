@@ -18,7 +18,7 @@ public interface ICommunityService {
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
 
-	public abstract WorkSpaceInfo[] searchCommunity(String key) throws Exception;
+	public abstract WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception;
 
 	public abstract User getUserById(String userId) throws Exception;
 
@@ -38,7 +38,7 @@ public interface ICommunityService {
 
 	public abstract WorkSpaceInfo getWorkSpaceInfoById(String workSpaceId) throws Exception;
 
-	public abstract UserInfo[] getAvailableChatter() throws Exception;
+	public abstract UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception;
 
 	public abstract UserInfo[] searchAvailableChatter(String key) throws Exception;
 
@@ -57,5 +57,11 @@ public interface ICommunityService {
 	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract UserInfo[] searchCompanyUser(String key) throws Exception;
+
+	public abstract UserInfo[] searchContact(User currentUser, String key) throws Exception;
+
+	public abstract UserInfo[] searchEmailAddress(String key) throws Exception;
 
 }

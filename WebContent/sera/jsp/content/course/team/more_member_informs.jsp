@@ -24,7 +24,10 @@
 		for(int i=0; i<members.length; i++){
 			SeraUserInfo member = members[i];
 			String userHref = (cUser.getId().equals(member.getId())) ? "myPAGE.sw" : "othersPAGE.sw?userId=" + member.getId();
-			String btnClass = type == MemberInformList.TYPE_MEMBERS ? "js_more_member_btn" : "js_more_non_member_btn";
+			String btnClass = "";
+			if(type == MemberInformList.TYPE_MEMBERS) btnClass = "js_more_member_btn";
+			else if(type == MemberInformList.TYPE_INVITED_MEMBERS) btnClass = "js_more_invited_member_btn";
+			else if(type == MemberInformList.TYPE_NON_MEMBERS) btnClass = "js_more_non_member_btn";
 			if(i==MemberInformList.MAX_MEMBER_LIST){
 	%>
 				<!-- 더보기 -->
@@ -73,6 +76,39 @@
 				</div>
 				<!-- 목록1//-->
 			<%
+				break;
+			case MemberInformList.TYPE_INVITED_MEMBERS:
+			%>
+				<!-- 목록1-->
+				<div class="panel_rds_block mb10 js_invited_member_item" userId="<%=member.getId()%>">
+					<ul>
+						<li class="pl0pr10">
+							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+								<img class="profile_size_m" src="<%=member.getMinPicture() %>" />
+							</a>
+						</li>
+						<li class="">
+							<a href="othersPAGE.sw?userId=<%=member.getId()%>">
+								<span><%=CommonUtil.toNotNull(member.getNickName()) %><br /> <span class="cb t_id"><%=CommonUtil.toNotNull(member.getName()) %></span></span>
+							</a>
+						</li>
+						<li class="bo_l"><span><%=CommonUtil.toNotNull(member.getGoal()) %><br /> <span class="t_id"><%=member.getId() %></span>
+						</span>
+						</li>
+						<li class="fr bo_l">
+							<span> <!-- Btn -->
+								<div class="btn_fgreen_l js_friend_request_btn" userId="<%=member.getId() %>" <%if(member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 요청</div>
+								</div> <!-- Btn //--> 
+								<div class="btn_fgreen_l js_destroy_friendship_btn" userId="<%=member.getId()%>" <%if(!member.isFriend()){%>style="display:none"<%} %>>
+									<div class="btn_fgreen_r"><span class="icon_green_down"></span>친구 끊기</div>
+								</div> <!-- Btn //--> 
+							</span>
+						</li>
+					</ul>
+				</div>
+				<!-- 목록1//-->
+				<%
 				break;
 			case MemberInformList.TYPE_NON_MEMBERS:
 			%>

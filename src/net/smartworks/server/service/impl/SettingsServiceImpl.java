@@ -190,7 +190,12 @@ public class SettingsServiceImpl implements ISettingsService {
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
 					imgCompanyLogo = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId);
-					getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
+						//  SWConfig DB에 id가 없을 경우, create, 있으면 update
+					if(getSwoManager().getLogo(userId, companyId) == null){
+						getSwoManager().createLogo(userId, companyId, imgCompanyLogo);
+					}else{
+						getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
+					}
 				}
 			}
 
@@ -1840,7 +1845,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			String pasMemberPassword = null;
 			String txtMemberEmployeeId = null;
 			String txtMemberPosition = null;
-			String selMemberRole = null;
+			int selMemberRole;
 			int selMemberUserLevel;
 			String selMemberLocale = null;
 			String selMemberTimeZone = null;
@@ -1887,8 +1892,8 @@ public class SettingsServiceImpl implements ISettingsService {
 						txtMemberPosition = (String)frmEditMember.get("txtMemberPosition");
 						swoUser.setPosition(txtMemberPosition);
 					} else if(fieldId.equals("selMemberRole")) {
-						selMemberRole = (String)frmEditMember.get("selMemberRole");
-						swoUser.setRoleId(selMemberRole.equals(User.USER_ROLE_LEADER) ? "DEPT LEADER" : "DEPT MEMBER");
+						selMemberRole = Integer.parseInt((String)frmEditMember.get("selMemberRole"));
+						swoUser.setRoleId(selMemberRole == User.USER_ROLE_LEADER ? "DEPT LEADER" : "DEPT MEMBER");
 					} else if(fieldId.equals("selMemberUserLevel")) {
 						selMemberUserLevel = Integer.parseInt((String)frmEditMember.get("selMemberUserLevel"));
 						swoUser.setAuthId(selMemberUserLevel == User.USER_LEVEL_EXTERNAL_USER ? "EXTERNALUSER" : selMemberUserLevel == User.USER_LEVEL_INTERNAL_USER ? "USER" : selMemberUserLevel == User.USER_LEVEL_AMINISTRATOR ? "ADMINISTRATOR" : "OPERATOR");

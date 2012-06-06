@@ -121,6 +121,7 @@ import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
@@ -223,7 +224,47 @@ public class ModelConverter {
 	public void setCommunityService(ICommunityService communityService) {
 		ModelConverter.communityService = communityService;
 	}
+	public static String[] getWorkSpaceIdIns(User currentUser) throws Exception {
+		try {
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
 
+			String userId = user.getId();
+
+			List<String> workSpaceIdInList = new ArrayList<String>();
+			String[] workSpaceIdIns = null;
+
+			// 나의 공간
+			workSpaceIdInList.add(userId);
+			// 나의 부서
+			DepartmentInfo[] myDepartments = communityService.getMyDepartments();
+			if(!CommonUtil.isEmpty(myDepartments)) {
+				for(DepartmentInfo myDepartment : myDepartments) {
+					String myDeptId = myDepartment.getId();
+					workSpaceIdInList.add(myDeptId);
+				}
+			}
+			// 나의 그룹
+			GroupInfo[] myGroups = communityService.getMyGroups();
+			if(!CommonUtil.isEmpty(myGroups)) {
+				for(GroupInfo myGroup : myGroups) {
+					String myGroupId = myGroup.getId();
+					workSpaceIdInList.add(myGroupId);
+				}
+			}
+			if(workSpaceIdInList.size() > 0) {
+				workSpaceIdIns = new String[workSpaceIdInList.size()];
+				workSpaceIdInList.toArray(workSpaceIdIns);
+			}
+
+			return workSpaceIdIns;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	private static PkgPackage getPkgPackageByPackageId(String packageId) throws Exception {
 		if (CommonUtil.isEmpty(packageId))
 			return null;
@@ -250,7 +291,7 @@ public class ModelConverter {
 		return new WorkSpace(workSpaceId, null);
 	}
 	// #########################################  INFO  ########################################################################
-	
+
 	public static String[] getLikersUserIdArray(String userId, int refType, String refId) throws Exception {
 		if ( CommonUtil.isEmpty(refType) || CommonUtil.isEmpty(refId))
 			return null;
@@ -963,6 +1004,12 @@ public class ModelConverter {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
 				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+						workInfo.setType(SmartWork.TYPE_INFORMATION);
+					} else {
+						workInfo.setType(SmartWork.TYPE_PROCESS);
+					}
 				}
 				instInfo.setCreatedDate(new LocalDate(task.getPrcCreateDate().getTime()));
 				if (task.getParentCtgId() != null) {
@@ -1704,7 +1751,34 @@ public class ModelConverter {
 			return false;
 		}
 	}
-	
+
+	public static UserInfo[] convertSwoUserExtendsToUserInfos(SwoUserExtend[] swoUserExtends) throws Exception {
+		if(CommonUtil.isEmpty(swoUserExtends))
+			return null;
+		UserInfo[] userInfos = null;
+		List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+		for(SwoUserExtend swoUserExtend : swoUserExtends) {
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(swoUserExtend.getId());
+			userInfo.setName(swoUserExtend.getName());
+			userInfo.setNickName(swoUserExtend.getNickName());
+			userInfo.setRole(SwoUser.USER_ROLE_DEPT_LEADER.equals(swoUserExtend.getRoleId()) ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
+			userInfo.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+			userInfo.setSmallPictureName(swoUserExtend.getSmallPictureName());
+			userInfo.setBigPictureName(swoUserExtend.getBigPictureName());
+			userInfo.setPosition(swoUserExtend.getPosition());
+			userInfo.setCellPhoneNo(swoUserExtend.getCellPhoneNo());
+			userInfo.setPhoneNo(swoUserExtend.getPhoneNo());
+			userInfoList.add(userInfo);
+		}
+		if(userInfoList.size() > 0) {
+			userInfos = new UserInfo[userInfoList.size()];
+			userInfoList.toArray(userInfos);
+		}
+		return userInfos;
+	}
+
 	public static UserInfo getUserInfoByUserId(String userId) throws Exception {
 		if (CommonUtil.isEmpty(userId))
 			return null;

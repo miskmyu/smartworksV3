@@ -80,13 +80,19 @@ public class CommunityController {
 		return SmartUtil.returnMnv(request, "jsp/chatting/chatting_box.jsp", "");
 	}
 
+	@RequestMapping("/available_chatter_list")
+	public ModelAndView availableChatterList(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/chatting/available_chatter_list.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_group", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String instanceId = smartworks.setGroup(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("href", "group_space.sw?cid=" + SmartWorks.CONTEXT_PREFIX_GROUP_SPACE + instanceId);
+		map.put("href", "group_space.sw?cid=" + SmartWorks.CONTEXT_PREFIX_GROUP_SPACE + instanceId + "&wid=" + instanceId ); // wid 추가( 그룹 생성 후 멤버가 보이지 않는 현상 수정)
 		return map;
 	}
 

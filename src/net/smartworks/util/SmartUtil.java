@@ -9,6 +9,7 @@
 package net.smartworks.util;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +23,6 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
@@ -399,6 +399,23 @@ public class SmartUtil {
 	    }
 	    return Long.toString(bytes) + Q[0];
 	}
+
+	public static String getFileExtension(String filename){
+		String extension = "none";
+		if(SmartUtil.isBlankObject(filename)) return extension;
+		int pos = filename.lastIndexOf('.');
+		String[] extTypes = new String[]{"asf", "avi", "bmp", "doc", "docx", "exe", "gif", "hwp", "jpg", "mid", "mp3",
+				"mpeg", "mpg", "pdf", "pds", "ppt", "pptx", "rar", "txt", "wav", "wma", "wmv", "word", "xls", "xlsx", "zip"};
+		if(pos != -1) {
+			String extTemp = filename.substring( pos + 1, filename.length()).toLowerCase();
+			for(int i=0; i<extTypes.length; i++) {
+				if(extTypes[i].equals(extTemp))
+					extension = extTemp;
+			}
+		}
+		return extension;
+		
+	}
 	
 	public static String getSubjectString(String userId){
 		return userId.replace('.' , '_');
@@ -424,7 +441,7 @@ public class SmartUtil {
 	}
 	
 	private static final String SUBJECT_SMARTWORKS = "/smartworks";
-	private static final String SUBJECT_BROADCASTING = "/broadcasting";
+	private static final String SUBJECT_BROADCASTING = "broadcasting";
 	private static final String MSG_TYPE_BROADCASTING = "BCAST";
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
@@ -436,24 +453,34 @@ public class SmartUtil {
 	public static void publishBcast(String[] messages){
 		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
-	
+
+	public static void publishCurrent(String userId, int type) throws Exception {
+
+		Notice[] notices = SwServiceFactory.getInstance().getNoticeService().getNotices(userId, type);
+
+		if(!CommonUtil.isEmpty(notices)) {
+			Notice notice = notices[0];
+			publishNoticeCount(userId, notice);
+		}
+	}
+
 	public static void publishAChatters(UserInfo[] users){
 
-		if(SmartUtil.isBlankObject(users)) return;
-		Object[] userInfos = new Object[users.length];
-		for(int i=0; i<users.length; i++){
-			UserInfo user = users[i];
-			Map<String, Object> userInfo = new HashMap<String, Object>();
-			userInfo.put("userId", user.getId());
-			userInfo.put("longName", user.getLongName());
-			userInfo.put("nickName", user.getNickName());
-			userInfo.put("minPicture", user.getMinPicture());
-			userInfos[i] = userInfo;
+		List<Map<String, Object>> userInfos = new ArrayList<Map<String,Object>>();
+		if(!SmartUtil.isBlankObject(users)) {
+			for(int i=0; i<users.length; i++){
+				UserInfo user = users[i];
+				Map<String, Object> userInfo = new HashMap<String, Object>();
+				userInfo.put("userId", user.getId());
+				userInfo.put("longName", user.getLongName());
+				userInfo.put("nickName", user.getNickName());
+				userInfo.put("minPicture", user.getMinPicture());
+				userInfos.add(userInfo);
+			}
 		}
-		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
 		data.put("userInfos", userInfos);
-		
-		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_AVAILABLE_CHATTERS, data);		
+		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_AVAILABLE_CHATTERS, userInfos);		
 	}
 	public static void increaseNoticeCountByNoticeType(String targetUserId, int noticeType) throws Exception {
 		if (noticeType == Notice.TYPE_INVALID)
@@ -467,13 +494,13 @@ public class SmartUtil {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("type", message.getType());
 		data.put("count", message.getLength());
-		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data );
+		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
 	}
 	
 	static Thread messageAgent = null;
 	static List<MessageModel> messageQueue = new LinkedList<MessageModel>();
 	
-	public synchronized static void publishMessage(String channel, String msgType, Object  message){
+	public synchronized static void publishMessage(String channel, String msgType, Object message){
 		if(messageAgent == null) {
 			messageAgent = new Thread(new Runnable() {
 				public void run() {
@@ -484,9 +511,9 @@ public class SmartUtil {
 						ClientTransport transport = LongPollingTransport.create(options, httpClient);
 						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
 						client.handshake();
-				
+
 						MessageModel message = null;
-						
+
 						while(true) {
 							try {
 								message = null;

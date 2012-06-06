@@ -218,7 +218,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 
-			SwdDomainCond swdDomainCond = new SwdDomainCond();
+/*			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
 	
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -237,48 +237,54 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(swdDomain == null)
 				return  null;
 
-			String formId = swdDomain.getFormId();
+			String formId = swdDomain.getFormId();*/
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
-			swdRecordCond.setFormId(formId);
-			swdRecordCond.setDomainId(swdDomain.getObjId());
-			if(spaceId != null)
-				swdRecordCond.setWorkSpaceId(spaceId);
+			String domainId = "frm_notice_SYSTEM";
+			//swdRecordCond.setFormId(formId);
+			swdRecordCond.setDomainId(domainId);
+			String[] workSpaceIdIns = null;
+			if(spaceId == null)
+				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			swdRecordCond.setWorkSpaceId(spaceId);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
+			swdRecordCond.setPageNo(0);
+			swdRecordCond.setPageSize(5);
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
-			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
-			SwdRecord[] swdRecords = null;
-			if(!CommonUtil.isEmpty(totalSwdRecords)) {
-				for(SwdRecord totalSwdRecord : totalSwdRecords) {
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
-					if(isAccessForMe) {
-						swdRecordList.add(totalSwdRecord);
-					}
-				}
-			}
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
-			if(swdRecordList.size() > 0) {
-				swdRecords = new SwdRecord[swdRecordList.size()];
-				swdRecordList.toArray(swdRecords);
-			}
+//			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+//			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
+//			SwdRecord[] swdRecords = null;
+//			if(!CommonUtil.isEmpty(totalSwdRecords)) {
+//				for(SwdRecord totalSwdRecord : totalSwdRecords) {
+//					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalSwdRecord);
+//					if(isAccessForMe) {
+//						swdRecordList.add(totalSwdRecord);
+//					}
+//				}
+//			}
+//
+//			if(swdRecordList.size() > 0) {
+//				swdRecords = new SwdRecord[swdRecordList.size()];
+//				swdRecordList.toArray(swdRecords);
+//			}
 
-			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			List<BoardInstanceInfo> boardInstanceInfoList = new ArrayList<BoardInstanceInfo>();
 			BoardInstanceInfo[] boardInstanceInfos = null;
 
-			String subCtgId = swdRecordExtends[0].getSubCtgId();
-			String subCtgName = swdRecordExtends[0].getSubCtg();
-			String parentCtgId = swdRecordExtends[0].getParentCtgId();
-			String parentCtgName = swdRecordExtends[0].getParentCtg();
-			String formName = swdDomain.getFormName();
+			//String subCtgId = swdRecordExtends[0].getSubCtgId();
+			//String subCtgName = swdRecordExtends[0].getSubCtg();
+			//String parentCtgId = swdRecordExtends[0].getParentCtgId();
+			//String parentCtgName = swdRecordExtends[0].getParentCtg();
+			//String formName = swdDomain.getFormName();
 
 			if(!CommonUtil.isEmpty(swdRecords)) {
 				int swdRecordLength = swdRecords.length;
-				if(swdRecordLength > 5)
-					swdRecordLength = 5;
 				for(int i=0; i < swdRecordLength; i++) {
 					SwdRecord swdRecord = swdRecords[i];
 					BoardInstanceInfo boardInstanceInfo = new BoardInstanceInfo();
@@ -292,17 +298,17 @@ public class InstanceServiceImpl implements IInstanceService {
 					if(workSpaceId == null)
 						workSpaceId = user.getId();
 
-					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+					//WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-					boardInstanceInfo.setWorkSpace(workSpaceInfo);
+					//boardInstanceInfo.setWorkSpace(workSpaceInfo);
 
-					WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(subCtgId))
-						groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
+					//WorkCategoryInfo groupInfo = null;
+					//if (!CommonUtil.isEmpty(subCtgId))
+					//	groupInfo = new WorkCategoryInfo(subCtgId, subCtgName);
 
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
+					//WorkCategoryInfo categoryInfo = new WorkCategoryInfo(parentCtgId, parentCtgName);
 
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 
 					boardInstanceInfo.setWork(workInfo);
 					boardInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
@@ -692,8 +698,9 @@ public class InstanceServiceImpl implements IInstanceService {
 				userId = cuser.getId();
 			
 			String formId = (String)requestBody.get("formId");
+			boolean retry = CommonUtil.toBoolean(requestBody.get("retry"));
 			
-			boolean isFirstSetMode = false; //초기 데이터 입력인지 수정인지를 판단한다
+			boolean isFirstSetMode = !retry; //초기 데이터 입력인지 수정인지를 판단한다
 			
 			//레코드 폼정보를 가져온다
 			if (CommonUtil.isEmpty(formId))
@@ -895,9 +902,10 @@ public class InstanceServiceImpl implements IInstanceService {
 						if (valueFunc == null || valueFunc.equalsIgnoreCase("value")) {
 							SwdRecord[] mappingRecords = null;
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
-								SwdRecord mappingRecord = getSwdManager().getRecordByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
-								if (mappingRecord != null)
-									mappingRecords = new SwdRecord[] {mappingRecord};
+								//SwdRecord mappingRecord = getSwdManager().getRecordByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
+								mappingRecords = getSwdManager().getRecordsByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
+								//if (mappingRecord != null)
+								//	mappingRecords = new SwdRecord[] {mappingRecord};
 							} else {
 								mappingRecords = getSwdManager().getRecordsByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
 							}
@@ -907,10 +915,39 @@ public class InstanceServiceImpl implements IInstanceService {
 							
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
 								
+								//다수의 검색 결과가 온경우 기본적으로 처음 결과값으로 dataField를 생성하고 그 객체 안의 하위 dataField[]에 
+								//전체 결과값을 담아서 리턴한다.
+								//폼런타임에서는 그필드가 콤보박스 필드라면 해당 하위 dataField[]를 검색하고 존재한다면 콤보 형식으로 데이터를 표현한다
+								
+								SwdDataField[] subDataFields = null;
+								if (mappingRecords.length > 1) {
+									
+									subDataFields = new SwdDataField[mappingRecords.length];
+									for (int i = 0; i < mappingRecords.length; i++) {
+										SwdRecord subMappingRecord = mappingRecords[i];
+										SwdDataField subMappingDataField = subMappingRecord.getDataField(mappingFieldId);
+										SwdDataField subDataField = new SwdDataField();
+										
+										if (subMappingDataField == null) {
+											subDataField.setValue(null);
+											subDataField.setRefRecordId(null);
+										} else {
+											subDataField.setValue(subMappingDataField.getValue());
+											subDataField.setRefRecordId(subMappingDataField.getRefRecordId());
+										}
+										subDataFields[i] = subDataField;
+									}
+								}
+								
+								
 								SwdRecord mappingRecord = mappingRecords[0];
 								SwdDataField mappingDataField = mappingRecord.getDataField(mappingFieldId);
 								
 								SwdDataField dataField = oldRecord.getDataField(fieldId);
+								
+								if (subDataFields != null)
+									dataField.setDataFields(subDataFields);
+								
 								if (dataField == null) {
 									dataField = new SwdDataField();
 									dataField.setId(fieldId);
@@ -949,10 +986,12 @@ public class InstanceServiceImpl implements IInstanceService {
 									dataField.setRefRecordId(mappingRecord.getRecordId());
 								}
 								
+								
+								
 							} else {
 								//Sw 2.0 에서 구현 되어 있지만 3.0에서는 미구현! mappingFieldId 가 비어 있는 경우가 없어 보인다! 만약에 아래 오류를 발견한다면
 								//2.0의 executionService.jsp 소스에서 refreshData 부분을 참고하여 코드를 작성해야 한다
-								throw new Exception("InstanceServiceImpl Exception : mappingFieldId is Empty (InstanceServiceImpl.java 760Line)");
+								throw new Exception("InstanceServiceImpl Exception : mappingFieldId is Empty (InstanceServiceImpl.java)");
 							}
 						} else {
 							double value = getSwdManager().getRecordValueByMappingForm(userId, oldRecord, formLinkMap.get(formLinkId), mappingFieldId, valueFunc);
@@ -1410,9 +1449,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			Key Set : frmAccessSpace
 			key Set : formId
 			key Set : formName
+			key Set : frmTaskForward
 			*/
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
 	
 			String domainId = null; // domainId 가 없어도 내부 서버에서 폼아이디로 검색하여 저장
 			String formId = (String)requestBody.get("formId");
@@ -1442,8 +1483,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			for (SwdField field : fields) {
 				fieldInfoMap.put(field.getFormFieldId(), field);
 			}
-	
-			Set<String> keySet = frmSmartFormMap.keySet();
+			
+			//업무화면에서 폼데이터를 넘길때 모든 필드가 다 넘어오지 않는다. 예를 들면 checkbox 의 체크가 되어 있지 않으면 해당 필드 정보자체가
+			//자체가 넘어 오지 않기 때문에 그값을 셋팅할수가 없다 따라서 화면에서 넘어오는 필드를 기준으로 하는것이 아니라 데이터베이스에서 조회한
+			//필드 기준으로 Iterator 한다
+			//그리고 만약 해당 필드가 boolean(checkbox) 일경우 값이 없다면 기본적으로 false를 입력하도록 한다
+			
+			//Set<String> keySet = frmSmartFormMap.keySet();
+			//Iterator<String> itr = keySet.iterator();
+			
+			Set<String> keySet = fieldInfoMap.keySet();
 			Iterator<String> itr = keySet.iterator();
 			
 	//		SwdField[] fieldDatas = new SwdField[keySet.size()];
@@ -1523,8 +1572,13 @@ public class InstanceServiceImpl implements IInstanceService {
 				} else if(fieldValue instanceof Integer) {
 					value = (Integer)frmSmartFormMap.get(fieldId) + "";
 				}
-				if (CommonUtil.isEmpty(value))
-					continue;
+				if (CommonUtil.isEmpty(value)) {
+					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean")) {
+						value = "false";
+					} else {
+						continue;
+					}
+				}
 				SwdDataField fieldData = new SwdDataField();
 				fieldData.setId(fieldId);
 				fieldData.setName(fieldInfoMap.get(fieldId).getFormFieldName());
@@ -1590,6 +1644,93 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setAccessLevel(accessLevel);
 				obj.setAccessValue(accessValue);
 			}
+			
+			//참조 업무 데이터 생성
+			
+			if (frmTaskForwardMap != null) {
+				
+				keySet = frmTaskForwardMap.keySet();
+				itr = keySet.iterator();
+	
+				String txtForwardSubject = null;
+				String txtForwardComments = null;
+				String txtForwardForwardee = null;
+	
+				while (itr.hasNext()) {
+					String fieldId = (String)itr.next();
+					Object fieldValue = frmTaskForwardMap.get(fieldId);
+					if (fieldValue instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(users)) {
+							String symbol = ";";
+							if(users.size() == 1) {
+								txtForwardForwardee = users.get(0).get("id");
+							} else {
+								txtForwardForwardee = "";
+								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+									Map<String, String> user = users.get(i);
+									txtForwardForwardee += user.get("id") + symbol;
+								}
+							}
+						}
+					} else if(fieldValue instanceof String) {
+						if(fieldId.equals("txtForwardSubject")) {
+							txtForwardSubject = (String)fieldValue;
+						} else if(fieldId.equals("txtForwardComments")) {
+							txtForwardComments = (String)fieldValue;
+						} 
+					}
+				}
+				obj.setExtendedAttributeValue("txtForwardSubject", txtForwardSubject);
+				obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+				obj.setExtendedAttributeValue("txtForwardComments", txtForwardComments);
+			}
+			
+			// 전자결재 업무 생성
+			
+			//전자 결재 정보를 바탕으로 approvalLine 을 생성한다
+			
+			String recId = obj.getRecordId();
+			if (CommonUtil.isEmpty(recId)) {
+				recId = CommonUtil.newId();
+				obj.setRecordId(recId);
+			}
+//			AprApprovalLine apprLine = new AprApprovalLine();
+//			apprLine.setStatus("created");
+//			
+//			AprApproval[] approvals = new AprApproval[3];
+//			AprApproval apr1 = new AprApproval();
+//			apr1.setName("firstApprovalName");
+//			apr1.setType("1th");
+//			apr1.setApprover("kmyu@maninsoft.co.kr");
+//			apr1.setMandatory(true);
+//			apr1.setModifiable(true);
+//			
+//			AprApproval apr2 = new AprApproval();
+//			apr2.setName("secondApprovalName");
+//			apr2.setType("2th");
+//			apr2.setApprover("kmyu@maninsoft.co.kr");
+//			apr2.setMandatory(true);
+//			apr2.setModifiable(true);
+//			
+//			AprApproval apr3 = new AprApproval();
+//			apr3.setName("thirdApprovalName");
+//			apr3.setType("3th");
+//			apr3.setApprover("kmyu@maninsoft.co.kr");
+//			apr3.setMandatory(true);
+//			apr3.setModifiable(true);
+//			
+//			approvals[0] = apr1;
+//			approvals[1] = apr2;
+//			approvals[2] = apr3;
+//			
+//			apprLine.setApprovals(approvals);
+//			apprLine.setExtendedPropertyValue("recordId", recId);
+//			SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+//			obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+			
+			// 전자결재 업무 끝
 
 			//TODO 좋은방법이 멀까?
 			String servletPath = request.getServletPath();
@@ -2639,25 +2780,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(!ModelConverter.isAccessibleAllInstance(formId, userId))
 				swdRecordCond.setCreationUser(userId);
 
-			SortingField sf = params.getSortingField();
-			String columnName = "";
-			boolean isAsc;
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
-			if (sf != null) {
-				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
-				isAsc = sf.isAscending();
-			} else {
-				columnName = FormField.ID_LAST_MODIFIED_DATE;
-				isAsc = false;
-			}
-			SortingField sortingField = new SortingField();
-			sortingField.setFieldId(columnName);
-			sortingField.setAscending(isAsc);
-
-			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
 			//long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+/*			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
 			SwdRecord[] finalSwdRecords = null;
 			int viewCount = 0;
@@ -2673,7 +2802,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					finalSwdRecords = new SwdRecord[swdRecordList.size()];
 					swdRecordList.toArray(finalSwdRecords);
 				}
-			}
+			}*/
 
 			int pageSize = params.getPageSize();
 			if(pageSize == 0) pageSize = 20;
@@ -2681,19 +2810,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-/*			int totalPages = (int)totalCount % pageSize;
+			int totalPages = (int)totalCount % pageSize;
 
 			if(totalPages == 0)
 				totalPages = (int)totalCount / pageSize;
 			else
-				totalPages = (int)totalCount / pageSize + 1;*/
-
-			int totalPages = viewCount % pageSize;
-			
-			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
-			else
-				totalPages = viewCount / pageSize + 1;
+				totalPages = (int)totalCount / pageSize + 1;
 
 			int result = 0;
 
@@ -2715,15 +2837,35 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
 				currentPage = 1;
 
-			/*if (currentPage > 0)
+			if (currentPage > 0)
 				swdRecordCond.setPageNo(currentPage-1);
 
-			swdRecordCond.setPageSize(pageSize);*/
+			swdRecordCond.setPageSize(pageSize);
 
-			int pageNo = currentPage-1;
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName  = CommonUtil.toDefault(sf.getFieldId(), FormField.ID_LAST_MODIFIED_DATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = FormField.ID_LAST_MODIFIED_DATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			swdRecordCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			if(CommonUtil.isEmpty(swdRecords))
+				return null;
 
 			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
@@ -2737,162 +2879,157 @@ public class InstanceServiceImpl implements IInstanceService {
 			List<IWInstanceInfo> iWInstanceInfoList = new ArrayList<IWInstanceInfo>();
 			IWInstanceInfo[] iWInstanceInfos = null;
 
-			int startLength = pageNo * pageSize;
-			int endLength = startLength + pageSize;
+			int recordSize = swdRecords.length;
 
-			if(!CommonUtil.isEmpty(finalSwdRecords) && startLength < finalSwdRecords.length) {
-				if(endLength > finalSwdRecords.length)
-					endLength = finalSwdRecords.length;
-				for(int i=startLength; i<endLength; i++) {
-					IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
-					SwdRecord swdRecord = finalSwdRecords[i];
-					String creationUser = swdRecord.getCreationUser();
-					Date creationDate = swdRecord.getCreationDate();
-					String modificationUser = swdRecord.getModificationUser();
-					Date modificationDate = swdRecord.getModificationDate();
-					if(creationUser == null)
-						creationUser = User.USER_ID_NONE_EXISTING;
-					if(creationDate == null)
-						creationDate = new Date();
-					UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
-					LocalDate createdDate = new LocalDate(creationDate.getTime());
-					UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
-					LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
+			for(int i=0; i<recordSize; i++) {
+				IWInstanceInfo iWInstanceInfo = new IWInstanceInfo();
+				SwdRecord swdRecord = swdRecords[i];
+				String creationUser = swdRecord.getCreationUser();
+				Date creationDate = swdRecord.getCreationDate();
+				String modificationUser = swdRecord.getModificationUser();
+				Date modificationDate = swdRecord.getModificationDate();
+				if(creationUser == null)
+					creationUser = User.USER_ID_NONE_EXISTING;
+				if(creationDate == null)
+					creationDate = new Date();
+				UserInfo owner = ModelConverter.getUserInfoByUserId(creationUser);
+				LocalDate createdDate = new LocalDate(creationDate.getTime());
+				UserInfo lastModifier = modificationUser != null ? ModelConverter.getUserInfoByUserId(modificationUser) : owner;
+				LocalDate lastModifiedDate = modificationDate != null ? new LocalDate(modificationDate.getTime()) : createdDate;
 
-					iWInstanceInfo.setId(swdRecord.getRecordId());
-					iWInstanceInfo.setOwner(owner);
-					iWInstanceInfo.setCreatedDate(createdDate);
-					iWInstanceInfo.setLastModifier(lastModifier);
-					iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
-					int type = WorkInstance.TYPE_INFORMATION;
-					iWInstanceInfo.setType(type);
-					iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					String workSpaceId = swdRecord.getWorkSpaceId();
-					if(CommonUtil.isEmpty(workSpaceId))
-						workSpaceId = userId;
+				iWInstanceInfo.setId(swdRecord.getRecordId());
+				iWInstanceInfo.setOwner(owner);
+				iWInstanceInfo.setCreatedDate(createdDate);
+				iWInstanceInfo.setLastModifier(lastModifier);
+				iWInstanceInfo.setLastModifiedDate(lastModifiedDate);
+				int type = WorkInstance.TYPE_INFORMATION;
+				iWInstanceInfo.setType(type);
+				iWInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
+				String workSpaceId = swdRecord.getWorkSpaceId();
+				if(CommonUtil.isEmpty(workSpaceId))
+					workSpaceId = userId;
 
-					WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
+				WorkSpaceInfo workSpaceInfo = communityService.getWorkSpaceInfoById(workSpaceId);
 
-					iWInstanceInfo.setWorkSpace(workSpaceInfo);
+				iWInstanceInfo.setWorkSpace(workSpaceInfo);
 
-					WorkCategoryInfo groupInfo = null;
-					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
-						groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
-		
-					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
-		
-					WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
+				WorkCategoryInfo groupInfo = null;
+				if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
+					groupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
 	
-					iWInstanceInfo.setWork(workInfo);
-					iWInstanceInfo.setViews(swdRecord.getHits());
-					SwdDataField[] swdDataFields = swdRecord.getDataFields();
-					List<FieldData> fieldDataList = new ArrayList<FieldData>();
+				WorkCategoryInfo categoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
+	
+				WorkInfo workInfo = new SmartWorkInfo(formId, formName, SmartWork.TYPE_INFORMATION, groupInfo, categoryInfo);
 
-					if(!CommonUtil.isEmpty(swdDataFields)) {
-						int swdDataFieldsLength = swdDataFields.length;
-						for(int j=0; j<swdDataFieldsLength; j++) {
-							SwdDataField swdDataField = swdDataFields[j];
-							if(swdDataField.getId().equals(titleFieldId))
-								iWInstanceInfo.setSubject(swdDataField.getValue());
-							if(!CommonUtil.isEmpty(swfFields)) {
-								int swfFieldsLength = swfFields.length;
-								for(int k=0; k<swfFieldsLength; k++) {
-									SwfField swfField = swfFields[k];
-									String formatType = swfField.getFormat().getType();
-									if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
-										if(swdDataField.getId().equals(swfField.getId())) {
-											FieldData fieldData = new FieldData();
-											fieldData.setFieldId(swdDataField.getId());
-											fieldData.setFieldType(formatType);
-											String value = swdDataField.getValue();
-											if(formatType.equals(FormField.TYPE_USER)) {
-												if(value != null) {
-													String[] users = value.split(";");
-													String resultUser = "";
-													if(!CommonUtil.isEmpty(users) && users.length > 0) {
-														if(users.length < 4) {
-															for(int l=0; l<users.length; l++) {
-																resultUser += users[l] + ", ";
-															}
-															resultUser = resultUser.substring(0, resultUser.length()-2);
-														} else if(users.length > 3) {
-															for(int l=0; l<3; l++) {
-																resultUser += users[l] + ", ";
-															}
-															resultUser = resultUser.substring(0, resultUser.length()-2);
-															resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
+				iWInstanceInfo.setWork(workInfo);
+				iWInstanceInfo.setViews(swdRecord.getHits());
+				SwdDataField[] swdDataFields = swdRecord.getDataFields();
+				List<FieldData> fieldDataList = new ArrayList<FieldData>();
+
+				if(!CommonUtil.isEmpty(swdDataFields)) {
+					int swdDataFieldsLength = swdDataFields.length;
+					for(int j=0; j<swdDataFieldsLength; j++) {
+						SwdDataField swdDataField = swdDataFields[j];
+						if(swdDataField.getId().equals(titleFieldId))
+							iWInstanceInfo.setSubject(swdDataField.getValue());
+						if(!CommonUtil.isEmpty(swfFields)) {
+							int swfFieldsLength = swfFields.length;
+							for(int k=0; k<swfFieldsLength; k++) {
+								SwfField swfField = swfFields[k];
+								String formatType = swfField.getFormat().getType();
+								if(swdDataField.getDisplayOrder() > -1 && !formatType.equals("richEditor") && !formatType.equals("imageBox") && !formatType.equals("dataGrid")) {
+									if(swdDataField.getId().equals(swfField.getId())) {
+										FieldData fieldData = new FieldData();
+										fieldData.setFieldId(swdDataField.getId());
+										fieldData.setFieldType(formatType);
+										String value = swdDataField.getValue();
+										if(formatType.equals(FormField.TYPE_USER)) {
+											if(value != null) {
+												String[] users = value.split(";");
+												String resultUser = "";
+												if(!CommonUtil.isEmpty(users) && users.length > 0) {
+													if(users.length < 4) {
+														for(int l=0; l<users.length; l++) {
+															resultUser += users[l] + ", ";
 														}
+														resultUser = resultUser.substring(0, resultUser.length()-2);
+													} else if(users.length > 3) {
+														for(int l=0; l<3; l++) {
+															resultUser += users[l] + ", ";
+														}
+														resultUser = resultUser.substring(0, resultUser.length()-2);
+														resultUser = resultUser + " " + SmartMessage.getString("content.sentence.with_other_users", (new Object[]{(users.length - 3)}));
 													}
-													value = resultUser;
 												}
-											} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
-												String symbol = swfField.getFormat().getCurrency();
-												fieldData.setSymbol(symbol);
-											} else if(formatType.equals(FormField.TYPE_PERCENT)) {
-												// TO-DO
-											} else if(formatType.equals(FormField.TYPE_DATE)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_TIME)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_DATETIME)) {
-												LocalDate localDateValue = null;
-												if(value != null) {
-													localDateValue = LocalDate.convertGMTStringToLocalDate(value);
-													if(localDateValue != null)
-														value = localDateValue.toLocalDateTimeSimpleString();
-												}
-											} else if(formatType.equals(FormField.TYPE_FILE)) { 
-												List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
-												List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
-												int fileModelListLength = fileModelList.size();
-												for(int l=0; l<fileModelListLength; l++) {
-													Map<String, String> fileMap = new LinkedHashMap<String, String>();
-													IFileModel fileModel = fileModelList.get(l);
-													String fileId = fileModel.getId();
-													String fileName = fileModel.getFileName();
-													String fileType = fileModel.getType();
-													String fileSize = fileModel.getFileSize() + "";
-													fileMap.put("fileId", fileId);
-													fileMap.put("fileName", fileName);
-													fileMap.put("fileType", fileType);
-													fileMap.put("fileSize", fileSize);
-													fileList.add(fileMap);
-												}
-												if(fileList.size() > 0)
-													fieldData.setFiles(fileList);
-											} else if(formatType.equals(FormField.TYPE_TEXT)) {
-												value = StringUtil.subString(value, 0, 30, "...");
+												value = resultUser;
 											}
-											fieldData.setValue(value);
-											fieldDataList.add(fieldData);
+										} else if(formatType.equals(FormField.TYPE_CURRENCY)) {
+											String symbol = swfField.getFormat().getCurrency();
+											fieldData.setSymbol(symbol);
+										} else if(formatType.equals(FormField.TYPE_PERCENT)) {
+											// TO-DO
+										} else if(formatType.equals(FormField.TYPE_DATE)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_TIME)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_DATETIME)) {
+											LocalDate localDateValue = null;
+											if(value != null) {
+												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												if(localDateValue != null)
+													value = localDateValue.toLocalDateTimeSimpleString();
+											}
+										} else if(formatType.equals(FormField.TYPE_FILE)) { 
+											List<IFileModel> fileModelList = getDocManager().findFileGroup(value);
+											List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+											int fileModelListLength = fileModelList.size();
+											for(int l=0; l<fileModelListLength; l++) {
+												Map<String, String> fileMap = new LinkedHashMap<String, String>();
+												IFileModel fileModel = fileModelList.get(l);
+												String fileId = fileModel.getId();
+												String fileName = fileModel.getFileName();
+												String fileType = fileModel.getType();
+												String fileSize = fileModel.getFileSize() + "";
+												fileMap.put("fileId", fileId);
+												fileMap.put("fileName", fileName);
+												fileMap.put("fileType", fileType);
+												fileMap.put("fileSize", fileSize);
+												fileList.add(fileMap);
+											}
+											if(fileList.size() > 0)
+												fieldData.setFiles(fileList);
+										} else if(formatType.equals(FormField.TYPE_TEXT)) {
+											value = StringUtil.subString(value, 0, 30, "...");
 										}
+										fieldData.setValue(value);
+										fieldDataList.add(fieldData);
 									}
 								}
 							}
 						}
 					}
-					FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
-					fieldDataList.toArray(fieldDatas);
-					iWInstanceInfo.setDisplayDatas(fieldDatas);
+				}
+				FieldData[] fieldDatas = new FieldData[fieldDataList.size()];
+				fieldDataList.toArray(fieldDatas);
+				iWInstanceInfo.setDisplayDatas(fieldDatas);
 
-					iWInstanceInfoList.add(iWInstanceInfo);
-				}
-				if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
-					iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
-					iWInstanceInfoList.toArray(iWInstanceInfos);
-				}
-				instanceInfoList.setInstanceDatas(iWInstanceInfos);
+				iWInstanceInfoList.add(iWInstanceInfo);
 			}
+			if(!CommonUtil.isEmpty(iWInstanceInfoList)) {
+				iWInstanceInfos = new IWInstanceInfo[iWInstanceInfoList.size()];
+				iWInstanceInfoList.toArray(iWInstanceInfos);
+			}
+			instanceInfoList.setInstanceDatas(iWInstanceInfos);
 
 			/*SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
@@ -3063,7 +3200,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				instanceInfoList.setInstanceDatas(iWInstanceInfos);
 			}*/
 
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
@@ -6027,33 +6164,33 @@ public class InstanceServiceImpl implements IInstanceService {
 	public AsyncMessageList getMyMessageInstancesByType(int type, int maxSize) throws Exception {
 
 		AsyncMessageList asyncMessageList = new AsyncMessageList();
-		AsyncMessageInstanceInfo[] messages = getMyMessageInstancesByType(type, null, maxSize);
-		int totalSize = 0;
-		if(!CommonUtil.isEmpty(messages))
-			totalSize = messages.length;
-		asyncMessageList.setTotalSize(totalSize);
-		asyncMessageList.setMessages(messages);
+		getMyMessageInstancesByType(asyncMessageList, type, null, maxSize);
 
 		return asyncMessageList;
 	}
 
 	@Override
-	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception {
 		try {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
 			MessageCond messageCond = new MessageCond();
 			if(fromDate != null)
 				messageCond.setCreationDateTo(fromDate);
-			messageCond.setPageNo(0);
-			messageCond.setPageSize(maxSize);
 			if(type == Instance.TYPE_ASYNC_MESSAGE) {
 				messageCond.setTargetUser(userId);
 			} else if(type == Instance.TYPE_SENT_ASYNC_MESSAGE) {
 				messageCond.setSendUser(userId);
 			}
 
-			messageCond.setOrders(new Order[]{new Order(MessageCond.A_CREATIONDATE, false)});
+			long totalSize = getMessageManager().getMessageSize(userId, messageCond);
+			if(asyncMessageList != null)
+				asyncMessageList.setTotalSize((int)totalSize);
+
+			messageCond.setPageNo(0);
+			messageCond.setPageSize(maxSize);
+			messageCond.setOrders(new Order[]{new Order(MessageCond.A_MODIFICATIONDATE, false)});
+
 			Message[] messages = getMessageManager().getMessages(userId, messageCond, IManager.LEVEL_ALL);
 
 			if(CommonUtil.isEmpty(messages))
@@ -6063,6 +6200,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			AsyncMessageInstanceInfo[] asyncMessageInstanceInfos = null;
 			if(!CommonUtil.isEmpty(messages)) {
 				for(Message message : messages) {
+					String deleteUser = message.getDeleteUser();
+					if(deleteUser != null && deleteUser.equals(userId))
+						continue;
 					AsyncMessageInstanceInfo asyncMessageInstanceInfo = new AsyncMessageInstanceInfo();
 					asyncMessageInstanceInfo.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 					asyncMessageInstanceInfo.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
@@ -6083,9 +6223,14 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}
 			if(asyncMessageInstanceInfoList.size() > 0) {
+				if(totalSize > maxSize)
+					asyncMessageInstanceInfoList.add(new AsyncMessageInstanceInfo());
 				asyncMessageInstanceInfos = new AsyncMessageInstanceInfo[asyncMessageInstanceInfoList.size()];
 				asyncMessageInstanceInfoList.toArray(asyncMessageInstanceInfos);
 			}
+			if(asyncMessageList != null)
+				asyncMessageList.setMessages(asyncMessageInstanceInfos);
+
 			return asyncMessageInstanceInfos;
 
 		} catch (Exception e) {
@@ -6096,53 +6241,41 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public void createAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		/*{
-			senderId=kmyu@maninsoft.co.kr, 
-			chatId=chatId1335500111869, 
-			senderInfo=
-				{
-					userId=kmyu@maninsoft.co.kr, 
-					longName=1 유광민, 
-					nickName=유광민, 
-					minPicture=http://localhost:8081/imageServer/Maninsoft/Profiles/kmyu@maninsoft.co.kr_thumb.jpg
-				}, 
-			chatters=[hsshin@maninsoft.co.kr], 
-			message=hello, 
-			receiverId=hsshin@maninsoft.co.kr
-		}*/
 		try {
 			String senderId = (String)requestBody.get("senderId");
 			String message = (String)requestBody.get("message");
-			String receiverId = (String)requestBody.get("receiverId");
+			List receivers = (ArrayList)requestBody.get("receivers");
 			String chatId = (String)requestBody.get("chatId");
-			List chattersList = (ArrayList)requestBody.get("chatters");
-			
-			Message msg = new Message();
-			msg.setContent(message);
-			msg.setSendUser(senderId);
-			msg.setTargetUser(receiverId);
-			
-			StringBuffer chattersBuff = null;
-			if (chattersList != null && chattersList.size() != 0) {
-				chattersBuff = new StringBuffer();
-				boolean first = true;
-				for (int i = 0; i < chattersList.size(); i++) {
-					String chattersId = (String)chattersList.get(i);
-					if (first) {
-						chattersBuff.append(chattersId);	
-						first = false;
-					} else {
-						chattersBuff.append(",").append(chattersId);
+			List chattersList = (ArrayList)requestBody.get("chatters");		
+			if(receivers != null && receivers.size() != 0){
+				for(int index=0; index<receivers.size(); index++){
+					Message msg = new Message();
+					msg.setContent(message);
+					msg.setSendUser(senderId);
+					msg.setTargetUser((String)receivers.get(index));
+					
+					StringBuffer chattersBuff = null;
+					if (chattersList != null && chattersList.size() != 0) {
+						chattersBuff = new StringBuffer();
+						boolean first = true;
+						for (int i = 0; i < chattersList.size(); i++) {
+							String chattersId = (String)chattersList.get(i);
+							if (first) {
+								chattersBuff.append(chattersId);	
+								first = false;
+							} else {
+								chattersBuff.append(",").append(chattersId);
+							}
+						}
+						msg.setChattersId(chattersBuff.toString());
 					}
-				}
-				msg.setChattersId(chattersBuff.toString());
-			}
-			msg.setChatId(chatId);
-			
-			getMessageManager().createMessage(senderId, msg);
+					msg.setChatId(chatId);
+					
+					getMessageManager().createMessage(senderId, msg);
 
-			SmartUtil.increaseNoticeCountByNoticeType(receiverId, Notice.TYPE_MESSAGE);
-			
+					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -6157,8 +6290,21 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String messageId = (String)requestBody.get("workInstanceId");
 
-			getMessageManager().removeMessage(userId, messageId);
+			Message msg = getMessageManager().getMessage(userId, messageId, IManager.LEVEL_ALL);
 			
+			String deleteUser = msg.getDeleteUser();
+			if(SmartUtil.isBlankObject(deleteUser)) {
+				String sendUser = msg.getSendUser();
+				String targetUser = msg.getTargetUser();
+				if(sendUser.equals(targetUser)){
+					getMessageManager().removeMessage(userId, messageId);
+				} else {
+					msg.setDeleteUser(userId);
+					getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);				
+				}
+			} else {
+				getMessageManager().removeMessage(userId, messageId);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -6178,13 +6324,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			msg.setChecked(true);
 			msg.setCheckedTime(new LocalDate());
 
-			getMessageManager().setMessage(userId, msg, IManager.LEVEL_ALL);
+			getMessageManager().setMessage(userId, msg, IManager.LEVEL_LITE);
+
+			SmartUtil.publishCurrent(userId, Notice.TYPE_MESSAGE);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
+
 	@Override
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		

@@ -15,6 +15,7 @@ public class SchWorkspace {
 	private String type;
 	private String description;
 	private String userPosition;
+	private String userNickName;
 	private String userPicture;
 	private String userDeptId;
 	private String userDeptName;
@@ -112,6 +113,12 @@ public class SchWorkspace {
 	}
 	public void setUserPosition(String userPosition) {
 		this.userPosition = userPosition;
+	}
+	public String getUserNickName() {
+		return userNickName;
+	}
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
 	}
 	public String getUserPicture() {
 		return userPicture;

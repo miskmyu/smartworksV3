@@ -46,8 +46,10 @@ public class SwdDataField extends BaseObject {
 	private String refForm;
 	private String refFormField;
 	private String refRecordId;
-	
 	private String value;
+
+	private SwdDataField[] dataFields;
+	
 	private List<Map<String, String>> users;
 	private List<Map<String, String>> files;
 
@@ -74,7 +76,6 @@ public class SwdDataField extends BaseObject {
 	public String getId() {
 		return id;
 	}
-	private SwdDataField[] dataFields;
 	public SwdDataField() {
 		super();
 	}

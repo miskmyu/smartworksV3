@@ -10,6 +10,7 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ page import="net.smartworks.model.community.*"%>
 <%@ page import="net.smartworks.model.notice.*"%>
+<%@page import="net.smartworks.model.company.CompanyGeneral"%>
 
 <script>
 
@@ -35,6 +36,12 @@ function updateNoticeCount(message){
 		$('#savedbox_count').html(data);
 	}
 };
+
+function logout() {
+	document.location.href = "logout.sw?userId=" + currentUser.userId;
+};
+
+</script>
 </script>
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 그리고 현재사용자 정보도 가져온다.	
@@ -49,12 +56,16 @@ function updateNoticeCount(message){
 	
 	// 서버에서 현재사용자에 대한 Notice들을 가져온다.
 	Notice[] notices = smartWorks.getNoticesForMe();
+	//로고반영 구현을 위해 추가
+	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
+<!--  style 확인 필요함 -->
 <div>
-	<a class="company_logo"
-		href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"></a>
+	<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
+		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyGeneral.getCompanyLogo()%>" />
+	</a>
 </div>
 <!-- 회사 로고 및 연결 링크 //-->
 
@@ -240,7 +251,7 @@ function updateNoticeCount(message){
 				href="my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
 						key="header.global_menu.edit_my_profile" /> </a>
 			</li>
-			<li><a href="logout"><fmt:message key="header.global_menu.logout" />
+			<li><a href="javascript:logout();"><fmt:message key="header.global_menu.logout" />
 			</a>
 			</li>
 		</ul>

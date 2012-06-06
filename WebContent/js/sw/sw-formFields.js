@@ -303,7 +303,7 @@ function loadNewBoardFields() {
 			gridRow.find('.form_label').hide();
 			gridRow.find('.form_value input').removeClass('fieldline').attr('placeholder', placeHolderTitle);
 			
-			var gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			gridRow.hide();
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
@@ -314,7 +314,7 @@ function loadNewBoardFields() {
 				required: true
 			});
 			
-			var gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			gridRow.hide();
 			SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
 				container: gridRow,
@@ -359,7 +359,7 @@ function loadTaskForwardFields() {
 				required: true
 			});
 
-			var gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtForwardComments",
@@ -414,6 +414,97 @@ function loadNewGroupFields() {
 				multiUsers: true,
 				required: false
 			});
+		}		
+	}
+};
+
+function loadWriteMailFields() {
+	var writeMailFields = $('div.js_write_mail_fields');
+	if(!isEmpty(writeMailFields)) {
+		for(var i=0; i<writeMailFields.length; i++) {
+			var writeMailField = $(writeMailFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			writeMailField.html(gridTable.html(gridRow));
+			
+			var receiversTitle = writeMailField.attr("receiversTitle");
+			var ccReceiversTitle = writeMailField.attr("ccReceiversTitle");
+			var bccReceiversTitle = writeMailField.attr("bccReceiversTitle");
+			var priorityTitle = writeMailField.attr("priorityTitle");
+			var subjectTitle = writeMailField.attr("subjectTitle");
+			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
+
+			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "receivers",
+				fieldName: receiversTitle,
+				columns: 1,
+				multiUsers: true,
+				emailAddress: true,
+				required: true
+			});
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "ccReceivers",
+				fieldName: ccReceiversTitle,
+				columns: 1,
+				multiUsers: true,
+				emailAddress: true,
+				required: false
+			});
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "bccReceivers",
+				fieldName: bccReceiversTitle,
+				columns: 1,
+				multiUsers: true,
+				emailAddress: true,
+				required: false
+			});
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "subject",
+				fieldName: subjectTitle,
+				columns: 1,
+				required: true
+			});
+			
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.CheckBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "priority",
+				fieldName: priorityTitle,
+				columns: 1,
+				required: false
+			});
+			
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+				container: gridRow,
+				fieldId: "attachments",
+				fieldName: attachmentsTitle,
+				columns: 1,
+				required: false
+			});
+			
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+				container: gridRow,
+				fieldId: "contents",
+				fieldName: "",
+				columns: 1,
+				required: true
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value').css({width:"100%"});
+			gridRow.find('#contents').css({height:"400px"});
 		}		
 	}
 };

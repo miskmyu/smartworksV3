@@ -21,11 +21,11 @@ public class MailFolder extends BaseObject {
 	public static final String ID_TRASH 	= "4";
 	public static final String ID_DRAFTS 	= "5";
 	
-	public static final String NAME_INBOX 	= "INBOX";
-	public static final String NAME_SENT 	= "Sent";
-	public static final String NAME_TRASH 	= "Trash";
-	public static final String NAME_DRAFTS 	= "Drafts";
-	public static final String NAME_JUNK 	= "Junk";
+	public static final String ID_STRING_INBOX 	= "INBOX";
+	public static final String ID_STRING_SENT 	= "Sent";
+	public static final String ID_STRING_TRASH 	= "Trash";
+	public static final String ID_STRING_DRAFTS = "Drafts";
+	public static final String ID_STRING_JUNK 	= "Junk";
 	
 	public static final MailFolder[] SYSTEM_FOLDERS = {
 		new MailFolder( ID_INBOX, "", TYPE_SYSTEM_INBOX),
@@ -54,6 +54,22 @@ public class MailFolder extends BaseObject {
 			return SmartMessage.getString("mail.title.folder.drafts");
 		}
 		return super.getName();
+	}
+	
+	public String getIdString(){
+		switch(type){
+		case 1:
+			return ID_STRING_INBOX;
+		case 2:
+			return ID_STRING_JUNK;
+		case 3:
+			return ID_STRING_SENT;
+		case 4:
+			return ID_STRING_TRASH;
+		case 5:
+			return ID_STRING_DRAFTS;
+		}
+		return "";
 	}
 	
 	public int getType() {
@@ -112,6 +128,25 @@ public class MailFolder extends BaseObject {
 			return SYSTEM_FOLDERS[2].getName();
 		case 5:
 			return SYSTEM_FOLDERS[3].getName();
+		}
+		return null;
+	}
+
+	public static String getFolderSIdById(String folderId){
+		if(SmartUtil.isBlankObject(folderId)) return null;
+		
+		int folderInt = Integer.parseInt(folderId);
+		switch(folderInt){
+		case 1:
+			return SYSTEM_FOLDERS[0].getIdString();
+		case 2:
+			return SYSTEM_FOLDERS[4].getIdString();
+		case 3:
+			return SYSTEM_FOLDERS[1].getIdString();
+		case 4:
+			return SYSTEM_FOLDERS[2].getIdString();
+		case 5:
+			return SYSTEM_FOLDERS[3].getIdString();
 		}
 		return null;
 	}

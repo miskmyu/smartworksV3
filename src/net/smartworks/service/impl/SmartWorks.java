@@ -48,6 +48,7 @@ import net.smartworks.model.sera.CourseAdList;
 import net.smartworks.model.sera.CourseList;
 import net.smartworks.model.sera.FriendInformList;
 import net.smartworks.model.sera.FriendList;
+import net.smartworks.model.sera.GlobalSearchList;
 import net.smartworks.model.sera.MemberInformList;
 import net.smartworks.model.sera.MenteeInformList;
 import net.smartworks.model.sera.Mentor;
@@ -75,6 +76,7 @@ import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IDocFileService;
 import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.ILoginService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
@@ -93,6 +95,7 @@ import com.google.gdata.data.youtube.FormUploadToken;
 public class SmartWorks implements ISmartWorks {
 
 	ICommunityService communityService;
+	ILoginService loginService;
 	INoticeService noticeService;
 	ICalendarService calendarService;
 	IInstanceService instanceService;
@@ -107,6 +110,11 @@ public class SmartWorks implements ISmartWorks {
 	@Autowired
 	public void setCommunityService(ICommunityService communityService) {
 		this.communityService = communityService;
+	}
+
+	@Autowired
+	public void setLoginService(ILoginService loginService) {
+		this.loginService = loginService;
 	}
 
 	@Autowired
@@ -195,8 +203,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public WorkSpaceInfo[] searchCommunity(String key) throws Exception {
-		return communityService.searchCommunity(key);
+	public WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception {
+		return communityService.searchCommunity(key, request);
 	}
 
 	@Override
@@ -225,8 +233,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public UserInfo[] getAvailableChatter() throws Exception {
-		return communityService.getAvailableChatter();
+	public UserInfo[] getAvailableChatter(HttpServletRequest request) throws Exception {
+		return communityService.getAvailableChatter(request);
 	}
 
 	@Override
@@ -1009,8 +1017,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public SeraUserInfo[] getFriendRequestsForMe(String lastId, int maxList) throws Exception {
-		return seraService.getFriendRequestsForMe(lastId, maxList);
+	public SeraUserInfo[] getFriendRequestsByUserId(String userId, String lastId, int maxList) throws Exception {
+		return seraService.getFriendRequestsByUserId(userId, lastId, maxList);
 	}
 	
 	@Override
@@ -1168,8 +1176,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(int type, LocalDate fromDate, int maxSize) throws Exception {
-		return instanceService.getMyMessageInstancesByType(type, fromDate, maxSize);
+	public AsyncMessageInstanceInfo[] getMyMessageInstancesByType(AsyncMessageList asyncMessageList, int type, LocalDate fromDate, int maxSize) throws Exception {
+		return instanceService.getMyMessageInstancesByType(null, type, fromDate, maxSize);
 	}
 
 	@Override
@@ -1222,37 +1230,31 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public TeamInfo[] getTeamsByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamsByCourse(courseId);
 	}
 
 	@Override
 	public Team getMyTeamByCourse(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getMyTeamByCourse(courseId);
 	}
 
 	@Override
 	public Team getTeamById(String teamId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamById(teamId);
 	}
 
 	@Override
 	public MemberInformList getTeamMemberInformations(String teamId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformations(teamId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] getTeamMemberInformsByType(int type, String teamId, String lastId, int maxList) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getTeamMemberInformsByType(type, teamId, lastId, maxList);
 	}
 
 	@Override
 	public SeraUserInfo[] searchTeamMemberByType(int type, String courseId, String teamId, String key) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.searchTeamMemberByType(type, courseId, teamId, key);
 	}
 
@@ -1273,7 +1275,6 @@ public class SmartWorks implements ISmartWorks {
 
 	@Override
 	public Team getJoinRequestTeamByCourseId(String courseId) throws Exception {
-		// TODO Auto-generated method stub
 		return seraService.getJoinRequestTeamByCourseId(courseId);
 	}
 
@@ -1306,4 +1307,35 @@ public class SmartWorks implements ISmartWorks {
 	public CourseAdList getCourseAds(int maxList) throws Exception {
 		return seraService.getCourseAds(maxList);
 	}
+
+	@Override
+	public GlobalSearchList searchGlobal(String key, int maxCourseList, int maxUserList) throws Exception {
+		return seraService.searchGlobal(key, maxCourseList, maxUserList);
+	}
+
+	@Override
+	public CourseInfo[] searchCourses(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchCourses(null, key, lastId, maxList);
+	}
+
+	@Override
+	public SeraUserInfo[] searchSeraUsers(String key, String lastId, int maxList) throws Exception {
+		return seraService.searchSeraUsers(null, key, lastId, maxList);
+	}
+
+	@Override
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		loginService.logout(request, response);
+	}
+
+	@Override
+	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.sendMail(requestBody, request);
+	}
+
+	@Override
+	public UserInfo[] searchEmailAddress(String key) throws Exception {
+		return communityService.searchEmailAddress(key);
+	}
+
 }

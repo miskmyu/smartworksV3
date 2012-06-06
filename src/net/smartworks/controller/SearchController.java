@@ -20,12 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 
-	@RequestMapping("/available_chatter")
-	public ModelAndView availableChatter(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		return SmartUtil.returnMnv(request, "jsp/search/available_chatter.jsp", "");
-	}
-
 	@RequestMapping("/community")
 	public ModelAndView community(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -72,5 +66,11 @@ public class SearchController {
 	public ModelAndView userName(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		return SmartUtil.returnMnv(request, "jsp/search/user_name.jsp", "");
+	}
+
+	@RequestMapping("/email_address")
+	public ModelAndView emailAddress(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "jsp/search/email_address.jsp", "");
 	}
 }

@@ -43,7 +43,7 @@
 			if(courseTeamManagement.find('input[name="chkUserDefineDays"]').attr('checked')!=='checked'){
 				var teamDays = parseInt(courseTeamManagement.find('input[name="txtTeamDays"]').attr('value'));
 				if(teamDays <= 0){
-					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1 이상이여야 합니다!");
+					smartPop.showInfo(smartPop.ERROR, "팀기간은 최소 1일 이상이여야 합니다!");
 					return false;					
 				}
 				startDate = new Date();
@@ -57,8 +57,10 @@
 				return false;
 			}
 			var paramsJson = {};
-			paramsJson['courseId'] = courseTeamManagement.attr('courseId');
-			paramsJson['teamId'] = courseTeamManagement.attr('teamId');
+			var courseId = courseTeamManagement.attr('courseId');
+			var teamId = courseTeamManagement.attr('teamId');
+			paramsJson['courseId'] = courseId;
+			paramsJson['teamId'] = teamId;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				if(form.attr('name') === 'frmSmartForm'){
@@ -80,7 +82,13 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, "팀정보가 정상적으로 수정되었습니다!", function(){
-						$('.js_course_home_page .js_course_main_menu .js_create_team').click();
+						var selectCourseTeam = $('.js_select_course_team select');
+						if(!isEmpty(selectCourseTeam)){
+							selectCourseTeam.find('option[value="' + teamId + '"]').attr('selected', 'selected');
+							selectCourseTeam.change();
+						}else{
+							$('.js_course_team_menu').click();
+						}
 					});
 				},
 				error : function(e) {

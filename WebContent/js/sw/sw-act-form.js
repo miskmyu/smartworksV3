@@ -24,6 +24,7 @@ $(function() {
 		}
 		refreshData['workId'] = workId;
 		refreshData['recordId'] = recordId;
+		refreshData['retry'] = true;
 		new SmartWorks.GridLayout({
 			target : target,
 			mode : "edit",

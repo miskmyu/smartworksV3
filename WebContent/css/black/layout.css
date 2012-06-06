@@ -1,8 +1,8 @@
 @charset "utf-8";
 
-#wrap { background: url("../../images/top_bg.jpg") repeat-x scroll 0 0 transparent; height:100%; min-width:1000px; margin:0; z-index:1; position:relative;}
+#wrap { background: url("../../images/top_bg.png") repeat-x scroll 0 0 #ECE9E2; height:100%; min-width:1000px; margin:0; z-index:1; position:relative;}
 
-body, #nav { background: url("../../images/bg_body.jpg") repeat-y;}
+body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 #nav a:link, #nav a:visited, #header a:link, #header a:visited {color:#FFF;}
 #nav a:hover, #nav a:focus, #nav a:active, #header a:hover, #header a:focus, #header a:active {color:#FFF; text-decoration:none;}
@@ -94,13 +94,13 @@ body, #nav { background: url("../../images/bg_body.jpg") repeat-y;}
 	width:25px;padding:0; position:relative;top:-23px;left:169px;border:0
 }
 .srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat;}
-.srch_wsize {width:195px;height:23px;margin: 0 10px;overflow:hidden}
+.srch_wsize {width:195px;height:23px;margin: 0 5px 0 0;overflow:hidden}
 .srch_wsize2{width:195px;height:23px;margin:0;margin-top:-2px;overflow:hidden}
 .srch_wsize_mail{width:195px;height:23px;margin: 28px 0 0; overflow:hidden}
 
 /*Search-white */
 .srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px;}
-.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px;}
+.srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px; margin: 0}
 .srch_wh button, .srch_wh .srch_icon, .mail_srch  button {
 	background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
 	width:13px; right:2px; padding:0; position:relative; float: right; top:1px;
@@ -184,11 +184,11 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -551px -650px; padding:0 0 0 22px; float: left; height:18px}
 
 /* Nav Mail Btn*/
-.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 0 transparent; height:12px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:12px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -93px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 -2px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -25px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0x 5px 0 0; display: inline-block;}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right;}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px;}
@@ -572,6 +572,8 @@ td.pic{width:85px}
 .mail_list_section .view_title dt { clear:both}
 .mail_list_section .view_title dd { margin:0 0 0 5px}
 .mail_list_section .read_frame { margin:10px}
+.nav_mail_list {height: 16px; vertical-align: top !important}
+.nav_mail_list span {vertical-align: top !important; color: #FFA24D}
 	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e;}
@@ -583,15 +585,15 @@ td.pic{width:85px}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
 
 /* Button */
-.btn {background-color:#666666; float:right; height:22px; position:absolute;}
-.txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
+.btn {background-color:#666666; float:right; height:22px; position:absolute; line-height:19px}
+.btn .txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
-.txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
+.btn .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
     		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
-.txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
+.btn .txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 			
-.btn_wh {clear: both; display:inline-block;}
+.btn_wh {clear: both; display:inline-block; line-height:19px}
 .btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
 			float:left; height:20px; width:5px;}
 .btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
@@ -599,7 +601,7 @@ td.pic{width:85px}
 .btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
     		float:left; height:20px; width:5px;}
 			
-.btn_wh_ov {clear: both; display:inline-block;}
+.btn_wh_ov {clear: both; display:inline-block; line-height:19px}
 .btn_wh_ov .txt_btn_start {background: url("../../images/btn_wh_left_ov.gif") repeat scroll 0 0 transparent;
 			float:left; height:20px; width:5px;}
 .btn_wh_ov .txt_btn_center {background: url("../../images/btn_wh_center_ov.gif") repeat scroll 0 0 transparent;
@@ -607,7 +609,7 @@ td.pic{width:85px}
 .btn_wh_ov .txt_btn_end {background: url("../../images/btn_wh_right_ov.gif") repeat scroll 0 0 transparent;
     		float:left; height:20px; width:5px;}
 			
-.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative;}
+.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative; line-height:19px}
 .btn_black .txt_btn_start {background: url("../../images/btn_blk_bg_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_black .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
@@ -615,7 +617,7 @@ td.pic{width:85px}
 .btn_black .txt_btn_end {background: url("../../images/btn_blk_bg_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 			
-.btn_gray {display:inline-block;}
+.btn_gray {display:inline-block; line-height:19px}
 .btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
