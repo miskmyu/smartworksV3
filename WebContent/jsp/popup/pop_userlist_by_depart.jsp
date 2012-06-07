@@ -50,7 +50,7 @@
 							<%if(isMultiSelectable){ %><input type="checkbox" class="js_checkbox fl_nowidth" comName="<%=department.getName() %>" value="<%=department.getId()%>"/><%} %>
 							<a href="pop_userlist_by_depart.sw?multiUsers=<%=isMultiSelectable %>" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
 								<span class="<%=iconType%>"></span>
-								<span><%=department.getName()%></span>
+								<span> <%=department.getName()%> </span>
 							</a>
 						</span>
 						<div style="display: none" class="menu_2dep js_drill_down_target"></div>

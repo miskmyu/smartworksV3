@@ -50,7 +50,7 @@
 			<li>
 				<!--  모든폴더에 공통으로 필요한 html -->
 				<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>"> 
-					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%> <span>(<%=folder.getUnreadItemCount()%>)</span><%}%></span>						
+					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%> <span>[<b><%=folder.getUnreadItemCount()%></b>]</span><%}%></span>						
 				</a>
 			</li>
 	<%
