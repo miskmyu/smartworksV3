@@ -1,8 +1,6 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
@@ -66,8 +63,6 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.sun.xml.internal.bind.v2.TODO;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -335,9 +330,9 @@ public class CommunityServiceImpl implements ICommunityService {
 					} else if(fieldId.equals("selGroupProfileType")) {
 						selGroupProfileType = (String)frmNewGroupProfile.get("selGroupProfileType");
 						if(selGroupProfileType.equals(Group.GROUP_TYPE_OPEN))
-							selGroupProfileType = SwoGroup.GROUP_STATUS_OPEN;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PUBLIC;
 						else
-							selGroupProfileType = SwoGroup.GROUP_STATUS_CLOSED;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PRIVATE;
 					} else if(fieldId.equals("txtGroupLeader")) {
 						txtGroupLeader = (String)frmNewGroupProfile.get("txtGroupLeader");
 					}
@@ -1092,11 +1087,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			swdRecordCond.setCompanyId(companyId);
 			swdRecordCond.setDomainId(domainId);
 
-			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
-			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
-
 			if(CommonUtil.isEmpty(key))
 				return null;
+
+			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
+			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
 
 			Filters fs1 = new Filters();
 			fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
@@ -1273,10 +1268,46 @@ public class CommunityServiceImpl implements ICommunityService {
 
 		try{
 			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+
 			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
+				SwoGroupCond swoGroupCond = new SwoGroupCond();
+
+				SwoGroupMember swoGroupMember = new SwoGroupMember();       
+				swoGroupMember.setUserId(userId);		
+				SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+				swoGroupMembers[0] = swoGroupMember;
+				swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+				swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
+
+				SwoGroup[] myGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				swoGroupCond = new SwoGroupCond();
+				swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PUBLIC);
+
+				SwoGroup[] publicGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
 				return getMyGroups();
-			}else{
-				return SmartTest.getAvailableChatter();
+			} else {
+				String[] ids = null;
+				List<String> idList = new ArrayList<String>();
+				SwoGroup swoGroup = getSwoManager().getGroup(cUser.getId(), groupId, IManager.LEVEL_ALL);
+				if(!CommonUtil.isEmpty(swoGroup)) {
+					SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+					if(!CommonUtil.isEmpty(swoGroupMembers)) {
+						for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+							idList.add(swoGroupMember.getUserId());
+						}
+						if(idList.size() > 0) {
+							ids = new String[idList.size()];
+							idList.toArray(ids);
+						}
+					}
+				}
+
+				SwoUserExtend[] swoUserExtends = getSwoManager().getUsersExtend(cUser.getId(), ids);
+
+				return ModelConverter.convertSwoUserExtendsToUserInfos(swoUserExtends);
 			}
 		}catch (Exception e){
 			// Exception Handling Required
