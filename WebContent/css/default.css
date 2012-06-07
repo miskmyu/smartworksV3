@@ -151,6 +151,9 @@ mark, rp, rt, ruby, summary, time {
 .cb {display:block; clear:both !important}
 
 .m0 { margin:0 !important}
+.m5 { margin:5px !important}
+
+.mr0 {margin-right:0 !important}
 .mr2 {margin-right:2px !important}
 .mr3 {margin-right:3px !important}
 .mr5 {margin-right:5px !important}

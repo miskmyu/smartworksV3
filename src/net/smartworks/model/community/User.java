@@ -146,7 +146,8 @@ public class User extends WorkSpace {
 	}
 	
 	public String getEmailAddressShown(){
-		return this.getLongName() + " <" + super.getId() + ">";
+		if(this.getLongName() == null) return super.getId();
+		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
 	
 	public int getTimeOffsetInHour(){

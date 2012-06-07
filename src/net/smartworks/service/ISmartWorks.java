@@ -312,6 +312,8 @@ public interface ISmartWorks {
 
 	public abstract CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception;
 
+	public abstract CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception;
+
 	public abstract MailFolder[] getMailFoldersById(String folderId) throws Exception;
 
 	public abstract MailInstance getMailInstanceById(String folderId, String msgId) throws Exception;
@@ -605,5 +607,11 @@ public interface ISmartWorks {
 	public abstract void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract UserInfo[] searchEmailAddress(String key) throws Exception;
+	
+	public abstract CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception;
+
+	public abstract void saveMailAsDraft(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 }

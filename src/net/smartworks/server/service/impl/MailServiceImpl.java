@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import javax.activation.DataHandler;
@@ -87,6 +89,265 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private ConnectionMetaHandler getConnectionMetaHandler() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return handler;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return handler;
+	}
+	
+	private ConnectionProfile getConnectionProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return profile;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return profile;
+	}
+	
+	private AuthProfile getAuthProfile() throws Exception{
+		
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+	    HttpServletRequest request = attr.getRequest();
+	    
+	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
+	    
+	    if(handler != null && profile != null && auth != null)
+	    	return auth;
+	    
+	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    
+	    profile = profiles[0];
+	    
+		String username = SmartUtil.getCurrentUser().getId();
+		String password = SmartUtil.getCurrentUser().getPassword();
+
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+
+			try {
+				handler = MailAuth.authenticate(profile, auth, handler);
+				if (handler != null) {
+					
+					request.getSession().setAttribute("handler", handler);
+					request.getSession().setAttribute("auth", auth);
+					request.getSession().setAttribute("profile", profile);
+
+					// create default mailboxes if not exists
+					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = factory.getFolderController();
+					foldCont.createDefaultFolders();
+				}
+			} catch (LoginInvalidException e) {
+				return null;
+			} catch (ServerDownException e) {
+				return null;
+			}
+		} else {
+			throw new LoginInvalidException();
+		}
+		return auth;
+	}
+	
+	private int findHtmlBody(ArrayList parts) {
+		for (int i=0;i<parts.size();i++) {
+			EmailPart body = (EmailPart)parts.get(i);
+			String cType = body.getContentType();
+			if (cType.toLowerCase().startsWith("text/html")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private int findTextBody(ArrayList parts) {
+		for (int i=0;i<parts.size();i++) {
+			EmailPart body = (EmailPart)parts.get(i);
+			String cType = body.getContentType();
+			if (cType.toLowerCase().startsWith("text/plain")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private void saveContacts(AuthProfile auth, Address[] adrs) {
+		try {
+			if (adrs != null) {
+				InternetAddress adr = null;
+				for (int i=0;i<adrs.length;i++) {
+					adr = (InternetAddress)adrs[i];
+					ContactsController.saveSenderFromAddr(auth, adr);
+				}
+			}
+		} catch (Exception e) {
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @param auth
+	 * @param msg
+	 * @param request
+	 * @throws Exception
+	 */
+	private void saveSentMail(AuthProfile auth, MimeMessage msg, HttpServletRequest request) throws Exception {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		msg.writeTo(bos);
+		byte bMsg[] = bos.toByteArray();
+					
+		// serialize the message byte array
+		ObjectOutputStream os = new ObjectOutputStream(bos);
+		os.writeObject(bMsg);
+
+		// create an email db item
+		MsgDbObject item = new MsgDbObject();
+		item.setEmail(bMsg);
+		String md5Header = new String(MD5.getHashString(bMsg)).toUpperCase(new Locale("en", "US"));
+
+		ConnectionMetaHandler handler = getConnectionHandler(request);
+		ConnectionProfile profile = getConnectionProfile(request);
+
+		FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+		FolderController foldCont = factory.getFolderController();
+		FolderDbObject fItem = foldCont.getSentItems();
+
+		item.setUniqueId(md5Header);
+		item.setFolderId(fItem.getId());
+		item.setUnread(new Boolean(false));
+		item.setUsername(auth.getUsername());
+		item.setMsgSize(new Long(bMsg.length));
+
+		// save the email db item.
+		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
+		MailController mailCont = mailFact.getMailController();
+		mailCont.appendEmail(item);
+	}
+	
+	private void saveDraft(AuthProfile auth, MimeMessage msg, HttpServletRequest request) throws Exception {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		msg.writeTo(bos);
+		byte bMsg[] = bos.toByteArray();
+					
+		// serialize the message byte array
+		ObjectOutputStream os = new ObjectOutputStream(bos);
+		os.writeObject(bMsg);
+
+		// create an email db item
+		MsgDbObject item = new MsgDbObject();
+		item.setEmail(bMsg);
+		String md5Header = new String(MD5.getHashString(bMsg)).toUpperCase(new Locale("en", "US"));
+
+		ConnectionMetaHandler handler = getConnectionHandler(request);
+		ConnectionProfile profile = getConnectionProfile(request);
+
+		FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+		FolderController foldCont = factory.getFolderController();
+		FolderDbObject fItem = foldCont.getDraftsFolder();
+
+		item.setUniqueId(md5Header);
+		item.setFolderId(fItem.getId());
+		item.setUnread(new Boolean(false));
+		item.setUsername(auth.getUsername());
+		item.setMsgSize(new Long(bMsg.length));
+
+		// save the email db item.
+		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
+		MailController mailCont = mailFact.getMailController();
+		mailCont.appendEmail(item);
+	}
 
 	@Override
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception {
@@ -182,7 +443,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						currFolder = folderCont.getInboxFolder().getFolderName();
 					}
 				} else {
-					currFolder = sFolder;
+					currFolder = folderId;
 					handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 					foldFact = new FolderControllerFactory(auth, profile, handler);
 					folderCont = foldFact.getFolderController();
@@ -384,178 +645,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		}
 	}
 	
-	private ConnectionMetaHandler getConnectionMetaHandler() throws Exception{
-		
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-	    HttpServletRequest request = attr.getRequest();
-	    
-	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
-	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
-	    if(handler != null && profile != null && auth != null)
-	    	return handler;
-	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
-
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
-
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
-
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
-			}
-		} else {
-			throw new LoginInvalidException();
-		}
-		return handler;
-	}
-	
-	private ConnectionProfile getConnectionProfile() throws Exception{
-		
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-	    HttpServletRequest request = attr.getRequest();
-	    
-	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
-	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
-	    if(handler != null && profile != null && auth != null)
-	    	return profile;
-	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
-
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
-
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
-
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
-			}
-		} else {
-			throw new LoginInvalidException();
-		}
-		return profile;
-	}
-	
-	private AuthProfile getAuthProfile() throws Exception{
-		
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-	    HttpServletRequest request = attr.getRequest();
-	    
-	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
-	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
-	    if(handler != null && profile != null && auth != null)
-	    	return auth;
-	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
-
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
-
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
-
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
-			}
-		} else {
-			throw new LoginInvalidException();
-		}
-		return auth;
-	}
-	
-	private int findHtmlBody(ArrayList parts) {
-		for (int i=0;i<parts.size();i++) {
-			EmailPart body = (EmailPart)parts.get(i);
-			String cType = body.getContentType();
-			if (cType.toLowerCase().startsWith("text/html")) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	private int findTextBody(ArrayList parts) {
-		for (int i=0;i<parts.size();i++) {
-			EmailPart body = (EmailPart)parts.get(i);
-			String cType = body.getContentType();
-			if (cType.toLowerCase().startsWith("text/plain")) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	@Override
 	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception {
 
@@ -782,7 +871,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //}
 			}
 			header.setSubject(subject);
-			header.setDate(new LocalDate());
+			header.setDate(new Date());
 
 //String replyTo = UserPrefsController.getUserSetting(auth, "replyTo");
 //if (replyTo != null && replyTo.trim().length() != 0) {
@@ -881,73 +970,176 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //			Address[] fail = (Address[])sendRes.get("fail");
 //			Address[] invalid = (Address[])sendRes.get("invalid");
 			
-//if (sent == null || sent.length == 0) {
-//} else {
-//	// if save to sent items enabled, save the sent mail.
-//	String saveEnabled = UserPrefsController.getUserSetting(auth, "saveSent");
-//	if (saveEnabled == null) {
-//		saveEnabled = "yes";
-//	}
-//	if (saveEnabled == null || saveEnabled.equals("yes")) {
-//		saveSentMail(auth, msg, request);
+			saveSentMail(auth, msg, request);
+
+		} catch (Exception e) {
+		}
+	}
+	
+	@Override
+	public void saveMailAsDraft(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		try {
+			Map<String, List<Map<String, String>>> from = (Map<String, List<Map<String, String>>>)requestBody.get("from");
+			Map<String, Object> newMail = (HashMap<String, Object>)requestBody.get("frmNewMail");
+			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("receivers");
+			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("ccReceivers");
+			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("bccReceivers");
+			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("attachments");
+			String subject = (String)newMail.get("subject");
+			String body = (String)newMail.get("contents");
+			String requestReceiptNotification = (String)newMail.get("requestReceiptNotification");
+			String priority = (String)newMail.get("priority");
+			String sensitivity = (String)newMail.get("sensitivity");
+			
+			AuthProfile auth = getAuthProfile();
+			
+			// now create a new email object.
+			Email email = new Email();
+			EmailHeader header = new EmailHeader();
+			
+			Address adrs[] = Utility.stringListToAddressArray(from.get("users"));
+			header.setFrom(adrs);
+			
+			Address tos[] = Utility.stringListToAddressArray(receivers.get("users"));
+			header.setTo(tos);
+			
+			if (ccReceivers != null) {
+				Address ccs[] = Utility.stringListToAddressArray(ccReceivers.get("users"));
+				header.setCc(ccs);
+			}
+			if (bccReceivers != null) {
+				Address bccs[] = Utility.stringListToAddressArray(bccReceivers.get("users"));
+				header.setBcc(bccs);
+			}
+			header.setSubject(subject);
+			header.setDate(new Date());
+
+//String replyTo = UserPrefsController.getUserSetting(auth, "replyTo");
+//if (replyTo != null && replyTo.trim().length() != 0) {
+//	header.setReplyTo(new Address[] {new InternetAddress(replyTo)});
+//}
+			
+			if (requestReceiptNotification!=null && requestReceiptNotification.equals("1")) {
+				header.setRequestReceiptNotification(Boolean.valueOf(true));
+			}
+			
+			if (priority!=null && priority.equals("on")) {
+				header.setPriority((short)EmailPriority.HIGH);
+			}
+
+			if (sensitivity!=null) {
+				header.setSensitivity(Short.valueOf(sensitivity).shortValue());
+			}
+			
+			email.setBaseHeader(header);
+
+			ArrayList parts = new ArrayList();
+			EmailPart bodyPart = new EmailPart();
+			bodyPart.setContentType("text/html; charset=UTF-8");
+			/*
+			HtmlCleaner cleaner = new HtmlCleaner(body);
+			cleaner.clean(false,false);
+			*/
+			
+//String appendSignature = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.append-signature");
+//String sign = "";
+//if (appendSignature != null && appendSignature.toLowerCase().equals("true")) {
+//	Cache cache = CacheManager.getContent("server.signature");
+//	if (cache == null) {
+//		BufferedInputStream is = new BufferedInputStream(new FileInputStream(Paths.getCfgFolder() + "/server_signature.txt"));
+//		int byte_;
+//		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//		while ((byte_ = is.read ()) != -1) {
+//			bos.write (byte_);
+//		}
+//		is.close();
+//		sign = new String(bos.toByteArray());
+//		bos.close();
+//		
+//		cache = new Cache();
+//		CacheManager.putContent("server.signature", sign, Integer.MAX_VALUE);
+//	} else {
+//		sign = (String)cache.getValue();
 //	}
 //}
-		} catch (Exception e) {
-		}
-	}
-
-	private void saveContacts(AuthProfile auth, Address[] adrs) {
-		try {
-			if (adrs != null) {
-				InternetAddress adr = null;
-				for (int i=0;i<adrs.length;i++) {
-					adr = (InternetAddress)adrs[i];
-					ContactsController.saveSenderFromAddr(auth, adr);
+//body = body + sign;
+			bodyPart.setContent(body);
+			parts.add(0, bodyPart);
+			
+			ArrayList attList = Utility.stringListToEmailPartArray(attachments.get("files"));
+			// attach some files...
+			if (attList != null) {
+				List newLst = new ArrayList();
+				EmailPart tmp = null;
+				for (int i=0;i<attList.size();i++) {
+					try {
+						tmp = (EmailPart)attList.get(i);
+						String disp = tmp.getDisposition();
+						File f = new File(disp);
+						FileInputStream fis = new FileInputStream(f);
+						BufferedInputStream bis = new BufferedInputStream(fis);
+						byte data[] = new byte[(int)f.length() + 2];
+						bis.read(data);
+						bis.close();
+			
+						MimeBodyPart bp = new MimeBodyPart();
+						DataSource ds = new ByteArrayDataSource(data, tmp.getContentType(), tmp.getFilename());
+						bp.setDataHandler(new DataHandler(ds));
+						bp.setDisposition("attachment; filename=\"" + tmp.getFilename() + "\"");
+						tmp.setDisposition(bp.getDisposition());
+						bp.setFileName(tmp.getFilename());
+						tmp.setDataSource(ds);
+						tmp.setContent(bp.getContent());
+						newLst.add(tmp);
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+				parts.addAll(newLst);
 			}
+			email.setParts(parts);
+			
+			// it is time to send the email object message
+			Smtp smtp = new Smtp(getConnectionProfile(request), getAuthProfile(request));
+			HashMap sendRes = smtp.send(email, true);
+			MimeMessage msg = (MimeMessage)sendRes.get("msg");
+
+			saveDraft(auth, msg, request);
+
 		} catch (Exception e) {
 		}
-		
 	}
 
-	/**
-	 * 
-	 * @param auth
-	 * @param msg
-	 * @param request
-	 * @throws Exception
-	 */
-	private void saveSentMail(AuthProfile auth, MimeMessage msg, HttpServletRequest request) throws Exception {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		msg.writeTo(bos);
-		byte bMsg[] = bos.toByteArray();
-					
-		// serialize the message byte array
-		ObjectOutputStream os = new ObjectOutputStream(bos);
-		os.writeObject(bMsg);
+	@Override
+	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
-		// create an email db item
-		MsgDbObject item = new MsgDbObject();
-		item.setEmail(bMsg);
-		String md5Header = new String(MD5.getHashString(bMsg)).toUpperCase(new Locale("en", "US"));
+		try {
 
-		ConnectionMetaHandler handler = getConnectionHandler(request);
-		ConnectionProfile profile = getConnectionProfile(request);
+			List<String> ids = (List<String>)requestBody.get("ids");
+			String srcFolder = (String)requestBody.get("source");
+			String targetFolder = (String)requestBody.get("target");
+			
+			if (ids != null && srcFolder != null && targetFolder != null) {
+				AuthProfile auth = getAuthProfile(request);
+				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 
-		FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-		FolderController foldCont = factory.getFolderController();
-		FolderDbObject fItem = foldCont.getSentItems();
+				MailControllerFactory factory = new MailControllerFactory(auth, profile, handler, srcFolder);
+				MailController mailCont = factory.getMailController();
+				
+				int msgs[] = new int[ids.size()];
+				for(int counter=0; counter<ids.size(); counter++) {
+					msgs[counter] = Integer.parseInt(ids.get(counter));
+				}
 
-		item.setUniqueId(md5Header);
-		item.setFolderId(fItem.getId());
-		item.setUnread(new Boolean(false));
-		item.setUsername(auth.getUsername());
-		item.setMsgSize(new Long(bMsg.length));
+				// action time
+				mailCont.moveEmails(msgs, targetFolder);
+			}
 
-		// save the email db item.
-		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
-		MailController mailCont = mailFact.getMailController();
-		mailCont.appendEmail(item);
+		} catch (Exception e) {
+		}
 	}
 
 }

@@ -1059,8 +1059,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		try {
 			UserInfo[] userInfos = null;
 			SwoUserCond swoUserCond = new SwoUserCond();
-			if(!CommonUtil.isEmpty(key))
-				swoUserCond.setKey(key);
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			swoUserCond.setKey(key);
 
 			swoUserCond.setOrders(new Order[]{new Order("name", true)});
 
@@ -1086,22 +1088,23 @@ public class CommunityServiceImpl implements ICommunityService {
 			String companyId = user.getCompanyId();
 
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			String domainId = "md_4fbb944806f342a89a282b7cc441154f";
+			String domainId = "frm_contact_SYSTEM";
 			swdRecordCond.setCompanyId(companyId);
 			swdRecordCond.setDomainId(domainId);
 
 			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
 			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
 
-			if(!CommonUtil.isEmpty(key)) {
-				Filters fs1 = new Filters();
-				fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs1);
-				Filters fs2 = new Filters();
-				fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs2);
-				swdRecordCond.setOperator("or");
-			}
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs1);
+			Filters fs2 = new Filters();
+			fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs2);
+			swdRecordCond.setOperator("or");
 
 			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
 				swdRecordCond.setCreationUser(userId);
@@ -1205,6 +1208,97 @@ public class CommunityServiceImpl implements ICommunityService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(departmentId)) {
+				departmentId = cUser.getCompanyId();
+			}
+	
+			SwoUserExtend[] swoUserExtends = getSwoManager().getAllComsByDepartmentId(departmentId, departmentOnly);
+	
+			List<CommunityInfo> resultList = new ArrayList<CommunityInfo>();
+			for(SwoUserExtend swoUserExtend : swoUserExtends) {
+				String type = swoUserExtend.getType();
+				if(!departmentOnly) {
+					if(type.equals("u")) {
+						UserInfo userInfo = new UserInfo();
+						userInfo.setId(swoUserExtend.getId());
+						userInfo.setName(swoUserExtend.getName());
+						userInfo.setPosition(swoUserExtend.getPosition());
+						userInfo.setRole(swoUserExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
+						String picture = swoUserExtend.getPictureName();
+						if(!CommonUtil.isEmpty(picture)) {
+							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+						} else {
+							userInfo.setSmallPictureName(picture);
+						}
+						resultList.add(userInfo);
+					} else {
+						DepartmentInfo departmentInfo = new DepartmentInfo();
+						departmentInfo.setId(swoUserExtend.getId());
+						departmentInfo.setName(swoUserExtend.getName());
+						departmentInfo.setDesc(swoUserExtend.getDescription());
+						resultList.add(departmentInfo);
+					}
+				} else {
+					DepartmentInfo departmentInfo = new DepartmentInfo();
+					departmentInfo.setId(swoUserExtend.getId());
+					departmentInfo.setName(swoUserExtend.getName());
+					departmentInfo.setDesc(swoUserExtend.getDescription());
+					resultList.add(departmentInfo);
+				}
+			}
+			CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
+			resultList.toArray(communityInfos);
+	
+			return communityInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
+				return getMyGroups();
+			}else{
+				return SmartTest.getAvailableChatter();
+			}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+	@Override
+	public CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception {
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(categoryId) || categoryId.equals(cUser.getCompanyId())) {
+				return SmartTest.getMyGroups();
+			}else{
+				return SmartTest.getAvailableChatter();
+			}
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
 		}
 	}
 

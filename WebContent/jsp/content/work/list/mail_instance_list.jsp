@@ -54,7 +54,6 @@
 
 <!-- 목록 테이블 -->
 <table>
-
 	<tbody>
 		<%
 		SortingField sortedField = null;
@@ -68,8 +67,8 @@
 				<th><input type="checkbox" /></th>
 				<th><div class="icon_important"></div></th>
 				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
@@ -149,11 +148,11 @@
 					String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
-						<td class="tc"><input type="checkbox" /></td>
+						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
-						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
-						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
+<%-- 						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
+ --%>						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
 					</tr>
@@ -168,8 +167,8 @@
 				<th><input type="checkbox" /></th>
 				<th><div class="icon_important"></div></th>
 				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">

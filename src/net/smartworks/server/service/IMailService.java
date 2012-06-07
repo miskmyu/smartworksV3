@@ -21,4 +21,8 @@ public interface IMailService {
 
 	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public void saveMailAsDraft(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

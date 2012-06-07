@@ -27,7 +27,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_mail_space_page">
+<div class="section_portlet js_mail_space_page" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -61,13 +61,14 @@
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
 				<div class="buttonSet">
-					<button><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-					<button><fmt:message key="common.button.mail.register_spam"/></button>
-					<button><fmt:message key="common.button.mail.reply"/></button>
-					<button><fmt:message key="common.button.mail.reply_all"/></button>
-					<button><fmt:message key="common.button.mail.forward"/></button>
+					<button class="js_move_mail_btn" targetId="<%=MailFolder.ID_TRASH%>"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
+					<button class="js_move_mail_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button>
+					<button><fmt:message key="mail.button.reply"/></button>
+					<button><fmt:message key="mail.button.reply_all"/></button>
+					<button><fmt:message key="mail.button.forward"/></button>
 					<button><fmt:message key="common.button.move"/><span class="icon_in_down"><a href=""> </a></span></button>
-					<button href="writeNewMail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="common.button.mail.new"/></button>
+					<button><fmt:message key="mail.button.list"/></button>
+					<button href="writeNewMail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
 				</div>
 				<div class="table_line"> </div>
 
