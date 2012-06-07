@@ -1059,8 +1059,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		try {
 			UserInfo[] userInfos = null;
 			SwoUserCond swoUserCond = new SwoUserCond();
-			if(!CommonUtil.isEmpty(key))
-				swoUserCond.setKey(key);
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			swoUserCond.setKey(key);
 
 			swoUserCond.setOrders(new Order[]{new Order("name", true)});
 
@@ -1086,22 +1088,23 @@ public class CommunityServiceImpl implements ICommunityService {
 			String companyId = user.getCompanyId();
 
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			String domainId = "md_4fbb944806f342a89a282b7cc441154f";
+			String domainId = "frm_contact_SYSTEM";
 			swdRecordCond.setCompanyId(companyId);
 			swdRecordCond.setDomainId(domainId);
 
 			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
 			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
 
-			if(!CommonUtil.isEmpty(key)) {
-				Filters fs1 = new Filters();
-				fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs1);
-				Filters fs2 = new Filters();
-				fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs2);
-				swdRecordCond.setOperator("or");
-			}
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs1);
+			Filters fs2 = new Filters();
+			fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs2);
+			swdRecordCond.setOperator("or");
 
 			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
 				swdRecordCond.setCreationUser(userId);
