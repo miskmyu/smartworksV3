@@ -65,9 +65,9 @@
 			if(sortedField==null) sortedField = new SortingField();
 		%>
 			<tr class="tit_bg">
-				<th><input type="checkbox" /></th>
-				<th><div class="icon_important"></div></th>
-				<th><div class="icon_mail_read"></div></th>
+				<th class="check"><input type="checkbox" /></th>
+				<th class="important"><div class="icon_important"></div></th>
+				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
@@ -165,9 +165,9 @@
 			sortedField = new SortingField();
 		%>
 			<tr class="tit_bg">
-				<th><input type="checkbox" /></th>
-				<th><div class="icon_important"></div></th>
-				<th><div class="icon_mail_read"></div></th>
+				<th class="check"><input type="checkbox" /></th>
+				<th class="important"><div class="icon_important"></div></th>
+				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){

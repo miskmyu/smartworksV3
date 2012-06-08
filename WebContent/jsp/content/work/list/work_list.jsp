@@ -102,11 +102,12 @@
 	};
 
 	selectListParam = function(progressSpan, isGray){
-		var pworkList = $('.js_pwork_list_page');
+		var pworkList = $('.js_space_work_list_page');
 		var forms = pworkList.find('form:visible');
+		console.log(forms);
 		var paramsJson = {};
 		var workId = pworkList.attr('workId');
-		paramsJson["href"] = "jsp/content/work/list/pwork_instance_list.jsp?workId=" + workId;
+		paramsJson["href"] = "jsp/content/work/list/work_instance_list.jsp?workId=" + workId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -133,7 +134,7 @@
 	String wid = request.getParameter("wid");
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
-	
+
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName(); 
