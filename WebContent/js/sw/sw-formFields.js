@@ -429,10 +429,15 @@ function loadWriteMailFields() {
 			writeMailField.html(gridTable.html(gridRow));
 			
 			var receiversTitle = writeMailField.attr("receiversTitle");
+			var receiversHtml = writeMailField.attr('receivers') || "";
 			var ccReceiversTitle = writeMailField.attr("ccReceiversTitle");
+			var ccReceiversHtml = writeMailField.attr('ccReceivers') || "";
 			var bccReceiversTitle = writeMailField.attr("bccReceiversTitle");
+			var bccReceiversHtml = writeMailField.attr('bccReceivers') || "";
 			var priorityTitle = writeMailField.attr("priorityTitle");
+			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
+			var subject = writeMailField.attr('subject');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
@@ -442,6 +447,7 @@ function loadWriteMailFields() {
 				columns: 1,
 				multiUsers: true,
 				emailAddress: true,
+				usersHtml: receiversHtml,
 				required: true
 			});
 
@@ -453,6 +459,7 @@ function loadWriteMailFields() {
 				columns: 1,
 				multiUsers: true,
 				emailAddress: true,
+				usersHtml: ccReceiversHtml,
 				required: false
 			});
 
@@ -464,6 +471,7 @@ function loadWriteMailFields() {
 				columns: 1,
 				multiUsers: true,
 				emailAddress: true,
+				usersHtml: bccReceiversHtml,
 				required: false
 			});
 
@@ -473,6 +481,7 @@ function loadWriteMailFields() {
 				fieldId: "subject",
 				fieldName: subjectTitle,
 				columns: 1,
+				value: subject,
 				required: true
 			});
 			

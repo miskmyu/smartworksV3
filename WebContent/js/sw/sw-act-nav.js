@@ -200,6 +200,7 @@ $(function() {
 		var groupId = input[0].getAttribute("groupId");
 		var departmentId = input[0].getAttribute("departmentId");
 		var comlistByDepart = input.parents('.js_comlist_by_depart_page');
+		console.log('target=', target, ', url=', url);
 		if(!isEmpty(comlistByDepart)){
 			var editMember = comlistByDepart.parents('.js_organization_management_page').find('.js_edit_member');
 			$.ajax({
@@ -207,8 +208,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					editMember.html(data).slideDown();;
 				}			
-			});
-			
+			});			
 		}
 		if (url == 'undefined' || (isEmpty(categoryId) && isEmpty(groupId) && isEmpty(departmentId))) {
 			return false;
@@ -231,6 +231,12 @@ $(function() {
 					target.html(data);
 					target.siblings('li.js_drill_down').find('.js_drill_down_target').hide();
 					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide();
+					var btnPlus = input.find('.btn_tree_plus');
+					var btnMinus = input.find('.btn_tree_minus');
+					if(!isEmpty(btnPlus)) btnPlus.removeClass('btn_tree_plus').addClass('btn_tree_minus');
+					if(!isEmpty(btnMinus)) btnPlus.removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 					smartPop.closeProgress();											
 				},
 				error : function(xhr, ajaxOptions, thrownError){
@@ -241,6 +247,15 @@ $(function() {
 			target.show();
 			target.siblings('li.js_drill_down').find('div').hide('.js_drill_down_target');
 			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide();
+			var btnPlus = input.find('.btn_tree_plus');
+			var btnMinus = input.find('.btn_tree_minus');
+			if(!isEmpty(btnPlus)) btnPlus.removeClass('btn_tree_plus').addClass('btn_tree_minus');
+			if(!isEmpty(btnMinus)) btnPlus.removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+		}else if(target.is(':visible') && !isEmpty($(target).children()) &&  $(targetElement(e)).parents('a:first').hasClass('js_expandable')){
+			target.hide();
+			if(!isEmpty(input.find('.btn_tree_minus'))) input.find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 		}
 		return false;
 	});

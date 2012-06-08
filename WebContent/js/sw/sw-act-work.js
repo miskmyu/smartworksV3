@@ -1146,6 +1146,16 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_emailpicker_button').live('click', function(e) {
+		var userField = $(targetElement(e)).parents('.js_type_userField:first');
+		var communityItems = userField.find('.js_community_item');
+		var target = userField.find('.js_community_popup:first');
+		var width = userField.find('.form_value').find('div:first').width();
+		var isMultiUsers = userField.attr('multiUsers');
+		smartPop.selectEmailAddress(communityItems, target, width, isMultiUsers);
+		return false;
+	});
+
 	$('a.js_workitempicker_button').live('click', function(e) {
 		var target = $(targetElement(e)).parents('td.js_type_refFormField:first');
 		var formId = target.attr('refForm');

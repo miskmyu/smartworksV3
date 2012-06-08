@@ -68,6 +68,7 @@ public class UserInfo extends WorkSpaceInfo {
 	}
 
 	public String getEmailAddressShown(){
-		return getLongName()  + " <" + getId() + ">";
+		if(this.getLongName() == null) return super.getId();
+		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
 }

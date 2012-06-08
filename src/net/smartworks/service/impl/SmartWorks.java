@@ -609,11 +609,6 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
-		return workService.getAllComsByDepartmentId(departmentId, departmentOnly);
-	}
-
-	@Override
 	public Data getReportData(HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		return workService.getReportData(request);
@@ -671,8 +666,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception {
-		return mailService.getMailInstanceById(folderId, msgId);
+	public MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception {
+		return mailService.getMailInstanceById(folderId, msgId, sendType);
 	}
 
 	@Override
@@ -1336,6 +1331,31 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public UserInfo[] searchEmailAddress(String key) throws Exception {
 		return communityService.searchEmailAddress(key);
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
+		return communityService.getAllComsByDepartmentId(departmentId, departmentOnly);
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception {
+		return communityService.getAllComsByGroupId(groupId);
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception {
+		return communityService.getAllComsByCategoryId(categoryId);
+	}
+
+	@Override
+	public void saveMailAsDraft(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.saveMailAsDraft(requestBody, request);
+	}
+
+	@Override
+	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.moveMails(requestBody, request);
 	}
 
 }

@@ -9,8 +9,8 @@
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545;}
 
 /* Layer popup list */
-.pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px; max-height:400px; overflow-y:auto}
-
+.pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px}
+.pop_list_area > ul {max-height:400px; overflow-y:auto; margin:5px}
 .pop_list_area li {}
 .pop_list_area li:hover {text-decoration: none !important;}
 
@@ -76,3 +76,58 @@ a:hover .pop_btn_x {background-color:#e5e5e5;}
 a .pop_icon_chat:hover { background-position:-151px -34px}
 a .pop_icon_mail:hover { background-position:-177px -34px}
 a .pop_icon_message:hover { background-position:-202px -34px}
+
+/* Button */
+.btn {background-color:#666666; float:right; height:22px; position:absolute; line-height:19px}
+.btn .txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
+			 float:left; height:22px; width:5px;}
+.btn .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
+.btn .txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
+    		float:left; height:22px; width:5px;}
+			
+.btn_wh {clear: both; display:inline-block; line-height:19px}
+.btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
+			float:left; height:20px; width:5px;}
+.btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
+.btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
+    		float:left; height:20px; width:5px;}
+			
+.btn_wh_ov {clear: both; display:inline-block; line-height:19px}
+.btn_wh_ov .txt_btn_start {background: url("../../images/btn_wh_left_ov.gif") repeat scroll 0 0 transparent;
+			float:left; height:20px; width:5px;}
+.btn_wh_ov .txt_btn_center {background: url("../../images/btn_wh_center_ov.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
+.btn_wh_ov .txt_btn_end {background: url("../../images/btn_wh_right_ov.gif") repeat scroll 0 0 transparent;
+    		float:left; height:20px; width:5px;}
+			
+.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative; line-height:19px}
+.btn_black .txt_btn_start {background: url("../../images/btn_blk_bg_left.jpg") repeat scroll 0 0 transparent;
+			 float:left; height:22px; width:5px;}
+.btn_black .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
+.btn_black .txt_btn_end {background: url("../../images/btn_blk_bg_right.jpg") repeat scroll 0 0 transparent;
+    		float:left; height:22px; width:5px;}
+			
+.btn_gray {display:inline-block; line-height:19px}
+.btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
+			 float:left; height:22px; width:5px;}
+.btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
+.btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
+    		float:left; height:22px; width:5px;}
+.btn_hpadding {margin:7px 0;}
+			
+/* close btn */
+.btn_x{
+	background: url("../../images/btn_im_x_gr.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 13px;
+    padding: 0; position: relative; right: 3px; top:2px; width: 13px; float: right;
+} 
+a .btn_x:hover {background-color:#8d8d8d;}
+/* td.form_col:hover .btn_x{display:inline;}
+td.form_col .btn_x {display:none;}
+ */
+.btn_right {left: 452px; position:relative;}
+.btn_x_gr {color:#c7c7c7; font-size:12px;}
+.btn_x_gr a:hover {background-color:#f2f2f2; text-decoration:none; font-size:12px;}

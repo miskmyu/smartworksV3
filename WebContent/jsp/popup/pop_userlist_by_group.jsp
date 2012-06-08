@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -11,11 +12,11 @@
 <%@ page import="net.smartworks.model.work.*"%>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
-	String departmentId = request.getParameter("departmentId");
+	String groupId = request.getParameter("groupId");
 	boolean isMultiSelectable = false;
 	isMultiSelectable = Boolean.parseBoolean(request.getParameter("multiUsers"));
 	
-	CommunityInfo[] communities = smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(departmentId), false);
+	CommunityInfo[] communities = smartWorks.getAllComsByGroupId(CommonUtil.toNotNull(groupId));
 	String iconType = null;
 %>
 
@@ -41,16 +42,16 @@
 						</span>
 					</li>
 				<%
-				} else if (community.getClass().equals(DepartmentInfo.class)) {
-					DepartmentInfo department = (DepartmentInfo)community;
-					iconType = "btn_tree_plus fn vm";
+				} else if (community.getClass().equals(GroupInfo.class)) {
+					GroupInfo group = (GroupInfo)community;
+					iconType = "btn_plus fn vm";
 				%>
 					<li class="js_drill_down">
 						<span class="dep">
-							<%if(isMultiSelectable){ %><input type="checkbox" class="js_checkbox fl_nowidth" comName="<%=department.getName() %>" value="<%=department.getId()%>"/><%} %>
-							<a href="pop_userlist_by_depart.sw?multiUsers=<%=isMultiSelectable %>" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
+							<%if(isMultiSelectable){ %><input type="checkbox" class="js_checkbox fl_nowidth" comName="<%=group.getName() %>" value="<%=group.getId()%>"/><%} %>
+							<a href="pop_userlist_by_group.sw?multiUsers=<%=isMultiSelectable %>" groupId="<%=group.getId()%>" class="js_popup js_expandable">
 								<span class="<%=iconType%>"></span>
-								<span> <%=department.getName()%> </span>
+								<span><%=group.getName()%></span>
 							</a>
 						</span>
 						<div style="display: none" class="menu_2dep js_drill_down_target"></div>

@@ -47,6 +47,7 @@
 	session.setAttribute("workId", folderId);
 
 	InstanceInfoList instanceList = smartWorks.getMailInstanceList(folderId, params);
+	boolean savedInstance = (folderId.equals(MailFolder.ID_DRAFTS)) ? true : false;
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -54,15 +55,6 @@
 
 <!-- 목록 테이블 -->
 <table>
-	<colgroup>
-		<col width="37px" />
-		<col width="24px" />
-		<col width="26px" />
-		<col width="30px" />
-		<col width="200px" />
-		<col width="" />
-		<col width="160px" />
-	</colgroup>
 	<tbody>
 		<%
 		SortingField sortedField = null;
@@ -73,11 +65,11 @@
 			if(sortedField==null) sortedField = new SortingField();
 		%>
 			<tr class="tit_bg">
-				<th><input type="checkbox" /></th>
-				<th><div class="icon_important"></div></th>
-				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+				<th class="check"><input type="checkbox" /></th>
+				<th class="important"><div class="icon_important"></div></th>
+				<th class="read"><div class="icon_mail_read"></div></th>
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
@@ -154,14 +146,14 @@
 					UserInfo lastModifier = instanceInfo.getLastModifier();
 					String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
 					String wid = instanceInfo.getWorkSpace().getId();
-					String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
+					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
-						<td class="tc"><input type="checkbox" /></td>
+						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
-						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
-						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
+<%-- 						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
+ --%>						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
 					</tr>
@@ -173,11 +165,11 @@
 			sortedField = new SortingField();
 		%>
 			<tr class="tit_bg">
-				<th><input type="checkbox" /></th>
-				<th><div class="icon_important"></div></th>
-				<th><div class="icon_mail_read"></div></th>
-				<th class="r_line"><div class="icon_file checked"></div></th>
-				<%
+				<th class="check"><input type="checkbox" /></th>
+				<th class="important"><div class="icon_important"></div></th>
+				<th class="read"><div class="icon_mail_read"></div></th>
+<!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
+ -->				<%
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">

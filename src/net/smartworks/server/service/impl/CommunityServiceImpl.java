@@ -330,9 +330,9 @@ public class CommunityServiceImpl implements ICommunityService {
 					} else if(fieldId.equals("selGroupProfileType")) {
 						selGroupProfileType = (String)frmNewGroupProfile.get("selGroupProfileType");
 						if(selGroupProfileType.equals(Group.GROUP_TYPE_OPEN))
-							selGroupProfileType = SwoGroup.GROUP_STATUS_OPEN;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PUBLIC;
 						else
-							selGroupProfileType = SwoGroup.GROUP_STATUS_CLOSED;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PRIVATE;
 					} else if(fieldId.equals("txtGroupLeader")) {
 						txtGroupLeader = (String)frmNewGroupProfile.get("txtGroupLeader");
 					}
@@ -709,10 +709,15 @@ public class CommunityServiceImpl implements ICommunityService {
 		try{
 		 	User user = SmartUtil.getCurrentUser();
 		 	String userId = user.getId();
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+			getLoginUserManager().deleteAllLoginUser(userId);
+
+			//TODO 현재 접속 유저로 업데이트
+
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {
@@ -1049,8 +1054,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		try {
 			UserInfo[] userInfos = null;
 			SwoUserCond swoUserCond = new SwoUserCond();
-			if(!CommonUtil.isEmpty(key))
-				swoUserCond.setKey(key);
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			swoUserCond.setKey(key);
 
 			swoUserCond.setOrders(new Order[]{new Order("name", true)});
 
@@ -1076,22 +1083,23 @@ public class CommunityServiceImpl implements ICommunityService {
 			String companyId = user.getCompanyId();
 
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			String domainId = "md_4fbb944806f342a89a282b7cc441154f";
+			String domainId = "frm_contact_SYSTEM";
 			swdRecordCond.setCompanyId(companyId);
 			swdRecordCond.setDomainId(domainId);
+
+			if(CommonUtil.isEmpty(key))
+				return null;
 
 			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
 			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
 
-			if(!CommonUtil.isEmpty(key)) {
-				Filters fs1 = new Filters();
-				fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs1);
-				Filters fs2 = new Filters();
-				fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs2);
-				swdRecordCond.setOperator("or");
-			}
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs1);
+			Filters fs2 = new Filters();
+			fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs2);
+			swdRecordCond.setOperator("or");
 
 			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
 				swdRecordCond.setCreationUser(userId);
@@ -1101,7 +1109,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
@@ -1193,6 +1201,266 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			return finalUserInfos;
 		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(departmentId)) {
+				departmentId = cUser.getCompanyId();
+			}
+	
+			SwoUserExtend[] swoUserExtends = getSwoManager().getAllComsByDepartmentId(departmentId, departmentOnly);
+	
+			List<CommunityInfo> resultList = new ArrayList<CommunityInfo>();
+			for(SwoUserExtend swoUserExtend : swoUserExtends) {
+				String type = swoUserExtend.getType();
+				if(!departmentOnly) {
+					if(type.equals("u")) {
+						UserInfo userInfo = new UserInfo();
+						userInfo.setId(swoUserExtend.getId());
+						userInfo.setName(swoUserExtend.getName());
+						userInfo.setPosition(swoUserExtend.getPosition());
+						userInfo.setRole(swoUserExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
+						String picture = swoUserExtend.getPictureName();
+						if(!CommonUtil.isEmpty(picture)) {
+							String extension = picture.lastIndexOf(".") > 1 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+							String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+							userInfo.setSmallPictureName(pictureId + Community.IMAGE_TYPE_THUMB + "." + extension);
+						} else {
+							userInfo.setSmallPictureName(picture);
+						}
+						resultList.add(userInfo);
+					} else {
+						DepartmentInfo departmentInfo = new DepartmentInfo();
+						departmentInfo.setId(swoUserExtend.getId());
+						departmentInfo.setName(swoUserExtend.getName());
+						departmentInfo.setDesc(swoUserExtend.getDescription());
+						resultList.add(departmentInfo);
+					}
+				} else {
+					DepartmentInfo departmentInfo = new DepartmentInfo();
+					departmentInfo.setId(swoUserExtend.getId());
+					departmentInfo.setName(swoUserExtend.getName());
+					departmentInfo.setDesc(swoUserExtend.getDescription());
+					resultList.add(departmentInfo);
+				}
+			}
+			CommunityInfo[] communityInfos = new CommunityInfo[resultList.size()];
+			resultList.toArray(communityInfos);
+	
+			return communityInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
+	public CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception {
+
+		try{
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+
+			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
+
+				Map<String, Object> swoGroupMap = new HashMap<String, Object>();
+				GroupInfo[] finalGroupInfos = null;
+				List<GroupInfo> finalGroupInfoList = new ArrayList<GroupInfo>();
+
+				SwoGroupCond swoGroupCond = new SwoGroupCond();
+
+				SwoGroupMember swoGroupMember = new SwoGroupMember();       
+				swoGroupMember.setUserId(userId);		
+				SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+				swoGroupMembers[0] = swoGroupMember;
+				swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+
+				SwoGroup[] myGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				if(!CommonUtil.isEmpty(myGroups)) {
+					for(SwoGroup myGroup : myGroups) {
+						swoGroupMap.put(myGroup.getId(), myGroup);
+					}
+				}
+
+				swoGroupCond = new SwoGroupCond();
+				swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PUBLIC);
+
+				SwoGroup[] publicGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				if(!CommonUtil.isEmpty(publicGroups)) {
+					for(SwoGroup publicGroup : publicGroups) {
+						swoGroupMap.put(publicGroup.getId(), publicGroup);
+					}
+				}
+
+				if(swoGroupMap.size() > 0) {
+					for(Map.Entry<String, Object> entry : swoGroupMap.entrySet()) {
+						SwoGroup swoGroup = (SwoGroup)entry.getValue();
+						finalGroupInfoList.add(ModelConverter.getGroupInfoBySwoGroup(null, swoGroup));
+					}
+				}
+
+				if(finalGroupInfoList.size() > 0) {
+					finalGroupInfos = new GroupInfo[finalGroupInfoList.size()];
+					finalGroupInfoList.toArray(finalGroupInfos);
+				}
+
+				return finalGroupInfos;
+			} else {
+				String[] ids = null;
+				List<String> idList = new ArrayList<String>();
+				SwoGroup swoGroup = getSwoManager().getGroup(cUser.getId(), groupId, IManager.LEVEL_ALL);
+				if(!CommonUtil.isEmpty(swoGroup)) {
+					SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+					if(!CommonUtil.isEmpty(swoGroupMembers)) {
+						for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+							idList.add(swoGroupMember.getUserId());
+						}
+						if(idList.size() > 0) {
+							ids = new String[idList.size()];
+							idList.toArray(ids);
+						}
+					}
+				}
+
+				SwoUserExtend[] swoUserExtends = getSwoManager().getUsersExtend(cUser.getId(), ids);
+
+				return ModelConverter.convertSwoUserExtendsToUserInfos(swoUserExtends);
+			}
+		} catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	public CommunityInfo[] getContactsByCategoryId(String categoryId) throws Exception {
+		try {
+
+			User user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+			String companyId = user.getCompanyId();
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			String domainId = "frm_contact_SYSTEM";
+			swdRecordCond.setCompanyId(companyId);
+			swdRecordCond.setDomainId(domainId);
+
+			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("!=", colEmail, Filter.OPERANDTYPE_STRING, ""));
+			swdRecordCond.addFilters(fs1);
+
+			if(!CommonUtil.isEmpty(categoryId)) {
+				String colCategory = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_CATEGORY);
+				Filters fs2 = new Filters();
+				fs2.addFilter(new Filter("=", colCategory, Filter.OPERANDTYPE_STRING, categoryId));
+				swdRecordCond.addFilters(fs2);
+			}
+
+			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
+				swdRecordCond.setCreationUser(userId);
+
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			if(!CommonUtil.isEmpty(categoryId)) {
+				UserInfo[] userInfos = null;
+				List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+				if(!CommonUtil.isEmpty(swdRecords)) {
+					for(int i=0; i < swdRecords.length; i++) {
+						SwdRecord swdRecord = swdRecords[i];
+						UserInfo userInfo = new UserInfo();
+						SwdDataField[] swdDataFields = swdRecord.getDataFields();
+						for(SwdDataField swdDataField : swdDataFields) {
+							String fieldId = swdDataField.getId();
+							String value = swdDataField.getValue();
+							if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL)) {
+								userInfo.setId(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_NAME)) {
+								userInfo.setName(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_POSITION)) {
+								userInfo.setPosition(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_CELLPHONE)) {
+								userInfo.setCellPhoneNo(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_PHONE)) {
+								userInfo.setPhoneNo(value);
+							}
+						}
+						userInfo.setRole(User.USER_ROLE_EMAIL);
+						userInfoList.add(userInfo);
+					}
+				}
+				if(userInfoList.size() != 0) {
+					userInfos = new UserInfo[userInfoList.size()];
+					userInfoList.toArray(userInfos);
+				}
+				return userInfos;
+			} else {
+				GroupInfo[] groupInfos = null;
+				List<GroupInfo> groupInfoList = new ArrayList<GroupInfo>();
+				Map<String, Object> groupInfoMap = new HashMap<String, Object>();
+
+				if(!CommonUtil.isEmpty(swdRecords)) {
+					for(int i=0; i < swdRecords.length; i++) {
+						SwdRecord swdRecord = swdRecords[i];
+						GroupInfo groupInfo = new GroupInfo();
+						SwdDataField[] swdDataFields = swdRecord.getDataFields();
+						for(SwdDataField swdDataField : swdDataFields) {
+							String fieldId = swdDataField.getId();
+							String value = swdDataField.getValue();
+							if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_CATEGORY)) {
+								groupInfo = new GroupInfo(value, value);
+							}
+						}
+						groupInfoMap.put(groupInfo.getId(), groupInfo);
+					}
+				}
+				if(groupInfoMap.size() > 0) {
+					for(Map.Entry<String, Object> entry : groupInfoMap.entrySet()) {
+						GroupInfo groupInfo = (GroupInfo)entry.getValue();
+						groupInfoList.add(groupInfo);
+					}
+				}
+				if(groupInfoList.size() > 0) {
+					groupInfos = new GroupInfo[groupInfoList.size()];
+					groupInfoList.toArray(groupInfos);
+				}
+				return groupInfos;
+			}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
+	public CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			if(CommonUtil.isEmpty(categoryId) || categoryId.equals(cUser.getCompanyId())) {
+				return getContactsByCategoryId(null);
+			} else {
+				return getContactsByCategoryId(categoryId);
+			}
+		} catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}

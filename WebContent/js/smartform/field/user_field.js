@@ -20,6 +20,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		options.container.html('');
 
 	var users = (options.dataField && options.dataField.users) || new Array();
+	var usersHtml = (options.dataField && options.dataField.usersHtml) || "";
 
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
@@ -44,7 +45,6 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	
 	var $user = null;
 	
-	var usersHtml = '';
 	var href = "user_name.sw";
 	if(!isEmpty(options.courseId))
 		href = "course_member.sw?courseId=" + options.courseId;
@@ -63,15 +63,17 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		userPicker = 'class="js_emailpicker_button"';
 	
 	if(multiUsers === 'true'){
-		for(var i=0; i<users.length; i++)
-			usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
+		if(!isEmpty(users) && isEmpty(usersHtml)){
+			for(var i=0; i<users.length; i++)
+				usersHtml = usersHtml +  "<span class='js_community_item user_select' comId='" + users[i].userId + "'>" + users[i].longName + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";		
+		}
 		href = "community_name.sw";
 		if(!isEmpty(options.courseId))
 			href =  "course_member.sw?courseId=" + options.courseId;
 		else if(options.emailAddress)
 			href = "email_address.sw";
 		icoClass = ' class="icon_fb_users"';
-	}else if (!isEmpty(users)) {
+	}else if (!isEmpty(users) && isEmpty(usersHtml)) {
 		usersHtml = "<span class='js_community_item user_select' comId='" + users[0].userId + "'>" + users[0].longName + "<a class='js_remove_community' href=''> x</a></span>";
 	}
 
@@ -191,7 +193,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.dataField = function(config){
 			fieldName: '',
 			formXml: '',
 			fieldId: '',
-			users: new Array() //{userId: '',longName: ''}
+			users: new Array(), //{userId: '',longName: ''}
+			usersHtml: ""
 	};
 
 	SmartWorks.extend(options, config);

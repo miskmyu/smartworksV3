@@ -47,4 +47,16 @@ public class MailController extends ExceptionInterceptor {
 	public @ResponseBody void sendMail(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.sendMail(requestBody, request);
 	}
+
+	@RequestMapping(value = "/save_mail", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void saveMail(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.saveMailAsDraft(requestBody, request);
+	}
+
+	@RequestMapping(value = "/move_mails", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void moveMailS(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.moveMails(requestBody, request);
+	}
 }

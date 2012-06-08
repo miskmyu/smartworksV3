@@ -184,11 +184,11 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -551px -650px; padding:0 0 0 22px; float: left; height:18px}
 
 /* Nav Mail Btn*/
-.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 0 transparent; height:12px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:12px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
-.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -93px transparent; height:16px; width: 25px; margin: 5px 5px 0 0; display: inline-block;}
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 -2px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -25px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right;}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px;}
@@ -351,23 +351,24 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal;}
 .txt_btn .po_right {float:right; margin-left:10px;}
 .txt_btn .po_left {float:left; margin-right:10px;}
+.txt_btn .po_left > span {line-height: 20px}
 .txt_btn .ch_right {float:right; margin-left:4px;}
+.txt_btn .btn_r {float:right; margin:6px 0 0 0; display: inline-block}
 
 .txt_btn .current { font-weight:bold;}
 .txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none;}
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
-.txt_btn_height25{height:25px}
 .txt_btn .image_pos {position: relative; bottom:2px;} /* 우측 메뉴중 이미지가 올때 위치 조정 */
 
 /* 검색- 자동 완성어 list, layer_pop list */
-.srch_list {z-index:100; position:absolute; width:447px; margin-top: 1px; -webkit-box-shadow: 0px 2px 10px #505050; -moz-box-shadow: 0px 2px 10px #505050; box-shadow: 0px 2px 10px #505050; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif;}
+.srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif;}
 .srch_list li, .srch_list_nowid li {position:relative; color:#454545;}
 .srch_list li a, .srch_list_nowid li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545;}
 /*.srch_list li a:hover {display:block; background-color:#fffccd; color:#454545;}*/
-.srch_list li.sw_hover, .srch_list_nowid li a:hover {display:block; background-color:#ffeed9; color:#454545;}
+.srch_list li.sw_hover, .srch_list_nowid li.sw_hover, .srch_list li a:hover , .srch_list_nowid li a:hover {display:block; background-color:#ffeed9; color:#454545;}
 .srch_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px;}
-.srch_list_nowid {z-index:100; position:absolute; margin-top: 1px; -webkit-box-shadow: 0px 2px 10px #505050; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif} 
+.srch_list_nowid {width:none} 
 
 /* nav검색- 자동 완성어 list */
 .nav_srch_list {z-index:100; position:absolute; width:192px; margin:0 0 0 10px; margin-top:-1px;-webkit-box-shadow: 0px 2px 10px #505050; background-color:#222; border: 1px solid #555;}
@@ -388,7 +389,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px;}
 
 /* 입력폼 */
-.form_wrap {background: none repeat scroll 0 0 #FFFFFF; height:100%; overflow:hidden}
+.form_wrap {background: none repeat scroll 0 0 #FFFFFF; height:100%}
 .form_wrap .input_check {float:left; margin-left:5px;}
 .form_title {padding:10px;}
 .form_title .title {font-weight:bold; font-size:14px; padding:0 0 0 19px; position:absolute;} /* 타이틀 우측으로 아이콘이 있을때 */
@@ -399,7 +400,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .form_contents .title_2dep {text-align:left;} 
 .form_contents .item {width:80px;}
 .form_contents .tcontents {width:100%;}
-.form_contents * {}
 .form_space {padding-right:3px;}
 
 .report_title th{width:17%;font-weight:normal}
@@ -421,7 +421,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; clear:both; padding:10px 0}
 
 /* table Gray */
-.gray_style {}
 .gray_style table {border-collapse:collapse; border:1px solid #d8d8d8;}
 .gray_style th {border:1px solid #d8d8d8; padding: 2px 8px;}
 .gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
@@ -572,6 +571,9 @@ td.pic{width:85px}
 .mail_list_section .view_title dt { clear:both}
 .mail_list_section .view_title dd { margin:0 0 0 5px}
 .mail_list_section .read_frame { margin:10px}
+.nav_mail_list {height: 16px; vertical-align: top !important}
+.nav_mail_list span {vertical-align: top !important; color: #FFA24D}
+.nav_mail_list span b {vertical-align: top !important}
 	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e;}
@@ -581,61 +583,6 @@ td.pic{width:85px}
 .icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
 .icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
-
-/* Button */
-.btn {background-color:#666666; float:right; height:22px; position:absolute; line-height:19px}
-.btn .txt_btn_start {background: url("../../images/btn_bg_left.jpg") repeat scroll 0 0 transparent;
-			 float:left; height:22px; width:5px;}
-.btn .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
-.btn .txt_btn_end {background: url("../../images/btn_bg_right.jpg") repeat scroll 0 0 transparent;
-    		float:left; height:22px; width:5px;}
-			
-.btn_wh {clear: both; display:inline-block; line-height:19px}
-.btn_wh .txt_btn_start {background: url("../../images/btn_wh_left.gif") repeat scroll 0 0 transparent;
-			float:left; height:20px; width:5px;}
-.btn_wh .txt_btn_center {background: url("../../images/btn_wh_center.gif") repeat scroll 0 0 transparent;
-    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
-.btn_wh .txt_btn_end {background: url("../../images/btn_wh_right.gif") repeat scroll 0 0 transparent;
-    		float:left; height:20px; width:5px;}
-			
-.btn_wh_ov {clear: both; display:inline-block; line-height:19px}
-.btn_wh_ov .txt_btn_start {background: url("../../images/btn_wh_left_ov.gif") repeat scroll 0 0 transparent;
-			float:left; height:20px; width:5px;}
-.btn_wh_ov .txt_btn_center {background: url("../../images/btn_wh_center_ov.gif") repeat scroll 0 0 transparent;
-    		float:left; color:#747474; height:18px; padding:2px 3px 0; text-align:center; font-size:11px;}
-.btn_wh_ov .txt_btn_end {background: url("../../images/btn_wh_right_ov.gif") repeat scroll 0 0 transparent;
-    		float:left; height:20px; width:5px;}
-			
-.btn_black {background-color:#666666; float:right; height:22px; margin-right:15px; position:relative; line-height:19px}
-.btn_black .txt_btn_start {background: url("../../images/btn_blk_bg_left.jpg") repeat scroll 0 0 transparent;
-			 float:left; height:22px; width:5px;}
-.btn_black .txt_btn_center {background: url("../../images/btn_bg_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center;}
-.btn_black .txt_btn_end {background: url("../../images/btn_blk_bg_right.jpg") repeat scroll 0 0 transparent;
-    		float:left; height:22px; width:5px;}
-			
-.btn_gray {display:inline-block; line-height:19px}
-.btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
-			 float:left; height:22px; width:5px;}
-.btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
-.btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
-    		float:left; height:22px; width:5px;}
-.btn_hpadding {margin:7px 0;}
-			
-/* close btn */
-.btn_x{
-	background: url("../../images/btn_im_x_gr.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 13px;
-    padding: 0; position: relative; right: 3px; top:2px; width: 13px; float: right;
-} 
-a .btn_x:hover {background-color:#8d8d8d;}
-/* td.form_col:hover .btn_x{display:inline;}
-td.form_col .btn_x {display:none;}
- */
-.btn_right {left: 452px; position:relative;}
-.btn_x_gr {color:#c7c7c7; font-size:12px;}
-.btn_x_gr a:hover {background-color:#f2f2f2; text-decoration:none; font-size:12px;}
     
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333;padding: 0 6px 0 5px; margin: 0 2px 0 0;

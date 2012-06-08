@@ -177,7 +177,7 @@
 		<div class="solid_line_s mt10 mb5"></div>		
 
 		<!-- 우측 버튼 -->
-		<div class="txt_btn txt_btn_height25">	
+		<div class="txt_btn">	
 
 			<!-- 수정하기 -->
 			<div class="fr ml5">
@@ -197,7 +197,7 @@
 		
 			<!-- 최종수정자 -->
 			<div class="po_left">
-				<img class="pho_user profile_size_s" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>">
+				<img class="pho_user profile_size_s vb" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>">
 				<span class="t_name"><%=work.getLastModifier().getLongName()%></span> 
 				<span class="t_date"><%=work.getLastModifiedDate().toLocalString()%></span>
 			</div>
@@ -219,62 +219,62 @@
 			</span>
 	
 			<!-- 우측 권한 아이콘 -->
-			<span>
+			<span class="btn_r">
 				<%
 				switch (work.getAccessPolicy().getLevel()) {
 				case AccessPolicy.LEVEL_PUBLIC:
 				%>
-					<span class="ch_right mt5"><fmt:message key="common.security.access.public" /></span>
+					<span class="ch_right"><fmt:message key="common.security.access.public" /></span>
 				<%
 					break;
 				case AccessPolicy.LEVEL_PRIVATE:
 				%>
-					<span class="ch_right mt5"><fmt:message key="common.security.access.private" /></span>
+					<span class="ch_right"><fmt:message key="common.security.access.private" /></span>
 				<%
 					break;
 				case AccessPolicy.LEVEL_CUSTOM:
 				%>
-					<span class="ch_right mt5"><fmt:message key="common.security.access.custom" /></span>
+					<span class="ch_right"><fmt:message key="common.security.access.custom" /></span>
 				<%
 					break;
 				}
 				%>
 		
-				<span class="fr mt5"><span class="icon_body_read"  title="<fmt:message key='common.security.title.access'/>"></span></span>
+				<span class="fr ml5"><span class="icon_body_read"  title="<fmt:message key='common.security.title.access'/>"></span></span>
 		
 				<%
 				switch (work.getWritePolicy().getLevel()) {
 				case WritePolicy.LEVEL_PUBLIC:
 				%>
-					<span class="ch_right  mt5"><fmt:message key="common.security.write.public" /></span>
+					<span class="ch_right"><fmt:message key="common.security.write.public" /></span>
 				<%
 					break;
 				case WritePolicy.LEVEL_CUSTOM:
 				%>
-					<span class="ch_right  mt5"><fmt:message key="common.security.write.custom" /></span>
+					<span class="ch_right"><fmt:message key="common.security.write.custom" /></span>
 				<%
 					break;
 				}
 				%>
 		
-				<span class="fr mt5"><span class="icon_body_register" title="<fmt:message key='common.security.title.write'/>"></span></span>
+				<span class="fr ml5"><span class="icon_body_register" title="<fmt:message key='common.security.title.write'/>"></span></span>
 		
 				<%
 				switch (work.getEditPolicy().getLevel()) {
 				case EditPolicy.LEVEL_WIKI:
 				%>
-					<span class="ch_right  mt5"><fmt:message key="common.security.edit.wiki" /></span>
+					<span class="ch_right"><fmt:message key="common.security.edit.wiki" /></span>
 				<%
 					break;
 				case EditPolicy.LEVEL_BLOG:
 				%>
-					<span class="ch_right  mt5"><fmt:message key="common.security.edit.blog" /></span>
+					<span class="ch_right"><fmt:message key="common.security.edit.blog" /></span>
 				<%
 					break;
 				}
 				%>
 		
-				<span class="fr mt5"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></span>
+				<span class="fr ml5"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></span>
 		
 			</span>
 			<!-- 우측 권한 아이콘//-->

@@ -25,7 +25,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.smartworks.model.community.Community;
-import net.smartworks.server.engine.docfile.manager.impl.DocFileManagerImpl;
 import net.smartworks.util.OSValidator;
 
 import org.springframework.util.StringUtils;
@@ -701,6 +700,7 @@ public class CommonUtil {
 
 		boolean isExistImage = false;
 		try {
+			if(imagePath.indexOf(".") == -1) return isExistImage;
 			URL url = new URL(imagePath);
 			HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
 			if(urlConnection.getResponseCode() == 200) {
