@@ -38,16 +38,21 @@
 	SecurityContext context = (SecurityContext) request.getSession().getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
-		if(!SmartUtil.isBlankObject(auth)){
-			System.out.println("-------------------------------------------");
-			System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
-			System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
-			System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
-			System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
-			System.out.println("-------------------------------------------");
+		if(!SmartUtil.isBlankObject(auth)) {
+			String connectUserId = ((Login) auth.getPrincipal()).getId();
+			if(SmartUtil.isBlankObject(session.getAttribute(connectUserId))) {
+				System.out.println("-------------------------------------------");
+				System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
+				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
+				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
+				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
+				System.out.println("-------------------------------------------");
+	
+				UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
+				SmartUtil.publishAChatters(userInfos);
 
-			UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
-			SmartUtil.publishAChatters(userInfos);
+				session.setAttribute(connectUserId, new LocalDate());
+			}
 		}
 	} else {
 		response.sendRedirect("login.sw");
