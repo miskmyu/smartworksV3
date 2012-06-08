@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="java.util.Date"%>
 <%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
 <%@page import="net.smartworks.model.sera.SeraBoardList"%>
@@ -307,8 +308,8 @@
 
 	//swoMgr.createGroup(user.getId(), swoGroupCond);
 
-/* 	ICommunityService communityService = (ICommunityService)SmartUtil.getBean("communityServiceImpl", request);
-	GroupInfo[] groupInfo = communityService.getMyGroups();
+ 	ICommunityService communityService = (ICommunityService)SmartUtil.getBean("communityServiceImpl", request);
+	/*GroupInfo[] groupInfo = communityService.getMyGroups();
 	System.out.println(groupInfo); */
 
 /* 	LocalDate localDate = LocalDate.convertLocalTimeStringToLocalDate("14:32");
@@ -554,6 +555,8 @@
 			}
 		}
 	} */
+	CommunityInfo[] communityInfos = communityService.getAllComsByGroupId(null);
+	System.out.println(communityInfos);
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>
