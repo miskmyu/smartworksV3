@@ -13,7 +13,7 @@ public interface IMailService {
 
 	public InstanceInfoList getMailInstanceList(String folderId, RequestParams params) throws Exception;
 
-	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception;
+	public MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception;
 
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception;
 	

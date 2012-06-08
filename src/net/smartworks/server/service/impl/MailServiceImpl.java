@@ -646,7 +646,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	}
 	
 	@Override
-	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception {
+	public MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception {
 
 		try{
 			MailInstance instance = null;
@@ -729,7 +729,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				instance.setCreatedDate(new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setReceivers(receivers);
 				instance.setCcReceivers(ccReceivers);
-				instance.setBcccReceivers(bccReceivers);
+				instance.setBccReceivers(bccReceivers);
 				
 				MailAttachment[] attachments = null;
 				int count = 0;

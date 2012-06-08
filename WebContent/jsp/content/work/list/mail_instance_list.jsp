@@ -47,6 +47,7 @@
 	session.setAttribute("workId", folderId);
 
 	InstanceInfoList instanceList = smartWorks.getMailInstanceList(folderId, params);
+	boolean savedInstance = (folderId.equals(MailFolder.ID_DRAFTS)) ? true : false;
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -145,7 +146,7 @@
 					UserInfo lastModifier = instanceInfo.getLastModifier();
 					String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
 					String wid = instanceInfo.getWorkSpace().getId();
-					String target = "mail_space.sw?folderId=" + folderId + "&msgId=" + instanceInfo.getId();
+					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
 						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>

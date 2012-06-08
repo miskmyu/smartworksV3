@@ -666,8 +666,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public MailInstance getMailInstanceById(String folderId, String msgId) throws Exception {
-		return mailService.getMailInstanceById(folderId, msgId);
+	public MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception {
+		return mailService.getMailInstanceById(folderId, msgId, sendType);
 	}
 
 	@Override
