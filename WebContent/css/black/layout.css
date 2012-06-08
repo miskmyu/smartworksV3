@@ -351,13 +351,14 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer;}
 .txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal;}
 .txt_btn .po_right {float:right; margin-left:10px;}
 .txt_btn .po_left {float:left; margin-right:10px;}
+.txt_btn .po_left > span {line-height: 20px}
 .txt_btn .ch_right {float:right; margin-left:4px;}
+.txt_btn .btn_r {float:right; margin:6px 0 0 0; display: inline-block}
 
 .txt_btn .current { font-weight:bold;}
 .txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none;}
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
-.txt_btn_height25{height:25px}
 .txt_btn .image_pos {position: relative; bottom:2px;} /* 우측 메뉴중 이미지가 올때 위치 조정 */
 
 /* 검색- 자동 완성어 list, layer_pop list */

@@ -114,7 +114,7 @@
 		<div class="solid_line_s t10 mb5"></div>
 		
 		<!-- 우측 버튼 -->
-		<div class="txt_btn txt_btn_height25">
+		<div class="txt_btn">
 	
 			<!-- 수정하기 -->
 			<div class="fr ml5">
@@ -134,7 +134,7 @@
 	
 			<!-- 최종수정자 -->
 			<div class="po_left">
-				<img class="pho_user profile_size_s" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>"> 
+				<img class="pho_user profile_size_s vb" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>"> 
 				<span class="t_name"><%=work.getLastModifier().getLongName()%></span>
 				<span class="t_date"><%=work.getLastModifiedDate().toLocalString()%></span>
 			</div>
@@ -156,7 +156,7 @@
 			</span>
 	
 			<!-- 우측 권한 아이콘-->
-			<span> 
+			<span class="btn_r"> 
 				<%
 				switch (work.getAccessPolicy().getLevel()) {
 				case AccessPolicy.LEVEL_PUBLIC:
@@ -177,7 +177,7 @@
 				}
 				%>
 					
-				<div class="fr ml5"><span class="icon_body_read" title="<fmt:message key='common.security.title.access'/>"></span></div>
+				<div class="ch_right"><span class="icon_body_read" title="<fmt:message key='common.security.title.access'/>"></span></div>
 				<%
 				switch (work.getWritePolicy().getLevel()) {
 				case WritePolicy.LEVEL_PUBLIC:
@@ -193,7 +193,7 @@
 				}
 				%>
 					
-				<div class="fr ml5"><span class="icon_body_register"  title="<fmt:message key='common.security.title.write'/>"></span></div> 
+				<div class="ch_right"><span class="icon_body_register"  title="<fmt:message key='common.security.title.write'/>"></span></div> 
 				<%
 				switch (work.getEditPolicy().getLevel()) {
 				case EditPolicy.LEVEL_WIKI:
@@ -208,7 +208,7 @@
 				 	break;
 				 }
 				 %>
-				<div class="fr ml5"><span class="icon_body_modify"  title="<fmt:message key='common.security.title.edit'/>"></span></div> 
+				<div class="ch_right"><span class="icon_body_modify"  title="<fmt:message key='common.security.title.edit'/>"></span></div> 
 			</span>
 			<!-- 우측 권한 아이콘-->
 		</div>
