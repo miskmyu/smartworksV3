@@ -2200,7 +2200,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
 			List<EventInstanceInfo> eventInstanceInfoList = new ArrayList<EventInstanceInfo>();
 			EventInstanceInfo[] eventInstanceInfos = null;
@@ -2972,7 +2972,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
 			List<NoteInstanceInfo> NoteInstanceInfoList = new ArrayList<NoteInstanceInfo>();
 			NoteInstanceInfo[] noteInstanceInfos = null;
@@ -3111,7 +3111,7 @@ public class SeraServiceImpl implements ISeraService {
 
 			swdRecordCond.setFromDate(fromDate);
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
 			List<MissionReportInstanceInfo> missionReportInstanceInfoList = new ArrayList<MissionReportInstanceInfo>();
 			MissionReportInstanceInfo[] missionReportInstanceInfos = null;
