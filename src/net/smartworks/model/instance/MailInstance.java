@@ -1,6 +1,7 @@
 package net.smartworks.model.instance;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.work.Work;
@@ -16,6 +17,7 @@ public class MailInstance extends Instance {
 	private User[] ccReceivers;
 	private User[] bccReceivers;
 	private int priority;
+	private String mailContents;
 	private long size;
 	private int partId;
 	private MailAttachment[] attachments;
@@ -83,8 +85,16 @@ public class MailInstance extends Instance {
 		return bccReceivers;
 	}
 
-	public void setBcccReceivers(User[] bccReceivers) {
+	public void setBccReceivers(User[] bccReceivers) {
 		this.bccReceivers = bccReceivers;
+	}
+
+	public String getMailContents() {
+		return mailContents;
+	}
+
+	public void setMailContents(String mailContents) {
+		this.mailContents = mailContents;
 	}
 
 	public long getSize() {
@@ -139,12 +149,28 @@ public class MailInstance extends Instance {
 		return shown;
 	}
 	
+	public String getReceiversHtml(){
+		if(SmartUtil.isBlankObject(this.receivers)) return "";
+		String userField = "";
+		for(int i=0; i<this.receivers.length; i++)
+			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "'>" + receivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		return userField;
+	}
+	
 	public String getCcReceiversShown(){
 		if(SmartUtil.isBlankObject(this.ccReceivers)) return "";
 		String shown = ccReceivers[0].getEmailAddressShown();
 		for(int i=1; i<this.ccReceivers.length; i++)
 			shown = shown + ", " +  ccReceivers[i].getEmailAddressShown();
 		return shown;		
+	}
+	
+	public String getCcReceiversHtml(){
+		if(SmartUtil.isBlankObject(this.ccReceivers)) return "";
+		String userField = "";
+		for(int i=0; i<this.ccReceivers.length; i++)
+			userField = userField + "<span class='js_community_item user_select' comId='" + ccReceivers[i].getId() + "'>" + ccReceivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		return userField;
 	}
 	
 	public String getBccReceiversShown(){
@@ -155,4 +181,11 @@ public class MailInstance extends Instance {
 		return shown;		
 	}
 
+	public String getBccReceiversHtml(){
+		if(SmartUtil.isBlankObject(this.bccReceivers)) return "";
+		String userField = "";
+		for(int i=0; i<this.bccReceivers.length; i++)
+			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "'>" + bccReceivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		return userField;
+	}	
 }

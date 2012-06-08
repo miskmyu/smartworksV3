@@ -12,6 +12,11 @@ public class MailFolder extends BaseObject {
 	public static final int TYPE_SYSTEM_TRASH 	= 4;
 	public static final int TYPE_SYSTEM_JUNK 	= 5;
 	public static final int TYPE_USER 			= 6;
+	
+	public static final int SEND_TYPE_NONE		= 0;
+	public static final int SEND_TYPE_REPLY		= 1;
+	public static final int SEND_TYPE_REPLY_ALL	= 2;
+	public static final int SEND_TYPE_FORWARD	= 3;
 
 	public static final String ID_ROOT 		= "0";
 	

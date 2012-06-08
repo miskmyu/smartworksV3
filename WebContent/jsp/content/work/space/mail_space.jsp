@@ -21,7 +21,7 @@
 	String msgId = request.getParameter("msgId");
 	User cUser = SmartUtil.getCurrentUser();
 
-	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId);
+	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
 	MailFolder mailFolder = smartWorks.getMailFolderById(folderId);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

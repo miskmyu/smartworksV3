@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.								 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.model.mail.MailFolder"%>
+<%@page import="net.smartworks.model.instance.MailInstance"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
@@ -72,6 +74,16 @@ function submitForms(action) {
 	//스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+
+	String folderId = request.getParameter("folderId");
+	String msgId = request.getParameter("msgId");
+	String sSendType = request.getParameter("sendType");
+	int sendType = (SmartUtil.isBlankObject(sSendType)) ? MailFolder.SEND_TYPE_NONE : Integer.parseInt(sSendType);
+	MailInstance instance = null;
+	if(!SmartUtil.isBlankObject(folderId) && !SmartUtil.isBlankObject(msgId)){
+		instance = smartWorks.getMailInstanceById(folderId, msgId, sendType);
+	}
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -122,7 +134,9 @@ function submitForms(action) {
 						<!-- 폼- 확장 -->
 						<form name="frmNewMail" class="form_title js_validation_required">
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
-								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>">
+								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
+								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=instance.getReceiversHtml() %>" ccReceivers="<%=instance.getCcReceiversHtml() %>" bccReceivers="<%=instance.getBccReceiversHtml() %>" 
+									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getAttachments() %>" attachments=""<%} %>>
 							</div>
 						</form>
 					</div>
