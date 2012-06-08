@@ -1,8 +1,6 @@
 package net.smartworks.server.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
@@ -66,8 +63,6 @@ import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.sun.xml.internal.bind.v2.TODO;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -335,9 +330,9 @@ public class CommunityServiceImpl implements ICommunityService {
 					} else if(fieldId.equals("selGroupProfileType")) {
 						selGroupProfileType = (String)frmNewGroupProfile.get("selGroupProfileType");
 						if(selGroupProfileType.equals(Group.GROUP_TYPE_OPEN))
-							selGroupProfileType = SwoGroup.GROUP_STATUS_OPEN;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PUBLIC;
 						else
-							selGroupProfileType = SwoGroup.GROUP_STATUS_CLOSED;
+							selGroupProfileType = SwoGroup.GROUP_TYPE_PRIVATE;
 					} else if(fieldId.equals("txtGroupLeader")) {
 						txtGroupLeader = (String)frmNewGroupProfile.get("txtGroupLeader");
 					}
@@ -1059,8 +1054,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		try {
 			UserInfo[] userInfos = null;
 			SwoUserCond swoUserCond = new SwoUserCond();
-			if(!CommonUtil.isEmpty(key))
-				swoUserCond.setKey(key);
+			if(CommonUtil.isEmpty(key))
+				return null;
+
+			swoUserCond.setKey(key);
 
 			swoUserCond.setOrders(new Order[]{new Order("name", true)});
 
@@ -1086,22 +1083,23 @@ public class CommunityServiceImpl implements ICommunityService {
 			String companyId = user.getCompanyId();
 
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
-			String domainId = "md_4fbb944806f342a89a282b7cc441154f";
+			String domainId = "frm_contact_SYSTEM";
 			swdRecordCond.setCompanyId(companyId);
 			swdRecordCond.setDomainId(domainId);
+
+			if(CommonUtil.isEmpty(key))
+				return null;
 
 			String colName = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_NAME);
 			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
 
-			if(!CommonUtil.isEmpty(key)) {
-				Filters fs1 = new Filters();
-				fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs1);
-				Filters fs2 = new Filters();
-				fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
-				swdRecordCond.addFilters(fs2);
-				swdRecordCond.setOperator("or");
-			}
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("like", colName, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs1);
+			Filters fs2 = new Filters();
+			fs2.addFilter(new Filter("like", colEmail, Filter.OPERANDTYPE_STRING, CommonUtil.toLikeString(key)));
+			swdRecordCond.addFilters(fs2);
+			swdRecordCond.setOperator("or");
 
 			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
 				swdRecordCond.setCreationUser(userId);
@@ -1270,10 +1268,74 @@ public class CommunityServiceImpl implements ICommunityService {
 
 		try{
 			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+
 			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
-				return getMyGroups();
-			}else{
-				return SmartTest.getAvailableChatter();
+
+				Map<String, Object> swoGroupMap = new HashMap<String, Object>();
+				GroupInfo[] finalGroupInfos = null;
+				List<GroupInfo> finalGroupInfoList = new ArrayList<GroupInfo>();
+
+				SwoGroupCond swoGroupCond = new SwoGroupCond();
+
+				SwoGroupMember swoGroupMember = new SwoGroupMember();       
+				swoGroupMember.setUserId(userId);		
+				SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+				swoGroupMembers[0] = swoGroupMember;
+				swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+
+				SwoGroup[] myGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				if(!CommonUtil.isEmpty(myGroups)) {
+					for(SwoGroup myGroup : myGroups) {
+						swoGroupMap.put(myGroup.getId(), myGroup);
+					}
+				}
+
+				swoGroupCond = new SwoGroupCond();
+				swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PUBLIC);
+
+				SwoGroup[] publicGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				if(!CommonUtil.isEmpty(publicGroups)) {
+					for(SwoGroup publicGroup : publicGroups) {
+						swoGroupMap.put(publicGroup.getId(), publicGroup);
+					}
+				}
+
+				if(swoGroupMap.size() > 0) {
+					for(Map.Entry<String, Object> entry : swoGroupMap.entrySet()) {
+						SwoGroup swoGroup = (SwoGroup)entry.getValue();
+						finalGroupInfoList.add(ModelConverter.getGroupInfoBySwoGroup(null, swoGroup));
+					}
+				}
+
+				if(finalGroupInfoList.size() > 0) {
+					finalGroupInfos = new GroupInfo[finalGroupInfoList.size()];
+					finalGroupInfoList.toArray(finalGroupInfos);
+				}
+
+				return finalGroupInfos;
+			} else {
+				String[] ids = null;
+				List<String> idList = new ArrayList<String>();
+				SwoGroup swoGroup = getSwoManager().getGroup(cUser.getId(), groupId, IManager.LEVEL_ALL);
+				if(!CommonUtil.isEmpty(swoGroup)) {
+					SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+					if(!CommonUtil.isEmpty(swoGroupMembers)) {
+						for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+							idList.add(swoGroupMember.getUserId());
+						}
+						if(idList.size() > 0) {
+							ids = new String[idList.size()];
+							idList.toArray(ids);
+						}
+					}
+				}
+
+				SwoUserExtend[] swoUserExtends = getSwoManager().getUsersExtend(cUser.getId(), ids);
+
+				return ModelConverter.convertSwoUserExtendsToUserInfos(swoUserExtends);
 			}
 		}catch (Exception e){
 			// Exception Handling Required

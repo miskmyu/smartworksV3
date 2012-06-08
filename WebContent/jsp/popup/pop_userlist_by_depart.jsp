@@ -43,14 +43,14 @@
 				<%
 				} else if (community.getClass().equals(DepartmentInfo.class)) {
 					DepartmentInfo department = (DepartmentInfo)community;
-					iconType = "btn_plus fn vm";
+					iconType = "btn_tree_plus fn vm";
 				%>
 					<li class="js_drill_down">
 						<span class="dep">
 							<%if(isMultiSelectable){ %><input type="checkbox" class="js_checkbox fl_nowidth" comName="<%=department.getName() %>" value="<%=department.getId()%>"/><%} %>
 							<a href="pop_userlist_by_depart.sw?multiUsers=<%=isMultiSelectable %>" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
 								<span class="<%=iconType%>"></span>
-								<span><%=department.getName()%></span>
+								<span> <%=department.getName()%> </span>
 							</a>
 						</span>
 						<div style="display: none" class="menu_2dep js_drill_down_target"></div>
