@@ -700,6 +700,7 @@ public class CommonUtil {
 
 		boolean isExistImage = false;
 		try {
+			if(imagePath.indexOf(".") == -1) return isExistImage;
 			URL url = new URL(imagePath);
 			HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
 			if(urlConnection.getResponseCode() == 200) {

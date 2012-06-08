@@ -1271,6 +1271,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			String userId = cUser.getId();
 
 			if(CommonUtil.isEmpty(groupId) || groupId.equals(cUser.getCompanyId())) {
+
+				Map<String, Object> swoGroupMap = new HashMap<String, Object>();
+				GroupInfo[] finalGroupInfos = null;
+				List<GroupInfo> finalGroupInfoList = new ArrayList<GroupInfo>();
+
 				SwoGroupCond swoGroupCond = new SwoGroupCond();
 
 				SwoGroupMember swoGroupMember = new SwoGroupMember();       
@@ -1278,16 +1283,39 @@ public class CommunityServiceImpl implements ICommunityService {
 				SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
 				swoGroupMembers[0] = swoGroupMember;
 				swoGroupCond.setSwoGroupMembers(swoGroupMembers);
-				swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 
 				SwoGroup[] myGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
+
+				if(!CommonUtil.isEmpty(myGroups)) {
+					for(SwoGroup myGroup : myGroups) {
+						swoGroupMap.put(myGroup.getId(), myGroup);
+					}
+				}
 
 				swoGroupCond = new SwoGroupCond();
 				swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PUBLIC);
 
 				SwoGroup[] publicGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_LITE);
 
-				return getMyGroups();
+				if(!CommonUtil.isEmpty(publicGroups)) {
+					for(SwoGroup publicGroup : publicGroups) {
+						swoGroupMap.put(publicGroup.getId(), publicGroup);
+					}
+				}
+
+				if(swoGroupMap.size() > 0) {
+					for(Map.Entry<String, Object> entry : swoGroupMap.entrySet()) {
+						SwoGroup swoGroup = (SwoGroup)entry.getValue();
+						finalGroupInfoList.add(ModelConverter.getGroupInfoBySwoGroup(null, swoGroup));
+					}
+				}
+
+				if(finalGroupInfoList.size() > 0) {
+					finalGroupInfos = new GroupInfo[finalGroupInfoList.size()];
+					finalGroupInfoList.toArray(finalGroupInfos);
+				}
+
+				return finalGroupInfos;
 			} else {
 				String[] ids = null;
 				List<String> idList = new ArrayList<String>();
