@@ -438,6 +438,7 @@ function loadWriteMailFields() {
 			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
 			var subject = writeMailField.attr('subject');
+			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
@@ -502,13 +503,14 @@ function loadWriteMailFields() {
 				columns: 1,
 				required: false
 			});
-			
+			console.log('contents=', contents);
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 				container: gridRow,
 				fieldId: "contents",
 				fieldName: "",
 				columns: 1,
+				value: contents,
 				required: true
 			});
 			gridRow.find('.form_label').hide();

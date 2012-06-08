@@ -1,10 +1,12 @@
 package net.smartworks.server.service.impl;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +24,7 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
@@ -60,6 +63,7 @@ import org.claros.commons.mail.models.Email;
 import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.models.EmailPriority;
+import org.claros.commons.mail.parser.HTMLMessageParser;
 import org.claros.commons.mail.protocols.Protocol;
 import org.claros.commons.mail.protocols.ProtocolFactory;
 import org.claros.commons.mail.protocols.Smtp;
@@ -78,6 +82,7 @@ import org.claros.intouch.webmail.factory.MailControllerFactory;
 import org.claros.intouch.webmail.models.FolderDbObject;
 import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
 import org.claros.intouch.webmail.models.MsgDbObject;
+import org.htmlcleaner.HtmlCleaner;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -735,6 +740,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				int count = 0;
 				// parts begin
 				List parts = email.getParts();
+				String mailContent = null;
 				if (parts != null) {
 					if (parts.size() > 1 || i == -1) {
 						EmailPart tmp = null;
@@ -751,8 +757,33 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							if (mime.indexOf(" ") > 0) {
 								mime = mime.substring(0, mime.indexOf(" "));
 							}
-							if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) || mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML))
-								continue;
+							if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) || mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+									mailContent = "";
+				                	Object obj = tmp.getContent();
+				                	if(null!=obj) mailContent = obj.toString();
+									HtmlCleaner cleaner = new HtmlCleaner(mailContent);
+									cleaner.setOmitXmlDeclaration(true);
+									cleaner.setOmitXmlnsAttributes(true);
+									cleaner.setUseCdataForScriptAndStyle(false);
+									cleaner.clean(false,false);
+									mailContent = cleaner.getCompactXmlAsString();
+									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
+								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
+									mailContent = "";
+				                	Object obj = tmp.getContent();
+				                	if(null!=obj) mailContent = obj.toString();
+									HtmlCleaner cleaner = new HtmlCleaner(mailContent);
+									cleaner.setOmitXmlDeclaration(true);
+									cleaner.setOmitXmlnsAttributes(true);
+									cleaner.setUseCdataForScriptAndStyle(false);
+									cleaner.clean(true,false);
+									mailContent = cleaner.getXmlAsString();
+									continue;
+								}
+
+							}
+
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
 							attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 							attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
@@ -767,6 +798,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						finalAttachments[j] = attachments[j];
 					}
 				}
+				if(mailContent != null && !mailContent.equals("")){
+					mailContent = mailContent.replace('\"', '\'');
+				}
+				instance.setMailContents(mailContent);
 				instance.setAttachments(finalAttachments);
 				instance.setPartId(i);
 				
@@ -1141,5 +1176,4 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		} catch (Exception e) {
 		}
 	}
-
 }

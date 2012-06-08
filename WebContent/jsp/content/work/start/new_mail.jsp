@@ -136,7 +136,7 @@ function submitForms(action) {
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
 								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
 								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=instance.getReceiversHtml() %>" ccReceivers="<%=instance.getCcReceiversHtml() %>" bccReceivers="<%=instance.getBccReceiversHtml() %>" 
-									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getAttachments() %>" attachments=""<%} %>>
+									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getMailContents() %>" attachments=""<%} %>>
 							</div>
 						</form>
 					</div>
