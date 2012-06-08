@@ -50,6 +50,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
@@ -62,6 +63,7 @@ import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -82,6 +84,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
+
+	@Autowired
+	private SessionRegistry sessionRegistry;
 
 	private ISeraService seraService = null;
 
@@ -715,7 +720,13 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			getLoginUserManager().deleteAllLoginUser(userId);
 
-			//TODO 현재 접속 유저로 업데이트
+			List<Object> allPrincipalList = sessionRegistry.getAllPrincipals();
+			if(allPrincipalList.size() > 0) {
+				for(Object allPrincipal : allPrincipalList) {
+					LoginUser loginUser = new LoginUser(((Login)allPrincipal).getId(), new LocalDate());
+					getLoginUserManager().createLoginUser(userId, loginUser);
+				}
+			}
 
 			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
@@ -1109,7 +1120,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});
 
-			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
 
 			UserInfo[] userInfos = null;
 			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
@@ -1337,27 +1348,132 @@ public class CommunityServiceImpl implements ICommunityService {
 
 				return ModelConverter.convertSwoUserExtendsToUserInfos(swoUserExtends);
 			}
-		}catch (Exception e){
+		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
 			// Exception Handling Required			
 		}
 	}
+
+	public CommunityInfo[] getContactsByCategoryId(String categoryId) throws Exception {
+		try {
+
+			User user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+			String companyId = user.getCompanyId();
+
+			SwdRecordCond swdRecordCond = new SwdRecordCond();
+			String domainId = "frm_contact_SYSTEM";
+			swdRecordCond.setCompanyId(companyId);
+			swdRecordCond.setDomainId(domainId);
+
+			String colEmail = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL);
+			Filters fs1 = new Filters();
+			fs1.addFilter(new Filter("!=", colEmail, Filter.OPERANDTYPE_STRING, ""));
+			swdRecordCond.addFilters(fs1);
+
+			if(!CommonUtil.isEmpty(categoryId)) {
+				String colCategory = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_CATEGORY);
+				Filters fs2 = new Filters();
+				fs2.addFilter(new Filter("=", colCategory, Filter.OPERANDTYPE_STRING, categoryId));
+				swdRecordCond.addFilters(fs2);
+			}
+
+			if(!ModelConverter.isAccessibleAllInstance(SwdDomainFieldConstants.CONTACT_FORMID, userId))
+				swdRecordCond.setCreationUser(userId);
+
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			swdRecordCond.setOrders(new Order[]{new Order(SwdDomainFieldConstants.CONTACT_FIELDID_NAME, true)});
+
+			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
+
+			if(!CommonUtil.isEmpty(categoryId)) {
+				UserInfo[] userInfos = null;
+				List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+				if(!CommonUtil.isEmpty(swdRecords)) {
+					for(int i=0; i < swdRecords.length; i++) {
+						SwdRecord swdRecord = swdRecords[i];
+						UserInfo userInfo = new UserInfo();
+						SwdDataField[] swdDataFields = swdRecord.getDataFields();
+						for(SwdDataField swdDataField : swdDataFields) {
+							String fieldId = swdDataField.getId();
+							String value = swdDataField.getValue();
+							if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_EMAIL)) {
+								userInfo.setId(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_NAME)) {
+								userInfo.setName(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_POSITION)) {
+								userInfo.setPosition(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_CELLPHONE)) {
+								userInfo.setCellPhoneNo(value);
+							} else if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_PHONE)) {
+								userInfo.setPhoneNo(value);
+							}
+						}
+						userInfo.setRole(User.USER_ROLE_EMAIL);
+						userInfoList.add(userInfo);
+					}
+				}
+				if(userInfoList.size() != 0) {
+					userInfos = new UserInfo[userInfoList.size()];
+					userInfoList.toArray(userInfos);
+				}
+				return userInfos;
+			} else {
+				GroupInfo[] groupInfos = null;
+				List<GroupInfo> groupInfoList = new ArrayList<GroupInfo>();
+				Map<String, Object> groupInfoMap = new HashMap<String, Object>();
+
+				if(!CommonUtil.isEmpty(swdRecords)) {
+					for(int i=0; i < swdRecords.length; i++) {
+						SwdRecord swdRecord = swdRecords[i];
+						GroupInfo groupInfo = new GroupInfo();
+						SwdDataField[] swdDataFields = swdRecord.getDataFields();
+						for(SwdDataField swdDataField : swdDataFields) {
+							String fieldId = swdDataField.getId();
+							String value = swdDataField.getValue();
+							if(fieldId.equals(SwdDomainFieldConstants.CONTACT_FIELDID_CATEGORY)) {
+								groupInfo = new GroupInfo(value, value);
+							}
+						}
+						groupInfoMap.put(groupInfo.getId(), groupInfo);
+					}
+				}
+				if(groupInfoMap.size() > 0) {
+					for(Map.Entry<String, Object> entry : groupInfoMap.entrySet()) {
+						GroupInfo groupInfo = (GroupInfo)entry.getValue();
+						groupInfoList.add(groupInfo);
+					}
+				}
+				if(groupInfoList.size() > 0) {
+					groupInfos = new GroupInfo[groupInfoList.size()];
+					groupInfoList.toArray(groupInfos);
+				}
+				return groupInfos;
+			}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@Override
 	public CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception {
-		try{
+		try {
 			User cUser = SmartUtil.getCurrentUser();
 			if(CommonUtil.isEmpty(categoryId) || categoryId.equals(cUser.getCompanyId())) {
-				return SmartTest.getMyGroups();
-			}else{
-				return SmartTest.getAvailableChatter();
+				return getContactsByCategoryId(null);
+			} else {
+				return getContactsByCategoryId(categoryId);
 			}
-		}catch (Exception e){
-			// Exception Handling Required
+		} catch(Exception e) {
 			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			return null;
 		}
 	}
 

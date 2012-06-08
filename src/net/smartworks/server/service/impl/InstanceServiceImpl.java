@@ -4344,6 +4344,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_FILE, 0);
 
 			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);

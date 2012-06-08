@@ -22,7 +22,7 @@
 				<li class="js_drill_down">
 					<div>
 						<a href="pop_userlist_by_depart.sw?multiUsers=<%=isMultiSelectable %>" departmentId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
-							<span class="btn_plus vm m5 mr0">-</span>
+							<span class="btn_tree_plus vm"></span>
 							<span><fmt:message key="organization.title.tree"/></span>
 						</a>
 					</div>
@@ -31,7 +31,7 @@
 				<li class="js_drill_down">
 					<div>
 						<a href="pop_userlist_by_group.sw?multiUsers=<%=isMultiSelectable %>" groupId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
-							<span class="btn_plus vm m5 mr0">-</span>
+							<span class="btn_tree_plus vm"></span>
 							<span><fmt:message key="group.title.tree"/></span>
 						</a>
 					</div>
@@ -40,7 +40,7 @@
 				<li class="js_drill_down">
 					<div>
 						<a href="pop_userlist_by_contact.sw?multiUsers=<%=isMultiSelectable %>" categoryId="<%=cUser.getCompanyId()%>" class="js_popup js_expandable">
-							<span class="btn_plus vm m5 mr0">-</span>
+							<span class="btn_tree_plus vm"></span>
 							<span><fmt:message key="common.title.contacts"/></span>
 						</a>
 					</div>

@@ -177,7 +177,7 @@
 		<div class="solid_line_s mt10 mb5"></div>		
 
 		<!-- 우측 버튼 -->
-		<div class="txt_btn txt_btn_height25">	
+		<div class="txt_btn">	
 
 			<!-- 수정하기 -->
 			<div class="fr ml5">
@@ -197,7 +197,7 @@
 		
 			<!-- 최종수정자 -->
 			<div class="po_left">
-				<img class="pho_user profile_size_s" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>">
+				<img class="pho_user profile_size_s vb" title="<fmt:message key="common.title.last_modifier" />" src="<%=work.getLastModifier().getMinPicture()%>">
 				<span class="t_name"><%=work.getLastModifier().getLongName()%></span> 
 				<span class="t_date"><%=work.getLastModifiedDate().toLocalString()%></span>
 			</div>
@@ -219,7 +219,7 @@
 			</span>
 	
 			<!-- 우측 권한 아이콘 -->
-			<span>
+			<span class="btn_r">
 				<%
 				switch (work.getAccessPolicy().getLevel()) {
 				case AccessPolicy.LEVEL_PUBLIC:

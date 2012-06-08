@@ -18,5 +18,6 @@ public class SwdDomainFieldConstants {
 	public final static String CONTACT_FIELDID_EMAIL = "10";
 	public final static String CONTACT_FIELDID_CELLPHONE = "12";
 	public final static String CONTACT_FIELDID_PHONE = "24";
+	public final static String CONTACT_FIELDID_CATEGORY = "48";
 
 }
