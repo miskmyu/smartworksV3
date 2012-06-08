@@ -39,31 +39,15 @@
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
 		if(!SmartUtil.isBlankObject(auth)){
-			String loginId = ((Login) auth.getPrincipal()).getId();
-			if (SmartUtil.isBlankObject(request.getSession().getAttribute(loginId))) {
-				System.out.println("-------------------------------------------");
-				System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
-				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
-				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
-				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
-				System.out.println("-------------------------------------------");
-				request.getSession().setAttribute(loginId, new LocalDate());
-				LoginUser loginUser = SwManagerFactory.getInstance().getLoginUserManager().getLoginUser(loginId, loginId, IManager.LEVEL_ALL);
+			System.out.println("-------------------------------------------");
+			System.out.println(((Login) auth.getPrincipal()).getPosition() + " " + ((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
+			System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
+			System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
+			System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
+			System.out.println("-------------------------------------------");
 
-				if(SmartUtil.isBlankObject(loginUser)) {
-					loginUser = new LoginUser();
-					loginUser.setUserId(loginId);
-					loginUser.setLoginTime(new LocalDate());
-					SwManagerFactory.getInstance().getLoginUserManager().createLoginUser(loginId, loginUser);
-					UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
-					SmartUtil.publishAChatters(userInfos);
-				} else {
-					loginUser.setLoginTime(new LocalDate());
-					SwManagerFactory.getInstance().getLoginUserManager().setLoginUser(loginId, loginUser);
-				}
-
-			}
-
+			UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
+			SmartUtil.publishAChatters(userInfos);
 		}
 	} else {
 		response.sendRedirect("login.sw");
@@ -150,7 +134,7 @@ function logout() {
 
 <script type="text/javascript" src="js/jstorage/jstorage.js"></script>
 <script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
-<script type="text/javascript" src="js/ext/bootstrap.js"></script>
+<!-- <script type="text/javascript" src="js/ext/bootstrap.js"></script> -->
 <script type="text/javascript" src="js/ext/ext-all.js"></script>
 
 <script type="text/javascript" src="js/sw/sw-common.js"></script>
