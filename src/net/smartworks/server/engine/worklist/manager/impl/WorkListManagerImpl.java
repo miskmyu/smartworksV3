@@ -421,8 +421,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 					queryBuffer.append("where taskInfo.tskReftype = :tskRefType ");
 			}
 		}
-
-		this.appendOrderQuery(queryBuffer, "taskInfo", cond);
+			
+		this.appendOrderQuery(queryBuffer, null, cond);
 		//queryBuffer.append("order by taskInfo.tskCreatedate desc ");
 
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());

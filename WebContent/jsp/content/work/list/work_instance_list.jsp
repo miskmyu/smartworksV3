@@ -92,9 +92,9 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_TASK_NAME%>"><fmt:message key='common.title.work_name'/>
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_WORK)){
+					if(sortedField.getFieldId().equals(FormField.ID_TASK_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
