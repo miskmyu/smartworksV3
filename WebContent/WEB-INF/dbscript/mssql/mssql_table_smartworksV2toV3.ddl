@@ -666,7 +666,7 @@ CREATE TABLE msg_db_objects (
     sentdate datetime,
     unread smallint NOT NULL,
     msg_size bigint NOT NULL,
-    email varbinary(2) NOT NULL,
+    email varbinary(max) NOT NULL,
     primary key (id)
 );
 
