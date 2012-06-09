@@ -171,9 +171,9 @@
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
 					<div class="title_line_btns">
-						<div class="icon_btn_edit">
+						<!-- div class="icon_btn_edit">
 							<a href="search_filter.sw?workId=" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
-						</div>
+						</div-->
 					</div>
 					
 					<div class="title_line_options">

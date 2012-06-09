@@ -2584,50 +2584,65 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWorkCond cond = new TaskWorkCond();
 			cond.setTskWorkSpaceId(instanceId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-			cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
-			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-				cond.setPageSize(length);
-			TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
-
+			
+			long tasksSize = getWlmManager().getTaskWorkListSize(userId, cond);
+			
 			InstanceInfo[] subInstancesInInstances = null;
 			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
-			List<String> prcInstIdList = new ArrayList<String>();
-			if(!CommonUtil.isEmpty(tasks)) {
-				for (int i = 0; i < tasks.length; i++) {
-					TaskWork task = tasks[i];
-					if (instanceInfoList.size() == 10)
-						break;
-					if (prcInstIdList.contains(task.getTskPrcInstId()))
-						continue;
-					prcInstIdList.add(task.getTskPrcInstId());
-					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+			
+			if (tasksSize != 0) {
+				
+				cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
+				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+					cond.setPageSize(length);
+				
+				TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
+				List<String> prcInstIdList = new ArrayList<String>();
+				if(!CommonUtil.isEmpty(tasks)) {
+					for (int i = 0; i < tasks.length; i++) {
+						TaskWork task = tasks[i];
+						if (instanceInfoList.size() == 10)
+							break;
+						if (prcInstIdList.contains(task.getTskPrcInstId()))
+							continue;
+						prcInstIdList.add(task.getTskPrcInstId());
+						instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+					}
 				}
 			}
 
 			OpinionCond opinionCond = new OpinionCond();
 			opinionCond.setRefId(instanceId);
-			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-				opinionCond.setPageSize(length);
-			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
-			if(!CommonUtil.isEmpty(opinions)) {
-				int opinionLength = opinions.length;
-				for(int i=0; i<opinionLength; i++) {
-					Opinion opinion = opinions[i];
-					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
-					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
-					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
-					commentInstanceInfo.setId(opinion.getObjId());
-					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
-					commentInstanceInfo.setComment(opinion.getOpinion());
-					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
-					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
-					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
-					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
-					instanceInfoList.add(commentInstanceInfo);
+
+			long opinionsSize = getOpinionManager().getOpinionSize(userId, opinionCond);
+			
+			if (opinionsSize != 0) {
+
+				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+					opinionCond.setPageSize(length);
+				
+				Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+				if(!CommonUtil.isEmpty(opinions)) {
+					int opinionLength = opinions.length;
+					for(int i=0; i<opinionLength; i++) {
+						Opinion opinion = opinions[i];
+						CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+						String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+						Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+						commentInstanceInfo.setId(opinion.getObjId());
+						commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+						commentInstanceInfo.setComment(opinion.getOpinion());
+						commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+						commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+						commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+						commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
+						instanceInfoList.add(commentInstanceInfo);
+					}
 				}
 			}
+			
 			if(instanceInfoList.size() > 0) {
 				Collections.sort(instanceInfoList);
 				subInstancesInInstances = new InstanceInfo[instanceInfoList.size()];
@@ -2732,40 +2747,42 @@ public class InstanceServiceImpl implements IInstanceService {
 					swdRecordCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
 				} else {
 					searchFilter = ModelConverter.getSearchFilterByFilterId(SwfFormModel.TYPE_SINGLE, workId, filterId);
-					Condition[] conditions = searchFilter.getConditions();
-					Filters filters = new Filters();
-					filterList = new ArrayList<Filter>();
-					for(Condition condition : conditions) {
-						Filter filter = new Filter();
-						FormField leftOperand = condition.getLeftOperand();
-						String lefOperandType = leftOperand.getType();
-						String operator = condition.getOperator();
-						Object rightOperand = condition.getRightOperand();
-						String rightOperandValue = "";
-						if(rightOperand instanceof User) {
-							rightOperandValue = ((User)rightOperand).getId();
-						} else if(rightOperand instanceof Work) {
-							rightOperandValue = ((Work)rightOperand).getId();
-						} else {
-							if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
-							else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
-							else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
-							else rightOperandValue = (String)rightOperand;
+					if (searchFilter != null) {
+						Condition[] conditions = searchFilter.getConditions();
+						Filters filters = new Filters();
+						filterList = new ArrayList<Filter>();
+						for(Condition condition : conditions) {
+							Filter filter = new Filter();
+							FormField leftOperand = condition.getLeftOperand();
+							String lefOperandType = leftOperand.getType();
+							String operator = condition.getOperator();
+							Object rightOperand = condition.getRightOperand();
+							String rightOperandValue = "";
+							if(rightOperand instanceof User) {
+								rightOperandValue = ((User)rightOperand).getId();
+							} else if(rightOperand instanceof Work) {
+								rightOperandValue = ((Work)rightOperand).getId();
+							} else {
+								if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
+								else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
+								else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
+								else rightOperandValue = (String)rightOperand;
+							}
+							filter.setLeftOperandType(lefOperandType);
+							filter.setLeftOperandValue(leftOperand.getId());
+							filter.setOperator(operator);
+							filter.setRightOperandType(lefOperandType);
+							filter.setRightOperandValue(rightOperandValue);
+							filterList.add(filter);
 						}
-						filter.setLeftOperandType(lefOperandType);
-						filter.setLeftOperandValue(leftOperand.getId());
-						filter.setOperator(operator);
-						filter.setRightOperandType(lefOperandType);
-						filter.setRightOperandValue(rightOperandValue);
-						filterList.add(filter);
+						Filter[] searchfilters = null;
+						if(filterList.size() != 0) {
+							searchfilters = new Filter[filterList.size()];
+							filterList.toArray(searchfilters);
+							filters.setFilter(searchfilters);
+						}
+						swdRecordCond.addFilters(filters);
 					}
-					Filter[] searchfilters = null;
-					if(filterList.size() != 0) {
-						searchfilters = new Filter[filterList.size()];
-						filterList.toArray(searchfilters);
-						filters.setFilter(searchfilters);
-					}
-					swdRecordCond.addFilters(filters);
 				}
 			}
 
