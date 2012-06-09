@@ -81,8 +81,8 @@
 
 	String folderId = cid;
 	User cUser = SmartUtil.getCurrentUser();
-	MailWork work = new MailWork(folderId, MailFolder.getFolderNameById(folderId), "");
 	MailFolder mailFolder = smartWorks.getMailFolderById(folderId);
+	MailWork work = new MailWork(folderId, mailFolder.getName(), "");
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
