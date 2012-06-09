@@ -1,8 +1,21 @@
 package org.claros.intouch.webmail.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import javax.mail.Folder;
+import javax.mail.Message;
+
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
+import org.claros.commons.mail.models.EmailHeader;
+import org.claros.commons.mail.protocols.Protocol;
+import org.claros.commons.mail.protocols.ProtocolFactory;
+import org.claros.commons.utility.MD5;
+import org.claros.intouch.webmail.factory.MailControllerFactory;
+import org.claros.intouch.webmail.models.MsgDbObject;
 
 /**
  * @author Umut Gokbayrak
@@ -23,13 +36,13 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	 * @see org.claros.groupware.webmail.controllers.InboxController#checkEmail()
 	 */
 	public ConnectionMetaHandler checkEmail() throws Exception {
-		//ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
-		//Protocol protocol = factory.getProtocol(null);
+		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+		Protocol protocol = factory.getProtocol(null);
 		try {
 			// fetch all messages from the remote pop3 server
-			// protocol.disconnect();
-			// handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
-			/*
+			protocol.disconnect();
+			handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
+
 			ArrayList headers = protocol.fetchAllHeaders();
 			ArrayList toBeDeleted = new ArrayList();
 			if (headers != null) {
@@ -69,7 +82,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 								os.writeObject(bMsg);
 
 								// create an email db item
-								MsgDbOject item = new MsgDbOject();
+								MsgDbObject item = new MsgDbObject();
 								item.setEmail(bos.toByteArray());
 								item.setUniqueId(md5Header);
 								item.setFolderId(new Long(folderId));
@@ -84,7 +97,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					} catch (Exception e) {
 						toBeDeleted.add(new Integer(msgId));
-						log.error("Error while processing mail.", e);
 					}
 				}
 			}
@@ -102,9 +114,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					protocol.deleteMessages(ids);
 				}
 			}
-			*/
 		} finally {
-//			protocol.disconnect();
+			protocol.disconnect();
 		}
 		return handler;
 	}

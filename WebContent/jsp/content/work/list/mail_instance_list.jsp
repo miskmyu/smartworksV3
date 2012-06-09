@@ -70,24 +70,24 @@
 				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
-				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
+				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
+							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
 						<span class="js_progress_span"></span>
 					</th>
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS) || folderId.equals(MailFolder.ID_JUNK)){
+				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
+							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -106,10 +106,10 @@
 					<span class="js_progress_span"></span>
 				</th>
 				<%
-				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
+				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -118,10 +118,10 @@
 						<span class="js_progress_span"></span>
 					</th>				
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS) || folderId.equals(MailFolder.ID_JUNK)){
+				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -152,8 +152,7 @@
 						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
-<%-- 						<td><div class="<%if(instanceInfo.isMultipart()){ %>icon_file<%}%>"></div></td>
- --%>						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
+						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
 					</tr>
@@ -170,24 +169,24 @@
 				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
-				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
+				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
+							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
 						<span class="js_progress_span"></span>
 					</th>
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
+							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -209,7 +208,7 @@
 				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -218,10 +217,10 @@
 						<span class="js_progress_span"></span>
 					</th>				
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
