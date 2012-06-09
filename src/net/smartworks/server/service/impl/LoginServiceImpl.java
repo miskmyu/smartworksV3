@@ -37,6 +37,7 @@ public class LoginServiceImpl implements ILoginService {
 				finalUserInfos = new UserInfo[finalUserInfoList.size()];
 				finalUserInfoList.toArray(finalUserInfos);
 			}
+			request.getSession().removeAttribute(userId);
 			SmartUtil.publishAChatters(finalUserInfos);
 		} catch (Exception e) {
 			e.printStackTrace();

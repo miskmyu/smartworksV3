@@ -13,108 +13,87 @@ public class MsgDbObject {
 	private byte[] email;
 
 	/**
-	 * 
-	 */
-	public MsgDbObject() {
-		super();
-	}
-
-	/**
-	 * @return
-	 */
-	public byte[] getEmail() {
-		return email;
-	}
-
-	/**
-	 * @return
-	 */
-	public Long getFolderId() {
-		return folderId;
-	}
-
-	/**
-	 * @return
+	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
-
 	/**
-	 * @return
+	 * @param id the id to set
 	 */
-	public Boolean getUnread() {
-		return unread;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
 	/**
-	 * @return
+	 * @return the username
 	 */
 	public String getUsername() {
 		return username;
 	}
-
 	/**
-	 * @param bs
+	 * @param username the username to set
 	 */
-	public void setEmail(byte[] bs) {
-		email = bs;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
 	/**
-	 * @param long1
+	 * @return the folderId
 	 */
-	public void setFolderId(Long long1) {
-		folderId = long1;
+	public Long getFolderId() {
+		return folderId;
 	}
-
 	/**
-	 * @param long1
+	 * @param folderId the folderId to set
 	 */
-	public void setId(Long long1) {
-		id = long1;
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
 	}
-
 	/**
-	 * @param boolean1
-	 */
-	public void setUnread(Boolean boolean1) {
-		unread = boolean1;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setUsername(String string) {
-		username = string;
-	}
-
-	/**
-	 * @return
+	 * @return the uniqueId
 	 */
 	public String getUniqueId() {
 		return uniqueId;
 	}
-
 	/**
-	 * @param string
+	 * @param uniqueId the uniqueId to set
 	 */
-	public void setUniqueId(String string) {
-		uniqueId = string;
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
 	}
-
 	/**
-	 * @return
+	 * @return the unread
+	 */
+	public Boolean getUnread() {
+		return unread;
+	}
+	/**
+	 * @param unread the unread to set
+	 */
+	public void setUnread(Boolean unread) {
+		this.unread = unread;
+	}
+	/**
+	 * @return the msgSize
 	 */
 	public Long getMsgSize() {
 		return msgSize;
 	}
-
 	/**
-	 * @param long1
+	 * @param msgSize the msgSize to set
 	 */
-	public void setMsgSize(Long long1) {
-		msgSize = long1;
+	public void setMsgSize(Long msgSize) {
+		this.msgSize = msgSize;
 	}
-
+	/**
+	 * @return the email
+	 */
+	public byte[] getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(byte[] email) {
+		this.email = email;
+	}
 }
