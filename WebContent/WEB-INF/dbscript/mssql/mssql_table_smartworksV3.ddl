@@ -2288,3 +2288,40 @@ CREATE TABLE SwLoginUser (
 	primary key (userId)
 );
 
+--메일관련 테이블 Start
+CREATE TABLE folder_db_objects (
+    id bigint NOT NULL,
+    username varchar(255) NOT NULL,
+    parent_id bigint NOT NULL,
+    folder_name varchar(100) NOT NULL,
+    folder_type int NOT NULL
+);
+
+CREATE TABLE msg_db_objects (
+    id bigint NOT NULL,
+    username varchar(255) NOT NULL,
+    folder_id bigint NOT NULL,
+    unique_id varchar(100) NOT NULL,
+    sender varchar(255),
+    receiver varchar(8000),
+    cc varchar(8000),
+    bcc varchar(8000),
+    subject varchar(255),
+    multipart bit,
+    priority int,
+    sentdate datetime,
+    unread smallint NOT NULL,
+    msg_size bigint NOT NULL,
+    email varbinary(2) NOT NULL
+);
+
+CREATE TABLE msg_rules (
+    id bigint NOT NULL,
+    username varchar(255) NOT NULL,
+    portion varchar(100) NOT NULL,
+    rule_condition varchar(30) NOT NULL,
+    keyword varchar(255) NOT NULL,
+    rule_action varchar(30) NOT NULL,
+    destination varchar(100) NOT NULL
+);
+--메일관련 테이블 End

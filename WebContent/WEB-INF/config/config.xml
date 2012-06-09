@@ -250,10 +250,14 @@
  -->		<!-- Sample Postgresql setting -->
 		<db>
 			<id>file</id>
-			<database>jdbc:postgresql://dev.smartworks.net:5432/intouch</database>
+<!-- 			<database>jdbc:postgresql://dev.smartworks.net:5432/intouch</database>
 			<driver>org.postgresql.Driver</driver>
 			<login>postgres</login>
-			<password>postgres</password>
+			<password>postgres</password> -->
+			<database>jdbc:jtds:sqlserver://localhost:1433/SmartworksV3_wine</database>
+			<driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+			<login>sa</login>
+			<password>maninsoft</password>
 		</db>
 	</db-config>
 </claros-config>

@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.codec.digest.DigestUtils"%>
 <%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="java.util.Date"%>
 <%@page import="net.smartworks.server.engine.sera.model.CourseDetail"%>
@@ -555,8 +556,16 @@
 			}
 		}
 	} */
-	CommunityInfo[] communityInfos = communityService.getAllComsByGroupId(null);
-	System.out.println(communityInfos);
+	/* CommunityInfo[] communityInfos = communityService.getAllComsByGroupId(null);
+	System.out.println(communityInfos); */
+
+	/* SwoUser[] swoUsers = SwManagerFactory.getInstance().getSwoManager().getUsers(null, null, null);
+	if(!CommonUtil.isEmpty(swoUsers)) {
+		for(SwoUser swoUser : swoUsers) {
+			swoUser.setPassword(DigestUtils.md5Hex(swoUser.getPassword()));
+			SwManagerFactory.getInstance().getSwoManager().setUser(null, swoUser, null);
+		}
+	} */
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>
