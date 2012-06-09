@@ -8,7 +8,11 @@ public class FormField extends BaseObject{
 	public static final String ID_STATUS = "status";
 	public static final String ID_SUBJECT = "subject";
 	public static final String ID_TASK_NAME = "taskName";
+	public static final String ID_TSK_NAME = "tskName";
+	public static final String ID_TSK_TITLE = "tskTitle";
+	public static final String ID_TSK_ASSIGNEE = "tskAssignee";
 	public static final String ID_LAST_TASK = "lastTask";
+	public static final String ID_TASK_LAST_MODIFYDATE = "taskLastModifyDate";
 	public static final String ID_PROCESS_TIME = "processTime";
 	public static final String ID_PROCESS_TYPE = "processType";
 	public static final String ID_WORK = "Work";

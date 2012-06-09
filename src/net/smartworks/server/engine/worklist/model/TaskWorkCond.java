@@ -69,6 +69,7 @@ public class TaskWorkCond extends Cond {
 	private Date expectEndDateFrom;
 	private Date expectEndDateTo;
 	
+	private String searchKey;
 	
 	public LocalDate getLastInstanceDate() {
 		return lastInstanceDate;
@@ -375,6 +376,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTskStartOrAssigned(String tskStartOrAssigned) {
 		this.tskStartOrAssigned = tskStartOrAssigned;
+	}
+	public String getSearchKey() {
+		return searchKey;
+	}
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 
 

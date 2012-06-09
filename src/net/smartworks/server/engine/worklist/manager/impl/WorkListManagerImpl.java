@@ -283,6 +283,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
 		
+		String searchKey = cond.getSearchKey();
+		
 		String worksSpaceId = cond.getTskWorkSpaceId();
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
 		Date executionDateTo = cond.getTskExecuteDateTo();
@@ -405,8 +407,9 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("		and prcInst.prcStatus = :prcStatus ");
 		queryBuffer.append(") prcInstInfo ");
 		queryBuffer.append("on taskInfo.tskPrcInstId = prcInstInfo.prcObjId ");
+		queryBuffer.append(" where 1=1 ");
 		if (lastInstanceDate != null) {
-			queryBuffer.append("where taskInfo.tskCreateDate < :lastInstanceDate ");
+			queryBuffer.append("and taskInfo.tskCreateDate < :lastInstanceDate ");
 			if (tskRefType != null) {
 				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
 					queryBuffer.append("and taskInfo.tskReftype is null ");
@@ -416,10 +419,13 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		} else {
 			if (tskRefType != null) {
 				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
-					queryBuffer.append("where taskInfo.tskReftype is null ");
+					queryBuffer.append("and taskInfo.tskReftype is null ");
 				else 
-					queryBuffer.append("where taskInfo.tskReftype = :tskRefType ");
+					queryBuffer.append("and taskInfo.tskReftype = :tskRefType ");
 			}
+		}
+		if (!CommonUtil.isEmpty(searchKey)) {
+			queryBuffer.append("and (taskInfo.tskName like :searchKey or taskInfo.tskTitle like :searchKey) ");
 		}
 			
 		this.appendOrderQuery(queryBuffer, null, cond);
@@ -451,6 +457,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setString("prcStatus", prcStatus);
 		if (!CommonUtil.isEmpty(tskRefType) && !tskRefType.equals(TskTask.TASKREFTYPE_NOTHING)) 
 			query.setString("tskRefType", tskRefType);
+		if (!CommonUtil.isEmpty(searchKey)) 
+			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
 
 		return query;
 	}

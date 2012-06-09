@@ -136,9 +136,9 @@
 			if(displayType!=FileCategory.DISPLAY_BY_WORK){
 			%>			
 				<th class="r_line">
-		 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK%>"><fmt:message key='common.title.work_name'/>
+		 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_TSK_NAME%>"><fmt:message key='common.title.work_name'/>
 				 		<span class="<%
-						if(sortedField.getFieldId().equals(FormField.ID_WORK)){
+						if(sortedField.getFieldId().equals(FormField.ID_TSK_NAME)){
 							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 						%>"></span>
 					</a>				
@@ -148,9 +148,9 @@
 			}
 			%>			
 			<th class="r_line">
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_WORK_INSTANCE%>"><fmt:message key='common.title.instance_subject'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_TSK_TITLE%>"><fmt:message key='common.title.instance_subject'/>
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_WORK_INSTANCE)){
+					if(sortedField.getFieldId().equals(FormField.ID_TSK_TITLE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
@@ -160,17 +160,17 @@
 				<%
 				if(displayType!=FileCategory.DISPLAY_BY_OWNER){
 				%>			
-					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER %>">
+					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_TSK_ASSIGNEE %>">
 						<fmt:message key='common.title.owner' />
-						<span class="<%if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
+						<span class="<%if(sortedField.getFieldId().equals(FormField.ID_TSK_ASSIGNEE)){
 							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 					</a>/
 				<%
 				}
 				%>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_TASK_LAST_MODIFYDATE%>">
 					<fmt:message key='common.title.last_modified_date' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_TASK_LAST_MODIFYDATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
