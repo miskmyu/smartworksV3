@@ -254,10 +254,16 @@
 			<driver>org.postgresql.Driver</driver>
 			<login>postgres</login>
 			<password>postgres</password> -->
-			<database>jdbc:jtds:sqlserver://localhost:1433/SmartworksV3_wine</database>
+
+<!-- 			<database>jdbc:jtds:sqlserver://localhost:1433/SmartworksV3_wine</database>
 			<driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
 			<login>sa</login>
 			<password>maninsoft</password>
+ -->
+			<database>jdbc:jtds:sqlserver://dev.smartworks.net:1433/Semiteq_20110930</database>
+			<driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+			<login>bpms6</login>
+			<password>bpms6</password>
 		</db>
 	</db-config>
 </claros-config>
