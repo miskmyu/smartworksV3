@@ -47,7 +47,7 @@
 	session.setAttribute("workId", folderId);
 
 	InstanceInfoList instanceList = smartWorks.getMailInstanceList(folderId, params);
-	MailFolder folder = work.getMailFolder();
+	MailFolder folder = smartWorks.getMailFolderById(folderId);
 	boolean savedInstance = (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS) ? true : false;
 	
 %>
