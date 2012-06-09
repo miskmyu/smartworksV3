@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -1169,32 +1170,33 @@ public class CommunityServiceImpl implements ICommunityService {
 			Semaphore semaphore = new Semaphore(2);
 			Thread currentThread = Thread.currentThread();
 
-			SearchParallelProcessing upp = new SearchParallelProcessing(semaphore, currentThread, null, 1, key);
 			SearchParallelProcessing cpp = new SearchParallelProcessing(semaphore, currentThread, currentUser, 2, key);
+			SearchParallelProcessing upp = new SearchParallelProcessing(semaphore, currentThread, null, 1, key);
 
-			upp.start();
 			cpp.start();
+			upp.start();
 
 			synchronized (currentThread) {
 				currentThread.wait();
 			}
 
-			UserInfo[] uUserInfos = (UserInfo[])upp.getArrayResult();
 			UserInfo[] cUserInfos = (UserInfo[])cpp.getArrayResult();
+			UserInfo[] uUserInfos = (UserInfo[])upp.getArrayResult();
 
 			UserInfo[] finalUserInfos = null;
 			List<UserInfo> finalUserInfoList = new ArrayList<UserInfo>();
 
-			Map<String, Object> userInfoMap = new HashMap<String, Object>();
+			Map<String, Object> userInfoMap = new TreeMap<String, Object>();
+
+			if(!CommonUtil.isEmpty(cUserInfos)) {
+				for(UserInfo cUserInfo : cUserInfos) {
+					userInfoMap.put(cUserInfo.getId(), cUserInfo);
+				}
+			}
 
 			if(!CommonUtil.isEmpty(uUserInfos)) {
 				for(UserInfo uUserInfo : uUserInfos) {
 					userInfoMap.put(uUserInfo.getId(), uUserInfo);
-				}
-			}
-			if(!CommonUtil.isEmpty(cUserInfos)) {
-				for(UserInfo cUserInfo : cUserInfos) {
-					userInfoMap.put(cUserInfo.getId(), cUserInfo);
 				}
 			}
 
