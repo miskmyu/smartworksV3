@@ -371,7 +371,7 @@ public class NoticeServiceImpl implements INoticeService {
 				params.setPageSize(10);
 				params.setCurrentPage(1);
 				params.setSortingField(new SortingField("date", false));
-				InstanceInfoList mailsList =  mailService.getMailInstanceList(MailFolder.ID_INBOX, params);
+				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
 				NoticeMessage[] notices = new NoticeMessage[instances.length];
