@@ -693,5 +693,38 @@ smartPop = {
 				}
 			});
 		});
-	}	
+	},	
+
+	createMailFolder : function(folderId, folderName, folderDesc){
+		$.get("pop_new_mail_folder.sw?folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#fff"},
+				containerCss:{
+					height:200,
+					width:460
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_new_mail_folder').die('click');
+					$('.js_close_new_mail_folder').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('.js_close_new_mail_folder').focus();
+					$('.js_close_new_mail_folder').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            $('.js_close_new_mail_folder').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
+				}
+			});
+		});
+	}
+
 };

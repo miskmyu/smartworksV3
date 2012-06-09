@@ -3891,6 +3891,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWorkCond taskWorkCond = new TaskWorkCond();
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
+			taskWorkCond.setSearchKey(params.getSearchKey());
 
 			long totalCount = getWlmManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -4183,6 +4184,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 
 			FileWorkCond fileWorkCond = new FileWorkCond();
+			if (!CommonUtil.isEmpty(params)) {
+				fileWorkCond.setSearchKey(CommonUtil.toNull(params.getSearchKey()));
+			}
 			fileWorkCond.setTskAssigneeOrSpaceId(workSpaceId);
 
 			SearchFilter searchFilter = params.getSearchFilter();

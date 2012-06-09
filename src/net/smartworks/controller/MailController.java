@@ -59,4 +59,28 @@ public class MailController extends ExceptionInterceptor {
 	public @ResponseBody void moveMailS(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.moveMails(requestBody, request);
 	}
+
+	@RequestMapping(value = "/delete_mails", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void deleteMails(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.deleteMails(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/new_mail_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void newMailFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.newMailFolder(requestBody, request);
+	}
+
+	@RequestMapping(value = "/set_mail_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setMailFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setMailFolder(requestBody, request);
+	}
+
+	@RequestMapping(value = "/delete_mail_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void deleteMailFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.deleteMailFolder(requestBody, request);
+	}
 }

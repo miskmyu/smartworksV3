@@ -119,13 +119,27 @@
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
 				<div class="buttonSet">
-					<button class="js_move_mails_btn" targetId="<%=MailFolder.ID_TRASH%>"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-					<button class="js_move_mails_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button>
-					<button><fmt:message key="mail.button.reply"/></button>
-					<button><fmt:message key="mail.button.reply_all"/></button>
-					<button><fmt:message key="mail.button.forward"/></button>
-					<button><fmt:message key="common.button.move"/><span class="icon_in_down"><a href=""> </a></span></button>
-					<button class="fr t_bold"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
+					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
+					<%if(!folderId.equals(MailFolder.ID_JUNK)){ %><button class="js_move_mails_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
+					<button class="js_reply_all_mail_btn" ><fmt:message key="mail.button.reply_all"/></button>
+					<button class="js_forward_mail_btn" ><fmt:message key="mail.button.forward"/></button>
+					<select class="js_select_move_folder">
+						<option>[<fmt:message key="mail.button.move"/>]</option>
+						<%
+						MailFolder[] folders = smartWorks.getMailFoldersById("");
+						if(!SmartUtil.isBlankObject(folders)){
+							for(int i=0; i<folders.length; i++){
+								MailFolder folder = folders[i];
+								if(folder.getType() != MailFolder.TYPE_USER || folder.getId().equals(folderId)) continue;
+						%>
+								<option value=<%=folder.getId() %>><%=folder.getName() %></option>
+						<%
+							}
+						}
+						%>
+					</select>
+					<button href="new_mail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
 				</div>
 
 				<!-- 메일 리스트-->

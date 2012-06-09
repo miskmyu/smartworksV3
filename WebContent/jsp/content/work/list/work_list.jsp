@@ -185,25 +185,7 @@
 							</div>
 						</form>
 
-						<form class="form_space po_left js_form_filter_name" name="frmPworkFilterName">
-							<select name="selFilterName" class="js_select_filter" href="search_filter.sw?workId=">
-								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" selected>
-									<fmt:message key='filter.name.all_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>">
-									<fmt:message key='filter.name.my_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>">
-									<fmt:message key='filter.name.recent_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>">
-									<fmt:message key='filter.name.my_recent_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>">
-									<fmt:message key='filter.name.my_running_instances' />
-								</option>
-							</select>
-						</form>
+						
 					</div>
 				</div>
 				<!-- 목록보기 타이틀-->

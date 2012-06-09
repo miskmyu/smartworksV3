@@ -1115,6 +1115,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String fileType = cond.getFileType();
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
+		
+		String searchKey = cond.getSearchKey();
 
 		String worksSpaceId = cond.getTskWorkSpaceId();
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
@@ -1226,6 +1228,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			queryBuffer.append("	and task.tskExecuteDate > :executionDateFrom ");
 		if (executionDateTo != null)
 			queryBuffer.append("	and task.tskExecuteDate < :executionDateTo ");
+		if (searchKey != null)
+			queryBuffer.append("	and (docfile.fileName like :searchKey or task.tskTitle like :searchKey )");
+		
 		queryBuffer.append(") taskInfo ");
 		//queryBuffer.append("left outer join ");
 		queryBuffer.append("join ");
@@ -1358,6 +1363,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			query.setString("prcStatus", prcStatus);
 		if (!CommonUtil.isEmpty(tskRefType) && !tskRefType.equals(TskTask.TASKREFTYPE_NOTHING)) 
 			query.setString("tskRefType", tskRefType);
+		if (!CommonUtil.isEmpty(searchKey)) 
+			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
 
 		return query;
 	}

@@ -21,7 +21,6 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 
 	var users = (options.dataField && options.dataField.users) || new Array();
 	var usersHtml = (options.dataField && options.dataField.usersHtml) || "";
-
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -129,6 +128,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			courseId: null,
 			friendOnly: false,
 			emailAddress: false,
+			usersHtml: "",
 			required: false,
 			readOnly: false		
 	};
@@ -151,7 +151,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.buildEx = function(config){
 			emailAddress: options.emailAddress,
 			dataField : SmartWorks.FormRuntime.UserFieldBuilder.dataField({
 				fieldId: options.fieldId,
-				users : options.users
+				users : options.users,
+				usersHtml : options.usersHtml
 			})
 	});
 	
@@ -206,7 +207,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.dataField = function(config){
 	if(isEmpty(fieldId)) return dataField;
 	dataField = {
 			id: fieldId,
-			users : options.users
+			users : options.users,
+			usersHtml : options.usersHtml
 	};
 	return dataField;
 };
