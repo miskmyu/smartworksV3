@@ -1,13 +1,18 @@
+/*	
+ * $Id$
+ * created by    : hsshin
+ * creation-date : 2012. 6. 9.
+ * =========================================================
+ * Copyright (c) 2012 ManinSoft, Inc. All rights reserved.
+ */
+
 package org.claros.intouch.webmail.models;
 
 import java.util.Date;
 
-/**
- * @author Umut Gokbayrak
- */
-public class MsgDbObject {
+public class HeaderDbObject {
+
 	private Long id;
-	private String username;
 	private Long folderId;
 	private String uniqueId;
 	private String sender;
@@ -16,12 +21,11 @@ public class MsgDbObject {
 	private String bcc;
 	private String replyTo;
 	private String subject;
-	private Boolean multipart;
-	private Integer priority;
+	private boolean multipart;
+	private int priority;
 	private Date date;
 	private Boolean unread;
 	private Long msgSize;
-	private byte[] email;
 
 	/**
 	 * @return the id
@@ -34,18 +38,6 @@ public class MsgDbObject {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-	}
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
 	}
 	/**
 	 * @return the folderId
@@ -146,25 +138,25 @@ public class MsgDbObject {
 	/**
 	 * @return the multipart
 	 */
-	public Boolean isMultipart() {
+	public boolean isMultipart() {
 		return multipart;
 	}
 	/**
 	 * @param multipart the multipart to set
 	 */
-	public void setMultipart(Boolean multipart) {
+	public void setMultipart(boolean multipart) {
 		this.multipart = multipart;
 	}
 	/**
 	 * @return the priority
 	 */
-	public Integer getPriority() {
+	public int getPriority() {
 		return priority;
 	}
 	/**
 	 * @param priority the priority to set
 	 */
-	public void setPriority(Integer priority) {
+	public void setPriority(int priority) {
 		this.priority = priority;
 	}
 	/**
@@ -202,17 +194,5 @@ public class MsgDbObject {
 	 */
 	public void setMsgSize(Long msgSize) {
 		this.msgSize = msgSize;
-	}
-	/**
-	 * @return the email
-	 */
-	public byte[] getEmail() {
-		return email;
-	}
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(byte[] email) {
-		this.email = email;
 	}
 }
