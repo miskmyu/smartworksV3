@@ -115,7 +115,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				}
 			}
 		} finally {
-//			protocol.disconnect();
+			protocol.disconnect();
 		}
 		return handler;
 	}
