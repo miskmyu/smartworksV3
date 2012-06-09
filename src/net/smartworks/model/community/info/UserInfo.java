@@ -71,4 +71,5 @@ public class UserInfo extends WorkSpaceInfo {
 		if(this.getLongName() == null) return super.getId();
 		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
+
 }

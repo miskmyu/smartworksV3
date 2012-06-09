@@ -155,19 +155,21 @@ public class Pop3ProtocolImpl implements Protocol {
 			fp.add("Size");
 			fp.add("Date");
 			
-			Message[] tempMsgs = new Message[20];
-			int msgSize = msgs.length;
-			for(int i=20; i>0; i--){
-				tempMsgs[i-1] = msgs[msgSize-1];
-				msgSize--;
-			}
-			fold.fetch(tempMsgs, fp);
+//			Message[] tempMsgs = new Message[20];
+//			int msgSize = msgs.length;
+//			for(int i=20; i>0; i--){
+//				tempMsgs[i-1] = msgs[msgSize-1];
+//				msgSize--;
+//			}
+//			fold.fetch(tempMsgs, fp);
+
+			fold.fetch(msgs, fp);
 
 			Message msg = null;
-			for (int i = 0; i < tempMsgs.length; i++) {
+			for (int i = 0; i < msgs.length; i++) {
 				try {
 					header = new EmailHeader();
-					msg = tempMsgs[i];
+					msg = msgs[i];
 
 					header.setMultipart((msg.isMimeType("multipart/*")) ? true : false);
 					header.setMessageId(i + 1);

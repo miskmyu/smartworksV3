@@ -187,5 +187,20 @@ public class MailInstance extends Instance {
 		for(int i=0; i<this.bccReceivers.length; i++)
 			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "'>" + bccReceivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
 		return userField;
-	}	
+	}
+	
+	public String getAttachmentsHtml(){
+		String html = "";
+		if(SmartUtil.isBlankObject(attachments)) return html;
+		
+		for(int i=0; i<attachments.length; i++){
+			MailAttachment attachment = attachments[i];
+			html = html + "<li class='qq-upload-success' folderId='" + mailFolder.getId() + "' msgId='" + this.getId() + "' partId='" + attachment.getPart().getId() + "'>" +
+								"<span class='vm icon_file_" + attachment.getFileType() + "'></span>" + 
+								"<a href='' partId='" + attachment.getId() + "' class='qq-upload-file js_download_mail_attachment'>" + attachment.getName() + "</a>" + 
+								"<span class='qq-upload-size'>" + SmartUtil.getBytesAsString(attachment.getSize()) + "</span>" +
+								"<a href='' class='qq-delete-text'>X</a></li>";
+		}
+		return html;
+	}
 }

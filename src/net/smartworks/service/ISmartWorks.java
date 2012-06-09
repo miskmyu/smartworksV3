@@ -614,4 +614,12 @@ public interface ISmartWorks {
 	
 	public abstract void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

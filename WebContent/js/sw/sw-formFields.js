@@ -438,7 +438,9 @@ function loadWriteMailFields() {
 			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
 			var subject = writeMailField.attr('subject');
+			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
+			var attachments = writeMailField.attr('attachments');
 
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
@@ -502,13 +504,16 @@ function loadWriteMailFields() {
 				columns: 1,
 				required: false
 			});
-			
+			if(!isEmpty(attachments)){
+				gridRow.find('.form_value .qq-upload-list').append(attachments);
+			}
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 				container: gridRow,
 				fieldId: "contents",
 				fieldName: "",
 				columns: 1,
+				value: contents,
 				required: true
 			});
 			gridRow.find('.form_label').hide();

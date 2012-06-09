@@ -1358,4 +1358,24 @@ public class SmartWorks implements ISmartWorks {
 		mailService.moveMails(requestBody, request);
 	}
 
+	@Override
+	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.deleteMails(requestBody, request);
+	}
+
+	@Override
+	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.newMailFolder(requestBody, request);
+	}
+
+	@Override
+	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.setMailFolder(requestBody, request);
+	}
+
+	@Override
+	public void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.deleteMailFolder(requestBody, request);
+	}
+
 }

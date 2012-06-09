@@ -128,9 +128,9 @@ public class DumpPartService extends BaseService {
 						cleaner.setOmitXmlnsAttributes(true);
 						cleaner.setUseCdataForScriptAndStyle(false);
 						if (modifyOutput) {
-							cleaner.clean(true,true);
+							cleaner.clean(true,false);
 						} else {
-							cleaner.clean(false,true);
+							cleaner.clean(false,false);
 						}
 						content = cleaner.getXmlAsString();
 					} else {
@@ -148,7 +148,7 @@ public class DumpPartService extends BaseService {
 						cleaner.setOmitXmlDeclaration(true);
 						cleaner.setOmitXmlnsAttributes(true);
 						cleaner.setUseCdataForScriptAndStyle(false);
-						cleaner.clean(false,true);
+						cleaner.clean(false,false);
 						content = cleaner.getCompactXmlAsString();
 						if (modifyOutput) {
 							content = HTMLMessageParser.prepareInlineHTMLContent(email, content);

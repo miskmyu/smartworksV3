@@ -919,5 +919,4 @@ public class HtmlCleaner {
     	
     	return writer.getBuffer().toString();
     }
-
 }

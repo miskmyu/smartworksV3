@@ -348,14 +348,22 @@ public class DbFolderControllerImpl implements FolderController {
 			if (!fld.getUsername().equals(auth.getUsername())) {
 				throw new NoPermissionException();
 			}
-		
-			String sql = "DELETE FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
-			// delete the emails under folder
-			dao.executeUpdate(sql, new Object[] {username, folderId});
 
-			sql = "DELETE FROM MSG_RULES WHERE USERNAME=? AND DESTINATION = ?";
-			// delete the filters targeting the deleted folder
-			dao.executeUpdate(sql, new Object[] {username, folderId});
+			String sql = "DELETE FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
+			try{
+				// delete the emails under folder
+				dao.executeUpdate(sql, new Object[] {username, folderId});
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+
+			try{
+				sql = "DELETE FROM MSG_RULES WHERE USERNAME=? AND DESTINATION = ?";
+				// delete the filters targeting the deleted folder
+				dao.executeUpdate(sql, new Object[] {username, folderId});
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 
 			// delete the folder
 			dao.deleteByPrimaryKey(FolderDbObject.class, folderId);
@@ -363,7 +371,7 @@ public class DbFolderControllerImpl implements FolderController {
 
 		} catch (Exception e) {
 //			dao.rollback();
-//			throw e;
+			throw e;
 		} finally {
 			JdbcUtil.close(dao);
 			dao = null;

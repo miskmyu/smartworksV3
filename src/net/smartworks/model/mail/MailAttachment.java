@@ -1,5 +1,7 @@
 package net.smartworks.model.mail;
 
+import org.claros.commons.mail.models.EmailPart;
+
 import net.smartworks.model.BaseObject;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
@@ -16,6 +18,7 @@ public class MailAttachment extends BaseObject {
 	String mimeType;
 	long size;
 	String fileType;
+	EmailPart part;
 	
 	public String getMimeType() {
 		return mimeType;
@@ -29,13 +32,18 @@ public class MailAttachment extends BaseObject {
 	public void setSize(long size) {
 		this.size = size;
 	}	
-	public String getFileTye() {
+	public String getFileType() {
 		return fileType;
 	}
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
+	}	
+	public EmailPart getPart() {
+		return part;
 	}
-	
+	public void setPart(EmailPart part) {
+		this.part = part;
+	}
 	public MailAttachment() {
 		super();
 	}

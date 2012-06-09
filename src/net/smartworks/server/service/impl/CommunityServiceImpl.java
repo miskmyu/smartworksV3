@@ -50,6 +50,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
@@ -62,6 +63,7 @@ import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -82,6 +84,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
+
+	@Autowired
+	private SessionRegistry sessionRegistry;
 
 	private ISeraService seraService = null;
 
@@ -715,7 +720,13 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			getLoginUserManager().deleteAllLoginUser(userId);
 
-			//TODO 현재 접속 유저로 업데이트
+			List<Object> allPrincipalList = sessionRegistry.getAllPrincipals();
+			if(allPrincipalList.size() > 0) {
+				for(Object allPrincipal : allPrincipalList) {
+					LoginUser loginUser = new LoginUser(((Login)allPrincipal).getId(), new LocalDate());
+					getLoginUserManager().createLoginUser(userId, loginUser);
+				}
+			}
 
 			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
