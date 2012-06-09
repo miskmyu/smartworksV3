@@ -104,15 +104,15 @@
 							</td>
 						</tr>		
 						<tr>
-							<td class="required_label"><fmt:message key="profile.title.user_name" /></td>
+							<td><fmt:message key="profile.title.user_name" /></td>
 							<td>
-								<input name="txtUserProfileUserName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(cUser.getName())%>">		
+								<input name="txtUserProfileUserName" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getName())%>">		
 							</td>
 						</tr>
 						<tr>
 							<td><fmt:message key="profile.title.employee_id" /></td>
 							<td>
-								<input name="txtUserProfileEmpId" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getEmployeeId())%>">		
+								<input name="txtUserProfileEmpId" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getEmployeeId())%>">		
 							</td>
 						</tr>		
 						<tr>
@@ -128,15 +128,15 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="required_label"><fmt:message key="profile.title.department" /></td>
+							<td><fmt:message key="profile.title.department" /></td>
 							<td>
-								<input name="txtUserProfileDepartment" type="text" class="required fieldline" companyId="<%=cUser.getCompanyId()%>" value="<%=CommonUtil.toNotNull(cUser.getDepartment())%>">		
+								<input name="txtUserProfileDepartment" readonly="readonly" type="text" companyId="<%=cUser.getCompanyId()%>" value="<%=CommonUtil.toNotNull(cUser.getDepartment())%>">		
 							</td>
 						</tr>
 						<tr>
-							<td class="required_label"><fmt:message key="profile.title.position" /></td>
+							<td><fmt:message key="profile.title.position" /></td>
 							<td>
-								<input name="txtUserProfilePosition" type="text" class="required fieldline" value="<%=CommonUtil.toNotNull(cUser.getPosition())%>">		
+								<input name="txtUserProfilePosition" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getPosition())%>">		
 							</td>
 						</tr>
 						<tr>
