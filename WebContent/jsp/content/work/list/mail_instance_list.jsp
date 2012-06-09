@@ -82,7 +82,7 @@
 						<span class="js_progress_span"></span>
 					</th>
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
@@ -118,7 +118,7 @@
 						<span class="js_progress_span"></span>
 					</th>				
 				<%
-				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				}else if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS) || folderId.equals(MailFolder.ID_JUNK)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>

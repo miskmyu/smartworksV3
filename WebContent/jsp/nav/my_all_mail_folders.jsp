@@ -45,12 +45,25 @@
 			case MailFolder.TYPE_SYSTEM_DRAFTS :
 				iconClass = "icon_mail_drafts";
 				break;
+			case MailFolder.TYPE_USER :
+				iconClass = "icon_mail_user";
+				break;
 			}
 	%>
-			<li>
+			<li class="folder_actions">
 				<!--  모든폴더에 공통으로 필요한 html -->
 				<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>"> 
-					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%> <span>[<b><%=folder.getUnreadItemCount()%></b>]</span><%}%></span>						
+					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%> <span>[<b><%=folder.getUnreadItemCount()%></b>]</span><%}%></span>								
+					<%
+					if(folder.getType() == MailFolder.TYPE_USER){
+					%>
+						<span class="fr">
+							<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
+							<span title="<fmt:message key='mail.button.remove_folder'/>" class="js_remove_mail_folder_btn btn_remove_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>"></span>
+						</span>
+					<%
+					}
+					%>
 				</a>
 			</li>
 	<%

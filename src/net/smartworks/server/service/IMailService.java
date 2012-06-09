@@ -25,4 +25,12 @@ public interface IMailService {
 	
 	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

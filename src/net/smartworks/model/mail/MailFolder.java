@@ -17,6 +17,7 @@ public class MailFolder extends BaseObject {
 	public static final int SEND_TYPE_REPLY		= 1;
 	public static final int SEND_TYPE_REPLY_ALL	= 2;
 	public static final int SEND_TYPE_FORWARD	= 3;
+	public static final int SEND_TYPE_DRAFTS	= 4;
 
 	public static final String ID_ROOT 		= "0";
 	
@@ -31,6 +32,7 @@ public class MailFolder extends BaseObject {
 	public static final String ID_STRING_SENT 	= "Sent";
 	public static final String ID_STRING_TRASH 	= "Trash";
 	public static final String ID_STRING_DRAFTS = "Drafts";
+	public static final String ID_STRING_USER 	= "User";
 	
 	public static final MailFolder[] SYSTEM_FOLDERS = {
 		new MailFolder( ID_INBOX, "", TYPE_SYSTEM_INBOX),
@@ -73,6 +75,8 @@ public class MailFolder extends BaseObject {
 			return ID_STRING_TRASH;
 		case 5:
 			return ID_STRING_JUNK;
+		case 6:
+			return ID_STRING_USER;
 		}
 		return "";
 	}
@@ -134,7 +138,7 @@ public class MailFolder extends BaseObject {
 		case 5:
 			return SYSTEM_FOLDERS[4].getName();
 		}
-		return null;
+		return "";
 	}
 
 	public static String getFolderSIdById(String folderId){
@@ -153,6 +157,6 @@ public class MailFolder extends BaseObject {
 		case 5:
 			return SYSTEM_FOLDERS[4].getIdString();
 		}
-		return null;
+		return ID_STRING_USER;
 	}
 }

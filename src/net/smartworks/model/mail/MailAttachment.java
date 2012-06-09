@@ -32,13 +32,18 @@ public class MailAttachment extends BaseObject {
 	public void setSize(long size) {
 		this.size = size;
 	}	
-	public String getFileTye() {
+	public String getFileType() {
 		return fileType;
 	}
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
+	}	
+	public EmailPart getPart() {
+		return part;
 	}
-	
+	public void setPart(EmailPart part) {
+		this.part = part;
+	}
 	public MailAttachment() {
 		super();
 	}

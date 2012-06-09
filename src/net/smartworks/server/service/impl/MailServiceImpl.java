@@ -39,6 +39,7 @@ import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 import org.claros.commons.auth.MailAuth;
@@ -392,10 +393,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 			return mailFolders;
 		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			throw e;
 		}
 	}
 
@@ -639,14 +637,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					instanceInfoList.setInstanceDatas(instanceInfos);
 				}
 			} catch (Exception e) {
+				throw e;
 			}
 			
 			return instanceInfoList;
 		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			throw e;
 		}
 	}
 	
@@ -700,16 +696,43 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				}
 				
 				if (from == null || from.equals("")) {
-					from = getText(request, "unknown.sender");
+					from = SmartMessage.getString("mail.title.unknown.sender");
 				}
 				if (subject == null || subject.equals("")) {
-					subject = getText(request, "no.subject");
+					subject = SmartMessage.getString("mail.title.no.subject");
 				}
-				
-				InternetAddress addrFrom = (InternetAddress)email.getBaseHeader().getFrom()[0];
-				InternetAddress[] addrTo = (InternetAddress[])email.getBaseHeader().getTo();			
-				InternetAddress[] addrCc = (InternetAddress[])email.getBaseHeader().getCc();
-				InternetAddress[] addrBcc = (InternetAddress[])email.getBaseHeader().getBcc();
+
+				InternetAddress addrFrom = null;
+				InternetAddress[] addrTo = null;	
+				InternetAddress[] addrCc = null;
+				InternetAddress[] addrBcc = null;
+				InternetAddress currentUser = new InternetAddress(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getLongName());
+				switch(sendType){
+				case MailFolder.SEND_TYPE_NONE:
+				case MailFolder.SEND_TYPE_DRAFTS:
+					addrFrom = (InternetAddress)email.getBaseHeader().getFrom()[0];
+					addrTo = (InternetAddress[])email.getBaseHeader().getTo();			
+					addrCc = (InternetAddress[])email.getBaseHeader().getCc();
+					addrBcc = (InternetAddress[])email.getBaseHeader().getBcc();
+					break;
+				case MailFolder.SEND_TYPE_FORWARD:
+					addrFrom = currentUser;
+					subject = SmartMessage.getString("mail.title.prefix.forward") + subject;
+					break;
+				case MailFolder.SEND_TYPE_REPLY:
+					addrFrom = currentUser;
+					addrTo = (InternetAddress[])email.getBaseHeader().getFrom();			
+					subject = SmartMessage.getString("mail.title.prefix.reply") + subject;
+					break;
+				case MailFolder.SEND_TYPE_REPLY_ALL:
+					addrFrom = currentUser;
+					addrTo = (InternetAddress[])email.getBaseHeader().getFrom();			
+					addrCc = (InternetAddress[])email.getBaseHeader().getCc();
+					addrBcc = (InternetAddress[])email.getBaseHeader().getBcc();
+					subject = SmartMessage.getString("mail.title.prefix.reply") + subject;
+					break;
+				}
+
 				User sender = new User(addrFrom.getAddress(), addrFrom.getPersonal());
 				User[] receivers = null;
 				if(addrTo != null){
@@ -742,7 +765,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				List parts = email.getParts();
 				String mailContent = null;
 				if (parts != null) {
-					if (parts.size() > 1 || i == -1) {
+					if (parts.size() > 0 || i == -1) {
 						EmailPart tmp = null;
 						String mime = null;
 						attachments = new MailAttachment[parts.size()];
@@ -758,10 +781,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								mime = mime.substring(0, mime.indexOf(" "));
 							}
 							if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) || mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
+								String contentPostfix = 
+											(sendType == MailFolder.SEND_TYPE_FORWARD || 
+											 sendType == MailFolder.SEND_TYPE_REPLY || 
+											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") : "";
 								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
-				                	if(null!=obj) mailContent = obj.toString();
+				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
 									HtmlCleaner cleaner = new HtmlCleaner(mailContent);
 									cleaner.setOmitXmlDeclaration(true);
 									cleaner.setOmitXmlnsAttributes(true);
@@ -769,10 +796,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									cleaner.clean(false,false);
 									mailContent = cleaner.getCompactXmlAsString();
 									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
+									continue;
 								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
-				                	if(null!=obj) mailContent = obj.toString();
+				                	if(null!=obj) mailContent = contentPostfix + obj.toString();
 									HtmlCleaner cleaner = new HtmlCleaner(mailContent);
 									cleaner.setOmitXmlDeclaration(true);
 									cleaner.setOmitXmlnsAttributes(true);
@@ -781,18 +809,18 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									mailContent = cleaner.getXmlAsString();
 									continue;
 								}
-
-							}
+							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
 							attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 							attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
+							attachments[count].setPart(tmp);
 							count++;
 						}
 					}
 				}
 				MailAttachment[] finalAttachments = null;
-				if(count>0){
+				if(count>0 && (sendType == MailFolder.SEND_TYPE_NONE || sendType == MailFolder.SEND_TYPE_DRAFTS || sendType == MailFolder.SEND_TYPE_FORWARD)){
 					finalAttachments = new MailAttachment[count]; 
 					for(int j=0; j<count; j++){
 						finalAttachments[j] = attachments[j];
@@ -804,16 +832,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				instance.setMailContents(mailContent);
 				instance.setAttachments(finalAttachments);
 				instance.setPartId(i);
+				instance.setMailFolder(getMailFolderById(folderId));
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw e;
 			}
 			return instance;
 		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			throw e;			
 		}
 	}
 
@@ -848,10 +874,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			mailFolder.setTotalItemCount(fld.getTotalItemCount().intValue());
 			return mailFolder;
 		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
+			throw e;		
 		}
 	}
 
@@ -962,28 +985,43 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			ArrayList attList = Utility.stringListToEmailPartArray(attachments.get("files"));
 			// attach some files...
-			if (attList != null) {
+			if (attList != null) {				
 				List newLst = new ArrayList();
 				EmailPart tmp = null;
+				MailInstance instance = null;
 				for (int i=0;i<attList.size();i++) {
 					try {
 						tmp = (EmailPart)attList.get(i);
 						String disp = tmp.getDisposition();
-						File f = new File(disp);
-						FileInputStream fis = new FileInputStream(f);
-						BufferedInputStream bis = new BufferedInputStream(fis);
-						byte data[] = new byte[(int)f.length() + 2];
-						bis.read(data);
-						bis.close();
-			
-						MimeBodyPart bp = new MimeBodyPart();
-						DataSource ds = new ByteArrayDataSource(data, tmp.getContentType(), tmp.getFilename());
-						bp.setDataHandler(new DataHandler(ds));
-						bp.setDisposition("attachment; filename=\"" + tmp.getFilename() + "\"");
-						tmp.setDisposition(bp.getDisposition());
-						bp.setFileName(tmp.getFilename());
-						tmp.setDataSource(ds);
-						tmp.setContent(bp.getContent());
+						if(disp != null && !disp.equals("")){
+							File f = new File(disp);
+							FileInputStream fis = new FileInputStream(f);
+							BufferedInputStream bis = new BufferedInputStream(fis);
+							byte data[] = new byte[(int)f.length() + 2];
+							bis.read(data);
+							bis.close();
+				
+							MimeBodyPart bp = new MimeBodyPart();
+							DataSource ds = new ByteArrayDataSource(data, tmp.getContentType(), tmp.getFilename());
+							bp.setDataHandler(new DataHandler(ds));
+							bp.setDisposition("attachment; filename=\"" + tmp.getFilename() + "\"");
+							tmp.setDisposition(bp.getDisposition());
+							bp.setFileName(tmp.getFilename());
+							tmp.setDataSource(ds);
+							tmp.setContent(bp.getContent());
+						}else{
+							if(instance == null)
+								instance = this.getMailInstanceById(tmp.getFolderId(), tmp.getMsgId(), MailFolder.SEND_TYPE_NONE);
+							if(instance!=null && instance.getAttachments()!=null){
+								for(int att=0; att<instance.getAttachments().length; att++){
+									MailAttachment attachment = instance.getAttachments()[att];
+									if(attachment.getPart().getId() == tmp.getId()){
+										tmp = attachment.getPart();
+										break;
+									}
+								}
+							}
+						}
 						newLst.add(tmp);
 						
 					} catch (Exception e) {
@@ -1008,6 +1046,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			saveSentMail(auth, msg, request);
 
 		} catch (Exception e) {
+			throw e;
 		}
 	}
 	
@@ -1144,6 +1183,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			saveDraft(auth, msg, request);
 
 		} catch (Exception e) {
+			throw e;
 		}
 	}
 
@@ -1174,6 +1214,164 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 
 		} catch (Exception e) {
+			throw e;
 		}
+	}
+
+	@Override
+	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+
+			List<String> ids = (List<String>)requestBody.get("ids");
+			String folderId = (String)requestBody.get("folderId");
+			
+			if (ids != null && folderId != null) {
+				AuthProfile auth = getAuthProfile(request);
+				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+
+				MailControllerFactory factory = new MailControllerFactory(auth, profile, handler, folderId);
+				MailController mailCont = factory.getMailController();
+				
+				int msgs[] = new int[ids.size()];
+				for(int counter=0; counter<ids.size(); counter++) {
+					msgs[counter] = Integer.parseInt(ids.get(counter));
+				}
+
+				// get the trash folder object
+				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = fFactory.getFolderController();
+				FolderDbObject fItem = foldCont.getTrashFolder();
+
+				// action time
+				if (profile.getProtocol().equals(Constants.POP3)) {
+					if (Long.toString(fItem.getId()).equals(folderId)) {
+						mailCont.deleteEmails(msgs);
+					} else {
+						mailCont.moveEmails(msgs, "" + fItem.getId());
+					}
+				} else {
+					if (fItem.getFolderName().equals(folderId)) {
+						mailCont.markAsDeleted(msgs);
+					} else {
+						mailCont.moveEmails(msgs, fItem.getFolderName());
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}
+		
+	}
+
+	@Override
+	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		String folderName = (String)requestBody.get("folderName");
+		String folderDesc = (String)requestBody.get("folderDesc");
+		
+		if (folderName != null) {
+			// character corrections. This is important for turkish users. 
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName.trim(), ".", "_");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u0131", "i");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u0130", "I");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u015E", "S");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u015F", "s");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00E7", "c");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00C7", "C");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00FC", "u");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00DC", "U");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00F6", "o");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00D6", "O");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u011F", "g");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u011E", "G");
+			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\"", "_");
+
+			AuthProfile auth = getAuthProfile(request);
+			ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+			ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+			FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+			FolderController foldCont = factory.getFolderController();
+			
+			FolderDbObject tmp = null;
+			try{
+				tmp = foldCont.getFolder(folderName);
+			}catch(Exception e){	
+			}
+			if(tmp != null){
+				throw new Exception("Duplicated Folder Name Error!");
+			}
+			
+			FolderDbObject folder = new FolderDbObject();
+			folder.setFolderType(org.claros.intouch.common.utility.Constants.FOLDER_TYPE_CUSTOM);
+			folder.setFolderName(folderName);
+			folder.setUsername(auth.getUsername());
+			folder.setParentId(new Long(0));
+			
+			foldCont.createFolder(folder);
+		}
+
+	}
+
+	@Override
+	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+
+			String folderId = (String)requestBody.get("folderId");
+			String folderName = (String)requestBody.get("folderName");
+			String folderDesc = (String)requestBody.get("folderDesc");
+			
+			if (folderName != null) {
+				// character corrections. This is important for turkish users. 
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName.trim(), ".", "_");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u0131", "i");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u0130", "I");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u015E", "S");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u015F", "s");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00E7", "c");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00C7", "C");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00FC", "u");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00DC", "U");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00F6", "o");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u00D6", "O");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u011F", "g");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u011E", "G");
+				folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\"", "_");
+
+				AuthProfile auth = getAuthProfile(request);
+				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = factory.getFolderController();
+				
+				FolderDbObject itm = foldCont.getFolderById(folderId);
+				foldCont.renameFolder(itm.getFolderName(), folderName);
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}		
+	}
+
+	@Override
+	public void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+
+			String folderId = (String)requestBody.get("folderId");
+			
+			if (folderId != null) {
+
+				AuthProfile auth = getAuthProfile(request);
+				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
+				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = factory.getFolderController();
+				foldCont.deleteFolder(folderId);
+			}
+
+		} catch (Exception e) {
+			throw e;
+		}		
 	}
 }

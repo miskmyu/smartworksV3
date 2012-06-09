@@ -28,6 +28,7 @@ function submitForms(action) {
 	// 그려진 화면에 있는 입력화면들을 JSON형식으로 Serialize한다...
 	var forms = newMail.find('form');
 	var paramsJson = {};
+	console.log('forms=', forms);
 	for(var i=0; i<forms.length; i++){
 		var form = $(forms[i]);
 		// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
@@ -90,7 +91,7 @@ function submitForms(action) {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page">
+<div class="section_portlet js_new_mail_page js_mail_space_page" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -136,7 +137,7 @@ function submitForms(action) {
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
 								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
 								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=instance.getReceiversHtml() %>" ccReceivers="<%=instance.getCcReceiversHtml() %>" bccReceivers="<%=instance.getBccReceiversHtml() %>" 
-									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getMailContents() %>" attachments=""<%} %>>
+									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getMailContents() %>" attachments="<%=instance.getAttachmentsHtml()%>"<%} %>>
 							</div>
 						</form>
 					</div>
@@ -152,6 +153,9 @@ function submitForms(action) {
 			<!-- 컨텐츠 //-->
 
 		</ul>
+		<div style="display:none">
+			<iframe id="attachmentIframe"/>
+		</div>
 	</div>
 	<div class="portlet_b" style="display: block;"></div>
 </div>

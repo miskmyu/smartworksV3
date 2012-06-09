@@ -133,4 +133,11 @@ public class PopupController {
 
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_event.jsp", "");
 	}
+
+	@RequestMapping("/pop_new_mail_folder")
+	public ModelAndView popNewMailFolder(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_mail_folder.jsp", "");
+	}
+
 }

@@ -22,7 +22,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
-	MailFolder mailFolder = smartWorks.getMailFolderById(folderId);
+	MailFolder mailFolder = instance.getMailFolder();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -61,14 +61,27 @@
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
 				<div class="buttonSet">
-					<button class="js_move_mail_btn" targetId="<%=MailFolder.ID_TRASH%>"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-					<button class="js_move_mail_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button>
-					<button><fmt:message key="mail.button.reply"/></button>
-					<button><fmt:message key="mail.button.reply_all"/></button>
-					<button><fmt:message key="mail.button.forward"/></button>
-					<button><fmt:message key="common.button.move"/><span class="icon_in_down"><a href=""> </a></span></button>
-					<button><fmt:message key="mail.button.list"/></button>
-					<button href="writeNewMail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
+					<button class="js_delete_mail_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
+					<%if(!folderId.equals(MailFolder.ID_JUNK)){ %><button class="js_move_mail_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY %>" class="js_content"><fmt:message key="mail.button.reply"/></button>
+					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY_ALL %>" class="js_content"><fmt:message key="mail.button.reply_all"/></button>
+					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_FORWARD %>" class="js_content"><fmt:message key="mail.button.forward"/></button>
+					<select class="js_select_move_folder">
+						<option>[<fmt:message key="mail.button.move"/>]</option>
+						<%
+						MailFolder[] folders = smartWorks.getMailFoldersById("");
+						if(!SmartUtil.isBlankObject(folders)){
+							for(int i=0; i<folders.length; i++){
+								MailFolder folder = folders[i];
+								if(folder.getType() != MailFolder.TYPE_USER || folder.getId().equals(folderId)) continue;
+						%>
+								<option value=<%=folder.getId() %>><%=folder.getName() %></option>
+						<%
+							}
+						}
+						%>
+					</select>
+					<button href="new_mail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
 				</div>
 				<div class="table_line"> </div>
 
@@ -105,7 +118,7 @@
 						        	MailAttachment attachment = attachments[i];
 						        %>
 									<li>
-										<span class="vm icon_file_<%=attachment.getFileTye()%>"></span>
+										<span class="vm icon_file_<%=attachment.getFileType()%>"></span>
 										<a href="" partId="<%=attachment.getId() %>" class="qq-upload-file js_download_mail_attachment"><%=attachment.getName() %></a>
 										<span class="qq-upload-size"><%=SmartUtil.getBytesAsString(attachment.getSize())%></span>
 									</li>
