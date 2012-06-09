@@ -120,8 +120,8 @@
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-					<%if(!folderId.equals(MailFolder.ID_JUNK)){ %><button class="js_move_mails_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
-					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
+<%-- 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+ --%>					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
 					<button class="js_reply_all_mail_btn" ><fmt:message key="mail.button.reply_all"/></button>
 					<button class="js_forward_mail_btn" ><fmt:message key="mail.button.forward"/></button>
 					<select class="js_select_move_folder">
