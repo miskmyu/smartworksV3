@@ -832,7 +832,7 @@ public class WorkServiceImpl implements IWorkService {
 				}
 			}
 
-			pwUserProfilePW = DigestUtils.md5Hex(pwUserProfilePW);
+			//pwUserProfilePW = DigestUtils.md5Hex(pwUserProfilePW);
 			user.setPassword(pwUserProfilePW);
 			user.setLocale(selUserProfileLocale);
 			user.setTimeZone(selUserProfileTimeZone);
