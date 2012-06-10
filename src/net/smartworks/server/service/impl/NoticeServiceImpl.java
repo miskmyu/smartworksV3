@@ -156,7 +156,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
 			mailBox = new Notice();
 			mailBox.setType(Notice.TYPE_MAILBOX);
-			mailBox.setLength(0);
+			mailBox.setLength(mailService.getUnreadEmails());
 		}
 		//---------------------------------------------------------------------------------------
 
@@ -750,6 +750,7 @@ public class NoticeServiceImpl implements INoticeService {
 					Message message = messages[i];
 					AsyncMessageInstanceInfo asyncMessage = new AsyncMessageInstanceInfo();
 					
+					asyncMessage.setId(message.getObjId());
 					asyncMessage.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 					asyncMessage.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
 					asyncMessage.setChatters(null);

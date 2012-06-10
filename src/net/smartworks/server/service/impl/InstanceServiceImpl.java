@@ -3293,6 +3293,33 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	private String getProcessTableColName(String formFieldId) throws Exception {
+		String tableColName = null;
+		if(CommonUtil.isEmpty(formFieldId))
+			return null;
+		if(formFieldId.equalsIgnoreCase("status"))
+			tableColName = "prcStatus";
+		else if(formFieldId.equalsIgnoreCase("subject"))
+			tableColName = "prcTitle";
+		else if(formFieldId.equalsIgnoreCase("taskName"))
+			tableColName = "taskName";
+		else if(formFieldId.equalsIgnoreCase("lastTask"))
+			tableColName = "lastTask_tskname";
+		else if(formFieldId.equalsIgnoreCase("processTime"))
+			tableColName = "processTime";
+		else if(formFieldId.equalsIgnoreCase("processType"))
+			tableColName = "processType";
+		else if(formFieldId.equalsIgnoreCase("creator"))
+			tableColName = "prcCreateUser";
+		else if(formFieldId.equalsIgnoreCase("createdTime"))
+			tableColName = "prcCreateDate";
+		else if(formFieldId.equalsIgnoreCase("modifier"))
+			tableColName = "prcModifyUser";
+		else if(formFieldId.equalsIgnoreCase("modifiedTime"))
+			tableColName = "prcModifyDate";
+			
+		return tableColName;
+	}
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
 		
 		try{
@@ -3341,6 +3368,35 @@ public class InstanceServiceImpl implements IInstanceService {
 					prcInstCond.setCreationUser(userId);
 				}
 			}*/
+
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
+
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					filter.setLeftOperandType(formFieldType);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				prcInstCond.setFilter(filters);
+			}
 
 			SortingField sf = params.getSortingField();
 
