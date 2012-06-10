@@ -125,8 +125,11 @@
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 							<jsp:param value="<%=forwardedTask.getSubject() %>" name="subject"/>
-<%-- 							<jsp:param value="<%=forwardedTask.getContent() %>" name="subject"/>
- --%>						</jsp:include>
+ 							<jsp:param value="<%=forwardedTask.getContent() %>" name="content"/>
+						</jsp:include>
+					<%
+					}
+					%>
 				</div>
 				
 				<!-- 상세보기 컨텐츠 -->
@@ -247,5 +250,5 @@
 
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
 	<jsp:param value="<%=work.getId() %>" name="workId"/>
-	<jsp:param value="<%=instId %>" name="instId"/>
+	<jsp:param value="<%=instId %>" name="instId"/> 
 </jsp:include>	
