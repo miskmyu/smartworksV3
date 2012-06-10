@@ -47,7 +47,8 @@
 	session.setAttribute("workId", folderId);
 
 	InstanceInfoList instanceList = smartWorks.getMailInstanceList(folderId, params);
-	boolean savedInstance = (folderId.equals(MailFolder.ID_DRAFTS)) ? true : false;
+	MailFolder folder = smartWorks.getMailFolderById(folderId);
+	boolean savedInstance = (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS) ? true : false;
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -70,7 +71,7 @@
 				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
-				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
@@ -106,7 +107,7 @@
 					<span class="js_progress_span"></span>
 				</th>
 				<%
-				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
@@ -169,7 +170,7 @@
 				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
  -->				<%
-				if(folderId.equals(MailFolder.ID_SENT) || folderId.equals(MailFolder.ID_DRAFTS)){
+				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
@@ -205,7 +206,7 @@
 					<span class="js_progress_span"></span>
 				</th>
 				<%
-				if(folderId.equals(MailFolder.ID_INBOX) || folderId.equals(MailFolder.ID_JUNK)){
+				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>

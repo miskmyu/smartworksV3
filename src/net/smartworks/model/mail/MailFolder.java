@@ -20,13 +20,7 @@ public class MailFolder extends BaseObject {
 	public static final int SEND_TYPE_DRAFTS	= 4;
 
 	public static final String ID_ROOT 		= "0";
-	
-	public static final String ID_INBOX 	= "1";
-	public static final String ID_JUNK 		= "2";
-	public static final String ID_SENT 		= "3";
-	public static final String ID_TRASH 	= "4";
-	public static final String ID_DRAFTS 	= "5";
-	
+		
 	public static final String ID_STRING_INBOX 	= "INBOX";
 	public static final String ID_STRING_JUNK 	= "Junk";
 	public static final String ID_STRING_SENT 	= "Sent";
@@ -34,14 +28,6 @@ public class MailFolder extends BaseObject {
 	public static final String ID_STRING_DRAFTS = "Drafts";
 	public static final String ID_STRING_USER 	= "User";
 	
-	public static final MailFolder[] SYSTEM_FOLDERS = {
-		new MailFolder( ID_INBOX, "", TYPE_SYSTEM_INBOX),
-		new MailFolder( ID_JUNK, "", TYPE_SYSTEM_JUNK),
-		new MailFolder( ID_SENT, "", TYPE_SYSTEM_SENT),
-		new MailFolder( ID_TRASH, "", TYPE_SYSTEM_TRASH),
-		new MailFolder( ID_DRAFTS, "", TYPE_SYSTEM_DRAFTS)
-	};
-
 	private int type = TYPE_USER;
 	private String desc;
 	private int unreadItemCount = 0;
@@ -120,43 +106,5 @@ public class MailFolder extends BaseObject {
 	public MailFolder(String id, String name, int type) {
 		super(id, name);
 		this.type = type;
-	}
-	
-	public static String getFolderNameById(String folderId){
-		if(SmartUtil.isBlankObject(folderId)) return null;
-		
-		int folderInt = Integer.parseInt(folderId);
-		switch(folderInt){
-		case 1:
-			return SYSTEM_FOLDERS[0].getName();
-		case 2:
-			return SYSTEM_FOLDERS[1].getName();
-		case 3:
-			return SYSTEM_FOLDERS[2].getName();
-		case 4:
-			return SYSTEM_FOLDERS[3].getName();
-		case 5:
-			return SYSTEM_FOLDERS[4].getName();
-		}
-		return "";
-	}
-
-	public static String getFolderSIdById(String folderId){
-		if(SmartUtil.isBlankObject(folderId)) return null;
-		
-		int folderInt = Integer.parseInt(folderId);
-		switch(folderInt){
-		case 1:
-			return SYSTEM_FOLDERS[0].getIdString();
-		case 2:
-			return SYSTEM_FOLDERS[1].getIdString();
-		case 3:
-			return SYSTEM_FOLDERS[2].getIdString();
-		case 4:
-			return SYSTEM_FOLDERS[3].getIdString();
-		case 5:
-			return SYSTEM_FOLDERS[4].getIdString();
-		}
-		return ID_STRING_USER;
-	}
+	}	
 }
