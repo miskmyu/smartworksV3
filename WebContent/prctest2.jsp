@@ -1,4 +1,5 @@
 
+<%@page import="net.smartworks.server.engine.publishnotice.model.PublishNotice"%>
 <%@page import="net.smartworks.server.engine.infowork.domain.model.SwdRecord"%>
 <%@page import="net.smartworks.server.engine.common.manager.IManager"%>
 <%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
@@ -29,22 +30,13 @@ public static Object getBean(String beanName, HttpServletRequest request) {
 %>
 <%	
 	
-	SwdRecordCond cond = new SwdRecordCond();
-	Filter ft = new Filter("in", "id" , Filter.OPERANDTYPE_STRING, "dr_402880eb36b59d9e0136b5b852560007");
-	cond.setFormId(SeraConstant.MISSION_FORMID);
-	cond.setFilter(new Filter[]{ft});
-	
-	SwdRecord[] recs = SwManagerFactory.getInstance().getSwdManager().getRecords("", cond, IManager.LEVEL_ALL);
+	PublishNotice no = new PublishNotice("kmyu@maninsoft.co.kr", PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_MESSAGE, "402880e337d559040137d55d531b0002");
 
-	if (recs != null) {
-		for (int i=0; i < recs.length; i++) {
-			SwdRecord rec = recs[i];
-			out.println(rec.getRecordId());
-		}
-			
-	} else {
-		out.print("result is null");
-	}
+	//SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("kmyu@maninsoft.co.kr", no, IManager.LEVEL_ALL);
+//	SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("kmyu@maninsoft.co.kr", no, IManager.LEVEL_ALL);
+//	PublishNotice result = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice("kmyu@maninsoft.co.kr", "402880e337d4875d0137d489c8600001", IManager.LEVEL_ALL);
+
+
 %>
 
 </body>

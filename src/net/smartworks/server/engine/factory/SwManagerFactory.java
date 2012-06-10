@@ -32,6 +32,7 @@ import net.smartworks.server.engine.process.link.manager.ILnkManager;
 import net.smartworks.server.engine.process.monitoring.manager.IMonManager;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
+import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
@@ -70,6 +71,7 @@ public class SwManagerFactory {
 	private ILoginUserManager loginUserManager;
 	private IResourceDesigntimeManager designtimeManager;
 	private IResourceRuntimeManager runtimeManager;
+	private IPublishNoticeManager publishNoticeManager;
 
 	//SERA
 	private ISeraManager seraManager;
@@ -257,6 +259,12 @@ public class SwManagerFactory {
 	}
 	public void setMessageManager(IMessageManager messageManager) {
 		this.messageManager = messageManager;
+	}
+	public IPublishNoticeManager getPublishNoticeManager() {
+		return publishNoticeManager;
+	}
+	public void setPublishNoticeManager(IPublishNoticeManager publishNoticeManager) {
+		this.publishNoticeManager = publishNoticeManager;
 	}
 
 //	public IChtManager getChtManager() {

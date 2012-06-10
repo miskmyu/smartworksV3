@@ -2329,3 +2329,19 @@ CREATE TABLE msg_rules (
     primary key (id)
 );
 --메일관련 테이블 End
+
+--알림 카운트를 세고 알림 조회를 위한 테이블
+CREATE TABLE SWPublishNotice (
+	id varchar(50) NOT NULL,
+	type int,
+	refType varchar(50),
+	refId varchar(100),
+	assignee varchar(50),
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);
+
+

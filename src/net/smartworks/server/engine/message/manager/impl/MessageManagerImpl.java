@@ -116,6 +116,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 	private Query appendQuery(StringBuffer buf, MessageCond cond) throws Exception {
 		
 		String objId = null;
+		String[] objIdIns = null;
 		String content = null;
 		String sendUser = null;
 		String targetUser = null;
@@ -134,6 +135,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 
 		if (cond != null) {
 			objId = cond.getObjId();
+			objIdIns = cond.getObjIdIns();
 			content = cond.getContent();
 			sendUser = cond.getSendUser();
 			targetUser = cond.getTargetUser();
@@ -155,6 +157,15 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		if (cond != null) {
 			if (objId != null) 
 				buf.append(" and obj.objId = :objId");
+			if (objIdIns != null && objIdIns.length != 0) {
+				buf.append(" and obj.objId in (");
+				for (int i=0; i<objIdIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":objIdIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (content != null)
 				buf.append(" and obj.content = :content");
 			if (sendUser != null) 
@@ -190,6 +201,11 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		if (cond != null) {
 			if (objId != null)
 				query.setString("objId", objId);
+			if (objIdIns != null && objIdIns.length != 0) {
+				for (int i=0; i<objIdIns.length; i++) {
+					query.setString("objIdIn"+i, objIdIns[i]);
+				}
+			}
 			if (content != null)
 				query.setString("content", content);
 			if (sendUser != null)

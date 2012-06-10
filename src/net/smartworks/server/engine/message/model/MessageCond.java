@@ -34,7 +34,8 @@ public class MessageCond extends MisObjectCond {
 	public static final String A_CHATID = "chatId";	
 	public static final String A_CHATTERSID = "chattersId";
 	public static final String A_DELETEUSER = "deleteUser";	
-	
+
+	private String[] objIdIns;
 	private String content;
 	private String sendUser;
 	private String targetUser;
@@ -282,6 +283,12 @@ public class MessageCond extends MisObjectCond {
 	}
 	public void setDeleteUser(String deleteUser) {
 		this.deleteUser = deleteUser;
+	}
+	public String[] getObjIdIns() {
+		return objIdIns;
+	}
+	public void setObjIdIns(String[] objIdIns) {
+		this.objIdIns = objIdIns;
 	}
 
 }

@@ -981,7 +981,20 @@ public class ModelConverter {
 			} else {
 				////////////////////////////////////////////
 				IWInstanceInfo instInfo = new IWInstanceInfo();
-				instInfo.setId(task.getPrcObjId());
+				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || 
+						task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+					String def = task.getTskDef();
+					String[] ids = StringUtils.tokenizeToStringArray(def, "|");
+					//ids[0] = domainId
+					//ids[1] = recordId
+					if (ids != null && ids.length == 2 ) {
+						instInfo.setId(ids[1]);
+					} else {
+						instInfo.setId(task.getPrcObjId());
+					}
+				} else {
+					instInfo.setId(task.getPrcObjId());
+				}
 //				String singleWorkInfos = task.getTskDef();
 //				String recordId = null;
 //				String domainId = null;

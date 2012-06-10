@@ -465,12 +465,14 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			//refTask.setPriority(priority);
 //			refTask.setTitle(obj.getTitle());
 			refTask.setTitle(subject);
-			refTask.setName(obj.getName());
+			//refTask.setName(obj.getName());
+			refTask.setName(obj.getTitle());
 			refTask.setAssigner(obj.getAssigner());
 			refTask.setAssignee(refUser);
 			refTask.setAssignmentDate(new LocalDate());
 			refTask.setStartDate(new LocalDate());
 			refTask.setForm(obj.getForm());
+			refTask.setDef(obj.getDef());
 			refTask.setFromRefId(obj.getObjId());
 			refTask.setFromRefType(obj.getType());
 			refTask.setExtendedPropertyValue("subject", subject);

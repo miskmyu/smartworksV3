@@ -65,6 +65,7 @@
 				<beans:value>classpath:/net/smartworks/server/engine/common/loginuser/hbm</beans:value>
 				<!-- engine -->
 				<beans:value>classpath:/net/smartworks/server/engine/resource/hbm</beans:value>
+				<beans:value>classpath:/net/smartworks/server/engine/publishnotice/hbm</beans:value>
 			</beans:list>
 		</beans:property>
 	</beans:bean>
