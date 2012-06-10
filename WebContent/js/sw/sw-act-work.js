@@ -1184,6 +1184,7 @@ $(function() {
 			}
 			return false;
 		}
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
 		$.ajax({
 			url : 'append_task_forward.sw',
 			data : {},
@@ -1214,6 +1215,7 @@ $(function() {
 			}
 			return false;
 		}
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
 		$.ajax({
 			url : 'append_task_approval.sw',
 			data : {},

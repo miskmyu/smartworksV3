@@ -409,6 +409,88 @@ $(function() {
 		
 	});
 	
+	$('.js_return_on_forward').live('keydown', function(e) {
+		var e = window.event || e;
+		var keyCode = e.which || e.keyCode;
+		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
+		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
+			e.keyCode = $.ui.keyCode.ENTER;
+			e.which = $.ui.keyCode.ENTER;
+			return true;
+		}else if(keyCode != $.ui.keyCode.ENTER){
+			return;
+		}
+		var input = $(targetElement(e));
+		var appendTaskForward = input.parents('.js_append_task_forward_page');
+		var comment = input.attr('value');
+		if(isEmpty(comment)) return false;
+		smartPop.confirm(smartMessage.get("commentTaskForwardConfirm"), function(){
+			var paramsJson = {};
+			paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
+			paramsJson['forwardId'] = appendTaskForward.attr('forwardId');
+			paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
+			paramsJson['comments'] = comment;
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "comment_on_task_forward.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						document.location.href = "";
+	 					smartPop.close();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskForwardError"), function(){
+						smartPop.close();					
+					});
+				}
+				
+			});			
+		});
+	});
+	
+	$('.js_reply_forward').live('click', function(e) {
+		var input = $(targetElement(e));
+		var appendTaskForward = input.parents('.js_iwork_space_page').find('.js_append_task_forward_page');
+		var comment = appendTaskForward.find('textarea[name="txtaCommentContent"]').attr('value');
+		if(isEmpty(comment)) return false;
+		smartPop.confirm(smartMessage.get("commentTaskForwardConfirm"), function(){
+			var paramsJson = {};
+			paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
+			paramsJson['forwardId'] = appendTaskForward.attr('forwardId');
+			paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
+			paramsJson['comments'] = comment;
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "comment_on_task_forward.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						document.location.href = "";
+	 					smartPop.close();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskForwardError"), function(){
+	 					smartPop.close();
+					});
+					
+				}
+				
+			});			
+		});
+		return false;
+	});
+	
 	$('.js_show_all_comments').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_show_all_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');

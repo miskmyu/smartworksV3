@@ -102,4 +102,10 @@ public class TaskInstanceController {
 		smartworks.tempSaveTaskInstance(requestBody, request);
 	}
 
+	@RequestMapping(value = "/comment_on_task_forward", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void commentOnTaskForward(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.commentOnTaskForward(requestBody, request);
+	}
+
 }

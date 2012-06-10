@@ -6433,4 +6433,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		return chatInstInfos;
 	}
+	@Override
+	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

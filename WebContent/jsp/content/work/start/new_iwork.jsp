@@ -131,10 +131,10 @@ function submitForms() {
 	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 //-->
  --%>
 	<!--  전자결재화면이 나타나는 곳 -->
-	<div class="js_form_task_approval" style="display:none"></div>
+	<div class="js_form_task_approval js_form_task" style="display:none"></div>
 	
 	<!-- 업무전달화면이 나타나는 곳 -->
-	<div class="js_form_task_forward" style="display:none"></div>
+	<div class="js_form_task_forward js_form_task" style="display:none"></div>
 	
 	<!-- 스마트폼에서 해당 업무화면을 그려주는 곳 -->
 	<div class="js_form_content js_click_start_form" workType="iwork"></div>

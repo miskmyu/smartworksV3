@@ -378,6 +378,18 @@ function loadTaskForwardFields() {
 				required: false,
 				readOnly: readOnly
 			});
+			
+			var iworkSpace = taskForwardFields.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				var target = iworkSpace.find('.js_append_task_forward_page').addClass('up');
+				if(readOnly){
+					target.addClass('form_read');
+					iworkSpace.find('.js_btn_reply_forward').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();
+			}
 		}		
 	}
 };
@@ -395,8 +407,8 @@ function loadTaskApprovalFields() {
 			var subjectTitle = taskApprovalField.attr("subjectTitle");
 			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
 			var commentsTitle = taskApprovalField.attr("commentsTitle");
-			var subject = taskForwardField.attr("subject");
-			var comments = taskForwardField.attr("content");
+			var subject = taskApprovalField.attr("subject");
+			var comments = taskApprovalField.attr("content");
 			var readOnly = isEmpty(subject) ? false : true;
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
@@ -417,7 +429,7 @@ function loadTaskApprovalFields() {
 					fieldName: forwardeeTitle,
 					columns: 1,
 					multiUsers: true,
-					required: true,
+					required: false,
 					readOnly: readOnly
 				});
 			}
@@ -433,6 +445,18 @@ function loadTaskApprovalFields() {
 				required: false,
 				readOnly: readOnly
 			});
+			
+			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
+				if(readOnly){
+					target.addClass('form_read');
+					iworkSpace.find('.js_btn_reply_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();
+			}
 		}		
 	}
 };

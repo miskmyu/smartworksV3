@@ -636,3 +636,10 @@ td.pic{width:85px}
 #footer .f_info { margin-left:4px; vertical-align: bottom;}
 #footer a:link, a:visited {color:#454545; text-decoration: none;}
 #footer a:hover, a:focus, a:active {color:#454545; text-decoration: underline;}
+
+/* Status Icons */
+.icon_status_running {background: url("../../images/icon_status_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_d_running {background: url("../../images/icon_status_d_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_returned {background: url("../../images/icon_status_returned.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_not_yet {background: url("../../images/icon_status_not_yet.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_completed {background: url("../../images/icon_status_completed.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}

@@ -1397,4 +1397,9 @@ public class SmartWorks implements ISmartWorks {
 		return mailService.getUnreadEmails();
 	}
 
+	@Override
+	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.commentOnTaskForward(requestBody, request);
+	}
+
 }

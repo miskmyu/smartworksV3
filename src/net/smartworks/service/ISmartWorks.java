@@ -629,4 +629,7 @@ public interface ISmartWorks {
 	public abstract void checkEmail() throws Exception;
 	
 	public abstract int getUnreadEmails() throws Exception;
+
+	public abstract void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

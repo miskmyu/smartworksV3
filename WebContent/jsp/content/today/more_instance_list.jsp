@@ -95,27 +95,27 @@ if (instances != null) {
 			switch (taskInstance.getStatus()) {
 			// 인스턴스가 현재 진행중인 경우..
 			case Instance.STATUS_RUNNING:
-				statusImage = "images/icon_status_running.jpg";
+				statusImage = "icon_status_running";
 				statusTitle = "content.status.running";
 				break;
 			// 인스턴스가 지연진행중인 경우....
 			case Instance.STATUS_DELAYED_RUNNING:
-				statusImage = "images/icon_status_d_running.jpg";
+				statusImage = "icon_status_d_running";
 				statusTitle = "content.status.delayed_running";
 				break;
 			// 인스턴스가 반려된 경우...
 			case Instance.STATUS_RETURNED:
-				statusImage = "images/icon_status_returned.jpg";
+				statusImage = "icon_status_returned";
 				statusTitle = "content.status.returned";
 				break;
 			// 기타 잘못되어 상태가 없는 경우..
 			default:
-				statusImage = "images/icon_status_not_yet.jpg";
+				statusImage = "icon_status_not_yet";
 				statusTitle = "content.status.not_yet";
 			}
 		// 인스턴스가 할당태스크가 아닌경우....
 		} else {
-			statusImage = "images/icon_status_running.jpg";
+			statusImage = "icon_status_running";
 			statusTitle = "content.status.running";
 		}
 %>
@@ -123,7 +123,7 @@ if (instances != null) {
 		<tr class="working_br instance_list js_more_instance_item js_content_list" href="<%=trTarget%>" dateValue="<%=workInstance.getLastModifiedDate().toLocalDateString2()%>">
 			<!-- 인스턴스 상태 및 시작자 사진표시 -->
 			<td class="pic">
-				<img src="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>" />
+				<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 				<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_m" src="<%=owner.getMidPicture()%>"/></a>
 			</td>
 			<!-- 인스턴스 상태 및 시작자 사진표시 -->

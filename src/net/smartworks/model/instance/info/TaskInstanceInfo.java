@@ -15,11 +15,14 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String name;
 	private int taskType=-1;
 	private WorkInstanceInfo  workInstance;
+	private UserInfo assigner;
 	private UserInfo assignee;
 	private UserInfo performer;
 	private String formId;
 	private String content;
 	private String comments;
+	private String approvalId="";
+	private String forwardId="";
 	public String getName() {
 		return name;
 	}
@@ -37,6 +40,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setWorkInstance(WorkInstanceInfo workInstance) {
 		this.workInstance = workInstance;
+	}
+	public UserInfo getAssigner() {
+		return assigner;
+	}
+	public void setAssigner(UserInfo assigner) {
+		this.assigner = assigner;
 	}
 	public UserInfo getAssignee() {
 		return assignee;
@@ -131,5 +140,17 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	public String getApprovalId() {
+		return approvalId;
+	}
+	public void setApprovalId(String approvalId) {
+		this.approvalId = approvalId;
+	}
+	public String getForwardId() {
+		return forwardId;
+	}
+	public void setForwardId(String forwardId) {
+		this.forwardId = forwardId;
 	}
 }

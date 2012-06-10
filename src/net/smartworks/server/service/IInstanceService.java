@@ -137,4 +137,7 @@ public interface IInstanceService {
 	public void setAsyncMessage(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public ChatInstanceInfo[] fetchAsyncMessagesByChatid(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -21,7 +22,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div>
+<div class="js_append_task_approval_page" workInstanceId="">
 	<!-- 결재선 Section -->
 	<div class="approval_section">
 		<div class="tit">
@@ -33,8 +34,7 @@
 				<div class="fl">기본결재</div>
 			</div>
 			<!-- POP -->
-			<div
-				style="position: relative; clear: both; width: 400px; float: right">
+			<div style="display:none; position: relative; clear: both; width: 400px; float: right">
 				<div class="pop_corner_all">
 					<!-- 팝업 타이틀 -->
 					<div class="form_title">
@@ -157,7 +157,7 @@
 					</div>
 				</div>
 				<!-- 결재선1 //-->
-				<!-- 결재선1 -->
+<!-- 				결재선1
 				<div class="approval_area">
 					<div class="label">승 인</div>
 					<div class="approval"></div>
@@ -173,8 +173,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- 결재선1 //-->
-			</div>
+				결재선1 //
+ -->			</div>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->
@@ -183,14 +183,16 @@
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<span> <!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 --> <!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 				<div class="js_task_approval_fields"
-					subjectTitle="<fmt:message key='common.forward.title.subject'/>"
-					subject="<%=subject%>"
-					forwardeeTitle="<fmt:message key='common.forward.title.forwardee'/>"
-					CommentsTitle="<fmt:message key="common.forward.title.comments" />"
-					content="<%=content%>">
+					subjectTitle="<fmt:message key='common.approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
+					forwardeeTitle="<fmt:message key='common.approval.title.forwardee'/>"
+					CommentsTitle="<fmt:message key="common.approval.title.comments" />" content="<%=CommonUtil.toNotNull(content)%>">
 				</div>
 			</span>
 		</form>
 		<div class="dash_line"></div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	loadTaskApprovalFields();
+</script>

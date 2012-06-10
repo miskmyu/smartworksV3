@@ -2,6 +2,7 @@ package net.smartworks.model.instance;
 
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 
@@ -46,5 +47,17 @@ public class InformationWorkInstance extends WorkInstance {
 			LocalDate lastModifiedDate) {
 		super(id, subject, work, owner, lastModifier, lastModifiedDate);
 		super.setType(WorkInstance.TYPE_INFORMATION);
+	}
+	
+	public int getNumberOfHistories(){
+		int numberOfHistories = 0;
+		for(TaskInstanceInfo task : (TaskInstanceInfo[])this.getTasks()){
+			if(task.getType() == TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED || task.getType() == TaskInstance.TYPE_INFORMATION_TASK_CREATED
+				|| task.getType() == TaskInstance.TYPE_INFORMATION_TASK_UDATED){
+				numberOfHistories++;
+			}
+		}
+		return numberOfHistories;
+		
 	}
 }
