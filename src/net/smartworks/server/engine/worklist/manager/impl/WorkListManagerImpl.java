@@ -289,6 +289,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
 		Date executionDateTo = cond.getTskExecuteDateTo();
 		
+		String[] taskObjIdIns = cond.getTskObjIdIns();
+		
 		queryBuffer.append("from ");
 		queryBuffer.append("( ");
 		queryBuffer.append("	select task.tskobjId ");
@@ -343,6 +345,15 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("	and task.tskExecuteDate > :executionDateFrom ");
 		if (executionDateTo != null)
 			queryBuffer.append("	and task.tskExecuteDate < :executionDateTo ");
+		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
+			queryBuffer.append(" 	and task.tskObjId in (");
+			for (int i=0; i<taskObjIdIns.length; i++) {
+				if (i != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":taskObjIdIn").append(i);
+			}
+			queryBuffer.append(")");
+		}
 		queryBuffer.append(") taskInfo ");
 		//queryBuffer.append("left outer join ");
 		queryBuffer.append("join ");
@@ -459,7 +470,11 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setString("tskRefType", tskRefType);
 		if (!CommonUtil.isEmpty(searchKey)) 
 			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
-
+		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
+			for (int i=0; i<taskObjIdIns.length; i++) {
+				query.setString("taskObjIdIn"+i, taskObjIdIns[i]);
+			}
+		}
 		return query;
 	}
 

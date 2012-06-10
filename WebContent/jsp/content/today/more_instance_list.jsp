@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -31,6 +33,16 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <%	
+
+RequestParams params = (RequestParams)request.getAttribute("requestParams");
+if (params == null) {
+	String searchKey = request.getParameter("searchKey");
+	if (!CommonUtil.isEmpty(searchKey)) {
+		params = new RequestParams();
+		params.setSearchKey(searchKey);
+	}
+}
+
 // 호출시 전달된 lastDate, assignedOnly 값을 가져온다..
 String strLastDate = request.getParameter("lastDate");
 LocalDate lastDate = new LocalDate();
@@ -39,7 +51,7 @@ if(!SmartUtil.isBlankObject(strLastDate))
 boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly);
+InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, params);
 if (instances != null) {
 	// 인스턴스 갯수 만큼 리스트를 그린다...
 	for (InstanceInfo instance : instances) {

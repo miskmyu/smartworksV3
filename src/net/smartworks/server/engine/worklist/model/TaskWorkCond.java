@@ -18,6 +18,7 @@ public class TaskWorkCond extends Cond {
 	private static final long serialVersionUID = 1L;
 
 	private String tskObjId;    
+	private String[] tskObjIdIns;
 	private String tskTitle;    
 	private String tskType; 
 	private String tskRefType;
@@ -238,6 +239,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setPrcObjId(String prcObjId) {
 		this.prcObjId = prcObjId;
+	}
+	public String[] getTskObjIdIns() {
+		return tskObjIdIns;
+	}
+	public void setTskObjIdIns(String[] tskObjIdIns) {
+		this.tskObjIdIns = tskObjIdIns;
 	}
 	public String getPrcTitle() {
 		return prcTitle;

@@ -153,6 +153,8 @@ public interface ISmartWorks {
 
 	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception;
 	
+	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception;
+	
 	public abstract RunningCounts getMyRunningInstancesCounts() throws Exception;
 	
 	public abstract String[] getBroadcastingMessages() throws Exception;

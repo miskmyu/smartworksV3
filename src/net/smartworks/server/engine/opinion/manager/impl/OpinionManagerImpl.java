@@ -124,6 +124,7 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 
 	private Query appendQuery(StringBuffer buf, OpinionCond cond) throws Exception {
 		String objId = null;
+		String[] objIdIns = null;
 		int refType = 0;
 		String refId = null;
 		String[] refIdIns = null;
@@ -141,6 +142,7 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 
 		if (cond != null) {
 			objId = cond.getObjId();
+			objIdIns = cond.getObjIdIns();
 			refType = cond.getRefType();
 			groupId = cond.getGroupId();
 			refId = cond.getRefId();
@@ -162,6 +164,15 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 		if (cond != null) {
 			if (objId != null) 
 				buf.append(" and obj.objId = :objId");
+			if (objIdIns != null && objIdIns.length != 0) {
+				buf.append(" and obj.objId in (");
+				for (int i=0; i<objIdIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":objIdIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (refType != 0)
 				buf.append(" and obj.refType = :refType");
 			if (groupId != null) 
@@ -204,6 +215,11 @@ public class OpinionManagerImpl extends AbstractManager implements IOpinionManag
 		if (cond != null) {
 			if (objId != null)
 				query.setString("objId", objId);
+			if (objIdIns != null && objIdIns.length != 0) {
+				for (int i=0; i<objIdIns.length; i++) {
+					query.setString("objIdIn"+i, objIdIns[i]);
+				}
+			}
 			if (refType != 0)
 				query.setInteger("refType", refType);
 			if (refIdIns != null && refIdIns.length != 0) {
