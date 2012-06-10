@@ -100,13 +100,13 @@
 						<%
 						if(approvalTask == null && forwardedTask == null){
 						%>
-							<span class="icon_refer_w"><a href="" title="<fmt:message key='common.button.forward'/>"></a></span>
-							<span class="icon_link_w"><a href="" title="<fmt:message key='common.button.approval'/>"></a></span>
+							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+		                	<a href="" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+		                	<a href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 						<%
 						}
 						%>
-	                	<span class="icon_mail_w"><a href="" title="<fmt:message key='common.button.email'/>"></a></span>
-	                	<span class="icon_print_w"><a href="" title="<fmt:message key='common.button.print'/>"></a></span>
 					</div>
 					<!-- 전자결재, 업무전달 버튼들 //-->
 		                    
@@ -115,18 +115,21 @@
 		            <!-- 타이틀 -->
 		            
 				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval" <%if(approvalTask==null){ %>style="display:none"<%} %>>
+				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null){ %>style="display:none"<%} %>>
 				</div>
 				
 				<!-- 업무전달화면이 나타나는 곳 -->
-				<div class="js_form_task_forward" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
+				<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
 					<%
 					if(forwardedTask!=null){
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 							<jsp:param value="<%=forwardedTask.getSubject() %>" name="subject"/>
-<%-- 							<jsp:param value="<%=forwardedTask.getContent() %>" name="subject"/>
- --%>						</jsp:include>
+ 							<jsp:param value="<%=forwardedTask.getContent() %>" name="content"/>
+						</jsp:include>
+					<%
+					}
+					%>
 				</div>
 				
 				<!-- 상세보기 컨텐츠 -->

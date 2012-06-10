@@ -77,32 +77,20 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<div id="work_ing">		
-				<div class="titl_section">
+				<div class="titl_section js_running_instance_title">
 				
 					<!-- 타이틀을 나타내는 곳 -->
-					<div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" />
-						<span class="js_progress_span"></span>
-					</div>					
+					<div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" /></div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<form name="frmSearchInstance" class="po_left">
+					<form name="frmSearchInstance" class="po_left js_search_running_instance">
 						<div class="srch_wh srch_wsize">
 							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
 							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>
 					</form>
-					
-					<!-- 자동완성 검색창과 검색결과 리스트 공간
-					<div class="nav_srch pb2">
-						<div class="srch_wh srch_wsize2">
-							<input id="" class="nav_input js_auto_complete" type="text" title="<fmt:message key="search.search_running_instance"/>"
-								placeholder="<fmt:message key="search.search_running_instance"/>" href="my_running_instance.sw">
-							<button title="<fmt:message key='search.search'/>" onclick=""></button>
-						</div>
-						<div style="display: none"></div>
-					</div> -->
-					<!-- 자동완성 검색창과 검색결과 리스트 공간 //-->
+					<span class="js_progress_span"></span>
 					
 					<!-- 전체/할당업무만의 갯수와 선택버튼들 -->
 					<div class="txt_btn fr js_instance_counts">
