@@ -4,7 +4,7 @@ var fayeServer = "fayeServer";
  
 var swSubject = {
 	SMARTWORKS : "/smartworks",
-	COMPANYID : "/Sera",
+	COMPANYID : "/Semiteq",
 	BROADCASTING : "/broadcasting",
 	FAYESERVER : "/fayeServer",
 	ONLINE : "/online",

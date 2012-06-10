@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -29,12 +30,15 @@
 			<!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
 			<!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 			<div class="js_task_forward_fields" 
-				subjectTitle="<fmt:message key='common.forward.title.subject'/>" subject="<%=subject %>" 
+				subjectTitle="<fmt:message key='common.forward.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>" 
 				forwardeeTitle="<fmt:message key='common.forward.title.forwardee'/>" 
-				CommentsTitle="<fmt:message key="common.forward.title.comments" />" content="<%=content%>"> 
+				CommentsTitle="<fmt:message key="common.forward.title.comments" />" content="<%=CommonUtil.toNotNull(content)%>"> 
 			</div>
 		</span>
 	</form>
 	<div class="dash_line"></div>
 </div>
 <!-- 업무계획하기 //-->
+<script type="text/javascript">
+	loadTaskForwardFields();
+</script>

@@ -35,7 +35,7 @@ public class PublishNotice extends MisObject {
 	public static final String REFTYPE_GROUPJOINREQUEST = "groupJoinReq"; 
 	public static final String REFTYPE_MESSAGE = "message";
 	public static final String REFTYPE_COMMENT_PROCESSINST = "commentProcessInst";
-	public static final String REFTYPE_COMMENT_TASKINST = "commentTaskInst";
+	public static final String REFTYPE_COMMENT_INFORWORK = "commentInforwork";
 	public static final String REFTYPE_COMMENT_PROCESSMANUAL = "commentPrcManual";
 	public static final String REFTYPE_COMMENT_INFOWORKMANUAL = "commentInfoworkManual";
 	public static final String REFTYPE_MAIL = "mail";

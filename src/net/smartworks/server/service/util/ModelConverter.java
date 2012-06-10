@@ -1082,7 +1082,8 @@ public class ModelConverter {
 				TaskInstanceInfo tskInfo = new TaskInstanceInfo();
 				tskInfo.setId(task.getTskObjId());
 				tskInfo.setName(task.getTskName());
-
+				tskInfo.setCreatedDate(new LocalDate(task.getPrcCreateDate().getTime()));
+				
 				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {

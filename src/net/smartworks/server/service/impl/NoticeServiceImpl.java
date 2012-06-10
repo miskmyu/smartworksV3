@@ -132,17 +132,16 @@ public class NoticeServiceImpl implements INoticeService {
 			
 			// TOTAL DELAYED TASK
 
-			//TODO 스케쥴러를 통한 PublishNotice 테이블로 데이터를 생성하게끔 하여야 한다
-			//PublishNoticeCond delayedTaskCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_DELAYED_TASK, null);
-			//long totalDelayedTaskSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
+			PublishNoticeCond delayedTaskCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_DELAYED_TASK, null);
+			long totalDelayedTaskSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
 			
-			TaskWorkCond delayedTaskCond = new TaskWorkCond();
-			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
-			delayedTaskCond.setTskAssignee(userId);
-			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-			delayedTaskCond.setExpectEndDateTo(new LocalDate());
-			
-			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
+//			TaskWorkCond delayedTaskCond = new TaskWorkCond();
+//			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+//			delayedTaskCond.setTskAssignee(userId);
+//			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+//			delayedTaskCond.setExpectEndDateTo(new LocalDate());
+//			
+//			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
 			
 			// TOTAL REQUESTER
 
@@ -157,7 +156,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
 			mailBox = new Notice();
 			mailBox.setType(Notice.TYPE_MAILBOX);
-			mailBox.setLength(0);
+			mailBox.setLength(mailService.getUnreadEmails());
 		}
 		//---------------------------------------------------------------------------------------
 
@@ -478,6 +477,21 @@ public class NoticeServiceImpl implements INoticeService {
 	public void removeNoticeInstance(String noticeId) throws Exception {
 		
 		try{
+			User user = SmartUtil.getCurrentUser();
+			PublishNoticeCond pubNotiCond = new PublishNoticeCond();
+			pubNotiCond.setRefId(noticeId);
+
+			PublishNotice notice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
+			if (CommonUtil.isEmpty(notice))
+				return;
+			
+			int noticeType = notice.getType();
+			String objId = notice.getObjId();
+			String assignee = notice.getAssignee();
+			
+			SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), objId);
+			SmartUtil.increaseNoticeCountByNoticeType(assignee, noticeType);
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -736,6 +750,7 @@ public class NoticeServiceImpl implements INoticeService {
 					Message message = messages[i];
 					AsyncMessageInstanceInfo asyncMessage = new AsyncMessageInstanceInfo();
 					
+					asyncMessage.setId(message.getObjId());
 					asyncMessage.setSender(ModelConverter.getUserInfoByUserId(message.getSendUser()));
 					asyncMessage.setReceiver(ModelConverter.getUserInfoByUserId(message.getTargetUser()));
 					asyncMessage.setChatters(null);
