@@ -17,6 +17,8 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private UserInfo assignee;
 	private UserInfo performer;
 	private String formId;
+	private String content;
+	private String comments;
 	public String getName() {
 		return name;
 	}
@@ -93,5 +95,18 @@ public class TaskInstanceInfo extends InstanceInfo {
 		super(id, name, Instance.TYPE_TASK, owner, performer, lastModifiedDate);
 		this.name = name;
 		this.taskType = taskType;
+	}
+
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 }

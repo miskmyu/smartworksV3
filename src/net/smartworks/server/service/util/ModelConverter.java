@@ -2032,6 +2032,8 @@ public class ModelConverter {
 			}
 		} else if(tskType.equals(TskTask.TASKTYPE_REFERENCE)) {
 			type = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+			taskInstInfo.setComments(swTask.getDocument());
+			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			type = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
 		}
@@ -2930,7 +2932,7 @@ public class ModelConverter {
 
 		tskCond.setOrders(new Order[] {new Order(TskTask.A_CREATIONDATE, true)});
 		
-		TskTask[] tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
+		TskTask[] tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_ALL);
 		
 		workInstance.setTasks(getTaskInstanceInfoArrayByTskTaskArray(pwInstInfo, tasks));
 		workInstance.setNumberOfSubInstances(-1);
@@ -3073,7 +3075,7 @@ public class ModelConverter {
 		tskCond.setProcessInstId(processInstId);
 		tskCond.setOrders(new Order[]{new Order("creationDate", false)});
 
-		tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
+		tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_ALL);
 
 		workInstance.setTasks(getTaskInstanceInfoArrayByTskTaskArray(iwInstInfo, tasks));
 		workInstance.setNumberOfSubInstances(-1);
