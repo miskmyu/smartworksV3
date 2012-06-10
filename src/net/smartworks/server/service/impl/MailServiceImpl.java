@@ -289,7 +289,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	 * @param request
 	 * @throws Exception
 	 */
-	private void saveSentMail(AuthProfile auth, MimeMessage msg, HttpServletRequest request) throws Exception {
+	private void saveSentMail(AuthProfile auth, MimeMessage msg, EmailHeader header, HttpServletRequest request) throws Exception {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		msg.writeTo(bos);
 		byte bMsg[] = bos.toByteArray();
@@ -316,9 +316,29 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setUsername(auth.getUsername());
 		item.setMsgSize(new Long(bMsg.length));
 
+		item.setSender(header.getFromShown());
+		item.setReceiver(header.getToShown());
+		item.setCc(header.getCcShown());
+		item.setBcc(header.getBccShown());
+		item.setReplyTo(header.getReplyToShown());
+//		item.setMultipart(header.isMultipart());
+		item.setSentDate(header.getDate());
+//		item.setPriority(new Integer(header.getPriority()));
+		item.setSubject(header.getSubject());
+		
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
+		try{
+			mailCont.deleteEmail(new Long(1212));
+		}catch(Exception e){
+			
+		}
+		try{
+			mailCont.deleteEmail(new Long(1213));
+		}catch(Exception e){
+			
+		}
 		mailCont.appendEmail(item);
 	}
 	
@@ -398,6 +418,37 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	}
 
 	@Override
+	public String getFolderIdByType(int folderType) throws Exception {
+		
+		try{
+			MailFolder[] mailFolders = null;
+	
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+		    if(handler == null) return null;
+		    
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+				
+			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
+			FolderController folderCont = foldFact.getFolderController();
+			
+			List folders = folderCont.getFolders();
+			if (folders != null) {
+				FolderDbObjectWrapper tmp = null;
+				mailFolders = new MailFolder[folders.size()];
+				for(int i=0; i<mailFolders.length; i++){
+					tmp = (FolderDbObjectWrapper)folders.get(i);
+					if(tmp.getFolderType() == folderType)
+						return tmp.getId().toString();
+				}
+			}
+			return null;
+		}catch (Exception e){
+			throw e;
+		}
+	}
+
+	@Override
 	public InstanceInfoList getMailInstanceList(String folderId, RequestParams params) throws Exception {
 
 		try{
@@ -433,7 +484,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					try {
 						InboxControllerFactory inFact = new InboxControllerFactory(auth, profile, handler);
 						InboxController inCont = inFact.getInboxController();
-						handler = inCont.checkEmail();
+						inCont.checkEmail();
 						request.getSession().setAttribute("handler", handler);
 						foldFact = new FolderControllerFactory(auth, profile, handler);
 						folderCont = foldFact.getFolderController();
@@ -626,7 +677,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							tmp = (EmailHeader)headers.get(i);
 							InternetAddress from = (InternetAddress)tmp.getFrom()[0];
 							MailInstanceInfo mailInstance = new MailInstanceInfo(Integer.toString(tmp.getMessageId()),
-									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset()));						
+									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate()/*tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset())*/);						
 							mailInstance.setSize(tmp.getSize());
 							mailInstance.setUnread(tmp.getUnread());
 							mailInstance.setPriority(tmp.getPriority());
@@ -908,9 +959,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			Address adrs[] = Utility.stringListToAddressArray(from.get("users"));
 			header.setFrom(adrs);
+			header.setFromShown(Utility.addressArrToString(adrs));
 			
 			Address tos[] = Utility.stringListToAddressArray(receivers.get("users"));
 			header.setTo(tos);
+			header.setToShown(Utility.addressArrToString(tos));
 //if (saveSentContacts != null && saveSentContacts.equals("yes")) {
 //	saveContacts(auth, tos);
 //}
@@ -918,6 +971,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			if (ccReceivers != null) {
 				Address ccs[] = Utility.stringListToAddressArray(ccReceivers.get("users"));
 				header.setCc(ccs);
+				header.setCcShown(Utility.addressArrToString(ccs));
 //if (saveSentContacts != null && saveSentContacts.equals("yes")) {
 //	saveContacts(auth, ccs);
 //}
@@ -925,6 +979,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			if (bccReceivers != null) {
 				Address bccs[] = Utility.stringListToAddressArray(bccReceivers.get("users"));
 				header.setBcc(bccs);
+				header.setBccShown(Utility.addressArrToString(bccs));
 //if (saveSentContacts != null && saveSentContacts.equals("yes")) {
 //	saveContacts(auth, bccs);
 //}
@@ -1044,7 +1099,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //			Address[] fail = (Address[])sendRes.get("fail");
 //			Address[] invalid = (Address[])sendRes.get("invalid");
 			
-			saveSentMail(auth, msg, request);
+			saveSentMail(auth, msg, header, request);
 
 		} catch (Exception e) {
 			throw e;
@@ -1072,7 +1127,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			// now create a new email object.
 			Email email = new Email();
 			EmailHeader header = new EmailHeader();
-			
+
 			Address adrs[] = Utility.stringListToAddressArray(from.get("users"));
 			header.setFrom(adrs);
 			
@@ -1246,7 +1301,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 				// action time
 				if (profile.getProtocol().equals(Constants.POP3)) {
-					if (Long.toString(fItem.getId()).equals(folderId)) {
+					if (false /*Long.toString(fItem.getId()).equals(folderId)*/) {
 						mailCont.deleteEmails(msgs);
 					} else {
 						mailCont.moveEmails(msgs, "" + fItem.getId());
@@ -1374,5 +1429,37 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		} catch (Exception e) {
 			throw e;
 		}		
+	}
+
+	@Override
+	public void checkEmail() throws Exception {
+		try {
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+			if(handler == null)  return;
+			
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			InboxControllerFactory inFact = new InboxControllerFactory(auth, profile, handler);
+			InboxController inCont = inFact.getInboxController();
+			inCont.checkEmail();
+		} catch (Exception e) {
+		}
+	}
+	
+	@Override
+	public int getUnreadEmails() throws Exception {
+		try {
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+			if(handler == null)  return 0;
+			
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			
+			FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
+			FolderController foldCont = fFactory.getFolderController();
+			return foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+		} catch (Exception e) {
+		}
+		return 0;
 	}
 }

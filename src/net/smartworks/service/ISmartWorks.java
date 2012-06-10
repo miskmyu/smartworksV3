@@ -622,4 +622,9 @@ public interface ISmartWorks {
 	
 	public abstract void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String getFolderIdByType(int folderType) throws Exception;
+
+	public abstract void checkEmail() throws Exception;
+	
+	public abstract int getUnreadEmails() throws Exception;
 }

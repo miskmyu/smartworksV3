@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.Instance;
@@ -29,7 +28,6 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
-import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
@@ -63,8 +61,6 @@ import net.smartworks.util.SmartUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import com.oreilly.servlet.MailMessage;
 
 @Service
 public class NoticeServiceImpl implements INoticeService {
@@ -224,7 +220,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
 			mailBox = new Notice();
 			mailBox.setType(Notice.TYPE_MAILBOX);
-			mailBox.setLength(0);
+			mailBox.setLength(mailService.getUnreadEmails());
 		}
 		//---------------------------------------------------------------------------------------
 

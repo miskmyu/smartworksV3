@@ -8,6 +8,7 @@ import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class TaskInstanceInfo extends InstanceInfo {
 	
@@ -93,5 +94,29 @@ public class TaskInstanceInfo extends InstanceInfo {
 		super(id, name, Instance.TYPE_TASK, owner, performer, lastModifiedDate);
 		this.name = name;
 		this.taskType = taskType;
+	}
+	
+	public boolean isRunningForwardedForMe(String userId, String taskInstId){
+		if(	taskInstId.equals(this.getId()) 
+			&& (this.getType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			&& !SmartUtil.isBlankObject(this.getAssignee()) 
+			&& this.getAssignee().getId().equals(userId)
+			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public boolean isRunningApprovalForMe(String userId, String taskInstId){
+		if(	taskInstId.equals(this.getId()) 
+			&& this.getType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+			&& !SmartUtil.isBlankObject(this.getAssignee()) 
+			&& this.getAssignee().getId().equals(userId)
+			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			return true;
+		}
+		return false;
+		
 	}
 }

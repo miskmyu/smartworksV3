@@ -1378,4 +1378,19 @@ public class SmartWorks implements ISmartWorks {
 		mailService.deleteMailFolder(requestBody, request);
 	}
 
+	@Override
+	public String getFolderIdByType(int folderType) throws Exception {
+		return mailService.getFolderIdByType(folderType);
+	}
+
+	@Override
+	public void checkEmail() throws Exception {
+		mailService.checkEmail();
+	}
+
+	@Override
+	public int getUnreadEmails() throws Exception {
+		return mailService.getUnreadEmails();
+	}
+
 }

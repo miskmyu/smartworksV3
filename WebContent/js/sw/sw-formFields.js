@@ -340,33 +340,98 @@ function loadTaskForwardFields() {
 			var subjectTitle = taskForwardField.attr("subjectTitle");
 			var forwardeeTitle = taskForwardField.attr("forwardeeTitle");
 			var commentsTitle = taskForwardField.attr("commentsTitle");
+			var subject = taskForwardField.attr("subject");
+			var comments = taskForwardField.attr("content");
+			var readOnly = isEmpty(subject) ? false : true;
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtForwardSubject",
 				fieldName: subjectTitle,
+				value: subject,
 				columns: 1,
-				required: true
+				required: true,
+				readOnly: readOnly
 			});
 			
-			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
-			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
-				container: gridRow,
-				fieldId: "txtForwardForwardee",
-				fieldName: forwardeeTitle,
-				columns: 1,
-				multiUsers: true,
-				required: true
-			});
+			if(!readOnly){
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtForwardForwardee",
+					fieldName: forwardeeTitle,
+					columns: 1,
+					multiUsers: true,
+					required: true,
+					readOnly: readOnly
+				});
+			}
 
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtForwardComments",
 				fieldName: commentsTitle,
+				value: comments,
 				columns: 1,
 				multiLines: 4,
-				required: false
+				required: false,
+				readOnly: readOnly
+			});
+		}		
+	}
+};
+
+function loadTaskApprovalFields() {
+	var taskApprovalFields = $('div.js_task_approval_fields');
+	if(!isEmpty(taskApprovalFields)) {
+		for(var i=0; i<taskApprovalFields.length; i++) {
+			var taskApprovalField = $(taskApprovalFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			taskApprovalField.html(gridTable.html(gridRow));
+			
+			var subjectTitle = taskApprovalField.attr("subjectTitle");
+			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
+			var commentsTitle = taskApprovalField.attr("commentsTitle");
+			var subject = taskForwardField.attr("subject");
+			var comments = taskForwardField.attr("content");
+			var readOnly = isEmpty(subject) ? false : true;
+
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtApprovalSubject",
+				fieldName: subjectTitle,
+				value: subject,
+				columns: 1,
+				required: true,
+				readOnly: readOnly
+
+			});
+			if(!readOnly){
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalForwardee",
+					fieldName: forwardeeTitle,
+					columns: 1,
+					multiUsers: true,
+					required: true,
+					readOnly: readOnly
+				});
+			}
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtApprovalComments",
+				fieldName: commentsTitle,
+				value: comments,
+				columns: 1,
+				multiLines: 4,
+				required: false,
+				readOnly: readOnly
 			});
 		}		
 	}
