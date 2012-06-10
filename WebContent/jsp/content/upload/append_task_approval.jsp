@@ -1,13 +1,196 @@
-<%@page import="java.text.DecimalFormat"%>
-<%@page import="net.smartworks.util.LocalDate"%>
+
+<!-- Name 			: append_task_forward.js							 -->
+<!-- Description	: 새업무를 등록시 다른사용자에게 업무전달을 위한 화	      	 -->
+<!-- Author			: Maninsoft, Inc.									 -->
+<!-- Created Date	: 2011.9.											 -->
+
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%
+	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+
+	String subject = request.getParameter("subject");
+	String content = request.getParameter("content");
 %>
+<!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+
+<div>
+	<!-- 결재선 Section -->
+	<div class="approval_section">
+		<div class="tit">
+			<span>전자결재</span>
+		</div>
+		<div class="approval_group">
+			<div class="fr">
+				<div class="fl icon_approval"></div>
+				<div class="fl">기본결재</div>
+			</div>
+			<!-- POP -->
+			<div
+				style="position: relative; clear: both; width: 400px; float: right">
+				<div class="pop_corner_all">
+					<!-- 팝업 타이틀 -->
+					<div class="form_title">
+						<div class="pop_title">결재선 관리</div>
+						<div class="txt_btn">
+							<a href="">
+								<div class="pop_btn_x"></div> </a>
+						</div>
+						<div class="solid_line"></div>
+					</div>
+					<!-- 팝업 타이틀 //-->
+					<!-- 팝업 컨텐츠 -->
+					<div class="form_contents">팝업 컨텐츠</div>
+					<!-- 팝업 컨텐츠 //-->
+					<!-- 페이징 -->
+					<div class="paginate mb5">
+						<a class="pre_end"> <span class="spr"></span> </a> <a class="pre">
+							<span class="spr"></span> </a> <strong>1</strong> <a class="num"
+							href="">2</a> <a class="num" href="">3</a> <a class="num" href="">4</a>
+						<a class="num" href="">5</a> <a class="num" href="">6</a> <a
+							class="next"> <span class="spr"></span> </a> <a class="next_end">
+							<span class="spr"></span> </a>
+					</div>
+					<!-- 페이징 //-->
+					<!-- 하단버튼영역 -->
+					<div class="glo_btn_space">
+						<div class="fr">
+							<span class="btn_gray"> <a onclick="close();" href="">
+									<span class="txt_btn_start"></span> <span class="txt_btn_center">닫기</span>
+									<span class="txt_btn_end"></span> </a> </span>
+						</div>
+					</div>
+					<!-- 하단버튼영역 //-->
+				</div>
+			</div>
+			<!-- POP //-->
+			<div class="cb">
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">검 토</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">승 인</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">대표이사</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">승 인</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">승 인</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+				<!-- 결재선1 -->
+				<div class="approval_area">
+					<div class="label">승 인</div>
+					<div class="approval"></div>
+					<div class="">
+						<div class="icon_fb_space">
+							<div
+								class="fieldline community_names js_community_names sw_required">
+								<input class="m0 js_auto_complete" type="text"
+									href="community_name.sw">
+							</div>
+							<a class="js_userpicker_button" href=""> <span
+								class="icon_fb_users"></span> </a>
+						</div>
+					</div>
+				</div>
+				<!-- 결재선1 //-->
+			</div>
+		</div>
+	</div>
+	<!-- 결재선 Section //-->
+	<!-- 전자결재 화면이 나타나는 곳 -->
+	<div class="cb">
+		<form class="form_layout js_validation_required" name="frmTaskApproval">
+			<span> <!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 --> <!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
+				<div class="js_task_approval_fields"
+					subjectTitle="<fmt:message key='common.forward.title.subject'/>"
+					subject="<%=subject%>"
+					forwardeeTitle="<fmt:message key='common.forward.title.forwardee'/>"
+					CommentsTitle="<fmt:message key="common.forward.title.comments" />"
+					content="<%=content%>">
+				</div>
+			</span>
+		</form>
+		<div class="dash_line"></div>
+	</div>
+</div>

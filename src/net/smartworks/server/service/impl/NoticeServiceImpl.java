@@ -374,7 +374,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == Notice.TYPE_MAILBOX || noticeType == Notice.TYPE_INVALID) {
 			mailBox = new Notice();
 			mailBox.setType(Notice.TYPE_MAILBOX);
-			mailBox.setLength(0);
+			mailBox.setLength(mailService.getUnreadEmails());
 		}
 		//---------------------------------------------------------------------------------------
 

@@ -1,16 +1,14 @@
 package org.claros.intouch.webmail.controllers;
 
-import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
+
+import net.smartworks.model.mail.MailFolder;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -28,7 +26,6 @@ import org.claros.commons.mail.protocols.ProtocolFactory;
 import org.claros.commons.utility.Formatter;
 import org.claros.intouch.common.utility.Constants;
 import org.claros.intouch.common.utility.Utility;
-import org.claros.intouch.webmail.models.HeaderDbObject;
 import org.claros.intouch.webmail.models.MsgDbObject;
 import org.claros.intouch.webmail.models.FolderDbObject;
 import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
@@ -252,12 +249,13 @@ public class DbFolderControllerImpl implements FolderController {
 	 */
 	public Integer countUnreadMessages(String folder) throws Exception {
 		FolderDbObject foldObj = getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
 			return new Integer(prot.getTotalMessageCount());
 		} else {
+				
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
 			HashMap result = null;
 			String username = auth.getUsername();
@@ -280,7 +278,7 @@ public class DbFolderControllerImpl implements FolderController {
 	 */
 	public Integer countTotalMessages(String folder) throws Exception {
 		FolderDbObject foldObj = getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -309,7 +307,7 @@ public class DbFolderControllerImpl implements FolderController {
 	 */
 	public void emptyFolder(String folder) throws Exception {
 		FolderDbObject foldObj = getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -383,10 +381,10 @@ public class DbFolderControllerImpl implements FolderController {
 	 */
 	public ArrayList getHeadersByFolder(String folder) throws Exception {
 		ArrayList headers = new ArrayList();
-
+		FolderDbObject foldObj = getInboxFolder();
 		List mails = null;
 		
-/*		if (org.claros.commons.mail.utility.Constants.FOLDER_INBOX(null).equals(folder)) {
+		if (false /*org.claros.commons.mail.utility.Constants.FOLDER_INBOX(null).equals(folder)*/) {
 			// it is inbox so we fetch e-mail on the fly
 			ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 			Protocol protocol = factory.getProtocol(folder);
@@ -431,64 +429,17 @@ public class DbFolderControllerImpl implements FolderController {
 				}
 			}
 		} else {
-*/		
-		folder = "1";	
-		mails = getMailsByFolder(folder);
-			if (mails != null) {
-				MsgDbObject item = null;
-				byte bEmail[] = null;
-				Properties props = new Properties();
-				Session session = Session.getDefaultInstance(props);
-				EmailHeader header = null;
-
-				for (int i=0;i<mails.size();i++) {
-					item = (MsgDbObject)mails.get(i);
-					bEmail = item.getEmail();
-
-					ByteArrayInputStream bis = new ByteArrayInputStream(bEmail);
-					MimeMessage msg = new MimeMessage(session, bis);
-					
-					try {
-						header = new EmailHeader();
-
-						header.setMultipart((msg.isMimeType("multipart/*")) ? true : false);
-						header.setMessageId(item.getId().intValue());
-						header.setFrom(msg.getFrom());
-						header.setTo(msg.getRecipients(Message.RecipientType.TO));
-						header.setCc(msg.getRecipients(Message.RecipientType.CC));
-						header.setBcc(msg.getRecipients(Message.RecipientType.BCC));
-						header.setDate(msg.getSentDate());
-						header.setReplyTo(msg.getReplyTo());
-						header.setSize(item.getMsgSize().longValue());
-						header.setSubject(org.claros.commons.utility.Utility.updateTRChars(msg.getSubject()));
-						header.setUnread(item.getUnread());
-	                
-						// now set the human readables.
-						header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
-						header.setFromShown(org.claros.commons.utility.Utility.updateTRChars(org.claros.commons.mail.utility.Utility.addressArrToString(header.getFrom())));
-						header.setToShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getTo()));
-						header.setCcShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getCc()));
-						header.setSizeShown(org.claros.commons.mail.utility.Utility.sizeToHumanReadable(header.getSize()));
-	                
-						// it is time to add it to the arraylist
-						headers.add(header);
-					} catch (MessagingException e1) {
-						log.error("Could not parse headers of e-mail. Message might be defuncted or illegal formatted.", e1);
-					} finally {
-						bis.close();
-					}
-				}
-			//}
+			if(folder == null || folder.equals("") || folder.equals(MailFolder.ID_STRING_INBOX))
+				folder = foldObj.getId().toString();
 			// it is a database folder
-
-			/*IGenericDao dao = null;
+			IGenericDao dao = null;
 			try {
 				Long folderId = new Long(folder);
 				dao = Utility.getDbConnection();
 				String username = auth.getUsername();
 				
-				String sql = "SELECT id, folder_id, unique_id, sender, receiver, cc, bcc, subject, multipart, priority, sentdate, unread, msg_size FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
-				mails = dao.readList(HeaderDbObject.class, sql, new Object[] {username, folderId});
+				String sql = "SELECT id, folder_id, unique_id, sender, receiver, cc, bcc, replyTo, subject, multipart, priority, sentdate, unread, msg_size FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
+				mails = dao.readList(MsgDbObject.class, sql, new Object[] {username, folderId});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -496,45 +447,46 @@ public class DbFolderControllerImpl implements FolderController {
 			dao = null;
 			//mails = getMailsByFolder(folder);
 			if (mails != null) {
-				HeaderDbObject item = null;
+				MsgDbObject item = null;
 				byte bEmail[] = null;
 				Properties props = new Properties();
 				Session session = Session.getDefaultInstance(props);
 				EmailHeader header = null;
-
+	
 				for (int i=0;i<mails.size();i++) {
-					item = (HeaderDbObject)mails.get(i);
-
+					item = (MsgDbObject)mails.get(i);
+	
 					try {
 						header = new EmailHeader();
-						header.setMultipart(item.isMultipart());
+	//					header.setMultipart(item.getMultipart());
 						header.setMessageId(item.getId().intValue());
-						header.setFrom(null);
-						header.setTo(null);
-						header.setCc(null);
-						header.setBcc(null);
-						header.setDate(item.getDate());
-						header.setReplyTo(null);
+						header.setFrom(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getSender()));
+						header.setTo(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getReceiver()));
+						header.setCc(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getCc()));
+						header.setBcc(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getBcc()));
+						header.setDate(item.getSentDate());
+						header.setReplyTo(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getReplyTo()));
 						header.setSize(item.getMsgSize());
 						header.setSubject(org.claros.commons.utility.Utility.updateTRChars(item.getSubject()));
 						header.setUnread(item.getUnread());
-
+	
 						// now set the human readables.
 						header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
 						header.setFromShown(org.claros.commons.utility.Utility.updateTRChars(org.claros.commons.mail.utility.Utility.addressArrToString(header.getFrom())));
 						header.setToShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getTo()));
-						header.setCcShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getCc()));
+						header.setCcShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getReplyTo()));
+						header.setReplyToShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getTo()));
+						header.setBccShown(org.claros.commons.mail.utility.Utility.addressArrToString(header.getBcc()));
 						header.setSizeShown(org.claros.commons.mail.utility.Utility.sizeToHumanReadable(header.getSize()));
-
+	
 						// it is time to add it to the arraylist
 						headers.add(header);
 					} catch (Exception e) {
 						log.error("Could not parse headers of e-mail. Message might be defuncted or illegal formatted.", e);
 					}
 				}
-			}*/
+			}
 		}
-
 		return headers;
 	}
 

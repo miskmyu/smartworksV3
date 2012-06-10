@@ -31,6 +31,8 @@ public class EmailHeader implements Serializable {
 	private String fromShown;
 	private String toShown;
 	private String ccShown;
+	private String bccShown;
+	private String replyToShown;
 	private String dateShown;
     
 	/**
@@ -298,5 +300,21 @@ public class EmailHeader implements Serializable {
 	 */
 	public void setSensitivity(short sensitivity) {
 		this.sensitivity = sensitivity;
+	}
+
+	public String getBccShown() {
+		return bccShown;
+	}
+
+	public void setBccShown(String bccShown) {
+		this.bccShown = bccShown;
+	}
+
+	public String getReplyToShown() {
+		return replyToShown;
+	}
+
+	public void setReplyToShown(String replyToShown) {
+		this.replyToShown = replyToShown;
 	}
 }

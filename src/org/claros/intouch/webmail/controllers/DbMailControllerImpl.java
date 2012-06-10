@@ -67,7 +67,7 @@ public class DbMailControllerImpl implements MailController {
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
 		FolderController cont = fact.getFolderController();
 		FolderDbObject foldObj = cont.getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -137,7 +137,7 @@ public class DbMailControllerImpl implements MailController {
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
 		FolderController cont = fact.getFolderController();
 		FolderDbObject foldObj = cont.getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -178,7 +178,7 @@ public class DbMailControllerImpl implements MailController {
 			throw new SystemException();
 		} 
 		
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -269,7 +269,7 @@ public class DbMailControllerImpl implements MailController {
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
 		FolderController cont = fact.getFolderController();
 		FolderDbObject foldObj = cont.getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			// do nothing
 		} else {
@@ -317,7 +317,7 @@ public class DbMailControllerImpl implements MailController {
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
 		FolderController cont = fact.getFolderController();
 		FolderDbObject foldObj = cont.getInboxFolder();
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();
@@ -342,7 +342,7 @@ public class DbMailControllerImpl implements MailController {
 			throw new SystemException();
 		} 
 		
-		if (foldObj.getId().toString().equals(folder)) {
+		if (false /*foldObj.getId().toString().equals(folder)*/) {
 			// it is the INBOX
 			ProtocolFactory pFact = new ProtocolFactory(profile, auth, handler);
 			Protocol prot = pFact.getPop3();

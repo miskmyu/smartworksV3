@@ -3,6 +3,7 @@ package org.claros.commons.mail.protocols;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -17,6 +18,11 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.search.ComparisonTerm;
+import javax.mail.search.FlagTerm;
+import javax.mail.search.ReceivedDateTerm;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SentDateTerm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -144,10 +150,19 @@ public class Pop3ProtocolImpl implements Protocol {
 			closeFolder(fold);
 			fold = getFolder();
 			
+			Date fromDate = new Date((new Date()).getTime() - (1000*60*60*24*7));
+			
 			headers = new ArrayList();
+			
 			EmailHeader header = null;
-            
-			Message[] msgs = fold.getMessages();
+			Message[] msgs = null;
+            if(fromDate == null){
+    			msgs = fold.getMessages();
+            }else{
+            	SearchTerm newerThen = new ReceivedDateTerm(ComparisonTerm.LE,fromDate);
+	            msgs = fold.search(newerThen);
+    			msgs = fold.getMessages();
+            }
 			FetchProfile fp = new FetchProfile();
 			fp.add(FetchProfile.Item.ENVELOPE);
 			fp.add(FetchProfile.Item.FLAGS);
@@ -155,14 +170,6 @@ public class Pop3ProtocolImpl implements Protocol {
 			fp.add("Size");
 			fp.add("Date");
 			
-//			Message[] tempMsgs = new Message[20];
-//			int msgSize = msgs.length;
-//			for(int i=20; i>0; i--){
-//				tempMsgs[i-1] = msgs[msgSize-1];
-//				msgSize--;
-//			}
-//			fold.fetch(tempMsgs, fp);
-
 			fold.fetch(msgs, fp);
 
 			Message msg = null;
@@ -186,7 +193,9 @@ public class Pop3ProtocolImpl implements Protocol {
 					header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
 					header.setFromShown(Utility.addressArrToString(header.getFrom()));
 					header.setToShown(Utility.addressArrToString(header.getTo()));
+					header.setReplyToShown(Utility.addressArrToString(header.getReplyTo()));
 					header.setCcShown(Utility.addressArrToString(header.getCc()));
+					header.setBccShown(Utility.addressArrToString(header.getBcc()));
 					header.setSizeShown(Utility.sizeToHumanReadable(header.getSize()));
                     
 					// it is time to add it to the arraylist

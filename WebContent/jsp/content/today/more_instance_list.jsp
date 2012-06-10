@@ -89,9 +89,6 @@ if (instances != null) {
 		UserInfo owner = workInstance.getOwner();
 		String userDetailInfo = SmartUtil.getUserDetailInfo(owner);
 		SmartWorkInfo work = (SmartWorkInfo) workInstance.getWork();
-		String runningTaskName = "";
-		if (taskInstance != null)
-			runningTaskName = taskInstance.getName();
 
 		// 인스턴스가 할당태스크인 경우 중에...
 		if (isAssignedTask) {
@@ -154,7 +151,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.itask_assigned">
 							<fmt:param>
 								<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
-									<span class='t_woname'><%=runningTaskName%></span> 
+									<span class='t_woname'><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -166,7 +163,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.itask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span>
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span>
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -178,7 +175,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.ptask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -190,7 +187,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.ptask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -202,7 +199,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -214,7 +211,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -226,7 +223,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -238,7 +235,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=runningTaskName%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -259,7 +256,7 @@ if (instances != null) {
 						boolean firstRun = true;
 						for (TaskInstanceInfo assignedTask : assignedTasks) {
 							UserInfo assignee = assignedTask.getAssignee();
-							runningTaskName = assignedTask.getName();
+							String runningTaskName = assignedTask.getName();
 							if (firstRun) {
 								firstRun = false;
 							} else {
@@ -290,7 +287,7 @@ if (instances != null) {
 						UserInfo forwardee = forwardedTasks[0].getAssignee();
 						String userContextId = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + forwardee.getId();
 						String forwardedContextId = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + forwardee.getId();
-						runningTaskName = forwardedTasks[0].getName();
+						String runningTaskName = forwardedTasks[0].getName();
 						if (assignedTasks != null) {
 					%>
 							<fmt:message key="content.sentence.and_also" />
