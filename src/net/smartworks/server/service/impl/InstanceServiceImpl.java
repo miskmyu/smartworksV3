@@ -136,6 +136,7 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -1957,16 +1958,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			if (workType == SmartWork.TYPE_INFORMATION || workType == SocialWork.TYPE_MEMO || workType == SocialWork.TYPE_EVENT || workType == SocialWork.TYPE_BOARD
 					 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_YTVIDEO) {
-				if (tskTask != null)
+				if (tskTask != null) {
+					PublishNotice pubNoticeObj = new PublishNotice(tskTask.getAssignee(), PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_COMMENT_INFORWORK, opinion.getObjId());
+					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType(tskTask.getAssignee(), Notice.TYPE_COMMENT);
+				}
 			} else if (workType == SmartWork.TYPE_PROCESS) {
 				TskTaskCond cond = new TskTaskCond();
 				cond.setProcessInstId(workInstanceId);
 				cond.setType(TskTask.TASKTYPE_COMMON);
 				TskTask[] tasks = getTskManager().getTasks(userId, cond, IManager.LEVEL_LITE);
 				if (tasks != null) {
+					List assigneeIdList = new ArrayList();
 					for (int i = 0; i < tasks.length; i++) {
-						SmartUtil.increaseNoticeCountByNoticeType(tasks[i].getAssignee(), Notice.TYPE_COMMENT);
+						if (!assigneeIdList.contains(tasks[i].getAssignee())) {
+							PublishNotice pubNoticeObj = new PublishNotice(tasks[i].getAssignee(), PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_COMMENT_INFORWORK, opinion.getObjId());
+							SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+							SmartUtil.increaseNoticeCountByNoticeType(tasks[i].getAssignee(), Notice.TYPE_COMMENT);
+							assigneeIdList.add(tasks[i].getAssignee());
+						}
 					}
 				}
 			}
@@ -5955,6 +5965,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
 				getTskManager().executeTask(userId, task, action);
+				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 			}
 			if (logger.isInfoEnabled()) {
 				logger.info(action + " Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
@@ -6322,6 +6333,8 @@ public class InstanceServiceImpl implements IInstanceService {
 					
 					getMessageManager().createMessage(senderId, msg);
 
+					PublishNotice pubNoticeObj = new PublishNotice((String)receivers.get(index), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, msg.getObjId());
+					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
 				}
 			}

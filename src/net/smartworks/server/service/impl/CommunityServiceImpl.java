@@ -51,6 +51,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
@@ -907,8 +908,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
 		
-		if (isNoticeToGroupLeader)
+		if (isNoticeToGroupLeader) {
+			PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
+		}	
 	}
 
 	/*

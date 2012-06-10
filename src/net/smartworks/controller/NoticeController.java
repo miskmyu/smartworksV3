@@ -67,7 +67,7 @@ public class NoticeController {
 	@RequestMapping("/remove_notice_instance")
 	public ModelAndView remove_notice_instance(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String removeNoticeId = request.getParameter("noticeId");
+		String removeNoticeId = request.getParameter("removeNoticeId");
 		String noticeType = request.getParameter("noticeType");
 		String lastNoticeId = request.getParameter("lastNoticeId");
 		
