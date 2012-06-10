@@ -1205,11 +1205,13 @@ $(function() {
 	$('a.js_view_my_running_instances').live('click',function(e) {
 		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');
-		var target = input.parents('.js_my_running_instance_list_page').find('table');  
+		var target = input.parents('.js_my_running_instance_list_page').find('table');
+		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();  
 		$.ajax({
 			url : 'more_instance_list.sw',
 			data : {
-				assignedOnly : false
+				assignedOnly : false,
+				searchKey : searchKey
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);
@@ -1225,10 +1227,12 @@ $(function() {
 		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');
 		var target = input.parents('.js_my_running_instance_list_page').find('table');  
+		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();
 		$.ajax({
 			url : 'more_instance_list.sw',
 			data : {
-				assignedOnly : true
+				assignedOnly : true,
+				searchKey : searchKey
 			},
 			success : function(data, status, jqXHR) {
 				target.html(data);

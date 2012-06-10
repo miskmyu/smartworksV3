@@ -336,18 +336,31 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 		cond.setType("SINGLE");
 		cond.setForm(formId);
 		cond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
-		Set exeStatusSet = MisUtil.taskExecutedStatusSet();
-		if (CommonUtil.isEmpty(exeStatusSet))
-			return;
-		String[] exeStatuses = new String[exeStatusSet.size()];
-		exeStatusSet.toArray(exeStatuses);
-		cond.setStatusNotIns(exeStatuses);
+		//Set exeStatusSet = MisUtil.taskExecutedStatusSet();
+		//if (CommonUtil.isEmpty(exeStatusSet))
+		//	return;
+		//String[] exeStatuses = new String[exeStatusSet.size()];
+		//exeStatusSet.toArray(exeStatuses);
+		//cond.setStatusNotIns(exeStatuses);
 		TskTask[] tasks = getTskManager().getTasks(user, cond, null);
 		if (CommonUtil.isEmpty(tasks))
 			return;
 		
-		for (TskTask task : tasks)
+		List prcInstIdList = new ArrayList();
+		for (TskTask task : tasks) {
+			String prcInstId = task.getProcessInstId();
 			getTskManager().removeTask(user, task.getObjId());
+			if (!prcInstIdList.contains(prcInstId)) {
+				prcInstIdList.add(prcInstId);
+			}
+		}
+		if (prcInstIdList == null || prcInstIdList.size() == 0)
+			return;
+		
+		for (int i = 0; i < prcInstIdList.size(); i++) {
+			
+			getPrcManager().removeProcessInst(user, (String)prcInstIdList.get(i));
+		}
 	}
 
 	private List<SwfField> getMappingFieldList(SwfForm form, String type) {

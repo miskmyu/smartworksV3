@@ -450,6 +450,51 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
+		
+		try{
+			//정보관리업무에서 파생된 업무는 IWInstanceInfo
+			//프로세스 태스크및 프로세스에서 파생된 업무는 PWInstanceInfo
+			
+			User user = SmartUtil.getCurrentUser();
+			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
+				return null;
+	
+			TaskWorkCond taskCond = new TaskWorkCond();
+			if (assignedOnly) {
+				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+				taskCond.setTskAssignee(user.getId());
+			} else {
+				taskCond.setTskStartOrAssigned(user.getId());
+			}
+			if (lastInstanceDate != null) {
+				taskCond.setLastInstanceDate(lastInstanceDate);
+			} else {
+				taskCond.setLastInstanceDate(new LocalDate());
+			}
+			if (params != null) {
+				if (!CommonUtil.isEmpty(params.getSearchKey())) {
+					taskCond.setSearchKey(params.getSearchKey());
+				}
+			}
+			taskCond.setPageNo(0);
+			taskCond.setPageSize(requestSize);
+			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			
+			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
+			
+			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+			
+			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+			return null;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+		
+	}
 	/*
 	 * 
 	 * 현재사용자의 진행중인 업무, 즉 현재사용자에게 할당된 태스크들과 현재사용자가 시작한 업무중 진행중인 업무를 가져다 주는 서비스로,
@@ -470,42 +515,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	 */
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
 
-		try{
-			//정보관리업무에서 파생된 업무는 IWInstanceInfo
-			//프로세스 태스크및 프로세스에서 파생된 업무는 PWInstanceInfo
-	
-			User user = SmartUtil.getCurrentUser();
-			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
-				return null;
-	
-			TaskWorkCond taskCond = new TaskWorkCond();
-			if (assignedOnly) {
-				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
-				taskCond.setTskAssignee(user.getId());
-			} else {
-				taskCond.setTskStartOrAssigned(user.getId());
-			}
-			if (lastInstanceDate != null) {
-				taskCond.setLastInstanceDate(lastInstanceDate);
-			} else {
-				taskCond.setLastInstanceDate(new LocalDate());
-			}
-			taskCond.setPageNo(0);
-			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-			
-			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
-			
-			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
-			
-			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
-			return null;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}
+		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, null);
 	}
 
 	/*
@@ -1803,7 +1813,24 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setFormId(swfForms[0].getId());
 			swdRecordCond.setRecordId(instanceId);
 	
-			getSwdManager().removeRecord(user.getId(), swdRecordCond);
+			//getSwdManager().removeRecord(user.getId(), swdRecordCond);
+			
+			// 삭제할 레코드 조회
+			SwdRecord record = getSwdManager().getRecord(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+			if (record == null)
+				return;
+			
+			// 삭제할 도메인 아이디 조회
+			String domainId = record.getDomainId();
+			if (domainId == null) {
+				SwdDomainCond domainCond = new SwdDomainCond();
+				domainCond.setFormId(record.getFormId());
+				SwdDomain domain = getSwdManager().getDomain(user.getId(), domainCond, IManager.LEVEL_LITE);
+				domainId = domain.getObjId();
+			}
+
+			getSwdManager().removeRecord(user.getId(), record.getDomainId(), record.getRecordId());
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
