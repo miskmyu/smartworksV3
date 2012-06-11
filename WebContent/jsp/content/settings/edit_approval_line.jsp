@@ -154,29 +154,25 @@
 									<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
 									<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
 								</select>
-								<div class="js_type_userField" fieldId="usrLevelApprover<%=count %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
-									<div class="icon_fb_space form_value" >
-										<div class="fieldline community_names js_community_names sw_required">
-											<div class="js_selected_communities user_sel_area">
+								<div class="form_col js_type_userField" fieldId="usrLevelApprover<%=count %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
+									<div class="form_value">
+										<div class="icon_fb_space" >
+											<div class="fieldline community_names js_community_names sw_required">
 												<%
 												if(!SmartUtil.isBlankObject(approval.getApprover())){
 												%>
-													<span>
-														<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %><span class='btn_x_gr'>
-															<a class='js_remove_community' href=''> x</a>
-														</span></span>
-													</span>									
+													<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
+														<a class='js_remove_community' href=''> x</a>
+													</span>
 												<%
 												}
 												%>
+												<input class="m0 js_auto_complete" style="width:100px" href="user_name.sw" type="text">
 											</div>
-											<input class="js_auto_complete" href="user_name.sw" type="text">
-											<div class="js_srch_x"></div>
+											<div class="js_community_list srch_list_nowid" style="display: none"></div>
+											<span class="js_community_popup"></span>
+											<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
 										</div>
-										<div class="js_community_list srch_list_nowid" style="display: none"></div>
-										<span class="js_community_popup"></span>
-										<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
-									</div>
 								</div>								
 							</td>
 					<%
