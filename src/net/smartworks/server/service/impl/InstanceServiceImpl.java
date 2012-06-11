@@ -121,6 +121,9 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
+import net.smartworks.server.engine.pkg.manager.IPkgManager;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
+import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -129,8 +132,6 @@ import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
-import net.smartworks.server.engine.process.process.model.PrcSwProcess;
-import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -166,6 +167,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	private IPrcManager getPrcManager() {
 		return SwManagerFactory.getInstance().getPrcManager();
+	}
+	private IPkgManager getPkgManager() {
+		return SwManagerFactory.getInstance().getPkgManager();
 	}
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
@@ -3439,29 +3443,58 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}
 
-			String resourceId = null;
-			PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
-			prcSwProcessCond.setPackageId(workId);
-			PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses("", prcSwProcessCond);
-			if(!CommonUtil.isEmpty(swProcesses)) {
-				PrcSwProcess swProcess = swProcesses[0];
-				resourceId = swProcess.getProcessId();
-			}
+			PkgPackageCond pkgPackageCond = new PkgPackageCond();
+			pkgPackageCond.setPackageId(workId);
+			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
 
-			if(!ModelConverter.isAccessibleAllInstance(resourceId, userId))
+			if(!ModelConverter.isAccessibleAllInstance(ModelConverter.getResourceIdByPkgPackage(pkgPackage), userId))
 				prcInstCond.setCreationUser(userId);
 
-			/*SwaResourceCond swaResourceCond = new SwaResourceCond();
-			swaResourceCond.setResourceId(resourceId);
-			swaResourceCond.setMode("R");
-			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
-			String permission = null;
-			if(swaResource != null) {
-				permission = swaResource.getPermission();
-				if(permission.equals(SwaResource.PERMISSION_NO)) {
-					prcInstCond.setCreationUser(userId);
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
 				}
-			}*/
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				prcInstCond.setPageNo(currentPage-1);
+
+			prcInstCond.setPageSize(pageSize);
 
 			SortingField sf = params.getSortingField();
 
@@ -3492,90 +3525,20 @@ public class InstanceServiceImpl implements IInstanceService {
 				sfColumnNameTemp = "prcCreateDate";
 			}
 
-			//long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
 			prcInstCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
-			PrcProcessInstExtend[] totalPrcInsts = getPrcManager().getProcessInstExtends(userId, prcInstCond);
-			List<PrcProcessInstExtend> prcProcessInstExtendList = new ArrayList<PrcProcessInstExtend>();
-			PrcProcessInstExtend[] finalPrcInsts = null;
-			int viewCount = 0;
-			if(!CommonUtil.isEmpty(totalPrcInsts)) {
-				for(PrcProcessInstExtend totalPrcInst : totalPrcInsts) {
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalPrcInst);
-					if(isAccessForMe) {
-						viewCount = viewCount + 1;
-						prcProcessInstExtendList.add(totalPrcInst);
-					}
-				}
-				if(prcProcessInstExtendList.size() > 0) {
-					finalPrcInsts = new PrcProcessInstExtend[prcProcessInstExtendList.size()];
-					prcProcessInstExtendList.toArray(finalPrcInsts);
-				}
-			}
 
-			int pageSize = params.getPageSize();
-			if(pageSize == 0) pageSize = 20;
-
-			int currentPage = params.getCurrentPage();
-			if(currentPage == 0) currentPage = 1;
-
-/*			int totalPages = (int)totalCount % pageSize;
-
-			if(totalPages == 0)
-				totalPages = (int)totalCount / pageSize;
-			else
-				totalPages = (int)totalCount / pageSize + 1;*/
-
-			int totalPages = viewCount % pageSize;
-			
-			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
-			else
-				totalPages = viewCount / pageSize + 1;
-
-			int result = 0;
-
-			if(params.getPagingAction() != 0) {
-				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
-					result = (((currentPage - 1) / 10) * 10) + 11;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
-					result = totalPages;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
-					result = ((currentPage - 1) / 10) * 10;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
-					result = 1;
-				}
-				currentPage = result;
-			}
-
-			if(previousPageSize != pageSize)
-				currentPage = 1;
-
-			previousPageSize = pageSize;
-
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
-				currentPage = 1;
-
-			/*if (currentPage > 0)
-				swdRecordCond.setPageNo(currentPage-1);
-
-			swdRecordCond.setPageSize(pageSize);*/
-
-			int pageNo = currentPage-1;
+			PrcProcessInstExtend[] processInstExtends = getPrcManager().getProcessInstExtends(userId, prcInstCond);
 
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 
 			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
 			PWInstanceInfo[] pWInstanceInfos = null;
 
-			int startLength = pageNo * pageSize;
-			int endLength = startLength + pageSize;
-
-			if(!CommonUtil.isEmpty(finalPrcInsts) && startLength < finalPrcInsts.length) {
-				if(endLength > finalPrcInsts.length)
-					endLength = finalPrcInsts.length;
-				for(int i=startLength; i<endLength; i++) {
+			if(!CommonUtil.isEmpty(processInstExtends)) {
+				int length = processInstExtends.length;
+				for(int i=0; i<length; i++) {
 					PWInstanceInfo pwInstInfo = new PWInstanceInfo();
-					PrcProcessInstExtend prcInst = finalPrcInsts[i];
+					PrcProcessInstExtend prcInst = processInstExtends[i];
 					pwInstInfo.setId(prcInst.getPrcObjId());
 					pwInstInfo.setOwner(ModelConverter.getUserInfoByUserId(prcInst.getPrcCreateUser()));
 					int status = -1;
@@ -3748,13 +3711,13 @@ public class InstanceServiceImpl implements IInstanceService {
 	//		instanceInfoList.setInstanceDatas(ModelConverter.getPWInstanceInfoArrayByPrcProcessInstArray(prcInsts));
 			instanceInfoList.setInstanceDatas(pWInstanceInfos);
 			instanceInfoList.setPageSize(pageSize);
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sf);
 			instanceInfoList.setTotalPages(totalPages);
 			instanceInfoList.setCurrentPage(currentPage);
 			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
 			return instanceInfoList;
-		}catch (Exception e){
+		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
