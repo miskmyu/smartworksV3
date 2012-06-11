@@ -51,6 +51,8 @@ public class InformationWorkInstance extends WorkInstance {
 	
 	public int getNumberOfHistories(){
 		int numberOfHistories = 0;
+		if (this.getTasks() == null)
+			return numberOfHistories;
 		for(TaskInstanceInfo task : (TaskInstanceInfo[])this.getTasks()){
 			if(task.getType() == TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED || task.getType() == TaskInstance.TYPE_INFORMATION_TASK_CREATED
 				|| task.getType() == TaskInstance.TYPE_INFORMATION_TASK_UDATED){

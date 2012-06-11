@@ -121,6 +121,8 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
+import net.smartworks.server.engine.process.approval.model.AprApproval;
+import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -1462,6 +1464,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			key Set : formId
 			key Set : formName
 			key Set : frmTaskForward
+			key Set : frmApprovalLine
+			key Set : frmTaskApproval
 			*/
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
@@ -1536,10 +1540,23 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
 						refRecordId = (String)valueMap.get("refRecordId");
-						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
-						swoDepartmentCond.setId(refRecordId);
-						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
-						value = deptName;
+						
+						SwdRecordCond cond = new SwdRecordCond();
+						cond.setFormId(refForm);
+						//cond.setReferencedFormId(refFormField);
+						cond.setRecordId(refRecordId);
+						
+						SwdRecord refRecord = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
+						
+						if (refRecord != null) {
+							value = refRecord.getDataFieldValue(refFormField);
+						}
+						
+//						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+//						swoDepartmentCond.setId(refRecordId);
+//						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
+//						value = deptName;
+					
 					} else if(!CommonUtil.isEmpty(users)) {
 						refForm = "frm_user_SYSTEM";
 						refFormField = "4";
@@ -1708,40 +1725,81 @@ public class InstanceServiceImpl implements IInstanceService {
 				recId = CommonUtil.newId();
 				obj.setRecordId(recId);
 			}
-//			AprApprovalLine apprLine = new AprApprovalLine();
-//			apprLine.setStatus("created");
-//			
-//			AprApproval[] approvals = new AprApproval[3];
-//			AprApproval apr1 = new AprApproval();
-//			apr1.setName("firstApprovalName");
-//			apr1.setType("1th");
-//			apr1.setApprover("kmyu@maninsoft.co.kr");
-//			apr1.setMandatory(true);
-//			apr1.setModifiable(true);
-//			
-//			AprApproval apr2 = new AprApproval();
-//			apr2.setName("secondApprovalName");
-//			apr2.setType("2th");
-//			apr2.setApprover("kmyu@maninsoft.co.kr");
-//			apr2.setMandatory(true);
-//			apr2.setModifiable(true);
-//			
-//			AprApproval apr3 = new AprApproval();
-//			apr3.setName("thirdApprovalName");
-//			apr3.setType("3th");
-//			apr3.setApprover("kmyu@maninsoft.co.kr");
-//			apr3.setMandatory(true);
-//			apr3.setModifiable(true);
-//			
-//			approvals[0] = apr1;
-//			approvals[1] = apr2;
-//			approvals[2] = apr3;
-//			
-//			apprLine.setApprovals(approvals);
-//			apprLine.setExtendedPropertyValue("recordId", recId);
-//			SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
-//			obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
 			
+			Map<String, Object> frmApprovalLine = (Map<String, Object>)requestBody.get("frmApprovalLine");
+		
+			if (frmApprovalLine != null) {
+				Iterator appLineItr = frmApprovalLine.keySet().iterator();
+				
+				String hdnApprovalLineId = null;
+				Map<String, Map<String, String>> appLineSortingMap = new HashMap<String, Map<String, String>>();
+				while (appLineItr.hasNext()) {
+					String key = (String)appLineItr.next();
+					if (key.equalsIgnoreCase("hdnApprovalLineId")) {
+						hdnApprovalLineId = (String)frmApprovalLine.get(key);
+						continue;
+					}
+					//key - usrLevelApprover1, usrLevelApprover2, usrLevelApprover3 ......
+					String keyIndex = StringUtils.replace(key, "usrLevelApprover", "");
+					Object value = frmApprovalLine.get(key);
+					
+					if (value instanceof String) {
+						Map userMap = new HashMap();
+						userMap.put("id", (String)value);
+						appLineSortingMap.put(keyIndex, userMap);
+					} else if (value instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)value;
+						ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(userArray)) {
+							
+							Map userMap = new HashMap();
+							userMap.put("id", (String)userArray.get(0).get("id"));
+							userMap.put("name", (String)userArray.get(0).get("name"));
+							appLineSortingMap.put(keyIndex, userMap);
+						}
+					}
+				}
+				
+				Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
+				String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
+				String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
+				
+				//TODO 전자결재 참조업무 생성
+//				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
+//				ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+				
+				if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
+
+					AprApprovalLine apprLine = new AprApprovalLine();
+					apprLine.setStatus("created");
+
+					AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
+					
+					for (int i = 1; i <= appLineSortingMap.size(); i++) {
+						
+						Map userMap = appLineSortingMap.get(i+"");
+						String id = (String)userMap.get("id");
+						String name = (String)userMap.get("name");
+
+						AprApproval apr = new AprApproval();
+						apr.setName(i + "단 결재(임시)");
+						apr.setType(i + "단 결재(임시)");
+						apr.setApprover(id);
+						apr.setMandatory(true);
+						apr.setModifiable(true);
+						
+						approvals[i-1] = apr;
+					}
+					apprLine.setApprovals(approvals);
+					apprLine.setExtendedPropertyValue("recordId", recId);
+
+					obj.setExtendedAttributeValue("txtApprovalSubject", txtApprovalSubject);
+					obj.setExtendedAttributeValue("txtApprovalComments", txtApprovalComments);
+					
+					SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+					obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+				}
+			}
 			// 전자결재 업무 끝
 
 			//TODO 좋은방법이 멀까?
@@ -2220,13 +2278,21 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
 						refRecordId = (String)valueMap.get("refRecordId");
-						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
-						swoDepartmentCond.setId(refRecordId);
-						String deptName = "";
-						SwoDepartment swoDepartment = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE);
-						if(swoDepartment != null)
-							deptName = swoDepartment.getName();
-						value = deptName;
+						SwdRecordCond cond = new SwdRecordCond();
+						cond.setFormId(refForm);
+						cond.setRecordId(refRecordId);
+						SwdRecord refRecord = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
+						
+						if (refRecord != null) {
+							value = refRecord.getDataFieldValue(refFormField);
+						}
+//						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+//						swoDepartmentCond.setId(refRecordId);
+//						String deptName = "";
+//						SwoDepartment swoDepartment = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE);
+//						if(swoDepartment != null)
+//							deptName = swoDepartment.getName();
+//						value = deptName;
 					} else if(!CommonUtil.isEmpty(users)) {
 						refFormField = "frm_user_SYSTEM"; 
 						String resultRefRecordId = "";
@@ -5645,7 +5711,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
-			return null;			
+			throw e;			
 			// Exception Handling Required			
 		}
 	}

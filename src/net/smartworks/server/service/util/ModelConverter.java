@@ -360,8 +360,9 @@ public class ModelConverter {
 //					wsInfo = getWorkSpaceInfo(wsType, wsId);
 					subject = tskTask.getTitle();
 					domainId = swdRecord.getDomainId();
-					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
-					String formId = swdDomain.getFormId();
+//					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
+//					String formId = swdDomain.getFormId();
+					String formId = swdRecord.getFormId();
 					SwfFormCond swfFormCond = new SwfFormCond();
 					swfFormCond.setId(formId);
 					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
