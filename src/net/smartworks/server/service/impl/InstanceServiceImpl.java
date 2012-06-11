@@ -6501,7 +6501,35 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		
+		//태스크인스턴스 아이디를 이용하여 저장 되어 있는 태스크를 조회 하고 실행 가능 여부를 판단한다
+		String taskInstId = (String)requestBody.get("taskInstId");
+		String comments = (String)requestBody.get("comments");
+		
+		if (CommonUtil.isEmpty(taskInstId))
+			throw new Exception("TaskId ("+taskInstId+") Is Null");
+		TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
+		if (task == null)
+			throw new Exception("Not Exist Task : taskId = " + taskInstId);
+		if (!task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN))
+			throw new Exception("Task Is Not Executable Status : taskId = " + taskInstId +" (status - " + task.getStatus() + ")");
+		if (!task.getAssignee().equalsIgnoreCase(userId)) 
+			throw new Exception("Task is Not Executable Assignee : taskId = " + taskInstId + " (assignee - " + task.getAssignee() + " But performer - " + userId + ")");
+		if (!task.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
+			throw new Exception("Task is Not ReferenceTask : taskId = " + task.getObjId() + ", type = " + task.getType());
+		
+		//태스크의 실제 완료 시간을 입력한다
+		if (task.getRealStartDate() == null)
+			task.setRealStartDate(new LocalDate(new Date().getTime()));
+		task.setRealEndDate(new LocalDate(new Date().getTime()));
+		
+		//참조의견을 저장한다
+		task.setDocument(comments);
+		
+		getTskManager().executeTask(userId, task, "execute");
+		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 	}
 }
