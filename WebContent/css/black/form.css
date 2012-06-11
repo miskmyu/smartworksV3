@@ -107,6 +107,14 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .icon_file_xlsx {background: url("../../images/file/icon_xlsx.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 .icon_file_zip {background: url("../../images/file/icon_zip.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 
+/* File Layer Popup */
+#sw_pop_files_detail {width:100%}
+#sw_pop_files_detail .pop_corner_all {padding:5px}
+#sw_pop_files_detail li {clear:both; padding: 5px 0 0 0}
+#sw_pop_files_detail li > span {float:left}
+#sw_pop_files_detail li .qq-upload-file {float:left; margin:0}
+#sw_pop_files_detail li .qq-upload-size {clear:both; color:#999897; display: block; margin: 0 0 0 20px}
+
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 

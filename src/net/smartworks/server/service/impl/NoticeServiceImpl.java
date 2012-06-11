@@ -480,6 +480,7 @@ public class NoticeServiceImpl implements INoticeService {
 			User user = SmartUtil.getCurrentUser();
 			PublishNoticeCond pubNotiCond = new PublishNoticeCond();
 			pubNotiCond.setRefId(noticeId);
+			pubNotiCond.setAssignee(user.getId());
 
 			PublishNotice notice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
 			if (CommonUtil.isEmpty(notice))
