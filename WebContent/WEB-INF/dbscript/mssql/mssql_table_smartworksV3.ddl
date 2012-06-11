@@ -2300,6 +2300,7 @@ CREATE TABLE folder_db_objects (
 
 CREATE TABLE msg_db_objects (
     id bigint IDENTITY(1,1) NOT NULL,
+    uid varchar(100) NOT NULL,
     username varchar(255) NOT NULL,
     folder_id bigint NOT NULL,
     unique_id varchar(100) NOT NULL,
@@ -2309,7 +2310,7 @@ CREATE TABLE msg_db_objects (
     bcc varchar(8000),
     replyTo varchar(255),
     subject varchar(255),
-    multipart bit,
+    multipart smallint,
     priority int,
     sentdate datetime,
     unread smallint NOT NULL,
@@ -2317,6 +2318,9 @@ CREATE TABLE msg_db_objects (
     email varbinary(max) NOT NULL,
     primary key (id)
 );
+
+ALTER TABLE msg_db_objects add uid varchar(100);
+ALTER TABLE msg_db_objects alter column multipart smallint;
 
 CREATE TABLE msg_rules (
     id bigint IDENTITY(1,1) NOT NULL,

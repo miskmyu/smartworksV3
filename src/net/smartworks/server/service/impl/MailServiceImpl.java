@@ -1301,7 +1301,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 				// action time
 				if (profile.getProtocol().equals(Constants.POP3)) {
-					if (false /*Long.toString(fItem.getId()).equals(folderId)*/) {
+					if (Long.toString(fItem.getId()).equals(folderId)) {
 						mailCont.deleteEmails(msgs);
 					} else {
 						mailCont.moveEmails(msgs, "" + fItem.getId());

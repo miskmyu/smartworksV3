@@ -121,6 +121,11 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
+import net.smartworks.server.engine.process.approval.model.AprApproval;
+import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
+import net.smartworks.server.engine.pkg.manager.IPkgManager;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
+import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -129,14 +134,13 @@ import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
-import net.smartworks.server.engine.process.process.model.PrcSwProcess;
-import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
+import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -165,6 +169,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	private IPrcManager getPrcManager() {
 		return SwManagerFactory.getInstance().getPrcManager();
+	}
+	private IPkgManager getPkgManager() {
+		return SwManagerFactory.getInstance().getPkgManager();
 	}
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
@@ -1461,6 +1468,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			key Set : formId
 			key Set : formName
 			key Set : frmTaskForward
+			key Set : frmApprovalLine
+			key Set : frmTaskApproval
 			*/
 			Map<String, Object> frmSmartFormMap = (Map<String, Object>)requestBody.get("frmSmartForm");
 			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
@@ -1535,10 +1544,23 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
 						refRecordId = (String)valueMap.get("refRecordId");
-						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
-						swoDepartmentCond.setId(refRecordId);
-						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
-						value = deptName;
+						
+						SwdRecordCond cond = new SwdRecordCond();
+						cond.setFormId(refForm);
+						//cond.setReferencedFormId(refFormField);
+						cond.setRecordId(refRecordId);
+						
+						SwdRecord refRecord = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
+						
+						if (refRecord != null) {
+							value = refRecord.getDataFieldValue(refFormField);
+						}
+						
+//						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+//						swoDepartmentCond.setId(refRecordId);
+//						String deptName = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE).getName();
+//						value = deptName;
+					
 					} else if(!CommonUtil.isEmpty(users)) {
 						refForm = "frm_user_SYSTEM";
 						refFormField = "4";
@@ -1707,40 +1729,81 @@ public class InstanceServiceImpl implements IInstanceService {
 				recId = CommonUtil.newId();
 				obj.setRecordId(recId);
 			}
-//			AprApprovalLine apprLine = new AprApprovalLine();
-//			apprLine.setStatus("created");
-//			
-//			AprApproval[] approvals = new AprApproval[3];
-//			AprApproval apr1 = new AprApproval();
-//			apr1.setName("firstApprovalName");
-//			apr1.setType("1th");
-//			apr1.setApprover("kmyu@maninsoft.co.kr");
-//			apr1.setMandatory(true);
-//			apr1.setModifiable(true);
-//			
-//			AprApproval apr2 = new AprApproval();
-//			apr2.setName("secondApprovalName");
-//			apr2.setType("2th");
-//			apr2.setApprover("kmyu@maninsoft.co.kr");
-//			apr2.setMandatory(true);
-//			apr2.setModifiable(true);
-//			
-//			AprApproval apr3 = new AprApproval();
-//			apr3.setName("thirdApprovalName");
-//			apr3.setType("3th");
-//			apr3.setApprover("kmyu@maninsoft.co.kr");
-//			apr3.setMandatory(true);
-//			apr3.setModifiable(true);
-//			
-//			approvals[0] = apr1;
-//			approvals[1] = apr2;
-//			approvals[2] = apr3;
-//			
-//			apprLine.setApprovals(approvals);
-//			apprLine.setExtendedPropertyValue("recordId", recId);
-//			SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
-//			obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
 			
+			Map<String, Object> frmApprovalLine = (Map<String, Object>)requestBody.get("frmApprovalLine");
+		
+			if (frmApprovalLine != null) {
+				Iterator appLineItr = frmApprovalLine.keySet().iterator();
+				
+				String hdnApprovalLineId = null;
+				Map<String, Map<String, String>> appLineSortingMap = new HashMap<String, Map<String, String>>();
+				while (appLineItr.hasNext()) {
+					String key = (String)appLineItr.next();
+					if (key.equalsIgnoreCase("hdnApprovalLineId")) {
+						hdnApprovalLineId = (String)frmApprovalLine.get(key);
+						continue;
+					}
+					//key - usrLevelApprover1, usrLevelApprover2, usrLevelApprover3 ......
+					String keyIndex = StringUtils.replace(key, "usrLevelApprover", "");
+					Object value = frmApprovalLine.get(key);
+					
+					if (value instanceof String) {
+						Map userMap = new HashMap();
+						userMap.put("id", (String)value);
+						appLineSortingMap.put(keyIndex, userMap);
+					} else if (value instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)value;
+						ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(userArray)) {
+							
+							Map userMap = new HashMap();
+							userMap.put("id", (String)userArray.get(0).get("id"));
+							userMap.put("name", (String)userArray.get(0).get("name"));
+							appLineSortingMap.put(keyIndex, userMap);
+						}
+					}
+				}
+				
+				Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
+				String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
+				String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
+				
+				//TODO 전자결재 참조업무 생성
+//				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
+//				ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+				
+				if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
+
+					AprApprovalLine apprLine = new AprApprovalLine();
+					apprLine.setStatus("created");
+
+					AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
+					
+					for (int i = 1; i <= appLineSortingMap.size(); i++) {
+						
+						Map userMap = appLineSortingMap.get(i+"");
+						String id = (String)userMap.get("id");
+						String name = (String)userMap.get("name");
+
+						AprApproval apr = new AprApproval();
+						apr.setName(i + "단 결재(임시)");
+						apr.setType(i + "단 결재(임시)");
+						apr.setApprover(id);
+						apr.setMandatory(true);
+						apr.setModifiable(true);
+						
+						approvals[i-1] = apr;
+					}
+					apprLine.setApprovals(approvals);
+					apprLine.setExtendedPropertyValue("recordId", recId);
+
+					obj.setExtendedAttributeValue("txtApprovalSubject", txtApprovalSubject);
+					obj.setExtendedAttributeValue("txtApprovalComments", txtApprovalComments);
+					
+					SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+					obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+				}
+			}
 			// 전자결재 업무 끝
 
 			//TODO 좋은방법이 멀까?
@@ -2219,13 +2282,21 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else if(!CommonUtil.isEmpty(refForm)) {
 						refFormField = (String)valueMap.get("refFormField");
 						refRecordId = (String)valueMap.get("refRecordId");
-						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
-						swoDepartmentCond.setId(refRecordId);
-						String deptName = "";
-						SwoDepartment swoDepartment = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE);
-						if(swoDepartment != null)
-							deptName = swoDepartment.getName();
-						value = deptName;
+						SwdRecordCond cond = new SwdRecordCond();
+						cond.setFormId(refForm);
+						cond.setRecordId(refRecordId);
+						SwdRecord refRecord = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, cond, IManager.LEVEL_LITE);
+						
+						if (refRecord != null) {
+							value = refRecord.getDataFieldValue(refFormField);
+						}
+//						SwoDepartmentCond swoDepartmentCond = new SwoDepartmentCond();
+//						swoDepartmentCond.setId(refRecordId);
+//						String deptName = "";
+//						SwoDepartment swoDepartment = getSwoManager().getDepartment(userId, swoDepartmentCond, IManager.LEVEL_LITE);
+//						if(swoDepartment != null)
+//							deptName = swoDepartment.getName();
+//						value = deptName;
 					} else if(!CommonUtil.isEmpty(users)) {
 						refFormField = "frm_user_SYSTEM"; 
 						String resultRefRecordId = "";
@@ -3301,23 +3372,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			tableColName = "prcStatus";
 		else if(formFieldId.equalsIgnoreCase("subject"))
 			tableColName = "prcTitle";
-		else if(formFieldId.equalsIgnoreCase("taskName"))
-			tableColName = "taskName";
+		/*else if(formFieldId.equalsIgnoreCase("taskName"))
+			tableColName = "taskName";*/
 		else if(formFieldId.equalsIgnoreCase("lastTask"))
 			tableColName = "lastTask_tskname";
-		else if(formFieldId.equalsIgnoreCase("processTime"))
+		/*else if(formFieldId.equalsIgnoreCase("processTime"))
 			tableColName = "processTime";
 		else if(formFieldId.equalsIgnoreCase("processType"))
-			tableColName = "processType";
+			tableColName = "processType";*/
 		else if(formFieldId.equalsIgnoreCase("creator"))
 			tableColName = "prcCreateUser";
 		else if(formFieldId.equalsIgnoreCase("createdTime"))
 			tableColName = "prcCreateDate";
 		else if(formFieldId.equalsIgnoreCase("modifier"))
-			tableColName = "prcModifyUser";
+			tableColName = "lastTask_tskassignee";
 		else if(formFieldId.equalsIgnoreCase("modifiedTime"))
-			tableColName = "prcModifyDate";
-			
+			tableColName = "lastTask_tskexecuteDate";
+		else
+			tableColName = formFieldId;
+
 		return tableColName;
 	}
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
@@ -3332,42 +3405,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			String filterId = params.getFilterId();
 
 			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
-
-			if(filterId != null) {
-				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
-				} else if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {
-					prcInstCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
-				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
-					prcInstCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
-				} else if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) {
-					prcInstCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
-					prcInstCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
-				}
-			}
-
-			String resourceId = null;
-			PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
-			prcSwProcessCond.setPackageId(workId);
-			PrcSwProcess[] swProcesses = getPrcManager().getSwProcesses("", prcSwProcessCond);
-			if(!CommonUtil.isEmpty(swProcesses)) {
-				PrcSwProcess swProcess = swProcesses[0];
-				resourceId = swProcess.getProcessId();
-			}
-
-			if(!ModelConverter.isAccessibleAllInstance(resourceId, userId))
-				prcInstCond.setCreationUser(userId);
-
-			/*SwaResourceCond swaResourceCond = new SwaResourceCond();
-			swaResourceCond.setResourceId(resourceId);
-			swaResourceCond.setMode("R");
-			SwaResource swaResource = getSwaManager().getResource(userId, swaResourceCond, IManager.LEVEL_LITE);
-			String permission = null;
-			if(swaResource != null) {
-				permission = swaResource.getPermission();
-				if(permission.equals(SwaResource.PERMISSION_NO)) {
-					prcInstCond.setCreationUser(userId);
-				}
-			}*/
 
 			SearchFilter searchFilter = params.getSearchFilter();
 			List<Filter> filterList = new ArrayList<Filter>();
@@ -3384,6 +3421,18 @@ public class InstanceServiceImpl implements IInstanceService {
 					String operator = condition.getOperator();
 					String rightOperand = (String)condition.getRightOperand();
 
+					if(formFieldId.equalsIgnoreCase("status")) {
+						int rightOperandInt = Integer.parseInt(rightOperand);
+						if(rightOperandInt == Instance.STATUS_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_RETURNED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_COMPLETED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+					}
+
 					filter.setLeftOperandType(formFieldType);
 					filter.setLeftOperandValue(tableColName);
 					filter.setOperator(operator);
@@ -3397,6 +3446,121 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				prcInstCond.setFilter(filters);
 			}
+
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_LAST_MODIFIER), Filter.OPERANDTYPE_STRING, user.getId()));
+				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
+					prcInstCond.addFilter(new Filter(">=", getProcessTableColName(FormField.ID_LAST_MODIFIED_DATE), Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+				} else if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) {
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_LAST_MODIFIER), Filter.OPERANDTYPE_STRING, user.getId()));
+					prcInstCond.addFilter(new Filter(">=", getProcessTableColName(FormField.ID_LAST_MODIFIED_DATE), Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+				} else if(filterId.equals(SearchFilter.FILTER_MY_RUNNING_INSTANCES)) {
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_OWNER), Filter.OPERANDTYPE_STRING, user.getId()));
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName("status"), Filter.OPERANDTYPE_STRING, PrcProcessInst.PROCESSINSTSTATUS_RUNNING));
+				} else {
+					searchFilter = ModelConverter.getSearchFilterByFilterId(SwfFormModel.TYPE_PROCESS, workId, filterId);
+					if (searchFilter != null) {
+						Condition[] conditions = searchFilter.getConditions();
+						filterList = new ArrayList<Filter>();
+						for(Condition condition : conditions) {
+							Filter filter = new Filter();
+							FormField leftOperand = condition.getLeftOperand();
+							String formFieldId = leftOperand.getId();
+							String tableColName = getProcessTableColName(formFieldId);
+							String lefOperandType = leftOperand.getType();
+							String operator = condition.getOperator();
+							Object rightOperand = condition.getRightOperand();
+							String rightOperandValue = "";
+							if(rightOperand instanceof User) {
+								rightOperandValue = ((User)rightOperand).getId();
+							} else if(rightOperand instanceof Work) {
+								rightOperandValue = ((Work)rightOperand).getId();
+							} else {
+								if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
+								else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
+								else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
+								else rightOperandValue = (String)rightOperand;
+							}
+							if(formFieldId.equalsIgnoreCase("status")) {
+								int rightOperandInt = Integer.parseInt((String)rightOperand);
+								if(rightOperandInt == Instance.STATUS_RUNNING)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_RETURNED)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_COMPLETED)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+							}
+							filter.setLeftOperandType(lefOperandType);
+							filter.setLeftOperandValue(tableColName);
+							filter.setOperator(operator);
+							filter.setRightOperandType(lefOperandType);
+							filter.setRightOperandValue(rightOperandValue);
+							filterList.add(filter);
+						}
+						Filter[] filters = new Filter[filterList.size()];
+						filterList.toArray(filters);
+
+						prcInstCond.setFilter(filters);
+					}
+				}
+			}
+
+			PkgPackageCond pkgPackageCond = new PkgPackageCond();
+			pkgPackageCond.setPackageId(workId);
+			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
+
+			if(!ModelConverter.isAccessibleAllInstance(ModelConverter.getResourceIdByPkgPackage(pkgPackage), userId))
+				prcInstCond.setCreationUser(userId);
+
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				prcInstCond.setPageNo(currentPage-1);
+
+			prcInstCond.setPageSize(pageSize);
 
 			SortingField sf = params.getSortingField();
 
@@ -3420,97 +3584,27 @@ public class InstanceServiceImpl implements IInstanceService {
 			} else if (sfColumnNameTemp.equalsIgnoreCase("createdTime")) {
 				sfColumnNameTemp = "prcCreateDate"; 
 			} else if (sfColumnNameTemp.equalsIgnoreCase("modifier")) {
-				sfColumnNameTemp = "prcModifyUser"; 
+				sfColumnNameTemp = "lastTask_tskassignee"; 
 			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
-				sfColumnNameTemp = "prcModifyDate"; 
+				sfColumnNameTemp = "lastTask_tskexecuteDate"; 
 			} else {
 				sfColumnNameTemp = "prcCreateDate";
 			}
 
-			//long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
 			prcInstCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
-			PrcProcessInstExtend[] totalPrcInsts = getPrcManager().getProcessInstExtends(userId, prcInstCond);
-			List<PrcProcessInstExtend> prcProcessInstExtendList = new ArrayList<PrcProcessInstExtend>();
-			PrcProcessInstExtend[] finalPrcInsts = null;
-			int viewCount = 0;
-			if(!CommonUtil.isEmpty(totalPrcInsts)) {
-				for(PrcProcessInstExtend totalPrcInst : totalPrcInsts) {
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalPrcInst);
-					if(isAccessForMe) {
-						viewCount = viewCount + 1;
-						prcProcessInstExtendList.add(totalPrcInst);
-					}
-				}
-				if(prcProcessInstExtendList.size() > 0) {
-					finalPrcInsts = new PrcProcessInstExtend[prcProcessInstExtendList.size()];
-					prcProcessInstExtendList.toArray(finalPrcInsts);
-				}
-			}
 
-			int pageSize = params.getPageSize();
-			if(pageSize == 0) pageSize = 20;
-
-			int currentPage = params.getCurrentPage();
-			if(currentPage == 0) currentPage = 1;
-
-/*			int totalPages = (int)totalCount % pageSize;
-
-			if(totalPages == 0)
-				totalPages = (int)totalCount / pageSize;
-			else
-				totalPages = (int)totalCount / pageSize + 1;*/
-
-			int totalPages = viewCount % pageSize;
-			
-			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
-			else
-				totalPages = viewCount / pageSize + 1;
-
-			int result = 0;
-
-			if(params.getPagingAction() != 0) {
-				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
-					result = (((currentPage - 1) / 10) * 10) + 11;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
-					result = totalPages;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
-					result = ((currentPage - 1) / 10) * 10;
-				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
-					result = 1;
-				}
-				currentPage = result;
-			}
-
-			if(previousPageSize != pageSize)
-				currentPage = 1;
-
-			previousPageSize = pageSize;
-
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
-				currentPage = 1;
-
-			/*if (currentPage > 0)
-				swdRecordCond.setPageNo(currentPage-1);
-
-			swdRecordCond.setPageSize(pageSize);*/
-
-			int pageNo = currentPage-1;
+			PrcProcessInstExtend[] processInstExtends = getPrcManager().getProcessInstExtends(userId, prcInstCond);
 
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 
 			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
 			PWInstanceInfo[] pWInstanceInfos = null;
 
-			int startLength = pageNo * pageSize;
-			int endLength = startLength + pageSize;
-
-			if(!CommonUtil.isEmpty(finalPrcInsts) && startLength < finalPrcInsts.length) {
-				if(endLength > finalPrcInsts.length)
-					endLength = finalPrcInsts.length;
-				for(int i=startLength; i<endLength; i++) {
+			if(!CommonUtil.isEmpty(processInstExtends)) {
+				int length = processInstExtends.length;
+				for(int i=0; i<length; i++) {
 					PWInstanceInfo pwInstInfo = new PWInstanceInfo();
-					PrcProcessInstExtend prcInst = finalPrcInsts[i];
+					PrcProcessInstExtend prcInst = processInstExtends[i];
 					pwInstInfo.setId(prcInst.getPrcObjId());
 					pwInstInfo.setOwner(ModelConverter.getUserInfoByUserId(prcInst.getPrcCreateUser()));
 					int status = -1;
@@ -3683,13 +3777,13 @@ public class InstanceServiceImpl implements IInstanceService {
 	//		instanceInfoList.setInstanceDatas(ModelConverter.getPWInstanceInfoArrayByPrcProcessInstArray(prcInsts));
 			instanceInfoList.setInstanceDatas(pWInstanceInfos);
 			instanceInfoList.setPageSize(pageSize);
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sf);
 			instanceInfoList.setTotalPages(totalPages);
 			instanceInfoList.setCurrentPage(currentPage);
 			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
 			return instanceInfoList;
-		}catch (Exception e){
+		} catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
 			return null;			
@@ -5580,7 +5674,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
-			return null;			
+			throw e;			
 			// Exception Handling Required			
 		}
 	}
@@ -6388,7 +6482,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					msg.setChatId(chatId);
 					
 					getMessageManager().createMessage(senderId, msg);
-
+					
 					PublishNotice pubNoticeObj = new PublishNotice((String)receivers.get(index), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, msg.getObjId());
 					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
@@ -6486,12 +6580,49 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		for (int i = 0; i < messages.length; i++) {
 			imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
+
+			PublishNoticeCond pubNoticeObjCond = new PublishNoticeCond(messages[i].getTargetUser(), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, messages[i].getObjId());
+			PublishNotice pubNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice("linkadvisor", pubNoticeObjCond, IManager.LEVEL_ALL);
+			
+			if (!CommonUtil.isEmpty(pubNotice)) {
+				SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), pubNotice.getObjId());
+				SmartUtil.increaseNoticeCountByNoticeType(messages[i].getTargetUser(), Notice.TYPE_MESSAGE);	
+			}
+			
 		}
 		return chatInstInfos;
 	}
 	@Override
 	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		
+		//태스크인스턴스 아이디를 이용하여 저장 되어 있는 태스크를 조회 하고 실행 가능 여부를 판단한다
+		String taskInstId = (String)requestBody.get("taskInstId");
+		String comments = (String)requestBody.get("comments");
+		
+		if (CommonUtil.isEmpty(taskInstId))
+			throw new Exception("TaskId ("+taskInstId+") Is Null");
+		TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
+		if (task == null)
+			throw new Exception("Not Exist Task : taskId = " + taskInstId);
+		if (!task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN))
+			throw new Exception("Task Is Not Executable Status : taskId = " + taskInstId +" (status - " + task.getStatus() + ")");
+		if (!task.getAssignee().equalsIgnoreCase(userId)) 
+			throw new Exception("Task is Not Executable Assignee : taskId = " + taskInstId + " (assignee - " + task.getAssignee() + " But performer - " + userId + ")");
+		if (!task.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
+			throw new Exception("Task is Not ReferenceTask : taskId = " + task.getObjId() + ", type = " + task.getType());
+		
+		//태스크의 실제 완료 시간을 입력한다
+		if (task.getRealStartDate() == null)
+			task.setRealStartDate(new LocalDate(new Date().getTime()));
+		task.setRealEndDate(new LocalDate(new Date().getTime()));
+		
+		//참조의견을 저장한다
+		task.setDocument(comments);
+		
+		getTskManager().executeTask(userId, task, "execute");
+		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 	}
 }

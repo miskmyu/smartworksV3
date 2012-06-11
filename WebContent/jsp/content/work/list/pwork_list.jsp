@@ -43,26 +43,32 @@
 	saveAsSearchFilter = function(filterId){
 		var pworkList = $('.js_pwork_list_page');
 		var searchFilter = $('.js_search_filter_page');
-		var url = "set_pwork_search_filter.sw";
+		var url = "set_work_search_filter.sw";
 		if(isEmpty(filterId)){
-			url = "create_pwork_search_filter.sw";
-			searchFilter.find('input[name="txtNewFilterId"]').addClass('required');
+			url = "create_work_search_filter.sw";
+			searchFilter.find('input[name="txtNewFilterName"]').addClass('required');
 		}
 
 		if (!SmartWorks.GridLayout.validate(searchFilter.find('form.js_validation_required'), $('.js_filter_error_message'))) return;
 
 		var paramsJson = {};
-		var workId = iworkList.attr('workId');
+		var workId = pworkList.attr('workId');
 		var searchFilters = searchFilter.find('form[name="frmSearchFilter"]');
 		paramsJson['workId'] = workId;
-		if(!isEmpty(filterId))
-			paramsJson['filterId'] = filterId;
+		paramsJson['workType'] = <%=SmartWork.TYPE_PROCESS%>;
+		if(isEmpty(filterId)) {
+			filterId = "";
+		}
+		paramsJson['filterId'] = filterId;
+		paramsJson['txtNewFilterName'] = searchFilter.find('input[name="txtNewFilterName"]').attr('value');
+
 		if(!isEmpty(searchFilters)){
 			var searchFilterArray = new Array();
 			for(var i=0; i<searchFilters.length; i++){
 				var searchFilter = $(searchFilters[i]);
-				if(searchFilter.is(':visible'))
-					searchFilterArray.push(searchFilter.find(':visible').serializeObject());
+				//if(searchFilter.is(':visible'))
+					//searchFilterArray.push(searchFilter.find(':visible').serializeObject());
+				searchFilterArray.push(searchFilter.serializeObject());
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
@@ -96,7 +102,7 @@
 	saveSearchFilter = function(){
 		var searchFilter = $('.js_search_filter_page');
 		var filterId = searchFilter.attr('filterId');
-		if(isEmpty(filterId)) searchFilter.find('input[name="txtNewFilterId"]').removeClass('required');
+		if(isEmpty(filterId)) searchFilter.find('input[name="txtNewFilterName"]').removeClass('required');
 		saveAsSearchFilter(filterId);
 	};
 
@@ -122,7 +128,7 @@
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
-		if(isEmpty(progressSpan)) progressSpan = pworkList.find('.js_search_filter').next('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = pworkList.find('.js_search_filter_page').next('span.js_progress_span:first');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
@@ -196,7 +202,7 @@
 						</form>
 
 						<form class="form_space po_left js_form_filter_name" name="frmPworkFilterName">
-							<select name="selFilterName" class="js_select_filter" href="search_filter.sw?workId=<%=workId%>">
+							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
 								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" selected>
 									<fmt:message key='filter.name.all_instances' />
 								</option>

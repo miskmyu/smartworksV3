@@ -360,8 +360,9 @@ public class ModelConverter {
 //					wsInfo = getWorkSpaceInfo(wsType, wsId);
 					subject = tskTask.getTitle();
 					domainId = swdRecord.getDomainId();
-					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
-					String formId = swdDomain.getFormId();
+//					SwdDomain swdDomain = getSwdManager().getDomain(userId, domainId, IManager.LEVEL_LITE);
+//					String formId = swdDomain.getFormId();
+					String formId = swdRecord.getFormId();
 					SwfFormCond swfFormCond = new SwfFormCond();
 					swfFormCond.setId(formId);
 					SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
@@ -2035,8 +2036,12 @@ public class ModelConverter {
 			type = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
+			taskInstInfo.setForwardId(swTask.getProcessInstId());
+			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			type = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
+			taskInstInfo.setApprovalId(swTask.getProcessInstId());
+			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		}
 
 		String assignee = swTask.getAssignee();
@@ -2407,7 +2412,7 @@ public class ModelConverter {
 		processWork.setHelpUrl("HELP URL");
 		processWork.setManualFileName("MANUAL FILE NAME");
 		processWork.setManualFilePath("MANUAL FILE PATH");
-		
+
 		processWork.setDiagram(getSmartDiagramByPkgInfo(userId, pkg));
 
 		OpinionCond opinionCond = new OpinionCond();
@@ -2415,6 +2420,9 @@ public class ModelConverter {
 		opinionCond.setRefType(6);
 		long commentCount = getOpinionManager().getOpinionSize(userId, opinionCond);
 		processWork.setCommentCount((int)commentCount);
+
+		//상세필터
+		processWork.setSearchFilters(ModelConverter.getSearchFilterInfoByPkgPackage(userId, pkg));
 
 		return processWork;
 	}

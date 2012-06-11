@@ -338,9 +338,9 @@ public interface ISmartWorks {
 
 	public abstract SwdRecord refreshDataFields(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract String setIWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract String setWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public abstract void removeIworkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public abstract void removeWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void downloadFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
 

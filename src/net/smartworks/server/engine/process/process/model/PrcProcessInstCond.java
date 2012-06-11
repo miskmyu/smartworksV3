@@ -53,14 +53,16 @@ public class PrcProcessInstCond extends MisObjectCond {
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
-	
+
 	private String[] objIdIns;
 	private String[] priorityIns;
 	private String[] priorityNotIns;
 	private String isSubInstance;
-	
+	private String[] workSpaceIdIns;
+	private String[] workSpaceIdNotIns;
+
 	private String searchKey;
-	
+
 	public PrcProcessInstCond() {
 		super();
 	}
@@ -391,4 +393,17 @@ public class PrcProcessInstCond extends MisObjectCond {
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
 	}
+	public String[] getWorkSpaceIdIns() {
+		return workSpaceIdIns;
+	}
+	public void setWorkSpaceIdIns(String[] workSpaceIdIns) {
+		this.workSpaceIdIns = workSpaceIdIns;
+	}
+	public String[] getWorkSpaceIdNotIns() {
+		return workSpaceIdNotIns;
+	}
+	public void setWorkSpaceIdNotIns(String[] workSpaceIdNotIns) {
+		this.workSpaceIdNotIns = workSpaceIdNotIns;
+	}
+
 }

@@ -1689,307 +1689,349 @@ VALUES ('4028809b1bd3a395011bd3b825e00003', 'pkg_af2c5abbdc694feab78b2706c31f3bd
 </form>', 'PUB_ALL');
 INSERT INTO swform (id, packageid, formid, version, name, type, status, keyword, creator, createdtime, modifier, modifiedtime, ownerdept, owner, encoding, description, content, publishmode) 
 VALUES ('40288afb1b280665011b283293f8000d', 'pkg_dde3f719c50143cd821e6c46e8df8655', 'frm_contact_SYSTEM', 1, '연락처', 'SINGLE', 'DEPLOYED', NULL, 'admin', getdate(), 'admin', getdate(), NULL, NULL, NULL, '', 
-'<form id="frm_contact_SYSTEM" version="1" name="연락처" title="연락처" formType="null" systemName="SWOrgContact">
+'<form id="frm_contact_SYSTEM" version="1" name="연락처" title="연락처"
+	formType="null" systemName="SWOrgContact">
 	<children>
-		<formEntity id="2" name="이름" title="이름" systemType="string" array="false" required="true" systemName="name" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="2" name="이름" title="이름" systemType="string"
+			array="false" required="true" systemName="name" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="4" name="회사" title="회사" systemType="string" array="false" required="false" systemName="companyid" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="4" name="회사" title="회사" systemType="string"
+			array="false" required="false" systemName="companyid" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="6" name="부서" title="부서" systemType="string" array="false" required="false" systemName="deptid" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="6" name="부서" title="부서" systemType="string"
+			array="false" required="false" systemName="deptid" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="8" name="직급" title="직급" systemType="string" array="false" required="false" systemName="pos" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="8" name="직급" title="직급" systemType="string"
+			array="false" required="false" systemName="pos" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="12" name="핸드폰" title="핸드폰" systemType="string" array="false" required="false" systemName="telephone" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="12" name="핸드폰" title="핸드폰" systemType="string"
+			array="false" required="false" systemName="telephone" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="24" name="전화" title="전화" systemType="string" array="false" required="false" systemName="swcompphone" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="24" name="전화" title="전화" systemType="string"
+			array="false" required="false" systemName="swcompphone" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="28" name="팩스" title="팩스" systemType="string" array="false" required="false" systemName="swfax" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="28" name="팩스" title="팩스" systemType="string"
+			array="false" required="false" systemName="swfax" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="10" name="이메일" title="이메일" systemType="string" array="false" required="false" systemName="email" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="10" name="이메일" title="이메일" systemType="string"
+			array="false" required="false" systemName="email" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="40" name="주소" title="주소" systemType="string" array="false" required="false" systemName="swaddress" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="40" name="주소" title="주소" systemType="string"
+			array="false" required="false" systemName="swaddress" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="44" name="국가" title="국가" systemType="string" array="false" required="false" systemName="swcountry" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="44" name="국가" title="국가" systemType="string"
+			array="false" required="false" systemName="swcountry" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
-		<formEntity id="48" name="범주" title="범주" systemType="string" array="false" required="false" systemName="swcat" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="48" name="범주" title="범주" systemType="string"
+			array="false" required="false" systemName="swcat" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="textInput" viewingType="textInput"/>
-			<expression/>
+			<children />
+			<format type="textInput" viewingType="textInput" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
+		</formEntity>		
+		<formEntity id="52" name="설명" systemType="text" required="false"
+			system="false">
+			<children />
+			<format type="richEditor" viewingType="richEditor"></format>
+			<graphic hidden="false" readOnly="false" labelWidth="80"
+				contentWidth="500" height="150" cellSize="1" fitWidth="false"
+				verticalScrollPolicy="true" />
 		</formEntity>
-		<formEntity id="52" name="설명" title="설명" systemType="text" array="false" required="false" systemName="swdesc" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
+		<formEntity id="56" name="첨부파일" title="첨부파일" systemType="string"
+			array="false" required="false" systemName="swattach" system="true">
+			<graphic displayOrder="" hidden="false" readOnly="false"
+				cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
 				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
+					<textStyle size="14" color="NaN" align="left" bold="false"
+						italic="false" underline="false">
 						<font>Arial</font>
 					</textStyle>
 				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
+				<textStyle size="12" color="NaN" align="left" bold="false"
+					italic="false" underline="false">
 					<font>Arial</font>
 				</textStyle>
 			</graphic>
-			<children/>
-			<format type="richEditor" viewingType="richEditor"/>
-			<expression/>
+			<children />
+			<format type="fileField" viewingType="fileField" />
+			<expression />
 			<mappings>
-				<pre/>
-				<post/>
-			</mappings>
-		</formEntity>
-		<formEntity id="56" name="첨부파일" title="첨부파일" systemType="string" array="false" required="false" systemName="swattach" system="true">
-			<graphic displayOrder="" hidden="false" readOnly="false" cellSize="1" contentsSize="-1" height="-1" bgColor="16777215">
-				<label visible="true" size="-1" loc="left">
-					<textStyle size="14" color="NaN" align="left" bold="false" italic="false" underline="false">
-						<font>Arial</font>
-					</textStyle>
-				</label>
-				<textStyle size="12" color="NaN" align="left" bold="false" italic="false" underline="false">
-					<font>Arial</font>
-				</textStyle>
-			</graphic>
-			<children/>
-			<format type="fileField" viewingType="fileField"/>
-			<expression/>
-			<mappings>
-				<pre/>
-				<post/>
+				<pre />
+				<post />
 			</mappings>
 		</formEntity>
 	</children>
-	<mappings/>
-	<graphic width="760" height="500" cellSize="1" currentEntityNum="58" currentMappingNum="0" styleId="null" scalePercent="100" titleHeight="30" itemHeightGap="7">
+	<mappings />
+	<graphic width="760" height="500" cellSize="1"
+		currentEntityNum="58" currentMappingNum="0" styleId="null"
+		scalePercent="100" titleHeight="30" itemHeightGap="7">
 		<title>
-			<textStyle size="20" color="NaN" align="center" bold="false" italic="false" underline="false">
+			<textStyle size="20" color="NaN" align="center" bold="false"
+				italic="false" underline="false">
 				<font>Arial</font>
 			</textStyle>
 		</title>
-		<space head="20" left="20" right="20" top="20" bottom="20"/>
-		<textStyle size="11" color="NaN" align="left" bold="false" italic="false" underline="false">
+		<space head="20" left="20" right="20" top="20" bottom="20" />
+		<textStyle size="11" color="NaN" align="left" bold="false"
+			italic="false" underline="false">
 			<font>verdana</font>
 		</textStyle>
 	</graphic>
-	<setting nextPerformer="null" assignee="null"/>
+	<setting nextPerformer="null" assignee="null" />
 	<layout type="grid_layout" verticalGap="1" horizontalGap="1">
 		<columns>
-			<gridColumn size="358.5" labelSize="80"/>
-			<gridColumn size="358.5" labelSize="80"/>
+			<gridColumn size="358.5" labelSize="80" />
+			<gridColumn size="358.5" labelSize="80" />
 		</columns>
 		<gridRow size="30">
-			<gridCell size="358.5" span="2" fieldId="2"/>
+			<gridCell size="358.5" span="2" fieldId="2" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="1" fieldId="4"/>
-			<gridCell size="358.5" span="1" fieldId="6"/>
+			<gridCell size="358.5" span="1" fieldId="4" />
+			<gridCell size="358.5" span="1" fieldId="6" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="1" fieldId="8"/>
-			<gridCell size="358.5" span="1" fieldId="12"/>
+			<gridCell size="358.5" span="1" fieldId="8" />
+			<gridCell size="358.5" span="1" fieldId="12" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="1" fieldId="24"/>
-			<gridCell size="358.5" span="1" fieldId="28"/>
+			<gridCell size="358.5" span="1" fieldId="24" />
+			<gridCell size="358.5" span="1" fieldId="28" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="2" fieldId="10"/>
+			<gridCell size="358.5" span="2" fieldId="10" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="2" fieldId="40"/>
+			<gridCell size="358.5" span="2" fieldId="40" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="1" fieldId="44"/>
-			<gridCell size="358.5" span="1" fieldId="48"/>
+			<gridCell size="358.5" span="1" fieldId="44" />
+			<gridCell size="358.5" span="1" fieldId="48" />
 		</gridRow>
 		<gridRow size="111.5">
-			<gridCell size="358.5" span="2" fieldId="52"/>
+			<gridCell size="358.5" span="2" fieldId="52" />
 		</gridRow>
 		<gridRow size="30">
-			<gridCell size="358.5" span="2" fieldId="56"/>
+			<gridCell size="358.5" span="2" fieldId="56" />
 		</gridRow>
 	</layout>
-	<mappingForms/>
+	<mappingForms />
 </form>', 'PUB_ALL');
 --INSERT INTO swform (id, packageid, formid, version, name, type, status, keyword, creator, createdtime, modifier, modifiedtime, ownerdept, owner, encoding, description, content, publishmode) 
 --VALUES ('4028809b1bd4848a011bd48e7b700001', 'pkg_19281471d5c9404392fea653e627da9e', 'frm_document_SYSTEM', 1, '문서관리', 'SINGLE', 'DEPLOYED', NULL, 'admin', getdate(), 'admin', getdate(), NULL, NULL, NULL, '', 

@@ -318,15 +318,28 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				taskRef = preApprTask.getExtendedPropertyValue("taskRef");
 			}
 			
+			
+			String txtApprovalSubject = obj.getExtendedPropertyValue("txtApprovalSubject");
+			String txtApprovalComments = obj.getExtendedPropertyValue("txtApprovalComments");
+			
 			TskTask apprTask = new TskTask();
 			apprTask.setProcessInstId(prcInstId);
-			apprTask.setName(name);
+			apprTask.setName("전자결재이름(임시)");
+			apprTask.setTitle(txtApprovalSubject);
+//			apprTask.setName(name);
+//			apprTask.setTitle(title);
 			apprTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval"));
 			apprTask.setPriority(priority);
-			apprTask.setTitle(title);
+			apprTask.setStartDate(new LocalDate());
+			apprTask.setDef(obj.getDef());
 			apprTask.setAssigner(assigner);
 			apprTask.setAssignee(approver);
+			apprTask.setAssignmentDate(new LocalDate());
 			apprTask.setForm(preApprTask != null ? preApprTask.getForm() : obj.getForm());
+		
+			apprTask.setWorkSpaceId(approver);
+			apprTask.setWorkSpaceType("4");
+			apprTask.setAccessLevel("3");
 			
 			if (CommonUtil.isEmpty(obj.getFromRefId())) {
 				apprTask.setFromRefType(obj.getType());
@@ -340,6 +353,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
 			apprTask.setExtendedPropertyValue("approval", appr.getObjId());
 			this.getTskManager().setTask("linkadvisor", apprTask, null);
+			
+			PublishNotice pubNoticeObj = new PublishNotice(approver, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, apprTask.getObjId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+			SmartUtil.increaseNoticeCountByNoticeType(approver, Notice.TYPE_ASSIGNED);
+			
 			if (logger.isInfoEnabled()) {
 				logger.info("Assignee Next Approval [" + obj.getTitle() + " ( User : " + obj.getAssignee() + " ) ]");
 			}

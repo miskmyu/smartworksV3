@@ -43,9 +43,11 @@ body, button, select, input, textarea, sub {
 	 font-size: 12px;
 }
  
-input[type="text"], textarea {
+input[type="text"] {
 	width:100%;
 }
+
+textarea {width:99.8%}
 
 
 select, input, textarea {
@@ -119,6 +121,7 @@ table {
 	border-spacing: 0pt;
 	width: 100%;
 }
+td, th {display: table-cell; vertical-align: inherit}
 
 legend, hr {
 	left: 0pt;

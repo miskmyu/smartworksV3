@@ -111,7 +111,7 @@
 								continue;
 					%>
 								<li class="sub_instance_list">
-									<div class="noti_pic">
+									<div class="noti_pic tc vm">
 										<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 									</div>
 									<div class="noti_pic">
