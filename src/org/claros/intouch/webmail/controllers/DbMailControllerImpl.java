@@ -237,7 +237,9 @@ public class DbMailControllerImpl implements MailController {
 		IGenericDao dao = null;
 		try {
 			dao = Utility.getDbConnection();
-			dao.update(MsgDbObject.class, item);
+			String sql = "UPDATE MSG_DB_OBJECTS SET FOLDER_ID = " + item.getFolderId() + " WHERE ID = " + item.getId();
+			dao.executeUpdate(sql);
+			//dao.update(MsgDbObject.class, item);
 		} finally {
 			JdbcUtil.close(dao);
 			dao = null;
