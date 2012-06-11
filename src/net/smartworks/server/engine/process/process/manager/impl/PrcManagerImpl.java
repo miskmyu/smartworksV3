@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.model.ClassObject;
 import net.smartworks.server.engine.common.model.Filter;
@@ -30,6 +31,7 @@ import net.smartworks.server.engine.process.process.model.PrcProcessVariable;
 import net.smartworks.server.engine.process.process.model.PrcProcessVariableCond;
 import net.smartworks.server.engine.process.process.model.PrcSwProcess;
 import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
+import net.smartworks.util.SmartUtil;
 
 import org.hibernate.Query;
 
@@ -562,7 +564,10 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 	}
 
 	private Query appendExtendQuery(StringBuffer queryBuffer, PrcProcessInstCond cond) throws Exception {
-		
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+
 		String packageId = cond.getPackageId();
 		String[] objIdIns = cond.getObjIdIns();
 		String createUser = cond.getCreationUser();
@@ -571,6 +576,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		Date creationDateTo = cond.getCreationDateTo();
 		Filter[] filters = cond.getFilter();
 		String logicalOperator = cond.getOperator();
+		String[] workSpaceIdIns = cond.getWorkSpaceIdIns();
+		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
 
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
@@ -657,6 +664,34 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			queryBuffer.append(")");
 		}
+
+		if (workSpaceIdIns != null) {
+			queryBuffer.append(" and");
+			queryBuffer.append(" ((prcInst.prcWorkSpaceType = 6 and prcInst.prcWorkSpaceId in (");
+			for (int j=0; j<workSpaceIdIns.length; j++) {
+				if (j != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":workSpaceIdIn").append(j);
+			}
+			queryBuffer.append(")) or (prcInst.prcWorkSpaceType = 5 and prcInst.prcWorkSpaceId in (");
+			for (int j=0; j<workSpaceIdIns.length; j++) {
+				if (j != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":workSpaceIdIn").append(j);
+			}
+			queryBuffer.append(")) or prcInst.prcWorkSpaceType = 4 or prcInst.prcWorkSpaceType = 2 or prcInst.prcWorkSpaceType is null)");
+		}
+		if (workSpaceIdNotIns != null) {
+			queryBuffer.append(" and");
+			queryBuffer.append(" prcInst.prcWorkSpaceId not in (");
+			for (int j=0; j<workSpaceIdNotIns.length; j++) {
+				if (j != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":workSpaceIdNotIn").append(j);
+			}
+			queryBuffer.append(")");
+		}
+		queryBuffer.append(" and (prcInst.prcAccessLevel is null or prcInst.prcAccessLevel = 3 or (prcInst.prcAccessLevel = 1 and prcInst.prcCreateUser = '" + userId + "') or (prcInst.prcAccessLevel = 2 and prcInst.prcAccessValue like '%" + userId + "%')) ");
 
 		Map filterMap = new HashMap();
 		if (!CommonUtil.isEmpty(filters)) {
@@ -767,6 +802,16 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		if (objIdIns != null && objIdIns.length != 0) {
 			for (int i=0; i<objIdIns.length; i++) {
 				query.setString("objIdIn"+i, objIdIns[i]);
+			}
+		}
+		if (workSpaceIdIns != null) {
+			for (int j=0; j<workSpaceIdIns.length; j++) {
+				query.setString("workSpaceIdIn"+j, workSpaceIdIns[j]);
+			}
+		}
+		if (workSpaceIdNotIns != null) {
+			for (int j=0; j<workSpaceIdNotIns.length; j++) {
+				query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
 			}
 		}
 		if (!CommonUtil.isEmpty(filters)) {

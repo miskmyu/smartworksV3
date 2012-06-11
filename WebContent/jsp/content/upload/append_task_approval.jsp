@@ -61,7 +61,7 @@
 	<div class="approval_section">
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
 		<div class="approval_group">
-			<div class="fr">
+			<div class="fr mb2">
 				<div class="fl icon_approval js_toggle_approval_line"></div>
                 <div class="fl"><%=approvalLine.getName() %></div>
 			</div>
@@ -104,7 +104,7 @@
 			</div>
 			<!-- POP //-->
 			<div class="cb">
-				<form class="form_layout js_validation_required" name="frmApprovalLine">
+				<form class="js_validation_required" name="frmApprovalLine">
 					<input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden">		
 					<%
 					if(!SmartUtil.isBlankObject(approvalLine) && !SmartUtil.isBlankObject(approvalLine.getApprovals())){
@@ -119,7 +119,7 @@
 							<%
 							if(approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
-								<div class="form_col js_type_userField" fieldId="usrLevelApprover<%=i+1 %>" multiUsers="false">
+								<div class="name form_col js_type_userField" fieldId="usrLevelApprover<%=i+1 %>" multiUsers="false">
 									<div class="form_value" style="width:100%">
 										<div class="icon_fb_space" >
 											<div class="fieldline community_names js_community_names sw_required">
@@ -136,8 +136,17 @@
 								User approver = approval.getApprover();
 								
 							%>
-								<div class="">
-									<a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a>
+								<div class="name">
+									<%-- <a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a> --%>
+									
+									<div class="noti_pic">
+										<img class="profile_size_s" title="대표이사 정윤식" src="images/no_user_picture_min.jpg">
+									</div>
+									<div class="noti_in">
+										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
+										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
+										<div class="t_date">04.15 05:38</div>
+									</div>
 									<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
 								</div>
 							<%
@@ -155,7 +164,7 @@
 	</div>
 	<!-- 결재선 Section //-->
 	<!-- 전자결재 화면이 나타나는 곳 -->
-	<div class="cb">
+	<div class="">
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<span> <!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 --> <!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 				<div class="js_task_approval_fields"

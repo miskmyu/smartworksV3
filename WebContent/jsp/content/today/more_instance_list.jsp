@@ -123,7 +123,7 @@ if (instances != null) {
 		<tr class="working_br instance_list js_more_instance_item js_content_list" href="<%=trTarget%>" dateValue="<%=workInstance.getLastModifiedDate().toLocalDateString2()%>">
 			<!-- 인스턴스 상태 및 시작자 사진표시 -->
 			<td class="pic">
-				<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+				<span class="<%=statusImage%> tc vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 				<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_m" src="<%=owner.getMidPicture()%>"/></a>
 			</td>
 			<!-- 인스턴스 상태 및 시작자 사진표시 -->
