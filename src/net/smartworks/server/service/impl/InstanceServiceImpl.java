@@ -3302,23 +3302,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			tableColName = "prcStatus";
 		else if(formFieldId.equalsIgnoreCase("subject"))
 			tableColName = "prcTitle";
-		else if(formFieldId.equalsIgnoreCase("taskName"))
-			tableColName = "taskName";
+		/*else if(formFieldId.equalsIgnoreCase("taskName"))
+			tableColName = "taskName";*/
 		else if(formFieldId.equalsIgnoreCase("lastTask"))
 			tableColName = "lastTask_tskname";
-		else if(formFieldId.equalsIgnoreCase("processTime"))
+		/*else if(formFieldId.equalsIgnoreCase("processTime"))
 			tableColName = "processTime";
 		else if(formFieldId.equalsIgnoreCase("processType"))
-			tableColName = "processType";
+			tableColName = "processType";*/
 		else if(formFieldId.equalsIgnoreCase("creator"))
 			tableColName = "prcCreateUser";
 		else if(formFieldId.equalsIgnoreCase("createdTime"))
 			tableColName = "prcCreateDate";
 		else if(formFieldId.equalsIgnoreCase("modifier"))
-			tableColName = "prcModifyUser";
+			tableColName = "lastTask_tskassignee";
 		else if(formFieldId.equalsIgnoreCase("modifiedTime"))
-			tableColName = "prcModifyDate";
-			
+			tableColName = "lastTask_tskexecuteDate";
+		else
+			tableColName = formFieldId;
+
 		return tableColName;
 	}
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
@@ -3334,15 +3336,106 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
 
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
+
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					if(formFieldId.equalsIgnoreCase("status")) {
+						int rightOperandInt = Integer.parseInt(rightOperand);
+						if(rightOperandInt == Instance.STATUS_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_RETURNED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_COMPLETED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+					}
+
+					filter.setLeftOperandType(formFieldType);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				prcInstCond.setFilter(filters);
+			}
+
 			if(filterId != null) {
 				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
 				} else if(filterId.equals(SearchFilter.FILTER_MY_INSTANCES)) {
-					prcInstCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_LAST_MODIFIER), Filter.OPERANDTYPE_STRING, user.getId()));
 				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
-					prcInstCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+					prcInstCond.addFilter(new Filter(">=", getProcessTableColName(FormField.ID_LAST_MODIFIED_DATE), Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
 				} else if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) {
-					prcInstCond.addFilter(new Filter("=", FormField.ID_LAST_MODIFIER, Filter.OPERANDTYPE_STRING, user.getId()));
-					prcInstCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_LAST_MODIFIER), Filter.OPERANDTYPE_STRING, user.getId()));
+					prcInstCond.addFilter(new Filter(">=", getProcessTableColName(FormField.ID_LAST_MODIFIED_DATE), Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+				} else if(filterId.equals(SearchFilter.FILTER_MY_RUNNING_INSTANCES)) {
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName(FormField.ID_OWNER), Filter.OPERANDTYPE_STRING, user.getId()));
+					prcInstCond.addFilter(new Filter("=", getProcessTableColName("status"), Filter.OPERANDTYPE_STRING, PrcProcessInst.PROCESSINSTSTATUS_RUNNING));
+				} else {
+					searchFilter = ModelConverter.getSearchFilterByFilterId(SwfFormModel.TYPE_PROCESS, workId, filterId);
+					if (searchFilter != null) {
+						Condition[] conditions = searchFilter.getConditions();
+						filterList = new ArrayList<Filter>();
+						for(Condition condition : conditions) {
+							Filter filter = new Filter();
+							FormField leftOperand = condition.getLeftOperand();
+							String formFieldId = leftOperand.getId();
+							String tableColName = getProcessTableColName(formFieldId);
+							String lefOperandType = leftOperand.getType();
+							String operator = condition.getOperator();
+							Object rightOperand = condition.getRightOperand();
+							String rightOperandValue = "";
+							if(rightOperand instanceof User) {
+								rightOperandValue = ((User)rightOperand).getId();
+							} else if(rightOperand instanceof Work) {
+								rightOperandValue = ((Work)rightOperand).getId();
+							} else {
+								if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
+								else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
+								else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
+								else rightOperandValue = (String)rightOperand;
+							}
+							if(formFieldId.equalsIgnoreCase("status")) {
+								int rightOperandInt = Integer.parseInt((String)rightOperand);
+								if(rightOperandInt == Instance.STATUS_RUNNING)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_RETURNED)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+								else if(rightOperandInt == Instance.STATUS_COMPLETED)
+									rightOperandValue = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+							}
+							filter.setLeftOperandType(lefOperandType);
+							filter.setLeftOperandValue(tableColName);
+							filter.setOperator(operator);
+							filter.setRightOperandType(lefOperandType);
+							filter.setRightOperandValue(rightOperandValue);
+							filterList.add(filter);
+						}
+						Filter[] filters = new Filter[filterList.size()];
+						filterList.toArray(filters);
+
+						prcInstCond.setFilter(filters);
+					}
 				}
 			}
 
@@ -3370,35 +3463,6 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}*/
 
-			SearchFilter searchFilter = params.getSearchFilter();
-			List<Filter> filterList = new ArrayList<Filter>();
-			if(searchFilter != null) {
-				Condition[] conditions = searchFilter.getConditions();
-				for(Condition condition : conditions) {
-					Filter filter = new Filter();
-
-					FormField leftOperand = condition.getLeftOperand();
-					String formFieldId = leftOperand.getId();
-					String tableColName = getProcessTableColName(formFieldId);
-
-					String formFieldType = leftOperand.getType();
-					String operator = condition.getOperator();
-					String rightOperand = (String)condition.getRightOperand();
-
-					filter.setLeftOperandType(formFieldType);
-					filter.setLeftOperandValue(tableColName);
-					filter.setOperator(operator);
-					filter.setRightOperandType(formFieldType);
-					filter.setRightOperandValue(rightOperand);
-					filterList.add(filter);
-				}
-
-				Filter[] filters = new Filter[filterList.size()];
-				filterList.toArray(filters);
-
-				prcInstCond.setFilter(filters);
-			}
-
 			SortingField sf = params.getSortingField();
 
 			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
@@ -3421,9 +3485,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			} else if (sfColumnNameTemp.equalsIgnoreCase("createdTime")) {
 				sfColumnNameTemp = "prcCreateDate"; 
 			} else if (sfColumnNameTemp.equalsIgnoreCase("modifier")) {
-				sfColumnNameTemp = "prcModifyUser"; 
+				sfColumnNameTemp = "lastTask_tskassignee"; 
 			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
-				sfColumnNameTemp = "prcModifyDate"; 
+				sfColumnNameTemp = "lastTask_tskexecuteDate"; 
 			} else {
 				sfColumnNameTemp = "prcCreateDate";
 			}

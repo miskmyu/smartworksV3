@@ -174,10 +174,10 @@ public class WorkController extends ExceptionInterceptor {
 		return map;
 	}
 
-	@RequestMapping(value = "/set_iwork_search_filter", method = RequestMethod.POST)
+	@RequestMapping(value = "/set_work_search_filter", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public ModelAndView setIworkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String filterId = smartworks.setIWorkSearchFilter(requestBody, request);
+	public ModelAndView setWorkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String filterId = smartworks.setWorkSearchFilter(requestBody, request);
 		String workId = (String)requestBody.get("workId");
 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 		ModelAndView mnv = new ModelAndView();
@@ -186,10 +186,10 @@ public class WorkController extends ExceptionInterceptor {
 		return mnv;
 	}
 
-	@RequestMapping(value = "/create_iwork_search_filter", method = RequestMethod.POST)
+	@RequestMapping(value = "/create_work_search_filter", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ModelAndView createIworkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String filterId = smartworks.setIWorkSearchFilter(requestBody, request);
+	public ModelAndView createWorkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String filterId = smartworks.setWorkSearchFilter(requestBody, request);
 		String workId = (String)requestBody.get("workId");
 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 		ModelAndView mnv = new ModelAndView();
@@ -198,10 +198,10 @@ public class WorkController extends ExceptionInterceptor {
 		return mnv;
 	}
 
-	@RequestMapping(value = "/remove_iwork_search_filter", method = RequestMethod.POST)
+	@RequestMapping(value = "/remove_work_search_filter", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody void removeIworkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		smartworks.removeIworkSearchFilter(requestBody, request);
+	public @ResponseBody void removeWorkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeWorkSearchFilter(requestBody, request);
 	}
 
 }

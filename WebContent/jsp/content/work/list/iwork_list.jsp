@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.service.impl.SmartWorks"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.report.ChartReport"%>
@@ -48,9 +49,9 @@
 	saveAsSearchFilter = function(filterId){
 		var iworkList = $('.js_iwork_list_page');
 		var searchFilter = $('.js_search_filter_page');
-		var url = "set_iwork_search_filter.sw";
+		var url = "set_work_search_filter.sw";
 		if(isEmpty(filterId)){
-			url = "create_iwork_search_filter.sw";
+			url = "create_work_search_filter.sw";
 			searchFilter.find('input[name="txtNewFilterName"]').addClass('required');
 		}
 
@@ -60,11 +61,12 @@
 		var workId = iworkList.attr('workId');
 		var searchFilters = searchFilter.find('form[name="frmSearchFilter"]');
 		paramsJson['workId'] = workId;
+		paramsJson['workType'] = <%=SmartWork.TYPE_INFORMATION%>;
 		if(isEmpty(filterId)) {
 			filterId = "";
 		}
-		paramsJson['txtNewFilterName'] = searchFilter.find('input[name="txtNewFilterName"]').attr('value');
 		paramsJson['filterId'] = filterId;
+		paramsJson['txtNewFilterName'] = searchFilter.find('input[name="txtNewFilterName"]').attr('value');
 
 		if(!isEmpty(searchFilters)){
 			var searchFilterArray = new Array();

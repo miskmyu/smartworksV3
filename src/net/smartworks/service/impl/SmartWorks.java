@@ -634,13 +634,13 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public String setIWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		return workService.setIWorkSearchFilter(requestBody, request);
+	public String setWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return workService.setWorkSearchFilter(requestBody, request);
 	}
 
 	@Override
-	public void removeIworkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		workService.removeIworkSearchFilter(requestBody, request);
+	public void removeWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		workService.removeWorkSearchFilter(requestBody, request);
 	}
 
 	@Override

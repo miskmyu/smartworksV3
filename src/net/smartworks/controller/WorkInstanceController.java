@@ -162,7 +162,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/set_file_instance_list", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public ModelAndView setIworkSearchFilter(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String filterId = smartworks.setIWorkSearchFilter(requestBody, request);
+		String filterId = smartworks.setWorkSearchFilter(requestBody, request);
 		String workId = (String)requestBody.get("workId");
 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 		ModelAndView mnv = new ModelAndView();
