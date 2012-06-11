@@ -4,6 +4,11 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
+<%@page import="net.smartworks.model.approval.Approval"%>
+<%@page import="net.smartworks.model.approval.ApprovalLine"%>
+<%@page import="net.smartworks.model.instance.info.TaskInstanceInfo"%>
+<%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
@@ -15,23 +20,50 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	String subject = request.getParameter("subject");
-	String content = request.getParameter("content");
+	String taskInstId = request.getParameter("taskInstId");
+	String approvalLineId = request.getParameter("approvalLineId");
+
+	WorkInstance workInstance = null;
+	TaskInstanceInfo[] tasks = null;
+	TaskInstanceInfo approvalTask = null;
+	String subject = "";
+	String content = "";
+	String workInstId = "";
+	String approvalId = "";
+	if(!SmartUtil.isBlankObject(taskInstId)){
+		workInstance = (WorkInstance)session.getAttribute("workInstance");
+		tasks = workInstance.getTasks();
+		if(!SmartUtil.isBlankObject(tasks)){
+			for(TaskInstanceInfo task : tasks){
+				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+					approvalTask = task;
+					approvalId = task.getApprovalId();
+					subject = task.getSubject();
+					content = task.getContent();
+					break;
+				}
+			}
+		}
+	}
+	
+	String threeLevelId = "5ef4e5632f70c3a5012f714290af012c";
+	String otherId = "402880ec358e456a01358e47be050001";
+	approvalId = threeLevelId;
+	ApprovalLine approvalLine = smartWorks.getApprovalLineById(otherId);
+
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_append_task_approval_page" workInstanceId="">
+<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalId="<%=approvalId %>" taskInstId="<%=taskInstId%>" >
 	<!-- 결재선 Section -->
 	<div class="approval_section">
-		<div class="tit">
-			<span>전자결재</span>
-		</div>
+		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
 		<div class="approval_group">
 			<div class="fr">
-				<div class="fl icon_approval"></div>
-				<div class="fl">기본결재</div>
+				<div class="fl icon_approval js_toggle_approval_line"></div>
+                <div class="fl"><%=approvalLine.getName() %></div>
 			</div>
 			<!-- POP -->
 			<div style="display:none; position: relative; clear: both; width: 400px; float: right">
@@ -72,109 +104,53 @@
 			</div>
 			<!-- POP //-->
 			<div class="cb">
-				<!-- 결재선1 -->
-				<div class="approval_area">
-					<div class="label">검 토</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
+				<form class="form_layout js_validation_required" name="frmApprovalLine">
+					<input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden">		
+					<%
+					if(!SmartUtil.isBlankObject(approvalLine) && !SmartUtil.isBlankObject(approvalLine.getApprovals())){
+						Approval[] approvals = approvalLine.getApprovals();
+						for(int i=0; i<approvals.length; i++){
+							Approval approval = approvals[i];
+					%>
+						<!-- 결재선 -->
+						<div class="approval_area">
+							<div class="label"><%=approval.getName() %></div>
+							<div class="approval"></div>
+							<%
+							if(approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
+							%>
+								<div class="form_col js_type_userField" fieldId="usrLevelApprover<%=i+1 %>" multiUsers="false">
+									<div class="form_value" style="width:100%">
+										<div class="icon_fb_space" >
+											<div class="fieldline community_names js_community_names sw_required">
+												<input class="m0 js_auto_complete" style="width:0" disabled="disabled" href="user_name.sw" type="text">
+											</div>
+											<div class="js_community_list srch_list_nowid" style="display: none"></div>
+											<span class="js_community_popup"></span>
+											<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
+										</div>
+									</div>
+								</div>							
+							<%
+							}else if(!SmartUtil.isBlankObject(approval.getApprover())){
+								User approver = approval.getApprover();
+								
+							%>
+								<div class="">
+									<a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a>
+									<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
+								</div>
+							<%
+							}
+							%>
 						</div>
-					</div>
-				</div>
-				<!-- 결재선1 //-->
-				<!-- 결재선1 -->
-				<div class="approval_area">
-					<div class="label">승 인</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
-						</div>
-					</div>
-				</div>
-				<!-- 결재선1 //-->
-				<!-- 결재선1 -->
-				<div class="approval_area">
-					<div class="label">대표이사</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
-						</div>
-					</div>
-				</div>
-				<!-- 결재선1 //-->
-				<!-- 결재선1 -->
-				<div class="approval_area">
-					<div class="label">승 인</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
-						</div>
-					</div>
-				</div>
-				<!-- 결재선1 //-->
-				<!-- 결재선1 -->
-				<div class="approval_area">
-					<div class="label">승 인</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
-						</div>
-					</div>
-				</div>
-				<!-- 결재선1 //-->
-<!-- 				결재선1
-				<div class="approval_area">
-					<div class="label">승 인</div>
-					<div class="approval"></div>
-					<div class="">
-						<div class="icon_fb_space">
-							<div
-								class="fieldline community_names js_community_names sw_required">
-								<input class="m0 js_auto_complete" type="text"
-									href="community_name.sw">
-							</div>
-							<a class="js_userpicker_button" href=""> <span
-								class="icon_fb_users"></span> </a>
-						</div>
-					</div>
-				</div>
-				결재선1 //
- -->			</div>
+						<!-- 결재선 //-->
+					<%
+						}
+					}
+					%>
+				</form>
+			</div>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->
