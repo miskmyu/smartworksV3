@@ -143,7 +143,8 @@
 										<img class="profile_size_s" title="대표이사 정윤식" src="images/no_user_picture_min.jpg">
 									</div>
 									<div class="noti_in">
-										<span class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></span>
+										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
+										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
 										<div class="t_date">04.15 05:38</div>
 									</div>
 									<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">

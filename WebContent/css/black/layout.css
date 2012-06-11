@@ -312,7 +312,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #upload div {float:left; padding-right:15px}
 
 .up_wrap {position:relative; margin: 0 3px 10px}
-.upload_up_wrap {width:743px}
+.upload_up_wrap {width:723px}
 .detail_up_wrap {margin:0 15px 15px} /* 상세보기 페이지의 up_wrap */ 
 
 /* UpLoad Search */
