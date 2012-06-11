@@ -49,9 +49,9 @@ public interface IWorkService {
 
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception;
 
-	public String setIWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public String setWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
-	public void removeIworkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	public void removeWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void setMyProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 

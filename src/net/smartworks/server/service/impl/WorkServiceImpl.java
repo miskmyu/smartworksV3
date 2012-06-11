@@ -978,13 +978,13 @@ public class WorkServiceImpl implements IWorkService {
 	}
 
 	@Override
-	public String setIWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public String setWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
-			String companyId = cUser.getCompanyId();
 
+			int workType = (Integer)requestBody.get("workType");
 			String workId = (String)requestBody.get("workId");
 			String filterId = (String)requestBody.get("filterId");
 			String txtNewFilterName = (String)requestBody.get("txtNewFilterName");
@@ -1000,13 +1000,19 @@ public class WorkServiceImpl implements IWorkService {
 			String rightOperandType = null;
 			String hdnFieldType = null;
 
-			SwfFormCond swfFormCond = new SwfFormCond();
+			PkgPackageCond pkgPackageCond = new PkgPackageCond();
+			pkgPackageCond.setPackageId(workId);
+			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
+
+			String resourceId = ModelConverter.getResourceIdByPkgPackage(pkgPackage);
+
+			/*SwfFormCond swfFormCond = new SwfFormCond();
 			swfFormCond.setCompanyId(companyId);
 			swfFormCond.setPackageId(workId);
-			String formId = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId();
+			String formId = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId();*/
 
-			String likType = "record.cond." + userId;
-			String lnkCorr = formId;
+			String likType = workType == SmartWork.TYPE_INFORMATION ? "record.cond." + userId : "processinst.cond." + userId;
+			String lnkCorr = resourceId;
 
 			ColList colList = null;
 			ColObject[] colObjects = null;
@@ -1156,25 +1162,31 @@ public class WorkServiceImpl implements IWorkService {
 	}
 
 	@Override
-	public void removeIworkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	public void removeWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
-			String companyId = cUser.getCompanyId();
 
 			String workId = (String)requestBody.get("workId");
 			String filterId = (String)requestBody.get("filterId");
+			int workType = Integer.parseInt((String)requestBody.get("workType"));
 
 			if(CommonUtil.isEmpty(workId) || CommonUtil.isEmpty(filterId))
 				return;
 
-			SwfFormCond swfFormCond = new SwfFormCond();
+			PkgPackageCond pkgPackageCond = new PkgPackageCond();
+			pkgPackageCond.setPackageId(workId);
+			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
+
+			String resourceId = ModelConverter.getResourceIdByPkgPackage(pkgPackage);
+
+			/*SwfFormCond swfFormCond = new SwfFormCond();
 			swfFormCond.setCompanyId(companyId);
 			swfFormCond.setPackageId(workId);
-			String formId = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId();
+			String formId = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE)[0].getId();*/
 
-			String likType = "record.cond." + userId;
-			String lnkCorr = formId;
+			String likType = workType == SmartWork.TYPE_INFORMATION ? "record.cond." + userId : "processinst.cond." + userId;
+			String lnkCorr = resourceId;
 
 			ColList colList = null;
 			ColObject[] colObjects = null;
@@ -1227,7 +1239,13 @@ public class WorkServiceImpl implements IWorkService {
 				String selFilterName = (String)frmIworkFilterName.get("selFilterName");
 				requestParams.setFilterId(selFilterName);
 			}
-	
+
+			Map<String, Object> frmPworkFilterName = (Map<String, Object>)requestBody.get("frmPworkFilterName");
+			if(frmPworkFilterName != null){
+				String selFilterName = (String)frmPworkFilterName.get("selFilterName");
+				requestParams.setFilterId(selFilterName);
+			}
+
 			Map<String, Object> frmSortingField = (Map<String, Object>)requestBody.get("frmSortingField");
 			if(frmSortingField != null){
 				String hdnSortingFieldId = (String)frmSortingField.get("hdnSortingFieldId");

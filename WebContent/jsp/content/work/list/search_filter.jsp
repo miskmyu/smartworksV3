@@ -63,7 +63,7 @@
 
 
 <!-- 상세 필터 -->
-<div class="filter_group js_search_filter_page" filterId="<%=filterId%>">
+<div class="filter_group js_search_filter_page" filterId="<%=filterId%>" workType="<%=workType%>" workId="<%=workId%>">
 	<table>
 		<tr>
 			<td>

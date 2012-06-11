@@ -2407,7 +2407,7 @@ public class ModelConverter {
 		processWork.setHelpUrl("HELP URL");
 		processWork.setManualFileName("MANUAL FILE NAME");
 		processWork.setManualFilePath("MANUAL FILE PATH");
-		
+
 		processWork.setDiagram(getSmartDiagramByPkgInfo(userId, pkg));
 
 		OpinionCond opinionCond = new OpinionCond();
@@ -2415,6 +2415,9 @@ public class ModelConverter {
 		opinionCond.setRefType(6);
 		long commentCount = getOpinionManager().getOpinionSize(userId, opinionCond);
 		processWork.setCommentCount((int)commentCount);
+
+		//상세필터
+		processWork.setSearchFilters(ModelConverter.getSearchFilterInfoByPkgPackage(userId, pkg));
 
 		return processWork;
 	}

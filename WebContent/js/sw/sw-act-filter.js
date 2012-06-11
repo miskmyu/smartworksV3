@@ -112,24 +112,33 @@ $(function() {
 
 	$('a.js_search_filter_delete').live("click", function(e){
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
-			var iworkList = $('.js_iwork_list_page');
-			var workId = iworkList.attr('workId');
+			//var iworkList = $('.js_iwork_list_page');
+			//var workId = iworkList.attr('workId');
 			var searchFilter = $('.js_search_filter_page');
+			var workId = searchFilter.attr('workId');
 			var filterId = searchFilter.attr('filterId');
-
+			var workType = searchFilter.attr('workType');				
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['filterId'] = filterId;
+			paramsJson['workType'] = workType;
 			console.log(JSON.stringify(paramsJson));
+
+			var href = "";
+			if(workType == 21)
+				href = "iwork_list.sw?cid=iw.li." + workId;
+			else if(workType == 22)
+				href = "pwork_list.sw?cid=pw.li." + workId;
+
 			$.ajax({
-				url : "remove_iwork_search_filter.sw",
+				url : "remove_work_search_filter.sw",
 				contentType : 'application/json',
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeFilterSucceed'), function(){
-						document.location.href = "iwork_list.sw?cid=iw.li." + workId;
-					});					
+						document.location.href = href;
+					});
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

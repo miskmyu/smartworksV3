@@ -561,7 +561,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		}
 	}
 
-	private Query appendExtendQuery(StringBuffer queryBuffer, PrcProcessInstCond cond) throws PrcException {
+	private Query appendExtendQuery(StringBuffer queryBuffer, PrcProcessInstCond cond) throws Exception {
 		
 		String packageId = cond.getPackageId();
 		String[] objIdIns = cond.getObjIdIns();
@@ -569,10 +569,12 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		String prcStatus = cond.getStatus();
 		Date creationDateFrom = cond.getCreationDateFrom();
 		Date creationDateTo = cond.getCreationDateTo();
-		
+		Filter[] filters = cond.getFilter();
+		String logicalOperator = cond.getOperator();
+
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
-		
+
 		queryBuffer.append(" from ( ");
 		queryBuffer.append(" 		select ");
 		queryBuffer.append(" 			 prcInst.prcObjId ");
@@ -655,6 +657,80 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			queryBuffer.append(")");
 		}
+
+		Map filterMap = new HashMap();
+		if (!CommonUtil.isEmpty(filters)) {
+			if (CommonUtil.isEmpty(logicalOperator))
+				logicalOperator = "and";
+			String operator;
+			String left;
+			String right;
+			String rightType;
+			int i = 0;
+
+			for (int j = 0; j < filters.length; j++) {
+				Filter f = filters[j];
+				operator = f.getOperator();
+				left = f.getLeftOperandValue();
+				right = f.getRightOperandValue();
+				rightType = f.getRightOperandType();
+				if (left == null)
+					throw new PrcException("left operand of filter condition is null.");
+				if (operator == null) {
+					operator = "=";
+				} else {
+					operator = operator.trim();
+				}
+				//left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
+				queryBuffer.append(CommonUtil.SPACE).append(logicalOperator);
+				
+				String oper1;
+				String oper2;
+				if (operator.equalsIgnoreCase("datein")) {
+					oper1 = ">=";
+					oper2 = "<=";
+					right = "a" + i++;
+					filterMap.put(right, f);
+					queryBuffer.append(CommonUtil.SPACE).append("(" + left);
+					queryBuffer.append(CommonUtil.SPACE).append(oper1);
+					queryBuffer.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+					queryBuffer.append(CommonUtil.SPACE).append("and");
+					queryBuffer.append(CommonUtil.SPACE).append(left);
+					queryBuffer.append(CommonUtil.SPACE).append(oper2);
+					queryBuffer.append(CommonUtil.SPACE).append(CommonUtil.COLON).append("_" + right).append(")");
+				} else if (operator.equalsIgnoreCase("datenotin")) {
+					oper1 = "<";
+					oper2 = ">";
+					right = "a" + i++;
+					filterMap.put(right, f);
+					queryBuffer.append(CommonUtil.SPACE).append("(" + left);
+					queryBuffer.append(CommonUtil.SPACE).append(oper1);
+					queryBuffer.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+					queryBuffer.append(CommonUtil.SPACE).append("or");
+					queryBuffer.append(CommonUtil.SPACE).append(left);
+					queryBuffer.append(CommonUtil.SPACE).append(oper2);
+					queryBuffer.append(CommonUtil.SPACE).append(CommonUtil.COLON).append("_" + right).append(")");
+				} else {
+					queryBuffer.append(CommonUtil.SPACE).append(left);
+					if (right == null) {
+						if (operator.equals("!=") || 
+								(operator.indexOf("=") == -1 && !operator.equalsIgnoreCase("is"))) {
+							queryBuffer.append(" is not null");
+						} else {
+							queryBuffer.append(" is null");
+						}
+					} else {
+						if (rightType == null || !rightType.equalsIgnoreCase(Filter.OPERANDTYPE_FIELD)) {
+							right = "a" + i++;
+							filterMap.put(right, f);
+						}
+						queryBuffer.append(CommonUtil.SPACE).append(operator);
+						queryBuffer.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+					}
+					
+				}
+			}
+		}
 		queryBuffer.append(" 	)info ");
 		queryBuffer.append(" 	left outer join ");
 		queryBuffer.append(" 	( ");
@@ -669,11 +745,11 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			and ctg.parentid = parentCtg.id ");
 		queryBuffer.append(" 	) ctgInfo ");
 		queryBuffer.append(" 	on info.prcobjid = ctginfo.prcinstid ");
-		
+
 		this.appendOrderQuery(queryBuffer, "info", cond);
-		
+
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
-		
+
 		if (pageSize > 0|| pageNo >= 0) {
 			query.setFirstResult(pageNo * pageSize);
 			query.setMaxResults(pageSize);
@@ -691,6 +767,48 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		if (objIdIns != null && objIdIns.length != 0) {
 			for (int i=0; i<objIdIns.length; i++) {
 				query.setString("objIdIn"+i, objIdIns[i]);
+			}
+		}
+		if (!CommonUtil.isEmpty(filters)) {
+			if (!CommonUtil.isEmpty(filterMap)) {
+				Filter f;
+				String operType;
+				String operValue;
+				String operator;
+
+				Iterator keyItr = filterMap.keySet().iterator();
+				String param = null;
+				while (keyItr.hasNext()) {
+					param = (String)keyItr.next();
+					f = (Filter)filterMap.get(param);
+					operType = f.getRightOperandType();
+					operator = f.getOperator();
+					if (operator.equalsIgnoreCase("like")) {
+						operValue = CommonUtil.toLikeString(f.getRightOperandValue());
+					} else {
+						operValue = f.getRightOperandValue();
+					}	
+					if (operType == null || operType.equalsIgnoreCase(Filter.OPERANDTYPE_STRING)) {
+						query.setString(param, operValue);
+					} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_INT)) {
+						query.setInteger(param, CommonUtil.toInt(operValue));
+					} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_FLOAT)) {
+						query.setFloat(param, CommonUtil.toFloat(operValue));
+					} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATE)) {
+						 if (operator.equalsIgnoreCase("datein") || operator.equalsIgnoreCase("datenotin")) {
+								query.setTimestamp(param, DateUtil.toFromDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+								query.setTimestamp("_" + param, DateUtil.toToDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+							 } else {
+								query.setTimestamp(param, DateUtil.toDate(operValue));
+							 }		
+						} else if (operType.equalsIgnoreCase("number")) {
+						query.setDouble(param, Double.parseDouble(operValue));
+					} else if (operType.equalsIgnoreCase("boolean")) {
+						query.setBoolean(param, CommonUtil.toBoolean(operValue));
+					} else {
+						query.setParameter(param, operValue);
+					}
+				}
 			}
 		}
 		return query;
@@ -713,65 +831,71 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		}
 	}
 	public PrcProcessInstExtend[] getProcessInstExtends(String user, PrcProcessInstCond cond) throws PrcException {
-		StringBuffer queryBuffer = new StringBuffer();
-		queryBuffer.append(" select  ctgInfo.parentCtgId ");
-		queryBuffer.append(" 			, ctgInfo.parentCtg ");
-		queryBuffer.append(" 			, ctgInfo.subCtgId ");
-		queryBuffer.append(" 			, ctgInfo.subCtg  ");
-		queryBuffer.append(" 			, info.* ");
+		try {
+			StringBuffer queryBuffer = new StringBuffer();
+			queryBuffer.append(" select  ctgInfo.parentCtgId ");
+			queryBuffer.append(" 			, ctgInfo.parentCtg ");
+			queryBuffer.append(" 			, ctgInfo.subCtgId ");
+			queryBuffer.append(" 			, ctgInfo.subCtg  ");
+			queryBuffer.append(" 			, info.* ");
+	
+			Query query = this.appendExtendQuery(queryBuffer, cond);
+	
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			List objList = new ArrayList();
+			for (Iterator itr = list.iterator(); itr.hasNext();) {
+				Object[] fields = (Object[]) itr.next();
+				PrcProcessInstExtend obj = new PrcProcessInstExtend();
+				int j = 0;
 		
-		Query query = this.appendExtendQuery(queryBuffer, cond);
-	
-		List list = query.list();
-		if (list == null || list.isEmpty())
-			return null;
-		List objList = new ArrayList();
-		for (Iterator itr = list.iterator(); itr.hasNext();) {
-			Object[] fields = (Object[]) itr.next();
-			PrcProcessInstExtend obj = new PrcProcessInstExtend();
-			int j = 0;
-	
-			obj.setParentCtgId((String)fields[j++]); 
-			obj.setParentCtg((String)fields[j++]);
-			obj.setSubCtgId((String)fields[j++]);
-			obj.setSubCtg((String)fields[j++]);
-			obj.setPrcObjId((String)fields[j++]);
-			obj.setPrcName((String)fields[j++]);
-			obj.setPrcCreateUser((String)fields[j++]);
-			obj.setPrcCreateDate((Timestamp)fields[j++]);
-			obj.setPrcModifyUser((String)fields[j++]);
-			obj.setPrcModifyDate((Timestamp)fields[j++]);
-			obj.setPrcStatus((String)fields[j++]);
-			obj.setPrcTitle((String)fields[j++]);
-			obj.setPrcDid((String)fields[j++]);
-			obj.setPrcPrcId((String)fields[j++]);
-			obj.setPrcWorkSpaceId((String)fields[j++]);
-			obj.setPrcWorkSpaceType((String)fields[j++]);
-			obj.setPrcAccessLevel((String)fields[j++]);
-			obj.setPrcAccessValue((String)fields[j++]);
-			obj.setLastTask_tskObjId((String)fields[j++]);
-			obj.setLastTask_tskName((String)fields[j++]);
-			obj.setLastTask_tskCreateUser((String)fields[j++]);
-			obj.setLastTask_tskCreateDate((Timestamp)fields[j++]);
-			obj.setLastTask_tskStatus((String)fields[j++]);
-			obj.setLastTask_tskType((String)fields[j++]);
-			obj.setLastTask_tskTitle((String)fields[j++]);
-			obj.setLastTask_tskAssignee((String)fields[j++]);
-			obj.setLastTask_tskExecuteDate((Timestamp)fields[j++]);
-			obj.setLastTask_tskDueDate((Timestamp)fields[j++]);
-			obj.setLastTask_tskForm((String)fields[j++]);
-			obj.setLastTask_tskWorkSpaceId((String)fields[j++]);
-			obj.setLastTask_tskWorkSpaceType((String)fields[j++]);
-			obj.setLastTask_tskAccessLevel((String)fields[j++]);
-			obj.setLastTask_tskAccessValue((String)fields[j++]);
-			int lastTaskCount = (Integer)fields[j++];
-			obj.setLastTask_tskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
-			objList.add(obj);
+				obj.setParentCtgId((String)fields[j++]); 
+				obj.setParentCtg((String)fields[j++]);
+				obj.setSubCtgId((String)fields[j++]);
+				obj.setSubCtg((String)fields[j++]);
+				obj.setPrcObjId((String)fields[j++]);
+				obj.setPrcName((String)fields[j++]);
+				obj.setPrcCreateUser((String)fields[j++]);
+				obj.setPrcCreateDate((Timestamp)fields[j++]);
+				obj.setPrcModifyUser((String)fields[j++]);
+				obj.setPrcModifyDate((Timestamp)fields[j++]);
+				obj.setPrcStatus((String)fields[j++]);
+				obj.setPrcTitle((String)fields[j++]);
+				obj.setPrcDid((String)fields[j++]);
+				obj.setPrcPrcId((String)fields[j++]);
+				obj.setPrcWorkSpaceId((String)fields[j++]);
+				obj.setPrcWorkSpaceType((String)fields[j++]);
+				obj.setPrcAccessLevel((String)fields[j++]);
+				obj.setPrcAccessValue((String)fields[j++]);
+				obj.setLastTask_tskObjId((String)fields[j++]);
+				obj.setLastTask_tskName((String)fields[j++]);
+				obj.setLastTask_tskCreateUser((String)fields[j++]);
+				obj.setLastTask_tskCreateDate((Timestamp)fields[j++]);
+				obj.setLastTask_tskStatus((String)fields[j++]);
+				obj.setLastTask_tskType((String)fields[j++]);
+				obj.setLastTask_tskTitle((String)fields[j++]);
+				obj.setLastTask_tskAssignee((String)fields[j++]);
+				obj.setLastTask_tskExecuteDate((Timestamp)fields[j++]);
+				obj.setLastTask_tskDueDate((Timestamp)fields[j++]);
+				obj.setLastTask_tskForm((String)fields[j++]);
+				obj.setLastTask_tskWorkSpaceId((String)fields[j++]);
+				obj.setLastTask_tskWorkSpaceType((String)fields[j++]);
+				obj.setLastTask_tskAccessLevel((String)fields[j++]);
+				obj.setLastTask_tskAccessValue((String)fields[j++]);
+				int lastTaskCount = (Integer)fields[j++];
+				obj.setLastTask_tskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
+				objList.add(obj);
+			}
+			list = objList;
+			PrcProcessInstExtend[] objs = new PrcProcessInstExtend[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (PrcException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new PrcException(e);
 		}
-		list = objList;
-		PrcProcessInstExtend[] objs = new PrcProcessInstExtend[list.size()];
-		list.toArray(objs);
-		return objs;
 	}
 
 	public PrcProcess getProcess(String user, String id, String level)	throws PrcException {
