@@ -171,11 +171,9 @@
 				}
 			%>
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
-					<td class="tc"><%=currentCount%></td>
-					<td>
-						<div>
+					<td class="tc vm"><%=currentCount%></td>
+					<td class="tc vm">
 							<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>"></span>
-						</div>
 					</td>
 					<td>
 						<div class="noti_pic">

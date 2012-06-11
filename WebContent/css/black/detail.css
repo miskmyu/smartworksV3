@@ -35,7 +35,7 @@
 
 /* 본문 컨텐츠 */
 .define_space {padding: 0 25px; overflow: hidden;} /* 상하 여백이 필요 없을때 */
-.contents_space {padding: 0 25px 10px; overflow: hidden;}
+.contents_space {padding: 0 25px 10px}
 .contents_space .det_title, .replay .det_title {padding:3px 0; overflow:hidden;} /* 타이틀 */
 .contents_space .area {padding:10px;}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px;}
@@ -77,7 +77,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_title_space,.default_title_space {padding:5px 0 0 0; overflow:hidden; clear:both} /* Case in right Button */
 .list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 2px no-repeat;font-size:14px;font-weight:bold; padding: 0 8px 0 20px; float:left;}
 
-.list_contents { clear:both}
+.list_contents {}
 /*.list_contents table {min-width:700px;}*/
 .list_contents table tr, .list_contents table td, .list_contents table th {border-bottom: 1px solid #DCDFE}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
@@ -241,10 +241,10 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .sel_date_section a:hover.btn_calendar {background: url("../../images/bg_date_feild.jpg") no-repeat 100% 0; float: right}
 
 /* 상단 아이콘 */
-.icon_forward_w {background: url("../../images/body_icon.png") no-repeat scroll 0 -364px transparent; height:16px; width:16px; display:inline-block;}
-.icon_approval_w {background: url("../../images/body_icon.png") no-repeat scroll -40px -364px transparent; height:16px; width:17px; display:inline-block;}
-.icon_print_w {background: url("../../images/body_icon.png") no-repeat scroll -80px -364px transparent; height:16px; width:16px; display:inline-block;}
-.icon_mail_w {background: url("../../images/body_icon.png") no-repeat scroll -124px -364px transparent; height:16px; width:17px; display:inline-block;}
+.icon_forward_w {background: url("../../images/body_icon.png") no-repeat scroll 0 -364px transparent; height:18px; width:16px; display:inline-block;}
+.icon_approval_w {background: url("../../images/body_icon.png") no-repeat scroll -199px -364px transparent; height:18px; width:17px; display:inline-block;}
+.icon_print_w {background: url("../../images/body_icon.png") no-repeat scroll -80px -364px transparent; height:18px; width:16px; display:inline-block;}
+.icon_mail_w {background: url("../../images/body_icon.png") no-repeat scroll -124px -364px transparent; height:18px; width:17px; display:inline-block;}
 
 /* 사진 이미지 사이즈 */
 .profile_size_b {width:110px; height:110px;}
@@ -322,4 +322,4 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .right_auto2 { display: block; padding-left:320px; width:auto}
 .left_im2 table, .right_auto2 table { width:100% ; min-width:inherit}
 
-.community_names .user_select{padding: 0 3px;margin:0;margin-left:3px;position:relative;top:0;}
+.community_names .user_select{padding: 1px 3px; margin:0;margin-left:3px; position:relative; top:0;}

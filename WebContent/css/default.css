@@ -121,6 +121,7 @@ table {
 	border-spacing: 0pt;
 	width: 100%;
 }
+td, th {display: table-cell; vertical-align: inherit}
 
 legend, hr {
 	left: 0pt;
