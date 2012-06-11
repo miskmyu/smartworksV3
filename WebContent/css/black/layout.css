@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#wrap { background: url("../../images/top_bg.png") repeat-x scroll 0 0 #ECE9E2; height:100%; min-width:1000px; margin:0; z-index:1; position:relative;}
+#wrap { background: url("../../images/top_bg.png") repeat-x scroll 0 0 transparent; height:100%; min-width:1000px; margin:0; z-index:1; position:relative;}
 
 body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
@@ -189,7 +189,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 .icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 .icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
-.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -483px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right;}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px;}
@@ -638,8 +638,8 @@ td.pic{width:85px}
 #footer a:hover, a:focus, a:active {color:#454545; text-decoration: underline;}
 
 /* Status Icons */
-.icon_status_running {background: url("../../images/icon_status_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
-.icon_status_d_running {background: url("../../images/icon_status_d_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
-.icon_status_returned {background: url("../../images/icon_status_returned.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
-.icon_status_not_yet {background: url("../../images/icon_status_not_yet.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
-.icon_status_completed {background: url("../../images/icon_status_completed.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_running {background: url("../../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; display: inline-block; height:21px;}
+.icon_status_d_running {background: url("../../images/icon_status_d_running.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; display: inline-block; height:21px;}
+.icon_status_returned {background: url("../../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; display: inline-block; height:21px;}
+.icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; display: inline-block; height:21px;}
+.icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; display: inline-block; height:21px;}
