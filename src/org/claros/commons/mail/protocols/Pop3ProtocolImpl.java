@@ -18,6 +18,8 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.UIDFolder;
+import javax.mail.internet.MimeMessage;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.ReceivedDateTerm;
@@ -38,6 +40,8 @@ import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.utility.Constants;
 import org.claros.commons.mail.utility.Utility;
 import org.claros.commons.utility.Formatter;
+
+import com.sun.mail.pop3.POP3Folder;
 
 public class Pop3ProtocolImpl implements Protocol {
 	private ConnectionProfile profile;
@@ -150,20 +154,13 @@ public class Pop3ProtocolImpl implements Protocol {
 			closeFolder(fold);
 			fold = getFolder();
 			
-			Date fromDate = new Date((new Date()).getTime() - (1000*60*60*24*7));
-			
 			headers = new ArrayList();
 			
 			EmailHeader header = null;
-			Message[] msgs = null;
-            if(fromDate == null){
-    			msgs = fold.getMessages();
-            }else{
-            	SearchTerm newerThen = new ReceivedDateTerm(ComparisonTerm.LE,fromDate);
-	            msgs = fold.search(newerThen);
-    			msgs = fold.getMessages();
-            }
-			FetchProfile fp = new FetchProfile();
+			
+            Message[] msgs = fold.getMessages();
+
+            FetchProfile fp = new FetchProfile();
 			fp.add(FetchProfile.Item.ENVELOPE);
 			fp.add(FetchProfile.Item.FLAGS);
 			fp.add(FetchProfile.Item.CONTENT_INFO);
@@ -211,6 +208,87 @@ public class Pop3ProtocolImpl implements Protocol {
 		return headers;
 	}
 
+	public EmailHeader fetchHeader(Message msg, int msgId) throws SystemException, ConnectionException {
+		EmailHeader header = null;
+		Folder fold = null;
+		try {
+			fold = getFolder();
+			closeFolder(fold);
+			fold = getFolder();
+			
+            FetchProfile fp = new FetchProfile();
+			fp.add(FetchProfile.Item.ENVELOPE);
+			fp.add(FetchProfile.Item.FLAGS);
+			fp.add(FetchProfile.Item.CONTENT_INFO);
+			fp.add("Size");
+			fp.add("Date");
+			
+			Message[] msgs = new Message[]{msg};
+			fold.fetch(msgs, fp);
+
+			try {
+				header = new EmailHeader();
+
+				header.setMultipart((msg.isMimeType("multipart/*")) ? true : false);
+				header.setMessageId(msgId);
+				header.setFrom(msg.getFrom());
+				header.setTo(msg.getRecipients(Message.RecipientType.TO));
+				header.setCc(msg.getRecipients(Message.RecipientType.CC));
+				header.setBcc(msg.getRecipients(Message.RecipientType.BCC));
+				header.setDate(msg.getSentDate());
+				header.setReplyTo(msg.getReplyTo());
+				header.setSize(msg.getSize());
+				header.setSubject(msg.getSubject());
+                
+				// now set the human readables.
+				header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
+				header.setFromShown(Utility.addressArrToString(header.getFrom()));
+				header.setToShown(Utility.addressArrToString(header.getTo()));
+				header.setReplyToShown(Utility.addressArrToString(header.getReplyTo()));
+				header.setCcShown(Utility.addressArrToString(header.getCc()));
+				header.setBccShown(Utility.addressArrToString(header.getBcc()));
+				header.setSizeShown(Utility.sizeToHumanReadable(header.getSize()));
+                
+			} catch (MessagingException e1) {
+				System.out.println("Could not parse headers of e-mail. Message might be defuncted or illegal formatted.");
+			}
+		} catch (Exception e) {
+			System.out.println("Could not fetch message headers. Is mbox connection still alive???");
+			throw new ConnectionException(e);
+		}
+		return header;
+	}
+
+	/**
+	 * Fetches all e-mail headers from the server, with appropriate
+	 * fields already set.
+	 * @param handler
+	 * @return ArrayList of MessageHeaders
+	 * @throws ConnectionException
+	 */
+	public Message[] fetchAllMessagesWithUid() throws SystemException, ConnectionException {
+		Folder fold = null;
+		try {
+			fold = getFolder();
+			closeFolder(fold);
+			fold = getFolder();
+			
+			FlagTerm ft = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
+            Message[] msgs = fold.search(ft);
+
+            FetchProfile fp = new FetchProfile();
+            fp.add(UIDFolder.FetchProfileItem.UID);
+            			
+			fold.fetch(msgs, fp);
+
+			return msgs;	
+			
+		} catch (Exception e) {
+			System.out.println("Could not fetch message headers. Is mbox connection still alive???");
+			throw new ConnectionException(e);
+		}
+	}
+
 	/**
 	 * Fetches and returns message headers as message objects.
 	 * @return
@@ -254,6 +332,7 @@ public class Pop3ProtocolImpl implements Protocol {
 			try {
 				fold = getFolder();
 				msg = fold.getMessage(messageId);
+
 			} catch (Exception e) {
 				System.out.println("Could not fetch message body from remote server.");
 				throw new MailboxActionException(e);
@@ -262,6 +341,24 @@ public class Pop3ProtocolImpl implements Protocol {
 			throw e;
 		}
 		return msg;
+	}
+
+	public String getMessageUID(Message message) throws MailboxActionException, SystemException, ConnectionException, Exception {
+		String uid = null;
+		POP3Folder fold = null;
+		try {
+			try {
+				fold = (POP3Folder)getFolder();
+				uid = fold.getUID(message);
+
+			} catch (Exception e) {
+				System.out.println("Could not fetch message body from remote server.");
+				throw new MailboxActionException(e);
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return uid;
 	}
 
 	/**
