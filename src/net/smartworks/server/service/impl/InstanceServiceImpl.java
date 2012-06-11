@@ -137,6 +137,7 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
+import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -6388,7 +6389,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					msg.setChatId(chatId);
 					
 					getMessageManager().createMessage(senderId, msg);
-
+					
 					PublishNotice pubNoticeObj = new PublishNotice((String)receivers.get(index), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, msg.getObjId());
 					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
@@ -6486,6 +6487,15 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 		for (int i = 0; i < messages.length; i++) {
 			imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
+
+			PublishNoticeCond pubNoticeObjCond = new PublishNoticeCond(messages[i].getTargetUser(), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, messages[i].getObjId());
+			PublishNotice pubNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice("linkadvisor", pubNoticeObjCond, IManager.LEVEL_ALL);
+			
+			if (!CommonUtil.isEmpty(pubNotice)) {
+				SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), pubNotice.getObjId());
+				SmartUtil.increaseNoticeCountByNoticeType(messages[i].getTargetUser(), Notice.TYPE_MESSAGE);	
+			}
+			
 		}
 		return chatInstInfos;
 	}
