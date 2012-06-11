@@ -186,9 +186,10 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 /* Nav Mail Btn*/
 .icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 -2px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 .icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -25px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 .icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block;}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right;}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px;}
@@ -236,6 +237,11 @@ a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png"
 .btn_text_category:hover, .btn_change_work:hover {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; display: inline-block}
 .btn_remove_category, .btn_remove_work {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; display: inline-block}
 .btn_remove_category:hover, .btn_remove_work:hover {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; display: inline-block}
+
+.btn_text_folder {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; display: none}
+.folder_actions:hover .btn_text_folder {display: inline-block}
+.btn_remove_folder {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; display: none}
+.folder_actions:hover .btn_remove_folder{display: inline-block}
 
 /* Icon Builder*/
 .icon_down {background: url("../../images/body_icon.png") no-repeat 0 -548px; width:13px; height:13px; display: inline-block}
@@ -630,3 +636,10 @@ td.pic{width:85px}
 #footer .f_info { margin-left:4px; vertical-align: bottom;}
 #footer a:link, a:visited {color:#454545; text-decoration: none;}
 #footer a:hover, a:focus, a:active {color:#454545; text-decoration: underline;}
+
+/* Status Icons */
+.icon_status_running {background: url("../../images/icon_status_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_d_running {background: url("../../images/icon_status_d_running.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_returned {background: url("../../images/icon_status_returned.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_not_yet {background: url("../../images/icon_status_not_yet.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}
+.icon_status_completed {background: url("../../images/icon_status_completed.jpg") no-repeat left top transparent; padding:0 0 0 21px; line-height:21px; float: left; height:21px;}

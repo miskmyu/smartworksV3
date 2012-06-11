@@ -136,6 +136,7 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -450,6 +451,51 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
+		
+		try{
+			//정보관리업무에서 파생된 업무는 IWInstanceInfo
+			//프로세스 태스크및 프로세스에서 파생된 업무는 PWInstanceInfo
+			
+			User user = SmartUtil.getCurrentUser();
+			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
+				return null;
+	
+			TaskWorkCond taskCond = new TaskWorkCond();
+			if (assignedOnly) {
+				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
+				taskCond.setTskAssignee(user.getId());
+			} else {
+				taskCond.setTskStartOrAssigned(user.getId());
+			}
+			if (lastInstanceDate != null) {
+				taskCond.setLastInstanceDate(lastInstanceDate);
+			} else {
+				taskCond.setLastInstanceDate(new LocalDate());
+			}
+			if (params != null) {
+				if (!CommonUtil.isEmpty(params.getSearchKey())) {
+					taskCond.setSearchKey(params.getSearchKey());
+				}
+			}
+			taskCond.setPageNo(0);
+			taskCond.setPageSize(requestSize);
+			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			
+			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
+			
+			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+			
+			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
+			return null;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+		
+	}
 	/*
 	 * 
 	 * 현재사용자의 진행중인 업무, 즉 현재사용자에게 할당된 태스크들과 현재사용자가 시작한 업무중 진행중인 업무를 가져다 주는 서비스로,
@@ -470,42 +516,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	 */
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
 
-		try{
-			//정보관리업무에서 파생된 업무는 IWInstanceInfo
-			//프로세스 태스크및 프로세스에서 파생된 업무는 PWInstanceInfo
-	
-			User user = SmartUtil.getCurrentUser();
-			if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
-				return null;
-	
-			TaskWorkCond taskCond = new TaskWorkCond();
-			if (assignedOnly) {
-				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
-				taskCond.setTskAssignee(user.getId());
-			} else {
-				taskCond.setTskStartOrAssigned(user.getId());
-			}
-			if (lastInstanceDate != null) {
-				taskCond.setLastInstanceDate(lastInstanceDate);
-			} else {
-				taskCond.setLastInstanceDate(new LocalDate());
-			}
-			taskCond.setPageNo(0);
-			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-			
-			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
-			
-			TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
-			
-			if(tasks != null) return ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), tasks);
-			return null;
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required			
-		}
+		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, null);
 	}
 
 	/*
@@ -1803,7 +1814,24 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setFormId(swfForms[0].getId());
 			swdRecordCond.setRecordId(instanceId);
 	
-			getSwdManager().removeRecord(user.getId(), swdRecordCond);
+			//getSwdManager().removeRecord(user.getId(), swdRecordCond);
+			
+			// 삭제할 레코드 조회
+			SwdRecord record = getSwdManager().getRecord(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+			if (record == null)
+				return;
+			
+			// 삭제할 도메인 아이디 조회
+			String domainId = record.getDomainId();
+			if (domainId == null) {
+				SwdDomainCond domainCond = new SwdDomainCond();
+				domainCond.setFormId(record.getFormId());
+				SwdDomain domain = getSwdManager().getDomain(user.getId(), domainCond, IManager.LEVEL_LITE);
+				domainId = domain.getObjId();
+			}
+
+			getSwdManager().removeRecord(user.getId(), record.getDomainId(), record.getRecordId());
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1930,16 +1958,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			if (workType == SmartWork.TYPE_INFORMATION || workType == SocialWork.TYPE_MEMO || workType == SocialWork.TYPE_EVENT || workType == SocialWork.TYPE_BOARD
 					 || workType == SocialWork.TYPE_FILE || workType == SocialWork.TYPE_IMAGE || workType == SocialWork.TYPE_YTVIDEO) {
-				if (tskTask != null)
+				if (tskTask != null) {
+					PublishNotice pubNoticeObj = new PublishNotice(tskTask.getAssignee(), PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_COMMENT_INFORWORK, opinion.getObjId());
+					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType(tskTask.getAssignee(), Notice.TYPE_COMMENT);
+				}
 			} else if (workType == SmartWork.TYPE_PROCESS) {
 				TskTaskCond cond = new TskTaskCond();
 				cond.setProcessInstId(workInstanceId);
 				cond.setType(TskTask.TASKTYPE_COMMON);
 				TskTask[] tasks = getTskManager().getTasks(userId, cond, IManager.LEVEL_LITE);
 				if (tasks != null) {
+					List assigneeIdList = new ArrayList();
 					for (int i = 0; i < tasks.length; i++) {
-						SmartUtil.increaseNoticeCountByNoticeType(tasks[i].getAssignee(), Notice.TYPE_COMMENT);
+						if (!assigneeIdList.contains(tasks[i].getAssignee())) {
+							PublishNotice pubNoticeObj = new PublishNotice(tasks[i].getAssignee(), PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_COMMENT_INFORWORK, opinion.getObjId());
+							SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+							SmartUtil.increaseNoticeCountByNoticeType(tasks[i].getAssignee(), Notice.TYPE_COMMENT);
+							assigneeIdList.add(tasks[i].getAssignee());
+						}
 					}
 				}
 			}
@@ -2584,50 +2621,65 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWorkCond cond = new TaskWorkCond();
 			cond.setTskWorkSpaceId(instanceId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
-			cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
-			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-				cond.setPageSize(length);
-			TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
-
+			
+			long tasksSize = getWlmManager().getTaskWorkListSize(userId, cond);
+			
 			InstanceInfo[] subInstancesInInstances = null;
 			List<InstanceInfo> instanceInfoList = new ArrayList<InstanceInfo>();
-			List<String> prcInstIdList = new ArrayList<String>();
-			if(!CommonUtil.isEmpty(tasks)) {
-				for (int i = 0; i < tasks.length; i++) {
-					TaskWork task = tasks[i];
-					if (instanceInfoList.size() == 10)
-						break;
-					if (prcInstIdList.contains(task.getTskPrcInstId()))
-						continue;
-					prcInstIdList.add(task.getTskPrcInstId());
-					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+			
+			if (tasksSize != 0) {
+				
+				cond.setOrders(new Order[]{new Order("taskLastModifyDate", true)});
+				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+					cond.setPageSize(length);
+				
+				TaskWork[] tasks = getWlmManager().getTaskWorkList(userId, cond);
+				List<String> prcInstIdList = new ArrayList<String>();
+				if(!CommonUtil.isEmpty(tasks)) {
+					for (int i = 0; i < tasks.length; i++) {
+						TaskWork task = tasks[i];
+						if (instanceInfoList.size() == 10)
+							break;
+						if (prcInstIdList.contains(task.getTskPrcInstId()))
+							continue;
+						prcInstIdList.add(task.getTskPrcInstId());
+						instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+					}
 				}
 			}
 
 			OpinionCond opinionCond = new OpinionCond();
 			opinionCond.setRefId(instanceId);
-			if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
-				opinionCond.setPageSize(length);
-			Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
-			if(!CommonUtil.isEmpty(opinions)) {
-				int opinionLength = opinions.length;
-				for(int i=0; i<opinionLength; i++) {
-					Opinion opinion = opinions[i];
-					CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
-					String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
-					Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
-					commentInstanceInfo.setId(opinion.getObjId());
-					commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
-					commentInstanceInfo.setComment(opinion.getOpinion());
-					commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
-					commentInstanceInfo.setType(Instance.TYPE_COMMENT);
-					commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
-					commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
-					commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
-					instanceInfoList.add(commentInstanceInfo);
+
+			long opinionsSize = getOpinionManager().getOpinionSize(userId, opinionCond);
+			
+			if (opinionsSize != 0) {
+
+				if(length == WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT)
+					opinionCond.setPageSize(length);
+				
+				Opinion[] opinions = getOpinionManager().getOpinions(userId, opinionCond, IManager.LEVEL_ALL);
+				if(!CommonUtil.isEmpty(opinions)) {
+					int opinionLength = opinions.length;
+					for(int i=0; i<opinionLength; i++) {
+						Opinion opinion = opinions[i];
+						CommentInstanceInfo commentInstanceInfo = new CommentInstanceInfo();
+						String modificationUser = opinion.getModificationUser() == null ? opinion.getCreationUser() : opinion.getModificationUser();
+						Date modificationDate = opinion.getModificationDate() == null ? opinion.getCreationDate() : opinion.getModificationDate();
+						commentInstanceInfo.setId(opinion.getObjId());
+						commentInstanceInfo.setCommentType(CommentInstance.COMMENT_TYPE_ON_WORK_MANUAL);
+						commentInstanceInfo.setComment(opinion.getOpinion());
+						commentInstanceInfo.setCommentor(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setLastModifiedDate(new LocalDate(modificationDate.getTime()));
+						commentInstanceInfo.setType(Instance.TYPE_COMMENT);
+						commentInstanceInfo.setOwner(ModelConverter.getUserInfoByUserId(opinion.getCreationUser()));
+						commentInstanceInfo.setCreatedDate(new LocalDate(opinion.getCreationDate().getTime()));
+						commentInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modificationUser));;
+						instanceInfoList.add(commentInstanceInfo);
+					}
 				}
 			}
+			
 			if(instanceInfoList.size() > 0) {
 				Collections.sort(instanceInfoList);
 				subInstancesInInstances = new InstanceInfo[instanceInfoList.size()];
@@ -2732,40 +2784,42 @@ public class InstanceServiceImpl implements IInstanceService {
 					swdRecordCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
 				} else {
 					searchFilter = ModelConverter.getSearchFilterByFilterId(SwfFormModel.TYPE_SINGLE, workId, filterId);
-					Condition[] conditions = searchFilter.getConditions();
-					Filters filters = new Filters();
-					filterList = new ArrayList<Filter>();
-					for(Condition condition : conditions) {
-						Filter filter = new Filter();
-						FormField leftOperand = condition.getLeftOperand();
-						String lefOperandType = leftOperand.getType();
-						String operator = condition.getOperator();
-						Object rightOperand = condition.getRightOperand();
-						String rightOperandValue = "";
-						if(rightOperand instanceof User) {
-							rightOperandValue = ((User)rightOperand).getId();
-						} else if(rightOperand instanceof Work) {
-							rightOperandValue = ((Work)rightOperand).getId();
-						} else {
-							if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
-							else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
-							else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
-							else rightOperandValue = (String)rightOperand;
+					if (searchFilter != null) {
+						Condition[] conditions = searchFilter.getConditions();
+						Filters filters = new Filters();
+						filterList = new ArrayList<Filter>();
+						for(Condition condition : conditions) {
+							Filter filter = new Filter();
+							FormField leftOperand = condition.getLeftOperand();
+							String lefOperandType = leftOperand.getType();
+							String operator = condition.getOperator();
+							Object rightOperand = condition.getRightOperand();
+							String rightOperandValue = "";
+							if(rightOperand instanceof User) {
+								rightOperandValue = ((User)rightOperand).getId();
+							} else if(rightOperand instanceof Work) {
+								rightOperandValue = ((Work)rightOperand).getId();
+							} else {
+								if(lefOperandType.equals(FormField.TYPE_DATETIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTDateString();
+								else if(lefOperandType.equals(FormField.TYPE_DATE)) rightOperandValue = ((LocalDate)rightOperand).toGMTSimpleDateString2();
+								else if(lefOperandType.equals(FormField.TYPE_TIME)) rightOperandValue = ((LocalDate)rightOperand).toGMTTimeString2();
+								else rightOperandValue = (String)rightOperand;
+							}
+							filter.setLeftOperandType(lefOperandType);
+							filter.setLeftOperandValue(leftOperand.getId());
+							filter.setOperator(operator);
+							filter.setRightOperandType(lefOperandType);
+							filter.setRightOperandValue(rightOperandValue);
+							filterList.add(filter);
 						}
-						filter.setLeftOperandType(lefOperandType);
-						filter.setLeftOperandValue(leftOperand.getId());
-						filter.setOperator(operator);
-						filter.setRightOperandType(lefOperandType);
-						filter.setRightOperandValue(rightOperandValue);
-						filterList.add(filter);
+						Filter[] searchfilters = null;
+						if(filterList.size() != 0) {
+							searchfilters = new Filter[filterList.size()];
+							filterList.toArray(searchfilters);
+							filters.setFilter(searchfilters);
+						}
+						swdRecordCond.addFilters(filters);
 					}
-					Filter[] searchfilters = null;
-					if(filterList.size() != 0) {
-						searchfilters = new Filter[filterList.size()];
-						filterList.toArray(searchfilters);
-						filters.setFilter(searchfilters);
-					}
-					swdRecordCond.addFilters(filters);
 				}
 			}
 
@@ -3239,6 +3293,33 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
+	private String getProcessTableColName(String formFieldId) throws Exception {
+		String tableColName = null;
+		if(CommonUtil.isEmpty(formFieldId))
+			return null;
+		if(formFieldId.equalsIgnoreCase("status"))
+			tableColName = "prcStatus";
+		else if(formFieldId.equalsIgnoreCase("subject"))
+			tableColName = "prcTitle";
+		else if(formFieldId.equalsIgnoreCase("taskName"))
+			tableColName = "taskName";
+		else if(formFieldId.equalsIgnoreCase("lastTask"))
+			tableColName = "lastTask_tskname";
+		else if(formFieldId.equalsIgnoreCase("processTime"))
+			tableColName = "processTime";
+		else if(formFieldId.equalsIgnoreCase("processType"))
+			tableColName = "processType";
+		else if(formFieldId.equalsIgnoreCase("creator"))
+			tableColName = "prcCreateUser";
+		else if(formFieldId.equalsIgnoreCase("createdTime"))
+			tableColName = "prcCreateDate";
+		else if(formFieldId.equalsIgnoreCase("modifier"))
+			tableColName = "prcModifyUser";
+		else if(formFieldId.equalsIgnoreCase("modifiedTime"))
+			tableColName = "prcModifyDate";
+			
+		return tableColName;
+	}
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
 		
 		try{
@@ -3287,6 +3368,35 @@ public class InstanceServiceImpl implements IInstanceService {
 					prcInstCond.setCreationUser(userId);
 				}
 			}*/
+
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
+
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					filter.setLeftOperandType(formFieldType);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				prcInstCond.setFilter(filters);
+			}
 
 			SortingField sf = params.getSortingField();
 
@@ -3891,6 +4001,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWorkCond taskWorkCond = new TaskWorkCond();
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
+			taskWorkCond.setSearchKey(params.getSearchKey());
 
 			long totalCount = getWlmManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -4183,6 +4294,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 
 			FileWorkCond fileWorkCond = new FileWorkCond();
+			if (!CommonUtil.isEmpty(params)) {
+				fileWorkCond.setSearchKey(CommonUtil.toNull(params.getSearchKey()));
+			}
 			fileWorkCond.setTskAssigneeOrSpaceId(workSpaceId);
 
 			SearchFilter searchFilter = params.getSearchFilter();
@@ -4344,6 +4458,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_FILE, 0);
 
 			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
@@ -5906,6 +6021,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
 				getTskManager().executeTask(userId, task, action);
+				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 			}
 			if (logger.isInfoEnabled()) {
 				logger.info(action + " Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
@@ -6273,6 +6389,8 @@ public class InstanceServiceImpl implements IInstanceService {
 					
 					getMessageManager().createMessage(senderId, msg);
 
+					PublishNotice pubNoticeObj = new PublishNotice((String)receivers.get(index), PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, msg.getObjId());
+					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType((String)receivers.get(index), Notice.TYPE_MESSAGE);					
 				}
 			}
@@ -6370,5 +6488,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			imsgMgr.removeMessage(user.getId(), messages[i].getObjId());
 		}
 		return chatInstInfos;
+	}
+	@Override
+	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

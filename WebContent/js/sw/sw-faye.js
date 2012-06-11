@@ -562,7 +562,9 @@ var smartTalk = {
 			var user = users[i];
 			if(user.status != userStatus.OFFLINE) continue;
 
-			paramsJson['receiverId'] = user.userId;
+			var receivers = new Array();
+			receivers.push(user.userId);
+			paramsJson['receivers'] = receivers;
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
 				url : "create_async_message.sw",

@@ -2288,3 +2288,60 @@ CREATE TABLE SwLoginUser (
 	primary key (userId)
 );
 
+--메일관련 테이블 Start
+CREATE TABLE folder_db_objects (
+    id bigint IDENTITY(1,1) NOT NULL,
+    username varchar(255) NOT NULL,
+    parent_id bigint NOT NULL,
+    folder_name varchar(100) NOT NULL,
+    folder_type int NOT NULL,
+    primary key (id)
+);
+
+CREATE TABLE msg_db_objects (
+    id bigint IDENTITY(1,1) NOT NULL,
+    username varchar(255) NOT NULL,
+    folder_id bigint NOT NULL,
+    unique_id varchar(100) NOT NULL,
+    sender varchar(255),
+    receiver varchar(8000),
+    cc varchar(8000),
+    bcc varchar(8000),
+    replyTo varchar(255),
+    subject varchar(255),
+    multipart bit,
+    priority int,
+    sentdate datetime,
+    unread smallint NOT NULL,
+    msg_size bigint NOT NULL,
+    email varbinary(max) NOT NULL,
+    primary key (id)
+);
+
+CREATE TABLE msg_rules (
+    id bigint IDENTITY(1,1) NOT NULL,
+    username varchar(255) NOT NULL,
+    portion varchar(100) NOT NULL,
+    rule_condition varchar(30) NOT NULL,
+    keyword varchar(255) NOT NULL,
+    rule_action varchar(30) NOT NULL,
+    destination varchar(100) NOT NULL,
+    primary key (id)
+);
+--메일관련 테이블 End
+
+--알림 카운트를 세고 알림 조회를 위한 테이블
+CREATE TABLE SWPublishNotice (
+	id varchar(50) NOT NULL,
+	type int,
+	refType varchar(50),
+	refId varchar(100),
+	assignee varchar(50),
+	creator varchar (50),
+	createdTime datetime,
+	modifier varchar (50),
+	modifiedTime datetime,
+	primary key (id)
+);
+
+

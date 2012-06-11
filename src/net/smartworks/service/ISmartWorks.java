@@ -153,6 +153,8 @@ public interface ISmartWorks {
 
 	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception;
 	
+	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception;
+	
 	public abstract RunningCounts getMyRunningInstancesCounts() throws Exception;
 	
 	public abstract String[] getBroadcastingMessages() throws Exception;
@@ -614,4 +616,20 @@ public interface ISmartWorks {
 	
 	public abstract void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract String getFolderIdByType(int folderType) throws Exception;
+
+	public abstract void checkEmail() throws Exception;
+	
+	public abstract int getUnreadEmails() throws Exception;
+
+	public abstract void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

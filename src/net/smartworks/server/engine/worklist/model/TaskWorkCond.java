@@ -18,6 +18,7 @@ public class TaskWorkCond extends Cond {
 	private static final long serialVersionUID = 1L;
 
 	private String tskObjId;    
+	private String[] tskObjIdIns;
 	private String tskTitle;    
 	private String tskType; 
 	private String tskRefType;
@@ -69,6 +70,7 @@ public class TaskWorkCond extends Cond {
 	private Date expectEndDateFrom;
 	private Date expectEndDateTo;
 	
+	private String searchKey;
 	
 	public LocalDate getLastInstanceDate() {
 		return lastInstanceDate;
@@ -238,6 +240,12 @@ public class TaskWorkCond extends Cond {
 	public void setPrcObjId(String prcObjId) {
 		this.prcObjId = prcObjId;
 	}
+	public String[] getTskObjIdIns() {
+		return tskObjIdIns;
+	}
+	public void setTskObjIdIns(String[] tskObjIdIns) {
+		this.tskObjIdIns = tskObjIdIns;
+	}
 	public String getPrcTitle() {
 		return prcTitle;
 	}
@@ -375,6 +383,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTskStartOrAssigned(String tskStartOrAssigned) {
 		this.tskStartOrAssigned = tskStartOrAssigned;
+	}
+	public String getSearchKey() {
+		return searchKey;
+	}
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 
 

@@ -195,11 +195,17 @@ public class Utility {
 			for(int counter=0; counter<size; counter++) {
 				Map<String, String> att = (Map<String, String>)strList.get(counter);
 				EmailPart tmp = new EmailPart();
-				tmp.setFilename(att.get("fileName"));
-				long fileSize = Long.parseLong(att.get("fileSize"));
-				tmp.setSize(fileSize);
-				tmp.setSizeReadable(SmartUtil.getBytesAsString(fileSize));
-				tmp.setDisposition(att.get("localFilePath"));
+				if(!SmartUtil.isBlankObject(att.get("fileId"))){
+					tmp.setFilename(att.get("fileName"));
+					long fileSize = Long.parseLong(att.get("fileSize"));
+					tmp.setSize(fileSize);
+					tmp.setSizeReadable(SmartUtil.getBytesAsString(fileSize));
+					tmp.setDisposition(att.get("localFilePath"));
+				}else{
+					tmp.setFolderId(att.get("folderId"));
+					tmp.setMsgId(att.get("msgId"));
+					tmp.setId(Integer.parseInt(att.get("partId")));
+				}
 				outEmailPart.add(tmp);
 			}
 			return outEmailPart;

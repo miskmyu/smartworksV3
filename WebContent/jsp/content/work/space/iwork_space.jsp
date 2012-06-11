@@ -25,25 +25,31 @@
 	String wid = request.getParameter("wid");
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
+	String taskInstId = request.getParameter("taskInstId");
 	
 	InformationWorkInstance instance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();
 	InformationWork work = (InformationWork)instance.getWork();
 	int numberOfRelatedWorks = instance.getNumberOfRelatedWorks();
-	int numberOfHistories = 0;
-	if(!instance.isApprovalWork()){
-		TaskInstanceInfo[] tasks = instance.getTasks();
-		if(tasks != null){
+	int numberOfHistories = instance.getNumberOfHistories();
+	TaskInstanceInfo[] tasks = instance.getTasks();
+	TaskInstanceInfo approvalTask = null;
+	TaskInstanceInfo forwardedTask = null;
+	if(tasks != null){
+		if(!SmartUtil.isBlankObject(taskInstId)){
 			for(TaskInstanceInfo task : tasks){
-				if(task.getType() == TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED || task.getType() == TaskInstance.TYPE_INFORMATION_TASK_CREATED
-					|| task.getType() == TaskInstance.TYPE_INFORMATION_TASK_UDATED){
-					numberOfHistories++;
+				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
+					forwardedTask = task;
+					break;
+				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+					approvalTask = task;
+					break;
 				}
 			}
 		}
 	}
-
+	
 	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -85,10 +91,16 @@
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="mb10 fr vb">
-						<span class="icon_refer_w"><a href="" title="<fmt:message key='common.button.forward'/>"></a></span>
-						<span class="icon_link_w"><a href="" title="<fmt:message key='common.button.approval'/>"></a></span>
-	                	<span class="icon_mail_w"><a href="" title="<fmt:message key='common.button.email'/>"></a></span>
-	                	<span class="icon_print_w"><a href="" title="<fmt:message key='common.button.print'/>"></a></span>
+						<%
+						if(approvalTask == null && forwardedTask == null){
+						%>
+							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+		                	<a title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+		                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+						<%
+						}
+						%>
 					</div>
 					<!-- 전자결재, 업무전달 버튼들 //-->
 		                    
@@ -97,10 +109,21 @@
 		            <!-- 타이틀 -->
 		            
 				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval" style="display:none"></div>
+				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null){ %>style="display:none"<%} %>>
+				</div>
 				
 				<!-- 업무전달화면이 나타나는 곳 -->
-				<div class="js_form_task_forward" style="display:none"></div>
+				<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
+					<%
+					if(forwardedTask!=null){
+					%>
+						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
+						</jsp:include>
+					<%
+					}
+					%>
+				</div>
 				
 				<!-- 상세보기 컨텐츠 -->
 				<div class="contents_space">				            
@@ -150,10 +173,26 @@
 				            </a>
 				   		</span>
 				
+				        <span class="btn_gray js_btn_reply_forward" style="display:none">
+				        	<a href="" class="js_reply_forward">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reply_forward"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
 				        <span class="btn_gray js_btn_do_approval" style="display:none">
 				        	<a href="" class="js_approval_iwork_instance">
 					            <span class="txt_btn_start"></span>
 					            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_reply_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reply_approval"/></span>
 					            <span class="txt_btn_end"></span>
 				            </a>
 				   		</span>
@@ -220,5 +259,5 @@
 
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
 	<jsp:param value="<%=work.getId() %>" name="workId"/>
-	<jsp:param value="<%=instId %>" name="instId"/>
+	<jsp:param value="<%=instId %>" name="instId"/> 
 </jsp:include>	

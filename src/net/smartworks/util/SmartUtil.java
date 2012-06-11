@@ -23,6 +23,9 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
+import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
@@ -481,6 +484,24 @@ public class SmartUtil {
 		Map<String, List<Map<String, Object>>> data = new HashMap<String, List<Map<String, Object>>>();
 		data.put("userInfos", userInfos);
 		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_AVAILABLE_CHATTERS, userInfos);		
+	}
+	public static void removeNoticeByExecutedTaskId(String targetUserId, String taskId) throws Exception {
+		
+		User user = SmartUtil.getCurrentUser();
+		PublishNoticeCond pubNotiCond = new PublishNoticeCond();
+		pubNotiCond.setRefId(taskId);
+
+		PublishNotice notice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
+		if (CommonUtil.isEmpty(notice))
+			return;
+		String assignee = notice.getAssignee();
+		if (!targetUserId.equalsIgnoreCase(assignee))
+			return;
+		String objId = notice.getObjId();
+		int noticeType = notice.getType();
+		
+		SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), objId);
+		SmartUtil.increaseNoticeCountByNoticeType(assignee, noticeType);
 	}
 	public static void increaseNoticeCountByNoticeType(String targetUserId, int noticeType) throws Exception {
 		if (noticeType == Notice.TYPE_INVALID)

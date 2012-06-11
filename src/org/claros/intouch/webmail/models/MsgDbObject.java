@@ -1,5 +1,7 @@
 package org.claros.intouch.webmail.models;
 
+import java.util.Date;
+
 /**
  * @author Umut Gokbayrak
  */
@@ -8,113 +10,112 @@ public class MsgDbObject {
 	private String username;
 	private Long folderId;
 	private String uniqueId;
+	private String sender;
+	private String receiver;
+	private String cc;
+	private String bcc;
+	private String replyTo;
+	private String subject;
+	private Boolean multipart;
+	private Integer priority;
+	private Date sentDate;
 	private Boolean unread;
 	private Long msgSize;
 	private byte[] email;
-
-	/**
-	 * 
-	 */
-	public MsgDbObject() {
-		super();
-	}
-
-	/**
-	 * @return
-	 */
-	public byte[] getEmail() {
-		return email;
-	}
-
-	/**
-	 * @return
-	 */
-	public Long getFolderId() {
-		return folderId;
-	}
-
-	/**
-	 * @return
-	 */
 	public Long getId() {
 		return id;
 	}
-
-	/**
-	 * @return
-	 */
-	public Boolean getUnread() {
-		return unread;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
-	/**
-	 * @return
-	 */
 	public String getUsername() {
 		return username;
 	}
-
-	/**
-	 * @param bs
-	 */
-	public void setEmail(byte[] bs) {
-		email = bs;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
-	/**
-	 * @param long1
-	 */
-	public void setFolderId(Long long1) {
-		folderId = long1;
+	public Long getFolderId() {
+		return folderId;
 	}
-
-	/**
-	 * @param long1
-	 */
-	public void setId(Long long1) {
-		id = long1;
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
 	}
-
-	/**
-	 * @param boolean1
-	 */
-	public void setUnread(Boolean boolean1) {
-		unread = boolean1;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setUsername(String string) {
-		username = string;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getUniqueId() {
 		return uniqueId;
 	}
-
-	/**
-	 * @param string
-	 */
-	public void setUniqueId(String string) {
-		uniqueId = string;
+	public void setUniqueId(String uniqueId) {
+		this.uniqueId = uniqueId;
 	}
-
-	/**
-	 * @return
-	 */
+	public String getSender() {
+		return sender;
+	}
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+	public String getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+	public String getCc() {
+		return cc;
+	}
+	public void setCc(String cc) {
+		this.cc = cc;
+	}
+	public String getBcc() {
+		return bcc;
+	}
+	public void setBcc(String bcc) {
+		this.bcc = bcc;
+	}
+	public String getReplyTo() {
+		return replyTo;
+	}
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public Boolean getMultipart() {
+		return multipart;
+	}
+	public void setMultipart(Boolean multipart) {
+		this.multipart = multipart;
+	}
+	public Integer getPriority() {
+		return priority;
+	}
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+	public Date getSentDate() {
+		return sentDate;
+	}
+	public void setSentDate(Date sentDate) {
+		this.sentDate = sentDate;
+	}
+	public Boolean getUnread() {
+		return unread;
+	}
+	public void setUnread(Boolean unread) {
+		this.unread = unread;
+	}
 	public Long getMsgSize() {
 		return msgSize;
 	}
-
-	/**
-	 * @param long1
-	 */
-	public void setMsgSize(Long long1) {
-		msgSize = long1;
+	public void setMsgSize(Long msgSize) {
+		this.msgSize = msgSize;
 	}
-
+	public byte[] getEmail() {
+		return email;
+	}
+	public void setEmail(byte[] email) {
+		this.email = email;
+	}
 }

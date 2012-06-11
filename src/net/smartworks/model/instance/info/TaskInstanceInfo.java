@@ -8,15 +8,21 @@ import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class TaskInstanceInfo extends InstanceInfo {
 	
 	private String name;
 	private int taskType=-1;
 	private WorkInstanceInfo  workInstance;
+	private UserInfo assigner;
 	private UserInfo assignee;
 	private UserInfo performer;
 	private String formId;
+	private String content;
+	private String comments;
+	private String approvalId="";
+	private String forwardId="";
 	public String getName() {
 		return name;
 	}
@@ -34,6 +40,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setWorkInstance(WorkInstanceInfo workInstance) {
 		this.workInstance = workInstance;
+	}
+	public UserInfo getAssigner() {
+		return assigner;
+	}
+	public void setAssigner(UserInfo assigner) {
+		this.assigner = assigner;
 	}
 	public UserInfo getAssignee() {
 		return assignee;
@@ -93,5 +105,52 @@ public class TaskInstanceInfo extends InstanceInfo {
 		super(id, name, Instance.TYPE_TASK, owner, performer, lastModifiedDate);
 		this.name = name;
 		this.taskType = taskType;
+	}
+	public boolean isRunningForwardedForMe(String userId, String taskInstId){
+		if(	taskInstId.equals(this.getId()) 
+			&& (this.getType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			&& !SmartUtil.isBlankObject(this.getAssignee()) 
+			&& this.getAssignee().getId().equals(userId)
+			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public boolean isRunningApprovalForMe(String userId, String taskInstId){
+		if(	taskInstId.equals(this.getId()) 
+			&& this.getType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+			&& !SmartUtil.isBlankObject(this.getAssignee()) 
+			&& this.getAssignee().getId().equals(userId)
+			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
+			return true;
+		}
+		return false;
+	}
+
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	public String getApprovalId() {
+		return approvalId;
+	}
+	public void setApprovalId(String approvalId) {
+		this.approvalId = approvalId;
+	}
+	public String getForwardId() {
+		return forwardId;
+	}
+	public void setForwardId(String forwardId) {
+		this.forwardId = forwardId;
 	}
 }

@@ -85,6 +85,7 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -830,8 +831,8 @@ public class WorkServiceImpl implements IWorkService {
 					user.setPicture(txtUserProfilePicture);
 				}
 			}
-	
-			//pwUserProfilePW = DigestUtils.md5Hex(pwUserProfilePW); -- md5 password 암호화
+
+			//pwUserProfilePW = DigestUtils.md5Hex(pwUserProfilePW);
 			user.setPassword(pwUserProfilePW);
 			user.setLocale(selUserProfileLocale);
 			user.setTimeZone(selUserProfileTimeZone);

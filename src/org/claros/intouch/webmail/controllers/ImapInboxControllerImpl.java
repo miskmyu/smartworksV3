@@ -32,7 +32,7 @@ public class ImapInboxControllerImpl extends InboxControllerBase implements Inbo
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.InboxController#checkEmail()
 	 */
-	public ConnectionMetaHandler checkEmail() throws Exception {
+	public void checkEmail() throws Exception {
 		// fetch all messages from the remote pop3 server
 		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(null);
@@ -122,6 +122,5 @@ public class ImapInboxControllerImpl extends InboxControllerBase implements Inbo
 			}
 			protocol.moveEmails(ids, folders);
 		}
-		return handler;
 	}
 }

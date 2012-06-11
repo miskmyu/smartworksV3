@@ -39,6 +39,10 @@ public class LoginUser extends MisObject {
 	public LoginUser() {
 		super();
 	}
+	public LoginUser(String userId, Date loginTime) {
+		this.userId = userId;
+		this.loginTime = loginTime;
+	}
 	public String toString(String name, String tab) {
 		if (name == null || name.trim().length() == 0)
 			name = NAME;

@@ -40,28 +40,19 @@
 	if (!SmartUtil.isBlankObject(context)) {
 		Authentication auth = context.getAuthentication();
 		if(!SmartUtil.isBlankObject(auth)){
-			String loginId = ((Login) auth.getPrincipal()).getId();
-			if(SmartUtil.isBlankObject(request.getSession().getAttribute(loginId))) {
+			String connectUserId = ((Login) auth.getPrincipal()).getId();
+			if(SmartUtil.isBlankObject(session.getAttribute(connectUserId))) {
 				System.out.println("-------------------------------------------");
 				System.out.println(((Login) auth.getPrincipal()).getName() + " 님이 접속하였습니다.");
 				System.out.println("ID : " + ((Login) auth.getPrincipal()).getId());
 				System.out.println("DEPT : " + ((Login) auth.getPrincipal()).getDepartment());
 				System.out.println("ConnectTime : " + (new LocalDate()).toLocalDateValue() ); 
 				System.out.println("-------------------------------------------");
-				request.getSession().setAttribute(loginId, new LocalDate());
-				LoginUser loginUser = SwManagerFactory.getInstance().getLoginUserManager().getLoginUser(loginId, loginId, IManager.LEVEL_ALL);
 
-				if(SmartUtil.isBlankObject(loginUser)) {
-					loginUser = new LoginUser();
-					loginUser.setUserId(loginId);
-					loginUser.setLoginTime(new LocalDate());
-					SwManagerFactory.getInstance().getLoginUserManager().createLoginUser(loginId, loginUser);
-					UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
-					SmartUtil.publishAChatters(userInfos);
-				} else {
-					loginUser.setLoginTime(new LocalDate());
-					SwManagerFactory.getInstance().getLoginUserManager().setLoginUser(loginId, loginUser);
-				}
+				UserInfo[] userInfos = SwServiceFactory.getInstance().getCommunityService().getAvailableChatter(request);
+				SmartUtil.publishAChatters(userInfos);
+
+				session.setAttribute(connectUserId, new LocalDate());
 
 			}
 		}

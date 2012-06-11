@@ -10,6 +10,54 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
+
+<script type="text/javascript">
+	getIntanceList = function(paramsJson, progressSpan, isGray){
+		if(isEmpty(progressSpan))
+			progressSpan = $('.js_running_instance_title').find('.js_progress_span:first');
+		if(isGray)
+			smartPop.progressContGray(progressSpan);
+		else
+			smartPop.progressCont(progressSpan);
+		var url = "set_instance_list_params.sw";
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				$('.js_instance_list_table').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get('workListError'));
+			}
+		});
+	};
+	
+	selectListParam = function(progressSpan, isGray){
+		var runningInstanceList = $('.js_my_running_instance_list_page');
+		var forms = runningInstanceList.find('form:visible');
+		var paramsJson = {};
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			if(form.attr('name') !== "frmSearchFilter" && form.attr('name') === "frmSearchInstance"){
+				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			}
+		}
+		var searchType = $('.js_instance_counts').find('.current').attr('searchType');//class에 current 포함된놈이 누구냐
+		var isAssignedOnly;
+		if (searchType === 'my_running_instances') {
+			isAssignedOnly = false;
+		} else if (searchType === 'assigned_instances') {
+			isAssignedOnly = true;
+		}
+		paramsJson["href"] = "/jsp/content/today/more_instance_list.jsp?assignedOnly=" + isAssignedOnly ;
+		getIntanceList(paramsJson, progressSpan, isGray);		
+	};
+</script>
+
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다 
  	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
@@ -29,30 +77,28 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<div id="work_ing">		
-				<div class="titl_section">
+				<div class="titl_section js_running_instance_title">
 				
 					<!-- 타이틀을 나타내는 곳 -->
-					<div class="tit pr10"><fmt:message key="content.my_running_instance_list" /></div>					
+					<div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" /></div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<!-- 자동완성 검색창과 검색결과 리스트 공간 -->
-					<div class="nav_srch pb2">
-						<div class="srch_wh srch_wsize2">
-							<input id="" class="nav_input js_auto_complete" type="text" title="<fmt:message key="search.search_running_instance"/>"
-								placeholder="<fmt:message key="search.search_running_instance"/>" href="my_running_instance.sw">
-							<button title="<fmt:message key='search.search'/>" onclick=""></button>
+					<form name="frmSearchInstance" class="po_left js_search_running_instance">
+						<div class="srch_wh srch_wsize">
+							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
+								placeholder="<fmt:message key="search.search_running_instance"/>">
+							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>
-						<div style="display: none"></div>
-					</div>
-					<!-- 자동완성 검색창과 검색결과 리스트 공간 //-->
+					</form>
+					<span class="js_progress_span"></span>
 					
 					<!-- 전체/할당업무만의 갯수와 선택버튼들 -->
 					<div class="txt_btn fr js_instance_counts">
-						<a href="" class="current js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
+						<a href="" searchType='my_running_instances' class="current js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
 							<span class="t_red_bold js_all_running_count">[<%=runningCounts.getTotal() %>]</span>
 						</a>
 						 | 
-						 <a href="" class="js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
+						 <a href="" searchType='assigned_instances' class="js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
 						 	<span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span>
 						 </a>
 					</div>

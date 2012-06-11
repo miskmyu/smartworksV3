@@ -16,7 +16,9 @@ public interface IMailService {
 	public MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception;
 
 	public MailFolder[] getMailFoldersById(String folderId) throws Exception;
-	
+
+	public String getFolderIdByType(int folderType) throws Exception;
+
 	public MailFolder getMailFolderById(String folderId) throws Exception;	
 
 	public void sendMail(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
@@ -24,5 +26,17 @@ public interface IMailService {
 	public void saveMailAsDraft(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void checkEmail() throws Exception;
+	
+	public int getUnreadEmails() throws Exception;
 	
 }

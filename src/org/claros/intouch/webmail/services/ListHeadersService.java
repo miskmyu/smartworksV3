@@ -97,7 +97,8 @@ public class ListHeadersService extends BaseService {
 				try {
 					InboxControllerFactory inFact = new InboxControllerFactory(auth, profile, handler);
 					InboxController inCont = inFact.getInboxController();
-					handler = inCont.checkEmail();
+//					handler = inCont.checkEmail();
+					inCont.checkEmail();
 					request.getSession().setAttribute("handler", handler);
 					foldFact = new FolderControllerFactory(auth, profile, handler);
 					folderCont = foldFact.getFolderController();

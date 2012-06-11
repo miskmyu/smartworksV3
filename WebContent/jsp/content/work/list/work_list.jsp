@@ -102,11 +102,12 @@
 	};
 
 	selectListParam = function(progressSpan, isGray){
-		var pworkList = $('.js_pwork_list_page');
+		var pworkList = $('.js_space_work_list_page');
 		var forms = pworkList.find('form:visible');
+		console.log(forms);
 		var paramsJson = {};
 		var workId = pworkList.attr('workId');
-		paramsJson["href"] = "jsp/content/work/list/pwork_instance_list.jsp?workId=" + workId;
+		paramsJson["href"] = "jsp/content/work/list/work_instance_list.jsp?workId=" + workId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -133,7 +134,7 @@
 	String wid = request.getParameter("wid");
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
-	
+
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName(); 
@@ -170,9 +171,9 @@
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
 					<div class="title_line_btns">
-						<div class="icon_btn_edit">
+						<!-- div class="icon_btn_edit">
 							<a href="search_filter.sw?workId=" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
-						</div>
+						</div-->
 					</div>
 					
 					<div class="title_line_options">
@@ -184,25 +185,7 @@
 							</div>
 						</form>
 
-						<form class="form_space po_left js_form_filter_name" name="frmPworkFilterName">
-							<select name="selFilterName" class="js_select_filter" href="search_filter.sw?workId=">
-								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" selected>
-									<fmt:message key='filter.name.all_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>">
-									<fmt:message key='filter.name.my_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>">
-									<fmt:message key='filter.name.recent_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>">
-									<fmt:message key='filter.name.my_recent_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>">
-									<fmt:message key='filter.name.my_running_instances' />
-								</option>
-							</select>
-						</form>
+						
 					</div>
 				</div>
 				<!-- 목록보기 타이틀-->

@@ -31,9 +31,12 @@ public class TaskInstance extends Instance {
 	private int taskType=-1;
 	private WorkInstance workInstance;
 	private boolean isStartTask=false;
+	private User assigner;
 	private User assignee;
 	private User performer;
 	private SmartForm smartForm;
+	private String approvalId;
+	private String forwardId;
 
 	public String getName() {
 		return name;
@@ -46,6 +49,12 @@ public class TaskInstance extends Instance {
 	}
 	public void setTaskType(int taskType) {
 		this.taskType = taskType;
+	}
+	public User getAssigner() {
+		return assigner;
+	}
+	public void setAssigner(User assigner) {
+		this.assigner = assigner;
 	}
 	public User getAssignee() {
 		return assignee;
@@ -77,6 +86,18 @@ public class TaskInstance extends Instance {
 	}
 	public void setSmartForm(SmartForm smartForm) {
 		this.smartForm = smartForm;
+	}
+	public String getApprovalId() {
+		return approvalId;
+	}
+	public void setApprovalId(String approvalId) {
+		this.approvalId = approvalId;
+	}
+	public String getForwardId() {
+		return forwardId;
+	}
+	public void setForwardId(String forwardId) {
+		this.forwardId = forwardId;
 	}
 	public String getController(){
 		if(getWork()==null) return "";

@@ -46,7 +46,7 @@ $(function() {
 	 * 어디에서든 class 값이 js_content로 지정된 anchor 가 선택이 되면, anchor 의 href 값으로 ajax 를 호출하여
 	 * 가져온 값을 content(메인컨텐트)화면에 보여준다.
 	 */
-	$('a.js_content').swnavi({
+	$('.js_content').swnavi({
 		history : true,
 		before : function(event){
 			var input = $(targetElement(event));

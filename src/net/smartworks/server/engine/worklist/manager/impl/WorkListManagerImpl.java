@@ -283,9 +283,13 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
 		
+		String searchKey = cond.getSearchKey();
+		
 		String worksSpaceId = cond.getTskWorkSpaceId();
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
 		Date executionDateTo = cond.getTskExecuteDateTo();
+		
+		String[] taskObjIdIns = cond.getTskObjIdIns();
 		
 		queryBuffer.append("from ");
 		queryBuffer.append("( ");
@@ -341,6 +345,15 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("	and task.tskExecuteDate > :executionDateFrom ");
 		if (executionDateTo != null)
 			queryBuffer.append("	and task.tskExecuteDate < :executionDateTo ");
+		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
+			queryBuffer.append(" 	and task.tskObjId in (");
+			for (int i=0; i<taskObjIdIns.length; i++) {
+				if (i != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":taskObjIdIn").append(i);
+			}
+			queryBuffer.append(")");
+		}
 		queryBuffer.append(") taskInfo ");
 		//queryBuffer.append("left outer join ");
 		queryBuffer.append("join ");
@@ -405,8 +418,9 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("		and prcInst.prcStatus = :prcStatus ");
 		queryBuffer.append(") prcInstInfo ");
 		queryBuffer.append("on taskInfo.tskPrcInstId = prcInstInfo.prcObjId ");
+		queryBuffer.append(" where 1=1 ");
 		if (lastInstanceDate != null) {
-			queryBuffer.append("where taskInfo.tskCreateDate < :lastInstanceDate ");
+			queryBuffer.append("and taskInfo.tskCreateDate < :lastInstanceDate ");
 			if (tskRefType != null) {
 				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
 					queryBuffer.append("and taskInfo.tskReftype is null ");
@@ -416,13 +430,16 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		} else {
 			if (tskRefType != null) {
 				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
-					queryBuffer.append("where taskInfo.tskReftype is null ");
+					queryBuffer.append("and taskInfo.tskReftype is null ");
 				else 
-					queryBuffer.append("where taskInfo.tskReftype = :tskRefType ");
+					queryBuffer.append("and taskInfo.tskReftype = :tskRefType ");
 			}
 		}
-
-		this.appendOrderQuery(queryBuffer, "taskInfo", cond);
+		if (!CommonUtil.isEmpty(searchKey)) {
+			queryBuffer.append("and (taskInfo.tskName like :searchKey or taskInfo.tskTitle like :searchKey) ");
+		}
+			
+		this.appendOrderQuery(queryBuffer, null, cond);
 		//queryBuffer.append("order by taskInfo.tskCreatedate desc ");
 
 		Query query = this.getSession().createSQLQuery(queryBuffer.toString());
@@ -451,7 +468,13 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setString("prcStatus", prcStatus);
 		if (!CommonUtil.isEmpty(tskRefType) && !tskRefType.equals(TskTask.TASKREFTYPE_NOTHING)) 
 			query.setString("tskRefType", tskRefType);
-
+		if (!CommonUtil.isEmpty(searchKey)) 
+			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
+		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
+			for (int i=0; i<taskObjIdIns.length; i++) {
+				query.setString("taskObjIdIn"+i, taskObjIdIns[i]);
+			}
+		}
 		return query;
 	}
 

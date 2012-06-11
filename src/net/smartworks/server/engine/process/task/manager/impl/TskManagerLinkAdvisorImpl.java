@@ -45,6 +45,7 @@ import net.smartworks.server.engine.process.task.manager.AbstractTskManagerAdvis
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -465,12 +466,14 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			//refTask.setPriority(priority);
 //			refTask.setTitle(obj.getTitle());
 			refTask.setTitle(subject);
-			refTask.setName(obj.getName());
+			//refTask.setName(obj.getName());
+			refTask.setName(subject);
 			refTask.setAssigner(obj.getAssigner());
 			refTask.setAssignee(refUser);
 			refTask.setAssignmentDate(new LocalDate());
 			refTask.setStartDate(new LocalDate());
 			refTask.setForm(obj.getForm());
+			refTask.setDef(obj.getDef());
 			refTask.setFromRefId(obj.getObjId());
 			refTask.setFromRefType(obj.getType());
 			refTask.setExtendedPropertyValue("subject", subject);
@@ -485,6 +488,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask.setAccessLevel("3");
 			
 			this.getTskManager().setTask(user, refTask, null);
+			
+			PublishNotice pubNoticeObj = new PublishNotice(refUser, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, refTask.getObjId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+			SmartUtil.increaseNoticeCountByNoticeType(refUser, Notice.TYPE_ASSIGNED);
+			
 			if (logger.isInfoEnabled()) {
 				logger.info("Assigned Reference Task [ " + subject + " ( Process Instance Id : " + refTask.getProcessInstId() + " , To User : " + refTask.getAssignee() + ")]");
 			}
@@ -720,8 +728,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				}
 				this.getTskManager().setTask("linkadvisor", task, null);
 				
-				if (task.getType().equals(TskTask.TASKTYPE_COMMON) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL))
+				if (task.getType().equals(TskTask.TASKTYPE_COMMON) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+					PublishNotice pubNoticeObj = new PublishNotice(task.getAssignee(), PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, task.getObjId());
+					SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 					SmartUtil.increaseNoticeCountByNoticeType(task.getAssignee(), Notice.TYPE_ASSIGNED);
+				}
 				
 				linkList.add(newLink(obj, task, action, extProps));
 			}

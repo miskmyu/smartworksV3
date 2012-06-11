@@ -340,34 +340,123 @@ function loadTaskForwardFields() {
 			var subjectTitle = taskForwardField.attr("subjectTitle");
 			var forwardeeTitle = taskForwardField.attr("forwardeeTitle");
 			var commentsTitle = taskForwardField.attr("commentsTitle");
+			var subject = taskForwardField.attr("subject");
+			var comments = taskForwardField.attr("content");
+			var readOnly = isEmpty(subject) ? false : true;
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtForwardSubject",
 				fieldName: subjectTitle,
+				value: subject,
 				columns: 1,
-				required: true
+				required: true,
+				readOnly: readOnly
 			});
 			
-			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
-			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
-				container: gridRow,
-				fieldId: "txtForwardForwardee",
-				fieldName: forwardeeTitle,
-				columns: 1,
-				multiUsers: true,
-				required: true
-			});
+			if(!readOnly){
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtForwardForwardee",
+					fieldName: forwardeeTitle,
+					columns: 1,
+					multiUsers: true,
+					required: true,
+					readOnly: readOnly
+				});
+			}
 
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtForwardComments",
 				fieldName: commentsTitle,
+				value: comments,
 				columns: 1,
 				multiLines: 4,
-				required: false
+				required: false,
+				readOnly: readOnly
 			});
+			
+			var iworkSpace = taskForwardFields.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				var target = iworkSpace.find('.js_append_task_forward_page').addClass('up');
+				if(readOnly){
+					target.addClass('form_read');
+					iworkSpace.find('.js_btn_reply_forward').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();
+			}
+		}		
+	}
+};
+
+function loadTaskApprovalFields() {
+	var taskApprovalFields = $('div.js_task_approval_fields');
+	if(!isEmpty(taskApprovalFields)) {
+		for(var i=0; i<taskApprovalFields.length; i++) {
+			var taskApprovalField = $(taskApprovalFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			taskApprovalField.html(gridTable.html(gridRow));
+			
+			var subjectTitle = taskApprovalField.attr("subjectTitle");
+			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
+			var commentsTitle = taskApprovalField.attr("commentsTitle");
+			var subject = taskApprovalField.attr("subject");
+			var comments = taskApprovalField.attr("content");
+			var readOnly = isEmpty(subject) ? false : true;
+
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtApprovalSubject",
+				fieldName: subjectTitle,
+				value: subject,
+				columns: 1,
+				required: true,
+				readOnly: readOnly
+
+			});
+			if(!readOnly){
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalForwardee",
+					fieldName: forwardeeTitle,
+					columns: 1,
+					multiUsers: true,
+					required: false,
+					readOnly: readOnly
+				});
+			}
+
+			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtApprovalComments",
+				fieldName: commentsTitle,
+				value: comments,
+				columns: 1,
+				multiLines: 4,
+				required: false,
+				readOnly: readOnly
+			});
+			
+			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
+				if(readOnly){
+					target.addClass('form_read');
+					iworkSpace.find('.js_btn_reply_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();
+			}
 		}		
 	}
 };
@@ -438,7 +527,9 @@ function loadWriteMailFields() {
 			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
 			var subject = writeMailField.attr('subject');
+			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
+			var attachments = writeMailField.attr('attachments');
 
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
@@ -502,13 +593,16 @@ function loadWriteMailFields() {
 				columns: 1,
 				required: false
 			});
-			
+			if(!isEmpty(attachments)){
+				gridRow.find('.form_value .qq-upload-list').append(attachments);
+			}
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 				container: gridRow,
 				fieldId: "contents",
 				fieldName: "",
 				columns: 1,
+				value: contents,
 				required: true
 			});
 			gridRow.find('.form_label').hide();

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,6 +51,8 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.publishnotice.model.PublishNotice;
+import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
 import net.smartworks.server.engine.sera.model.CourseDetail;
 import net.smartworks.server.service.ICommunityService;
@@ -62,6 +65,7 @@ import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -82,6 +86,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	private ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
+
+	@Autowired
+	private SessionRegistry sessionRegistry;
 
 	private ISeraService seraService = null;
 
@@ -715,7 +722,13 @@ public class CommunityServiceImpl implements ICommunityService {
 
 			getLoginUserManager().deleteAllLoginUser(userId);
 
-			//TODO 현재 접속 유저로 업데이트
+			List<Object> allPrincipalList = sessionRegistry.getAllPrincipals();
+			if(allPrincipalList.size() > 0) {
+				for(Object allPrincipal : allPrincipalList) {
+					LoginUser loginUser = new LoginUser(((Login)allPrincipal).getId(), new LocalDate());
+					getLoginUserManager().createLoginUser(userId, loginUser);
+				}
+			}
 
 			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
 
@@ -895,8 +908,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
 		
-		if (isNoticeToGroupLeader)
+		if (isNoticeToGroupLeader) {
+			PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
+		}	
 	}
 
 	/*
@@ -1158,32 +1174,33 @@ public class CommunityServiceImpl implements ICommunityService {
 			Semaphore semaphore = new Semaphore(2);
 			Thread currentThread = Thread.currentThread();
 
-			SearchParallelProcessing upp = new SearchParallelProcessing(semaphore, currentThread, null, 1, key);
 			SearchParallelProcessing cpp = new SearchParallelProcessing(semaphore, currentThread, currentUser, 2, key);
+			SearchParallelProcessing upp = new SearchParallelProcessing(semaphore, currentThread, null, 1, key);
 
-			upp.start();
 			cpp.start();
+			upp.start();
 
 			synchronized (currentThread) {
 				currentThread.wait();
 			}
 
-			UserInfo[] uUserInfos = (UserInfo[])upp.getArrayResult();
 			UserInfo[] cUserInfos = (UserInfo[])cpp.getArrayResult();
+			UserInfo[] uUserInfos = (UserInfo[])upp.getArrayResult();
 
 			UserInfo[] finalUserInfos = null;
 			List<UserInfo> finalUserInfoList = new ArrayList<UserInfo>();
 
-			Map<String, Object> userInfoMap = new HashMap<String, Object>();
+			Map<String, Object> userInfoMap = new TreeMap<String, Object>();
+
+			if(!CommonUtil.isEmpty(cUserInfos)) {
+				for(UserInfo cUserInfo : cUserInfos) {
+					userInfoMap.put(cUserInfo.getId(), cUserInfo);
+				}
+			}
 
 			if(!CommonUtil.isEmpty(uUserInfos)) {
 				for(UserInfo uUserInfo : uUserInfos) {
 					userInfoMap.put(uUserInfo.getId(), uUserInfo);
-				}
-			}
-			if(!CommonUtil.isEmpty(cUserInfos)) {
-				for(UserInfo cUserInfo : cUserInfos) {
-					userInfoMap.put(cUserInfo.getId(), cUserInfo);
 				}
 			}
 

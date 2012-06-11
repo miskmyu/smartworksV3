@@ -6,6 +6,6 @@ import org.claros.commons.mail.models.ConnectionMetaHandler;
  * @author Umut Gokbayrak
  */
 public interface InboxController {
-	public ConnectionMetaHandler checkEmail() throws Exception;
+	public void checkEmail() throws Exception;
 
 }

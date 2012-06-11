@@ -38,6 +38,7 @@ public class OpinionCond extends MisObjectCond {
 	public static final String A_TITLE = "title";
 	public static final String A_OPINION = "opinion";
 
+	private String[] objIdIns;
 	private int refType;
 	private String groupId;
 	private String refId;
@@ -276,6 +277,12 @@ public class OpinionCond extends MisObjectCond {
 	}
 	public void setRefIdIns(String[] refIdIns) {
 		this.refIdIns = refIdIns;
+	}
+	public String[] getObjIdIns() {
+		return objIdIns;
+	}
+	public void setObjIdIns(String[] objIdIns) {
+		this.objIdIns = objIdIns;
 	}
 
 }

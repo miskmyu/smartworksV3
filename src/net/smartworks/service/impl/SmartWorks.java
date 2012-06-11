@@ -351,6 +351,10 @@ public class SmartWorks implements ISmartWorks {
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
 		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly);
 	}
+	@Override
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
+		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, params);
+	}
 
 	@Override
 	public RunningCounts getMyRunningInstancesCounts() throws Exception {
@@ -1356,6 +1360,46 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void moveMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		mailService.moveMails(requestBody, request);
+	}
+
+	@Override
+	public void deleteMails(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.deleteMails(requestBody, request);
+	}
+
+	@Override
+	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.newMailFolder(requestBody, request);
+	}
+
+	@Override
+	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.setMailFolder(requestBody, request);
+	}
+
+	@Override
+	public void deleteMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		mailService.deleteMailFolder(requestBody, request);
+	}
+
+	@Override
+	public String getFolderIdByType(int folderType) throws Exception {
+		return mailService.getFolderIdByType(folderType);
+	}
+
+	@Override
+	public void checkEmail() throws Exception {
+		mailService.checkEmail();
+	}
+
+	@Override
+	public int getUnreadEmails() throws Exception {
+		return mailService.getUnreadEmails();
+	}
+
+	@Override
+	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.commentOnTaskForward(requestBody, request);
 	}
 
 }

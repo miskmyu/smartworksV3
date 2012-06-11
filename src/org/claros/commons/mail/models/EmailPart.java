@@ -18,6 +18,24 @@ public class EmailPart {
 	private String filename;
 	private String shortname;
 	private DataSource dataSource;
+	private String folderId;
+	private String msgId;
+
+	public String getFolderId() {
+		return folderId;
+	}
+
+	public void setFolderId(String folderId) {
+		this.folderId = folderId;
+	}
+
+	public String getMsgId() {
+		return msgId;
+	}
+
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
+	}
 
 	public EmailPart() {
 		super();
