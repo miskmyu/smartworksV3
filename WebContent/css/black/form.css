@@ -110,20 +110,22 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 /* File Layer Popup */
 #sw_pop_files_detail {width:100%}
 #sw_pop_files_detail .pop_corner_all {padding:5px}
-#sw_pop_files_detail li {clear:both; padding: 5px 0 0 0}
+#sw_pop_files_detail li {clear:both; line-height: 18px}
 #sw_pop_files_detail li > span {float:left}
 #sw_pop_files_detail li .qq-upload-file {float:left; margin:0}
-#sw_pop_files_detail li .qq-upload-size {clear:both; color:#999897; display: block; margin: 0 0 0 20px}
+#sw_pop_files_detail li .qq-upload-size {color:#999897; margin: 0 0 0 7px}
 
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 
 /* Approval */
 .approval_section { padding:10px}
-.approval_section .tit { float:left; font-size:14px; font-weight:bold}
-.approval_section .tit span { display:table-cell; vertical-align:middle; height:127px; width:130px; text-align: center}
+.approval_section .tit {font-size:16px; font-weight:bold}
+.approval_section .tit span { display:block; vertical-align:middle; text-align: center}
 .approval_group { float:right; max-width:605px}
-.approval_area { width:110px; border:1px solid #cccccc; padding:5px; float:left; margin: -1px 0 0 -1px}
+.approval_area { width:125px; border:1px solid #cccccc; padding:5px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
-.approval_area .approval {height:50px; height: 60px}
+.approval_area .approval {height: 60px}
+.approval_area .name {height:26px}
+.approval_area .name .t_name {font-size:11px}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
