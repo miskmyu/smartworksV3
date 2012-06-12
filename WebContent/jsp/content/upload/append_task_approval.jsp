@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.approval.ApprovalLineInst"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -23,7 +24,6 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String taskInstId = request.getParameter("taskInstId");
-	String approvalLineId = request.getParameter("approvalLineId");
 
 	WorkInstance workInstance = null; 
 	TaskInstanceInfo[] tasks = null;
@@ -53,7 +53,7 @@
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);		
 	}else{
-		approvalLine = smartWorks.getApprovalLineById(approvalLineId);
+		approvalLine = smartWorks.getApprovalLineById(null);
 	}
 
 %>
@@ -61,17 +61,16 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalLineId="<%=approvalLineId %>" approvalInstId="<%=approvalInstId %>" taskInstId="<%=taskInstId%>" >
+<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalInstId="<%=approvalInstId %>" taskInstId="<%=taskInstId%>" >
 	<!-- 결재선 Section -->
 	<div class="approval_section">
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
 		<div class="approval_group">
 			<div class="fr mb2">
-                <div class="fl mr5"><%=approvalLine.getName() %></div>
+                <div class="fl mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
 				<a href="" class="js_pop_approval_line"><div class="fl icon_approval"></div></a>
 			</div>
-			<div class="js_select_approval_line"></div>
-			<div class="cb">
+			<div class="cb js_approval_line_box">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden">		
 					<%
@@ -86,37 +85,40 @@
 						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
+							String statusIcon = "";
+							if(approval.getStatus() == Instance.STATUS_COMPLETED) statusIcon = "approval_status_completed_" + cUser.getLocale();
+							else if(approval.getStatus() == Instance.STATUS_RETURNED) statusIcon = "approval_status_returned_" + cUser.getLocale();
+							else if(approval.getStatus() == Instance.STATUS_REJECTED) statusIcon = "approval_status_rejected_" + cUser.getLocale();
 					%>
 						<!-- 결재선 -->
 						<div class="approval_area">
 							<div class="label"><%=approval.getName() %></div>
-							<div class="approval"></div>
+							<div class="approval <%=statusIcon%>"></div>
 							<%
 							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
-								<div class="name">
+								<a href="" class="name js_selected_approver_info js_userpicker_button">
 									<div class="noti_pic">
 										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 									</div>
-									<div class="noti_in up"> 결재자 선택
-											<div class="t_name"></div>
-											<div class="t_name"></div>
-											<div class="t_date"></div>
+									<div class="noti_in up"><fmt:message key="approval.title.select_approver"/>
 									</div>
-								</div>	
+								</a>	
+								<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
 											
 							<%
 							}else if(!SmartUtil.isBlankObject(approval.getApprover())){
 								User approver = approval.getApprover();
-								String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateSimpleString();
+								String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateTimeSimpleString();
 								
 							%>
 								<div class="name">
 									<div class="noti_pic">
-										<img class="profile_size_s" title="images/no_user_picture_min.jpg">
+										<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
 									</div>
 									<div class="noti_in">
-										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
+										<div class="t_name"><%=CommonUtil.toNotNull(approver.getPosition()) %></div>
+										<div class="t_name"><%=approver.getName() %></div>
 										<div class="t_date"><%=completedDateStr %></div>
 									</div>
 									<%
@@ -138,6 +140,7 @@
 					%>
 				</form>
 			</div>
+			<span class="js_community_popup"></span>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->

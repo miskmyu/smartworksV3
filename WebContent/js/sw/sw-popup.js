@@ -325,10 +325,26 @@ smartPop = {
 					$('a.js_pop_select_users').die('click');
 					if(isEmpty(isMultiUsers) || isMultiUsers!== 'true'){
 						$('a.js_pop_select_user').live('click', function(e){
+							
 							var input = $(targetElement(e));
 							var comId = input.attr('userId');
 							var comName = input.text();
-							selectionProc(comId, comName);
+							if(!isEmpty(communityItems) && communityItems.hasClass('js_selected_approver_info')){
+								var userName = input.attr('userName');
+								var userPosition = input.attr('userPosition') || "";
+								var userPicture = input.attr('userPicture');
+								var approverInfo = '<div class="noti_pic">' +
+														'<img class="profile_size_s" src="' + userPicture + '" title="' + userPosition + ' ' + userName + '">' +
+													'</div>' +
+													'<div class="noti_in">' +
+														'<div class="t_name">' + userPosition + '</div>' +
+														'<div class="t_name">' + userName + '</div>' +
+													'</div>';
+								communityItems.html(approverInfo);
+								communityItems.next().attr('value', comId);
+							}else{
+								selectionProc(comId, comName);
+							}
 							smartPop.close();
 							target.html('');
 							return false;
@@ -560,35 +576,25 @@ smartPop = {
 		});
 	},
 	
-	selectApprovalLine : function(target){
-		if(isEmpty(target)) return;
-		$.get("pop_select_approval_line.sw", {formId: formId}, function(data){
+	selectApprovalLine : function(){
+		$.get("pop_select_approval_line.sw", {}, function(data){
 			$(data).modal({
 				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
-					height:500,
 					width:800
 				},
 				overlayClose: false,
 				onShow: function(dialog){
-					$('.js_pop_select_work_item').die('click');
-					$('.js_pop_select_work_item').live( 'click', function(e){
-						var input = $(targetElement(e));
-						var recordId = input.attr('instId');
-						var fieldId = target.attr('refFormField');
-						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
-						var keyPos = keyField.prevAll('th').length;
-						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
-						target.attr('refRecordId', recordId);
-						var inputTarget = target.find('input');
-						inputTarget.attr('value', value);
-						if(inputTarget.hasClass('sw_required') && inputTarget.hasClass('sw_error')){
-							inputTarget.removeClass('sw_error');
-							$('form.js_validation_required').validate({ showErrors: showErrors}).form();
-						}
-						target.change();
-						smartPop.close();
+					$('.js_pop_select_approval_line').die('click');
+					$('.js_pop_select_approval_line').live( 'click', function(e){
+						var input = $(targetElement(e)).parents('.js_pop_select_approval_line');
+						var appendTaskApproval = $('.js_append_task_approval_page');
+						var url = 'approval_line_box.sw?approvalLineId=' + input.attr('approvalLineId');
+						$.get(url,  function(data){
+							appendTaskApproval.find('.js_approval_line_box').html(data);
+							smartPop.close();
+						});
 						return false;
 					});
 				}

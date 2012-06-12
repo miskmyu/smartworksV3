@@ -113,9 +113,8 @@
 					<%
 					if(approvalTask!=null){
 					%>
-						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
-							<jsp:param value="<%=taskInstId %>" name="approvalLine"
 						</jsp:include>
 					<%
 					}

@@ -65,12 +65,12 @@
 			    	<a href=""><img src="<%=forwarder.getMinPicture() %>" class="profile_size_s" /> <%=forwarder.getLongName() %></a>
 			    	<span class="t_date"> <%= forwardedTask.getLastModifiedDate().toLocalString() %> </span>
 			    </div>
+				<span class="solid_line_sd2"></span>
 			<%
 			}
 	%>
 			
-		<form name='frmTaskForward' class="form_layout js_validation_required">
-			<span class="solid_line_sd2">
+			<form name='frmTaskForward' class="form_layout js_validation_required">
 				<!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
 				<!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 				<div class="js_task_forward_fields" 
@@ -78,11 +78,13 @@
 					forwardeeTitle="<fmt:message key='forward.title.forwardee'/>" 
 					CommentsTitle="<fmt:message key='forward.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"> 
 				</div>
-				<div class="replay">
-					<div class="up_point_sgr pos_works"></div>
-					<ul class="bg p10">
-						<%
-						if(!SmartUtil.isBlankObject(forwardedTask) && !SmartUtil.isBlankObject(tasks)){
+				<%
+				if(!SmartUtil.isBlankObject(forwardedTask) && !SmartUtil.isBlankObject(tasks)){
+				%>
+					<div class="replay">
+						<div class="up_point_sgr pos_works"></div>
+						<ul class="bg p10">
+							<%
 							for(TaskInstanceInfo task : tasks){
 								if(!task.getForwardId().equals(forwardedTask.getForwardId())) continue;
 								UserInfo owner = task.getAssignee();
@@ -141,13 +143,12 @@
 						        	</span>								
 							</li>
 							
-						<%
-						}
-						%>
-					</ul>
-				</div>
-			</span>
-		</form>
+						</ul>
+					</div>
+				<%
+				}
+				%>					
+			</form>
 		<div class="dash_line"></div>
 </div>
 <!-- 업무계획하기 //-->

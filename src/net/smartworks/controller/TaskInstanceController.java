@@ -66,6 +66,12 @@ public class TaskInstanceController {
 		return SmartUtil.returnMnv(request, "jsp/content/upload/append_task_approval.jsp", "");
 	}
 
+	@RequestMapping("/approval_line_box")
+	public ModelAndView approvalLineBox(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/upload/approval_line_box.jsp", "");
+	}
+
 	@RequestMapping("/more_space_task_histories")
 	public ModelAndView moreSpaceTaskHistories(HttpServletRequest request, HttpServletResponse response) {
 

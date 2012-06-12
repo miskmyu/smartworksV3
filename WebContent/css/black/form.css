@@ -128,7 +128,7 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .approval_area { width:125px; border:1px solid #cccccc; padding:5px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
 .approval_area .approval {height: 60px}
-.approval_area .name {height:38px; vertical-align: bottom; display: table-cell}
+.approval_area .name {width:125px; height:38px; vertical-align: bottom; display: table-cell}
 .approval_area .name .t_name {font-size:11px}
 .approval_area .name .up {width: 96px; height: 13px; color:#868686}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}

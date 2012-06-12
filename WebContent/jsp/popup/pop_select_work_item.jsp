@@ -52,9 +52,11 @@
 	<div class="glo_btn_space">
 
 		<div class="fr">
-			<span class="btn_gray"> <a onclick="$.modal.close();return false;" href=""> <span
-					class="txt_btn_start"></span> <span class="txt_btn_center"><fmt:message key="common.button.close"/></span> <span
-					class="txt_btn_end"></span> </a> </span>
+			<span class="btn_gray"> 
+				<a onclick="$.modal.close();return false;" href=""> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.close"/></span> 
+					<span class="txt_btn_end"></span> </a> </span>
 		</div>
 
 	</div>
