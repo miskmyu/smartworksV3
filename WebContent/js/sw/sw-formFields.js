@@ -451,7 +451,9 @@ function loadTaskApprovalFields() {
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
 				if(readOnly){
 					target.addClass('form_read');
-					iworkSpace.find('.js_btn_reply_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_return_approval').show();
+					iworkSpace.find('.js_btn_reject_approval').show();
 					iworkSpace.find('.js_btn_cancel').show();						
 				}
 				target.parent().addClass('contents_space');

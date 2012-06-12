@@ -12,6 +12,7 @@ public class UserInfo extends WorkSpaceInfo {
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
 	private boolean online;
+	private String signPicture;
 
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -58,8 +59,13 @@ public class UserInfo extends WorkSpaceInfo {
 	}
 	public void setOnline(boolean online) {
 		this.online = online;
+	}	
+	public String getSignPicture() {
+		return signPicture;
 	}
-	
+	public void setSignPicture(String signPicture) {
+		this.signPicture = signPicture;
+	}
 	public UserInfo(){
 		super();
 	}

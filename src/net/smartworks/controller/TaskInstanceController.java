@@ -114,4 +114,10 @@ public class TaskInstanceController {
 		smartworks.commentOnTaskForward(requestBody, request);
 	}
 
+	@RequestMapping(value = "/comment_on_task_approval", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void commentOnTaskApproval(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.commentOnTaskApproval(requestBody, request);
+	}
+
 }

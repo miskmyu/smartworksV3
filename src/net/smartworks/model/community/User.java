@@ -41,6 +41,7 @@ public class User extends WorkSpace {
 	private String cellPhoneNo;
 	private String company;
 	private String companyId;
+	private String signPicture;
 	private boolean online;
 	
 	public String getNickName() {
@@ -136,8 +137,13 @@ public class User extends WorkSpace {
 	}
 	public void setOnline(boolean online) {
 		this.online = online;
+	}	
+	public String getSignPicture() {
+		return signPicture;
 	}
-	
+	public void setSignPicture(String signPicture) {
+		this.signPicture = signPicture;
+	}
 	public User(){
 		super();
 	}

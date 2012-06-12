@@ -491,6 +491,47 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_reply_approval').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_reply_approval');
+		var appendTaskApproval = input.parents('.js_iwork_space_page').find('.js_append_task_approval_page');
+		var comment = appendTaskApproval.find('textarea[name="txtaCommentContent"]').attr('value');
+		if(isEmpty(comment)) return false;
+		smartPop.confirm(smartMessage.get("commentTaskApprovalConfirm"), function(){
+			var result = (input.parents().hasClass('js_btn_approve_approval')) ? "approved" 
+						: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
+						: (input.parents().hasClass('js_btn_approve_approval')) ? "returned" : "";
+			var paramsJson = {};
+			paramsJson['workInstId'] = appendTaskApproval.attr('workInstId');
+			paramsJson['approvalInstId'] = appendTaskApproval.attr('approvalInstId');
+			paramsJson['taskInstId'] = appendTaskApproval.attr('taskInstId');
+			paramsJson['comments'] = comment;
+			paramsJson['result'] = result;
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "comment_on_task_approval.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
+						document.location.href = "";
+	 					smartPop.close();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskApprovalError"), function(){
+	 					smartPop.close();
+					});
+					
+				}
+				
+			});			
+		});
+		return false;
+	});
+	
 	$('.js_show_all_comments').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_show_all_comments');
 		var subInstanceList = input.parents('.js_sub_instance_list');

@@ -198,10 +198,26 @@
 				            </a>
 				   		</span>
 				
-				        <span class="btn_gray js_btn_reply_approval" style="display:none">
+				        <span class="btn_gray js_btn_approve_approval" style="display:none">
 				        	<a href="" class="js_reply_approval">
 					            <span class="txt_btn_start"></span>
-					            <span class="txt_btn_center"><fmt:message key="common.button.reply_approval"/></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.approve_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_return_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.return_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
+				        <span class="btn_gray js_btn_reject_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.reject_approval"/></span>
 					            <span class="txt_btn_end"></span>
 				            </a>
 				   		</span>
