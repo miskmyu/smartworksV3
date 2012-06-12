@@ -11,6 +11,7 @@ import com.google.gdata.data.youtube.FormUploadToken;
 import net.smartworks.model.RecordList;
 import net.smartworks.model.YTMetaInfo;
 import net.smartworks.model.approval.ApprovalLine;
+import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
@@ -631,5 +632,8 @@ public interface ISmartWorks {
 	public abstract int getUnreadEmails() throws Exception;
 
 	public abstract void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
+
 
 }

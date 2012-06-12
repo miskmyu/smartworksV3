@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.model.instance.Instance"%>
+<%@page import="net.smartworks.model.approval.ApprovalLineInst"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.approval.Approval"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
@@ -23,13 +25,13 @@
 	String taskInstId = request.getParameter("taskInstId");
 	String approvalLineId = request.getParameter("approvalLineId");
 
-	WorkInstance workInstance = null;
+	WorkInstance workInstance = null; 
 	TaskInstanceInfo[] tasks = null;
 	TaskInstanceInfo approvalTask = null;
 	String subject = "";
 	String content = "";
 	String workInstId = "";
-	String approvalId = "";
+	String approvalInstId = "";
 	if(!SmartUtil.isBlankObject(taskInstId)){
 		workInstance = (WorkInstance)session.getAttribute("workInstance");
 		tasks = workInstance.getTasks();
@@ -37,7 +39,7 @@
 			for(TaskInstanceInfo task : tasks){
 				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
 					approvalTask = task;
-					approvalId = task.getApprovalId();
+					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
 					content = task.getContent();
 					break;
@@ -46,14 +48,20 @@
 		}
 	}
 	
-	ApprovalLine approvalLine = smartWorks.getApprovalLineById(approvalId);
+	ApprovalLine approvalLine = null;
+	ApprovalLineInst approvalLineInst = null;
+	if(!SmartUtil.isBlankObject(approvalInstId)){
+		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);		
+	}else{
+		approvalLine = smartWorks.getApprovalLineById(approvalLineId);
+	}
 
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalId="<%=approvalId %>" taskInstId="<%=taskInstId%>" >
+<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalLineId="<%=approvalLineId %>" approvalInstId="<%=approvalInstId %>" taskInstId="<%=taskInstId%>" >
 	<!-- 결재선 Section -->
 	<div class="approval_section">
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
@@ -67,8 +75,15 @@
 				<form class="js_validation_required" name="frmApprovalLine">
 					<input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden">		
 					<%
-					if(!SmartUtil.isBlankObject(approvalLine) && !SmartUtil.isBlankObject(approvalLine.getApprovals())){
-						Approval[] approvals = approvalLine.getApprovals();
+					if((!SmartUtil.isBlankObject(approvalLine) && !SmartUtil.isBlankObject(approvalLine.getApprovals())) 
+							|| (!SmartUtil.isBlankObject(approvalLineInst) && !SmartUtil.isBlankObject(approvalLineInst.getApprovals()))){
+						Approval[] approvals = null;
+						if(!SmartUtil.isBlankObject(approvalLine)){
+							approvals = approvalLine.getApprovals();	
+						}else{
+							approvals = approvalLineInst.getApprovals();
+						}
+						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
 					%>
@@ -77,7 +92,7 @@
 							<div class="label"><%=approval.getName() %></div>
 							<div class="approval"></div>
 							<%
-							if(approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
+							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
 								<div class="name form_col js_type_userField" fieldId="usrLevelApprover<%=i+1 %>" multiUsers="false">
 									<div class="form_value" style="width:100%">
@@ -94,6 +109,7 @@
 							<%
 							}else if(!SmartUtil.isBlankObject(approval.getApprover())){
 								User approver = approval.getApprover();
+								String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateSimpleString();
 								
 							%>
 								<div class="name">
@@ -102,9 +118,15 @@
 									</div>
 									<div class="noti_in">
 										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
-										<div class="t_date"> 04.15 05:38</div>
+										<div class="t_date"><%=completedDateStr %></div>
 									</div>
-									<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
+									<%
+									if(SmartUtil.isBlankObject(approvalLineInst)){
+									%>
+										<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
+									<%
+									}
+									%>
 								</div>
 							<%
 							}
