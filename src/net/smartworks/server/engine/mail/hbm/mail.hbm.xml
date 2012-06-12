@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.mail.model" default-lazy="false">
+
+	<class name="MAILFOLDER" table="folder_db_objects">
+		<id name="id" type="int" unsaved-value="undefined"/>
+		<property name="username" column="username" type="string" length="255"/>
+		<property name="parentId" column="parent_id" type="string" length="4000"/>
+		<property name="creationUser" column="writer" type="string" length="30"/>
+		<property name="creationDate" column="writtenTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="30"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+
+</hibernate-mapping>
