@@ -46,10 +46,7 @@
 		}
 	}
 	
-	String threeLevelId = "5ef4e5632f70c3a5012f714290af012c";
-	String otherId = "402880ec358e456a01358e47be050001";
-	approvalId = threeLevelId;
-	ApprovalLine approvalLine = smartWorks.getApprovalLineById(otherId);
+	ApprovalLine approvalLine = smartWorks.getApprovalLineById(approvalId);
 
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -137,15 +134,11 @@
 								
 							%>
 								<div class="name">
-									<%-- <a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a> --%>
-									
 									<div class="noti_pic">
-										<img class="profile_size_s" title="대표이사 정윤식" src="images/no_user_picture_min.jpg">
+										<img class="profile_size_s" title="<%=approver.getLongName() %>" src="<%=approver.getMinPicture()%>">
 									</div>
 									<div class="noti_in">
 										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
-										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
-										<div class="t_date">04.15 05:38</div>
 									</div>
 									<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
 								</div>
@@ -168,9 +161,9 @@
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<span> <!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 --> <!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 				<div class="js_task_approval_fields"
-					subjectTitle="<fmt:message key='common.approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
-					forwardeeTitle="<fmt:message key='common.approval.title.forwardee'/>"
-					CommentsTitle="<fmt:message key="common.approval.title.comments" />" content="<%=CommonUtil.toNotNull(content)%>">
+					subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
+					forwardeeTitle="<fmt:message key='approval.title.forwardee'/>"
+					CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>">
 				</div>
 			</span>
 		</form>

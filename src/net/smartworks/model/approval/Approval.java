@@ -1,12 +1,17 @@
 package net.smartworks.model.approval;
 
 import net.smartworks.model.community.User;
+import net.smartworks.util.SmartMessage;
 
 public class Approval{
 
 	public static final int APPROVER_CHOOSE_ON_RUNNING = 1;
 	public static final int APPROVER_MY_BOSS = 2;
 	public static final int APPROVER_CHOOSE_USER = 3;
+	
+	public static final Approval DEFAULT_APPROVAL_APPROVER = new Approval(SmartMessage.getString("approval.title.approver"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
+	public static final Approval DEFAULT_APPROVAL_REVIEWER = new Approval(SmartMessage.getString("approval.title.reviewer"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
+	public static final Approval DEFAULT_APPROVAL_FINAL_APPROVER = new Approval(SmartMessage.getString("approval.title.final_reviewer"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
 
 	private String name;
 	private int approverType;
@@ -51,6 +56,17 @@ public class Approval{
 	public void setMeanTimeMinutes(int meanTimeMinutes) {
 		this.meanTimeMinutes = meanTimeMinutes;
 	}
+	
 	public Approval(){
 	}	
+
+	public Approval(String name, int approverType, User approver, int meanTimeDays, int meanTimeHours, int meanTimeMinutes){
+		super();
+		this.name = name;
+		this.approverType = approverType;
+		this.approver = approver;
+		this.meanTimeDays = meanTimeDays;
+		this.meanTimeHours = meanTimeHours;
+		this.meanTimeMinutes = meanTimeMinutes;
+	}
 }

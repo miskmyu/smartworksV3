@@ -213,8 +213,8 @@ public class Pop3ProtocolImpl implements Protocol {
 		Folder fold = null;
 		try {
 			fold = getFolder();
-			closeFolder(fold);
-			fold = getFolder();
+//			closeFolder(fold);
+//			fold = getFolder();
 			
             FetchProfile fp = new FetchProfile();
 			fp.add(FetchProfile.Item.ENVELOPE);

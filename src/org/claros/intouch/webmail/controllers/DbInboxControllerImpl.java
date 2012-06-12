@@ -205,8 +205,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 								MailController mailCont = mailFact.getMailController();
 								DbMailControllerImpl dbMailCont = (DbMailControllerImpl)mailCont;
 								if (!dbMailCont.msgAlreadyFetched(uid)) {
-									header = protocol.fetchHeader(msg, i);
-									msgId = header.getMessageId();
+									header = protocol.fetchHeader(msg, msgId);
 									msg = protocol.getMessage(msgId);
 									if (!msg.getFolder().isOpen()) {
 										msg.getFolder().open(Folder.READ_ONLY);
@@ -236,6 +235,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										MsgDbObject item = new MsgDbObject();
 										item.setEmail(bos.toByteArray());
 										item.setUniqueId(md5Header);
+										item.setUid(uid);
 										item.setFolderId(new Long(folderId));
 										item.setUnread(new Boolean(true));
 										item.setUsername(auth.getUsername());

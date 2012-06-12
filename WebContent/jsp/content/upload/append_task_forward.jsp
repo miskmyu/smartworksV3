@@ -68,9 +68,9 @@
 			<!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
 			<!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 			<div class="js_task_forward_fields" 
-				subjectTitle="<fmt:message key='common.forward.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>" 
-				forwardeeTitle="<fmt:message key='common.forward.title.forwardee'/>" 
-				CommentsTitle="<fmt:message key="common.forward.title.comments" />" content="<%=CommonUtil.toNotNull(content)%>"> 
+				subjectTitle="<fmt:message key='forward.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>" 
+				forwardeeTitle="<fmt:message key='forward.title.forwardee'/>" 
+				CommentsTitle="<fmt:message key='forward.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"> 
 			</div>
 			<div class="replay">
 				<ul>
