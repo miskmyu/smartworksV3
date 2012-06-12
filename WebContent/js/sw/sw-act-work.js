@@ -1318,4 +1318,14 @@ $(function() {
 			filesDetailTimer = null;
 		}, 300);
 	});	
+
+	$('.js_pop_approval_line').live('click', function(e) {
+		var startWork = $(targetElement(e)).parents('.js_append_task_approval_page');
+		var target = startWork.find('.js_select_approval_line');
+//		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
+//		smartPop.selectWork(target, width);
+		smartPop.selectApprovalLine(target);
+		return false;
+	});
+
 });

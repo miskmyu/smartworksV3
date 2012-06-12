@@ -59,11 +59,10 @@
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
 		<div class="approval_group">
 			<div class="fr mb2">
-				<div class="fl icon_approval js_toggle_approval_line"></div>
                 <div class="fl"><%=approvalLine.getName() %></div>
+				<a href="" class="js_pop_approval_line"><div class="fl icon_approval"></div></a>
 			</div>
-			<!-- POP -->
-			<div class="js_pop_approval_line"></div>
+			<div class="js_select_approval_line"></div>
 			<div class="cb">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden">		
