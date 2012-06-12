@@ -11,7 +11,7 @@ public class Approval{
 	
 	public static final Approval DEFAULT_APPROVAL_APPROVER = new Approval(SmartMessage.getString("approval.title.approver"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
 	public static final Approval DEFAULT_APPROVAL_REVIEWER = new Approval(SmartMessage.getString("approval.title.reviewer"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
-	public static final Approval DEFAULT_APPROVAL_FINAL_APPROVER = new Approval(SmartMessage.getString("approval.title.final_reviewer"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
+	public static final Approval DEFAULT_APPROVAL_FINAL_APPROVER = new Approval(SmartMessage.getString("approval.title.final_approver"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
 
 	private String name;
 	private int approverType;
