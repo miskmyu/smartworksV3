@@ -667,7 +667,13 @@ CREATE TABLE msg_db_objects (
     unread smallint NOT NULL,
     msg_size bigint NOT NULL,
     email varbinary(max) NOT NULL,
+    uid varchar(100) NOT NULL
     primary key (id)
+);
+
+CREATE TABLE msg_db_uids (
+    username varchar(255) NOT NULL,
+    uid varchar(100) NOT NULL
 );
 
 CREATE TABLE msg_rules (
