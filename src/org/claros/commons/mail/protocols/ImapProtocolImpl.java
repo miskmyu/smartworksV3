@@ -825,4 +825,22 @@ public class ImapProtocolImpl implements Protocol {
 		}
 		return headers;
 	}
+
+	@Override
+	public Message[] fetchAllMessagesWithUid() throws SystemException, ConnectionException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getMessageUID(Message message) throws MailboxActionException, SystemException, ConnectionException, Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EmailHeader fetchHeader(Message msg, int msgId) throws SystemException, ConnectionException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -901,12 +901,15 @@ public class SettingsServiceImpl implements ISettingsService {
 	public ApprovalLine getApprovalLineById(String id) throws Exception {
 
 		try {
-			User cUser = SmartUtil.getCurrentUser();
-			String userId = cUser.getId();
-			AprApprovalLineDef approvalLineDef = getAprManager().getApprovalLineDef(userId, id, IManager.LEVEL_ALL);
 
 			Approval[] approvals = null;
 			ApprovalLine approvalLine = new ApprovalLine();
+			if(SmartUtil.isBlankObject(id))
+				return ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+			
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			AprApprovalLineDef approvalLineDef = getAprManager().getApprovalLineDef(userId, id, IManager.LEVEL_ALL);
 			if(approvalLineDef != null) {
 				String name = approvalLineDef.getAprLineName();
 				String desc = CommonUtil.toNotNull(approvalLineDef.getAprDescription());

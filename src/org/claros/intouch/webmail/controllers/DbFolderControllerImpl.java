@@ -438,7 +438,7 @@ public class DbFolderControllerImpl implements FolderController {
 				dao = Utility.getDbConnection();
 				String username = auth.getUsername();
 				
-				String sql = "SELECT id, folder_id, unique_id, sender, receiver, cc, bcc, replyTo, subject, multipart, priority, sentdate, unread, msg_size FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
+				String sql = "SELECT id, folder_id, unique_id, uid, sender, receiver, cc, bcc, replyTo, subject, multipart, priority, sentdate, unread, msg_size FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
 				mails = dao.readList(MsgDbObject.class, sql, new Object[] {username, folderId});
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -458,7 +458,7 @@ public class DbFolderControllerImpl implements FolderController {
 	
 					try {
 						header = new EmailHeader();
-	//					header.setMultipart(item.getMultipart());
+						header.setMultipart(item.getMultipart());
 						header.setMessageId(item.getId().intValue());
 						header.setFrom(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getSender()));
 						header.setTo(org.claros.commons.mail.utility.Utility.stringToAddressArray(item.getReceiver()));

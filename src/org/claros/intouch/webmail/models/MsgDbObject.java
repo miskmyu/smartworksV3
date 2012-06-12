@@ -10,6 +10,7 @@ public class MsgDbObject {
 	private String username;
 	private Long folderId;
 	private String uniqueId;
+	private String uid;
 	private String sender;
 	private String receiver;
 	private String cc;
@@ -45,6 +46,12 @@ public class MsgDbObject {
 	}
 	public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
+	}
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 	public String getSender() {
 		return sender;
