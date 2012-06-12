@@ -37,24 +37,33 @@ $(function() {
 	});
 
 	$('a.js_cancel_action').live('click',function(e) {
-		var input = $('.js_select_action').find('a:first');
-		if(isEmpty(input)) return false;
-		$('.js_select_action').find('a').removeClass('current');
-		var currentAction = input.parents('.up_icon_list');
-		currentAction.find('a').addClass('current');
-		var target = $('.js_upload_form');
-		var url = input.attr('href');
-		$.ajax({
-			url : url,
-			data : {},
-			success : function(data, status, jqXHR) {
-				target.html(data).show();
-				$(data).find('.js_up_pointer').css({"left": (currentAction.position().left + currentAction.outerWidth()/2) + "px"});
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-				
-			}
-		});
+
+		if ($('.js_select_action').find('a:first').length != 0) {
+			var input = $('.js_select_action').find('a:first');
+			if(isEmpty(input)) return false;
+			$('.js_select_action').find('a').removeClass('current');
+			var currentAction = input.parents('.up_icon_list');
+			currentAction.find('a').addClass('current');
+			var target = $('.js_upload_form');
+			var url = input.attr('href');
+			$.ajax({
+				url : url,
+				data : {},
+				success : function(data, status, jqXHR) {
+					target.html(data).show();
+					$(data).find('.js_up_pointer').css({"left": (currentAction.position().left + currentAction.outerWidth()/2) + "px"});
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+				}
+			});
+		} else if ($(targetElement(e)).parents('.js_work_list_page').find('div.js_new_work_form').length != 0 ){
+			var input = $(targetElement(e)).parents('.js_work_list_page').find('div.js_new_work_form');
+			if(isEmpty(input)) return false;
+			var workform = input.parents('.js_work_list_page').find('div.js_new_work_form');
+			if(isEmpty(workform)) return false;
+			workform.slideUp();
+		}
+		
 		return false;
 	});
 	
@@ -1309,4 +1318,14 @@ $(function() {
 			filesDetailTimer = null;
 		}, 300);
 	});	
+
+	$('.js_pop_approval_line').live('click', function(e) {
+		var startWork = $(targetElement(e)).parents('.js_append_task_approval_page');
+		var target = startWork.find('.js_select_approval_line');
+//		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
+//		smartPop.selectWork(target, width);
+		smartPop.selectApprovalLine(target);
+		return false;
+	});
+
 });

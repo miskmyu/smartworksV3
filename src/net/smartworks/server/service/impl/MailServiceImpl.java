@@ -321,9 +321,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setCc(header.getCcShown());
 		item.setBcc(header.getBccShown());
 		item.setReplyTo(header.getReplyToShown());
-//		item.setMultipart(header.isMultipart());
+		item.setMultipart(header.isMultipart());
 		item.setSentDate(header.getDate());
-//		item.setPriority(new Integer(header.getPriority()));
+		item.setPriority(new Integer(header.getPriority()));
 		item.setSubject(header.getSubject());
 		
 		// save the email db item.
@@ -342,7 +342,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		mailCont.appendEmail(item);
 	}
 	
-	private void saveDraft(AuthProfile auth, MimeMessage msg, HttpServletRequest request) throws Exception {
+	private void saveDraft(AuthProfile auth, MimeMessage msg, EmailHeader header, HttpServletRequest request) throws Exception {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		msg.writeTo(bos);
 		byte bMsg[] = bos.toByteArray();
@@ -369,6 +369,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setUsername(auth.getUsername());
 		item.setMsgSize(new Long(bMsg.length));
 
+		item.setSender(header.getFromShown());
+		item.setReceiver(header.getToShown());
+		item.setCc(header.getCcShown());
+		item.setBcc(header.getBccShown());
+		item.setReplyTo(header.getReplyToShown());
+		item.setMultipart(header.isMultipart());
+		item.setSentDate(header.getDate());
+		item.setPriority(new Integer(header.getPriority()));
+		item.setSubject(header.getSubject());
+		
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
@@ -675,9 +685,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						// so with a for statement display them. 
 						for (int i=startIdx;i<endIdx;i++) {
 							tmp = (EmailHeader)headers.get(i);
-							InternetAddress from = (InternetAddress)tmp.getFrom()[0];
+							InternetAddress from = new InternetAddress();
+							if(!SmartUtil.isBlankObject(tmp.getFrom()))
+								from = (InternetAddress)tmp.getFrom()[0];
+							if(SmartUtil.isBlankObject(tmp.getDate())){
+								tmp.setDate(new Date());
+							}
 							MailInstanceInfo mailInstance = new MailInstanceInfo(Integer.toString(tmp.getMessageId()),
-									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate()/*tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset())*/);						
+									tmp.getSubject(), new UserInfo(from.getAddress(), from.getPersonal()), new LocalDate(tmp.getDate().getTime()-TimeZone.getDefault().getRawOffset()));						
 							mailInstance.setSize(tmp.getSize());
 							mailInstance.setUnread(tmp.getUnread());
 							mailInstance.setPriority(tmp.getPriority());
@@ -1236,7 +1251,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			HashMap sendRes = smtp.send(email, true);
 			MimeMessage msg = (MimeMessage)sendRes.get("msg");
 
-			saveDraft(auth, msg, request);
+			saveDraft(auth, msg, header, request);
 
 		} catch (Exception e) {
 			throw e;

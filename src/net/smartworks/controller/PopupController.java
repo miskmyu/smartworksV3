@@ -50,6 +50,12 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_select_work_item.jsp", "jsp/popup/pop_select_work_item.jsp");
 	}
 
+	@RequestMapping("/pop_select_approval_line")
+	public ModelAndView popSelectApprovalLine(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_select_approval_line.jsp", "jsp/popup/pop_select_approval_line.jsp");
+	}
+
 	@RequestMapping("/pop_worklist_by_category")
 	public ModelAndView popWorklistByCategory(HttpServletRequest request, HttpServletResponse response) {
 
