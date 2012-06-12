@@ -1,21 +1,16 @@
 package net.smartworks.server.service.impl;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import javax.activation.DataHandler;
@@ -24,38 +19,37 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.SortingField;
-import net.smartworks.model.instance.info.BoardInstanceInfo;
-import net.smartworks.model.instance.info.EventInstanceInfo;
+import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MailInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
+import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Order;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.manager.IMailManager;
+import net.smartworks.server.engine.mail.model.MailContent;
+import net.smartworks.server.engine.mail.model.MailContentCond;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
+
 import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.exception.LoginInvalidException;
 import org.claros.commons.auth.models.AuthProfile;
-import org.claros.commons.cache.Cache;
-import org.claros.commons.cache.CacheManager;
-import org.claros.commons.configuration.Paths;
-import org.claros.commons.configuration.PropertyFile;
 import org.claros.commons.exception.NoPermissionException;
-import org.claros.commons.mail.comparator.ComparatorDate;
-import org.claros.commons.mail.comparator.ComparatorFrom;
-import org.claros.commons.mail.comparator.ComparatorSize;
-import org.claros.commons.mail.comparator.ComparatorSubject;
-import org.claros.commons.mail.comparator.ComparatorTo;
-import org.claros.commons.mail.exception.ProtocolNotAvailableException;
 import org.claros.commons.mail.exception.ServerDownException;
 import org.claros.commons.mail.models.ByteArrayDataSource;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
@@ -65,15 +59,12 @@ import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.models.EmailPriority;
 import org.claros.commons.mail.parser.HTMLMessageParser;
-import org.claros.commons.mail.protocols.Protocol;
-import org.claros.commons.mail.protocols.ProtocolFactory;
 import org.claros.commons.mail.protocols.Smtp;
 import org.claros.commons.mail.utility.Constants;
 import org.claros.commons.mail.utility.Utility;
 import org.claros.commons.utility.MD5;
 import org.claros.intouch.common.services.BaseService;
 import org.claros.intouch.contacts.controllers.ContactsController;
-import org.claros.intouch.preferences.controllers.UserPrefsController;
 import org.claros.intouch.webmail.controllers.FolderController;
 import org.claros.intouch.webmail.controllers.InboxController;
 import org.claros.intouch.webmail.controllers.MailController;
@@ -91,10 +82,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Service
 public class MailServiceImpl extends BaseService implements IMailService {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
+	private IMailManager getMailManager() {
+		return SwManagerFactory.getInstance().getMailManager();
+	}
 
 	private ConnectionMetaHandler getConnectionMetaHandler() throws Exception{
 		
@@ -458,13 +450,140 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		}
 	}
 
+	int previousPageSize = 0;
 	@Override
 	public InstanceInfoList getMailInstanceList(String folderId, RequestParams params) throws Exception {
 
-		try{
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+			if(handler == null) return null;
+			
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+
+			InboxControllerFactory inFact = new InboxControllerFactory(auth, profile, handler);
+			InboxController inCont = inFact.getInboxController();
+			inCont.checkEmail();
+
+			MailContentCond mailContentCond = new MailContentCond();
+			mailContentCond.setUsername(userId);
+			mailContentCond.setFolderId(Long.parseLong(folderId));
+
+			String searchKey = params.getSearchKey();
+			mailContentCond.setSearchKey(searchKey);
+
+			long totalCount = getMailManager().getMailContentSize(userId, mailContentCond);
+
+			SortingField sf = params.getSortingField();
+			String columnName = "";
+			boolean isAsc;
+
+			if (sf != null) {
+				columnName = CommonUtil.toDefault(sf.getFieldId(), MailContent.A_SENTDATE);
+				isAsc = sf.isAscending();
+			} else {
+				columnName = MailContent.A_SENTDATE;
+				isAsc = false;
+			}
+			SortingField sortingField = new SortingField();
+			sortingField.setFieldId(columnName);
+			sortingField.setAscending(isAsc);
+
+			mailContentCond.setOrders(new Order[]{new Order(columnName, isAsc)});
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				mailContentCond.setPageNo(currentPage-1);
+
+			mailContentCond.setPageSize(pageSize);
+
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
-	
-		    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+			MailContent[] mailContents = getMailManager().getMailContents(userId, mailContentCond, IManager.LEVEL_LITE);
+
+			List<MailInstanceInfo> mailInstanceInfoList = new ArrayList<MailInstanceInfo>();
+			MailInstanceInfo[] instanceDatas = null;
+
+			if(!CommonUtil.isEmpty(mailContents)) {
+				int length = mailContents.length;
+				for(int i=0; i<length; i++) {
+					MailContent mailContent = mailContents[i];
+					MailInstanceInfo mailInstanceInfo = new MailInstanceInfo();
+					mailInstanceInfo.setId(String.valueOf(mailContent.getId()));
+					String sender = mailContent.getSender();
+					String senderId = null;
+					int start = sender.indexOf("<");
+					int end = sender.indexOf(">");
+					senderId = sender.substring(start+1, end);
+					mailInstanceInfo.setSubject(mailContent.getSubject());
+					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
+					mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
+					mailInstanceInfo.setPriority(mailContent.getPriority());
+					mailInstanceInfo.setSize(mailContent.getMsgSize());
+					mailInstanceInfo.setMultipart(mailContent.getMultipart() == 0 ? false : true);
+					mailInstanceInfo.setUnread(mailContent.getUnread() == 0 ? false : true);
+					mailInstanceInfo.setType(Instance.TYPE_MAIL);
+					mailInstanceInfoList.add(mailInstanceInfo);
+					/*
+					private UserInfo[] receivers;
+					private UserInfo[] ccReceivers;
+					private MailFolder mailFolder;
+					private MailFolder parentMailFolder;*/
+				}
+			}
+			if(mailInstanceInfoList.size() > 0) {
+				instanceDatas = new MailInstanceInfo[mailInstanceInfoList.size()];
+				mailInstanceInfoList.toArray(instanceDatas);
+			}
+			instanceInfoList.setInstanceDatas(instanceDatas);
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sortingField);
+			instanceInfoList.setType(InstanceInfoList.TYPE_MAIL_INSTANCE_LIST);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+
+			return instanceInfoList;
+
+		   /* ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		    HttpServletRequest request = attr.getRequest();
 
 		    ConnectionMetaHandler handler = getConnectionMetaHandler();
@@ -705,9 +824,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				}
 			} catch (Exception e) {
 				throw e;
-			}
-			
-			return instanceInfoList;
+			}*/
 		}catch (Exception e){
 			throw e;
 		}

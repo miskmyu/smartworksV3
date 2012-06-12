@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.UserInfo;
@@ -6624,5 +6625,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		getTskManager().executeTask(userId, task, "execute");
 		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
+	}
+	@Override
+	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

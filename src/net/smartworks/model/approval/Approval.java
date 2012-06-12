@@ -1,6 +1,8 @@
 package net.smartworks.model.approval;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.Instance;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 
 public class Approval{
@@ -15,10 +17,15 @@ public class Approval{
 
 	private String name;
 	private int approverType;
+	private int status = Instance.STATUS_NOT_YET; // Instance에 있는 status를 같이 사용한다.
 	private User approver;
 	private int meanTimeDays=0;
 	private int meanTimeHours=0;
 	private int meanTimeMinutes=30;
+	private String dueDate;
+	private LocalDate completedDate;
+	private boolean isMandatory = true;
+	private boolean isModifiable = true;
 
 	public String getName() {
 		return name;
@@ -55,6 +62,36 @@ public class Approval{
 	}
 	public void setMeanTimeMinutes(int meanTimeMinutes) {
 		this.meanTimeMinutes = meanTimeMinutes;
+	}	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public String getDueDate() {
+		return dueDate;
+	}
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+	public boolean isMandatory() {
+		return isMandatory;
+	}
+	public void setMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
+	}
+	public boolean isModifiable() {
+		return isModifiable;
+	}
+	public void setModifiable(boolean isModifiable) {
+		this.isModifiable = isModifiable;
+	}
+	public LocalDate getCompletedDate() {
+		return completedDate;
+	}
+	public void setCompletedDate(LocalDate completedDate) {
+		this.completedDate = completedDate;
 	}
 	
 	public Approval(){

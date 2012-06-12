@@ -2,14 +2,36 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="net.smartworks.server.engine.mail.model" default-lazy="false">
 
-	<class name="MAILFOLDER" table="folder_db_objects">
-		<id name="id" type="int" unsaved-value="undefined"/>
+<!-- 	<class name="MailFolder" table="folder_db_objects">
+		<id name="id" type="long" unsaved-value="undefined"/>
 		<property name="username" column="username" type="string" length="255"/>
-		<property name="parentId" column="parent_id" type="string" length="4000"/>
-		<property name="creationUser" column="writer" type="string" length="30"/>
-		<property name="creationDate" column="writtenTime" type="timestamp"/>
-		<property name="modificationUser" column="modifier" type="string" length="30"/>
-		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+		<property name="parentId" column="parent_id" type="long"/>
+		<property name="folderName" column="folder_name" type="string" length="100"/>
+		<property name="folderType" column="folder_type" type="integer"/>
+	</class> -->
+
+	<class name="MailContent" table="msg_db_objects">
+		<id name="id" column="id" type="long" unsaved-value="undefined"/>
+		<property name="username" column="username" type="string" length="255"/>
+		<property name="folderId" column="folder_id" type="long"/>
+		<property name="uniqueId" column="unique_id" type="string" length="100"/>
+		<property name="sender" column="sender" type="string" length="255"/>
+		<property name="receiver" column="receiver" type="string" length="8000"/>
+		<property name="cc" column="cc" type="string" length="8000"/>
+		<property name="bcc" column="bcc" type="string" length="8000"/>
+		<property name="replyTo" column="replyTo" type="string" length="255"/>
+		<property name="subject" column="subject" type="string" length="255"/>
+		<property name="multipart" column="multipart" type="integer"/>
+		<property name="priority" column="priority" type="integer"/>
+		<property name="sentDate" column="sentDate" type="timestamp"/>
+		<property name="unread" column="unread" type="integer"/>
+		<property name="msgSize" column="msg_size" type="long"/>
+		<property name="email" column="email" type="binary"/>
 	</class>
+
+<!-- 	<class name="MailUid" table="msg_db_uids">
+		<id name="uid" column="uid" type="string" length="100" unsaved-value="undefined"/>
+		<property name="username" column="username" type="string" length="255"/>
+	</class> -->
 
 </hibernate-mapping>

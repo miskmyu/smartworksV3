@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.mail.model.MailContent"%>
 <%@page import="org.claros.commons.mail.models.EmailPriority"%>
 <%@page import="net.smartworks.model.instance.info.MailInstanceInfo"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
@@ -40,7 +41,7 @@
 			params = new RequestParams();
 			params.setPageSize(20);
 			params.setCurrentPage(1);
-			params.setSortingField(new SortingField("date", false));
+			params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
 		}
 	}
 	session.setAttribute("requestParams", params);
@@ -74,9 +75,9 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
+							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -86,9 +87,9 @@
 				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENDER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -110,9 +111,9 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>
@@ -122,9 +123,9 @@
 				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>
@@ -143,10 +144,10 @@
 			if(instanceList.getInstanceDatas() != null) {
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
-					UserInfo owner = instanceInfo.getOwner();
-					UserInfo lastModifier = instanceInfo.getLastModifier();
-					String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
-					String wid = instanceInfo.getWorkSpace().getId();
+					//UserInfo owner = instanceInfo.getOwner();
+					//UserInfo lastModifier = instanceInfo.getLastModifier();
+					//String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
+					//String wid = instanceInfo.getWorkSpace().getId();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
@@ -173,9 +174,9 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_RECEIVERS%>"><fmt:message key='common.title.receivers'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_RECEIVERS)){
+							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -185,9 +186,9 @@
 				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SENDER%>"><fmt:message key='common.title.sender'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SENDER)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENDER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>				
@@ -209,9 +210,9 @@
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.received_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>
@@ -221,9 +222,9 @@
 				}else{
 				%>
 					<th class="r_line">
-			 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SEND_DATE%>"><fmt:message key='common.title.send_date'/>
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
-							if(sortedField.getFieldId().equals(FormField.ID_SEND_DATE)){
+							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 							%>"></span>
 						</a>

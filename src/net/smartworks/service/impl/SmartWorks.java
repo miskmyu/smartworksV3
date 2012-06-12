@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.smartworks.model.RecordList;
 import net.smartworks.model.YTMetaInfo;
 import net.smartworks.model.approval.ApprovalLine;
+import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.calendar.CompanyCalendar;
 import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
@@ -1400,6 +1401,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.commentOnTaskForward(requestBody, request);
+	}
+
+	@Override
+	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception {
+		return instanceService.getApprovalLineInstById(instId);
 	}
 
 }
