@@ -318,15 +318,15 @@ public class DbMailControllerImpl implements MailController {
 
 	public boolean msgAlreadyFetched(String uid) throws Exception {
 		IGenericDao dao = null;
-		boolean result = false;
+		boolean result = true;
 		try {
 			dao = Utility.getDbConnection();
 			String username = auth.getUsername();
 			
 			String sql = "SELECT UID FROM MSG_DB_UIDS WHERE USERNAME=? AND UID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, uid});
-			if (email != null) {
-				result = true;
+			if (email == null) {
+				result = false;
 			}
 		} finally {
 			JdbcUtil.close(dao);
