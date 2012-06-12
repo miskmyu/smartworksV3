@@ -319,7 +319,7 @@ public class DbMailControllerImpl implements MailController {
 			dao = Utility.getDbConnection();
 			String username = auth.getUsername();
 			
-			String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
+			String sql = "SELECT uid FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, uid});
 			if (email != null) {
 				result = true;
