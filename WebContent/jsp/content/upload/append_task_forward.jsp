@@ -79,8 +79,8 @@
 					CommentsTitle="<fmt:message key='forward.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"> 
 				</div>
 				<div class="replay">
-					<div class="up_point pos_works js_up_pointer"></div>
-					<ul class="up p10">
+					<div class="up_point_sgr pos_works"></div>
+					<ul class="bg p10">
 						<%
 						if(!SmartUtil.isBlankObject(forwardedTask) && !SmartUtil.isBlankObject(tasks)){
 							for(TaskInstanceInfo task : tasks){

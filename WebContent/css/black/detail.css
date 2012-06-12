@@ -63,6 +63,7 @@
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
 .reply_section {background-color:#eef2f6; padding:10px; width:600px; margin-bottom:5px}
 .replay {margin:10px 0 0 15px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
+.replay .bg {background-color:#f2f2f2}
 .list_reply {margin:0} /* 댓글 목록 */
 .reply_input {margin-top:10px} /* 댓글 입력 영역 */
 .list_reply li, .replay li, .space_section li {border-bottom: 1px dashed #9c9c9c; vertical-align: middle; padding:5px 0}
@@ -99,7 +100,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .nmake_title_space .title_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -331px transparent; height:20px; font-size:14px; font-weight:bold; padding: 0 8px 0 28px; float:left; line-height: 23px}
 
 /* GR 포인트 */
-.gr_up_point {background: url("../../images/up_point_gr.gif") no-repeat scroll left top transparent; height: 13px; width: 23px}
+.up_point_gr {background: url("../../images/up_point_gr.gif") no-repeat scroll left top transparent; height: 13px; width: 23px}
 .posit_point {left:30px; position: relative; top:7px; z-index:90}
 .posit_default {left: 58px; position: relative; top: 1px; margin-top:5px; z-index: 20}
 

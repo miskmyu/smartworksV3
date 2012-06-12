@@ -37,7 +37,7 @@
 
 <div class="js_space_instance_list_page"  contextId="<%=workInstance.getContextId() %>" spaceId="<%=workInstance.getId() %>">	
 	<!-- 댓글 영역 -->
-	<div class="gr_up_point posit_point"></div>
+	<div class="up_point_gr posit_point"></div>
 	<!-- 댓글 목록 -->
 	<div class="gr_portlet">
 		<div class="gr_portlet_t"><div class="gr_portlet_tl"></div></div>
