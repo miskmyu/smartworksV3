@@ -48,6 +48,7 @@ import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
@@ -386,7 +387,19 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	 */
 	public void updateFile(String userId, IFileModel file) throws DocFileException {
 
-		this.getHibernateTemplate().update(file);
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("update SwFile set ");
+			buf.append(" deleteAction = :deleteAction ");
+			buf.append(" where id = :id");
+			Query query = this.getSession().createSQLQuery(buf.toString());
+			query.setBoolean("deleteAction", file.isDeleteAction());
+			query.setString("id", file.getId());
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DocFileException(e);
+		}
 	}
 
 	/*
@@ -987,6 +1000,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			formFile.setFilePath(realFile);
 			formFile.setFileSize(Long.parseLong(fileSize, 16));
 			formFile.setType(extension);
+			formFile.setDeleteAction(false);
 			this.getHibernateTemplate().save(formFile);
 
 			File deleteFile = new File(tempFile);

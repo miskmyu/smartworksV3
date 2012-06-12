@@ -52,6 +52,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
@@ -962,6 +963,17 @@ public class WorkServiceImpl implements IWorkService {
 									if(localDate != null)
 										value = localDate.toLocalDateTimeSimpleString();
 								} catch (Exception e) {
+								}
+							}
+						} else if(formatType.equals(FormField.TYPE_FILE)) {
+							List<IFileModel> iFileModelList = getDocManager().findFileGroup(value);
+							if(iFileModelList.size() > 0) {
+								for(int i=0; i<iFileModelList.size(); i++) {
+									IFileModel fileModel = iFileModelList.get(i);
+									if(fileModel.isDeleteAction()) {
+										fileModel.setDeleteAction(false);
+										getDocManager().updateFile(userId, fileModel);
+									}
 								}
 							}
 						}

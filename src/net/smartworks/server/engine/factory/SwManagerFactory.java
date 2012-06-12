@@ -22,6 +22,7 @@ import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
 import net.smartworks.server.engine.like.manager.ILikeManager;
+import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.message.manager.IMessageManager;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -72,6 +73,7 @@ public class SwManagerFactory {
 	private IResourceDesigntimeManager designtimeManager;
 	private IResourceRuntimeManager runtimeManager;
 	private IPublishNoticeManager publishNoticeManager;
+	private IMailManager mailManager;
 
 	//SERA
 	private ISeraManager seraManager;
@@ -265,6 +267,12 @@ public class SwManagerFactory {
 	}
 	public void setPublishNoticeManager(IPublishNoticeManager publishNoticeManager) {
 		this.publishNoticeManager = publishNoticeManager;
+	}
+	public IMailManager getMailManager() {
+		return mailManager;
+	}
+	public void setMailManager(IMailManager mailManager) {
+		this.mailManager = mailManager;
 	}
 
 //	public IChtManager getChtManager() {

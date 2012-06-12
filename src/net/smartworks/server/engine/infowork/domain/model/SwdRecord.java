@@ -62,6 +62,7 @@ public class SwdRecord extends BaseObject {
 	private String accessLevel;
 	private String accessValue;
 	private int hits;
+	private String fileGroupId;
 	private Map<String, List<Map<String, String>>> fileGroupMap;
 
 	private SwdDataField[] dataFields;
@@ -426,6 +427,12 @@ public class SwdRecord extends BaseObject {
 	}
 	public void setHits(int hits) {
 		this.hits = hits;
+	}
+	public String getFileGroupId() {
+		return fileGroupId;
+	}
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
 	}
 	public Map<String, List<Map<String, String>>> getFileGroupMap() {
 		return fileGroupMap;
