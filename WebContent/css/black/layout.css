@@ -366,6 +366,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
 .txt_btn .image_pos {position: relative; bottom:2px} /* 우측 메뉴중 이미지가 올때 위치 조정 */
+.txt_btn.deliver {margin: 0 10px 10px; color: #979797}
 
 /* 검색- 자동 완성어 list, layer_pop list */
 .srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
@@ -620,11 +621,13 @@ td.pic{width:85px}
 .arr {font-size:10px; margin-right:2px}
 .t_location {font-size:11px; color:#999897; position:relative; top:24px; margin-left:10px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 0 0 5px 10px; vertical-align: top}
+.bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}
 .table_line { border-top:2px solid #7f7f7f; width:100%}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%}
+.solid_line_sd2 {border-top:1px solid #ececec; width:100%; display:block}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px}
 .dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}

@@ -52,21 +52,25 @@
 
 <!-- 업무계획하기 -->
 <div class="js_append_task_forward_page" workInstId="<%=workInstId%>" forwardId="<%=forwardId%>" taskInstId="<%=taskInstId%>">
-	<div class="approval_section">
-		<div class="tit"><span><fmt:message key="common.button.forward"/></span></div>
-		<form name='frmTaskForward' class="form_layout js_validation_required">
-			<%
+	<div class="forward_section">
+		<div class="tit m0"><span><fmt:message key="common.button.forward"/></span></div>
+	</div>
+	
+	<%
 			if(!SmartUtil.isBlankObject(forwardedTask)){
 				UserInfo forwarder = forwardedTask.getAssigner();//;
 			%>
-			    <div class="po_left"><fmt:message key="common.title.forwarder"/>   
+			    <div class="txt_btn deliver">
+			    	<span class="bul_arr_orng"></span><fmt:message key="common.title.forwarder"/> :   
 			    	<a href=""><img src="<%=forwarder.getMinPicture() %>" class="profile_size_s" /> <%=forwarder.getLongName() %></a>
 			    	<span class="t_date"> <%= forwardedTask.getLastModifiedDate().toLocalString() %> </span>
 			    </div>
 			<%
 			}
-			%>
-			<span>
+	%>
+			
+		<form name='frmTaskForward' class="form_layout js_validation_required">
+			<span class="solid_line_sd2">
 				<!-- 업무전달을 위한 입력화면들을 자동으로 그려주는 곳 -->
 				<!-- js_task_forward_fields : js/sw/sw-formFields.js 의 loadTaskForwardFields()에서 자동으로 화면을 그려준다. -->
 				<div class="js_task_forward_fields" 
@@ -75,7 +79,8 @@
 					CommentsTitle="<fmt:message key='forward.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"> 
 				</div>
 				<div class="replay">
-					<ul>
+					<div class="up_point pos_works js_up_pointer"></div>
+					<ul class="up p10">
 						<%
 						if(!SmartUtil.isBlankObject(forwardedTask) && !SmartUtil.isBlankObject(tasks)){
 							for(TaskInstanceInfo task : tasks){
@@ -113,37 +118,27 @@
 									continue;
 						%>
 									<li class="sub_instance_list">
-										<div class="noti_pic tc vm">
-											<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-										</div>
-										<div class="noti_pic">
+											<span class="<%=statusImage%> tc vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 											<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 												<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 											</a>
-										</div>
-										<div class="noti_in">
-											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-												<span class="t_name"><%=owner.getLongName()%></span>
-											</a>
-											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
-										</div>
+											<span>
+												<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+													<span class="t_name"><%=owner.getLongName()%></span>
+												</a>
+												<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+												<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
+											</span>
 									</li>					
 							<%
 							}
 							%>
 							<li class="sub_instance_list">
-								<div class="noti_pic">
-									<span class="icon_status_running" title="<fmt:message key='content.status.running'/>" ></span>
-								</div>
-						        <div class="reply_input comment_box js_return_on_forward">
-									<div class="noti_pic">
+									<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
+						        	<span class="comment_box js_return_on_forward">
 										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-									</div>
-									<div class="noti_in">
-										<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
-									</div>
-						        </div>								
+										<textarea style="width:93%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+						        	</span>								
 							</li>
 							
 						<%
@@ -154,7 +149,6 @@
 			</span>
 		</form>
 		<div class="dash_line"></div>
-	</div>
 </div>
 <!-- 업무계획하기 //-->
 <script type="text/javascript">

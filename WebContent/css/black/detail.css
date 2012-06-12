@@ -106,7 +106,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /* GR 포틀릿 */
 .gr_portlet {
     background: url("../../images/gr_bg_portlet_b.jpg") no-repeat scroll 0 100% transparent;
-    margin-bottom:10px; position:relative; width:100%; z-index:30}
+    margin-bottom:10px; width:100%; z-index:30}
 .gr_portlet ul {height:100%}
 	
 .gr_tab_portlet {
