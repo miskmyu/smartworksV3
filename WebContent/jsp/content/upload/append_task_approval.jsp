@@ -67,7 +67,7 @@
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
 		<div class="approval_group">
 			<div class="fr mb2">
-                <div class="fl"><%=approvalLine.getName() %></div>
+                <div class="fl mr5"><%=approvalLine.getName() %></div>
 				<a href="" class="js_pop_approval_line"><div class="fl icon_approval"></div></a>
 			</div>
 			<div class="js_select_approval_line"></div>
@@ -94,18 +94,17 @@
 							<%
 							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
-								<div class="name form_col js_type_userField" fieldId="usrLevelApprover<%=i+1 %>" multiUsers="false">
-									<div class="form_value" style="width:100%">
-										<div class="icon_fb_space" >
-											<div class="fieldline community_names js_community_names sw_required">
-												<input class="m0 js_auto_complete" style="width:0" disabled="disabled" href="user_name.sw" type="text">
-											</div>
-											<div class="js_community_list srch_list_nowid" style="display: none"></div>
-											<span class="js_community_popup"></span>
-											<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
-										</div>
+								<div class="name">
+									<div class="noti_pic">
+										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 									</div>
-								</div>							
+									<div class="noti_in up"> 결재자 선택
+											<div class="t_name"></div>
+											<div class="t_name"></div>
+											<div class="t_date"></div>
+									</div>
+								</div>	
+											
 							<%
 							}else if(!SmartUtil.isBlankObject(approval.getApprover())){
 								User approver = approval.getApprover();
@@ -114,7 +113,7 @@
 							%>
 								<div class="name">
 									<div class="noti_pic">
-										<img class="profile_size_s" title="<%=approver.getLongName() %>" src="<%=approver.getMinPicture()%>">
+										<img class="profile_size_s" title="images/no_user_picture_min.jpg">
 									</div>
 									<div class="noti_in">
 										<div class="t_name"><a href="<%=approver.getSpaceController() %>?cid=<%=approver.getSpaceContextId() %>"><%=approver.getLongName() %></a></div>
