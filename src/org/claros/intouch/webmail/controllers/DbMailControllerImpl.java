@@ -300,8 +300,27 @@ public class DbMailControllerImpl implements MailController {
 			dao = Utility.getDbConnection();
 			String username = auth.getUsername();
 			
-			String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
+			String sql = "SELECT unique_id FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, md5Header});
+			if (email != null) {
+				result = true;
+			}
+		} finally {
+			JdbcUtil.close(dao);
+			dao = null;
+		}
+		return result;
+	}
+
+	public boolean msgAlreadyFetched(String uid) throws Exception {
+		IGenericDao dao = null;
+		boolean result = false;
+		try {
+			dao = Utility.getDbConnection();
+			String username = auth.getUsername();
+			
+			String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
+			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, uid});
 			if (email != null) {
 				result = true;
 			}
