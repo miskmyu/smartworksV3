@@ -1787,7 +1787,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 						AprApproval apr = new AprApproval();
 						apr.setName(i + "단 결재(임시)");
-						apr.setType(i + "단 결재(임시)");
+						apr.setType(i+"");
 						apr.setApprover(id);
 						apr.setMandatory(true);
 						apr.setModifiable(true);
