@@ -44,6 +44,9 @@
 					UserInfo owner = taskInstance.getOwner();
 					WorkInstanceInfo workInstance = taskInstance.getWorkInstance();
 					WorkInfo work = workInstance.getWork();
+					String workId = null;
+					if (work != null)
+						workId = work.getId();
 					String workSpaceId = taskInstance.getWorkSpace().getId();
 %>
 					<ul>
@@ -54,7 +57,7 @@
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"></a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workSpaceId%>"><%=workInstance.getSubject()%>▶<%=taskInstance.getName()%></a>
+							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workSpaceId%>&workId=<%=workId%>"><%=workInstance.getSubject()%>▶<%=taskInstance.getName()%></a>
 							<div class="t_date"><%=taskInstance.getLastModifiedDate().toLocalString()%></div>
 						</div>
 						</div>
