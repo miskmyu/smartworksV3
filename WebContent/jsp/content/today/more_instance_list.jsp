@@ -222,7 +222,7 @@ if (instances != null) {
 					%>
 						<fmt:message key="content.sentence.stask_forwarded">
 							<fmt:param>
-								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>%>">
+								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
 									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>

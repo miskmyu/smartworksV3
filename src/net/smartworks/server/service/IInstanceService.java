@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
@@ -140,4 +141,6 @@ public interface IInstanceService {
 
 	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
+	
 }

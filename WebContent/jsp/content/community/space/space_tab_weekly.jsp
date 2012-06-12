@@ -115,14 +115,12 @@
 	%>
 
 	<div class="option_section">
-	<div class="option_section">
   		<span class="sel_date_section"><%=selectedWeekStr %><input type="hidden" class="js_space_datepicker" value="<%=selectedDateStr %>"><a href="space_tab_weekly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
 		<select class="js_space_select_scope">
 			<option value="space_tab_dayly.sw"><fmt:message key="space.title.tab_dayly"/></option>
 			<option selected><fmt:message key="space.title.tab_weekly"/></option>
 			<option value="space_tab_monthly.sw"><fmt:message key="space.title.tab_monthly"/></option>
 		</select>
-	</div>
 	</div>
 
 </div>
@@ -152,7 +150,7 @@
 					String toDateStr = (new LocalDate(calendars[i].getDate().getTime() + LocalDate.ONE_DAY)).toLocalDateString2();
 				%>
 					<!-- 5일 -->					
-					<div class="space_section mt10 js_space_weekly_day" toDate="<%=toDateStr%>">
+					<div class="space_section js_space_weekly_day" toDate="<%=toDateStr%>">
 						<div class="<%=titleClass%>"><%=calendars[i].getDate().toLocalDateLongString() + calendars[i].toCompanyEventsString()%></div>
 						<ul>
 							<%

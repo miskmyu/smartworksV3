@@ -10,7 +10,7 @@
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px}
-.pop_list_area > ul {max-height:400px; overflow-y:auto; margin:5px}
+.pop_list_area > ul {max-height:330px; overflow-y:auto; margin:5px}
 .pop_list_area li {}
 .pop_list_area li:hover {text-decoration: none !important;}
 
@@ -62,8 +62,8 @@ a:hover .pop_btn_x {background-color:#e5e5e5;}
 
 .icon_pop_Info {background: url("../../images/body_icon.png") no-repeat scroll -547px -257px transparent; display: block; font-size: 14px; font-weight: bold; line-height: 20px; padding: 2px 0 0 33px; text-align: left; margin-bottom: 10px}
 .icon_pop_Warn {background: url("../../images/body_icon.png") no-repeat scroll -547px -227px transparent; display: block; font-size: 14px; font-weight: bold; height: 26px; line-height: 20px; padding: 3px 0 0 33px; text-align: left; margin-bottom: 10px}
-.icon_pop_Error {background: url("../../images/body_icon.png") no-repeat scroll -547px -283px transparent; display: block; font-size: 14px; font-weight: bold; height: 26px; line-height: 20px; padding: 4px 0 0 33px; text-align: left; margin-bottom: 10px}
-
+.icon_pop_Error {background: url("../../images/body_icon.png") no-repeat scroll -547px z-283px transparent; display: block; font-size: 14px; font-weight: bold; height: 26px; line-height: 20px; padding: 4px 0 0 33px; text-align: left; margin-bottom: 10px}
+.icon_pop_Confirm {background: url("../../images/body_icon.png") no-repeat scroll -547px -257px transparent; display: block; font-size: 14px; font-weight: bold; line-height: 20px; padding: 2px 0 0 33px; text-align: left; margin-bottom: 10px}
 
 /* Smart User Info */
 .smartp_name { font-weight:bold; color:#3B5998;}

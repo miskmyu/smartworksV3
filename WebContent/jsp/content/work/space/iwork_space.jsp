@@ -110,6 +110,16 @@
 		            
 				<!--  전자결재화면이 나타나는 곳 -->
 				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null){ %>style="display:none"<%} %>>
+					<%
+					if(approvalTask!=null){
+					%>
+						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
+							<jsp:param value="<%=taskInstId %>" name="approvalLine"
+						</jsp:include>
+					<%
+					}
+					%>
 				</div>
 				
 				<!-- 업무전달화면이 나타나는 곳 -->

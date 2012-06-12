@@ -344,11 +344,12 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding:3px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
-.fieldline {margin-top:0; border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
+.fieldline {border:1px solid #c7c7c7; left:0px; margin-top:0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 
 .up_form {position:absolute}
 .up_point {background: url("../../images/up_point.gif") no-repeat left top; width:11px; height:7px}
+.up_point_sgr {background: url("../../images/up_point_sgr.png") no-repeat left top; width:11px; height:7px}
 .up_point_b {background: url("../../images/up_point_b.gif") no-repeat left top; width:11px; height:7px}
 .up_textarea {height:30px; width: 100%; vertical-align:top; border: 1px solid #c7c7c7} /* 라인 포함된 textarea h50 */
 .input_1line_first { height:21px; padding-bottom: 5px; position:relative} /* 한줄라인 input정보- 맨위줄*/
@@ -366,6 +367,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
 .txt_btn .image_pos {position: relative; bottom:2px} /* 우측 메뉴중 이미지가 올때 위치 조정 */
+.txt_btn.deliver {margin: 0 10px 10px; color: #979797}
 
 /* 검색- 자동 완성어 list, layer_pop list */
 .srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
@@ -620,11 +622,13 @@ td.pic{width:85px}
 .arr {font-size:10px; margin-right:2px}
 .t_location {font-size:11px; color:#999897; position:relative; top:24px; margin-left:10px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 0 0 5px 10px; vertical-align: top}
+.bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}
 .table_line { border-top:2px solid #7f7f7f; width:100%}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%}
+.solid_line_sd2 {border-top:1px solid #ececec; width:100%; display:block}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px}
 .dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}
