@@ -74,7 +74,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
 .default_title_space{padding-bottom:3px !important} /* Case in No right Button */
-.list_title_space,.default_title_space {padding:5px 0 0 0; overflow:hidden; clear:both} /* Case in right Button */
+.list_title_space,.default_title_space {padding:5px 0 0 0; overflow:hidden} /* Case in right Button */
 .list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 2px no-repeat;font-size:14px;font-weight:bold; padding: 0 8px 0 20px; float:left}
 
 .list_contents {}
