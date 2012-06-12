@@ -115,7 +115,7 @@
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
-							<jsp:param value="<%=taskInstId %>" name="approvalLine"
+							<jsp:param value="<%=taskInstId %>" name="approvalLine"/>
 						</jsp:include>
 					<%
 					}

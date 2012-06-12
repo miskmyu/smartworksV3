@@ -127,13 +127,15 @@ public class DocFileServiceImpl implements IDocFileService {
 			if(fileId.startsWith("temp_")) {
 				String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
 				filePath = SmartConfUtil.getInstance().getImageServer() + user.getCompanyId() + "\\"+ "Temps" + "\\" + fileId + "." + extension;
+				File f = new File(filePath);
+				f.delete();
 			} else {
 				IFileModel doc = getDocManager().retrieveFile(fileId);
-				filePath = doc.getFilePath();
-				getDocManager().deleteFile(fileId);
+				doc.setDeleteAction(true);
+				getDocManager().updateFile(user.getId(), doc);
+				//filePath = doc.getFilePath();
+				//getDocManager().deleteFile(fileId);
 			}
-			File f = new File(filePath);
-			f.delete();
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

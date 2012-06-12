@@ -687,3 +687,6 @@ CREATE TABLE msg_rules (
     primary key (id)
 );
 --메일관련 테이블 End
+
+--사용자의 파일 삭제 액션 유무 저장
+ALTER TABLE swfile add deleteAction bit;

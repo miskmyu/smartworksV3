@@ -301,6 +301,7 @@ CREATE TABLE swfile (
   	filepath varchar(1000),  
 	filesize int,
 	writtentime datetime,
+	deleteAction bit;
   	primary key(id)
 );
 
