@@ -33,6 +33,7 @@
 	// 서버에게 lastNoticeId를 기준으로 최근 10개의 Notice항목을 가져오는 기능.
 	NoticeBox noticeBox = smartWorks.getNoticeBoxForMe10(noticeType, lastNoticeId);
 
+	String draftBoxId = smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_DRAFTS);
 	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
 	if (noticeMessages != null) {
 		for (NoticeMessage nMessage : (NoticeMessage[]) noticeBox.getNoticeMessages()) {
@@ -60,7 +61,7 @@
 				
 				// 이메일인 경우에는 이메일 임시저장함에 저장 관리 된다.
 				case Instance.TYPE_MAIL:
-					targetContent = "mail_space.sw?folderId=" + MailFolder.ID_DRAFTS + "msgId=" + instance.getId();
+					targetContent = "mail_space.sw?folderId=" + draftBoxId + "msgId=" + instance.getId();
 					break;
 				}
 %>

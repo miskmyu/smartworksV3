@@ -3588,8 +3588,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			//한군데에서 관리 하도록 상수로 변경 필요
 			if (sf == null) {
 				sf = new SortingField();
-				sf.setFieldId(FormField.ID_LAST_MODIFIED_DATE);
-				sf.setAscending(true);
+				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setAscending(false);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
 			
@@ -3627,6 +3627,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					PrcProcessInstExtend prcInst = processInstExtends[i];
 					pwInstInfo.setId(prcInst.getPrcObjId());
 					pwInstInfo.setOwner(ModelConverter.getUserInfoByUserId(prcInst.getPrcCreateUser()));
+					pwInstInfo.setCreatedDate(new LocalDate(prcInst.getPrcCreateDate().getTime()));
 					int status = -1;
 					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 						status = Instance.STATUS_RUNNING;

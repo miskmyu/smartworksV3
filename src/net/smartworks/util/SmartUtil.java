@@ -453,6 +453,10 @@ public class SmartUtil {
 		return SUBJECT_SMARTWORKS + "/" + SmartUtil.getCurrentUser().getCompanyId() + "/" + channel; 
 	}
 
+	private static String getMessageChannel(String companyId, String channel){
+		return SUBJECT_SMARTWORKS + "/" + companyId + "/" + channel; 
+	}
+
 	public static void publishBcast(String[] messages){
 		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
@@ -516,6 +520,13 @@ public class SmartUtil {
 		data.put("type", message.getType());
 		data.put("count", message.getLength());
 		publishMessage( getMessageChannel(SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
+	}
+	
+	public static void publishNoticeCount(String userId, String companyId, Notice message){
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("type", message.getType());
+		data.put("count", message.getLength());
+		publishMessage( getMessageChannel(companyId, SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
 	}
 	
 	static Thread messageAgent = null;

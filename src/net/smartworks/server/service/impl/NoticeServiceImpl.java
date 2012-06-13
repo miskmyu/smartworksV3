@@ -455,6 +455,7 @@ public class NoticeServiceImpl implements INoticeService {
 
 		try{
 			User user = SmartUtil.getCurrentUser();
+			mailService.checkEmail();
 			return getNotices(user.getId(), Notice.TYPE_INVALID);
 			//return new Notice[] {};//SmartTest.getNoticesForMe();
 		}catch (Exception e){
@@ -540,10 +541,12 @@ public class NoticeServiceImpl implements INoticeService {
 			
 			switch(noticeType){
 			case Notice.TYPE_MAILBOX:
+				mailService.checkEmail();
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
 				params.setSortingField(new SortingField("date", false));
+				params.setUnreadEmail(true);
 				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
@@ -554,8 +557,10 @@ public class NoticeServiceImpl implements INoticeService {
 				}
 				noticeBox.setNoticeMessages(notices);
 				noticeBox.setNoticeType(Notice.TYPE_MAILBOX);
-				noticeBox.setDateOfLastNotice(new LocalDate());
-				noticeBox.setRemainingLength(48);
+				if(instances.length>0){
+					noticeBox.setDateOfLastNotice(instances[instances.length-1].getCreatedDate());
+					noticeBox.setRemainingLength(mailsList.getTotalSize()-instances.length);
+				}
 				return noticeBox;
 	
 			case Notice.TYPE_ASSIGNED:

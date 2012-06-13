@@ -412,6 +412,7 @@ public class WorkServiceImpl implements IWorkService {
 			String userId = user.getId();
 			PkgPackageCond pkgCond = new PkgPackageCond();
 			pkgCond.setCompanyId(user.getCompanyId());
+			pkgCond.setStatus(PkgPackage.STATUS_DEPLOYED);
 			pkgCond.setNameLike(key);
 			PkgPackage[] pkgs = getPkgManager().getPackages(userId, pkgCond, IManager.LEVEL_ALL);
 			if (pkgs == null)

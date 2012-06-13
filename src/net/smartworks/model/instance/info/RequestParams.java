@@ -18,6 +18,7 @@ public class RequestParams {
 	private String searchKey;
 	private String filterId;
 	private SearchFilter searchFilter;
+	private boolean unreadEmail;
 	
 	public int getPageSize() {
 		return pageSize;
@@ -62,6 +63,12 @@ public class RequestParams {
 		this.searchFilter = searchFilter;
 	}
 
+	public boolean isUnreadEmail() {
+		return unreadEmail;
+	}
+	public void setUnreadEmail(boolean unreadEmail) {
+		this.unreadEmail = unreadEmail;
+	}
 	public RequestParams() {
 		super();
 	}
