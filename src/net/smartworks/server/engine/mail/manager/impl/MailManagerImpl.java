@@ -122,11 +122,13 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 		String username = null; 
 		long folderId = -1;
 		String searchKey = null;
+		int unread = -1;
 
 		if (cond != null) {
 			username = cond.getUsername();
 			folderId = cond.getFolderId();
 			searchKey = cond.getSearchKey();
+			unread = cond.getUnread();
 		}
 		buf.append(" from MailContent obj");
 		buf.append(" where obj.id is not null");
@@ -138,6 +140,8 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append(" and obj.folderId = :folderId");
 			if(searchKey != null)
 				buf.append(" and (obj.sender like :searchKey or obj.subject like :searchKey)");
+			if(unread != -1) 
+				buf.append(" and obj.unread = :unread");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 
@@ -150,6 +154,8 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				query.setLong("folderId", folderId);
 			if(searchKey != null)
 				query.setString("searchKey", searchKey);
+			if(unread != -1)
+				query.setInteger("unread", unread);
 		}
 		return query;
 

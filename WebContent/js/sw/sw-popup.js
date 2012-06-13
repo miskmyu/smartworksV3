@@ -582,7 +582,7 @@ smartPop = {
 				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
-					width:800
+					width:600
 				},
 				overlayClose: false,
 				onShow: function(dialog){

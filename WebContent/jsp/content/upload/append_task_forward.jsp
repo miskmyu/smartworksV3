@@ -65,7 +65,6 @@
 			    	<a href=""><img src="<%=forwarder.getMinPicture() %>" class="profile_size_s" /> <%=forwarder.getLongName() %></a>
 			    	<span class="t_date"> <%= forwardedTask.getLastModifiedDate().toLocalString() %> </span>
 			    </div>
-				<span class="solid_line_sd2"></span>
 			<%
 			}
 	%>
@@ -137,9 +136,9 @@
 							%>
 							<li class="sub_instance_list">
 									<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 						        	<span class="comment_box js_return_on_forward">
-										<textarea style="width:90%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+										<textarea style="width:91%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
 						        	</span>								
 							</li>
 							

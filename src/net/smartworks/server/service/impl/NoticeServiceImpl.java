@@ -28,6 +28,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
@@ -39,6 +40,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.message.model.MessageCond;
 import net.smartworks.server.engine.opinion.model.Opinion;
@@ -455,6 +457,7 @@ public class NoticeServiceImpl implements INoticeService {
 
 		try{
 			User user = SmartUtil.getCurrentUser();
+			mailService.checkEmail();
 			return getNotices(user.getId(), Notice.TYPE_INVALID);
 			//return new Notice[] {};//SmartTest.getNoticesForMe();
 		}catch (Exception e){
@@ -540,11 +543,13 @@ public class NoticeServiceImpl implements INoticeService {
 			
 			switch(noticeType){
 			case Notice.TYPE_MAILBOX:
+				mailService.checkEmail();
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
-				params.setSortingField(new SortingField("date", false));
-				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
+				params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
+				params.setUnreadEmail(true);
+				InstanceInfoList mailsList =  mailService.getMailInstanceList(Integer.toString(MailFolder.TYPE_SYSTEM_INBOX), params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
 				NoticeMessage[] notices = new NoticeMessage[instances.length];
@@ -554,8 +559,10 @@ public class NoticeServiceImpl implements INoticeService {
 				}
 				noticeBox.setNoticeMessages(notices);
 				noticeBox.setNoticeType(Notice.TYPE_MAILBOX);
-				noticeBox.setDateOfLastNotice(new LocalDate());
-				noticeBox.setRemainingLength(48);
+				if(instances.length>0){
+					noticeBox.setDateOfLastNotice(instances[instances.length-1].getCreatedDate());
+					noticeBox.setRemainingLength(mailsList.getTotalSize()-instances.length);
+				}
 				return noticeBox;
 	
 			case Notice.TYPE_ASSIGNED:
@@ -961,8 +968,8 @@ public class NoticeServiceImpl implements INoticeService {
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
-				params.setSortingField(new SortingField("date", false));
-				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
+				params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
+				InstanceInfoList mailsList =  mailService.getMailInstanceList(Integer.toString(MailFolder.TYPE_SYSTEM_INBOX), params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
 				NoticeMessage[] notices = new NoticeMessage[instances.length];

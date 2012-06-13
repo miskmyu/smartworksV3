@@ -302,9 +302,6 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .current .btn_app_shar {background-position:-225px -547px}
 .btn_app_shar_go {background: url("../../images/body_icon.png") no-repeat -277px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
 
-/* line style */
-.dline_left_gray{border-left:1px dashed #c2c2c2}
-
 /* 3단구성 */
 .left40 { float:left; width:40%}
 .mid20 { float:left; width:20%; vertical-align:middle; margin-top:20px}
@@ -322,3 +319,30 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .left_im2 { position:absolute; width:315px}
 .right_auto2 { display: block; padding-left:320px; width:auto}
 .left_im2 table, .right_auto2 table { width:100% ; min-width:inherit}
+
+
+/* Approval */
+.approval_section, .forward_section { padding:10px}
+.approval_section .tit, .forward_section .tit {font-size:16px; font-weight:bold; border-bottom: 1px dashed #9C9C9C; margin: 0 0 15px 0; padding: 0 0 5px 0}
+.approval_section .tit span, .forward_section .tit span { display:block; vertical-align:middle; text-align: center}
+
+.approval_group {margin: 0 10px 0 10px}
+.approval_area { width:130px; height:128px; border:1px solid #cccccc; padding:4px; float:left; margin: -1px 0 0 -1px}
+.approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
+.approval_area .approval {height: 80px; overflow: hidden}
+.approval_area .name {height:26px; vertical-align: bottom; display: table-cell}
+.approval_area .name .t_name {font-size:11px; height: 11px; overflow: hidden}
+.approval_area .name .up {height: 13px; color:#868686}
+.approval_area .name .noti_pic {margin: 0 5px 0 0}
+.approval_area .name .noti_in {width: 104px; margin-left: 23px}
+.icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
+/* Approval Status Image */
+.approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px}
+.approval_status.drafted_ko {background-position:0 0}
+.approval_status.drafted_en {background-position:-77px 0}
+.approval_status.completed_ko {background-position:0 -69px}
+.approval_status.completed_en {background-position:-77px -69px}
+.approval_status.returned_ko {background-position:0 -140px}
+.approval_status.returned_en {background-position:-77px -140px}
+.approval_status.rejected_ko {background-position:0 -209px}
+.approval_status.rejected_en {background-position:-77px -209px}

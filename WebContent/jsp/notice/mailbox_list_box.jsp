@@ -29,6 +29,7 @@
 	NoticeBox noticeBox = smartWorks.getNoticeBoxForMe10(noticeType, lastNoticeId);
 
 	NoticeMessage[] noticeMessages = noticeBox.getNoticeMessages();
+	String inboxId = smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_INBOX);
 	if (noticeMessages != null) {
 		for (NoticeMessage nMessage : (NoticeMessage[]) noticeBox.getNoticeMessages()) {
 			if (noticeBox != null && noticeBox.getNoticeType() == Notice.TYPE_MAILBOX) {
@@ -41,7 +42,7 @@
 						<div class="info_ms_section">
 						<div class="info_img"><b><%=owner.getName()%> </b></div>
 						<div class="info_list">
-							<a href="mail_space.sw?folderId=<%=MailFolder.ID_INBOX %>&msgId=<%=mailInstance.getId()%>"><%=mailInstance.getSubject()%></a>
+							<a href="mail_space.sw?folderId=<%=inboxId%>&msgId=<%=mailInstance.getId()%>"><%=mailInstance.getSubject()%></a>
 							<div class="t_date"><%=mailInstance.getSendDate().toLocalString()%></div>
 						</div>
 						</div>

@@ -151,8 +151,6 @@ public class Pop3ProtocolImpl implements Protocol {
 		Folder fold = null;
 		try {
 			fold = getFolder();
-			closeFolder(fold);
-			fold = getFolder();
 			
 			headers = new ArrayList();
 			
@@ -213,8 +211,6 @@ public class Pop3ProtocolImpl implements Protocol {
 		Folder fold = null;
 		try {
 			fold = getFolder();
-//			closeFolder(fold);
-//			fold = getFolder();
 			
             FetchProfile fp = new FetchProfile();
 			fp.add(FetchProfile.Item.ENVELOPE);
@@ -270,8 +266,6 @@ public class Pop3ProtocolImpl implements Protocol {
 		Folder fold = null;
 		try {
 			fold = getFolder();
-			closeFolder(fold);
-			fold = getFolder();
 			
 			FlagTerm ft = new FlagTerm(new Flags(Flags.Flag.SEEN), false);
             Message[] msgs = fold.search(ft);
@@ -299,8 +293,6 @@ public class Pop3ProtocolImpl implements Protocol {
 		ArrayList headers = null;
 		Folder fold = null;
 		try {
-			fold = getFolder();
-			closeFolder(fold);
 			fold = getFolder();
 			headers = new ArrayList();
             
