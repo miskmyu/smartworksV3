@@ -247,7 +247,7 @@
 								<span ><%=approvalTask.getName() %></span>
 								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 					        	<span class="comment_box">
-									<textarea style="width:90%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+									<textarea style="width:74%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
 					        	</span>								
 						</li>
 						

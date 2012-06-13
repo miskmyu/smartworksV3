@@ -330,11 +330,11 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .approval_area { width:130px; border:1px solid #cccccc; padding:4px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
 .approval_area .approval {height: 70px; overflow: hidden}
-.approval_area .name {height:38px; vertical-align: bottom; display: table-cell}
+.approval_area .name {height:26px; vertical-align: bottom; display: table-cell}
 .approval_area .name .t_name {font-size:11px; height: 11px; overflow: hidden}
-.approval_area .name .up {width: 104px; height: 13px; color:#868686}
-.approval_area .name ..noti_pic {margin: 0 5px 0 0}
-.approval_area .name .noti_in {margin-left: 23px}
+.approval_area .name .up {height: 13px; color:#868686}
+.approval_area .name .noti_pic {margin: 0 5px 0 0}
+.approval_area .name .noti_in {width: 104px; margin-left: 23px}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
 /* Approval Status Image */
 .approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px}
