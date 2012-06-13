@@ -22,6 +22,8 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.approval.Approval;
+import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.CommunityInfo;
@@ -127,7 +129,9 @@ import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.approval.model.AprApproval;
+import net.smartworks.server.engine.process.approval.model.AprApprovalDef;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
+import net.smartworks.server.engine.process.approval.model.AprApprovalLineDef;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -1777,6 +1781,34 @@ public class InstanceServiceImpl implements IInstanceService {
 				if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
 
 					AprApprovalLine apprLine = new AprApprovalLine();
+					
+					AprApprovalDef[] aprAprDefs  = null;
+					if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level")) {
+						ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+						Approval[] aprs = aprline.getApprovals();
+						aprAprDefs = new AprApprovalDef[aprs.length];
+						for (int i = 0; i < aprs.length; i++) {
+							aprAprDefs[i] = new AprApprovalDef();
+							aprAprDefs[i].setName(aprs[i].getName());
+							aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						}
+						apprLine.setName(aprline.getName());
+					} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
+						ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
+						Approval[] aprs = aprline.getApprovals();
+						aprAprDefs = new AprApprovalDef[aprs.length];
+						for (int i = 0; i < aprs.length; i++) {
+							aprAprDefs[i] = new AprApprovalDef();
+							aprAprDefs[i].setName(aprs[i].getName());
+							aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+						};
+						apprLine.setName(aprline.getName());
+					} else {
+						AprApprovalLineDef aprAprLineDef = SwManagerFactory.getInstance().getAprManager().getApprovalLineDef(userId, hdnApprovalLineId, IManager.LEVEL_ALL);
+						aprAprDefs = aprAprLineDef.getApprovalDefs();
+						apprLine.setName(aprAprLineDef.getName());
+					}
+					
 					apprLine.setStatus("created");
 
 					AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
@@ -1788,8 +1820,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						String name = (String)userMap.get("name");
 
 						AprApproval apr = new AprApproval();
-						apr.setName(i + "단 결재(임시)");
-						apr.setType(i+"");
+						apr.setName(aprAprDefs[i-1].getName());
+						apr.setType(aprAprDefs[i-1].getType());
 						apr.setApprover(id);
 						apr.setMandatory(true);
 						apr.setModifiable(true);
@@ -1798,9 +1830,15 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 					apprLine.setApprovals(approvals);
 					apprLine.setExtendedPropertyValue("recordId", recId);
+					apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+					apprLine.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
+					
+					//참조한 approvallindef 가 있다면 그아이디를 입력한다
+					apprLine.setRefAppLineDefId(hdnApprovalLineId);					
 
 					obj.setExtendedAttributeValue("txtApprovalSubject", txtApprovalSubject);
 					obj.setExtendedAttributeValue("txtApprovalComments", txtApprovalComments);
+					obj.setExtendedAttributeValue("refAppLineDefId", hdnApprovalLineId);
 					
 					SwManagerFactory.getInstance().getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
 					obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
@@ -6665,12 +6703,122 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if (CommonUtil.isEmpty(instId))
+			return null;
+		
+		User user = SmartUtil.getCurrentUser();
+		
+		AprApprovalLine aprLine = SwManagerFactory.getInstance().getAprManager().getApprovalLine(user.getId(), instId, IManager.LEVEL_ALL);
+		if (aprLine == null)
+			return null;
+		
+		AprApproval[] apraprs = aprLine.getApprovals();
+		
+//		String refAppLineDefId = aprLine.getRefAppLineDefId();
+//		if (!CommonUtil.isEmpty(refAppLineDefId)) {
+//			AprApprovalLineDef aprLineDef = SwManagerFactory.getInstance().getAprManager().getApprovalLineDef(user.getId(), refAppLineDefId, IManager.LEVEL_ALL); 
+//		}
+		
+		ApprovalLineInst approvalLineInst = new ApprovalLineInst();
+		Approval[] aprs = new Approval[apraprs.length];
+		for (int i = 0; i < apraprs.length; i++) {
+			AprApproval aprapr = apraprs[i];
+			Approval apr = new Approval();
+
+//			Instance.STATUS_NOT_YET = 0;
+//			Instance STATUS_RUNNING = 1;
+//			Instance STATUS_DELAYED_RUNNING = 2;
+//			Instance STATUS_RETURNED = 3;
+//			Instance STATUS_COMPLETED = 4;
+//			Instance STATUS_PLANNED = 5;
+//			Instance STATUS_REJECTED = 6;
+//			Instance STATUS_ABORTED = 7;
+//			Instance STATUS_DRAFTED = 8;
+			
+			//TODO aprapr상태값 확인 필요
+			if (aprapr.getStatus() == null) {
+				apr.setStatus(Instance.STATUS_NOT_YET);
+			} else if (aprapr.getStatus().equalsIgnoreCase("21")) {
+				//완료
+				apr.setStatus(Instance.STATUS_COMPLETED);
+			} else if (aprapr.getStatus().equalsIgnoreCase("23")) {
+				//반려
+				apr.setStatus(Instance.STATUS_RETURNED);
+			} else if (aprapr.getStatus().equalsIgnoreCase("24")) {
+				//취소
+				apr.setStatus(Instance.STATUS_ABORTED);
+			}	
+			apr.setName(aprapr.getName());
+			
+//			Instance APPROVER_CHOOSE_ON_RUNNING = 1;
+//			Instance APPROVER_MY_BOSS = 2;
+//			Instance APPROVER_CHOOSE_USER = 3;
+			apr.setApproverType((aprapr.getType() == null) ? Approval.APPROVER_CHOOSE_ON_RUNNING :  Integer.parseInt(aprapr.getType()));
+			
+			apr.setApprover(ModelConverter.getUserByUserId(aprapr.getApprover()));
+			//apr.setMeanTimeDays();
+			//apr.setMeanTimeHours();
+			//apr.setMeanTimeMinutes();
+			apr.setDueDate(aprapr.getDueDate());
+			if (aprapr.getStatus() != null)
+				apr.setCompletedDate(new LocalDate(aprapr.getModificationDate().getTime()));
+			apr.setMandatory(aprapr.isMandatory());
+			apr.setModifiable(aprapr.isModifiable());
+			
+			aprs[i] = apr;
+		}
+		approvalLineInst.setApprovals(aprs);
+		approvalLineInst.setName(aprLine.getName());
+		return approvalLineInst;
 	}
 	@Override
 	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		//태스크인스턴스 아이디를 이용하여 저장 되어 있는 태스크를 조회 하고 실행 가능 여부를 판단한다
+		String taskInstId = (String)requestBody.get("taskInstId");
+		String comments = (String)requestBody.get("comments");
+		String result = (String)requestBody.get("result");
+		
+		if (CommonUtil.isEmpty(taskInstId))
+			throw new Exception("TaskId ("+taskInstId+") Is Null");
+		TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
+		if (task == null)
+			throw new Exception("Not Exist Task : taskId = " + taskInstId);
+		if (!task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN))
+			throw new Exception("Task Is Not Executable Status : taskId = " + taskInstId +" (status - " + task.getStatus() + ")");
+		if (!task.getAssignee().equalsIgnoreCase(userId)) 
+			throw new Exception("Task is Not Executable Assignee : taskId = " + taskInstId + " (assignee - " + task.getAssignee() + " But performer - " + userId + ")");
+		if (!task.getType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL))
+			throw new Exception("Task is Not ReferenceTask : taskId = " + task.getObjId() + ", type = " + task.getType());
+		
+		//태스크의 실제 완료 시간을 입력한다
+		if (task.getRealStartDate() == null)
+			task.setRealStartDate(new LocalDate(new Date().getTime()));
+		task.setRealEndDate(new LocalDate(new Date().getTime()));
+		
+		//승인의견을 저장한다
+		task.setDocument(comments);
+		String action = null;
+		if (result.equalsIgnoreCase("approved")) {
+			//승인
+			action = "execute";
+		} else if (result.equalsIgnoreCase("")) {
+			//반려
+			action = "return";
+			
+		} else if (result.equalsIgnoreCase("rejected")) {
+			//기각
+			action = "cancel";
+			
+		} else {
+			throw new Exception("Approval Task Failed : Action Is Null");
+		}
+		
+		getTskManager().executeTask(userId, task, action);
+		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 		
 	}
 }

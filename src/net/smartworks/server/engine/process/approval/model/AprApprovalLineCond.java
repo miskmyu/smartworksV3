@@ -19,8 +19,10 @@ public class AprApprovalLineCond extends MisObjectCond {
 	private static final String NAME = CommonUtil.toName(AprApprovalLineCond.class, PREFIX);
 
 	public static final String A_CORRELATION = "correlation";
+	public static final String A_REFAPPLINEDEFID = "refAppLineDefId";
 	
 	private String correlation;
+	private String refAppLineDefId;
 	public AprApprovalLineCond() {
 		super();
 	}
@@ -168,5 +170,11 @@ public class AprApprovalLineCond extends MisObjectCond {
 	}
 	public void setCorrelation(String correlation) {
 		this.correlation = correlation;
+	}
+	public String getRefAppLineDefId() {
+		return refAppLineDefId;
+	}
+	public void setRefAppLineDefId(String refAppLineDefId) {
+		this.refAppLineDefId = refAppLineDefId;
 	}
 }

@@ -609,6 +609,7 @@ CREATE TABLE apraprline (
     aprdesc text,
     aprstatus varchar(50),
     aprcorr varchar(50),
+    aprRefAppLineDefId varchar(50),
 	primary key (aprobjid)
 );
 

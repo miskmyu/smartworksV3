@@ -105,10 +105,11 @@
 							approvals = approvalLineInst.getApprovals();
 						}
 						
+						String statusIcon = "";
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
-							String signPicture = approval.getApprover().getSignPicture();
-							String statusIcon = "";
+							
+							String signPicture = SmartUtil.isBlankObject(approvalLineInst) ? "" : approval.getApprover().getSignPicture();
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
 								statusIcon = "approval_status_completed_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_RETURNED){
@@ -118,7 +119,6 @@
 							}else if(approval.getStatus() == Instance.STATUS_DRAFTED){
 								statusIcon = "approval_status_drafted_" + cUser.getLocale();
 							}
-							
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
 						<!-- 결재선 -->

@@ -365,6 +365,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 				buf.append(", modificationUser=:modificationUser, modificationDate=:modificationDate");
 				buf.append(", description=:description, status=:status");
 				buf.append(", correlation=:correlation");
+				buf.append(", refApplineDefId=:refApplineDefId");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(AprApprovalLine.A_NAME, obj.getName());
@@ -376,6 +377,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 				query.setString(AprApprovalLine.A_DESCRIPTION, obj.getDescription());
 				query.setString(AprApprovalLine.A_STATUS, obj.getStatus());
 				query.setString(AprApprovalLine.A_CORRELATION, obj.getCorrelation());
+				query.setString(AprApprovalLine.A_REFAPPLINEDEFID, obj.getRefAppLineDefId());
 				query.setString(AprApprovalLine.A_OBJID, obj.getObjId());
 			}
 		} catch (AprException e) {
@@ -419,6 +421,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 		Date modificationDateTo = null;
 		String status = null;
 		String correlation = null;
+		String refAppLineDefId = null;
 		Property[] extProps = null;
 		
 		if (cond != null) {
@@ -431,6 +434,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 			modificationDateTo = cond.getModificationDateTo();
 			status = cond.getStatus();
 			correlation = cond.getCorrelation();
+			refAppLineDefId = cond.getRefAppLineDefId();
 			extProps = cond.getExtendedProperties();
 		}
 		buf.append(" from AprApprovalLine obj");
@@ -459,6 +463,8 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 				buf.append(" and obj.status = :status");
 			if (correlation != null)
 				buf.append(" and obj.correlation = :correlation");
+			if (refAppLineDefId != null)
+				buf.append(" and obj.refAppLineDefId = :refAppLineDefId");
 			if (extProps != null && extProps.length != 0) {
 				for (int i=0; i<extProps.length; i++) {
 					Property extProp = extProps[i];
@@ -493,6 +499,8 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 				query.setString("status", status);
 			if (correlation != null)
 				query.setString("correlation", correlation);
+			if (refAppLineDefId != null)
+				query.setString("refAppLineDefId", refAppLineDefId);
 			if (extProps != null && extProps.length != 0) {
 				for (int i=0; i<extProps.length; i++) {
 					Property extProp = extProps[i];
@@ -534,6 +542,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 				buf.append(" obj.objId, obj.name, obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 				buf.append(", obj.status, obj.description");
 				buf.append(", obj.correlation");
+				buf.append(", obj.refAppLineDefId");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -554,6 +563,7 @@ public class AprManagerImpl extends AbstractManager implements IAprManager {
 					obj.setStatus(((String)fields[j++]));
 					obj.setDescription(((String)fields[j++]));
 					obj.setCorrelation((String)fields[j++]);
+					obj.setRefAppLineDefId((String)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;
