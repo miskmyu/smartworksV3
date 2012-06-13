@@ -1093,10 +1093,12 @@ public class ModelConverter {
 				
 				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
+					tskInfo.setApprovalId("yukwangmin");
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
+					tskInfo.setForwardId(task.getPrcObjId());
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 				}
