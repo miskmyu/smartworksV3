@@ -493,7 +493,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_b {
     background: url("../../images/bg_event.jpg") no-repeat scroll 100% 100% transparent;
     height:10px; margin-left:10px; position:relative}
-.line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
 .event_space {position:relative; width:99%; display:inline-block; margin-left:10px; }
 .event_space > ul > li { width:33%}
 .event_space .eventCell li { width: auto}
@@ -633,7 +632,8 @@ td.pic{width:85px}
 .dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px}
 .dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}
 .line_width {padding:0 10px}
-
+.dline_left_gray {border-left:1px dashed #c2c2c2}
+.line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
 
 /*Footer*/
 #footer {text-align:center; height:28px; color:#454545; margin: 15px 10px 10px 240px}

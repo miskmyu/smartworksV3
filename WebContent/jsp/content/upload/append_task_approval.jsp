@@ -107,7 +107,7 @@
 						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
-							String signPicture = approval.getApprover().getSignPicture();
+							String signPicture = approval.getApprover() != null ? approval.getApprover().getSignPicture() : "";
 							String statusIcon = "";
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
 								statusIcon = "approval_status_completed_" + cUser.getLocale();
@@ -128,11 +128,12 @@
 							<%
 							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
-								<a href="" class="name js_selected_approver_info js_userpicker_button">
+								<a class="name js_selected_approver_info js_userpicker_button">
 									<div class="noti_pic">
 										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 									</div>
-									<div class="noti_in up"><fmt:message key="approval.title.select_approver"/>
+									<div class="noti_in up">
+										<fmt:message key="approval.title.select_approver"/>
 									</div>
 								</a>	
 								<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
