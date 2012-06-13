@@ -107,7 +107,7 @@
 						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
-							String signPicture = approval.getApprover().getSignPicture();
+							String signPicture = approval.getApprover() != null ? approval.getApprover().getSignPicture() : "";
 							String statusIcon = "";
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
 								statusIcon = "approval_status_completed_" + cUser.getLocale();
