@@ -723,14 +723,24 @@ public class CommunityServiceImpl implements ICommunityService {
 			getLoginUserManager().deleteAllLoginUser(userId);
 
 			List<Object> allPrincipalList = sessionRegistry.getAllPrincipals();
+
+			Map<String, LoginUser> connectionUserMap = new HashMap<String, LoginUser>();
 			if(allPrincipalList.size() > 0) {
 				for(Object allPrincipal : allPrincipalList) {
-					LoginUser loginUser = new LoginUser(((Login)allPrincipal).getId(), new LocalDate());
-					getLoginUserManager().createLoginUser(userId, loginUser);
+					String connectionUserId = ((Login)allPrincipal).getId();
+					LoginUser loginUser = new LoginUser(connectionUserId, new LocalDate());
+					connectionUserMap.put(connectionUserId, loginUser);
+				}
+			}
+			if(connectionUserMap.size() > 0) {
+				for(Map.Entry<String, LoginUser> entry : connectionUserMap.entrySet()) {
+					String loginUserId = (String)entry.getKey();
+					LoginUser loginUser = (LoginUser)entry.getValue();
+					getLoginUserManager().createLoginUser(loginUserId, loginUser);
 				}
 			}
 
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_LITE);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {
