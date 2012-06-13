@@ -141,6 +141,8 @@ public interface IInstanceService {
 
 	public void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
 	
 }

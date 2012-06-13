@@ -633,6 +633,8 @@ public interface ISmartWorks {
 
 	public abstract void commentOnTaskForward(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
 
 

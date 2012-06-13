@@ -1146,12 +1146,18 @@ $(function() {
 	});
 
 	$('a.js_userpicker_button').live('click', function(e) {
-		var userField = $(targetElement(e)).parents('.js_type_userField:first');
-		var communityItems = userField.find('.js_community_item');
-		var target = userField.find('.js_community_popup:first');
-		var width = userField.find('.form_value').find('div:first').width();
-		var isMultiUsers = userField.attr('multiUsers');
-		smartPop.selectUser(communityItems, target, width, isMultiUsers);
+		var input = $(targetElement(e)).parents('.js_userpicker_button');
+		if(input.hasClass('js_selected_approver_info')){
+			var target = input.parents('.js_append_task_approval_page').find('.js_community_popup');
+			smartPop.selectUser(input, target, 300, false);			
+		}else{
+			var userField = $(targetElement(e)).parents('.js_type_userField:first');
+			var communityItems = userField.find('.js_community_item');
+			var target = userField.find('.js_community_popup:first');
+			var width = userField.find('.form_value').find('div:first').width();
+			var isMultiUsers = userField.attr('multiUsers');
+			smartPop.selectUser(communityItems, target, width, isMultiUsers);
+		}
 		return false;
 	});
 
@@ -1320,8 +1326,8 @@ $(function() {
 	});	
 
 	$('.js_pop_approval_line').live('click', function(e) {
-		var startWork = $(targetElement(e)).parents('.js_append_task_approval_page');
-		var target = startWork.find('.js_select_approval_line');
+		var appendTaskApproval = $(targetElement(e)).parents('.js_append_task_approval_page');
+		var target = appendTaskApproval.find('.js_select_approval_line');
 //		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
 //		smartPop.selectWork(target, width);
 		smartPop.selectApprovalLine(target);

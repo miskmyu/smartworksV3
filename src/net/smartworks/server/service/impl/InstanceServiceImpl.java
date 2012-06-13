@@ -1,5 +1,6 @@
 package net.smartworks.server.service.impl;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -122,11 +123,11 @@ import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
-import net.smartworks.server.engine.process.approval.model.AprApproval;
-import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.process.approval.model.AprApproval;
+import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.deploy.model.AcpActualParameter;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
@@ -1852,6 +1853,23 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 			}
+			if(groupId != null) {
+				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
+				if(iFileModelList.size() > 0) {
+					for(int i=0; i<iFileModelList.size(); i++) {
+						IFileModel fileModel = iFileModelList.get(i);
+						String fileId = fileModel.getId();
+						String filePath = fileModel.getFilePath();
+						if(fileModel.isDeleteAction()) {
+							getDocManager().deleteFile(fileId);
+							File f = new File(filePath);
+							if(f.exists())
+								f.delete();
+						}
+					}
+				}
+			}
+
 			return instanceId;
 
 		}catch (Exception e){
@@ -2342,7 +2360,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setValue(value);
 
 				fieldDataList.add(fieldData);
-				
+
 			}
 
 			SwdDataField[] fieldDatas = new SwdDataField[fieldDataList.size()];
@@ -2354,6 +2372,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			obj.setFormVersion(formVersion);
 			obj.setDataFields(fieldDatas);
 			obj.setRecordId(instanceId);
+			obj.setFileGroupId(groupId);
 			obj.setFileGroupMap(fileGroupMap);
 
 			return obj;
@@ -3570,7 +3589,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (sf == null) {
 				sf = new SortingField();
 				sf.setFieldId(FormField.ID_LAST_MODIFIED_DATE);
-				sf.setAscending(false);
+				sf.setAscending(true);
 			}
 			String sfColumnNameTemp = sf.getFieldId();
 			
@@ -3618,7 +3637,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					pwInstInfo.setSubject(prcInst.getPrcTitle());
 					int type = WorkInstance.TYPE_PROCESS;
 					pwInstInfo.setType(type);
-	
+
 					WorkCategoryInfo groupInfo = null;
 					if (!CommonUtil.isEmpty(prcInst.getSubCtgId()))
 						groupInfo = new WorkCategoryInfo(prcInst.getSubCtgId(), prcInst.getSubCtg());
@@ -6052,9 +6071,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
 			String taskDocument = null;
+			String groupId = null;
 			Map<String, List<Map<String, String>>> fileGroupMap = null;
-			if (recordObj != null) {
+			if(recordObj != null) {
 				taskDocument = recordObj.toString();
+				groupId = recordObj.getFileGroupId();
 				fileGroupMap = recordObj.getFileGroupMap();
 			}
 			task.setDocument(taskDocument);
@@ -6137,6 +6158,22 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 					} catch (Exception e) {
 						throw new DocFileException("file upload fail...");
+					}
+				}
+			}
+			if(groupId != null) {
+				List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
+				if(iFileModelList.size() > 0) {
+					for(int i=0; i<iFileModelList.size(); i++) {
+						IFileModel fileModel = iFileModelList.get(i);
+						String fileId = fileModel.getId();
+						String filePath = fileModel.getFilePath();
+						if(fileModel.isDeleteAction()) {
+							getDocManager().deleteFile(fileId);
+							File f = new File(filePath);
+							if(f.exists())
+								f.delete();
+						}
 					}
 				}
 			}
@@ -6630,5 +6667,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

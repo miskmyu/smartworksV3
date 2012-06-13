@@ -66,6 +66,12 @@ public class TaskInstanceController {
 		return SmartUtil.returnMnv(request, "jsp/content/upload/append_task_approval.jsp", "");
 	}
 
+	@RequestMapping("/approval_line_box")
+	public ModelAndView approvalLineBox(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/upload/approval_line_box.jsp", "");
+	}
+
 	@RequestMapping("/more_space_task_histories")
 	public ModelAndView moreSpaceTaskHistories(HttpServletRequest request, HttpServletResponse response) {
 
@@ -106,6 +112,12 @@ public class TaskInstanceController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void commentOnTaskForward(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.commentOnTaskForward(requestBody, request);
+	}
+
+	@RequestMapping(value = "/comment_on_task_approval", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void commentOnTaskApproval(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.commentOnTaskApproval(requestBody, request);
 	}
 
 }

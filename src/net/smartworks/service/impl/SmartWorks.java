@@ -1408,4 +1408,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getApprovalLineInstById(instId);
 	}
 
+	@Override
+	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.commentOnTaskApproval(requestBody, request);
+	}
+
 }

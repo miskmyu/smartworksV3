@@ -36,6 +36,7 @@ public class Instance {
 	public final static int STATUS_PLANNED = 5;
 	public final static int STATUS_REJECTED = 6;
 	public final static int STATUS_ABORTED = 7;
+	public final static int STATUS_DRAFTED = 8;
 	
 	private String id;
 	private String subject;

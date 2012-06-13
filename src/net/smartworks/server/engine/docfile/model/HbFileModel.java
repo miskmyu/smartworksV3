@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
-import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.server.engine.common.util.XmlUtil;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +56,11 @@ public class HbFileModel implements IFileModel, Serializable, Comparable<HbFileM
   	 * 태스크인스턴스아이디
   	 */
   	private String tskInstanceId;
+ 
+  	/**
+  	 * 파일 삭제 Flag
+  	 */
+  	private boolean deleteAction;
  
   	/**
 	 * @return the multipartFile
@@ -206,22 +210,24 @@ public class HbFileModel implements IFileModel, Serializable, Comparable<HbFileM
 	public void setMultiPartInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
 	}
-
 	@Override
 	public InputStream getMultiPartInputStream() {
 		return inputStream;
 	}
-
 	@Override
 	public String getTskInstanceId() {
 		return this.tskInstanceId;
 	}
-
 	@Override
 	public void setTskInstanceId(String tskInstanceId) {
 		this.tskInstanceId = tskInstanceId;
 	}
-
+	public boolean isDeleteAction() {
+		return deleteAction;
+	}
+	public void setDeleteAction(boolean deleteAction) {
+		this.deleteAction = deleteAction;
+	}
 	@Override
 	public int compareTo(HbFileModel o) {
 		return String.valueOf(this.getWrittenTime()).compareTo(String.valueOf(((HbFileModel)o).getWrittenTime()));
