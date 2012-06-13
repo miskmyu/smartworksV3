@@ -64,9 +64,9 @@
 	    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
 
-<!--  	<session-config>
-        <session-timeout>30</session-timeout>
-    </session-config> -->
+ 	<session-config>
+        <session-timeout>-1</session-timeout>
+    </session-config>
     
   <servlet>
     <servlet-name>InitiatorBase</servlet-name>
