@@ -85,14 +85,14 @@
 			<%
 			if(!SmartUtil.isBlankObject(approvalLine)){
 			%>
-				<div class="fr mb2">
-	                <div class="fl mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
-					<a href="" class="js_pop_approval_line"><div class="fl icon_approval"></div></a>
+				<div class="" style="height: 20px">
+					<a href="" class="js_pop_approval_line"><div class="fr icon_approval"></div></a>
+	                <div class="fr mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
 				</div>
 			<%
 			}
 			%>
-			<div class="cb js_approval_line_box">
+			<div class="fr mb10 js_approval_line_box">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<%if(!SmartUtil.isBlankObject(approvalLine)){ %><input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden"><%} %>		
 					<%
@@ -172,7 +172,7 @@
 					%>
 				</form>
 			</div>
-			<span class="js_community_popup"></span>
+			<span class="js_community_popup" style="position: relative; top: 125px; left: 185px"></span>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->
