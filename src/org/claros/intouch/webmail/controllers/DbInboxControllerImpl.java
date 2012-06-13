@@ -53,9 +53,11 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	
 	static Thread checkingEmail = null;
 	static String currentUserId = null;
+	static String currentCompanyId = null;
 	public void checkEmailWithHeader() throws Exception {
 		
 		currentUserId = SmartUtil.getCurrentUser().getId();
+		currentCompanyId = SmartUtil.getCurrentUser().getCompanyId();
 		checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
@@ -164,7 +166,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				FolderController foldCont = fFactory.getFolderController();
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
-					SmartUtil.publishNoticeCount(currentUserId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
+					SmartUtil.publishNoticeCount(currentUserId, currentCompanyId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
@@ -177,6 +179,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	public void checkEmail() throws Exception {
 		
 		currentUserId = SmartUtil.getCurrentUser().getId();
+		currentCompanyId = SmartUtil.getCurrentUser().getCompanyId();
 		checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
@@ -288,7 +291,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				FolderController foldCont = fFactory.getFolderController();
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
-					SmartUtil.publishNoticeCount(currentUserId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
+					SmartUtil.publishNoticeCount(currentUserId, currentCompanyId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
