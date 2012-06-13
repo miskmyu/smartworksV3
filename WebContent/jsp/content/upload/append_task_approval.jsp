@@ -132,7 +132,8 @@
 									<div class="noti_pic">
 										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 									</div>
-									<div class="noti_in up"><fmt:message key="approval.title.select_approver"/>
+									<div class="noti_in up">
+										<fmt:message key="approval.title.select_approver"/>
 									</div>
 								</a>	
 								<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
