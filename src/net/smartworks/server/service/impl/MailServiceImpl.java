@@ -23,11 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
-import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.SortingField;
-import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MailInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
@@ -49,7 +47,6 @@ import net.smartworks.util.SmartUtil;
 import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.exception.LoginInvalidException;
 import org.claros.commons.auth.models.AuthProfile;
-import org.claros.commons.exception.NoPermissionException;
 import org.claros.commons.mail.exception.ServerDownException;
 import org.claros.commons.mail.models.ByteArrayDataSource;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
@@ -468,9 +465,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			InboxController inCont = inFact.getInboxController();
 			inCont.checkEmail();
 
+			boolean unreadEmail = params.isUnreadEmail();
+
 			MailContentCond mailContentCond = new MailContentCond();
 			mailContentCond.setUsername(userId);
 			mailContentCond.setFolderId(Long.parseLong(folderId));
+			if(unreadEmail)
+				mailContentCond.setUnread(1);
 
 			String searchKey = params.getSearchKey();
 			mailContentCond.setSearchKey(searchKey);
