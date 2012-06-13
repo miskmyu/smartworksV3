@@ -128,7 +128,7 @@
 							<%
 							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
-								<a href="" class="name js_selected_approver_info js_userpicker_button">
+								<a class="name js_selected_approver_info js_userpicker_button">
 									<div class="noti_pic">
 										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 									</div>
