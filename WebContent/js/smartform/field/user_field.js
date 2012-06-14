@@ -85,7 +85,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 
 	if(readOnly){
 		$user = $('<div class="form_value" style="width:' + valueWidth + '%"></div>');
-		usersHtml = '';
+		var viewUsersHtml = '';
 		for(var i=0; i<users.length; i++) {
 			var separator = ', ';
 			var href = 'department_space.sw?cid=dp.sp.';
@@ -98,9 +98,10 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 			}
 			if(i == users.length - 1)
 				separator = '';
-			usersHtml = usersHtml + '<a href="' + href + users[i].userId + '"><span>' + users[i].longName + separator + '</span></a>';
+			viewUsersHtml = viewUsersHtml + '<a href="' + href + users[i].userId + '"><span>' + users[i].longName + separator + '</span></a>';
 		}
-		$user.html(usersHtml);
+		$user.html(viewUsersHtml);
+		$user = $user.after(usersHtml);
 	}else{	
 		$user = $html;
 	}
