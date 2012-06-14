@@ -1,10 +1,18 @@
 package net.smartworks.server.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.security.AccessPolicy;
+import net.smartworks.model.security.EditPolicy;
+import net.smartworks.model.security.WritePolicy;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
@@ -19,7 +27,10 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
+import net.smartworks.server.engine.process.process.model.PrcSwProcess;
+import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.model.IPackageModel;
 import net.smartworks.server.engine.resource.model.IProcessModel;
@@ -46,6 +57,9 @@ public class BuilderServiceImpl implements IBuilderService {
 	}
 	private static ICtgManager getCtgManager() {
 		return SwManagerFactory.getInstance().getCtgManager();
+	}
+	private static IPrcManager getPrcManager() {
+		return SwManagerFactory.getInstance().getPrcManager();
 	}
 
 	@Override
@@ -199,8 +213,77 @@ public class BuilderServiceImpl implements IBuilderService {
 	@Override
 	public void setWorkSettings(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
-		try{
-		}catch (Exception e){
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+
+			String workId = (String)requestBody.get("workId");
+			Map<String, Object> frmWorkSettings = (Map<String, Object>)requestBody.get("frmWorkSettings");
+
+			Set<String> keySet = frmWorkSettings.keySet();
+			Iterator<String> itr = keySet.iterator();
+
+			String rdoKeyField = null;
+			List<String> hdnDisplayFields = null;
+			String rdoAccessLevel = null;
+			String rdoWriteLevel = null;
+			String rdoEditLevel = null;
+
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmWorkSettings.get(fieldId);
+				if(fieldValue instanceof String) {
+					String stringValue = (String)fieldValue;
+					if(fieldId.equals("rdoKeyField"))
+						rdoKeyField = stringValue;
+					else if(fieldId.equals("rdoAccessLevel"))
+						rdoAccessLevel = stringValue;
+					else if(fieldId.equals("rdoWriteLevel"))
+						rdoWriteLevel = stringValue;
+					else if(fieldId.equals("rdoEditLevel"))
+						rdoEditLevel = stringValue;
+					
+				} else if(fieldValue instanceof ArrayList) {
+					List<String> valueList = (ArrayList<String>)fieldValue;
+					if(fieldId.equals("hdnDisplayFields"))
+						hdnDisplayFields = valueList;
+				}
+			}
+
+			String resourceId = null;
+			if(rdoKeyField != null) { //정보관리업무
+				SwfFormCond swfFormCond = new SwfFormCond();
+				swfFormCond.setPackageId(workId);
+				SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
+				if(!CommonUtil.isEmpty(swfForms))
+					resourceId = swfForms[0].getId();
+			} else { //프로세스업무, 일정계획업무
+				PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
+				prcSwProcessCond.setPackageId(workId);
+				PrcSwProcess[] prcSwProcesses = getPrcManager().getSwProcesses(userId, prcSwProcessCond);
+				if(!CommonUtil.isEmpty(prcSwProcesses))
+					resourceId = prcSwProcesses[0].getProcessId();
+			}
+			SwaResource[] swaResources = null;
+			if(resourceId != null) {
+				SwaResourceCond swaResourceCond = new SwaResourceCond();
+				swaResourceCond.setResourceId(resourceId);
+				swaResources = getSwaManager().getResources(userId, swaResourceCond, IManager.LEVEL_LITE);
+			}
+			if(!CommonUtil.isEmpty(swaResources)) {
+				for(SwaResource swaResource : swaResources) {
+					String mode = swaResource.getMode();
+					if(mode.equalsIgnoreCase(SwaResource.MODE_READ))
+						swaResource.setPermission(rdoAccessLevel.equals(AccessPolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(AccessPolicy.LEVEL_CUSTOM) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+					else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE))
+						swaResource.setPermission(rdoWriteLevel.equals(WritePolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
+					else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY))
+						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_WIKI) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_NO);
+					else if(mode.equalsIgnoreCase(SwaResource.MODE_DELETE))
+						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_WIKI) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_NO);
+				}
+			}
+		} catch (Exception e) {
 			// Exception Handling Required
 			e.printStackTrace();
 			// Exception Handling Required			
