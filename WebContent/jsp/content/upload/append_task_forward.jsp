@@ -138,7 +138,7 @@
 									<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
 						        	<span class="comment_box js_return_on_forward">
 										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-										<textarea style="width:91%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+										<textarea style="width:90%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
 						        	</span>								
 							</li>
 							

@@ -80,7 +80,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="form_wrap up up_padding mb2 cb js_edit_work_hour_page" policyId="<%=CommonUtil.toNotNull(policyId)%>">
+<div class="form_wrap up up_padding mb2 js_edit_work_hour_page" policyId="<%=CommonUtil.toNotNull(policyId)%>">
 	<div class="form_title">
 		<%
 		if(SmartUtil.isBlankObject(policyId)){
@@ -93,7 +93,7 @@
 		<%
 		}
 		%>
-		<div class="solid_line cb"></div>
+		<div class="solid_line"></div>
 	</div>
 
 	<form name="frmEditWorkHour" class="form_layout con mb10 js_validation_required">

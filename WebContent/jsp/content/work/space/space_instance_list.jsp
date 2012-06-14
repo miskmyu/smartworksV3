@@ -35,7 +35,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_space_instance_list_page"  contextId="<%=workInstance.getContextId() %>" spaceId="<%=workInstance.getId() %>">	
+<div class="upload_up_wrap js_space_instance_list_page"  contextId="<%=workInstance.getContextId() %>" spaceId="<%=workInstance.getId() %>">	
 	<!-- 댓글 영역 -->
 	<div class="up_point_gr posit_point"></div>
 	<!-- 댓글 목록 -->

@@ -118,3 +118,6 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
+
+/* qq-uploader Control */
+#imgCompanyLogo .qq-upload-button {width:60px !important}

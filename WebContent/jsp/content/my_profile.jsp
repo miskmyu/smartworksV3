@@ -87,7 +87,7 @@
 			
 			<!-- 컨텐츠 -->
 			<form name="frmMyProfileSetting" class="js_validation_required">
-				<div class="contents_space">
+				<div class="contents_space oh">
 					<div class="photo_section">
 					
 						<!--  *** js_my_profile_field : sw_act_work.js에서 화면로딩이 완료되면 이 클래스로 찾아서,  	-->
