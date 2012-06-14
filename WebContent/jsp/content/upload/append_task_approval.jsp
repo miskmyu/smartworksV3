@@ -120,60 +120,61 @@
 							}
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
-						<!-- 결재선 -->
-						<div class="approval_area">
-							<div class="label"><%=approvalName %></div>
-							<div class="approval <%=statusIcon%>"><%if(!SmartUtil.isBlankObject(signPicture)){ %><img src="<%=signPicture%>"/><%} %></div>
-							<%
-							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
-							%>
-								<div class="t_date tc"></div>
-								<a class="name js_selected_approver_info js_userpicker_button">
-									<div class="noti_pic">
-										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
-									</div>
-									<div class="noti_in up">
-										<fmt:message key="approval.title.select_approver"/>
-									</div>
-								</a>	
-								<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
+							<!-- 결재선 -->
+							<div class="approval_area">
+								<div class="label"><%=approvalName %></div>
+								<div class="approval <%=statusIcon%>"><%if(!SmartUtil.isBlankObject(signPicture)){ %><img src="<%=signPicture%>"/><%} %></div>
+								<%
+								if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
+								%>
+									<div class="t_date tc"></div>
+									<a class="name js_selected_approver_info js_userpicker_button" href="">
+										<div class="noti_pic">
+											<img class="profile_size_s" src="images/no_user_picture_min.jpg">
+										</div>
+									</a>
+									<span class="noti_in up">
+										<input class="m0 js_auto_complete" style="width:98px" href="community_name.sw" type="text">
+									</span>
+									<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
+												
+								<%
+								}else if(!SmartUtil.isBlankObject(approval.getApprover())){
+									User approver = approval.getApprover();
+									String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateTimeSimpleString();
+									
+								%>
+									<div class="t_date tc"><%=completedDateStr %></div>
+									<div class="name">
+										<div class="noti_pic">
+											<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
+										</div>
+										<div class="noti_in">
+											<div class="t_name"><%=CommonUtil.toNotNull(approver.getPosition()) %></div>
+											<div class="t_name"><%=approver.getName() %></div>
 											
-							<%
-							}else if(!SmartUtil.isBlankObject(approval.getApprover())){
-								User approver = approval.getApprover();
-								String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateTimeSimpleString();
-								
-							%>
-								<div class="t_date tc">2011.06.12 14:45<%-- <%=completedDateStr %> --%></div>
-								<div class="name">
-									<div class="noti_pic">
-										<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
+										</div>
+										<%
+										if(SmartUtil.isBlankObject(approvalLineInst)){
+										%>
+											<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
+										<%
+										}
+										%>
 									</div>
-									<div class="noti_in">
-										<div class="t_name">선임연구원<%-- <%=CommonUtil.toNotNull(approver.getPosition()) %> --%></div>
-										<div class="t_name">신현성<%-- <%=approver.getName() %> --%></div>
-										
-									</div>
-									<%
-									if(SmartUtil.isBlankObject(approvalLineInst)){
-									%>
-										<input name="usrLevelApprover<%=i+1 %>" value="<%=approver.getId() %>" type="hidden">
-									<%
-									}
-									%>
-								</div>
-							<%
-							}
-							%>
-						</div>
-						<!-- 결재선 //-->
+								<%
+								}
+								%>
+							</div>
+							<!-- 결재선 //-->
 					<%
 						}
 					}
 					%>
 				</form>
 			</div>
-			<span class="js_community_popup" style="position: relative; top: 125px; left: 185px"></span>
+			<span class="js_community_list srch_list_nowid" style="display:none"></span>
+			<div class="js_community_popup"></div>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->
