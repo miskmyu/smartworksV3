@@ -13,7 +13,6 @@ import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
@@ -22,7 +21,6 @@ import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
-import net.smartworks.server.engine.resource.manager.SmartServerManager;
 import net.smartworks.server.engine.resource.model.IPackageModel;
 import net.smartworks.server.engine.resource.model.IProcessModel;
 import net.smartworks.server.service.IBuilderService;
@@ -34,12 +32,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class BuilderServiceImpl implements IBuilderService {
 
-	private ISwdManager getSwdManager() {
-		return SwManagerFactory.getInstance().getSwdManager();
-	}
-	private IPkgManager getPkgManager() {
+	private static IPkgManager getPkgManager() {
 		return SwManagerFactory.getInstance().getPkgManager();
 	}
+	private static ISwfManager getSwfManager() {
+		return SwManagerFactory.getInstance().getSwfManager();
+	}
+	private static IResourceDesigntimeManager getDesigntimeManager() {
+		return SwManagerFactory.getInstance().getDesigntimeManager();
+	}
+	private static ISwaManager getSwaManager() {
+		return SwManagerFactory.getInstance().getSwaManager();
+	}
+	private static ICtgManager getCtgManager() {
+		return SwManagerFactory.getInstance().getCtgManager();
+	}
+
 	@Override
 	public void startWorkService(String workId) throws Exception {
 
@@ -66,25 +74,22 @@ public class BuilderServiceImpl implements IBuilderService {
 			LocalDate date = new LocalDate();
 			if (packageId != null) {
 				if (type.equals("SINGLE")){
-					ISwfManager swfMgr = SwManagerFactory.getInstance().getSwfManager();
 					SwfFormCond swfCond = new SwfFormCond();
 					swfCond.setPackageId(packageId);
-					SwfForm[] swfObj = swfMgr.getForms(userId, swfCond, "all");
+					SwfForm[] swfObj = getSwfManager().getForms(userId, swfCond, "all");
 					if (swfObj != null) {
 					receId = swfObj[0].getId();
 					}
 				} else {
-					IResourceDesigntimeManager rscMgr1 = SwManagerFactory.getInstance().getDesigntimeManager();
-					IProcessModel prcModel = rscMgr1.retrieveProcessByPackage(userId, packageId, 1);
+					IProcessModel prcModel = getDesigntimeManager().retrieveProcessByPackage(userId, packageId, 1);
 					if (prcModel != null) {
 					receId = prcModel.getProcessId();
 					}
 				}
 				if (receId != null) {
-					ISwaManager swaMgr = SwManagerFactory.getInstance().getSwaManager();
 					SwaResourceCond swaCond = new SwaResourceCond();
 					swaCond.setResourceId(receId);
-					SwaResource[] swaObj = swaMgr.getResources(userId, swaCond, "all");
+					SwaResource[] swaObj = getSwaManager().getResources(userId, swaCond, "all");
 					if (swaObj == null){
 						SwaResource swaobjs = new SwaResource();
 						//R
@@ -97,7 +102,7 @@ public class BuilderServiceImpl implements IBuilderService {
 						swaobjs.setCompanyId(compId);
 						swaobjs.setCreationDate(date);
 						swaobjs.setModificationDate(date);
-						SwManagerFactory.getInstance().getSwaManager().setResource(userId, swaobjs, null);
+						getSwaManager().setResource(userId, swaobjs, null);
 						//W
 						SwaResource swaobjs1 = new SwaResource();
 						swaobjs1.setResourceId(receId);
@@ -109,7 +114,7 @@ public class BuilderServiceImpl implements IBuilderService {
 						swaobjs1.setCompanyId(compId);
 						swaobjs1.setCreationDate(date);
 						swaobjs1.setModificationDate(date);
-						SwManagerFactory.getInstance().getSwaManager().setResource(userId, swaobjs1, null);
+						getSwaManager().setResource(userId, swaobjs1, null);
 						//M
 						SwaResource swaobjs2 = new SwaResource();
 						swaobjs2.setResourceId(receId);
@@ -121,7 +126,7 @@ public class BuilderServiceImpl implements IBuilderService {
 						swaobjs2.setCompanyId(compId);
 						swaobjs2.setCreationDate(date);
 						swaobjs2.setModificationDate(date);
-						SwManagerFactory.getInstance().getSwaManager().setResource(userId, swaobjs2, null);
+						getSwaManager().setResource(userId, swaobjs2, null);
 						//D
 						SwaResource swaobjs3 = new SwaResource();
 						swaobjs3.setResourceId(receId);
@@ -133,12 +138,12 @@ public class BuilderServiceImpl implements IBuilderService {
 						swaobjs3.setCompanyId(compId);
 						swaobjs3.setCreationDate(date);
 						swaobjs3.setModificationDate(date);
-						SwManagerFactory.getInstance().getSwaManager().setResource(userId, swaobjs3, null);
+						getSwaManager().setResource(userId, swaobjs3, null);
 					}
 				}
 			}
-			SwManagerFactory.getInstance().getDesigntimeManager().deployPackage(userId, compId, packageId, 1);
-			
+			getDesigntimeManager().deployPackage(userId, compId, packageId, 1);
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -153,7 +158,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
-			SwManagerFactory.getInstance().getDesigntimeManager().undeployPackage(userId, workId, 1);
+			getDesigntimeManager().undeployPackage(userId, workId, 1);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -168,7 +173,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
-			SwManagerFactory.getInstance().getDesigntimeManager().checkOutPackage(userId, workId, 1);
+			getDesigntimeManager().checkOutPackage(userId, workId, 1);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -183,7 +188,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			String userId = null;
 			if (cuser != null)
 				userId = cuser.getId();
-			SwManagerFactory.getInstance().getDesigntimeManager().checkInPackage(userId, workId, 1);
+			getDesigntimeManager().checkInPackage(userId, workId, 1);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -239,7 +244,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			ctg.setParentId(parentCategoryId);
 			ctg.setDisplayOrder(1);
 			//ICategoryModel category = catMgr.createCategory(userId, parentCategoryId, name, desc);
-			CtgCategory category = SwManagerFactory.getInstance().getCtgManager().createCategory(userId, ctg);
+			CtgCategory category = getCtgManager().createCategory(userId, ctg);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -264,15 +269,14 @@ public class BuilderServiceImpl implements IBuilderService {
 			String categoryId = (String)requestBody.get("categoryId");
 			String name = (String)frmNewWorkCategory.get("txtCategoryName");
 			String desc = (String)frmNewWorkCategory.get("txtCategoryDesc");
-			
-			ICtgManager categoryMgr = SwManagerFactory.getInstance().getCtgManager();
-			CtgCategory category = categoryMgr.getCategory(userId, categoryId, IManager.LEVEL_ALL);
+
+			CtgCategory category = getCtgManager().getCategory(userId, categoryId, IManager.LEVEL_ALL);
 			if (category == null)
 				return;
 			category.setName(name);
 			category.setDescription(desc);
 			//ICategoryModel category = catMgr.createCategory(userId, parentCategoryId, name, desc);
-			categoryMgr.setCategory(userId, category, IManager.LEVEL_ALL);
+			getCtgManager().setCategory(userId, category, IManager.LEVEL_ALL);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -301,9 +305,8 @@ public class BuilderServiceImpl implements IBuilderService {
 			
 			if (pkgCount > 0)
 				throw new Exception("Delete Category(" +categoryId+ ") failed - Exist Sub Packages!" );
-			
-			ICtgManager categoryMgr = SwManagerFactory.getInstance().getCtgManager();
-			categoryMgr.removeCategory(userId, categoryId);
+
+			getCtgManager().removeCategory(userId, categoryId);
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -347,9 +350,9 @@ public class BuilderServiceImpl implements IBuilderService {
 			
 			IPackageModel pkg = null;
 			if (CommonUtil.isEmpty(type))
-				pkg = SwManagerFactory.getInstance().getDesigntimeManager().createPackage(userId, categoryId, name, desc);
+				pkg = getDesigntimeManager().createPackage(userId, categoryId, name, desc);
 			else {
-				pkg = SwManagerFactory.getInstance().getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
+				pkg = getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
 			}
 			
 		}catch (Exception e){

@@ -1,12 +1,6 @@
 package net.smartworks.server.service.impl;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLDecoder;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.YTMetaInfo;
 import net.smartworks.server.service.IYouTubeService;
@@ -17,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gdata.client.youtube.YouTubeService;
-import com.google.gdata.data.media.MediaFileSource;
 import com.google.gdata.data.media.mediarss.MediaCategory;
 import com.google.gdata.data.media.mediarss.MediaDescription;
 import com.google.gdata.data.media.mediarss.MediaKeywords;
@@ -37,14 +30,10 @@ public class YouTubeServiceImpl implements IYouTubeService {
 	private static String YOUTUBE_SMARTWORKS_PASSWORD = "smartworks.net";
 	private static String YOUTUBE_YSJUNG_USERID = "ysjung@maninsoft.co.kr";
 	private static String YOUTUBE_YSJUNG_PASSWORD = "ysjung5775";
-	
-	ISmartWorks smartworks;
 
-	@Autowired
-	public void setSmartworks(ISmartWorks smartworks) {
-		this.smartworks = smartworks;
-	}
-	
+	@Autowired	
+	private ISmartWorks smartworks;
+
 	@Override
 	public FormUploadToken getUploadToken(YTMetaInfo metaInfo, String ytUserId, String ytPassword) throws Exception {
 		try{
