@@ -571,7 +571,6 @@ public class NoticeServiceImpl implements INoticeService {
 			
 			switch(noticeType){
 			case Notice.TYPE_MAILBOX:
-				mailService.checkEmail();
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
@@ -580,14 +579,16 @@ public class NoticeServiceImpl implements INoticeService {
 				InstanceInfoList mailsList =  mailService.getMailInstanceList(Integer.toString(MailFolder.TYPE_SYSTEM_INBOX), params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
-				NoticeMessage[] notices = new NoticeMessage[instances.length];
-				for(int i=0; i<instances.length; i++){
-					notices[i] = new NoticeMessage(instances[i].getId(), 0, instances[i].getOwner(), instances[i].getCreatedDate());
-					notices[i].setInstance(instances[i]);
+				NoticeMessage[] notices = new NoticeMessage[(instances==null) ? 0 : instances.length];
+				if(instances!=null){
+					for(int i=0; i<instances.length; i++){
+						notices[i] = new NoticeMessage(instances[i].getId(), 0, instances[i].getOwner(), instances[i].getCreatedDate());
+						notices[i].setInstance(instances[i]);
+					}
 				}
 				noticeBox.setNoticeMessages(notices);
 				noticeBox.setNoticeType(Notice.TYPE_MAILBOX);
-				if(instances.length>0){
+				if(instances!= null && instances.length>0){
 					noticeBox.setDateOfLastNotice(instances[instances.length-1].getCreatedDate());
 					noticeBox.setRemainingLength(mailsList.getTotalSize()-instances.length);
 				}

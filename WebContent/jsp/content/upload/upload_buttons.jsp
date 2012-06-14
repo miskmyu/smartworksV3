@@ -183,10 +183,7 @@
 					<div class="form_value">
 						<div class="icon_fb_space">
 							<div class="fieldline community_names js_community_names sw_required">
-								<div class="js_selected_communities user_sel_area">
-								</div>
 								<input class="js_auto_complete" href="community_name.sw" type="text">
-								<div class="js_srch_x"></div>
 							</div>
 							<div class="js_community_list com_list" style="display: none"></div>
 							<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>

@@ -292,4 +292,34 @@ $(function() {
 		input.parents('.js_tab_work_settings_page').find('input[name="rdoKeyField"]').attr('value', input.attr('fieldId'));
 		return false;
 	});
+	
+	$('.js_select_access_level > input').live('change', function(e){
+		var input = $(targetElement(e));
+		var accessLevelCustom = input.nextAll('.js_access_level_custom');
+		if(input.hasClass('js_security_level_custom'))
+			accessLevelCustom.show();
+		else
+			accessLevelCustom.hide();
+		return false;
+	});
+	
+	$('.js_select_write_level > input').live('change', function(e){
+		var input = $(targetElement(e));
+		var writeLevelCustom = input.nextAll('.js_write_level_custom');
+		if(input.hasClass('js_security_level_custom'))
+			writeLevelCustom.show();
+		else
+			writeLevelCustom.hide();
+		return false;
+	});
+	
+	$('.js_select_edit_level > input').live('change', function(e){
+		var input = $(targetElement(e));
+		var editLevelCustom = input.nextAll('.js_edit_level_custom');
+		if(input.hasClass('js_security_level_custom'))
+			editLevelCustom.show();
+		else
+			editLevelCustom.hide();
+		return false;
+	});
 });
