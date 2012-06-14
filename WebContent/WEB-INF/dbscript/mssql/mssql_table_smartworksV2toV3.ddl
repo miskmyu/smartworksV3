@@ -690,3 +690,8 @@ CREATE TABLE msg_rules (
 
 --사용자의 파일 삭제 액션 유무 저장
 ALTER TABLE swfile add deleteAction bit;
+
+
+--전자 결재 라인 데피니션을 참조하기위한 컬럼
+alter table apraprline add aprRefAppLineDefId varchar(50);
+

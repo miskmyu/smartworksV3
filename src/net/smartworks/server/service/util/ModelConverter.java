@@ -1093,10 +1093,22 @@ public class ModelConverter {
 				
 				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
+					
+					
+					
+					
+					
+					tskInfo.setApprovalId("needs task approval id");
+					
+					
+					
+					
+					
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
+					tskInfo.setForwardId(task.getPrcObjId());
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 				}
@@ -2046,7 +2058,9 @@ public class ModelConverter {
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			type = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
-			taskInstInfo.setApprovalId(swTask.getProcessInstId());
+			taskInstInfo.setComments(swTask.getDocument());
+			taskInstInfo.setContent(swTask.getExtendedPropertyValue("txtApprovalComments"));
+			taskInstInfo.setApprovalId(swTask.getExtendedPropertyValue("approvalLine"));
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		}
 

@@ -61,13 +61,13 @@ public class CalendarServiceImpl implements ICalendarService {
 	@Autowired
 	private ICommunityService communityService;
 
-	private ISwcManager getSwcManager() {
+	private static ISwcManager getSwcManager() {
 		return SwManagerFactory.getInstance().getSwcManager();
 	}
-	private ISwdManager getSwdManager() {
+	private static ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
-	private ISwfManager getSwfManager() {
+	private static ISwfManager getSwfManager() {
 		return SwManagerFactory.getInstance().getSwfManager();
 	}
 

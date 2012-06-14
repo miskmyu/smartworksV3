@@ -51,6 +51,7 @@ import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.organization.model.SwoUserExtend;
+import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
@@ -71,31 +72,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommunityServiceImpl implements ICommunityService {
 
-	private ISwoManager getSwoManager() {
+	private static ISwoManager getSwoManager() {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
-	private IDocFileManager getDocManager() {
+	private static IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
 	}
-	private ISchManager getSchManager() {
+	private static ISchManager getSchManager() {
 		return SwManagerFactory.getInstance().getSchManager();
 	}
-	private ILoginUserManager getLoginUserManager() {
+	private static ILoginUserManager getLoginUserManager() {
 		return SwManagerFactory.getInstance().getLoginUserManager();
 	}
-	private ISwdManager getSwdManager() {
+	private static ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
+	}
+	private static ISeraManager getSeraManager() {
+		return SwManagerFactory.getInstance().getSeraManager();
+	}
+	private static IPublishNoticeManager getPublishNoticeManager() {
+		return SwManagerFactory.getInstance().getPublishNoticeManager();
 	}
 
 	@Autowired
 	private SessionRegistry sessionRegistry;
 
-	private ISeraService seraService = null;
-
 	@Autowired
-	public void setSeraService(ISeraService seraService) {
-		this.seraService = seraService;
-	}
+	private ISeraService seraService;
 
 	/*
 	 * (non-Javadoc)
@@ -723,14 +726,24 @@ public class CommunityServiceImpl implements ICommunityService {
 			getLoginUserManager().deleteAllLoginUser(userId);
 
 			List<Object> allPrincipalList = sessionRegistry.getAllPrincipals();
+
+			Map<String, LoginUser> connectionUserMap = new HashMap<String, LoginUser>();
 			if(allPrincipalList.size() > 0) {
 				for(Object allPrincipal : allPrincipalList) {
-					LoginUser loginUser = new LoginUser(((Login)allPrincipal).getId(), new LocalDate());
-					getLoginUserManager().createLoginUser(userId, loginUser);
+					String connectionUserId = ((Login)allPrincipal).getId();
+					LoginUser loginUser = new LoginUser(connectionUserId, new LocalDate());
+					connectionUserMap.put(connectionUserId, loginUser);
+				}
+			}
+			if(connectionUserMap.size() > 0) {
+				for(Map.Entry<String, LoginUser> entry : connectionUserMap.entrySet()) {
+					String loginUserId = (String)entry.getKey();
+					LoginUser loginUser = (LoginUser)entry.getValue();
+					getLoginUserManager().createLoginUser(loginUserId, loginUser);
 				}
 			}
 
-			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_ALL);
+			LoginUser[] loginUsers = getLoginUserManager().getLoginUsers(userId, null, IManager.LEVEL_LITE);
 
 			if(!CommonUtil.isEmpty(loginUsers)) {
 				for(LoginUser loginUser : loginUsers) {
@@ -874,10 +887,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		String groupId = (String)requestBody.get("courseId");
 		String userId = (String)requestBody.get("userId");
 		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		ISeraManager seraMgr = SwManagerFactory.getInstance().getSeraManager();
-		
-		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
 		if (group == null)
 			return;
 		if (group.isContainGroupMember(userId))
@@ -887,7 +897,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		groupMember.setUserId(userId);
 		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
 
-		CourseDetail courseDetail = seraMgr.getCourseDetailById(groupId);
+		CourseDetail courseDetail = getSeraManager().getCourseDetailById(groupId);
 		
 		boolean isNoticeToGroupLeader = false;
 		if (courseDetail == null) {
@@ -906,11 +916,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 		group.addGroupMember(groupMember);
 		
-		swoMgr.setGroup(userId, group, IManager.LEVEL_ALL);
+		getSwoManager().setGroup(userId, group, IManager.LEVEL_ALL);
 		
 		if (isNoticeToGroupLeader) {
 			PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
-			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+			getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
 			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
 		}	
 	}
@@ -946,9 +956,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		if (userIdArray == null || userIdArray.length == 0)
 			return;
 		
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		
-		SwoGroup group = swoMgr.getGroup("", groupId, IManager.LEVEL_ALL);
+		SwoGroup group = getSwoManager().getGroup("", groupId, IManager.LEVEL_ALL);
 		if (group == null)
 			return;
 		for (int i = 0; i < userIdArray.length; i++) {
@@ -967,7 +975,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			
 		}
 		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
-		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 	}
 
 	/*
@@ -985,9 +993,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		String userId = (String)requestBody.get("userId");
 		boolean approval = (Boolean)requestBody.get("approval");
 
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		
-		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
 		if (group == null)
 			return;
 		if (!group.isContainGroupMember(userId))
@@ -1001,7 +1007,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		} else {
 			group.removeGroupMember(groupMember);
 		}
-		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 	}
 
 	/*
@@ -1019,10 +1025,8 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		String groupId = (String)requestBody.get("groupId");
 		String userId = user.getId();
-	
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		
-		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+
+		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
 		if (group == null)
 			return;
 		if (!group.isContainGroupMember(userId))
@@ -1033,7 +1037,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
 
-		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 	}
 
 	/*
@@ -1049,9 +1053,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		String groupId = (String)requestBody.get("groupId");
 		String userId = (String)requestBody.get("userId");
 
-		ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
-		
-		SwoGroup group = swoMgr.getGroup(userId, groupId, IManager.LEVEL_ALL);
+		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
 		if (group == null)
 			return;
 		if (!group.isContainGroupMember(userId))
@@ -1062,7 +1064,7 @@ public class CommunityServiceImpl implements ICommunityService {
 
 		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
 
-		swoMgr.setGroup("", group, IManager.LEVEL_ALL);
+		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 
 	}
 	@Override

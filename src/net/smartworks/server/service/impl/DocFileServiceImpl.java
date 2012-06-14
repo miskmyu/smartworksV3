@@ -39,7 +39,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 @Service
 public class DocFileServiceImpl implements IDocFileService {
 
-	private IDocFileManager getDocManager() {
+	private static IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
 	}
 

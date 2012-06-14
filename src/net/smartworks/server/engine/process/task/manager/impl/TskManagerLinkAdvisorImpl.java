@@ -107,13 +107,34 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				return;
 				
 			// 승인인 경우
-			} else {
+			} else if (action.equalsIgnoreCase("execute")) {
 				nextTask = setNextApproval(null, obj, apprLine);
 				if (logger.isInfoEnabled()) {
 					logger.info("Execute Approval [" + obj.getName() + "/" + obj.getTitle() + " (TaskId : " + obj.getObjId() + " , User : " + obj.getAssignee() + ") ]");
 				}
 				if (nextTask != null)
 					status = nextTask.getStatus();
+			} else if (action.equalsIgnoreCase("cancel")) {
+				//MisUtil utill = new MisUtil();
+				//Map status = (Map)utill.getTaskStatusMap();
+				//String canceledStatus = (String) status.get("canceled");
+				String canceledStatus = "24";
+				obj.setStatus(canceledStatus);
+				getTskManager().setTask("linkeadvisor", obj, null);
+				
+				//PrcInstance 종료
+				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_ALL);
+				prcInst.setStatus(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("completed"), "completed"));
+				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
+				
+				//Apprline 종료
+				String aprStatus = "24";
+				apprLine.setStatus(aprStatus);
+				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
+				if (logger.isInfoEnabled()) {
+					logger.info("Cancel Approval [" + obj.getName() + "/" + obj.getTitle() + " (TaskId : " + obj.getObjId() + " , User : " + obj.getAssignee() + ") ]");
+				}
+				return;
 			}
 			
 			apprLine.setStatus(status);
@@ -321,10 +342,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			
 			String txtApprovalSubject = obj.getExtendedPropertyValue("txtApprovalSubject");
 			String txtApprovalComments = obj.getExtendedPropertyValue("txtApprovalComments");
+			String refAppLineDefId = obj.getExtendedPropertyValue("refAppLineDefId");
 			
 			TskTask apprTask = new TskTask();
 			apprTask.setProcessInstId(prcInstId);
-			apprTask.setName("전자결재이름(임시)");
+			apprTask.setName(appr.getName());
 			apprTask.setTitle(txtApprovalSubject);
 //			apprTask.setName(name);
 //			apprTask.setTitle(title);
@@ -351,6 +373,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			
 			apprTask.setExtendedPropertyValue("taskRef", taskRef);
 			apprTask.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
+			apprTask.setExtendedPropertyValue("refAppLineDefId", refAppLineDefId);
+			apprTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
 			apprTask.setExtendedPropertyValue("approval", appr.getObjId());
 			this.getTskManager().setTask("linkadvisor", apprTask, null);
 			

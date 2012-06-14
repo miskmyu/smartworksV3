@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.service.ILoginService;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements ILoginService {
 
+	private static ILoginUserManager getLoginUserManager() {
+		return SwManagerFactory.getInstance().getLoginUserManager();
+	}
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
@@ -26,7 +30,7 @@ public class LoginServiceImpl implements ILoginService {
 			UserInfo[] finalUserInfos = null;
 			List<UserInfo> finalUserInfoList = new ArrayList<UserInfo>();
 			if(!CommonUtil.isEmpty(userInfos)) {
-				SwManagerFactory.getInstance().getLoginUserManager().removeLoginUser(userId, userId);
+				getLoginUserManager().removeLoginUser(userId, userId);
 				for(UserInfo userInfo : userInfos) {
 					if(userInfo.getId().equals(userId))
 						continue;

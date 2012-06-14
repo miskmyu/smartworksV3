@@ -50,6 +50,7 @@ import net.smartworks.server.engine.config.model.SwcWebServiceCond;
 import net.smartworks.server.engine.config.model.SwcWebServiceParameter;
 import net.smartworks.server.engine.config.model.SwcWorkHour;
 import net.smartworks.server.engine.config.model.SwcWorkHourCond;
+import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
@@ -73,22 +74,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class SettingsServiceImpl implements ISettingsService {
 
-	private ISwoManager getSwoManager() {
+	private static ISwoManager getSwoManager() {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
-	private ISwcManager getSwcManager() {
+	private static ISwcManager getSwcManager() {
 		return SwManagerFactory.getInstance().getSwcManager();
 	}
-	private IAprManager getAprManager() {
+	private static IAprManager getAprManager() {
 		return SwManagerFactory.getInstance().getAprManager();
 	}
-
-	ICommunityService communityService;
-	
-	@Autowired
-	public void setCommunityService(ICommunityService communityService) {
-		this.communityService = communityService;
+	private static IDocFileManager getDocManager() {
+		return SwManagerFactory.getInstance().getDocManager();
 	}
+
+	@Autowired
+	private ICommunityService communityService;
 
 	/*
 	 * (non-Javadoc)
@@ -189,7 +189,7 @@ public class SettingsServiceImpl implements ISettingsService {
 					Map<String, String> fileMap = files.get(i);
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
-					imgCompanyLogo = SwManagerFactory.getInstance().getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId);
+					imgCompanyLogo = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId);
 						//  SWConfig DB에 id가 없을 경우, create, 있으면 update
 					if(getSwoManager().getLogo(userId, companyId) == null){
 						getSwoManager().createLogo(userId, companyId, imgCompanyLogo);

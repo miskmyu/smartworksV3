@@ -39,6 +39,7 @@
 		<property name="description" column="aprDesc" type="text"/>
 		<property name="status" column="aprStatus" type="string" length="50" index="IxAprAprLine2"/>
 		<property name="correlation" column="aprCorr" type="string" length="50" index="IxAprAprLine3"/>
+		<property name="refAppLineDefId" column="aprRefAppLineDefId" type="string" length="50" index="IxAprAprLine4"/>
 		<array name="extendedProperties" table="AprAprLineExtProp">
 			<key column="aprObjId" foreign-key="FkAprAprLineExtProp"/>
 			<list-index column="aprSeq"/>

@@ -28,6 +28,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
+import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
 import net.smartworks.model.notice.NoticeMessage;
@@ -39,23 +40,32 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.model.MailContent;
+import net.smartworks.server.engine.message.manager.IMessageManager;
 import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.message.model.MessageCond;
+import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.Opinion;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
+import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoGroup;
 import net.smartworks.server.engine.organization.model.SwoGroupCond;
 import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
+import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.INoticeService;
+import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
@@ -69,12 +79,32 @@ import org.springframework.util.StringUtils;
 @Service
 public class NoticeServiceImpl implements INoticeService {
 
-	private IMailService mailService;
+	private static IPublishNoticeManager getPublishNoticeManager() {
+		return SwManagerFactory.getInstance().getPublishNoticeManager();
+	}
+	private static IMessageManager getMessageManager() {
+		return SwManagerFactory.getInstance().getMessageManager();
+	}
+	private static ITskManager getTskManager() {
+		return SwManagerFactory.getInstance().getTskManager();
+	}
+	private static IPrcManager getPrcManager() {
+		return SwManagerFactory.getInstance().getPrcManager();
+	}
+	private static IOpinionManager getOpinionManager() {
+		return SwManagerFactory.getInstance().getOpinionManager();
+	}
+	private static IWorkListManager getWorkListManager() {
+		return SwManagerFactory.getInstance().getWorkListManager();
+	}
+	private static ISwoManager getSwoManager() {
+		return SwManagerFactory.getInstance().getSwoManager();
+	}
 
 	@Autowired
-	public void setMailService(IMailService mailService){
-		this.mailService = mailService;
-	}
+	private IMailService mailService;
+	@Autowired
+	private ISeraService seraService;
 
 	public Notice[] getNotices(String userId, int noticeType) throws Exception {
 
@@ -92,7 +122,7 @@ public class NoticeServiceImpl implements INoticeService {
 			message.setType(Notice.TYPE_MESSAGE);
 
 			PublishNoticeCond messageCond = new PublishNoticeCond(userId, PublishNotice.TYPE_MESSAGE, PublishNotice.REFTYPE_MESSAGE, null);
-			long totalMessageSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, messageCond);
+			long totalMessageSize = getPublishNoticeManager().getPublishNoticeSize(userId, messageCond);
 			
 			message.setLength((int)totalMessageSize);
 		}
@@ -105,7 +135,7 @@ public class NoticeServiceImpl implements INoticeService {
 			//내가 작성한 정보관리 업무 + 내가 수행한 태스크가 속해있는 프로세스 인스턴스업무
 
 			PublishNoticeCond commentCond = new PublishNoticeCond(userId, PublishNotice.TYPE_COMMENT, null, null);
-			long totalCommentSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, commentCond);
+			long totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(userId, commentCond);
 			
 			comment.setLength((int)totalCommentSize);
 		}
@@ -117,7 +147,7 @@ public class NoticeServiceImpl implements INoticeService {
 			assigned.setType(Notice.TYPE_ASSIGNED);
 			
 			PublishNoticeCond assignedCond = new PublishNoticeCond(userId, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, null);
-			long totalAssignedSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, assignedCond);
+			long totalAssignedSize = getPublishNoticeManager().getPublishNoticeSize(userId, assignedCond);
 			
 			assigned.setLength((int)totalAssignedSize);
 		}
@@ -133,7 +163,7 @@ public class NoticeServiceImpl implements INoticeService {
 			// TOTAL DELAYED TASK
 
 			PublishNoticeCond delayedTaskCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_DELAYED_TASK, null);
-			long totalDelayedTaskSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
+			long totalDelayedTaskSize = getPublishNoticeManager().getPublishNoticeSize(userId, delayedTaskCond);
 			
 //			TaskWorkCond delayedTaskCond = new TaskWorkCond();
 //			delayedTaskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
@@ -146,7 +176,7 @@ public class NoticeServiceImpl implements INoticeService {
 			// TOTAL REQUESTER
 
 			PublishNoticeCond requestCond = new PublishNoticeCond(userId, PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, null);
-			long totalRequestSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(userId, requestCond);
+			long totalRequestSize = getPublishNoticeManager().getPublishNoticeSize(userId, requestCond);
 			
 			notificationMessage.setLength((int)totalDelayedTaskSize + (int)totalRequestSize);
 
@@ -171,7 +201,7 @@ public class NoticeServiceImpl implements INoticeService {
 		if (noticeType == SeraNotice.TYPE_FRIEND) {
 			friend = new Notice();
 			friend.setType(SeraNotice.TYPE_FRIEND);
-			SeraUserInfo[] seraUserInfos = SwServiceFactory.getInstance().getSeraService().getFriendRequestsByUserId(userId, null, FriendInformList.MAX_ALL_FRIEND_LIST);
+			SeraUserInfo[] seraUserInfos = seraService.getFriendRequestsByUserId(userId, null, FriendInformList.MAX_ALL_FRIEND_LIST);
 			int length = 0;
 			if(!CommonUtil.isEmpty(seraUserInfos))
 				length = seraUserInfos.length;
@@ -242,7 +272,7 @@ public class NoticeServiceImpl implements INoticeService {
 			MessageCond messageCond = new MessageCond();
 			messageCond.setTargetUser(userId);
 			messageCond.setReadStatus(MessageCond.TYPE_STATUS_UNREAD);
-			long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(userId, messageCond);
+			long totalMessageSize = getMessageManager().getMessageSize(userId, messageCond);
 			message.setLength((int)totalMessageSize);
 		}
 		//---------------------------------------------------------------------------------------
@@ -256,7 +286,7 @@ public class NoticeServiceImpl implements INoticeService {
 			myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
 			myTaskCond.setAssignee(userId);
 			
-			TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(userId, myTaskCond, IManager.LEVEL_LITE);
+			TskTask[] myTask = getTskManager().getTasks(userId, myTaskCond, IManager.LEVEL_LITE);
 			if (myTask != null) {
 				List instanceIdList = new ArrayList();
 				
@@ -292,7 +322,7 @@ public class NoticeServiceImpl implements INoticeService {
 					OpinionCond opinionCond = new OpinionCond();
 					opinionCond.setRefIdIns(opinionRefIds);
 					
-					long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(userId, opinionCond);
+					long totalCommentSize = getOpinionManager().getOpinionSize(userId, opinionCond);
 					comment.setLength((int)totalCommentSize);
 					
 				} else {
@@ -318,7 +348,7 @@ public class NoticeServiceImpl implements INoticeService {
 			taskCond.setPageNo(0);
 			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, taskCond);
+			long totalSize = getWorkListManager().getTaskWorkListSize(userId, taskCond);
 			
 			assigned.setLength((int)totalSize);
 		}
@@ -340,12 +370,12 @@ public class NoticeServiceImpl implements INoticeService {
 			delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			delayedTaskCond.setExpectEndDateTo(new LocalDate());
 			
-			long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
+			long totalDelayedTaskSize = getWorkListManager().getTaskWorkListSize(userId, delayedTaskCond);
 			
 			// TOTAL REQUESTER
 			SwoGroupCond groupCond = new SwoGroupCond();
 			groupCond.setGroupLeader(userId);
-			SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(userId, groupCond, IManager.LEVEL_ALL);
+			SwoGroup[] groups = getSwoManager().getGroups(userId, groupCond, IManager.LEVEL_ALL);
 			
 			long totalRequestSize = 0;
 			if (groups != null) {
@@ -483,7 +513,7 @@ public class NoticeServiceImpl implements INoticeService {
 			pubNotiCond.setRefId(noticeId);
 			pubNotiCond.setAssignee(user.getId());
 
-			PublishNotice notice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
+			PublishNotice notice = getPublishNoticeManager().getPublishNotice(user.getId(), pubNotiCond, null);
 			if (CommonUtil.isEmpty(notice))
 				return;
 			
@@ -491,7 +521,7 @@ public class NoticeServiceImpl implements INoticeService {
 			String objId = notice.getObjId();
 			String assignee = notice.getAssignee();
 			
-			SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user.getId(), objId);
+			getPublishNoticeManager().removePublishNotice(user.getId(), objId);
 			SmartUtil.increaseNoticeCountByNoticeType(assignee, noticeType);
 			
 		}catch (Exception e){
@@ -505,7 +535,7 @@ public class NoticeServiceImpl implements INoticeService {
 		User user = SmartUtil.getCurrentUser();
 		PrcProcessInstCond cond = new PrcProcessInstCond();
 		cond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
-		PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(user.getId(), cond, IManager.LEVEL_LITE);
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(user.getId(), cond, IManager.LEVEL_LITE);
 		if (prcInst == null)
 			return null;
 		return prcInst.getObjId();
@@ -545,9 +575,9 @@ public class NoticeServiceImpl implements INoticeService {
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
-				params.setSortingField(new SortingField("date", false));
+				params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
 				params.setUnreadEmail(true);
-				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
+				InstanceInfoList mailsList =  mailService.getMailInstanceList(Integer.toString(MailFolder.TYPE_SYSTEM_INBOX), params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
 				NoticeMessage[] notices = new NoticeMessage[instances.length];
@@ -575,18 +605,18 @@ public class NoticeServiceImpl implements INoticeService {
 				assignedCond.setRefType(PublishNotice.REFTYPE_ASSIGNED_TASK);
 				assignedCond.setAssignee(user.getId());
 
-				long totalSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(user.getId(), assignedCond);
+				long totalSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), assignedCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					assignedCond.setRefId(lastNoticeId);//TaskId
-					PublishNotice[] lastNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, null);
+					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastTaskCreationDate = lastNotice[0].getCreationDate();
 						assignedCond.setCreationDateTo(lastTaskCreationDate);
 					}
 				}
 				
-				PublishNotice[] pubNotis = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, null);
+				PublishNotice[] pubNotis = getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, null);
 				if (pubNotis == null || pubNotis.length == 0)
 					return assignTaskNoticeBox;
 				
@@ -601,7 +631,7 @@ public class NoticeServiceImpl implements INoticeService {
 				taskCond.setPageNo(0);
 				taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 				taskCond.setPageSize(10);
-				TaskWork[] tasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+				TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 				
 				if(tasks == null)
 					return assignTaskNoticeBox;
@@ -630,18 +660,18 @@ public class NoticeServiceImpl implements INoticeService {
 				
 				PublishNoticeCond commentCond = new PublishNoticeCond(user.getId(), PublishNotice.TYPE_COMMENT, null, null);
 				
-				long totalCommentSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
+				long totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					commentCond.setRefId(lastNoticeId);//opinionId
-					PublishNotice[] lastNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, null);
+					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastNoticeCreationDate = lastNotice[0].getCreationDate();
 						commentCond.setCreationDateTo(lastNoticeCreationDate);
 					}
 				}
 				
-				PublishNotice[] commentNotices = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, null);
+				PublishNotice[] commentNotices = getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, null);
 				if (commentNotices == null || commentNotices.length == 0)
 					return commentNoticeBox;
 				
@@ -656,7 +686,7 @@ public class NoticeServiceImpl implements INoticeService {
 				opinionCond.setPageNo(0);
 				opinionCond.setPageSize(10);
 				
-				Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+				Opinion[] opinions = getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
 
 				List<CommentInstanceInfo> commentInstanceInfoList = new ArrayList<CommentInstanceInfo>();
 				CommentInstanceInfo[] commentInstanceInfos = null;
@@ -720,18 +750,18 @@ public class NoticeServiceImpl implements INoticeService {
 				
 				PublishNoticeCond messageNoticeCond = new PublishNoticeCond(user.getId(), PublishNotice.TYPE_MESSAGE, null, null);
 				
-				long totalMessageSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(user.getId(), messageNoticeCond);
+				long totalMessageSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), messageNoticeCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					messageNoticeCond.setRefId(lastNoticeId);//messageid
-					PublishNotice[] lastNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), messageNoticeCond, null);
+					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), messageNoticeCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastNoticeCreationDate = lastNotice[0].getCreationDate();
 						messageNoticeCond.setCreationDateTo(lastNoticeCreationDate);
 					}
 				}
 				
-				PublishNotice[] messageNotices = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), messageNoticeCond, null);
+				PublishNotice[] messageNotices = getPublishNoticeManager().getPublishNotices(user.getId(), messageNoticeCond, null);
 				if (messageNotices == null || messageNotices.length == 0)
 					return messageNoticeBox;
 				
@@ -746,7 +776,7 @@ public class NoticeServiceImpl implements INoticeService {
 				messageCond.setPageNo(0);
 				messageCond.setPageSize(10);
 				
-				Message[] messages = SwManagerFactory.getInstance().getMessageManager().getMessages(user.getId(), messageCond, IManager.LEVEL_ALL);
+				Message[] messages = getMessageManager().getMessages(user.getId(), messageCond, IManager.LEVEL_ALL);
 				
 				if (messages == null)
 					return messageNoticeBox;
@@ -803,18 +833,18 @@ public class NoticeServiceImpl implements INoticeService {
 				delayedCond.setRefType(PublishNotice.REFTYPE_DELAYED_TASK);
 				delayedCond.setAssignee(user.getId());
 
-				long totalDelayedTaskSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(user.getId(), delayedCond);
+				long totalDelayedTaskSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), delayedCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					delayedCond.setRefId(lastNoticeId);//TaskId
-					PublishNotice[] lastNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), delayedCond, null);
+					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), delayedCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastTaskCreationDate = lastNotice[0].getCreationDate();
 						delayedCond.setCreationDateTo(lastTaskCreationDate);
 					}
 				}
 				
-				PublishNotice[] delayedNotices = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), delayedCond, null);
+				PublishNotice[] delayedNotices = getPublishNoticeManager().getPublishNotices(user.getId(), delayedCond, null);
 				if (delayedNotices != null && delayedNotices.length != 0) {
 					
 					String[] delayedTaskIdIns = new String[delayedNotices.length];
@@ -828,7 +858,7 @@ public class NoticeServiceImpl implements INoticeService {
 					delayedTaskCond.setPageNo(0);
 					delayedTaskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 					delayedTaskCond.setPageSize(10);
-					TaskWork[] delayedTasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), delayedTaskCond);
+					TaskWork[] delayedTasks = getWorkListManager().getTaskWorkList(user.getId(), delayedTaskCond);
 					
 					if(delayedTasks != null) {
 						InstanceInfo[] delayedTaskInstInfos = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), delayedTasks);
@@ -851,18 +881,18 @@ public class NoticeServiceImpl implements INoticeService {
 				reqJoinGropuCond.setRefType(PublishNotice.REFTYPE_GROUPJOINREQUEST);
 				reqJoinGropuCond.setAssignee(user.getId());
 
-				long totalReqJoinGroupSize = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNoticeSize(user.getId(), reqJoinGropuCond);
+				long totalReqJoinGroupSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), reqJoinGropuCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					reqJoinGropuCond.setRefId(lastNoticeId);//TaskId
-					PublishNotice[] lastNotice = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), reqJoinGropuCond, null);
+					PublishNotice[] lastNotice = getPublishNoticeManager().getPublishNotices(user.getId(), reqJoinGropuCond, null);
 					if (lastNotice != null && lastNotice.length != 0) {
 						Date lastTaskCreationDate = lastNotice[0].getCreationDate();
 						reqJoinGropuCond.setCreationDateTo(lastTaskCreationDate);
 					}
 				}
 				
-				PublishNotice[] reqJoinGroupNotices = SwManagerFactory.getInstance().getPublishNoticeManager().getPublishNotices(user.getId(), reqJoinGropuCond, null);
+				PublishNotice[] reqJoinGroupNotices = getPublishNoticeManager().getPublishNotices(user.getId(), reqJoinGropuCond, null);
 				if (reqJoinGroupNotices != null && reqJoinGroupNotices.length != 0) {
 					for (int i = 0; i < reqJoinGroupNotices.length; i++) {
 						PublishNotice reqJoinGroupNotice = reqJoinGroupNotices[i];
@@ -876,7 +906,7 @@ public class NoticeServiceImpl implements INoticeService {
 						
 						UserInfo memberInfo = ModelConverter.getUserInfoByUserId(requester);
 						NoticeMessage joinRequestNotice = new NoticeMessage(groupId + "_" + requester, 0, memberInfo, new LocalDate(reqJoinGroupNotice.getCreationDate().getTime()));
-						joinRequestNotice.setGroup(ModelConverter.getGroupInfoBySwoGroup(null, SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL)));
+						joinRequestNotice.setGroup(ModelConverter.getGroupInfoBySwoGroup(null, getSwoManager().getGroup(user.getId(), groupId, IManager.LEVEL_ALL)));
 						joinRequestNotice.setType(NoticeMessage.TYPE_JOIN_REQUEST);
 						joinRequestNotice.setMessage(memberInfo.getLongName());
 						//NoticeMessageList.add(joinRequestNotice);
@@ -966,8 +996,8 @@ public class NoticeServiceImpl implements INoticeService {
 				RequestParams params = new RequestParams();
 				params.setPageSize(10);
 				params.setCurrentPage(1);
-				params.setSortingField(new SortingField("date", false));
-				InstanceInfoList mailsList =  mailService.getMailInstanceList("", params);
+				params.setSortingField(new SortingField(MailContent.A_SENTDATE, false));
+				InstanceInfoList mailsList =  mailService.getMailInstanceList(Integer.toString(MailFolder.TYPE_SYSTEM_INBOX), params);
 				InstanceInfo[] instances = mailsList.getInstanceDatas();
 				NoticeBox noticeBox = new NoticeBox();
 				NoticeMessage[] notices = new NoticeMessage[instances.length];
@@ -997,7 +1027,7 @@ public class NoticeServiceImpl implements INoticeService {
 					lastTaskCond.setProcessInstId(lastNoticeId);
 					lastTaskCond.setAssignee(user.getId());
 					lastTaskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
-					TskTask[] lastTasks = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), lastTaskCond, IManager.LEVEL_LITE);
+					TskTask[] lastTasks = getTskManager().getTasks(user.getId(), lastTaskCond, IManager.LEVEL_LITE);
 					if (lastTasks != null) {
 						lastTaskCreationDate = lastTasks[0].getCreationDate();
 					}
@@ -1011,12 +1041,12 @@ public class NoticeServiceImpl implements INoticeService {
 				taskCond.setPageNo(0);
 				taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 				
-				long totalSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
+				long totalSize = getWorkListManager().getTaskWorkListSize(user.getId(), taskCond);
 				
 				taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 				
 				taskCond.setPageSize(10);
-				TaskWork[] tasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), taskCond);
+				TaskWork[] tasks = getWorkListManager().getTaskWorkList(user.getId(), taskCond);
 				
 				if(tasks == null)
 					return assignTaskNoticeBox;
@@ -1046,7 +1076,7 @@ public class NoticeServiceImpl implements INoticeService {
 				myTaskCond.setStatus(TskTask.TASKSTATUS_COMPLETE);
 				myTaskCond.setAssignee(user.getId());
 				
-				TskTask[] myTask = SwManagerFactory.getInstance().getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
+				TskTask[] myTask = getTskManager().getTasks(user.getId(), myTaskCond, IManager.LEVEL_LITE);
 				if (myTask == null)
 					return commentNoticeBox;
 				List instanceIdList = new ArrayList();
@@ -1086,20 +1116,20 @@ public class NoticeServiceImpl implements INoticeService {
 				OpinionCond opinionCond = new OpinionCond();
 				opinionCond.setRefIdIns(opinionRefIds);
 				
-				long totalCommentSize = SwManagerFactory.getInstance().getOpinionManager().getOpinionSize(user.getId(), opinionCond);
+				long totalCommentSize = getOpinionManager().getOpinionSize(user.getId(), opinionCond);
 				
 				opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
 				opinionCond.setPageNo(0);
 				opinionCond.setPageSize(10);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
-					Opinion lastOpinion = SwManagerFactory.getInstance().getOpinionManager().getOpinion(user.getId(), lastNoticeId, null);
+					Opinion lastOpinion = getOpinionManager().getOpinion(user.getId(), lastNoticeId, null);
 					if (lastOpinion != null) {
 						opinionCond.setWrittenDateTo(lastOpinion.getCreationDate());
 					}
 				}
 				
-				Opinion[] opinions = SwManagerFactory.getInstance().getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+				Opinion[] opinions = getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
 
 				List<CommentInstanceInfo> commentInstanceInfoList = new ArrayList<CommentInstanceInfo>();
 				CommentInstanceInfo[] commentInstanceInfos = null;
@@ -1165,20 +1195,20 @@ public class NoticeServiceImpl implements INoticeService {
 				messageCond.setTargetUser(user.getId());
 				messageCond.setChecked(false);
 				
-				long totalMessageSize = SwManagerFactory.getInstance().getMessageManager().getMessageSize(user.getId(), messageCond);
+				long totalMessageSize = getMessageManager().getMessageSize(user.getId(), messageCond);
 
 				messageCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
 				messageCond.setPageNo(0);
 				messageCond.setPageSize(10);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
-					Message lastMessage = SwManagerFactory.getInstance().getMessageManager().getMessage(user.getId(), lastNoticeId, null);
+					Message lastMessage = getMessageManager().getMessage(user.getId(), lastNoticeId, null);
 					if (lastMessage != null) {
 						messageCond.setCreationDateTo(lastMessage.getCreationDate());
 					}
 				}
 				
-				Message[] messages = SwManagerFactory.getInstance().getMessageManager().getMessages(user.getId(), messageCond, IManager.LEVEL_ALL);
+				Message[] messages = getMessageManager().getMessages(user.getId(), messageCond, IManager.LEVEL_ALL);
 				
 				if (messages == null)
 					return messageNoticeBox;
@@ -1237,8 +1267,8 @@ public class NoticeServiceImpl implements INoticeService {
 				delayedTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 				delayedTaskCond.setExpectEndDateTo(new LocalDate());
 				
-				long totalDelayedTaskSize = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkListSize(user.getId(), delayedTaskCond);
-				TaskWork[] delayedTasks = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(user.getId(), delayedTaskCond);
+				long totalDelayedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), delayedTaskCond);
+				TaskWork[] delayedTasks = getWorkListManager().getTaskWorkList(user.getId(), delayedTaskCond);
 				
 				if(delayedTasks != null) {
 					InstanceInfo[] delayedTaskInstInfos = ModelConverter.getInstanceInfoArrayByTaskWorkArray(user.getId(), delayedTasks);
@@ -1256,7 +1286,7 @@ public class NoticeServiceImpl implements INoticeService {
 				//내가 운영하는 그룹정보
 				SwoGroupCond groupCond = new SwoGroupCond();
 				groupCond.setGroupLeader(user.getId());
-				SwoGroup[] groups = SwManagerFactory.getInstance().getSwoManager().getGroups(user.getId(), groupCond, IManager.LEVEL_ALL);
+				SwoGroup[] groups = getSwoManager().getGroups(user.getId(), groupCond, IManager.LEVEL_ALL);
 				
 				long totalRequestSize = 0;
 				if (groups != null) {

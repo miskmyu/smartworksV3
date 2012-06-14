@@ -312,7 +312,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #upload div {float:left; padding-right:15px}
 
 .up_wrap {position:relative; margin: 0 3px 10px}
-.upload_up_wrap {width:723px}
+.upload_up_wrap {width:760px}
 .detail_up_wrap {margin:0 15px 15px} /* 상세보기 페이지의 up_wrap */ 
 
 /* UpLoad Search */
@@ -367,7 +367,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
 .txt_btn .image_pos {position: relative; bottom:2px} /* 우측 메뉴중 이미지가 올때 위치 조정 */
-.txt_btn.deliver {margin: 0 10px 10px; color: #979797}
+.txt_btn.deliver {margin: 0 10px 10px; color: #979797; border-bottom: 1px dotted #cccccc}
 
 /* 검색- 자동 완성어 list, layer_pop list */
 .srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}

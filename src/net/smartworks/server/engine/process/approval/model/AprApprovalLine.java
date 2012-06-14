@@ -19,10 +19,12 @@ public class AprApprovalLine extends MisObject {
 	private static final String NAME = CommonUtil.toName(AprApprovalLine.class, PREFIX);
 
 	public static final String A_CORRELATION = "correlation";
+	public static final String A_REFAPPLINEDEFID = "refAppLineDefId";
 	public static final String A_APPROVALS = "approvals";
 	public static final String A_APPROVAL = "approval";
 	
 	private String correlation;
+	private String refAppLineDefId;
 	private AprApproval[] approvals;
 	
 	public AprApprovalLine() {
@@ -203,5 +205,11 @@ public class AprApprovalLine extends MisObject {
 		if (approval == null)
 			return;
 		this.setApprovals(AprApproval.remove(this.getApprovals(), approval));
+	}
+	public String getRefAppLineDefId() {
+		return refAppLineDefId;
+	}
+	public void setRefAppLineDefId(String refAppLineDefId) {
+		this.refAppLineDefId = refAppLineDefId;
 	}
 }

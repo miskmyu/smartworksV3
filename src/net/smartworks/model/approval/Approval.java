@@ -16,14 +16,14 @@ public class Approval{
 	public static final Approval DEFAULT_APPROVAL_FINAL_APPROVER = new Approval(SmartMessage.getString("approval.title.final_approver"), Approval.APPROVER_CHOOSE_ON_RUNNING, null, 0, 1, 0);
 
 	private String name;
-	private int approverType;
+	private int approverType;//팀장 자동, 부서장, 이냐에 대한 코드값
 	private int status = Instance.STATUS_NOT_YET; // Instance에 있는 status를 같이 사용한다.
 	private User approver;
 	private int meanTimeDays=0;
 	private int meanTimeHours=0;
 	private int meanTimeMinutes=30;
 	private String dueDate;
-	private LocalDate completedDate;
+	private LocalDate completedDate;//실행되었을경우
 	private boolean isMandatory = true;
 	private boolean isModifiable = true;
 

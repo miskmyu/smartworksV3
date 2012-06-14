@@ -205,6 +205,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 		String approvalLine = obj.getExtendedAttributeValue("approvalLine");
 		String txtApprovalSubject = obj.getExtendedAttributeValue("txtApprovalSubject");
 		String txtApprovalComments = obj.getExtendedAttributeValue("txtApprovalComments");
+		String refAppLineDefId = obj.getExtendedAttributeValue("refAppLineDefId");
 		
 		String forwardSubject = obj.getExtendedAttributeValue("txtForwardSubject");
 		String forwardForwardee = obj.getExtendedAttributeValue("txtForwardForwardee");
@@ -277,6 +278,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 					task.setExtendedPropertyValue("approvalLine", approvalLine);
 					task.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
 					task.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+					task.setExtendedPropertyValue("refAppLineDefId", refAppLineDefId);
 				}	
 				//MEATADATA
 				

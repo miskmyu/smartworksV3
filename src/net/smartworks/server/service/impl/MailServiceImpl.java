@@ -81,7 +81,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	private static final long serialVersionUID = 1L;
 
-	private IMailManager getMailManager() {
+	private static IMailManager getMailManager() {
 		return SwManagerFactory.getInstance().getMailManager();
 	}
 
@@ -465,13 +465,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			InboxController inCont = inFact.getInboxController();
 			inCont.checkEmail();
 
-			boolean unreadEmail = params.isUnreadEmail();
-
 			MailContentCond mailContentCond = new MailContentCond();
 			mailContentCond.setUsername(userId);
 			mailContentCond.setFolderId(Long.parseLong(folderId));
+
+			boolean unreadEmail = params.isUnreadEmail();
+			int unread = -1;
 			if(unreadEmail)
-				mailContentCond.setUnread(1);
+				unread = 1;
+			mailContentCond.setUnread(unread);
 
 			String searchKey = params.getSearchKey();
 			mailContentCond.setSearchKey(searchKey);

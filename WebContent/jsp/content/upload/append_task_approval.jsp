@@ -85,14 +85,14 @@
 			<%
 			if(!SmartUtil.isBlankObject(approvalLine)){
 			%>
-				<div class="fr mb2">
-	                <div class="fl mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
-					<a href="" class="js_pop_approval_line"><div class="fl icon_approval"></div></a>
+				<div class="" style="height: 20px">
+					<a href="" class="js_pop_approval_line"><div class="fr icon_approval"></div></a>
+	                <div class="fr mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
 				</div>
 			<%
 			}
 			%>
-			<div class="cb js_approval_line_box">
+			<div class="fr mb10 js_approval_line_box">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<%if(!SmartUtil.isBlankObject(approvalLine)){ %><input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden"><%} %>		
 					<%
@@ -118,7 +118,6 @@
 							}else if(approval.getStatus() == Instance.STATUS_DRAFTED){
 								statusIcon = "approval_status_drafted_" + cUser.getLocale();
 							}
-							
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
 						<!-- 결재선 -->
@@ -172,7 +171,7 @@
 					%>
 				</form>
 			</div>
-			<span class="js_community_popup"></span>
+			<span class="js_community_popup" style="position: relative; top: 125px; left: 185px"></span>
 		</div>
 	</div>
 	<!-- 결재선 Section //-->
@@ -247,7 +246,7 @@
 								<span ><%=approvalTask.getName() %></span>
 								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 					        	<span class="comment_box">
-									<textarea style="width:90%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+									<textarea style="width:74%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
 					        	</span>								
 						</li>
 						
