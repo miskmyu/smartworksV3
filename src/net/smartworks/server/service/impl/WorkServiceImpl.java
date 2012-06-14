@@ -10,11 +10,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.CommunityInfo;
-import net.smartworks.model.community.info.DepartmentInfo;
-import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.ConditionOperator;
 import net.smartworks.model.filter.SearchFilter;
@@ -71,7 +67,6 @@ import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoUser;
-import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
@@ -86,7 +81,6 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -100,43 +94,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class WorkServiceImpl implements IWorkService {
 
-	private ICtgManager getCtgManager() {
+	private static ICtgManager getCtgManager() {
 		return SwManagerFactory.getInstance().getCtgManager();
 	}
-	private IPkgManager getPkgManager() {
+	private static IPkgManager getPkgManager() {
 		return SwManagerFactory.getInstance().getPkgManager();
 	}
-	private ISwdManager getSwdManager() {
+	private static ISwdManager getSwdManager() {
 		return SwManagerFactory.getInstance().getSwdManager();
 	}
-	private ISwfManager getSwfManager() {
+	private static ISwfManager getSwfManager() {
 		return SwManagerFactory.getInstance().getSwfManager();
 	}
-	private IItmManager getItmManager() {
+	private static IItmManager getItmManager() {
 		return SwManagerFactory.getInstance().getItmManager();
 	}
-	private ISwoManager getSwoManager() {
+	private static ISwoManager getSwoManager() {
 		return SwManagerFactory.getInstance().getSwoManager();
 	}
-	private IDocFileManager getDocManager() {
+	private static IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
 	}
-	private ITskManager getTskManager() {
+	private static ITskManager getTskManager() {
 		return SwManagerFactory.getInstance().getTskManager();
 	}
-	private IColManager getColManager() {
+	private static IColManager getColManager() {
 		return SwManagerFactory.getInstance().getColManager();
 	}
-	private IOpinionManager getOpinionManager() {
+	private static IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
 	}
 
+	@Autowired
 	private AuthenticationManager authenticationManager;
-
-    @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
 
 	/*
 	 * (non-Javadoc)

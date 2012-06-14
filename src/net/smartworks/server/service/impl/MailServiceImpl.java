@@ -81,7 +81,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	private static final long serialVersionUID = 1L;
 
-	private IMailManager getMailManager() {
+	private static IMailManager getMailManager() {
 		return SwManagerFactory.getInstance().getMailManager();
 	}
 
