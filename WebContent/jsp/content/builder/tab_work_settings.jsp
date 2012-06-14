@@ -137,7 +137,7 @@
 						FormField[] displayFields = informationWork.getDisplayFields();
 					%>
 						<!-- 보이는 항목,안보이는 항목 설정-->
-						<div class="cb">
+						<div class="oh">
 							<div class="left40 gray_style">
 								<table class="js_display_field_items">
 									<tr>
@@ -238,7 +238,7 @@
 						</div>
 						<!-- 보이는 항목, 안보이는 항목 //-->
 	
-						<div class=" cb pt20">
+						<div class="pt20">
 							<table>
 								<tbody class="js_display_field_list">
 									<tr class="tit_bg">

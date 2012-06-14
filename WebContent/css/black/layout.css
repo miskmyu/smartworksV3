@@ -189,7 +189,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -71px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block}
 .icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -48px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block}
 .icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block}
-.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -483px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -509px transparent; height:16px; width: 25px; margin: 0 5px 0 0; display: inline-block}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px}
@@ -343,7 +343,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold}
 
 /* Table Format */
-.up {border:1px solid #c7c7c7; padding:3px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
+.up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
 .fieldline {border:1px solid #c7c7c7; left:0px; margin-top:0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 
@@ -401,7 +401,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .form_wrap .input_check {float:left; margin-left:5px}
 .form_title {padding:10px}
 .form_title .title {font-weight:bold; font-size:14px; padding:0 0 0 19px; position:absolute} /* 타이틀 우측으로 아이콘이 있을때 */
-.form_title .title_noico  {font-weight:bold; font-size:14px; font-family:'돋움',Dotum, Arial, sans-serif; padding: 0 0 0 19px; margin-bottom:2px} /* 타이틀 우측으로 아이콘이 없을때 */
+.form_title .title_noico  {font-weight:bold; font-size:14px; font-family:'돋움',Dotum, Arial, sans-serif; padding: 0 0 0 19px; margin-bottom:2px; float: none} /* 타이틀 우측으로 아이콘이 없을때 */
 .form_contents {padding:0 20px 10px; text-align: center}
 /* .form_contents table tr {height:30px} */
 .form_contents table .before_icon {padding:2px 10px 2px 0}
@@ -425,14 +425,14 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 /* Table - Fix 600px */
 .table_normal600 {position: relative}
 .table_normal600 table {width: 555px; min-width:555px !important}
-.table_normal600 table tr {height:32px}
-.boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; clear:both; padding:10px 0}
+.boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; padding:10px 0}
 
 /* table Gray */
 .gray_style table {border-collapse:collapse; border:1px solid #d8d8d8}
+.gray_style tr {height:32px}
 .gray_style th {border:1px solid #d8d8d8; padding: 2px 8px}
 .gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
-.gray_style td { background-color:#FFF; border-bottom:none}
+.gray_style td { background-color:#FFF; border-bottom:none; padding-left: 5px}
 
 /*라운드 포틀릿*/
 .section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; position:relative; width:100%; z-index:30}

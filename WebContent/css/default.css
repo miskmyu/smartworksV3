@@ -35,7 +35,7 @@ a.no_hover_line:hover {
 
 h1, h2, h3, h4, h5, h6, th, td, button, textarea, sub {
 	 text-align:left;
-	 padding:2px 1px;
+	 padding:2px;
 }
 
 body, button, select, input, textarea, sub {
@@ -47,7 +47,7 @@ input[type="text"] {
 	width:100%;
 }
 
-textarea {width:99.7%}
+textarea {width:99.6%}
 
 
 select, input, textarea {
@@ -118,7 +118,8 @@ abbr, acronym {
 }
 
 table {
-	border-spacing: 0pt;
+	border-spacing: 0;
+	border-collapse: collapse;
 	width: 100%;
 }
 td, th {display: table-cell; vertical-align: inherit}
@@ -194,6 +195,7 @@ mark, rp, rt, ruby, summary, time {
 .mb2 {margin-bottom:2px !important}
 .mb3 {margin-bottom:3px !important}
 .mb5 {margin-bottom:5px !important}
+.mb7 {margin-bottom:7px !important}
 .mb10 {margin-bottom:10px !important}
 .mb15 {margin-bottom: 15px !important}
 .mb20 {margin-bottom: 20px !important}

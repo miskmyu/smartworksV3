@@ -110,13 +110,13 @@
 							String signPicture = approval.getApprover() != null ? approval.getApprover().getSignPicture() : "";
 							String statusIcon = "";
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
-								statusIcon = "approval_status_completed_" + cUser.getLocale();
+								statusIcon = "approval_status completed_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_RETURNED){
-								statusIcon = "approval_status_returned_" + cUser.getLocale();
+								statusIcon = "approval_status returned_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_REJECTED){
-								statusIcon = "approval_status_rejected_" + cUser.getLocale();
+								statusIcon = "approval_status rejected_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_DRAFTED){
-								statusIcon = "approval_status_drafted_" + cUser.getLocale();
+								statusIcon = "approval_status drafted_" + cUser.getLocale();
 							}
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
@@ -127,6 +127,7 @@
 							<%
 							if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 							%>
+								<div class="t_date tc"></div>
 								<a class="name js_selected_approver_info js_userpicker_button">
 									<div class="noti_pic">
 										<img class="profile_size_s" src="images/no_user_picture_min.jpg">
@@ -143,14 +144,15 @@
 								String completedDateStr = (SmartUtil.isBlankObject(approval.getCompletedDate())) ? "" : approval.getCompletedDate().toLocalDateTimeSimpleString();
 								
 							%>
+								<div class="t_date tc">2011.06.12 14:45<%-- <%=completedDateStr %> --%></div>
 								<div class="name">
 									<div class="noti_pic">
 										<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
 									</div>
 									<div class="noti_in">
-										<div class="t_name"><%=CommonUtil.toNotNull(approver.getPosition()) %></div>
-										<div class="t_name"><%=approver.getName() %></div>
-										<div class="t_date"><%=completedDateStr %></div>
+										<div class="t_name">선임연구원<%-- <%=CommonUtil.toNotNull(approver.getPosition()) %> --%></div>
+										<div class="t_name">신현성<%-- <%=approver.getName() %> --%></div>
+										
 									</div>
 									<%
 									if(SmartUtil.isBlankObject(approvalLineInst)){
@@ -246,7 +248,7 @@
 								<span ><%=approvalTask.getName() %></span>
 								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 					        	<span class="comment_box">
-									<textarea style="width:74%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+									<textarea style="width:73%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
 					        	</span>								
 						</li>
 						

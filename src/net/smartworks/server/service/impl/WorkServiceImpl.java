@@ -149,12 +149,13 @@ public class WorkServiceImpl implements IWorkService {
 			String[] packageIdArray = null;
 			ItmMenuItem[] menuItems = null;
 			SmartWorkInfo[] workPkgs = null;
+			PkgPackage[] pkgs = null;
 			if(itmList != null) {
 				menuItems = itmList.getMenuItems();
 				if(!CommonUtil.isEmpty(menuItems)) {
 					int menuItemLength = menuItems.length;
 					packageIdArray = new String[menuItemLength];
-					for (int i = 0; i < menuItemLength; i++) {
+					for (int i=0; i<menuItemLength; i++) {
 						ItmMenuItem item = menuItems[i];
 						if(item != null) {
 							String packageId = item.getPackageId();
@@ -162,17 +163,19 @@ public class WorkServiceImpl implements IWorkService {
 						}
 					}
 				}
-
-				if(!CommonUtil.isEmpty(packageIdArray)) {
-					PkgPackageCond pkgCond = new PkgPackageCond();
-					pkgCond.setCompanyId(user.getCompanyId());
-					pkgCond.setPackageIdIns(packageIdArray);
-					PkgPackage[] pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_ALL);
-	
-					if(!CommonUtil.isEmpty(pkgs))
-						workPkgs = (SmartWorkInfo[])ModelConverter.getSmartWorkInfoArrayByPkgPackageArray(pkgs);
-				}
 			}
+
+			if(!CommonUtil.isEmpty(packageIdArray)) {
+				PkgPackageCond pkgCond = new PkgPackageCond();
+				pkgCond.setCompanyId(user.getCompanyId());
+				pkgCond.setPackageIdIns(packageIdArray);
+				pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_LITE);
+			}
+
+			if(!CommonUtil.isEmpty(pkgs)) {
+				workPkgs = ModelConverter.convertPkgPackagesToSmartWorkInfos(pkgs);
+			}
+
 			return workPkgs;
 		}catch (Exception e){
 			// Exception Handling Required

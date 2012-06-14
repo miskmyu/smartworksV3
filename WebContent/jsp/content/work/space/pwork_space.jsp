@@ -174,7 +174,7 @@
 			<!-- 상세보기 컨텐츠 -->
 			<div class="contents_space">
 				<div class="up_point pos_default js_form_content_pointer"></div>
-				<div class="form_wrap up up_padding form_read js_form_content"></div>
+				<div class="form_wrap up form_read js_form_content"></div>
 			</div>
 	
 			<!-- 버튼 영역 -->

@@ -40,8 +40,8 @@
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
-.contents_space table td,
-.contents_space table th { padding:3px 10px} 
+.contents_space table > td,
+.contents_space table > th { padding:3px 10px} 
 
 /* Replay Info */
 .task_information {vertical-align:bottom; position:absolute}
@@ -62,7 +62,7 @@
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
 .reply_section {background-color:#eef2f6; padding:10px; width:600px; margin-bottom:5px}
-.replay {margin:10px 0 0 15px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
+.replay {margin:10px 15px 0 15px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
 .replay .bg {background-color:#ededed}
 .list_reply {margin:0} /* 댓글 목록 */
 .reply_input {margin-top:10px} /* 댓글 입력 영역 */
@@ -74,13 +74,12 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
-.default_title_space{padding-bottom:3px !important} /* Case in No right Button */
+.default_title_space{padding-bottom:5px !important} /* Case in No right Button */
 .list_title_space,.default_title_space {padding:5px 0 0 0; overflow:hidden} /* Case in right Button */
 .list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 2px no-repeat;font-size:14px;font-weight:bold; padding: 0 8px 0 20px; float:left}
 
 .list_contents {}
 /*.list_contents table {min-width:700px}*/
-.list_contents table tr, .list_contents table td, .list_contents table th {border-bottom: 1px solid #DCDFE}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background: url("../../images/bg_thGradient.gif") 0 100% repeat-x}
 .list_contents table .tit_bg th{border-bottom:1px solid #ccc;border-top:2px solid #7f7f7f}
@@ -275,9 +274,9 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /*프로파일 화면 구성*/
 .photo_section {width:200px; float:left}
-.section_portlet .table_normal600{float:left}
-.photo_section .qq-upload-button{top:115px;left:40px}
-.t_text_s11{margin:30px 0 0 28px;text-align:center;width:110px}
+.section_portlet .table_normal600 {}
+.photo_section .qq-upload-button {top:115px;left:40px}
+.t_text_s11 {margin:30px 0 0 28px; text-align:center; width:110px}
 
 /* Icon button style */
 .title_line_btns {float:right; position:relative; top:-3px}
@@ -327,17 +326,18 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .approval_section .tit span, .forward_section .tit span { display:block; vertical-align:middle; text-align: center}
 
 .approval_group {margin: 0 10px 0 10px}
-.approval_area { width:130px; height:128px; border:1px solid #cccccc; padding:4px; float:left; margin: -1px 0 0 -1px}
+.approval_area { width:130px; height:150px; border:1px solid #cccccc; padding:4px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px}
 .approval_area .approval {height: 80px; overflow: hidden}
-.approval_area .name {height:26px; vertical-align: bottom; display: table-cell}
-.approval_area .name .t_name {font-size:11px; height: 11px; overflow: hidden}
-.approval_area .name .up {height: 13px; color:#868686}
+.approval_area .name {height:24px; vertical-align: bottom; display: table-cell}
+.approval_area .name .t_name {font-size:11px; height: 12px; overflow: hidden}
+.approval_area .name .up {height: 17px ! important; color:#868686}
 .approval_area .name .noti_pic {margin: 0 5px 0 0}
-.approval_area .name .noti_in {width: 104px; margin-left: 23px}
+.approval_area .name .noti_in {width: 101px; margin-left: 27px; height:24px}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
+.approval_area .t_date {margin:0 0 7px 0; height:18px}
 /* Approval Status Image */
-.approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px}
+.approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px !important; margin: 12px 30px 6px}
 .approval_status.drafted_ko {background-position:0 0}
 .approval_status.drafted_en {background-position:-77px 0}
 .approval_status.completed_ko {background-position:0 -69px}
