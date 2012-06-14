@@ -1387,9 +1387,43 @@ public class ModelConverter {
 		} else if (pkg.getType().equalsIgnoreCase("GANTT")) {
 			workInfo.setType(SmartWork.TYPE_SCHEDULE);	
 		}
+		workInfo.setDesc(pkg.getDescription());
 		return workInfo;
 	}
 
+	public static SmartWorkInfo[] convertPkgPackagesToSmartWorkInfos(PkgPackage[] pkgPackages) throws Exception {
+		try {
+			if(CommonUtil.isEmpty(pkgPackages))
+				return null;
+
+			int packageLength = pkgPackages.length;
+			SmartWorkInfo[] smartWorkInfos = new SmartWorkInfo[packageLength];
+
+			for(int i=0; i<packageLength; i++) {
+				PkgPackage pkgPackage = pkgPackages[i];
+				SmartWorkInfo smartWorkInfo = new SmartWorkInfo();
+				getWorkInfoByPkgPackage(smartWorkInfo, pkgPackage);
+				Map<String, WorkCategoryInfo> pkgCtgPathMap = getPkgCtgInfoMapByPackage(pkgPackage);
+				smartWorkInfo.setMyCategory(pkgCtgPathMap.get("category"));
+				smartWorkInfo.setMyGroup(pkgCtgPathMap.get("group"));
+				String packageStatus = pkgPackage.getStatus();
+				boolean isRunningPackage = false;
+				if (packageStatus.equalsIgnoreCase("DEPLOYED")) {
+					isRunningPackage = true;
+				} else if (packageStatus.equalsIgnoreCase("CHECKED-OUT") || packageStatus.equalsIgnoreCase("CHECKED-IN")) {
+					isRunningPackage = false;
+				}
+				smartWorkInfo.setRunning(isRunningPackage);
+				smartWorkInfo.setFavorite(true);
+				smartWorkInfos[i] = smartWorkInfo;
+			}
+
+			return smartWorkInfos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static SmartWorkInfo getSmartWorkInfoByPackageId(String packageId) throws Exception {
 		PkgPackage pkg = getPkgPackageByPackageId(packageId);
 		return getSmartWorkInfoByPkgPackage(null, pkg);
