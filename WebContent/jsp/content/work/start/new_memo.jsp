@@ -105,7 +105,7 @@ function submitForms() {
 
 		<!-- 폼- 확장 -->
 		<form name='frmNewMemo' class="js_validation_required js_click_start_form">
-			<div class="form_col">
+			<div class="">
  				<textarea name="txtMemo" class="bn required" rows="1" placeholder="<fmt:message key="common.upload.message.memo"/>"/></textarea>
  			</div>
  		</form>

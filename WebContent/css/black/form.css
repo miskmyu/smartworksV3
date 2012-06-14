@@ -16,6 +16,7 @@
 .form_read .form_layout table td,
 .form_read .form_layout table th {border: 1px solid #dadada; border-left: 0; border-right: 0; padding:0}
 
+.js_type_richEditor .form_label > span, .js_type_richEditor .form_value > span {padding:3px 0}
 
 /* 상세필터 */
 .filter_section {overflow:hidden;}
