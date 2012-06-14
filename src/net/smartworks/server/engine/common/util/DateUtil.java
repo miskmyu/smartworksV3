@@ -41,10 +41,12 @@ public class DateUtil {
 	public static final String DATEFORMATSTRING_XSDSMALLDATETIME = "yyyy-MM-dd'T'HH:mm:ss";
 	public static final String DATEFORMATSTRING_XSDDATETIMEZ = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	public static final String DATEFORMATSTRING_XSDDATE = "yyyy-MM-dd";
+	public static final String DATEFORMATSTRING_XSDDOTDATE = "yyyy.MM.dd";
 	public static final SimpleDateFormat DATEFORMAT_XSDDATETIME = new SimpleDateFormat(DATEFORMATSTRING_XSDDATETIME);
 	public static final SimpleDateFormat DATEFORMAT_XSDSMALLDATETIME = new SimpleDateFormat(DATEFORMATSTRING_XSDSMALLDATETIME);
 	public static final SimpleDateFormat DATEFORMAT_XSDDATETIMEZ = new SimpleDateFormat(DATEFORMATSTRING_XSDDATETIMEZ);
 	public static final SimpleDateFormat DATEFORMAT_XSDDATE = new SimpleDateFormat(DATEFORMATSTRING_XSDDATE);
+	public static final SimpleDateFormat DATEFORMAT_XSDDOTDATE = new SimpleDateFormat(DATEFORMATSTRING_XSDDOTDATE);
 	protected static final SimpleDateFormat DATEFORMAT[] = {
 		DATEFORMAT_XSDDATETIME,
 		DATEFORMAT_XSDSMALLDATETIME,
@@ -285,6 +287,12 @@ public class DateUtil {
 			return null;
 		DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 		String dateString = dateFormat.format(date);
+		return dateString;
+	}
+	public static String toXsdDotDateString(Date date) {
+		if (date == null)
+			return null;
+		String dateString = toString(date, DATEFORMAT_XSDDOTDATE);
 		return dateString;
 	}
 	public static String toXsdDateString(Date date) {

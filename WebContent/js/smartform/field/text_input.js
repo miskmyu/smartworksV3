@@ -40,6 +40,7 @@ SmartWorks.FormRuntime.TextInputBuilder.build = function(config) {
 	var $text = null;
 	if(readOnly){
 		$text = $('<div class="form_value" fieldId="' + id + '" style="width:' + valueWidth + '%"></div>').text(value);
+		$text = $text.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else if(multiLines > 1){	
 		$text = $('<div class="form_value" style="width:' + valueWidth + '%"><textarea rows="' + multiLines + '" name="' + id + '"' + required + '></textarea></div>');
 		$text.find('textarea').attr('value', value);

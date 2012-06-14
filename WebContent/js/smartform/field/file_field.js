@@ -97,6 +97,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.buildEx = function(config){
 
 SmartWorks.FormRuntime.FileFieldBuilder.serializeObject = function(fileFields){
 	var fileUploaders = fileFields.find('.qq-uploader');
+	
 	var filesJson = {};
 	for(var i=0; i<fileUploaders.length; i++){
 		var fileUploader = $(fileUploaders[i]);
@@ -112,14 +113,33 @@ SmartWorks.FormRuntime.FileFieldBuilder.serializeObject = function(fileFields){
 		fileJson['files'] = fileInfos;
 		filesJson[fieldId] =  fileJson;
 	}
+//	if(isEmpty(fileUploaders) && !isEmpty(fileFields)){
+//		for(var i=0; i<fileFields.length; i++){
+//			var fileField = $(fileFields[i]);
+//			var groupId = fileField.find('.form_value').attr('groupId');
+//			if(!isEmpty(groupId)){
+//				var fileJson = { groupId : groupId};
+////				var fileInfos = new Array();
+////				fileJson['files'] = fileInfos;
+//				filesJson[fileField.attr('fieldId')] = fileJson; 
+//			}
+//		}
+//	}
 	if(isEmpty(fileUploaders) && !isEmpty(fileFields)){
 		for(var i=0; i<fileFields.length; i++){
 			var fileField = $(fileFields[i]);
 			var groupId = fileField.find('.form_value').attr('groupId');
 			if(!isEmpty(groupId)){
 				var fileJson = { groupId : groupId};
-//				var fileInfos = new Array();
-//				fileJson['files'] = fileInfos;
+				var files = fileField.find('.qq-upload-file');
+				var fileInfos = new Array();
+				for(var j=0; j<files.length; j++){
+					var file = $(files[j]);
+					fileInfos.push({fileId : file.attr('fileId'), fileName : file.attr('fileName'), fileSize : file.attr('fileSize'), localFilePath : file.attr('localFilePath'),
+									folderId : file.attr('folderId'), msgId : file.attr('msgId'), partId : file.attr('partId')});
+				}
+				if(!isEmpty(fileInfos))
+					fileJson['files'] = fileInfos;
 				filesJson[fileField.attr('fieldId')] = fileJson; 
 			}
 		}

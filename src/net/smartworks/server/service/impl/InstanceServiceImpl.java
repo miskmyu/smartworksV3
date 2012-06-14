@@ -997,7 +997,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							dataField.setRefRecordId(null);
 							dataField.setRefForm(null);
 							dataField.setRefFormField(null);
-							dataField.setValue(DateUtil.toXsdDateString(new Date()));
+							dataField.setValue(DateUtil.toXsdDotDateString(new Date()));
 							resultStack.push(dataField);
 							
 						} else if (functionId.equals("mis:getCurrentUser")) {

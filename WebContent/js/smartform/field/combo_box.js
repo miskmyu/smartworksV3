@@ -57,6 +57,7 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 	$input.attr('fieldId', id);
 	if (readOnly) {
 		$input.find('select').attr('disabled', 'disabled');
+		$input = $input.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{
 		required = "";
 	}

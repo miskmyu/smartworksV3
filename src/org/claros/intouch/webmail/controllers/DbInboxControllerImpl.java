@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -19,18 +19,10 @@ import org.claros.commons.mail.models.ConnectionProfile;
 import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.protocols.Protocol;
 import org.claros.commons.mail.protocols.ProtocolFactory;
-import org.claros.commons.mail.utility.Constants;
 import org.claros.commons.utility.MD5;
 import org.claros.intouch.webmail.factory.FolderControllerFactory;
 import org.claros.intouch.webmail.factory.MailControllerFactory;
 import org.claros.intouch.webmail.models.MsgDbObject;
-import org.cometd.bayeux.client.ClientSession;
-import org.cometd.client.BayeuxClient;
-import org.cometd.client.transport.ClientTransport;
-import org.cometd.client.transport.LongPollingTransport;
-import org.eclipse.jetty.client.HttpClient;
-
-import com.sun.mail.pop3.POP3Folder;
 
 /**
  * @author Umut Gokbayrak
@@ -51,14 +43,53 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	 * @see org.claros.groupware.webmail.controllers.InboxController#checkEmail()
 	 */
 	
-	static Thread checkingEmail = null;
-	static String currentUserId = null;
-	static String currentCompanyId = null;
+	static List<CheckingModel> checkingQueue = new LinkedList<CheckingModel>();
+	synchronized static int addChecking(String userId, String companyId){
+		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(companyId))
+			return -1;
+		if(SmartUtil.isBlankObject(checkingQueue)){
+			checkingQueue.add(new CheckingModel(userId, companyId));
+			return 0;
+		}
+		
+		for(int index=0; index<checkingQueue.size(); index++){
+			CheckingModel checkingModel = checkingQueue.get(index);
+			if(checkingModel.getUserId().equals(userId))
+				return -1;
+		}
+		
+		checkingQueue.add(new CheckingModel(userId, companyId));
+		return checkingQueue.size()-1;
+	}
+	static void addThreadToChecking(int index, Thread thread){
+		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
+		
+		CheckingModel checkingModel = checkingQueue.get(index);
+		checkingModel.setThread(thread);
+		checkingQueue.set(index, checkingModel);
+	}
+	
+	static CheckingModel getChecking(Thread thread){
+		if(thread==null || SmartUtil.isBlankObject(checkingQueue))
+			return null;
+		
+		for(int index=0; index<checkingQueue.size(); index++){
+			CheckingModel checkingModel = checkingQueue.get(index);
+			if(checkingModel.getThread() == thread)
+				checkingQueue.remove(index);
+				return checkingModel;
+		}
+		return null;
+
+	}
 	public void checkEmailWithHeader() throws Exception {
 		
-		currentUserId = SmartUtil.getCurrentUser().getId();
-		currentCompanyId = SmartUtil.getCurrentUser().getCompanyId();
-		checkingEmail = new Thread(new Runnable() {
+		int index = -1;
+		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1){
+			return;
+		}
+		
+		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
@@ -154,7 +185,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					}
 					newMessages = toBeDeleted.size();
-					checkingEmail = null;
 				}catch(Exception e){
 				} finally {
 				}
@@ -164,23 +194,25 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
+				
+				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
-					SmartUtil.publishNoticeCount(currentUserId, currentCompanyId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
+					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
-				currentUserId = null;
-				checkingEmail = null;
 			}
 		});
-		checkingEmail.start();		
+		checkingEmail.start();
+		addThreadToChecking(index, checkingEmail);
 	}
 	public void checkEmail() throws Exception {
 		
-		currentUserId = SmartUtil.getCurrentUser().getId();
-		currentCompanyId = SmartUtil.getCurrentUser().getCompanyId();
-		checkingEmail = new Thread(new Runnable() {
+		int index = -1;
+		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;
+		
+		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
@@ -279,7 +311,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					}
 					newMessages = toBeDeleted.size();
-					checkingEmail = null;
 				}catch(Exception e){
 				} finally {
 				}
@@ -289,17 +320,46 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
+				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
-					SmartUtil.publishNoticeCount(currentUserId, currentCompanyId, new Notice(Notice.TYPE_MAILBOX, unreadMails));
+					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
-				currentUserId = null;
-				checkingEmail = null;
 			}
 		});
-		checkingEmail.start();		
+		checkingEmail.start();
+		addThreadToChecking(index, checkingEmail);
 	}
-
 }
+
+class CheckingModel {
+	CheckingModel(String userId, String companyId) {
+		this.userId = userId;
+		this.companyId = companyId;
+	}
+	
+	protected Thread thread=null;
+	protected String userId=null;
+	protected String companyId=null;
+	public Thread getThread() {
+		return thread;
+	}
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}	
+}
+

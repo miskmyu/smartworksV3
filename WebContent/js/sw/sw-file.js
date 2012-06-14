@@ -268,7 +268,7 @@ function viewFiles(groupId, target){
 					file.attr('fileId', data[i].id);
 					file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
 					file.find('.qq-upload-file').text(displayFileName);
-		        	file.find('.qq-upload-file').attr('fileName', fileName).attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName);
+		        	file.find('.qq-upload-file').attr('fileName', fileName).attr('fileId', data[i].id).attr('fileSize', data[i].fileSize).attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName);
 					file.find('.qq-upload-size').text(getBytesWithUnit(data[i].fileSize));
 				}
 			},

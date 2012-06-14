@@ -39,6 +39,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	var $number = null;
 	if(readOnly){
 		$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+		$number = $number.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{	
 		$number = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text"' + required + '></div>');
 		$number.find('input').attr('value',value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
