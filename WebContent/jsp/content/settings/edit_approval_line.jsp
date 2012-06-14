@@ -82,7 +82,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="form_wrap up up_padding mb2 js_edit_approval_line_page" lineId="<%=CommonUtil.toNotNull(lineId)%>">
+<div class="form_wrap up mb2 js_edit_approval_line_page" lineId="<%=CommonUtil.toNotNull(lineId)%>">
 	<div class="form_title">
 		<%
 		if(SmartUtil.isBlankObject(lineId)){

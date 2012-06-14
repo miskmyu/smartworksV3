@@ -343,7 +343,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold}
 
 /* Table Format */
-.up {border:1px solid #c7c7c7; padding:3px 0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
+.up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
 .fieldline {border:1px solid #c7c7c7; left:0px; margin-top:0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 

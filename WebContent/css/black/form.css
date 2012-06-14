@@ -1,10 +1,10 @@
 @charset "utf-8";
 /* CSS Document */
 
-.form_layout {padding:10px;}
-.form_col {}
-.form_row {}
-.form_label, .form_value {float:left;}
+.form_layout {padding:10px; line-height: 20px}
+.form_label, .form_value {float:left}
+.form_label {background-color:#ECECEC}
+.form_label span, .form_value span {padding: 0 10px}
 .form_value input[type="text"] {width:100%}
 .form_value textarea {width:99.8% !important}
 .form_value, .form_value a span,
@@ -12,10 +12,10 @@
 .form_layout.con th, .boTb th {font-weight:normal; color: #454545}
 
 .form_layout table td,
-.form_layout table th {padding:3px 10px; border-bottom: none}
+.form_layout table th {padding:0; border-bottom: none}
 
 .form_read .form_layout table td,
-.form_read .form_layout table th {border-bottom: 1px solid #ececec}
+.form_read .form_layout table th {border: 1px solid #dadada; border-left: 0; border-right: 0}
 
 /* 상세필터 */
 .filter_section {overflow:hidden;}

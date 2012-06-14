@@ -80,7 +80,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="form_wrap up up_padding mb2 js_edit_work_hour_page" policyId="<%=CommonUtil.toNotNull(policyId)%>">
+<div class="form_wrap up mb2 js_edit_work_hour_page" policyId="<%=CommonUtil.toNotNull(policyId)%>">
 	<div class="form_title">
 		<%
 		if(SmartUtil.isBlankObject(policyId)){

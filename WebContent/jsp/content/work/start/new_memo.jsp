@@ -101,7 +101,7 @@ function submitForms() {
 
 <div class="up_wrap js_new_memo_page" workId="<%=SmartWork.ID_MEMO_MANAGEMENT%>">
 	<div class="up_point pos_works js_up_pointer"></div>
-	<div class="form_wrap up up_padding">
+	<div class="form_wrap up">
 
 		<!-- 폼- 확장 -->
 		<form name='frmNewMemo' class="js_validation_required js_click_start_form">

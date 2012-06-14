@@ -127,7 +127,7 @@ function submitForms() {
 
 <div class="up_wrap js_new_event_page" workId="<%=SmartWork.ID_EVENT_MANAGEMENT%>">
 	<div class="up_point pos_works js_up_pointer"></div>
-	<div class="form_wrap up up_padding">
+	<div class="form_wrap up">
 		<!-- 폼- 확장 -->
 		<form name="frmNewEvent" class="js_validation_required js_click_start_form">
 			<!-- 새로운 이벤트를 등록하기 위한 입력화면을 스마트폼을 이용하여 자동으로 그린다.. -->
