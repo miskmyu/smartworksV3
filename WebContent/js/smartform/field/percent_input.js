@@ -44,6 +44,7 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 	
 	if (readOnly) {
 		$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(percentValue);
+		$percent = $percent.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	} else {
 		$percent = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text"' + required + '/></div>');
 		$percent.find('input').attr('value', percentValue);
