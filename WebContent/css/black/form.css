@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
-
-.form_layout {padding:10px; line-height: 23px}
+.form_wrap form {line-height: 23px}
+.form_layout {padding:10px}
 .form_col {padding:0 5px}
 .form_label, .form_value {float:left}
 .form_label {color:#23579e}
@@ -10,7 +10,7 @@
 .form_value, .form_value a span,
 .form_layout.con td, .boTb td {color: #555555 !important}
 .form_layout.con th, .boTb th {color: #454545; vertical-align: top}
-.form_layout td, .form_layout th {border-bottom: 1px solid #ededed}
+.form_layout td, .form_layout th {border-bottom: 1px dotted #ededed}
 
 
 /* 상세필터 */

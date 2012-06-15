@@ -104,7 +104,7 @@ a .pop_icon_message:hover { background-position:-202px -34px}
 .btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
+    		float:left; color:#fff !important; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
 .btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 .btn_hpadding {margin:7px 0;}
