@@ -148,9 +148,9 @@
 							int editVarCount = (externalForm.getEditVariables()==null) ? 0 : externalForm.getEditVariables().length;
 							%>
 							<tr style="display:none" varCount="<%=editVarCount %>">
-								<th><input class="fieldline required variableName" name="txtEditVariableName" type="text" value=""></th>
-								<th><input class="fieldline required elementName" name="txtEditElementName" type="text" value=""></th>
-								<th><select class="fieldline required elementType" name="selEditElementType">
+								<td><input class="fieldline required variableName" name="txtEditVariableName" type="text" value=""></td>
+								<td><input class="fieldline required elementName" name="txtEditElementName" type="text" value=""></td>
+								<td><select class="fieldline required elementType" name="selEditElementType">
 										<%
 										for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 											String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -161,7 +161,7 @@
 										}
 										%>
 									</select>
-								</th>
+								</td>
 								<th><a href="" class="js_remove_variable_item"> - </a></th>
 							</tr>				
 							<%
@@ -171,9 +171,9 @@
 									Variable editVariable = editVariables[count-1]; 
 							%>
 									<tr>
-										<th><input class="fieldline required" name="txtEditVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(editVariable.getName())%>"></th>
-										<th><input class="fieldline required" name="txtEditElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(editVariable.getElementName())%>"></th>
-										<th><select class="fieldline required" name="selEditElementType<%=count %>">
+										<td><input class="fieldline required" name="txtEditVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(editVariable.getName())%>"></td>
+										<td><input class="fieldline required" name="txtEditElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(editVariable.getElementName())%>"></td>
+										<td><select class="fieldline required" name="selEditElementType<%=count %>">
 												<%
 												for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 													String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -184,7 +184,7 @@
 												}
 												%>
 											</select>
-										</th>
+										</td>
 										<th><a href="" class="js_remove_variable_item"> - </a></th>
 									</tr>				
 							<%
@@ -208,9 +208,9 @@
 							int viewVarCount = (externalForm.getViewVariables()==null) ? 0 : externalForm.getViewVariables().length;
 							%>
 							<tr style="display:none" varCount="<%=viewVarCount%>">
-								<th><input class="fieldline required variableName" name="txtViewVariableName" type="text" value=""></th>
-								<th><input class="fieldline required elementName" name="txtViewElementName" type="text" value=""></th>
-								<th><select class="fieldline required elementType" name="selViewElementType">
+								<td><input class="fieldline required variableName" name="txtViewVariableName" type="text" value=""></td>
+								<td><input class="fieldline required elementName" name="txtViewElementName" type="text" value=""></td>
+								<td><select class="fieldline required elementType" name="selViewElementType">
 										<%
 										for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 											String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -231,9 +231,9 @@
 									Variable viewVariable = viewVariables[count-1]; 
 							%>
 									<tr>
-										<th><input class="fieldline required" name="txtViewVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(viewVariable.getName())%>"></th>
-										<th><input class="fieldline required" name="txtViewElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(viewVariable.getElementName())%>"></th>
-										<th><select class="fieldline required" name="selViewElementType<%=count %>">
+										<td><input class="fieldline required" name="txtViewVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(viewVariable.getName())%>"></td>
+										<td><input class="fieldline required" name="txtViewElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(viewVariable.getElementName())%>"></td>
+										<td><select class="fieldline required" name="selViewElementType<%=count %>">
 												<%
 												for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 													String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -244,7 +244,7 @@
 												}
 												%>
 											</select>
-										</th>
+										</td>
 										<th><a href="" class="js_remove_variable_item"> - </a></th>
 									</tr>				
 							<%
@@ -268,9 +268,9 @@
 							int returnVarCount = (externalForm.getReturnVariables()==null) ? 0 : externalForm.getReturnVariables().length;
 							%>
 							<tr style="display:none" varCount="<%=returnVarCount%>">
-								<th><input class="fieldline required variableName" name="txtReturnVariableName" type="text" value=""></th>
-								<th><input class="fieldline required elementName" name="txtReturnElementName" type="text" value=""></th>
-								<th><select class="fieldline required elementType" name="selReturnElementType">
+								<td><input class="fieldline required variableName" name="txtReturnVariableName" type="text" value=""></td>
+								<td><input class="fieldline required elementName" name="txtReturnElementName" type="text" value=""></td>
+								<td><select class="fieldline required elementType" name="selReturnElementType">
 										<%
 										for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 											String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -281,7 +281,7 @@
 										}
 										%>
 									</select>
-								</th>
+								</td>
 								<th><a href="" class="js_remove_variable_item"> - </a></th>
 							</tr>				
 							<%
@@ -291,9 +291,9 @@
 									Variable returnVariable = returnVariables[count-1]; 
 							%>
 									<tr>
-										<th><input class="fieldline required" name="txtReturnVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getName())%>"></th>
-										<th><input class="fieldline required" name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></th>
-										<th><select class="fieldline required" name="selReturnElementType<%=count %>">
+										<td><input class="fieldline required" name="txtReturnVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getName())%>"></td>
+										<td><input class="fieldline required" name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></td>
+										<td><select class="fieldline required" name="selReturnElementType<%=count %>">
 												<%
 												for(int i=0; i<FormField.FORM_FIELD_TYPES_VARIABLE.length; i++){
 													String elementType = FormField.FORM_FIELD_TYPES_VARIABLE[i];
@@ -304,7 +304,7 @@
 												}
 												%>
 											</select>
-										</th>
+										</td>
 										<th><a href="" class="js_remove_variable_item"> - </a></th>
 									</tr>				
 							<%

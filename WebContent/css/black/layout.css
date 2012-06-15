@@ -303,8 +303,8 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #nav .tab_buttons a:hover, #nav .tab_buttons a:focus, #nav .tab_buttons a:active, #nav .tab_buttons a:visited {color:#FFF; text-decoration:underline}
 
 /* Contents*/
-#content {margin:15px 10px 10px 240px; color:#454545; font-family: '돋움',dotum,Helvetica,sans-serif; line-height:1.5em; z-index:20}
-#board {margin:5px 10px 10px 240px; color:#ea1a1a; font-family: '돋움',dotum,Helvetica,sans-serif; line-height:1.5em; height:18px; z-index:20}
+#content {margin:15px 10px 10px 240px; color:#454545; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
+#board {margin:5px 10px 10px 240px; color:#ea1a1a; font-family: '돋움',dotum,Helvetica,sans-serif; height:18px; z-index:20}
 
 /* UpLoad */
 #upload {width:100%; height:22px; margin: 0 2px; display:inline-block; position:relative}
@@ -509,6 +509,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:25px; line-height: 13px}
+.noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
 .noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
 .noti_in_file {word-wrap: break-word; text-align:left; padding:0 0 0 44px; line-height: 16px} /* Right Contents in Space - file */
@@ -547,7 +548,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 }
 .red_tab_content .right_cap{background: url("../../images/bgRoundRedContentRight.gif") no-repeat;width:27px;height:30px;position:relative;top:-6px;float:right}
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-.red_tab_content .right_cap {top:-24px;left:15px}
+.red_tab_content .right_cap {top:-22px;left:15px}
 }
 			
 /* Work ING */

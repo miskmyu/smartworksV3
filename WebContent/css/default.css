@@ -45,17 +45,18 @@ body, button, select, input, textarea, sub {
  
 input[type="text"] {
 	width:100%;
+	color:#555555 !important
 }
 
 textarea {width:99.6%}
 
 
 select, input, textarea {
-	color:#868686;
+	color:#555555
 }
 
 textarea{
-	overflow-y:hidden;
+	overflow-y:hidden
 }
 
 /* 

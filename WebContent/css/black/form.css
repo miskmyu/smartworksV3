@@ -2,21 +2,16 @@
 /* CSS Document */
 
 .form_layout {padding:10px; line-height: 23px}
+.form_col {padding:0 5px}
 .form_label, .form_value {float:left}
-.form_label {background-color:#F1F8FC}
-.form_label > span, .form_value > span {padding: 0 10px}
+.form_label {color:#23579e}
 .form_value input[type="text"] {width:100%}
 .form_value textarea {width:99.8% !important}
-.form_value input[type="text"], .form_value textarea, .form_value > div {margin-top: 3px}
 .form_value, .form_value a span,
-.form_layout.con td, .boTb td {color: #868686}
-.form_layout.con th, .boTb th {font-weight:normal; color: #454545}
+.form_layout.con td, .boTb td {color: #555555 !important}
+.form_layout.con th, .boTb th {color: #454545; vertical-align: top}
+.form_layout td, .form_layout th {border-bottom: 1px solid #ededed}
 
-.form_col,
-.form_read .form_layout table td,
-.form_read .form_layout table th {border: 1px solid #dadada; border-left: 0; border-right: 0; padding:0}
-
-.js_type_richEditor .form_label > span, .js_type_richEditor .form_value > span {padding:3px 0}
 
 /* 상세필터 */
 .filter_section {overflow:hidden;}
@@ -43,10 +38,10 @@
 
 /* label check icon add */
 .icon_required{background: url("../../images/icon_check.png") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
-.required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat #F1F8FC}
+.required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat transparent}
 .required_label span{padding-right:12px}
 
-.form_number_input {text-align:right; max-width:300px;}
+.form_number_input {text-align:right; max-width:100%}
 .form_radio_btn
 .form_check_box
 .form_select_box {min-width:100px;}
