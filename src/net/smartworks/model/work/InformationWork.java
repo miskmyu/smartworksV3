@@ -4,7 +4,7 @@ public class InformationWork extends SmartWork {
 
 	private SmartForm form;
 	private FormField keyField;
-	private boolean keyDuplicatable;
+	private boolean keyDuplicatable=true;
 	private FormField[] displayFields;
 	private String helpUrl;
 	private String manualFilePath;

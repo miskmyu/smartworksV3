@@ -196,14 +196,19 @@
 				<div class="ch_right"><span class="icon_body_register"  title="<fmt:message key='common.security.title.write'/>"></span></div> 
 				<%
 				switch (work.getEditPolicy().getLevel()) {
-				case EditPolicy.LEVEL_WIKI:
+				case EditPolicy.LEVEL_PUBLIC:
 				 %>
-					<div class="ch_right"><fmt:message key="common.security.edit.wiki" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.edit.public" /></div> 
 				<%
 					break;
-				case EditPolicy.LEVEL_BLOG:
+				case EditPolicy.LEVEL_PRIVATE:
 				%>
-					<div class="ch_right"><fmt:message key="common.security.edit.blog" /></div> 
+					<div class="ch_right"><fmt:message key="common.security.edit.private" /></div> 
+				<%
+				 	break;
+				case EditPolicy.LEVEL_CUSTOM:
+				%>
+					<div class="ch_right"><fmt:message key="common.security.edit.custom" /></div> 
 				<%
 				 	break;
 				 }

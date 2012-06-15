@@ -261,17 +261,22 @@
 		
 				<%
 				switch (work.getEditPolicy().getLevel()) {
-				case EditPolicy.LEVEL_WIKI:
-				%>
-					<span class="ch_right"><fmt:message key="common.security.edit.wiki" /></span>
+				case EditPolicy.LEVEL_PUBLIC:
+				 %>
+					<div class="ch_right"><fmt:message key="common.security.edit.public" /></div> 
 				<%
 					break;
-				case EditPolicy.LEVEL_BLOG:
+				case EditPolicy.LEVEL_PRIVATE:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.edit.blog" /></span>
+					<div class="ch_right"><fmt:message key="common.security.edit.private" /></div> 
 				<%
-					break;
-				}
+				 	break;
+				case EditPolicy.LEVEL_CUSTOM:
+				%>
+					<div class="ch_right"><fmt:message key="common.security.edit.custom" /></div> 
+				<%
+				 	break;
+				 }
 				%>
 		
 				<span class="fr ml5"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></span>

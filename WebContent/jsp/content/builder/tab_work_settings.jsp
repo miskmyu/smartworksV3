@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.work.SmartForm"%>
 <%@page import="net.smartworks.model.security.EditPolicy"%>
 <%@page import="net.smartworks.model.security.WritePolicy"%>
@@ -260,27 +262,71 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="mt10 gray_style">
+							<table>
+								<tr>
+									<th width="30%"><fmt:message key="builder.title.key_duplication"/></th>
+									<td width="70%">
+										<input type="radio" name="radKeyDuplicable" value="true" <%if(informationWork.isKeyDuplicatable()){ %>checked<%} %>>
+										<span <%if(informationWork.isKeyDuplicatable()){ %>class="t_bold"<%} %>><fmt:message key="builder.title.key_dup.true"/></span> 
+										<input type="radio" name="radKeyDuplicable" value="false" <%if(!informationWork.isKeyDuplicatable()){ %>checked<%} %>>
+										<span <%if(!informationWork.isKeyDuplicatable()){ %>class="t_bold"<%} %>><fmt:message key="builder.title.key_dup.false"/></span> 
+									</td>
+								</tr>
+							</table>
+						</div>
 					<%
 					}
+					
 					%>
+					
 					<!-- 권한 -->
 					<%
 					int accessLevel = (SmartUtil.isBlankObject(work.getAccessPolicy())) ? AccessPolicy.LEVEL_DEFAULT : work.getAccessPolicy().getLevel();
 					int writeLevel = (SmartUtil.isBlankObject(work.getWritePolicy())) ? WritePolicy.LEVEL_DEFAULT : work.getWritePolicy().getLevel();
 					int editLevel = (SmartUtil.isBlankObject(work.getEditPolicy())) ? EditPolicy.LEVEL_DEFAULT : work.getEditPolicy().getLevel();
+					CommunityInfo[] communities = null;
 					
 					%>
 					<div class="mt10 gray_style">
 						<table>
 							<tr>
 								<th width="30%"><fmt:message key="common.security.title.access"/></th>
-								<td width="70%">
+								<td width="70%" class="js_select_access_level">
 									<input name="rdoAccessLevel" type="radio" value="<%=AccessPolicy.LEVEL_PUBLIC %>" <%if(accessLevel==AccessPolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
 									<span <%if(accessLevel==AccessPolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.public"/> <fmt:message key="common.security.default"/></span> 
 									<input name="rdoAccessLevel" type="radio" value="<%=AccessPolicy.LEVEL_PRIVATE %>"  <%if(accessLevel==AccessPolicy.LEVEL_PRIVATE){ %>checked<%} %>/>
 									<span <%if(accessLevel==AccessPolicy.LEVEL_PRIVATE){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.private"/></span> 
-									<input name="rdoAccessLevel" type="radio" value="<%=AccessPolicy.LEVEL_CUSTOM %>"  <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
+									<input name="rdoAccessLevel" class="js_security_level_custom" type="radio" value="<%=AccessPolicy.LEVEL_CUSTOM %>"  <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
 									<span <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.custom"/></span>
+									<div class="js_access_level_custom" <%if(accessLevel!=AccessPolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
+										<span class="form_col js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+											<div class="w100 form_value">
+												<div class="icon_fb_space">
+													<div class="fieldline community_names js_community_names sw_required">
+														<%
+														communities = work.getAccessPolicy().getCommunitiesToOpen();
+														if(!SmartUtil.isBlankObject(communities)){
+															for(int i=0; i<communities.length; i++){
+																CommunityInfo community = communities[i];
+																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
+														%>
+																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+														
+														<%
+															}
+														}
+														
+														%>
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+													</div>
+													<div class="js_community_list srch_list_nowid" style="display: none"></div>
+													<span class="js_community_popup"></span>
+													<a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+												</div>
+											</div>
+										</span>
+									</div>
 								</td>
 							</tr>
 						</table>
@@ -292,11 +338,40 @@
 						<table>
 							<tr>
 								<th width="30%"><fmt:message key="common.security.title.write"/></th>
-								<td width="70%">
+								<td width="70%" class="js_select_write_level">
 									<input name="rdoWriteLevel" type="radio" value="<%=WritePolicy.LEVEL_PUBLIC %>" <%if(writeLevel==WritePolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
 									<span <%if(writeLevel==WritePolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.write.public"/> <fmt:message key="common.security.default"/></span> 
-									<input name="rdoWriteLevel" type="radio" value="<%=WritePolicy.LEVEL_CUSTOM %>" <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
+									<input name="rdoWriteLevel" class="js_security_level_custom" type="radio" value="<%=WritePolicy.LEVEL_CUSTOM %>" <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
 									<span <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.write.custom"/></span>
+									<div class="js_write_level_custom" <%if(writeLevel!=WritePolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
+										<span class="form_col js_type_userField" fieldId="txtWritableUsers" multiUsers="true">
+											<div class="w100 form_value">
+												<div class="icon_fb_space">
+													<div class="fieldline community_names js_community_names sw_required">
+														<%
+														communities = work.getWritePolicy().getCommunitiesToWrite();
+														if(!SmartUtil.isBlankObject(communities)){
+															for(int i=0; i<communities.length; i++){
+																CommunityInfo community = communities[i];
+																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
+														%>
+																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+														
+														<%
+															}
+														}
+														
+														%>
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+													</div>
+													<div class="js_community_list srch_list_nowid" style="display: none"></div>
+													<span class="js_community_popup"></span>
+													<a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+												</div>
+											</div>
+										</span>
+									</div>
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -307,11 +382,41 @@
 						<table>
 							<tr>
 								<th width="30%"><fmt:message key="common.security.title.edit"/></th>
-								<td width="70%">
-									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_WIKI %>" <%if(editLevel==EditPolicy.LEVEL_WIKI){ %>checked<%} %>/>
-									<span <%if(editLevel==EditPolicy.LEVEL_WIKI){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.wiki"/> <fmt:message key="common.security.default"/></span> 
-									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_BLOG %>" <%if(editLevel==EditPolicy.LEVEL_BLOG){ %>checked<%} %>/>
-									<span <%if(editLevel==EditPolicy.LEVEL_BLOG){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.blog"/></span> 
+								<td width="70%" class="js_select_edit_level">
+									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_PUBLIC %>" <%if(editLevel==EditPolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
+									<span <%if(editLevel==EditPolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.public"/></span> 
+									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_PRIVATE %>"  <%if(editLevel==EditPolicy.LEVEL_PRIVATE){ %>checked<%} %>/>
+									<span <%if(editLevel==EditPolicy.LEVEL_PRIVATE){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.private"/> <fmt:message key="common.security.default"/></span> 
+									<input name="rdoEditLevel" class="js_security_level_custom" type="radio" value="<%=EditPolicy.LEVEL_CUSTOM %>"  <%if(editLevel==EditPolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
+									<span <%if(editLevel==EditPolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.custom"/></span>
+									<div class="js_edit_level_custom" <%if(editLevel!=EditPolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
+										<span class="form_col js_type_userField" fieldId="txtEditableUsers" multiUsers="true">
+											<div class="w100 form_value">
+												<div class="icon_fb_space">
+													<div class="fieldline community_names js_community_names sw_required">
+														<%
+														communities = work.getEditPolicy().getCommunitiesToEdit();
+														if(!SmartUtil.isBlankObject(communities)){
+															for(int i=0; i<communities.length; i++){
+																CommunityInfo community = communities[i];
+																String comName = (community.getClass().equals(UserInfo.class)) ? ((UserInfo)community).getLongName() : community.getName();
+														%>
+																<span class="js_community_item user_select" comId="<%=community.getId() %>"><%=comName %><a class="js_remove_community" href="">&nbsp;x</a></span>		
+														
+														<%
+															}
+														}
+														
+														%>
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+													</div>
+													<div class="js_community_list srch_list_nowid" style="display: none"></div>
+													<span class="js_community_popup"></span>
+													<a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+												</div>
+											</div>
+										</span>
+									</div>
 								</td>
 							</tr>
 						</table>

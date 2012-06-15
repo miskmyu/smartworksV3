@@ -15,12 +15,24 @@ $(function() {
 		var startWork = input.parents('div.js_start_work_page');
 		var chatter_name = input.parents('div.js_chatter_names');
 		var communityId = input.parents('ul.js_community_members').attr('communityId');
-		var target;
+		var appendTaskApproval = input.parents('.js_append_task_approval_page');
+		var target, listTop, listLeft;
 		if (!isEmpty(startWork)){
 			target = startWork.find('#upload_work_list');
 		}else if(!isEmpty(chatter_name)){
 			target = chatter_name.siblings('div.js_chatter_list').addClass('searching');
 			listWidth = target.width();
+		}else if(!isEmpty(appendTaskApproval)){
+			var approvalLineBox = appendTaskApproval.find('.js_approval_line_box');
+			var inputPosition = input.position(); 
+			var approvalLineBoxPosition = approvalLineBox.position(); 
+			target = approvalLineBox.nextAll('.js_community_list').attr('approverIndex', input.attr('approverIndex'));
+			listWidth = 300;
+			listTop = inputPosition.top + input.height();
+			listLeft = inputPosition.left;
+			var widthGap = listWidth - (approvalLineBox.width() - (inputPosition.left - approvalLineBoxPosition.left));
+			if(widthGap>0)
+				listLeft = listLeft-widthGap;  
 		}else{
 			target = input.parent().next('div');
 		}
@@ -58,6 +70,10 @@ $(function() {
 										'<span>' + emailAddress + '</span></a></li></ul>';
 							}
 						}
+						if(!isEmpty(appendTaskApproval)){
+							target.css({ "top" : listTop + "px"});
+							target.css({ "left" : listLeft + "px"});
+						}
 						target.html(data).width(listWidth);
 						target.show();
 					},
@@ -79,6 +95,7 @@ $(function() {
 		var startWork = input.parents('div.js_start_work_page');
 		var user_name = input.parents('div.js_community_names');
 		var chatter_name = input.parents('div.js_chatter_names');
+		var appendTaskApproval = input.parents('.js_append_task_approval_page');
 		var target;
 		if (!isEmpty(startWork))
 			target = startWork.find('#upload_work_list');
@@ -86,6 +103,8 @@ $(function() {
 			target = user_name.next('div');
 		else if(!isEmpty(chatter_name))
 			target = chatter_name.nextAll('div.js_chatter_list');
+		else if(!isEmpty(appendTaskApproval))
+			target = appendTaskApproval.find('.js_approval_line_box').nextAll('.js_community_list');
 		else
 			target = input.parent().nextAll('div');
 		setTimeout(function() {
@@ -103,10 +122,12 @@ $(function() {
 			var input = $(targetElement(e));
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
+			var appendTaskApproval = input.parents('.js_append_task_approval_page');
 
 			var target = input.parent().next('div');
 			if(!isEmpty(startWork)) target =  startWork.find('#upload_work_list');
 			else if(!isEmpty(chatter_name)) target = chatter_name.siblings('div.js_chatter_list');
+			else if(!isEmpty(appendTaskApproval)) target = appendTaskApproval.find('.js_approval_line_box').next('.js_community_list');
 
 			var list = target.find('li');
 			if(isEmpty(list)) return;
@@ -127,10 +148,12 @@ $(function() {
 			var input = $(targetElement(e));
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
+			var appendTaskApproval = input.parents('.js_append_task_approval_page');
 
 			var target = input.parent().next('div');
 			if(!isEmpty(startWork)) target =  startWork.find('#upload_work_list');
 			else if(!isEmpty(chatter_name)) target = chatter_name.siblings('div.js_chatter_list');
+			else if(!isEmpty(appendTaskApproval)) target = appendTaskApproval.find('.js_approval_line_box').next('.js_community_list');
 			target.find('.sw_hover:first a').click();
 			input.focusout();
 		}
@@ -160,28 +183,47 @@ $(function() {
 		if(!input.hasClass('js_select_community')) input = input.parents('.js_select_community:first');
 		var comName = input.attr('comName');
 		var comId = input.attr('comId');
-		var communityItems = input.parents('.js_community_list').prev().find('.js_community_item');				
+		var communityItems = input.parents('.js_community_list').prev().find('.js_community_item');
+		var selectedApproverInfo = input.parents('.js_community_list').prev().find('.js_selected_approver_info');
 		var userField = input.parents('.js_type_userField');
 		var inputTarget = userField.find('input.js_auto_complete');
 		if(inputTarget.parents('.sw_required').hasClass('sw_error')){
 			inputTarget.parents('.sw_required').removeClass('sw_error');
 			$('form.js_validation_required').validate({ showErrors: showErrors}).form();
 		}
-		if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
-			communityItems.remove();
-		var isSameId = false;
-		for(var i=0; i<communityItems.length; i++){
-			var oldComId = $(communityItems[i]).attr('comId');
-			if(oldComId !=null && oldComId === comId){
-				isSameId = true;
-				break;
+		if(isEmpty(communityItems) && !isEmpty(selectedApproverInfo)){
+			var index = parseInt(input.parents('.js_community_list').attr('approverIndex'));
+			selectedApproverInfo = $(selectedApproverInfo[index]);
+			var userName = input.attr('userName');
+			var userPosition = input.attr('userPosition') || "";
+			var userPicture = input.attr('userPicture');
+			var approverInfo = '<div class="noti_pic">' +
+									'<img class="profile_size_s" src="' + userPicture + '" title="' + userPosition + ' ' + userName + '">' +
+								'</div>' +
+								'<div class="noti_in">' +
+									'<div class="t_name">' + userPosition + '</div>' +
+									'<div class="t_name">' + userName + '</div>' +
+								'</div>';
+			selectedApproverInfo.html(approverInfo);
+			selectedApproverInfo.nextAll('span').hide();
+			selectedApproverInfo.nextAll('input').attr('value', comId);
+		}else{
+			if (isEmpty(communityItems) || (!isEmpty(userField) && userField.attr('multiUsers') !== 'true'))
+				communityItems.remove();
+			var isSameId = false;
+			for(var i=0; i<communityItems.length; i++){
+				var oldComId = $(communityItems[i]).attr('comId');
+				if(oldComId !=null && oldComId === comId){
+					isSameId = true;
+					break;
+				}
 			}
+			if(!isSameId){
+				$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
+						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+			}
+			inputTarget.focus().parents('.js_community_names').change();
 		}
-		if(!isSameId){
-			$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
-					+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
-		}
-		inputTarget.focus().parents('.js_community_names').change();
 		return false;
 	});
 
