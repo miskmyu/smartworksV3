@@ -132,10 +132,10 @@
 					    </dl>
 					</div>
 					<!-- 업무 내용 -->
-					<div class="read_frame list_contents js_form_content">
- 						<iframe id="msgTextIframe" align="center" frameborder="0" height="100%" width="100%"
+					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
+ 						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							style="font-size: 11px; font: arial, sans-serif;" scrolling="no"
-							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" />
+							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
 					</div>
 					<!-- 업무 내용 //-->
 				</div>

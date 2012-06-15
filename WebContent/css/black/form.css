@@ -3,7 +3,7 @@
 .form_wrap form {line-height: 23px}
 .form_layout {padding:10px}
 .form_col {padding:0 5px}
-.form_label, .form_value {float:left}
+.form_label, .form_value {float:left; margin-top: 3px}
 .form_label {color:#23579e}
 .form_value input[type="text"] {width:100%}
 .form_value textarea {width:99.8% !important}

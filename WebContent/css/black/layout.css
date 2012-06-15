@@ -413,7 +413,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
 .glo_btn_space .btn_finish {float:right; padding-right:10px}
 
 .pos_works {left:40px; top:1px; position:relative; z-index:20}

@@ -170,6 +170,7 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-act-settings.js"></script>
 <script type="text/javascript" src="js/sw/sw-act-builder.js"></script>
 <script type="text/javascript" src="js/sw/sw-act-mail.js"></script>
+<script type="text/javascript" src="js/sw/iframe.js"></script>
 
 <script type="text/javascript" src='js/smartform/smartworks.js'></script>
 <script type="text/javascript" src='js/smartform/sw-form-layout.js'></script>

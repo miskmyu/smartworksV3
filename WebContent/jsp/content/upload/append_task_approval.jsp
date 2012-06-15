@@ -92,7 +92,7 @@
 			<%
 			}
 			%>
-			<div class="fr mb10 js_approval_line_box">
+			<div class="fr js_approval_line_box">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<%if(!SmartUtil.isBlankObject(approvalLine)){ %><input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden"><%} %>		
 					<%
@@ -179,7 +179,7 @@
 	</div>
 	<!-- 결재선 Section //-->
 	<!-- 전자결재 화면이 나타나는 곳 -->
-	<div class="">
+	<div class="" style="display:block">
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<div class="js_task_approval_fields"
 				subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"

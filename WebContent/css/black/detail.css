@@ -326,7 +326,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .approval_section .tit, .forward_section .tit {font-size:16px; font-weight:bold; border-bottom: 1px dashed #9C9C9C; margin: 0 0 15px 0; padding: 0 0 5px 0}
 .approval_section .tit span, .forward_section .tit span { display:block; vertical-align:middle; text-align: center}
 
-.approval_group {margin: 0 5px}
+.approval_group {margin: 0 5px; overflow:hidden}
 .approval_area { width:130px; height:147px; border:1px solid #cccccc; padding:4px; float:left; margin: -1px 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px}
 .approval_area .approval {height: 80px; overflow: hidden}
