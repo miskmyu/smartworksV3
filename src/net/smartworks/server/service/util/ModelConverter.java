@@ -1177,7 +1177,7 @@ public class ModelConverter {
 		if (CommonUtil.isEmpty(swaResources)) {
 			accessPolicy.setLevel(AccessPolicy.LEVEL_DEFAULT);
 			writePolicy.setLevel(WritePolicy.LEVEL_DEFAULT);
-			editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
+			editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
 		} else {
 			for(SwaResource swaResource : swaResources) {
 				Set<CommunityInfo> communityInfoSet = new LinkedHashSet<CommunityInfo>();
@@ -1186,7 +1186,7 @@ public class ModelConverter {
 				String permission = swaResource.getPermission();
 				if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_READ)) {
 					if(permission.equals(SwaResource.PERMISSION_ALL)) {
-						accessPolicy.setLevel(AccessPolicy.LEVEL_DEFAULT);
+						accessPolicy.setLevel(AccessPolicy.LEVEL_PUBLIC);
 					} else if(permission.equals(SwaResource.PERMISSION_SELECT)) {
 						accessPolicy.setLevel(AccessPolicy.LEVEL_CUSTOM);
 						SwaUserCond swaUserCond = new SwaUserCond();
@@ -1218,11 +1218,11 @@ public class ModelConverter {
 						}
 						accessPolicy.setCommunitiesToOpen(communitieInfos);
 					} else {
-						//accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
+						accessPolicy.setLevel(AccessPolicy.LEVEL_PRIVATE);
 					}
 				} else if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_WRITE)) {
 					if(permission.equals(SwaResource.PERMISSION_ALL)) {
-						writePolicy.setLevel(WritePolicy.LEVEL_DEFAULT);
+						writePolicy.setLevel(WritePolicy.LEVEL_PUBLIC);
 					} else {
 						writePolicy.setLevel(WritePolicy.LEVEL_CUSTOM);
 						SwaUserCond swaUserCond = new SwaUserCond();
@@ -1255,10 +1255,41 @@ public class ModelConverter {
 						writePolicy.setCommunitiesToWrite(communitieInfos);
 					}
 				} else if(CommonUtil.toNotNull(mode).equals(SwaResource.MODE_MODIFY)) {
-					if(permission.equals(SwaResource.PERMISSION_ALL))
-						editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
-					else
-						editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
+					if(permission.equals(SwaResource.PERMISSION_ALL)){
+						editPolicy.setLevel(EditPolicy.LEVEL_PUBLIC);
+					} else if(permission.equals(SwaResource.PERMISSION_SELECT)) {
+						editPolicy.setLevel(EditPolicy.LEVEL_CUSTOM);
+						SwaUserCond swaUserCond = new SwaUserCond();
+						swaUserCond.setResourceId(resourceId);
+						swaUserCond.setMode(SwaResource.MODE_READ);
+						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+						if(!CommonUtil.isEmpty(swaUsers)) {
+							for(SwaUser swaUser : swaUsers) {
+								String authUserId = swaUser.getUserId();
+								String type = swaUser.getType();
+								if(type.equals(SwaUser.TYPE_USER)) {
+									UserInfo userInfo = getUserInfoByUserId(authUserId);
+									if(userInfo != null)
+										communityInfoSet.add(userInfo);
+								} else if(type.equals(SwaUser.TYPE_DEPT)) {
+									DepartmentInfo departmentInfo = getDepartmentInfoByDepartmentId(authUserId);
+									if(departmentInfo != null)
+										communityInfoSet.add(departmentInfo);
+								} else {
+									GroupInfo groupInfo = getGroupInfoByGroupId(authUserId);
+									if(groupInfo != null)
+										communityInfoSet.add(groupInfo);
+								}
+							}
+							if(communityInfoSet.size() > 0) {
+								communitieInfos = new CommunityInfo[communityInfoSet.size()];
+								communityInfoSet.toArray(communitieInfos);
+							}
+						}
+						editPolicy.setCommunitiesToEdit(communitieInfos);
+					}else{
+						editPolicy.setLevel(EditPolicy.LEVEL_PRIVATE);
+					}
 				}
 			}
 		}

@@ -278,9 +278,7 @@ public class BuilderServiceImpl implements IBuilderService {
 					else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE))
 						swaResource.setPermission(rdoWriteLevel.equals(WritePolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
 					else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY))
-						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_WIKI) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_NO);
-					else if(mode.equalsIgnoreCase(SwaResource.MODE_DELETE))
-						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_WIKI) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_NO);
+						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(AccessPolicy.LEVEL_CUSTOM) ? SwaResource.PERMISSION_SELECT: SwaResource.PERMISSION_NO);
 				}
 			}
 		} catch (Exception e) {
