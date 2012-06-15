@@ -472,6 +472,7 @@ CREATE TABLE swdomain (
 	tblname varchar(100),
 	keycolumn varchar(100),
 	titlefieldid varchar(50),
+	keyDuplicable bit,
 	masterid varchar(50),
 	masterfieldid varchar(50),
 	systemdomainyn char(1),

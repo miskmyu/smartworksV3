@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.security.EditPolicy;
@@ -16,14 +17,21 @@ import net.smartworks.model.security.WritePolicy;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
+import net.smartworks.server.engine.authority.model.SwaUser;
+import net.smartworks.server.engine.authority.model.SwaUserCond;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdField;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
+import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
@@ -60,6 +68,12 @@ public class BuilderServiceImpl implements IBuilderService {
 	}
 	private static IPrcManager getPrcManager() {
 		return SwManagerFactory.getInstance().getPrcManager();
+	}
+	private static ISwoManager getSwoManager() {
+		return SwManagerFactory.getInstance().getSwoManager();
+	}
+	private static ISwdManager getSwdManager() {
+		return SwManagerFactory.getInstance().getSwdManager();
 	}
 
 	@Override
@@ -210,12 +224,38 @@ public class BuilderServiceImpl implements IBuilderService {
 		}		
 	}
 
+	public void setSwaUsers(List<Map<String, String>> maps, String resourceId, String mode) throws Exception {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			String companyId = user.getCompanyId();
+
+			for(int i=0; i<maps.size(); i++) {
+				Map<String, String> userMap = maps.get(i);
+				String id = userMap.get("id");
+				SwaUser swaUser = new SwaUser();
+				swaUser.setResourceId(resourceId);
+				swaUser.setMode(mode);
+				swaUser.setUserId(id);
+				String type = getSwoManager().getTypeByWorkspaceId(id);
+				if(type != null)
+					type = type.equalsIgnoreCase(Community.COMMUNITY_USER) ? SwaUser.TYPE_USER : type.equalsIgnoreCase(Community.COMMUNITY_DEPARTMENT) ? SwaUser.TYPE_DEPT : SwaUser.TYPE_GROUP;
+				swaUser.setType(type);
+				swaUser.setCompanyId(companyId);
+				getSwaManager().setUser(userId, swaUser, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+	}
 	@Override
 	public void setWorkSettings(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		try {
-			User user = SmartUtil.getCurrentUser();
-			String userId = user.getId();
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String companyId = cUser.getCompanyId();
 
 			String workId = (String)requestBody.get("workId");
 			Map<String, Object> frmWorkSettings = (Map<String, Object>)requestBody.get("frmWorkSettings");
@@ -225,9 +265,14 @@ public class BuilderServiceImpl implements IBuilderService {
 
 			String rdoKeyField = null;
 			List<String> hdnDisplayFields = null;
+			String radKeyDuplicable = null;
 			String rdoAccessLevel = null;
 			String rdoWriteLevel = null;
 			String rdoEditLevel = null;
+
+			List<Map<String, String>> txtAccessableUsers = null;
+			List<Map<String, String>> txtWritableUsers = null;
+			List<Map<String, String>> txtEditableUsers = null;
 
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -242,11 +287,20 @@ public class BuilderServiceImpl implements IBuilderService {
 						rdoWriteLevel = stringValue;
 					else if(fieldId.equals("rdoEditLevel"))
 						rdoEditLevel = stringValue;
-					
+					else if(fieldId.equals("radKeyDuplicable"))
+						radKeyDuplicable = stringValue;
 				} else if(fieldValue instanceof ArrayList) {
 					List<String> valueList = (ArrayList<String>)fieldValue;
 					if(fieldId.equals("hdnDisplayFields"))
 						hdnDisplayFields = valueList;
+				} else if(fieldValue instanceof LinkedHashMap) {
+					List<Map<String, String>> users = (ArrayList<Map<String,String>>)((LinkedHashMap)fieldValue).get("users");
+					if(fieldId.equals("txtAccessableUsers"))
+						txtAccessableUsers = users;
+					else if(fieldId.equals("txtWritableUsers"))
+						txtWritableUsers = users;
+					else if(fieldId.equals("txtEditableUsers"))
+						txtEditableUsers = users;
 				}
 			}
 
@@ -257,6 +311,35 @@ public class BuilderServiceImpl implements IBuilderService {
 				SwfForm[] swfForms = getSwfManager().getForms(userId, swfFormCond, IManager.LEVEL_LITE);
 				if(!CommonUtil.isEmpty(swfForms))
 					resourceId = swfForms[0].getId();
+
+				SwdDomainCond swdDomainCond = new SwdDomainCond();
+				swdDomainCond.setFormId(resourceId);
+				swdDomainCond.setCompanyId(companyId);
+				SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_ALL);
+				SwdField[] swdFields = null;
+				if(swdDomain != null) {
+					swdDomain.setKeyColumn(rdoKeyField);
+					swdFields = swdDomain.getFields();
+				}
+
+				if(!CommonUtil.isEmpty(swdFields)) {
+					for(SwdField swdField : swdFields) {
+						swdField.setDisplayOrder(-1);
+					}
+					int displayOrder = 0;
+					for(String displayField : hdnDisplayFields) {
+						for(SwdField swdField : swdFields) {
+							if(displayField.equals(swdField.getFormFieldId())) {
+								swdField.setDisplayOrder(displayOrder);
+								displayOrder++;
+								break;
+							}
+						}
+					}
+				}
+				swdDomain.setKeyDuplicable(Boolean.parseBoolean(radKeyDuplicable));
+				swdDomain.setFields(swdFields);
+				getSwdManager().setDomain(userId, swdDomain, IManager.LEVEL_ALL);
 			} else { //프로세스업무, 일정계획업무
 				PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
 				prcSwProcessCond.setPackageId(workId);
@@ -264,6 +347,33 @@ public class BuilderServiceImpl implements IBuilderService {
 				if(!CommonUtil.isEmpty(prcSwProcesses))
 					resourceId = prcSwProcesses[0].getProcessId();
 			}
+
+			SwaUser[] swaUsers = null;
+			if(resourceId != null) {
+				SwaUserCond swaUserCond = new SwaUserCond();
+				swaUserCond.setResourceId(resourceId);
+				swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+			}
+			if(!CommonUtil.isEmpty(swaUsers)) {
+				for(SwaUser swaUser : swaUsers) {
+					String objId = swaUser.getObjId();
+					getSwaManager().removeUser(userId, objId);
+				}
+			}
+
+			if(!CommonUtil.isEmpty(txtAccessableUsers)) {
+				if(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)))
+					setSwaUsers(txtAccessableUsers, resourceId, SwaUser.MODE_READ);
+			}
+			if(!CommonUtil.isEmpty(txtWritableUsers)) {
+				if(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_CUSTOM)))
+					setSwaUsers(txtWritableUsers, resourceId, SwaUser.MODE_WRITE);
+			}
+			if(!CommonUtil.isEmpty(txtEditableUsers)) {
+				if(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)))
+					setSwaUsers(txtEditableUsers, resourceId, SwaUser.MODE_MODIFY);
+			}
+
 			SwaResource[] swaResources = null;
 			if(resourceId != null) {
 				SwaResourceCond swaResourceCond = new SwaResourceCond();
@@ -272,13 +382,20 @@ public class BuilderServiceImpl implements IBuilderService {
 			}
 			if(!CommonUtil.isEmpty(swaResources)) {
 				for(SwaResource swaResource : swaResources) {
+					String objId = swaResource.getObjId();
 					String mode = swaResource.getMode();
-					if(mode.equalsIgnoreCase(SwaResource.MODE_READ))
-						swaResource.setPermission(rdoAccessLevel.equals(AccessPolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(AccessPolicy.LEVEL_CUSTOM) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
-					else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE))
-						swaResource.setPermission(rdoWriteLevel.equals(WritePolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
-					else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY))
-						swaResource.setPermission(rdoEditLevel.equals(EditPolicy.LEVEL_PUBLIC) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(AccessPolicy.LEVEL_CUSTOM) ? SwaResource.PERMISSION_SELECT: SwaResource.PERMISSION_NO);
+					if(mode.equalsIgnoreCase(SwaResource.MODE_DELETE)) {
+						getSwaManager().removeResource(userId, objId);
+					} else {
+						if(mode.equalsIgnoreCase(SwaResource.MODE_READ)) {
+							swaResource.setPermission(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+						} else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE)) {
+							swaResource.setPermission(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
+						} else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY)) {
+							swaResource.setPermission(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+						}
+						getSwaManager().setResource(userId, swaResource, null);
+					}
 				}
 			}
 		} catch (Exception e) {

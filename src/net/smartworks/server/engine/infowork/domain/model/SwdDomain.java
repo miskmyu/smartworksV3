@@ -36,6 +36,7 @@ public class SwdDomain extends ClassObject {
 	public static final String A_TABLENAME = "tableName";
 	public static final String A_KEYCOLUMN = "keyColumn";
 	public static final String A_TITLEFIELDID = "titleFieldId";
+	public static final String A_KEYDUPLICABLE = "keyDuplicable";
 	public static final String A_ISSYSTEMDOMAIN = "isSystemDomain";
 	public static final String A_PUBLISHMODE = "publishMode";
 
@@ -48,6 +49,7 @@ public class SwdDomain extends ClassObject {
 	private String tableName;
 	private String keyColumn;
 	private String titleFieldId;
+	private boolean keyDuplicable;
 	private String systemDomainYn;
 	private String publishMode;
 	
@@ -75,6 +77,7 @@ public class SwdDomain extends ClassObject {
 		appendAttributeString(A_TABLENAME, tableName, buf);
 		appendAttributeString(A_KEYCOLUMN, keyColumn, buf);
 		appendAttributeString(A_TITLEFIELDID, titleFieldId, buf);
+		appendAttributeString(A_KEYDUPLICABLE, keyDuplicable, buf);
 		appendAttributeString(A_ISSYSTEMDOMAIN, isSystemDomain(), buf);
 		appendAttributeString(A_PUBLISHMODE, publishMode, buf);
 		return buf.toString();
@@ -110,6 +113,7 @@ public class SwdDomain extends ClassObject {
 			Node tableName = attrMap.getNamedItem(A_TABLENAME);
 			Node keyColumn = attrMap.getNamedItem(A_KEYCOLUMN);
 			Node titleFieldId = attrMap.getNamedItem(A_TITLEFIELDID);
+			Node keyDuplicable = attrMap.getNamedItem(A_KEYDUPLICABLE);
 			Node isSystemDomain = attrMap.getNamedItem(A_ISSYSTEMDOMAIN);
 			Node publishMode = attrMap.getNamedItem(A_PUBLISHMODE);
 			if (formId != null)
@@ -124,6 +128,8 @@ public class SwdDomain extends ClassObject {
 				obj.setKeyColumn(keyColumn.getNodeValue());
 			if (titleFieldId != null)
 				obj.setTitleFieldId(titleFieldId.getNodeValue());
+			if (keyDuplicable != null)
+				obj.setKeyDuplicable(CommonUtil.toBoolean(keyDuplicable.getNodeValue()));
 			if (isSystemDomain != null)
 				obj.setSystemDomain(CommonUtil.toBoolean(isSystemDomain.getNodeValue()));
 			if (publishMode != null)
@@ -314,6 +320,12 @@ public class SwdDomain extends ClassObject {
 	}
 	public void setTitleFieldId(String titleFieldId) {
 		this.titleFieldId = titleFieldId;
+	}
+	public boolean isKeyDuplicable() {
+		return keyDuplicable;
+	}
+	public void setKeyDuplicable(boolean keyDuplicable) {
+		this.keyDuplicable = keyDuplicable;
 	}
 
 }

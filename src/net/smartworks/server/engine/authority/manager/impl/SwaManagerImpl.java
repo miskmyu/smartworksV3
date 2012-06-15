@@ -88,6 +88,7 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 	}
 	public void setResource(String user, SwaResource obj, String level) throws SwaException {
 		try {
+			fill(user, obj);
 			set(obj);
 		} catch (Exception e) {
 			throw new SwaException(e);

@@ -266,7 +266,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId, obj.formId, obj.formVersion, obj.formName");
-				buf.append(", obj.tableName, obj.keyColumn, obj.titleFieldId");
+				buf.append(", obj.tableName, obj.keyColumn, obj.titleFieldId, obj.keyDuplicable");
 				buf.append(", obj.systemDomainYn, obj.publishMode, obj.companyId");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -286,6 +286,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					obj.setTableName((String)fields[j++]);
 					obj.setKeyColumn((String)fields[j++]);
 					obj.setTitleFieldId((String)fields[j++]);
+					obj.setKeyDuplicable((Boolean)fields[j++]);
 					obj.setSystemDomain(CommonUtil.toBoolean((String)fields[j++]));
 					obj.setPublishMode((String)fields[j++]);
 					obj.setCompanyId((String)fields[j++]);
