@@ -134,7 +134,7 @@
 										</div>
 									</a>
 									<span class="noti_in up">
-										<input class="m0 js_auto_complete" style="width:98px" href="community_name.sw" type="text">
+										<input class="m0 js_auto_complete" style="width:98px" href="user_name.sw" type="text" approverIndex="<%=i%>">
 									</span>
 									<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
 												

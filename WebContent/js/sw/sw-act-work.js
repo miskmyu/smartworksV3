@@ -1148,7 +1148,20 @@ $(function() {
 	$('a.js_userpicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_userpicker_button');
 		if(input.hasClass('js_selected_approver_info')){
-			var target = input.parents('.js_append_task_approval_page').find('.js_community_popup');
+			var appendTaskApproval = input.parents('.js_append_task_approval_page');
+			var approvalLineBox = appendTaskApproval.find('.js_approval_line_box');
+			var inputPosition = input.position(); 
+			var approvalLineBoxPosition = approvalLineBox.position(); 
+			target = approvalLineBox.nextAll('.js_community_popup');
+			listWidth = 300;
+			listTop = inputPosition.top + input.height();
+			listLeft = inputPosition.left;
+			var widthGap = listWidth - (approvalLineBox.width() - (inputPosition.left - approvalLineBoxPosition.left));
+			if(widthGap>0)
+				listLeft = listLeft-widthGap;  
+			target.css({ "top" : listTop + "px"});
+			target.css({ "left" : listLeft + "px"});
+			target.css({ "position" : "absolute"});
 			smartPop.selectUser(input, target, 300, false);			
 		}else{
 			var userField = $(targetElement(e)).parents('.js_type_userField:first');
