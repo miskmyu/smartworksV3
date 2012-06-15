@@ -695,3 +695,8 @@ ALTER TABLE swfile add deleteAction bit;
 --전자 결재 라인 데피니션을 참조하기위한 컬럼
 alter table apraprline add aprRefAppLineDefId varchar(50);
 
+--키값 중복 허용 여부
+alter table swdomain add keyDuplicable bit;
+
+-- keyColumn = 키필드, titleFieldId = 제목필드
+update swdomain set keyColumn = titleFieldId

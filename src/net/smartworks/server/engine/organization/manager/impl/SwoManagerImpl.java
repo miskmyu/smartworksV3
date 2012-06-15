@@ -2516,15 +2516,15 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			buff.append(" select type  ");
 			buff.append(" from  ");
 			buff.append(" ( ");
-			buff.append(" 	select 'user' as type ");
+			buff.append(" 	select 'User' as type ");
 			buff.append(" 		, usr.id, usr.name ");
 			buff.append(" 	from sworguser usr ");
 			buff.append(" 	union ");
-			buff.append(" 	select 'department' as type ");
+			buff.append(" 	select 'Department' as type ");
 			buff.append(" 		, dept.id, dept.name ");
 			buff.append(" 	from sworgdept dept ");
 			buff.append(" 	union ");
-			buff.append(" 	select 'group' as type ");
+			buff.append(" 	select 'Group' as type ");
 			buff.append(" 		, grp.id, grp.name ");
 			buff.append(" 	from sworggroup grp ");
 			buff.append(" ) workspaceinfo ");
@@ -2533,9 +2533,12 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			Query query = this.getSession().createSQLQuery(buff.toString());
 	
 			query.setString("id", workSpaceId);
-	
-			String type = (String)query.uniqueResult();
-	
+
+			String type = null;
+
+			if(query.uniqueResult() != null)
+				type = (String)query.uniqueResult();
+
 			return type;
 		} catch (Exception e) {
 			e.printStackTrace();

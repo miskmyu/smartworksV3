@@ -402,7 +402,7 @@ public class CopyOfModelConverter {
 		if (CommonUtil.isEmpty(swaResources)) {
 			accessPolicy.setLevel(AccessPolicy.LEVEL_DEFAULT);
 			writePolicy.setLevel(WritePolicy.LEVEL_DEFAULT);
-			editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
+			editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
 		} else {
 			for(SwaResource swaResource : swaResources) {
 				if(CommonUtil.toNotNull(swaResource.getMode()).equals("R")) {
@@ -419,11 +419,11 @@ public class CopyOfModelConverter {
 						writePolicy.setLevel(WritePolicy.LEVEL_CUSTOM);
 				} else if(CommonUtil.toNotNull(swaResource.getMode()).equals("M")) {
 					if(swaResource.getPermission().equals("PUB_ALL"))
-						editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
+						editPolicy.setLevel(EditPolicy.LEVEL_PUBLIC);
 					else if(swaResource.getPermission().equals("PUB_SELECT"))
-						editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
+						editPolicy.setLevel(EditPolicy.LEVEL_PUBLIC);
 					else
-						editPolicy.setLevel(EditPolicy.LEVEL_BLOG);
+						editPolicy.setLevel(EditPolicy.LEVEL_DEFAULT);
 				}
 			}
 		}
