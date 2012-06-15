@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@ page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -24,7 +25,7 @@
 			String comId = user.getId();
 	%>
 			<li>
-				<a href="" comName="<%=user.getLongName()%>" comId="<%=comId%>" class="js_select_community">
+				<a href="" comName="<%=user.getLongName()%>" comId="<%=comId%>" class="js_select_community" userName="<%=user.getName()%>" userPosition="<%=CommonUtil.toNotNull(user.getPosition())%>" userPicture="<%=user.getMinPicture()%>">
 					<img src="<%=picName%>" class="profile_size_s"><%=comName%>
 				</a>
 			</li>

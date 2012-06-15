@@ -341,7 +341,8 @@ smartPop = {
 														'<div class="t_name">' + userName + '</div>' +
 													'</div>';
 								communityItems.html(approverInfo);
-								communityItems.next().attr('value', comId);
+								communityItems.nextAll('span').hide();
+								communityItems.nextAll('input').attr('value', comId);
 							}else{
 								selectionProc(comId, comName);
 							}
