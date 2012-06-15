@@ -413,8 +413,8 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; border-top: 1px solid #c7c7c7}
-.glo_btn_space .btn_finish {float:right; padding-right:10px; overflow: hidden;}
+.glo_btn_space {background-color:#FFF; padding:8px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
+.glo_btn_space .btn_finish {float:right; padding-right:10px}
 
 .pos_works {left:40px; top:1px; position:relative; z-index:20}
 
@@ -509,6 +509,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:25px; line-height: 13px}
+.noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
 .noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
 .noti_in_file {word-wrap: break-word; text-align:left; padding:0 0 0 44px; line-height: 16px} /* Right Contents in Space - file */
