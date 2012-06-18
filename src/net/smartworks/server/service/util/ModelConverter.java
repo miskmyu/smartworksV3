@@ -1025,8 +1025,8 @@ public class ModelConverter {
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);
 					}
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
-					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_APPROVAL.equalsIgnoreCase(task.getTskType())) {
+					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
 						workInfo.setType(SmartWork.TYPE_INFORMATION);
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);

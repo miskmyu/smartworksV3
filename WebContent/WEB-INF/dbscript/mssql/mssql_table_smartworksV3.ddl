@@ -2384,6 +2384,7 @@ CREATE TABLE SwMailAccount (
 	id varchar(50) NOT NULL,
 	userId varchar(50) NOT NULL,
 	mailServerId varchar(50) NOT NULL,
+	mailServerName varchar(100) NOT NULL,
 	mailId varchar(50) NOT NULL,
 	mailPassword varchar(50) NOT NULL,
 	creator	varchar(50),
@@ -2392,4 +2393,3 @@ CREATE TABLE SwMailAccount (
 	modifiedtime datetime,
     primary key (id)
 );
-
