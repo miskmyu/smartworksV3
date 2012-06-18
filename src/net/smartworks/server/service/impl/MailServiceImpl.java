@@ -29,6 +29,7 @@ import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MailInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -38,7 +39,9 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
+import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IMailService;
+import net.smartworks.server.service.ISettingsService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
@@ -72,12 +75,16 @@ import org.claros.intouch.webmail.models.FolderDbObject;
 import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
 import org.claros.intouch.webmail.models.MsgDbObject;
 import org.htmlcleaner.HtmlCleaner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class MailServiceImpl extends BaseService implements IMailService {
+
+	@Autowired
+	private ISettingsService settingsService;
 
 	private static final long serialVersionUID = 1L;
 
@@ -97,15 +104,17 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    if(handler != null && profile != null && auth != null)
 	    	return handler;
 	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
 	    if(profiles == null || profiles.length == 0)
 	    	return null;
 	    
 	    profile = profiles[0];
 	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
-
+	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    if(mailAccounts == null || mailAccounts.length == 0)
+	    	return null;
+		String username = mailAccounts[0].getUserName();
+		String password = mailAccounts[0].getPassword();
 		if (username != null && password != null) {
 			auth = new AuthProfile();
 			auth.setUsername(username);
@@ -147,14 +156,17 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    if(handler != null && profile != null && auth != null)
 	    	return profile;
 	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
 	    if(profiles == null || profiles.length == 0)
 	    	return null;
 	    
 	    profile = profiles[0];
 	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
+	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    if(mailAccounts == null || mailAccounts.length == 0)
+	    	return null;
+		String username = mailAccounts[0].getUserName();
+		String password = mailAccounts[0].getPassword();
 
 		if (username != null && password != null) {
 			auth = new AuthProfile();
@@ -197,14 +209,17 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    if(handler != null && profile != null && auth != null)
 	    	return auth;
 	    
-	    ConnectionProfile[] profiles = SmartTest.getMailConnectionProfiles();
+	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
 	    if(profiles == null || profiles.length == 0)
 	    	return null;
 	    
 	    profile = profiles[0];
 	    
-		String username = SmartUtil.getCurrentUser().getId();
-		String password = SmartUtil.getCurrentUser().getPassword();
+	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    if(mailAccounts == null || mailAccounts.length == 0)
+	    	return null;
+		String username = mailAccounts[0].getUserName();
+		String password = mailAccounts[0].getPassword();
 
 		if (username != null && password != null) {
 			auth = new AuthProfile();
@@ -1574,6 +1589,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	@Override
 	public void checkEmail() throws Exception {
+		if(!SmartUtil.getCurrentUser().isUseMail()) return;
 		try {
 		    ConnectionMetaHandler handler = getConnectionMetaHandler();
 			if(handler == null)  return;

@@ -64,9 +64,15 @@
 		<div class="nav_list">
 			<jsp:include page="/jsp/nav/communities.jsp" />
 		</div>
-		<div class="nav_list mb20">
-			<jsp:include page="/jsp/nav/mail.jsp" />
-		</div>
+		<%
+		if(cUser.isUseMail()){
+		%>
+			<div class="nav_list mb20">
+				<jsp:include page="/jsp/nav/mail.jsp" />
+			</div>
+		<%
+		}
+		%>
 	<%
 	}
 	%>	

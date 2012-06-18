@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.claros.commons.mail.models.ConnectionProfile;
+
 import net.smartworks.model.RecordList;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.calendar.CompanyEvent;
@@ -82,5 +84,7 @@ public interface ISettingsService {
 	public abstract void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract EmailServer[] getEmailServers() throws Exception;
+	
+	public abstract ConnectionProfile[] getMailConnectionProfiles() throws Exception;
 	
 }

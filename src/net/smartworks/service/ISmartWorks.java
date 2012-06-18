@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.claros.commons.mail.models.ConnectionProfile;
+
 import com.google.gdata.data.youtube.FormUploadToken;
 
 import net.smartworks.model.RecordList;
@@ -648,4 +650,6 @@ public interface ISmartWorks {
 	
 	public abstract EmailServer[] getEmailServers() throws Exception;
 
+	public abstract ConnectionProfile[] getMailConnectionProfiles() throws Exception;
+	
 }

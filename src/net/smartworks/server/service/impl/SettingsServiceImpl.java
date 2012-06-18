@@ -31,6 +31,7 @@ import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.mail.EmailServer;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
@@ -68,6 +69,7 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
+import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -2071,6 +2073,28 @@ public class SettingsServiceImpl implements ISettingsService {
 		emailServer.setSmtpAuthenticated(true);
 		emailServer.setSmtpSsl(false);
 		return new EmailServer[]{emailServer};
+	}
+	@Override
+	public ConnectionProfile[] getMailConnectionProfiles() throws Exception {
+		MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+		if(SmartUtil.isBlankObject(mailAccounts)) return null;
+		ConnectionProfile[] connectionProfiles = new ConnectionProfile[mailAccounts.length];		
+		for(int i=0; i<mailAccounts.length; i++){
+			MailAccount mailAccount = mailAccounts[i];
+			EmailServer server = getEmailServerById(mailAccount.getEmailServerId());
+			ConnectionProfile profile = new ConnectionProfile();
+			profile.setShortName(server.getName());
+			profile.setFetchServer(server.getFetchServer());
+			profile.setFetchPort(String.valueOf(server.getFetchServerPort()));
+			profile.setFetchSSL(String.valueOf(server.isFetchSsl()));
+			profile.setProtocol(server.getFetchProtocol());
+			profile.setSmtpServer(server.getSmtpServer());
+			profile.setSmtpPort(String.valueOf(server.getSmtpServerPort()));
+			profile.setSmtpSSL(String.valueOf(server.isSmtpSsl()));
+			profile.setSmtpAuthenticated(String.valueOf(server.isSmtpAuthenticated()));
+			connectionProfiles[i] = profile;
+		}
+		return connectionProfiles;
 	}
 
 }

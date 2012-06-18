@@ -88,6 +88,7 @@ import net.smartworks.server.service.IYouTubeService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 
+import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -1437,6 +1438,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public EmailServer[] getEmailServers() throws Exception {
 		return settingsService.getEmailServers();
+	}
+
+	@Override
+	public ConnectionProfile[] getMailConnectionProfiles() throws Exception {
+		return settingsService.getMailConnectionProfiles();
 	}
 
 }
