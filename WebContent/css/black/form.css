@@ -1,6 +1,5 @@
 @charset "utf-8";
 /* CSS Document */
-.form_wrap form {line-height: 23px}
 .form_layout {padding:10px}
 .form_col {padding:0 5px; line-height: 23px}
 .form_label, .form_value {float:left; margin-top: 3px}
@@ -9,7 +8,7 @@
 .form_value textarea {width:99.8% !important}
 .form_value, .form_value a span,
 .form_layout.con td, .boTb td {color: #555555 !important}
-.form_layout.con th, .boTb th {color: #454545; vertical-align: top}
+.form_layout.con th, .boTb th {color: #23579E; vertical-align: top; font-weight: normal}
 .form_layout td, .form_layout th {border-bottom: 1px dotted #ededed}
 
 
