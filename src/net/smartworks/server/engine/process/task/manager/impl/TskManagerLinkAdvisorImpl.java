@@ -88,8 +88,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 					if (!CommonUtil.isEmpty(apprs)) {
 						for (int i=0; i<apprs.length; i++) {
 							AprApproval appr = apprs[i];
-							if (appr.getObjId().equalsIgnoreCase(apprId))
+							if (appr.getObjId().equalsIgnoreCase(apprId)) {
 								appr.setStatus(status);
+								appr.setModificationDate(new LocalDate());
+								appr.setModificationUser(appr.getApprover());
+							}
 						}
 					}
 				}
@@ -305,6 +308,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			String apprId = appr.getObjId();
 			if (preApprId != null && apprId.equalsIgnoreCase(preApprId)) {
 				appr.setStatus(preApprTask.getStatus());
+				appr.setModificationDate(new LocalDate());
+				appr.setModificationUser(appr.getApprover());
 				continue;
 			}
 			
@@ -338,11 +343,19 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				assigner = preApprTask.getAssigner();
 				taskRef = preApprTask.getExtendedPropertyValue("taskRef");
 			}
-			
-			
-			String txtApprovalSubject = obj.getExtendedPropertyValue("txtApprovalSubject");
-			String txtApprovalComments = obj.getExtendedPropertyValue("txtApprovalComments");
-			String refAppLineDefId = obj.getExtendedPropertyValue("refAppLineDefId");
+
+			String txtApprovalSubject = null;
+			String txtApprovalComments = null;
+			String refAppLineDefId = null;
+			if (obj == null) {
+				txtApprovalSubject = preApprTask.getExtendedPropertyValue("txtApprovalSubject");
+				txtApprovalComments = preApprTask.getExtendedPropertyValue("txtApprovalComments");
+				refAppLineDefId = preApprTask.getExtendedPropertyValue("refAppLineDefId");
+			} else {
+				txtApprovalSubject = obj.getExtendedPropertyValue("txtApprovalSubject");
+				txtApprovalComments = obj.getExtendedPropertyValue("txtApprovalComments");
+				refAppLineDefId = obj.getExtendedPropertyValue("refAppLineDefId");
+			}
 			
 			TskTask apprTask = new TskTask();
 			apprTask.setProcessInstId(prcInstId);
@@ -353,7 +366,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval"));
 			apprTask.setPriority(priority);
 			apprTask.setStartDate(new LocalDate());
-			apprTask.setDef(obj.getDef());
+			apprTask.setDef(preApprTask != null ? preApprTask.getDef() : obj.getDef());
 			apprTask.setAssigner(assigner);
 			apprTask.setAssignee(approver);
 			apprTask.setAssignmentDate(new LocalDate());
@@ -363,12 +376,22 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setWorkSpaceType("4");
 			apprTask.setAccessLevel("3");
 			
-			if (CommonUtil.isEmpty(obj.getFromRefId())) {
-				apprTask.setFromRefType(obj.getType());
-				apprTask.setFromRefId(obj.getObjId());
+			if (obj != null) {
+				if (CommonUtil.isEmpty(obj.getFromRefId())) {
+					apprTask.setFromRefType(obj.getType());
+					apprTask.setFromRefId(obj.getObjId());
+				} else {
+					apprTask.setFromRefType(obj.getFromRefType());
+					apprTask.setFromRefId(obj.getFromRefId());
+				}
 			} else {
-				apprTask.setFromRefType(obj.getFromRefType());
-				apprTask.setFromRefId(obj.getFromRefId());
+				if (CommonUtil.isEmpty(preApprTask.getFromRefId())) {
+					apprTask.setFromRefType(preApprTask.getType());
+					apprTask.setFromRefId(preApprTask.getObjId());
+				} else {
+					apprTask.setFromRefType(preApprTask.getFromRefType());
+					apprTask.setFromRefId(preApprTask.getFromRefId());
+				}
 			}
 			
 			apprTask.setExtendedPropertyValue("taskRef", taskRef);
@@ -383,7 +406,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			SmartUtil.increaseNoticeCountByNoticeType(approver, Notice.TYPE_ASSIGNED);
 			
 			if (logger.isInfoEnabled()) {
-				logger.info("Assignee Next Approval [" + obj.getTitle() + " ( User : " + obj.getAssignee() + " ) ]");
+				logger.info("Assignee Next Approval [" + apprTask.getTitle() + " ( User : " + apprTask.getAssignee() + " ) ]");
 			}
 			return apprTask;
 		}

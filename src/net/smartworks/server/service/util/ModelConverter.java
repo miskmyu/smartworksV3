@@ -983,7 +983,8 @@ public class ModelConverter {
 				////////////////////////////////////////////
 				IWInstanceInfo instInfo = new IWInstanceInfo();
 				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || 
-						task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+						task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL) ||
+							task.getTskType().equalsIgnoreCase("SINGLE")) {
 					String def = task.getTskDef();
 					String[] ids = StringUtils.tokenizeToStringArray(def, "|");
 					//ids[0] = domainId
