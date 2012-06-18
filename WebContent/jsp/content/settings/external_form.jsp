@@ -76,7 +76,7 @@
 					<div class="title"><fmt:message key="settings.title.externalform.list"/></div>
 					<!-- 우측버튼 -->
 					<div class="title_line_btns">
-						<div class="icon_btn_create"> <a class="icon_btn_tail js_new_external_form" href=""><fmt:message key="common.button.add_new"/></a> </div>
+						<div class="icon_btn_add"> <a class="icon_btn_tail js_new_external_form" href=""><fmt:message key="common.button.add_new"/></a> </div>
 					</div>
 					<!-- 우측버튼 //-->
 				</div>

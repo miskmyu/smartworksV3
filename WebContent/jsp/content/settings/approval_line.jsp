@@ -75,7 +75,7 @@
 					<div class="title"><fmt:message key="settings.title.approval.list"/></div>
 					<!-- 우측버튼 -->
 					<div class="title_line_btns">
-						<div class="icon_btn_create">
+						<div class="icon_btn_add">
 							<a class="icon_btn_tail js_new_approval_line" href=""><fmt:message key="common.button.add_new"/></a>
 						</div>
 					</div>

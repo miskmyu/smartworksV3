@@ -120,7 +120,7 @@
 				<tr>
 					<th class="required_label"><fmt:message key="settings.title.webservice.wsdl_uri"/></th>
 					<td>
-						<div class="btn_fb_space js_webservice_wsdl">
+						<div class="btn_fb_space5 js_webservice_wsdl">
 							<input name="txtWebServiceWSDL" <%if(!SmartUtil.isBlankObject(webService.getWsdlUri())){ %>readonly<%} %> class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(webService.getWsdlUri())%>">
 							<div class="icon_btn_start po_rbtn">
 								<a class="icon_btn_tail js_fetch_webservice_wsdl" <%if(!SmartUtil.isBlankObject(webService.getWsdlUri())){ %>style="display:none"<%} %> href=""><fmt:message key="settings.button.wsdl.fetch"/></a>

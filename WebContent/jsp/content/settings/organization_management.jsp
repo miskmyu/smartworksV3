@@ -33,8 +33,8 @@
 								<td width="35%" class="vt"><div class="pop_list_area mr15"><jsp:include page="/jsp/content/settings/comlist_by_depart.jsp"></jsp:include></div></td>
 								<td width="65%" class="vt">
 									<div class="tr mb2">
-										<span class="icon_btn_create"><a class="icon_btn_tail js_new_department" href=""><fmt:message key="settings.button.add_department"/></a></span>
-										<span class="icon_btn_create"><a class="icon_btn_tail js_new_member" href=""><fmt:message key="settings.button.add_member"/></a></span>
+										<span class="icon_btn_add"><a class="icon_btn_tail js_new_department" href=""><fmt:message key="settings.button.add_department"/></a></span>
+										<span class="icon_btn_add"><a class="icon_btn_tail js_new_member" href=""><fmt:message key="settings.button.add_member"/></a></span>
 									</div>
 									<!-- 상단 우측 버튼//-->
 					
