@@ -553,12 +553,18 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					mailInstanceInfo.setId(String.valueOf(mailContent.getId()));
 					String sender = mailContent.getSender();
 					String senderId = null;
-					int start = sender.indexOf("<");
-					int end = sender.indexOf(">");
-					senderId = sender.substring(start+1, end);
+					if(!SmartUtil.isBlankObject(sender)){
+						int start = sender.indexOf("<");
+						int end = sender.indexOf(">");
+						if(start == -1 || end == -1)
+							senderId = sender;
+						else
+							senderId = sender.substring(start+1, end);
+					}
 					mailInstanceInfo.setSubject(mailContent.getSubject());
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
-					mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
+					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
+						mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
 					mailInstanceInfo.setPriority(mailContent.getPriority());
 					mailInstanceInfo.setSize(mailContent.getMsgSize());
 					mailInstanceInfo.setMultipart(mailContent.getMultipart() == 0 ? false : true);

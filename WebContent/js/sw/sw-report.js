@@ -320,7 +320,6 @@ Ext.onReady(function () {
 		},
 		
 		loadWithData : function(reportType, data, chartType, isStacked, target) {
-			console.log($('#' + target));
 			smartChart.reportType = reportType;
 			if(isEmpty(chartType)) chartType = swChartType.DEFAULT;
 			smartChart.chartType = chartType;

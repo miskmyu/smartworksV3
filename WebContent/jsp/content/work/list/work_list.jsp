@@ -132,8 +132,10 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
+
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "work_list.sw");
 
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);

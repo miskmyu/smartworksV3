@@ -39,6 +39,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
+import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
@@ -1411,6 +1412,31 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.commentOnTaskApproval(requestBody, request);
+	}
+
+	@Override
+	public RecordList getEmailServerList(RequestParams params) throws Exception {
+		return settingsService.getEmailServerList(params);
+	}
+
+	@Override
+	public EmailServer getEmailServerById(String id) throws Exception {
+		return settingsService.getEmailServerById(id);
+	}
+
+	@Override
+	public void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		settingsService.setEmailServer(requestBody, request);
+	}
+
+	@Override
+	public void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		settingsService.removeEmailServer(requestBody, request);
+	}
+
+	@Override
+	public EmailServer[] getEmailServers() throws Exception {
+		return settingsService.getEmailServers();
 	}
 
 }

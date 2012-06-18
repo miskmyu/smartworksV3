@@ -4,6 +4,7 @@ import java.util.TimeZone;
 
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.LocaleInfo;
 import net.smartworks.util.SmartUtil;
@@ -43,6 +44,8 @@ public class User extends WorkSpace {
 	private String companyId;
 	private String signPicture;
 	private boolean online;
+	private boolean useMail;
+	private MailAccount[] mailAccounts;
 	
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -143,6 +146,18 @@ public class User extends WorkSpace {
 	}
 	public void setSignPicture(String signPicture) {
 		this.signPicture = signPicture;
+	}
+	public boolean isUseMail() {
+		return useMail;
+	}
+	public void setUseMail(boolean useMail) {
+		this.useMail = useMail;
+	}
+	public MailAccount[] getMailAccounts() {
+		return mailAccounts;
+	}
+	public void setMailAccounts(MailAccount[] mailAccounts) {
+		this.mailAccounts = mailAccounts;
 	}
 	public User(){
 		super();

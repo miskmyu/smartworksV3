@@ -55,6 +55,7 @@
 					<li><a href="approval_line.sw" class="js_content"><span class="icon_b1dep"><fmt:message key="settings.title.approval_information"/></span></a></li>
 					<li><a href="web_service.sw" class="js_content"><span class="icon_b1dep"><fmt:message key="settings.title.wservice_information"/></span></a></li>
 					<li><a href="external_form.sw" class="js_content"><span class="icon_b1dep"><fmt:message key="settings.title.eform_information"/></span></a></li>
+					<li><a href="email_server.sw" class="js_content"><span class="icon_b1dep"><fmt:message key="settings.title.email_information"/></span></a></li>
 				</ul>
 				<!--내부메뉴//-->
 			</div>

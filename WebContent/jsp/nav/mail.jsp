@@ -31,14 +31,14 @@
 <!-- 메일 해더 부분  //-->
 	
 <!-- 메일 폴더및 관련기능들  -->
-<div class='nav_sub_list js_collapsible'>
+<div class="nav_sub_list js_collapsible js_mail_folders">
 	<!-- 내부 메뉴 -->
 	<div class="tab_buttons js_nav_tab_mail">
-		<a href="fetch_unread_mails.sw" title="<fmt:message key='nav.mail.fetch_unread_mails'/>"><span class="btn_unread_mail"/></span></a>
+		<a href="" class="js_fetch_unread_mails_btn" title="<fmt:message key='nav.mail.fetch_unread_mails'/>"><span class="btn_unread_mail"/></span></a>
 		<a href="new_mail.sw" class="js_content" title="<fmt:message key='nav.mail.new_mail'/>"><span class="btn_new_mail"></span></a>
 		<a href="" class="js_new_mail_folder_btn" title="<fmt:message key='nav.mail.new_folder'/>"><span class="btn_folder_add"></span></a>
 	</div>
-	<div id='my_mail'>
+	<div id="my_mail" class="js_all_mail_folders">
 		<!--  메일서버에서 현재사용자의 메일폴더정보를 가져와서 보여준다.. -->
    		<jsp:include page="my_all_mail_folders.jsp" />
 	</div>

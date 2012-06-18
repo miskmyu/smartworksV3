@@ -84,6 +84,12 @@ public class SettingsController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/settings/external_form.jsp", "external_form.tiles");
 	}
 
+	@RequestMapping("/email_server")
+	public ModelAndView emailServerManagement(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/settings/email_server.jsp", "email_server.tiles");
+	}
+
 	@RequestMapping(value = "/set_company_general", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void setCompanyGeneral(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -274,6 +280,30 @@ public class SettingsController extends ExceptionInterceptor {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void checkIdDuplication(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.checkIdDuplication(request);
+	}
+	
+	@RequestMapping("/edit_email_server")
+	public ModelAndView editEmailServer(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/settings/edit_email_server.jsp", "edit_email_server.tiles");
+	}
+
+	@RequestMapping(value = "/create_email_server", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void createEmailServer(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setEmailServer(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/set_email_server", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void setEmailServer(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setEmailServer(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/remove_email_server", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void removeEmailServer(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeEmailServer(requestBody, request);
 	}
 	
 }

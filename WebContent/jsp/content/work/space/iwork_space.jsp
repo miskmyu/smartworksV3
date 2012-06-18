@@ -23,6 +23,8 @@
 	
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
+	String lastHref = SmartUtil.getLastHref(request);
+
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
 	String taskInstId = request.getParameter("taskInstId");
@@ -61,7 +63,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-    <div class="section_portlet js_iwork_space_page" workId="<%=workId%>" instId="<%=instId%>">
+    <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>">
     	<div class="portlet_t">
       		<div class="portlet_tl"></div>
     	</div>

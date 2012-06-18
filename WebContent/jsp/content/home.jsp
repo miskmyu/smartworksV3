@@ -10,6 +10,7 @@
 <%
 
 	session.setAttribute("cid", ISmartWorks.CONTEXT_HOME);
+	session.setAttribute("lastLocation", "home.sw");
 	session.removeAttribute("wid");
 
 %>

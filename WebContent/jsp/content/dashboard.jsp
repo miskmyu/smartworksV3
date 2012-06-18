@@ -5,6 +5,7 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	
 	session.setAttribute("cid", ISmartWorks.CONTEXT_DASHBOARD);
+	session.setAttribute("lastLocation", "dashboard.sw");
 	session.removeAttribute("wid");
 	
 %>

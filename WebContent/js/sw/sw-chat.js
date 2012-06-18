@@ -32,7 +32,6 @@ function fetchAllasyncMessages(chatId){
 			receiverId : currentUser.userId
 		},
 		success : function(data, status, jqXHR) {
-			console.log('fetched messages =', data.messages);
 			if(!isEmpty(data.messages)){
 				for(var i=0; i<data.messages.length; i++){
 					var message = {};
@@ -191,7 +190,6 @@ function shiftBoxFromGroup(type, chattingBox){
 function startChattingWindow(message) {
 	var target = $('div.js_chatting_box_list');
 	var chattingBoxs = target.find('div.js_chatting_box');
-	console.log('chattingBoxs=', chattingBoxs);
 	for(var i=0; i<chattingBoxs.length; i++ )
 		if($(chattingBoxs[i]).attr('id') === message.chatId)
 			return;

@@ -29,7 +29,7 @@
 		</div>
 		
 		<!-- nav 검색 리스트 -->
-		<div class="nav_srch_list" style="display: none"></div>
+		<div class="nav_srch_list m0" style="display: none"></div>
 		<!-- nav 검색 리스트 -->
 		
 	</li>

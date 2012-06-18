@@ -57,7 +57,7 @@
 			<div class='srch_icon js_srch_x'></div>
 		</div>
 		<!-- nav 검색 리스트 -->
-		<div class="nav_srch_list" style="display: none"></div>
+		<div class="nav_srch_list m0" style="display: none"></div>
 		<!-- nav 검색 리스트 -->
 	</li>
 	<!--  검색박스를 제공하여, 초성검색 기능을 제공 //-->

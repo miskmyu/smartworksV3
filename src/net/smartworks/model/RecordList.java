@@ -7,6 +7,7 @@ public class RecordList {
 	public static final int TYPE_APPROVAL_LINE_LIST = 3;
 	public static final int TYPE_WEB_SERVICE_LIST = 4;
 	public static final int TYPE_EXTERNAL_FORM_LIST = 5;
+	public static final int TYPE_EMAIL_SERVER_LIST = 6;
 	public static final int DEFAULT_PAGE_SIZE = 20;
 		
 	private int type;

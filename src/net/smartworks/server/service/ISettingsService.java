@@ -10,6 +10,7 @@ import net.smartworks.model.calendar.CompanyEvent;
 import net.smartworks.model.calendar.WorkHourPolicy;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
@@ -71,5 +72,15 @@ public interface ISettingsService {
 	public abstract void removeDepartment(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void checkIdDuplication(HttpServletRequest request) throws Exception;
+	
+	public abstract RecordList getEmailServerList(RequestParams params) throws Exception;
+	
+	public abstract EmailServer getEmailServerById(String id) throws Exception;
+	
+	public abstract void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract EmailServer[] getEmailServers() throws Exception;
 	
 }

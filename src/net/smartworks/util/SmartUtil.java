@@ -210,8 +210,7 @@ public class SmartUtil {
 	/* (non-Javadoc)
 	 * @see net.smartworks.service.impl.ISmartWorks#getContextPrefixByWorkType(int, int)
 	 */
-	public static String getContextPrefixByWorkType(int smartWorkType,
-			int spaceType) throws Exception {
+	public static String getContextPrefixByWorkType(int smartWorkType, int spaceType) throws Exception {
 
 		if (spaceType == SmartWorks.SPACE_TYPE_WORK_LIST) {
 			if (smartWorkType == SmartWork.TYPE_INFORMATION)
@@ -234,8 +233,7 @@ public class SmartUtil {
 	/* (non-Javadoc)
 	 * @see net.smartworks.service.impl.ISmartWorks#getTargetContentByWorkType(int, int)
 	 */
-	public static String getTargetContentByWorkType(int smartWorkType,
-			int spaceType) throws Exception {
+	public static String getTargetContentByWorkType(int smartWorkType, int spaceType) throws Exception {
 
 		if (spaceType == SmartWorks.SPACE_TYPE_WORK_LIST) {
 			if (smartWorkType == SmartWork.TYPE_INFORMATION)
@@ -261,6 +259,45 @@ public class SmartUtil {
 
 		}
 		return null;
+	}
+	
+	public static String getLastHref(HttpServletRequest request) throws Exception{
+		String lastLocation = (String)request.getSession().getAttribute("lastLocation");
+		if(isBlankObject(lastLocation)) return "home.sw";
+		
+		if(		lastLocation.equals("homew.sw") 
+				 || lastLocation.equals("smartcaster.sw") 
+				 || lastLocation.equals("dashboard.sw")){ 
+			return lastLocation;
+		}
+		
+		if(		lastLocation.equals("department_space.sw") 
+				 || lastLocation.equals("group_space.sw") 
+				 || lastLocation.equals("user_space.sw")){ 
+			String cid = (String)request.getSession().getAttribute("cid");
+			String wid = (String)request.getSession().getAttribute("wid");
+			return lastLocation + "?cid=" + cid + "&wid=" + wid;
+		}
+			
+		if(		lastLocation.equals("board_list.sw") 
+				 || lastLocation.equals("memo_list.sw") 
+				 || lastLocation.equals("file_list.sw") 
+				 || lastLocation.equals("image_list.sw") 
+				 || lastLocation.equals("event_list.sw") 
+				 || lastLocation.equals("work_list.sw")){ 
+			String cid = (String)request.getSession().getAttribute("cid");
+			String wid = (String)request.getSession().getAttribute("wid");
+			return lastLocation + "?cid=" + cid + "&wid=" + wid;
+		}
+			
+		if(		lastLocation.equals("iwork_list.sw") 
+				 || lastLocation.equals("pwork_list.sw") 
+				 || lastLocation.equals("mail_list.sw")){ 
+			String cid = (String)request.getSession().getAttribute("cid");
+			return lastLocation + "?cid=" + cid;
+		}
+			
+		return "home.sw";
 	}
 
 	/* (non-Javadoc)

@@ -10,6 +10,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	session.setAttribute("cid", ISmartWorks.CONTEXT_SMARTCASTER);
+	session.setAttribute("lastLocation", "smartcaster.sw");
 	session.removeAttribute("wid");
 	
 %>

@@ -13,6 +13,7 @@
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", userId);
 	session.setAttribute("workSpace", user);
+	session.setAttribute("lastLocation", "user_space.sw");
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

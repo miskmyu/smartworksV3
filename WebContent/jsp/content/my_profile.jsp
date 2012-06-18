@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.mail.EmailServer"%>
+<%@page import="net.smartworks.model.mail.MailAccount"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.KeyMap"%>
 <%@page import="net.smartworks.util.LocalDate"%>
@@ -20,6 +22,10 @@
 
 	// 사용가능한 타임존들을 가져와서, 타임존 선택박스에 리스트로 보여준다.
 	KeyMap[] timeZoneNames = LocalDate.getAvailableTimeZoneNames(cUser.getLocale());
+	
+	MailAccount[] mailAccounts = cUser.getMailAccounts();
+	MailAccount mailAccount = (SmartUtil.isBlankObject(mailAccounts) || mailAccounts.length<1) ? new MailAccount() : mailAccounts[0];
+	EmailServer[] emailServers = smartWorks.getEmailServers();
 %>
 <script type="text/javascript">
 
@@ -97,7 +103,7 @@
 					</div>					
 					<table class="table_normal600" style="width:70%">
 						<tr>
-							<td><fmt:message key="profile.title.user_id" /></td>
+							<td style="width:200px"><fmt:message key="profile.title.user_id" /></td>
 							<td>
 								<input name="txtUserProfileUserId" type="text" readonly="readonly"
 									value="<%=CommonUtil.toNotNull(cUser.getId())%>">
@@ -180,6 +186,47 @@
 								<input name="txtUserProfileCellNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getCellPhoneNo())%>" title="">
 							</td>
 						</tr>
+						<%
+						if(!SmartUtil.isBlankObject(emailServers)){
+						%>
+							<tr>
+								<td><fmt:message key="profile.title.email.use" /></td>
+								<td>
+									<input name="chkUserProfileUseEmail" class="fieldline js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
+								</td>
+							</tr>
+							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+								<td  class="required_label"><fmt:message key="profile.title.email.id" /></td>
+								<td>
+										<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName())%>" title="">
+										@
+										<select style="width:45%" name="selUserProfileEmailServerName" class="fieldline">
+											<%
+											for(int i=0; i<emailServers.length; i++){
+												EmailServer emailServer = emailServers[i];
+											%>
+												<option value="<%=emailServer.getId() %>" <%if(emailServer.getId().equals(mailAccount.getEmailServerId())){ %>selected<%} %>><%=CommonUtil.toNotNull(emailServer.getName()) %></option>
+											<%
+											}
+											%>
+										</select>
+								</td>
+							</tr>
+							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+								<td class="required_label"><fmt:message key="profile.title.email.password" /></td>
+								<td>
+									<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+								</td>
+							</tr>
+							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+								<td class="required_label"><fmt:message key="profile.title.email.password_confirm" /></td>
+								<td>
+									<input name="pwUserProfileEmailPWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+								</td>
+							</tr>
+						<%
+						}
+						%>
 					</table>
 				</form>
 			</div>

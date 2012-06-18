@@ -30,6 +30,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
@@ -2010,6 +2011,66 @@ public class SettingsServiceImpl implements ISettingsService {
 		} catch(Exception e) {
 			throw new DuplicateKeyException("duplicateKeyException");
 		}
+	}
+	
+	@Override
+	public RecordList getEmailServerList(RequestParams params) throws Exception {
+		RecordList recordList = new RecordList();
+		recordList.setCurrentPage(1);
+		recordList.setPageSize(20);
+		recordList.setTotalPages(21);
+		recordList.setType(RecordList.TYPE_EMAIL_SERVER_LIST);
+		EmailServer emailServer = new EmailServer("paranmail", "maninsoft.co.kr");
+		emailServer.setFetchServer("pop3.openmail.paran.com");
+		emailServer.setFetchServerPort(110);
+		emailServer.setFetchProtocol(EmailServer.PROTOCOL_POP3);
+		emailServer.setFetchSsl(false);
+		emailServer.setSmtpServer("smtp.openmail.paran.com");
+		emailServer.setSmtpServerPort(25);
+		emailServer.setSmtpAuthenticated(true);
+		emailServer.setSmtpSsl(false);
+		EmailServer[] emailServers = new EmailServer[]{emailServer};
+		recordList.setRecords(emailServers);
+		return recordList;
+	}
+	
+	@Override
+	public EmailServer getEmailServerById(String id) throws Exception {
+		EmailServer emailServer = new EmailServer("paranmail", "maninsoft.co.kr");
+		emailServer.setFetchServer("pop3.openmail.paran.com");
+		emailServer.setFetchServerPort(110);
+		emailServer.setFetchProtocol(EmailServer.PROTOCOL_POP3);
+		emailServer.setFetchSsl(false);
+		emailServer.setSmtpServer("smtp.openmail.paran.com");
+		emailServer.setSmtpServerPort(25);
+		emailServer.setSmtpAuthenticated(true);
+		emailServer.setSmtpSsl(false);
+		return emailServer;
+	}
+	
+	@Override
+	public void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public EmailServer[] getEmailServers() throws Exception {
+		EmailServer emailServer = new EmailServer("paranmail", "maninsoft.co.kr");
+		emailServer.setFetchServer("pop3.openmail.paran.com");
+		emailServer.setFetchServerPort(110);
+		emailServer.setFetchProtocol(EmailServer.PROTOCOL_POP3);
+		emailServer.setFetchSsl(false);
+		emailServer.setSmtpServer("smtp.openmail.paran.com");
+		emailServer.setSmtpServerPort(25);
+		emailServer.setSmtpAuthenticated(true);
+		emailServer.setSmtpSsl(false);
+		return new EmailServer[]{emailServer};
 	}
 
 }

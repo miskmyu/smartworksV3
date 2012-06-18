@@ -77,14 +77,11 @@
 				%>
 			</select>
 			
-		</div>
-		<div class="title_line_btns">
-			<span class="po_left js_progress_span"></span>
-			
-			<div class="icon_btn_edit">
-				<a href="work_report_edit.sw" class="js_edit_work_report icon_btn_tail"><fmt:message key="report.button.edit_report"/></a>
-			</div>
-		</div>
+		</div>			
+		<a href="work_report_edit.sw" class="js_edit_work_report" title="<fmt:message key='report.button.edit_report'/>">
+			<span class="icon_btn_edit"></span>
+		</a>
+		<span class="js_progress_span"></span>
 	</div>
 	
 	<div>

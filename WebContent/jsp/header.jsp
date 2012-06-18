@@ -32,6 +32,9 @@ function updateNoticeCount(message){
 		$('#assigned_count').html(data);
 	} else if (type == 4) {
 		$('#mailbox_count').html(data);
+		data = (count>0) ? " [<b>" + count + "</b>]" : "";
+		$('.js_inbox_unread_count').html(data);
+		$('.js_folder_unread_count').html(count);
 	} else if (type == 5) {
 		$('#savedbox_count').html(data);
 	}

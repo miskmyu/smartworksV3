@@ -33,7 +33,6 @@
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
 	session.setAttribute("smartWork", work);
-
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

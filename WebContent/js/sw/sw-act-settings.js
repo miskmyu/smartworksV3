@@ -399,13 +399,11 @@ $(function() {
 				userId : userId
 			},
 			success : function(data, status, jqXHR) {
-				console.log("success");
 				smartPop.showInfo(smartPop.INFO, smartMessage.get('usableUserId'));
 				target.addClass('sw_dup_checked').attr('readonly', true);
 				input.hide().siblings().show();;
 			},
 			error : function(xhr, ajaxOptions, thrownError){
-				console.log("error");
 				smartPop.showInfo(smartPop.WARN, smartMessage.get('duplicatedUserId'));
 			}
 		});
@@ -575,6 +573,72 @@ $(function() {
 			itemTable.parents('tr:first td:first').removeClass('required_label');
 		}
 		return false;
+	});
+
+	$('a.js_new_email_server').live('click', function(e) {
+		var input = $(targetElement(e));
+		var target = input.parents('.js_email_server_page').find('div.js_new_email_server');
+		$.ajax({
+			url : "edit_email_server.sw",
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+			}			
+		});
+		return false;
+	});
+
+	$('.js_edit_email_server').live('click', function(e) {
+		var input = $(targetElement(e));
+		var target = input.parents('.js_email_server_page').find('div.js_new_email_server');
+		var emailServerId = input.parents('.js_edit_email_server').attr('emailServerId');
+		$.ajax({
+			url : "edit_email_server.sw?emailServerId=" + emailServerId,
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+			}			
+		});
+		return false;
+	});
+
+	$('.js_delete_email_server').live('click', function(e) {
+		var input = $(targetElement(e));
+		
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
+			var emailServerId = input.parents('.js_edit_email_server').attr('emailServerId');
+			var paramsJson = {};
+			paramsJson['emailServerId'] = emailServerId;
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "remove_email_server.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeEmailServerSucceed'), function(){
+						document.location.href = "email_server.sw";					
+					});					
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeEmailServerError"), function(){
+					});
+					
+				}
+				
+			});
+		});
+		return false;
+	});
+	
+	$('.js_toggle_use_email').live('click', function(e){
+		var input = $(targetElement(e));
+		var emailAccountInfos = input.parents('tr').nextAll('.js_email_account_info');
+		if(input.is(':checked')){
+			emailAccountInfos.show();
+		}else{
+			emailAccountInfos.hide();			
+		}
+		return true;
 	});
 
 });
