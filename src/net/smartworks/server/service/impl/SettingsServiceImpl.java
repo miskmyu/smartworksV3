@@ -2274,7 +2274,7 @@ public class SettingsServiceImpl implements ISettingsService {
 
 	@Override
 	public ConnectionProfile[] getMailConnectionProfiles() throws Exception {
-		MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+		MailAccount[] mailAccounts = communityService.getMyMailAccounts();
 		if(SmartUtil.isBlankObject(mailAccounts)) return null;
 		ConnectionProfile[] connectionProfiles = new ConnectionProfile[mailAccounts.length];		
 		for(int i=0; i<mailAccounts.length; i++){

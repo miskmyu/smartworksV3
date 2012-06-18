@@ -39,6 +39,7 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
+import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.ISettingsService;
@@ -85,6 +86,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 	@Autowired
 	private ISettingsService settingsService;
+	@Autowired
+	private ICommunityService communityService;
 
 	private static final long serialVersionUID = 1L;
 
@@ -110,7 +113,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    
 	    profile = profiles[0];
 	    
-	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
 	    if(mailAccounts == null || mailAccounts.length == 0)
 	    	return null;
 		String username = mailAccounts[0].getUserName();
@@ -162,7 +165,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    
 	    profile = profiles[0];
 	    
-	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
 	    if(mailAccounts == null || mailAccounts.length == 0)
 	    	return null;
 		String username = mailAccounts[0].getUserName();
@@ -215,7 +218,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    
 	    profile = profiles[0];
 	    
-	    MailAccount[] mailAccounts = SmartUtil.getCurrentUser().getMailAccounts();
+	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
 	    if(mailAccounts == null || mailAccounts.length == 0)
 	    	return null;
 		String username = mailAccounts[0].getUserName();
