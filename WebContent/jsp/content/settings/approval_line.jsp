@@ -86,7 +86,7 @@
 				<div class="js_new_approval_line"></div>
 				<!-- 추가하기 테이블 //-->
 				<!-- 근무정책 목록 -->
-				<div class="list_contents mt10">
+				<div class="list_contents">
 					<div>
 						<table>
 							<tbody>

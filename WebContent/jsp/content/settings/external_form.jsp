@@ -85,7 +85,7 @@
 				<div class="js_new_external_form"></div>
 				<!-- 추가하기 테이블 //-->
 				<!-- 웹서비스 목록 -->
-				<div class="list_contents mt10">
+				<div class="list_contents">
 					<div>
 						<table>
 							<tbody>
