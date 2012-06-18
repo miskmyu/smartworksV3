@@ -16,7 +16,7 @@ public class SwoUserExtend {
 	}
 	
 	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String departmentName, String departmentDesc, String locale,
-			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, String phoneNo, String cellPhoneNo) {
+			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, String phoneNo, String cellPhoneNo) {
 		this.id = id;
 		this.name = name;
 		this.nickName = nickName;
@@ -34,6 +34,7 @@ public class SwoUserExtend {
 		this.authId = authId;
 		this.employeeId = employeeId;
 		this.email = email;
+		this.useMail = useMail;
 		this.phoneNo = phoneNo;
 		this.cellPhoneNo = cellPhoneNo;
 	}
@@ -56,6 +57,7 @@ public class SwoUserExtend {
 	private String authId = null;
 	private String employeeId = null;
 	private String email = null;
+	private boolean useMail = false;
 	private String phoneNo = null;
 	private String cellPhoneNo = null;
 	private String type = null;
@@ -75,6 +77,12 @@ public class SwoUserExtend {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isUseMail() {
+		return useMail;
+	}
+	public void setUseMail(boolean useMail) {
+		this.useMail = useMail;
 	}
 	public String getPhoneNo() {
 		return phoneNo;

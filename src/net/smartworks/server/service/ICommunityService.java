@@ -13,6 +13,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.mail.MailAccount;
 
 public interface ICommunityService {
 
@@ -69,5 +70,7 @@ public interface ICommunityService {
 	public abstract CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception;
 
 	public abstract CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception;
+
+	public abstract MailAccount[] getMyMailAccounts() throws Exception;
 
 }

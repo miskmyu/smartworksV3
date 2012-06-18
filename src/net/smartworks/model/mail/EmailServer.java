@@ -1,8 +1,6 @@
 package net.smartworks.model.mail;
 
 import net.smartworks.model.BaseObject;
-import net.smartworks.util.SmartMessage;
-import net.smartworks.util.SmartUtil;
 
 public class EmailServer extends BaseObject {
 

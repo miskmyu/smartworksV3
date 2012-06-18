@@ -44,6 +44,7 @@ import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.mail.EmailServer;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
@@ -651,5 +652,7 @@ public interface ISmartWorks {
 	public abstract EmailServer[] getEmailServers() throws Exception;
 
 	public abstract ConnectionProfile[] getMailConnectionProfiles() throws Exception;
-	
+
+	public abstract MailAccount[] getMyMailAccounts() throws Exception;
+
 }

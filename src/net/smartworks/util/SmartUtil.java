@@ -363,6 +363,7 @@ public class SmartUtil {
 					user.setPhoneNo(login.getPhoneNo());
 					user.setCellPhoneNo(login.getCellPhoneNo());
 					user.setEmployeeId(login.getEmpNo());
+					user.setUseMail(login.isUseMail());
 				}
 				return user;
 			} else {

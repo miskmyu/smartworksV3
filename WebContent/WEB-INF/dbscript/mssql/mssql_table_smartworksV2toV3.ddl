@@ -42,6 +42,7 @@ ALTER TABLE SwOpinion add modifiedTime datetime;
 ALTER TABLE SWOrgUser add locale varchar(20);
 ALTER TABLE SWOrgUser add timeZone varchar(20);
 ALTER TABLE SWOrgUser add nickName varchar(255);
+ALTER TABLE SWOrgUser add useMail bit;
 
 ALTER TABLE SWOrgGroup alter column name varchar(100);
 
@@ -700,3 +701,37 @@ alter table swdomain add keyDuplicable bit;
 
 -- keyColumn = 키필드, titleFieldId = 제목필드
 update swdomain set keyColumn = titleFieldId
+
+-- SwMailServer (메일서버정보)
+CREATE TABLE SwMailServer (
+	id varchar(50) NOT NULL,
+	name varchar(100) NOT NULL,
+	companyId varchar(50) NOT NULL,
+	fetchServer varchar(50),
+	fetchServerPort int,
+	fetchProtocol varchar(10),
+	fetchSsl bit,
+	smtpServer varchar(50),
+	smtpServerPort int,
+	smtpAuthenticated bit,
+	smtpSsl bit,
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
+
+-- SwMailAccount (사용자메일계정)
+CREATE TABLE SwMailAccount (
+	id varchar(50) NOT NULL,
+	userId varchar(50) NOT NULL,
+	mailServerId varchar(50) NOT NULL,
+	mailId varchar(50) NOT NULL,
+	mailPassword varchar(50) NOT NULL,
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);

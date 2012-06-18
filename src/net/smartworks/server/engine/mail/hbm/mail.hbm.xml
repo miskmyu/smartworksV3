@@ -29,6 +29,41 @@
 		<property name="email" column="email" type="binary"/>
 	</class>
 
+	<class name="MailServer" table="SwMailServer">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="name" column="name" type="string" length="100" not-null="true"/>
+		<property name="companyId" column="companyId" type="string" length="50"/>
+		<property name="fetchServer" column="fetchServer" type="string" length="50"/>
+		<property name="fetchServerPort" column="fetchServerPort" type="int"/>
+		<property name="fetchProtocol" column="fetchProtocol" type="string" length="10"/>
+		<property name="fetchSsl" column="fetchSsl" type="boolean"/>
+		<property name="smtpServer" column="smtpServer" type="string" length="50"/>
+		<property name="smtpServerPort" column="smtpServerPort" type="int"/>
+		<property name="smtpAuthenticated" column="smtpAuthenticated" type="boolean"/>
+		<property name="smtpSsl" column="smtpSsl" type="boolean"/>
+		<property name="creationUser" column="creator" type="string" length="30"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="30"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+
+	<class name="MailAccount" table="SwMailAccount">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="userId" column="userId" type="string" length="50" not-null="true"/>
+		<property name="mailServerId" column="mailServerId" type="string" length="50" not-null="true"/>
+		<property name="mailServerName" column="mailServerName" type="string" length="100"/>
+		<property name="mailId" column="mailId" type="string" length="50" not-null="true"/>
+		<property name="mailPassword" column="mailPassword" type="string" length="50" not-null="true"/>
+		<property name="creationUser" column="creator" type="string" length="30"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="30"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+
 <!-- 	<class name="MailUid" table="msg_db_uids">
 		<id name="uid" column="uid" type="string" length="100" unsaved-value="undefined"/>
 		<property name="username" column="username" type="string" length="255"/>

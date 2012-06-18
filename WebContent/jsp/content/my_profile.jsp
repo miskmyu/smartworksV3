@@ -22,8 +22,9 @@
 
 	// 사용가능한 타임존들을 가져와서, 타임존 선택박스에 리스트로 보여준다.
 	KeyMap[] timeZoneNames = LocalDate.getAvailableTimeZoneNames(cUser.getLocale());
-	
-	MailAccount[] mailAccounts = cUser.getMailAccounts();
+
+	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
+	//MailAccount[] mailAccounts = cUser.getMailAccounts();
 	MailAccount mailAccount = (SmartUtil.isBlankObject(mailAccounts) || mailAccounts.length<1) ? new MailAccount() : mailAccounts[0];
 	EmailServer[] emailServers = smartWorks.getEmailServers();
 %>

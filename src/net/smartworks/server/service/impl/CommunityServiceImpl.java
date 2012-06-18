@@ -21,6 +21,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
@@ -42,6 +43,8 @@ import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomainFieldConstants;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
+import net.smartworks.server.engine.mail.manager.IMailManager;
+import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
@@ -92,6 +95,9 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private static IPublishNoticeManager getPublishNoticeManager() {
 		return SwManagerFactory.getInstance().getPublishNoticeManager();
+	}
+	private static IMailManager getMailManager() {
+		return SwManagerFactory.getInstance().getMailManager();
 	}
 
 	@Autowired
@@ -1480,6 +1486,38 @@ public class CommunityServiceImpl implements ICommunityService {
 				return getContactsByCategoryId(categoryId);
 			}
 		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@Override
+	public MailAccount[] getMyMailAccounts() throws Exception {
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			MailAccountCond mailAccountCond = new MailAccountCond();
+			mailAccountCond.setUserId(userId);
+
+			net.smartworks.server.engine.mail.model.MailAccount[] sMailAccounts = getMailManager().getMailAccounts(userId, mailAccountCond, IManager.LEVEL_ALL);
+
+			MailAccount[] vMailAccounts = null;
+			List<MailAccount> vMailAccountList = new ArrayList<MailAccount>();
+			if(!CommonUtil.isEmpty(sMailAccounts)) {
+				for(net.smartworks.server.engine.mail.model.MailAccount sMailAccount : sMailAccounts) {
+					MailAccount vMailAccount = new MailAccount();
+					vMailAccount.setEmailServerId(sMailAccount.getMailServerId());
+					vMailAccount.setEmailServerName(sMailAccount.getMailServerName());
+					vMailAccount.setUserName(sMailAccount.getMailId());
+					vMailAccount.setPassword(sMailAccount.getMailPassword());
+					vMailAccountList.add(vMailAccount);
+				}
+			}
+			if(vMailAccountList.size() > 0) {
+				vMailAccounts = new MailAccount[vMailAccountList.size()];
+				vMailAccountList.toArray(vMailAccounts);
+			}
+			return vMailAccounts;
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}

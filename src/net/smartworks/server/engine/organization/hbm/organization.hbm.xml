@@ -76,6 +76,7 @@
 		<property name="type" type="string" length="50"/>
 		<property name="position" column="pos" type="string" length="50"/>
 		<property name="email" type="string" length="50"/>
+		<property name="useMail" type="boolean"/>
 		<property name="password" column="passwd" type="string" length="50"/>
 		<property name="lang" type="string" length="20"/>
 		<property name="locale" type="string" length="20"/>

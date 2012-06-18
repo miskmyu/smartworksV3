@@ -46,7 +46,7 @@
 			var url = "set_email_server.sw";
 			var emailServerId = editEmailServer.attr('emailServerId'); 
 			var confirmMessage = smartMessage.get("saveConfirmation");
-			if(isEmpty(eventId)){
+			if(isEmpty(emailServerId)){
 				url = "create_email_server.sw";
 				confirmMessage = smartMessage.get("createConfirmation")
 			}
@@ -61,13 +61,13 @@
 					success : function(data, status, jqXHR) {
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.INFO, isEmpty(eventId) ? smartMessage.get('createEmailServerSucceed') : smartMessage.get('setEmailServerSucceed'), function(){
+						smartPop.showInfo(smartPop.INFO, isEmpty(emailServerId) ? smartMessage.get('createEmailServerSucceed') : smartMessage.get('setEmailServerSucceed'), function(){
 							document.location.href = "email_server.sw";					
 						});
 					},
 					error : function(e) {
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, isEmpty(eventId) ? smartMessage.get('createEmailServerError') : smartMessage.get('setEmailServerError'));
+						smartPop.showInfo(smartPop.ERROR, isEmpty(emailServerId) ? smartMessage.get('createEmailServerError') : smartMessage.get('setEmailServerError'));
 					}
 				});
 			});

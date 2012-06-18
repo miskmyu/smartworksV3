@@ -25,6 +25,7 @@ CREATE TABLE sworguser (
 	type varchar(50),
 	pos varchar(50),
 	email varchar(50),
+	useMail bit,
 	passwd varchar(20),
 	lang varchar(20),
 	stdtime varchar(20),
@@ -2357,4 +2358,38 @@ CREATE TABLE SWPublishNotice (
 	primary key (id)
 );
 
+
+-- SwMailServer (메일서버정보)
+CREATE TABLE SwMailServer (
+	id varchar(50) NOT NULL,
+	name varchar(100) NOT NULL,
+	companyId varchar(50) NOT NULL,
+	fetchServer varchar(50),
+	fetchServerPort int,
+	fetchProtocol varchar(10),
+	fetchSsl bit,
+	smtpServer varchar(50),
+	smtpServerPort int,
+	smtpAuthenticated bit,
+	smtpSsl bit,
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
+
+-- SwMailAccount (사용자메일계정)
+CREATE TABLE SwMailAccount (
+	id varchar(50) NOT NULL,
+	userId varchar(50) NOT NULL,
+	mailServerId varchar(50) NOT NULL,
+	mailId varchar(50) NOT NULL,
+	mailPassword varchar(50) NOT NULL,
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
 
