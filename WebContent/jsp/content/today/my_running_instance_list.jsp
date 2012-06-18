@@ -94,13 +94,13 @@
 					
 					<!-- 전체/할당업무만의 갯수와 선택버튼들 -->
 					<div class="txt_btn fr js_instance_counts">
-						<a href="" searchType='my_running_instances' class="current js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
-							<span class="t_red_bold js_all_running_count">[<%=runningCounts.getTotal() %>]</span>
+						<a href="" searchType='assigned_instances' class="current js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
+							<span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span>
 						</a>
 						 | 
-						 <a href="" searchType='assigned_instances' class="js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
-						 	<span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span>
-						 </a>
+						<a href="" searchType='my_running_instances' class="js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
+							<span class="t_red_bold js_all_running_count">[<%=runningCounts.getTotal() %>]</span>
+						</a>
 					</div>
 					<!-- 전체/할당업무만의 갯수와 선택버튼들 //-->
 					
@@ -109,7 +109,9 @@
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
 				<div class="solid_line"></div>
 				<table class="js_instance_list_table">
-					<jsp:include page="/jsp/content/today/more_instance_list.jsp" />
+					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
+						<jsp:param value="true" name="assignedOnly"/>
+					</jsp:include>
 				</table>
 				<!-- 진행중인 업무목록 및 더보기 버튼 //-->
 				<!-- 더보기 버튼 -->

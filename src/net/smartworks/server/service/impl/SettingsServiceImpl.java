@@ -30,6 +30,8 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.mail.EmailServer;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.Variable;
 import net.smartworks.model.service.WSDLDetail;
@@ -52,6 +54,9 @@ import net.smartworks.server.engine.config.model.SwcWorkHour;
 import net.smartworks.server.engine.config.model.SwcWorkHourCond;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.manager.IMailManager;
+import net.smartworks.server.engine.mail.model.MailServer;
+import net.smartworks.server.engine.mail.model.MailServerCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoConfig;
@@ -67,6 +72,7 @@ import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
+import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -85,6 +91,9 @@ public class SettingsServiceImpl implements ISettingsService {
 	}
 	private static IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
+	}
+	private static IMailManager getMailManager() {
+		return SwManagerFactory.getInstance().getMailManager();
 	}
 
 	@Autowired
@@ -2010,6 +2019,280 @@ public class SettingsServiceImpl implements ISettingsService {
 		} catch(Exception e) {
 			throw new DuplicateKeyException("duplicateKeyException");
 		}
+	}
+	
+	@Override
+	public RecordList getEmailServerList(RequestParams params) throws Exception {
+
+		try {
+			RecordList recordList = new RecordList();
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String companyId = cUser.getCompanyId();
+
+			MailServerCond mailServerCond = new MailServerCond();
+			mailServerCond.setCompanyId(companyId);
+
+			long totalCount = getMailManager().getMailServerSize(userId, mailServerCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				mailServerCond.setPageNo(currentPage-1);
+
+			mailServerCond.setPageSize(pageSize);
+
+			mailServerCond.setOrders(new Order[]{new Order(MailServerCond.A_CREATIONDATE, false)});
+			MailServer[] mailServers = getMailManager().getMailServers(userId, mailServerCond, IManager.LEVEL_ALL);
+
+			EmailServer[] emailServers = null;
+			List<EmailServer> emailServerList = new ArrayList<EmailServer>();
+			if(mailServers != null) {
+				for(MailServer mailServer : mailServers) {
+					EmailServer emailServer = new EmailServer();
+					emailServer.setId(mailServer.getObjId());
+					emailServer.setName(mailServer.getName());
+					emailServer.setFetchServer(mailServer.getFetchServer());
+					emailServer.setFetchServerPort(mailServer.getFetchServerPort());
+					emailServer.setFetchProtocol(mailServer.getFetchProtocol());
+					emailServer.setFetchSsl(mailServer.isFetchSsl());
+					emailServer.setSmtpServer(mailServer.getSmtpServer());
+					emailServer.setSmtpServerPort(mailServer.getSmtpServerPort());
+					emailServer.setSmtpAuthenticated(mailServer.isSmtpAuthenticated());
+					emailServer.setSmtpSsl(mailServer.isSmtpSsl());
+					emailServerList.add(emailServer);
+				}
+			}
+			if(emailServerList.size() > 0) {
+				emailServers = new EmailServer[emailServerList.size()];
+				emailServerList.toArray(emailServers);
+			}
+
+			recordList.setRecords(emailServers);
+			recordList.setPageSize(pageSize);
+			recordList.setTotalPages(totalPages);
+			recordList.setCurrentPage(currentPage);
+			recordList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
+
+			return recordList;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;			
+		}
+
+	}
+	
+	@Override
+	public EmailServer getEmailServerById(String id) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+
+			MailServer mailServer = getMailManager().getMailServer(userId, id, IManager.LEVEL_ALL);
+
+			EmailServer emailServer = null;
+			if(!SmartUtil.isBlankObject(mailServer)) {
+				emailServer = new EmailServer();
+				emailServer.setId(mailServer.getObjId());
+				emailServer.setName(mailServer.getName());
+				emailServer.setFetchServer(mailServer.getFetchServer());
+				emailServer.setFetchServerPort(mailServer.getFetchServerPort());
+				emailServer.setFetchProtocol(mailServer.getFetchProtocol());
+				emailServer.setFetchSsl(mailServer.isFetchSsl());
+				emailServer.setSmtpServer(mailServer.getSmtpServer());
+				emailServer.setSmtpServerPort(mailServer.getSmtpServerPort());
+				emailServer.setSmtpAuthenticated(mailServer.isSmtpAuthenticated());
+				emailServer.setSmtpSsl(mailServer.isSmtpSsl());
+			}
+			return emailServer;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String companyId = cUser.getCompanyId();
+
+			String emailServerId = (String)requestBody.get("emailServerId");
+			Map<String, Object> frmEditEmailServer = (Map<String, Object>)requestBody.get("frmEditEmailServer");
+
+			Set<String> keySet = frmEditEmailServer.keySet();
+			Iterator<String> itr = keySet.iterator();
+
+			String txtEmailServerName = null;
+			String txtEmailServerFetchServer = null;
+			String txtEmailServerFetchPort = null;
+			String selEmailServerFetchProtocol = null;
+			boolean txtEmailServerFetchSsl = false;
+			String txtEmailServerSmtpServer = null;
+			String txtEmailServerSmtpPort = null;
+			boolean txtEmailServerSmtpAuthenticated = false;
+			boolean txtEmailServerSmtpSsl = false;
+
+			while(itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmEditEmailServer.get(fieldId);
+				if(fieldValue instanceof String) {
+					String valueString = (String)fieldValue;
+					if(fieldId.equals("txtEmailServerName")) {
+						txtEmailServerName = valueString;
+					} else if(fieldId.equals("txtEmailServerFetchServer")) {
+						txtEmailServerFetchServer = valueString;
+					} else if(fieldId.equals("txtEmailServerFetchPort")) {
+						txtEmailServerFetchPort = valueString;
+					} else if(fieldId.equals("selEmailServerFetchProtocol")) {
+						selEmailServerFetchProtocol = valueString;
+					} else if(fieldId.equals("txtEmailServerFetchSsl")) {
+						txtEmailServerFetchSsl = true;
+					} else if(fieldId.equals("txtEmailServerSmtpServer")) {
+						txtEmailServerSmtpServer = valueString;
+					} else if(fieldId.equals("txtEmailServerSmtpPort")) {
+						txtEmailServerSmtpPort = valueString;
+					} else if(fieldId.equals("txtEmailServerSmtpAuthenticated")) {
+						txtEmailServerSmtpAuthenticated = true;
+					} else if(fieldId.equals("txtEmailServerSmtpSsl")) {
+						txtEmailServerSmtpSsl = true;
+					}
+				}
+			} 
+
+			MailServer mailServer = null;
+			if(!CommonUtil.isEmpty(emailServerId))
+				mailServer = getMailManager().getMailServer(userId, emailServerId, IManager.LEVEL_ALL);
+			else
+				mailServer = new MailServer();
+
+			mailServer.setName(txtEmailServerName);
+			mailServer.setCompanyId(companyId);
+			mailServer.setFetchServer(txtEmailServerFetchServer);
+			mailServer.setFetchServerPort(Integer.parseInt(txtEmailServerFetchPort));
+			mailServer.setFetchProtocol(selEmailServerFetchProtocol);
+			mailServer.setFetchSsl(txtEmailServerFetchSsl);
+			mailServer.setSmtpServer(txtEmailServerSmtpServer);
+			mailServer.setSmtpServerPort(Integer.parseInt(txtEmailServerSmtpPort));
+			mailServer.setSmtpAuthenticated(txtEmailServerSmtpAuthenticated);
+			mailServer.setSmtpSsl(txtEmailServerSmtpSsl);
+
+			getMailManager().setMailServer(userId, mailServer, IManager.LEVEL_ALL);
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+	}
+	
+	@Override
+	public void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String emailServerId = (String)requestBody.get("emailServerId");
+			getMailManager().removeMailServer(userId, emailServerId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+	}
+
+	@Override
+	public EmailServer[] getEmailServers() throws Exception {
+
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		String companyId = cUser.getCompanyId();
+
+		MailServerCond mailServerCond = new MailServerCond();
+		mailServerCond.setCompanyId(companyId);
+		mailServerCond.setOrders(new Order[]{new Order(MailServerCond.A_CREATIONDATE, false)});
+
+		MailServer[] mailServers = getMailManager().getMailServers(userId, mailServerCond, IManager.LEVEL_ALL);
+
+		EmailServer[] emailServers = null;
+		List<EmailServer> emailServerList = new ArrayList<EmailServer>();
+		if(mailServers != null) {
+			for(MailServer mailServer : mailServers) {
+				EmailServer emailServer = new EmailServer();
+				emailServer.setId(mailServer.getObjId());
+				emailServer.setName(mailServer.getName());
+				emailServer.setFetchServer(mailServer.getFetchServer());
+				emailServer.setFetchServerPort(mailServer.getFetchServerPort());
+				emailServer.setFetchProtocol(mailServer.getFetchProtocol());
+				emailServer.setFetchSsl(mailServer.isFetchSsl());
+				emailServer.setSmtpServer(mailServer.getSmtpServer());
+				emailServer.setSmtpServerPort(mailServer.getSmtpServerPort());
+				emailServer.setSmtpAuthenticated(mailServer.isSmtpAuthenticated());
+				emailServer.setSmtpSsl(mailServer.isSmtpSsl());
+				emailServerList.add(emailServer);
+			}
+		}
+		if(emailServerList.size() > 0) {
+			emailServers = new EmailServer[emailServerList.size()];
+			emailServerList.toArray(emailServers);
+		}
+		return emailServers;
+	}
+
+	@Override
+	public ConnectionProfile[] getMailConnectionProfiles() throws Exception {
+		MailAccount[] mailAccounts = communityService.getMyMailAccounts();
+		if(SmartUtil.isBlankObject(mailAccounts)) return null;
+		ConnectionProfile[] connectionProfiles = new ConnectionProfile[mailAccounts.length];		
+		for(int i=0; i<mailAccounts.length; i++){
+			MailAccount mailAccount = mailAccounts[i];
+			EmailServer server = getEmailServerById(mailAccount.getEmailServerId());
+			ConnectionProfile profile = new ConnectionProfile();
+			profile.setShortName(server.getName());
+			profile.setFetchServer(server.getFetchServer());
+			profile.setFetchPort(String.valueOf(server.getFetchServerPort()));
+			profile.setFetchSSL(String.valueOf(server.isFetchSsl()));
+			profile.setProtocol(server.getFetchProtocol());
+			profile.setSmtpServer(server.getSmtpServer());
+			profile.setSmtpPort(String.valueOf(server.getSmtpServerPort()));
+			profile.setSmtpSSL(String.valueOf(server.isSmtpSsl()));
+			profile.setSmtpAuthenticated(String.valueOf(server.isSmtpAuthenticated()));
+			connectionProfiles[i] = profile;
+		}
+		return connectionProfiles;
 	}
 
 }

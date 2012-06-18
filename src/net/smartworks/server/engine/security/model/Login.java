@@ -36,6 +36,7 @@ public class Login implements UserDetails {
 	private String type;
 	private String empNo;
 	private String email;
+	private boolean useMail;
 	private String authId;
 	private String bigPictureName;
 	private String smallPictureName;
@@ -154,6 +155,12 @@ public class Login implements UserDetails {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isUseMail() {
+		return useMail;
+	}
+	public void setUseMail(boolean useMail) {
+		this.useMail = useMail;
 	}
 	public String getAuthId() {
 		return authId;

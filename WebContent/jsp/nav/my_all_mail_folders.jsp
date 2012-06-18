@@ -29,9 +29,11 @@
 	if(folders != null){
 		for (MailFolder folder : folders) {
 			String iconClass = "";
+			String unreadCountTarget = "";
 			switch(folder.getType()){
 			case MailFolder.TYPE_SYSTEM_INBOX :
 				iconClass = "icon_mail_inbox";
+				unreadCountTarget = "js_inbox_unread_count";
 				break;
 			case MailFolder.TYPE_SYSTEM_SENT :
 				iconClass = "icon_mail_sent";
@@ -53,7 +55,7 @@
 			<li class="folder_actions">
 				<!--  모든폴더에 공통으로 필요한 html -->
 				<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>"> 
-					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><%if (folder.getUnreadItemCount() > 0) {%> <span>[<b><%=folder.getUnreadItemCount()%></b>]</span><%}%></span>								
+					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><span class="<%=unreadCountTarget%>"><%if (folder.getUnreadItemCount() > 0) {%> [<b><%=folder.getUnreadItemCount()%></b>]<%}%></span></span>								
 					<%
 					if(folder.getType() == MailFolder.TYPE_USER){
 					%>

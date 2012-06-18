@@ -32,8 +32,6 @@ $(function() {
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
 		smartPop.progressCenter();
 		$.ajax({
 			url : "move_mails.sw",
@@ -41,8 +39,10 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
+					smartPop.closeProgress();
+					document.location.href = mailSpace.attr('lastHref');
+				});
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -65,6 +65,7 @@ $(function() {
 			sourceId = mailList.attr('folderId');
 			var mails = mailList.find('input[name="chkSelectMail"]:checked');
 			if(isEmpty(mails)){
+				smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
 				input.find('option:first').attr('selected', 'selected').siblings('selected', '');
 				return false;
 			}
@@ -80,25 +81,27 @@ $(function() {
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
-		smartPop.progressCenter();
-		$.ajax({
-			url : "move_mails.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-				smartPop.closeProgress();
-			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
-			}
+		smartPop.confirm(smartMessage.get("moveMailConfirm"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "move_mails.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
+						input.find('option:first').attr('selected', 'selected').siblings('selected', '');
+						document.location.href = mailList.attr('currentHref');
+						smartPop.closeProgress();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					input.find('option:first').attr('selected', 'selected').siblings('selected', '');
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
+				}
+			});
 		});
 	});
 
@@ -108,7 +111,10 @@ $(function() {
 		var sourceId = mailList.attr('folderId');
 		var targetId = input.attr('targetId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
-		if(isEmpty(mails)) return false;
+		if(isEmpty(mails)){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			return false;
+		}
 		var paramsJson = {};
 		var msgIds = new Array();
 		for(var i=0; i<mails.length; i++)
@@ -117,23 +123,25 @@ $(function() {
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
-		smartPop.progressCenter();
-		$.ajax({
-			url : "move_mails.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
-			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
-			}
+		smartPop.confirm(smartMessage.get("moveMailConfirm"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "move_mails.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
+						document.location.href = mailList.attr('currentHref');
+						smartPop.closeProgress();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
+				}
+			});
 		});
 		return false;
 	});
@@ -149,23 +157,25 @@ $(function() {
 		paramsJson['ids'] = msgIds;
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
-		smartPop.progressCenter();
-		$.ajax({
-			url : "delete_mails.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
-			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
-			}
+		smartPop.confirm(smartMessage.get("deletMailConfirm"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "delete_mails.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
+						smartPop.closeProgress();
+						document.location.href = mailSpace.attr('lastHref');
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+				}
+			});
 		});
 		return false;
 	});
@@ -175,7 +185,10 @@ $(function() {
 		var mailList = input.parents('.js_mail_list_page');
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
-		if(isEmpty(mails)) return false;
+		if(isEmpty(mails)){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			return false;
+		}
 		var paramsJson = {};
 		var msgIds = new Array();
 		for(var i=0; i<mails.length; i++)
@@ -183,23 +196,25 @@ $(function() {
 		paramsJson['ids'] = msgIds;
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
-		smartPop.progressCenter();
-		$.ajax({
-			url : "delete_mails.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
-			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
-			}
+		smartPop.confirm(smartMessage.get("deletMailConfirm"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "delete_mails.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
+						smartPop.closeProgress();
+						document.location.href = mailList.attr('currentHref');
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+				}
+			});
 		});
 		return false;
 	});
@@ -213,7 +228,11 @@ $(function() {
 		var mailList = input.parents('.js_mail_list_page');
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
-		if(isEmpty(mails) || mails.length != 1) return false;
+		if(isEmpty(mails) || mails.length != 1){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			return false;
+		}
+			
 		var msgId =	$(mails[0]).attr('value');
 		smartPop.progressCenter();
 		$.ajax({
@@ -241,7 +260,11 @@ $(function() {
 		var mailList = input.parents('.js_mail_list_page');
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
-		if(isEmpty(mails) || mails.length != 1) return false;
+		if(isEmpty(mails) || mails.length != 1){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			return false;
+		}
+			
 		var msgId =	$(mails[0]).attr('value');
 		smartPop.progressCenter();
 		$.ajax({
@@ -269,7 +292,11 @@ $(function() {
 		var mailList = input.parents('.js_mail_list_page');
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
-		if(isEmpty(mails) || mails.length != 1) return false;
+		if(isEmpty(mails) || mails.length != 1){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			return false;
+		}
+
 		var msgId =	$(mails[0]).attr('value');
 		smartPop.progressCenter();
 		$.ajax({
@@ -304,23 +331,23 @@ $(function() {
 		var paramsJson = {};
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		// 서비스요청 프로그래스바를 나타나게 한다....
-//		var progressSpan = newMail.find('.js_progress_span');
-		smartPop.progressCenter();
-		$.ajax({
-			url : "delete_mail_folder.sw",
-			contentType : 'application/json',
-			type : 'POST',
-			data : JSON.stringify(paramsJson),
-			success : function(data, status, jqXHR) {
-				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
-			},
-			error : function(e) {
-				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailFolderError"));
-			}
+		smartPop.confirm(smartMessage.get("removeMailFolderConfirm"), function(){
+			smartPop.progressCenter();
+			$.ajax({
+				url : "delete_mail_folder.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					smartPop.closeProgress();
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailFolderError"));
+				}
+			});
 		});
 		return false;
 	});
@@ -333,6 +360,33 @@ $(function() {
 		smartPop.createMailFolder(folderId, folderName, folderDesc);
 		return false;
 		
+	});
+	
+	$('.js_fetch_unread_mails_btn').live('click', function(e){
+		var allMailFolders = $(targetElement(e)).parents('.js_mail_folders').find('.js_all_mail_folders');
+		smartPop.progressCenter();
+		$.ajax({
+			url : "my_all_mail_folders.sw",
+			data : {},
+			success : function(data, status, jqXHR) {
+				allMailFolders.html(data);
+				smartPop.closeProgress();
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+			}
+		});
+		return false;
+	});
+	
+	$('.js_toggle_select_all').live('click', function(e){
+		var input = $(targetElement(e));
+		var checkValue = input.is(':checked');
+		var checkBoxes = input.parents('.js_mail_list_page').find('input[name="chkSelectMail"]');
+		checkBoxes.attr('checked', checkValue);
+		return true;
 	});
 
 });

@@ -21,8 +21,10 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
+
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "image_list.sw");
 	
 	User cUser = SmartUtil.getCurrentUser();
 	

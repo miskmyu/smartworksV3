@@ -55,7 +55,7 @@
 	ApprovalLineInst approvalLineInst = null;
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
-		if(approvalLineInst == null){
+/* 		if(approvalLineInst == null){
 			approvalLineInst = new ApprovalLineInst(approvalInstId, "");
 			Approval approval1 = new Approval("", Approval.APPROVER_CHOOSE_ON_RUNNING, cUser, 0, 0, 0 );
 			approval1.setStatus(Instance.STATUS_DRAFTED);
@@ -68,7 +68,7 @@
 			approval2.setCompletedDate(new LocalDate());
 			approvalLineInst.setApprovals(new Approval[]{approval1, approval2, approval3});
 		}
-	}else{
+ */	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
 
@@ -131,11 +131,11 @@
 									<div class="name">
 										<a class="js_selected_approver_info js_userpicker_button" href="">
 											<span class="noti_pic">
-												<img src="images/no_user_picture_min.jpg">
+												<img class="profile_size_s" src="images/no_user_picture_min.jpg">
 											</span>
 										</a>
 										<span class="noti_in">
-											<input class="js_auto_complete" href="user_name.sw" type="text" approverIndex="<%=i%>">
+											<input class="js_auto_complete js_approver_box" href="user_name.sw" type="text" approverIndex="<%=i%>">
 										</span>
 										<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
 									</div>			
@@ -148,7 +148,7 @@
 									<div class="t_date tc"><%=completedDateStr %></div>
 									<div class="name">
 										<span class="noti_pic">
-											<img src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
+											<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
 										</span>
 										<span class="noti_in">
 											<div class="t_name"><%=CommonUtil.toNotNull(approver.getPosition()) %></div>

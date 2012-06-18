@@ -42,6 +42,12 @@ public class MailController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_mail.jsp", "");
 	}
 
+	@RequestMapping("/my_all_mail_folders")
+	public ModelAndView myAllMailFolders(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.checkEmail();
+		return SmartUtil.returnMnv(request, "jsp/nav/my_all_mail_folders.jsp", "");
+	}
+
 	@RequestMapping(value = "/send_mail", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void sendMail(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

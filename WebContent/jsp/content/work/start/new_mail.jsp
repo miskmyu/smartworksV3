@@ -60,7 +60,10 @@ function submitForms(action) {
 		data : JSON.stringify(paramsJson),
 		success : function(data, status, jqXHR) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-			smartPop.closeProgress();
+			smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
+				smartPop.closeProgress();
+				document.location.href = newMail.attr('lastHref');
+			});
 		},
 		error : function(e) {
 			// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -75,6 +78,7 @@ function submitForms(action) {
 	//스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
+	String lastHref = SmartUtil.getLastHref(request);
 
 	String folderId = request.getParameter("folderId");
 	String msgId = request.getParameter("msgId");
@@ -91,7 +95,7 @@ function submitForms(action) {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page js_mail_space_page" msgId="<%=msgId %>" folderId="<%=folderId%>">
+<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -99,12 +103,7 @@ function submitForms(action) {
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_area ti_mail title">
-					<div class="title myspace_h"><fmt:message key="nav.mail.new_mail"/> 
-						<span class="t_mail">
-							<span class="t_s11"><fmt:message key="mail.title.count.drafts"/> </span>
-							<span class="new_mail">34</span><fmt:message key="mail.title.count"/>
-						</span>
-					</div>
+					<div class="title myspace_h"><fmt:message key="nav.mail.new_mail"/> </div>
 				</div>
 
 				<!-- 메일 검색 -->

@@ -49,16 +49,17 @@
 			if(approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 			%>
 				<div class="t_date tc"></div>
-				<a class="name js_selected_approver_info js_userpicker_button" href="">
-					<div class="noti_pic">
-						<img class="profile_size_s" src="images/no_user_picture_min.jpg">
-					</div>
-				</a>	
-				<span class="noti_in up">
-					<input class="m0 js_auto_complete" style="width:100px" href="community_name.sw" type="text" approverIndex="<%=i%>">
-				</span>
-				<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
-							
+				<div class="name">
+					<a class="js_selected_approver_info js_userpicker_button" href="">
+						<span class="noti_pic">
+							<img class="profile_size_s" src="images/no_user_picture_min.jpg">
+						</span>
+					</a>
+					<span class="noti_in">
+						<input class="js_auto_complete js_approver_box" href="user_name.sw" type="text" approverIndex="<%=i%>">
+					</span>
+					<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
+				</div>										
 			<%
 			}else if(!SmartUtil.isBlankObject(approval.getApprover())){
 				User approver = approval.getApprover();

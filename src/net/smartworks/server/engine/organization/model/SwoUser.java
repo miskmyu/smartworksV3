@@ -43,6 +43,7 @@ public class SwoUser extends SwoObject {
 	public static final String A_TYPE = "type";
 	public static final String A_POSITION = "position";
 	public static final String A_EMAIL = "email";
+	public static final String A_USEMAIL = "useMail";
 	public static final String A_LANG = "lang";
 	public static final String A_LOCALE = "locale";
 	public static final String A_TIMEZONE = "timeZone";
@@ -61,7 +62,8 @@ public class SwoUser extends SwoObject {
 	private String empNo;
 	private String type;
 	private String position;
-	private String email;	
+	private String email;
+	private boolean useMail;
 	private String lang;
 	private String locale;
 	private String timeZone;
@@ -97,6 +99,7 @@ public class SwoUser extends SwoObject {
 		appendAttributeString(A_TYPE, type, buf);
 		appendAttributeString(A_POSITION, position, buf);
 		appendAttributeString(A_EMAIL, email, buf);
+		appendAttributeString(A_USEMAIL, useMail, buf);
 		appendAttributeString(A_LANG, lang, buf);
 		appendAttributeString(A_LOCALE, locale, buf);
 		appendAttributeString(A_TIMEZONE, timeZone, buf);
@@ -137,6 +140,7 @@ public class SwoUser extends SwoObject {
 			Node type = attrMap.getNamedItem(A_TYPE);
 			Node position = attrMap.getNamedItem(A_POSITION);
 			Node email = attrMap.getNamedItem(A_EMAIL);
+			Node useMail = attrMap.getNamedItem(A_USEMAIL);
 			Node lang = attrMap.getNamedItem(A_LANG);
 			Node locale = attrMap.getNamedItem(A_LOCALE);
 			Node timeZone = attrMap.getNamedItem(A_TIMEZONE);
@@ -166,6 +170,8 @@ public class SwoUser extends SwoObject {
 				obj.setPosition(position.getNodeValue());
 			if (email != null)
 				obj.setEmail(email.getNodeValue());
+			if (useMail != null)
+				obj.setUseMail(CommonUtil.toBoolean(useMail.getNodeValue()));
 			if (lang != null)
 				obj.setLang(lang.getNodeValue());
 			if (locale != null)
@@ -345,6 +351,12 @@ public class SwoUser extends SwoObject {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isUseMail() {
+		return useMail;
+	}
+	public void setUseMail(boolean useMail) {
+		this.useMail = useMail;
 	}
 	public String getLang() {
 		return this.lang;

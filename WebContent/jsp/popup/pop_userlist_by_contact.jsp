@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.Department"%>
@@ -37,7 +38,11 @@
 				<%
 				} else if (community.getClass().equals(GroupInfo.class)) {
 					GroupInfo group = (GroupInfo)community;
-					iconType = "btn_plus fn vm";
+					iconType = "btn_tree_plus fn vm";
+					if(SmartUtil.isBlankObject(group.getId())){
+						group.setId("uncategorized");
+						group.setName(SmartMessage.getString("common.title.uncategorized"));
+					}
 				%>
 					<li class="js_drill_down">
 						<span class="dep">

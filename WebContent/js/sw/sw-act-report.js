@@ -12,34 +12,12 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_select_new_work_report').live('click', function(e) {
-		var input = $(targetElement(e));
-		var target = input.next('div.js_new_work_report');
-		var url = input.attr('href');
-//		var progressSpan = input.parents('.js_work_report:first').find('span.js_progress_span');
-//		smartPop.progressCont(progressSpan);						
-		$.ajax({
-			url : url,
-			data : {},
-			success : function(data, status, jqXHR) {
-				target.html(data).slideDown(500);
-				target.find('.js_button_save_as').hide();
-				target.find('.js_work_report_name').show();
-				smartPop.closeProgress();						
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-				smartPop.closeProgress();						
-			}
-		});
-		return false;
-	});
-
 	$('a.js_edit_work_report').live('click', function(e) {
-		var input = $(targetElement(e));
+		var input = $(targetElement(e)).parent();
 		var workReport = input.parents('div.js_work_report_page');
 		var target = workReport.find('div.js_work_report_edit');
 		var url = input.attr('href');
-		var progressSpan = input.parent().next('span.js_progress_span');
+		var progressSpan = input.next('span.js_progress_span');
 		var reportId = workReport.find('select[name="selMyReportList"]').attr('value');
 		smartPop.progressCont(progressSpan);
 		$.ajax({
@@ -211,11 +189,11 @@ $(function() {
 		var reportId = selected.attr('value');
 		if(reportId==="none"){
 			target.slideUp().html('');
-			workReport.find('div.js_work_report_edit').slideUp().html('');
+			workReport.find('.js_work_report_edit').slideUp().html('');
 			return false;
 		}
 		var chartType = selected.attr('chartType');
-		var progressSpan = input.parent().next('span.js_progress_span');
+		var progressSpan = input.nextAll('span.js_progress_span');
 		smartPop.progressCont(progressSpan);						
 		$.ajax({
 			url : url,

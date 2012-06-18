@@ -41,6 +41,7 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_TYPENOTINS = "typeNotIns";
 	public static final String A_POSITION = "position";
 	public static final String A_EMAIL = "email";
+	public static final String A_USEMAIL = "useMail";
 	public static final String A_LANG = "lang";
 	public static final String A_STDTIME = "stdTime";
 	public static final String A_PICTURE = "picture";
@@ -58,7 +59,8 @@ public class SwoUserCond extends SwoObjectCond {
 	private String type;
 	private String position;
 	private String password;
-	private String email;	
+	private String email;
+	private boolean useMail;
 	private String lang;
 	private String stdTime;
 	private String picture;
@@ -92,6 +94,7 @@ public class SwoUserCond extends SwoObjectCond {
 		appendAttributeString(A_NICKNAME, nickName, true, buf);
 		appendAttributeString(A_PASSWORD, password, true, buf);
 		appendAttributeString(A_EMAIL, email, buf);
+		appendAttributeString(A_USEMAIL, useMail, buf);
 		appendAttributeString(A_LANG, lang, buf);
 		appendAttributeString(A_STDTIME, stdTime, buf);
 		appendAttributeString(A_COMPANYID, companyId, buf);
@@ -131,6 +134,7 @@ public class SwoUserCond extends SwoObjectCond {
 			Node nickName = attrMap.getNamedItem(A_NICKNAME);
 			Node password = attrMap.getNamedItem(A_PASSWORD);
 			Node email = attrMap.getNamedItem(A_EMAIL);
+			Node useMail = attrMap.getNamedItem(A_USEMAIL);
 			Node lang = attrMap.getNamedItem(A_LANG);
 			Node stdTime = attrMap.getNamedItem(A_STDTIME);
 			Node companyId = attrMap.getNamedItem(A_COMPANYID);
@@ -150,6 +154,8 @@ public class SwoUserCond extends SwoObjectCond {
 				obj.setPassword(password.getNodeValue());
 			if (email != null)
 				obj.setEmail(email.getNodeValue());
+			if (useMail != null)
+				obj.setUseMail(CommonUtil.toBoolean(useMail.getNodeValue()));
 			if (lang != null)
 				obj.setLang(lang.getNodeValue());
 			if (stdTime != null)
@@ -354,6 +360,12 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isUseMail() {
+		return useMail;
+	}
+	public void setUseMail(boolean useMail) {
+		this.useMail = useMail;
 	}
 	public String getLang() {
 		return this.lang;

@@ -16,6 +16,7 @@ $(function() {
 		var chatter_name = input.parents('div.js_chatter_names');
 		var communityId = input.parents('ul.js_community_members').attr('communityId');
 		var appendTaskApproval = input.parents('.js_append_task_approval_page');
+		if(!input.hasClass('js_approver_box')) appendTaskApproval = [];
 		var target, listTop, listLeft;
 		if (!isEmpty(startWork)){
 			target = startWork.find('#upload_work_list');
@@ -32,7 +33,7 @@ $(function() {
 			listLeft = inputPosition.left;
 			var widthGap = listWidth - (approvalLineBox.width() - (inputPosition.left - approvalLineBoxPosition.left));
 			if(widthGap>0)
-				listLeft = listLeft-widthGap;  
+				listLeft = listLeft-widthGap;
 		}else{
 			target = input.parent().next('div');
 		}
@@ -96,6 +97,7 @@ $(function() {
 		var user_name = input.parents('div.js_community_names');
 		var chatter_name = input.parents('div.js_chatter_names');
 		var appendTaskApproval = input.parents('.js_append_task_approval_page');
+		if(!input.hasClass('js_approver_box')) appendTaskApproval = [];
 		var target;
 		if (!isEmpty(startWork))
 			target = startWork.find('#upload_work_list');
@@ -123,6 +125,7 @@ $(function() {
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
 			var appendTaskApproval = input.parents('.js_append_task_approval_page');
+			if(!input.hasClass('js_approver_box')) appendTaskApproval = [];
 
 			var target = input.parent().next('div');
 			if(!isEmpty(startWork)) target =  startWork.find('#upload_work_list');
@@ -149,6 +152,7 @@ $(function() {
 			var startWork = input.parents('div.js_start_work_page');
 			var chatter_name = input.parents('div.js_chatter_names');
 			var appendTaskApproval = input.parents('.js_append_task_approval_page');
+			if(!input.hasClass('js_approver_box')) appendTaskApproval = [];
 
 			var target = input.parent().next('div');
 			if(!isEmpty(startWork)) target =  startWork.find('#upload_work_list');

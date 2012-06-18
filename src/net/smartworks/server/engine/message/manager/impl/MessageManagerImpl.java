@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.Query;
-
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.message.exception.MessageException;
 import net.smartworks.server.engine.message.manager.IMessageManager;
 import net.smartworks.server.engine.message.model.Message;
 import net.smartworks.server.engine.message.model.MessageCond;
+
+import org.hibernate.Query;
 
 public class MessageManagerImpl extends AbstractManager implements IMessageManager {
 
@@ -45,12 +45,12 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		if (level == null)
 			level = LEVEL_ALL;
 		cond.setPageSize(2);
-		Message[] message = getMessages(user, cond, level);
-		if (CommonUtil.isEmpty(message))
+		Message[] objs = getMessages(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
 			return null;
-		if (message.length > 1)
+		if (objs.length > 1)
 			throw new MessageException("More than 1 Message. ");
-		return message[0];
+		return objs[0];
 	}
 
 	@Override
@@ -237,9 +237,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			if (creationDateTo != null)
 				query.setTimestamp("creationDateTo", creationDateTo);
 		}
-
 		return query;
-
 	}
 	
 	@Override
@@ -280,10 +278,9 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 			if (!level.equals(LEVEL_ALL)) {
 				List objList = new ArrayList();
 				for (Iterator itr = list.iterator(); itr.hasNext();) {
-					Object[] fields = (Object[]) itr.next();
+					Object[] fields = (Object[])itr.next();
 					Message obj = new Message();
 					int j = 0;
-					
 					obj.setObjId((String)fields[j++]);
 					obj.setContent((String)fields[j++]);
 					obj.setSendUser((String)fields[j++]);
@@ -301,7 +298,7 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 				}
 				list = objList;
 			}
-			Message[] objs = new Message [list.size()];
+			Message[] objs = new Message[list.size()];
 			list.toArray(objs);
 			return objs;
 		} catch (Exception e) {
@@ -310,5 +307,4 @@ public class MessageManagerImpl extends AbstractManager implements IMessageManag
 		}
 	}
 
-	
 }

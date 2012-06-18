@@ -983,7 +983,8 @@ public class ModelConverter {
 				////////////////////////////////////////////
 				IWInstanceInfo instInfo = new IWInstanceInfo();
 				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || 
-						task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+						task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL) ||
+							task.getTskType().equalsIgnoreCase("SINGLE")) {
 					String def = task.getTskDef();
 					String[] ids = StringUtils.tokenizeToStringArray(def, "|");
 					//ids[0] = domainId
@@ -1024,8 +1025,8 @@ public class ModelConverter {
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);
 					}
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
-					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_APPROVAL.equalsIgnoreCase(task.getTskType())) {
+					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
 						workInfo.setType(SmartWork.TYPE_INFORMATION);
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);

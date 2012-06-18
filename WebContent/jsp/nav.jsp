@@ -21,8 +21,6 @@
 	if (SmartUtil.isBlankObject(cid))
 		cid = ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId();
 	String wid = request.getParameter("wid");
-	if (SmartUtil.isBlankObject(wid))
-		wid = cUser.getId();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 %>
 
@@ -34,7 +32,7 @@
 
 	<%
 	// 페이지 컨텍스트가 커뮤너티 공간인데 사용자 공간이 아니면, 커뮤너티 멤버들의 정보를 보여준다...
-	if (!SmartUtil.getSpaceIdFromContentContext(cid).equals(cUser.getId())){		
+	if (!SmartUtil.isBlankObject(wid) && !SmartUtil.getSpaceIdFromContentContext(cid).equals(cUser.getId())){		
 		if(!workSpace.getClass().equals(User.class)) {
 	%>
 			<div class="nav_list">
@@ -66,9 +64,15 @@
 		<div class="nav_list">
 			<jsp:include page="/jsp/nav/communities.jsp" />
 		</div>
-		<div class="nav_list mb20">
-			<jsp:include page="/jsp/nav/mail.jsp" />
-		</div>
+		<%
+		if(cUser.isUseMail()){
+		%>
+			<div class="nav_list mb20">
+				<jsp:include page="/jsp/nav/mail.jsp" />
+			</div>
+		<%
+		}
+		%>
 	<%
 	}
 	%>	

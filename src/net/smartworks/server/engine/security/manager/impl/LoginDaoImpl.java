@@ -36,7 +36,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 	private static String RETRIVE_USER = "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
 										 "		   	orguser.empNo, orguser.mobileNo, orguser.internalNo, orguser.locale, orguser.timeZone,										" +
 										 "          orguser.type, orguser.lang, orguser.pos, orguser.stdtime, orguser.authId,													" +
-										 "	        orguser.email,	orguser.passwd, orguser.picture, orguser.roleId																" +
+										 "	        orguser.email, orguser.useMail, orguser.passwd, orguser.picture, orguser.roleId																" +
 										 "    from 	sworguser orguser, sworgdept orgdept, sworgcompany orgcompany																" +
 										 "	 where 	orguser.deptid = orgdept.id																									" +
 										 "	   and 	orguser.companyid = orgcompany.id																							" +
@@ -103,6 +103,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			login.setPosition(rs.getString("pos"));
 			login.setAuthId(rs.getString("authId"));
 			login.setEmail(rs.getString("email"));
+			login.setUseMail(rs.getBoolean("useMail"));
 			login.setPassword(rs.getString("passwd"));
 			login.setLocale(rs.getString("locale"));
 
