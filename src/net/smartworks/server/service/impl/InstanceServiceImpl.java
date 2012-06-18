@@ -1763,6 +1763,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						apr.setApprover(id);
 						apr.setMandatory(true);
 						apr.setModifiable(true);
+						apr.setCreationDate(new LocalDate());
+						apr.setCreationUser(id);
 						
 						approvals[i-1] = apr;
 					}
