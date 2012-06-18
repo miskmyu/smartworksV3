@@ -1262,7 +1262,7 @@ public class ModelConverter {
 						editPolicy.setLevel(EditPolicy.LEVEL_CUSTOM);
 						SwaUserCond swaUserCond = new SwaUserCond();
 						swaUserCond.setResourceId(resourceId);
-						swaUserCond.setMode(SwaResource.MODE_READ);
+						swaUserCond.setMode(SwaResource.MODE_MODIFY);
 						SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
 						if(!CommonUtil.isEmpty(swaUsers)) {
 							for(SwaUser swaUser : swaUsers) {

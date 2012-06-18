@@ -80,13 +80,11 @@ $(function() {
 		var input = $(targetElement(e));
 		if(!isEmpty(input.parents('.js_srch_my_com'))){
 			smartPop.progressNavGray(input.parents('.js_srch_my_com').prev('li').find('span:last'));
-			var target = input.parent().next('div');
-			window.location = target.find('.sw_hover:first a').attr('href');
+			window.location = input.attr('href');
 			smartPop.closeProgress();
 		}else if(!isEmpty(input.parents('.js_srch_com_members'))){
 			smartPop.progressNavGray(input.parents('.js_srch_com_members').prev('li').find('span:last'));
-			var target = input.parent().next('div');
-			window.location = target.find('.sw_hover:first a').attr('href');
+			window.location = input.attr('href');
 			smartPop.closeProgress();
 		}
 	});
@@ -200,7 +198,6 @@ $(function() {
 		var groupId = input[0].getAttribute("groupId");
 		var departmentId = input[0].getAttribute("departmentId");
 		var comlistByDepart = input.parents('.js_comlist_by_depart_page');
-		console.log('target=', target, ', url=', url);
 		if(!isEmpty(comlistByDepart)){
 			var editMember = comlistByDepart.parents('.js_organization_management_page').find('.js_edit_member');
 			$.ajax({
@@ -210,7 +207,7 @@ $(function() {
 				}			
 			});			
 		}
-		if (url == 'undefined' || (isEmpty(categoryId) && isEmpty(groupId) && isEmpty(departmentId))) {
+		if (url == 'undefined' || (categoryId==null && isEmpty(groupId) && isEmpty(departmentId))) {
 			return false;
 		}
 		if(isEmpty($(target).children())){
@@ -228,15 +225,9 @@ $(function() {
 				context : input,
 				success : function(data, status, jqXHR) {
 					target.show();
-					target.html(data);
-					target.siblings('li.js_drill_down').find('.js_drill_down_target').hide();
-					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide();
-					var btnPlus = input.find('.btn_tree_plus');
-					var btnMinus = input.find('.btn_tree_minus');
-					if(!isEmpty(btnPlus)) btnPlus.removeClass('btn_tree_plus').addClass('btn_tree_minus');
-					if(!isEmpty(btnMinus)) btnPlus.removeClass('btn_tree_minus').addClass('btn_tree_plus');
-					target.siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
-					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.html(data).prev().find('.btn_tree_plus').removeClass('btn_tree_plus').addClass('btn_tree_minus');
+					target.siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+					target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 					smartPop.closeProgress();											
 				},
 				error : function(xhr, ajaxOptions, thrownError){
@@ -244,18 +235,11 @@ $(function() {
 				}
 			});
 		}else if(!target.is(':visible')){
-			target.show();
-			target.siblings('li.js_drill_down').find('div').hide('.js_drill_down_target');
-			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide();
-			var btnPlus = input.find('.btn_tree_plus');
-			var btnMinus = input.find('.btn_tree_minus');
-			if(!isEmpty(btnPlus)) btnPlus.removeClass('btn_tree_plus').addClass('btn_tree_minus');
-			if(!isEmpty(btnMinus)) btnPlus.removeClass('btn_tree_minus').addClass('btn_tree_plus');
-			target.siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
-			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.show().prev().find('.btn_tree_plus').removeClass('btn_tree_plus').addClass('btn_tree_minus');
+			target.siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.parents('li.js_drill_down').siblings('li.js_drill_down').find('.js_drill_down_target').hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 		}else if(target.is(':visible') && !isEmpty($(target).children()) &&  $(targetElement(e)).parents('a:first').hasClass('js_expandable')){
-			target.hide();
-			if(!isEmpty(input.find('.btn_tree_minus'))) input.find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
+			target.hide().prev().find('.btn_tree_minus').removeClass('btn_tree_minus').addClass('btn_tree_plus');
 		}
 		return false;
 	});

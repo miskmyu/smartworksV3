@@ -136,8 +136,10 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
+
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "pwork_list.sw");
 	
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	User cUser = SmartUtil.getCurrentUser();
@@ -184,9 +186,6 @@
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
 					<div class="title_line_btns">
-						<div class="icon_btn_edit">
-							<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
-						</div>
 						<div class="icon_btn_create">
 							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.start_new_pwork"/></a>
 						</div>
@@ -194,7 +193,6 @@
 					
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
-							<span class="js_progress_span"></span>
 							<div class="srch_wh srch_wsize">
 								<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
@@ -230,6 +228,10 @@
 								%>
 							</select>
 						</form>
+						<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+							<span class="icon_btn_edit"></span>
+						</a>
+						<span class="js_progress_span"></span>
 					</div>
 				</div>
 				<!-- 목록보기 타이틀-->

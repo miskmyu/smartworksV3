@@ -188,7 +188,7 @@
 						<!-- 타이틀 -->
 						<div class="form_title p0 mb10">
 							<div class="<%=work.getIconClass() %> title_noico"><%=work.getName() %></div>
-							<div class="solid_line cb"></div>
+							<div class="solid_line"></div>
 						</div>
 						<!-- 타이틀 //-->
 						<div class="left_im2">

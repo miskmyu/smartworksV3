@@ -55,7 +55,7 @@
 	ApprovalLineInst approvalLineInst = null;
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
-		if(approvalLineInst == null){
+/* 		if(approvalLineInst == null){
 			approvalLineInst = new ApprovalLineInst(approvalInstId, "");
 			Approval approval1 = new Approval("", Approval.APPROVER_CHOOSE_ON_RUNNING, cUser, 0, 0, 0 );
 			approval1.setStatus(Instance.STATUS_DRAFTED);
@@ -68,7 +68,7 @@
 			approval2.setCompletedDate(new LocalDate());
 			approvalLineInst.setApprovals(new Approval[]{approval1, approval2, approval3});
 		}
-	}else{
+ */	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
 
@@ -92,7 +92,7 @@
 			<%
 			}
 			%>
-			<div class="fr mb10 js_approval_line_box">
+			<div class="fr js_approval_line_box">
 				<form class="js_validation_required" name="frmApprovalLine">
 					<%if(!SmartUtil.isBlankObject(approvalLine)){ %><input name="hdnApprovalLineId" value="<%=approvalLine.getId() %>" type="hidden"><%} %>		
 					<%
@@ -128,16 +128,17 @@
 								if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 								%>
 									<div class="t_date tc"></div>
-									<a class="name js_selected_approver_info js_userpicker_button" href="">
-										<div class="noti_pic">
-											<img class="profile_size_s" src="images/no_user_picture_min.jpg">
-										</div>
-									</a>
-									<span class="noti_in up">
-										<input class="m0 js_auto_complete" style="width:98px" href="user_name.sw" type="text" approverIndex="<%=i%>">
-									</span>
-									<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
-												
+									<div class="name">
+										<a class="js_selected_approver_info js_userpicker_button" href="">
+											<span class="noti_pic">
+												<img class="profile_size_s" src="images/no_user_picture_min.jpg">
+											</span>
+										</a>
+										<span class="noti_in">
+											<input class="js_auto_complete js_approver_box" href="user_name.sw" type="text" approverIndex="<%=i%>">
+										</span>
+										<input name="usrLevelApprover<%=i+1 %>" value="" type="hidden">
+									</div>			
 								<%
 								}else if(!SmartUtil.isBlankObject(approval.getApprover())){
 									User approver = approval.getApprover();
@@ -146,14 +147,13 @@
 								%>
 									<div class="t_date tc"><%=completedDateStr %></div>
 									<div class="name">
-										<div class="noti_pic">
+										<span class="noti_pic">
 											<img class="profile_size_s" src="<%=approver.getMinPicture()%>" title="<%=approver.getLongName()%>">
-										</div>
-										<div class="noti_in">
+										</span>
+										<span class="noti_in">
 											<div class="t_name"><%=CommonUtil.toNotNull(approver.getPosition()) %></div>
 											<div class="t_name"><%=approver.getName() %></div>
-											
-										</div>
+										</span>
 										<%
 										if(SmartUtil.isBlankObject(approvalLineInst)){
 										%>
@@ -179,7 +179,7 @@
 	</div>
 	<!-- 결재선 Section //-->
 	<!-- 전자결재 화면이 나타나는 곳 -->
-	<div class="">
+	<div class="" style="display:block">
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<div class="js_task_approval_fields"
 				subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"

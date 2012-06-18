@@ -461,7 +461,8 @@ smartPop = {
 					    });
 					}else{
 						$('a.js_pop_select_users').live('click', function(e){
-							var selections = $('form[name="frmUserSelections"]').find('input.js_checkbox:checked');
+							var input = $(targetElement(e));
+							var selections = input.parents('.pop_list_area').find('input.js_checkbox:checked');
 							if(isEmpty(selections)) return false;
 							
 							for(var i=0; i<selections.length; i++){

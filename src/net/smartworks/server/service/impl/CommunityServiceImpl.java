@@ -656,13 +656,13 @@ public class CommunityServiceImpl implements ICommunityService {
 			String type = getSwoManager().getTypeByWorkspaceId(workSpaceId);
 	
 			if(type != null) {
-				if(type.equals("user")) {
+				if(type.equalsIgnoreCase(Community.COMMUNITY_USER)) {
 					User user = this.getUserById(workSpaceId);
 					return user;
-				} else if(type.equals("department")) {
+				} else if(type.equalsIgnoreCase(Community.COMMUNITY_DEPARTMENT)) {
 					Department department = this.getDepartmentById(workSpaceId);
 					return department;
-				} else if(type.equals("group")) {
+				} else if(type.equalsIgnoreCase(Community.COMMUNITY_GROUP)) {
 					Group group = this.getGroupById(workSpaceId);
 					return group;
 				}
@@ -687,13 +687,13 @@ public class CommunityServiceImpl implements ICommunityService {
 			String type = getSwoManager().getTypeByWorkspaceId(workSpaceId);
 	
 			if(type != null) {
-				if(type.equals("user")) {
+				if(type.equalsIgnoreCase(Community.COMMUNITY_USER)) {
 					UserInfo userInfo = ModelConverter.getUserInfoByUserId(workSpaceId);
 					return userInfo;
-				} else if(type.equals("department")) {
+				} else if(type.equalsIgnoreCase(Community.COMMUNITY_DEPARTMENT)) {
 					DepartmentInfo departmentInfo = ModelConverter.getDepartmentInfoByDepartmentId(workSpaceId);
 					return departmentInfo;
-				} else if(type.equals("group")) {
+				} else if(type.equalsIgnoreCase(Community.COMMUNITY_GROUP)) {
 					GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(workSpaceId);
 					return groupInfo;
 				}

@@ -1,5 +1,7 @@
+<%@page import="net.smartworks.model.mail.EmailServer"%>
+<%@page import="net.smartworks.model.community.Community"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
-<%@page import="net.smartworks.model.service.WebService"%>
+<%@page import="net.smartworks.model.calendar.CompanyEvent"%>
 <%@page import="net.smartworks.model.RecordList"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -16,25 +18,25 @@
 	}
 	User cUser = SmartUtil.getCurrentUser();
 	
-	RecordList recordList = smartWorks.getWebServiceList(params);
+	RecordList recordList = smartWorks.getEmailServerList(params);
 	int pageSize = recordList.getPageSize();
 	int totalPages = recordList.getTotalPages();
 	int currentPage = recordList.getCurrentPage();
-	WebService[] webServices = (WebService[])recordList.getRecords();
+	EmailServer[] emailServers = (EmailServer[])recordList.getRecords();
 	
 %>
 <script type="text/javascript">
 
 	selectListParam = function(progressSpan, isGray){
-		var webService = $('.js_web_service_page');
-		var forms = webService.find('form:visible');
+		var emailServer = $('.js_email_server_page');
+		var forms = emailServer.find('form:visible');
 		var paramsJson = {};
-		paramsJson["href"] = "jsp/content/settings/web_service.jsp";
+		paramsJson["href"] = "jsp/content/settings/email_server.jsp";
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
-		progressSpan = webService.find('span.js_progress_span:first');
+		progressSpan = emailServer.find('span.js_progress_span:first');
 		smartPop.progressCont(progressSpan);
 		console.log(JSON.stringify(paramsJson));
 		var url = "set_instance_list_params.sw";
@@ -49,7 +51,7 @@
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get('webServiceListError'));
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get('emailServerListError'));
 			}
 		});
 	};
@@ -58,13 +60,13 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_web_service_page">
+<div class="section_portlet js_email_server_page">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<!-- 타이틀 -->
 			<div class="body_titl">
-				<div class="body_titl_area ti_webservice title_noico"><fmt:message key="settings.title.webservice.setting"/></div>
+				<div class="body_titl_area ti_company title_noico"><fmt:message key="settings.title.email.setting"/></div>
 				<div class="solid_line"></div>
 			</div>
 			<!-- 타이틀 -->
@@ -72,42 +74,53 @@
 			<div class="contents_space">
 				<!-- 타이틀 영역 -->
 				<div class="list_title_space">
-					<div class="title"><fmt:message key="settings.title.webservice.list"/></div>
+					<div class="title"><fmt:message key="settings.title.email.server_list"/></div>
 					<!-- 우측버튼 -->
 					<div class="title_line_btns">
-						<div class="icon_btn_create"> <a class="icon_btn_tail js_new_web_service" href=""><fmt:message key="common.button.add_new"/></a> </div>
+						<div class="icon_btn_create">
+							<a class="icon_btn_tail js_new_email_server" href=""><fmt:message key="common.button.add_new"/></a>
+						</div>
 					</div>
 					<!-- 우측버튼 //-->
 				</div>
 				<!-- 타이틀 영역// -->
 				<!-- 추가하기 테이블 -->
-				<div class="js_new_web_service"></div>
+				<div class="js_new_email_server"></div>
 				<!-- 추가하기 테이블 //-->
-				<!-- 웹서비스 목록 -->
+				<!-- 근무정책 목록 -->
 				<div class="list_contents mt10">
 					<div>
 						<table>
 							<tbody>
 								<tr class="tit_bg">
-									<th class="r_line"><fmt:message key="settings.title.webservice.name"/></th>
-									<th class="r_line"><fmt:message key="settings.title.webservice.desc"/></th>
-									<th class="r_line"><fmt:message key="settings.title.webservice.wsdl_uri"/></th>
-									<th class="r_line"><fmt:message key="settings.title.webservice.port"/></th>
-									<th class="r_line"><fmt:message key="settings.title.webservice.operation"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.name"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.fetch_server"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.fetch_port"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.fetch_protocol"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.fetch_ssl"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.smtp_server"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.smtp_port"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.smtp_authenticated"/></th>
+									<th class="r_line"><fmt:message key="settings.title.email.smtp_ssl"/></th>
 									<th width="20px"></th>
 								</tr>
 								<%
-								if(!SmartUtil.isBlankObject(webServices)){
-									for(WebService webService : webServices){	
-								%>								
-										<tr class="js_edit_web_service list_action_item" serviceId=<%=CommonUtil.toNotNull(webService.getId()) %>>
-											<td><a href=""><%=webService.getName() %></a></td>
-											<td><a href=""><%=webService.getDesc() %></a></td>
-											<td><a href=""><%=webService.getWsdlUri() %></a></td>
-											<td><a href=""><%=webService.getPort() %></a></td>
-											<td><a href=""><%=webService.getOperation() %></a></td>
-											<td><%if(!SmartUtil.isBlankObject(webService.getId())){ %><div class="list_action"><div title="<fmt:message key='common.button.delete'/>" class="js_delete_web_service"> X </div></div><%} %></td>
+								if(!SmartUtil.isBlankObject(emailServers)){
+									for(EmailServer emailServer : emailServers){	
+								%>
+										<tr class="js_edit_email_server list_action_item" emailServerId=<%=CommonUtil.toNotNull(emailServer.getId()) %>>
+											<td><a href=""><%=emailServer.getName() %></a></td>
+											<td><a href=""><%=emailServer.getFetchServer() %></a></td>
+											<td><a href=""><%=emailServer.getFetchServerPort() %></a></td>
+											<td><a href=""><%=emailServer.getFetchProtocol() %></a></td>
+											<td><a href=""><%if(emailServer.isFetchSsl()){%><fmt:message key="common.title.boolean.true"/><%}else{ %><fmt:message key="common.title.boolean.false"/><%} %></a></td>
+											<td><a href=""><%=emailServer.getSmtpServer() %></a></td>
+											<td><a href=""><%=emailServer.getSmtpServerPort() %></a></td>
+											<td><a href=""><%if(emailServer.isSmtpAuthenticated()){%><fmt:message key="common.title.boolean.true"/><%}else{ %><fmt:message key="common.title.boolean.false"/><%} %></a></td>
+											<td><a href=""><%if(emailServer.isSmtpSsl()){%><fmt:message key="common.title.boolean.true"/><%}else{ %><fmt:message key="common.title.boolean.false"/><%} %></a></td>
+											<td><div class="list_action"><div title="<fmt:message key='common.button.delete'/>" class="js_delete_email_server"> X </div></div></td>
 										</tr>
+									</a>
 								<%
 									}
 								}else{
@@ -115,11 +128,12 @@
 									<tr><td><fmt:message key="common.message.no_instance"/></td></tr>
 								<%
 								}
+
 								%>
 							</tbody>
 						</table>
-						<!-- Paging -->
-						<form name="frmWebServiceListPaging">
+
+						<form name="frmEmailServerListPaging">
 							<!-- 페이징 -->
 							<div class="paginate">
 								<%

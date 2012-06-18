@@ -26,7 +26,6 @@
 	session.setAttribute("cid", cid);
 	session.removeAttribute("wid");
 	session.setAttribute("smartWork", work);
-
 %>
 <script type="text/javascript">
 

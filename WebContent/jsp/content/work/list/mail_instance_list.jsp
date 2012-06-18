@@ -61,13 +61,13 @@
 		<%
 		SortingField sortedField = null;
 		int pageSize = 0, totalPages = 0, currentPage = 0;
-		if (instanceList != null && (instanceList.getInstanceDatas() != null) && (work != null)) {
+		if (instanceList != null && !SmartUtil.isBlankObject(instanceList.getInstanceDatas()) && (work != null)) {
 			int type = instanceList.getType();
 			sortedField = instanceList.getSortedField();
 			if(sortedField==null) sortedField = new SortingField();
 		%>
 			<tr class="tit_bg">
-				<th class="check"><input type="checkbox" /></th>
+				<th class="check"><input type="checkbox" class="js_toggle_select_all" /></th>
 				<th class="important"><div class="icon_important"></div></th>
 				<th class="read"><div class="icon_mail_read"></div></th>
 <!-- 				<th class="r_line"><div class="icon_file checked"></div></th>
@@ -141,7 +141,7 @@
 			totalPages = instanceList.getTotalPages();
 			currentPage = instanceList.getCurrentPage();
 			int currentCount = instanceList.getTotalSize()-(currentPage-1)*pageSize;
-			if(instanceList.getInstanceDatas() != null) {
+			if(!SmartUtil.isBlankObject(instanceList.getInstanceDatas())) {
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
 					//UserInfo owner = instanceInfo.getOwner();
@@ -149,6 +149,7 @@
 					//String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
 					//String wid = instanceInfo.getWorkSpace().getId();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
+					String sendDateStr = (SmartUtil.isBlankObject(instanceInfo.getSendDate())) ? "" : instanceInfo.getSendDate().toLocalString();
 				%>
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
 						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
@@ -156,7 +157,7 @@
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
-						<td class="tr"><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSendDate().toLocalString())%></a></td>
+						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>
 					</tr>
 		<%
 					currentCount--;

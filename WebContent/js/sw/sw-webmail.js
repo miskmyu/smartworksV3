@@ -31,7 +31,6 @@ var smartMail = {
 			type : "POST",
 			success : function(data, status, jqXHR) {
 				loggedIn = true;
-				console.log(data);
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				loggedIn = false;
@@ -65,7 +64,6 @@ var smartMail = {
 			},
 			type : "POST",
 			success : function(data, status, jqXHR) {
-				console.log("fetch folders = ", data);
 //				$('#my_webmail').html(data);
 				if(isEmpty(folderId))
 					smartMail.unreadMailCount();

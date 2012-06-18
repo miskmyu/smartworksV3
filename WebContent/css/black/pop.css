@@ -13,7 +13,7 @@
 .pop_list_area > ul,.pop_list_area form > ul {max-height:330px; overflow-y:auto}
 
 .pop_list_area li {display:block}
-.pop_list_area li:hover {display:block; background-color:#fffccd; text-decoration: none;}
+.pop_list_area li>span:hover {display:block; background-color:#fffccd; text-decoration: none;}
 
 .pop_list_area li .dep {padding:2px 0 2px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
 .pop_list_area li .menu_2dep li {padding:0 0 0 13px}
@@ -104,7 +104,7 @@ a .pop_icon_message:hover { background-position:-202px -34px}
 .btn_gray .txt_btn_start {background: url("../../images/btn_gr_left.jpg") repeat scroll 0 0 transparent;
 			 float:left; height:22px; width:5px;}
 .btn_gray .txt_btn_center {background: url("../../images/btn_gr_center.jpg") repeat scroll 0 0 transparent;
-    		float:left; color:#fff; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
+    		float:left; color:#fff !important; height:20px; padding:2px 3px 0; text-align:center; font-weight:bold;}
 .btn_gray .txt_btn_end {background: url("../../images/btn_gr_right.jpg") repeat scroll 0 0 transparent;
     		float:left; height:22px; width:5px;}
 .btn_hpadding {margin:7px 0;}

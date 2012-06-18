@@ -120,6 +120,10 @@
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/external_form.jsp" />
 	</definition>
+	<definition name="email_server" extends="layouts">
+		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
+		<put-attribute name="content" value="/jsp/content/settings/email_server.jsp" />
+	</definition>
 	<definition name="builder_home" extends="layouts">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/home.jsp" />

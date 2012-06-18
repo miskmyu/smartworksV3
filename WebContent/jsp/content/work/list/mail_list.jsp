@@ -76,13 +76,16 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
+
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "mail_list.sw");
 
 	String folderId = cid;
 	User cUser = SmartUtil.getCurrentUser();
 	MailFolder mailFolder = smartWorks.getMailFolderById(folderId);
 	MailWork work = new MailWork(folderId, mailFolder.getName(), "");
+	String unreadCountTarget = (mailFolder.getType()==MailFolder.TYPE_SYSTEM_INBOX) ? "js_folder_unread_count" : "";
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
@@ -90,7 +93,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_mail_list_page js_work_list_page" workId=<%=work.getId()%> folderId="<%=folderId%>">
+<div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -99,7 +102,7 @@
 			<div class="body_titl">
 				<div class="body_titl_area ti_mail title">
 					<div class="title myspace_h"><%=mailFolder.getName() %>
-						<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
+						<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
 					</div>
 				</div>
 
@@ -120,8 +123,8 @@
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-<%-- 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
- --%>					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
+ 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK)%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+					<button class="js_reply_mail_btn" ><fmt:message key="mail.button.reply"/></button>
 					<button class="js_reply_all_mail_btn" ><fmt:message key="mail.button.reply_all"/></button>
 					<button class="js_forward_mail_btn" ><fmt:message key="mail.button.forward"/></button>
 					<select class="js_select_move_folder">

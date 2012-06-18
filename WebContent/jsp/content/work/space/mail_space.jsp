@@ -20,6 +20,7 @@
 	String folderId = request.getParameter("folderId");
 	String msgId = request.getParameter("msgId");
 	User cUser = SmartUtil.getCurrentUser();
+	String lastHref = SmartUtil.getLastHref(request);
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
 	MailFolder mailFolder = instance.getMailFolder();
@@ -27,7 +28,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_mail_space_page" msgId="<%=msgId %>" folderId="<%=folderId%>">
+<div class="section_portlet js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -62,8 +63,8 @@
 			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mail_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
-<%-- 					<%if(!folderId.equals(MailFolder.ID_JUNK)){ %><button class="js_move_mail_btn" targetId="<%=MailFolder.ID_JUNK%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
- --%>					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY %>" class="js_content"><fmt:message key="mail.button.reply"/></button>
+ 					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mail_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK) %>"><fmt:message key="mail.button.register_spam"/></button><%} %>
+					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY %>" class="js_content"><fmt:message key="mail.button.reply"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY_ALL %>" class="js_content"><fmt:message key="mail.button.reply_all"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_FORWARD %>" class="js_content"><fmt:message key="mail.button.forward"/></button>
 					<select class="js_select_move_folder">
@@ -132,10 +133,10 @@
 					    </dl>
 					</div>
 					<!-- 업무 내용 -->
-					<div class="read_frame list_contents js_form_content">
- 						<iframe id="msgTextIframe" align="center" frameborder="0" height="100%" width="100%"
+					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
+ 						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							style="font-size: 11px; font: arial, sans-serif;" scrolling="no"
-							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" />
+							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
 					</div>
 					<!-- 업무 내용 //-->
 				</div>

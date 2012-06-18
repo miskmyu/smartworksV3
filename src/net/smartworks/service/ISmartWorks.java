@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.claros.commons.mail.models.ConnectionProfile;
+
 import com.google.gdata.data.youtube.FormUploadToken;
 
 import net.smartworks.model.RecordList;
@@ -41,6 +43,7 @@ import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
+import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
@@ -637,5 +640,16 @@ public interface ISmartWorks {
 	
 	public abstract ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
 
+	public abstract RecordList getEmailServerList(RequestParams params) throws Exception;
+	
+	public abstract EmailServer getEmailServerById(String id) throws Exception;
+	
+	public abstract void setEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeEmailServer(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract EmailServer[] getEmailServers() throws Exception;
 
+	public abstract ConnectionProfile[] getMailConnectionProfiles() throws Exception;
+	
 }

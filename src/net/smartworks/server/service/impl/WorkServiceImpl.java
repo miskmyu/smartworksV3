@@ -604,6 +604,8 @@ public class WorkServiceImpl implements IWorkService {
 			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE); 
 
 			if(swdDomain != null) {
+				resultwork.setKeyField(new FormField(swdDomain.getKeyColumn(), null, null));
+				resultwork.setKeyDuplicatable(swdDomain.isKeyDuplicable());
 				SwdFieldCond swdFieldCond = new SwdFieldCond();
 				swdFieldCond.setDomainObjId(swdDomain.getObjId());
 				Order[] order = new Order[1];

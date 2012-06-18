@@ -45,7 +45,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <tr class="js_wsdl_detail">
-	<td><fmt:message key="settings.title.webservice.port"/></td>
+	<th><fmt:message key="settings.title.webservice.port"/></th>
 	<td>
 		<select name="selWebServicePort" class="js_webservice_port">
 			<%
@@ -65,7 +65,7 @@
 	</td>
 </tr>
 <tr class="js_wsdl_detail">
-	<td><fmt:message key="settings.title.webservice.operation"/></td>
+	<th><fmt:message key="settings.title.webservice.operation"/></th>
 	<td>
 		<select name="selWebServiceOperation" class="js_webservice_operation">
 			<%
@@ -91,7 +91,7 @@
 								&& (!SmartUtil.isBlankObject(ports[selectedPort].getOperations()[selectedOperation].getInputVariables()) && ports[selectedPort].getOperations()[selectedOperation].getInputVariables().length>0))
 								? true : false;
 	%>
-	<td <%if(inputVarExisting){%>class="required_label"<%} %>><fmt:message key="settings.title.webservice.input_variables"/></td>
+	<th <%if(inputVarExisting){%>class="required_label"<%} %>><fmt:message key="settings.title.webservice.input_variables"/></th>
 	<td>
 		<table style="width:100%">
 			<tr>
@@ -106,9 +106,9 @@
 					Variable inputVariable = inputVariables[count-1]; 
 			%>
 					<tr>
-						<th><input class="fieldline required" name="txtInputVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getName())%>"></th>
-						<th><input readonly name="txtInputElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementName())%>"></th>
-						<th><input readonly name="txtInputElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementType())%>"></th>
+						<td><input class="fieldline required" name="txtInputVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getName())%>"></td>
+						<td><input readonly name="txtInputElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementName())%>"></td>
+						<td><input readonly name="txtInputElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(inputVariable.getElementType())%>"></td>
 					</tr>				
 			<%
 				}
@@ -124,7 +124,7 @@
 								&& (!SmartUtil.isBlankObject(ports[selectedPort].getOperations()[selectedOperation].getReturnVariables()) && ports[selectedPort].getOperations()[selectedOperation].getReturnVariables().length>0))
 								? true : false;
 	%>
-	<td <%if(returnVarExisting){ %>class="required_label"<%} %>><fmt:message key="settings.title.webservice.return_variables"/></td>
+	<th <%if(returnVarExisting){ %>class="required_label"<%} %>><fmt:message key="settings.title.webservice.return_variables"/></th>
 	<td>
 		<table style="width:100%">
 			<tr>
@@ -139,9 +139,9 @@
 					Variable returnVariable = returnVariables[count-1]; 
 			%>
 					<tr>
-						<th><input class="fieldline required" name="txtReturnVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getName())%>"></th>
-						<th><input readonly name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></th>
-						<th><input readonly name="txtReturnElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementType())%>"></th>
+						<td><input class="fieldline required" name="txtReturnVariableName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getName())%>"></td>
+						<td><input readonly name="txtReturnElementName<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementName())%>"></td>
+						<td><input readonly name="txtReturnElementType<%=count %>" type="text" value="<%=CommonUtil.toNotNull(returnVariable.getElementType())%>"></td>
 					</tr>				
 			<%
 				}
