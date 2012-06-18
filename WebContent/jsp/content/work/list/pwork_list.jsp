@@ -184,12 +184,12 @@
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
 					<div class="title_line_btns">
-						<div class="icon_btn_edit">
-							<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
-						</div>
-						<div class="icon_btn_create">
-							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.start_new_pwork"/></a>
-						</div>
+						<span class="icon_filter_edit">
+							<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="상세필터 편집"><%-- <fmt:message key='filter.button.edit_search_filter' /> --%></a>
+						</span>
+						<span class="icon_work_create">
+							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work m0" workId="<%=workId%>" title="새항목 등록하기"><%-- <fmt:message key="common.button.start_new_pwork"/> --%></a>
+						</span>
 					</div>
 					
 					<div class="title_line_options">

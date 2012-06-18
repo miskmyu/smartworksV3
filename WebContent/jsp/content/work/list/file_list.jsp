@@ -194,8 +194,8 @@
 						<div class="list_title_space js_work_list_title mt15">
 							<div class="title"><fmt:message key="common.title.instance_list" /></div>					
 							<div class="title_line_btns">
-								<div class="icon_btn_edit">
-									<a href="search_filter.sw?workId=<%=SmartWork.ID_FILE_MANAGEMENT%>" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
+								<div class="icon_filter_edit ">
+									<a href="search_filter.sw?workId=<%=SmartWork.ID_FILE_MANAGEMENT%>" class="js_edit_search_filter" title="상세필터 편집"><%-- <fmt:message key='filter.button.edit_search_filter' /> --%></a>
 								</div>
 							</div>
 						
