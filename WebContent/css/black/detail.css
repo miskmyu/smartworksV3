@@ -185,6 +185,16 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 
 .num_box {float:right; margin: -20px 5px 0; position:relative}
 
+/* Prev Page, Next Page  */
+.move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 21px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space.top {border-top: none}
+.move_btn_space.bottom {border-bottom:none; background-color: #FFF}
+.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 16px}
+.icon_arr_ppage a:hover {background-position: -49px -314px}
+.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
+.icon_arr_npage a:hover {background-position: -66px -314px}
+
 /* 탭 */
 .tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
 .tab li { background: url("../../images/bg_tab_l.jpg") no-repeat scroll 0 0 transparent; float: left; height: 31px}
