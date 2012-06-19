@@ -57,7 +57,6 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 	$input.attr('fieldId', id);
 	if (readOnly) {
 		$input.find('select').attr('disabled', 'disabled');
-		$input = $input.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{
 		required = "";
 	}
@@ -81,6 +80,10 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 		$label.hide();
 		$input.hide();
 	}
+	
+	if (readOnly)
+		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	
 	return options.container;
 };
 
