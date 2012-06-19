@@ -84,9 +84,9 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;
 }
 
-.nav_srch .srch input::-webkit-input-placeholder {color:#999}
+.nav_srch .srch input:-webkit-input-placeholder {color:#999}
 .nav_srch .srch input:-moz-placeholder {color:#999}
-.global_srch .srch input::-webkit-input-placeholder {color:#999}
+.global_srch .srch input:-webkit-input-placeholder {color:#999}
 .global_srch .srch input:-moz-placeholder {color:#999}
 
 .srch button, .srch .srch_icon{
@@ -564,6 +564,7 @@ td.pic{width:85px}
 /* Mail */
 .buttonSet {margin:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
+.buttonSet select {height:21px; margin:0; padding:0}
 .mail_list_section .not_read {color:#0459C1}
 .mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
 .mail_list_section .not_read .icon_important,

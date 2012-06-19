@@ -70,7 +70,7 @@
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY %>" class="js_content"><fmt:message key="mail.button.reply"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_REPLY_ALL %>" class="js_content"><fmt:message key="mail.button.reply_all"/></button>
 					<button href="new_mail.sw?folderId=<%=folderId %>&msgId=<%=msgId %>&sendType=<%=MailFolder.SEND_TYPE_FORWARD %>" class="js_content"><fmt:message key="mail.button.forward"/></button>
-					<select class="js_select_move_folder m0p0" style="height:21px">
+					<select class="js_select_move_folder">
 						<option>[<fmt:message key="mail.button.move"/>]</option>
 						<%
 						MailFolder[] folders = smartWorks.getMailFoldersById("");

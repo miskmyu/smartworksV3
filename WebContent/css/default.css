@@ -45,7 +45,7 @@ body, button, select, input, textarea, sub {
  
 input[type="text"] {
 	width:100%;
-	color:#555555 !important;
+	color:#555555;
 	padding:2px 0 0 0
 }
 
