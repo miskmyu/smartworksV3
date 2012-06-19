@@ -46,7 +46,6 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 	var $refForm = null;
 	if(readOnly){
 		$refForm = $('<div class="form_value" style="width:' + valueWidth + '%"><a href="iwork_space.sw?cid=iw.sp.' + refRecordId + '&workId=' + refFormId + '" class="js_content"></a></div>').find('a').text(value);
-		$refForm = $refForm.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{	
 		$refForm = $('<div class="form_value" style="width:' + valueWidth + '%"><div class="icon_fb_space"><input readonly="readonly" type="text" name="' + id + '"' + required + '><a href="" class="js_workitempicker_button"><span class="icon_fb_work"></span></a></div></div>');
 		$refForm.find('input').attr('value', value);
@@ -60,7 +59,10 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 	}else{
 		options.container.find('.form_value').html($refForm.children());		
 	}
-
+	
+	if (readOnly)
+		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	
 	return options.container;
 };
 

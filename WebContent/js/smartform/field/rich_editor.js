@@ -40,7 +40,6 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	var $textarea = null;
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
-		$textarea = $textarea.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{	
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+value+'</textarea></span></div>');
 	}
@@ -65,6 +64,9 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 			options.container.find('.form_value textarea').attr('value', value);		
 	}
 
+	if (readOnly)
+		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	
 	return options.container;
 };
 
