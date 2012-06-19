@@ -78,7 +78,7 @@
 			</select>
 			
 		</div>			
-		<a href="work_report_edit.sw" class="js_edit_work_report" title="<fmt:message key='report.button.edit_report'/>">
+		<a href="work_report_edit.sw" class="js_edit_work_report ml5" title="<fmt:message key='report.button.edit_report'/>">
 			<span class="icon_btn_edit"></span>
 		</a>
 		<span class="js_progress_span"></span>

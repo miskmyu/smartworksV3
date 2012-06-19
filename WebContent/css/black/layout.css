@@ -409,7 +409,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .form_contents .title_2dep {text-align:left} 
 .form_contents .item {width:80px}
 .form_contents .tcontents {width:100%}
-.form_space {padding-right:3px}
+.form_space {padding-right:5px}
 
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
