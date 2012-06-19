@@ -34,11 +34,6 @@
 /* icon */
 .icon_pop_event {background: url("../../images/header_nico.png") no-repeat -195px -267px transparent; height:20px; display: inline-block;}
 
-/* close btn */
-a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
-    padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 
-a:hover .pop_btn_x {background-color:#e5e5e5;}
-
 /* pop title */
 .pop_title_space {padding:15px 0 5px; overflow:hidden;border-bottom:2px solid #999}
 .pop_title_space .title_work {background: url("../../images/body_icon.png") no-repeat scroll -547px -146px transparent;font-size:14px; font-weight:bold; padding: 0 8px 0 28px; float:left; line-height: 20px;}

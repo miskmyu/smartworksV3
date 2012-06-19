@@ -76,7 +76,7 @@
 					<div class="title"><fmt:message key="settings.title.externalform.list"/></div>
 					<!-- 우측버튼 -->
 					<div class="title_line_btns">
-						<div class="icon_btn_create"> <a class="icon_btn_tail js_new_external_form" href=""><fmt:message key="common.button.add_new"/></a> </div>
+						<div class="icon_btn_add"> <a class="icon_btn_tail js_new_external_form" href=""><fmt:message key="common.button.add_new"/></a> </div>
 					</div>
 					<!-- 우측버튼 //-->
 				</div>
@@ -85,7 +85,7 @@
 				<div class="js_new_external_form"></div>
 				<!-- 추가하기 테이블 //-->
 				<!-- 웹서비스 목록 -->
-				<div class="list_contents mt10">
+				<div class="list_contents">
 					<div>
 						<table>
 							<tbody>

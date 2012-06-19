@@ -185,6 +185,16 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 
 .num_box {float:right; margin: -20px 5px 0; position:relative}
 
+/* Prev Page, Next Page  */
+.move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 21px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space.top {border-top: none}
+.move_btn_space.bottom {border-bottom:none; background-color: #FFF}
+.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 16px}
+.icon_arr_ppage a:hover {background-position: -49px -314px}
+.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
+.icon_arr_npage a:hover {background-position: -66px -314px}
+
 /* 탭 */
 .tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
 .tab li { background: url("../../images/bg_tab_l.jpg") no-repeat scroll 0 0 transparent; float: left; height: 31px}
@@ -245,6 +255,10 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .icon_approval_w {background: url("../../images/body_icon.png") no-repeat scroll -199px -364px transparent; height:18px; width:17px; display:inline-block}
 .icon_print_w {background: url("../../images/body_icon.png") no-repeat scroll -80px -364px transparent; height:18px; width:16px; display:inline-block}
 .icon_mail_w {background: url("../../images/body_icon.png") no-repeat scroll -124px -364px transparent; height:18px; width:17px; display:inline-block}
+.icon_report_edit a {background: url("../../images/body_icon.png") no-repeat scroll -74px -814px transparent; height:18px; width:17px; display:inline-block}
+.icon_filter_edit a {background: url("../../images/body_icon.png") no-repeat scroll -36px -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
+.icon_work_create a {background: url("../../images/body_icon.png") no-repeat scroll 0 -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
+.icon_excel a {background: url("../../images/body_icon.png") no-repeat scroll -115px -814px transparent; height:18px; width:17px; display:inline-block}
 
 /* 사진 이미지 사이즈 */
 .profile_size_b {width:110px; height:110px}
@@ -267,7 +281,6 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
  */
 .icon_btn_video {background: url("../../images/body_icon.png") no-repeat scroll 0 -118px transparent; height:16px; display:inline-block; padding: 0 0 0 23px}
 .icon_btn_webex {background: url("../../images/body_icon.png") no-repeat scroll -219px -83px transparent; height:16px; display:inline-block; padding: 0 0 0 24px}
-.icon_btn_excel {background: url("../../images/body_icon.png") no-repeat scroll -352px -83px transparent; height:16px; display:inline-block; padding: 0 0 0 19px}
 .icon_btn_newwork {background: url("../../images/body_icon.png") no-repeat scroll -249px 0 transparent; height:20px; display:inline-block; padding: 0 0 0 24px}
 .icon_btn_arrb {background: url("../../images/body_icon.png") no-repeat scroll -286px 0 transparent; height:4px; display:inline-block}
 .icon_btn_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -251px transparent; height:21px; display:inline-block; padding: 0 0 0 24px}
@@ -284,11 +297,13 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .title_line_options {float:left; position:relative; top:0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
-.icon_btn_edit {background: url("../../images/bgBtnIcons.gif") 0 -21px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_create {background: url("../../images/bgBtnIcons.gif") 0 -42px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_excel {background: url("../../images/bgBtnIcons.gif") 0 -63px no-repeat;height:21px;display:inline-block;padding-left:22px}
-.icon_btn_start {background: url("../../images/bgBtnIcons.gif") 0 -84px no-repeat;height:21px;display:inline-block;padding-left:5px}
-.icon_btn_tail {background: url("../../images/bgBtnIconsTail.gif") 100% 0 no-repeat;height:21px;display:inline-block;padding-right:5px;line-height:22px; font-size:11px}
+.icon_btn_edit {background: url("../../images/body_icon.png") 0 -859px no-repeat; height:18px; width:24px; display:inline-block}
+a .icon_btn_edit:hover {background-position:-36px -859px}
+.icon_btn_create {background: url("../../images/bgBtnIcons.gif") 0 -42px no-repeat; height:21px; display:inline-block; padding-left:22px}
+.icon_btn_excel {background: url("../../images/bgBtnIcons.gif") 0 -63px no-repeat; height:21px; display:inline-block; padding-left:22px}
+.icon_btn_add {background: url("../../images/bgBtnIcons.gif") 0 -105px no-repeat; height:21px; display:inline-block; padding-left:20px}
+.icon_btn_start {background: url("../../images/bgBtnIcons.gif") 0 -84px no-repeat; height:21px; display:inline-block; padding-left:5px}
+.icon_btn_tail {background: url("../../images/bgBtnIconsTail.gif") 100% 0 no-repeat; height:21px; display:inline-block; padding-right:5px; line-height:24px; font-size:11px}
 
 .btn_s_modi {background: url("../../images/btn_modi.gif") 0 0; height:21px; width:40px; display:inline-block}
 .btn_s_del {background: url("../../images/bt_delete.gif") 0 0; height:21px; width:40px; display:inline-block}

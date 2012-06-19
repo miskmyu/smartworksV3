@@ -133,7 +133,7 @@
 	};
 </script>
 <%
-	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
 

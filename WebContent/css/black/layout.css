@@ -46,10 +46,10 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -321px -102px transparent; 
 	display:inline-block; font-family: Tahoma, dotum; font-size:9px; color:#FFF; height:12px; letter-spacing:0; line-height:13px; padding-right:5px; position:absolute;
-	left:14px; top:13px; text-indent: 4px;
+	left:14px; top:13px; text-indent: 4px; z-index:1001
 }
 .icon_number span { 
-	background: url("../../images/header_nico.png") no-repeat scroll -357px -102px transparent !important;
+	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
 
@@ -346,6 +346,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
 .fieldline {border:1px solid #c7c7c7; left:0px; margin-top:0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
+.fieldline.community_names {line-height:17px}
 
 .up_form {position:absolute}
 .up_point {background: url("../../images/up_point.gif") no-repeat left top; width:11px; height:7px}
@@ -408,7 +409,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .form_contents .title_2dep {text-align:left} 
 .form_contents .item {width:80px}
 .form_contents .tcontents {width:100%}
-.form_space {padding-right:3px}
+.form_space {padding-right:5px}
 
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */

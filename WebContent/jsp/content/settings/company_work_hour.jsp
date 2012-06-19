@@ -81,7 +81,7 @@
 					<div class="title"><fmt:message key="settings.title.company.work_hour_list"/></div>
 					<!-- 우측버튼 -->
 					<div class="title_line_btns">
-						<div class="icon_btn_create">
+						<div class="icon_btn_add">
 							<a class="icon_btn_tail js_new_work_hour" href=""><fmt:message key="common.button.add_new"/></a>
 						</div>
 					</div>
@@ -93,7 +93,7 @@
 				<div class="js_new_work_hour"></div>
 
 				<!-- 근무정책 목록 -->
-				<div class="list_contents mt10">
+				<div class="list_contents">
 					<div>
 						<table>
 							<tbody>

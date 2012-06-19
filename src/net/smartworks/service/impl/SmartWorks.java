@@ -40,6 +40,7 @@ import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.mail.EmailServer;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.notice.NoticeBox;
@@ -1443,6 +1444,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public ConnectionProfile[] getMailConnectionProfiles() throws Exception {
 		return settingsService.getMailConnectionProfiles();
+	}
+
+	@Override
+	public MailAccount[] getMyMailAccounts() throws Exception {
+		return communityService.getMyMailAccounts();
 	}
 
 }

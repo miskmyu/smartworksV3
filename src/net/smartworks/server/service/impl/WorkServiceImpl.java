@@ -63,6 +63,10 @@ import net.smartworks.server.engine.infowork.form.model.SwfField;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
+import net.smartworks.server.engine.mail.manager.IMailManager;
+import net.smartworks.server.engine.mail.model.MailAccount;
+import net.smartworks.server.engine.mail.model.MailAccountCond;
+import net.smartworks.server.engine.mail.model.MailServer;
 import net.smartworks.server.engine.opinion.manager.IOpinionManager;
 import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
@@ -123,6 +127,9 @@ public class WorkServiceImpl implements IWorkService {
 	}
 	private static IOpinionManager getOpinionManager() {
 		return SwManagerFactory.getInstance().getOpinionManager();
+	}
+	private static IMailManager getMailManager() {
+		return SwManagerFactory.getInstance().getMailManager();
 	}
 
 	@Autowired
@@ -784,7 +791,11 @@ public class WorkServiceImpl implements IWorkService {
 			String txtUserProfilePicture = null;
 			String txtUserProfilePosition = null;
 			String txtUserProfileEmpId = null;
-			
+			boolean chkUserProfileUseEmail = false;
+			String txtUserProfileEmailId = null;
+			String selUserProfileEmailServerName = null;
+			String pwUserProfileEmailPW = null;
+
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
 				Object fieldValue = frmMyProfileSetting.get(fieldId);
@@ -795,28 +806,37 @@ public class WorkServiceImpl implements IWorkService {
 						files = (ArrayList<Map<String,String>>)valueMap.get("files");
 					}
 				} else if(fieldValue instanceof String) {
+					String valueString = (String)fieldValue;
 					if(fieldId.equals("txtUserProfileUserId"))
-						txtUserProfileUserId = (String)frmMyProfileSetting.get("txtUserProfileUserId");
+						txtUserProfileUserId = valueString;
 					else if(fieldId.equals("pwUserProfilePW"))
-						pwUserProfilePW = (String)frmMyProfileSetting.get("pwUserProfilePW");
+						pwUserProfilePW = valueString;
 						//pwUserProfilePW = DigestUtils.md5Hex(pwUserProfilePW);
 					else if(fieldId.equals("selUserProfileLocale"))
-						selUserProfileLocale = (String)frmMyProfileSetting.get("selUserProfileLocale");
+						selUserProfileLocale = valueString;
 					else if(fieldId.equals("selUserProfileTimeZone"))
-						selUserProfileTimeZone = (String)frmMyProfileSetting.get("selUserProfileTimeZone");
+						selUserProfileTimeZone = valueString;
 					else if(fieldId.equals("txtUserProfileEmail"))
-						txtUserProfileEmail = (String)frmMyProfileSetting.get("txtUserProfileEmail");
+						txtUserProfileEmail = valueString;
 					else if(fieldId.equals("txtUserProfilePhoneNo"))
-						txtUserProfilePhoneNo = (String)frmMyProfileSetting.get("txtUserProfilePhoneNo");
+						txtUserProfilePhoneNo = valueString;
 					else if(fieldId.equals("txtUserProfileCellNo"))
-						txtUserProfileCellNo = (String)frmMyProfileSetting.get("txtUserProfileCellNo");
+						txtUserProfileCellNo = valueString;
 					else if(fieldId.equals("txtUserProfilePosition"))
-						txtUserProfilePosition = (String)frmMyProfileSetting.get("txtUserProfilePosition");
+						txtUserProfilePosition = valueString;
 					else if(fieldId.equals("txtUserProfileEmpId"))
-						txtUserProfileEmpId = (String)frmMyProfileSetting.get("txtUserProfileEmpId");
+						txtUserProfileEmpId = valueString;
+					else if(fieldId.equals("chkUserProfileUseEmail"))
+						chkUserProfileUseEmail = true;
+					else if(fieldId.equals("txtUserProfileEmailId"))
+						txtUserProfileEmailId = valueString;
+					else if(fieldId.equals("selUserProfileEmailServerName"))
+						selUserProfileEmailServerName = valueString;
+					else if(fieldId.equals("pwUserProfileEmailPW"))
+						pwUserProfileEmailPW = valueString;
 				}
 			}
-	
+
 			SwoUser user = getSwoManager().getUser(txtUserProfileUserId, txtUserProfileUserId, null);
 	
 			if(!files.isEmpty()) {
@@ -834,12 +854,31 @@ public class WorkServiceImpl implements IWorkService {
 			user.setLocale(selUserProfileLocale);
 			user.setTimeZone(selUserProfileTimeZone);
 			user.setEmail(txtUserProfileEmail);
+			user.setUseMail(chkUserProfileUseEmail);
 			user.setExtensionNo(txtUserProfilePhoneNo);
 			user.setMobileNo(txtUserProfileCellNo);
 			user.setPosition(txtUserProfilePosition);
 			user.setEmpNo(txtUserProfileEmpId);
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);
+				if(chkUserProfileUseEmail) {
+					MailAccountCond mailAccountCond = new MailAccountCond();
+					mailAccountCond.setUserId(txtUserProfileUserId);
+					mailAccountCond.setMailServerId(selUserProfileEmailServerName);
+					MailAccount mailAccount = getMailManager().getMailAccount(txtUserProfileUserId, mailAccountCond, IManager.LEVEL_ALL);
+					if(SmartUtil.isBlankObject(mailAccount))
+						mailAccount = new MailAccount();
+					mailAccount.setUserId(txtUserProfileUserId);
+					mailAccount.setMailServerId(selUserProfileEmailServerName);
+					MailServer mailServer = getMailManager().getMailServer(txtUserProfileUserId, selUserProfileEmailServerName, IManager.LEVEL_ALL);
+					String mailServerName = null;
+					if(!SmartUtil.isBlankObject(mailServer))
+						mailServerName = mailServer.getName();
+					mailAccount.setMailServerName(mailServerName);
+					mailAccount.setMailId(txtUserProfileEmailId);
+					mailAccount.setMailPassword(pwUserProfileEmailPW);
+					getMailManager().setMailAccount(txtUserProfileUserId, mailAccount, IManager.LEVEL_ALL);
+				}
 				UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());
 		        Authentication authentication = authenticationManager.authenticate(authRequest);
 		        SecurityContext securityContext = new SecurityContextImpl();

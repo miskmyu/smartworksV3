@@ -129,7 +129,7 @@
 						<div class="js_type_userField" fieldId="usrRelatedUsers" multiUsers="true">
 							<div class="icon_fb_space" >
 								<div class="fieldline community_names js_community_names">
-									<div class="js_selected_communities user_sel_area">
+									<span class="js_selected_communities">
 										<%
 										if(!SmartUtil.isBlankObject(event.getRelatedUsers())){
 											for(Community community : event.getRelatedUsers()){
@@ -140,17 +140,19 @@
 													comName = community.getName();
 												}
 										%>
-												<span>
-													<span class='js_community_item user_select' comId="<%=community.getId()%>"><%=comName %><span class='btn_x_gr'>
-														<a class='js_remove_community' href=''> x</a>
-													</span></span>
-												</span>
+												
+													<span class='js_community_item user_select' comId="<%=community.getId()%>"><%=comName %>
+														<span class='btn_x_gr'>
+															<a class='js_remove_community' href=''> x</a>
+														</span>
+													</span>
+												
 										<%
 											}
 										}
 										%>
-									</div>
-									<input class="js_auto_complete" href="community_name.sw" type="text">
+									</span>
+									<input class="js_auto_complete m0" href="community_name.sw" type="text" style="width:100px">
 									<div class="js_srch_x"></div>
 								</div>
 								<div class="js_community_list srch_list_nowid" style="display: none"></div>
