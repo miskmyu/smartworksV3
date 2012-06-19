@@ -46,10 +46,10 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -321px -102px transparent; 
 	display:inline-block; font-family: Tahoma, dotum; font-size:9px; color:#FFF; height:12px; letter-spacing:0; line-height:13px; padding-right:5px; position:absolute;
-	left:14px; top:13px; text-indent: 4px;
+	left:14px; top:13px; text-indent: 4px; z-index:1001
 }
 .icon_number span { 
-	background: url("../../images/header_nico.png") no-repeat scroll -357px -102px transparent !important;
+	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
 
