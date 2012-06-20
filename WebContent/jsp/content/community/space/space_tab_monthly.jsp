@@ -107,6 +107,7 @@
 	<div class="option_section">
   		<span class="sel_date_section"><%=selectedMonthStr %><input type="hidden" class="js_space_datepicker" value="<%=selectedMonthStr%>.01"><a href="space_tab_monthly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
 		<select class="js_space_select_scope">
+			<option value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
 			<option value="space_tab_dayly.sw"><fmt:message key="space.title.tab_dayly"/></option>
 			<option value="space_tab_weekly.sw"><fmt:message key="space.title.tab_weekly"/></option>
 			<option selected><fmt:message key="space.title.tab_monthly"/></option>

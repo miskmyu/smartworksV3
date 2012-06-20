@@ -62,6 +62,12 @@ public class CommunityController {
 		return SmartUtil.returnMnv(request, "jsp/content/community/space/space_tab_dayly.jsp", "space_tab_dayly.tiles");
 	}
 
+	@RequestMapping("/space_tab_timeline")
+	public ModelAndView spaceTabTimeline(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/space_tab_timeline.jsp", "space_tab_timeline.tiles");
+	}
+
 	@RequestMapping("/space_tab_weekly")
 	public ModelAndView spaceTabWeekly(HttpServletRequest request, HttpServletResponse response) {
 

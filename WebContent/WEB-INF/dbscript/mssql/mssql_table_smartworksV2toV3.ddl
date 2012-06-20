@@ -697,6 +697,7 @@ alter table apraprline add aprRefAppLineDefId varchar(50);
 
 --키값 중복 허용 여부
 alter table swdomain add keyDuplicable bit;
+alter table swdomain add constraint swdomain_df default 0 for keyDuplicable
 
 -- keyColumn = 키필드, titleFieldId = 제목필드
 update swdomain set keyColumn = titleFieldId
