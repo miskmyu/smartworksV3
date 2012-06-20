@@ -114,6 +114,9 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	else
 		options.container.find('.form_value').html($user.children());
 
+//	if (readOnly)
+//		options.container.append(usersHtml);
+	
 	return options.container;
 };
 

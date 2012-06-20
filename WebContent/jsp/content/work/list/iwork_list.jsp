@@ -86,7 +86,9 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				$('.js_search_filter_list_box:first').html(data);
+				var selectSearchFilter = iworkList.find('.js_select_search_filter');
+				selectSearchFilter.find('.js_custom_filter').remove();
+				selectSearchFilter.append(data);
 				$('a.js_search_filter_close').click();
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, smartMessage.get('setFilterSucceed'));
@@ -245,7 +247,7 @@
 										for (SearchFilterInfo filter : filters) {
 											if(SmartUtil.isBlankObject(filter.getId())) continue;
 									%>
-											<option value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=CommonUtil.toNotNull(filter.getName())%></option>
+											<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=CommonUtil.toNotNull(filter.getName())%></option>
 									<%
 										}
 									}

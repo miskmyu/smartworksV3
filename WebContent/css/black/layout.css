@@ -46,10 +46,10 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -321px -102px transparent; 
 	display:inline-block; font-family: Tahoma, dotum; font-size:9px; color:#FFF; height:12px; letter-spacing:0; line-height:13px; padding-right:5px; position:absolute;
-	left:14px; top:13px; text-indent: 4px;
+	left:14px; top:13px; text-indent: 4px; z-index:1001
 }
 .icon_number span { 
-	background: url("../../images/header_nico.png") no-repeat scroll -357px -102px transparent !important;
+	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
 
@@ -84,9 +84,9 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;
 }
 
-.nav_srch .srch input::-webkit-input-placeholder {color:#999}
+.nav_srch .srch input:-webkit-input-placeholder {color:#999}
 .nav_srch .srch input:-moz-placeholder {color:#999}
-.global_srch .srch input::-webkit-input-placeholder {color:#999}
+.global_srch .srch input:-webkit-input-placeholder {color:#999}
 .global_srch .srch input:-moz-placeholder {color:#999}
 
 .srch button, .srch .srch_icon{
@@ -346,6 +346,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
 .fieldline {border:1px solid #c7c7c7; left:0px; margin-top:0; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
+.fieldline.community_names {line-height:17px}
 
 .up_form {position:absolute}
 .up_point {background: url("../../images/up_point.gif") no-repeat left top; width:11px; height:7px}
@@ -359,8 +360,9 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .txt_btn .po_right {float:right; margin-left:10px}
 .txt_btn .po_left {float:left; margin-right:10px}
 .txt_btn .po_left > span {line-height: 20px}
-.txt_btn .ch_right {float:right; margin-left:4px}
-.txt_btn .btn_r {float:right; margin:6px 0 0 0; display: inline-block}
+.txt_btn .ch_right {float:right; margin-left:7px}
+.txt_btn .btn_r {float:right; margin:5px 0 0 0; display: inline-block}
+.txt_btn .btn_r .fr {line-height: 17px; margin-left:3px}
 
 .txt_btn .current { font-weight:bold}
 .txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none}
@@ -408,7 +410,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .form_contents .title_2dep {text-align:left} 
 .form_contents .item {width:80px}
 .form_contents .tcontents {width:100%}
-.form_space {padding-right:3px}
+.form_space {padding-right:5px}
 
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
@@ -563,6 +565,7 @@ td.pic{width:85px}
 /* Mail */
 .buttonSet {margin:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
+.buttonSet select {height:21px; margin:0; padding:0}
 .mail_list_section .not_read {color:#0459C1}
 .mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
 .mail_list_section .not_read .icon_important,

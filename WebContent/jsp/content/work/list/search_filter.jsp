@@ -284,10 +284,8 @@
 			</td>
 			
 			<!-- 추가 버튼  -->
-			<td class="btn_plus_space">
-				<a href="">
-					<span class="btn_plus js_add_condition" /> </span>
-				</a>
+			<td class="btn_plus_space vb">
+				<span class="btn_plus js_add_condition" /> </span>
 			</td>
 		</tr>
 	</table>
@@ -297,8 +295,8 @@
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
 				<span class="form_space sw_error_message js_filter_error_message" style="text-align:right; color: red"></span>
 				<span class="js_progress_span"></span>
-				<span>
-					<input class="fieldline" style="width:160px;" type="text" name="txtNewFilterName" value="<%=filterName %>" />
+				<span class="fl">
+					<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
 				</span>
 				<span class="btn_wh">
 					<a href="" class="js_search_filter_saveas"><span class="txt_btn_start"></span>

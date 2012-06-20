@@ -317,7 +317,7 @@
 														}
 														
 														%>
-														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text" style="width:100px">
 													</div>
 													<div class="js_community_list srch_list_nowid" style="display: none"></div>
 													<span class="js_community_popup"></span>
@@ -361,7 +361,7 @@
 														}
 														
 														%>
-														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text" style="width:100px">
 													</div>
 													<div class="js_community_list srch_list_nowid" style="display: none"></div>
 													<span class="js_community_popup"></span>
@@ -407,7 +407,7 @@
 														}
 														
 														%>
-														<input class="m0 js_auto_complete" href="community_name.sw" type="text">
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text" style="width:100px">
 													</div>
 													<div class="js_community_list srch_list_nowid" style="display: none"></div>
 													<span class="js_community_popup"></span>

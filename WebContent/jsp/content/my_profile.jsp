@@ -56,8 +56,10 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('setMyProfileSucceed'));
+					smartPop.showInfo(smartPop.INFO, smartMessage.get('setMyProfileSucceed'), function(){
+						document.location.href = "home.sw";
+						smartPop.closeProgress();
+					});
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -193,7 +195,7 @@
 							<tr>
 								<td><fmt:message key="profile.title.email.use" /></td>
 								<td>
-									<input name="chkUserProfileUseEmail" class="fieldline js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
+									<input name="chkUserProfileUseEmail" class="js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
 								</td>
 							</tr>
 							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>

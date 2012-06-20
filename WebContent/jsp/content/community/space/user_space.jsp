@@ -23,6 +23,6 @@
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
 	<div class="js_space_instance_list">
-		<jsp:include page="/jsp/content/community/space/space_tab_weekly.jsp"></jsp:include>
+		<jsp:include page="/jsp/content/community/space/space_tab_timeline.jsp"></jsp:include>
 	</div>
 </div>

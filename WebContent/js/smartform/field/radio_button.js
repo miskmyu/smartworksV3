@@ -53,7 +53,6 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		$input.attr('fieldId', id);
 		if (readOnly) {
 			$input.attr('disabled', 'disabled');
-			$input = $input.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 		}
 		if ($graphic.attr('hidden') == 'true'){
 			$label.hide();
@@ -73,6 +72,9 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		$input_container.hide();
 	}
 
+	if (readOnly)
+		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	
 	return options.container;
 };
 

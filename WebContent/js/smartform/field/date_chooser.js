@@ -39,7 +39,6 @@ SmartWorks.FormRuntime.DateChooserBuilder.build = function(config) {
 	var $text = null;
 	if(readOnly){
 		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"></div>').text(value);
-		$text = $text.after('<input type="hidden" name="' + id + '" value="' + value + '">');
 	}else{	
 		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><div class="icon_fb_space form_date_input"><input readonly="readonly" type="text" name="' + id + '"' + required + '><a href="" class="js_todaypicker_button"><span class="icon_fb_date"></span></a></div></div>');
 		$text.find('input').attr('value', value);	
@@ -58,6 +57,9 @@ SmartWorks.FormRuntime.DateChooserBuilder.build = function(config) {
 		else
 			options.container.find('.form_value input').attr('value', value);
 	}
+	
+	if (readOnly)
+		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
 	
 	return options.container;
 };

@@ -80,7 +80,9 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				$('.js_search_filter_list_box:first').html(data);
+				var selectSearchFilter = pworkList.find('.js_select_search_filter');
+				selectSearchFilter.find('.js_custom_filter').remove();
+				selectSearchFilter.append(data);
 				$('a.js_search_filter_close').click();
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, smartMessage.get('setFilterSucceed'));
@@ -133,7 +135,7 @@
 	};
 </script>
 <%
-	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
+	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
 
@@ -221,7 +223,7 @@
 								if (filters != null) {
 									for (SearchFilterInfo filter : filters) {
 								%>
-										<option value="<%=filter.getId()%>"><%=filter.getName()%></option>
+										<option class="js_custom_filter" value="<%=filter.getId()%>"><%=filter.getName()%></option>
 								<%
 									}
 								}
