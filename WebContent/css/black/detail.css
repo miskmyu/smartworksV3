@@ -330,7 +330,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .left_im { position:absolute; width:208px}
 .right_auto {display: block; padding-left:213px; width:auto}
 .left_im table, .right_auto table { width:100% ; min-width:inherit}
-.left30 { float:left; width:30%}
+.left30 { float:left; width:28%}
 .right70 { float:right; width:70%}
 
 /* 2단구성 - 사용자 가이드 */
