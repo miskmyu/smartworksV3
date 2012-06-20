@@ -43,13 +43,11 @@ ALTER TABLE SWOrgUser add locale varchar(20);
 ALTER TABLE SWOrgUser add timeZone varchar(20);
 ALTER TABLE SWOrgUser add nickName varchar(255);
 
-ALTER TABLE SWOrgGroup alter column name varchar(100);
-
 -- 커뮤니티 그룹
 CREATE TABLE SWOrgGroup (
 	id	varchar(50) not null,
 	companyId	varchar(50),
-	name	varchar(50),
+	name	varchar(100),
 	groupLeader	varchar(50),
 	groupType	varchar(1),
 	status	varchar(1),
