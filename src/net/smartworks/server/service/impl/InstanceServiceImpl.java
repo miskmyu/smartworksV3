@@ -5598,6 +5598,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	
 	@Override
+	public TaskInstanceInfo[] getTaskInstancesByTimeline(String contextId, String spaceId, LocalDate fromDate, int maxSize) throws Exception {
+		return getCastTaskInstancesByDate(fromDate, maxSize);
+	}
+	
+	@Override
 	public InstanceInfo[] getSpaceInstancesByDate(String spaceId, LocalDate fromDate, int maxSize) throws Exception {
 		try{
 			User cuser = SmartUtil.getCurrentUser();
