@@ -195,7 +195,7 @@
 							<tr>
 								<td><fmt:message key="profile.title.email.use" /></td>
 								<td>
-									<input name="chkUserProfileUseEmail" class="fieldline js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
+									<input name="chkUserProfileUseEmail" class="js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
 								</td>
 							</tr>
 							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>

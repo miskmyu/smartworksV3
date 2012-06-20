@@ -27,6 +27,9 @@
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+
+<script type="text/javascript" src="js/sw/iframe.js"></script>
+
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
@@ -85,6 +88,14 @@
 					<button href="new_mail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
 				</div>
 				<div class="table_line"> </div>
+				
+				<!-- 이전 다음 목록 버튼 -->
+				<div class="move_btn_space top">
+					<span class="icon_arr_npage" title="다음"><a href=""> </a></span>
+					<span class="icon_arr_ppage" title="이전"><a href=""> </a></span>
+					<span><a href="" class="mr5">목록보기</a></span>
+				</div>
+				<!-- 이전 다음 목록 버튼 //-->
 
 				<!-- 메일 리스트-->
 				<div class="list_contents mail_list_section">
@@ -139,6 +150,15 @@
 							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
 					</div>
 					<!-- 업무 내용 //-->
+					
+				<!-- 이전 다음 목록 버튼 -->
+				<div class="move_btn_space bottom">
+					<span class="icon_arr_npage" title="다음"><a href=""> </a></span>
+					<span class="icon_arr_ppage" title="이전"><a href=""> </a></span>
+					<span><a href="" class="mr5">목록보기</a></span>
+				</div>
+				<!-- 이전 다음 목록 버튼 //-->
+				
 				</div>
 		        <!-- 메일 리스트//-->
 			</div>
