@@ -5139,17 +5139,21 @@ public class InstanceServiceImpl implements IInstanceService {
 		} else {
 			taskWorkCond.setTskWorkSpaceId(spaceId);
 		}
-		
-		taskWorkCond.setTskExecuteDateFrom(fromDate);
-		taskWorkCond.setTskExecuteDateTo(toDate);
-		
+
+		if(fromDate != null && toDate == null) {
+			taskWorkCond.setTskExecuteDateBefore(fromDate);
+		} else {
+			taskWorkCond.setTskExecuteDateFrom(fromDate);
+			taskWorkCond.setTskExecuteDateTo(toDate);
+		}
+
 		taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", true)});
-		
-//		taskWorkCond.setPageNo(0);
-//		taskWorkCond.setPageSize(maxSize);
+
+		//taskWorkCond.setPageNo(0);
+		//taskWorkCond.setPageSize(maxSize);
 
 		TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
-		
+
 		return tasks;
 	}
 	
@@ -5625,7 +5629,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	
 	@Override
 	public TaskInstanceInfo[] getTaskInstancesByTimeline(String contextId, String spaceId, LocalDate fromDate, int maxSize) throws Exception {
-		return getCastTaskInstancesByDate(fromDate, maxSize);
+		return getTaskInstancesByDate(contextId, spaceId, fromDate, null, maxSize);
 	}
 	
 	@Override
