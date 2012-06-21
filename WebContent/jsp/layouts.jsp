@@ -86,7 +86,8 @@ currentUser = {
 	orgPicture : "<%=currentUser.getOrgPicture()%>",
 	locale : "<%=currentUser.getLocale()%>",
 	timeZone : "<%=currentUser.getTimeZone()%>",
-	timeOffset : "<%=currentUser.getTimeOffsetInHour()%>"
+	timeOffset : "<%=currentUser.getTimeOffsetInHour()%>",
+	signPicture : "<%=currentUser.getSignPicture()%>"
 };
 
 function logout() {

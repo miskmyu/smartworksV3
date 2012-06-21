@@ -27,27 +27,33 @@
 
 	String taskInstId = request.getParameter("taskInstId");
 
-	WorkInstance workInstance = null; 
-	TaskInstanceInfo[] tasks = null;
 	TaskInstanceInfo approvalTask = null;
 	String subject = "";
 	String content = "";
-	String workInstId = "";
 	String approvalInstId = "";
-	if(!SmartUtil.isBlankObject(taskInstId)){
-		workInstance = (WorkInstance)session.getAttribute("workInstance");
-		workInstId = workInstance.getId();
-		tasks = workInstance.getTasks();
-		if(!SmartUtil.isBlankObject(tasks)){
+	
+	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
+	String workInstId = workInstance.getId();
+	TaskInstanceInfo[] tasks = workInstance.getTasks();
+	if(!SmartUtil.isBlankObject(tasks)){
+		for(TaskInstanceInfo task : tasks){
+			if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+				approvalTask = task;
+				approvalInstId = task.getApprovalId();
+				subject = task.getSubject();
+				content = task.getContent();
+				break;
+			}
+		}
+		if(SmartUtil.isBlankObject(approvalTask)){
 			for(TaskInstanceInfo task : tasks){
-				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
-					approvalTask = task;
+				if(!SmartUtil.isBlankObject(task.getApprovalId())){
 					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
 					content = task.getContent();
 					break;
 				}
-			}
+			}			
 		}
 	}
 	
@@ -55,20 +61,7 @@
 	ApprovalLineInst approvalLineInst = null;
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
-/* 		if(approvalLineInst == null){
-			approvalLineInst = new ApprovalLineInst(approvalInstId, "");
-			Approval approval1 = new Approval("", Approval.APPROVER_CHOOSE_ON_RUNNING, cUser, 0, 0, 0 );
-			approval1.setStatus(Instance.STATUS_DRAFTED);
-			approval1.setCompletedDate(new LocalDate());
-			Approval approval2 = new Approval("승인", Approval.APPROVER_CHOOSE_ON_RUNNING, cUser, 0, 0, 0 );
-			approval2.setStatus(Instance.STATUS_COMPLETED);
-			approval2.setCompletedDate(new LocalDate());
-			Approval approval3 = new Approval("대표이사", Approval.APPROVER_CHOOSE_ON_RUNNING, cUser, 0, 0, 0 );
-			approval2.setStatus(Instance.STATUS_COMPLETED);
-			approval2.setCompletedDate(new LocalDate());
-			approvalLineInst.setApprovals(new Approval[]{approval1, approval2, approval3});
-		}
- */	}else{
+	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
 
@@ -107,16 +100,16 @@
 						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
-							String signPicture = approval.getApprover() != null ? approval.getApprover().getSignPicture() : "";
+							String signPicture = (approval.getApprover() != null && approval.getApprover().isUseSignPicture()) ? approval.getApprover().getSignPicture() : "";
 							String statusIcon = "";
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
-								statusIcon = "approval_status completed_" + cUser.getLocale();
+								if(SmartUtil.isBlankObject(signPicture)) statusIcon = "approval_status approved_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_RETURNED){
 								statusIcon = "approval_status returned_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_REJECTED){
 								statusIcon = "approval_status rejected_" + cUser.getLocale();
 							}else if(approval.getStatus() == Instance.STATUS_DRAFTED){
-								statusIcon = "approval_status drafted_" + cUser.getLocale();
+								if(SmartUtil.isBlankObject(signPicture)) statusIcon = "approval_status drafted_" + cUser.getLocale();
 							}
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
@@ -194,7 +187,7 @@
 					<ul class="bg p10">
 						<%
 						for(TaskInstanceInfo task : tasks){
-							if(!task.getApprovalId().equals(approvalTask.getApprovalId())) continue;
+							if(!task.getApprovalId().equals(approvalInstId)) continue;
 							UserInfo owner = task.getAssignee();
 							String statusImage = "";
 							String statusTitle = "";
@@ -224,7 +217,7 @@
 								statusImage = "icon_status_not_yet";
 								statusTitle = "content.status.not_yet";
 							}
-							if(approvalTask.getId().equals(task.getId()))
+							if(!SmartUtil.isBlankObject(approvalTask) && approvalTask.getId().equals(task.getId()))
 								continue;
 					%>
 								<li class="sub_instance_list">
@@ -243,16 +236,19 @@
 								</li>					
 						<%
 						}
+						if(!SmartUtil.isBlankObject(approvalTask)){
 						%>
-						<li class="sub_instance_list">
-								<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
-								<span ><%=approvalTask.getName() %></span>
-								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-					        	<span class="comment_box">
-									<textarea style="width:73%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
-					        	</span>								
-						</li>
-						
+							<li class="sub_instance_list">
+									<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
+									<span ><%=approvalTask.getName() %></span>
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+						        	<span class="comment_box">
+										<textarea style="width:73%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+						        	</span>								
+							</li>
+						<%
+						}
+						%>
 					</ul>
 				</div>
 			<%

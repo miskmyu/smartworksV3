@@ -19,6 +19,27 @@ function loadMyProfileField() {
 			});
 		}		
 	}
+	
+	var mySignPictureFields = $('div.js_my_signpic_field');
+	if(!isEmpty(mySignPictureFields)) {
+		for(var i=0; i<mySignPictureFields.length; i++) {
+			var mySignPictureField = $(mySignPictureFields[i]);
+			
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			mySignPictureField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgMySignPic",
+				fieldName: "picture sign",
+				imgSource: currentUser.signPicture,
+				pictureWidth: 67,
+				pictureHeight: 67,
+				required: false
+			});
+		}		
+	}
 };
 
 function loadCompanyLogoField() {
