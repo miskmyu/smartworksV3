@@ -51,6 +51,13 @@
 					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
 					content = task.getContent();
+					for(TaskInstanceInfo tsk : tasks){
+						if(tsk.isRunningApprovalForMe(cUser.getId(), null)){
+							approvalTask = tsk;
+							taskInstId = tsk.getId();
+							break;
+						}
+					}
 					break;
 				}
 			}			

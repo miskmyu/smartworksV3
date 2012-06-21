@@ -119,6 +119,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	
 	public boolean isRunningApprovalForMe(String userId, String taskInstId){
+		if(SmartUtil.isBlankObject(taskInstId)) taskInstId = this.getId();
 		if(	taskInstId.equals(this.getId()) 
 			&& this.getType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
