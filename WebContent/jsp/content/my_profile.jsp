@@ -190,12 +190,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td><fmt:message key="profile.title.use.sign_picture" /></td>
-							<td><input name="chkUseSignPicture" type="checkbox" <%if(cUser.isUseSignPicture()){ %>checked<%} %>></td>
-						</tr>
-						<tr>
 							<td><fmt:message key="profile.title.sign_picture" /></td>
-							<td><div class="js_my_signpic_field js_auto_load_profile"></div></td>
+							<td>
+								<span><fmt:message key="profile.title.use.sign_picture" /></span>
+								<input name="chkUseSignPicture" type="checkbox" <%if(cUser.isUseSignPicture()){ %>checked<%} %>>
+								<div class="js_my_signpic_field js_auto_load_profile"></div>
+							</td>
 						</tr>
 						<%
 						if(!SmartUtil.isBlankObject(emailServers)){
