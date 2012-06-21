@@ -286,8 +286,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					obj.setTableName((String)fields[j++]);
 					obj.setKeyColumn((String)fields[j++]);
 					obj.setTitleFieldId((String)fields[j++]);
-					obj.setKeyDuplicable((Boolean)fields[j++]);
-					obj.setSystemDomain(CommonUtil.toBoolean((String)fields[j++]));
+					obj.setKeyDuplicable(CommonUtil.toBoolean(fields[j++]));
+					obj.setSystemDomain(CommonUtil.toBoolean(fields[j++]));
 					obj.setPublishMode((String)fields[j++]);
 					obj.setCompanyId((String)fields[j++]);
 					objList.add(obj);
@@ -2431,6 +2431,25 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SwdException();
+		}
+	}
+	@Override
+	public Object[] getObjectsByFormFieldId(String domainId, String formFieldId, String tableName) throws SwdException {
+		try {
+			String tableColName = getTableColName(domainId, formFieldId);
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append("select ").append(tableColName).append(" from ").append(tableName).append(" order by createdTime desc");
+			Query query = this.getSession().createSQLQuery(stringBuffer.toString());
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+
+			Object[] objects = new Object[list.size()];
+			list.toArray(objects);
+			return objects;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

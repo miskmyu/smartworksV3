@@ -288,7 +288,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		String worksSpaceId = cond.getTskWorkSpaceId();
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
 		Date executionDateTo = cond.getTskExecuteDateTo();
-		
+		Date executionDateBefore = cond.getTskExecuteDateBefore();
+
 		String[] taskObjIdIns = cond.getTskObjIdIns();
 		
 		queryBuffer.append("from ");
@@ -331,6 +332,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		on ctg.parentId = ctg2.id ");
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
+		queryBuffer.append("	and form.packageId is not null ");
 		if (!CommonUtil.isEmpty(tskAssignee))
 			queryBuffer.append("	and task.tskassignee = :tskAssignee ");
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))
@@ -345,6 +347,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("	and task.tskExecuteDate > :executionDateFrom ");
 		if (executionDateTo != null)
 			queryBuffer.append("	and task.tskExecuteDate < :executionDateTo ");
+		if (executionDateBefore != null)
+			queryBuffer.append("	and task.tskExecuteDate < :executionDateBefore ");
 		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
 			queryBuffer.append(" 	and task.tskObjId in (");
 			for (int i=0; i<taskObjIdIns.length; i++) {
@@ -464,6 +468,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setTimestamp("executionDateFrom", executionDateFrom);
 		if (executionDateTo != null)
 			query.setTimestamp("executionDateTo", executionDateTo);
+		if (executionDateBefore != null)
+			query.setTimestamp("executionDateBefore", executionDateBefore);
 		if (!CommonUtil.isEmpty(prcStatus)) 
 			query.setString("prcStatus", prcStatus);
 		if (!CommonUtil.isEmpty(tskRefType) && !tskRefType.equals(TskTask.TASKREFTYPE_NOTHING)) 

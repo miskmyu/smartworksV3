@@ -45,15 +45,15 @@ body, button, select, input, textarea, sub {
  
 input[type="text"] {
 	width:100%;
-	color:#555555 !important;
-	padding:2px 0 0 0
+	color:#989898;
+	padding:1px 0
 }
 
 textarea {width:99.6%}
 
 
 select, input, textarea {
-	color:#555555
+	color:#989898
 }
 
 textarea{
@@ -123,7 +123,7 @@ table {
 	border-spacing: 0;
 	border-collapse: collapse;
 	width: 100%;
-	line-height: 23px
+	line-height: 22px
 }
 td, th {display: table-cell; vertical-align: inherit}
 

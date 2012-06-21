@@ -164,6 +164,7 @@ import net.smartworks.util.SmartUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -1465,26 +1466,37 @@ public class InstanceServiceImpl implements IInstanceService {
 			int formVersion = 1;
 			User cuser = SmartUtil.getCurrentUser();
 			String userId = null;
-			if (cuser != null)
+			String companyId = null;
+			if (cuser != null) {
 				userId = cuser.getId();
-	
+				companyId = cuser.getCompanyId();
+			}
+
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setFormId(formId);
 			SwdDomain swdDomain = getSwdManager().getDomain(userId, swdDomainCond, IManager.LEVEL_LITE);
-	
-			domainId = swdDomain.getObjId();
-	
+
+			String tableName = null;
+			String keyColumn = null;
+			boolean keyDuplicable = true;
+			if(!SmartUtil.isBlankObject(swdDomain)) {
+				domainId = swdDomain.getObjId();
+				tableName = swdDomain.getTableName();
+				keyColumn = swdDomain.getKeyColumn();
+				keyDuplicable = swdDomain.isKeyDuplicable();
+			}
+
 			SwdFieldCond swdFieldCond = new SwdFieldCond();
 			swdFieldCond.setDomainObjId(domainId);
 			SwdField[] fields = getSwdManager().getFields(userId, swdFieldCond, IManager.LEVEL_LITE);
 			if (CommonUtil.isEmpty(fields))
 				return null;//TODO return null? throw new Exception??
-	
+
 			Map<String, SwdField> fieldInfoMap = new HashMap<String, SwdField>();
 			for (SwdField field : fields) {
 				fieldInfoMap.put(field.getFormFieldId(), field);
 			}
-			
+
 			//업무화면에서 폼데이터를 넘길때 모든 필드가 다 넘어오지 않는다. 예를 들면 checkbox 의 체크가 되어 있지 않으면 해당 필드 정보자체가
 			//자체가 넘어 오지 않기 때문에 그값을 셋팅할수가 없다 따라서 화면에서 넘어오는 필드를 기준으로 하는것이 아니라 데이터베이스에서 조회한
 			//필드 기준으로 Iterator 한다
@@ -1510,6 +1522,18 @@ public class InstanceServiceImpl implements IInstanceService {
 				String refFormField = null;
 				String refRecordId = null;
 				Object fieldValue = frmSmartFormMap.get(fieldId);
+				if(!keyDuplicable) {
+					if(fieldId.equals(keyColumn)) {
+						Object[] objects = getSwdManager().getObjectsByFormFieldId(domainId, fieldId, tableName);
+						if(!CommonUtil.isEmpty(objects)) {
+							for(Object object : objects) {
+								if(object.equals(fieldValue)) {
+									throw new DuplicateKeyException("duplicateKeyException");
+								}
+							}
+						}
+					}
+				}
 				if (fieldValue instanceof LinkedHashMap) {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					groupId = (String)valueMap.get("groupId");
@@ -1887,7 +1911,9 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			return instanceId;
 
-		}catch (Exception e){
+		} catch (DuplicateKeyException dke) {
+			throw new DuplicateKeyException("duplicateKeyException");
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;			
 		}
@@ -5150,17 +5176,21 @@ public class InstanceServiceImpl implements IInstanceService {
 		} else {
 			taskWorkCond.setTskWorkSpaceId(spaceId);
 		}
-		
-		taskWorkCond.setTskExecuteDateFrom(fromDate);
-		taskWorkCond.setTskExecuteDateTo(toDate);
-		
+
+		if(fromDate != null && toDate == null) {
+			taskWorkCond.setTskExecuteDateBefore(fromDate);
+		} else {
+			taskWorkCond.setTskExecuteDateFrom(fromDate);
+			taskWorkCond.setTskExecuteDateTo(toDate);
+		}
+
 		taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", true)});
-		
-//		taskWorkCond.setPageNo(0);
-//		taskWorkCond.setPageSize(maxSize);
+
+		//taskWorkCond.setPageNo(0);
+		//taskWorkCond.setPageSize(maxSize);
 
 		TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
-		
+
 		return tasks;
 	}
 	
@@ -5632,6 +5662,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;			
 			// Exception Handling Required			
 		}
+	}
+	
+	@Override
+	public TaskInstanceInfo[] getTaskInstancesByTimeline(String contextId, String spaceId, LocalDate fromDate, int maxSize) throws Exception {
+		return getTaskInstancesByDate(contextId, spaceId, fromDate, null, maxSize);
 	}
 	
 	@Override

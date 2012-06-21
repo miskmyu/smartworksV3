@@ -38,29 +38,16 @@
 	
 	LocalDate today =  LocalDate.convertLocalDateStringToLocalDate((new LocalDate()).toLocalDateSimpleString());
 
-	String selectedIndexStr = request.getParameter("selectedIndex");
-	int selectedIndex = SmartUtil.isBlankObject(selectedIndexStr) ? 6 : Integer.parseInt(selectedIndexStr);
-
-	LocalDate startDate = new LocalDate(today.getTime()-LocalDate.ONE_DAY*6);
+	LocalDate startDate = new LocalDate();
 	String startDateStr = request.getParameter("startDate");
 	if(!SmartUtil.isBlankObject(startDateStr)){
 		LocalDate tempStartDate = LocalDate.convertLocalDateStringToLocalDate(startDateStr);
-		if(tempStartDate.getTime()+LocalDate.ONE_DAY*6 < today.getTime()) startDate = new LocalDate(tempStartDate.getTime());
+		startDate = new LocalDate(tempStartDate.getTime());
 	}
-	LocalDate endDate = new LocalDate(startDate.getTime()+LocalDate.ONE_DAY*6);
-	LocalDate weekLaterDate = new LocalDate(endDate.getTime()+LocalDate.ONE_DAY*6);
-	
-	CompanyCalendar[] calendars = (!SmartUtil.isBlankObject(startDateStr) && startDateStr.equals((String)session.getAttribute("startDate")))
-									? (CompanyCalendar[])session.getAttribute("calendars") : smartWorks.getCompanyCalendars(startDate, endDate);
 	startDateStr = startDate.toLocalDateSimpleString();
 	session.setAttribute("startDate", startDateStr);
-	session.setAttribute("calendars", calendars);
 	
-	CompanyCalendar selectedCalendar = calendars[selectedIndex];
-	WorkHourPolicy whp = smartWorks.getCompanyWorkHourPolicy();
-	selectedCalendar.setWorkHour(whp.getWorkHour(selectedCalendar.getDate().getDayOfWeek()));
-	
-	TaskInstanceInfo[][] tasksByWorkHours = smartWorks.getTaskInstancesByWorkHours(contextStr, workSpace.getId(), selectedCalendar.getDate(), 10); 
+	TaskInstanceInfo[] taskInstances = smartWorks.getTaskInstancesByTimeline(contextStr, workSpace.getId(), startDate, 20); 
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -68,57 +55,11 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--탭-->
-<div class="tab js_space_tab_dayly_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
-
-	<%
-	String prevWeekHref = "space_tab_dayly.sw?startDate=" 
-			+ (new LocalDate(startDate.getTime()-LocalDate.ONE_DAY*7)).toLocalDateSimpleString()
-			+ "&selectedIndex=0";
-	String prevDayHref = "space_tab_dayly.sw?startDate=" 
-			+ (new LocalDate(startDate.getTime()-LocalDate.ONE_DAY)).toLocalDateSimpleString()
-			+ "&selectedIndex=0";
-	%>
-	<a href="<%=prevWeekHref %>" class="btn_arr_prev2 js_space_tab_index"></a> 
-	<a href="<%=prevDayHref %>" class="btn_arr_prev js_space_tab_index"></a>
-
-	<ul>
-		<%
-		String selectedDateStr = "";
-		for(int i = 0; i<calendars.length; i++){
-			String dateStr = (i==selectedIndex) 
-								? calendars[i].getDate().toLocalDateString() : calendars[i].getDate().toLocalDateShortString();
-			if(i==selectedIndex) selectedDateStr = calendars[i].getDate().toLocalDateSimpleString();
-			String liClass = (i==selectedIndex) ? "current" : "";
-			int dayOfWeek = calendars[i].getDate().getDayOfWeek();
-			String spanClass = ((calendars[i].isHoliday() || dayOfWeek==Calendar.SUNDAY) ? "t_sunday" : (dayOfWeek==Calendar.SATURDAY) ? "t_saturday" : "");
- 			String href = "space_tab_dayly.sw?startDate=" + startDateStr + "&selectedIndex=" + i; 
-		%>
-			<li class="<%=liClass%>"><span class="intab"><a class="js_space_tab_index" href="<%=href %>"><span class="<%=spanClass%>"><%=dateStr %></span></a></span></li>
-		<%
-		}
-		%>
-	</ul>
-	<%
-	String nextDayHref = "space_tab_dayly.sw?startDate=" 
-			+ (new LocalDate(startDate.getTime()+LocalDate.ONE_DAY)).toLocalDateSimpleString()
-			+ "&selectedIndex=6";
-	String nextWeekHref = "space_tab_dayly.sw?startDate="
-			+ (new LocalDate(startDate.getTime()+LocalDate.ONE_DAY*7)).toLocalDateSimpleString()
-			+ "&selectedIndex=6";
-	%>
-	<%
-	if(!endDate.isSameDate(today)){
-	%>
-		<a href="<%=nextDayHref%>" class="btn_arr_next js_space_tab_index"></a>
-		<a href="<%=nextWeekHref %>" class="btn_arr_next2 js_space_tab_index"></a>
-	<%
-	} 
-	%>
-
+<div class="tab js_space_tab_timeline_page" workSpaceId="<%=workSpace.getId() %>" startDate="<%=startDateStr%>">
 	<div class="option_section">
-  		<span class="sel_date_section"><%=selectedDateStr%><input type="hidden" class="js_space_datepicker" value="<%=selectedDateStr%>"><a href="space_tab_dayly.sw" class="btn_calendar js_space_datepicker_button"></a></span> 
 		<select class="js_space_select_scope">
-			<option selected value="space_tab_dayly.sw?startDate=<%=selectedDateStr%>&selectedIndex=6"><fmt:message key="space.title.tab_dayly"/></option>
+			<option selected value="space_tab_timeline.sw"><fmt:message key="space.title.tab_timeline"/></option>
+			<option value="space_tab_dayly.sw"><fmt:message key="space.title.tab_dayly"/></option>
 			<option value="space_tab_weekly.sw"><fmt:message key="space.title.tab_weekly"/></option>
 			<option value="space_tab_monthly.sw"><fmt:message key="space.title.tab_monthly"/></option>
 		</select>
@@ -127,7 +68,7 @@
 <!--탭//-->
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_space_dayly_page" contextId="<%=contextStr %>" spaceId="<%=workSpace.getId() %>" >
+<div class="section_portlet js_space_timeline_page" contextId="<%=contextStr %>" spaceId="<%=workSpace.getId() %>" >
 	<div class="portlet_t">
 		<div class="portlet_tl"></div>
 	</div>
@@ -135,107 +76,26 @@
 		<ul class="portlet_r" style="display: block;">
 
 			<!-- 컨텐츠 -->
-			<div class="contents_space">
-			
-				<%
-				String toDateStr = (new LocalDate(selectedCalendar.getDate().getTime() + LocalDate.ONE_DAY)).toLocalDateString2();
-				if(selectedCalendar.isHoliday() || selectedCalendar.getWorkHour().getWorkTime()==0){
-					String dayTitle = SmartMessage.getString("common.title.holiday") + selectedCalendar.toCompanyEventsString();
-				%>
-					<!-- 휴일시간 -->
-					<div class="space_section js_space_dayly_work_hour" toDate="<%=toDateStr%>">
-	 					<div class="title"><%=dayTitle%></div>
-						<ul>
-							<%
-							int holidayTasks = 0;
-							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length > 0){
-								for(int i=0; i<tasksByWorkHours.length; i++){
-									if(!SmartUtil.isBlankObject(tasksByWorkHours[i])){
-										holidayTasks++;
-										session.setAttribute("taskHistories", tasksByWorkHours[i]);
-							%>
-										<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
-							<%
-									}
-								}
-							}
-							if(holidayTasks==0){
-							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
-							<%
-							}
-							%>											
-						</ul>
-					</div>
-					<!-- 휴일시간 //-->
-				<%
-				}else{
-					String workStartStr = (new LocalDate(selectedCalendar.getDate().getTime() + selectedCalendar.getWorkHour().getStart())).toLocalDateString2();
-					String workEndStr = (new LocalDate(selectedCalendar.getDate().getTime() + selectedCalendar.getWorkHour().getEnd())).toLocalDateString2();
-				%>				
-					<!-- 근무시간 전 -->
-					<div class="space_section  js_space_dayly_work_hour" toDate="<%=workStartStr%>">
-	 					<div class="title"><fmt:message key="common.title.before_work"/>( ~ <%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getStart())%>)</div>
-						<ul>
-							<%
-							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length==3 && !SmartUtil.isBlankObject(tasksByWorkHours[0])){
-								session.setAttribute("taskHistories", tasksByWorkHours[0]);
-							%>
-								<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
-							<%
-							}else{
-							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
-							<%
-							}
-							%>											
-						</ul>
-					</div>
-					<!-- 근무시간 전//-->
-	
-					<!-- 근무시간 -->
-					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=workEndStr%>">
-						<div class="title"><fmt:message key="common.title.work_hour"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getStart())%> ~ <%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%>)</div>
-	
-						<ul>
-							<%
-							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[1])){
-								session.setAttribute("taskHistories", tasksByWorkHours[1]);
-							%>
-								<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
-							<%
-							}else{
-							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
-							<%
-							}
-							%>											
-						</ul>
-					</div>
-					<!-- 근무시간//-->
-	
-					<!-- 근무시간 후 -->
-					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=toDateStr%>">
-						<div class="title_off"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
-						<ul>
-							<%
-							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[2])){
-								session.setAttribute("taskHistories", tasksByWorkHours[2]);
-							%>
-								<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
-							<%
-							}else{
-							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
-							<%
-							}
-							%>											
-						</ul>
-					</div>
-					<!-- 근무시간 후//-->
-				<%
-				}
-				%>
+			<div class="contents_space">			
+				<div class="space_section mt10 js_space_timeline">
+					<div class="title"><fmt:message key="common.title.work_timeline"/></div>
+
+					<ul>
+						<%
+						if(!SmartUtil.isBlankObject(taskInstances)){
+							session.setAttribute("taskHistories", taskInstances);
+						%>
+							<jsp:include page="/jsp/content/community/space/space_task_histories.jsp"></jsp:include>
+						<%
+						}else{
+						%>
+							<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+						<%
+						}
+						%>											
+					</ul>
+				</div>
+				<!-- 근무시간//-->
 			</div>
 			<!-- 컨텐츠 //-->
 
@@ -244,37 +104,3 @@
 	<div class="portlet_b" style="display: block;"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->
-
-<script type="text/javascript">
-$.datepicker.setDefaults($.datepicker.regional[currentUser.locale]);
-$('.js_space_datepicker').datepicker({
-	defaultDate : new Date(),
-	dateFormat : 'yy.mm.dd',
-	onSelect: function(date) {
-		var selectedDate = new Date(date);
-		var today = new Date();
-		if(selectedDate>today){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get('spaceOverDateSeleted'));
-			return false;
-		}
-		var input = $(this);
-		var target = input.parents('.js_space_instance_list');
-		var url = input.next().attr('href');
-		var startDate = new Date(selectedDate.toString());
-		startDate.setDate(selectedDate.getDate() - 6);
-		$.ajax({
-			url : url,
-			data : {
-				startDate : startDate.format('yyyy.mm.dd'),
-				selectedIndex : 6
-			},
-			success : function(data, status, jqXHR) {
-				target.html(data);
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-			}
-		});
-	}
-});
-
-</script>

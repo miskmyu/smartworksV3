@@ -1,16 +1,22 @@
 @charset "utf-8";
 /* CSS Document */
 .form_layout {padding:10px}
-.form_col {padding:0 5px; line-height: 23px}
-.form_label, .form_value {float:left; margin-top: 3px}
+.form_col {padding:0 10px; line-height: 22px}
+.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
+.form_col iframe {margin-bottom:4px}
+form .form_label, form .form_value {margin:4px 0 0 0}
+.form_label, .form_value {float:left}
 .form_label {color:#23579e}
 .form_value input[type="text"] {width:100%}
 .form_value textarea {width:99.8% !important}
 .form_value, .form_value a span,
 .form_layout.con td, .boTb td {color: #555555 !important}
 .form_layout.con th, .boTb th {color: #23579E; vertical-align: top; font-weight: normal}
-.form_layout td, .form_layout th {border-bottom: 1px dotted #ededed}
+.form_layout td, .form_layout th {border-bottom: 1px dotted #DCDFE0}
 
+/* Up Load Box */
+#upload_form_box .form_label, #upload_form_box .form_value {margin:1px 0}
+#upload_form_box .form_col {padding:0 3px}
 
 /* 상세필터 */
 .filter_section {overflow:hidden;}

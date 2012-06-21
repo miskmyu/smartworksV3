@@ -167,6 +167,9 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .pos_reply_point {left: 86px; position: relative; top: 1px; z-index: 20}
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
 
+/* Manual */
+.det_contents {margin: 15px 0 10px}
+
 /* 페이징 */
 .paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold}
 .paginate strong {color:#ed1c24}
@@ -186,11 +189,11 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .num_box {float:right; margin: -20px 5px 0; position:relative}
 
 /* Prev Page, Next Page  */
-.move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 21px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
 .move_btn_space.top {border-top: none}
 .move_btn_space.bottom {border-bottom:none; background-color: #FFF}
-.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
-.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 16px}
+.move_btn_space span a {float:right; margin-top: 4px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 15px}
 .icon_arr_ppage a:hover {background-position: -49px -314px}
 .icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
 .icon_arr_npage a:hover {background-position: -66px -314px}
@@ -275,7 +278,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 /* Body Icon */
 .icon_body_modify {background: url("../../images/body_icon.png") no-repeat scroll 0 -7px transparent; height:16px; width:16px; display:inline-block}
 .icon_body_register {background: url("../../images/body_icon.png") no-repeat scroll -74px -7px transparent; height:16px; width:16px; display:inline-block}
-.icon_body_read {background: url("../../images/body_icon.png") no-repeat scroll -156px -7px transparent; height:16px; width:13px; display:inline-block}
+.icon_body_read {background: url("../../images/body_icon.png") no-repeat scroll -156px -8px transparent; height:16px; width:13px; display:inline-block}
 /* 
 .bu_work_explan {background: url("../../images/body_icon.png") no-repeat scroll 0 -83px transparent; height:16px; display:inline-block; padding: 0 0 0 15px}
  */
@@ -327,7 +330,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .left_im { position:absolute; width:208px}
 .right_auto {display: block; padding-left:213px; width:auto}
 .left_im table, .right_auto table { width:100% ; min-width:inherit}
-.left30 { float:left; width:30%}
+.left30 { float:left; width:28%}
 .right70 { float:right; width:70%}
 
 /* 2단구성 - 사용자 가이드 */
