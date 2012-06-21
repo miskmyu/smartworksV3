@@ -345,9 +345,9 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_section .tit span, .forward_section .tit span { display:block; vertical-align:middle; text-align: center}
 
 .approval_group {margin: 0 5px; overflow:hidden}
-.approval_area { width:130px; height:147px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 0 -1px}
+.approval_area { width:130px; height:134px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px}
-.approval_area .approval {height: 80px; overflow: hidden}
+.approval_area .approval {height: 72px; overflow: hidden}
 .approval_area .name {height:24px; vertical-align: bottom; display: table-cell}
 .approval_area .name .t_name {font-size:11px; height: 12px; overflow: hidden}
 .approval_area .name .up {height: 17px ! important; color:#555555}
@@ -355,15 +355,15 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_area .name .noti_pic img { width:24px; height:24px}
 .approval_area .name .noti_in {width: 101px; margin:0; float:left}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
-.approval_area .t_date {margin:0 0 7px 0; height:18px}
+.approval_area .t_date {margin:0 0 7px 0; height:12px}
 /* Approval Status Image */
-.approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px !important; margin: 12px 30px 6px}
-.approval_status img {width:67px; height:67px} 
+.approval_status {background: url("../../images/status.png") no-repeat 0 0; width:88px; height:61px !important; margin: 10px 20px 6px}
+.approval_status img {width:80px; height:67px} 
 .approval_status.drafted_en {background-position:0 0}
-.approval_status.drafted_ko {background-position:-77px 0}
-.approval_status.approved_en {background-position:0 -69px}
-.approval_status.approved_ko {background-position:-77px -69px}
-.approval_status.returned_en {background-position:0 -140px}
-.approval_status.returned_ko {background-position:-77px -140px}
-.approval_status.rejected_en {background-position:0 -209px}
-.approval_status.rejected_ko {background-position:-77px -209px}
+.approval_status.drafted_ko {background-position:-106px 0}
+.approval_status.approved_en {background-position:0 -67px}
+.approval_status.approved_ko {background-position:-106px -67px}
+.approval_status.returned_en {background-position:0 -134px}
+.approval_status.returned_ko {background-position:-106px -134px}
+.approval_status.rejected_en {background-position:0 -200px}
+.approval_status.rejected_ko {background-position:-106px -200px}
