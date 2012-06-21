@@ -359,11 +359,11 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 /* Approval Status Image */
 .approval_status {background: url("../../images/status.png") no-repeat 0 0; width:67px; height:67px !important; margin: 12px 30px 6px}
 .approval_status img {width:67px; height:67px} 
-.approval_status.drafted_ko {background-position:0 0}
-.approval_status.drafted_en {background-position:-77px 0}
-.approval_status.approved_ko {background-position:0 -69px}
-.approval_status.approved_en {background-position:-77px -69px}
-.approval_status.returned_ko {background-position:0 -140px}
-.approval_status.returned_en {background-position:-77px -140px}
-.approval_status.rejected_ko {background-position:0 -209px}
-.approval_status.rejected_en {background-position:-77px -209px}
+.approval_status.drafted_en {background-position:0 0}
+.approval_status.drafted_ko {background-position:-77px 0}
+.approval_status.approved_en {background-position:0 -69px}
+.approval_status.approved_ko {background-position:-77px -69px}
+.approval_status.returned_en {background-position:0 -140px}
+.approval_status.returned_ko {background-position:-77px -140px}
+.approval_status.rejected_en {background-position:0 -209px}
+.approval_status.rejected_ko {background-position:-77px -209px}
