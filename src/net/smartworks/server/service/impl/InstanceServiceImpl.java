@@ -1281,7 +1281,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		dataField.setRefForm("frm_user_SYSTEM");
 		dataField.setRefFormField("4");
 		dataField.setRefRecordId(id);
-		dataField.setValue(userModel.getPosition() + " " + userModel.getName());
+		dataField.setValue(userModel.getPosition() == null || userModel.getPosition().equalsIgnoreCase("") ? userModel.getName() : userModel.getPosition() + " " + userModel.getName());
 		return dataField;
 	}
 	public String setInformationWorkInstance_old(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -2358,7 +2358,8 @@ public class InstanceServiceImpl implements IInstanceService {
 //							deptName = swoDepartment.getName();
 //						value = deptName;
 					} else if(!CommonUtil.isEmpty(users)) {
-						refFormField = "frm_user_SYSTEM"; 
+						refForm = "frm_user_SYSTEM";
+						refFormField = "4"; 
 						String resultRefRecordId = "";
 						String resultValue = "";
 						String symbol = ";";
