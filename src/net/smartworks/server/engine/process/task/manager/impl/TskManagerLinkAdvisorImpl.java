@@ -398,6 +398,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setExtendedPropertyValue("taskRef", taskRef);
 			apprTask.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
 			apprTask.setExtendedPropertyValue("refAppLineDefId", refAppLineDefId);
+			apprTask.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
 			apprTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
 			apprTask.setExtendedPropertyValue("approval", appr.getObjId());
 			this.getTskManager().setTask("linkadvisor", apprTask, null);
