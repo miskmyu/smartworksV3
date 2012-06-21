@@ -114,7 +114,7 @@
 			</div>
 			<!-- 타이틀 -->
 
-			<div class=" contents_space">  
+			<div class=" contents_space oh">  
 				<%
 				if(displayType!=FileCategory.DISPLAY_ALL){
 				%>          
