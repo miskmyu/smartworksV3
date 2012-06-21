@@ -1795,6 +1795,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			SwdDataField dataField;
 			String dataFieldValue = null;
 			String dataFieldRefRecordId = null;
+			String dataFieldRefFormId = null;
+			String dataFieldRefFormFieldId = null;
 			for (SwfMapping map : maps) {
 				type = map.getType();
 				if (type == null || type.equalsIgnoreCase("expression")) {
@@ -1880,6 +1882,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					if (dataField != null) {
 						dataFieldValue = dataField.getValue();
 						dataFieldRefRecordId = dataField.getRefRecordId();
+						dataFieldRefFormFieldId = dataField.getRefFormField();
+						dataFieldRefFormId = dataField.getRefForm();
 					}
 
 					if (mappingFieldId.equalsIgnoreCase("id")) {
@@ -1899,6 +1903,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						}
 						mappingDataField.setValue(dataFieldValue);
 						mappingDataField.setRefRecordId(dataFieldRefRecordId);
+						mappingDataField.setRefForm(dataFieldRefFormId);
+						mappingDataField.setRefFormField(dataFieldRefFormFieldId);
 					}
 					if (!mappingRecordMap.containsKey(mappingRecord.getRecordId()))
 						mappingRecordMap.put(mappingRecord.getRecordId(), mappingRecord);
@@ -1912,6 +1918,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
 				defaultSetRecord(user, mappingRecord);
 				setRecord(user, mappingRecord, null);
+				
+				setDataRefByRecord(user, mappingRecord);
 				
 				if (!context.containsKey("task"))
 					continue;
@@ -1969,6 +1977,100 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			dataField.setRefFormField(dataRef.getRefFormFieldId());
 			dataField.setRefRecordId(dataRef.getRefRecordId());
 		}
+	}
+	//일반적으로 setRecord를 수행하면 swdAdvisor의 postSetRecord에서 DataRef를 생성한다 하지만 내보내기를 통한 데이터생성은
+	//swdAdvisor를 타지 않음으로 내보내기 dataRef 성성을 위해 swdAdvisor 해당 소스를 편집하여 아래에 복사해 사용한다
+	private void setDataRefByRecord(String user, SwdRecord obj) throws Exception {
+		// 도메인 조회
+		String formId = obj.getFormId();
+		if ("DEFAULTFORM".equalsIgnoreCase(formId)) {
+			
+		} else {
+			String domainId = null;
+			String recordId = null;
+			String name = null;
+			String title = null;
+			domainId = obj.getDomainId();
+			SwdDomain domain = null;
+			if (CommonUtil.isEmpty(formId)) {
+				if (CommonUtil.isEmpty(domainId))
+					return;
+				domain = getDomain(user, domainId, null);
+				formId = domain.getFormId();
+				obj.setFormId(formId);
+			} else {
+				SwdDomainCond domainCond = new SwdDomainCond();
+				domainCond.setFormId(formId);
+				domain = getDomain(user, domainCond, null);
+				domainId = domain.getObjId();
+				obj.setDomainId(domainId);
+			}
+			if (domain == null)
+				return;
+			
+			SwdField[] fields = domain.getFields();
+			if (CommonUtil.isEmpty(fields))
+				return;
+			
+			// 데이터 참조 삭제
+			recordId = obj.getRecordId();
+			this.removeDataRefsByRecordId(user, domain.getFormId(), recordId);
+			
+			String dataFieldId;
+			SwdDataField dataField;
+			int refFormFieldPathIndex;
+			String refFormId;
+			String refFormFieldId;
+			String refRecordId;
+			SwdDataRef dataRef;
+			for (SwdField field : fields) {
+				dataFieldId = field.getFormFieldId();
+				dataField = obj.getDataField(dataFieldId);
+				if (dataField == null)
+					continue;
+				String refFormFieldPath = field.getFormFieldPath();
+				if (CommonUtil.isEmpty(refFormFieldPath)) {
+					refFormId = dataField.getRefForm();
+					refFormFieldId = dataField.getRefFormField();
+					refRecordId = dataField.getRefRecordId();
+					if (CommonUtil.isEmpty(refFormId) || CommonUtil.isEmpty(refFormFieldId) || CommonUtil.isEmpty(refRecordId))
+						continue;
+					dataRef = this.newDataRef(obj.getRecordId(), domain.getFormId(), dataFieldId, refRecordId, refFormId, refFormFieldId);
+					setDataRef(user, dataRef, null);
+				} else {
+					refFormFieldPathIndex = refFormFieldPath.indexOf(".");
+					if (refFormFieldPathIndex == -1)
+						continue;
+					refFormId = refFormFieldPath.substring(0, refFormFieldPathIndex);
+					refFormFieldId = refFormFieldPath.substring(refFormFieldPathIndex + 1);
+					refRecordId = dataField.getRefRecordId();
+					if (CommonUtil.isEmpty(refRecordId))
+						continue;
+					dataRef = this.newDataRef(obj.getRecordId(), domain.getFormId(), dataFieldId, refRecordId, refFormId, refFormFieldId);
+					setDataRef(user, dataRef, null);
+				}
+			}
+		}
+	}
+	private void removeDataRefsByRecordId(String user, String formId, String recordId) throws Exception {
+		SwdDataRefCond dataRefCond = new SwdDataRefCond();
+		dataRefCond.setMyFormId(formId);
+		dataRefCond.setMyRecordId(recordId);
+		SwdDataRef[] dataRefs = getDataRefs(user, dataRefCond, IManager.LEVEL_LITE);
+		if (!CommonUtil.isEmpty(dataRefs)) {
+			for (SwdDataRef dataRef : dataRefs)
+				removeDataRef(user, dataRef.getObjId());
+		}
+	}
+	private SwdDataRef newDataRef(String myRecordId, String myFormId, String myFormFieldId, String refRecordId, String refFormId, String refFormFieldId) {
+		SwdDataRef dataRef = new SwdDataRef();
+		dataRef.setMyFormId(myFormId);
+		dataRef.setMyFormFieldId(myFormFieldId);
+		dataRef.setMyRecordId(myRecordId);
+		dataRef.setRefFormId(refFormId);
+		dataRef.setRefFormFieldId(refFormFieldId);
+		dataRef.setRefRecordId(refRecordId);
+		return dataRef;
 	}
 	
 //	private void populateRecord(String user, SwdRecord record) throws Exception {
