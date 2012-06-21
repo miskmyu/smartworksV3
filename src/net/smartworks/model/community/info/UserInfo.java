@@ -12,6 +12,7 @@ public class UserInfo extends WorkSpaceInfo {
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
 	private boolean online;
+	private boolean useSignPicture;
 	private String signPicture;
 
 	public String getNickName() {
@@ -60,6 +61,12 @@ public class UserInfo extends WorkSpaceInfo {
 	public void setOnline(boolean online) {
 		this.online = online;
 	}	
+	public boolean isUseSignPicture() {
+		return useSignPicture;
+	}
+	public void setUseSignPicture(boolean useSignPicture) {
+		this.useSignPicture = useSignPicture;
+	}
 	public String getSignPicture() {
 		return signPicture;
 	}

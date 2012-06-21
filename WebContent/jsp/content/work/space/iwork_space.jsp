@@ -111,9 +111,9 @@
 		            <!-- 타이틀 -->
 		            
 				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null){ %>style="display:none"<%} %>>
+				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && !instance.isApprovalWork()){ %>style="display:none"<%} %>>
 					<%
-					if(approvalTask!=null){
+					if(approvalTask!=null || instance.isApprovalWork()){
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>

@@ -60,8 +60,9 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 	private static Pattern pattern = Pattern.compile("\\{\\$[^$]+\\}");
 	
 	public void postExecuteTask(String user, TskTask obj, String action) throws Exception {
-
-		postMapping(user, obj, action);
+		
+		if (!obj.getType().equalsIgnoreCase("SINGLE"))
+			postMapping(user, obj, action);
 		
 		// ####참조업무#### 
 		//obj 객체에 담겨 넘어오는 참조자에게 업무를 전달(생성)한다
@@ -397,6 +398,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setExtendedPropertyValue("taskRef", taskRef);
 			apprTask.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
 			apprTask.setExtendedPropertyValue("refAppLineDefId", refAppLineDefId);
+			apprTask.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
 			apprTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
 			apprTask.setExtendedPropertyValue("approval", appr.getObjId());
 			this.getTskManager().setTask("linkadvisor", apprTask, null);
