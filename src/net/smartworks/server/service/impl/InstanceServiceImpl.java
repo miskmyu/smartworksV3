@@ -1147,6 +1147,11 @@ public class InstanceServiceImpl implements IInstanceService {
 										SwdDataField[] subDataFields = new SwdDataField[returnWebService.length];
 										for (int j = 0; j < returnWebService.length; j++) {
 											
+											if (oldRecord.getDataFieldValue(fieldId) != null &&  oldRecord.getDataFieldValue(fieldId) != "") {
+												if (oldRecord.getDataFieldValue(fieldId).equalsIgnoreCase(returnWebService[j])) 
+													dataField.setValue(returnWebService[j]);
+											} 
+											
 											SwdDataField subDataField = new SwdDataField();
 											if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
 												subDataField.setId(field.getId());
@@ -1156,6 +1161,10 @@ public class InstanceServiceImpl implements IInstanceService {
 												subDataField = toUserDataField(userId, returnWebService[j]);
 											}
 											subDataFields[j] = subDataField;
+										}
+										if (dataField.getValue() == null || dataField.getValue() == "") {
+											if (returnWebService.length != 0)
+												dataField.setValue(returnWebService[0]);
 										}
 										dataField.setDataFields(subDataFields);
 										resultStack.push(dataField);
@@ -1193,6 +1202,33 @@ public class InstanceServiceImpl implements IInstanceService {
 					String expr = preMapping.getExpression();
 					String value = "";
 					if (!CommonUtil.isEmpty(expr)) {
+						
+						String[] tempStrArray = StringUtils.tokenizeToStringArray(expr, "'");
+						List numList = new ArrayList();
+						for (int i = 0; i < tempStrArray.length; i++) {
+							try {
+								int tempNum = Integer.parseInt(tempStrArray[i]);
+								numList.add(tempNum);
+							} catch (Exception e) {
+								continue;
+							}
+						}
+						SwfField[] fields = form.getFields();
+						
+						for (int i = 0; i < numList.size(); i++) {
+							int num = (Integer)numList.get(i);
+							
+							SwfField targetField = null;
+							for (SwfField tempField : fields) {
+								if (tempField.getId().equalsIgnoreCase(num+"")) {
+									targetField = tempField;
+									break;
+								}
+							}
+							if (!resultMap.containsKey(num) && targetField != null)
+								setResultFieldMapByFields(userId, form, resultMap, targetField, newRecord, oldRecord, isFirst);
+						}
+						
 						value = getSwdManager().executeExpression(userId, preMapping.getExpression(), newRecord, formLinks);
 					}
 					SwdDataField dataField = toDataField(userId, field, value);
@@ -1227,6 +1263,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			obj = new SwdDataField();
 			obj.setId(field.getId());
 			obj.setType(field.getSystemType());
+			obj.setName(field.getName());
 			obj.setValue(id);
 		} else {
 			obj = toUserDataField(user, id);
