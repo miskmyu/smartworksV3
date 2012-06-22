@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
@@ -48,7 +49,7 @@
 	workId = work.getId();
 	
 	TaskInstanceInfo[] taskHistories = instance.getTasks();
-
+	
 	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -140,7 +141,7 @@
 			            			<!-- 태스크 --> 
 						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" formMode="<%=formMode %>">
 					                    <!-- task 정보 -->
-					                    <img src="<%=task.getOwner().getMinPicture()%>" class="noti_pic profile_size_s">
+					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s" title="<%=task.getPerformer().getLongName()%>">
 					                    <div class="noti_in_s">
 						                    <%=i+1%>) <%=task.getName() %>
 						                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
@@ -184,7 +185,11 @@
 			
 				<div class="txt_btn task_information">
 				    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
-				    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
+				    	<%
+			    		User lastModifier = instance.getLastModifier();
+			    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
+			    		%>
+				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
 				</div>     
@@ -237,6 +242,7 @@
 <script type="text/javascript">
 
 	function clickOnTask(input){
+		console.log('input=', input);
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var formId = input.attr("formId");
@@ -311,7 +317,7 @@
 			instanceRight.hide();
  	}else{
  		for(var i=0; i<tasks.length; i++){
-			var task = $(tasks[i]).find('a');
+			var task = $(tasks[i]);
 			if(task.attr('taskInstId') === taskInstId)
 				break;
 		}

@@ -127,7 +127,7 @@
 								<%
 								if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 								%>
-									<div class="t_date tc"></div>
+									<div class="t_date tc">2012.06.21 13:50</div>
 									<div class="name">
 										<a class="js_selected_approver_info js_userpicker_button" href="">
 											<span class="noti_pic">
