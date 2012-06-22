@@ -608,7 +608,7 @@ td.pic{width:85px}
 .t_bold {font-weight:bold}
 .t_gbold {color:#656565; font-weight:bold}
 .t_gray { color:#919191; font-weight:normal}
-.t_name {color:#23579e; position: relative}
+.t_name {color:#23579e; font-weight:bold; position: relative}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
 .t_size12 {font-size:12px}
