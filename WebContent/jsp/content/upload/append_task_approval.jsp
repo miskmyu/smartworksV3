@@ -32,38 +32,41 @@
 	String content = "";
 	String approvalInstId = "";
 	
+	String workInstId = null;
+	TaskInstanceInfo[] tasks = null;
 	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
-	String workInstId = workInstance.getId();
-	TaskInstanceInfo[] tasks = workInstance.getTasks();
-	if(!SmartUtil.isBlankObject(tasks)){
-		for(TaskInstanceInfo task : tasks){
-			if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
-				approvalTask = task;
-				approvalInstId = task.getApprovalId();
-				subject = task.getSubject();
-				content = task.getContent();
-				break;
-			}
-		}
-		if(SmartUtil.isBlankObject(approvalTask)){
+	if (workInstance != null) {
+		workInstId = workInstance.getId();
+		tasks = workInstance.getTasks();
+		if(!SmartUtil.isBlankObject(tasks)){
 			for(TaskInstanceInfo task : tasks){
-				if(!SmartUtil.isBlankObject(task.getApprovalId())){
+				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+					approvalTask = task;
 					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
 					content = task.getContent();
-					for(TaskInstanceInfo tsk : tasks){
-						if(tsk.isRunningApprovalForMe(cUser.getId(), null)){
-							approvalTask = tsk;
-							taskInstId = tsk.getId();
-							break;
-						}
-					}
 					break;
 				}
-			}			
+			}
+			if(SmartUtil.isBlankObject(approvalTask)){
+				for(TaskInstanceInfo task : tasks){
+					if(!SmartUtil.isBlankObject(task.getApprovalId())){
+						approvalInstId = task.getApprovalId();
+						subject = task.getSubject();
+						content = task.getContent();
+						for(TaskInstanceInfo tsk : tasks){
+							if(tsk.isRunningApprovalForMe(cUser.getId(), null)){
+								approvalTask = tsk;
+								taskInstId = tsk.getId();
+								break;
+							}
+						}
+						break;
+					}
+				}			
+			}
 		}
 	}
-	
 	ApprovalLine approvalLine = null;
 	ApprovalLineInst approvalLineInst = null;
 	if(!SmartUtil.isBlankObject(approvalInstId)){
