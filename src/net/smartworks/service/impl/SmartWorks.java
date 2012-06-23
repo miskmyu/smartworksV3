@@ -1457,4 +1457,19 @@ public class SmartWorks implements ISmartWorks {
 		return communityService.getMyMailAccounts();
 	}
 
+	@Override
+	public void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		builderService.removeWorkDefinition(requestBody, request);
+	}
+
+	@Override
+	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return builderService.copyWorkDefinition(requestBody, request);
+	}
+
+	@Override
+	public String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return builderService.moveWorkDefinition(requestBody, request);
+	}
+
 }

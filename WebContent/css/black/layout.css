@@ -109,11 +109,11 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 /*Left Navigation*/	
 #nav {background-color:#6b6b6b;float:left;width:226px;height:100%; z-index:30}
 
-li.ctgr_action_item .ctgr_action {display:none; position:absolute; margin-top:-21px; margin-left:165px}
+li.ctgr_action_item .ctgr_action {display:none; position:relative; margin-top:-18px; float:right}
 li.ctgr_action_item > a:hover + .ctgr_action {display:block}
-li.group_action_item .group_action {display:none; position:absolute; margin-top:-21px; margin-left:165px}
+li.group_action_item .group_action {display:none; position:relative; margin-top:-18px; float:right}
 li.group_action_item>a:hover + .group_action {display:block}
-li.work_action_item .work_action {display:none; position:absolute; margin-top:-21px; margin-left:185px}
+li.work_action_item .work_action {display:none; position:relative; margin-top:-18px; float:right}
 li.work_action_item>a:hover + .work_action {display:block}
 
 tr.list_action_item .list_action {display:none}

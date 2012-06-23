@@ -94,7 +94,7 @@ $(function() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCategorySucceed'), function(){
-							document.location.href = document.location.href;
+							document.location.href = "builder_home.sw";
 	 						smartPop.close();
 	  					});
 					},
@@ -133,6 +133,7 @@ $(function() {
 	
 	$('.js_remove_work_definition').live('click', function(e) {
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_remove_work_definition')) input = input.parents('js_remove_work_definition');
 		var workId = input.attr('workId');
 		var workName = input.attr('workName');
 		var paramsJson = {};
@@ -146,7 +147,7 @@ $(function() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkDefinitionSucceed'), function(){
-							document.location.href = document.location.href;
+							document.location.href = "builder_home.sw";
 	 						smartPop.close();
 	  					});
 					},
@@ -163,9 +164,30 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_copy_work_definition').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_copy_work_definition');
+		var workId = input.attr('workId');
+		var workName = input.attr('workName');
+		var workDesc = input.attr('workDesc');
+		var workFullName = input.attr('workFullName');
+		var categoryId = input.attr('categoryId');
+		var groupId = input.attr('groupId');
+		smartPop.moveWorkDefinition("copy", workId, workFullName, categoryId, groupId, workName, workDesc);
+		return false;
+	});
+	
+	$('.js_move_work_definition').live('click', function(e) {
+		var input = $(targetElement(e)).parents('.js_move_work_definition');
+		var workId = input.attr('workId');
+		var workFullName = input.attr('workFullName');
+		smartPop.moveWorkDefinition("move", workId, workFullName);
+		return false;
+	});
+	
 	$('.js_select_work_category').live('change', function(e) {
 		var input = $(targetElement(e));
 		var target = input.parents('.js_new_work_definition_page').find('.js_work_group_target');
+		if(isEmpty(target)) target = input.parents('.js_move_work_definition_page').find('.js_work_group_target');
 		var categoryId = input.find('option:selected').attr('value');
 		$.ajax({
 			url : "group_options_by_category.sw",

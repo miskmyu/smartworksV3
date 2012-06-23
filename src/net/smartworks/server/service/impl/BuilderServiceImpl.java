@@ -570,4 +570,19 @@ public class BuilderServiceImpl implements IBuilderService {
 			// Exception Handling Required			
 		}
 	}
+	@Override
+	public void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		String newWorkId = "";
+		return newWorkId;
+	}
+	@Override
+	public String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		String newWorkId = "";
+		return newWorkId;
+	}
 }

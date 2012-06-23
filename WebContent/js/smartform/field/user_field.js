@@ -24,6 +24,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
+	console.log('users=', users);
 	var multiUsers = $graphic.attr('multipleUsers');
 	options.container.attr('multiUsers', multiUsers);
 	var id = $entity.attr('id');
@@ -88,7 +89,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 		var viewUsersHtml = '';
 		for(var i=0; i<users.length; i++) {
 			var separator = ', ';
-			var href = 'department_space.sw?cid=dp.sp.';
+			var href = '';
 			if(isEmailAddress(users[i].userId)){
 				href = 'user_space.sw?cid=us.sp.';
 			}else if(users[i].userId.substring(0,6) === "group_"){
@@ -96,12 +97,12 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 			}else if(users[i].userId.substring(0,5) === "dept_"){
 				href = 'department_space.sw?cid=dp.sp.';
 			}
+			href = href + users[i].userId + '&wid=' + users[i].userId;
 			if(i == users.length - 1)
 				separator = '';
-			viewUsersHtml = viewUsersHtml + '<a href="' + href + users[i].userId + '"><span>' + users[i].longName + separator + '</span></a>';
+			viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + separator + '</span></a>';
 		}
 		$user.html(viewUsersHtml);
-		$user = $user.after(usersHtml);
 	}else{	
 		$user = $html;
 	}
@@ -114,8 +115,8 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	else
 		options.container.find('.form_value').html($user.children());
 
-//	if (readOnly)
-//		options.container.append(usersHtml);
+	if (readOnly)
+		options.container.append($('<div style="display:none"></div>').html(usersHtml));
 	
 	return options.container;
 };

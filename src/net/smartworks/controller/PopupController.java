@@ -110,16 +110,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_work_definition.jsp", "");
 	}
 
-	@RequestMapping("/pop_change_work_definition")
-	public ModelAndView popChangeWorkDefinition(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/pop_move_work_definition")
+	public ModelAndView popMoveWorkDefinition(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "jsp/popup/pop_change_work_definition.jsp", "");
-	}
-
-	@RequestMapping("/pop_copy_work_definition")
-	public ModelAndView popCopyWorkDefinition(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnv(request, "jsp/popup/pop_copy_work_definition.jsp", "");
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_move_work_definition.jsp", "");
 	}
 
 	@RequestMapping("/pop_download_from_appstore")

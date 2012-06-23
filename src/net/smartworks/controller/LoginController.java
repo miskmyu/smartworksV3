@@ -39,7 +39,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("/index")
-	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {		
 		ModelAndView mnv = new ModelAndView();
 		mnv.setViewName("jsp/index.jsp");
 		return mnv;

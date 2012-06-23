@@ -8,12 +8,14 @@
 
 package net.smartworks.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.service.ISmartWorks;
+import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +164,30 @@ public class BuilderController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void setWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.setWorkDefinition(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/remove_work_definition", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeWorkDefinition(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/copy_work_definition", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> copyWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String workId = smartworks.copyWorkDefinition(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "builder_home.sw#tab_workbench.sw?cid=" + SmartWorks.CONTEXT_PREFIX_BUILDER_SPACE + workId);
+		return map;
+	}
+	
+	@RequestMapping(value = "/move_work_definition", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Map<String, Object> moveWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String workId = smartworks.moveWorkDefinition(requestBody, request);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("href", "builder_home.sw#tab_workbench.sw?cid=" + SmartWorks.CONTEXT_PREFIX_BUILDER_SPACE + workId);
+		return map;
 	}
 	
 }

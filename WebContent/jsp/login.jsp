@@ -24,7 +24,8 @@
 		<link rel="shortcut icon" href="images/favicon/smartworks.ico"/>
 	</head>
 
-	<script type="text/javascript">
+	<script type="text/javascript"> 
+		var requestedHref =  document.location.href;
 		if(isEmpty(parent.location.pathname.match('login.sw'))){
 		    parent.location.href = "login.sw";
 		}

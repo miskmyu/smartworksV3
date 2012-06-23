@@ -45,7 +45,7 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="<%=iconClass %> title"><%=work.getName() %></div>
-				<span class="t_location"><%=work.getFullpathName() %></span>
+				<span class="t_location"><%=work.getPathName() %></span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
 					<ul class="cb">
@@ -104,6 +104,8 @@
 					String editingStatus = (isEditable) ? 
 							SmartMessage.getString("builder.title.editable") : 
 							SmartMessage.getString("builder.title.not_editable");
+					String myCategoryId = (SmartUtil.isBlankObject(work.getMyCategory())) ? "" : work.getMyCategory().getId();
+					String myGroupId = (SmartUtil.isBlankObject(work.getMyGroup())) ? "" : work.getMyGroup().getId();
 					%>
 					<tr>
 						<td class="state" width="40%">
@@ -140,21 +142,21 @@
 								</a>
 							</span>
 							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="display:none"<%} %>>
-								<a href="" class="js_delete_work_definition">
+								<a href="" class="js_remove_work_definition" workId="<%=work.getId() %>" workName="<%=work.getName()%>">
 									<span class="txt_btn_start"></span>
 										<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
 									<span class="txt_btn_end"></span>
 								</a>
 							</span>
 							<span class="btn_gray" <%if(work.isEditing()){%>style="display:none"<%} %>>
-								<a href="" class="js_copy_work_definition">
+								<a href="" class="js_copy_work_definition" workId="<%=work.getId()%>" workFullName="<%=work.getFullpathName()%>" categoryId=<%=myCategoryId%> groupId="<%=myGroupId%>" workName="<%=work.getName()%>" workDesc="<%=work.getDesc()%>">
 									<span class="txt_btn_start"></span>
 										<span class="txt_btn_center"><fmt:message key="common.button.copy"/></span>
 									<span class="txt_btn_end"></span>
 								</a>
 							</span>
 							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="display:none"<%} %>>
-								<a href="" class="js_move_work_definition">
+								<a href="" class="js_move_work_definition" workId="<%=work.getId()%>" workFullName="<%=work.getFullpathName()%>">
 									<span class="txt_btn_start"></span>
 										<span class="txt_btn_center"><fmt:message key="common.button.move"/></span>
 									<span class="txt_btn_end"></span>
