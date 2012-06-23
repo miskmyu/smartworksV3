@@ -481,6 +481,8 @@ CREATE TABLE swdomain (
 	primary key (id)
 );
 
+alter table swdomain add constraint swdomain_df default 0 for keyDuplicable
+
 CREATE TABLE swremoveddomain (
 	formid varchar(50) NOT NULL,
 	tblname varchar(100),
