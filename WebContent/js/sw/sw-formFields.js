@@ -431,6 +431,7 @@ function loadTaskApprovalFields() {
 			var subject = taskApprovalField.attr("subject");
 			var comments = taskApprovalField.attr("content");
 			var readOnly = isEmpty(subject) ? false : true;
+			var actionRequired = taskApprovalField.attr("actionRequired");
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
@@ -470,12 +471,19 @@ function loadTaskApprovalFields() {
 			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
-				if(readOnly){
+				if(actionRequired==="true"){
 					target.addClass('form_read');
 					iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
 					iworkSpace.find('.js_btn_return_approval').show();
 					iworkSpace.find('.js_btn_reject_approval').show();
 					iworkSpace.find('.js_btn_cancel').show();						
+				}else{
+					iworkSpace.find('.js_btn_cancel').show().siblings().hide();
+				}
+				
+				if(readOnly){
+					iworkSpace.find('.js_toggle_forward_btn').hide();
+					iworkSpace.find('.js_toggle_approval_btn').hide();
 				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();

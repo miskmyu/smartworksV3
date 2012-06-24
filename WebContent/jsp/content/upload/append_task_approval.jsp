@@ -130,7 +130,7 @@
 								<%
 								if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
 								%>
-									<div class="t_date tc">2012.06.21 13:50</div>
+									<div class="t_date tc"></div>
 									<div class="name">
 										<a class="js_selected_approver_info js_userpicker_button" href="">
 											<span class="noti_pic">
@@ -186,7 +186,7 @@
 		<form class="form_layout js_validation_required" name="frmTaskApproval">
 			<div class="js_task_approval_fields"
 				subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
-				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>"
+				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>" actionRequired="<%=!SmartUtil.isBlankObject(approvalTask) %>"
 				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>">
 			</div>
 			<%

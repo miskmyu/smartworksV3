@@ -1527,7 +1527,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						Object[] objects = getSwdManager().getObjectsByFormFieldId(domainId, fieldId, tableName);
 						if(!CommonUtil.isEmpty(objects)) {
 							for(Object object : objects) {
-								if(object.equals(fieldValue)) {
+								if(object!=null && object.equals(fieldValue)) {
 									throw new DuplicateKeyException("duplicateKeyException");
 								}
 							}

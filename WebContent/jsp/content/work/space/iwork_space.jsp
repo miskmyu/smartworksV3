@@ -88,7 +88,7 @@
 		                    
 		            <!-- 우측 버튼-->
 		            <div class="txt_btn t_s11">
-		                <div class="fr"><a class="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
+		                <div class="fr"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
 		            </div>
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
