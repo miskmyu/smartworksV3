@@ -662,5 +662,4 @@ public interface ISmartWorks {
 	public abstract String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-
 }

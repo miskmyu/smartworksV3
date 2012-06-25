@@ -100,14 +100,14 @@
 		<property name="type" column="type" type="string" length="30"/>
 		<property name="duration" column="duration" type="int"/>
 		
-		<set name="performerLineSet" table="SWWorkTypePerformerLine" lazy="false">
+		<!-- set name="performerLineSet" table="SWWorkTypePerformerLine" lazy="false">
 			<key column="workTypeId" />
 			<composite-element class="HbWorkTypePerformerLineModel">
 				<property name="step" column="step" type="int"/>
 				<property name="performerType" column="performerType" type="int"/>
 				<property name="performer" column="performer" type="string" length="30"/>
 			</composite-element>
-		</set>
+		</set-->
 	</class>
 
 		

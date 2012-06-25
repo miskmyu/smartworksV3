@@ -1461,7 +1461,6 @@ public class SmartWorks implements ISmartWorks {
 	public void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		builderService.removeWorkDefinition(requestBody, request);
 	}
-
 	@Override
 	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return builderService.copyWorkDefinition(requestBody, request);

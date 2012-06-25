@@ -563,7 +563,51 @@ public class BuilderServiceImpl implements IBuilderService {
 	@Override
 	public void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
-			System.out.println(requestBody);
+			/*{
+				workId=pkg_949b8ab3061b4f5289d9683fd0efeb9c, 
+				frmNewWorkDefinition={
+											txtWorkName=변경할 정보관리업무123132, 
+											selWorkCategoryId=4028802e3812eb6e013812f3ec7f0001, 
+											selWorkGroupId=없음, 
+											txtaWorkDesc=
+									}
+			}*/
+
+			String workId = (String)requestBody.get("workId");
+			Map<String, String> workDefinitionMap = (Map<String, String>)requestBody.get("frmNewWorkDefinition");
+			
+			if (CommonUtil.isEmpty(workId))
+				return;
+			
+			if (workDefinitionMap == null)
+				return;
+			
+			String workName = workDefinitionMap.get("txtWorkName");
+			String workCategoryId = workDefinitionMap.get("selWorkCategoryId");
+			String workGroupId = workDefinitionMap.get("selWorkGroupId");
+			String workDesc = workDefinitionMap.get("txtaWorkDesc");
+			
+			String userId = SmartUtil.getCurrentUser().getId();
+			
+			PkgPackageCond pkgCond = new PkgPackageCond();
+			pkgCond.setPackageId(workId);
+			
+			PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_ALL);
+			
+			if (pkg == null)
+				return;
+			
+			pkg.setCategoryId(workCategoryId);
+			//업무 그룹아이디가 넘어 온다면 카테고리 아이디가 의미가 없다 업무그룹아이디로 지정을 해놓으면 그 업무그룹이 상위
+			//카테고리아이디를 가지고 있기 때문
+			//현재 workGroupId 가 "없음" 이런식으로 넘어온다..아직 구현이 안되어 있는듯....
+//			if (!CommonUtil.isEmpty(workGroupId))
+//				pkg.setCategoryId(workGroupId);
+			pkg.setDescription(workDesc);
+			pkg.setName(workName);
+			
+			SwManagerFactory.getInstance().getPkgManager().setPackage(userId, pkg, IManager.LEVEL_ALL);
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -571,12 +615,15 @@ public class BuilderServiceImpl implements IBuilderService {
 		}
 	}
 
-	@Override
 	public void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+
+		//pkg_bcec7491878f42f1a235fd2392134029
+		String workId = (String)requestBody.get("workId");
+		String userId = SmartUtil.getCurrentUser().getId();
+		
+		SwManagerFactory.getInstance().getDesigntimeManager().deletePackage(userId, workId, 1);
 		
 	}
-	@Override
 	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		String newWorkId = "";
 		return newWorkId;
