@@ -109,11 +109,11 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 /*Left Navigation*/	
 #nav {background-color:#6b6b6b;float:left;width:226px;height:100%; z-index:30}
 
-li.ctgr_action_item .ctgr_action {display:none; position:absolute; margin-top:-21px; margin-left:165px}
+li.ctgr_action_item .ctgr_action {display:none; position:relative; margin-top:-18px; float:right}
 li.ctgr_action_item > a:hover + .ctgr_action {display:block}
-li.group_action_item .group_action {display:none; position:absolute; margin-top:-21px; margin-left:165px}
+li.group_action_item .group_action {display:none; position:relative; margin-top:-18px; float:right}
 li.group_action_item>a:hover + .group_action {display:block}
-li.work_action_item .work_action {display:none; position:absolute; margin-top:-21px; margin-left:185px}
+li.work_action_item .work_action {display:none; position:relative; margin-top:-18px; float:right}
 li.work_action_item>a:hover + .work_action {display:block}
 
 tr.list_action_item .list_action {display:none}
@@ -477,25 +477,32 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
     background: url("../../images/bg_portlet.jpg") repeat-y scroll 0 -319px transparent;
     display:inline-block; width:10px; height:16px; left:0; position:absolute}
 		
-/* Head Line Section */	
-.headline_section {position:relative; padding:10px 20px; overflow:hidden}
-.headline_section .area {background-color:#f5f5f5; -webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px; padding: 8px 10px; overflow:hidden; box-shadow: 0 0 4px #CCCCCC inset; line-height: 17px; max-height:175px}
-.headline_section > ul > li { width:45.5%; float:left}
-.headline_section > ul > li > div {margin-bottom:5px; overflow:hidden; border-bottom: 1px dotted #CFCFCF; padding-bottom: 3px}
-.headline_section > ul > li > div.end { margin:0; padding:0; border:none}
-.headline_section > ul > li > div > div { float:left; text-align:left}
-.headline_section > ul > li > div .date_space { margin-right:15px; font-size:11px; width: 51px; line-height: 16px; text-align:center}
-.headline_section > ul > li > div > div .day {color: #000000; font-family: arial; font-size: 21px; font-weight: bold;}
-.headline_section .area .tit {padding:0}
-.headline_section .area .tit span {font-weight:bold}
-.more { border-bottom:none !important; margin:0 !important; padding:0 !important; font-weight:normal !important}
-.more a:link, .more a:visited, .more a:focus, .more a:active {color:#b35a5a !important; font-size:11px}
-	
+/*Event*/	
+.event {background: url("../../images/bg_event.jpg") no-repeat scroll 0 100% transparent;
+    	position:relative;z-index:30; margin:0 5px 0 5px}
+.event_t {
+    background: url("../../images/bg_event.jpg") no-repeat scroll 100% 0 transparent;
+    clea:both; width:100%; height:8px; overflow:hidden; position:relative}
+.event_t .event_t_l {
+    background: url("../../images/bg_event.jpg") no-repeat scroll 0 0 transparent;
+    width:10px; height:8px; left:0; position:absolute}
+.event_l {
+    background: url("../../images/bg_event.jpg") repeat-y scroll 0 -50px #ffffff;
+    min-height:100px; margin-left:10px}
+.event_r {
+    background: url("../../images/bg_event.jpg") repeat-y scroll 100% -50px transparent;
+    min-height:100px; width:100%}
+.event_b {
+    background: url("../../images/bg_event.jpg") no-repeat scroll 100% 100% transparent;
+    height:10px; margin-left:10px; position:relative}
+.event_space {position:relative; width:99%; display:inline-block; margin-left:10px; }
+.event_space > ul > li { width:33%}
+.event_space .eventCell li { width: auto}
 .space_left { margin-left:15px}
 .space_right { float:right; margin-right:20px}
 .space_top { margin-top:5px}
-.event_cell {margin:0 7px;padding:0 7px}
-.cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
+.event_cell{margin:0 7px;padding:0 7px}
+.cell_date{display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
 .event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
@@ -512,15 +519,27 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 		    padding:0 0 0 23px; display:block; font-weight:bold}
 .noti_tit_snew {background: url("../../images/icon_notice_s.gif") no-repeat scroll 8px 0 transparent;
 		    padding:0 0 0 23px; font-weight:bold}
+.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px}
+.notice .headline_notice{float:left;width:32.5%;padding-right:5px;border-right:1px solid #cfcfcf}
+.notice .recent_notice{float:left;width:64%;margin-left:10px}
+.notice a.more{background: url("../../images/btnMainNotice.gif") no-repeat;width:50px;height:30px;float:left;margin-right:5px;padding:75px 15px 0 0;font-size:10px;text-align:right}
+.notice a.more:hover{background: url("../../images/btnMainNotice.gif") -65px 0 no-repeat;color:#ba3938}
+.headline_notice .title{display:block;font-size:13px;font-weight:bold;padding:7px 0 4px 0}
+.headline_notice .info{display:block;font-size:11px;color:#696969}
+.headline_notice .content{display:block;font-size:12px;border-top:1px dotted #cfcfcf;padding-top:2px;clear:right}
+.headline_notice .icon_division_s{background-position:70px 0;padding-left:90px}
+.recent_notice td{border-bottom:1px dotted #DCDFE0}
+.recent_notice .title{background: url("../../images/dotRed.gif") 1px 9px no-repeat;padding-left:10px}
+.recent_notice .title,.recent_notice .index{vertical-align:top}
+.recent_notice .title a{font-size:13px;font-weight:bold}
+.recent_notice .icon_division_s{background-position:0 3px}
+.recent_notice .date{font-weight:normal;text-align:right;white-space:nowrap}
+.recent_notice .title img,.headline_notice .index img{margin:0 3px 0 0}
+.headline_notice .index{font-size:11px;color:#666;overflow:hidden}
+.headline_notice .index span.date{float:right;margin-right:9px;font-weight:normal}
 
-.recent_notice { border-bottom:none !important; margin:0 !important}
-.recent_notice td {}
-.recent_notice .title {background: url("../../images/dotRed.gif") 1px 9px no-repeat;padding-left:10px}
-.recent_notice .title,.recent_notice .index {vertical-align:top}
-.recent_notice .title a {font-size:13px;font-weight:bold}
-.recent_notice .icon_division_s {background-position:0 3px}
-.recent_notice .date {font-weight:normal;text-align:right;white-space:nowrap}
-.recent_notice .title img,.headline_notice .index img {margin:0 3px 0 0}
+.headline_notice > div {}
+.headline_notice > div:hover {cursor:pointer; text-decoration: none}
 
 /* 3일 업무표시 */
 .red_stroke{background: url("../../images/bgRoundRedStrokeLeft.gif") no-repeat;height:40px;text-align:center}
@@ -541,11 +560,8 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .working_br td{padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left}
 #work_ing .titl_section {height:21px; padding-top:14px}
-td.pic {width:85px}
-.subject_list { margin-left:5px}
-.subject_list li {color: #bababa; float: left; margin-right: 5px}
-.subject_list .on a {color: #2F3743; font-weight: bold}
-	
+td.pic{width:85px}
+
 /* Mail */
 .buttonSet {margin:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
@@ -589,9 +605,10 @@ td.pic {width:85px}
 .t_light_orange {color:#fff4a7;font-weight:normal}
 .t_red_bold {color:#e54b4b; font-weight:bold}
 .t_up_num {color:#e54b4b; font-weight:bold}
+.t_bold {font-weight:bold}
 .t_gbold {color:#656565; font-weight:bold}
 .t_gray { color:#919191; font-weight:normal}
-.t_name {color:#23579e; position: relative}
+.t_name {color:#23579e; font-weight:bold; position: relative}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
 .t_size12 {font-size:12px}
