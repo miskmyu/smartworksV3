@@ -163,5 +163,10 @@ public class BuilderController {
 	public @ResponseBody void setWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.setWorkDefinition(requestBody, request);
 	}
+	@RequestMapping(value = "/remove_work_definition", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeWorkDefinition(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeWorkDefinition(requestBody, request);
+	}
 	
 }

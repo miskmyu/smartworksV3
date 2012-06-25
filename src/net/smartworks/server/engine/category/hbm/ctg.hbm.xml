@@ -14,13 +14,13 @@
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
-		<array name="extendedProperties" table="SWCategoryExtProp">
+		<!-- array name="extendedProperties" table="SWCategoryExtProp">
 			<key column="id" foreign-key="FkSwcategoryExtProp"/>
 			<list-index column="ctgSeq"/>
 			<composite-element class="net.smartworks.server.engine.common.model.Property">
 				<property name="name" column="ctgName" type="string" length="100" index="IxSwCategoryExtProp"/>
 				<property name="value" column="ctgValue" type="string" length="100" index="IxSwCategoryExtProp2"/>
 			</composite-element>
-		</array>
+		</array-->
 	</class>
 </hibernate-mapping>

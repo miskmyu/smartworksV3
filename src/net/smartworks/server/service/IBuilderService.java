@@ -27,4 +27,6 @@ public interface IBuilderService {
 	public abstract void createNewWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }
