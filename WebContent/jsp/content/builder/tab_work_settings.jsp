@@ -267,9 +267,9 @@
 									<th width="30%"><fmt:message key="builder.title.key_duplication"/></th>
 									<td width="70%">
 										<input type="radio" name="radKeyDuplicable" value="true" <%if(informationWork.isKeyDuplicatable()){ %>checked<%} %>>
-										<span <%if(informationWork.isKeyDuplicatable()){ %>class="t_bold"<%} %>><fmt:message key="builder.title.key_dup.true"/></span> 
+										<span <%if(informationWork.isKeyDuplicatable()){ %>class="tb"<%} %>><fmt:message key="builder.title.key_dup.true"/></span> 
 										<input type="radio" name="radKeyDuplicable" value="false" <%if(!informationWork.isKeyDuplicatable()){ %>checked<%} %>>
-										<span <%if(!informationWork.isKeyDuplicatable()){ %>class="t_bold"<%} %>><fmt:message key="builder.title.key_dup.false"/></span> 
+										<span <%if(!informationWork.isKeyDuplicatable()){ %>class="tb"<%} %>><fmt:message key="builder.title.key_dup.false"/></span> 
 									</td>
 								</tr>
 							</table>
@@ -293,11 +293,11 @@
 								<th width="30%"><fmt:message key="common.security.title.access"/></th>
 								<td width="70%" class="js_select_access_level">
 									<input name="rdoAccessLevel" type="radio" value="<%=AccessPolicy.LEVEL_PUBLIC %>" <%if(accessLevel==AccessPolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
-									<span <%if(accessLevel==AccessPolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.public"/> <fmt:message key="common.security.default"/></span> 
+									<span <%if(accessLevel==AccessPolicy.LEVEL_PUBLIC){ %>class="tb"<%} %>><fmt:message key="common.security.access.public"/> <fmt:message key="common.security.default"/></span> 
 									<input name="rdoAccessLevel" type="radio" value="<%=AccessPolicy.LEVEL_PRIVATE %>"  <%if(accessLevel==AccessPolicy.LEVEL_PRIVATE){ %>checked<%} %>/>
-									<span <%if(accessLevel==AccessPolicy.LEVEL_PRIVATE){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.private"/></span> 
+									<span <%if(accessLevel==AccessPolicy.LEVEL_PRIVATE){ %>class="tb"<%} %>><fmt:message key="common.security.access.private"/></span> 
 									<input name="rdoAccessLevel" class="js_security_level_custom" type="radio" value="<%=AccessPolicy.LEVEL_CUSTOM %>"  <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
-									<span <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.access.custom"/></span>
+									<span <%if(accessLevel==AccessPolicy.LEVEL_CUSTOM){ %>class="tb"<%} %>><fmt:message key="common.security.access.custom"/></span>
 									<div class="js_access_level_custom" <%if(accessLevel!=AccessPolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
 										<span class="form_col js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
 											<div class="w100 form_value">
@@ -339,9 +339,9 @@
 								<th width="30%"><fmt:message key="common.security.title.write"/></th>
 								<td width="70%" class="js_select_write_level">
 									<input name="rdoWriteLevel" type="radio" value="<%=WritePolicy.LEVEL_PUBLIC %>" <%if(writeLevel==WritePolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
-									<span <%if(writeLevel==WritePolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.write.public"/> <fmt:message key="common.security.default"/></span> 
+									<span <%if(writeLevel==WritePolicy.LEVEL_PUBLIC){ %>class="tb"<%} %>><fmt:message key="common.security.write.public"/> <fmt:message key="common.security.default"/></span> 
 									<input name="rdoWriteLevel" class="js_security_level_custom" type="radio" value="<%=WritePolicy.LEVEL_CUSTOM %>" <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
-									<span <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.write.custom"/></span>
+									<span <%if(writeLevel==WritePolicy.LEVEL_CUSTOM){ %>class="tb"<%} %>><fmt:message key="common.security.write.custom"/></span>
 									<div class="js_write_level_custom" <%if(writeLevel!=WritePolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
 										<span class="form_col js_type_userField" fieldId="txtWritableUsers" multiUsers="true">
 											<div class="w100 form_value">
@@ -383,11 +383,11 @@
 								<th width="30%"><fmt:message key="common.security.title.edit"/></th>
 								<td width="70%" class="js_select_edit_level">
 									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_PUBLIC %>" <%if(editLevel==EditPolicy.LEVEL_PUBLIC){ %>checked<%} %>/>
-									<span <%if(editLevel==EditPolicy.LEVEL_PUBLIC){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.public"/></span> 
+									<span <%if(editLevel==EditPolicy.LEVEL_PUBLIC){ %>class="tb"<%} %>><fmt:message key="common.security.edit.public"/></span> 
 									<input name="rdoEditLevel" type="radio" value="<%=EditPolicy.LEVEL_PRIVATE %>"  <%if(editLevel==EditPolicy.LEVEL_PRIVATE){ %>checked<%} %>/>
-									<span <%if(editLevel==EditPolicy.LEVEL_PRIVATE){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.private"/> <fmt:message key="common.security.default"/></span> 
+									<span <%if(editLevel==EditPolicy.LEVEL_PRIVATE){ %>class="tb"<%} %>><fmt:message key="common.security.edit.private"/> <fmt:message key="common.security.default"/></span> 
 									<input name="rdoEditLevel" class="js_security_level_custom" type="radio" value="<%=EditPolicy.LEVEL_CUSTOM %>"  <%if(editLevel==EditPolicy.LEVEL_CUSTOM){ %>checked<%} %>/>
-									<span <%if(editLevel==EditPolicy.LEVEL_CUSTOM){ %>class="t_bold"<%} %>><fmt:message key="common.security.edit.custom"/></span>
+									<span <%if(editLevel==EditPolicy.LEVEL_CUSTOM){ %>class="tb"<%} %>><fmt:message key="common.security.edit.custom"/></span>
 									<div class="js_edit_level_custom" <%if(editLevel!=EditPolicy.LEVEL_CUSTOM) {%>style="display:none"<%} %>>
 										<span class="form_col js_type_userField" fieldId="txtEditableUsers" multiUsers="true">
 											<div class="w100 form_value">
