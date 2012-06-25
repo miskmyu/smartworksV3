@@ -614,16 +614,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			// Exception Handling Required			
 		}
 	}
-	public void copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		try{
-			System.out.println(requestBody);
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			// Exception Handling Required			
-		}
-	}
-	@Override
+
 	public void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
 		//pkg_bcec7491878f42f1a235fd2392134029
@@ -632,5 +623,14 @@ public class BuilderServiceImpl implements IBuilderService {
 		
 		SwManagerFactory.getInstance().getDesigntimeManager().deletePackage(userId, workId, 1);
 		
+	}
+	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		String newWorkId = "";
+		return newWorkId;
+	}
+	@Override
+	public String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		String newWorkId = "";
+		return newWorkId;
 	}
 }

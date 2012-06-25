@@ -23,6 +23,10 @@
 	String lastHref = SmartUtil.getLastHref(request);
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
+
+	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
+	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
+
 	MailFolder mailFolder = instance.getMailFolder();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -91,9 +95,9 @@
 				
 				<!-- 이전 다음 목록 버튼 -->
 				<div class="move_btn_space top">
-					<span class="icon_arr_npage" title="다음"><a href=""> </a></span>
-					<span class="icon_arr_ppage" title="이전"><a href=""> </a></span>
-					<span><a href="" class="mr5">목록보기</a></span>
+					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span><a href="<%=lastHref%>" class="mr5 js_content"><fmt:message key='common.button.list'/></a></span>
 				</div>
 				<!-- 이전 다음 목록 버튼 //-->
 
@@ -153,9 +157,9 @@
 					
 				<!-- 이전 다음 목록 버튼 -->
 				<div class="move_btn_space bottom">
-					<span class="icon_arr_npage" title="다음"><a href=""> </a></span>
-					<span class="icon_arr_ppage" title="이전"><a href=""> </a></span>
-					<span><a href="" class="mr5">목록보기</a></span>
+					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span><a href="<%=lastHref%>" class="mr5 js_content"><fmt:message key='common.button.list'/></a></span>
 				</div>
 				<!-- 이전 다음 목록 버튼 //-->
 				

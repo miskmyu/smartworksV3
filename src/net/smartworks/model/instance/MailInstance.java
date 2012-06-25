@@ -24,6 +24,8 @@ public class MailInstance extends Instance {
 	private boolean unread;
 	private MailFolder mailFolder;
 	private MailFolder parentMailFolder;
+	private String prevMsgId;
+	private String nextMsgId;
 
 	public User getSender() {
 		return sender;
@@ -127,6 +129,22 @@ public class MailInstance extends Instance {
 
 	public void setParentMailFolder(MailFolder parentMailFolder) {
 		this.parentMailFolder = parentMailFolder;
+	}
+
+	public String getPrevMsgId() {
+		return prevMsgId;
+	}
+
+	public void setPrevMsgId(String prevMsgId) {
+		this.prevMsgId = prevMsgId;
+	}
+
+	public String getNextMsgId() {
+		return nextMsgId;
+	}
+
+	public void setNextMsgId(String nextMsgId) {
+		this.nextMsgId = nextMsgId;
 	}
 
 	public MailInstance() {

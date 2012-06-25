@@ -1110,13 +1110,9 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_copy_address').zclip({
-        path:'js/jquery/ZeroClipboard.swf',
-        copy: function(){
-        	return $(location).attr('href');
-        	},
-        beforeCopy: null,
-        afterCopy:null
+	$('a#js_copy_address').zclip({
+        path: 'resources/flash/ZeroClipboard.swf',
+        copy: function(){return document.location.href;}
     });
 
 	$('.js_pop_all_works').live('click', function(e) {

@@ -693,7 +693,40 @@ smartPop = {
 						var e = window.event || e;
 						var keyCode = e.which || e.keyCode;
 				        if (keyCode == $.ui.keyCode.ENTER) {
-				            $('.js_close_new_category').click();
+				            $('.js_close_new_work').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
+				}
+			});
+		});
+	},
+
+	moveWorkDefinition : function(type, workId, workFullName, categoryId, groupId, workName, workDesc){
+		var url = "pop_move_work_definition.sw?workId=" + workId + "&workName=" + workName + "&type=" + type + "&workFullName=" + workFullName + "&categoryId=" + categoryId + "&groupId=" + groupId + "&workDesc=" + workDesc;
+		$.get( url, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#fff"},
+				containerCss:{
+					height:300,
+					width:560
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_move_work').die('click');
+					$('.js_close_move_work').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('.js_close_move_work').focus();
+					$('.js_close_move_work').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            $('.js_close_move_work').click();
 				            return false;
 				        } else {
 				            return true;

@@ -41,7 +41,13 @@
 				if(workCategory.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
 				%>
 					<span class="ctgr_action">
-						<span title="<fmt:message key='builder.button.remove_category'/>" class="js_remove_work_category btn_remove_category" categoryId="<%=workCategory.getId() %>" categoryName="<%=workCategory.getName()%>"></span>
+						<%
+						if(!((WorkCategoryInfo)workCategory).isRunning()){
+						%>
+							<span title="<fmt:message key='builder.button.remove_category'/>" class="js_remove_work_category btn_remove_category" categoryId="<%=workCategory.getId() %>" categoryName="<%=workCategory.getName()%>"></span>
+						<%
+						}
+						%>
 						<span title="<fmt:message key='builder.button.text_category'/>" class="js_text_work_category btn_text_category" categoryId="<%=workCategory.getId() %>" categoryName="<%=workCategory.getName()%>" categoryDesc="<%=workCategory.getDesc()%>"></span>
 						<span title="<fmt:message key='builder.button.add_work'/>" class="js_add_work_definition btn_add_work" parentId="<%=workCategory.getId() %>" parentName="<%=((WorkCategoryInfo)workCategory).getFullPathName()%>"></span>
 					</span>

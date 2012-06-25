@@ -105,7 +105,7 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_iworks title"><%=work.getName() %></div>
-				<span class="t_location"><%=work.getFullpathName() %></span>
+				<span class="t_location"><%=work.getPathName() %></span>
 				<!-- tab -->
 				<div id="" class="tab_adm fr">
 					<ul class="cb">

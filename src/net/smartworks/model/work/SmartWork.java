@@ -53,6 +53,10 @@ public class SmartWork extends Work {
 				+ super.getName();
 	}
 
+	public String getPathName() {
+		return this.myCategory.getName() + ((this.myGroup != null && this.myGroup.getId() != null) ? " > " + this.myGroup.getName() : "");
+	}
+
 	public WorkCategory getMyGroup() {
 		return myGroup;
 	}
@@ -170,4 +174,8 @@ public class SmartWork extends Work {
 		this.myCategory = myCategory;
 	}
 
+	public boolean isEditable(){
+		if(isEditing || isRunning) return false;
+		return true;
+	}
 }

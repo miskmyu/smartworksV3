@@ -658,4 +658,8 @@ public interface ISmartWorks {
 	public abstract MailAccount[] getMyMailAccounts() throws Exception;
 
 	public abstract void removeWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 }
