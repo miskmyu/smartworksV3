@@ -47,7 +47,7 @@
 			</span>
 		</a>
 		<a href="my_departments.sw" class="" title="<fmt:message key='nav.communities.my_departments'/>">
-			<span class="btn_my_depart current"></span>
+			<span class="btn_depart current"></span>
 		</a> 
 		<span class="fr ml2 js_progress_span" ></span><!--  프로그래스아이콘이 실행되는 곳 -->
 
