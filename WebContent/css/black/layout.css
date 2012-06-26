@@ -148,7 +148,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_tit_chat {background-color:#363636; border-top:1px solid #969696; width:205px; padding:10px}
 .nav_sub_list.coummi {min-height: 200px}
 
-.icon_aworks {background: url("../../images/icon_aworks.png") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
+.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
 .icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:17px}
 .icon_cworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:17px}
@@ -521,8 +521,8 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px}
 .notice .headline_notice{float:left;width:32.5%;padding-right:5px;border-right:1px solid #cfcfcf}
 .notice .recent_notice{float:left;width:64%;margin-left:10px}
-.notice a.more{background: url("../../images/btnMainNotice.gif") no-repeat;width:50px;height:30px;float:left;margin-right:5px;padding:75px 15px 0 0;font-size:10px;text-align:right}
-.notice a.more:hover{background: url("../../images/btnMainNotice.gif") -65px 0 no-repeat;color:#ba3938}
+.notice > .headline_notice > a.more{background: url("../../images/btnMainNotice.gif") no-repeat;width:50px;height:30px;float:left;margin-right:5px;padding:75px 15px 0 0;font-size:10px;text-align:right}
+.notice > .headline_notice > a.more:hover{background: url("../../images/btnMainNotice.gif") -65px 0 no-repeat;color:#ba3938}
 .headline_notice .title{display:block;font-size:13px;font-weight:bold;padding:7px 0 4px 0}
 .headline_notice .info{display:block;font-size:11px;color:#696969}
 .headline_notice .content{display:block;font-size:12px;border-top:1px dotted #cfcfcf;padding-top:2px;clear:right}
