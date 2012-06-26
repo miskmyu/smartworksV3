@@ -290,7 +290,7 @@
 								<span class="t_date"><%=work.getFullpathName()%></span>
 							</a>
 							<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>&workId=<%=work.getId()%>">
-								<span class="t_bold"><%=workInstance.getSubject()%></span> 
+								<span class="tb"><%=workInstance.getSubject()%></span> 
 							</a>
 						</div>
 					</div>

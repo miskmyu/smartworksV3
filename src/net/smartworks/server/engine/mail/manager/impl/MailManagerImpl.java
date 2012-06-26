@@ -237,6 +237,68 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 	}
 
 	@Override
+	public long getPrevMailId(String user, MailContentCond cond) throws MailException {
+		try {
+			long id = -1;
+			long folderId = -1;
+			if(cond != null) {
+				id = cond.getId();
+				folderId = cond.getFolderId();
+			}
+			StringBuffer buf = new StringBuffer();
+			buf.append("select max(b.id) as prevMsgId from MailContent a, MailContent b where a.id > b.id and a.id = :id and b.folderId = :folderId");
+
+			Query query = this.getSession().createQuery(buf.toString());
+
+			if(id != -1)
+				query.setLong("id", id);
+			if(folderId != -1)
+				query.setLong("folderId", folderId);
+
+			long result = 0;
+			Object object = query.uniqueResult();
+			if(!CommonUtil.isEmpty(object))
+				result = Long.parseLong(String.valueOf(object));
+
+			return result;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new MailException(e);
+		}
+	}
+
+	@Override
+	public long getNextMailId(String user, MailContentCond cond) throws MailException {
+		try {
+			long id = -1;
+			long folderId = -1;
+			if(cond != null) {
+				id = cond.getId();
+				folderId = cond.getFolderId();
+			}
+			StringBuffer buf = new StringBuffer();
+			buf.append("select min(b.id) as nextMsgId from MailContent a, MailContent b where a.id < b.id and a.id = :id and b.folderId = :folderId");
+
+			Query query = this.getSession().createQuery(buf.toString());
+
+			if(id != -1)
+				query.setLong("id", id);
+			if(folderId != -1)
+				query.setLong("folderId", folderId);
+
+			long result = 0;
+			Object object = query.uniqueResult();
+			if(!CommonUtil.isEmpty(object))
+				result = Long.parseLong(String.valueOf(object));
+
+			return result;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new MailException(e);
+		}
+	}
+
+	@Override
 	public MailServer getMailServer(String user, String objId, String level) throws MailException {
 		if (level == null)
 			level = LEVEL_ALL;

@@ -103,19 +103,19 @@
 											if (cnt == 0) {
 											%>
 												<li class="line_dashed tc">
-													<span class="cell_date"><span class="t_bold"><fmt:message key='content.threedays.today' /> </span> <%=today.toLocalDateShortString()%></span>
+													<span class="cell_date"><span class="tb"><fmt:message key='content.threedays.today' /> </span> <%=today.toLocalDateShortString()%></span>
 												</li>
 											<%
 											} else if (cnt == 1) {
 											%>
 												<li class="line_dashed tc">
-													<span class="cell_date"><span class="t_bold"><fmt:message key='content.threedays.tomorrow' /> </span> <%=tomorrow.toLocalDateShortString()%></span>
+													<span class="cell_date"><span class="tb"><fmt:message key='content.threedays.tomorrow' /> </span> <%=tomorrow.toLocalDateShortString()%></span>
 												</li>
 											<%
 											} else if (cnt == 2) {
 											%>
 												<li class="line_dashed tc">
-													<span class="cell_date"><span class="t_bold"><fmt:message key='content.threedays.after' /> </span></span>
+													<span class="cell_date"><span class="tb"><fmt:message key='content.threedays.after' /> </span></span>
 												</li>
 											<%
 											}

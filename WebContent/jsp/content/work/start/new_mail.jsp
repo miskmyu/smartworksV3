@@ -123,7 +123,7 @@ function submitForms(action) {
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
 				<div class="buttonSet">
-					<button class="t_bold js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
+					<button class="tb js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
 					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
 				</div>
 				<div class="table_line"></div>
@@ -145,7 +145,7 @@ function submitForms(action) {
 				<!-- 메일 리스트//-->
 				<div class="table_line"></div>
 				<div class="buttonSet">
-					<button class="t_bold js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
+					<button class="tb js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
 					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
 				</div>
 			</div>

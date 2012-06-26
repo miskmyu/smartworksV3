@@ -142,7 +142,7 @@
 						}
 						%>
 					</select>
-					<button href="new_mail.sw" class="fr t_bold js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
+					<button href="new_mail.sw" class="fr tb js_content"><span class="icon_mail_write"></span><fmt:message key="mail.button.new"/></button>
 				</div>
 
 				<!-- 메일 리스트-->

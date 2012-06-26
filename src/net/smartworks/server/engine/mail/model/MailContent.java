@@ -63,6 +63,8 @@ public class MailContent extends MisObject {
 	private int unread;
 	private long msgSize;
 	private byte[] email;
+	private long prevId;
+	private long nextId;
 
 	public MailContent() {
 		super();
@@ -370,6 +372,18 @@ public class MailContent extends MisObject {
 	}
 	public void setUnread(int unread) {
 		this.unread = unread;
+	}
+	public long getPrevId() {
+		return prevId;
+	}
+	public void setPrevId(long prevId) {
+		this.prevId = prevId;
+	}
+	public long getNextId() {
+		return nextId;
+	}
+	public void setNextId(long nextId) {
+		this.nextId = nextId;
 	}
 
 }
