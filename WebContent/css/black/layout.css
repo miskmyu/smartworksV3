@@ -147,6 +147,15 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_tit_mail, .nav_tit_default {background: url("../../images/naviti_mail_bg.jpg") repeat-x scroll 0 0; width:206px; padding:4px 10px 4px; height:17px}
 .nav_tit_chat {background-color:#363636; border-top:1px solid #969696; width:205px; padding:10px}
 .nav_sub_list.coummi {min-height: 200px}
+.nav_list.recent {padding-bottom:10px}
+.nav_list.recent a:link, .nav_list.recent a:visited {color:#dddddd !important}
+.nav_list.recent .nav_tit { background:none; height:inherit; padding:7px 10px 3px}
+.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px; color:#FFF}
+.nav_list.recent .t_date { margin-right:3px}
+.nav_list.recent ul { line-height:16px}
+.nav_list.recent .recent_notice td {border-bottom:none}
+.recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+.recent li:hover { display:block; background-color:#6b6b6b}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
@@ -201,11 +210,14 @@ a .btn_folder_add {background: url("../../images/nav_img.png") no-repeat -25px -
 a .btn_folder_add:hover, .btn_folder_add.current {background: url("../../images/nav_img.png") no-repeat -25px -150px}
 
 /* Nav Community Btn */ 
-.btn_my_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_my_depart:hover, .btn_my_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
+.btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_depart:hover, .btn_my_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
 
 .btn_my_group {background: url("../../images/nav_img.png") no-repeat -158px -188px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_my_group:hover, .btn_my_group.current {background: url("../../images/nav_img.png") no-repeat -158px -217px}
+
+.btn_member {background: url("../../images/nav_img.png") no-repeat -158px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_member:hover, .btn_member.current {background: url("../../images/nav_img.png") no-repeat -158px -666px}
 
 .btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
  a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
@@ -480,11 +492,12 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 /* Head Line Section */	
 .headline_section {position:relative; padding:10px 20px; overflow:hidden}
 .headline_section .area {background-color:#f5f5f5; -webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px; padding: 8px 10px; overflow:hidden; box-shadow: 0 0 4px #CCCCCC inset; line-height: 17px; max-height:175px}
+.headline_section .area .t_date { margin-right:3px}
 .headline_section > ul > li { width:45.5%; float:left}
 .headline_section > ul > li > div {margin-bottom:5px; overflow:hidden; border-bottom: 1px dotted #CFCFCF; padding-bottom: 3px}
 .headline_section > ul > li > div.end { margin:0; padding:0; border:none}
 .headline_section > ul > li > div > div { float:left; text-align:left}
-.headline_section > ul > li > div .date_space { margin-right:15px; font-size:11px; width: 51px; line-height: 16px; text-align:center}
+.headline_section > ul > li > div .date_space { margin-right:15px; font-size:11px; width: 54px; line-height: 16px; text-align:center}
 .headline_section > ul > li > div > div .day {color: #000000; font-family: arial; font-size: 21px; font-weight: bold;}
 .headline_section .area .tit {padding:0}
 .headline_section .area .tit span {font-weight:bold}
@@ -507,6 +520,16 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
 .noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
+.recent_notice { border-bottom:none !important}
+.recent_notice .end td {border-bottom:none !important}
+
+.recent_notice td{border-bottom:1px dotted #DCDFE0}
+.recent_notice .title{background: url("../../images/dotRed.gif") 1px 9px no-repeat;padding-left:10px}
+.recent_notice .title,.recent_notice .index{vertical-align:top}
+.recent_notice .title a{font-size:13px;font-weight:bold}
+.recent_notice .icon_division_s{background-position:0 3px}
+.recent_notice .date{font-weight:normal;text-align:right;white-space:nowrap}
+.recent_notice .title img,.headline_notice .index img{margin:0 3px 0 0}
 
 /*Event old */	
 .event_space {position:relative; width:99%; display:inline-block; margin-left:10px; }
@@ -527,13 +550,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .headline_notice .info{display:block;font-size:11px;color:#696969}
 .headline_notice .content{display:block;font-size:12px;border-top:1px dotted #cfcfcf;padding-top:2px;clear:right}
 .headline_notice .icon_division_s{background-position:70px 0;padding-left:90px}
-.recent_notice td{border-bottom:1px dotted #DCDFE0}
-.recent_notice .title{background: url("../../images/dotRed.gif") 1px 9px no-repeat;padding-left:10px}
-.recent_notice .title,.recent_notice .index{vertical-align:top}
-.recent_notice .title a{font-size:13px;font-weight:bold}
-.recent_notice .icon_division_s{background-position:0 3px}
-.recent_notice .date{font-weight:normal;text-align:right;white-space:nowrap}
-.recent_notice .title img,.headline_notice .index img{margin:0 3px 0 0}
 .headline_notice .index{font-size:11px;color:#666;overflow:hidden}
 .headline_notice .index span.date{float:right;margin-right:9px;font-weight:normal}
 
