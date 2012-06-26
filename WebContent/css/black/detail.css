@@ -192,6 +192,13 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 
 .num_box {float:right; margin: -20px 5px 0; position:relative}
 
+/* Nav Paging */
+.nav_paginate {color:#dddddd; font-size:11px; margin:0 6px 0 0; text-align:right}
+.nav_paginate .prev a {background: url("../../images/nav_img.png") no-repeat 0 -538px transparent; display: inline-block; width:7px; height:9px}
+.nav_paginate .prev a:hover {background-position:0 -552px}
+.nav_paginate .next a {background: url("../../images/nav_img.png") no-repeat -12px -538px transparent; display: inline-block; width:7px; height:9px}
+.nav_paginate .next a:hover { background-position:-12px -552px}
+
 /* Prev Page, Next Page  */
 .move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
 .move_btn_space.top {border-top: none}
