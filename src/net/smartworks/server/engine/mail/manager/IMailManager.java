@@ -26,6 +26,8 @@ public interface IMailManager {
 	public void removeMailContent(String user, MailContentCond cond) throws MailException;
 	public long getMailContentSize(String user, MailContentCond cond) throws MailException;
 	public MailContent[] getMailContents(String user, MailContentCond cond, String level) throws MailException;
+	public long getPrevMailId(String user, MailContentCond cond) throws MailException; 
+	public long getNextMailId(String user, MailContentCond cond) throws MailException; 
 
 	public MailServer getMailServer(String user, String objId, String level) throws MailException;
 	public MailServer getMailServer(String user, MailServerCond cond, String level) throws MailException;

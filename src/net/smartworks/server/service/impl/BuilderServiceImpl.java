@@ -14,6 +14,8 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.WritePolicy;
+import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.WorkCategory;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
@@ -399,9 +401,8 @@ public class BuilderServiceImpl implements IBuilderService {
 				}
 			}
 		} catch (Exception e) {
-			// Exception Handling Required
 			e.printStackTrace();
-			// Exception Handling Required			
+			throw new Exception(e);
 		}
 	}
 
@@ -529,30 +530,40 @@ public class BuilderServiceImpl implements IBuilderService {
 			Map<String, Object> frmNewWorkDefinition = (Map<String, Object>)requestBody.get("frmNewWorkDefinition");
 			String name = (String)frmNewWorkDefinition.get("txtWorkName");
 			String type = (String)frmNewWorkDefinition.get("chkWorkType");
+			String desc = (String)frmNewWorkDefinition.get("txtaWorkDesc");
+//			TYPE_CATEGORY = 11;				
 //			TYPE_INFORMATION = 21;
 //			TYPE_PROCESS = 22;
 //			TYPE_SCHEDULE = 23;
-			switch (Integer.parseInt(type)) {
-			
-			case 21 :
-				type = PrcProcessInst.PROCESSINSTTYPE_INFORMATION;
-				break;
-			case 22 :
-				type = PrcProcessInst.PROCESSINSTTYPE_PROCESS;
-				break;
-			case 23 :
-				type = PrcProcessInst.PROCESSINSTTYPE_SCHEDULE;
-				break;
+
+			if(Integer.parseInt(type) == WorkCategory.TYPE_CATEGORY) {
+				CtgCategory ctg = new CtgCategory();
+				ctg.setCompanyId(compId);
+				ctg.setName(name);
+				ctg.setParentId(categoryId);
+				ctg.setDescription(desc);
+				ctg.setDisplayOrder(2);
+				getCtgManager().createCategory(userId, ctg);
+			} else {
+				switch (Integer.parseInt(type)) {
+	
+				case SmartWork.TYPE_INFORMATION :
+					type = PrcProcessInst.PROCESSINSTTYPE_INFORMATION;
+					break;
+				case SmartWork.TYPE_PROCESS :
+					type = PrcProcessInst.PROCESSINSTTYPE_PROCESS;
+					break;
+				case SmartWork.TYPE_SCHEDULE :
+					type = PrcProcessInst.PROCESSINSTTYPE_SCHEDULE;
+					break;
+				}
+
+				if (CommonUtil.isEmpty(type))
+					getDesigntimeManager().createPackage(userId, categoryId, name, desc);
+				else {
+					getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
+				}
 			}
-			String desc = (String)frmNewWorkDefinition.get("txtaWorkDesc");
-			
-			IPackageModel pkg = null;
-			if (CommonUtil.isEmpty(type))
-				pkg = getDesigntimeManager().createPackage(userId, categoryId, name, desc);
-			else {
-				pkg = getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
-			}
-			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();

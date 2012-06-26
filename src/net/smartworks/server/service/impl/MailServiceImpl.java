@@ -40,12 +40,10 @@ import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
 import net.smartworks.server.service.ICommunityService;
-import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IMailService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
-import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.MailAuth;
@@ -875,7 +873,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	
 			MailControllerFactory factory = new MailControllerFactory(auth, profile, handler, folderId);
 			MailController mailCont = factory.getMailController();
-			
+
 			try {
 				Email email = mailCont.getEmailById(new Long(msgId));
 				request.getSession().setAttribute("email", email);
@@ -1044,7 +1042,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				instance.setAttachments(finalAttachments);
 				instance.setPartId(i);
 				instance.setMailFolder(getMailFolderById(folderId));
-				
+				MailContentCond mailContentCond = new MailContentCond();
+				mailContentCond.setId(Long.parseLong(msgId));
+				mailContentCond.setFolderId(Long.parseLong(folderId));
+				String prevMsgId = String.valueOf(getMailManager().getPrevMailId(null, mailContentCond));
+				String nextMsgId = String.valueOf(getMailManager().getNextMailId(null, mailContentCond));
+				instance.setPrevMsgId("0".equals(prevMsgId) ? null : prevMsgId);
+				instance.setNextMsgId("0".equals(nextMsgId) ? null : nextMsgId);
+
 			} catch (Exception e) {
 				throw e;
 			}
