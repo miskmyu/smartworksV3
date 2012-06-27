@@ -54,13 +54,13 @@
 .smartp_name { font-weight:bold; color:#3B5998;}
 .smartp_info {}
 .smartp_btn_space {background-color: #c7c7c7; height: 19px; padding: 4px 5px 2px;}
-.pop_icon_chat {background: url("../../images/nav_img.png") no-repeat scroll -151px 0 transparent; display: inline-block; height: 19px; width:20px;}
-.pop_icon_mail {background: url("../../images/nav_img.png") no-repeat scroll -177px 0 transparent; display: inline-block; height: 19px; width:20px;}
-.pop_icon_message {background: url("../../images/nav_img.png") no-repeat scroll -202px 0 transparent; display: inline-block; height: 19px; width:20px;}
+.pop_icon_chat a {background: url("../../images/nav_img.png") no-repeat scroll -151px 0 transparent; display: inline-block; height: 19px; width:20px;}
+.pop_icon_mail a {background: url("../../images/nav_img.png") no-repeat scroll -177px 0 transparent; display: inline-block; height: 19px; width:20px;}
+.pop_icon_message a{background: url("../../images/nav_img.png") no-repeat scroll -202px 0 transparent; display: inline-block; height: 19px; width:20px;}
 
-a .pop_icon_chat:hover { background-position:-151px -34px}
-a .pop_icon_mail:hover { background-position:-177px -34px}
-a .pop_icon_message:hover { background-position:-202px -34px}
+.pop_icon_chat a:hover { background-position:-151px -34px; text-decoration:none}
+.pop_icon_mail a:hover { background-position:-177px -34px; text-decoration:none}
+.pop_icon_message a:hover { background-position:-202px -34px; text-decoration:none}
 
 /* Button */
 .btn {background-color:#666666; float:right; height:22px; position:absolute; line-height:19px}
