@@ -188,7 +188,7 @@
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>
 					<div class="title_line_btns">
-						<div class="icon_btn_create">
+						<div class="icon_btn_start">
 							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.start_new_pwork"/></a>
 						</div>
 					</div>
