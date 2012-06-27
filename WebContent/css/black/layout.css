@@ -149,13 +149,13 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_sub_list.coummi {min-height: 200px}
 .nav_list.recent {padding-bottom:10px}
 .nav_list.recent a:link, .nav_list.recent a:visited {color:#dddddd !important}
-.nav_list.recent .nav_tit { background:none; height:inherit; padding:7px 10px 3px}
-.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px; color:#FFF}
+.nav_list.recent .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
+.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px; color:#FFF}
 .nav_list.recent .t_date { margin-right:3px}
 .nav_list.recent ul { line-height:16px}
 .nav_list.recent .recent_notice td {border-bottom:none}
 .recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-.recent li:hover { display:block; background-color:#6b6b6b}
+.recent li:hover { display:block; background-color:#555555}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
@@ -211,17 +211,20 @@ a .btn_folder_add:hover, .btn_folder_add.current {background: url("../../images/
 
 /* Nav Community Btn */ 
 .btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_depart:hover, .btn_my_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
+a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
 
 .btn_my_group {background: url("../../images/nav_img.png") no-repeat -158px -188px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_my_group:hover, .btn_my_group.current {background: url("../../images/nav_img.png") no-repeat -158px -217px}
 
+.btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
+ a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
+
 .btn_member {background: url("../../images/nav_img.png") no-repeat -158px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_member:hover, .btn_member.current {background: url("../../images/nav_img.png") no-repeat -158px -666px}
 
-.btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
- a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
- 
+.btn_allmember {background: url("../../images/nav_img.png") no-repeat -201px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_allmember:hover, .btn_allmember.current {background: url("../../images/nav_img.png") no-repeat -201px -666px}
+
 /* Nav Works Btn */
 .btn_recent {background: url("../../images/nav_img.png") no-repeat -115px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
 a .btn_recent:hover, .btn_recent.current {background: url("../../images/nav_img.png") no-repeat -115px -274px}
