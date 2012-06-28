@@ -36,7 +36,7 @@
 					
 					<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="<%=classType%>">
 						<span class="<%=work.getIconClass()%>"></span>
-						<span  class="mt3"><%=work.getName()%></span>
+						<span><%=work.getName()%></span>
 					</a>
 					<div class="check_option"><div title="<fmt:message key='nav.works.my_favorite_works'/>" class="js_check_favorite_work icon_fvrt <%if(((SmartWorkInfo)work).isFavorite()){ %> checked <%} %>" workId="<%=work.getId() %>" ></div></div>
 				</li>
@@ -50,7 +50,7 @@
 				<li class="js_drill_down">
 					<a href="my_worklist_by_category.sw" categoryId="<%=work.getId()%>">
 						<span class="<%=work.getIconClass()%>"></span>
-						<span class="mt3"><%=work.getName()%></span>
+						<span><%=work.getName()%></span>
 					</a>
 					<div class="js_drill_down_target" style="display: none"></div>
 				</li>
