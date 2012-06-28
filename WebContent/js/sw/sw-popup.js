@@ -654,7 +654,15 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
-					$('.js_close_new_category').focus();
+					$('input[name="txtCategoryName"]').focus();
+					$('input[name="txtCategoryName"]').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            return false;
+				        }
+				    });
+					/*$('.js_close_new_category').focus();
 					$('.js_close_new_category').keypress(function (e) {
 						var e = window.event || e;
 						var keyCode = e.which || e.keyCode;
@@ -664,7 +672,7 @@ smartPop = {
 				        } else {
 				            return true;
 				        }
-				    });
+				    });*/
 				}
 			});
 		});
