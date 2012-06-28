@@ -776,8 +776,9 @@ public class WorkServiceImpl implements IWorkService {
 	
 			Set<String> keySet = frmMyProfileSetting.keySet();
 			Iterator<String> itr = keySet.iterator();
-	
-			List<Map<String, String>> files = null;
+
+			List<Map<String, String>> imgMyProfile = null;
+			List<Map<String, String>> imgMySignPic = null;
 			String groupId = null;
 			String txtUserProfileUserId = null;
 			String pwUserProfilePW = null;
@@ -792,6 +793,7 @@ public class WorkServiceImpl implements IWorkService {
 			String txtUserProfilePosition = null;
 			String txtUserProfileEmpId = null;
 			boolean chkUserProfileUseEmail = false;
+			boolean chkUseSignPicture = false;
 			String txtUserProfileEmailId = null;
 			String selUserProfileEmailServerName = null;
 			String pwUserProfileEmailPW = null;
@@ -803,7 +805,10 @@ public class WorkServiceImpl implements IWorkService {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					groupId = (String)valueMap.get("groupId");
 					if(!CommonUtil.isEmpty(groupId)) {
-						files = (ArrayList<Map<String,String>>)valueMap.get("files");
+						if(fieldId.equals("imgMyProfile"))
+							imgMyProfile = (ArrayList<Map<String,String>>)valueMap.get("files");
+						else if(fieldId.equals("imgMySignPic"))
+							imgMySignPic = (ArrayList<Map<String,String>>)valueMap.get("files");
 					}
 				} else if(fieldValue instanceof String) {
 					String valueString = (String)fieldValue;
@@ -826,6 +831,8 @@ public class WorkServiceImpl implements IWorkService {
 						txtUserProfilePosition = valueString;
 					else if(fieldId.equals("txtUserProfileEmpId"))
 						txtUserProfileEmpId = valueString;
+					else if(fieldId.equals("chkUseSignPicture"))
+						chkUseSignPicture = true;
 					else if(fieldId.equals("chkUserProfileUseEmail"))
 						chkUserProfileUseEmail = true;
 					else if(fieldId.equals("txtUserProfileEmailId"))
@@ -839,13 +846,22 @@ public class WorkServiceImpl implements IWorkService {
 
 			SwoUser user = getSwoManager().getUser(txtUserProfileUserId, txtUserProfileUserId, null);
 	
-			if(!files.isEmpty()) {
-				for(int i=0; i < files.subList(0, files.size()).size(); i++) {
-					Map<String, String> file = files.get(i);
+			if(!imgMyProfile.isEmpty()) {
+				for(int i=0; i < imgMyProfile.subList(0, imgMyProfile.size()).size(); i++) {
+					Map<String, String> file = imgMyProfile.get(i);
 					profileFileId = file.get("fileId");
 					profileFileName = file.get("fileName");
-					txtUserProfilePicture = getDocManager().insertProfilesFile(profileFileId, profileFileName, txtUserProfileUserId);
+					txtUserProfilePicture = getDocManager().insertProfilesFile(profileFileId, profileFileName, txtUserProfileUserId + "_p");
 					user.setPicture(txtUserProfilePicture);
+				}
+			}
+			if(!imgMySignPic.isEmpty()) {
+				for(int i=0; i < imgMySignPic.subList(0, imgMySignPic.size()).size(); i++) {
+					Map<String, String> file = imgMySignPic.get(i);
+					profileFileId = file.get("fileId");
+					profileFileName = file.get("fileName");
+					txtUserProfilePicture = getDocManager().insertProfilesFile(profileFileId, profileFileName, txtUserProfileUserId + "_s");
+					user.setSign(txtUserProfilePicture);
 				}
 			}
 
@@ -855,6 +871,7 @@ public class WorkServiceImpl implements IWorkService {
 			user.setTimeZone(selUserProfileTimeZone);
 			user.setEmail(txtUserProfileEmail);
 			user.setUseMail(chkUserProfileUseEmail);
+			user.setUseSign(chkUseSignPicture);
 			user.setExtensionNo(txtUserProfilePhoneNo);
 			user.setMobileNo(txtUserProfileCellNo);
 			user.setPosition(txtUserProfilePosition);

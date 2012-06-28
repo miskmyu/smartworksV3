@@ -703,6 +703,16 @@ update swdomain set keyColumn = titleFieldId
 
 -- 메일사용여부
 ALTER TABLE SWOrgUser add useMail bit;
+UPDATE SWOrgUser SET useMail = 0;
+
+
+-- 사인사용여부
+ALTER TABLE SWOrgUser add useSign bit;
+UPDATE SWOrgUser SET useSign = 0;
+
+-- 사인명
+ALTER TABLE SWOrgUser add sign varchar(50);
+
 
 -- SwMailServer (메일서버정보)
 CREATE TABLE SwMailServer (
