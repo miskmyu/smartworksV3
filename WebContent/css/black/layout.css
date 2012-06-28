@@ -341,10 +341,10 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 /* UpLoad Search */
 .start_works_input {position:relative}
 .start_works_input .input_size {width:743px}
-.start_works_input .srch input {width:718px; padding:2px 0 0 0}
-.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7; height: 18px}
+.start_works_input .srch input {width:718px}
+.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7; padding:1px 3px}
 .start_works_input .srch .srch_icon_w {background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
-	width:13px; right:2px; padding:0; position:relative; float: right; top:2px}
+	width:13px; right:3px; padding:0; position:relative; float: right; top:1px}
 
 /* upload Icon */
 .up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block}
