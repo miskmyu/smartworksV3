@@ -131,17 +131,23 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .global_menu .pop_admin {position:absolute; top:23px; right:0; z-index:38}
 
 /*Personal Info*/
-.personal_info {background: url("../../images/personal_info_bg.jpg")repeat-x scroll 0 0; padding:11px 22px; height:69px; width:182px}
-.personal_info ul {position:absolute}
-.personal_info li {float:left; vertical-align:bottom; margin-right:6px; color:#dddddd; line-height: 1.3em; } 
+.personal_info {background: url("../../images/personal_info_bg.png")repeat-x scroll 0 0; padding:11px; border-bottom:1px solid #1f1f1f}
+.personal_info ul {overflow:hidden}
+.personal_info li {float:left; vertical-align:bottom; margin-right:6px; color:#dddddd; line-height: 17px } 
+.personal_info li.info { width:129px}
 .personal_info .pic {background: url("../../images/pic_personal_info.jpg"); display:inline; width:66px; height:66px; position:relative}
 .personal_info .setting {background: url("../../images/nav_setting.png"); display:inline; width:66px; height:66px; position:relative}
 .personal_info .builder {background: url("../../images/nav_builder.png"); display:inline; width:72px; height:75px; position:relative}
+.personal_info button {background: -moz-linear-gradient(center top , #8cb1e3, #537ab9) repeat scroll 0 0; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#8cb1e3),to(#537ab9)); background: -o-linear-gradient(top,#8cb1e3,#537ab9); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#8cb1e3,endColorStr=#537ab9); text-decoration: none!important; border-radius: 9px; color: #e5edf7; cursor: pointer; display: inline-block; letter-spacing: 0; margin:8px 0 0; overflow: visible; padding: 3px 20px 2px; text-decoration: none !important; vertical-align: middle; font-size:11px}
+.personal_info span a {color: #AAAAAA !important; font-size: 11px; vertical-align: bottom}
+.personal_info a {color:#dddddd !important}
+.personal_info a:hover {text-decoration:underline !important}
 
 /* Nav List*/
 .nav_list {width:226px; border-bottom:1px solid #7a7a7a}
+.nav_list.top { border-top:1px solid #7a7a7a}
 .nav_current {color:#fcab4c; text-decoration:underline}
-.nav_tit {background: url("../../images/naviti_bg.jpg") repeat-x scroll 0 0; width:206px; height:38px; padding:7px 10px 10px}
+.nav_tit {background: url("../../images/naviti_bg.jpg") repeat-x scroll 0 0; width:206px; height:38px; padding:7px 10px 10px; color:#FFF}
 .nav_sub_list {border:2px solid #363636; border-top:none; padding-bottom: 10px; background-color:#6b6b6b}
 .nav_sub_list.noline { border:none; background-color:#444444; padding:5px 0}
 .nav_tit_mail, .nav_tit_default {background: url("../../images/naviti_mail_bg.jpg") repeat-x scroll 0 0; width:206px; padding:4px 10px 4px; height:17px}
@@ -149,13 +155,15 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_sub_list.coummi {min-height: 200px}
 .nav_list.recent {padding-bottom:10px}
 .nav_list.recent a:link, .nav_list.recent a:visited {color:#dddddd !important}
-.nav_list.recent .nav_tit { background:none; height:inherit; padding:7px 10px 3px}
-.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px; color:#FFF}
+.nav_list.recent .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
+.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works, .nav_list.recent .icon_all_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px}
 .nav_list.recent .t_date { margin-right:3px}
 .nav_list.recent ul { line-height:16px}
+.nav_list.recent .works li { padding:7px 10px 0}
+.nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
 .nav_list.recent .recent_notice td {border-bottom:none}
 .recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-.recent li:hover { display:block; background-color:#6b6b6b}
+.recent li:hover { display:block; background-color:#555555}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 22px; line-height:18px; float: left; height:18px}
@@ -174,8 +182,8 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_depart {background: url("../../images/icon_depart.gif") no-repeat left top transparent; height:20px; padding:0 0 0 22px; display: inline-block; float:left}
 .icon_group {background: url("../../images/icon_group.gif") no-repeat left top transparent; height:20px; padding:0 0 0 22px; display: inline-block; float:left}
 .icon_pe {height:20px; padding:0 5px 0 0; display: inline-block; float:left}
-.icon_b1dep {background: url("../../images/nav_img.png") no-repeat 0 -348px transparent; display: inline-block; padding:0 0 0 13px}
-.icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -364px transparent; display: inline-block; padding:0 0 0 12px}
+.icon_b1dep {background: url("../../images/nav_img.png") no-repeat 0 -349px transparent; padding:0 0 0 13px}
+.icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -366px transparent; padding:0 0 0 12px}
 .icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 22px; font-weight:bold}
 /* new Icon added by ysjung */
 .icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 10px transparent;display:inline-block;height:20px;width:30px;vertical-align:bottom}
@@ -211,17 +219,20 @@ a .btn_folder_add:hover, .btn_folder_add.current {background: url("../../images/
 
 /* Nav Community Btn */ 
 .btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_depart:hover, .btn_my_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
+a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
 
 .btn_my_group {background: url("../../images/nav_img.png") no-repeat -158px -188px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_my_group:hover, .btn_my_group.current {background: url("../../images/nav_img.png") no-repeat -158px -217px}
 
+.btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
+ a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
+
 .btn_member {background: url("../../images/nav_img.png") no-repeat -158px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
 a .btn_member:hover, .btn_member.current {background: url("../../images/nav_img.png") no-repeat -158px -666px}
 
-.btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
- a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
- 
+.btn_allmember {background: url("../../images/nav_img.png") no-repeat -201px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_allmember:hover, .btn_allmember.current {background: url("../../images/nav_img.png") no-repeat -201px -666px}
+
 /* Nav Works Btn */
 .btn_recent {background: url("../../images/nav_img.png") no-repeat -115px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
 a .btn_recent:hover, .btn_recent.current {background: url("../../images/nav_img.png") no-repeat -115px -274px}
@@ -584,6 +595,7 @@ td.pic {width:85px}
 .buttonSet {margin:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
 .buttonSet select {height:21px; margin:0; padding:0}
+.mail_list_section {line-height:19px}
 .mail_list_section .not_read {color:#0459C1}
 .mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
 .mail_list_section .not_read .icon_important,
@@ -597,7 +609,7 @@ td.pic {width:85px}
 .mail_list_section .view_title h1 {color: #333333; font-size: 13px; font-weight: bold; line-height: 18px; margin: 10px 0 5px 0; overflow: hidden; float:left; padding:0; line-height:18px}
 .mail_list_section .view_title dl { clear:both; font-size:12px; color:#777777; margin:0 0 10px; overflow:hidden}
 .mail_list_section .view_title dt, .mail_list_section .view_title dd { float:left}
-.mail_list_section .view_title dt { clear:both}
+.mail_list_section .view_title dt { clear:both; min-width:65px; text-align:right}
 .mail_list_section .view_title dd { margin:0 0 0 5px}
 .mail_list_section .read_frame { margin:10px}
 .nav_mail_list {height: 16px; vertical-align: top !important}
@@ -643,6 +655,7 @@ td.pic {width:85px}
 .t_location {font-size:11px; color:#999897; position:relative; top:24px; margin-left:10px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 0 0 5px 10px; vertical-align: top}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
+.bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}

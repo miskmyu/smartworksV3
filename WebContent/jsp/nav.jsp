@@ -38,7 +38,7 @@
 			<div class="nav_list">
 				<jsp:include page="/jsp/nav/community_wall.jsp" />
 			</div>	
-			<div class="nav_list">
+			<div class="nav_list top">
 				<jsp:include page="/jsp/nav/community_members.jsp" />
 			</div>
 	<%
