@@ -356,6 +356,7 @@ public class SmartUtil {
 					user.setPosition(login.getPosition());
 					user.setBigPictureName(login.getBigPictureName());
 					user.setSmallPictureName(login.getSmallPictureName());
+					user.setSignPicture(login.getSignPictureName());
 					user.setLocale(login.getLocale());
 					user.setTimeZone(login.getTimeZone());
 					user.setRole(login.getRole());
@@ -364,6 +365,7 @@ public class SmartUtil {
 					user.setCellPhoneNo(login.getCellPhoneNo());
 					user.setEmployeeId(login.getEmpNo());
 					user.setUseMail(login.isUseMail());
+					user.setUseSignPicture(login.isUseSign());
 				}
 				return user;
 			} else {

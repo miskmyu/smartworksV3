@@ -2156,6 +2156,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			userExtend.setLocale(LocaleInfo.LOCALE_DEFAULT);
 			userExtend.setTimeZone(LocalDate.TIMEZONE_SEOUL);
 			userExtend.setPictureName("");
+			userExtend.setSign("");
 			userExtend.setRoleId("DEPT LEADER");
 			userExtend.setAuthId("ADMINISTRATOR");
 			userExtend.setEmployeeId("E00001");
@@ -2177,7 +2178,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
 			buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
 			buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-			buff.append("     	   user.empNo, user.email, user.useMail, user.extensionNo, user.mobileNo )");
+			buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 			buff.append("     from SwoUser user, SwoDepartment dept, SwoCompany company ");
 			buff.append("    where user.deptId = dept.id");
 			buff.append("      and user.companyId = company.id");
@@ -2199,6 +2200,16 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		} else {
 			userExtend.setBigPictureName(picture);
 			userExtend.setSmallPictureName(picture);
+		}
+
+		String sign = CommonUtil.toNotNull(userExtend.getSign());
+
+		if(!sign.equals("")) {
+			String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
+			String signId = sign.substring(0, (sign.length() - extension.length())-1);
+			userExtend.setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
+		} else {
+			userExtend.setSign(sign);
 		}
 
 		String locale = CommonUtil.toNotNull(userExtend.getLocale());
@@ -2227,7 +2238,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId, company.name, ");
 		buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append("     	   user.empNo, user.email, user.useMail, user.extensionNo, user.mobileNo )");
+		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		if (!CommonUtil.isEmpty(lastName))
@@ -2267,6 +2278,17 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				user.setBigPictureName(picture);
 				user.setSmallPictureName(picture);
 			}
+
+			String sign = CommonUtil.toNotNull(user.getSign());
+
+			if(!sign.equals("")) {
+				String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
+				String signId = sign.substring(0, (sign.length() - extension.length())-1);
+				user.setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			} else {
+				user.setSign(sign);
+			}
+
 			usersExtendsArray[i] = user;
 			i++;
 		}
@@ -2283,7 +2305,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append("     	   user.empNo, user.email, user.useMail, user.extensionNo, user.mobileNo )");
+		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.companyId = company.id");
@@ -2335,6 +2357,17 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				user.setBigPictureName(picture);
 				user.setSmallPictureName(picture);
 			}
+
+			String sign = CommonUtil.toNotNull(user.getSign());
+
+			if(!sign.equals("")) {
+				String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
+				String signId = sign.substring(0, (sign.length() - extension.length())-1);
+				user.setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			} else {
+				user.setSign(sign);
+			}
+
 			usersExtendsArray[i] = user;
 			i++;
 		}
@@ -2360,6 +2393,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		userExtend.setLocale(LocaleInfo.LOCALE_DEFAULT);
 		userExtend.setTimeZone(LocalDate.TIMEZONE_SEOUL);
 		userExtend.setPictureName("");
+		userExtend.setSign("");
 		userExtend.setRoleId("");
 		userExtend.setAuthId("");
 		userExtend.setEmployeeId("");
@@ -2426,7 +2460,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" user.id,  user.name, user.nickName, user.password, user.companyId,  company.name, ");
 		buff.append(" user.deptId, dept.name, dept.description, user.locale, ");
 		buff.append(" user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
-		buff.append(" user.empNo, user.email, user.useMail, user.extensionNo, user.mobileNo )");
+		buff.append(" user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.companyId = company.id");
@@ -2457,6 +2491,16 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			} else {
 				swoUserExtends[i].setBigPictureName(picture);
 				swoUserExtends[i].setSmallPictureName(picture);
+			}
+
+			String sign = CommonUtil.toNotNull(swoUserExtends[i].getSign());
+
+			if(!sign.equals("")) {
+				String extension = sign.lastIndexOf(".") > 0 ? sign.substring(sign.lastIndexOf(".") + 1) : null;
+				String signId = sign.substring(0, (sign.length() - extension.length())-1);
+				swoUserExtends[i].setSign(signId + Community.IMAGE_TYPE_THUMB + "." + extension);
+			} else {
+				swoUserExtends[i].setSign(sign);
 			}
 
 			String locale = CommonUtil.toNotNull(swoUserExtends[i].getLocale());

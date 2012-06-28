@@ -52,6 +52,8 @@ public class SwoUser extends SwoObject {
 	public static final String A_RETIREE = "retiree";
 	public static final String A_MOBILENO = "mobileNo";
 	public static final String A_EXTENSIONNO = "extensionNo";
+	public static final String A_SIGN = "sign";
+	public static final String A_USESIGN = "useSign";
 
 	private String nickName;
 	private String password;
@@ -72,6 +74,8 @@ public class SwoUser extends SwoObject {
 	private String retiree;
 	private String mobileNo;
 	private String extensionNo;
+	private String sign;
+	private boolean useSign;
 
 	public SwoUser() {
 		super();
@@ -405,6 +409,18 @@ public class SwoUser extends SwoObject {
 	}
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
+	}
+	public String getSign() {
+		return sign;
+	}
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+	public boolean isUseSign() {
+		return useSign;
+	}
+	public void setUseSign(boolean useSign) {
+		this.useSign = useSign;
 	}
 
 }

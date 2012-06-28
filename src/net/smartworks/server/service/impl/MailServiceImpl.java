@@ -37,6 +37,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.mail.manager.IMailManager;
+import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
 import net.smartworks.server.service.ICommunityService;
@@ -481,8 +482,20 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			InboxController inCont = inFact.getInboxController();
 			inCont.checkEmail();
 
+			MailAccountCond mailAccountCond = new MailAccountCond();
+			mailAccountCond.setUserId(userId);
+			net.smartworks.server.engine.mail.model.MailAccount[] mailAccounts = getMailManager().getMailAccounts(userId, mailAccountCond, IManager.LEVEL_ALL);
+			if(CommonUtil.isEmpty(mailAccounts))
+				return null;
+
+			net.smartworks.server.engine.mail.model.MailAccount mailAccount = mailAccounts[0];
+
+			String username = null;
+			if(mailAccount != null)
+				username = mailAccount.getMailId() + "@" + mailAccount.getMailServerName();
+
 			MailContentCond mailContentCond = new MailContentCond();
-			mailContentCond.setUsername(userId);
+			mailContentCond.setUsername(username);
 			mailContentCond.setFolderId(Long.parseLong(folderId));
 
 			boolean unreadEmail = params.isUnreadEmail();
