@@ -316,10 +316,11 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #community_members .icon_pe {padding: 1px}
 
 #all_works li .menu_2dep li a, #my_works li .menu_2dep li a, #m_setting li .menu_2dep li a {padding:2px 0 2px 24px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-#my_works li .menu_2dep li a:hover, #m_setting li .menu_2dep li a:hover {display:block; background-color:#4e4e4e}
+#all_works li .menu_2dep li a:hover, #my_works li .menu_2dep li a:hover, #m_setting li .menu_2dep li a:hover {display:block; background-color:#4e4e4e}
 
 #all_works li .menu_2dep li div li a, #my_works li .menu_2dep li div li a, #m_setting li .menu_2dep li div li a {padding:2px 0 2px 34px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-#my_works li .menu_2dep li div li a:hover, #m_setting li .menu_2dep li div li a:hover {display:block; background-color:#4e4e4e}
+#all_works li .menu_2dep li div li a:hover, #my_works li .menu_2dep li div li a:hover, #m_setting li .menu_2dep li div li a:hover {display:block; background-color:#4e4e4e}
+.menu_2dep li {line-height:18px}
 
 /*Tab buttons */
 .tab_buttons {margin:0 2px 8px 0; height:20px; font-family:'돋움',Dotum; font-size: 11px; color:#c5c5c5; padding-top:2px}
