@@ -516,6 +516,18 @@ public interface IResourceDesigntimeDao {
 	 * @throws SmartServerRuntimeException
 	 */
 	public IPackageModel clonePackage(String userId, String categoryId, String packageId, int version) throws SmartServerRuntimeException;
+
+	/**
+	 * 패키지를 복사하여 붙입니다.
+	 * 
+	 * @param userId
+	 * @param categoryId
+	 * @param packageId
+	 * @param version
+	 * @return
+	 * @throws SmartServerRuntimeException
+	 */
+	public IPackageModel clonePackage(String userId, String categoryId, String targetPackageName, String targetPackageDesc, String packageId, int version) throws SmartServerRuntimeException;
 	
 	/**
 	 * 업무패키지를 업데이트한다.

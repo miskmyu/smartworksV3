@@ -113,6 +113,10 @@ public class ResourceDesigntimeManagerImpl implements IResourceDesigntimeManager
 		return resourceDesigntimeDao.clonePackage(userId, categoryId, packageId, version);
 	}
 
+	public IPackageModel clonePackage(String userId, String categoryId, String targetPackageName, String targetPackageDesc, String packageId, int version) throws SmartServerRuntimeException {
+		return resourceDesigntimeDao.clonePackage(userId, categoryId, targetPackageName, targetPackageDesc, packageId, version);
+	}
+	
 	public IPackageModel createPackage(String userId, String categoryId, IPackageModel pkg) throws SmartServerRuntimeException {
 		return this.resourceDesigntimeDao.createPackage(userId, categoryId, pkg);
 	}

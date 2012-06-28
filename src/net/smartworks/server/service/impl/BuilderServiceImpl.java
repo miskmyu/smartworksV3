@@ -612,8 +612,8 @@ public class BuilderServiceImpl implements IBuilderService {
 			//업무 그룹아이디가 넘어 온다면 카테고리 아이디가 의미가 없다 업무그룹아이디로 지정을 해놓으면 그 업무그룹이 상위
 			//카테고리아이디를 가지고 있기 때문
 			//현재 workGroupId 가 "없음" 이런식으로 넘어온다..아직 구현이 안되어 있는듯....
-//			if (!CommonUtil.isEmpty(workGroupId))
-//				pkg.setCategoryId(workGroupId);
+			if (!CommonUtil.isEmpty(workGroupId) && !workGroupId.equalsIgnoreCase("없음"))
+				pkg.setCategoryId(workGroupId);
 			pkg.setDescription(workDesc);
 			pkg.setName(workName);
 			
@@ -636,12 +636,62 @@ public class BuilderServiceImpl implements IBuilderService {
 		
 	}
 	public String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		String newWorkId = "";
+		
+		/*{
+			workId=pkg_61fbd7b05967490d97695ee0595cb7d6,
+			frmMoveWorkDefinition={
+						selWorkCategoryId=40288023382b729501382b890d530003, 
+						selWorkGroupId=없음, 
+						txtToWorkName=asd_복사본, 
+						txtaToWorkDesc=
+						}
+		}*/
+
+		String userId = SmartUtil.getCurrentUser().getId();
+		String workId = (String)requestBody.get("workId");
+		Map<String, Object> targetDefinition = (Map<String, Object>)requestBody.get("frmMoveWorkDefinition");
+		String targetCategoryId = (String)targetDefinition.get("selWorkCategoryId");
+		String targetWorkGroupId = (String)targetDefinition.get("selWorkGroupId");
+		String targetWorkName = CommonUtil.toNull((String)targetDefinition.get("txtToWorkName"));
+		String targetWorkDesc = CommonUtil.toNull((String)targetDefinition.get("txtaToWorkDesc"));
+
+		//업무 그룹아이디가 넘어 온다면 카테고리 아이디가 의미가 없다 업무그룹아이디로 지정을 해놓으면 그 업무그룹이 상위
+		//카테고리아이디를 가지고 있기 때문
+		//현재 workGroupId 가 "없음" 이런식으로 넘어온다..아직 구현이 안되어 있는듯....
+		if (!CommonUtil.isEmpty(targetWorkGroupId) && !targetWorkGroupId.equalsIgnoreCase("없음"))
+			targetCategoryId = targetWorkGroupId;
+
+		IPackageModel pkg = SwManagerFactory.getInstance().getDesigntimeManager().clonePackage(userId, targetCategoryId, targetWorkName, targetWorkDesc, workId, 1);
+		
+		String newWorkId = pkg.getPackageId();
 		return newWorkId;
 	}
 	@Override
 	public String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		String newWorkId = "";
-		return newWorkId;
+		
+		/*{
+			workId=pkg_61fbd7b05967490d97695ee0595cb7d6, 
+			frmMoveWorkDefinition={
+						selWorkCategoryId=52fca4b219fef4f50119ffcd871b0000, 
+						selWorkGroupId=없음
+						}
+		}*/
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		String workId = (String)requestBody.get("workId");
+		Map<String, Object> targetDefinition = (Map<String, Object>)requestBody.get("frmMoveWorkDefinition");
+		String targetCategoryId = (String)targetDefinition.get("selWorkCategoryId");
+		String targetWorkGroupId = (String)targetDefinition.get("selWorkGroupId");
+
+		//업무 그룹아이디가 넘어 온다면 카테고리 아이디가 의미가 없다 업무그룹아이디로 지정을 해놓으면 그 업무그룹이 상위
+		//카테고리아이디를 가지고 있기 때문
+		//현재 workGroupId 가 "없음" 이런식으로 넘어온다..아직 구현이 안되어 있는듯....
+		if (!CommonUtil.isEmpty(targetWorkGroupId) && !targetWorkGroupId.equalsIgnoreCase("없음"))
+			targetCategoryId = targetWorkGroupId;
+
+		SwManagerFactory.getInstance().getRuntimeManager().doMovePackageCategory(userId, workId, targetCategoryId);
+		
+		return workId;
+		
 	}
 }
