@@ -175,6 +175,7 @@ public class WorkServiceImpl implements IWorkService {
 			if(!CommonUtil.isEmpty(packageIdArray)) {
 				PkgPackageCond pkgCond = new PkgPackageCond();
 				pkgCond.setCompanyId(user.getCompanyId());
+				pkgCond.setStatus(PkgPackage.STATUS_DEPLOYED);
 				pkgCond.setPackageIdIns(packageIdArray);
 				pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_LITE);
 			}
