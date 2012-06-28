@@ -804,10 +804,16 @@ public class InstanceServiceImpl implements IInstanceService {
 						SwdDataField myDataField = new SwdDataField();
 						myDataField.setId(fieldId);
 						myDataField.setType(fieldType);
-						if (dataField != null)
-							myDataField.setValue(dataField.getValue());
+						if (dataField != null) {
+							myDataField.setValue(dataField.getValue() != null ? dataField.getValue().trim() : null);
 						//resultMap.put(fieldId, new SwdDataField());
-						
+							//if (field.getFormat().getType().equalsIgnoreCase("userField")) {
+								myDataField.setRefForm(dataField.getRefForm());
+								myDataField.setRefFormField(dataField.getRefFormField());
+								myDataField.setRefRecordId(dataField.getRefRecordId());
+							//}
+						}	
+							
 						long timeKey = oldRecord.getCreationDate().getTime();
 						if (!resultTreeMap.containsKey(timeKey)) {
 							resultTreeMap.put(timeKey, myDataField);
@@ -895,7 +901,7 @@ public class InstanceServiceImpl implements IInstanceService {
 											subDataField.setValue(null);
 											subDataField.setRefRecordId(null);
 										} else {
-											subDataField.setValue(subMappingDataField.getValue());
+											subDataField.setValue(subMappingDataField.getValue() != null ? subMappingDataField.getValue().trim() : null);
 											subDataField.setRefRecordId(subMappingDataField.getRefRecordId());
 										}
 										subDataFields[i] = subDataField;
@@ -920,7 +926,7 @@ public class InstanceServiceImpl implements IInstanceService {
 									dataField.setValue(null);
 									dataField.setRefRecordId(null);
 								} else {
-									dataField.setValue(mappingDataField.getValue());
+									dataField.setValue(mappingDataField.getValue() != null ? mappingDataField.getValue().trim() : null);
 									dataField.setRefRecordId(mappingDataField.getRefRecordId());
 								}
 								//setResultTreeMap
@@ -1140,7 +1146,7 @@ public class InstanceServiceImpl implements IInstanceService {
 											dataField.setId(field.getId());
 											//dataField.setType(field.getSystemType());
 											dataField.setType("ArrayOf_xsd_string");
-											dataField.setValue(oldRecord.getDataFieldValue(fieldId));
+											dataField.setValue(oldRecord.getDataFieldValue(fieldId) != null ? oldRecord.getDataFieldValue(fieldId).trim() : null);
 										} else {
 											dataField = toUserDataField(userId, oldRecord.getDataFieldValue(fieldId));
 										}
@@ -1150,14 +1156,14 @@ public class InstanceServiceImpl implements IInstanceService {
 											
 											if (oldRecord.getDataFieldValue(fieldId) != null &&  oldRecord.getDataFieldValue(fieldId) != "") {
 												if (oldRecord.getDataFieldValue(fieldId).equalsIgnoreCase(returnWebService[j])) 
-													dataField.setValue(returnWebService[j]);
+													dataField.setValue(returnWebService[j] != null ? returnWebService[j].trim() : null);
 											} 
 											
 											SwdDataField subDataField = new SwdDataField();
 											if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
 												subDataField.setId(field.getId());
 												subDataField.setType(field.getSystemType());
-												subDataField.setValue(returnWebService[j]);
+												subDataField.setValue(returnWebService[j] != null ? returnWebService[j].trim() : null);
 											} else {
 												subDataField = toUserDataField(userId, returnWebService[j]);
 											}
@@ -1165,7 +1171,7 @@ public class InstanceServiceImpl implements IInstanceService {
 										}
 										if (dataField.getValue() == null || dataField.getValue() == "") {
 											if (returnWebService.length != 0)
-												dataField.setValue(returnWebService[0]);
+												dataField.setValue(returnWebService[0] != null ? returnWebService[0].trim() : null);
 										}
 										dataField.setDataFields(subDataFields);
 										resultStack.push(dataField);
@@ -1175,7 +1181,7 @@ public class InstanceServiceImpl implements IInstanceService {
 										if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
 											dataField.setId(field.getId());
 											dataField.setType(field.getSystemType());
-											dataField.setValue(returnWebService[0]);
+											dataField.setValue(returnWebService[0] != null ? returnWebService[0].trim() : null);
 										} else {
 											dataField = toUserDataField(userId, returnWebService[0]);
 										}
