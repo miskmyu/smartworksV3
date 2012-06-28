@@ -103,7 +103,7 @@
 				<tr>
 					<td  class="required_label"><fmt:message key="builder.title.category_name" /></td>
 					<td>
-						<input name="txtCategoryName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(categoryName)%>">		
+						<input name="txtCategoryName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(categoryName)%>">
 					</td>
 				</tr>
 				<tr>
