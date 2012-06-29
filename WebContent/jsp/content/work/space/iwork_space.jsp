@@ -146,8 +146,8 @@
 				<div class="glo_btn_space">
 				
 					<div class="txt_btn task_information">
-					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
-					    <%if(numberOfHistories > 0){ %><div class="po_left"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
+					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
+					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
 					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
 					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
