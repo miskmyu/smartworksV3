@@ -277,9 +277,9 @@ a.icon_hide:hover {background: url("../../images/body_icon.png") no-repeat -28px
 a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px -571px; width:13px; height:13px; display: inline-block}
 
 /* CheckOption Nav */
-li.fvrt_item .check_option {display:none; position:absolute; margin-top:-22px; margin-left:210px}
+li.fvrt_item .check_option {display:none; position:absolute; margin-top:-25px; margin-left:163px}
 li.fvrt_item:hover .check_option {display:block}
-.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-left:-5px; margin-top:4px; height:16px; width:16px; float:right}
+.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
 .icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
 
 /* KeyOption Setting */
