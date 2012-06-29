@@ -30,6 +30,8 @@ CREATE TABLE sworguser (
 	lang varchar(20),
 	stdtime varchar(20),
 	picture varchar(50),
+	sign varchar(50),
+	useSign bit,
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),

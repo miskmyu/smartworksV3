@@ -16,7 +16,7 @@ public class SwoUserExtend {
 	}
 	
 	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String departmentName, String departmentDesc, String locale,
-			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, String phoneNo, String cellPhoneNo) {
+			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, boolean useSign, String sign, String phoneNo, String cellPhoneNo) {
 		this.id = id;
 		this.name = name;
 		this.nickName = nickName;
@@ -35,6 +35,8 @@ public class SwoUserExtend {
 		this.employeeId = employeeId;
 		this.email = email;
 		this.useMail = useMail;
+		this.useSign = useSign;
+		this.sign = sign;
 		this.phoneNo = phoneNo;
 		this.cellPhoneNo = cellPhoneNo;
 	}
@@ -58,6 +60,8 @@ public class SwoUserExtend {
 	private String employeeId = null;
 	private String email = null;
 	private boolean useMail = false;
+	private boolean useSign = false;
+	private String sign = null;
 	private String phoneNo = null;
 	private String cellPhoneNo = null;
 	private String type = null;
@@ -83,6 +87,18 @@ public class SwoUserExtend {
 	}
 	public void setUseMail(boolean useMail) {
 		this.useMail = useMail;
+	}
+	public boolean isUseSign() {
+		return useSign;
+	}
+	public void setUseSign(boolean useSign) {
+		this.useSign = useSign;
+	}
+	public String getSign() {
+		return sign;
+	}
+	public void setSign(String sign) {
+		this.sign = sign;
 	}
 	public String getPhoneNo() {
 		return phoneNo;

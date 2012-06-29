@@ -2450,7 +2450,9 @@ public class ModelConverter {
 		getWorkByPkgPackage(smartWork, pkg);
 		
 		setPolicyToWork(smartWork, getResourceIdByPkgPackage(pkg));
-		
+
+		smartWork.setCreater(getUserByUserId(pkg.getCreationUser()));
+		smartWork.setCreatedDate(new LocalDate(pkg.getCreationDate().getTime()));
 		smartWork.setLastModifier(getUserByUserId(pkg.getModificationUser()));
 		smartWork.setLastModifiedDate(new LocalDate(pkg.getModificationDate().getTime()));
 		

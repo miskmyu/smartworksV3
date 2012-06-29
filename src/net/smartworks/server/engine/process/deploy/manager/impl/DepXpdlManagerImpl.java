@@ -636,6 +636,8 @@ public class DepXpdlManagerImpl implements IDepManager {
 								approvalRequired = CommonUtil.toBoolean(attrValue);
 							} else if (attrName.equals("MeanTime")) {
 								taskDef.setDueDate((String)attrValue);
+							} else if (attrName.equals("SubjectFieldId")) {
+								taskDef.setExtendedPropertyValue("subjectFieldId", (String)attrValue);
 							}
 						}
 					}

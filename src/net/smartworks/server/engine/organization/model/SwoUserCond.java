@@ -48,6 +48,8 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_RETIREE = "retiree";
 	public static final String A_MOBILENO = "mobileNo";
 	public static final String A_EXTENSIONNO = "extensionNo";
+	public static final String A_SIGN = "sign";
+	public static final String A_USESIGN = "useSign";
 
 	private String nickName;
 	private String companyId;
@@ -70,6 +72,8 @@ public class SwoUserCond extends SwoObjectCond {
 	private String key;
 	private String lastName;
 	private Date lastModifiedTime;
+	private String sign;
+	private boolean useSign;
 
 	private String[] typeNotIns;
 	private String[] idIns;
@@ -444,6 +448,18 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setLastModifiedTime(Date lastModifiedTime) {
 		this.lastModifiedTime = lastModifiedTime;
+	}
+	public String getSign() {
+		return sign;
+	}
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+	public boolean isUseSign() {
+		return useSign;
+	}
+	public void setUseSign(boolean useSign) {
+		this.useSign = useSign;
 	}
 
 }

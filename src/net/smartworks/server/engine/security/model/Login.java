@@ -40,6 +40,8 @@ public class Login implements UserDetails {
 	private String authId;
 	private String bigPictureName;
 	private String smallPictureName;
+	private boolean useSign;
+	private String signPictureName;
 	private Collection<GrantedAuthority> authorities; // 권한
 
 	public String getId() {
@@ -179,6 +181,18 @@ public class Login implements UserDetails {
 	}
 	public void setSmallPictureName(String smallPictureName) {
 		this.smallPictureName = smallPictureName;
+	}
+	public boolean isUseSign() {
+		return useSign;
+	}
+	public void setUseSign(boolean useSign) {
+		this.useSign = useSign;
+	}
+	public String getSignPictureName() {
+		return signPictureName;
+	}
+	public void setSignPictureName(String signPictureName) {
+		this.signPictureName = signPictureName;
 	}
 	public Collection<GrantedAuthority> getAuthorities() {
 		return authorities;
