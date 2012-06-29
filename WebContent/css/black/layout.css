@@ -167,11 +167,11 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
-.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left 1px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
 .icon_cworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 20px; line-height:18px; float: left; height:17px}
 .icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
 .icon_gworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
-.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left 1px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
 .icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
 .icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
 .icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
@@ -376,7 +376,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .input_1line_first { height:21px; padding-bottom: 5px; position:relative} /* 한줄라인 input정보- 맨위줄*/
 .input_1line {overflow:hidden; width:100%; position:relative; margin:8px 0} /* 한줄라인 input정보 */
 
-.txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal}
+.txt_btn {font-family: Dotum; font-size: 11px; height: 16px; font-weight:normal}
 .txt_btn .po_right {float:right; margin-left:10px}
 .txt_btn .po_left {float:left; margin-right:10px}
 .txt_btn .po_left > span {line-height: 20px}
@@ -524,10 +524,11 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 /* Noice */
 .noti_pic {float:left; margin-right: 5px;margin-left: 3px}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
-.noti_in { margin-left:25px; line-height: 13px}
+.noti_in { margin-left:33px; line-height: 13px}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
 .noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
+.noti_in_m + div {line-height: 19px}
 .recent_notice { border-bottom:none !important}
 .recent_notice .end td {border-bottom:none !important}
 

@@ -52,7 +52,7 @@
 .required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat #ededed}
 .required_label span{padding-right:12px}
 
-.form_number_input {text-align:right; max-width:100%}
+.form_number_input input {text-align:right}
 .form_radio_btn
 .form_check_box
 .form_select_box {min-width:100px;}

@@ -74,10 +74,10 @@ function submitForms(e) {
 	<div class="form_title js_form_header">
 		<div class="icon_sworks title"><%=work.getFullpathName()%></div>
 		<div class="txt_btn">
-			<div class="po_right image_posi">
+			<div class="po_right">
 				<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
 			</div>
-			<div class="po_right image_posi">
+			<div class="po_right">
 				<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
 			</div>
 		</div>

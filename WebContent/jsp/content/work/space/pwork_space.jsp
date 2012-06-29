@@ -67,14 +67,14 @@
 	    <ul class="portlet_r" style="display: block;">		            
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
-	                <div class="noti_pic mr7 mb5"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></div>
-	                <div class="noti_in_bodytitle mb5">
-	                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
-	                    <span class="t_date"><%=instance.getCreatedDate().toLocalString()%></span>
-	                    <div class="">
-	                    	<span class="title_picico fl mr7"><%=instance.getSubject()%></span>
-	                    	<span class="icon_pworks t_date"> <%=work.getFullpathName() %></span> 
-	                    </div>
+	                <div class="noti_pic mr7"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></div>
+	                <div class="noti_in_bodytitle">
+	                    <div>
+		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
+		                    <span class="t_date"><%=instance.getCreatedDate().toLocalString()%></span>
+						</div>
+                    	<div class="title_picico"><%=instance.getSubject()%></div>
+                    	<div class="icon_pworks t_date"> <%=work.getFullpathName() %></div> 
 	                </div>
 		                    
 	            <!-- 우측 버튼-->
@@ -83,15 +83,13 @@
 	            </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
-				<div class="txt_btn image_posi fr">
-	                <div class="icon_print_w">
-	                	<a href="" title="<fmt:message key='common.button.print'/>"></a>
+				<div class="txt_btn fr">
+                	<a href="" title="<fmt:message key='common.button.print'/>"><div class="icon_print_w fr ml5"></div></a>
+                	<a href="" title="<fmt:message key='common.button.email'/>"> <div class="icon_mail_w fr"></div></a>
+	                <div class="cb pt3">
+	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
-	                <div class="icon_mail_w">
-	                	<a href="" title="<fmt:message key='common.button.email'/>"></a>
-	                </div>
-	                <div><a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a></div>
-	                <div style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>
+	                <div class="cb pt3" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>
 	            </div>
 	            <!-- 우측 버튼 -->
 		                    
