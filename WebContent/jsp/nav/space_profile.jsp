@@ -82,6 +82,8 @@
 		<li>
 			<div><b><%=thisDepartment.getName()%></b></div>
 			<div><fmt:message key="department.role.head" /> : <%=thisDepartment.getHead() == null ? "" : thisDepartment.getHead().getLongName()%></div>
+			<div><fmt:message key="department.subdepartment_count" /> : <%=thisDepartment.getNumberOfSubDepartment()%></div>
+			<div><fmt:message key="department.members_count" /> : <%=thisDepartment.getNumberOfMember()%></div>
 		</li>
 	<%
 	// 사용자인 경우....
