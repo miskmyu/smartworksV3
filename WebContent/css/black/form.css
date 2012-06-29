@@ -12,7 +12,7 @@
 .form_value, .form_value a span,
 .form_layout.con td, .boTb td {color: #555555 !important}
 .form_layout.con th, .boTb th {color: #23579E; vertical-align: top; font-weight: normal}
-.form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
+.form_layout td, .form_layout th {border-bottom: 1px solid #d6d6d6}
 
 /* File Upload */
 .form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
