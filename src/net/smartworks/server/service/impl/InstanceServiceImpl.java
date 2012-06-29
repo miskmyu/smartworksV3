@@ -804,10 +804,16 @@ public class InstanceServiceImpl implements IInstanceService {
 						SwdDataField myDataField = new SwdDataField();
 						myDataField.setId(fieldId);
 						myDataField.setType(fieldType);
-						if (dataField != null)
-							myDataField.setValue(dataField.getValue());
+						if (dataField != null) {
+							myDataField.setValue(dataField.getValue() != null ? dataField.getValue().trim() : null);
 						//resultMap.put(fieldId, new SwdDataField());
-						
+							//if (field.getFormat().getType().equalsIgnoreCase("userField")) {
+								myDataField.setRefForm(dataField.getRefForm());
+								myDataField.setRefFormField(dataField.getRefFormField());
+								myDataField.setRefRecordId(dataField.getRefRecordId());
+							//}
+						}	
+							
 						long timeKey = oldRecord.getCreationDate().getTime();
 						if (!resultTreeMap.containsKey(timeKey)) {
 							resultTreeMap.put(timeKey, myDataField);
@@ -895,7 +901,7 @@ public class InstanceServiceImpl implements IInstanceService {
 											subDataField.setValue(null);
 											subDataField.setRefRecordId(null);
 										} else {
-											subDataField.setValue(subMappingDataField.getValue());
+											subDataField.setValue(subMappingDataField.getValue() != null ? subMappingDataField.getValue().trim() : null);
 											subDataField.setRefRecordId(subMappingDataField.getRefRecordId());
 										}
 										subDataFields[i] = subDataField;
@@ -920,7 +926,7 @@ public class InstanceServiceImpl implements IInstanceService {
 									dataField.setValue(null);
 									dataField.setRefRecordId(null);
 								} else {
-									dataField.setValue(mappingDataField.getValue());
+									dataField.setValue(mappingDataField.getValue() != null ? mappingDataField.getValue().trim() : null);
 									dataField.setRefRecordId(mappingDataField.getRefRecordId());
 								}
 								//setResultTreeMap
@@ -1140,7 +1146,7 @@ public class InstanceServiceImpl implements IInstanceService {
 											dataField.setId(field.getId());
 											//dataField.setType(field.getSystemType());
 											dataField.setType("ArrayOf_xsd_string");
-											dataField.setValue(oldRecord.getDataFieldValue(fieldId));
+											dataField.setValue(oldRecord.getDataFieldValue(fieldId) != null ? oldRecord.getDataFieldValue(fieldId).trim() : null);
 										} else {
 											dataField = toUserDataField(userId, oldRecord.getDataFieldValue(fieldId));
 										}
@@ -1150,14 +1156,14 @@ public class InstanceServiceImpl implements IInstanceService {
 											
 											if (oldRecord.getDataFieldValue(fieldId) != null &&  oldRecord.getDataFieldValue(fieldId) != "") {
 												if (oldRecord.getDataFieldValue(fieldId).equalsIgnoreCase(returnWebService[j])) 
-													dataField.setValue(returnWebService[j]);
+													dataField.setValue(returnWebService[j] != null ? returnWebService[j].trim() : null);
 											} 
 											
 											SwdDataField subDataField = new SwdDataField();
 											if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
 												subDataField.setId(field.getId());
 												subDataField.setType(field.getSystemType());
-												subDataField.setValue(returnWebService[j]);
+												subDataField.setValue(returnWebService[j] != null ? returnWebService[j].trim() : null);
 											} else {
 												subDataField = toUserDataField(userId, returnWebService[j]);
 											}
@@ -1165,7 +1171,7 @@ public class InstanceServiceImpl implements IInstanceService {
 										}
 										if (dataField.getValue() == null || dataField.getValue() == "") {
 											if (returnWebService.length != 0)
-												dataField.setValue(returnWebService[0]);
+												dataField.setValue(returnWebService[0] != null ? returnWebService[0].trim() : null);
 										}
 										dataField.setDataFields(subDataFields);
 										resultStack.push(dataField);
@@ -1175,7 +1181,7 @@ public class InstanceServiceImpl implements IInstanceService {
 										if (fieldFormat == null || !"userField".equals(fieldFormat.getType())) {
 											dataField.setId(field.getId());
 											dataField.setType(field.getSystemType());
-											dataField.setValue(returnWebService[0]);
+											dataField.setValue(returnWebService[0] != null ? returnWebService[0].trim() : null);
 										} else {
 											dataField = toUserDataField(userId, returnWebService[0]);
 										}
@@ -1682,171 +1688,16 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setAccessLevel(accessLevel);
 				obj.setAccessValue(accessValue);
 			}
-			
-			//참조 업무 데이터 생성
-			
-			if (frmTaskForwardMap != null) {
-				
-				keySet = frmTaskForwardMap.keySet();
-				itr = keySet.iterator();
-	
-				String txtForwardSubject = null;
-				String txtForwardComments = null;
-				String txtForwardForwardee = null;
-	
-				while (itr.hasNext()) {
-					String fieldId = (String)itr.next();
-					Object fieldValue = frmTaskForwardMap.get(fieldId);
-					if (fieldValue instanceof LinkedHashMap) {
-						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
-						users = (ArrayList<Map<String,String>>)valueMap.get("users");
-						if(!CommonUtil.isEmpty(users)) {
-							String symbol = ";";
-							if(users.size() == 1) {
-								txtForwardForwardee = users.get(0).get("id");
-							} else {
-								txtForwardForwardee = "";
-								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
-									Map<String, String> user = users.get(i);
-									txtForwardForwardee += user.get("id") + symbol;
-								}
-							}
-						}
-					} else if(fieldValue instanceof String) {
-						if(fieldId.equals("txtForwardSubject")) {
-							txtForwardSubject = (String)fieldValue;
-						} else if(fieldId.equals("txtForwardComments")) {
-							txtForwardComments = (String)fieldValue;
-						} 
-					}
-				}
-				obj.setExtendedAttributeValue("txtForwardSubject", txtForwardSubject);
-				obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
-				obj.setExtendedAttributeValue("txtForwardComments", txtForwardComments);
-			}
-			
-			// 전자결재 업무 생성
-			
-			//전자 결재 정보를 바탕으로 approvalLine 을 생성한다
-			
+
 			String recId = obj.getRecordId();
 			if (CommonUtil.isEmpty(recId)) {
 				recId = CommonUtil.newId();
 				obj.setRecordId(recId);
 			}
 			
-			Map<String, Object> frmApprovalLine = (Map<String, Object>)requestBody.get("frmApprovalLine");
-		
-			if (frmApprovalLine != null) {
-				Iterator appLineItr = frmApprovalLine.keySet().iterator();
-				
-				String hdnApprovalLineId = null;
-				Map<String, Map<String, String>> appLineSortingMap = new HashMap<String, Map<String, String>>();
-				while (appLineItr.hasNext()) {
-					String key = (String)appLineItr.next();
-					if (key.equalsIgnoreCase("hdnApprovalLineId")) {
-						hdnApprovalLineId = (String)frmApprovalLine.get(key);
-						continue;
-					}
-					//key - usrLevelApprover1, usrLevelApprover2, usrLevelApprover3 ......
-					String keyIndex = StringUtils.replace(key, "usrLevelApprover", "");
-					Object value = frmApprovalLine.get(key);
-					
-					if (value instanceof String) {
-						Map userMap = new HashMap();
-						userMap.put("id", (String)value);
-						appLineSortingMap.put(keyIndex, userMap);
-					} else if (value instanceof LinkedHashMap) {
-						Map<String, Object> valueMap = (Map<String, Object>)value;
-						ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)valueMap.get("users");
-						if(!CommonUtil.isEmpty(userArray)) {
-							
-							Map userMap = new HashMap();
-							userMap.put("id", (String)userArray.get(0).get("id"));
-							userMap.put("name", (String)userArray.get(0).get("name"));
-							appLineSortingMap.put(keyIndex, userMap);
-						}
-					}
-				}
-				
-				Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
-				String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
-				String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
-				
-				//TODO 전자결재 참조업무 생성
-//				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
-//				ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
-				
-				if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
-
-					AprApprovalLine apprLine = new AprApprovalLine();
-					
-					AprApprovalDef[] aprAprDefs  = null;
-					if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level")) {
-						ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
-						Approval[] aprs = aprline.getApprovals();
-						aprAprDefs = new AprApprovalDef[aprs.length];
-						for (int i = 0; i < aprs.length; i++) {
-							aprAprDefs[i] = new AprApprovalDef();
-							aprAprDefs[i].setName(aprs[i].getName());
-							aprAprDefs[i].setType(aprs[i].getApproverType() + "");
-						}
-						apprLine.setName(aprline.getName());
-					} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
-						ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
-						Approval[] aprs = aprline.getApprovals();
-						aprAprDefs = new AprApprovalDef[aprs.length];
-						for (int i = 0; i < aprs.length; i++) {
-							aprAprDefs[i] = new AprApprovalDef();
-							aprAprDefs[i].setName(aprs[i].getName());
-							aprAprDefs[i].setType(aprs[i].getApproverType() + "");
-						};
-						apprLine.setName(aprline.getName());
-					} else {
-						AprApprovalLineDef aprAprLineDef = getAprManager().getApprovalLineDef(userId, hdnApprovalLineId, IManager.LEVEL_ALL);
-						aprAprDefs = aprAprLineDef.getApprovalDefs();
-						apprLine.setName(aprAprLineDef.getName());
-					}
-					
-					apprLine.setStatus("created");
-
-					AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
-					
-					for (int i = 1; i <= appLineSortingMap.size(); i++) {
-						
-						Map userMap = appLineSortingMap.get(i+"");
-						String id = (String)userMap.get("id");
-						String name = (String)userMap.get("name");
-
-						AprApproval apr = new AprApproval();
-						apr.setName(aprAprDefs[i-1].getName());
-						apr.setType(aprAprDefs[i-1].getType());
-						apr.setApprover(id);
-						apr.setMandatory(true);
-						apr.setModifiable(true);
-						apr.setCreationDate(new LocalDate());
-						apr.setCreationUser(id);
-						
-						approvals[i-1] = apr;
-					}
-					apprLine.setApprovals(approvals);
-					apprLine.setExtendedPropertyValue("recordId", recId);
-					apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
-					apprLine.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
-					
-					//참조한 approvallindef 가 있다면 그아이디를 입력한다
-					apprLine.setRefAppLineDefId(hdnApprovalLineId);					
-
-					obj.setExtendedAttributeValue("txtApprovalSubject", txtApprovalSubject);
-					obj.setExtendedAttributeValue("txtApprovalComments", txtApprovalComments);
-					obj.setExtendedAttributeValue("refAppLineDefId", hdnApprovalLineId);
-					
-					getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
-					obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
-				}
-			}
-			// 전자결재 업무 끝
-
+			//참조 업무, 승인 업무 데이터 생성
+			setReferenceApprovalToRecord(userId, obj, requestBody);
+			
 			//TODO 좋은방법이 멀까?
 			String servletPath = request.getServletPath();
 			if(servletPath.equals("/upload_new_picture.sw")) {
@@ -2425,13 +2276,353 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	private void setReferenceApprovalToRecord(String userId, SwdRecord obj, Map<String, Object> requestBody) throws Exception {
 
+		Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
+		Map<String, Object> frmApprovalLine = (Map<String, Object>)requestBody.get("frmApprovalLine");
+		
+		List<Map<String, String>> users = null;
+		
+		if (frmTaskForwardMap != null) {
+			
+			Set<String> keySet = frmTaskForwardMap.keySet();
+			Iterator itr = keySet.iterator();
+
+			String txtForwardSubject = null;
+			String txtForwardComments = null;
+			String txtForwardForwardee = null;
+
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmTaskForwardMap.get(fieldId);
+				if (fieldValue instanceof LinkedHashMap) {
+					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+					users = (ArrayList<Map<String,String>>)valueMap.get("users");
+					if(!CommonUtil.isEmpty(users)) {
+						String symbol = ";";
+						if(users.size() == 1) {
+							txtForwardForwardee = users.get(0).get("id");
+						} else {
+							txtForwardForwardee = "";
+							for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+								Map<String, String> user = users.get(i);
+								txtForwardForwardee += user.get("id") + symbol;
+							}
+						}
+					}
+				} else if(fieldValue instanceof String) {
+					if(fieldId.equals("txtForwardSubject")) {
+						txtForwardSubject = (String)fieldValue;
+					} else if(fieldId.equals("txtForwardComments")) {
+						txtForwardComments = (String)fieldValue;
+					} 
+				}
+			}
+			obj.setExtendedAttributeValue("txtForwardSubject", txtForwardSubject);
+			obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+			obj.setExtendedAttributeValue("txtForwardComments", txtForwardComments);
+		
+		} else if (frmApprovalLine != null) {
+			Iterator appLineItr = frmApprovalLine.keySet().iterator();
+			
+			String hdnApprovalLineId = null;
+			Map<String, Map<String, String>> appLineSortingMap = new HashMap<String, Map<String, String>>();
+			while (appLineItr.hasNext()) {
+				String key = (String)appLineItr.next();
+				if (key.equalsIgnoreCase("hdnApprovalLineId")) {
+					hdnApprovalLineId = (String)frmApprovalLine.get(key);
+					continue;
+				}
+				//key - usrLevelApprover1, usrLevelApprover2, usrLevelApprover3 ......
+				String keyIndex = StringUtils.replace(key, "usrLevelApprover", "");
+				Object value = frmApprovalLine.get(key);
+				
+				if (value instanceof String) {
+					Map userMap = new HashMap();
+					userMap.put("id", (String)value);
+					appLineSortingMap.put(keyIndex, userMap);
+				} else if (value instanceof LinkedHashMap) {
+					Map<String, Object> valueMap = (Map<String, Object>)value;
+					ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)valueMap.get("users");
+					if(!CommonUtil.isEmpty(userArray)) {
+						
+						Map userMap = new HashMap();
+						userMap.put("id", (String)userArray.get(0).get("id"));
+						userMap.put("name", (String)userArray.get(0).get("name"));
+						appLineSortingMap.put(keyIndex, userMap);
+					}
+				}
+			}
+			
+			Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
+			String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
+			String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
+			
+			//TODO 전자결재 참조업무 생성
+//			Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
+//			ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+			
+			if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
+
+				AprApprovalLine apprLine = new AprApprovalLine();
+				
+				AprApprovalDef[] aprAprDefs  = null;
+				if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level")) {
+					ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+					Approval[] aprs = aprline.getApprovals();
+					aprAprDefs = new AprApprovalDef[aprs.length];
+					for (int i = 0; i < aprs.length; i++) {
+						aprAprDefs[i] = new AprApprovalDef();
+						aprAprDefs[i].setName(aprs[i].getName());
+						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+					}
+					apprLine.setName(aprline.getName());
+				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
+					ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
+					Approval[] aprs = aprline.getApprovals();
+					aprAprDefs = new AprApprovalDef[aprs.length];
+					for (int i = 0; i < aprs.length; i++) {
+						aprAprDefs[i] = new AprApprovalDef();
+						aprAprDefs[i].setName(aprs[i].getName());
+						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+					};
+					apprLine.setName(aprline.getName());
+				} else {
+					AprApprovalLineDef aprAprLineDef = getAprManager().getApprovalLineDef(userId, hdnApprovalLineId, IManager.LEVEL_ALL);
+					aprAprDefs = aprAprLineDef.getApprovalDefs();
+					apprLine.setName(aprAprLineDef.getName());
+				}
+				
+				apprLine.setStatus("created");
+
+				AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
+				
+				for (int i = 1; i <= appLineSortingMap.size(); i++) {
+					
+					Map userMap = appLineSortingMap.get(i+"");
+					String id = (String)userMap.get("id");
+					String name = (String)userMap.get("name");
+
+					AprApproval apr = new AprApproval();
+					apr.setName(aprAprDefs[i-1].getName());
+					apr.setType(aprAprDefs[i-1].getType());
+					apr.setApprover(id);
+					apr.setMandatory(true);
+					apr.setModifiable(true);
+					apr.setCreationDate(new LocalDate());
+					apr.setCreationUser(id);
+					
+					approvals[i-1] = apr;
+				}
+				apprLine.setApprovals(approvals);
+				apprLine.setExtendedPropertyValue("recordId", obj.getRecordId());
+				apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+				apprLine.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
+				
+				//참조한 approvallindef 가 있다면 그아이디를 입력한다
+				apprLine.setRefAppLineDefId(hdnApprovalLineId);					
+
+				obj.setExtendedAttributeValue("txtApprovalSubject", txtApprovalSubject);
+				obj.setExtendedAttributeValue("txtApprovalComments", txtApprovalComments);
+				obj.setExtendedAttributeValue("refAppLineDefId", hdnApprovalLineId);
+				
+				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+				obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+			}
+		}
+	}
+	private void setReferenceApprovalToTask(String userId, TskTask obj, Map<String, Object> requestBody) throws Exception {
+		
+		Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
+		Map<String, Object> frmApprovalLine = (Map<String, Object>)requestBody.get("frmApprovalLine");
+		
+		List<Map<String, String>> users = null;
+		
+		if (frmTaskForwardMap != null) {
+			
+			Set<String> keySet = frmTaskForwardMap.keySet();
+			Iterator itr = keySet.iterator();
+
+			String txtForwardSubject = null;
+			String txtForwardComments = null;
+			String txtForwardForwardee = null;
+
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmTaskForwardMap.get(fieldId);
+				if (fieldValue instanceof LinkedHashMap) {
+					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+					users = (ArrayList<Map<String,String>>)valueMap.get("users");
+					if(!CommonUtil.isEmpty(users)) {
+						String symbol = ";";
+						if(users.size() == 1) {
+							txtForwardForwardee = users.get(0).get("id");
+						} else {
+							txtForwardForwardee = "";
+							for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+								Map<String, String> user = users.get(i);
+								txtForwardForwardee += user.get("id") + symbol;
+							}
+						}
+					}
+				} else if(fieldValue instanceof String) {
+					if(fieldId.equals("txtForwardSubject")) {
+						txtForwardSubject = (String)fieldValue;
+					} else if(fieldId.equals("txtForwardComments")) {
+						txtForwardComments = (String)fieldValue;
+					} 
+				}
+			}
+			
+			obj.setExtendedAttributeValue("subject", txtForwardSubject);
+			obj.setExtendedAttributeValue("referenceUser", txtForwardForwardee);
+			obj.setExtendedAttributeValue("workContents", txtForwardComments);
+		
+		} else if (frmApprovalLine != null) {
+			Iterator appLineItr = frmApprovalLine.keySet().iterator();
+			
+			String hdnApprovalLineId = null;
+			Map<String, Map<String, String>> appLineSortingMap = new HashMap<String, Map<String, String>>();
+			while (appLineItr.hasNext()) {
+				String key = (String)appLineItr.next();
+				if (key.equalsIgnoreCase("hdnApprovalLineId")) {
+					hdnApprovalLineId = (String)frmApprovalLine.get(key);
+					continue;
+				}
+				//key - usrLevelApprover1, usrLevelApprover2, usrLevelApprover3 ......
+				String keyIndex = StringUtils.replace(key, "usrLevelApprover", "");
+				Object value = frmApprovalLine.get(key);
+				
+				if (value instanceof String) {
+					Map userMap = new HashMap();
+					userMap.put("id", (String)value);
+					appLineSortingMap.put(keyIndex, userMap);
+				} else if (value instanceof LinkedHashMap) {
+					Map<String, Object> valueMap = (Map<String, Object>)value;
+					ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)valueMap.get("users");
+					if(!CommonUtil.isEmpty(userArray)) {
+						
+						Map userMap = new HashMap();
+						userMap.put("id", (String)userArray.get(0).get("id"));
+						userMap.put("name", (String)userArray.get(0).get("name"));
+						appLineSortingMap.put(keyIndex, userMap);
+					}
+				}
+			}
+			
+			Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
+			String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
+			String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
+			
+			//TODO 전자결재 참조업무 생성
+//			Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
+//			ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+			
+			if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
+
+				AprApprovalLine apprLine = new AprApprovalLine();
+				
+				AprApprovalDef[] aprAprDefs  = null;
+				if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level")) {
+					ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+					Approval[] aprs = aprline.getApprovals();
+					aprAprDefs = new AprApprovalDef[aprs.length];
+					for (int i = 0; i < aprs.length; i++) {
+						aprAprDefs[i] = new AprApprovalDef();
+						aprAprDefs[i].setName(aprs[i].getName());
+						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+					}
+					apprLine.setName(aprline.getName());
+				} else if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
+					ApprovalLine aprline = ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
+					Approval[] aprs = aprline.getApprovals();
+					aprAprDefs = new AprApprovalDef[aprs.length];
+					for (int i = 0; i < aprs.length; i++) {
+						aprAprDefs[i] = new AprApprovalDef();
+						aprAprDefs[i].setName(aprs[i].getName());
+						aprAprDefs[i].setType(aprs[i].getApproverType() + "");
+					};
+					apprLine.setName(aprline.getName());
+				} else {
+					AprApprovalLineDef aprAprLineDef = getAprManager().getApprovalLineDef(userId, hdnApprovalLineId, IManager.LEVEL_ALL);
+					aprAprDefs = aprAprLineDef.getApprovalDefs();
+					apprLine.setName(aprAprLineDef.getName());
+				}
+				
+				apprLine.setStatus("created");
+
+				AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
+				
+				for (int i = 1; i <= appLineSortingMap.size(); i++) {
+					
+					Map userMap = appLineSortingMap.get(i+"");
+					String id = (String)userMap.get("id");
+					String name = (String)userMap.get("name");
+
+					AprApproval apr = new AprApproval();
+					apr.setName(aprAprDefs[i-1].getName());
+					apr.setType(aprAprDefs[i-1].getType());
+					apr.setApprover(id);
+					apr.setMandatory(true);
+					apr.setModifiable(true);
+					apr.setCreationDate(new LocalDate());
+					apr.setCreationUser(id);
+					
+					approvals[i-1] = apr;
+				}
+				apprLine.setApprovals(approvals);
+				apprLine.setExtendedPropertyValue("recordId", obj.getObjId());
+				apprLine.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+				apprLine.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
+				
+				//참조한 approvallindef 가 있다면 그아이디를 입력한다
+				apprLine.setRefAppLineDefId(hdnApprovalLineId);					
+
+				obj.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
+				obj.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+				obj.setExtendedPropertyValue("refAppLineDefId", hdnApprovalLineId);
+				
+				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
+				obj.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
+			}
+		}
+	}
 	@Override
 	public String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
 			"workId":"pkg_cf3b0087995f4f99a41c93e2fe95b22d",
 			"formId":"frm_c19b1fe4bceb4732acbb8a4cd2a57474",
 			"formName":"기안품의",
+			 frmTaskForward=   {
+							      txtForwardSubject=전달 제목입니다.,
+							      txtForwardComments=전달 내용입니다.,
+							      txtForwardForwardee= {
+												         users= [
+														            {
+														               id=kmyu@maninsoft.co.kr,
+														               name=선임 유광민
+														            }
+												         		]
+							      						}
+		     },
+		        frmApprovalLine=   {
+								      hdnApprovalLineId=system.approvalLine.default.3level,
+								      usrLevelApprover1=kmyu@maninsoft.co.kr,
+								      usrLevelApprover2=kmyu@maninsoft.co.kr,
+								      usrLevelApprover3=kmyu@maninsoft.co.kr
+								   },
+			   frmTaskApproval=   {
+			      txtApprovalSubject=전자 결재 제목,
+			      txtApprovalComments=전자결재 제목,
+			      txtApprovalForwardee=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      }
+			   },
 			"frmSmartForm":
 				{
 					"4":
@@ -2495,7 +2686,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			Property[] extProps = new Property[] {new Property("processId", processId), new Property("startActivity", "true")};
 			TskTaskDefCond taskCond = new TskTaskDefCond();
 			taskCond.setExtendedProperties(extProps);
-			TskTaskDef[] taskDefs = getTskManager().getTaskDefs(userId, taskCond, IManager.LEVEL_LITE);
+			TskTaskDef[] taskDefs = getTskManager().getTaskDefs(userId, taskCond, IManager.LEVEL_ALL);
 			if (CommonUtil.isEmpty(taskDefs))
 				throw new Exception(new StringBuffer("No start activity. -> processId:").append(processId).toString());
 			TskTaskDef taskDef = taskDefs[0];
@@ -2534,26 +2725,28 @@ public class InstanceServiceImpl implements IInstanceService {
 				taskDocument = recordObj.toString();
 				fileGroupMap = recordObj.getFileGroupMap();
 			}
-
-			//TODO 참조자, 전자결재, 연결업무 정보를 셋팅한다
 			
 			String title = null;
-			if (requiredFieldIdList.size() != 0) {
-				for (int i = 0; i < requiredFieldIdList.size(); i++) {
-					String temp = recordObj.getDataFieldValue((String)requiredFieldIdList.get(i));
-					if (!CommonUtil.isEmpty(temp)) {
-						title = temp;
-						break;
-					}
-				}
+			if (!CommonUtil.isEmpty(taskDef.getExtendedPropertyValue("subjectFieldId"))) {
+				title = CommonUtil.toNotNull(recordObj.getDataFieldValue(taskDef.getExtendedPropertyValue("subjectFieldId")));
 			} else {
-				for (int i = 0; i < textInputFieldIdList.size(); i++) {
-					String temp = recordObj.getDataFieldValue((String)textInputFieldIdList.get(i));
-					if (!CommonUtil.isEmpty(temp)) {
-						title = temp;
-						break;
+				if (requiredFieldIdList.size() != 0) {
+					for (int i = 0; i < requiredFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)requiredFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
 					}
-					
+				} else {
+					for (int i = 0; i < textInputFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)textInputFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
+						
+					}
 				}
 			}
 			
@@ -2627,6 +2820,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				expectEndDate.setTime(new LocalDate(now.getTime() + 1800000).getTime());
 			}
 			task.setExpectEndDate(expectEndDate);
+			
+			//참조자, 전자결재, 연결업무 정보를 셋팅한다
+			setReferenceApprovalToTask(userId, task, requestBody);
+			
+			//태스크를 실행하며 프로세스업무를 실행한다
 			task = getTskManager().executeTask(userId, task, "execute");
 
 			String taskInstId = task.getObjId();

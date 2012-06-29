@@ -1,23 +1,26 @@
 @charset "utf-8";
 /* CSS Document */
 .form_layout {padding:10px}
-.form_layout .form_col {padding:0 10px !important; line-height: 22px}
-.form_layout .form_label, .form_layout .form_value {margin:4px 0 0 0 !important}
+.form_layout .form_col {}
+.form_layout .form_label, .form_layout .form_value {padding:4px 0 0 0 !important}
 .form_label, .form_value {float:left}
-.form_label {color:#23579e}
-.form_value input[type="text"] {width:100%}
-.form_value textarea {width:99.8% !important}
+.form_label {color:#23579e; background-color:#ededed}
+.form_label > span {margin:0 5px}
+.form_value > * {margin:0 5px}
+.form_value input[type="text"] {width:95%}
+.form_value textarea {width:97.4% !important; margin-bottom: 4px}
+.form_value iframe {width:98%}
 .form_value, .form_value a span,
 .form_layout.con td, .boTb td {color: #555555 !important}
 .form_layout.con th, .boTb th {color: #23579E; vertical-align: top; font-weight: normal}
-.form_layout td, .form_layout th {border-bottom: 1px dotted #DCDFE0}
+.form_layout td, .form_layout th {border: 1px dotted #c7c7c7}
 
 /* File Upload */
 .form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
 .form_col iframe {margin-bottom:4px}
 
 /* Up Load Box */
-.form_col {padding:0 3px}
+.form_col {padding:0; line-height:23px}
 .form_label, .form_value {margin:1px 0}
 
 /* 상세필터 */
@@ -34,6 +37,7 @@
 .form_date_input {width:80px !important} /*date input 사이즈, 상세필터 공용*/
 .form_time_input {width:60px !important} /*time input 사이즈, 상세필터 공용*/
 .form_datetime_input {width:120px !important}
+.form_date_input input[type="text"], .form_time_input input[type="text"], .form_datetime_input input[type="text"], .icon_fb_space input[type="text"] {width:100%}
 
 /* .form_text_input {max-width:300px;}
 .form_datetime_input {width:300px;}
@@ -45,10 +49,10 @@
 
 /* label check icon add */
 .icon_required{background: url("../../images/icon_check.png") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
-.required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat transparent}
+.required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat #ededed}
 .required_label span{padding-right:12px}
 
-.form_number_input {text-align:right; max-width:100%}
+.form_number_input input {text-align:right}
 .form_radio_btn
 .form_check_box
 .form_select_box {min-width:100px;}

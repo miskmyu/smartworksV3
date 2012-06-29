@@ -77,7 +77,7 @@
 
 			<!-- 컨텐츠 -->
 			<div class="contents_space">			
-				<div class="space_section mt10 js_space_timeline">
+				<div class="space_section js_space_timeline">
 					<div class="title"><fmt:message key="common.title.work_timeline"/></div>
 
 					<ul>

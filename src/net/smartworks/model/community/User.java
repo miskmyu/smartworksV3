@@ -149,7 +149,7 @@ public class User extends WorkSpace {
 		this.useSignPicture = useSignPicture;
 	}
 	public String getSignPicture() {
-		return signPicture;
+		return super.getPath() + this.signPicture;
 	}
 	public void setSignPicture(String signPicture) {
 		this.signPicture = signPicture;

@@ -104,10 +104,10 @@ function submitForms(e) {
 
 		<!-- 전자결재, 업무전달 버튼들 -->
 		<div class="txt_btn">
-			<div class="fr image_pos">
+			<div class="fr">
 				<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
 			</div>
-			<div class="fr image_pos">
+			<div class="fr">
 				<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
 			</div>
 		</div>

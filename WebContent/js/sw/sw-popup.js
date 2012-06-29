@@ -76,9 +76,9 @@ smartPop = {
 						'</div>' +
 						'<div class="smartp_btn_space">' +
 							'<div class="fr">' +
-								'<a href="" class="js_send_mail_to_user" userId="' + userId + '"><span class="pop_icon_mail"></span></a>' +
-								'<a href="" class="js_leave_message_for_user" userId="' + userId + '"><span class="pop_icon_message"></span></a>' + 
-								'<a href="" class="js_start_chat_with_user" userId="' + userId + '"><span class="pop_icon_chat"></span></a>' +
+								'<span class="pop_icon_mail"><a href="" class="js_send_mail_to_user" userId="' + userId + '"></a></span>' +
+								'<span class="pop_icon_message"><a href="" class="js_leave_message_for_user" userId="' + userId + '"></a></span>' + 
+								'<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="' + userId + '"></a></span>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -654,7 +654,15 @@ smartPop = {
 						smartPop.close();
 						return false;
 					});
-					$('.js_close_new_category').focus();
+					$('input[name="txtCategoryName"]').focus();
+					$('input[name="txtCategoryName"]').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            return false;
+				        }
+				    });
+					/*$('.js_close_new_category').focus();
 					$('.js_close_new_category').keypress(function (e) {
 						var e = window.event || e;
 						var keyCode = e.which || e.keyCode;
@@ -664,7 +672,7 @@ smartPop = {
 				        } else {
 				            return true;
 				        }
-				    });
+				    });*/
 				}
 			});
 		});

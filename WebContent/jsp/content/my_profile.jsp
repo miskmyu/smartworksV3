@@ -209,7 +209,7 @@
 							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
 								<td  class="required_label"><fmt:message key="profile.title.email.id" /></td>
 								<td>
-										<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName())%>" title="">
+										<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName()).split("@")[0]%>" title="">
 										@
 										<select style="width:45%" name="selUserProfileEmailServerName" class="fieldline">
 											<%

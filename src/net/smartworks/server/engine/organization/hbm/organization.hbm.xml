@@ -83,6 +83,8 @@
 		<property name="timeZone" type="string" length="20"/>
 		<property name="stdTime" type="string" length="20"/>
 		<property name="picture" type="string" length="50"/>
+		<property name="useSign" type="boolean"/>
+		<property name="sign" type="string" length="50"/>
 		<property name="retiree" type="string" length="50"/>
 		<property name="mobileNo" type="string" length="50"/>
 		<property name="extensionNo" column="internalNo" type="string" length="50"/>

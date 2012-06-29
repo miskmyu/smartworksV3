@@ -44,7 +44,7 @@
 					
 					<a href="<%=targetContent%>?cid=<%=workContext%>" class="<%=classType%>">
 						<span class="<%=work.getIconClass()%>"></span>
-						<span  class="mt3"><%=work.getName()%></span>
+						<span><%=work.getName()%></span>
 					</a>
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
@@ -80,7 +80,7 @@
 				<li class="js_drill_down group_action_item">
 					<a href="<%=targetContent%>" categoryId="<%=work.getId()%>">
 						<span class="<%=work.getIconClass()%>"></span>
-						<span class="mt3"><%=work.getName()%></span>
+						<span><%=work.getName()%></span>
 					</a>
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){

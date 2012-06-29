@@ -45,6 +45,7 @@
 					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
 					content = task.getContent();
+					taskInstId = task.getId();
 					break;
 				}
 			}

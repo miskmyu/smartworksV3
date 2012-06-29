@@ -454,7 +454,8 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		return cloneForm(userId, formId, version, toPkgId, toPkgVer, null);
 	}
 	
-	public IPackageModel clonePackage(String userId, String categoryId, String packageId, int version) throws SmartServerRuntimeException {
+	public IPackageModel clonePackage(String userId, String categoryId, String targetPackageName, String targetPackageDesc, String packageId, int version) throws SmartServerRuntimeException {
+
 		IPackageModel obj = this.retrievePackage(packageId, version);
 		if (obj == null)
 			return null;
@@ -499,8 +500,20 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		
 		obj = SmartServerModelUtil.clonePackage(obj);
 		obj.setCategoryId(categoryId);
-		obj.setName("사본_" + obj.getName());
+		if (!CommonUtil.isEmpty(targetPackageName)) {
+			obj.setName(targetPackageName);
+		} else {
+			obj.setName("사본_" + obj.getName());
+		}
+		if (!CommonUtil.isEmpty(targetPackageDesc)) {
+			obj.setDescription(targetPackageDesc);
+		}
+			
 		return this.createPackage(userId, categoryId, obj);
+	}	
+		
+	public IPackageModel clonePackage(String userId, String categoryId, String packageId, int version) throws SmartServerRuntimeException {
+		return clonePackage (userId, categoryId, null, null, packageId, version);
 	}
 	
 	public IPackageModel createPackage(String userId, String categoryId, IPackageModel pkg) throws SmartServerRuntimeException {

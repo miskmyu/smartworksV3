@@ -30,6 +30,8 @@ CREATE TABLE sworguser (
 	lang varchar(20),
 	stdtime varchar(20),
 	picture varchar(50),
+	sign varchar(50),
+	useSign bit,
 	domainid varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
@@ -302,7 +304,7 @@ CREATE TABLE swfile (
   	filepath varchar(1000),  
 	filesize int,
 	writtentime datetime,
-	deleteAction bit;
+	deleteAction bit,
   	primary key(id)
 );
 
@@ -2285,7 +2287,6 @@ CREATE TABLE SWMessage(
 	primary key (id)
 );
 
-ALTER TABLE SWMessage add deleteUserId varchar(50);
 
 -- 로그인 사용자
 CREATE TABLE SwLoginUser (
@@ -2322,7 +2323,6 @@ CREATE TABLE msg_db_objects (
     unread smallint NOT NULL,
     msg_size bigint NOT NULL,
     email varbinary(max) NOT NULL,
-    uid varchar(100) NOT NULL
     primary key (id)
 );
 
@@ -2331,8 +2331,6 @@ CREATE TABLE msg_db_uids (
     uid varchar(100) NOT NULL
 );
 
-ALTER TABLE msg_db_objects add uid varchar(100);
-ALTER TABLE msg_db_objects alter column multipart smallint;
 
 CREATE TABLE msg_rules (
     id bigint IDENTITY(1,1) NOT NULL,
