@@ -94,6 +94,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table .tit_bg .file {width:16px}
 .list_contents table th {text-align:center}
 .list_contents table th, .list_contents table td {border-bottom: 1px dotted #C7C7C7}
+.list_contents table td {padding:6px 2px}
 .list_contents table .tit_bg2 th {background-color:#F5F5F5; font-weight:normal}
 .list_contents table .tit_bg2 td {background-color:#FFF}
 .r_line {border-right:1px solid #cccccc}

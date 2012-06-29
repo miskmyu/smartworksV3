@@ -138,7 +138,7 @@
 				
 				<!-- 상세보기 컨텐츠 -->
 				<div class="contents_space">				            
-			       <div class="list_contents up form_read js_form_content">      
+			       <div class="up form_read js_form_content">      
 			       </div>
 				</div>
 		

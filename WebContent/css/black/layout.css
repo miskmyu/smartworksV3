@@ -165,19 +165,19 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 .recent li:hover { display:block; background-color:#555555}
 
-.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:18px}
-.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:18px}
-.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left 1px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_cworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_gworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left 1px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_stworks {background: url("../../images/icon_stworks.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; height:17px}
+.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
+.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left 1px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_cworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 20px; line-height:18px; float: left; height:17px}
+.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_gworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left 1px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:17px}
+.icon_stworks {background: url("../../images/icon_stworks.gif") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; height:17px}
 
 .icon_depart {background: url("../../images/icon_depart.gif") no-repeat left top transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
 .icon_group {background: url("../../images/icon_group.gif") no-repeat left top transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
@@ -201,12 +201,12 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -551px -650px; padding:0 0 0 21px; float: left; height:18px}
 
 /* Nav Mail Btn*/
-.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
-.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
-.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
-.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 25px; margin: 0 3px 0 0; display: inline-block}
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px}
@@ -302,12 +302,12 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 /* 나의 커뮤니티, 나의 업무, 메일, 커뮤너티멤버 Hover */
 /* #my_works:업무 , #m_setting:나의공간, #my_communities:커뮤니티, #my_mail:메일, #all_works:스마트빌더-업무전체 */
 
-#all_works li, #my_works li, #my_communities li, #my_mail li, #m_setting li {position:relative; line-height:19px}
+#all_works li, #my_works li, #my_communities li, #my_mail li, #m_setting li {position:relative; line-height:21px}
 
 #all_works li a, #my_works li a, #my_communities li a, #my_mail li a {padding:1px 0 1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 #all_works li a:hover, #my_works li a:hover, #my_communities li a:hover, #my_mail li a:hover {display:block; background-color:#4e4e4e}
 
-#m_setting li {padding:4px 0 4px 20px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+#m_setting li {padding:1px 0 1px 20px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 #m_setting li:hover {display:block; background-color:#6b6b6b}
 
 #all_works .menu_2dep, #my_works .menu_2dep {padding:2px 0 2px 14px}
