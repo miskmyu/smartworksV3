@@ -167,11 +167,11 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:18px}
-.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat left 1px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_cworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_gworks {background: url("../../images/icon_category.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
-.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat left 1px transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
 .icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat left top transparent; padding:0 0 0 21px; line-height:18px; float: left; height:17px}
@@ -277,10 +277,10 @@ a.icon_hide:hover {background: url("../../images/body_icon.png") no-repeat -28px
 a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px -571px; width:13px; height:13px; display: inline-block}
 
 /* CheckOption Nav */
-li.fvrt_item .check_option {display:none; position:absolute; margin-top:-25px; margin-left:163px}
+li.fvrt_item .check_option {display:none; position:absolute; margin:-25px 5px 0 0; right:0; padding:0 !important}
 li.fvrt_item:hover .check_option {display:block}
-.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
-.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
+.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:7px; height:16px; width:16px; float:right; padding:0 !important}
+.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:7px; height:16px; width:16px; float:right}
 
 /* KeyOption Setting */
 .list_action_item .key_option {display:none}
