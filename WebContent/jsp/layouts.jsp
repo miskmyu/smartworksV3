@@ -193,6 +193,7 @@ function logout() {
 <script type="text/javascript" src='js/smartform/field/ref_form_field.js'></script>
 <script type="text/javascript" src='js/smartform/field/image_box.js'></script>
 <script type="text/javascript" src='js/smartform/field/videoYT_box.js'></script>
+<script type="text/javascript" src='js/smartform/field/auto_index.js'></script>
 
 <script type="text/javascript" src="smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/jquery/fileuploader/fileuploader.js" ></script>

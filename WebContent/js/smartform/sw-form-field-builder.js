@@ -23,6 +23,16 @@ SmartWorks.FormFieldBuilder.build = function(mode, $target, $entity, dataField, 
 			layoutInstance : layoutInstance
 		});
 		return;		
+	case 'autoIndex' :
+		SmartWorks.FormRuntime.AutoIndexBuilder.build({
+			mode : mode, // view or edit
+			container : $target,
+			entity : $entity,
+			dataField : dataField,
+			refreshData : refreshData,
+			layoutInstance : layoutInstance
+		});
+		return;		
 	case 'currencyInput' :
 		SmartWorks.FormRuntime.CurrencyInputBuilder.build({
 			mode : mode, // view or edit
