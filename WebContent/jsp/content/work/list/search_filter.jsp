@@ -293,9 +293,9 @@
 		<form name="frmSearchFilterActions" class="js_validation_required">
 			<div class="fr">
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-				<span class="form_space sw_error_message js_filter_error_message" style="text-align:right; color: red"></span>
+				<span class="form_space fl sw_error_message js_filter_error_message" style="color: red; max-width: 324px"></span>
 				<span class="js_progress_span"></span>
-				<span class="fl">
+				<span class="fl mr5">
 					<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
 				</span>
 				<span class="btn_wh">

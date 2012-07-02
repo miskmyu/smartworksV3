@@ -105,7 +105,7 @@
 							<input name="hdnParentId" type="hidden" value="<%=CommonUtil.toNotNull(parentId) %>" />
 						</td>	
 					</tr>
-					<tr>
+					<tr class="end">
 						<th class="required_label"><fmt:message key="profile.title.department"/></th>
 						<td><input name="txtDepartmentName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(department.getName()) %>" /></td>
 					</tr>

@@ -10,10 +10,18 @@
 .form_value input[type="text"] {width:95%}
 .form_value textarea {width:97.4% !important; margin-bottom: 4px}
 .form_value iframe {width:98%}
-.form_value, .form_value a span,
-.form_layout.con td, .boTb td {color: #555555 !important}
-.form_layout.con th, .boTb th {color: #23579E; vertical-align: top; font-weight: normal}
 .form_layout td, .form_layout th {border: 1px dotted #c7c7c7}
+
+/* Setting Form */
+.setting_section table {line-height: 26px}
+.setting_section td, .setting_section th {border:none}
+/* .setting_section tr {border-bottom: 1px dotted #C7C7C7} */
+.setting_section tr.end {border-bottom: none}
+.setting_section .required_label {background-color:#FFF}
+.con td, .boTb td {color: #555555 !important}
+.con th, .boTb th {color: #23579E; vertical-align: middle; padding: 0 5px; font-weight: normal}
+/* .boTb table tr {border-bottom: 1px dotted #C7C7C7} */
+.boTb table tr.end {border-bottom: none}
 
 /* File Upload */
 .form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
@@ -25,7 +33,7 @@
 
 /* 상세필터 */
 .filter_section {overflow:hidden;}
-.filter_group {border:1px solid #e2e2e2; padding:5px; margin:0 0 3px 0;}
+.filter_group {border:1px solid #e2e2e2; padding:5px; margin:0 0 3px 0; overflow: hidden}
 .filter_group table { margin:0; text-align:right; } 
 .filter_area {clear:both; float:right; line-height: 22px}
 .filter_area .selb_size_fir {float:left; margin-right:5px;}
@@ -49,7 +57,7 @@
 
 /* label check icon add */
 .icon_required{background: url("../../images/icon_check.png") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
-.required_label{background: url("../../images/icon_check.png") 98% 3px no-repeat #ededed}
+.required_label{background: url("../../images/icon_check.png") 98% 7px no-repeat #ededed}
 .required_label span{padding-right:12px}
 
 .form_number_input input {text-align:right}
