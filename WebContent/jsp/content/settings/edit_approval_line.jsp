@@ -98,7 +98,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditApprovalLine" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditApprovalLine" class="form_layout con js_validation_required">
 		<table>
 			<tbody>
 				<tr>
@@ -180,7 +180,7 @@
 					}
 					%>
 				</tr>
-				<tr>
+				<tr class="end">
 					<th class="required_label"><fmt:message key="settings.title.approval.mean_time"/></th>
 					<%
 					if(approvalLine.getApprovalLevel()!=0){

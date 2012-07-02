@@ -67,6 +67,7 @@ $(function() {
 		smartPop.progressCont(input.siblings('.js_progress_span'));
 		var fromDate = input.attr('lastDate');
 		var target = input.parents('ul:first');
+		var spaceTimeline = input.parents('.js_space_timeline_page');
 		var spaceDayly = input.parents('.js_space_dayly_page');
 		var spaceWeekly = input.parents('.js_space_weekly_page');
 		var spaceMonthly = input.parents('.js_space_monthly_page');
@@ -74,7 +75,10 @@ $(function() {
 		var smartcaster = input.parents('.js_smartcaster_page');
 		var spacePage = [];
 		var toDate = "";
-		if(!isEmpty(spaceDayly)){
+		if(!isEmpty(spaceTimeline)){
+			spacePage = spaceTimeline;
+			toDate = input.parents('.js_space_timeline').attr('toDate');
+		}else if(!isEmpty(spaceDayly)){
 			spacePage = spaceDayly;
 			toDate = input.parents('.js_space_dayly_work_hour').attr('toDate');
 		}else if(!isEmpty(spaceWeekly)){

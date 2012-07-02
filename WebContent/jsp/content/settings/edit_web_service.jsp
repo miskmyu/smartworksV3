@@ -104,7 +104,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditWebService" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditWebService" class="form_layout con js_validation_required">
 		<table>
 			<tbody class="js_edit_webservice_tbody">
 				<tr>

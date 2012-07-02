@@ -101,7 +101,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditExternalForm" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditExternalForm" class="form_layout con js_validation_required">
 		<table>
 			<tbody>
 				<tr>

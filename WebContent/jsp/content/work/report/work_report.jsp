@@ -37,7 +37,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!--  전체 레이아웃 -->
 <div class="js_work_report_page mt15" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
-	<div class="list_title_space solid_line_sb">
+	<div class="list_title_space solid_line_sb pb3">
 		<div class="title"><fmt:message key="report.title.report" /></div>
 		<div class="title_line_options js_work_report_list_box">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							

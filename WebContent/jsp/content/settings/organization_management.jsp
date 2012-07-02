@@ -13,7 +13,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_organization_management_page">
+<div class="section_portlet setting_section js_organization_management_page">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -29,7 +29,7 @@
 				<div>
 					<table>
 						<tbody>
-							<tr>
+							<tr class="end">
 								<td width="35%" class="vt"><div class="pop_list_area mr15"><jsp:include page="/jsp/content/settings/comlist_by_depart.jsp"></jsp:include></div></td>
 								<td width="65%" class="vt">
 									<div class="tr mb2">
