@@ -104,6 +104,6 @@ public interface ISwdManager extends IManager {
 
 	public void addHits(String tableName, String recordId) throws SwdException;
 
-	public Object[] getObjectsByFormFieldId(String domainId, String formFieldId, String tableName) throws SwdException;
+	public int getObjectsCountByFormFieldId(String domainId, String formFieldId, String tableName, String fieldValue) throws SwdException;
 
 }
