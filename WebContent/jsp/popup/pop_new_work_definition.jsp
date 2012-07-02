@@ -137,10 +137,10 @@
 					<tr>
 						<td><fmt:message key="builder.title.work_type" /></td>
 						<td>
-							<input name="chkWorkType" class="required" type="checkbox" value="<%=SmartWork.TYPE_INFORMATION%>"><fmt:message key="common.title.information_work"/>	
-							<input name="chkWorkType" class="required" type="checkbox" value="<%=SmartWork.TYPE_PROCESS%>"><fmt:message key="common.title.process_work"/>	
-							<input name="chkWorkType" class="required" type="checkbox" value="<%=SmartWork.TYPE_SCHEDULE%>"><fmt:message key="common.title.schedule_work"/>	
-							<input name="chkWorkType" class="required" type="checkbox" value="<%=WorkCategory.TYPE_CATEGORY%>"><fmt:message key="common.title.work_group"/>	
+							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_INFORMATION%>"><fmt:message key="common.title.information_work"/>	
+							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_PROCESS%>"><fmt:message key="common.title.process_work"/>	
+							<input name="chkWorkType" class="required" type="radio" value="<%=SmartWork.TYPE_SCHEDULE%>"><fmt:message key="common.title.schedule_work"/>	
+							<input name="chkWorkType" class="required" type="radio" value="<%=WorkCategory.TYPE_CATEGORY%>"><fmt:message key="common.title.work_group"/>	
 						</td>
 					</tr>
 				<%

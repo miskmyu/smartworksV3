@@ -438,10 +438,11 @@ SmartWorks.GridLayout.serializeObject = function(form, valueChanged){
 	var numberInputs = SmartWorks.FormRuntime.NumberInputBuilder.serializeObject(form.find('.js_type_numberInput'));
 	var percentInputs = SmartWorks.FormRuntime.PercentInputBuilder.serializeObject(form.find('.js_type_percentInput'));
 	var currencyInputs = SmartWorks.FormRuntime.CurrencyInputBuilder.serializeObject(form.find('.js_type_currencyInput'));
+	var autoIndexs = SmartWorks.FormRuntime.AutoIndexBuilder.serializeObject(form.find('.js_type_autoIndex'));
 	var dataGrids = {};
 	return merge3Objects(merge3Objects(fileFields, userFields, richEditors), 
 			merge3Objects(refFormFields, imageBoxs, videoYTBoxs), 
-			merge3Objects(numberInputs, percentInputs, currencyInputs));
+			merge3Objects(numberInputs, percentInputs, mergeObjects(currencyInputs, autoIndexs)));
 };
 
 SmartWorks.GridLayout.validate = function(form, messageTarget){

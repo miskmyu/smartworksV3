@@ -24,8 +24,8 @@
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
 
-	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
-	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
+	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
+	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
 
 	MailFolder mailFolder = instance.getMailFolder();
 %>

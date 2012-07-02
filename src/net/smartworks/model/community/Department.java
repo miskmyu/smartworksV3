@@ -2,6 +2,7 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.util.SmartUtil;
 
 public class Department extends WorkSpace {
 
@@ -37,11 +38,19 @@ public class Department extends WorkSpace {
 	public void setMembers(UserInfo[] members) {
 		this.members = members;
 	}
+	public int getNumberOfMember(){
+		if(SmartUtil.isBlankObject(this.members)) return 0;
+		return this.members.length;
+	}
 	public DepartmentInfo[] getChildren() {
 		return children;
 	}
 	public void setChildren(DepartmentInfo[] children) {
 		this.children = children;
+	}
+	public int getNumberOfSubDepartment(){
+		if(SmartUtil.isBlankObject(this.children)) return 0;
+		return this.children.length;
 	}
 	
 	public Department(){

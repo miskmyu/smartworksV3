@@ -68,9 +68,9 @@
       		<div class="portlet_tl"></div>
     	</div>
     	<div class="portlet_l" style="display: block;">
-		    <ul class="portlet_r" style="display: block;">		    		            
+		    <ul class="portlet_r" style="display: block;">	
+		    	<!-- 타이틀 -->	    		            
             	<div class="body_titl_pic js_form_header">		
-                    <div class="">
                         <div class="noti_pic mr7"><img class="profile_size_m" src="<%=instance.getOwner().getMidPicture() %>" /></div>
                         <div class="noti_in_bodytitle">
                         	<div>
@@ -78,13 +78,9 @@
 	                            <%if(workSpace != null && !workSpace.getId().equals(owner.getId())){ %><span class="arr">▶</span><span class="icon_division_s"><%=workSpace.getName() %></span><%} %>
 	                            <span class="t_date"><%=instance.getCreatedDate().toLocalString() %></span>
                             </div>
-                           	<div class=""><%=instance.getSubject()%></div>
-                           	<div class="">
-                            	<span class="<%=work.getIconClass() %>"></span>
-                            	<span><%=work.getFullpathName() %></span> 
-                            </div>
+                           	<div class="title_picico"><%=instance.getSubject()%></div>
+                           	<div class="<%=work.getIconClass() %> t_date"> <%=work.getFullpathName() %></div>
                         </div>
-                    </div>
 		                    
 		            <!-- 우측 버튼-->
 		            <div class="txt_btn t_s11">
@@ -92,7 +88,7 @@
 		            </div>
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
-					<div class="mb10 fr vb">
+					<div class="fr pt12">
 						<%
 						if(approvalTask == null && forwardedTask == null){
 						%>
@@ -138,7 +134,7 @@
 				
 				<!-- 상세보기 컨텐츠 -->
 				<div class="contents_space">				            
-			       <div class="list_contents up form_read js_form_content">      
+			       <div class="up form_read js_form_content">      
 			       </div>
 				</div>
 		
@@ -146,8 +142,8 @@
 				<div class="glo_btn_space">
 				
 					<div class="txt_btn task_information">
-					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
-					    <%if(numberOfHistories > 0){ %><div class="po_left"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
+					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
+					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
 					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
 					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
