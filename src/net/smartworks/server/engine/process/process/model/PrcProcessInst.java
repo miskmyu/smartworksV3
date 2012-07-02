@@ -24,6 +24,7 @@ public class PrcProcessInst extends MisObject {
 	
 	public static final String PROCESSINSTTYPE_PROCESS = "PROCESS";
 	public static final String PROCESSINSTTYPE_INFORMATION = "SINGLE";
+	public static final String PROCESSINSTTYPE_GANTT = "GANTT";
 	public static final String PROCESSINSTTYPE_SCHEDULE = "SCHEDULE";
 	
 	public static final String A_TITLE = "title";

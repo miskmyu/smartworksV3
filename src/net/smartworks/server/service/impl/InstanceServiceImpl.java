@@ -5191,16 +5191,34 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskExecuteDateTo(toDate);
 		}
 
-		taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", true)});
+		long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
-		//taskWorkCond.setPageNo(0);
-		//taskWorkCond.setPageSize(maxSize);
+		if(fromDate != null && toDate == null) {
+			taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", false)});
+		} else {
+			taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", true)});
+		}
+
+		taskWorkCond.setPageNo(0);
+		taskWorkCond.setPageSize(maxSize);
 
 		TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
 
+		TaskWork[] newTasks = null;
+		TaskWork task = new TaskWork();
+
+		if(totalCount > maxSize) {
+			if(!CommonUtil.isEmpty(tasks)) {
+				newTasks = new TaskWork[maxSize+1];
+				for(int i=0; i<maxSize; i++)
+					newTasks[i] = tasks[i];
+				newTasks[maxSize] = task;
+				return newTasks;
+			}
+		}
 		return tasks;
 	}
-	
+
 	@Override
 	public TaskInstanceInfo[][] getTaskInstancesByWorkHours(String contextId, String spaceId, LocalDate date, int maxSize) throws Exception {
 		try{
@@ -5276,7 +5294,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (beforeWorkTimeList.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[beforeWorkTimeList.size()];
 				beforeWorkTimeList.toArray(taskArray);
-				beforeTaskInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				beforeTaskInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (beforeTaskInstanceInfo != null && beforeTaskInstanceInfo.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5292,7 +5310,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (workTimeList.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[workTimeList.size()];
 				workTimeList.toArray(taskArray);
-				taskInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				taskInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (taskInstanceInfo != null && taskInstanceInfo.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5309,7 +5327,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (afterWorkTimeList.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[afterWorkTimeList.size()];
 				afterWorkTimeList.toArray(taskArray);
-				afterInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				afterInstanceInfo = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (afterInstanceInfo != null && afterInstanceInfo.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5434,7 +5452,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList1.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList1.size()];
 				instanceInfoList1.toArray(taskArray);
-				instanceInfo1 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo1 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo1 != null && instanceInfo1.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5451,7 +5469,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList2.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList2.size()];
 				instanceInfoList2.toArray(taskArray);
-				instanceInfo2 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo2 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo2 != null && instanceInfo2.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5467,7 +5485,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList3.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList3.size()];
 				instanceInfoList3.toArray(taskArray);
-				instanceInfo3 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo3 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo3 != null && instanceInfo3.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5483,7 +5501,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList4.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList4.size()];
 				instanceInfoList4.toArray(taskArray);
-				instanceInfo4 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo4 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo4 != null && instanceInfo4.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5499,7 +5517,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList5.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList5.size()];
 				instanceInfoList5.toArray(taskArray);
-				instanceInfo5 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo5 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo5 != null && instanceInfo5.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5515,7 +5533,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList6.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList6.size()];
 				instanceInfoList6.toArray(taskArray);
-				instanceInfo6 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo6 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo6 != null && instanceInfo6.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5531,7 +5549,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (instanceInfoList7.size() != 0) {
 				TaskWork[] taskArray = new TaskWork[instanceInfoList7.size()];
 				instanceInfoList7.toArray(taskArray);
-				instanceInfo7 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray);
+				instanceInfo7 = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskArray, maxSize);
 				
 				if (instanceInfo7 != null && instanceInfo7.length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5611,7 +5629,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				List taskWorksList = weekMappingMap.get(i);
 				TaskWork[] taskWorks = new TaskWork[taskWorksList.size()];
 				taskWorksList.toArray(taskWorks);
-				result[i] = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskWorks);
+				result[i] = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskWorks, maxSize);
 
 				if (result[i] != null && result[i].length > maxSize) {
 					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
@@ -5661,7 +5679,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			TaskWork[] tasks = getTaskWorkByFromToDate(contextId, spaceId, tempFromDate, tempToDate, maxSize);
 
-			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
+			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
 			
 		}catch (Exception e){
 			// Exception Handling Required
@@ -5839,7 +5857,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWork[] tasks = getWorkListManager().getCastWorkList(userId, cond);
 			TaskInstanceInfo[] taskInfos = null;
 			if(!CommonUtil.isEmpty(tasks))
-				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
+				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
 
 			if(!CommonUtil.isEmpty(taskInfos)) {
 				if (totalSize > maxSize) {

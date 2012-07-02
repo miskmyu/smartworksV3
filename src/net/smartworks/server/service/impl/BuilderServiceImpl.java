@@ -554,15 +554,14 @@ public class BuilderServiceImpl implements IBuilderService {
 					type = PrcProcessInst.PROCESSINSTTYPE_PROCESS;
 					break;
 				case SmartWork.TYPE_SCHEDULE :
-					type = PrcProcessInst.PROCESSINSTTYPE_SCHEDULE;
+					type = PrcProcessInst.PROCESSINSTTYPE_GANTT;
 					break;
 				}
 
 				if (CommonUtil.isEmpty(type))
 					getDesigntimeManager().createPackage(userId, categoryId, name, desc);
-				else {
+				else
 					getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
-				}
 			}
 		}catch (Exception e){
 			// Exception Handling Required
