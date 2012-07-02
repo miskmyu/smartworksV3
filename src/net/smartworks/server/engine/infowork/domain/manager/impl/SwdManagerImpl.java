@@ -2540,22 +2540,22 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}
 	}
 	@Override
-	public Object[] getObjectsByFormFieldId(String domainId, String formFieldId, String tableName) throws SwdException {
+	public int getObjectsCountByFormFieldId(String domainId, String formFieldId, String tableName, String fieldValue) throws SwdException {
 		try {
 			String tableColName = getTableColName(domainId, formFieldId);
 			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append("select ").append(tableColName).append(" from ").append(tableName).append(" order by createdTime desc");
+			stringBuffer.append("select count(*)").append(" from ").append(tableName).append(" where ").append(tableColName).append(" = :fieldValue");
 			Query query = this.getSession().createSQLQuery(stringBuffer.toString());
+			query.setString("fieldValue", fieldValue);
 			List list = query.list();
 			if (list == null || list.isEmpty())
-				return null;
+				return 0;
+			int count = list.size();
+			return count;
 
-			Object[] objects = new Object[list.size()];
-			list.toArray(objects);
-			return objects;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return 0;
 		}
 	}
 

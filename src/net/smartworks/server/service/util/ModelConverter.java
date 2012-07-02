@@ -417,12 +417,16 @@ public class ModelConverter {
 		}
 		return workSpaceInfo;
 	}
-	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks) throws Exception {
+	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int maxSize) throws Exception {
 		if (tasks == null || tasks.length == 0)
 			return null;
 		List<TaskInstanceInfo> resultInfoList = new ArrayList<TaskInstanceInfo>();
-		
-		for (int i = 0; i < tasks.length; i++) {
+
+		int taskLenth = tasks.length;
+
+		for (int i = 0; i < taskLenth; i++) {
+			if(i == maxSize)
+				continue;
 			TaskWork task = tasks[i];
 			TaskInstanceInfo taskInfo = new TaskInstanceInfo();
 			taskInfo.setId(task.getTskObjId());
@@ -483,6 +487,12 @@ public class ModelConverter {
 			taskInfo.setFormId(task.getTskForm());
 
 			resultInfoList.add(taskInfo);
+		}
+
+		if(taskLenth > maxSize) {
+			TaskInstanceInfo taskInstanceInfo = new TaskInstanceInfo();
+			taskInstanceInfo.setType(-21);
+			resultInfoList.add(taskInstanceInfo);
 		}
 		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
 		resultInfoList.toArray(resultInfo);
@@ -1869,6 +1879,8 @@ public class ModelConverter {
 			userInfo.setPosition(swoUserExtend.getPosition());
 			userInfo.setCellPhoneNo(swoUserExtend.getCellPhoneNo());
 			userInfo.setPhoneNo(swoUserExtend.getPhoneNo());
+			userInfo.setUseSignPicture(swoUserExtend.isUseSign());
+			userInfo.setSignPicture(swoUserExtend.getSign());
 			userInfoList.add(userInfo);
 		}
 		if(userInfoList.size() > 0) {
@@ -1901,6 +1913,8 @@ public class ModelConverter {
 		userInfo.setRole(userExtend.getRoleId().equals("DEPT LEADER") ? User.USER_ROLE_LEADER : User.USER_ROLE_MEMBER);
 		userInfo.setCellPhoneNo(userExtend.getCellPhoneNo());
 		userInfo.setPhoneNo(userExtend.getPhoneNo());
+		userInfo.setUseSignPicture(userExtend.isUseSign());
+		userInfo.setSignPicture(userExtend.getSign());
 		return userInfo;
 	}
 
@@ -2192,6 +2206,8 @@ public class ModelConverter {
 		user.setEmployeeId(userExtend.getEmployeeId());
 		user.setPhoneNo(userExtend.getPhoneNo());
 		user.setCellPhoneNo(userExtend.getCellPhoneNo());
+		user.setUseSignPicture(userExtend.isUseSign());
+		user.setSignPicture(userExtend.getSign());
 
 		return user;
 	}
@@ -2262,6 +2278,8 @@ public class ModelConverter {
 				member.setRole(swoUserExtend.getAuthId().equals("EXTERNALUSER") ? User.USER_LEVEL_EXTERNAL_USER : swoUserExtend.getAuthId().equals("USER") ? User.USER_LEVEL_INTERNAL_USER : swoUserExtend.getAuthId().equals("ADMINISTRATOR") ? User.USER_LEVEL_AMINISTRATOR : User.USER_LEVEL_SYSMANAGER);
 				member.setSmallPictureName(swoUserExtend.getSmallPictureName());
 				member.setDepartment(new DepartmentInfo(swoUserExtend.getDepartmentId(), swoUserExtend.getDepartmentName(), swoUserExtend.getDepartmentDesc()));
+				member.setUseSignPicture(swoUserExtend.isUseSign());
+				member.setSignPicture(swoUserExtend.getSign());
 				userInfoList.add(member);
 			}
 
@@ -2548,33 +2566,37 @@ public class ModelConverter {
 		for (Iterator prcItr = prcList.iterator(); prcItr.hasNext();) {
 			ProcessType1 prc = (ProcessType1) prcItr.next();
 			Activities acts = prc.getActivities();
-			List actList = acts.getActivity();
-			for (Iterator actIter = actList.iterator(); actIter.hasNext();) {
-				Activity act = (Activity) actIter.next();
-				String actId = act.getId();
-				
-				Sequence attrs = act.getAnyAttribute();
-				if (attrs != null && attrs.size() > 0) {
-					for (int i=0; i<attrs.size(); i++) {
-						commonj.sdo.Property attr = attrs.getProperty(i);
-						String attrName = attr.getName();
-						Object attrValue = attrs.getValue(i);
-						if (CommonUtil.isEmpty(attrName) || attrValue == null)
-							continue;
-						if (attrName.equals("PerformerName")) {
-							activityPerformerMap.put(actId, attrValue);
-						} 
+			List actList = new ArrayList();
+			if(acts != null)
+				actList = acts.getActivity();
+			if(actList.size() > 0) {
+				for (Iterator actIter = actList.iterator(); actIter.hasNext();) {
+					Activity act = (Activity) actIter.next();
+					String actId = act.getId();
+					
+					Sequence attrs = act.getAnyAttribute();
+					if (attrs != null && attrs.size() > 0) {
+						for (int i=0; i<attrs.size(); i++) {
+							commonj.sdo.Property attr = attrs.getProperty(i);
+							String attrName = attr.getName();
+							Object attrValue = attrs.getValue(i);
+							if (CommonUtil.isEmpty(attrName) || attrValue == null)
+								continue;
+							if (attrName.equals("PerformerName")) {
+								activityPerformerMap.put(actId, attrValue);
+							} 
+						}
 					}
+//					Performers performers = act.getPerformers();
+//	
+//					List performerList = null;
+//					if (performers != null)
+//						performerList = performers.getPerformer();
+//					if (performerList != null && !performerList.isEmpty()) {
+//						String peformer = ((Performer)performerList.get(0)).getValue();
+//						activityPerformerMap.put(actId, peformer);
+//					}
 				}
-//				Performers performers = act.getPerformers();
-//
-//				List performerList = null;
-//				if (performers != null)
-//					performerList = performers.getPerformer();
-//				if (performerList != null && !performerList.isEmpty()) {
-//					String peformer = ((Performer)performerList.get(0)).getValue();
-//					activityPerformerMap.put(actId, peformer);
-//				}
 			}
 		}
 		//Parsing End

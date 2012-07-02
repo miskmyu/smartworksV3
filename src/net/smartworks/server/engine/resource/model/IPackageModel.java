@@ -27,6 +27,7 @@ public interface IPackageModel {
 	
 	public static final String TYPE_PROCESS = "PROCESS";
 	public static final String TYPE_SINGLE = "SINGLE";
+	public static final String TYPE_SCHEDULE = "SCHEDULE";
 	public static final String TYPE_GANTT = "GANTT";
 	
 	public String getId();
