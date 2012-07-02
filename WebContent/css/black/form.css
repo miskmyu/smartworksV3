@@ -13,13 +13,13 @@
 .form_layout td, .form_layout th {border: 1px dotted #c7c7c7}
 
 /* Setting Form */
-.setting_section table {line-height: 26px}
+.setting_section table, .js_my_profile_page table {line-height: 26px}
 .setting_section td, .setting_section th {border:none}
 /* .setting_section tr {border-bottom: 1px dotted #C7C7C7} */
 .setting_section tr.end {border-bottom: none}
-.setting_section .required_label {background-color:#FFF}
+.setting_section .required_label, .js_my_profile_page .required_label {background-color:#FFF}
 .con td, .boTb td {color: #555555 !important}
-.con th, .boTb th {color: #23579E; vertical-align: middle; padding: 0 5px; font-weight: normal}
+.con th, .boTb th, .js_my_profile_page th {color: #23579E; vertical-align: middle; padding: 0 5px; font-weight: normal}
 /* .boTb table tr {border-bottom: 1px dotted #C7C7C7} */
 .boTb table tr.end {border-bottom: none}
 
