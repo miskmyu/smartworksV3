@@ -3221,7 +3221,7 @@ public class ModelConverter {
 
 		tskCond = new TskTaskCond();
 		tskCond.setProcessInstId(processInstId);
-		tskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, true)});
 
 		tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_ALL);
 
