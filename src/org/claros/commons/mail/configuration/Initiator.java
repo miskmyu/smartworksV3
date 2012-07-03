@@ -25,7 +25,7 @@ public class Initiator extends HttpServlet {
      */
     public void init() throws ServletException {
 		try {
-			Digester digester = new Digester();
+			/*Digester digester = new Digester();
 			digester.setValidating(false);
 			digester.addObjectCreate("claros-config/servers", "org.claros.commons.mail.models.ConnectionProfileList");
 			digester.addObjectCreate("claros-config/servers/server", "org.claros.commons.mail.models.ConnectionProfile");
@@ -45,7 +45,9 @@ public class Initiator extends HttpServlet {
 		} catch (IOException e) {
 			log.fatal("Could not find config.xml file in your config path.(" + Paths.getCfgFolder() + ")", e);
 		} catch (SAXException e) {
-			log.fatal("Could not validate config.xml file or could not read its contents", e);
+			log.fatal("Could not validate config.xml file or could not read its contents", e);*/
+		} catch (Exception e) {
+			log.fatal("");
 		}
     }
 }
