@@ -112,6 +112,28 @@
 					</table>
 				</div>
 				<!-- 목록영역 -->
+				<!-- 로그인화면 이미지 설정 -->
+				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.loginimage_setting"/></div></div>
+				
+				<div class="boTb">
+					<table>
+						<colgroup>
+							<col width="25%" />
+							<col width="75%" />
+						</colgroup>
+						<tbody>
+							<tr class="end">
+								<th rowspan="2"><fmt:message key="settings.title.company.loginimage_setting"/></th>
+								<td>
+									<div class="js_company_loginimage_field js_company_loginimage" imgSource="<%=companyGeneral.getCompanyLoginImage()%>"></div>
+									<div class="t_s11" style="vertical-align:bottom"><fmt:message key="settings.title.company.loginimage_desc"/></div>
+
+ 								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 로그인화면 이미지 설정 -->
 				<div class="default_title_space pt20">
 					<div class="title"><fmt:message key="settings.title.company.mail_setting"/></div>
 				</div>
@@ -178,6 +200,12 @@
 	if(!isEmpty(companyLogos)) {
 		for(var i=0; i<companyLogos.length; i++) {			
 			loadCompanyLogoField();
+		}		
+	}
+	var companyLoginImages = $('div.js_company_loginimage');
+	if(!isEmpty(companyLoginImages)) {
+		for(var i=0; i<companyLoginImages.length; i++) {			
+			loadCompanyLoginImageField();
 		}		
 	}
 </script>

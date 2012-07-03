@@ -61,9 +61,14 @@ SmartWorks.FormRuntime.TextInputBuilder.build = function(config) {
 		else
 			options.container.find('.form_value input').attr('value', value);
 	}
-	if (readOnly) 
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
-
+	if (readOnly) {
+		var $textHiddenInput = options.container.find('#textHiddenInput' + id);
+		if ($textHiddenInput.length === 0) {
+			options.container.append('<input id="textHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$textHiddenInput.attr('value', value);
+		}
+	}
 	return options.container;
 };
 

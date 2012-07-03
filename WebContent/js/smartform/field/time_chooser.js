@@ -58,8 +58,14 @@ SmartWorks.FormRuntime.TimeChooserBuilder.build = function(config) {
 		}
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $timeChooserHiddenInput = options.container.find('#timeChooserHiddenInput' + id);
+		if ($timeChooserHiddenInput.length === 0) {
+			options.container.append('<input id="timeChooserHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$timeChooserHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

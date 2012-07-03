@@ -557,6 +557,7 @@ public class HbDomainDdlDaoImpl extends HibernateDaoSupport implements IDomainDd
 		masterDomain.setFormName(formDef.getName());
 		masterDomain.setId(this.getMasterDomainId());
 		masterDomain.setKeyColumn(DBDomainConstant.COLUMNNAME_RECORDID);
+		masterDomain.setKeyDuplicate(false);
 		masterDomain.setTblOwner("");
 		masterDomain.setCompanyId(companyId);
 		domainList.add(masterDomain);

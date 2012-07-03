@@ -217,6 +217,7 @@ function createUploader(groupId, target, isMultiple, isProfile, isTempFile, file
 					var ext = getExt(fileName);
 
 					var file = $(uploadFileTemplate).appendTo(files);
+					file.addClass('qq-upload-success');
 					file.attr('fileId', data[i].id).attr('fileName', fileName).attr('fileSize', data[i].fileSize);
 					file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
 					file.find('.qq-upload-file').text(displayFileName);

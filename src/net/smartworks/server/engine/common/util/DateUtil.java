@@ -289,6 +289,12 @@ public class DateUtil {
 		String dateString = dateFormat.format(date);
 		return dateString;
 	}
+	public static String toXsdSmallDateString(Date date) {
+		if (date == null)
+			return null;
+		String dateString = toString(date, DATEFORMAT_XSDSMALLDATETIME);
+		return dateString;
+	}
 	public static String toXsdDotDateString(Date date) {
 		if (date == null)
 			return null;

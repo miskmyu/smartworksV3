@@ -20,7 +20,7 @@ public class Initiator extends HttpServlet {
 	 * @throws ServletException if an error occurs
 	 */
 	public void init() throws ServletException {
-		File dir = new File(Constants.tmpDir);
+		/*File dir = new File(Constants.tmpDir);
 
 		// if temp directory doesn't exist, try to create a new one. 
 		if (!dir.exists()) {
@@ -37,7 +37,7 @@ public class Initiator extends HttpServlet {
 		} else {
 			log.fatal("Temp dir does not exist or is not a directory, please check the tmp-dir setting in the config.xml file");
 			throw new SystemException();
-		}
+		}*/
 	}
 
 }

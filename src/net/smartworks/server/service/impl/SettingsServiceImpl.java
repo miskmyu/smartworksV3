@@ -113,11 +113,17 @@ public class SettingsServiceImpl implements ISettingsService {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 			String companyId = cUser.getCompanyId();
+			if(CommonUtil.isEmpty(companyId)) {
+				SwoCompany[] swoCompanies = getSwoManager().getCompanys(null, null, null);
+				if(!CommonUtil.isEmpty(swoCompanies))
+					companyId = swoCompanies[0].getId();
+			}
 			SwoCompany swoCompany = getSwoManager().getCompany(userId, companyId, IManager.LEVEL_ALL);
 			SwoConfig swoConfig = getSwoManager().getConfig(userId, companyId, IManager.LEVEL_ALL);
 			String id = "";
 			String name = "";
 			String logoName = "";
+			String loginImageName = "";
 			String sendMailHost = "";
 			String sendMailAccount = "";
 			String sendMailPassword = "";
@@ -127,6 +133,7 @@ public class SettingsServiceImpl implements ISettingsService {
 				name = swoCompany.getName();
 			}
 			logoName = CommonUtil.toNotNull(getSwoManager().getLogo(userId, companyId));
+			loginImageName = CommonUtil.toNotNull(getSwoManager().getLoginImage(userId, companyId));
 			if(swoConfig != null) {
 				sendMailHost = swoConfig.getSmtpAddress();
 				sendMailAccount = swoConfig.getUserId();
@@ -138,6 +145,7 @@ public class SettingsServiceImpl implements ISettingsService {
 			companyGeneral.setId(id);
 			companyGeneral.setName(name);
 			companyGeneral.setLogoName(logoName);
+			companyGeneral.setLoginImageName(loginImageName);
 			companyGeneral.setSendMailHost(sendMailHost);
 			companyGeneral.setSendMailAccount(sendMailAccount);
 			companyGeneral.setSendMailPassword(sendMailPassword);
@@ -163,12 +171,14 @@ public class SettingsServiceImpl implements ISettingsService {
 	
 			Set<String> keySet = frmCompanyGeneral.keySet();
 			Iterator<String> itr = keySet.iterator();
-			List<Map<String, String>> files = null;
+			List<Map<String, String>> logoFiles = null;
+			List<Map<String, String>> loginImageFiles = null;
 			String txtMailHost = null;
 			String txtMailAccount = null;
 			String pasMailPassword = null;
 			boolean isActivity = false;
 			String imgCompanyLogo = null;
+			String imgCompanyLoginImage = null;
 			String companyFileId = null;
 			String companyFileName = null;
 
@@ -178,7 +188,9 @@ public class SettingsServiceImpl implements ISettingsService {
 				if(fieldValue instanceof LinkedHashMap) {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					if(fieldId.equals("imgCompanyLogo")) {
-						files = (ArrayList<Map<String,String>>)valueMap.get("files");
+						logoFiles = (ArrayList<Map<String,String>>)valueMap.get("files");
+					} else if(fieldId.equals("imgCompanyLoginImage")) {
+						loginImageFiles = (ArrayList<Map<String,String>>)valueMap.get("files");
 					}
 				} else if(fieldValue instanceof String) {					
 					if(fieldId.equals("txtMailHost")) {
@@ -193,22 +205,29 @@ public class SettingsServiceImpl implements ISettingsService {
 				}
 			}
 
-			if(!files.isEmpty()) {
-				for(int i=0; i < files.subList(0, files.size()).size(); i++) {
-					Map<String, String> fileMap = files.get(i);
+			if(!logoFiles.isEmpty()) {
+				for(int i=0; i < logoFiles.subList(0, logoFiles.size()).size(); i++) {
+					Map<String, String> fileMap = logoFiles.get(i);
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
-					imgCompanyLogo = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId);
-						//  SWConfig DB에 id가 없을 경우, create, 있으면 update
-					if(getSwoManager().getLogo(userId, companyId) == null){
-						getSwoManager().createLogo(userId, companyId, imgCompanyLogo);
-					}else{
-						getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
-					}
+					imgCompanyLogo = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId + CompanyGeneral.IMAGE_TYPE_LOGO);
+					getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
+				}
+			}
+			if(!loginImageFiles.isEmpty()) {
+				for(int i=0; i < loginImageFiles.subList(0, loginImageFiles.size()).size(); i++) {
+					Map<String, String> fileMap = loginImageFiles.get(i);
+					companyFileId = fileMap.get("fileId");
+					companyFileName = fileMap.get("fileName");
+					imgCompanyLoginImage = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId + CompanyGeneral.IMAGE_TYPE_LOGINIMAGE);
+					getSwoManager().setLoginImage(userId, companyId, imgCompanyLoginImage);
 				}
 			}
 
 			SwoConfig swoConfig = getSwoManager().getConfig(userId, companyId, IManager.LEVEL_ALL);
+
+			if(swoConfig == null)
+				swoConfig = new SwoConfig();
 
 			swoConfig.setId(companyId);
 			swoConfig.setName(companyName);
