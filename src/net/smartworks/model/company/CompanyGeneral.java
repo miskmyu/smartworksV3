@@ -1,10 +1,9 @@
 package net.smartworks.model.company;
 
 import net.smartworks.model.BaseObject;
-import net.smartworks.model.community.Department;
-import net.smartworks.model.community.Group;
-import net.smartworks.model.community.User;
-import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartUtil;
 
@@ -13,9 +12,11 @@ public class CompanyGeneral extends BaseObject {
 	public static final String PICTURE_PATH = SmartConfUtil.getInstance().getImageServer();
 	public static final String NO_LOGO_PATH = "images/";
 	public static final String DEFAULT_COMPANY_LOGO = "default_company_logo.jpg";
+	public static final String DEFAULT_COMPANY_LOGIN_IMAGE = "login_img.gif";
 	public static final String PROFILES_DIR = "Profiles";
 
 	private String logoName;
+	private String loginImageName;
 	private String sendMailHost;
 	private String sendMailAccount;
 	private String sendMailPassword;
@@ -27,6 +28,12 @@ public class CompanyGeneral extends BaseObject {
 	}
 	public void setLogoName(String logoName) {
 		this.logoName = logoName;
+	}
+	public String getLoginImageName() {
+		return loginImageName;
+	}
+	public void setLoginImageName(String loginImageName) {
+		this.loginImageName = loginImageName;
 	}
 	public String getSendMailHost() {
 		return sendMailHost;
@@ -66,8 +73,29 @@ public class CompanyGeneral extends BaseObject {
 		return getPath() + this.getLogoName();
 	}
 
+	public String getCompanyLoginImage() {
+		if(this.getLoginImageName() == null || this.getLoginImageName().equals("")) {
+			return NO_LOGO_PATH + DEFAULT_COMPANY_LOGIN_IMAGE;
+		}
+		return getPath() + this.getLoginImageName();
+	}
+
+	public String getCompanyId() {
+		try {
+			String companyId = SmartUtil.getCurrentUser().getCompanyId();
+			if(CommonUtil.isEmpty(companyId)) {
+				SwoCompany[] swoCompanies = SwManagerFactory.getInstance().getSwoManager().getCompanys(null, null, null);
+				if(!CommonUtil.isEmpty(swoCompanies))
+					companyId = swoCompanies[0].getId();
+			}
+			return companyId;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public String getPath(){
-		return PICTURE_PATH + SmartUtil.getCurrentUser().getCompanyId() + "/" + PROFILES_DIR + "/";
+		return PICTURE_PATH + getCompanyId() + "/" + PROFILES_DIR + "/";
 	}
 
 	public CompanyGeneral(){

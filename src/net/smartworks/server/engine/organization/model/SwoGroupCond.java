@@ -47,7 +47,14 @@ public class SwoGroupCond extends SwoObjectCond {
 	private Date lastCreateDateTo;
 	private String lastName;
 	private SwoGroupMember[] swoGroupMembers;
+	private String noId;
 
+	public String getNoId() {
+		return noId;
+	}
+	public void setNoId(String noId) {
+		this.noId = noId;
+	}
 	public SwoGroupMember[] getSwoGroupMembers() {
 		return swoGroupMembers;
 	}

@@ -911,7 +911,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String realFile2 = null;
 			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
 
-			if(communityId.equals(companyId)) {
+			if(communityId.equals(companyId+"_logo") || communityId.equals(companyId+"_loginimage")) {
 				originId = communityId;
 			} else {
 				//bigId = communityId + "_big";

@@ -1491,7 +1491,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		return (String)logo;
 	}
 
-	public String getLogo(String user, String companyId ) throws SwoException {
+	public String getLogo(String user, String companyId) throws SwoException {
 		String sql = "select logo from SWConfig where id = '" + companyId + "'";
 		Query query = this.getSession().createSQLQuery(sql);
 		Object logo = query.uniqueResult();
@@ -1506,6 +1506,25 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 	public void createLogo(String user, String companyId, String pictureName) throws SwoException {
 		String sql = "insert into SWConfig (id, logo) values ('"+ companyId +"', '"+ pictureName +"')";
+		Query query = this.getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	public String getLoginImage(String user, String companyId) throws SwoException {
+		String sql = "select loginImage from SWConfig where id = '" + companyId + "'";
+		Query query = this.getSession().createSQLQuery(sql);
+		Object loginImage = query.uniqueResult();
+		return (String)loginImage;
+	}
+
+	public void setLoginImage(String user, String companyId, String pictureName) throws SwoException {
+		String sql = "update SWConfig set loginImage = '" + pictureName + "' where id = '" + companyId + "'";
+		Query query = this.getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	public void createLoginImage(String user, String companyId, String pictureName) throws SwoException {
+		String sql = "insert into SWConfig (id, loginImage) values ('"+ companyId +"', '"+ pictureName +"')";
 		Query query = this.getSession().createSQLQuery(sql);
 		query.executeUpdate();
 	}
@@ -2736,6 +2755,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		Date lastCreateDateTo = null;
 		String lastName = null;
 		String nameLike = null;
+		String noId = null;
 		SwoGroupMember[] swoGroupMembers = null;
 	
 		if (cond != null) {
@@ -2753,6 +2773,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
 			nameLike = cond.getNameLike();
+			noId = cond.getNoId();
 			swoGroupMembers = cond.getSwoGroupMembers();
 			lastCreateDateTo = cond.getLastCreateDateTo();
 			lastName = cond.getLastName();
@@ -2806,6 +2827,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and (obj.creationDate <= :lastCreateDateTo");
 				buf.append(" and obj.id not in (select id from SwoGroup where creationDate = :lastCreateDateTo and name <= :lastName))");
 			}
+			if (noId != null)
+				buf.append(" and obj.id != :noId");
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];
@@ -2870,6 +2893,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setTimestamp("lastCreateDateTo", lastCreateDateTo);
 			if (lastName != null)
 				query.setString("lastName", lastName);
+			if (noId != null)
+				query.setString("noId", noId);
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];

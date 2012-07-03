@@ -67,6 +67,31 @@ function loadCompanyLogoField() {
 	}
 };
 
+function loadCompanyLoginImageField() {
+	var companyLoginImageFields = $('div.js_company_loginimage_field');
+	if(!isEmpty(companyLoginImageFields)) {
+		for(var i=0; i<companyLoginImageFields.length; i++) {
+			var companyLoginImageField = $(companyLoginImageFields[i]);
+			
+			var imgSource = companyLoginImageField.attr('imgSource');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			companyLoginImageField.html(gridTable.html(gridRow));
+			
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgCompanyLoginImage",
+				fieldName: "picture profile",
+				imgSource: imgSource,
+				columns: 1,
+				pictureWidth: 130,
+				pictureHeight: 60,
+				required: false
+			});
+		}		
+	}
+};
+
 function loadCheckScheduleFields() {
 	var checkScheduleFields = $('div.js_check_schedule_fields');
 	if(!isEmpty(checkScheduleFields)) {

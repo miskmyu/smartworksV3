@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.model.company.CompanyGeneral"%>
+<%@page import="net.smartworks.service.ISmartWorks"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="java.util.Locale"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -5,7 +7,10 @@
 
 <meta http-equiv="X-UA-Compatible" content="IE=8" />
 <!--[if lte IE 8]><link rel="stylesheet" href="css/black/ie8.css" type="text/css" media="all"><![endif]-->
-
+<%
+	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
+%>
 <html>
 <fmt:setLocale value="<%=java.util.Locale.getDefault().getLanguage() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -66,7 +71,7 @@
 			<!-- Contents -->
 			<div id="lo_contents">
 			<div><img src="images/login_logoTitle.gif" border="0" /></div>
-			<div><img src="images/login_img.gif" border="0" /></div>
+			<div><img src="<%=companyGeneral.getCompanyLoginImage()%>" border="0" /></div>
 			</div>
 			<!-- End of Contents -->
 	
