@@ -38,7 +38,7 @@
 %>
 
 	<!-- 이벤트,공지 포틀릿 -->	
-	<div class="section_portlet">
+	<div class="section_portlet mb15">
         <!-- 오늘에 대한 날짜 이벤트 시간을 표시하는 곳 -->
         <div class="red_stroke">
         	<span class="red_tab_content">
@@ -221,24 +221,18 @@
 					</ul>				
 				</div>
 				<!-- 이벤트 목록 영역 //-->
-			</ul>
-		</div>
-		<!-- 오늘, 내일 그리고 모레이후 이벤트들을 나타내는 곳 -->
-
-		<div class="portlet_b" style="display: block;"></div>
-
-	</div>
-	
-	<div class="section_portlet">
-		<div class="portlet_t"><div class="portlet_tl"></div></div>
-		<div style="display: block;" class="portlet_l">
-			<div style="display: block;" class="portlet_r">
 				
 				<!-- 최근 5개 공지사항을 보여주는 곳 -->
-				<jsp:include page="/jsp/content/today/recent_board_list.jsp" />
+				<div>
+					<jsp:include page="/jsp/content/today/recent_board_list.jsp" />
+				</div>
 				<!-- 최근 5개 공지사항을 보여주는 곳 //-->
-			</div>
-		</div>	
+				
+			</ul>
+		</div>
+		<!-- 오늘, 내일 그리고 모레이후 이벤트들을 나타내는 곳 //-->
+
 		<div class="portlet_b" style="display: block;"></div>
+
 	</div>
 	<!-- 이벤트,공지 포틀릿//-->

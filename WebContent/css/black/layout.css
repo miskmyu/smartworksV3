@@ -331,7 +331,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #upload div a:hover, #upload div a:focus, #upload div a:active, #upload div a:link, #upload div a:visited {color: #333333; text-decoration:none}
 #upload div {float:left; padding-right:15px}
 
-.up_wrap {position:relative; margin: 0 3px 10px}
+.up_wrap {position:relative; margin: 0 3px 5px}
 .upload_up_wrap {width:760px}
 .detail_up_wrap {margin:0 15px 15px} /* 상세보기 페이지의 up_wrap */ 
 
@@ -444,8 +444,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .table_normal table tr {height:32px}
 
 /* Table - Fix 600px */
-.table_normal600 {position: relative}
-.table_normal600 table {width: 555px; min-width:555px !important}
+.table_normal600 {width:600px}
 .boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; padding:10px 0}
 
 /* table Gray */
@@ -514,7 +513,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .space_left { margin-left:15px}
 .space_right { float:right; margin-right:20px}
 .space_top { margin-top:5px}
-.event_cell {margin:0 7px;padding:0 7px}
+.event_cell {margin:0 7px; padding:5px 7px}
 .cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
@@ -540,7 +539,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .recent_notice .title img,.headline_notice .index img {margin:0 3px 0 0}
 
 /*Event old */	
-.event_space {position:relative; width:99%; display:inline-block; margin-left:10px; }
+.event_space {position:relative; width:99%; display:inline-block; margin:0 0 10px 10px}
 .event_space > ul > li { width:33%}
 .event_space .eventCell li { width: auto}
 .event_cell {margin:0 7px; padding:0 7px}
@@ -549,7 +548,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
 
 /* Noice old */
-.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px}
+.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
 .notice .headline_notice {float:left; width:32.5%; padding-right:5px; border-right:1px solid #cfcfcf}
 .notice .recent_notice {float:left; width:64%; margin-left:10px}
 .notice > .headline_notice > a.more {background: url("../../images/btnMainNotice.gif") no-repeat; width:50px; height:30px; float:left; margin-right:6px; padding:75px 15px 0 0; font-size:10px; text-align:right}

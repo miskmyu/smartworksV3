@@ -103,142 +103,144 @@
 						<!--      현재사용자의 사진을 보여주고, 다른 사진을 올리줄 있도록하는 기능을 제공한다. 			-->
 						<div class="js_my_profile_field js_auto_load_profile"></div>
 						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
-					</div>					
-					<table class="table_normal600" style="width:70%">
-						<tr>
-							<th style="width:200px"><fmt:message key="profile.title.user_id" /></th>
-							<td>
-								<input name="txtUserProfileUserId" type="text" readonly="readonly"
-									value="<%=CommonUtil.toNotNull(cUser.getId())%>">
-							</td>
-						</tr>		
-						<tr>
-							<th><fmt:message key="profile.title.user_name" /></th>
-							<td>
-								<input name="txtUserProfileUserName" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getName())%>">		
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.employee_id" /></thd>
-							<td>
-								<input name="txtUserProfileEmpId" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getEmployeeId())%>">		
-							</td>
-						</tr>		
-						<tr>
-							<th class="required_label"><fmt:message key="profile.title.password" /></th>
-							<td>
-								<input name="pwUserProfilePW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(cUser.getPassword())%>">		
-							</td>
-						</tr>
-						<tr>
-							<th class="required_label"><fmt:message key="profile.title.password_confirm" /></th>
-							<td>
-								<input name="pwUserProfilePWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(cUser.getPassword())%>">		
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.department" /></th>
-							<td>
-								<input name="txtUserProfileDepartment" readonly="readonly" type="text" companyId="<%=cUser.getCompanyId()%>" value="<%=CommonUtil.toNotNull(cUser.getDepartment())%>">		
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.position" /></th>
-							<td>
-								<input name="txtUserProfilePosition" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getPosition())%>">		
-							</td>
-						</tr>
-						<tr>
-							<th class="required_label"><fmt:message key="profile.title.locale" /></th>
-							<td>
-								<select name="selUserProfileLocale">
-									<%
-									for (String locale : LocaleInfo.supportingLocales) {
-										String strKey = "common.title.locale." + locale;
-									%>
-										<option value="<%=locale%>" <%if (cUser.getLocale().equals(locale)) {%> selected <%}%>><fmt:message key="<%=strKey%>" /></option>
-									<%
-									}
-									%>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th  class="required_label"><fmt:message key="profile.title.timezone" /></th>
-							<td>
-								<select name="selUserProfileTimeZone">
-									<%
-									for (KeyMap timeZoneName : timeZoneNames) {
-									%>
-										<option value="<%=timeZoneName.getId()%>" <%if (cUser.getTimeZone().equals(timeZoneName.getId())) {%> selected <%}%>><%=timeZoneName.getKey()%></option>
-									<%
-									}
-									%>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.phone_no" /></th>
-							<td>
-								<input name="txtUserProfilePhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getPhoneNo())%>" title="">
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.cell_phone_no" /></th>
-							<td>
-								<input name="txtUserProfileCellNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getCellPhoneNo())%>" title="">
-							</td>
-						</tr>
-						<tr>
-							<th><fmt:message key="profile.title.sign_picture" /></th>
-							<td>
-								<span><fmt:message key="profile.title.use.sign_picture" /></span>
-								<input name="chkUseSignPicture" type="checkbox" <%if(cUser.isUseSignPicture()){ %>checked<%} %>>
-								<div class="js_my_signpic_field js_auto_load_profile"></div>
-							</td>
-						</tr>
-						<%
-						if(!SmartUtil.isBlankObject(emailServers)){
-						%>
+					</div>	
+					<div class="table_normal600">				
+						<table>
 							<tr>
-								<th><fmt:message key="profile.title.email.use" /></th>
+								<th style="width:128px"><fmt:message key="profile.title.user_id" /></th>
 								<td>
-									<input name="chkUserProfileUseEmail" class="js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
+									<input name="txtUserProfileUserId" type="text" readonly="readonly"
+										value="<%=CommonUtil.toNotNull(cUser.getId())%>">
+								</td>
+							</tr>		
+							<tr>
+								<th><fmt:message key="profile.title.user_name" /></th>
+								<td>
+									<input name="txtUserProfileUserName" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getName())%>">		
 								</td>
 							</tr>
-							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
-								<th  class="required_label"><fmt:message key="profile.title.email.id" /></th>
+							<tr>
+								<th><fmt:message key="profile.title.employee_id" /></thd>
 								<td>
-										<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName()).split("@")[0]%>" title="">
-										@
-										<select style="width:45%" name="selUserProfileEmailServerName" class="fieldline">
-											<%
-											for(int i=0; i<emailServers.length; i++){
-												EmailServer emailServer = emailServers[i];
-											%>
-												<option value="<%=emailServer.getId() %>" <%if(emailServer.getId().equals(mailAccount.getEmailServerId())){ %>selected<%} %>><%=CommonUtil.toNotNull(emailServer.getName()) %></option>
-											<%
-											}
-											%>
-										</select>
+									<input name="txtUserProfileEmpId" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getEmployeeId())%>">		
+								</td>
+							</tr>		
+							<tr>
+								<th class="required_label"><fmt:message key="profile.title.password" /></th>
+								<td>
+									<input name="pwUserProfilePW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(cUser.getPassword())%>">		
 								</td>
 							</tr>
-							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
-								<th class="required_label"><fmt:message key="profile.title.email.password" /></th>
+							<tr>
+								<th class="required_label"><fmt:message key="profile.title.password_confirm" /></th>
 								<td>
-									<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+									<input name="pwUserProfilePWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(cUser.getPassword())%>">		
 								</td>
 							</tr>
-							<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
-								<th class="required_label"><fmt:message key="profile.title.email.password_confirm" /></th>
+							<tr>
+								<th><fmt:message key="profile.title.department" /></th>
 								<td>
-									<input name="pwUserProfileEmailPWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+									<input name="txtUserProfileDepartment" readonly="readonly" type="text" companyId="<%=cUser.getCompanyId()%>" value="<%=CommonUtil.toNotNull(cUser.getDepartment())%>">		
 								</td>
 							</tr>
-						<%
-						}
-						%>
-					</table>
+							<tr>
+								<th><fmt:message key="profile.title.position" /></th>
+								<td>
+									<input name="txtUserProfilePosition" readonly="readonly" type="text" value="<%=CommonUtil.toNotNull(cUser.getPosition())%>">		
+								</td>
+							</tr>
+							<tr>
+								<th class="required_label"><fmt:message key="profile.title.locale" /></th>
+								<td>
+									<select name="selUserProfileLocale">
+										<%
+										for (String locale : LocaleInfo.supportingLocales) {
+											String strKey = "common.title.locale." + locale;
+										%>
+											<option value="<%=locale%>" <%if (cUser.getLocale().equals(locale)) {%> selected <%}%>><fmt:message key="<%=strKey%>" /></option>
+										<%
+										}
+										%>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th  class="required_label"><fmt:message key="profile.title.timezone" /></th>
+								<td>
+									<select name="selUserProfileTimeZone">
+										<%
+										for (KeyMap timeZoneName : timeZoneNames) {
+										%>
+											<option value="<%=timeZoneName.getId()%>" <%if (cUser.getTimeZone().equals(timeZoneName.getId())) {%> selected <%}%>><%=timeZoneName.getKey()%></option>
+										<%
+										}
+										%>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.phone_no" /></th>
+								<td>
+									<input name="txtUserProfilePhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getPhoneNo())%>" title="">
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.cell_phone_no" /></th>
+								<td>
+									<input name="txtUserProfileCellNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(cUser.getCellPhoneNo())%>" title="">
+								</td>
+							</tr>
+							<tr>
+								<th><fmt:message key="profile.title.sign_picture" /></th>
+								<td>
+									<span><fmt:message key="profile.title.use.sign_picture" /></span>
+									<input name="chkUseSignPicture" type="checkbox" <%if(cUser.isUseSignPicture()){ %>checked<%} %>>
+									<div class="js_my_signpic_field js_auto_load_profile"></div>
+								</td>
+							</tr>
+							<%
+							if(!SmartUtil.isBlankObject(emailServers)){
+							%>
+								<tr>
+									<th><fmt:message key="profile.title.email.use" /></th>
+									<td>
+										<input name="chkUserProfileUseEmail" class="js_toggle_use_email" type="checkbox" <%if(cUser.isUseMail()){ %>checked<%} %>>
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th  class="required_label"><fmt:message key="profile.title.email.id" /></th>
+									<td>
+											<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName()).split("@")[0]%>" title="">
+											@
+											<select style="width:45%" name="selUserProfileEmailServerName" class="fieldline">
+												<%
+												for(int i=0; i<emailServers.length; i++){
+													EmailServer emailServer = emailServers[i];
+												%>
+													<option value="<%=emailServer.getId() %>" <%if(emailServer.getId().equals(mailAccount.getEmailServerId())){ %>selected<%} %>><%=CommonUtil.toNotNull(emailServer.getName()) %></option>
+												<%
+												}
+												%>
+											</select>
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th class="required_label"><fmt:message key="profile.title.email.password" /></th>
+									<td>
+										<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th class="required_label"><fmt:message key="profile.title.email.password_confirm" /></th>
+									<td>
+										<input name="pwUserProfileEmailPWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+									</td>
+								</tr>
+							<%
+							}
+							%>
+						</table>
+					</div>
 				</form>
 			</div>
 			<!-- 컨텐츠 //-->

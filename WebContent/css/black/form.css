@@ -12,6 +12,8 @@
 .form_value iframe {width:98%}
 .form_layout td, .form_layout th {border: 1px dotted #c7c7c7}
 
+.js_type_imageBox .form_label {background-color:#FFF; width:0}
+
 /* Setting Form */
 .setting_section table, .js_my_profile_page table {line-height: 26px}
 .setting_section td, .setting_section th {border:none}
