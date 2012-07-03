@@ -254,12 +254,12 @@ a .btn_add_category:hover, .btn_add_category.current {background: url("../../ima
 a .btn_apps {background: url("../../images/nav_img.png") no-repeat -157px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
 a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png") no-repeat -157px -379px}
 
-.btn_add_work {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; display: inline-block}
-.btn_add_work:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:15px; display: inline-block}
-.btn_text_category, .btn_change_work {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; display: inline-block}
-.btn_text_category:hover, .btn_change_work:hover {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; display: inline-block}
-.btn_remove_category, .btn_remove_work {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; display: inline-block}
-.btn_remove_category:hover, .btn_remove_work:hover {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; display: inline-block}
+.btn_add_work {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; float:left}
+.btn_add_work:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:12px; float:left}
+.btn_text_category, .btn_change_work {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; float:left}
+.btn_text_category:hover, .btn_change_work:hover {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; float:left}
+.btn_remove_category, .btn_remove_work {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; float:left}
+.btn_remove_category:hover, .btn_remove_work:hover {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; float:left}
 
 .btn_text_folder {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; display: none}
 .folder_actions:hover .btn_text_folder {display: inline-block}
@@ -279,8 +279,8 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 /* CheckOption Nav */
 li.fvrt_item .check_option {display:none; position:absolute; margin:-2px 5px 0 0; right:0; top:0; padding:0 !important}
 li.fvrt_item:hover .check_option {display:block}
-.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:7px; height:16px; width:16px; float:right; padding:0 !important}
-.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:7px; height:16px; width:16px; float:right}
+.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:4px; height:16px; width:16px; float:right; padding:0 !important}
+.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
 
 /* KeyOption Setting */
 .list_action_item .key_option {display:none}
