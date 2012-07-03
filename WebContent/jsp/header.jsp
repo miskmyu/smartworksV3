@@ -61,13 +61,14 @@ function logout() {
 	Notice[] notices = smartWorks.getNoticesForMe();
 	//로고반영 구현을 위해 추가
 	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
+	String companyLogo = (SmartUtil.isBlankObject(companyGeneral) || SmartUtil.isBlankObject(companyGeneral.getCompanyLogo())) ? "images/logo_compay.gif" : companyGeneral.getCompanyLogo();
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
 <!--  style 확인 필요함 -->
 <div>
 	<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
-		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyGeneral.getCompanyLogo()%>" />
+		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyLogo%>" />
 	</a>
 </div>
 <!-- 회사 로고 및 연결 링크 //-->
