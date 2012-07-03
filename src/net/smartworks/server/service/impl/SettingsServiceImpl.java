@@ -226,6 +226,9 @@ public class SettingsServiceImpl implements ISettingsService {
 
 			SwoConfig swoConfig = getSwoManager().getConfig(userId, companyId, IManager.LEVEL_ALL);
 
+			if(swoConfig == null)
+				swoConfig = new SwoConfig();
+
 			swoConfig.setId(companyId);
 			swoConfig.setName(companyName);
 			swoConfig.setCompanyId(companyId);

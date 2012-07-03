@@ -135,7 +135,7 @@
 				</div>
 				<!-- 로그인화면 이미지 설정 -->
 				<div class="default_title_space pt20">
-					<div class="title"><fmt:message key="settings.title.company.loginimage_setting"/></div>
+					<div class="title"><fmt:message key="settings.title.company.mail_setting"/></div>
 				</div>
 				
 				<div class="boTb">
