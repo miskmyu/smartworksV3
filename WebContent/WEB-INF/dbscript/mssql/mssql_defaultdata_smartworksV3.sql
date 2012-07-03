@@ -1,5 +1,5 @@
 -- config
-INSERT INTO swconfig (id, logo) VALUES ('1', 'logo_company.gif');
+INSERT INTO swconfig (id, logo) VALUES ('Maninsoft', 'logo_company.gif');
 
 -- language
 --INSERT INTO swlanguage (id, kor, eng) VALUES ('Add', 'Ãß°¡', 'Add');
