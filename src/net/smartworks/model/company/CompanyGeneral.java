@@ -15,6 +15,9 @@ public class CompanyGeneral extends BaseObject {
 	public static final String DEFAULT_COMPANY_LOGIN_IMAGE = "login_img.gif";
 	public static final String PROFILES_DIR = "Profiles";
 
+	public static final String IMAGE_TYPE_LOGO = "_logo";
+	public static final String IMAGE_TYPE_LOGINIMAGE = "_loginimage";
+
 	private String logoName;
 	private String loginImageName;
 	private String sendMailHost;

@@ -210,7 +210,7 @@ public class SettingsServiceImpl implements ISettingsService {
 					Map<String, String> fileMap = logoFiles.get(i);
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
-					imgCompanyLogo = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId+"_logo");
+					imgCompanyLogo = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId + CompanyGeneral.IMAGE_TYPE_LOGO);
 					getSwoManager().setLogo(userId, companyId, imgCompanyLogo);
 				}
 			}
@@ -219,7 +219,7 @@ public class SettingsServiceImpl implements ISettingsService {
 					Map<String, String> fileMap = loginImageFiles.get(i);
 					companyFileId = fileMap.get("fileId");
 					companyFileName = fileMap.get("fileName");
-					imgCompanyLoginImage = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId+"_loginimage");
+					imgCompanyLoginImage = getDocManager().insertProfilesFile(companyFileId, companyFileName, companyId + CompanyGeneral.IMAGE_TYPE_LOGINIMAGE);
 					getSwoManager().setLoginImage(userId, companyId, imgCompanyLoginImage);
 				}
 			}

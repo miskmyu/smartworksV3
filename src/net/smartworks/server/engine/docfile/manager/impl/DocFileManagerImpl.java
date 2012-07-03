@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
+import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -48,7 +49,6 @@ import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
@@ -900,9 +900,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 					companyId = companys[0].getId();
 				}				
 			}
-			
+
 			File repository = this.getFileRepository(companyId, FILE_DIVISION_PROFILES);
-	
+
 			String communityPictureId = communityId + "." + extension;
 			//String bigId = null;
 			String thumbId = null;
@@ -911,7 +911,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			String realFile2 = null;
 			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
 
-			if(communityId.equals(companyId+"_logo") || communityId.equals(companyId+"_loginimage")) {
+			if(communityId.equals(companyId + CompanyGeneral.IMAGE_TYPE_LOGO) || communityId.equals(companyId + CompanyGeneral.IMAGE_TYPE_LOGINIMAGE)) {
 				originId = communityId;
 			} else {
 				//bigId = communityId + "_big";
