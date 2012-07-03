@@ -53,13 +53,15 @@
 </select>
 
 <!-- 우측의 날짜를 비교할 수 있은 시간 선택박스 -->
-<span class="icon_fb_space fl">
-	<input name="selFilterTimeOperand" class="inputline form_time_input js_timepicker required" type="text"
-		value="<%if (operandValue != null) {%><%=operandValue%><%} else {%><%=curTime%><%}%>">
-	<a href="" class="js_timepicker_button"><span class="icon_fb_time"></span></a>
+<span class="str_field">
+	<span class="icon_fb_space fl">
+		<input name="selFilterTimeOperand" class="inputline form_time_input js_timepicker required" type="text"
+			value="<%if (operandValue != null) {%><%=operandValue%><%} else {%><%=curTime%><%}%>">
+		<a href="" class="js_timepicker_button"><span class="icon_fb_time"></span></a>
+	</span>
 </span>
 
 <!--  현재 콘디션을 삭제할 수 있는 샂제 버튼 -->
 <span class="btn_delete_posi">
-	<button class="btn_delete js_remove_condition"></button>
+	<span class="btn_delete js_remove_condition"></span>
 </span>

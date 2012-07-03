@@ -41,6 +41,31 @@
 			<beans:value>${solarisImageDirectory}</beans:value>
 		</beans:property>
 	</beans:bean>
+	<beans:bean id="id" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
+		<beans:property name="id">
+			<beans:value>file</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="driverClassName" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
+		<beans:property name="driverClassName">
+			<beans:value>${smartworksDs.driverClassName}</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="url" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
+		<beans:property name="url">
+			<beans:value>${smartworksDs.url}</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="username" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
+		<beans:property name="username">
+			<beans:value>${smartworksDs.username}</beans:value>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="password" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
+		<beans:property name="password">
+			<beans:value>${smartworksDs.password}</beans:value>
+		</beans:property>
+	</beans:bean>
 
 	<!-- StringHttpMessageConverter UTF-8 -->
 	<beans:bean	class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">

@@ -64,8 +64,14 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 			options.container.find('.form_value textarea').attr('value', value);		
 	}
 
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $richEditorHiddenInput = $('#richEditorHiddenInput'+id);
+		if ($richEditorHiddenInput.length === 0) {
+			options.container.append('<input id="richEditorHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$richEditorHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

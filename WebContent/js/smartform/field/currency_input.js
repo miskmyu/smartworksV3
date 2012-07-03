@@ -58,9 +58,16 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 		else
 			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + currency + value + '">');
 	
+	if (readOnly) {
+		var $currencyHiddenInput = $('#currencyHiddenInput'+id);
+		if ($currencyHiddenInput.length === 0) {
+			options.container.append('<input id="currencyHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$currencyHiddenInput.attr('value', value);
+		}
+	}
+
 	return options.container;
 };
 

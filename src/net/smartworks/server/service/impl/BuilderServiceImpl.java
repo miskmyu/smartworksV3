@@ -272,6 +272,7 @@ public class BuilderServiceImpl implements IBuilderService {
 			Iterator<String> itr = keySet.iterator();
 
 			String rdoKeyField = null;
+			String hdnDisplayField = null;
 			List<String> hdnDisplayFields = null;
 			String radKeyDuplicable = null;
 			String rdoAccessLevel = null;
@@ -289,6 +290,8 @@ public class BuilderServiceImpl implements IBuilderService {
 					String stringValue = (String)fieldValue;
 					if(fieldId.equals("rdoKeyField"))
 						rdoKeyField = stringValue;
+					else if(fieldId.equals("hdnDisplayFields"))
+						hdnDisplayField = stringValue;
 					else if(fieldId.equals("rdoAccessLevel"))
 						rdoAccessLevel = stringValue;
 					else if(fieldId.equals("rdoWriteLevel"))
@@ -335,12 +338,20 @@ public class BuilderServiceImpl implements IBuilderService {
 						swdField.setDisplayOrder(-1);
 					}
 					int displayOrder = 0;
-					for(String displayField : hdnDisplayFields) {
+					if(!CommonUtil.isEmpty(hdnDisplayField)) {
 						for(SwdField swdField : swdFields) {
-							if(displayField.equals(swdField.getFormFieldId())) {
+							if(hdnDisplayField.equals(swdField.getFormFieldId())) {
 								swdField.setDisplayOrder(displayOrder);
-								displayOrder++;
-								break;
+							}
+						}
+					} else if(!CommonUtil.isEmpty(hdnDisplayFields.size())) {
+						for(String displayField : hdnDisplayFields) {
+							for(SwdField swdField : swdFields) {
+								if(displayField.equals(swdField.getFormFieldId())) {
+									swdField.setDisplayOrder(displayOrder);
+									displayOrder++;
+									break;
+								}
 							}
 						}
 					}

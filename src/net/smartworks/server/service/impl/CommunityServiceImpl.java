@@ -69,6 +69,7 @@ import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
@@ -448,6 +449,16 @@ public class CommunityServiceImpl implements ICommunityService {
 			}
 
 			swoGroup.setCompanyId(user.getCompanyId());
+
+			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			swoGroupCond.setNoId(swoGroup.getId());
+			swoGroupCond.setName(txtGroupName);
+
+			long totalCount = getSwoManager().getGroupSize(user.getId(), swoGroupCond);
+
+			if(totalCount > 0)
+				throw new DuplicateKeyException("Duplicated Group Name!!");
+
 			swoGroup.setName(txtGroupName);
 			swoGroup.setDescription(txtaGroupDesc);
 			swoGroup.setStatus(SwoGroup.GROUP_STATUS_OPEN);
@@ -462,6 +473,8 @@ public class CommunityServiceImpl implements ICommunityService {
 				return null;
 			return groupId;
 
+		} catch (DuplicateKeyException dke) {
+			throw new DuplicateKeyException("Duplicated Group Name!!");
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;

@@ -52,10 +52,9 @@
 <span class="str_field"> 
 	<input class="fieldline required" type="text" name="txtFilterStringOperand" 
 		value="<%if(operandValue!=null){ %><%=operandValue%><%} %>" id="<%if(operandId!=null){ %><%=operandId%><%}%>">
-	</input>
 </span>
 
 <!--  현재 콘디션을 삭제할 수 있는 샂제 버튼 -->
 <span class="btn_delete_posi">
-	<button class="btn_delete js_remove_condition"></button> 
+	<span class="btn_delete js_remove_condition"></span> 
 </span>

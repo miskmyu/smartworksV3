@@ -748,3 +748,6 @@ CREATE TABLE SwMailAccount (
 	modifiedtime datetime,
     primary key (id)
 );
+
+-- 회사 로그인페이지 이미지
+ALTER TABLE SWConfig add loginImage varchar(50);

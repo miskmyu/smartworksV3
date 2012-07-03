@@ -289,48 +289,66 @@
 			</td>
 		</tr>
 	</table>
-	<div class="filter_btn_space">
-		<form name="frmSearchFilterActions" class="js_validation_required">
-			<div class="fr">
-				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-				<span class="form_space fl sw_error_message js_filter_error_message" style="color: red; max-width: 324px"></span>
-				<span class="js_progress_span"></span>
-				<span class="fl mr5">
-					<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
-				</span>
-				<span class="btn_wh">
-					<a href="" class="js_search_filter_saveas"><span class="txt_btn_start"></span>
-						<span class="txt_btn_center"><fmt:message key="common.button.save_as"/></span><span class="txt_btn_end"></span> 
+	<div class="glo_btn_space">
+		<div class="fr">
+ 			<%
+ 			if(!(!SmartUtil.isBlankObject(filter) && filter.isSystemFilter())){
+			%>
+				<span class="btn_gray"> 
+					<a href="" class="js_search_filter_save"> 
+						<span class="txt_btn_start"></span> 
+						<span class="txt_btn_center"><fmt:message key="common.button.save_as"/></span> 
+						<span class="txt_btn_end"></span>
 					</a> 
 				</span> 
-	 			<%
-	 			if(!(!SmartUtil.isBlankObject(filter) && filter.isSystemFilter())){
-	 				if(!SmartUtil.isBlankObject(filter))
-	 			%>
-					<span class="btn_wh"> 
-						<a href="" class="js_search_filter_save"><span class="txt_btn_start"></span>
-							<span class="txt_btn_center"><fmt:message key="common.button.save"/></span><span class="txt_btn_end"></span> 
-						</a>
-					</span> 
-					<span class="btn_wh"> 
-						<a href="" class="js_search_filter_delete"><span class="txt_btn_start"></span>
-							<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span><span class="txt_btn_end"></span>
-						</a>
-					</span> 
-				<%
-				}
-				%>
-				<span class="btn_wh"> 
-					<a href="" class="js_search_filter_execute"><span class="txt_btn_start"></span>
-						<span class="txt_btn_center"><fmt:message key="common.button.execute"/></span><span class="txt_btn_end"></span>
-					</a>
+			<%
+			}
+			%>
+			<span class="btn_gray"> 
+				<a href="" class="js_search_filter_saveas"> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.save"/></span> 
+					<span class="txt_btn_end"></span>
+				</a> 
+			</span>
+ 			<%
+ 			if(!(!SmartUtil.isBlankObject(filter) && filter.isSystemFilter())){
+			%>
+				<span class="btn_gray"> 
+					<a href="" class="js_search_filter_delete"> 
+						<span class="txt_btn_start"></span> 
+						<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span> 
+						<span class="txt_btn_end"></span>
+					</a> 
 				</span> 
-				<span class="btn_wh">
-					<a href="" class="js_search_filter_close"><span class="txt_btn_start"></span>
-						<span class="txt_btn_center"><fmt:message key="common.button.close"/></span> <span class="txt_btn_end"></span>
-					</a>
-				</span>
-			</div>
+			<%
+			}
+			%>
+	
+			<span class="btn_gray"> 
+				<a href="" class="js_search_filter_execute"> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.execute"/></span> 
+					<span class="txt_btn_end"></span>
+				</a> 
+			</span> 
+			<span class="btn_gray ml5">
+				<a href="" class="js_search_filter_close"> 
+					<span class="txt_btn_start"></span> 
+					<span class="txt_btn_center"><fmt:message key="common.button.cancel"/></span> 
+					<span class="txt_btn_end"></span> 
+				</a> 
+			</span>
+		</div>
+		<form name="frmSearchFilterActions" class="fr pr10 js_validation_required">
+			<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
 		</form>
+		
+		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+		<div class="fr form_space js_progress_span" ></div>
+		
+		<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+		<span class="form_space sw_error_message js_filter_error_message" style="text-align:right; color: red"></span>
+		
 	</div>
 </div>

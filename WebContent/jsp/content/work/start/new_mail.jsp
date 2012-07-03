@@ -28,7 +28,6 @@ function submitForms(action) {
 	// 그려진 화면에 있는 입력화면들을 JSON형식으로 Serialize한다...
 	var forms = newMail.find('form');
 	var paramsJson = {};
-	console.log('forms=', forms);
 	for(var i=0; i<forms.length; i++){
 		var form = $(forms[i]);
 		// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
@@ -68,7 +67,10 @@ function submitForms(action) {
 		error : function(e) {
 			// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 			smartPop.closeProgress();
-			smartPop.showInfo(smartPop.ERROR, smartMessage.get("sendMailError"));
+			if(e.responseText === "duplicateKeyException")
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+			else
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("sendMailError"));
 		}
 	});
 }

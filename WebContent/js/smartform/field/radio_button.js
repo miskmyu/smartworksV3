@@ -72,8 +72,14 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		$input_container.hide();
 	}
 
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $radioHiddenInput = $('#radioHiddenInput'+id);
+		if ($radioHiddenInput.length === 0) {
+			options.container.append('<input id="radioHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$radioHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

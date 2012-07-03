@@ -1146,7 +1146,15 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} else {
 				buf.append(" and (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
 			}
-		}	
+		} else if (domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM")) {
+			if(first) {
+				buf.append(" where");
+				first = false;
+			} else {
+				buf.append(" and");
+			}
+			buf.append(" obj.id not in ('root', 'ROOT') ");
+		}
 		// post query
 		if (postQuery != null)
 			buf.append(postQuery);
@@ -2540,7 +2548,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}
 	}
 	@Override
-	public int getObjectsCountByFormFieldId(String domainId, String formFieldId, String tableName, String fieldValue) throws SwdException {
+	public long getObjectsCountByFormFieldId(String domainId, String formFieldId, String tableName, String fieldValue) throws SwdException {
 		try {
 			String tableColName = getTableColName(domainId, formFieldId);
 			StringBuffer stringBuffer = new StringBuffer();
@@ -2548,11 +2556,8 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			Query query = this.getSession().createSQLQuery(stringBuffer.toString());
 			query.setString("fieldValue", fieldValue);
 			List list = query.list();
-			if (list == null || list.isEmpty())
-				return 0;
-			int count = list.size();
-			return count;
-
+			Object sizeObj = list.get(0);
+			return Long.parseLong(sizeObj.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

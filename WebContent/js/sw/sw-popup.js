@@ -316,6 +316,11 @@ smartPop = {
 						if(!isSameId){
 							$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
 									+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+
+							var searchFilter = target.parents('.js_search_filter_page');
+							if(!isEmpty(searchFilter)){
+								userField.find('input[name="txtFilterStringOperand"]').attr('value', comId);
+							}
 						}
 						inputTarget.focus();
 						userField.find('.js_community_names').change();

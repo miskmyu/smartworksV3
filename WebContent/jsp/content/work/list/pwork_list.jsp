@@ -66,9 +66,8 @@
 			var searchFilterArray = new Array();
 			for(var i=0; i<searchFilters.length; i++){
 				var searchFilter = $(searchFilters[i]);
-				//if(searchFilter.is(':visible'))
-					//searchFilterArray.push(searchFilter.find(':visible').serializeObject());
-				searchFilterArray.push(searchFilter.serializeObject());
+				if(searchFilter.is(':visible'))
+					searchFilterArray.push(searchFilter.serializeObject());
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
@@ -126,7 +125,7 @@
 			for(var i=0; i<searchFilters.length; i++){
 				var searchFilter = $(searchFilters[i]);
 				if(searchFilter.is(':visible'))
-					searchFilterArray.push(searchFilter.find(':visible').serializeObject());
+					searchFilterArray.push(searchFilter.serializeObject());
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}

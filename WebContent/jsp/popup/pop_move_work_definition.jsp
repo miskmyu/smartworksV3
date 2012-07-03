@@ -207,16 +207,9 @@
 	<!-- 컨텐츠 //-->
 	<!-- 버튼 영역 -->
 	<div class="glo_btn_space">
-	<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-	<div class="sw_error_message js_pop_error_message" style="color: red"></div>
 	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 
 		<div class="fr pr10">
-
-			<span class="js_progress_span fr"></span>
-
-			<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-			<span class="js_progress_span"></span>
 
 			<span class="btn_gray">
 				<a href="" onclick='submitForms(); return false;'>
@@ -243,6 +236,13 @@
 				 </a>
 			</span>
 		</div>
+
+		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+		<span class="fr js_progress_span"></span>
+	
+		<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+		<div class="sw_error_message js_pop_error_message" style="text-align:right; color: red"></div>
+
 	</div>
 	<!-- 버튼 영역 //-->
 

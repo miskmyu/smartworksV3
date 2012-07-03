@@ -87,8 +87,14 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 		$input.hide();
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $comboHiddenInput = $('#comboHiddenInput'+id);
+		if ($comboHiddenInput.length === 0) {
+			options.container.append('<input id="comboHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$comboHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

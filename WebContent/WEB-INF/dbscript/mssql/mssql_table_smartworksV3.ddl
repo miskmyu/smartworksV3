@@ -567,6 +567,7 @@ CREATE TABLE swauthuser (
 CREATE TABLE swconfig (
 	id varchar(50) NOT NULL,
 	logo varchar(50),
+	loginImage varchar(50),
 	primary key (id)
 );
 

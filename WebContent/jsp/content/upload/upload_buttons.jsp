@@ -196,11 +196,13 @@
 		%>
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
 		
-		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-		<div class="fr form_space js_progress_span" ></div>
-		
-		<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-		<span class="form_space sw_error_message js_upload_error_message" style="text-align:right; color: red"></span>
 	</form>
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
+
+	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+	<div class="fr form_space js_progress_span" ></div>
+	
+	<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+	<span class="form_space sw_error_message js_upload_error_message" style="text-align:right; color: red"></span>
+
 </div>

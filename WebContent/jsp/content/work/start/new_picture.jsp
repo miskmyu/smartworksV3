@@ -97,7 +97,10 @@ function submitForms(e) {
 							},
 							error : function(e) {
 								smartPop.closeProgress();
-								smartPop.showInfo(smartPop.ERROR, smartMessage.get("uploadPictureError"));
+								if(e.responseText === "duplicateKeyException")
+									smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+								else
+									smartPop.showInfo(smartPop.ERROR, smartMessage.get("uploadPictureError"));
 							}
 						});
 					}

@@ -67,6 +67,31 @@ function loadCompanyLogoField() {
 	}
 };
 
+function loadCompanyLoginImageField() {
+	var companyLoginImageFields = $('div.js_company_loginimage_field');
+	if(!isEmpty(companyLoginImageFields)) {
+		for(var i=0; i<companyLoginImageFields.length; i++) {
+			var companyLoginImageField = $(companyLoginImageFields[i]);
+			
+			var imgSource = companyLoginImageField.attr('imgSource');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			companyLoginImageField.html(gridTable.html(gridRow));
+			
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgCompanyLoginImage",
+				fieldName: "picture profile",
+				imgSource: imgSource,
+				columns: 1,
+				pictureWidth: 130,
+				pictureHeight: 60,
+				required: false
+			});
+		}		
+	}
+};
+
 function loadCheckScheduleFields() {
 	var checkScheduleFields = $('div.js_check_schedule_fields');
 	if(!isEmpty(checkScheduleFields)) {
@@ -428,8 +453,13 @@ function loadTaskApprovalFields() {
 			var subjectTitle = taskApprovalField.attr("subjectTitle");
 			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
 			var commentsTitle = taskApprovalField.attr("commentsTitle");
+			var drafterTitle = taskApprovalField.attr("drafterTitle");
+			var draftDateTitle = taskApprovalField.attr("draftDateTitle");
 			var subject = taskApprovalField.attr("subject");
 			var comments = taskApprovalField.attr("content");
+			var drafterId = taskApprovalField.attr("drafterId");
+			var drafterName = taskApprovalField.attr("drafterName");
+			var draftDate = taskApprovalField.attr("draftDate");
 			var readOnly = isEmpty(subject) ? false : true;
 			var actionRequired = taskApprovalField.attr("actionRequired");
 
@@ -438,7 +468,8 @@ function loadTaskApprovalFields() {
 				fieldId: "txtApprovalSubject",
 				fieldName: subjectTitle,
 				value: subject,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				required: true,
 				readOnly: readOnly
 
@@ -449,7 +480,8 @@ function loadTaskApprovalFields() {
 					container: gridRow,
 					fieldId: "txtApprovalForwardee",
 					fieldName: forwardeeTitle,
-					columns: 1,
+					columns: 2,
+					colSpan: 2,
 					multiUsers: true,
 					required: false,
 					readOnly: readOnly
@@ -462,12 +494,41 @@ function loadTaskApprovalFields() {
 				fieldId: "txtApprovalComments",
 				fieldName: commentsTitle,
 				value: comments,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				multiLines: 4,
 				required: false,
 				readOnly: readOnly
 			});
 			
+			if(readOnly){
+				var users = new Array();
+				users.push({userId : drafterId, longName: drafterName});
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalDrafter",
+					fieldName: drafterTitle,
+					columns: 2,
+					colSpan: 1,
+					users: users,
+					multiUsers: false,
+					required: false,
+					readOnly: readOnly
+				});
+				SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalDraftDate",
+					fieldName: draftDateTitle,
+					value: draftDate,
+					columns: 2,
+					colSpan: 1,
+					required: false,
+					readOnly: readOnly
+
+				});
+			}
+
 			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');

@@ -11,6 +11,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import net.smartworks.util.SmartConfUtil;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,7 +79,7 @@ public class Initiator extends HttpServlet {
 
     private void initiateDb() {
         try {
-            Digester digester = new Digester();
+            /*Digester digester = new Digester();
             digester.setValidating(false);
             digester.addObjectCreate("claros-config/db-config", "org.claros.commons.db.DbConfigList");
             digester.addObjectCreate("claros-config/db-config/db", "org.claros.commons.db.DbConfig");
@@ -87,12 +89,23 @@ public class Initiator extends HttpServlet {
             digester.addCallMethod("claros-config/db-config/db/login", "setLogin", 0);
             digester.addCallMethod("claros-config/db-config/db/password", "setPassword", 0);
             digester.addSetNext("claros-config/db-config/db", "addDbConfig", "org.claros.commons.db.DbConfig");
-            digester.parse(Paths.getCfgFolder() + "/config.xml");
-        } catch (IOException e) {
+            digester.parse(Paths.getCfgFolder() + "/config.xml");*/
+        	DbConfig dbConfig = new DbConfig();
+        	dbConfig.setId(SmartConfUtil.getInstance().getId());
+        	dbConfig.setDatabase(SmartConfUtil.getInstance().getUrl());
+        	dbConfig.setDriver(SmartConfUtil.getInstance().getDriverClassName());
+        	dbConfig.setLogin(SmartConfUtil.getInstance().getUsername());
+        	dbConfig.setPassword(SmartConfUtil.getInstance().getPassword());
+        	DbConfigList dbConfigList = new DbConfigList();
+        	dbConfigList.addDbConfig(dbConfig);
+        } catch (Exception e) {
+        	log.fatal("Could not initiate Database");
+		}
+       /* } catch (IOException e) {
             log.fatal("Could not find config.xml file in your config path.(" + Paths.getCfgFolder() + ")", e);
         } catch (SAXException e) {
             log.fatal("Could not validate config.xml file or could not read its contents", e);
-        }
+        }*/
     }
 
     /**

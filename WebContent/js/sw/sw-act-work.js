@@ -687,7 +687,10 @@ $(function() {
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("setIWorkInstanceError"), function(){
+					if(e.responseText === "duplicateKeyException")
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+					else
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("setIWorkInstanceError"), function(){
 						return false;
 					});
 					
@@ -994,7 +997,10 @@ $(function() {
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("tempSaveTaskInstanceError"), function(){
+					if(e.responseText === "duplicateKeyException")
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+					else
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get("tempSaveTaskInstanceError"), function(){
 						return;
 					});
 					
@@ -1159,6 +1165,11 @@ $(function() {
 			target.css({ "left" : listLeft + "px"});
 			target.css({ "position" : "absolute"});
 			smartPop.selectUser(input, target, 300, false);			
+		}else if(!isEmpty(input.parents('.js_search_filter_page'))){
+			var userField = $(targetElement(e)).parents('.js_type_userField:first');
+			var communityItems = userField.find('.js_community_item');
+			var target = userField.find('.js_community_popup:first');
+			smartPop.selectUser(communityItems, target, 240, false);
 		}else{
 			var userField = $(targetElement(e)).parents('.js_type_userField:first');
 			var communityItems = userField.find('.js_community_item');

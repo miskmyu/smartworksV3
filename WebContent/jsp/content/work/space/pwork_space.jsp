@@ -240,7 +240,6 @@
 <script type="text/javascript">
 
 	function clickOnTask(input){
-		console.log('input=', input);
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var formId = input.attr("formId");

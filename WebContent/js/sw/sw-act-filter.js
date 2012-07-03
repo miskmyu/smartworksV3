@@ -20,7 +20,8 @@ $(function() {
 	$('select.js_select_filter_operator').live('change', function(e) {
 		var input = $(targetElement(e));
 		var target = input.children('option:selected').attr('type');
-		input.siblings('span.' + target).show().siblings('span.js_right_operand').hide();
+		input.next().children('span.' + target).show().siblings('span.js_right_operand').hide();
+		console.log('i');
 		return false;
 	});
 	
