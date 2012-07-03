@@ -98,7 +98,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditCompanyEvent" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditCompanyEvent" class="form_layout con js_validation_required">
 		<table>
 			<tbody>
 				<tr>
@@ -123,7 +123,7 @@
 						</div>					
 					</td>
 				</tr>
-				<tr>
+				<tr class="end">
 					<th><fmt:message key="settings.title.company_event.related_users"/></th>
 					<td colspan="3">
 						<div class="js_type_userField" fieldId="usrRelatedUsers" multiUsers="true">

@@ -97,7 +97,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditEmailServer" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditEmailServer" class="form_layout con js_validation_required">
 		<table>
 			<tbody>
 				<tr>

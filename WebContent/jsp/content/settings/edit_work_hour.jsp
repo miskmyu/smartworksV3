@@ -96,7 +96,7 @@
 		<div class="solid_line"></div>
 	</div>
 
-	<form name="frmEditWorkHour" class="form_layout con mb10 js_validation_required">
+	<form name="frmEditWorkHour" class="form_layout con js_validation_required">
 		<table>
 			<colgroup>
 				<col widtd="15%" />
@@ -147,8 +147,8 @@
 					if(workHour == null) workHour = new WorkHour();
 				%>
 					<tr class="js_work_hour" <%if(i<workHourPolicy.getFirstDayOfWeek() || i>=workHourPolicy.getFirstDayOfWeek()+workHourPolicy.getWorkingDays()){ %> style="display:none"<%} %>>
-						<th class="end"><%=LocalDate.getDayLocalString(i) %></th>
-						<td class="end">
+						<th class=""><%=LocalDate.getDayLocalString(i) %></th>
+						<td class="">
 							<span class="fl mr5"><fmt:message key="settings.title.work_hour.start"/></span>
 							<div class="icon_fb_space form_time_input fl mr10">
 								<input name="timWorkStart" class="fieldline js_timepicker workStart" readonly="readonly" type="text" value="<%=LocalDate.convertTimeToString(workHour.getStart()) %>">

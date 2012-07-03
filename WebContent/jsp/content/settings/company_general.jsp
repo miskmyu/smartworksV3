@@ -69,7 +69,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_company_general_page" companyId="<%=companyGeneral.getId()%>">
+<div class="section_portlet setting_section js_company_general_page" companyId="<%=companyGeneral.getId()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
@@ -100,7 +100,7 @@
 							<col width="75%" />
 						</colgroup>
 						<tbody>
-							<tr>
+							<tr class="end">
 								<th rowspan="2"><fmt:message key="settings.title.company.logo_setting"/></th>
 								<td>
 									<div class="js_company_logo_field js_company_logo" imgSource="<%=companyGeneral.getCompanyLogo()%>"></div>
@@ -124,27 +124,27 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><fmt:message key="settings.title.company.mail_host"/></td>
+								<th><fmt:message key="settings.title.company.mail_host"/></th>
 								<td><input name="txtMailHost" class="fieldline" type="text" value="<%=companyGeneral.getSendMailHost()%>" /></td>
 							</tr>
 							<tr>
-								<td><fmt:message key="settings.title.company.send_mail_account"/></td>
+								<th><fmt:message key="settings.title.company.send_mail_account"/></th>
 								<td><input name="txtMailAccount" class="fieldline" type="text" value="<%=companyGeneral.getSendMailAccount()%>" /></td>
 							</tr>
 							<tr>
-								<td><fmt:message key="settings.title.company.send_mail_password"/></td>
+								<th><fmt:message key="settings.title.company.send_mail_password"/></th>
 								<td><input name="pasMailPassword" class="fieldline" type="password" value="<%=companyGeneral.getSendMailPassword()%>" /></td>
 							</tr>
 							<tr>
-								<td><fmt:message key="settings.title.company.send_mail_password_confirm"/></td>
+								<th><fmt:message key="settings.title.company.send_mail_password_confirm"/></th>
 								<td><input name="pasMailPasswordConfirm" class="fieldline" type="password" value="<%=companyGeneral.getSendMailPassword()%>" /></td>
 							</tr>
 							<tr>
-								<td><fmt:message key="settings.title.company.mail_notification"></fmt:message></td>
+								<th><fmt:message key="settings.title.company.mail_notification"></fmt:message></th>
 								<td><input name="chkMailNotification" type="checkbox" <% if(companyGeneral.isSendMailNotification() == true){out.println("checked");} %> /></td>
 							</tr>
-							<tr>
-								<td><fmt:message key="settings.title.company.test_after_saving"/></td>
+							<tr class="end">
+								<th><fmt:message key="settings.title.company.test_after_saving"/></th>
 								<td><input name="chkTestAfterSaving" type="checkbox"/></td>
 							</tr>
 						</tbody>

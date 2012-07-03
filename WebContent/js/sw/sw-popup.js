@@ -327,6 +327,7 @@ smartPop = {
 						$('a.js_pop_select_user').live('click', function(e){
 							
 							var input = $(targetElement(e));
+							if(!input.hasClass('js_pop_select_user')) input = input.parent();
 							var comId = input.attr('userId');
 							var comName = input.text();
 							if(!isEmpty(communityItems) && communityItems.hasClass('js_selected_approver_info')){

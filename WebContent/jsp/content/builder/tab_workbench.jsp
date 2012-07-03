@@ -141,13 +141,6 @@
 									<span class="txt_btn_end"></span>
 								</a>
 							</span>
-							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="display:none"<%} %>>
-								<a href="" class="js_remove_work_definition" workId="<%=work.getId() %>" workName="<%=work.getName()%>">
-									<span class="txt_btn_start"></span>
-										<span class="txt_btn_center"><fmt:message key="common.button.delete"/></span>
-									<span class="txt_btn_end"></span>
-								</a>
-							</span>
 							<span class="btn_gray" <%if(work.isEditing()){%>style="display:none"<%} %>>
 								<a href="" class="js_copy_work_definition" workId="<%=work.getId()%>" workFullName="<%=work.getFullpathName()%>" categoryId=<%=myCategoryId%> groupId="<%=myGroupId%>" workName="<%=work.getName()%>" workDesc="<%=work.getDesc()%>">
 									<span class="txt_btn_start"></span>

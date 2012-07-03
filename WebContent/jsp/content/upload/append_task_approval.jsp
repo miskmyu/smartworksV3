@@ -232,12 +232,12 @@
 								continue;
 					%>
 								<li class="sub_instance_list">
-										<span class="<%=statusImage%> tc vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-										<span ><%=task.getName() %></span>
+										<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+										<span class="approval_stage"><%=task.getName() %></span>
 										<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 										</a>
-										<span>
+										<span class="fl">
 											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 												<span class="t_name"><%=owner.getLongName()%></span>
 											</a>
@@ -250,11 +250,11 @@
 						if(!SmartUtil.isBlankObject(approvalTask)){
 						%>
 							<li class="sub_instance_list">
-									<span class="icon_status_running tc vm" title="<fmt:message key='content.status.running'/>" ></span>
-									<span ><%=approvalTask.getName() %></span>
+									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
+									<span class="approval_stage"><%=approvalTask.getName() %></span>
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 						        	<span class="comment_box">
-										<textarea style="width:73%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
 						        	</span>								
 							</li>
 						<%

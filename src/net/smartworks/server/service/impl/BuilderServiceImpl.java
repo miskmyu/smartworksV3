@@ -48,6 +48,7 @@ import net.smartworks.server.service.IBuilderService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -240,12 +241,17 @@ public class BuilderServiceImpl implements IBuilderService {
 				swaUser.setMode(mode);
 				swaUser.setUserId(id);
 				String type = getSwoManager().getTypeByWorkspaceId(id);
-				if(type != null)
-					type = type.equalsIgnoreCase(Community.COMMUNITY_USER) ? SwaUser.TYPE_USER : type.equalsIgnoreCase(Community.COMMUNITY_DEPARTMENT) ? SwaUser.TYPE_DEPT : SwaUser.TYPE_GROUP;
+
+				if(type == null)
+					throw new ArrayIndexOutOfBoundsException("non-existent user or department!!");
+
+				type = type.equalsIgnoreCase(Community.COMMUNITY_USER) ? SwaUser.TYPE_USER : type.equalsIgnoreCase(Community.COMMUNITY_DEPARTMENT) ? SwaUser.TYPE_DEPT : SwaUser.TYPE_GROUP;
 				swaUser.setType(type);
 				swaUser.setCompanyId(companyId);
 				getSwaManager().setUser(userId, swaUser, null);
 			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ArrayIndexOutOfBoundsException("non-existent user or department!!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e);
@@ -554,15 +560,14 @@ public class BuilderServiceImpl implements IBuilderService {
 					type = PrcProcessInst.PROCESSINSTTYPE_PROCESS;
 					break;
 				case SmartWork.TYPE_SCHEDULE :
-					type = PrcProcessInst.PROCESSINSTTYPE_SCHEDULE;
+					type = PrcProcessInst.PROCESSINSTTYPE_GANTT;
 					break;
 				}
 
 				if (CommonUtil.isEmpty(type))
 					getDesigntimeManager().createPackage(userId, categoryId, name, desc);
-				else {
+				else
 					getDesigntimeManager().createPackage(userId, categoryId, type, name, desc);
-				}
 			}
 		}catch (Exception e){
 			// Exception Handling Required
