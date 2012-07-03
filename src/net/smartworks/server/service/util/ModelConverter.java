@@ -459,12 +459,17 @@ public class ModelConverter {
 			}
 			String packageStatus = task.getPackageStatus();
 			boolean isRunningPackage = true;
+			boolean isEditingPackage = false;
 			if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
 				isRunningPackage = true;
 			} else {
+				if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+					isEditingPackage = true;
 				isRunningPackage = false;
 			}
 			workInfo.setRunning(isRunningPackage);
+			workInfo.setEditing(isEditingPackage);
+			
 			taskInfo.setWork(workInfo); //workInfo
 
 			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
@@ -655,12 +660,16 @@ public class ModelConverter {
 		
 		String packageStatus = task.getPackageStatus();
 		boolean isRunningPackage = true;
+		boolean isEditingPackage = false;
 		if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
 			isRunningPackage = true;
 		} else {
+			if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+				isEditingPackage = true;
 			isRunningPackage = false;
 		}
 		workInfo.setRunning(isRunningPackage);
+		workInfo.setEditing(isEditingPackage);
 		
 		workInfo.setId(task.getPackageId());
 		workInfo.setName(task.getPackageName());
@@ -811,12 +820,16 @@ public class ModelConverter {
 					
 					String packageStatus = task.getPackageStatus();
 					boolean isRunningPackage = true;
+					boolean isEditingPackage = false;
 					if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
 						isRunningPackage = true;
 					} else {
+						if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+							isEditingPackage = true;
 						isRunningPackage = false;
 					}
 					workInfo.setRunning(isRunningPackage);
+					workInfo.setEditing(isEditingPackage);
 					
 					/*TYPE_INFORMATION = 21;
 					TYPE_PROCESS = 22;
@@ -904,12 +917,16 @@ public class ModelConverter {
 					}
 					String packageStatus = task.getPackageStatus();
 					boolean isRunningPackage = true;
+					boolean isEditingPackage = false;
 					if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
 						isRunningPackage = true;
 					} else {
+						if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+							isEditingPackage = true;
 						isRunningPackage = false;
 					}
 					workInfo.setRunning(isRunningPackage);
+					workInfo.setEditing(isEditingPackage);
 					instInfo.setWork(workInfo);
 					instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
@@ -1041,12 +1058,16 @@ public class ModelConverter {
 				}
 				String packageStatus = task.getPackageStatus();
 				boolean isRunningPackage = true;
+				boolean isEditingPackage = false;
 				if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
 					isRunningPackage = true;
 				} else {
+					if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+						isEditingPackage = true;
 					isRunningPackage = false;
 				}
 				workInfo.setRunning(isRunningPackage);
+				workInfo.setEditing(isEditingPackage);
 				instInfo.setWork(workInfo);
 				instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 				instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
@@ -1440,12 +1461,16 @@ public class ModelConverter {
 				smartWorkInfo.setMyGroup(pkgCtgPathMap.get("group"));
 				String packageStatus = pkgPackage.getStatus();
 				boolean isRunningPackage = false;
+				boolean isEditingPackage = false;
 				if (packageStatus.equalsIgnoreCase("DEPLOYED")) {
 					isRunningPackage = true;
-				} else if (packageStatus.equalsIgnoreCase("CHECKED-OUT") || packageStatus.equalsIgnoreCase("CHECKED-IN")) {
+				} else {
+					if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+						isEditingPackage = true;
 					isRunningPackage = false;
 				}
 				smartWorkInfo.setRunning(isRunningPackage);
+				smartWorkInfo.setEditing(isEditingPackage);
 				smartWorkInfo.setFavorite(true);
 				smartWorkInfos[i] = smartWorkInfo;
 			}
@@ -1510,12 +1535,16 @@ public class ModelConverter {
 		}
 		String packageStatus = pkg.getStatus();
 		boolean isRunningPackage = false;
+		boolean isEditingPackage = false;
 		if (packageStatus.equalsIgnoreCase("DEPLOYED")) {
 			isRunningPackage = true;
-		} else if (packageStatus.equalsIgnoreCase("CHECKED-OUT") || packageStatus.equalsIgnoreCase("CHECKED-IN")) {
+		} else {
+			if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+				isEditingPackage = true;
 			isRunningPackage = false;
 		}
 		workInfo.setRunning(isRunningPackage);
+		workInfo.setEditing(isEditingPackage);
 		return workInfo;
 	}	
 	
