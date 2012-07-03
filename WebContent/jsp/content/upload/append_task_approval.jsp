@@ -70,8 +70,15 @@
 	}
 	ApprovalLine approvalLine = null;
 	ApprovalLineInst approvalLineInst = null;
+	String drafterId = "";
+	String drafterName = "";
+	String draftDate = "";
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
+		Approval draft = approvalLineInst.getDraft();
+		drafterId = draft.getApprover().getId();
+		drafterName = draft.getApprover().getLongName();
+		draftDate = draft.getCompletedDate().toLocalString();
 	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
@@ -188,7 +195,9 @@
 			<div class="js_task_approval_fields"
 				subjectTitle="<fmt:message key='approval.title.subject'/>" subject="<%=CommonUtil.toNotNull(subject)%>"
 				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>" actionRequired="<%=!SmartUtil.isBlankObject(approvalTask) %>"
-				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>">
+				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"
+				drafterTitle="<fmt:message key='approval.title.drafter' />" drafterId="<%=CommonUtil.toNotNull(drafterId)%>" drafterName="<%=CommonUtil.toNotNull(drafterName)%>"
+				draftDateTitle="<fmt:message key='approval.title.draft_date' />" draftDate="<%=CommonUtil.toNotNull(draftDate)%>">
 			</div>
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){

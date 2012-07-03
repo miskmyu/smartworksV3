@@ -179,7 +179,6 @@ $(document).ready(function(){
 		},
  		dayClick: function(date, allDay, jsEvent, view){
  			var toDate = null;
- 			console.log('hours=', date.getHours());
  			if(date.getHours()>0) toDate = new Date(date.getTime() + 60*60*1000);
 			loadNewEventFields(date, toDate);
 			$('div.js_new_event_fields .form_value:first input').click();			

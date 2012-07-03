@@ -106,7 +106,10 @@ function submitForms() {
 					error : function(e) {
 						// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 						smartPop.closeProgress();
-						smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
+						if(e.responseText === "duplicateKeyException")
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
+						else
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
 					}
 				});
 			}

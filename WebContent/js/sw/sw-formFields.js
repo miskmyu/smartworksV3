@@ -428,8 +428,13 @@ function loadTaskApprovalFields() {
 			var subjectTitle = taskApprovalField.attr("subjectTitle");
 			var forwardeeTitle = taskApprovalField.attr("forwardeeTitle");
 			var commentsTitle = taskApprovalField.attr("commentsTitle");
+			var drafterTitle = taskApprovalField.attr("drafterTitle");
+			var draftDateTitle = taskApprovalField.attr("draftDateTitle");
 			var subject = taskApprovalField.attr("subject");
 			var comments = taskApprovalField.attr("content");
+			var drafterId = taskApprovalField.attr("drafterId");
+			var drafterName = taskApprovalField.attr("drafterName");
+			var draftDate = taskApprovalField.attr("draftDate");
 			var readOnly = isEmpty(subject) ? false : true;
 			var actionRequired = taskApprovalField.attr("actionRequired");
 
@@ -468,6 +473,34 @@ function loadTaskApprovalFields() {
 				readOnly: readOnly
 			});
 			
+			if(readOnly){
+				var users = new Array();
+				users.push({userId : drafterId, longName: drafterName});
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalDrafter",
+					fieldName: drafterTitle,
+					columns: 2,
+					colSpan: 1,
+					users: users,
+					multiUsers: false,
+					required: false,
+					readOnly: readOnly
+				});
+				SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtApprovalDraftDate",
+					fieldName: draftDateTitle,
+					value: draftDate,
+					columns: 2,
+					colSpan: 1,
+					required: false,
+					readOnly: readOnly
+
+				});
+			}
+
 			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
