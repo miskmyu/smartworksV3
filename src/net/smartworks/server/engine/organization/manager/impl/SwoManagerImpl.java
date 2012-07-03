@@ -1491,7 +1491,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		return (String)logo;
 	}
 
-	public String getLogo(String user, String companyId ) throws SwoException {
+	public String getLogo(String user, String companyId) throws SwoException {
 		String sql = "select logo from SWConfig where id = '" + companyId + "'";
 		Query query = this.getSession().createSQLQuery(sql);
 		Object logo = query.uniqueResult();
@@ -1506,6 +1506,25 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 	public void createLogo(String user, String companyId, String pictureName) throws SwoException {
 		String sql = "insert into SWConfig (id, logo) values ('"+ companyId +"', '"+ pictureName +"')";
+		Query query = this.getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	public String getLoginImage(String user, String companyId) throws SwoException {
+		String sql = "select loginImage from SWConfig where id = '" + companyId + "'";
+		Query query = this.getSession().createSQLQuery(sql);
+		Object loginImage = query.uniqueResult();
+		return (String)loginImage;
+	}
+
+	public void setLoginImage(String user, String companyId, String pictureName) throws SwoException {
+		String sql = "update SWConfig set loginImage = '" + pictureName + "' where id = '" + companyId + "'";
+		Query query = this.getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	public void createLoginImage(String user, String companyId, String pictureName) throws SwoException {
+		String sql = "insert into SWConfig (id, loginImage) values ('"+ companyId +"', '"+ pictureName +"')";
 		Query query = this.getSession().createSQLQuery(sql);
 		query.executeUpdate();
 	}

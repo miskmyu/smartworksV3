@@ -138,6 +138,12 @@ public interface ISwoManager {
 
 	public void setLogo(String user, String companyId, String pictureName) throws SwoException;
 
+	public void createLoginImage(String user, String companyId, String pictureName) throws SwoException;
+
+	public void setLoginImage(String user, String companyId, String pictureName) throws SwoException;
+
+	public String getLoginImage(String user, String companyId) throws SwoException;
+
 	public void createLogo(String user, String companyId, String pictureName) throws SwoException;
 
 	public SwoConfig getConfig(String user, String id, String level) throws SwoException;
