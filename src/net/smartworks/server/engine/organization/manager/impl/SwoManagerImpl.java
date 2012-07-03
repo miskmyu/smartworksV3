@@ -2736,6 +2736,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		Date lastCreateDateTo = null;
 		String lastName = null;
 		String nameLike = null;
+		String noId = null;
 		SwoGroupMember[] swoGroupMembers = null;
 	
 		if (cond != null) {
@@ -2753,6 +2754,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
 			nameLike = cond.getNameLike();
+			noId = cond.getNoId();
 			swoGroupMembers = cond.getSwoGroupMembers();
 			lastCreateDateTo = cond.getLastCreateDateTo();
 			lastName = cond.getLastName();
@@ -2806,6 +2808,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and (obj.creationDate <= :lastCreateDateTo");
 				buf.append(" and obj.id not in (select id from SwoGroup where creationDate = :lastCreateDateTo and name <= :lastName))");
 			}
+			if (noId != null)
+				buf.append(" and obj.id != :noId");
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];
@@ -2870,6 +2874,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setTimestamp("lastCreateDateTo", lastCreateDateTo);
 			if (lastName != null)
 				query.setString("lastName", lastName);
+			if (noId != null)
+				query.setString("noId", noId);
 			if (swoGroupMembers != null && swoGroupMembers.length != 0) {
 				for (int i=0; i<swoGroupMembers.length; i++) {
 					SwoGroupMember swoGroupMember = swoGroupMembers[i];
