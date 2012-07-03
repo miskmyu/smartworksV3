@@ -58,8 +58,14 @@ SmartWorks.FormRuntime.DateChooserBuilder.build = function(config) {
 			options.container.find('.form_value input').attr('value', value);
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly){
+		var $dateChooserHiddenInput = $('#dateChooserHiddenInput'+id);
+		if ($dateChooserHiddenInput.length === 0) {
+			options.container.append('<input id="dateChooserHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$dateChooserHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

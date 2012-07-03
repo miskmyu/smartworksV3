@@ -57,8 +57,15 @@ SmartWorks.FormRuntime.CheckBoxBuilder.build = function(config) {
 			options.container.find('.form_value input').attr('checked', value);
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + smartMessage.get((value===true) ? "trueText" : "falseText") + '">');
+	if (readOnly) {
+		var $checkHiddenInput = options.container.find('#checkHiddenInput' + id);
+		var hiddenValue = (value===true) ? 'true' : 'false';
+		if ($checkHiddenInput.length === 0) {
+			options.container.append('<input id="checkHiddenInput'+id+'" type="hidden" name="' + id + '" value="'+ hiddenValue +'">');
+		} else {
+			$checkHiddenInput.attr('value', hiddenValue);
+		}
+	}
 
 	return options.container;
 };

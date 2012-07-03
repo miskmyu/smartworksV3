@@ -62,8 +62,14 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 			options.container.find('.form_value input').attr('value', percentValue);
 	}
 
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '%">');
+	if (readOnly) {
+		var $percentHiddenInput = $('#percentHiddenInput'+id);
+		if ($percentHiddenInput.length === 0) {
+			options.container.append('<input id="percentHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '%">');
+		} else {
+			$percentHiddenInput.attr('value', value + '%');
+		}
+	}
 	
 	return options.container;
 };

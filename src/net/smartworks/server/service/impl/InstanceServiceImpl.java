@@ -1007,6 +1007,21 @@ public class InstanceServiceImpl implements IInstanceService {
 							dataField.setValue(DateUtil.toXsdDotDateString(new Date()));
 							resultStack.push(dataField);
 							
+						} else if (functionId.equals("mis:getCurrentTime")) {
+							SwdDataField dataField = new SwdDataField();
+							dataField.setId(fieldId);
+							dataField.setType(fieldType);
+							dataField.setRefRecordId(null);
+							dataField.setRefForm(null);
+							dataField.setRefFormField(null);
+
+							long time = System.currentTimeMillis(); 
+							SimpleDateFormat dayTime = new SimpleDateFormat("HH:mm");
+							String value = dayTime.format(new Date(time));
+							
+							dataField.setValue(value);
+							resultStack.push(dataField);
+							
 						} else if (functionId.equals("mis:getCurrentUser")) {
 							SwdDataField dataField = toDataField(userId, field, userId);
 							dataField.setId(fieldId);

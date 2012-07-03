@@ -114,9 +114,15 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 	else
 		options.container.find('.form_value').html($user.children());
 
-	if (readOnly)
-		options.container.append($('<div style="display:none"></div>').html(usersHtml));
-	
+	if (readOnly) {
+		var $userHiddenDiv = options.container.find('#userHiddenDiv' + id);
+		if ($userHiddenDiv.length === 0) {
+			options.container.append($('<div id="userHiddenDiv' + id + '" style="display:none"></div>').html(usersHtml));
+		} else {
+			$userHiddenDiv.html(usersHtml);
+		}
+	}	
+		
 	return options.container;
 };
 
