@@ -34,8 +34,8 @@
 .form_label, .form_value {margin:1px 0}
 
 /* 상세필터 */
-.filter_section {overflow:hidden;}
-.filter_group {border:1px solid #e2e2e2; padding:5px; margin:0 0 3px 0; overflow: hidden}
+.filter_section {}
+.filter_group {border:1px solid #e2e2e2; padding:5px; margin:0 0 3px 0}
 .filter_group table { margin:0; text-align:right; } 
 .filter_area {clear:both; float:right; line-height: 22px}
 .filter_area .selb_size_fir {float:left; margin-right:5px;}
@@ -75,7 +75,7 @@ a .btn_tree_plus:hover {background-position:0 -14px}
 .btn_tree_minus {background: url("../../images/btn_tree.png") no-repeat -17px 0 transparent; border: 0 none; cursor: pointer; height: 14px; padding: 0; width: 16px; display:inline-block}
 a .btn_tree_minus:hover {background-position:-17px -14px}
 .btn_delete {background: url("../../images/btn_ic_delet.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 11px;
-    padding: 0; width: 11px; position: relative;} /* 필터 안에 삭제버튼 */
+    padding: 0; width: 11px; position: relative; display: inline-block} /* 필터 안에 삭제버튼 */
 	
 .filter_btn_space {background-color:#FFF; padding:8px 0 0; height:22px; border-top: 1px solid #c7c7c7;}
 .btn_delete_posi {padding:0 0 0 9px}
