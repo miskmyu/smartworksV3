@@ -51,34 +51,28 @@
 </select>
 
 <!-- 사용자를 선택하는 입력화면 -->
-<div class="js_type_userField fl"> 
-	<div class="icon_fb_space"> 
-		<div class='fieldline community_names js_community_names sw_required'>
-			<div class="js_selected_communities user_sel_area">
-				<%if (operandValue != null) {%><span>
-					<span class='js_community_item user_select' comId='<%=operandValueSecond%>'><%=operandValue%><span class='btn_x_gr'>
-						<a class='js_remove_community' href=''> x</a>
-					</span></span>
-				</span><%}%>
+<span class="str_field">
+	<div class="fl w100 js_type_userField"> 
+		<div class="icon_fb_space"> 
+			<div class='fieldline community_names js_community_names sw_required'>
+				<div class="js_selected_communities user_sel_area">
+					<%if (operandValue != null) {%>
+						<span class='js_community_item user_select' comId='<%=operandValueSecond%>'><%=operandValue%>
+							<a class='js_remove_community' href=''> x</a>
+						</span>
+					<%}%>
+				</div>
+				<input class="m0 js_auto_complete" style="width:100px" href="user_name.sw" type="text">
+				<input name="txtFilterStringOperand" type="hidden" value="<%=operandId%>">
 			</div>
-			<input name="txtFilterStringOperand" class="js_auto_complete" href="user_name.sw" type="text" id="<%if (operandId != null) {%><%=operandId%><%}%>">
-			<div class="js_srch_x"></div>
+			<div class="js_community_list com_list" style="display: none"></div>
+			<span class="js_community_popup"></span>
+			<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
 		</div>
-		<div class="js_community_list com_list" style="display: none"></div>
-		<span class="js_community_popup"></span>
-		<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
 	</div>
-</div>
-<%-- 
-<span class="str_field"> 
-	<input class="inputline required" type="text" name="txtFilterStringOperand" value="<%if (operandValue != null) {%><%=operandValue%><%}%>"
-		id="<%if (operandId != null) {%><%=operandId%><%}%>">
-	</input>
-	<img src="images/btn_s_person.png" />
 </span>
- --%>
 
 <!--  현재 콘디션을 삭제할 수 있는 샂제 버튼 -->
 <span class="btn_delete_posi">
-	<button class="btn_delete js_remove_condition"></button> 
+	<span class="btn_delete js_remove_condition"></span> 
 </span>

@@ -156,9 +156,6 @@
 				<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private"/></option>
 			</select>
 		</div>
-		<div class="fr form_space">
-			<span class="icon_body_read mt2"></span> 
-		</div>
 	</form>
 
 	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->

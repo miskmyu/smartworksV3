@@ -443,7 +443,8 @@ function loadTaskApprovalFields() {
 				fieldId: "txtApprovalSubject",
 				fieldName: subjectTitle,
 				value: subject,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				required: true,
 				readOnly: readOnly
 
@@ -454,7 +455,8 @@ function loadTaskApprovalFields() {
 					container: gridRow,
 					fieldId: "txtApprovalForwardee",
 					fieldName: forwardeeTitle,
-					columns: 1,
+					columns: 2,
+					colSpan: 2,
 					multiUsers: true,
 					required: false,
 					readOnly: readOnly
@@ -467,7 +469,8 @@ function loadTaskApprovalFields() {
 				fieldId: "txtApprovalComments",
 				fieldName: commentsTitle,
 				value: comments,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				multiLines: 4,
 				required: false,
 				readOnly: readOnly

@@ -1165,6 +1165,11 @@ $(function() {
 			target.css({ "left" : listLeft + "px"});
 			target.css({ "position" : "absolute"});
 			smartPop.selectUser(input, target, 300, false);			
+		}else if(!isEmpty(input.parents('.js_search_filter_page'))){
+			var userField = $(targetElement(e)).parents('.js_type_userField:first');
+			var communityItems = userField.find('.js_community_item');
+			var target = userField.find('.js_community_popup:first');
+			smartPop.selectUser(communityItems, target, 240, false);
 		}else{
 			var userField = $(targetElement(e)).parents('.js_type_userField:first');
 			var communityItems = userField.find('.js_community_item');

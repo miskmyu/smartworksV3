@@ -76,9 +76,11 @@
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
 		Approval draft = approvalLineInst.getDraft();
-		drafterId = draft.getApprover().getId();
-		drafterName = draft.getApprover().getLongName();
-		draftDate = draft.getCompletedDate().toLocalString();
+		if(!SmartUtil.isBlankObject(draft)){
+			drafterId = draft.getApprover().getId();
+			drafterName = draft.getApprover().getLongName();
+			draftDate = draft.getCompletedDate().toLocalString();
+		}
 	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
@@ -118,7 +120,7 @@
 						
 						for(int i=0; i<approvals.length; i++){
 							Approval approval = approvals[i];
-							String signPicture = (approval.getApprover() != null && approval.getApprover().isUseSignPicture()) ? approval.getApprover().getSignPicture() : "";
+							String signPicture = (approval.getApprover() != null && approval.getApprover().isUseSignPicture() && approval.getStatus() == Instance.STATUS_COMPLETED) ? approval.getApprover().getSignPicture() : "";
 							String statusIcon = "";
 							if(approval.getStatus() == Instance.STATUS_COMPLETED){
 								if(SmartUtil.isBlankObject(signPicture)) statusIcon = "approval_status approved_" + cUser.getLocale();

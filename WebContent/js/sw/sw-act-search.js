@@ -225,9 +225,15 @@ $(function() {
 			if(!isSameId){
 				$("<span class='js_community_item user_select' comId='" + comId+ "'>" + comName
 						+ "<a class='js_remove_community' href=''>&nbsp;x</a></span>").insertBefore(inputTarget);
+
+				var searchFilter = input.parents('.js_search_filter_page');
+				if(!isEmpty(searchFilter)){
+					userField.find('input[name="txtFilterStringOperand"]').attr('value', comId);
+				}
 			}
 			inputTarget.focus().parents('.js_community_names').change();
-		}
+		}		
+		
 		return false;
 	});
 
@@ -240,9 +246,14 @@ $(function() {
 			inputTarget.show();
 			inputTarget.next('.js_srch_x').show();
 		}
+		var searchFilter = input.parents('.js_search_filter_page');
+		if(!isEmpty(searchFilter)){
+			userField.find('input[name="txtFilterStringOperand"]').attr('value', '');
+		}
 		input.parents('span.js_community_item').remove();
 		userField.find('.js_community_names').change();
 		userField.find('input.js_auto_complete').focus();
+
 		return false;
 	});
 });

@@ -102,104 +102,170 @@
 		<table>
 			<tbody>
 				<tr>
-					<th class="required_label" width="20%"><fmt:message key="settings.title.approval.name"/></th>
-					<td colspan="3" width="80%" ><input name="txtApprovalLineName" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(approvalLine.getName())%>"/>
+					<th class="required_label" style="width:160px"><fmt:message key="settings.title.approval.name"/></th>
+					<td colspan="5"><input name="txtApprovalLineName" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(approvalLine.getName())%>"/>
 					</td>
 				</tr>
 				<tr>
 					<th><fmt:message key="settings.title.approval.desc"/></th>
-					<td colspan="3"><textarea name="txtaApprovalLineDesc" rows="3" class="fieldline"><%=CommonUtil.toNotNull(approvalLine.getDesc()) %></textarea>
+					<td colspan="5"><textarea name="txtaApprovalLineDesc" rows="3" class="fieldline"><%=CommonUtil.toNotNull(approvalLine.getDesc()) %></textarea>
 					</td>
 				</tr>
 				<tr>
 					<th><fmt:message key="settings.title.approval.level"/></span></th>
-					<td colspan="3">
+					<td colspan="5">
 						<select name="selApprovalLineLevel" class="js_approval_line_level">
+							<option value="1" <%if(approvalLine.getApprovalLevel() == 1){ %>selected<%} %>>1<fmt:message key="settings.title.approval_level"/></option>
 							<option value="2" <%if(approvalLine.getApprovalLevel() == 2){ %>selected<%} %>>2<fmt:message key="settings.title.approval_level"/></option>
 							<option value="3" <%if(approvalLine.getApprovalLevel() == 3){ %>selected<%} %>>3<fmt:message key="settings.title.approval_level"/></option>
 							<option value="4" <%if(approvalLine.getApprovalLevel() == 4){ %>selected<%} %>>4<fmt:message key="settings.title.approval_level"/></option>
 							<option value="5" <%if(approvalLine.getApprovalLevel() == 5){ %>selected<%} %>>5<fmt:message key="settings.title.approval_level"/></option>
+							<option value="6" <%if(approvalLine.getApprovalLevel() == 6){ %>selected<%} %>>6<fmt:message key="settings.title.approval_level"/></option>
+							<option value="7" <%if(approvalLine.getApprovalLevel() == 7){ %>selected<%} %>>7<fmt:message key="settings.title.approval_level"/></option>
+							<option value="8" <%if(approvalLine.getApprovalLevel() == 8){ %>selected<%} %>>8<fmt:message key="settings.title.approval_level"/></option>
+							<option value="9" <%if(approvalLine.getApprovalLevel() == 9){ %>selected<%} %>>9<fmt:message key="settings.title.approval_level"/></option>
+							<option value="10" <%if(approvalLine.getApprovalLevel() == 10){ %>selected<%} %>>10<fmt:message key="settings.title.approval_level"/></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
 					<th class="required_label"><fmt:message key="settings.title.approval.level_name"/></th>
 					<%
-					if(approvalLine.getApprovalLevel()!=0){
-						int widthVal = 80/approvalLine.getApprovalLevel();
-						Approval[] approvals = approvalLine.getApprovals();
-						for(int count=1; count<6; count++){
-							String levelName = "";
-							if(approvals!=null && approvals.length>=count) levelName = approvals[count-1].getName();
+					int widthVal = 100;
+					Approval[] approvals = approvalLine.getApprovals();
+					for(int count=0; count<5; count++){
+						String levelName = "";
+						if(approvals!=null && approvals.length>count) levelName = approvals[count].getName();
 					%>					
-							<td class="js_approval_level_name" width="<%=widthVal%>%" <%if(approvalLine.getApprovalLevel()<count){ %>style="display:none"<%} %>><input name="txtLevelName<%=count %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
+						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
 					<%
-						}
 					}
 					%>
 				</tr>
 				<tr>
-					<th><fmt:message key="settings.title.approval.approver"/></span></th>
+					<th><fmt:message key="settings.title.approval.approver"/></th>
 					<%
-					if(approvalLine.getApprovalLevel()!=0){
-						int widthVal = 80/approvalLine.getApprovalLevel();
-						Approval[] approvals = approvalLine.getApprovals();
-						for(int count=1; count<6; count++){
-							Approval approval = new Approval();
-							if(approvals!=null && approvals.length>=count) approval = approvals[count-1];
+					for(int count=0; count<5; count++){
+						Approval approval = new Approval();
+						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
-							<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count){ %>style="display:none"<%} %>>
-								<select name="selLevelApproverType<%=count %>" class="js_approval_approver_type">
-									<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
-									<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
-									<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
-								</select>
-								<div class="js_type_userField" fieldId="usrLevelApprover<%=count %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
-									<div class="">
-										<div class="icon_fb_space" >
-											<div class="fieldline community_names js_community_names sw_required">
-												<%
-												if(!SmartUtil.isBlankObject(approval.getApprover())){
-												%>
-													<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
-														<a class='js_remove_community' href=''> x</a>
-													</span>
-												<%
-												}
-												%>
-												<input class="m0 js_auto_complete" style="width:100px" href="user_name.sw" type="text">
-											</div>
-											<div class="js_community_list srch_list_nowid" style="display: none"></div>
-											<span class="js_community_popup"></span>
-											<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
+						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+							<select name="selLevelApproverType<%=count+1 %>" class="js_approval_approver_type">
+								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
+								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
+								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
+							</select>
+							<div class="js_type_userField" fieldId="usrLevelApprover<%=count+1 %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
+								<div class="">
+									<div class="icon_fb_space" >
+										<div class="fieldline community_names js_community_names sw_required">
+											<%
+											if(!SmartUtil.isBlankObject(approval.getApprover())){
+											%>
+												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
+													<a class='js_remove_community' href=''> x</a>
+												</span>
+											<%
+											}
+											%>
+											<input class="m0 js_auto_complete" style="width:100px" href="user_name.sw" type="text">
 										</div>
-								</div>								
-							</td>
+										<div class="js_community_list srch_list_nowid" style="display: none"></div>
+										<span class="js_community_popup"></span>
+										<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
+									</div>
+							</div>								
+						</td>
 					<%
-						}
 					}
 					%>
 				</tr>
 				<tr class="end">
 					<th class="required_label"><fmt:message key="settings.title.approval.mean_time"/></th>
 					<%
-					if(approvalLine.getApprovalLevel()!=0){
-						int widthVal = 80/approvalLine.getApprovalLevel();
-						Approval[] approvals = approvalLine.getApprovals();
-						for(int count=1; count<6; count++){
-							Approval approval = new Approval();
-							if(approvals!=null && approvals.length>=count) approval = approvals[count-1];
+					for(int count=0; count<5; count++){
+						Approval approval = new Approval();
+						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
-							<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count){ %>style="display:none"<%} %>>
-								<input name="txtMeanTimeDays<%=count %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeDays()%>"/>
-								<span><fmt:message key="settings.title.mean_time.days"/></span>
-								<input name="txtMeanTimeHours<%=count %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeHours()%>"/>
-								<span><fmt:message key="settings.title.mean_time.hours"/></span>
-								<input name="txtMeanTimeMinutes<%=count %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeMinutes()%>"/>
-								<span><fmt:message key="settings.title.mean_time.minutes"/></span>
-							</td>
+						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+							<input name="txtMeanTimeDays<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeDays()%>"/>
+							<span><fmt:message key="settings.title.mean_time.days"/></span>
+							<input name="txtMeanTimeHours<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeHours()%>"/>
+							<span><fmt:message key="settings.title.mean_time.hours"/></span>
+							<input name="txtMeanTimeMinutes<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeMinutes()%>"/>
+							<span><fmt:message key="settings.title.mean_time.minutes"/></span>
+						</td>
 					<%
-						}
+					}
+					%>
+				</tr>
+				
+				<tr class="js_approval_second_5" <%if(approvalLine.getApprovalLevel()<6){ %>style="display:none"<%} %>>
+					<th class="required_label"><fmt:message key="settings.title.approval.level_name"/></th>
+					<%
+					for(int count=5; count<10; count++){
+						String levelName = "";
+						if(approvals!=null && approvals.length>count) levelName = approvals[count].getName();
+					%>					
+						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
+					<%
+					}
+					%>
+				</tr>
+				<tr class="js_approval_second_5" <%if(approvalLine.getApprovalLevel()<6){ %>style="display:none"<%} %>>
+					<th><fmt:message key="settings.title.approval.approver"/></th>
+					<%
+					for(int count=5; count<10; count++){
+						Approval approval = new Approval();
+						if(approvals!=null && approvals.length>count) approval = approvals[count];
+					%>					
+						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+							<select name="selLevelApproverType<%=count+1 %>" class="js_approval_approver_type">
+								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
+								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
+								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
+							</select>
+							<div class="js_type_userField" fieldId="usrLevelApprover<%=count+1 %>" multiUsers="false" <%if(approval.getApproverType()!=Approval.APPROVER_CHOOSE_USER){ %>style="display:none"<%} %>>
+								<div class="">
+									<div class="icon_fb_space" >
+										<div class="fieldline community_names js_community_names sw_required">
+											<%
+											if(!SmartUtil.isBlankObject(approval.getApprover())){
+											%>
+												<span class='js_community_item user_select' comId="<%=approval.getApprover().getId()%>"><%=approval.getApprover().getLongName() %>
+													<a class='js_remove_community' href=''> x</a>
+												</span>
+											<%
+											}
+											%>
+											<input class="m0 js_auto_complete" style="width:100px" href="user_name.sw" type="text">
+										</div>
+										<div class="js_community_list srch_list_nowid" style="display: none"></div>
+										<span class="js_community_popup"></span>
+										<a href="" class="js_userpicker_button"><span class="icon_fb_user"></span></a>
+									</div>
+							</div>								
+						</td>
+					<%
+					}
+					%>
+				</tr <%if(approvalLine.getApprovalLevel()<6){ %>style="display:none"<%} %>>
+				<tr class="js_approval_second_5 end">
+					<th class="required_label"><fmt:message key="settings.title.approval.mean_time"/></th>
+					<%
+					for(int count=5; count<10; count++){
+						Approval approval = new Approval();
+						if(approvals!=null && approvals.length>count) approval = approvals[count];
+					%>					
+						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+							<input name="txtMeanTimeDays<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeDays()%>"/>
+							<span><fmt:message key="settings.title.mean_time.days"/></span>
+							<input name="txtMeanTimeHours<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeHours()%>"/>
+							<span><fmt:message key="settings.title.mean_time.hours"/></span>
+							<input name="txtMeanTimeMinutes<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeMinutes()%>"/>
+							<span><fmt:message key="settings.title.mean_time.minutes"/></span>
+						</td>
+					<%
 					}
 					%>
 				</tr>
