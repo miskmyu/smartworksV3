@@ -16,7 +16,7 @@ public class ApprovalLine extends BaseObject{
 			ApprovalLine.ID_DEFAULT_APPROVAL_LINE_3_LEVEL, 
 			SmartMessage.getString("approval.name.defaul_3_level"), 
 			SmartMessage.getString("approval.desc.defaul_3_level"), 
-			3, new Approval[]{Approval.DEFAULT_APPROVAL_APPROVER, Approval.DEFAULT_APPROVAL_REVIEWER, Approval.DEFAULT_APPROVAL_FINAL_APPROVER});
+			3, new Approval[]{Approval.DEFAULT_APPROVAL_REVIEWER, Approval.DEFAULT_APPROVAL_APPROVER, Approval.DEFAULT_APPROVAL_FINAL_APPROVER});
 	
 	private String desc;
 	private int approvalLevel;

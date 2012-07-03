@@ -208,7 +208,7 @@
 						<th><fmt:message key="profile.title.phone_no"/></th>
 						<td><input name="txtMemberPhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getPhoneNo()) %>" /></td>
 					</tr>
-					<tr>
+					<tr class="end">
 						<th><fmt:message key="profile.title.cell_phone_no"/></th>
 						<td><input name="txtMemberCellPhoneNo" class="fieldline" type="text" value="<%=CommonUtil.toNotNull(user.getCellPhoneNo()) %>" /></td>
 					</tr>

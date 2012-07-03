@@ -71,11 +71,13 @@
 .replay .bg {background-color:#ededed}
 .list_reply {margin:0} /* 댓글 목록 */
 .reply_input {margin-top:10px} /* 댓글 입력 영역 */
-.list_reply li, .replay li, .space_section li {border-bottom: 1px dashed #9c9c9c; vertical-align: middle; padding:5px 0}
+.list_reply li, .replay > ul > li, .space_section li {border-bottom: 1px dashed #9c9c9c; vertical-align: middle; padding:5px 0; overflow: hidden}
 .list_reply .end, .replay .end, .noborder li {border-bottom: none !important; vertical-align: middle}
 .repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px}
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
+.replay .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
+.replay li a img, .replay li img {float:left; margin-right:5px} 
 
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
@@ -94,7 +96,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table .tit_bg .file {width:16px}
 .list_contents table th {text-align:center}
 .list_contents table th, .list_contents table td {border-bottom: 1px dotted #C7C7C7}
-.list_contents table td {padding:6px 2px}
+.list_contents table td {padding:4px 2px}
 .list_contents table .tit_bg2 th {background-color:#F5F5F5; font-weight:normal}
 .list_contents table .tit_bg2 td {background-color:#FFF}
 .r_line {border-right:1px solid #cccccc}
@@ -360,7 +362,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_group {margin: 0 5px; overflow:hidden}
 .approval_area { width:130px; height:134px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 0 -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px}
-.approval_area .approval {height: 72px; overflow: hidden}
+.approval_area .approval {text-align:center; height: 72px; overflow: hidden}
 .approval_area .name {height:24px; vertical-align: bottom; display: table-cell}
 .approval_area .name .t_name {font-size:11px; height: 12px; overflow: hidden}
 .approval_area .name .up {height: 17px ! important; color:#555555}
@@ -371,7 +373,6 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_area .t_date {margin:0 0 7px 0; height:12px}
 /* Approval Status Image */
 .approval_status {background: url("../../images/status.png") no-repeat 0 0; width:88px; height:61px !important; margin: 10px 20px 6px}
-.approval_status img {width:80px; height:67px} 
 .approval_status.drafted_en {background-position:0 0}
 .approval_status.drafted_ko {background-position:-106px 0}
 .approval_status.approved_en {background-position:0 -67px}
@@ -380,3 +381,4 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_status.returned_ko {background-position:-106px -134px}
 .approval_status.rejected_en {background-position:0 -200px}
 .approval_status.rejected_ko {background-position:-106px -200px}
+.approval img {width:80px; height:67px}
