@@ -57,8 +57,14 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
 
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $numberHiddenInput = $('#numberHiddenInput'+id);
+		if ($numberHiddenInput.length === 0) {
+			options.container.append('<input id="numberHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$numberHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

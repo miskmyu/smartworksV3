@@ -91,8 +91,14 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 		$input.hide();
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $autoIndexHiddenInput = $('#autoIndexHiddenInput'+id);
+		if ($autoIndexHiddenInput.length === 0) {
+			options.container.append('<input id="autoIndexHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$autoIndexHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };

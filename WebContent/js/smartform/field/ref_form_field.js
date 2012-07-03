@@ -60,8 +60,14 @@ SmartWorks.FormRuntime.RefFormFieldBuilder.build = function(config) {
 		options.container.find('.form_value').html($refForm.children());		
 	}
 	
-	if (readOnly)
-		options.container.append('<input type="hidden" name="' + id + '" value="' + value + '">');
+	if (readOnly) {
+		var $refFormHiddenInput = $('#refFormHiddenInput'+id);
+		if ($refFormHiddenInput.length === 0) {
+			options.container.append('<input id="refFormHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+		} else {
+			$refFormHiddenInput.attr('value', value);
+		}
+	}
 	
 	return options.container;
 };
