@@ -1530,7 +1530,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				Object fieldValue = frmSmartFormMap.get(fieldId);
 				if(!keyDuplicable) {
 					if(fieldId.equals(keyColumn)) {
-						int objectCount = getSwdManager().getObjectsCountByFormFieldId(domainId, fieldId, tableName, String.valueOf(fieldValue));
+						long objectCount = getSwdManager().getObjectsCountByFormFieldId(domainId, fieldId, tableName, String.valueOf(fieldValue));
 						if(objectCount > 0)
 							throw new DuplicateKeyException("duplicateKeyException");
 					}
