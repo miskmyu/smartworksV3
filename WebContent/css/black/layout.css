@@ -277,10 +277,10 @@ a.icon_hide:hover {background: url("../../images/body_icon.png") no-repeat -28px
 a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px -571px; width:13px; height:13px; display: inline-block}
 
 /* CheckOption Nav */
-li.fvrt_item .check_option {display:none; position:absolute; margin:-2px 5px 0 0; right:0; top:0; padding:0 !important}
+li.fvrt_item .check_option {display:none; position:absolute; margin:3px 5px 0 0; right:0; top:0; padding:0 !important}
 li.fvrt_item:hover .check_option {display:block}
-.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -317px transparent; margin-top:4px; height:16px; width:16px; float:right; padding:0 !important}
-.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -317px transparent; margin-top:4px; height:16px; width:16px; float:right}
+.icon_fvrt {background: url("../../images/nav_img.png") no-repeat -115px -315px transparent; height:16px; width:16px; float:right; padding:0 !important}
+.icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -315px transparent; height:16px; width:16px; float:right}
 
 /* KeyOption Setting */
 .list_action_item .key_option {display:none}
@@ -633,11 +633,11 @@ td.pic {width:85px}
 .t_up_num {color:#e54b4b; font-weight:bold}
 .t_gbold {color:#656565; font-weight:bold}
 .t_gray { color:#919191; font-weight:normal}
-.t_name {color:#23579e; position: relative}
+.t_name, .t_name a {color:#23579e !important; position: relative}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
 .t_size12 {font-size:12px}
-.t_action {color:#23579e; font-size:10px; text-decoration:underline}
+.t_action {color:#23579e; font-size:10.5px; text-decoration:underline}
 .t_action_disabled {color:#454545 !important; text-decoration:none !important}
 .t_date, .t_text_s11, .t_s11,
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}
@@ -649,9 +649,10 @@ td.pic {width:85px}
 .bar { font-weight:normal; color:#999999}
 .arr {font-size:10px; margin-right:2px}
 .t_location {font-size:11px; color:#999897; position:relative; top:24px; margin-left:10px}
-.bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 0 0 5px 10px; vertical-align: top}
+.bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 .bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
+.js_tab_workbench_page .t_location {line-height: 19px}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}
