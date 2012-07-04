@@ -175,7 +175,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.ptask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -199,7 +199,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -223,7 +223,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>

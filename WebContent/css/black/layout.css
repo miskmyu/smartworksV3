@@ -123,6 +123,7 @@ tr.list_action_item td.rdo_key_field input:checked{display:block}
 tr.list_action_item:hover td.rdo_key_field input{display:block} 
 tr.list_action_item td.btn_move_field .move_actions{display:none} 
 tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:pointer} 
+.gray_style tr.list_action_item {height:auto}
 
 /*global Menu */
 .global_menu {position:absolute; right:10px; top:11px;  font-family:'돋움',Dotum; font-size: 11px; color:#c5c5c5}
@@ -186,7 +187,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -366px transparent; padding:0 0 0 12px}
 .icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 21px; font-weight:bold}
 /* new Icon added by ysjung */
-.icon_new {background: url("../../images/icon_new.gif") no-repeat 5px 0 transparent; display:inline-block; height:8px; width:30px; vertical-align:bottom}
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:30px; vertical-align:bottom}
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
@@ -283,6 +284,7 @@ li.fvrt_item:hover .check_option {display:block}
 .icon_fvrt.checked {background: url("../../images/nav_img.png") no-repeat -138px -315px transparent; height:16px; width:16px; float:right}
 
 /* KeyOption Setting */
+.list_contents .list_action_item td, .list_contents .list_action_item th {border-bottom:none}
 .list_action_item .key_option {display:none}
 .list_action_item:hover .key_option {display:block}
 .list_action_item .key_option.checked {display:block}
@@ -452,7 +454,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .gray_style tr {height:32px}
 .gray_style th {border:1px solid #d8d8d8; padding: 2px 8px}
 .gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
-.gray_style td { background-color:#FFF; border-bottom:none; padding-left: 5px}
+.gray_style td { background-color:#FFF; border-bottom:none}
 
 /*라운드 포틀릿*/
 .section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; position:relative; width:100%; z-index:30}
@@ -513,7 +515,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .space_left { margin-left:15px}
 .space_right { float:right; margin-right:20px}
 .space_top { margin-top:5px}
-.event_cell {margin:0 7px; padding:5px 7px}
+.event_cell {margin:0 7px; padding:0px 7px; line-height: 18px}
 .cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
@@ -542,7 +544,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_space {position:relative; width:99%; display:inline-block; margin:0 0 10px 10px}
 .event_space > ul > li { width:33%}
 .event_space .eventCell li { width: auto}
-.event_cell {margin:0 7px; padding:0 7px}
 .cell_date {display:inline-block; border-bottom:1px dotted #cfcfcf; padding:0 5px 1px 5px; margin-bottom:3px}
 .event_cell li.event_list {}
 .event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
@@ -648,11 +649,10 @@ td.pic {width:85px}
 .new_mail {color:#f38f1b}
 .bar { font-weight:normal; color:#999999}
 .arr {font-size:10px; margin-right:2px}
-.t_location {font-size:11px; color:#999897; position:relative; top:24px; margin-left:10px}
+.t_location {font-size:11px; color:#999897; position:relative; top:27px; margin-left:5px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 .bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
-.js_tab_workbench_page .t_location {line-height: 19px}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}

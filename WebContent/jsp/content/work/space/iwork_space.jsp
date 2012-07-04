@@ -148,15 +148,6 @@
 				<!-- 버튼 영역 -->
 				<div class="glo_btn_space">
 				
-					<div class="txt_btn task_information">
-					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
-					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
-					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
-					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
-					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
-					    </div>
-					</div>     
-
 					<!-- 수정, 삭제버튼 -->
 				    <div class="fr">
 						<%
@@ -355,8 +346,17 @@
 					<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 					<div class="fr form_space js_progress_span" ></div>
 					
+					<div class="txt_btn task_information">
+					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
+					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
+					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
+					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
+					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
+					    </div>
+					</div>     
+
 					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-					<span class="form_space sw_error_message js_upload_error_message" style="text-align:right; color: red"></span>
+					<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
 				</div>
 				<!-- 버튼 영역 //-->     				
 			</ul>
