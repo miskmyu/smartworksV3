@@ -7076,4 +7076,117 @@ public class InstanceServiceImpl implements IInstanceService {
 		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 		
 	}
+	@Override
+	public void forwardIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			   workId=pkg_309666dd2bb5493c9d7e618b3a0aad96,
+			   instanceId=dr_402880eb385121e701385122faa40006,
+			   frmTaskForward=   {
+			      txtForwardSubject=전달제목,
+			      txtForwardComments=전달 내용,
+			      txtForwardForwardee=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=1 유광민
+			            }
+			         ]
+			      }
+			   }
+			}*/
+//		String userId = SmartUtil.getCurrentUser().getId();
+//		
+//		String workId = (String)requestBody.get("workId");
+//		String instanceId = (String)requestBody.get("instanceId");
+//	
+//		//레코드를 조회한다
+//		SwfFormCond formCond = new SwfFormCond();
+//		formCond.setPackageId(workId);
+//		SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+//		if (forms == null || forms.length > 1)
+//			throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
+//		
+//		String formId = forms[0].getId();
+//		
+//		SwdDomainCond domainCond = new SwdDomainCond();
+//		domainCond.setFormId(formId);
+//		SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
+//		
+//		if (domain == null)
+//			throw new Exception("Not Exist Domain! - formId : " + formId);
+//		
+//		SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
+		
+		//정보관리 작성시에 생성된 태스크 및 업무인스턴스(prcprcinst)를 조회 한다.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	@Override
+	public void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		/*{
+			   workId=pkg_309666dd2bb5493c9d7e618b3a0aad96,
+			   instanceId=dr_402880eb385121e701385122faa40006,
+			   frmApprovalLine=   {
+			      hdnApprovalLineId=system.approvalLine.default.3level,
+			      usrLevelApprover1=kmyu@maninsoft.co.kr,
+			      usrLevelApprover2=kmyu@maninsoft.co.kr,
+			      usrLevelApprover3=kmyu@maninsoft.co.kr
+			   },
+			   frmTaskApproval=   {
+			      txtApprovalSubject=기안제목,
+			      txtApprovalComments=기안 내용,
+			      txtApprovalForwardee=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=1 유광민
+			            },
+			            {
+			               id=hsshin@maninsoft.co.kr,
+			               name=신현성
+			            }
+			         ]
+			      }
+			   }
+			}*/
+		
+		System.out.println(requestBody);
+	}
 }
