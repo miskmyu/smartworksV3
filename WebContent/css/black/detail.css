@@ -82,8 +82,8 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
 .default_title_space{padding-bottom:5px !important} /* Case in No right Button */
-.list_title_space,.default_title_space {padding:5px 0 0 0; overflow:hidden} /* Case in right Button */
-.list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 2px no-repeat;font-size:14px;font-weight:bold; padding: 0 8px 0 20px; float:left}
+.list_title_space,.default_title_space {padding:5px 0 2px 0; overflow:hidden} /* Case in right Button */
+.list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 3px no-repeat; font-size:14px; font-weight:bold; padding: 3px 8px 0 20px; float:left}
 
 .list_contents {}
 /*.list_contents table {min-width:700px}*/
@@ -96,7 +96,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table .tit_bg .file {width:16px}
 .list_contents table th {text-align:center}
 .list_contents table th, .list_contents table td {border-bottom: 1px dotted #C7C7C7}
-.list_contents table td {padding:4px 2px}
+.list_contents table td {padding:2px 5px}
 .list_contents table .tit_bg2 th {background-color:#F5F5F5; font-weight:normal}
 .list_contents table .tit_bg2 td {background-color:#FFF}
 .r_line {border-right:1px solid #cccccc}
@@ -311,7 +311,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .t_text_s11 {margin:28px 0 0 4px; text-align:center; width:110px}
 
 /* Icon button style */
-.title_line_btns {float:right; position:relative; top:-3px}
+.title_line_btns {float:right; position: relative; top: -1px}
 .title_line_options {float:left; position:relative; top:0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
@@ -371,6 +371,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_area .name .noti_in {width: 101px; margin:0; float:left}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
 .approval_area .t_date {margin:0 0 7px 0; height:12px}
+
 /* Approval Status Image */
 .approval_status {background: url("../../images/status.png") no-repeat 0 0; width:88px; height:61px !important; margin: 10px 20px 6px}
 .approval_status.drafted_en {background-position:0 0}
