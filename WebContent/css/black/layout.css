@@ -446,7 +446,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .table_normal table tr {height:32px}
 
 /* Table - Fix 600px */
-.table_normal600 {width:600px}
+.table_normal600 {width:558px}
 .boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; padding:10px 0}
 
 /* table Gray */

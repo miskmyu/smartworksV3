@@ -72,7 +72,6 @@
 	
 			<!-- Contents -->
 			<div id="lo_contents">
-			<div><img src="images/login_logoTitle.gif" border="0" /></div>
 			<div><img src="<%=companyLogo%>" border="0" /></div>
 			</div>
 			<!-- End of Contents -->

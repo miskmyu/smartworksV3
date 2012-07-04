@@ -57,9 +57,9 @@
 
 
 /* label check icon add */
-.icon_required{background: url("../../images/icon_check.png") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
-.required_label{background: url("../../images/icon_check.png") 98% 7px no-repeat transparent}
-.required_label span{padding-right:12px}
+.icon_required {background: url("../../images/icon_check.png") no-repeat 0 6px; height:18px; width:13px; position: relative; display: inline-block;}
+.required_label {background: url("../../images/icon_check.png") 98% 7px no-repeat transparent}
+.required_label span {padding-right:12px}
 
 .form_number_input input {text-align:right}
 .form_radio_btn
