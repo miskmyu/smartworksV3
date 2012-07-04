@@ -2405,6 +2405,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				apprLine.setStatus("created");
 
+				
 				AprApproval[] approvals = new AprApproval[appLineSortingMap.size()];
 				
 				for (int i = 1; i <= appLineSortingMap.size(); i++) {
@@ -6955,7 +6956,26 @@ public class InstanceServiceImpl implements IInstanceService {
 //		}
 		
 		ApprovalLineInst approvalLineInst = new ApprovalLineInst();
-		Approval[] aprs = new Approval[apraprs.length];
+		Approval[] aprs = new Approval[apraprs.length + 1];
+		
+		//기안 단계(ex : 정보관리 작성시 생성되는 SINGLE, COMMON 태스크를 조회 하여 기안 단계의 approval 을 포함하여 리턴한다)
+		String taskId = aprLine.getCorrelation();
+		TskTask task = getTskManager().getTask(user.getId(), taskId, IManager.LEVEL_LITE);
+		
+		if (task == null)
+			throw new Exception("Not Exist Draft Task!! taskId : " + taskId);
+		
+		Approval draftApr = new Approval();
+		draftApr.setStatus(Instance.STATUS_DRAFTED);
+		draftApr.setName("DRAFT");
+		draftApr.setApproverType(Approval.APPROVER_CHOOSE_ON_RUNNING);
+		draftApr.setApprover(ModelConverter.getUserByUserId(task.getAssignee()));
+		//draftApr.setDueDate("");
+		draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
+		draftApr.setMandatory(true);
+		draftApr.setModifiable(true);
+		aprs[0] = draftApr;
+		
 		for (int i = 0; i < apraprs.length; i++) {
 			AprApproval aprapr = apraprs[i];
 			Approval apr = new Approval();
@@ -7000,7 +7020,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			apr.setMandatory(aprapr.isMandatory());
 			apr.setModifiable(aprapr.isModifiable());
 			
-			aprs[i] = apr;
+			aprs[i + 1] = apr;
 		}
 		approvalLineInst.setApprovals(aprs);
 		approvalLineInst.setName(aprLine.getName());

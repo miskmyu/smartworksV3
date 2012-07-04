@@ -161,6 +161,7 @@ smartMessage.bundle['en'] = {
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
 	noneDisplayFieldError : "Display field is none. Please select more than one Display field.",
+	eventOldEndDateError : "The End Date of Event is before the Start Date. Please retry with valid End Date", 
 	
 	removeConfirmation : "Do you really want to remove?",
 	saveConfirmation : "Do you really want to save changes? ",
