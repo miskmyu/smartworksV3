@@ -11,7 +11,7 @@
 	ISmartWorks smartWorks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
 	CompanyGeneral companyGeneral = SmartUtil.isBlankObject(smartWorks.getCompanyGeneral()) ? new CompanyGeneral() : smartWorks.getCompanyGeneral();
 
-	String companyLogo = companyGeneral.getCompanyLoginImage();
+	String companyLoginImage = companyGeneral.getCompanyLoginImage();
 %>
 <html>
 <fmt:setLocale value="<%=java.util.Locale.getDefault().getLanguage() %>" scope="request" />
@@ -72,7 +72,7 @@
 	
 			<!-- Contents -->
 			<div id="lo_contents">
-			<div><img src="<%=companyLogo%>" border="0" /></div>
+			<div><img src="<%=companyLoginImage%>" border="0" /></div>
 			</div>
 			<!-- End of Contents -->
 	
