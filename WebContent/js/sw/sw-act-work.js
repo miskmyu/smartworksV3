@@ -1354,4 +1354,16 @@ $(function() {
 		return false;
 	});
 
+	$('.js_select_print').live("click", function(e){
+		var print_content = $(".js_form_content").html();
+		var title = $(".title_picico").text();
+		styleSheets = [];
+		styleSheets.push("css/default.css");
+		styleSheets.push("css/black/detail.css");
+		styleSheets.push("css/black/form.css");
+		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
+		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
+		return false;
+	});
+
 });
