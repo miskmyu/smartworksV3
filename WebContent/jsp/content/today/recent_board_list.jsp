@@ -39,24 +39,24 @@
 	// 공지사항이 있으면 화면을 그린다...
 	if(boards != null && boards.length>0){
 		
-		// 처음 공지사항은 최근 것이므로 별도로 왼쪽에 내용미리보기와 함께 표시하기 위해 분리한다...
+ 		// 처음 공지사항은 최근 것이므로 별도로 왼쪽에 내용미리보기와 함께 표시하기 위해 분리한다...
 		BoardInstanceInfo board = boards[0];
 		WorkSpaceInfo workSpace = board.getWorkSpace();
-		String workSpaceIco = "";
 		UserInfo owner = board.getOwner();
-	
+ 	
 	%>
-		<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
-		<div class="headline_notice">
+		<!-- 공지사항 타이틀 -->
+		<div class="left_title">
 			<a href="<%=board.getWork().getController() %>?cid=<%=board.getWork().getContextId()%>" class="more"><fmt:message key="common.button.view_all"/></a>
-			<div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
+			<!-- 처음게시판(헤드라인 공지사항)을 표시한다 -->
+			<%-- <div class="js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 				<span class="title"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject() %>
 					<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 					<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 				</span>
 				<span class="index">
 					<%
-					if(!workSpaceIco.equals("")){
+					if(!workSpace.equals("")){
 					%>
 						<span class="arr">▶</span>
 						<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
@@ -67,27 +67,28 @@
 				</span>
 				<span class="info"></span>
 				<span class="content"><%=board.getBriefContent() %></span>
-			</div>
+			</div> --%>
+			<!-- 처음게시판(헤드라인 공지사항)을 표시한다 //-->
 		</div>
-		<!-- 처음게시판(헤드라인 공지사항)을 표시한다 //-->
+		<!-- 공지사항 타이틀 //-->
+		
 
 		<!-- 나머지 4개를 리스트로 표시한다 -->
 		<div class="recent_notice">
 			<table>
 				<%
-				for(int i=1; i<boards.length; i++) {
+				for(int i=0; i<boards.length; i++) {
 					board = boards[i];
 					workSpace = board.getWorkSpace();
 				%>			
 					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 						<td class="title">
-							<span><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
+							<span><img class="profile_size_s" title="<%=board.getOwner().getLongName() %>" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 							<%
-							if(!workSpaceIco.equals("")){
+							if(!SmartUtil.isBlankObject(workSpace) && !workSpace.getId().equals(cUser.getId())){
 							%>
-								<span class="arr">▶</span>
 								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span>
 							<%
 							}

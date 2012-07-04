@@ -104,7 +104,7 @@
 						<div class="js_my_profile_field js_auto_load_profile"></div>
 						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
 					</div>	
-					<div class="table_normal600">				
+					<div class="table_normal600 fl">				
 						<table>
 							<tr>
 								<th style="width:128px"><fmt:message key="profile.title.user_id" /></th>

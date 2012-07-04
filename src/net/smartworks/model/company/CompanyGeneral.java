@@ -70,14 +70,14 @@ public class CompanyGeneral extends BaseObject {
 	}
 
 	public String getCompanyLogo() {
-		if(this.getLogoName() == null || this.getLogoName().equals("")) {
+		if(!CommonUtil.isExistImage(getPath() + this.getLogoName())) {
 			return NO_LOGO_PATH + DEFAULT_COMPANY_LOGO;
 		}
 		return getPath() + this.getLogoName();
 	}
 
 	public String getCompanyLoginImage() {
-		if(this.getLoginImageName() == null || this.getLoginImageName().equals("")) {
+		if(!CommonUtil.isExistImage(getPath() + this.getLoginImageName())) {
 			return NO_LOGO_PATH + DEFAULT_COMPANY_LOGIN_IMAGE;
 		}
 		return getPath() + this.getLoginImageName();
