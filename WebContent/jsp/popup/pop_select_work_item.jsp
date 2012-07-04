@@ -20,7 +20,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all">
+<div class="pop_corner_all js_select_work_item_page">
 
 	<!-- 팝업 타이틀 -->
 	<div class="pop_title_space w_margin"> 
