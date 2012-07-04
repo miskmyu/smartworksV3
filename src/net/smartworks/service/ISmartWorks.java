@@ -300,6 +300,10 @@ public interface ISmartWorks {
 	public abstract String setInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void removeInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void forwardIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	/**

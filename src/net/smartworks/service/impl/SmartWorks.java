@@ -406,6 +406,16 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public void forwardIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.forwardIworkInstance(requestBody, request);
+	}
+	
+	@Override
+	public void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.approvalIworkInstance(requestBody, request);
+	}
+	
+	@Override
 	public String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return instanceService.startProcessWorkInstance(requestBody, request);
 

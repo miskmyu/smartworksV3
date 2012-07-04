@@ -84,8 +84,8 @@
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
 				<div class="txt_btn fr">
-                	<a href="" title="<fmt:message key='common.button.print'/>"><div class="icon_print_w fr ml5"></div></a>
-                	<a href="" title="<fmt:message key='common.button.email'/>"> <div class="icon_mail_w fr"></div></a>
+                	<a href="" title="<fmt:message key='common.button.print'/>"><div class="icon_print_w fr ml5 js_select_print"></div></a>
+                	<a href="" title="<fmt:message key='common.button.email'/>"><div class="icon_mail_w fr"></div></a>
 	                <div class="cb pt3">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
@@ -177,7 +177,7 @@
 				<div class="up_point pos_default js_form_content_pointer"></div>
 				<div class="form_wrap up form_read js_form_content"></div>
 			</div>
-	
+
 			<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
 			

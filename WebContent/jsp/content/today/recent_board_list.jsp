@@ -56,7 +56,7 @@
 				</span>
 				<span class="index">
 					<%
-					if(!workSpaceIco.equals("")){
+					if(!workSpace.equals("")){
 					%>
 						<span class="arr">▶</span>
 						<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>

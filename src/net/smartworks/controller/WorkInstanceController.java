@@ -285,6 +285,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	public @ResponseBody Map<String, Object> forwardIworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		String instanceId = smartworks.setInformationWorkInstance(requestBody, request);
 		// TO DO : Exception handler
+		smartworks.forwardIworkInstance(requestBody, request);
 		return null;
 	}
 
@@ -293,6 +294,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	public @ResponseBody Map<String, Object> approvalIworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		String instanceId = smartworks.setInformationWorkInstance(requestBody, request);
 		// TO DO : Exception handler
+		smartworks.approvalIworkInstance(requestBody, request);
 		return null;
 	}
 
