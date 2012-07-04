@@ -283,6 +283,14 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return null;
 	}
 
+	@RequestMapping(value = "/approval_iwork_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> approvalIworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		String instanceId = smartworks.setInformationWorkInstance(requestBody, request);
+		// TO DO : Exception handler
+		return null;
+	}
+
 	@RequestMapping(value = "/update_my_profile", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> updateMyProfile(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
