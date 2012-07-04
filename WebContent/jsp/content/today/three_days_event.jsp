@@ -177,7 +177,7 @@
 														}
 														if (!owner.getId().equals(cUser.getId())) {
 														%> 
-															<span class="t_name"><a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><%=owner.getLongName()%></a></span>
+															<span class="t_name"><a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><%=owner.getName()%></a></span>
 														<%
 				 										}
 				 										%> 

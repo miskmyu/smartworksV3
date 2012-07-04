@@ -83,13 +83,12 @@
 				%>			
 					<tr class="instance_list js_content_list" href="<%=board.getController() %>?cid=<%=board.getContextId()%>&workId=<%=SmartWork.ID_BOARD_MANAGEMENT%>&wid=<%=board.getWorkSpace().getId()%>">
 						<td class="title">
-							<span><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
+							<span><img class="profile_size_s" title="<%=board.getOwner().getLongName() %>" src="<%=board.getOwner().getMinPicture()%>">&nbsp;<%=board.getSubject()%></span> 
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 							<%
 							if(!SmartUtil.isBlankObject(workSpace) && !workSpace.getId().equals(cUser.getId())){
 							%>
-								<span class="arr">▶</span>
 								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span>
 							<%
 							}
