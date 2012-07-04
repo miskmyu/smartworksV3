@@ -263,6 +263,7 @@ mark, rp, rt, ruby, summary, time {
 
 .oh {overflow:hidden !important}
 .psr { position:relative !important}
+.lh0 {line-height: 0 !important}
 
 .op10 { filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=10); opacity:0.1; }
 .op20 { filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=20); opacity:0.2; }

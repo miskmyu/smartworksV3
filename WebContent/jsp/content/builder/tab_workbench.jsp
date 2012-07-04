@@ -66,7 +66,7 @@
 						<tbody>
 							<tr></tr>
 							<tr>
-								<td class="bul_dot" width="110"><fmt:message key="common.title.desc"/> :</td>
+								<td class="bul_dot" width="80"><fmt:message key="common.title.desc"/> :</td>
 								<td class="content" width=""><%=CommonUtil.toNotNull(work.getDesc()) %></td>
 							</tr>
 							<tr>
@@ -75,19 +75,19 @@
 								String createrName = (SmartUtil.isBlankObject(work.getCreater())) ? "" : work.getCreater().getLongName();
 								String createdDate = (SmartUtil.isBlankObject(work.getCreatedDate())) ? "" : work.getCreatedDate().toLocalString();
 								%>
-								<td class="content"><a class="userFieldLink" href="">&nbsp;<%=createrName%></a>&nbsp;<%=createdDate %></td>
+								<td class="content"><a class="userFieldLink t_name" href=""><%=createrName%></a><span class="t_date ml5"><%=createdDate %></span></td>
 							</tr>
 							<tr>
 								<td class="bul_dot"><fmt:message key="common.title.last_modifier"/> :</td>
-								<td class="content"><a class="userFieldLink" href="">&nbsp;<%=work.getLastModifier().getLongName() %></a>&nbsp;<%=work.getLastModifiedDate().toLocalString() %></td>
+								<td class="content"><a class="userFieldLink t_name" href=""><%=work.getLastModifier().getLongName() %></a><span class="t_date ml5"><%=work.getLastModifiedDate().toLocalString() %></span></td>
 							</tr>
 							<%
 							if(!SmartUtil.isBlankObject(work.getEditingUser())){
 							%>
 								<tr>
 									<td class="bul_dot"><fmt:message key="builder.title.editing_user"/> :</td>
-									<td class="content"><a class="userFieldLink" href="">&nbsp;<%=work.getEditingUser().getLongName() %></a>
-										&nbsp;<%=work.getEditingStartDate().toLocalString() %></td>
+									<td class="content"><a class="userFieldLink t_name" href=""><%=work.getEditingUser().getLongName() %></a>
+										<span class="t_date ml5"><%=work.getEditingStartDate().toLocalString() %></span></td>
 								</tr>
 							<%
 							}
@@ -96,7 +96,7 @@
 					</table>
 				</div>
 
-				<table>
+				<table  class="lh0">
 					<%
 					String serviceStatus = (work.isRunning()) ? 
 							SmartMessage.getString("builder.title.service_started") : 
