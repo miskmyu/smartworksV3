@@ -54,7 +54,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	}
 
 	if (!readOnly) {
-		createUploader(value, $('#'+id), false, true);
+		createUploader(value, options.container.find('#'+id), false, true);
 	}
 	return options.container;
 

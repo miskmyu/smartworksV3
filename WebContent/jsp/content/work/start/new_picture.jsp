@@ -52,8 +52,8 @@ function submitForms(e) {
 						workId : workId
 					},
 					success : function(formXml, status, jqXHR) {
-						
 						// 화면 xml을 가져오면 가져온 값과 입력된 사진정보 및 설명값들을 가지고 스마트폼을 이용해 화면을 그린다...
+						
 						new SmartWorks.GridLayout({
 							target : formContent,
 							formXml : formXml,

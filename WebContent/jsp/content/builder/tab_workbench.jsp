@@ -96,7 +96,7 @@
 					</table>
 				</div>
 
-				<table  class="lh0">
+				<table class="lh0">
 					<%
 					String serviceStatus = (work.isRunning()) ? 
 							SmartMessage.getString("builder.title.service_started") : 
@@ -108,11 +108,11 @@
 					String myGroupId = (SmartUtil.isBlankObject(work.getMyGroup())) ? "" : work.getMyGroup().getId();
 					%>
 					<tr>
-						<td class="state" width="40%">
+						<td class="state" width="70%">
 							<fmt:message key="builder.title.service_status"/> : <span style="color: #40991b; font-weight: bold"><%=serviceStatus %></span> &nbsp;&nbsp;
 							<fmt:message key="builder.title.editing_status"/> : <span style="color: #666666; font-weight: bold"><%=editingStatus %></span>
 						</td>
-						<td class=" tr" width="60%">
+						<td class=" tr" width="30%">
 							<span class="btn_gray" <%if(work.isRunning() || work.isEditing()){%>style="display:none"<%} %>>
 								<a href="" class="js_start_work_service">
 									<span class="txt_btn_start"></span>

@@ -11,7 +11,6 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		refreshData : false,
 		layoutInstance : null
 	};
-
 	SmartWorks.extend(options, config);
 
 	if(options.refreshData) return options.container;
@@ -48,7 +47,6 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		$file.hide();		
 	}
 	$file.appendTo(options.container);
-
 	if (readOnly) {
 		viewFiles(value, $('#'+id));
 	} else {
@@ -56,7 +54,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		if(isTempfile){
 			fileList = 	(options.dataField && options.dataField.fileList) || '';
 		}	
-		createUploader(value, $('#'+id), true, false, isTempfile, fileList);
+		createUploader(value, options.container.find('#'+id), true, false, isTempfile, fileList);
 	}
 	return options.container;
 
@@ -97,7 +95,6 @@ SmartWorks.FormRuntime.FileFieldBuilder.buildEx = function(config){
 
 SmartWorks.FormRuntime.FileFieldBuilder.serializeObject = function(fileFields){
 	var fileUploaders = fileFields.find('.qq-uploader');
-	
 	var filesJson = {};
 	for(var i=0; i<fileUploaders.length; i++){
 		var fileUploader = $(fileUploaders[i]);
