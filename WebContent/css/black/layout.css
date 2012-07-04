@@ -549,11 +549,11 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
 
 /* Noice old */
-.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
+/* .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
 .notice .headline_notice {float:left; width:32.5%; padding-right:5px; border-right:1px solid #cfcfcf}
 .notice .recent_notice {float:left; width:64%; margin-left:10px}
-.notice > .headline_notice > a.more {background: url("../../images/btnMainNotice.gif") no-repeat; width:50px; height:30px; float:left; margin-right:6px; padding:75px 15px 0 0; font-size:10px; text-align:right}
-.notice > .headline_notice > a.more:hover {background: url("../../images/btnMainNotice.gif") -65px 0 no-repeat; color:#ba3938}
+.notice > .headline_notice > a.more {background: url("../../images/main_notice.gif") no-repeat; width:50px; height:30px; float:left; margin-right:6px; padding:75px 15px 0 0; font-size:10px; text-align:right}
+.notice > .headline_notice > a.more:hover {background: url("../../images/main_notice.gif") -65px 0 no-repeat; color:#ba3938}
 .headline_notice .title {display:block; font-size:13px; font-weight:bold; padding:7px 0 4px 0}
 .headline_notice .info {display:block; font-size:11px; color:#696969}
 .headline_notice .content {display:block; font-size:12px; border-top:1px dotted #cfcfcf; padding-top:2px; clear:right}
@@ -562,7 +562,24 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .headline_notice .index span.date {float:right; margin-right:9px; font-weight:normal}
 
 .headline_notice > div {}
-.headline_notice > div:hover {cursor:pointer; text-decoration: none}
+.headline_notice > div:hover {cursor:pointer; text-decoration: none} 
+.headline_notice > div {}
+.headline_notice > div:hover {cursor:pointer; text-decoration: none} */
+
+/* Notice New 3.0 */
+.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
+.notice .left_title {float:left; width:12%; min-width:80px; padding-right:5px; text-align: center}
+.notice .recent_notice {float:right; width:87%}
+.notice > .left_title > a.more {background: url("../../images/main_notice.gif") no-repeat; width:60px; height:30px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
+margin: 0 auto}
+.notice > .left_title > a.more:hover {background: url("../../images/main_notice.gif") -80px 0 no-repeat; color:#ba3938 !important; text-decoration: none}
+.left_title .title {display:block; font-size:13px; font-weight:bold; padding:7px 0 4px 0}
+.left_title .info {display:block; font-size:11px; color:#696969}
+.left_title .content {display:block; font-size:12px; border-top:1px dotted #cfcfcf; padding-top:2px; clear:right}
+.left_title .icon_division_s {background-position:70px 0; padding-left:90px}
+.left_title .index {font-size:11px; color:#666; overflow:hidden}
+.left_title .index span.date {float:right; margin-right:9px; font-weight:normal}
+.recent_notice table {line-height: 19px}
 
 /* 3일 업무표시 */
 .red_stroke {background: url("../../images/bgRoundRedStrokeLeft.gif") no-repeat; height:40px; text-align:center}
@@ -580,9 +597,13 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #work_ing {margin:0 15px}
 #work_ing li {border-bottom:1px solid #DCDFE0}
 #work_ing li.end { border:none}
-.working_br td{padding:4px 0;border-bottom:1px solid #cfcfcf}
-#work_ing .tit { font-size:14px; font-weight:bold; float:left}
+.working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
+#work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
 #work_ing .titl_section {height:21px; padding-top:14px}
+#work_ing .title {font-size:12px; color:#bbbaba}
+#work_ing .title a {color:#454545}
+#work_ing .title a:hover {text-decoration:none}
+#work_ing .current {font-size:14px; font-weight:bold}
 td.pic {width:85px}
 .subject_list { margin-left:5px}
 .subject_list li {color: #bababa; float: left; margin-right: 5px}
