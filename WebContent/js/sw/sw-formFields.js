@@ -240,7 +240,7 @@ function loadNewEventFields(startDate, endDate) {
 			var startDateStr = "";
 			if(isEmpty(startDate)){
 				var today = new Date();
-				startDate = new Date(today.getTime() - today.getHours()*60*60*1000 - today.getMinutes()*60*1000);
+				startDate = new Date(today.getTime() - today.getMinutes()*60*1000);
 			}
 			startDateStr = startDate.format('yyyy.mm.dd hh:MM');
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);

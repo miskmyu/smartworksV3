@@ -298,3 +298,11 @@ var printDateTime = function(date){
 var targetElement = function(e){
 	return (typeof e.target != 'undefined') ? e.target : e.srcElement;
 };
+
+var getGMTDate = function(date, timeOffset){
+	if(isEmpty(date) || isEmpty(timeOffset)) return new Date();
+	var dateTemp = (typeof(date) == 'Date') ? date : new Date(date);
+	var offset = (typeof(timeOffset) == 'String') ? parseInt(timeOffset) : timeOffset;
+	
+	return new Date(dateTemp.getTime() - (offset*60*60*1000));
+};
