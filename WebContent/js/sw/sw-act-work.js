@@ -625,6 +625,15 @@ $(function() {
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
 		var formContent = iworkSpace.find('div.js_form_content');
+		var approvers = iworkSpace.find('.js_approval_box input[type="hidden"]');
+		if(!isEmpty(approvers)){
+			for(var i=0; i<approvers.length; i++){
+				var approver = $(approvers[i]);
+				var autoComplete = approver.parents('.js_approval_box').find('.js_auto_complete');
+				if(isEmpty(approver.attr('value'))) autoComplete.addClass('required');
+				else autoComplete.removeClass('required');
+			}
+		}
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('form.js_validation_required'), $('.js_space_error_message'))) return false;
 		
@@ -776,6 +785,15 @@ $(function() {
 		var iworkSpace = input.parents('.js_iwork_space_page');
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
+		var approvers = iworkSpace.find('.js_approval_box input[type="hidden"]');
+		if(!isEmpty(approvers)){
+			for(var i=0; i<approvers.length; i++){
+				var approver = $(approvers[i]);
+				var autoComplete = approver.parents('.js_approval_box').find('.js_auto_complete');
+				if(isEmpty(approver.attr('value'))) autoComplete.addClass('required');
+				else autoComplete.removeClass('required');
+			}
+		}
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('.js_form_task_approval form'), $('.js_space_error_message'))) return false;
 		
