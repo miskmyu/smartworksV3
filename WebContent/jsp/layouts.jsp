@@ -66,7 +66,7 @@
 	}
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
-
+	
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

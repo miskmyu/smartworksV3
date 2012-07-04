@@ -148,16 +148,20 @@
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "iwork_list.sw");
 
-	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
-	RequestParams params = (RequestParams)request.getAttribute("requestParams");
-	if (params == null)
-		params = (RequestParams)session.getAttribute("requestParams");
-	if (params != null)
-		selectedFilterId = params.getFilterId();
-	
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	User cUser = SmartUtil.getCurrentUser();
 	InformationWork work = (InformationWork) smartWorks.getWorkById(workId);
+	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	if (params == null){
+		String savedWorkId = (String)session.getAttribute("workId");
+		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
+			params = (RequestParams)session.getAttribute("requestParams");
+		}
+	}if (params != null){
+		selectedFilterId = params.getFilterId();
+	}
+
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>

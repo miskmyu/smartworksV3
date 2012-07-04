@@ -111,6 +111,7 @@ $(function() {
 	});
 
 	$('.js_select_search_filter').live('change', function(e){
+		var input = $(targetElement(e));
 		$('a.js_edit_search_filter').show();
 		var progressSpan = $('.js_edit_search_filter').next('span.js_progress_span:first');
 		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
@@ -129,6 +130,7 @@ $(function() {
 	});
 
 	$('a.js_search_filter_execute').live("click", function(e){
+		var input = $(targetElement(e));
 		if (!SmartWorks.GridLayout.validate($('form.js_validation_required'), $('.js_filter_error_message'))) return false;
 		var progressSpan = $('.js_search_filter_page').find('span.js_progress_span:first');
 		if(isEmpty(input.parents('.js_pop_instance_list_page')))

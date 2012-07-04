@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
 <%@page import="net.smartworks.model.work.FormField"%>
@@ -145,6 +146,16 @@
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
+	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	if (params == null){
+		String savedWorkId = (String)session.getAttribute("workId");
+		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
+			params = (RequestParams)session.getAttribute("requestParams");
+		}
+	}if (params != null){
+		selectedFilterId = params.getFilterId();
+	}
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
@@ -202,19 +213,24 @@
 
 						<form class="form_space po_left js_form_filter_name" name="frmPworkFilterName">
 							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
-								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" selected>
+								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.all_instances' />
 								</option>
-								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>">
+								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_instances' />
 								</option>
-								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>">
+								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.recent_instances' />
 								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>">
+								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_recent_instances' />
 								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>">
+								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.my_running_instances' />
 								</option>
 								<%
@@ -222,7 +238,7 @@
 								if (filters != null) {
 									for (SearchFilterInfo filter : filters) {
 								%>
-										<option class="js_custom_filter" value="<%=filter.getId()%>"><%=filter.getName()%></option>
+										<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=filter.getName()%></option>
 								<%
 									}
 								}

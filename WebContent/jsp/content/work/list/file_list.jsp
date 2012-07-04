@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.server.engine.process.xpdl.xpdl2.Category"%>
 <%@page import="net.smartworks.model.work.info.FileCategoryInfo"%>
@@ -82,7 +83,7 @@
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "file_list.sw");
-	
+
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName();
