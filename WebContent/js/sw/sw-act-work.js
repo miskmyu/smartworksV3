@@ -591,6 +591,7 @@ $(function() {
 		iworkSpace.find('.js_btn_delete').hide();
 		iworkSpace.find('.js_btn_save').show();
 		iworkSpace.find('.js_btn_cancel').show();
+		iworkSpace.find('form[name="frmAccessSpace"]').show();
 		return false;
 	});
 
@@ -614,6 +615,7 @@ $(function() {
 		showErrors();
 		iworkSpace.find('.js_btn_modify').show().siblings().hide();
 		iworkSpace.find('.js_btn_delete').show();
+		iworkSpace.find('form[name="frmAccessSpace"]').hide();
 		return false;
 	});
 
@@ -676,6 +678,7 @@ $(function() {
 								iworkSpace.find('.js_btn_delete').show();
 								iworkSpace.find('.js_btn_save').hide();
 								iworkSpace.find('.js_btn_cancel').hide();
+								iworkSpace.find('form[name="frmAccessSpace"]').hide();
 								smartPop.closeProgress();								
 							},
 							onError : function(){
