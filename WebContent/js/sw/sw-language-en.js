@@ -164,6 +164,10 @@ smartMessage.bundle['en'] = {
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
 	noneDisplayFieldError : "Display field is none. Please select more than one Display field.",
 	eventOldEndDateError : "The End Date of Event is before the Start Date. Please retry with valid End Date", 
+
+	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
+	duplicatedUserId : "The ID is already used by other. Please input another ID.",
+	missingCommentTaskApproval : "결재의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
 	
 	removeConfirmation : "Do you really want to remove?",
 	saveConfirmation : "Do you really want to save changes? ",

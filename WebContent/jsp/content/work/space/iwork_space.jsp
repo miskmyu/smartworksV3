@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.model.security.AccessPolicy"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
@@ -43,7 +44,7 @@
 	TaskInstanceInfo[] tasks = instance.getTasks();
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
-	if(tasks != null){
+	if(tasks != null && instance.getStatus() != Instance.STATUS_REJECTED){
 		if(!SmartUtil.isBlankObject(taskInstId)){
 			for(TaskInstanceInfo task : tasks){
 				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){

@@ -499,7 +499,10 @@ $(function() {
 		var input = $(targetElement(e)).parents('.js_reply_approval');
 		var appendTaskApproval = input.parents('.js_iwork_space_page').find('.js_append_task_approval_page');
 		var comment = appendTaskApproval.find('textarea[name="txtaCommentContent"]').attr('value');
-		if(isEmpty(comment)) return false;
+		if(isEmpty(comment)){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("missingCommentTaskApproval"));			
+			return false;
+		}
 		smartPop.confirm(smartMessage.get("commentTaskApprovalConfirm"), function(){
 			var result = (input.parents().hasClass('js_btn_approve_approval')) ? "approved" 
 						: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
