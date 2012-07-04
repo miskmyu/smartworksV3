@@ -156,6 +156,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
 import net.smartworks.server.service.util.ModelConverter;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
@@ -262,6 +263,10 @@ public class InstanceServiceImpl implements IInstanceService {
 					String workSpaceId = swdRecord.getWorkSpaceId();
 					if(workSpaceId == null)
 						workSpaceId = user.getId();
+					String workSpaceType = swdRecord.getWorkSpaceType();
+					if(workSpaceType == null)
+						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
+					boardInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 
 					WorkInfo workInfo = new WorkInfo(workId, null, SocialWork.TYPE_BOARD);
 

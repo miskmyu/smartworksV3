@@ -42,7 +42,6 @@
 		// 처음 공지사항은 최근 것이므로 별도로 왼쪽에 내용미리보기와 함께 표시하기 위해 분리한다...
 		BoardInstanceInfo board = boards[0];
 		WorkSpaceInfo workSpace = board.getWorkSpace();
-		String workSpaceIco = "";
 		UserInfo owner = board.getOwner();
 	
 	%>
@@ -56,7 +55,7 @@
 				</span>
 				<span class="index">
 					<%
-					if(!workSpaceIco.equals("")){
+					if(!workSpace.equals("")){
 					%>
 						<span class="arr">▶</span>
 						<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
@@ -85,7 +84,7 @@
 							<%if(board.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=board.getSubInstanceCount() %></b>]</font><%} %>
 							<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 							<%
-							if(!workSpaceIco.equals("")){
+							if(!workSpace.equals("")){
 							%>
 								<span class="arr">▶</span>
 								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span>
