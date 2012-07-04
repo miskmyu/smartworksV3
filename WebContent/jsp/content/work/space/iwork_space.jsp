@@ -4,6 +4,11 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.instance.WorkInstance"%>
+<%@page import="net.smartworks.model.security.AccessPolicy"%>
+<%@page import="net.smartworks.model.community.info.GroupInfo"%>
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.instance.info.TaskInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
 <%@page import="net.smartworks.model.work.InformationWork"%>
@@ -59,6 +64,8 @@
 		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
 		
+	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
+	CommunityInfo[] communities = smartWorks.getMyCommunities();
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -141,23 +148,8 @@
 				<!-- 버튼 영역 -->
 				<div class="glo_btn_space">
 				
-					<div class="txt_btn task_information">
-					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
-					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
-					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
-					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
-					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
-					    </div>
-					</div>     
-
 					<!-- 수정, 삭제버튼 -->
 				    <div class="fr">
-						<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-						<div class="form_space js_progress_span" ></div>
-						
-						<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-						<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
-
 						<%
 						if(work.getEditPolicy().isEditableForMe(owner.getId())){
 						%>
@@ -257,7 +249,114 @@
 					    	</a>
 				   		</span>
 					</div>
-					<!-- 수정, 삭제버튼 //-->    					  
+					<!-- 수정, 삭제버튼 //--> 
+					  					  
+					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
+					<form name="frmAccessSpace" class="fr pr10 js_validation_required" style="display:none">
+						<div id="" class="fr form_space">						
+							<select name="selWorkSpace" class="js_select_work_space">
+								<%
+								if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
+								%>
+									<option  <%if(workSpace.getId().equals(cUser.getId())){ %>selected<%} %> value="<%=cUser.getId()%>" workSpaceType="<%=ISmartWorks.SPACE_TYPE_USER%>"><fmt:message key="common.upload.space.self" /></option>
+								<%
+								}
+								%>
+								<optgroup class="js_optgroup_department" label="<fmt:message key="common.upload.space.department"/>">
+									<%
+									// 현재사용자가 속해있는 부서들을 선택하는 옵션들을 구성한다..
+									for (CommunityInfo community : communities) {
+										if (community.getClass().equals(DepartmentInfo.class)) {
+									%>
+											<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>"><%=community.getName()%></option>
+									<%
+										}
+									}
+									%>
+								</optgroup>
+								<optgroup class="js_optgroup_group" label="<fmt:message key="common.upload.space.group"/>">
+									<%
+									// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
+									for (CommunityInfo community : communities) {
+										if (community.getClass().equals(GroupInfo.class)) {
+									%>
+											<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_GROUP%>"><%=community.getName()%></option>
+									<%
+										}
+									}
+									%>
+								</optgroup>
+							</select>
+						</div>
+				
+						<div id="" class="fr form_space">
+							<!--  현재업무의 접근(읽기)권한 중에 선택가능한 권한들을 구성한다... -->
+							<select name="selAccessLevel" class="js_select_access_level">
+								<%
+								// 읽기권한이 공개 이면, 공개, 비공개, 사용자 지정중에 선택할 수 있다..
+								
+								int accessLevel = (SmartUtil.isBlankObject(instance.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : instance.getAccessPolicy().getLevel();
+								if (accessLevel == AccessPolicy.LEVEL_PUBLIC) {
+								%>
+									<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+								<%
+								// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
+								} else if (accessLevel == AccessPolicy.LEVEL_CUSTOM) {
+								%>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+									<option selected class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+								<%
+								// 읽기권한이 비공개이면, 비공개만 해당된다...
+								} else if (accessLevel == AccessPolicy.LEVEL_PRIVATE) {
+								%>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+				
+						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
+						<%
+						if(accessLevel == AccessPolicy.LEVEL_PUBLIC){
+						%>
+							<div class="fr form_space js_access_level_custom" style="display:none">
+								<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+									<div class="form_value">
+										<div class="icon_fb_space">
+											<div class="fieldline community_names js_community_names sw_required">
+												<input class="js_auto_complete" href="community_name.sw" type="text">
+											</div>
+											<div class="js_community_list com_list" style="display: none"></div>
+											<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+										</div>
+									</div>
+								</span>
+							</div>
+						<%
+						}
+						%>
+						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
+						
+					</form>
+					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
+					
+					<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+					<div class="fr form_space js_progress_span" ></div>
+					
+					<div class="txt_btn task_information">
+					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
+					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
+					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
+					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
+					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
+					    </div>
+					</div>     
+
+					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+					<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
 				</div>
 				<!-- 버튼 영역 //-->     				
 			</ul>

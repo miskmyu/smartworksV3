@@ -134,7 +134,7 @@
 							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
 							<!-- 결재선 -->
-							<div class="approval_area">
+							<div class="approval_area js_approval_box">
 								<div class="label"><%=approvalName %></div>
 								<div class="approval <%=statusIcon%>"><%if(!SmartUtil.isBlankObject(signPicture)){ %><img src="<%=signPicture%>"/><%} %></div>
 								<%

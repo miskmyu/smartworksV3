@@ -2147,26 +2147,26 @@ public class ModelConverter {
 		getInstanceInfoByTskTask (taskInstInfo, swTask);
 
 		String name = swTask.getName();
-		int taskType = WorkInstance.TYPE_TASK;
-		int type = 0;
+		int type = WorkInstance.TYPE_TASK;
+		int taskType = 0;
 
 		String tskType = swTask.getType();
 		String tskStatus = swTask.getStatus();
 
 		if(tskType.equals(TskTask.TASKTYPE_SINGLE)) {
 			if(tskStatus.equals("11")) {
-				type = TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED;
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED;
 			} else if(tskStatus.equals("21")) {
-				type = TaskInstance.TYPE_INFORMATION_TASK_UDATED;
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_UDATED;
 			}
 		} else if(tskType.equals(TskTask.TASKTYPE_REFERENCE)) {
-			type = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+			taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
 			taskInstInfo.setForwardId(swTask.getProcessInstId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
-			type = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
+			taskType = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("txtApprovalComments"));
 			taskInstInfo.setApprovalId(swTask.getExtendedPropertyValue("approvalLine"));

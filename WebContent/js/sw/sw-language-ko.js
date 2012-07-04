@@ -115,6 +115,8 @@ smartMessage.bundle['ko'] = {
 	removeIWorkInstanceError : "업무내용 삭제 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	forwardIWorkInstanceSucceed : "업무내용이 정상적으로 전달되었습니다.",
 	forwardIWorkInstanceError : "업무내용 전달 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
+	approvalIWorkInstanceSucceed : "업무내용이 정상적으로 전자결재 상신되었습니다.",
+	approvalIWorkInstanceError : "업무내용 전자결재 상신 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	performTaskInstanceSucceed : "태스크가 정상적으로 완료되었습니다.",
 	performTaskInstanceError : "태스크 완료 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	returnTaskInstanceSucceed : "태스크가 정상적으로 반려되었습니다.",
@@ -167,7 +169,8 @@ smartMessage.bundle['ko'] = {
 	duplicationCheckError : "아이디 중복확인이 되지 않았습니다. 중복확인을 실행한 후 다시 하시기 바랍니다.",
 	wsdlNotFetchedError : "WSDL 가져오기를 실행하지 않았습니다. WSDL 가져오기를 실행한 후 다시 하시기 바랍니다.",
 	noneDisplayFieldError : "보이는 항목이 존재하지 않습니다. 보이는 항목은 최소한 한개 이상이여야 합니다.",
-	
+	eventOldEndDateError : "이벤트의 종료일자가 시작일자보자 이전일자입니다. 수정 후 다시 하시기 바랍니다.", 
+		
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
 
@@ -175,6 +178,7 @@ smartMessage.bundle['ko'] = {
 	saveConfirmation : "항목을 수정하려고 합니다. 정말로 수정하시겠습니까? ",
 	createConfirmation : "항목을 생성하려고 합니다. 정말로 생성하시겠습니까? ",
 	forwardConfirmation : "항목을 전달하려고 합니다. 정말로 전달하시겠습니까? ",
+	approvalConfirmation : "항목을 전자결재로 상신하려고 합니다. 정말로 상신하시겠습니까? ",
 	performConfirmation : "태스크를 완료하려고 합니다. 정말로 완료하시겠습니까? ",
 	returnConfirmation : "태스크를 반려하려고 합니다. 정말로 반려하시겠습니까? ",
 	reassignConfirmation : "태스크를 다른 사용자에게 위임하려고 합니다. 정말로 위임하시겠습니까? ",

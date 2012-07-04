@@ -108,7 +108,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public boolean isRunningForwardedForMe(String userId, String taskInstId){
 		if(	taskInstId.equals(this.getId()) 
-			&& (this.getType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			&& (this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
 			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
@@ -121,7 +121,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	public boolean isRunningApprovalForMe(String userId, String taskInstId){
 		if(SmartUtil.isBlankObject(taskInstId)) taskInstId = this.getId();
 		if(	taskInstId.equals(this.getId()) 
-			&& this.getType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+			&& this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
 			&& this.getStatus() == TaskInstance.STATUS_RUNNING){

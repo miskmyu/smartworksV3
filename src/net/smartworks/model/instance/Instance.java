@@ -2,6 +2,7 @@ package net.smartworks.model.instance;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 
@@ -45,6 +46,7 @@ public class Instance {
 	private WorkSpace workSpace;
 	private int status=-1;
 	private User owner;
+	private AccessPolicy accessPolicy;
 	private LocalDate createdDate;
 	private User lastModifier;
 	private LocalDate lastModifiedDate;
@@ -111,8 +113,13 @@ public class Instance {
 	}
 	public void setLastModifiedDate(LocalDate lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
+	}	
+	public AccessPolicy getAccessPolicy() {
+		return accessPolicy;
 	}
-	
+	public void setAccessPolicy(AccessPolicy accessPolicy) {
+		this.accessPolicy = accessPolicy;
+	}
 	public Instance() {
 		super();
 	}

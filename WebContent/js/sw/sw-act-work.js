@@ -591,6 +591,7 @@ $(function() {
 		iworkSpace.find('.js_btn_delete').hide();
 		iworkSpace.find('.js_btn_save').show();
 		iworkSpace.find('.js_btn_cancel').show();
+		iworkSpace.find('form[name="frmAccessSpace"]').show();
 		return false;
 	});
 
@@ -614,6 +615,7 @@ $(function() {
 		showErrors();
 		iworkSpace.find('.js_btn_modify').show().siblings().hide();
 		iworkSpace.find('.js_btn_delete').show();
+		iworkSpace.find('form[name="frmAccessSpace"]').hide();
 		return false;
 	});
 
@@ -623,6 +625,15 @@ $(function() {
 		var workId = iworkSpace.attr("workId");
 		var instId = iworkSpace.attr("instId");
 		var formContent = iworkSpace.find('div.js_form_content');
+		var approvers = iworkSpace.find('.js_approval_box input[type="hidden"]');
+		if(!isEmpty(approvers)){
+			for(var i=0; i<approvers.length; i++){
+				var approver = $(approvers[i]);
+				var autoComplete = approver.parents('.js_approval_box').find('.js_auto_complete');
+				if(isEmpty(approver.attr('value'))) autoComplete.addClass('required');
+				else autoComplete.removeClass('required');
+			}
+		}
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('form.js_validation_required'), $('.js_space_error_message'))) return false;
 		
@@ -676,6 +687,7 @@ $(function() {
 								iworkSpace.find('.js_btn_delete').show();
 								iworkSpace.find('.js_btn_save').hide();
 								iworkSpace.find('.js_btn_cancel').hide();
+								iworkSpace.find('form[name="frmAccessSpace"]').hide();
 								smartPop.closeProgress();								
 							},
 							onError : function(){
@@ -749,6 +761,78 @@ $(function() {
 						iworkSpace.find('.js_form_task_forward').hide().html('');
 						iworkSpace.find('.js_btn_save').show().siblings().hide();						
 						iworkSpace.find('.js_btn_modify').show();						
+						return false;
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("forwardIWorkInstanceError"), function(){
+						return false;
+					});
+					
+				}
+			});
+		},
+		function(){
+			return false;
+		});
+		return false;
+	});
+
+	$('a.js_approval_iwork_instance').live('click', function(e){
+		var input = $(targetElement(e));
+		var iworkSpace = input.parents('.js_iwork_space_page');
+		var workId = iworkSpace.attr("workId");
+		var instId = iworkSpace.attr("instId");
+		var approvers = iworkSpace.find('.js_approval_box input[type="hidden"]');
+		if(!isEmpty(approvers)){
+			for(var i=0; i<approvers.length; i++){
+				var approver = $(approvers[i]);
+				var autoComplete = approver.parents('.js_approval_box').find('.js_auto_complete');
+				if(isEmpty(approver.attr('value'))) autoComplete.addClass('required');
+				else autoComplete.removeClass('required');
+			}
+		}
+		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
+		if (!SmartWorks.GridLayout.validate(iworkSpace.find('.js_form_task_approval form'), $('.js_space_error_message'))) return false;
+		
+		smartPop.confirm(smartMessage.get("approvalConfirmation"), function(){
+			var forms = iworkSpace.find('.js_form_task_approval form');
+			var paramsJson = {};
+			paramsJson['workId'] = workId;
+			paramsJson['instanceId'] = instId;
+			for(var i=0; i<forms.length; i++){
+				var form = $(forms[i]);
+				
+				// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+				if(form.attr('name') === 'frmSmartForm'){
+					paramsJson['formId'] = form.attr('formId');
+					paramsJson['formName'] = form.attr('formName');
+				}
+				
+				// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			}
+			console.log(JSON.stringify(paramsJson));
+			var url = "approval_iwork_instance.sw";
+			
+			// 서비스요청 프로그래스바를 나타나게 한다....
+			var progressSpan = iworkSpace.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
+			
+			// set_iwork_instance.sw서비스를 요청한다..
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					
+					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalIWorkInstanceSucceed"), function(){
+						window.location.reload();
 						return false;
 					});
 				},

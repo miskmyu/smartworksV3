@@ -160,6 +160,7 @@ $(function() {
 			else if(!isEmpty(appendTaskApproval)) target = appendTaskApproval.find('.js_approval_line_box').next('.js_community_list');
 			target.find('.sw_hover:first a').click();
 			input.focusout();
+			return false;
 		}
 	});
 	
