@@ -41,14 +41,14 @@
 /* 본문 컨텐츠 */
 .define_space {padding: 0 25px; overflow: hidden} /* 상하 여백이 필요 없을때 */
 .contents_space {padding: 0 25px 10px}
-.contents_space .det_title, .replay .det_title {padding:3px 0; overflow:hidden} /* 타이틀 */
+.contents_space .det_title, .reply .det_title {padding:5px 0; overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px} 
 
-/* Replay Info */
+/* Reply Info */
 .task_information {vertical-align:bottom; float:left}
 
 /* 공간 영역 */
@@ -66,18 +66,22 @@
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
-.reply_section {background-color:#eef2f6; padding:10px; width:600px; margin-bottom:5px}
-.replay {margin:10px 15px 0 15px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
-.replay .bg {background-color:#ededed}
+.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:5px}
+.reply {margin:0 15px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
+.reply .bg {background-color:#ededed}
 .list_reply {margin:0} /* 댓글 목록 */
-.reply_input {margin-top:10px} /* 댓글 입력 영역 */
-.list_reply li, .replay > ul > li, .space_section li {border-bottom: 1px dashed #9c9c9c; vertical-align: middle; padding:5px 0; overflow: hidden}
-.list_reply .end, .replay .end, .noborder li {border-bottom: none !important; vertical-align: middle}
+.reply_input {margin:5px 0 0 0} /* 댓글 입력 영역 */
+#upload_form_box .reply_input {margin:5px} /* Reply Input in upload_form_box */
+
+.list_reply li, .reply > ul > li, .space_section li {border-bottom: 1px dashed #9c9c9c; vertical-align: middle; overflow: hidden}
+.list_reply li {padding:0}
+.list_reply .end, .reply .end, .noborder li {border-bottom: none !important; vertical-align: middle}
 .repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px}
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
-.replay .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
-.replay li a img, .replay li img {float:left; margin-right:5px} 
+.reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
+.reply li a img, .reply li img {float:left} 
+.btns_action {margin:0 0 5px 70px}
 
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/

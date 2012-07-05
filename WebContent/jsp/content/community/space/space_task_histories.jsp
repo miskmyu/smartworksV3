@@ -367,7 +367,7 @@
 				    </div>
 				    <!-- 댓글 //-->
 				</div>
-			    <div class="ml70 js_action_btns">
+			    <div class="btns_action js_action_btns">
 			    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
 			    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
 			    </div>
