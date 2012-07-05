@@ -24,10 +24,6 @@
 <div class="js_department_space_page">
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
-	<!-- 오늘, 내일 그리고 모레이후에 대한 달력과 이벤트들을 보여주는 화면 -->
-	<jsp:include page="/jsp/content/today/three_days_event.jsp" />
-	<!-- 오늘, 내일 그리고 모레이후에 대한 달력과 이벤트들을 보여주는 화면 //-->
-	
 	<div class="js_space_instance_list">
 		<jsp:include page="/jsp/content/community/space/space_tab_timeline.jsp"></jsp:include>
 	</div>

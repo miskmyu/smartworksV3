@@ -28,12 +28,6 @@
 	</div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-			<div class="body_titl">
-				<div class="body_titl_iworks title"><fmt:message key="header.top_menu.smartcaster"/></div>
-           		<div class="txt_btn">
-          		</div>
-				<div class="solid_line"></div>
-			</div>
 			<!-- 타이틀 -->
 			<jsp:include page="/jsp/content/more_smartcast.jsp"></jsp:include>
 		</ul>
