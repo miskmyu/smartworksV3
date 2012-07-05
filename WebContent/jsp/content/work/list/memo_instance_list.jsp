@@ -109,6 +109,8 @@
 					</td>
 					<td>
 						<%=((MemoInstanceInfo)instanceInfo).getContent() %>
+						<%if(((MemoInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((MemoInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
+						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
 					</td>
 					<td class="tr pr10">
 						<%

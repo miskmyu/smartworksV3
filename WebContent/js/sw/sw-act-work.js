@@ -832,6 +832,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalIWorkInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						window.location.reload();
 						return false;
 					});
@@ -881,6 +882,7 @@ $(function() {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
+								smartPop.progressCenter();
 								document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
 							});
 				},
@@ -947,6 +949,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1011,6 +1014,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1141,6 +1145,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1435,6 +1440,18 @@ $(function() {
 //		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
 //		smartPop.selectWork(target, width);
 		smartPop.selectApprovalLine(target);
+		return false;
+	});
+
+	$('.js_select_print').live("click", function(e){
+		var print_content = $(".js_form_content").html();
+		var title = $(".title_picico").text();
+		styleSheets = [];
+		styleSheets.push("css/default.css");
+		styleSheets.push("css/black/detail.css");
+		styleSheets.push("css/black/form.css");
+		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
+		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
 		return false;
 	});
 

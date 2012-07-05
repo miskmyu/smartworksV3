@@ -11,6 +11,7 @@ body, #nav {none no-repeat #FFF}
 
 /* Contents */
 #lo_contents {text-align: center; margin: 80px 0}
+#lo_contents img {max-width:600px; max-height:410px}
 .lo_img {left:257px; top:191px; width: 513px; height: 430px}
 .btn_login {margin:15px 0 0 7px; background-color:#80b0de; border-radius:3px; color:#FFF; font-size:11px; cursor:pointer; height:21px}
 

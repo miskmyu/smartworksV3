@@ -151,7 +151,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.itask_assigned">
 							<fmt:param>
 								<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
-									<span class='t_woname'><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
+									<span class='t_woname'><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -175,7 +175,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.ptask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -199,7 +199,7 @@ if (instances != null) {
 						<fmt:message key="content.sentence.stask_assigned">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
+									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
 								</a>
 							</fmt:param>
 						</fmt:message>
@@ -219,20 +219,31 @@ if (instances != null) {
 						break;
 					// 전자결재업무 할당태스크인 경우...
 					case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
+						String approvalStatus = (workInstance.getStatus() == Instance.STATUS_RETURNED) ? "returned" : "assigned";
 					%>
-						<fmt:message key="content.sentence.stask_forwarded">
-							<fmt:param>
-								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
-									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 
-								</a>
-							</fmt:param>
-						</fmt:message>
+						<%if(workInstance.getStatus() == Instance.STATUS_RETURNED){ %>
+							<fmt:message key="content.sentence.atask_returned">
+								<fmt:param>
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+									</a>
+								</fmt:param>
+							</fmt:message>
+						<% }else{ %>
+							<fmt:message key="content.sentence.atask_assigned">
+								<fmt:param>
+									<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
+										<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getName()%></span> 
+									</a>
+								</fmt:param>
+							</fmt:message>
+						<% } %>
 					<%
 						break;
 					// 전자결재업무 업무전달인 경우....
 					case TaskInstance.TYPE_APPROVAL_TASK_FORWARDED:
 					%>
-						<fmt:message key="content.sentence.stask_forwarded">
+						<fmt:message key="content.sentence.atask_forwarded">
 							<fmt:param>
 								<a class="js_content" href="<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>">
 									<span class="t_woname"><%=((TaskInstanceInfo)taskInstance).getSubject()%></span> 

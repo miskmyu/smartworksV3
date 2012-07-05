@@ -115,6 +115,8 @@
 					</td>
 					<td>
 						<%=((BoardInstanceInfo)instanceInfo).getSubject() %>
+						<%if(((BoardInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((BoardInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
+						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
 					</td>
 					<td class="tr pr10">
 						<%

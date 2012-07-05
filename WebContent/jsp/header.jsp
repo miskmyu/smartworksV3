@@ -41,6 +41,7 @@ function updateNoticeCount(message){
 };
 
 function logout() {
+	smartPop.progressCenter();
 	document.location.href = "logout.sw?userId=" + currentUser.userId;
 };
 

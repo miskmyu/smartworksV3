@@ -63,6 +63,7 @@
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 						smartPop.closeProgress();
 						smartPop.showInfo(smartPop.INFO, isEmpty(lineId) ? smartMessage.get('createApprovalLineSucceed') : smartMessage.get('setApprovalLineSucceed'), function(){
+							smartPop.progressCenter();
 							document.location.href = "approval_line.sw";					
 						});
 					},

@@ -7,6 +7,7 @@ $(function() {
 		$.ajax({
 			url : "start_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
+				smartPop.progressCenter();
 				window.location.reload();
 			}			
 		});
@@ -20,6 +21,7 @@ $(function() {
 		$.ajax({
 			url : "stop_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
+				smartPop.progressCenter();
 				window.location.reload();
 			}			
 		});
@@ -94,13 +96,12 @@ $(function() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCategorySucceed'), function(){
+	 						smartPop.progressCenter();
 							document.location.href = "builder_home.sw";
-	 						smartPop.close();
 	  					});
 					},
 					error : function() {
 	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeCategoryError'), function(){
-	 						smartPop.close();
 	  					});
 					}					
 				});
@@ -147,8 +148,8 @@ $(function() {
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkDefinitionSucceed'), function(){
+	 						smartPop.progressCenter();
 							document.location.href = "builder_home.sw";
-	 						smartPop.close();
 	  					});
 					},
 					error : function() {

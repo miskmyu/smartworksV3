@@ -106,7 +106,10 @@ function submitForms(e) {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				document.location.href = data.href;
+				smartPop.progressCenter();
+				//document.location.href = data.href;
+				window.location.reload();
+
 			},
 			error : function(e) {
 				smartPop.closeProgress();

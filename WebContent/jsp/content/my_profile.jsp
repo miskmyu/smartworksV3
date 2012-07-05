@@ -57,8 +57,8 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('setMyProfileSucceed'), function(){
+						smartPop.progressCenter();
 						document.location.href = "home.sw";
-						smartPop.closeProgress();
 					});
 				},
 				error : function(e) {
@@ -104,7 +104,7 @@
 						<div class="js_my_profile_field js_auto_load_profile"></div>
 						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
 					</div>	
-					<div class="table_normal600">				
+					<div class="table_normal600 fl">				
 						<table>
 							<tr>
 								<th style="width:128px"><fmt:message key="profile.title.user_id" /></th>

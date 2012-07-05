@@ -35,6 +35,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	TaskInstanceInfo[] tasksHistories = (TaskInstanceInfo[])session.getAttribute("taskHistories");
+	String workSpaceId = (String)session.getAttribute("wid");
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -62,9 +63,9 @@
 			WorkSpaceInfo workSpace = workInstance.getWorkSpace();
 			if(SmartUtil.isBlankObject(workSpace)) workSpace = workInstance.getOwner();
 			boolean onWorkSpace = false;
-			if(workSpace.getClass().equals(DepartmentInfo.class)){
+			if(workSpace.getClass().equals(DepartmentInfo.class) && !workSpace.getId().equals(workSpaceId)){
 				onWorkSpace = true;
-			}else if(workSpace.getClass().equals(GroupInfo.class)){
+			}else if(workSpace.getClass().equals(GroupInfo.class) && !workSpace.getId().equals(workSpaceId)){
 				onWorkSpace = true;
 			}
 			BoardInstanceInfo board=null;
@@ -93,7 +94,9 @@
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
-									<div><%=board.getSubject() %></div>
+									<div><%=board.getSubject() %>
+										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
 								</div>
 								<div><%=board.getBriefContent()%></div>
 							</a>
@@ -115,7 +118,9 @@
 							<a href="<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
-									<div><%=event.getSubject() %></div>
+									<div><%=event.getSubject() %>
+										<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
 								</div>
 								<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
 									<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
@@ -134,6 +139,7 @@
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %></div><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 						</div>
@@ -150,6 +156,7 @@
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<%if(image.isNew()){ %><span class="icon_new"></span><%} %>
 							<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 						</div>
@@ -169,7 +176,9 @@
 							<a href="<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
-									<div><%=memo.getContent() %></div>
+									<div><%=memo.getContent() %>
+										<%if(memo.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
 								</div>
 							</a>
 						</div>
@@ -290,7 +299,9 @@
 								<span class="t_date"><%=work.getFullpathName()%></span>
 							</a>
 							<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>&workId=<%=work.getId()%>">
-								<span class="tb"><%=workInstance.getSubject()%></span> 
+								<span class="tb"><%=workInstance.getSubject()%>
+									<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
+								</span> 
 							</a>
 						</div>
 					</div>

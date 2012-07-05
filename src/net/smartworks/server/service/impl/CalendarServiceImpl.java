@@ -48,6 +48,7 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
 import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.util.ModelConverter;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
@@ -384,7 +385,13 @@ public class CalendarServiceImpl implements ICalendarService {
 					int type = WorkInstance.TYPE_INFORMATION;
 					eventInstanceInfo.setType(type);
 					eventInstanceInfo.setStatus(WorkInstance.STATUS_COMPLETED);
-					eventInstanceInfo.setWorkSpace(null);
+					workSpaceId = swdRecord.getWorkSpaceId();
+					if(workSpaceId == null)
+						workSpaceId = user.getId();
+					String workSpaceType = swdRecord.getWorkSpaceType();
+					if(workSpaceType == null)
+						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
+					eventInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 
 					WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))

@@ -79,12 +79,17 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
+import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.claros.commons.auth.MailAuth;
+import org.claros.commons.auth.models.AuthProfile;
+import org.claros.commons.mail.models.ConnectionMetaHandler;
+import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -132,6 +137,8 @@ public class WorkServiceImpl implements IWorkService {
 		return SwManagerFactory.getInstance().getMailManager();
 	}
 
+	@Autowired
+	private ISettingsService settingsService;
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -896,6 +903,19 @@ public class WorkServiceImpl implements IWorkService {
 					mailAccount.setMailId(txtUserProfileEmailId);
 					mailAccount.setMailPassword(pwUserProfileEmailPW);
 					getMailManager().setMailAccount(txtUserProfileUserId, mailAccount, IManager.LEVEL_ALL);
+					ConnectionProfile profile = null;
+					ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
+					if(!CommonUtil.isEmpty(profiles)) {
+					    profile = profiles[0];	
+					}
+					request.getSession().setAttribute("profile", profile);
+					AuthProfile auth = new AuthProfile();
+					auth.setUsername(txtUserProfileEmailId+"@"+mailServerName);
+					auth.setPassword(pwUserProfileEmailPW);
+					request.getSession().setAttribute("auth", auth);
+					ConnectionMetaHandler handler = null;
+					handler = MailAuth.authenticate(profile, auth, handler);
+					request.getSession().setAttribute("handler", handler);
 				}
 				UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());
 		        Authentication authentication = authenticationManager.authenticate(authRequest);
@@ -1119,7 +1139,7 @@ public class WorkServiceImpl implements IWorkService {
 			Filter[] filters = null;
 			ColObject colObject = new ColObject();
 			if(frmSearchFilters != null) {
-				for(int i=1; i<frmSearchFilters.size(); i++) {
+				for(int i=0; i<frmSearchFilters.size(); i++) {
 					Filter filter = new Filter();
 					Map<String, String> filtersMap = frmSearchFilters.get(i);
 					selFilterLeftOperand = (String)filtersMap.get("selFilterLeftOperand");

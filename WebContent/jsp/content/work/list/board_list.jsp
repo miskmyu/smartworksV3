@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
