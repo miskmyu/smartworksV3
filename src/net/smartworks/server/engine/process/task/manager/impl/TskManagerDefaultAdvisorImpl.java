@@ -114,7 +114,15 @@ public class TskManagerDefaultAdvisorImpl extends AbstractTskManagerAdvisor {
 				prcInst.setObjId(preDefinedPrcInstId);
 			prcInst.setStatus(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("started"), "started"));
 			prcInst.setPriority(obj.getPriority());
-			prcInst.setTitle(obj.getTitle());
+			
+			String title = obj.getExtendedPropertyValue("txtApprovalSubject");
+			if (CommonUtil.isEmpty(title)) {
+				prcInst.setTitle(obj.getTitle());
+			} else {
+				prcInst.setTitle(title);
+			}
+			
+			//prcInst.setTitle(obj.getTitle());
 			prcInst.setName(obj.getName());
 			prcInst.setDiagramId(packageId);//packageId
 			prcInst.setDiagramVersion("1");

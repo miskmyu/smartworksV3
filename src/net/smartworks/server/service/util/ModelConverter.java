@@ -3319,7 +3319,18 @@ public class ModelConverter {
 		instance.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 		instance.setOwner(getUserByUserId(swdRecord.getCreationUser()));
+		
+		
+		
+		
+		
 		instance.setStatus(Instance.STATUS_COMPLETED);
+		
+		
+		
+		
+		
+		
 		instance.setType(WorkInstance.TYPE_INFORMATION);
 
 		String formId = swdDomain.getFormId();
@@ -3351,6 +3362,18 @@ public class ModelConverter {
 		String processInstId = "";
 		if(tasks != null)
 			processInstId = tasks[0].getProcessInstId();
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, processInstId, IManager.LEVEL_LITE);
+		
+		if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+			workInstance.setStatus(Instance.STATUS_RUNNING);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+			workInstance.setStatus(Instance.STATUS_COMPLETED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			workInstance.setStatus(Instance.STATUS_RETURNED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+			workInstance.setStatus(Instance.STATUS_REJECTED);
+		}
 
 		tskCond = new TskTaskCond();
 		tskCond.setProcessInstId(processInstId);

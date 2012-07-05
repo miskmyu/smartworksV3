@@ -48,6 +48,7 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.util.StringUtils;
@@ -104,7 +105,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(taskRef)) {
 					TskTask newTask = cloneTask(taskRef);
 					
-					newTask.setName("DRAFT");
+					newTask.setName(SmartMessage.getString("approval.title.draft"));
 					newTask.setTitle(obj.getTitle());
 					newTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval"));
 					newTask.setStartDate(new LocalDate());
