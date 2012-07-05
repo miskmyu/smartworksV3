@@ -4373,6 +4373,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
 			taskWorkCond.setSearchKey(params.getSearchKey());
+			taskWorkCond.setPackageStatus("DEPLOYED");
 
 			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -6980,7 +6981,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			draftApr.setStatus(Instance.STATUS_RUNNING);
 			draftApr.setCompletedDate(null);
 		}
-		draftApr.setName("DRAFT");
+		draftApr.setName(SmartMessage.getString("approval.title.draft"));
 		draftApr.setApproverType(Approval.APPROVER_CHOOSE_ON_RUNNING);
 		draftApr.setApprover(ModelConverter.getUserByUserId(task.getAssignee()));
 		//draftApr.setDueDate("");

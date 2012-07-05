@@ -54,7 +54,9 @@ public class TaskWorkCond extends Cond {
 	private String[] prcStatusIns;
 	private String prcCreateUser;                      
 	private String prcDid;                             
-	private String prcPrcId;                           
+	private String prcPrcId;
+	private String packageName;
+	private String packageStatus;
 	private String lastTskObjId;                       
 	private String lastTskName;                        
 	private String lastTskCreateUser;                  
@@ -217,6 +219,18 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setPackageId(String packageId) {
 		this.packageId = packageId;
+	}
+	public String getPackageName() {
+		return packageName;
+	}
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+	public String getPackageStatus() {
+		return packageStatus;
+	}
+	public void setPackageStatus(String packageStatus) {
+		this.packageStatus = packageStatus;
 	}
 	public String getChildCtgId() {
 		return childCtgId;

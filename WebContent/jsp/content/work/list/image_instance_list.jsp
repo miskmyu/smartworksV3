@@ -41,6 +41,34 @@
 	if(!SmartUtil.isBlankObject(strLastDate))		
 		lastDate = LocalDate.convertLocalStringToLocalDate(request.getParameter("lastDate"));
 %>
+<script type="text/javascript">
+
+function imgResize(img){ 
+	  img1= new Image(); 
+	  img1.src=(img); 
+	  imgControll(img); 
+	}
+function imgControll(img){ 
+	  if((img1.width!=0)&&(img1.height!=0))
+	    viewImage(img); 		  
+	  else{ 
+	    controller="imgControll('"+img+"')"; 
+	    intervalID=setTimeout(controller,20); 
+	  } 
+	}
+function viewImage(img){ 
+	 W=img1.width+20; 
+	 H=img1.height;
+	 L=(screen.width-W)/2;
+	 O="width="+W+",height="+H+",left="+L+",top=200"; 
+	 imgWin=window.open("","",O);
+	 imgWin.document.write("<body topmargin=0 leftmargin=0>");
+	 imgWin.document.write("<img src="+img+" onclick='self.close()' style='cursor:hand;'>");
+	 imgWin.document.close();
+	} 
+
+</script>
+
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
@@ -78,14 +106,16 @@
 	%>
 				<!--폴더 목록1 -->
 				<li>
-					<div class="picture_bg">
-						<a href="" class="" instanceId="<%=image.getId()%>">
-							<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
-						</a>
-						<div style="float:right"><%=image.getLastModifiedDate().toLocalString() %></div>
-					</div>
-				</li>
-				<!--폴더 목록1 //-->
+					<div class="picture_bg">		
+						
+						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
+						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
+						</a>												
+						<div style="float:right"><%=image.getLastModifiedDate().toLocalString()%></div>
+ 					</div>
+ 				</li>
+
+				<!--폴더 목록1 //--> 	 
 	<%
 			}
 		}

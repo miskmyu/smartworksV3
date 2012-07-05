@@ -48,6 +48,7 @@ import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.util.StringUtils;
@@ -104,7 +105,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				if (!CommonUtil.isEmpty(taskRef)) {
 					TskTask newTask = cloneTask(taskRef);
 					
-					newTask.setName("DRAFT");
+					newTask.setName(SmartMessage.getString("approval.title.draft"));
 					newTask.setTitle(obj.getTitle());
 					newTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval"));
 					newTask.setStartDate(new LocalDate());
@@ -165,6 +166,22 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
 				
 				//Apprline 종료
+				
+				String apprId = obj.getExtendedPropertyValue("approval");
+				if (apprLine != null && !CommonUtil.isEmpty(apprId)) {
+					AprApproval[] apprs = apprLine.getApprovals();
+					if (!CommonUtil.isEmpty(apprs)) {
+						for (int i=0; i<apprs.length; i++) {
+							if (apprs[i].getObjId().equalsIgnoreCase(apprId)) {
+								AprApproval appr = apprs[i];
+								appr.setStatus(Instance.STATUS_REJECTED + "");
+								appr.setModificationDate(new LocalDate());
+								appr.setModificationUser(obj.getAssignee());
+							}
+						}
+					}
+				}
+				
 				String aprStatus = "24";
 				apprLine.setStatus(aprStatus);
 				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
