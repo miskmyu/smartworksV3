@@ -4,6 +4,7 @@ public class RunningCounts {
 
 	private int total;
 	private int assignedOnly;
+	private int runningOnly;
 	
 	public int getTotal() {
 		return total;
@@ -17,6 +18,12 @@ public class RunningCounts {
 	}
 	public void setAssignedOnly(int assignedOnly) {
 		this.assignedOnly = assignedOnly;
+	}
+	public int getRunningOnly() {
+		return runningOnly;
+	}
+	public void setRunningOnly(int runningOnly) {
+		this.runningOnly = runningOnly;
 	}
 
 	public RunningCounts() {

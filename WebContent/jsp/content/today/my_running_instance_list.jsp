@@ -77,14 +77,13 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<div id="work_ing">		
-				<div class="titl_section js_running_instance_title">
+				<div class="titl_section">
 				
 					<!-- 타이틀을 나타내는 곳 -->
-					<%-- <div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" /></div> --%>
-					<div class="title js_running_instance_title pr10 fl">
-						<span class="current js_view_smartcaster_instances"><a href="">스마트캐스터</a></span> | 
-						<span class="js_view_assigned_instances"><a href="" searchType='assigned_instances'>처리할 업무 <span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
-						<span class="js_view_running_instances"><a href="" searchType='running_instances'>내가 시작한 업무 <span class="t_red_bold js_running_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span>
+					<div class="title pr10 fl js_running_instance_title js_instance_count">
+						<span class="current js_view_smartcaster_instances"><a href=""><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
+						<span class="js_view_assigned_instances"><a href="" searchType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/><span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
+						<span class="js_view_running_instances"><a href="" searchType='running_instances'><fmt:message key="content.my_running_instance_count"/><span class="t_red_bold js_running_count">[<%=runningCounts.getRunningOnly() %>]</span> </a></span>
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
@@ -97,29 +96,15 @@
 					</form>
 					<span class="js_progress_span"></span>
 					
-					<!-- 전체/할당업무만의 갯수와 선택버튼들 -->
-					<%-- <div class="txt_btn fr js_instance_counts">
-						<a href="" searchType='assigned_instances' class="current js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
-							<span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span>
-						</a>
-						 | 
-						<a href="" searchType='my_running_instances' class="js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
-							<span class="t_red_bold js_all_running_count">[<%=runningCounts.getTotal() %>]</span>
-						</a>
-					</div> --%>
-					<!-- 전체/할당업무만의 갯수와 선택버튼들 //-->
-					
 				</div>
 				
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
 				<div class="solid_line mb5"></div>
 				<table class="js_instance_list_table">
-					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
-						<jsp:param value="true" name="assignedOnly"/>
-					</jsp:include>
+					<jsp:include page="/jsp/content/more_smartcast.jsp"/>
 				</table>
 				<!-- 진행중인 업무목록 및 더보기 버튼 //-->
-				<!-- 더보기 버튼 -->
+<%-- 				<!-- 더보기 버튼 -->
 				<%if(runningCounts.getTotal() > 20){ %>
 					<div class="js_more_list">
 						<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
@@ -127,7 +112,7 @@
 					</div>
 				<%} %>
 				<!-- 더보기 버튼 !!-->
-	
+ --%>	
 			</div>
 		</ul>
 	</div>

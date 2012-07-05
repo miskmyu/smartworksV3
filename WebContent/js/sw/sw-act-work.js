@@ -1410,11 +1410,13 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_view_assigned_instances').live('click',function(e) {
+	$('.js_view_assigned_instances').live('click',function(e) {
 		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');
-		var target = input.parents('.js_my_running_instance_list_page').find('table');  
+		var target = input.parents('.js_my_running_instance_list_page').find('.js_instance_list_table');  
 		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();
+		console.log('input=', input, ', target=', target);
+		alert('wait');
 		$.ajax({
 			url : 'more_instance_list.sw',
 			data : {
