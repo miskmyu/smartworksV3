@@ -461,9 +461,8 @@ function loadTaskApprovalFields() {
 			var drafterName = taskApprovalField.attr("drafterName");
 			var draftDate = taskApprovalField.attr("draftDate");
 			var isReturned = taskApprovalField.attr("isReturned");
-			var readOnly = (isEmpty(subject) || isReturned=='true') ? false : true;
+			var readOnly = isEmpty(subject) ? false : true;
 			var actionRequired = taskApprovalField.attr("actionRequired");
-			console.log('isReturned=', isReturned, ', readOnly=', readOnly);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtApprovalSubject",

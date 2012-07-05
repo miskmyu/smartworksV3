@@ -381,13 +381,22 @@
 	</div> 
 	<!-- 컨텐츠 레이아웃//-->
 <script type="text/javascript">
+
+	var mode = "view";
+	<%
+	if(instance.getStatus() == Instance.STATUS_RETURNED){
+	%>
+		mode = "edit";
+	<%
+	}
+	%>
 	var iworkSpace = $('.js_iwork_space_page');
 	var workId = iworkSpace.attr("workId");
 	var instId = iworkSpace.attr("instId");
 	var formContent = iworkSpace.find('div.js_form_content');
 	new SmartWorks.GridLayout({
 		target : formContent,
-		mode : "view",
+		mode : mode,
 		workId : workId,
 		recordId : instId,
 		onSuccess : function(){
