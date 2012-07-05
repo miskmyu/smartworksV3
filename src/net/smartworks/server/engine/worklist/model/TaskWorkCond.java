@@ -50,7 +50,8 @@ public class TaskWorkCond extends Cond {
 	private String prcObjId;                           
 	private String prcTitle;                           
 	private String prcType;                            
-	private String prcStatus;                          
+	private String prcStatus;  
+	private String[] prcStatusIns;
 	private String prcCreateUser;                      
 	private String prcDid;                             
 	private String prcPrcId;                           
@@ -396,6 +397,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setSearchKey(String searchKey) {
 		this.searchKey = searchKey;
+	}
+	public String[] getPrcStatusIns() {
+		return prcStatusIns;
+	}
+	public void setPrcStatusIns(String[] prcStatusIns) {
+		this.prcStatusIns = prcStatusIns;
 	}
 
 }

@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.smartworks.model.instance.Instance;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
@@ -89,29 +90,61 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 					if (!CommonUtil.isEmpty(apprs)) {
 						for (int i=0; i<apprs.length; i++) {
 							AprApproval appr = apprs[i];
-							if (appr.getObjId().equalsIgnoreCase(apprId)) {
-								appr.setStatus(status);
-								appr.setModificationDate(new LocalDate());
-								appr.setModificationUser(appr.getApprover());
-							}
+							appr.setStatus(null);
+							appr.setModificationDate(null);
+							appr.setModificationUser(null);
 						}
 					}
 				}
+				apprLine.setStatus(status);
+				
+				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
+				
 				String taskRef = obj.getExtendedPropertyValue("taskRef");
 				if (!CommonUtil.isEmpty(taskRef)) {
 					TskTask newTask = cloneTask(taskRef);
+					
+					newTask.setName("DRAFT");
+					newTask.setTitle(obj.getTitle());
+					newTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("approval"), "approval"));
+					newTask.setStartDate(new LocalDate());
+					newTask.setDef(obj.getDef());
+					newTask.setAssignmentDate(new LocalDate());
+				
+					newTask.setFromRefType(obj.getFromRefType());
+					newTask.setFromRefId(obj.getFromRefId());
+					
+					newTask.setExtendedPropertyValue("taskRef", taskRef);
+//					newTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
+//					newTask.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
+//					newTask.setExtendedPropertyValue("refAppLineDefId", refAppLineDefId);
+//					newTask.setExtendedPropertyValue("txtApprovalSubject", txtApprovalSubject);
+//					newTask.setExtendedPropertyValue("approval", appr.getObjId());
+					
 					getTskManager().setTask("linkeadvisor", newTask, null);
+					
+					String prcInstId = newTask.getProcessInstId();
+					PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
+					prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RETURN);
+					getPrcManager().setProcessInst(user, prcInst, IManager.LEVEL_LITE);
+					
 				}
 				
-				apprLine.setStatus(status);
-				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
 				if (logger.isInfoEnabled()) {
-					logger.info("Reject Approval [" + obj.getName() + "/" + obj.getTitle() + " (TaskId : " + obj.getObjId() + " , User : " + obj.getAssignee() + ") ]");
+					logger.info("Return Approval [" + obj.getName() + "/" + obj.getTitle() + " (TaskId : " + obj.getObjId() + " , User : " + obj.getAssignee() + ") ]");
 				}
 				return;
 				
 			// 승인인 경우
 			} else if (action.equalsIgnoreCase("execute")) {
+
+				String prcInstId = obj.getProcessInstId();
+				PrcProcessInst prcInst = getPrcManager().getProcessInst(user, prcInstId, IManager.LEVEL_LITE);
+				if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+					prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+					getPrcManager().setProcessInst(user, prcInst, IManager.LEVEL_LITE);
+				}
+				
 				nextTask = setNextApproval(null, obj, apprLine);
 				if (logger.isInfoEnabled()) {
 					logger.info("Execute Approval [" + obj.getName() + "/" + obj.getTitle() + " (TaskId : " + obj.getObjId() + " , User : " + obj.getAssignee() + ") ]");
@@ -122,13 +155,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				//MisUtil utill = new MisUtil();
 				//Map status = (Map)utill.getTaskStatusMap();
 				//String canceledStatus = (String) status.get("canceled");
-				String canceledStatus = "24";
+				String canceledStatus = TskTask.TASKSTATUS_CANCEL;
 				obj.setStatus(canceledStatus);
 				getTskManager().setTask("linkeadvisor", obj, null);
 				
 				//PrcInstance 종료
-				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_ALL);
-				prcInst.setStatus(CommonUtil.toDefault((String)MisUtil.processInstStatusMap().get("completed"), "completed"));
+				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_LITE);
+				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_CANCEL);
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
 				
 				//Apprline 종료
