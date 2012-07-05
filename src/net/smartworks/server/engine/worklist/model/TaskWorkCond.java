@@ -418,5 +418,5 @@ public class TaskWorkCond extends Cond {
 	public void setPrcStatusIns(String[] prcStatusIns) {
 		this.prcStatusIns = prcStatusIns;
 	}
-	
+
 }

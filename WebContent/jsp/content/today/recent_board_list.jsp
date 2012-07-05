@@ -89,7 +89,7 @@
 							<%
 							if(!SmartUtil.isBlankObject(workSpace) && !workSpace.getId().equals(cUser.getId())){
 							%>
-								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span>
+								<span class="arr">▶</span><span class="space_name"><%=workSpace.getName()%></span>
 							<%
 							}
 							%>

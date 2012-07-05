@@ -181,15 +181,14 @@
 														<%
 				 										}
 				 										%> 
+				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>
 				 										<%
 				 										if (!workSpace.getId().equals(owner.getId())) {
 				 										%> 
-															<span class="arr">▶</span> 
-				 											<span class="<%=workSpace.getIconClass()%>"><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><%=workSpace.getName()%></a></span> 
+															<span class="arr">▶</span><span class="space_name"><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><%=workSpace.getName()%></a></span> 
 				 										<%
 				 										}
 				 										%>
-				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>
 														<%if(event.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=event.getSubInstanceCount() %></b>]</font><%} %>
 														<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
 													</li>

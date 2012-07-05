@@ -1241,6 +1241,7 @@ public class ModelConverter {
 				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
 					
+					//TODO tskInfo.setApprovalId("needs task approval id");
 					
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
@@ -4086,7 +4087,17 @@ public class ModelConverter {
 		//workInstanceInfo.setType(Instance.TYPE_WORK);
 		workInstanceInfo.setWork(workInfo);
 		workInstanceInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-		workInstanceInfo.setStatus(task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+		
+		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
+		}
+		
 		workInstanceInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
 		workInstanceInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));

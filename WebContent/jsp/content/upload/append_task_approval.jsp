@@ -235,6 +235,10 @@
 								statusTitle = "content.status.completed";
 								break;
 								// 기타 잘못되어 상태가 없는 경우..
+							case Instance.STATUS_REJECTED:
+								statusImage = "icon_status_rejected";
+								statusTitle = "content.status.rejected";
+								break;
 							default:
 								statusImage = "icon_status_not_yet";
 								statusTitle = "content.status.not_yet";
