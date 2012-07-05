@@ -165,6 +165,22 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
 				
 				//Apprline 종료
+				
+				String apprId = obj.getExtendedPropertyValue("approval");
+				if (apprLine != null && !CommonUtil.isEmpty(apprId)) {
+					AprApproval[] apprs = apprLine.getApprovals();
+					if (!CommonUtil.isEmpty(apprs)) {
+						for (int i=0; i<apprs.length; i++) {
+							if (apprs[i].getObjId().equalsIgnoreCase(apprId)) {
+								AprApproval appr = apprs[i];
+								appr.setStatus(Instance.STATUS_REJECTED + "");
+								appr.setModificationDate(new LocalDate());
+								appr.setModificationUser(obj.getAssignee());
+							}
+						}
+					}
+				}
+				
 				String aprStatus = "24";
 				apprLine.setStatus(aprStatus);
 				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
