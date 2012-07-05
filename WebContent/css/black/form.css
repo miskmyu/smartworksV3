@@ -6,7 +6,7 @@
 .form_label, .form_value {float:left; margin:1px 0}
 .form_label {color:#23579e; font-weight: bold; text-align: right}
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
-.form_layout td, .form_layout th {border_bottom: 1px dotted #c7c7c7; border-top: 1px dotted #C7C7C7}
+.form_layout td, .form_layout th {border-top: 1px dotted #c7c7c7}
 
 .js_type_imageBox .form_label {background-color:#FFF; width:0}
 
@@ -27,11 +27,6 @@
 .con th, .boTb th, .js_my_profile_page th {color: #23579E; vertical-align: middle; padding: 0 5px; font-weight: normal}
 /* .boTb table tr {border-bottom: 1px dotted #C7C7C7} */
 .boTb table tr.end {border-bottom: none}
-
-/* File Upload */
-.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
-.form_col iframe {margin-bottom:4px}
-
 
 /* 상세필터 */
 .filter_section {}
@@ -135,8 +130,12 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 /* Input Type */
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 
-/* qq-uploader Control */
+/* Upload Control */
+.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px; margin:0 0 0 1px}
+.form_col iframe {margin-bottom:4px}
+
 #imgCompanyLogo .qq-upload-button {width:60px !important}
+#imgPictureFile {float:left; font-weight:normal}
 
 /* Builder Input */
 .js_tab_work_sharing_page input[type="text"] {width: 99.5%}

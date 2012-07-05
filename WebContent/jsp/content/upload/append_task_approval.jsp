@@ -206,7 +206,7 @@
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
 			%>
-				<div class="replay">
+				<div class="reply">
 					<div class="up_point_sgr pos_works"></div>
 					<ul class="bg p10">
 						<%
