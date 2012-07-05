@@ -40,7 +40,7 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-					smartPop.closeProgress();
+					smartPop.progressCenter();
 					document.location.href = mailSpace.attr('lastHref');
 				});
 			},
@@ -90,9 +90,9 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
+						smartPop.progressCenter();
 						input.find('option:first').attr('selected', 'selected').siblings('selected', '');
 						document.location.href = mailList.attr('currentHref');
-						smartPop.closeProgress();
 					});
 				},
 				error : function(e) {
@@ -132,8 +132,8 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = mailList.attr('currentHref');
-						smartPop.closeProgress();
 					});
 				},
 				error : function(e) {
@@ -166,7 +166,7 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
-						smartPop.closeProgress();
+						smartPop.progressCenter();
 						document.location.href = mailSpace.attr('lastHref');
 					});
 				},
@@ -205,7 +205,7 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
-						smartPop.closeProgress();
+						smartPop.progressCenter();
 						document.location.href = mailList.attr('currentHref');
 					});
 				},

@@ -832,6 +832,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalIWorkInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						window.location.reload();
 						return false;
 					});
@@ -881,6 +882,7 @@ $(function() {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
+								smartPop.progressCenter();
 								document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
 							});
 				},
@@ -947,6 +949,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1011,6 +1014,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1141,6 +1145,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});

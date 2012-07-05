@@ -71,8 +71,8 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
  					smartPop.showInfo(smartPop.INFO, (type === "move") ? smartMessage.get('moveWorkDefinitionSucceed') : smartMessage.get('copyWorkDefinitionSucceed'), function(){
+ 						smartPop.progressCenter();
 						document.location.href = data.href;
- 						smartPop.close();
   					});
 				},
 				error : function(e) {

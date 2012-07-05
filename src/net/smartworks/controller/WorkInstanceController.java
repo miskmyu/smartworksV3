@@ -130,6 +130,12 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_board.jsp", "");
 	}
 
+	@RequestMapping("/new_comment")
+	public ModelAndView newComment(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_comment.jsp", "");
+	}
+
 	@RequestMapping("/more_space_sub_instances")
 	public ModelAndView moreSpaceSubInstances(HttpServletRequest request, HttpServletResponse response) {
 

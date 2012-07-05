@@ -125,11 +125,26 @@ case ISmartWorks.SPACE_TYPE_AWORK_LIST:
 	break;
 default:
 %>
-	<!--  업로드할 항목(새업무, 사진, 파일, 이벤트, 메모, 공지)을 선택하는 아이콘들  -->
+	<!--  업로드할 항목(새업무, 사진, 파일, 이벤트, 메모, 공지, 댓글)을 선택하는 아이콘들  -->
 	<div id="upload" class="js_select_action js_select_upload_action_page">
-		<div class="up_memo up_icon_list">
-			<a class="current" href="new_memo.sw"><fmt:message key='common.upload.memo' /> </a>
-		</div>
+		<%
+		if(spaceType == ISmartWorks.SPACE_TYPE_WORK_INSTANCE || spaceType == ISmartWorks.SPACE_TYPE_WORK_INSTANCE){
+		%>
+			<div class="up_comment up_icon_list">
+				<a class="current" href="new_comment.sw"><fmt:message key='common.upload.comment' /> </a>
+			</div>
+			<div class="up_memo up_icon_list">
+				<a href="new_memo.sw"><fmt:message key='common.upload.memo' /> </a>
+			</div>
+		<%
+		}else{
+		%>
+			<div class="up_memo up_icon_list">
+				<a class="current" href="new_memo.sw"><fmt:message key='common.upload.memo' /> </a>
+			</div>
+		<%
+		}
+		%>
 		<div class="up_pic up_icon_list">
 			<a href="new_picture.sw"><fmt:message key='common.upload.picture' /> </a>
 		</div>
@@ -163,13 +178,27 @@ default:
 			<a href="start_work.sw"><fmt:message key='common.upload.work' /></a>
 		</div>
 	</div>
-	<!--  업로드할 항목(새업무, 사진, 파일, 이벤트, 메모, 공지)을 선택하는 아이콘들 // -->
+	<!--  업로드할 항목(새업무, 사진, 파일, 이벤트, 메모, 공지, 댓글)을 선택하는 아이콘들 // -->
 	
-	<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... -->
-	<div class="js_upload_form" id="upload_form_box">
-		<jsp:include page="/jsp/content/work/start/new_memo.jsp" />
-	</div>
-	<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... //-->
+	<%
+	if(spaceType == ISmartWorks.SPACE_TYPE_WORK_INSTANCE || spaceType == ISmartWorks.SPACE_TYPE_WORK_INSTANCE){
+	%>
+		<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... -->
+		<div class="js_upload_form" id="upload_form_box">
+			<jsp:include page="/jsp/content/work/start/new_comment.jsp" />
+		</div>
+		<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... //-->
+	<%
+	}else{
+	%>
+		<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... -->
+		<div class="js_upload_form" id="upload_form_box">
+			<jsp:include page="/jsp/content/work/start/new_memo.jsp" />
+		</div>
+		<!-- 새업무 등록시에는 업무를 선택하는 자동검색 및 전체업무찾기 버튼을 을 보여준다... //-->
+	<%
+	}
+	%>
 <%
 }
 %>	
