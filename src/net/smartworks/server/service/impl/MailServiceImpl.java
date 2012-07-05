@@ -98,156 +98,163 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		
 	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 	    HttpServletRequest request = attr.getRequest();
-	    
+
 	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
+
 	    if(handler != null && profile != null && auth != null)
 	    	return handler;
-	    
-	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
-	    if(mailAccounts == null || mailAccounts.length == 0)
-	    	return null;
-		String username = mailAccounts[0].getUserName();
-		String password = mailAccounts[0].getPassword();
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
 
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
+	    if(profile == null) {
+		    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
+		    if(profiles == null || profiles.length == 0)
+		    	return null;
+		    profile = profiles[0];
+	    }
 
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
+	    if(auth == null) {
+		    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
+		    if(mailAccounts == null || mailAccounts.length == 0)
+				throw new LoginInvalidException();
+
+			String username = mailAccounts[0].getUserName();
+			String password = mailAccounts[0].getPassword();
+			if (username != null && password != null) {
+				auth = new AuthProfile();
+				auth.setUsername(username);
+				auth.setPassword(password);
 			}
-		} else {
-			throw new LoginInvalidException();
+	    }
+
+		try {
+			if(handler == null)
+				handler = MailAuth.authenticate(profile, auth, handler);
+			if (handler != null) {
+
+				request.getSession().setAttribute("handler", handler);
+				request.getSession().setAttribute("auth", auth);
+				request.getSession().setAttribute("profile", profile);
+
+				// create default mailboxes if not exists
+				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = factory.getFolderController();
+				foldCont.createDefaultFolders();
+			}
+		} catch (LoginInvalidException e) {
+			return null;
+		} catch (ServerDownException e) {
+			return null;
 		}
 		return handler;
 	}
 	
 	private ConnectionProfile getConnectionProfile() throws Exception{
 		
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 	    HttpServletRequest request = attr.getRequest();
-	    
+
 	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
+
 	    if(handler != null && profile != null && auth != null)
 	    	return profile;
-	    
-	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
-	    if(mailAccounts == null || mailAccounts.length == 0)
-	    	return null;
-		String username = mailAccounts[0].getUserName();
-		String password = mailAccounts[0].getPassword();
 
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
+	    if(profile == null) {
+		    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
+		    if(profiles == null || profiles.length == 0)
+		    	return null;
+		    profile = profiles[0];
+	    }
 
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
+	    if(auth == null) {
+		    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
+		    if(mailAccounts == null || mailAccounts.length == 0)
+				throw new LoginInvalidException();
 
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
+			String username = mailAccounts[0].getUserName();
+			String password = mailAccounts[0].getPassword();
+			if (username != null && password != null) {
+				auth = new AuthProfile();
+				auth.setUsername(username);
+				auth.setPassword(password);
 			}
-		} else {
-			throw new LoginInvalidException();
+	    }
+
+		try {
+			if(handler == null)
+				handler = MailAuth.authenticate(profile, auth, handler);
+			if (handler != null) {
+
+				request.getSession().setAttribute("handler", handler);
+				request.getSession().setAttribute("auth", auth);
+				request.getSession().setAttribute("profile", profile);
+
+				// create default mailboxes if not exists
+				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = factory.getFolderController();
+				foldCont.createDefaultFolders();
+			}
+		} catch (LoginInvalidException e) {
+			return null;
+		} catch (ServerDownException e) {
+			return null;
 		}
 		return profile;
 	}
 	
 	private AuthProfile getAuthProfile() throws Exception{
 		
-	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 	    HttpServletRequest request = attr.getRequest();
-	    
+
 	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-	    
+
 	    if(handler != null && profile != null && auth != null)
 	    	return auth;
-	    
-	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
-	    	return null;
-	    
-	    profile = profiles[0];
-	    
-	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
-	    if(mailAccounts == null || mailAccounts.length == 0)
-	    	return null;
-		String username = mailAccounts[0].getUserName();
-		String password = mailAccounts[0].getPassword();
 
-		if (username != null && password != null) {
-			auth = new AuthProfile();
-			auth.setUsername(username);
-			auth.setPassword(password);
+	    if(profile == null) {
+		    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
+		    if(profiles == null || profiles.length == 0)
+		    	return null;
+		    profile = profiles[0];
+	    }
 
-			try {
-				handler = MailAuth.authenticate(profile, auth, handler);
-				if (handler != null) {
-					
-					request.getSession().setAttribute("handler", handler);
-					request.getSession().setAttribute("auth", auth);
-					request.getSession().setAttribute("profile", profile);
+	    if(auth == null) {
+		    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
+		    if(mailAccounts == null || mailAccounts.length == 0)
+				throw new LoginInvalidException();
 
-					// create default mailboxes if not exists
-					FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
-					FolderController foldCont = factory.getFolderController();
-					foldCont.createDefaultFolders();
-				}
-			} catch (LoginInvalidException e) {
-				return null;
-			} catch (ServerDownException e) {
-				return null;
+			String username = mailAccounts[0].getUserName();
+			String password = mailAccounts[0].getPassword();
+			if (username != null && password != null) {
+				auth = new AuthProfile();
+				auth.setUsername(username);
+				auth.setPassword(password);
 			}
-		} else {
-			throw new LoginInvalidException();
+	    }
+
+		try {
+			if(handler == null)
+				handler = MailAuth.authenticate(profile, auth, handler);
+			if (handler != null) {
+
+				request.getSession().setAttribute("handler", handler);
+				request.getSession().setAttribute("auth", auth);
+				request.getSession().setAttribute("profile", profile);
+
+				// create default mailboxes if not exists
+				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
+				FolderController foldCont = factory.getFolderController();
+				foldCont.createDefaultFolders();
+			}
+		} catch (LoginInvalidException e) {
+			return null;
+		} catch (ServerDownException e) {
+			return null;
 		}
 		return auth;
 	}
