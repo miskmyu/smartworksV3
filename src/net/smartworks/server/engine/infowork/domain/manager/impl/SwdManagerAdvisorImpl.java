@@ -219,6 +219,7 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 			TskTaskCond cond = new TskTaskCond();
 			cond.setExtendedProperties(new Property[] {new Property("recordId", obj.getRecordId())});
 			cond.setOrders(new Order[] {new Order("creationDate", false)});
+			cond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
 			
 			TskTask[] tasks = getTskManager().getTasks(user, cond, IManager.LEVEL_ALL);
 			TskTask task = null;
