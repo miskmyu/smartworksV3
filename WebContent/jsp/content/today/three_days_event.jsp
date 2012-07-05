@@ -38,7 +38,7 @@
 %>
 
 	<!-- 이벤트,공지 포틀릿 -->	
-	<div class="section_portlet mb15">
+	<div class="section_portlet mb20">
         <!-- 오늘에 대한 날짜 이벤트 시간을 표시하는 곳 -->
         <div class="red_stroke">
         	<span class="red_tab_content">
