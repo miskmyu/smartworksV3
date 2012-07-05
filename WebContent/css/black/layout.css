@@ -293,11 +293,11 @@ li.fvrt_item:hover .check_option {display:block}
 
 /* CommentsBox added by ysjung */
 tr.instance_list {}
-tr.instance_list:hover {background-color:#fffccd; cursor:pointer}
+tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
 li.sub_instance_list > div.det_title {}
-li.sub_instance_list > div.det_title:hover {background-color:#fffccd; cursor:pointer}
+li.sub_instance_list > div.det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.comment_list {}
-li.comment_list:hover {background-color:#fffccd; cursor:pointer}
+li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
 .arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
 
@@ -333,9 +333,9 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #upload div a:hover, #upload div a:focus, #upload div a:active, #upload div a:link, #upload div a:visited {color: #333333; text-decoration:none}
 #upload div {float:left; padding-right:15px}
 
-.up_wrap {position:relative; margin: 0 3px 5px}
+.up_wrap {position:relative; margin: 0 0 3px}
 .upload_up_wrap {width:760px}
-.detail_up_wrap {margin:0 15px 15px} /* 상세보기 페이지의 up_wrap */ 
+.detail_up_wrap {margin:0 15px 10px} /* 상세보기 페이지의 up_wrap */ 
 
 /* UpLoad Search */
 .start_works_input {position:relative}
@@ -347,25 +347,26 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 
 /* upload Icon */
 .up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block}
-.up_works a:hover, .up_works .current,  .up_works a.current:hover {background: url("../../images/header_nico.png") no-repeat -4px -190px; font-weight:bold}
+.up_works a:hover, .up_works .current,  .up_works a.current:hover {background-position: -4px -190px; font-weight:bold}
 
 .up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; width:26px; padding:4px 0 3px 25px; display:block}
-.up_file a:hover, .up_file .current,  .up_file a.current:hover {background: url("../../images/header_nico.png") no-repeat -147px -190px; font-weight:bold}
+.up_file a:hover, .up_file .current,  .up_file a.current:hover {background-position: -147px -190px; font-weight:bold}
 
 .up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block}
-.up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background: url("../../images/header_nico.png") no-repeat -677px -190px; font-weight:bold}
+.up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background-position: -677px -190px; font-weight:bold}
 
 .up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 22px; display:block}
-.up_event a:hover, .up_event .current,  .up_event a.current:hover {background: url("../../images/header_nico.png") no-repeat -278px -190px; font-weight:bold}
+.up_event a:hover, .up_event .current,  .up_event a.current:hover {background-position: -278px -190px; font-weight:bold}
 
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
-.up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold}
+.up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background-position: -426px -190px; font-weight:bold}
 
-.up_comment a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
-.up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold}
+.up_comment a {background: url("../../images/header_nico.png") no-repeat -827px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
+.up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background-position: -827px -190px; font-weight:bold}
 
 .up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block}
-.up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold}
+.up_board a:hover, .up_board .current,  .up_board a.current:hover {background-position: -564px -190px; font-weight:bold}
+
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
@@ -419,7 +420,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .com_list li {position:relative; color:#454545}
 .com_list li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545}
 /*.com_list li a:hover {display:block; background-color:#fffccd; color:#454545}*/
-.com_list li.sw_hover {display:block; background-color:#fffccd; color:#454545}
+.com_list li.sw_hover {display:block; background-color:#fff7eb; color:#454545}
 .com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
 
 /* 입력폼 */
@@ -522,15 +523,15 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
 /* Noice */
-.noti_pic {float:left; margin-right: 5px;margin-left: 3px}
+.noti_pic {float:left; margin: 0 5px 0 0}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:33px; line-height: 14px}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
-.noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
+.noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px; line-height:16px} /* M사이즈 등록글 사용시*/
 .noti_in_m + div {line-height: 19px}
 .recent_notice { border-bottom:none !important}
 .recent_notice .end td {border-bottom:none !important}
@@ -548,7 +549,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_space .eventCell li { width: auto}
 .cell_date {display:inline-block; border-bottom:1px dotted #cfcfcf; padding:0 5px 1px 5px; margin-bottom:3px}
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
 /* Noice old */
 /* .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
@@ -572,7 +573,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
 .notice .left_title {float:left; width:12%; min-width:80px; padding-right:5px; text-align: center}
 .notice .recent_notice {float:right; width:87%}
-.notice > .left_title > a.more {background: url("../../images/main_notice.gif") no-repeat; width:60px; height:30px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
+.notice > .left_title > a.more {background: url("../../images/main_notice.jpg") no-repeat; width:60px; height:28px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
 margin: 0 auto}
 .notice > .left_title > a.more:hover {background: url("../../images/main_notice.gif") -80px 0 no-repeat; color:#ba3938 !important; text-decoration: none}
 .left_title .title {display:block; font-size:13px; font-weight:bold; padding:7px 0 4px 0}
@@ -600,12 +601,15 @@ margin: 0 auto}
 #work_ing li.end { border:none}
 .working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
-#work_ing .titl_section {height:21px; padding-top:14px}
+#work_ing .titl_section {height:21px; padding-top:8px}
 #work_ing .title {font-size:12px; color:#bbbaba}
-#work_ing .title a {color:#454545}
+#work_ing .title a {color:#888888}
 #work_ing .title a:hover {text-decoration:none}
-#work_ing .current {font-size:14px; font-weight:bold}
+#work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
+#work_ing .srch_wsize {margin: 0}
+#work_ing .solid_line {margin:2px 0 5px}
+
 td.pic {width:85px}
 .subject_list { margin-left:5px}
 .subject_list li {color: #bababa; float: left; margin-right: 5px}

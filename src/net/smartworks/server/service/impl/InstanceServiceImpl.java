@@ -2373,10 +2373,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
 			String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
 			
-			//TODO 전자결재 참조업무 생성
-//			Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
-//			ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
-			
 			if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
 
 				AprApprovalLine apprLine = new AprApprovalLine();
@@ -2444,6 +2440,30 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
 				obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+				
+
+				//TODO 전자결재 참조업무 생성
+				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)frmTaskApproval.get("txtApprovalForwardee");
+				if (txtApprovalForwardee != null) {
+					ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+					
+					String txtForwardForwardee = null;
+					if(!CommonUtil.isEmpty(forwardee)) {
+						String symbol = ";";
+						if(forwardee.size() == 1) {
+							txtForwardForwardee = forwardee.get(0).get("id");
+						} else {
+							txtForwardForwardee = "";
+							for(int i=0; i < forwardee.subList(0, forwardee.size()).size(); i++) {
+								Map<String, String> user = forwardee.get(i);
+								txtForwardForwardee += user.get("id") + symbol;
+							}
+						}
+					}
+					obj.setExtendedAttributeValue("txtForwardSubject", txtApprovalSubject);
+					obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+					obj.setExtendedAttributeValue("txtForwardComments", txtApprovalComments);
+				}
 			}
 		}
 	}
@@ -7073,15 +7093,75 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (result.equalsIgnoreCase("approved")) {
 			//승인
 			action = "execute";
-		} else if (result.equalsIgnoreCase("")) {
+		} else if (result.equalsIgnoreCase("returned")) {
 			//반려
 			action = "return";
-			
 		} else if (result.equalsIgnoreCase("rejected")) {
 			//기각
 			action = "cancel";
+		} else if (result.equalsIgnoreCase("submited")) {
+			//재상신 - 재상신 할경우 수정된 정보관리 폼정보가 온다
+			/*{
+				   workInstId=dr_402880eb385652400138565240100000,
+				   approvalInstId=402880eb38563b3e0138565240350001,
+				   taskInstId=402880eb38563b3e0138565276190008,
+				   comments=ㅇㄹㄴㄹ,
+				   result=submited,
+				   formId=frm_board_SYSTEM,
+				   formName=게시판,
+				   frmSmartForm=   {
+				      2      =321,
+				      4      =중,
+				      6      =321123,
+				      14      =      {
+				         groupId=fg_e8b797308e397847838a2668ab682d36f2ac,
+				         files=         [
+
+				         ]
+				      }
+				   }
+				}*/
+		
+			String formId = (String)requestBody.get("formId");
+			String instanceId = (String)requestBody.get("workInstId");
+
+			SwfFormCond formCond = new SwfFormCond();
+			formCond.setId(formId);
+			SwfForm[] forms = getSwfManager().getForms(user.getId(), formCond, IManager.LEVEL_LITE);
+			String packageId = forms[0].getPackageId();
 			
-		} else {
+			Map<String, Object> saveWorkInstance = new LinkedHashMap<String, Object>();
+			saveWorkInstance.put("workId", packageId);
+			saveWorkInstance.put("instanceId", instanceId);
+			saveWorkInstance.put("formId", formId);
+			saveWorkInstance.put("formName", requestBody.get("formName"));
+			saveWorkInstance.put("frmSmartForm", requestBody.get("frmSmartForm"));
+			
+			
+			Map<String, Object> frmAccessSpaceMap = new LinkedHashMap<String, Object>();
+			frmAccessSpaceMap.put("selWorkSpace", task.getWorkSpaceId());
+			frmAccessSpaceMap.put("selWorkSpaceType", task.getWorkSpaceType());
+			frmAccessSpaceMap.put("selAccessLevel", task.getAccessLevel());
+			
+			String usersStr = task.getAccessValue();
+			if (!CommonUtil.isEmpty(usersStr)) {
+				String[] usersArray = StringUtils.tokenizeToStringArray(usersStr, ";");
+				
+				ArrayList<Map<String,String>> userList = new ArrayList<Map<String,String>>();
+				for (int i = 0; i < usersArray.length; i++) {
+					Map<String, String> userInfoMap = new LinkedHashMap<String, String>();
+					userInfoMap.put("id", usersArray[i]);
+					userList.add(userInfoMap);
+				}
+				frmAccessSpaceMap.put("txtAccessableUsers", userList);
+			}
+			saveWorkInstance.put("frmAccessSpace", frmAccessSpaceMap);
+			
+			setInformationWorkInstance(saveWorkInstance, request);
+			
+			action = "execute";
+			
+		} else {	
 			throw new Exception("Approval Task Failed : Action Is Null");
 		}
 		

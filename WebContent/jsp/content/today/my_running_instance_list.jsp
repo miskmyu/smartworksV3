@@ -82,13 +82,13 @@
 					<!-- 타이틀을 나타내는 곳 -->
 					<%-- <div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" /></div> --%>
 					<div class="title js_running_instance_title pr10 fl">
-						<span><a href="">전체보기</a></span> | 
-						<span class="current js_view_assigned_instances"><a href="" searchType='assigned_instances'>처리할 업무 <span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
-						<span><a href="">내가 시작한 업무</a></span>
+						<span class="current js_view_smartcaster_instances"><a href="">스마트캐스터</a></span> | 
+						<span class="js_view_assigned_instances"><a href="" searchType='assigned_instances'>처리할 업무 <span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
+						<span class="js_view_running_instances"><a href="" searchType='running_instances'>내가 시작한 업무 <span class="t_red_bold js_running_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span>
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<form name="frmSearchInstance" class="po_left js_search_running_instance">
+					<form name="frmSearchInstance" class="fr js_search_running_instance">
 						<div class="srch_wh srch_wsize">
 							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
@@ -112,7 +112,7 @@
 				</div>
 				
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
-				<div class="solid_line"></div>
+				<div class="solid_line mb5"></div>
 				<table class="js_instance_list_table">
 					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
 						<jsp:param value="true" name="assignedOnly"/>

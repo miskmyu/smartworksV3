@@ -131,11 +131,13 @@
 						<div class="btn_fb_space5">
 						
 								<input name="txtMemberId" <%if(!SmartUtil.isBlankObject(userId)){ %>class="sw_dup_checked fieldline required email" readonly<%}else{ %>class="fieldline required email" <%} %> type="text" value="<%=CommonUtil.toNotNull(user.getId()) %>" />
-								
+								<!-- 유저 아이디가 없을 경우 버튼 활성화 -->
+								<%if(smartWorks.getUserById(userId) == null){%>
 								<div class="icon_btn_start icon_pos_right">
 								<a class="icon_btn_tail js_check_id_duplication" href="" <%if(!SmartUtil.isBlankObject(userId)){%>style="display:none"<%} %>><fmt:message key="settings.button.duplication_check"/></a>
 								<a class="icon_btn_tail js_change_id" href="" <%if(SmartUtil.isBlankObject(userId)){%>style="display:none"<%} %>><fmt:message key="settings.button.change_id"/></a>
 								</div>
+								<%} %>
 						</div>
 						
 						<div class="t_s11 fl"><fmt:message key="settings.sentence.use_email"/></div>
