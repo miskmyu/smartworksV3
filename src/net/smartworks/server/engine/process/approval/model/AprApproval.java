@@ -23,6 +23,10 @@ public class AprApproval extends MisObject {
 	public static final String A_DUEDATE = "dueDate";
 	public static final String A_ISMANDATORY = "isMandatory";
 	public static final String A_ISMODIFIABLE = "isModifiable";
+	
+	public static final String APPROVAL_STATUS_COMPLETE = "21";
+	public static final String APPROVAL_STATUS_REJECT = "23";
+	public static final String APPROVAL_STATUS_RUNNING = "11";
 
 	private String type;
 	private String approver;

@@ -437,7 +437,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			
 			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 			
@@ -2373,10 +2373,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
 			String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
 			
-			//TODO 전자결재 참조업무 생성
-//			Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
-//			ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
-			
 			if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
 
 				AprApprovalLine apprLine = new AprApprovalLine();
@@ -2444,6 +2440,30 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
 				obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+				
+
+				//TODO 전자결재 참조업무 생성
+				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)frmTaskApproval.get("txtApprovalForwardee");
+				if (txtApprovalForwardee != null) {
+					ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+					
+					String txtForwardForwardee = null;
+					if(!CommonUtil.isEmpty(forwardee)) {
+						String symbol = ";";
+						if(forwardee.size() == 1) {
+							txtForwardForwardee = forwardee.get(0).get("id");
+						} else {
+							txtForwardForwardee = "";
+							for(int i=0; i < forwardee.subList(0, forwardee.size()).size(); i++) {
+								Map<String, String> user = forwardee.get(i);
+								txtForwardForwardee += user.get("id") + symbol;
+							}
+						}
+					}
+					obj.setExtendedAttributeValue("txtForwardSubject", txtApprovalSubject);
+					obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+					obj.setExtendedAttributeValue("txtForwardComments", txtApprovalComments);
+				}
 			}
 		}
 	}
@@ -4373,6 +4393,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
 			taskWorkCond.setSearchKey(params.getSearchKey());
+			taskWorkCond.setPackageStatus("DEPLOYED");
 
 			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -6971,12 +6992,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			throw new Exception("Not Exist Draft Task!! taskId : " + taskId);
 		
 		Approval draftApr = new Approval();
-		draftApr.setStatus(Instance.STATUS_DRAFTED);
-		draftApr.setName("DRAFT");
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(user.getId(), task.getProcessInstId(), IManager.LEVEL_LITE);
+		if (prcInst != null && !prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			draftApr.setStatus(Instance.STATUS_DRAFTED);
+			draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
+		} else {
+			draftApr.setStatus(Instance.STATUS_RUNNING);
+			draftApr.setCompletedDate(null);
+		}
+		draftApr.setName(SmartMessage.getString("approval.title.draft"));
 		draftApr.setApproverType(Approval.APPROVER_CHOOSE_ON_RUNNING);
 		draftApr.setApprover(ModelConverter.getUserByUserId(task.getAssignee()));
 		//draftApr.setDueDate("");
-		draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
 		draftApr.setMandatory(true);
 		draftApr.setModifiable(true);
 		aprs[0] = draftApr;
@@ -7065,15 +7093,15 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (result.equalsIgnoreCase("approved")) {
 			//승인
 			action = "execute";
-		} else if (result.equalsIgnoreCase("")) {
+		} else if (result.equalsIgnoreCase("returned")) {
 			//반려
 			action = "return";
-			
 		} else if (result.equalsIgnoreCase("rejected")) {
 			//기각
 			action = "cancel";
-			
-		} else {
+		} else if (result.equalsIgnoreCase("submited")) {
+			//재상신 - 재상신 할경우 수정된 정보관리 폼정보가 온다
+		} else {	
 			throw new Exception("Approval Task Failed : Action Is Null");
 		}
 		

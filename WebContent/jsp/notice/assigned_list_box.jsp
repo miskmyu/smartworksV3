@@ -57,7 +57,7 @@
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"></a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workSpaceId%>&workId=<%=workId%>"><%=workInstance.getSubject()%>▶<%=taskInstance.getName()%></a>
+							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&workId=<%=workId%>"><%=workInstance.getSubject()%>▶<%=taskInstance.getName()%></a>
 							<div class="t_date"><%=taskInstance.getLastModifiedDate().toLocalString()%></div>
 						</div>
 						</div>

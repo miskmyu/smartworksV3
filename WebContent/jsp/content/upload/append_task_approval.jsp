@@ -75,12 +75,9 @@
 	String draftDate = "";
 	if(!SmartUtil.isBlankObject(approvalInstId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
-		Approval draft = approvalLineInst.getDraft();
-		if(!SmartUtil.isBlankObject(draft)){
-			drafterId = draft.getApprover().getId();
-			drafterName = draft.getApprover().getLongName();
-			draftDate = draft.getCompletedDate().toLocalString();
-		}
+		drafterId = workInstance.getOwner().getId();
+		drafterName = workInstance.getOwner().getLongName();
+		draftDate = workInstance.getCreatedDate().toLocalString();
 	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
@@ -131,11 +128,10 @@
 							}else if(approval.getStatus() == Instance.STATUS_DRAFTED){
 								if(SmartUtil.isBlankObject(signPicture)) statusIcon = "approval_status drafted_" + cUser.getLocale();
 							}
-							String approvalName = (approval.getStatus()==Instance.STATUS_DRAFTED) ? SmartMessage.getString("approval.title.draft") : approval.getName();
 					%>
 							<!-- 결재선 -->
 							<div class="approval_area js_approval_box">
-								<div class="label"><%=approvalName %></div>
+								<div class="label"><%=approval.getName() %></div>
 								<div class="approval <%=statusIcon%>"><%if(!SmartUtil.isBlankObject(signPicture)){ %><img src="<%=signPicture%>"/><%} %></div>
 								<%
 								if(SmartUtil.isBlankObject(approvalLineInst) && approval.getApproverType() == Approval.APPROVER_CHOOSE_ON_RUNNING){
@@ -199,7 +195,8 @@
 				forwardeeTitle="<fmt:message key='approval.title.forwardee'/>" actionRequired="<%=!SmartUtil.isBlankObject(approvalTask) %>"
 				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"
 				drafterTitle="<fmt:message key='approval.title.drafter' />" drafterId="<%=CommonUtil.toNotNull(drafterId)%>" drafterName="<%=CommonUtil.toNotNull(drafterName)%>"
-				draftDateTitle="<fmt:message key='approval.title.draft_date' />" draftDate="<%=CommonUtil.toNotNull(draftDate)%>">
+				draftDateTitle="<fmt:message key='approval.title.draft_date' />" draftDate="<%=CommonUtil.toNotNull(draftDate)%>"
+				isReturned="<%=(workInstance.getStatus()==Instance.STATUS_RETURNED)%>">
 			</div>
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
@@ -235,6 +232,10 @@
 								statusTitle = "content.status.completed";
 								break;
 								// 기타 잘못되어 상태가 없는 경우..
+							case Instance.STATUS_REJECTED:
+								statusImage = "icon_status_rejected";
+								statusTitle = "content.status.rejected";
+								break;
 							default:
 								statusImage = "icon_status_not_yet";
 								statusTitle = "content.status.not_yet";
@@ -253,7 +254,10 @@
 												<span class="t_name"><%=owner.getLongName()%></span>
 											</a>
 											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
+											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED 
+														|| task.getStatus()==TaskInstance.STATUS_REJECTED 
+														|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %>
+											</div>
 										</span>
 								</li>					
 						<%

@@ -1358,6 +1358,37 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_email_content_btn').live('click',function(e) {
+		var input = $(targetElement(e));
+		var target = input.parents('.js_form_header').siblings('.js_form_task_email');
+		if(target.is(':visible')){
+			target.hide().html('');
+			var iworkSpace = input.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				iworkSpace.find('.js_btn_save').show().siblings().hide();						
+				iworkSpace.find('.js_btn_modify').show();						
+			}
+			return false;
+		}
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
+		$.ajax({
+			url : 'append_task_approval.sw',
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data).show();
+				var iworkSpace = input.parents('.js_iwork_space_page');
+				if(!isEmpty(iworkSpace)){
+					iworkSpace.find('.js_btn_do_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				
+			}
+		});
+		return false;
+	});
+
 	$('a.js_view_my_running_instances').live('click',function(e) {
 		var input = $(targetElement(e));
 		input.addClass('current').siblings().removeClass('current');

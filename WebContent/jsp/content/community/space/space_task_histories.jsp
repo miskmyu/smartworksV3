@@ -30,6 +30,35 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<!--사진 팝업 스크립트-->
+
+<script type="text/javascript">
+	function imgResize(img){ 
+		  img1= new Image(); 
+		  img1.src=(img); 
+		  imgControll(img); 
+		}
+	function imgControll(img){ 
+		  if((img1.width!=0)&&(img1.height!=0))
+		    viewImage(img); 		  
+		  else{ 
+		    controller="imgControll('"+img+"')"; 
+		    intervalID=setTimeout(controller,20); 
+		  } 
+		}
+	function viewImage(img){ 
+		 W=img1.width+20; 
+		 H=img1.height;
+		 left=(screen.width-W)/2;
+		 O="width="+W+",height="+H+",left="+left+",top=200"; 
+		 imgWin=window.open("","",O);
+		 imgWin.document.write("<body topmargin=0 leftmargin=0>");
+		 imgWin.document.write("<img src="+img+" onclick='self.close()' style='cursor:hand;'>");
+		 imgWin.document.close();
+		} 
+
+</script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
@@ -157,7 +186,7 @@
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<%if(image.isNew()){ %><span class="icon_new"></span><%} %>
-							<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
+							<div><a href="javascript:imgResize('<%=image.getOriginImgSource()%>')"><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 						</div>
 					</div>

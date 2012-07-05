@@ -182,7 +182,7 @@ public class WorkServiceImpl implements IWorkService {
 			if(!CommonUtil.isEmpty(packageIdArray)) {
 				PkgPackageCond pkgCond = new PkgPackageCond();
 				pkgCond.setCompanyId(user.getCompanyId());
-				pkgCond.setStatus(PkgPackage.STATUS_DEPLOYED);
+				pkgCond.setStatus("DEPLOYED");
 				pkgCond.setPackageIdIns(packageIdArray);
 				pkgs = getPkgManager().getPackages(user.getId(), pkgCond, IManager.LEVEL_LITE);
 			}
@@ -335,6 +335,8 @@ public class WorkServiceImpl implements IWorkService {
 				pkgCond.setCategoryId(categoryId);
 				pkgCond.setOrders(new Order[]{new Order(PkgPackage.A_NAME, true)});
 				//pkgCond.setStatus("DEPLOYED");
+				String[] packageIdNotIns = {"pkg_19281471d5c9404392fea653e627da9e", "pkg_24245093482e404fae15a7b48a55f854", "pkg_fbbd1761c3f144d49337dc38119caa28", "pkg_c2156de59c14435bb551c61c1593a442", "pkg_df40ac03a33c41d59586e4b201b433fd", "pkg_394ea78cec37434d922c73f09ab4b24e"};
+				pkgCond.setPackageIdNotIns(packageIdNotIns);
 	
 				CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
 				WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);

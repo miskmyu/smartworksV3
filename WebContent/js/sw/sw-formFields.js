@@ -460,9 +460,9 @@ function loadTaskApprovalFields() {
 			var drafterId = taskApprovalField.attr("drafterId");
 			var drafterName = taskApprovalField.attr("drafterName");
 			var draftDate = taskApprovalField.attr("draftDate");
+			var isReturned = taskApprovalField.attr("isReturned");
 			var readOnly = isEmpty(subject) ? false : true;
 			var actionRequired = taskApprovalField.attr("actionRequired");
-
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
 				fieldId: "txtApprovalSubject",
@@ -534,14 +534,19 @@ function loadTaskApprovalFields() {
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
 				if(actionRequired==="true"){
 					target.addClass('form_read');
-					iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
-					iworkSpace.find('.js_btn_return_approval').show();
-					iworkSpace.find('.js_btn_reject_approval').show();
+					if(isReturned=='true'){
+						iworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
+						iworkSpace.find('.js_btn_reject_approval').show();						
+					}else{
+						iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
+						iworkSpace.find('.js_btn_return_approval').show();
+						iworkSpace.find('.js_btn_reject_approval').show();
+					}
 				}else{
 					iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();					
 				}
 				
-				if(readOnly){
+				if(readOnly || isReturned=='true'){
 					iworkSpace.find('.js_toggle_forward_btn').hide();
 					iworkSpace.find('.js_toggle_approval_btn').hide();
 				}
