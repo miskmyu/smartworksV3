@@ -175,13 +175,15 @@
 																<span class="t_gbold"><%=event.getStart().toLocalString()%></span>
 														<%
 														}
+														%>
+				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>														
+														<%
 														if (!owner.getId().equals(cUser.getId())) {
 														%> 
 															<span class="t_name"><a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" title="<%=owner.getLongName()%>"><%=owner.getName()%></a></span>
 														<%
 				 										}
 				 										%> 
-				 										<a href="<%=event.getController() %>?cid=<%=event.getContextId()%>&workId=<%=SmartWork.ID_EVENT_MANAGEMENT%>&wid=<%=workSpace.getId()%>"><%=event.getSubject()%></a>
 				 										<%
 				 										if (!workSpace.getId().equals(owner.getId())) {
 				 										%> 
