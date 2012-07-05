@@ -516,14 +516,32 @@ $(function() {
 		}
 		smartPop.confirm(smartMessage.get("commentTaskApprovalConfirm"), function(){
 			var result = (input.parents().hasClass('js_btn_approve_approval')) ? "approved" 
-						: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
-						: (input.parents().hasClass('js_btn_approve_approval')) ? "returned" : "";
+					: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
+					: (input.parents().hasClass('js_btn_submit_approval')) ? "submited" 
+					: (input.parents().hasClass('js_btn_return_approval')) ? "returned" : "";
 			var paramsJson = {};
 			paramsJson['workInstId'] = appendTaskApproval.attr('workInstId');
 			paramsJson['approvalInstId'] = appendTaskApproval.attr('approvalInstId');
 			paramsJson['taskInstId'] = appendTaskApproval.attr('taskInstId');
 			paramsJson['comments'] = comment;
 			paramsJson['result'] = result;
+			if(result === "submited"){
+				var iworkSpace = input.parents('.js_iwork_space_page');
+				var forms = iworkSpace.find('form[name="frmSmartForm"]');
+				for(var i=0; i<forms.length; i++){
+					var form = $(forms[i]);
+					
+					// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+					if(form.attr('name') === 'frmSmartForm'){
+						paramsJson['formId'] = form.attr('formId');
+						paramsJson['formName'] = form.attr('formName');
+					}
+					
+					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+				}
+				
+			}
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
 				url : "comment_on_task_approval.sw",
