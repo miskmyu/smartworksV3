@@ -537,9 +537,8 @@ function loadTaskApprovalFields() {
 					iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
 					iworkSpace.find('.js_btn_return_approval').show();
 					iworkSpace.find('.js_btn_reject_approval').show();
-					iworkSpace.find('.js_btn_cancel').show();						
 				}else{
-					iworkSpace.find('.js_btn_cancel').show().siblings().hide();
+					iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();					
 				}
 				
 				if(readOnly){

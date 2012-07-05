@@ -21,7 +21,6 @@ $(function() {
 		var input = $(targetElement(e));
 		var target = input.children('option:selected').attr('type');
 		input.next().children('span.' + target).show().siblings('span.js_right_operand').hide();
-		console.log('i');
 		return false;
 	});
 	
@@ -48,36 +47,52 @@ $(function() {
 
 	
 	$('a.js_select_paging').live("click", function(e){
-		$('#search_filter').slideUp(500).html('');
 		var input = $(targetElement(e)).parents('a.js_select_paging');
 		input.find('input').attr('value', 'true');
 		var progressSpan = input.siblings('span.js_progress_span:first');
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			$('#search_filter').slideUp(500).html('');			
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}
 		return false;
 	});
 	
 	$('a.js_select_current_page').live("click", function(e){
 		var input = $(targetElement(e));
-		$('#search_filter').slideUp(500).html('');
 		var progressSpan = input.siblings('span.js_progress_span:first');
 		input.siblings('input[name="hdnCurrentPage"]').attr('value', input.text());
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			$('#search_filter').slideUp(500).html('');			
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}
 		return false;
 	});
 	
 	$('.js_select_page_size').live("change", function(e){
 		var input = $(targetElement(e));
-		$('#search_filter').slideUp(500).html('');
 		var progressSpan = input.siblings('span.js_progress_span:first');
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			$('#search_filter').slideUp(500).html('');			
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}
 		return false;
 	});
 	
 	$('a.js_select_field_sorting').live('click', function(e){
 		var input = $(targetElement(e));
-		$('#search_filter').slideUp(500).html('');
+		var popInstanceList = input.parents('.js_pop_instance_list_page');
 		var sortingField = $('form[name="frmSortingField"]').find('input[name="hdnSortingFieldId"]');
 		var sortingIsAscending = $('form[name="frmSortingField"]').find('input[name="hdnSortingIsAscending"]');
+		if(!isEmpty(popInstanceList)){
+			sortingField = popInstanceList.find('form[name="frmSortingField"]').find('input[name="hdnSortingFieldId"]');
+			sortingIsAscending = popInstanceList.find('form[name="frmSortingField"]').find('input[name="hdnSortingIsAscending"]');			
+		}
 		if(sortingField.attr('value') === input.attr('fieldId')){
 			var isAscending = sortingIsAscending.attr('value');
 			sortingIsAscending.attr('value', (isAscending === "true") ? "false" : "true");
@@ -86,15 +101,24 @@ $(function() {
 			sortingIsAscending.attr('value', 'false');
 		}
 		var progressSpan = input.siblings('.js_progress_span:first');
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			$('#search_filter').slideUp(500).html('');			
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}
 		return false;
 	});
 
 	$('.js_select_search_filter').live('change', function(e){
-		$('#search_filter').slideUp(500).html('');
 		$('a.js_edit_search_filter').show();
 		var progressSpan = $('.js_edit_search_filter').next('span.js_progress_span:first');
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			$('#search_filter').slideUp(500).html('');			
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}
 		return false;		
 	});
 	
@@ -107,7 +131,10 @@ $(function() {
 	$('a.js_search_filter_execute').live("click", function(e){
 		if (!SmartWorks.GridLayout.validate($('form.js_validation_required'), $('.js_filter_error_message'))) return false;
 		var progressSpan = $('.js_search_filter_page').find('span.js_progress_span:first');
-		selectListParam(progressSpan, false);
+		if(isEmpty(input.parents('.js_pop_instance_list_page')))
+			selectListParam(progressSpan, false);
+		else
+			popSelectListParam(progressSpan, false);
 		return false;
 	});	
 

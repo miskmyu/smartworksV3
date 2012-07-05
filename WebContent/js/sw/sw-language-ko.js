@@ -173,7 +173,8 @@ smartMessage.bundle['ko'] = {
 		
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
-
+	missingCommentTaskApproval : "결재의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
+	
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",
 	saveConfirmation : "항목을 수정하려고 합니다. 정말로 수정하시겠습니까? ",
 	createConfirmation : "항목을 생성하려고 합니다. 정말로 생성하시겠습니까? ",

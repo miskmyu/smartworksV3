@@ -22,7 +22,7 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <script type="text/javascript">
-	getIntanceList = function(paramsJson){
+	popGetIntanceList = function(paramsJson){
 		console.log(JSON.stringify(paramsJson));
 		var url = "set_instance_list_params.sw";
 		$.ajax({
@@ -31,7 +31,8 @@
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				$('#iwork_list_page').html(data);
+				var selectWorkItem = $('.js_select_work_item_page');
+				selectWorkItem.find('#iwork_list_page').html(data);
 			},
 			error : function(e) {
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get('iworkListError'));
@@ -39,16 +40,17 @@
 		});
 	};
 	
-	selectListParam = function(progressSpan, isGray){
-		var forms = $('form.js_pop_select_work_item:visible');
+	popSelectListParam = function(progressSpan, isGray){
+		var selectWorkItem = $('.js_select_work_item_page');
+		var forms = selectWorkItem.find('form.js_pop_select_work_item:visible');
 		var paramsJson = {};
-		var workId = $('form[name="frmSortingField"]').attr('workId');
+		var workId = selectWorkItem.find('form[name="frmSortingField"]').attr('workId');
 		paramsJson["href"] = "jsp/popup/pop_iwork_instance_list.jsp?workId=" + workId;
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
-		getIntanceList(paramsJson);		
+		popGetIntanceList(paramsJson);		
 	};
 </script>
 <%
@@ -71,7 +73,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="list_contents form_contents">
+<div class="list_contents form_contents js_pop_instance_list_page">
 
 	<!-- 목록 테이블 -->
 	<table>
