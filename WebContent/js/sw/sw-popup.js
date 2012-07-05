@@ -565,9 +565,11 @@ smartPop = {
 						var input = $(targetElement(e));
 						var recordId = input.attr('instId');
 						var fieldId = target.attr('refFormField');
-						var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
-						var keyPos = keyField.prevAll('th').length;
-						var value = $(input.parents('tr').find('td')[keyPos]).find('a').text();
+						/*var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
+						var keyPos = keyField.prevAll('th').length;*/
+						
+						//pop_iwork_instance_list.jsp의  td의 필드아이디와 빌더설정한 필드아이디가 같은걸 반환함.
+						var value = $(input.parents('tr').find('td')).find('a[fieldId="'+fieldId+'"]').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
 						inputTarget.attr('value', value);
