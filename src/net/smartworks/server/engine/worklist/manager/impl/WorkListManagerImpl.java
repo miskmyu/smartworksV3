@@ -278,6 +278,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		//assingnedOnly 값이 true 라면 실행중인(11) 태스크만 조회를 한다.
 		String tskStatus =  cond.getTskStatus();
 		String prcStatus = cond.getPrcStatus();
+		String[] prcStatusIns = cond.getPrcStatusIns();
 		Date lastInstanceDate = cond.getLastInstanceDate();
 		String tskRefType = cond.getTskRefType();
 		int pageNo = cond.getPageNo();
@@ -420,6 +421,15 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		prcInst.prcobjid=prcInstInfo.lastTask_tskprcinstid ");
 		if (!CommonUtil.isEmpty(prcStatus))
 			queryBuffer.append("		and prcInst.prcStatus = :prcStatus ");
+		if (prcStatusIns != null && prcStatusIns.length != 0) {
+			queryBuffer.append(" 		and prcInst.prcStatus in (");
+			for (int i=0; i<prcStatusIns.length; i++) {
+				if (i != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":prcStatusIn").append(i);
+			}
+			queryBuffer.append(")");
+		}
 		queryBuffer.append(") prcInstInfo ");
 		queryBuffer.append("on taskInfo.tskPrcInstId = prcInstInfo.prcObjId ");
 		queryBuffer.append(" where 1=1 ");
@@ -479,6 +489,11 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
 			for (int i=0; i<taskObjIdIns.length; i++) {
 				query.setString("taskObjIdIn"+i, taskObjIdIns[i]);
+			}
+		}
+		if (prcStatusIns != null && prcStatusIns.length != 0) {
+			for (int i=0; i<prcStatusIns.length; i++) {
+				query.setString("prcStatusIn"+i, prcStatusIns[i]);
 			}
 		}
 		return query;
