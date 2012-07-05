@@ -272,6 +272,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 	}
 	private Query appendQuery(StringBuffer queryBuffer , TaskWorkCond cond) throws Exception {
 		
+		String packageStatus = cond.getPackageStatus();
 		String tskAssignee = cond.getTskAssignee();
 		String tskAssigneeOrTskSpaceId = cond.getTskAssigneeOrSpaceId();
 		String tskStartOrAssigned = cond.getTskStartOrAssigned();
@@ -334,6 +335,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
 		queryBuffer.append("	and form.packageId is not null ");
+		if (!CommonUtil.isEmpty(packageStatus))
+			queryBuffer.append("	and pkg.status = :packageStatus ");
 		if (!CommonUtil.isEmpty(tskAssignee))
 			queryBuffer.append("	and task.tskassignee = :tskAssignee ");
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))
@@ -462,6 +465,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setFirstResult(pageNo * pageSize);
 			query.setMaxResults(pageSize);
 		}
+		if (!CommonUtil.isEmpty(packageStatus))
+			query.setString("packageStatus", packageStatus);
 		if (!CommonUtil.isEmpty(tskAssignee))
 			query.setString("tskAssignee", tskAssignee);
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))

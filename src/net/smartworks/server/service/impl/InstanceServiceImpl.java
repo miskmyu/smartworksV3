@@ -4373,6 +4373,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
 			taskWorkCond.setSearchKey(params.getSearchKey());
+			taskWorkCond.setPackageStatus("DEPLOYED");
 
 			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
