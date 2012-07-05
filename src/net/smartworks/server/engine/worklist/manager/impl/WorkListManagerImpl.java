@@ -272,12 +272,14 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 	}
 	private Query appendQuery(StringBuffer queryBuffer , TaskWorkCond cond) throws Exception {
 		
+		String packageStatus = cond.getPackageStatus();
 		String tskAssignee = cond.getTskAssignee();
 		String tskAssigneeOrTskSpaceId = cond.getTskAssigneeOrSpaceId();
 		String tskStartOrAssigned = cond.getTskStartOrAssigned();
 		//assingnedOnly 값이 true 라면 실행중인(11) 태스크만 조회를 한다.
 		String tskStatus =  cond.getTskStatus();
 		String prcStatus = cond.getPrcStatus();
+		String[] prcStatusIns = cond.getPrcStatusIns();
 		Date lastInstanceDate = cond.getLastInstanceDate();
 		String tskRefType = cond.getTskRefType();
 		int pageNo = cond.getPageNo();
@@ -333,6 +335,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
 		queryBuffer.append("	and form.packageId is not null ");
+		if (!CommonUtil.isEmpty(packageStatus))
+			queryBuffer.append("	and pkg.status = :packageStatus ");
 		if (!CommonUtil.isEmpty(tskAssignee))
 			queryBuffer.append("	and task.tskassignee = :tskAssignee ");
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))
@@ -420,6 +424,15 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		prcInst.prcobjid=prcInstInfo.lastTask_tskprcinstid ");
 		if (!CommonUtil.isEmpty(prcStatus))
 			queryBuffer.append("		and prcInst.prcStatus = :prcStatus ");
+		if (prcStatusIns != null && prcStatusIns.length != 0) {
+			queryBuffer.append(" 		and prcInst.prcStatus in (");
+			for (int i=0; i<prcStatusIns.length; i++) {
+				if (i != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":prcStatusIn").append(i);
+			}
+			queryBuffer.append(")");
+		}
 		queryBuffer.append(") prcInstInfo ");
 		queryBuffer.append("on taskInfo.tskPrcInstId = prcInstInfo.prcObjId ");
 		queryBuffer.append(" where 1=1 ");
@@ -452,6 +465,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setFirstResult(pageNo * pageSize);
 			query.setMaxResults(pageSize);
 		}
+		if (!CommonUtil.isEmpty(packageStatus))
+			query.setString("packageStatus", packageStatus);
 		if (!CommonUtil.isEmpty(tskAssignee))
 			query.setString("tskAssignee", tskAssignee);
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))
@@ -479,6 +494,11 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		if (taskObjIdIns != null && taskObjIdIns.length != 0) {
 			for (int i=0; i<taskObjIdIns.length; i++) {
 				query.setString("taskObjIdIn"+i, taskObjIdIns[i]);
+			}
+		}
+		if (prcStatusIns != null && prcStatusIns.length != 0) {
+			for (int i=0; i<prcStatusIns.length; i++) {
+				query.setString("prcStatusIn"+i, prcStatusIns[i]);
 			}
 		}
 		return query;

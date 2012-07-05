@@ -437,7 +437,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			
 			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 			
@@ -4373,6 +4373,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
 			taskWorkCond.setSearchKey(params.getSearchKey());
+			taskWorkCond.setPackageStatus("DEPLOYED");
 
 			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -6971,12 +6972,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			throw new Exception("Not Exist Draft Task!! taskId : " + taskId);
 		
 		Approval draftApr = new Approval();
-		draftApr.setStatus(Instance.STATUS_DRAFTED);
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(user.getId(), task.getProcessInstId(), IManager.LEVEL_LITE);
+		if (prcInst != null && !prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			draftApr.setStatus(Instance.STATUS_DRAFTED);
+			draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
+		} else {
+			draftApr.setStatus(Instance.STATUS_RUNNING);
+			draftApr.setCompletedDate(null);
+		}
 		draftApr.setName("DRAFT");
 		draftApr.setApproverType(Approval.APPROVER_CHOOSE_ON_RUNNING);
 		draftApr.setApprover(ModelConverter.getUserByUserId(task.getAssignee()));
 		//draftApr.setDueDate("");
-		draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
 		draftApr.setMandatory(true);
 		draftApr.setModifiable(true);
 		aprs[0] = draftApr;

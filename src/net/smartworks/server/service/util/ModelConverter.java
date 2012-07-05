@@ -478,7 +478,16 @@ public class ModelConverter {
 
 			taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 
-			taskInfo.setStatus(task.getTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+			
+			if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+				taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+				taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+				taskInfo.setStatus(TaskInstance.STATUS_REJECTED);
+			} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+				taskInfo.setStatus(TaskInstance.STATUS_RETURNED);
+			}
 
 			//taskInfo.setNumberOfAssociatedWorks(numberOfAssociatedWorks);
 			taskInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
@@ -700,12 +709,31 @@ public class ModelConverter {
 			else if(task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_MOVIE))
 				workInfo.setType(SocialWork.TYPE_MOVIE);
 		} else {*/
-			if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON))
+			if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 				workInfo.setType(SmartWork.TYPE_PROCESS);
-			else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE))
+			} else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 				workInfo.setType(SmartWork.TYPE_INFORMATION);
-			else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
-				workInfo.setType(SmartWork.TYPE_INFORMATION);
+			} else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+				String packageId = task.getPackageId();
+				PkgPackageCond pkgCond = new PkgPackageCond();
+				pkgCond.setPackageId(packageId);
+				PkgPackage pkg = getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_LITE);
+				if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+					workInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+					workInfo.setType(SmartWork.TYPE_PROCESS);
+				}
+			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+				String packageId = task.getPackageId();
+				PkgPackageCond pkgCond = new PkgPackageCond();
+				pkgCond.setPackageId(packageId);
+				PkgPackage pkg = getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_LITE);
+				if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+					workInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+					workInfo.setType(SmartWork.TYPE_PROCESS);
+				}
+			}
 		//}
 		if (task.getParentCtgId() != null) {
 			workInfo.setMyCategory(new WorkCategoryInfo(task.getParentCtgId(), task.getParentCtgName()));
@@ -731,7 +759,17 @@ public class ModelConverter {
 		lastTask.setSubject(task.getPrcTitle());
 		lastTask.setWork(workInfo);
 		lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-		lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+		
+		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+			lastTask.setStatus(TaskInstance.STATUS_RETURNED);
+		}
+		
 		lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
 		Date createdDate = task.getTskCreateDate();
 		Date lastTskDate = task.getLastTskCreateDate() == null ? createdDate : task.getLastTskCreateDate();
@@ -759,7 +797,7 @@ public class ModelConverter {
 				recordId = swdRecord.getRecordId();
 			}
 			workInstanceInfo.setId(recordId);
-		} else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+		} else if(task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 			String processInstId = task.getTskPrcInstId();
 			TskTaskCond tskTaskCond = new TskTaskCond();
 			tskTaskCond.setProcessInstId(processInstId);
@@ -797,7 +835,16 @@ public class ModelConverter {
 		//workInstanceInfo.setType(Instance.TYPE_WORK);
 		workInstanceInfo.setWork(workInfo);
 		workInstanceInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-		workInstanceInfo.setStatus(task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+		
+		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_RUNNING);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
+		}
 		workInstanceInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
 		Date modifiedDate = task.getTaskLastModifyDate() == null ? task.getTskCreateDate() : task.getTaskLastModifyDate();
@@ -862,7 +909,16 @@ public class ModelConverter {
 					
 					instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
 					
-					instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
+					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						instInfo.setStatus(Instance.STATUS_RUNNING);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						instInfo.setStatus(Instance.STATUS_COMPLETED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+						instInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+						instInfo.setStatus(Instance.STATUS_REJECTED);
+					}
+					
 					instInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 					instInfo.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
 					instInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -888,12 +944,21 @@ public class ModelConverter {
 					lastTask.setSubject(task.getPrcTitle());
 					lastTask.setWork(workInfo);
 					lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-					lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+					
+					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+						lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+						lastTask.setStatus(TaskInstance.STATUS_RETURNED);
+					}
+					
 					lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
 					lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
 
-					
 					instInfo.setLastTask(lastTask);
 					instInfo.setLastTaskCount(task.getLastTskCount());
 
@@ -939,7 +1004,17 @@ public class ModelConverter {
 					workInfo.setEditing(isEditingPackage);
 					instInfo.setWork(workInfo);
 					instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-					instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
+					
+					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						instInfo.setStatus(Instance.STATUS_RUNNING);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						instInfo.setStatus(Instance.STATUS_COMPLETED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+						instInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+						instInfo.setStatus(Instance.STATUS_REJECTED);
+					}
+					
 					instInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 					instInfo.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
 					instInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -964,7 +1039,17 @@ public class ModelConverter {
 					lastTask.setSubject(task.getPrcTitle());
 					lastTask.setWork(workInfo);
 					lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-					lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+					
+					if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+						lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+						lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+						lastTask.setStatus(TaskInstance.STATUS_RETURNED);
+					}
+					
 					lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
 					lastTask.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
 					lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -998,7 +1083,17 @@ public class ModelConverter {
 					tskInfo.setSubject(task.getPrcTitle());
 					tskInfo.setWork(workInfo);
 					tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-					tskInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+					
+					if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						tskInfo.setStatus(Instance.STATUS_RUNNING);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						tskInfo.setStatus(Instance.STATUS_COMPLETED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+						tskInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+						tskInfo.setStatus(Instance.STATUS_REJECTED);
+					}
+					
 					tskInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 					tskInfo.setLastModifiedDate(new LocalDate(task.getTaskLastModifyDate().getTime()));
 					tskInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -1080,7 +1175,17 @@ public class ModelConverter {
 				workInfo.setEditing(isEditingPackage);
 				instInfo.setWork(workInfo);
 				instInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
-				instInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? Instance.STATUS_RUNNING : Instance.STATUS_COMPLETED);
+				
+				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+					instInfo.setStatus(Instance.STATUS_RUNNING);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+					instInfo.setStatus(Instance.STATUS_COMPLETED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+					instInfo.setStatus(Instance.STATUS_RETURNED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+					instInfo.setStatus(Instance.STATUS_REJECTED);
+				}
+				
 				instInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 				Date lastTskCreateDate = task.getLastTskCreateDate() == null ? new Date() : task.getLastTskCreateDate();
 				Date lastExecuteDate = task.getLastTskExecuteDate() == null ? new Date() : task.getLastTskExecuteDate();
@@ -1107,7 +1212,17 @@ public class ModelConverter {
 				lastTask.setSubject(task.getPrcTitle());
 				lastTask.setWork(workInfo);
 				lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-				lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+				
+				if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+					lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+					lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
+				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+					lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+					lastTask.setStatus(TaskInstance.STATUS_RETURNED);
+				}
+				
 				lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
 				lastTask.setLastModifiedDate(new LocalDate(task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskCreateDate.getTime() : lastExecuteDate.getTime()));
 				lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -1127,15 +1242,6 @@ public class ModelConverter {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
 					
 					
-					
-					
-					
-					tskInfo.setApprovalId("needs task approval id");
-					
-					
-					
-					
-					
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
 				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
@@ -1152,7 +1258,17 @@ public class ModelConverter {
 				tskInfo.setSubject(task.getPrcTitle());
 				tskInfo.setWork(workInfo);
 				tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
-				tskInfo.setStatus(task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+				
+				if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+					tskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+					tskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+					tskInfo.setStatus(TaskInstance.STATUS_RETURNED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+					tskInfo.setStatus(TaskInstance.STATUS_REJECTED);
+				}
+				
 				tskInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 				tskInfo.setLastModifiedDate(new LocalDate(task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? lastTskCreateDate.getTime() : lastExecuteDate.getTime()));
 				tskInfo.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
@@ -1387,7 +1503,12 @@ public class ModelConverter {
 			instInfo.setStatus(Instance.STATUS_COMPLETED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 			instInfo.setStatus(Instance.STATUS_RUNNING);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			instInfo.setStatus(Instance.STATUS_RETURNED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+			instInfo.setStatus(Instance.STATUS_REJECTED);
 		}
+		
 		if (prcInst.getType() != null && prcInst.getType().equalsIgnoreCase(PrcProcessInst.PROCESSINSTTYPE_PROCESS)) {
 			instInfo.setType(WorkInstance.TYPE_PROCESS);
 		} else if (prcInst.getType() != null && prcInst.getType().equalsIgnoreCase(PrcProcessInst.PROCESSINSTTYPE_INFORMATION)) {
@@ -1995,7 +2116,12 @@ public class ModelConverter {
 			status = Instance.STATUS_COMPLETED;
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 			status = Instance.STATUS_COMPLETED;
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			status = Instance.STATUS_RETURNED;
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+			status = Instance.STATUS_REJECTED;
 		}
+		
 		UserInfo owner = ModelConverter.getUserInfoByUserId(prcInst.getCreationUser());
 		
 		TskTask lastTask = getLastExecutedTskTaskByPrcInstId(prcInst.getObjId());
@@ -2101,6 +2227,8 @@ public class ModelConverter {
 			status = Instance.STATUS_RETURNED;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CREATE)) {
 			status = Instance.STATUS_PLANNED;
+		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			status = Instance.STATUS_REJECTED;
 		}
 		UserInfo owner = ModelConverter.getUserInfoByUserId(task.getCreationUser());
 		LocalDate createdDate = new LocalDate(task.getCreationDate().getTime());
@@ -3046,6 +3174,10 @@ public class ModelConverter {
 			instance.setStatus(Instance.STATUS_COMPLETED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
 			instance.setStatus(Instance.STATUS_RUNNING);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			instance.setStatus(Instance.STATUS_RETURNED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+			instance.setStatus(Instance.STATUS_REJECTED);
 		}
 		if (prcInst.getType() != null && prcInst.getType().equalsIgnoreCase(PrcProcessInst.PROCESSINSTTYPE_PROCESS)) {
 			instance.setType(WorkInstance.TYPE_PROCESS);
@@ -3920,7 +4052,17 @@ public class ModelConverter {
 		lastTask.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
 		lastTask.setWork(workInfo);
 		lastTask.setWorkSpace(getWorkSpaceInfo(task.getLastTskWorkSpaceType(), task.getLastTskWorkSpaceId()));
-		lastTask.setStatus(task.getLastTskStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING) ? TaskInstance.STATUS_RUNNING : TaskInstance.STATUS_COMPLETED);
+		
+		if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+			lastTask.setStatus(TaskInstance.STATUS_RUNNING);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+			lastTask.setStatus(TaskInstance.STATUS_RETURNED);
+		}
+		
 		lastTask.setOwner(getUserInfoByUserId(task.getLastTskAssignee()));
 		lastTask.setLastModifiedDate(new LocalDate( task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getLastTskCreateDate().getTime() : task.getLastTskExecuteDate().getTime()));
 		lastTask.setLastModifier(getUserInfoByUserId(task.getLastTskAssignee()));
