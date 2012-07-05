@@ -602,6 +602,7 @@ margin: 0 auto}
 #work_ing .title a {color:#454545}
 #work_ing .title a:hover {text-decoration:none}
 #work_ing .current {font-size:14px; font-weight:bold}
+#work_ing .t_red_bold {font-size:11px}
 td.pic {width:85px}
 .subject_list { margin-left:5px}
 .subject_list li {color: #bababa; float: left; margin-right: 5px}
