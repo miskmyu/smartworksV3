@@ -325,6 +325,9 @@ public class ModelConverter {
 			WorkInfo workInfo = new WorkInfo();
 			TskTaskCond tskCond = new TskTaskCond();
 			tskCond.setExtendedProperties(new Property[] {new Property("recordId", workSpaceId)});
+			tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
+			tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
+			
 			TskTask[] tskTasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
 			WorkSpaceInfo wsInfo = null;
 			String instanceId = workSpaceId;

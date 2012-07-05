@@ -134,7 +134,7 @@
 				if ((fieldDatas != null) && (fieldDatas.length == displayFields.length)) {
 					for (FieldData data : fieldDatas) {
 				%>
-						<td><a href="<%=target%>" class=js_pop_select_work_item workId="<%=workId%>" instId="<%=instanceInfo.getId()%>"><%=CommonUtil.toNotNull(data.getValue())%></a></td>
+						<td><a href="<%=target%>" class=js_pop_select_work_item workId="<%=workId%>" instId="<%=instanceInfo.getId()%>"fieldId="<%=data.getFieldId()%>"><%=CommonUtil.toNotNull(data.getValue())%></a></td>
 				<%
 					}
 				}

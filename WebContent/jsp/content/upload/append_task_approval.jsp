@@ -196,7 +196,12 @@
 				CommentsTitle="<fmt:message key='approval.title.comments' />" content="<%=CommonUtil.toNotNull(content)%>"
 				drafterTitle="<fmt:message key='approval.title.drafter' />" drafterId="<%=CommonUtil.toNotNull(drafterId)%>" drafterName="<%=CommonUtil.toNotNull(drafterName)%>"
 				draftDateTitle="<fmt:message key='approval.title.draft_date' />" draftDate="<%=CommonUtil.toNotNull(draftDate)%>"
-				isReturned="<%=(workInstance.getStatus()==Instance.STATUS_RETURNED)%>">
+				<%
+				boolean isReturned = false;
+				if (workInstance != null)
+					isReturned = (workInstance.getStatus()==Instance.STATUS_RETURNED);
+				%>
+				isReturned="<%=isReturned%>">
 			</div>
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
