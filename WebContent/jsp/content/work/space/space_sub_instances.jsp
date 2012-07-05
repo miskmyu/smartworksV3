@@ -99,7 +99,7 @@
 
 							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles()) %></div><%} %>
 							<!-- 인스턴스 마지막수정일자 -->
-							<div class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
+							<div class="tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
 							<!-- 인스턴스 마지막수정일자 //-->
 						</div>
 					</div>
@@ -193,12 +193,15 @@
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_m">
 						</a>
 					</div>
-					<div class="noti_in">
+					<div class="noti_in_m">
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						
 						<div><%=comment.getComment() %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
+						<!-- 인스턴스 마지막 수정일자 -->
+						<div class="tr pr10 t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></div>
+						<!-- 인스턴스 마지막 수정일자 // -->
 					</div>
 				</div>
 			<%
@@ -209,6 +212,7 @@
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+							
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span></a><%} %>
 							<div><%=workInstance.getSubject() %>
@@ -278,14 +282,14 @@
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 								</div>
 								<div class="noti_in">
-									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+									<textarea style="width:98%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
 								</div>
 					        </div>
 					    
 					    </div>
 					    <!-- 댓글 //-->
 				    </div>
-				    <div class="ml70 js_action_btns">
+				    <div class="btns_action js_action_btns">
 				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
 				    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
 				    </div>
