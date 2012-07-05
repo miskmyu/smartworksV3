@@ -64,6 +64,7 @@
 	else
 		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
+	session.setAttribute("workSpaceId", instance.getId());
 		
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunities();

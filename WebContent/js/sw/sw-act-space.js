@@ -359,9 +359,11 @@ $(function() {
 		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');
+		console.log('comment=', comment);
 		if(isEmpty(comment)) return false;
 		var iworkManual = input.parents('.js_iwork_manual_page');
 		var pworkManual = input.parents('.js_pwork_manual_page');
+		var newComment = input.parents('.js_new_comment_page');
 		var workId="", workInstanceId="", workType="", url="";
 		if(!isEmpty(iworkManual)){
 			workId = iworkManual.attr('workId');
@@ -369,6 +371,9 @@ $(function() {
 		}else if(!isEmpty(pworkManual)){
 			workId = pworkManual.attr('workId');
 			workType = pworkManual.attr('workType');
+		}else if(!isEmpty(newComment)){
+			workInstanceId = newComment.attr('instanceId');
+			workType = newComment.attr('workType');
 		}else{
 			workInstanceId = input.parents('li:first').attr('instanceId');
 			workType = input.parents('li:first').attr('workType');
@@ -390,16 +395,22 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				var target = subInstanceList.find('.js_comment_list');
-				var showAllComments = target.find('.js_show_all_comments');
-				if(!isEmpty(showAllComments)){
-					showAllComments.find('span').click();
-					input.attr('value', '');
+				if(isEmpty(newComment)){
+					var target = subInstanceList.find('.js_comment_list');
+					var showAllComments = target.find('.js_show_all_comments');
+					if(!isEmpty(showAllComments)){
+						showAllComments.find('span').click();
+						input.attr('value', '');
+					}else{
+						var newCommentInstance = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+						newCommentInstance.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
+						target.append(newCommentInstance);
+						input.attr('value', '');
+					}
 				}else{
-					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
-					newComment.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
-					target.append(newComment);
+					smartPop.progressCenter();
 					input.attr('value', '');
+					window.location.reload();
 				}
 			},
 			error : function(e) {
@@ -443,8 +454,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {
@@ -478,8 +489,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {
@@ -522,8 +533,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {

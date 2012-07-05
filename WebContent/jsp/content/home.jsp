@@ -12,6 +12,9 @@
 	session.setAttribute("cid", ISmartWorks.CONTEXT_HOME);
 	session.setAttribute("lastLocation", "home.sw");
 	session.removeAttribute("wid");
+	session.removeAttribute("smartWork");
+	session.removeAttribute("workInstance");
+	session.removeAttribute("requestParams");
 
 %>
 <!-- 오늘, 내일 그리고 모레이후에 대한 달력과 이벤트들을 보여주는 화면 -->

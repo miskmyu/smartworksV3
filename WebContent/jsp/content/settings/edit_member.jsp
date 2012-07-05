@@ -65,6 +65,7 @@
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 						smartPop.closeProgress();
 						smartPop.showInfo(smartPop.INFO, isEmpty(userId) ? smartMessage.get('createMemberSucceed') : smartMessage.get('setMemberSucceed'), function(){
+							smartPop.progressCenter();
 							document.location.href = "organization_management.sw";					
 						});
 					},

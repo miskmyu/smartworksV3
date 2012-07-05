@@ -339,6 +339,9 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
 .up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold}
 
+.up_comment a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
+.up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold}
+
 .up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block}
 .up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold}
 

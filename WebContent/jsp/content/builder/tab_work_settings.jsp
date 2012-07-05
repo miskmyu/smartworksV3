@@ -66,6 +66,7 @@
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 						smartPop.closeProgress();
 						smartPop.showInfo(smartPop.INFO, smartMessage.get('setWorkSettingsSucceed'), function(){
+							smartPop.progressCenter();
 							document.location.href = "tab_work_settings.sw?cid=bd.sp."+ workId;					
 						});
 					},
