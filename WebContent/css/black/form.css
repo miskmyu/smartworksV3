@@ -1,18 +1,22 @@
 @charset "utf-8";
 /* CSS Document */
 .form_layout {padding:10px}
-.form_layout .form_col {}
+.form_col {padding:0; line-height:22px}
 .form_layout .form_label, .form_layout .form_value {padding:4px 0 0 0 !important}
-.form_label, .form_value {float:left}
-.form_label {color:#23579e; background-color:#ededed}
-.form_label > span {margin:0 5px}
-.form_value > * {margin:0 5px}
-.form_value input[type="text"] {width:95%}
-.form_value textarea {width:97.4% !important; margin-bottom: 4px}
-.form_value iframe {width:98%}
-.form_layout td, .form_layout th {border: 1px dotted #c7c7c7}
+.form_label, .form_value {float:left; margin:1px 0}
+.form_label {color:#23579e; font-weight: bold; text-align: right}
+.form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
+.form_layout td, .form_layout th {border_bottom: 1px dotted #c7c7c7; border-top: 1px dotted #C7C7C7}
 
 .js_type_imageBox .form_label {background-color:#FFF; width:0}
+
+/* Form Old : label부분 회색음영 */
+/* .form_label {color:#23579e; background-color:#ededed}
+.form_value > * {margin:0 5px} 
+.form_value input[type="text"] {width:95%}
+.form_value textarea {width:97.4% !important; margin-bottom: 4px}
+.form_value iframe {width:98% !important}
+.form_layout td, .form_layout th {border: 1px dotted #c7c7c7}*/
 
 /* Setting Form */
 .setting_section table, .js_my_profile_page table {line-height: 26px}
@@ -28,9 +32,6 @@
 .form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
 .form_col iframe {margin-bottom:4px}
 
-/* Up Load Box */
-.form_col {padding:0; line-height:23px}
-.form_label, .form_value {margin:1px 0}
 
 /* 상세필터 */
 .filter_section {}
@@ -59,7 +60,6 @@
 /* label check icon add */
 .icon_required {background: url("../../images/icon_check.png") no-repeat 0 6px; height:18px; width:13px; position: relative; display: inline-block;}
 .required_label {background: url("../../images/icon_check.png") 98% 7px no-repeat transparent}
-.required_label span {padding-right:12px}
 
 .form_number_input input {text-align:right}
 .form_radio_btn
