@@ -204,6 +204,14 @@
 				            </a>
 				   		</span>
 				
+				        <span class="btn_gray js_btn_submit_approval" style="display:none">
+				        	<a href="" class="js_reply_approval">
+					            <span class="txt_btn_start"></span>
+					            <span class="txt_btn_center"><fmt:message key="common.button.submit_approval"/></span>
+					            <span class="txt_btn_end"></span>
+				            </a>
+				   		</span>
+				
 				        <span class="btn_gray js_btn_return_approval" style="display:none">
 				        	<a href="" class="js_reply_approval">
 					            <span class="txt_btn_start"></span>
