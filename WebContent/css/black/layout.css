@@ -332,19 +332,19 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 #upload {width:100%; height:22px; margin: 0 7px; display:inline-block; position:relative}
 #upload div a:hover, #upload div a:focus, #upload div a:active, #upload div a:link, #upload div a:visited {color: #333333; text-decoration:none}
 #upload div {float:left; padding-right:15px}
-#upload_form_box {margin: 0 5px}
+#upload_form_box {margin: 0 5px; width:730px}
+#upload_form_box input[type="text"], #upload_form_box textarea {padding:0; margin:2px}
 
 .up_wrap {position:relative; margin: 0 0 3px}
-.upload_up_wrap {width:760px}
+.upload_up_wrap {width:770px}
 .detail_up_wrap {margin:0 15px 10px} /* 상세보기 페이지의 up_wrap */ 
 
 /* UpLoad Search */
 .start_works_input {position:relative}
-.start_works_input .input_size {width:743px}
-.start_works_input .srch input {width:718px}
-.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7; padding:1px 3px}
+.start_works_input .srch input {width:700px}
+.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7}
 .start_works_input .srch .srch_icon_w {background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
-	width:13px; right:3px; padding:0; position:relative; float: right; top:1px}
+	width:13px; right:3px; padding:0; position:relative; float: right; top:2px}
 
 /* upload Icon */
 .up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block}
@@ -598,8 +598,8 @@ margin: 0 auto}
 			
 /* Work ING */
 #work_ing {margin:0 15px}
-#work_ing li {border-bottom:1px solid #DCDFE0}
-#work_ing li.end { border:none}
+/* #work_ing li {border-bottom:1px solid #DCDFE0}*/
+#work_ing li.end { border:none} 
 .working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
 #work_ing .titl_section {height:21px; padding-top:8px}
@@ -608,7 +608,6 @@ margin: 0 auto}
 #work_ing .title a:hover {text-decoration:none}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
-#work_ing .srch_wsize {margin: 0}
 #work_ing .solid_line {margin:2px 0 5px}
 
 td.pic {width:85px}
@@ -667,7 +666,7 @@ td.pic {width:85px}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
 .t_size12 {font-size:12px}
-.t_action {color:#23579e; font-size:10.5px; text-decoration:underline}
+.t_action {color:#418AC8; font-size:10.5px}
 .t_action_disabled {color:#454545 !important; text-decoration:none !important}
 .t_date, .t_text_s11, .t_s11,
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}

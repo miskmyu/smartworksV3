@@ -56,8 +56,8 @@
 
 /* 공간 영역 */
 .space_section {padding-top: 8px}
-.space_section .title {background: url("../../images/body_icon.png") no-repeat 0 -418px transparent; font-weight:bold; padding:5px 0 0 20px; border-bottom: 1px solid #C7C7C7;background-color: gainsboro}
-.space_section .title_off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent; font-weight:bold; padding:4px 0 1px 20px; border-bottom: 1px solid #C7C7C7;background-color: gainsboro}
+.space_section .title {background: url("../../images/body_icon.png") no-repeat 5px -418px transparent; font-weight:bold; padding:3px 0 0 25px; border-bottom: 1px solid #C7C7C7; background-color:#dedede; line-height: 20px}
+.space_section .title.off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent}
 .space_section .imag_area { margin:4px 0}
 .picture_section { overflow:hidden}
 .picture_section li { float:left; margin:20px 10px 0 10px}
@@ -85,11 +85,12 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 .reply li a img, .reply li img {float:left} 
 .btns_action {margin:0 0 5px 70px}
+.btns_action + a {margin:0 7px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
 
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
 .default_title_space{padding-bottom:5px !important} /* Case in No right Button */
-.list_title_space,.default_title_space {padding:5px 0 2px 0; overflow:hidden} /* Case in right Button */
+.list_title_space,.default_title_space {padding:0 0 2px 0; overflow:hidden} /* Case in right Button */
 .list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 3px no-repeat; font-size:14px; font-weight:bold; padding: 3px 8px 0 20px; float:left}
 
 .list_contents {}
@@ -271,7 +272,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /* Option - date */
 .option_section { float:right; margin:5px 5px 0 0}
-.sel_date_section {background: url("../../images/bg_date_feild.jpg") no-repeat 0 0;display: inline-block; font-weight: bold; height: 19px; padding: 0 0 0 6px; width:120px}
+.sel_date_section {background: url("../../images/bg_date_feild.jpg") no-repeat 0 0; display: inline-block; font-weight: bold; height: 19px; padding: 0 0 0 6px; width:120px; line-height: 18px}
 .sel_date_section a.btn_calendar {background: url("../../images/bg_date_feild.jpg") no-repeat -577px 0; float: right; height: 19px; width: 23px}
 .sel_date_section a:hover.btn_calendar {background: url("../../images/bg_date_feild.jpg") no-repeat 100% 0; float: right}
 
@@ -317,7 +318,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .t_text_s11 {margin:28px 0 0 4px; text-align:center; width:110px}
 
 /* Icon button style */
-.title_line_btns {float:right; position: relative; top: -1px}
+.title_line_btns {float:right; position: relative}
 .title_line_options {float:left; position:relative; top:0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
