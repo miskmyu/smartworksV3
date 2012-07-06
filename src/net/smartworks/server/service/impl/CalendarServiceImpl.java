@@ -349,8 +349,16 @@ public class CalendarServiceImpl implements ICalendarService {
 
 			swdRecordCond.setOrders(new Order[]{new Order(tableColName, true)});
 
-			if(workSpaceId != null)
-				swdRecordCond.setWorkSpaceId(workSpaceId);
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			if(workSpaceId != null) {
+				if(workSpaceId.equals(userId))
+					swdRecordCond.setCreatorOrSpaceId(workSpaceId);
+				else
+					swdRecordCond.setWorkSpaceId(workSpaceId);
+			} else {
+				swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+			}
+			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
 			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();

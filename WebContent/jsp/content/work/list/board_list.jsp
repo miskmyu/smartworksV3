@@ -97,12 +97,12 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 				<!-- 목록보기 타이틀-->
-				<div class="list_title_space js_work_list_title mt15">
-					<div class="title"><fmt:message key="common.title.instance_list" /></div>					
+				<div class="list_title_space fr js_work_list_title">
+					<%-- <div class="title"><fmt:message key="common.title.instance_list" /></div>	 --%>				
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
 							<span class="js_progress_span"></span>
-							<div class="srch_wh mr5">
+							<div class="srch_wh srch_wsize m0">
 								<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>

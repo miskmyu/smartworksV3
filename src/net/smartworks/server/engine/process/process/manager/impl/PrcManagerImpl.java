@@ -578,6 +578,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		String logicalOperator = cond.getOperator();
 		String[] workSpaceIdIns = cond.getWorkSpaceIdIns();
 		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
+		String[] likeAccessValues = cond.getLikeAccessValues();
 
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
@@ -667,7 +668,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 
 		if (workSpaceIdIns != null) {
 			queryBuffer.append(" and");
-			queryBuffer.append(" ((prcInst.prcWorkSpaceType = 6 and prcInst.prcWorkSpaceId in (");
+			queryBuffer.append(" (prcInst.prcCreateUser = '" + userId + "' or ((prcInst.prcWorkSpaceType = 6 and prcInst.prcWorkSpaceId in (");
 			for (int j=0; j<workSpaceIdIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
@@ -679,7 +680,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or prcInst.prcWorkSpaceType = 4 or prcInst.prcWorkSpaceType = 2 or prcInst.prcWorkSpaceType is null)");
+			queryBuffer.append(")) or prcInst.prcWorkSpaceType = 4 or prcInst.prcWorkSpaceType = 2 or prcInst.prcWorkSpaceType is null))");
 		}
 		if (workSpaceIdNotIns != null) {
 			queryBuffer.append(" and");
@@ -691,7 +692,17 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			queryBuffer.append(")");
 		}
-		queryBuffer.append(" and (prcInst.prcAccessLevel is null or prcInst.prcAccessLevel = 3 or (prcInst.prcAccessLevel = 1 and prcInst.prcCreateUser = '" + userId + "') or (prcInst.prcAccessLevel = 2 and prcInst.prcAccessValue like '%" + userId + "%')) ");
+		String likeAccessValuesQuery = "prcInst.prcAccessValue like '%%'";
+		StringBuffer likeAccessValuesBuffer = new StringBuffer();
+		if(likeAccessValues != null) {
+			for (int j=0; j<likeAccessValues.length; j++) {
+				if(j==0)
+					likeAccessValuesBuffer.append("prcInst.prcAccessValue like :likeAccessValue").append(j);
+				likeAccessValuesBuffer.append(" or prcInst.prcAccessValue like :likeAccessValue").append(j);
+			}
+			likeAccessValuesQuery = likeAccessValuesBuffer.toString();
+		}
+		queryBuffer.append(" and (prcInst.prcAccessLevel is null or prcInst.prcAccessLevel = 3 or (prcInst.prcAccessLevel = 1 and prcInst.prcCreateUser = '" + userId + "') or (prcInst.prcAccessLevel = 2 and (").append(likeAccessValuesQuery).append(" or prcInst.prcCreateUser = '" + userId + "'))) ");
 
 		Map filterMap = new HashMap();
 		if (!CommonUtil.isEmpty(filters)) {
@@ -812,6 +823,11 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		if (workSpaceIdNotIns != null) {
 			for (int j=0; j<workSpaceIdNotIns.length; j++) {
 				query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
+			}
+		}
+		if (likeAccessValues != null) {
+			for (int j=0; j<likeAccessValues.length; j++) {
+				query.setString("likeAccessValue"+j, CommonUtil.toLikeString(likeAccessValues[j]));
 			}
 		}
 		if (!CommonUtil.isEmpty(filters)) {

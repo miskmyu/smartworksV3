@@ -19,7 +19,7 @@
 
 <!-- 타이틀 -->
 <div class="body_titl">
-	<div class="body_titl_iworks title"><fmt:message key="header.top_menu.smartcaster"/></div>
+	<div class="smartcaster title"><fmt:message key="header.top_menu.smartcaster"/></div>
        	<div class="txt_btn"></div>
 	<div class="solid_line"></div>
 </div>
@@ -36,6 +36,32 @@
 	</div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
+		
+			<!-- 검색&필터 -->
+			<div class="contents_space oh">
+				<div class="title_line_options fr">
+					<form class="po_left" name="frmSearchInstance">
+						<div class="srch_wh srch_wsize">
+							<input class="nav_input" type="text" placeholder="항목 찾기" name="txtSearchInstance">
+							<button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="항목 찾기"></button>
+						</div>
+						</form>
+						<form class="form_space po_left js_form_filter_name" name="frmIworkFilterName">
+						<select class="js_select_search_filter" name="selFilterName">
+							<option selected="" value="">이름  </option>
+							<option value="">이름 </option>
+							<option value="">이름 </option>
+							<option value="">이름 </option>
+						</select>
+					</form>
+					<a class="js_edit_search_filter" title="상세필터편집" href="">
+						<div class="icon_btn_edit"></div>
+					</a>
+				</div>
+				<div class="solid_line cb"></div>
+			</div>
+			<!-- 검색&필터 //-->
+			
 			<jsp:include page="/jsp/content/more_smartcast.jsp"></jsp:include>
 		</ul>
 	</div>

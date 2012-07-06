@@ -57,6 +57,7 @@ import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.notice.Notice;
+import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
@@ -236,11 +237,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setCompanyId(companyId);
 			String domainId = "frm_notice_SYSTEM";
 			swdRecordCond.setDomainId(domainId);
-			String[] workSpaceIdIns = null;
-			if(spaceId == null)
-				workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
-			swdRecordCond.setWorkSpaceId(spaceId);
-			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+			if(spaceId != null) {
+				if(spaceId.equals(userId))
+					swdRecordCond.setCreatorOrSpaceId(spaceId);
+				else
+					swdRecordCond.setWorkSpaceId(spaceId);
+			} else {
+				swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+			}
+			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			swdRecordCond.setPageNo(0);
 			swdRecordCond.setPageSize(5);
@@ -1704,6 +1710,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, formId);
+				}
 				obj.setWorkSpaceId(workSpaceId);
 				obj.setWorkSpaceType(workSpaceType);
 				obj.setAccessLevel(accessLevel);
@@ -2846,6 +2855,10 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, processId);
+				}
+
 				task.setWorkSpaceId(workSpaceId);
 				task.setWorkSpaceType(workSpaceType);
 				task.setAccessLevel(accessLevel);
@@ -3213,6 +3226,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
 
@@ -3825,6 +3840,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
 			prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
 
+			prcInstCond.setLikeAccessValues(workSpaceIdIns);
+
+			String searchKey = params.getSearchKey();
+			prcInstCond.setSearchKey(searchKey);
+
 			long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
 
 			int pageSize = params.getPageSize();
@@ -4135,6 +4155,9 @@ public class InstanceServiceImpl implements IInstanceService {
 				swdRecordCond.setCreatorOrSpaceId(workSpaceId);
 			else
 				swdRecordCond.setWorkSpaceId(workSpaceId);
+
+			String[] likeAccessValues = ModelConverter.getWorkSpaceIdIns(cUser);
+			swdRecordCond.setLikeAccessValues(likeAccessValues);
 
 			String searchKey = params.getSearchKey();
 			if(!CommonUtil.isEmpty(searchKey))
@@ -6403,7 +6426,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			task.setRealEndDate(new LocalDate(new Date().getTime()));
 			//태스크를 실행한다
 
-			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			/*Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
 			if(!CommonUtil.isEmpty(frmAccessSpaceMap)) {
 				Set<String> keySet = frmAccessSpaceMap.keySet();
 				Iterator<String> itr = keySet.iterator();
@@ -6442,11 +6465,15 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, (String)requestBody.get("instanceId"));
+				}
+
 				task.setWorkSpaceId(workSpaceId);
 				task.setWorkSpaceType(workSpaceType);
 				task.setAccessLevel(accessLevel);
 				task.setAccessValue(accessValue);
-			}
+			}*/
 
 			if (action.equalsIgnoreCase("save")) {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
@@ -6510,7 +6537,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (logger.isInfoEnabled())
 				logger.info("Delegate Task "+ task.getName() +"("+taskInstId+") From " + userId + " To " + delegateUserId);
 
-			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			/*Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
 			if(!CommonUtil.isEmpty(frmAccessSpaceMap)) {
 				Set<String> keySet = frmAccessSpaceMap.keySet();
 				Iterator<String> itr = keySet.iterator();
@@ -6549,11 +6576,15 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 				}
 
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, (String)requestBody.get("instanceId"));
+				}
+
 				task.setWorkSpaceId(workSpaceId);
 				task.setWorkSpaceType(workSpaceType);
 				task.setAccessLevel(accessLevel);
 				task.setAccessValue(accessValue);
-			}
+			}*/
 
 			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			return taskInstId;

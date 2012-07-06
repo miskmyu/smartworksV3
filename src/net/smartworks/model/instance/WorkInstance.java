@@ -116,5 +116,18 @@ public class WorkInstance extends Instance {
 			if(cUserId.equals(likers[i]))
 				return true;
 		return false;
-	}	
+	}
+	
+	public TaskInstanceInfo getMyRunningApprovalTask(){
+		if(SmartUtil.isBlankObject(tasks)) return null;
+		for(TaskInstanceInfo task : tasks){
+			if(task.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+				&& !SmartUtil.isBlankObject(task.getAssignee()) 
+				&& task.getAssignee().getId().equals(SmartUtil.getCurrentUser().getId())
+				&& task.getStatus() == TaskInstance.STATUS_RUNNING){
+					return task;
+				}
+		}
+		return null;
+	}
 }

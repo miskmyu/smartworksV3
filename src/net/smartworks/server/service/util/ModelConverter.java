@@ -1346,6 +1346,26 @@ public class ModelConverter {
 		}
 		return instanceInfos;
 	}
+	public static String getAccessValue(String userId, String resourceId) throws Exception {
+		try {
+			String accessValue = null;
+			SwaUserCond swaUserCond = new SwaUserCond();
+			swaUserCond.setResourceId(resourceId);
+			swaUserCond.setMode(SwaResource.MODE_READ);
+			SwaUser[] swaUsers = getSwaManager().getUsers(userId, swaUserCond, IManager.LEVEL_LITE);
+			if(!CommonUtil.isEmpty(swaUsers)) {
+				accessValue = "";
+				for(SwaUser swaUser : swaUsers) {
+					String authUserId = swaUser.getUserId() + ";";
+					accessValue = accessValue + authUserId;
+				}
+			}
+			return accessValue;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static void setPolicyToWork(SmartWork work, String resourceId) throws Exception {
 
 		User user = SmartUtil.getCurrentUser();
