@@ -230,6 +230,8 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 			
 			if ((tasks != null && tasks.length != 0) && !isNewTask) {
 				task = (TskTask)tasks[0].clone();
+				if (task.getIsStartActivity().equalsIgnoreCase("true"))
+					task.setIsStartActivity(null);
 				
 				task.setObjId(null);
 				task.setStatus(null);
@@ -299,6 +301,8 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 				task.setRealStartDate(new LocalDate());
 				//task.setExpectEndDate(endDate);
 				//task.setRealEndDate(endDate);
+				if (!CommonUtil.isEmpty(approvalLine))
+					task.setIsStartActivity("true");
 			}
 			if (obj.getExtendedAttributeValue("extValues") != null && obj.getExtendedAttributeValue("extValues").length() != 0)
 				task.setExtendedAttributeValue("extValues", obj.getExtendedAttributeValue("extValues"));

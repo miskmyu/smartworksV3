@@ -276,6 +276,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		String tskAssignee = cond.getTskAssignee();
 		String tskAssigneeOrTskSpaceId = cond.getTskAssigneeOrSpaceId();
 		String tskStartOrAssigned = cond.getTskStartOrAssigned();
+		String tskStartOnly = cond.getTskStartOnly();
 		//assingnedOnly 값이 true 라면 실행중인(11) 태스크만 조회를 한다.
 		String tskStatus =  cond.getTskStatus();
 		String prcStatus = cond.getPrcStatus();
@@ -343,6 +344,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			queryBuffer.append("	and (task.tskassignee = :tskAssigneeOrTskSpaceId or task.tskWorkSpaceId = :tskAssigneeOrTskSpaceId) ");
 		if (!CommonUtil.isEmpty(tskStartOrAssigned))
 			queryBuffer.append("	and ((task.tskassignee = :tskStartOrAssigned and task.isStartActivity = 'true') or (task.tskStatus = '11' and task.tskassignee = :tskStartOrAssigned)) ");
+		if (!CommonUtil.isEmpty(tskStartOnly))
+			queryBuffer.append("	and (task.tskassignee = :tskStartOnly and task.isStartActivity = 'true') ");
 		if (!CommonUtil.isEmpty(tskStatus))
 			queryBuffer.append("	and task.tskstatus = :tskStatus ");
 		if (!CommonUtil.isEmpty(worksSpaceId))
@@ -473,6 +476,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setString("tskAssigneeOrTskSpaceId",tskAssigneeOrTskSpaceId);
 		if (!CommonUtil.isEmpty(tskStartOrAssigned))
 			query.setString("tskStartOrAssigned",tskStartOrAssigned);
+		if (!CommonUtil.isEmpty(tskStartOnly))
+			query.setString("tskStartOnly",tskStartOnly);
 		if (!CommonUtil.isEmpty(tskStatus))
 			query.setString("tskStatus", tskStatus);
 		if (lastInstanceDate != null)

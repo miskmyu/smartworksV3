@@ -457,6 +457,22 @@ public class ModelConverter {
 			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 				workInfo.setType(SmartWork.TYPE_INFORMATION);
 				taskInfo.setType(SmartWork.TYPE_INFORMATION);
+			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+				if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+					workInfo.setType(SmartWork.TYPE_INFORMATION);
+					taskInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else {
+					workInfo.setType(SmartWork.TYPE_PROCESS);
+					taskInfo.setType(SmartWork.TYPE_PROCESS);
+				}
+			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+				if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+					workInfo.setType(SmartWork.TYPE_INFORMATION);
+					taskInfo.setType(SmartWork.TYPE_INFORMATION);
+				} else {
+					workInfo.setType(SmartWork.TYPE_PROCESS);
+					taskInfo.setType(SmartWork.TYPE_PROCESS);
+				}
 			}
 			if (task.getParentCtgId() != null) {
 				workInfo.setMyCategory(new WorkCategoryInfo(task.getParentCtgId(), task.getParentCtgName()));
@@ -865,11 +881,23 @@ public class ModelConverter {
 			if (task.getPrcObjId() == null)
 				continue;
 			
-			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON) || ((task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE) && task.getIsStartActivity().equalsIgnoreCase("true")))) {
 				if (task.getIsStartActivity() != null && task.getIsStartActivity().equalsIgnoreCase("true")) {
 					PWInstanceInfo instInfo = new PWInstanceInfo();
 					
-					instInfo.setId(task.getPrcObjId());
+					if ((task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE) && task.getIsStartActivity().equalsIgnoreCase("true"))) {
+						String def = task.getTskDef();
+						String[] ids = StringUtils.tokenizeToStringArray(def, "|");
+						//ids[0] = domainId
+						//ids[1] = recordId
+						if (ids != null && ids.length == 2 ) {
+							instInfo.setId(ids[1]);
+						} else {
+							instInfo.setId(task.getPrcObjId());
+						}
+					} else {
+						instInfo.setId(task.getPrcObjId());
+					}
 					instInfo.setSubject(task.getPrcTitle());
 					instInfo.setType(Instance.TYPE_WORK);
 					
