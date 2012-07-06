@@ -22,6 +22,16 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="js_department_space_page">
+	<!-- Title -->
+	<div class="body_titl space">
+		<div class="depart fl"></div>
+			<div class="info">
+				<div class="title">부서명</div>
+				<div>부서 설명이 들어갑니다.</div>
+			</div>
+		<div class="solid_line"></div>
+	</div>
+	<!-- Title //-->
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
 	<div class="js_space_instance_list">
