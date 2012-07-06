@@ -25,6 +25,7 @@
 .body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
 .body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
 .body_titl > .user {background: url("../../images/body_title.png") no-repeat 0 -725px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
+.body_titl > .smartcaster {background: url("../../images/body_title.png") no-repeat 0 -776px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:140px}
 
 .body_titl_area {background: url("../../images/body_title.png") no-repeat 0 0 transparent; padding:22px 0 0 68px; line-height:18px}
 .body_titl_area.ti_company {background-position:0 0}
