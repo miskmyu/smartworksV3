@@ -598,7 +598,6 @@ margin: 0 auto}
 			
 /* Work ING */
 #work_ing {margin:0 15px}
-/* #work_ing li {border-bottom:1px solid #DCDFE0}*/
 #work_ing li.end { border:none} 
 .working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
@@ -609,6 +608,7 @@ margin: 0 auto}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
 #work_ing .solid_line {margin:2px 0 5px}
+#work_ing .t_woname {font-size:14px; text-decoration:underline}
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}

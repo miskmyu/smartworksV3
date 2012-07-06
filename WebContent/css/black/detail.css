@@ -44,7 +44,7 @@
 /* 본문 컨텐츠 */
 .define_space {padding: 0 25px; overflow: hidden} /* 상하 여백이 필요 없을때 */
 .contents_space {padding: 0 20px 10px}
-.contents_space .det_title, .reply .det_title {padding:5px 0; overflow:hidden} /* 타이틀 */
+.contents_space .det_title, .reply .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
@@ -76,7 +76,7 @@
 .reply_input {margin:5px 0 0 0} /* 댓글 입력 영역 */
 #upload_form_box .reply_input {margin:5px} /* Reply Input in upload_form_box */
 
-.list_reply li, .reply > ul > li, .space_section li {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; overflow: hidden}
+.list_reply li, .reply > ul > li, .space_section li {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; padding: 3px 0; overflow: hidden}
 .list_reply li {padding:0}
 .list_reply .end, .reply .end, .noborder li {border-bottom: none !important; vertical-align: middle}
 .repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px}
@@ -84,7 +84,7 @@
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 .reply li a img, .reply li img {float:left} 
-.btns_action {margin:0 0 5px 70px}
+.btns_action {margin:0 0 0 70px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important; font-size:10.5px}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
 .btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
