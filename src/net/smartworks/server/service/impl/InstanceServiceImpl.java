@@ -2515,6 +2515,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			obj.setExtendedAttributeValue("subject", txtForwardSubject);
 			obj.setExtendedAttributeValue("referenceUser", txtForwardForwardee);
 			obj.setExtendedAttributeValue("workContents", txtForwardComments);
+			
+			obj.setExtendedPropertyValue("subject", txtForwardSubject);
+			obj.setExtendedPropertyValue("referenceUser", txtForwardForwardee);
+			obj.setExtendedPropertyValue("workContents", txtForwardComments);
 		
 		} else if (frmApprovalLine != null) {
 			Iterator appLineItr = frmApprovalLine.keySet().iterator();
