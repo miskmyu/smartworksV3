@@ -1389,25 +1389,49 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_view_my_instances').live('click',function(e) {
+	$('.js_view_my_instances').live('click',function(e) {
 		var input = $(targetElement(e));
-		input.addClass('current').siblings().removeClass('current');
-		var target = input.parents('.js_my_running_instance_list_page').find('table');
+		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
+		input.parent().addClass('current').siblings().removeClass('current');
+		var viewType = input.attr('viewType'); 
+		var target = input.parents('.js_my_running_instance_list_page').find('.js_instance_list_table');
 		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();  
-		var searchFilterId = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();  
-		$.ajax({
-			url : 'more_instance_list.sw',
-			data : {
-				runningOnly : true,
-				searchKey : searchKey
-			},
-			success : function(data, status, jqXHR) {
-				target.html(data);
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-				
-			}
-		});
+		var searchFilterId = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();
+		var progressSpan = myRunningInstanceList.find('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		if(viewType == 'smartcaster_instances'){
+			$.ajax({
+				url : "more_smartcast.sw",
+				data : {
+					fromDate : '',
+					maxSize : 20
+				},
+				success : function(data, status, jqXHR) {
+					target.html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
+				}
+			});
+			
+		}else if(viewType == 'assigned_instances' || viewType == 'running_instances'){
+			$.ajax({
+				url : 'more_instance_list.sw',
+				data : {
+					runningOnly : (viewType == 'running_instances'),
+					assignedOnly : (viewType == 'assigned_instances'),
+					searchKey : searchKey
+				},
+				success : function(data, status, jqXHR) {
+					target.html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();					
+				}
+			});			
+		}
 		return false;
 	});
 

@@ -33,9 +33,9 @@ public interface IInstanceService {
 
 	public Instance getInstanceById(String instanceId) throws Exception;
 
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception;
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception;
 
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception;
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception;
 	
 	public RunningCounts getMyRunningInstancesCounts() throws Exception;
 

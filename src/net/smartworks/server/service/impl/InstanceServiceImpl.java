@@ -408,7 +408,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception {
 		
 		try{
 			//정보관리업무에서 파생된 업무는 IWInstanceInfo
@@ -471,9 +471,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	 * InstanceInfo[] : return
 	 * 	
 	 */
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception {
 
-		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, null);
+		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, runningOnly, null);
 	}
 
 	/*

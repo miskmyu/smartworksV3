@@ -156,9 +156,9 @@ public interface ISmartWorks {
 
 	public final static String CONTEXT_PREFIX_BUILDER_SPACE = "bd.sp.";
 
-	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception;
+	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception;
 	
-	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception;
+	public abstract InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception;
 	
 	public abstract RunningCounts getMyRunningInstancesCounts() throws Exception;
 	

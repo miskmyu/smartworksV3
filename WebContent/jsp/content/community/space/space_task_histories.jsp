@@ -298,7 +298,7 @@
 						switch(taskInstance.getTaskType()){
 						case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
 						%>
-							<fmt:message key="content.sentence.stask_forwarded">
+							<fmt:message key="content.sentence.atask_assigned">
 								<fmt:param>
 									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
 										<span class="t_woname"><%=runningTaskName%></span> 
@@ -322,7 +322,7 @@
 							break;
 						case TaskInstance.TYPE_APPROVAL_TASK_FORWARDED:
 						%>
-							<fmt:message key="content.sentence.stask_forwarded">
+							<fmt:message key="content.sentence.atask_forwarded">
 								<fmt:param>
 									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
 										<span class="t_woname"><%=runningTaskName%></span> 

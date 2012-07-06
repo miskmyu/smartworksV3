@@ -73,6 +73,8 @@ $(function() {
 		var spaceMonthly = input.parents('.js_space_monthly_page');
 		var spaceInstanceList = input.parents('.js_space_instance_list_page');
 		var smartcaster = input.parents('.js_smartcaster_page');
+		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
+		if(!isEmpty(myRunningInstanceList)) target = target.find('.js_instance_list_table');
 		var spacePage = [];
 		var toDate = "";
 		if(!isEmpty(spaceTimeline)){
@@ -89,7 +91,7 @@ $(function() {
 			toDate = input.parents('.js_space_monthly_week').attr('toDate');
 		}else if(!isEmpty(spaceInstanceList)){
 			spacePage = spaceInstanceList;
-		}else if(!isEmpty(smartcaster)){
+		}else if(!isEmpty(smartcaster) || !isEmpty(myRunningInstanceList)){
 			$.ajax({
 				url : "more_smartcast.sw",
 				data : {
@@ -359,7 +361,6 @@ $(function() {
 		var input = $(targetElement(e));
 		var subInstanceList = input.parents('.js_sub_instance_list');
 		var comment = input.attr('value');
-		console.log('comment=', comment);
 		if(isEmpty(comment)) return false;
 		var iworkManual = input.parents('.js_iwork_manual_page');
 		var pworkManual = input.parents('.js_pwork_manual_page');

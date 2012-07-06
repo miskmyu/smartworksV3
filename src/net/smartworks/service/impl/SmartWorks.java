@@ -352,12 +352,12 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
-		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly);
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception {
+		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, runningOnly);
 	}
 	@Override
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
-		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, params);
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception {
+		return instanceService.getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, runningOnly, params);
 	}
 
 	@Override
