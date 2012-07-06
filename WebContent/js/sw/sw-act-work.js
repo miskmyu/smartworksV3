@@ -832,6 +832,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalIWorkInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						window.location.reload();
 						return false;
 					});
@@ -881,6 +882,7 @@ $(function() {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
+								smartPop.progressCenter();
 								document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
 							});
 				},
@@ -947,6 +949,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1011,6 +1014,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1141,6 +1145,7 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
@@ -1353,19 +1358,29 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_view_my_running_instances').live('click',function(e) {
+	$('a.js_email_content_btn').live('click',function(e) {
 		var input = $(targetElement(e));
-		input.addClass('current').siblings().removeClass('current');
-		var target = input.parents('.js_my_running_instance_list_page').find('table');
-		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();  
+		var target = input.parents('.js_form_header').siblings('.js_form_task_email');
+		if(target.is(':visible')){
+			target.hide().html('');
+			var iworkSpace = input.parents('.js_iwork_space_page');
+			if(!isEmpty(iworkSpace)){
+				iworkSpace.find('.js_btn_save').show().siblings().hide();						
+				iworkSpace.find('.js_btn_modify').show();						
+			}
+			return false;
+		}
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
 		$.ajax({
-			url : 'more_instance_list.sw',
-			data : {
-				assignedOnly : false,
-				searchKey : searchKey
-			},
+			url : 'append_task_approval.sw',
+			data : {},
 			success : function(data, status, jqXHR) {
-				target.html(data);
+				target.html(data).show();
+				var iworkSpace = input.parents('.js_iwork_space_page');
+				if(!isEmpty(iworkSpace)){
+					iworkSpace.find('.js_btn_do_approval').show().siblings().hide();
+					iworkSpace.find('.js_btn_cancel').show();						
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				
@@ -1374,27 +1389,54 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_view_assigned_instances').live('click',function(e) {
+	$('.js_view_my_instances').live('click',function(e) {
 		var input = $(targetElement(e));
-		input.addClass('current').siblings().removeClass('current');
-		var target = input.parents('.js_my_running_instance_list_page').find('table');  
-		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();
-		$.ajax({
-			url : 'more_instance_list.sw',
-			data : {
-				assignedOnly : true,
-				searchKey : searchKey
-			},
-			success : function(data, status, jqXHR) {
-				target.html(data);
-			},
-			error : function(xhr, ajaxOptions, thrownError){
-				
-			}
-		});
+		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
+		input.parent().addClass('current').siblings().removeClass('current');
+		var viewType = input.attr('viewType'); 
+		var target = input.parents('.js_my_running_instance_list_page').find('.js_instance_list_table');
+		var searchKey = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();  
+		var searchFilterId = input.parents('.js_my_running_instance_list_page').find('input[name]=txtSearchInstance').val();
+		var progressSpan = myRunningInstanceList.find('.js_progress_span');
+		smartPop.progressCont(progressSpan);
+		if(viewType == 'smartcaster_instances'){
+			$.ajax({
+				url : "more_smartcast.sw",
+				data : {
+					fromDate : '',
+					maxSize : 20
+				},
+				success : function(data, status, jqXHR) {
+					target.html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
+				}
+			});
+			
+		}else if(viewType == 'assigned_instances' || viewType == 'running_instances'){
+			$.ajax({
+				url : 'more_instance_list.sw',
+				data : {
+					runningOnly : (viewType == 'running_instances'),
+					assignedOnly : (viewType == 'assigned_instances'),
+					searchKey : searchKey
+				},
+				success : function(data, status, jqXHR) {
+					target.html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();					
+				}
+			});			
+		}else{
+			smartPop.closeProgress();			
+		}
 		return false;
 	});
-	
+
 	var filesDetailTimer = null;
 	$('.js_pop_files_detail').live('mouseenter', function(e){
 		if(filesDetailTimer!=null){

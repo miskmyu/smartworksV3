@@ -219,11 +219,16 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 			TskTaskCond cond = new TskTaskCond();
 			cond.setExtendedProperties(new Property[] {new Property("recordId", obj.getRecordId())});
 			cond.setOrders(new Order[] {new Order("creationDate", false)});
+			cond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
 			
 			TskTask[] tasks = getTskManager().getTasks(user, cond, IManager.LEVEL_ALL);
 			TskTask task = null;
 			
-			if (tasks != null && tasks.length != 0) {
+			String makeNewNotClon = obj.getExtendedAttributeValue("makeNewNotClon");
+			
+			boolean isNewTask = CommonUtil.toBoolean(makeNewNotClon);
+			
+			if ((tasks != null && tasks.length != 0) && !isNewTask) {
 				task = (TskTask)tasks[0].clone();
 				
 				task.setObjId(null);
@@ -259,6 +264,9 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 				task.setName(name);
 				task.setType("SINGLE");
 				task.setPriority(null);
+				
+				if (tasks != null && tasks.length != 0)
+					task.setProcessInstId(tasks[0].getProcessInstId());
 				
 				task.setExtendedPropertyValue("subject", forwardSubject == null || forwardSubject.length() == 0 ? title : forwardSubject);
 				task.setTitle(title);

@@ -56,6 +56,7 @@
 	else
 		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
+	session.setAttribute("workSpaceId", instance.getId());
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

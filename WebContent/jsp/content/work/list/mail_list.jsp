@@ -92,32 +92,32 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
+<!-- 타이틀 -->
+<div class="body_titl list">
+	<div class="body_titl_area ti_mail title">
+		<div class="title myspace_h"><%=mailFolder.getName() %>
+			<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
+		</div>
+	</div>
+
+	<!-- 메일 검색 -->
+	<div class="mail_srch">
+		<div class="srch_wh srch_wsize_mail">
+			<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>">
+			<button onclick="" title="<fmt:message key="search.search"/>"></button>
+		</div>
+	</div>
+	<!-- 메일 검색//-->
+
+	<div class="solid_line cb"></div>
+</div>
+<!-- 타이틀 //-->
+			
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_area ti_mail title">
-					<div class="title myspace_h"><%=mailFolder.getName() %>
-						<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
-					</div>
-				</div>
-
-				<!-- 메일 검색 -->
-				<div class="mail_srch">
-					<div class="srch_wh srch_wsize_mail">
-						<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>">
-						<button onclick="" title="<fmt:message key="search.search"/>"></button>
-					</div>
-				</div>
-				<!-- 메일 검색//-->
-
-				<div class="solid_line cb"></div>
-			</div>
-			<!-- 타이틀 //-->
 
 			<!-- 컨텐츠 -->
 			<div class="contents_space">

@@ -134,7 +134,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 /*Personal Info*/
 .personal_info {background: url("../../images/personal_info_bg.png")repeat-x scroll 0 0; padding:11px; border-bottom:1px solid #1f1f1f}
 .personal_info ul {overflow:hidden}
-.personal_info li {float:left; vertical-align:bottom; margin-right:6px; color:#dddddd; line-height: 17px } 
+.personal_info li {float:left; vertical-align:bottom; margin-right:6px; color:#dddddd; line-height: 16px } 
 .personal_info li.info { width:129px}
 .personal_info .pic {background: url("../../images/pic_personal_info.jpg"); display:inline; width:66px; height:66px; position:relative}
 .personal_info .setting {background: url("../../images/nav_setting.png"); display:inline; width:66px; height:66px; position:relative}
@@ -187,7 +187,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -366px transparent; padding:0 0 0 12px}
 .icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 21px; font-weight:bold}
 /* new Icon added by ysjung */
-.icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:30px; vertical-align:bottom}
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:20px}
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
@@ -197,7 +197,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_file_works {background: url("../../images/body_icon.png") no-repeat -551px -503px; padding:0 0 0 21px; float: left; height:18px}
 .icon_event_works {background: url("../../images/body_icon.png") no-repeat -551px -529px; padding:0 0 0 21px; float: left; height:19px}
 .icon_memo_works {background: url("../../images/body_icon.png") no-repeat -551px -556px; padding:0 0 0 21px; float: left; height:18px}
-.icon_board_works {background: url("../../images/body_icon.png") no-repeat -551px -606px; padding:0 0 0 21px; float: left; height:18px}
+.icon_board_works {background: url("../../images/body_icon.png") no-repeat -551px -605px; padding:0 0 0 21px; float: left; height:18px}
 .icon_forum_works {background: url("../../images/body_icon.png") no-repeat -551px -627px; padding:0 0 0 21px; float: left; height:18px}
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -551px -650px; padding:0 0 0 21px; float: left; height:18px}
 
@@ -293,11 +293,11 @@ li.fvrt_item:hover .check_option {display:block}
 
 /* CommentsBox added by ysjung */
 tr.instance_list {}
-tr.instance_list:hover {background-color:#fffccd; cursor:pointer}
+tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
 li.sub_instance_list > div.det_title {}
-li.sub_instance_list > div.det_title:hover {background-color:#fffccd; cursor:pointer}
+li.sub_instance_list > div.det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.comment_list {}
-li.comment_list:hover {background-color:#fffccd; cursor:pointer}
+li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
 .arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
 
@@ -329,40 +329,45 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 #board {margin:5px 10px 10px 240px; color:#ea1a1a; font-family: '돋움',dotum,Helvetica,sans-serif; height:18px; z-index:20}
 
 /* UpLoad */
-#upload {width:100%; height:22px; margin: 0 2px; display:inline-block; position:relative}
+#upload {width:100%; height:22px; margin: 0 7px; display:inline-block; position:relative}
 #upload div a:hover, #upload div a:focus, #upload div a:active, #upload div a:link, #upload div a:visited {color: #333333; text-decoration:none}
 #upload div {float:left; padding-right:15px}
+#upload_form_box {margin: 0 5px; width:730px}
+#upload_form_box input[type="text"], #upload_form_box textarea {padding:0; margin:2px}
 
-.up_wrap {position:relative; margin: 0 3px 5px}
-.upload_up_wrap {width:760px}
-.detail_up_wrap {margin:0 15px 15px} /* 상세보기 페이지의 up_wrap */ 
+.up_wrap {position:relative; margin: 0 0 3px}
+.upload_up_wrap {width:770px}
+.detail_up_wrap {margin:0 15px 10px} /* 상세보기 페이지의 up_wrap */ 
 
 /* UpLoad Search */
 .start_works_input {position:relative}
-.start_works_input .input_size {width:743px}
-.start_works_input .srch input {width:718px}
-.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7; padding:1px 3px}
+.start_works_input .srch input {width:700px}
+.start_works_input .srch {background: none repeat scroll 0 0 #FFF; border: 1px solid #c7c7c7}
 .start_works_input .srch .srch_icon_w {background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
-	width:13px; right:3px; padding:0; position:relative; float: right; top:1px}
+	width:13px; right:3px; padding:0; position:relative; float: right; top:2px}
 
 /* upload Icon */
 .up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block}
-.up_works a:hover, .up_works .current,  .up_works a.current:hover {background: url("../../images/header_nico.png") no-repeat -4px -190px; font-weight:bold}
+.up_works a:hover, .up_works .current,  .up_works a.current:hover {background-position: -4px -190px; font-weight:bold}
 
 .up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; width:26px; padding:4px 0 3px 25px; display:block}
-.up_file a:hover, .up_file .current,  .up_file a.current:hover {background: url("../../images/header_nico.png") no-repeat -147px -190px; font-weight:bold}
+.up_file a:hover, .up_file .current,  .up_file a.current:hover {background-position: -147px -190px; font-weight:bold}
 
 .up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block}
-.up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background: url("../../images/header_nico.png") no-repeat -677px -190px; font-weight:bold}
+.up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background-position: -677px -190px; font-weight:bold}
 
 .up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 22px; display:block}
-.up_event a:hover, .up_event .current,  .up_event a.current:hover {background: url("../../images/header_nico.png") no-repeat -278px -190px; font-weight:bold}
+.up_event a:hover, .up_event .current,  .up_event a.current:hover {background-position: -278px -190px; font-weight:bold}
 
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
-.up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background: url("../../images/header_nico.png") no-repeat -426px -190px; font-weight:bold}
+.up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background-position: -426px -190px; font-weight:bold}
+
+.up_comment a {background: url("../../images/header_nico.png") no-repeat -827px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
+.up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background-position: -827px -190px; font-weight:bold}
 
 .up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block}
-.up_board a:hover, .up_board .current,  .up_board a.current:hover {background: url("../../images/header_nico.png") no-repeat -564px -190px; font-weight:bold}
+.up_board a:hover, .up_board .current,  .up_board a.current:hover {background-position: -564px -190px; font-weight:bold}
+
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
@@ -378,7 +383,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .input_1line_first { height:21px; padding-bottom: 5px; position:relative} /* 한줄라인 input정보- 맨위줄*/
 .input_1line {overflow:hidden; width:100%; position:relative; margin:8px 0} /* 한줄라인 input정보 */
 
-.txt_btn {font-family: Dotum; font-size: 11px; height: 16px; font-weight:normal}
+.txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal}
 .txt_btn .po_right {float:right; margin-left:10px}
 .txt_btn .po_left {float:left; margin-right:10px}
 .txt_btn .po_left > span {line-height: 20px}
@@ -416,7 +421,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .com_list li {position:relative; color:#454545}
 .com_list li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545}
 /*.com_list li a:hover {display:block; background-color:#fffccd; color:#454545}*/
-.com_list li.sw_hover {display:block; background-color:#fffccd; color:#454545}
+.com_list li.sw_hover {display:block; background-color:#fff7eb; color:#454545}
 .com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
 
 /* 입력폼 */
@@ -519,15 +524,15 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
 /* Noice */
-.noti_pic {float:left; margin-right: 5px;margin-left: 3px}
+.noti_pic {float:left; margin: 0 5px 0 0}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:33px; line-height: 14px}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
-.noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px} /* M사이즈 등록글 사용시*/
+.noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px; line-height:16px} /* M사이즈 등록글 사용시*/
 .noti_in_m + div {line-height: 19px}
 .recent_notice { border-bottom:none !important}
 .recent_notice .end td {border-bottom:none !important}
@@ -536,7 +541,6 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .recent_notice .title {background: url("../../images/dotRed.gif") 1px 9px no-repeat;padding-left:10px}
 .recent_notice .title,.recent_notice .index {vertical-align:top}
 .recent_notice .title a {font-size:13px;font-weight:bold}
-.recent_notice .icon_division_s {background-position:0 3px}
 .recent_notice .date {font-weight:normal;text-align:right;white-space:nowrap}
 .recent_notice .title img,.headline_notice .index img {margin:0 3px 0 0}
 
@@ -546,7 +550,7 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .event_space .eventCell li { width: auto}
 .cell_date {display:inline-block; border-bottom:1px dotted #cfcfcf; padding:0 5px 1px 5px; margin-bottom:3px}
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fffccd; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
 /* Noice old */
 /* .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
@@ -570,13 +574,12 @@ li.comment_list:hover {background-color:#fffccd; cursor:pointer}
 .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
 .notice .left_title {float:left; width:12%; min-width:80px; padding-right:5px; text-align: center}
 .notice .recent_notice {float:right; width:87%}
-.notice > .left_title > a.more {background: url("../../images/main_notice.gif") no-repeat; width:60px; height:30px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
+.notice > .left_title > a.more {background: url("../../images/main_notice.jpg") no-repeat; width:60px; height:28px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
 margin: 0 auto}
-.notice > .left_title > a.more:hover {background: url("../../images/main_notice.gif") -80px 0 no-repeat; color:#ba3938 !important; text-decoration: none}
+.notice > .left_title > a.more:hover {background: url("../../images/main_notice.jpg") -80px 0 no-repeat; color:#ba3938 !important; text-decoration: none}
 .left_title .title {display:block; font-size:13px; font-weight:bold; padding:7px 0 4px 0}
 .left_title .info {display:block; font-size:11px; color:#696969}
 .left_title .content {display:block; font-size:12px; border-top:1px dotted #cfcfcf; padding-top:2px; clear:right}
-.left_title .icon_division_s {background-position:70px 0; padding-left:90px}
 .left_title .index {font-size:11px; color:#666; overflow:hidden}
 .left_title .index span.date {float:right; margin-right:9px; font-weight:normal}
 .recent_notice table {line-height: 19px}
@@ -595,22 +598,25 @@ margin: 0 auto}
 			
 /* Work ING */
 #work_ing {margin:0 15px}
-#work_ing li {border-bottom:1px solid #DCDFE0}
-#work_ing li.end { border:none}
+#work_ing li.end { border:none} 
 .working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
-#work_ing .titl_section {height:21px; padding-top:14px}
+#work_ing .titl_section {height:21px; padding-top:8px}
 #work_ing .title {font-size:12px; color:#bbbaba}
-#work_ing .title a {color:#454545}
+#work_ing .title a {color:#888888}
 #work_ing .title a:hover {text-decoration:none}
-#work_ing .current {font-size:14px; font-weight:bold}
+#work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
+#work_ing .t_red_bold {font-size:11px}
+#work_ing .solid_line {margin:2px 0 5px}
+#work_ing .t_woname {font-size:14px; text-decoration:underline}
+
 td.pic {width:85px}
 .subject_list { margin-left:5px}
 .subject_list li {color: #bababa; float: left; margin-right: 5px}
 .subject_list .on a {color: #2F3743; font-weight: bold}
 	
 /* Mail */
-.buttonSet {margin:5px 0 7px}
+.buttonSet {padding:5px 0 7px}
 .buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
 .buttonSet select {height:21px; margin:0; padding:0}
 .mail_list_section {line-height:19px}
@@ -635,7 +641,7 @@ td.pic {width:85px}
 .nav_mail_list span b {vertical-align: top !important}
 	
 /* Icon */
-.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; padding:0 0 0 21px; color:#23579e}
+.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
 .icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
 .icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
@@ -655,11 +661,11 @@ td.pic {width:85px}
 .t_up_num {color:#e54b4b; font-weight:bold}
 .t_gbold {color:#656565; font-weight:bold}
 .t_gray { color:#919191; font-weight:normal}
-.t_name, .t_name a {color:#23579e !important; position: relative}
+.t_name, .t_name a {color:#23579e !important}
+.space_name, .space_name a {color:#23579e !important; font-size:11px}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
 .t_size12 {font-size:12px}
-.t_action {color:#23579e; font-size:10.5px; text-decoration:underline}
 .t_action_disabled {color:#454545 !important; text-decoration:none !important}
 .t_date, .t_text_s11, .t_s11,
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}
@@ -669,7 +675,7 @@ td.pic {width:85px}
 .t_mail { font-size:11px; color:#333333}
 .new_mail {color:#f38f1b}
 .bar { font-weight:normal; color:#999999}
-.arr {font-size:10px; margin-right:2px}
+.arr {font-size:10px; margin-right:2px; color:#23579E}
 .t_location {font-size:11px; color:#999897; position:relative; top:27px; margin-left:5px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}

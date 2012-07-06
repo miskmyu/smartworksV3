@@ -51,7 +51,7 @@
 				<!-- 올리기 //-->
 	    
 				<!-- 목록시작 -->
-				<div class="replay">
+				<div class="reply">
 				    <ul>
 				    	<%
 						if(!SmartUtil.isBlankObject(subInstances)){

@@ -57,8 +57,8 @@
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
  					smartPop.showInfo(smartPop.INFO, isEmpty(categoryId) ? smartMessage.get('createCategorySucceed') : smartMessage.get('setCategorySucceed'), function(){
+ 						smartPop.progressCenter();
 						window.location.reload();
- 						smartPop.close();
   					});
 				},
 				error : function(e) {

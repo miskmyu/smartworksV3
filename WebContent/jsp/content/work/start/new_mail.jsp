@@ -61,6 +61,7 @@ function submitForms(action) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 			smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
 				smartPop.closeProgress();
+				smartPop.progressCenter();
 				document.location.href = newMail.attr('lastHref');
 			});
 		},

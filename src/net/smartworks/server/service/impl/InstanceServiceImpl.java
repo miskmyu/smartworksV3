@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -75,6 +76,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
+import net.smartworks.server.engine.common.util.MisUtil;
 import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.common.util.WebServiceUtil;
 import net.smartworks.server.engine.config.manager.ISwcManager;
@@ -414,7 +416,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, RequestParams params) throws Exception {
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception {
 		
 		try{
 			//정보관리업무에서 파생된 업무는 IWInstanceInfo
@@ -443,7 +445,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			
 			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 			
@@ -477,9 +479,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	 * InstanceInfo[] : return
 	 * 	
 	 */
-	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly) throws Exception {
+	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception {
 
-		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, null);
+		return getMyRunningInstances(lastInstanceDate, requestSize, assignedOnly, runningOnly, null);
 	}
 
 	/*
@@ -2382,10 +2384,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
 			String txtApprovalComments = (String)frmTaskApproval.get("txtApprovalComments");
 			
-			//TODO 전자결재 참조업무 생성
-//			Map<String, Object> txtApprovalForwardee = (Map<String, Object>)requestBody.get("txtApprovalForwardee");
-//			ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
-			
 			if (appLineSortingMap != null && appLineSortingMap.size() != 0) {
 
 				AprApprovalLine apprLine = new AprApprovalLine();
@@ -2453,6 +2451,30 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
 				obj.setExtendedAttributeValue("approvalLine", apprLine.getObjId());
+				
+
+				//TODO 전자결재 참조업무 생성
+				Map<String, Object> txtApprovalForwardee = (Map<String, Object>)frmTaskApproval.get("txtApprovalForwardee");
+				if (txtApprovalForwardee != null) {
+					ArrayList<Map<String, String>> forwardee = (ArrayList<Map<String,String>>)txtApprovalForwardee.get("users");
+					
+					String txtForwardForwardee = null;
+					if(!CommonUtil.isEmpty(forwardee)) {
+						String symbol = ";";
+						if(forwardee.size() == 1) {
+							txtForwardForwardee = forwardee.get(0).get("id");
+						} else {
+							txtForwardForwardee = "";
+							for(int i=0; i < forwardee.subList(0, forwardee.size()).size(); i++) {
+								Map<String, String> user = forwardee.get(i);
+								txtForwardForwardee += user.get("id") + symbol;
+							}
+						}
+					}
+					obj.setExtendedAttributeValue("txtForwardSubject", txtApprovalSubject);
+					obj.setExtendedAttributeValue("txtForwardForwardee", txtForwardForwardee);
+					obj.setExtendedAttributeValue("txtForwardComments", txtApprovalComments);
+				}
 			}
 		}
 	}
@@ -2502,6 +2524,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			obj.setExtendedAttributeValue("subject", txtForwardSubject);
 			obj.setExtendedAttributeValue("referenceUser", txtForwardForwardee);
 			obj.setExtendedAttributeValue("workContents", txtForwardComments);
+			
+			obj.setExtendedPropertyValue("subject", txtForwardSubject);
+			obj.setExtendedPropertyValue("referenceUser", txtForwardForwardee);
+			obj.setExtendedPropertyValue("workContents", txtForwardComments);
 		
 		} else if (frmApprovalLine != null) {
 			Iterator appLineItr = frmApprovalLine.keySet().iterator();
@@ -4396,6 +4422,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
 			taskWorkCond.setTskRefType(refType);
 			taskWorkCond.setSearchKey(params.getSearchKey());
+			taskWorkCond.setPackageStatus("DEPLOYED");
 
 			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -7002,12 +7029,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			throw new Exception("Not Exist Draft Task!! taskId : " + taskId);
 		
 		Approval draftApr = new Approval();
-		draftApr.setStatus(Instance.STATUS_DRAFTED);
-		draftApr.setName("DRAFT");
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(user.getId(), task.getProcessInstId(), IManager.LEVEL_LITE);
+		if (prcInst != null && !prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+			draftApr.setStatus(Instance.STATUS_DRAFTED);
+			draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
+		} else {
+			draftApr.setStatus(Instance.STATUS_RUNNING);
+			draftApr.setCompletedDate(null);
+		}
+		draftApr.setName(SmartMessage.getString("approval.title.draft"));
 		draftApr.setApproverType(Approval.APPROVER_CHOOSE_ON_RUNNING);
 		draftApr.setApprover(ModelConverter.getUserByUserId(task.getAssignee()));
 		//draftApr.setDueDate("");
-		draftApr.setCompletedDate(new LocalDate(task.getCreationDate().getTime()));
 		draftApr.setMandatory(true);
 		draftApr.setModifiable(true);
 		aprs[0] = draftApr;
@@ -7096,15 +7130,75 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (result.equalsIgnoreCase("approved")) {
 			//승인
 			action = "execute";
-		} else if (result.equalsIgnoreCase("")) {
+		} else if (result.equalsIgnoreCase("returned")) {
 			//반려
 			action = "return";
-			
 		} else if (result.equalsIgnoreCase("rejected")) {
 			//기각
 			action = "cancel";
+		} else if (result.equalsIgnoreCase("submited")) {
+			//재상신 - 재상신 할경우 수정된 정보관리 폼정보가 온다
+			/*{
+				   workInstId=dr_402880eb385652400138565240100000,
+				   approvalInstId=402880eb38563b3e0138565240350001,
+				   taskInstId=402880eb38563b3e0138565276190008,
+				   comments=ㅇㄹㄴㄹ,
+				   result=submited,
+				   formId=frm_board_SYSTEM,
+				   formName=게시판,
+				   frmSmartForm=   {
+				      2      =321,
+				      4      =중,
+				      6      =321123,
+				      14      =      {
+				         groupId=fg_e8b797308e397847838a2668ab682d36f2ac,
+				         files=         [
+
+				         ]
+				      }
+				   }
+				}*/
+		
+			String formId = (String)requestBody.get("formId");
+			String instanceId = (String)requestBody.get("workInstId");
+
+			SwfFormCond formCond = new SwfFormCond();
+			formCond.setId(formId);
+			SwfForm[] forms = getSwfManager().getForms(user.getId(), formCond, IManager.LEVEL_LITE);
+			String packageId = forms[0].getPackageId();
 			
-		} else {
+			Map<String, Object> saveWorkInstance = new LinkedHashMap<String, Object>();
+			saveWorkInstance.put("workId", packageId);
+			saveWorkInstance.put("instanceId", instanceId);
+			saveWorkInstance.put("formId", formId);
+			saveWorkInstance.put("formName", requestBody.get("formName"));
+			saveWorkInstance.put("frmSmartForm", requestBody.get("frmSmartForm"));
+			
+			
+			Map<String, Object> frmAccessSpaceMap = new LinkedHashMap<String, Object>();
+			frmAccessSpaceMap.put("selWorkSpace", task.getWorkSpaceId());
+			frmAccessSpaceMap.put("selWorkSpaceType", task.getWorkSpaceType());
+			frmAccessSpaceMap.put("selAccessLevel", task.getAccessLevel());
+			
+			String usersStr = task.getAccessValue();
+			if (!CommonUtil.isEmpty(usersStr)) {
+				String[] usersArray = StringUtils.tokenizeToStringArray(usersStr, ";");
+				
+				ArrayList<Map<String,String>> userList = new ArrayList<Map<String,String>>();
+				for (int i = 0; i < usersArray.length; i++) {
+					Map<String, String> userInfoMap = new LinkedHashMap<String, String>();
+					userInfoMap.put("id", usersArray[i]);
+					userList.add(userInfoMap);
+				}
+				frmAccessSpaceMap.put("txtAccessableUsers", userList);
+			}
+			saveWorkInstance.put("frmAccessSpace", frmAccessSpaceMap);
+			
+			setInformationWorkInstance(saveWorkInstance, request);
+			
+			action = "execute";
+			
+		} else {	
 			throw new Exception("Approval Task Failed : Action Is Null");
 		}
 		
@@ -7130,71 +7224,123 @@ public class InstanceServiceImpl implements IInstanceService {
 			      }
 			   }
 			}*/
-//		String userId = SmartUtil.getCurrentUser().getId();
-//		
-//		String workId = (String)requestBody.get("workId");
-//		String instanceId = (String)requestBody.get("instanceId");
-//	
-//		//레코드를 조회한다
-//		SwfFormCond formCond = new SwfFormCond();
-//		formCond.setPackageId(workId);
-//		SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
-//		if (forms == null || forms.length > 1)
-//			throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
-//		
-//		String formId = forms[0].getId();
-//		
-//		SwdDomainCond domainCond = new SwdDomainCond();
-//		domainCond.setFormId(formId);
-//		SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
-//		
-//		if (domain == null)
-//			throw new Exception("Not Exist Domain! - formId : " + formId);
-//		
-//		SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
+
+		String userId = SmartUtil.getCurrentUser().getId();
+
+		Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
+
+		String workId = (String)requestBody.get("workId");
+		String instanceId = (String)requestBody.get("instanceId");
+		//제목
+		String txtForwardSubject = (String)frmTaskForwardMap.get("txtForwardSubject");
+		//설명
+		String txtForwardComments = (String)frmTaskForwardMap.get("txtForwardComments");
+		
+		Map<String, Object> txtForwardForwardeeMap = (Map<String, Object>)frmTaskForwardMap.get("txtForwardForwardee");
+		
+		ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
+		
+		String[] refUsers = null;
+		if(!CommonUtil.isEmpty(userArray)) {
+			refUsers = new String[userArray.size()];
+			for (int i = 0; i < userArray.size(); i++) {
+				Map<String, String> userInfoMap = userArray.get(i);
+				refUsers[i] = userInfoMap.get("id");
+			}
+		} else {
+			return;
+		}
+		
+		//레코드를 조회한다
+		SwfFormCond formCond = new SwfFormCond();
+		formCond.setPackageId(workId);
+		SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+		if (forms == null || forms.length > 1)
+			throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
+		
+		String formId = forms[0].getId();
+		
+		SwdDomainCond domainCond = new SwdDomainCond();
+		domainCond.setFormId(formId);
+		SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
+		
+		if (domain == null)
+			throw new Exception("Not Exist Domain! - formId : " + formId);
+		
+		SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
+		if (record == null)
+			throw new Exception("Not Exist Record! - formId : " + formId + ", recordId : " + instanceId);
 		
 		//정보관리 작성시에 생성된 태스크 및 업무인스턴스(prcprcinst)를 조회 한다.
+		String recordId = record.getRecordId();
+		PrcProcessInstCond prcInstCond = new PrcProcessInstCond(); 
+		prcInstCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
 		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
+		prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+		prcInst.setTitle(txtForwardSubject);
+		getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 		
+		String prcInstId = prcInst.getObjId();
+
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setProcessInstId(prcInstId);
+		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
+		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
 		
+		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		if (tasks == null || tasks.length == 0)
+			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
 		
+		//참조자가 존재한다면 참조타입의 태스크를 생성
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		TskTask refTask = null;
+		Set refUserSet = new HashSet();
+		String refUser = null;
+		for (int i = 0; i < refUsers.length; i++) {
+			refUser = refUsers[i];
+			if (refUserSet.contains(refUser))
+				continue;
+			
+			refTask = new TskTask();
+			refTask.setProcessInstId(prcInstId);
+			refTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "reference"));
+			//refTask.setPriority(priority);
+//					refTask.setTitle(obj.getTitle());
+			refTask.setTitle(txtForwardSubject);
+			//refTask.setName(obj.getName());
+			refTask.setName(txtForwardSubject);
+			refTask.setAssigner(userId);
+			refTask.setAssignee(refUser);
+			refTask.setAssignmentDate(new LocalDate());
+			refTask.setStartDate(new LocalDate());
+			refTask.setForm(formId);
+			refTask.setDef(tasks[0].getDef());
+			refTask.setFromRefId(tasks[0].getObjId());
+			refTask.setFromRefType(tasks[0].getType());
+			refTask.setExtendedPropertyValue("subject", txtForwardSubject);
+			refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
+			refTask.setExtendedPropertyValue("workContents", txtForwardComments);
+			//refTask.setExtendedPropertyValue("projectName", projectName);
+			
+			refTask.setWorkSpaceId(record.getWorkSpaceId());
+			refTask.setWorkSpaceType(record.getWorkSpaceType());
+			refTask.setAccessLevel(record.getAccessLevel());
+			refTask.setAccessValue(record.getAccessValue());
+			
+			this.getTskManager().setTask(userId, refTask, null);
+			
+			PublishNotice pubNoticeObj = new PublishNotice(refUser, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, refTask.getObjId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+			SmartUtil.increaseNoticeCountByNoticeType(refUser, Notice.TYPE_ASSIGNED);
+			
+			if (logger.isInfoEnabled()) {
+				logger.info("Assigned Reference Task [ " + txtForwardSubject + " ( Process Instance Id : " + refTask.getProcessInstId() + " , To User : " + refTask.getAssignee() + ")]");
+			}
+			refUserSet.add(refUser);
+		}
 	}
-	@Override
+	
 	public void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		/*{
 			   workId=pkg_309666dd2bb5493c9d7e618b3a0aad96,
@@ -7223,6 +7369,60 @@ public class InstanceServiceImpl implements IInstanceService {
 			   }
 			}*/
 		
-		System.out.println(requestBody);
+		String userId = SmartUtil.getCurrentUser().getId();
+
+		String workId = (String)requestBody.get("workId");
+		String instanceId = (String)requestBody.get("instanceId");
+		
+		//레코드를 조회한다
+		SwfFormCond formCond = new SwfFormCond();
+		formCond.setPackageId(workId);
+		SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+		if (forms == null || forms.length > 1)
+			throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
+		
+		String formId = forms[0].getId();
+		
+		SwdDomainCond domainCond = new SwdDomainCond();
+		domainCond.setFormId(formId);
+		SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
+		
+		if (domain == null)
+			throw new Exception("Not Exist Domain! - formId : " + formId);
+		
+		SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
+		if (record == null)
+			throw new Exception("Not Exist Record! - formId : " + formId + ", recordId : " + instanceId);
+		
+		String recordId = record.getRecordId();
+		PrcProcessInstCond prcInstCond = new PrcProcessInstCond(); 
+		prcInstCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
+
+		Map<String, Object> frmTaskApproval = (Map<String, Object>)requestBody.get("frmTaskApproval");
+		String txtApprovalSubject = (String)frmTaskApproval.get("txtApprovalSubject");
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
+		prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+		prcInst.setTitle(txtApprovalSubject);
+		getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
+		
+		String prcInstId = prcInst.getObjId();
+		
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setProcessInstId(prcInstId);
+		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
+		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
+		
+		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
+		if (tasks == null || tasks.length == 0)
+			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
+
+		setReferenceApprovalToRecord(userId, record, requestBody);
+		
+		record.setExtendedAttributeValue("makeNewNotClon", "true");
+		
+		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
+		
 	}
+
 }

@@ -101,8 +101,8 @@ public class HbDomainDdlDaoImpl extends HibernateDaoSupport implements IDomainDd
 		query.executeUpdate();
 		
 		// 8. 관련 폼으로 등록된 포스트 삭제
-		query = session.createSQLQuery("delete from SWPost where refGroupId = '" + formId + "'");
-		query.executeUpdate();
+		//query = session.createSQLQuery("delete from SWPost where refGroupId = '" + formId + "'");
+		//query.executeUpdate();
 		
 		// 9. 최근 처리 업무에서 관련 폼으로 등록된 건 삭제
 		query = session.createSQLQuery("delete from SWWorkHistory where formId = '" + formId + "'");

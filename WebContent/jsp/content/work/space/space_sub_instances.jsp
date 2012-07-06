@@ -37,6 +37,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	InstanceInfo[] subInstances = (InstanceInfo[])session.getAttribute("subInstances");
+	String workSpaceId = (String)session.getAttribute("workSpaceId");
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -63,7 +64,7 @@
 			WorkSpaceInfo workSpace = workInstance.getWorkSpace();
 			if(SmartUtil.isBlankObject(workSpace)) workSpace = workInstance.getOwner();
 			boolean onWorkSpace = false;
-			if(!(workSpace.getClass().equals(UserInfo.class)))
+			if(!(workSpace.getClass().equals(UserInfo.class)) && !workSpace.getId().equals(workSpaceId) )
 				onWorkSpace = true;
 			BoardInstanceInfo board=null;
 			EventInstanceInfo event=null;
@@ -89,13 +90,16 @@
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
-									<div><%=board.getSubject() %></div>
+									<div><%=board.getSubject() %>
+										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
+									</div>
 								</div>
 								<div><%=board.getBriefContent()%></div>
 							</a>
+
 							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles()) %></div><%} %>
 							<!-- 인스턴스 마지막수정일자 -->
-							<div class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
+							<div class="tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
 							<!-- 인스턴스 마지막수정일자 //-->
 						</div>
 					</div>
@@ -110,7 +114,9 @@
 						<div class="noti_in_m">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
-							<div><%=event.getSubject() %></div>
+							<div><%=event.getSubject() %>
+								<%if(event.isNew()){ %><span class="icon_new"></span><%} %>
+							</div>
 							<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
 								<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
 							<!-- 인스턴스 마지막수정일자 -->
@@ -129,6 +135,7 @@
 						<div class="noti_in_m">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %></div><%} %>
 							<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 							<!-- 인스턴스 마지막수정일자 -->
@@ -147,6 +154,7 @@
 						<div class="noti_in_m">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<%if(image.isNew()){ %><span class="icon_new"></span><%} %>
 							<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 							<!-- 인스턴스 마지막수정일자 -->
@@ -165,7 +173,9 @@
 						<div class="noti_in_m">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
-							<div><%=memo.getContent() %></div>
+							<div><%=memo.getContent() %>
+								<%if(memo.isNew()){ %><span class="icon_new"></span><%} %>
+							</div>
 							<!-- 인스턴스 마지막수정일자 -->
 							<div class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -183,12 +193,15 @@
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_m">
 						</a>
 					</div>
-					<div class="noti_in">
+					<div class="noti_in_m">
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						
 						<div><%=comment.getComment() %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
+						<!-- 인스턴스 마지막 수정일자 -->
+						<div class="tr pr10 t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></div>
+						<!-- 인스턴스 마지막 수정일자 // -->
 					</div>
 				</div>
 			<%
@@ -199,9 +212,12 @@
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
 							<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
+							
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName()%></span></a><%} %>
-							<div><%=workInstance.getSubject() %></div>
+							<div><%=workInstance.getSubject() %>
+								<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
+							</div>
 							<!-- 인스턴스 마지막수정일자 -->
 							<div class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></div>
 							<!-- 인스턴스 마지막수정일자 //-->
@@ -266,15 +282,15 @@
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 								</div>
 								<div class="noti_in">
-									<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+									<textarea style="width:98%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
 								</div>
 					        </div>
 					    
 					    </div>
 					    <!-- 댓글 //-->
 				    </div>
-				    <div class="ml70 js_action_btns">
-				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+				    <div class="btns_action js_action_btns">
+				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a> 
 				    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
 				    </div>
 				<%

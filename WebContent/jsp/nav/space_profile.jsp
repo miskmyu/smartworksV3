@@ -65,12 +65,20 @@
 		<li>
 			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisGroup.getOrgPicture()%>"></a>
 		</li>
-		<li>
+		<li class="info m0">
 			<div><b><%=thisGroup.getName()%></b></div>
-			<div><fmt:message key="group.role.leader" /> : <%=thisGroup.getLeader().getLongName()%></div>
-			<div><fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%></div>
-			<div><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
+			<div class="bul_org"><fmt:message key="group.role.leader" /> : <%=thisGroup.getLeader().getLongName()%></div>
+			<div class="bul_org"><fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%></div>
+			<div class="bul_org"><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
 		</li>
+		<!-- 가입하기/초대하기 아이콘 -->
+		<div class="tc">
+			<button>초대하기</button>
+			<span>
+				<a href="">탈퇴하기</a>
+			</span>
+		</div>
+		<!-- 가입하기/초대하기 아이콘 //-->
 	<%
 	// 부서인경우....
 	} else if (thisDepartment != null) {
@@ -79,11 +87,11 @@
 		<li>
 			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisDepartment.getOrgPicture()%>"></a>
 		</li>
-		<li>
+		<li class="info m0">
 			<div><b><%=thisDepartment.getName()%></b></div>
-			<div><fmt:message key="department.role.head" /> : <%=thisDepartment.getHead() == null ? "" : thisDepartment.getHead().getLongName()%></div>
-			<div><fmt:message key="department.subdepartment_count" /> : <%=thisDepartment.getNumberOfSubDepartment()%></div>
-			<div><fmt:message key="department.members_count" /> : <%=thisDepartment.getNumberOfMember()%></div>
+			<div class="bul_org"><fmt:message key="department.role.head" /> : <%=thisDepartment.getHead() == null ? "" : thisDepartment.getHead().getLongName()%></div>
+			<div class="bul_org"><fmt:message key="department.subdepartment_count" /> : <%=thisDepartment.getNumberOfSubDepartment()%></div>
+			<div class="bul_org"><fmt:message key="department.members_count" /> : <%=thisDepartment.getNumberOfMember()%></div>
 		</li>
 	<%
 	// 사용자인 경우....
@@ -93,10 +101,10 @@
 		<li>
 			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisUser.getOrgPicture()%>"></a>
 		</li>
-		<li>
+		<li class="info m0">
 			<div><%=thisUser.getPosition()%></div>
 			<div><b><%=thisUser.getName()%></b></div>
-			<div><%=thisUser.getDepartment()%></div>
+			<div class="bul_org"><%=thisUser.getDepartment()%></div>
 		</li>
 	<%
 	}

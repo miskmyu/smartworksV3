@@ -20,6 +20,9 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="js_user_space_page">
+
+	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+		
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
 	<div class="js_space_instance_list">

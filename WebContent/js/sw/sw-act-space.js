@@ -73,6 +73,8 @@ $(function() {
 		var spaceMonthly = input.parents('.js_space_monthly_page');
 		var spaceInstanceList = input.parents('.js_space_instance_list_page');
 		var smartcaster = input.parents('.js_smartcaster_page');
+		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
+		if(!isEmpty(myRunningInstanceList)) target = target.find('.js_instance_list_table');
 		var spacePage = [];
 		var toDate = "";
 		if(!isEmpty(spaceTimeline)){
@@ -89,7 +91,7 @@ $(function() {
 			toDate = input.parents('.js_space_monthly_week').attr('toDate');
 		}else if(!isEmpty(spaceInstanceList)){
 			spacePage = spaceInstanceList;
-		}else if(!isEmpty(smartcaster)){
+		}else if(!isEmpty(smartcaster) || !isEmpty(myRunningInstanceList)){
 			$.ajax({
 				url : "more_smartcast.sw",
 				data : {
@@ -362,6 +364,7 @@ $(function() {
 		if(isEmpty(comment)) return false;
 		var iworkManual = input.parents('.js_iwork_manual_page');
 		var pworkManual = input.parents('.js_pwork_manual_page');
+		var newComment = input.parents('.js_new_comment_page');
 		var workId="", workInstanceId="", workType="", url="";
 		if(!isEmpty(iworkManual)){
 			workId = iworkManual.attr('workId');
@@ -369,6 +372,9 @@ $(function() {
 		}else if(!isEmpty(pworkManual)){
 			workId = pworkManual.attr('workId');
 			workType = pworkManual.attr('workType');
+		}else if(!isEmpty(newComment)){
+			workInstanceId = newComment.attr('instanceId');
+			workType = newComment.attr('workType');
 		}else{
 			workInstanceId = input.parents('li:first').attr('instanceId');
 			workType = input.parents('li:first').attr('workType');
@@ -390,16 +396,22 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				var target = subInstanceList.find('.js_comment_list');
-				var showAllComments = target.find('.js_show_all_comments');
-				if(!isEmpty(showAllComments)){
-					showAllComments.find('span').click();
-					input.attr('value', '');
+				if(isEmpty(newComment)){
+					var target = subInstanceList.find('.js_comment_list');
+					var showAllComments = target.find('.js_show_all_comments');
+					if(!isEmpty(showAllComments)){
+						showAllComments.find('span').click();
+						input.attr('value', '');
+					}else{
+						var newCommentInstance = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
+						newCommentInstance.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
+						target.append(newCommentInstance);
+						input.attr('value', '');
+					}
 				}else{
-					var newComment = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
-					newComment.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
-					target.append(newComment);
+					smartPop.progressCenter();
 					input.attr('value', '');
+					window.location.reload();
 				}
 			},
 			error : function(e) {
@@ -443,8 +455,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {
@@ -478,8 +490,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {
@@ -505,14 +517,32 @@ $(function() {
 		}
 		smartPop.confirm(smartMessage.get("commentTaskApprovalConfirm"), function(){
 			var result = (input.parents().hasClass('js_btn_approve_approval')) ? "approved" 
-						: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
-						: (input.parents().hasClass('js_btn_approve_approval')) ? "returned" : "";
+					: (input.parents().hasClass('js_btn_reject_approval')) ? "rejected" 
+					: (input.parents().hasClass('js_btn_submit_approval')) ? "submited" 
+					: (input.parents().hasClass('js_btn_return_approval')) ? "returned" : "";
 			var paramsJson = {};
 			paramsJson['workInstId'] = appendTaskApproval.attr('workInstId');
 			paramsJson['approvalInstId'] = appendTaskApproval.attr('approvalInstId');
 			paramsJson['taskInstId'] = appendTaskApproval.attr('taskInstId');
 			paramsJson['comments'] = comment;
 			paramsJson['result'] = result;
+			if(result === "submited"){
+				var iworkSpace = input.parents('.js_iwork_space_page');
+				var forms = iworkSpace.find('form[name="frmSmartForm"]');
+				for(var i=0; i<forms.length; i++){
+					var form = $(forms[i]);
+					
+					// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+					if(form.attr('name') === 'frmSmartForm'){
+						paramsJson['formId'] = form.attr('formId');
+						paramsJson['formName'] = form.attr('formName');
+					}
+					
+					// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+					paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+				}
+				
+			}
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
 				url : "comment_on_task_approval.sw",
@@ -522,8 +552,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
+						smartPop.progressCenter();
 						document.location.href = "";
-	 					smartPop.close();
 					});
 				},
 				error : function(e) {

@@ -77,6 +77,11 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th class="r_line">
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
+					<fmt:message key='common.title.last_modifier' />
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+				</a>/
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
 					<fmt:message key='common.title.last_modified_date' />
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
@@ -116,7 +121,7 @@
 						<%
 						if(!SmartUtil.isBlankObject(lastModifier)){
 						%>
-							<div class="noti_in">
+							<div class="noti_in_m">
 								<span class="t_name"><%=lastModifier.getLongName()%></span>
 								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
 							</div>

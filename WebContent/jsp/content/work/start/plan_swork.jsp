@@ -43,9 +43,11 @@ function submitForms(e) {
 				$.modal.close();
 				smartPop.confirm("성공적으로 완료하였습니다. 생성된 항목페이지로 이동하시겠습니까??", 
 						function(){
+							smartPop.progressCenter();
 							document.location.href = data.href;					
 						},
 						function(){
+							smartPop.progressCenter();
 							document.location.href = document.location.href;
 						});
 			},

@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.server.engine.process.xpdl.xpdl2.Category"%>
 <%@page import="net.smartworks.model.work.info.FileCategoryInfo"%>
@@ -79,18 +80,22 @@
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
 
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "file_list.sw");
-	
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName();
 	int displayType = (SmartUtil.isBlankObject(wid)) ? FileCategory.DISPLAY_ALL : FileCategory.DISPLAY_BY_CATEGORY;
 
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "file_list.sw");
+	session.setAttribute("workSpace", workSpace);
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+
+		
+<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
 
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
@@ -100,26 +105,12 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_area ti_file title">
-					<div class="title myspace_h"><%=workSpaceName %>
-						<span class="bul_space"><fmt:message key="space.title.files"/></span>
-					</div>
-				</div>
-				<!-- 우측 버튼 -->
-				<div class="txt_btn">
-				</div>
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
-
 			<div class=" contents_space oh">  
 				<%
 				if(displayType!=FileCategory.DISPLAY_ALL){
 				%>          
 					<!-- Left -->
-					<div class="left30 mt13 ">
+					<div class="left30 ">
 						<!-- 필 터 -->
 						<div class="fl">
 							<select class="js_file_display_by">
@@ -151,12 +142,12 @@
 					<div class="right70">
 					<!-- 목록보기 -->
 						<!-- 목록보기 타이틀-->
-						<div class="list_title_space js_work_list_title mt15">
-							<div class="title"><fmt:message key="common.title.instance_list" /></div>					
-								<div class="title_line_options">
+						<div class="list_title_space js_work_list_title">
+							<%-- <div class="title"><fmt:message key="common.title.instance_list" /></div>	 --%>				
+								<div class="title_line_options fr">
 									<form name="frmSearchInstance" class="po_left">
 										<span class="js_progress_span"></span>
-										<div class="srch_wh srch_wsize">
+										<div class="srch_wh srch_wsize m0">
 											<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
 											<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 										</div>
