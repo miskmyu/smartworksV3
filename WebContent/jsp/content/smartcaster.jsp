@@ -19,7 +19,7 @@
 
 <!-- 타이틀 -->
 <div class="body_titl">
-	<div class="smartcaster title"><%-- <fmt:message key="header.top_menu.smartcaster"/> --%></div>
+	<div class="smartcaster title"><fmt:message key="header.top_menu.smartcaster"/></div>
        	<div class="txt_btn"></div>
 	<div class="solid_line"></div>
 </div>
