@@ -724,7 +724,7 @@ $(function() {
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('.js_form_task_forward form'), $('.js_space_error_message'))) return false;
 		
 		smartPop.confirm(smartMessage.get("forwardConfirmation"), function(){
-			var forms = iworkSpace.find('.js_form_task_forward form');
+			var forms = iworkSpace.find('.js_form_task_forwar form');
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
@@ -798,7 +798,8 @@ $(function() {
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('.js_form_task_approval form'), $('.js_space_error_message'))) return false;
 		
 		smartPop.confirm(smartMessage.get("approvalConfirmation"), function(){
-			var forms = iworkSpace.find('.js_form_task_approval form');
+			var forms = iworkSpace.find('form');
+			console.log('forms=', forms);
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
