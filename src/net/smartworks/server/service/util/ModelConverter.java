@@ -1241,17 +1241,31 @@ public class ModelConverter {
 				tskInfo.setName(task.getTskName());
 				tskInfo.setCreatedDate(new LocalDate(task.getPrcCreateDate().getTime()));
 				
-				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+//				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+//					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
+//					
+//					//TODO tskInfo.setApprovalId("needs task approval id");
+//					
+//				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+//					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
+//				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+//					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
+//					tskInfo.setForwardId(task.getPrcObjId());
+//				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+//					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
+//				}
+				
+				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
-					
-					//TODO tskInfo.setApprovalId("needs task approval id");
-					
-				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
-				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+					
+					//TODO 정보관리업무의 참조업무인지 전자결재에서 파생된 참조업무인지 구분이 필요하다
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
 					tskInfo.setForwardId(task.getPrcObjId());
-				} else if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+					
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 				}
 
@@ -3368,14 +3382,16 @@ public class ModelConverter {
 		
 		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, processInstId, IManager.LEVEL_LITE);
 		
-		if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-			workInstance.setStatus(Instance.STATUS_RUNNING);
-		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
-			workInstance.setStatus(Instance.STATUS_COMPLETED);
-		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
-			workInstance.setStatus(Instance.STATUS_RETURNED);
-		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
-			workInstance.setStatus(Instance.STATUS_REJECTED);
+		if (prcInst != null) {
+			if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+				workInstance.setStatus(Instance.STATUS_RUNNING);
+			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+				workInstance.setStatus(Instance.STATUS_COMPLETED);
+			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
+				workInstance.setStatus(Instance.STATUS_RETURNED);
+			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
+				workInstance.setStatus(Instance.STATUS_REJECTED);
+			}
 		}
 
 		tskCond = new TskTaskCond();
