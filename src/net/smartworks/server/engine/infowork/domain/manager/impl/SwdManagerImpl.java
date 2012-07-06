@@ -979,6 +979,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}
 		// where
 		String[] workSpaceIdIns = cond.getWorkSpaceIdIns();
+		String[] likeAccessValues = cond.getLikeAccessValues();
 		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
 		boolean first = true;
 		if (refFormId != null || refRecordId != null) {
@@ -1076,11 +1077,12 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}
 		if(creatorOrSpaceId != null) {
 			if(first) {
-				buf.append(" where (obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
+				buf.append(" where ");
 				first = false;
 			} else {
-				buf.append(" and (obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
+				buf.append(" and ");
 			}
+			buf.append("(obj.creator = '" + creatorOrSpaceId + "' or obj.workSpaceId = '" + creatorOrSpaceId + "')");
 		}
 		/*if (workSpaceIdIns != null) {
 			if(first) {
@@ -1103,7 +1105,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				} else {
 					buf.append(" and");
 				}
-				buf.append(" ((obj.workSpaceType = 6 and obj.workSpaceId in (");
+				buf.append(" (obj.creator = '" + user + "' or ((obj.workSpaceType = 6 and obj.workSpaceId in (");
 				for (int j=0; j<workSpaceIdIns.length; j++) {
 					if (j != 0)
 						buf.append(", ");
@@ -1115,7 +1117,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						buf.append(", ");
 					buf.append(":workSpaceIdIn").append(j);
 				}
-				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2 or obj.workSpaceType is null)");
+				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2 or obj.workSpaceType is null))");
 	
 				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
 				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
@@ -1141,11 +1143,23 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	//			}
 			}
 			if(first) {
-				buf.append(" where (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+				buf.append(" where ");
 				first = false;
 			} else {
-				buf.append(" and (obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and obj.accessValue like '%" + user + "%')) ");
+				buf.append(" and ");
 			}
+
+			String likeAccessValuesQuery = "obj.accessValue like '%%'";
+			StringBuffer likeAccessValuesBuffer = new StringBuffer();
+			if(likeAccessValues != null) {
+				for (int j=0; j<likeAccessValues.length; j++) {
+					if(j==0)
+						likeAccessValuesBuffer.append("obj.accessValue like :likeAccessValue").append(j);
+					likeAccessValuesBuffer.append(" or obj.accessValue like :likeAccessValue").append(j);
+				}
+				likeAccessValuesQuery = likeAccessValuesBuffer.toString();
+			}
+			buf.append("(obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and (").append(likeAccessValuesQuery).append(" or obj.creator = '" + user + "'))) ");
 		} else if (domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM")) {
 			if(first) {
 				buf.append(" where");
@@ -1198,8 +1212,13 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
 				}
 			}
+			if (likeAccessValues != null) {
+				for (int j=0; j<likeAccessValues.length; j++) {
+					query.setString("likeAccessValue"+j, CommonUtil.toLikeString(likeAccessValues[j]));
+				}
+			}
 		}
-		
+
 		if (!CommonUtil.isEmpty(filterMap)) {
 			Filter f;
 			String operType;

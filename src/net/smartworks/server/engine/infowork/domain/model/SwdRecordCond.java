@@ -71,6 +71,7 @@ public class SwdRecordCond extends ClassObjectCond {
 	private String workSpaceType;
 	private String accessLevel;
 	private String accessValue;
+	private String[] likeAccessValues;
 	private String creatorOrSpaceId;
 	private int hits;
 	private Date fromDate;
@@ -415,6 +416,12 @@ public class SwdRecordCond extends ClassObjectCond {
 	}
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
+	}
+	public String[] getLikeAccessValues() {
+		return likeAccessValues;
+	}
+	public void setLikeAccessValues(String[] likeAccessValues) {
+		this.likeAccessValues = likeAccessValues;
 	}
 	public String getCreatorOrSpaceId() {
 		return creatorOrSpaceId;

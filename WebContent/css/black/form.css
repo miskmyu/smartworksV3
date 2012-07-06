@@ -8,7 +8,10 @@
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
 .form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 
-.js_type_imageBox .form_label {background-color:#FFF; width:0}
+/* 개인정보 수정 File Upload */
+.js_my_profile_field .js_type_imageBox .form_label {background-color:#FFF; width:0px !important}
+.js_my_profile_field .js_type_imageBox .form_value img {left:0}
+.js_type_imageBox .form_value img {position: relative; left: 20px}
 
 /* Form Old : label부분 회색음영 */
 /* .form_label {color:#23579e; background-color:#ededed}

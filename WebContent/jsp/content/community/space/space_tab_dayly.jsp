@@ -217,7 +217,7 @@
 	
 					<!-- 근무시간 후 -->
 					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=toDateStr%>">
-						<div class="title_off"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
+						<div class="title off"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
 						<ul>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[2])){

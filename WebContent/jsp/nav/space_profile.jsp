@@ -71,6 +71,14 @@
 			<div class="bul_org"><fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%></div>
 			<div class="bul_org"><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
 		</li>
+		<!-- 가입하기/초대하기 아이콘 -->
+		<div class="tc">
+			<button>초대하기</button>
+			<span>
+				<a href="">탈퇴하기</a>
+			</span>
+		</div>
+		<!-- 가입하기/초대하기 아이콘 //-->
 	<%
 	// 부서인경우....
 	} else if (thisDepartment != null) {
