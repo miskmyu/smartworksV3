@@ -90,6 +90,8 @@ import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
+import org.claros.intouch.webmail.controllers.FolderController;
+import org.claros.intouch.webmail.factory.FolderControllerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -913,7 +915,7 @@ public class WorkServiceImpl implements IWorkService {
 					auth.setUsername(txtUserProfileEmailId+"@"+mailServerName);
 					auth.setPassword(pwUserProfileEmailPW);
 					request.getSession().setAttribute("auth", auth);
-					ConnectionMetaHandler handler = null;
+				    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 					handler = MailAuth.authenticate(profile, auth, handler);
 					request.getSession().setAttribute("handler", handler);
 				}
