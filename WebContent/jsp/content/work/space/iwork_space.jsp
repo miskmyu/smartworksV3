@@ -56,6 +56,12 @@
 				}
 			}
 		}
+		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(approvalTask)){
+			approvalTask = instance.getMyRunningApprovalTask();
+			if(!SmartUtil.isBlankObject(approvalTask)){
+				taskInstId = approvalTask.getId();
+			}
+		}
 	}
 	
 	session.setAttribute("cid", cid);
@@ -102,7 +108,13 @@
 						if(approvalTask == null && forwardedTask == null){
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
-							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+							<%
+							if(instance.getOwner().equals(cUser.getId())){
+							%>
+								<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+							<%
+							}
+							%>
 							<%
 							if(cUser.isUseMail()){
 							%>
@@ -402,6 +414,14 @@
 		onSuccess : function(){
 		}
 	});
+	
+	<%
+	if(SmartUtil.isBlankObject(approvalTask) && instance.isApprovalWork()){
+	%>
+		iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();			
+	<%
+	}
+	%>
 </script>
 
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
