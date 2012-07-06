@@ -6,24 +6,18 @@
 		smartPop.progressCont(anchor.siblings('.js_progress_span'));
 		var runningPage = anchor.parents('.js_my_running_instance_list_page');
 		var lastDate = runningPage.find('.js_more_instance_item:last').attr('dateValue');
-		var assignedOnly = runningPage.find('a.js_view_assigned_instances').hasClass('current');
-		var instanceCount;
-		if(assignedOnly)
-			instanceCount = runningPage.find('a.js_view_assigned_instances').attr('instanceCount');
-		else
-			instanceCount = runningPage.find('a.js_view_my_running_instances').attr('instanceCount');
-		if(instanceCount > runningPage.length)
-			runningPage.find('.js_more_list').show();
-		else
-			runningPage.find('.js_more_list').hide();
-		
+		var viewType = runningPage.find('.js_view_my_instances:current').attr('viewType');
+		var assignedOnly = (viewType == 'assigned_instances');
+		var runningOnly = (viewType == 'running_instances');
 		$.ajax({
 			url : anchor.attr('href'),
 			data : {
 				lastDate : lastDate,
-				assignedOnly : assignedOnly
+				assignedOnly : assignedOnly,
+				runningOnly : runningOnly
 			},
 			success : function(data, status, jqXHR) {
+				anchor.remove();
 				$(data).appendTo(runningPage.find('.js_instance_list_table'));
 				smartPop.closeProgress();
 			},
@@ -37,7 +31,8 @@
 
 	$(window).scroll( function() {
 		var more_anchor = $('#work_ing .js_more_list a');
-		var more_smartcaster = $('.js_smartcaster_page a.js_space_more_history')
+		var more_smartcaster = $('.js_smartcaster_page a.js_space_more_history');
+		var more_smartcaster_home = $('.js_my_running_instance_list_page a.js_space_more_history');
 		if ($(window).scrollTop() == $(document).height() - $(window).height()){
 			
 			if(!isEmpty(more_anchor) && !more_anchor.isWaiting){
@@ -46,14 +41,21 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_anchor.trigger('click');
 					more_anchor.isWaiting = false;
-				}, 3000);
+				}, 2000);
 			}else if(!isEmpty(more_smartcaster) && !more_smartcaster.isWaiting){
 				more_smartcaster.isWaiting = true;
 				setTimeout(function() {
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_smartcaster.trigger('click');
 					more_smartcaster.isWaiting = false;
-				}, 3000);
+				}, 2000);
+			}else if(!isEmpty(more_smartcaster_home) && !more_smartcaster_home.isWaiting){
+				more_smartcaster_home.isWaiting = true;
+				setTimeout(function() {
+					if ($(window).scrollTop() == $(document).height() - $(window).height())
+						more_smartcaster_home.trigger('click');
+					more_smartcaster_home.isWaiting = false;
+				}, 2000);
 			}
 		}
 	});

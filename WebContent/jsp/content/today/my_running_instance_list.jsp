@@ -86,20 +86,20 @@
 				
 					<!-- 타이틀을 나타내는 곳 -->
 					<div class="title pr10 fl js_running_instance_title js_instance_count">
-						<span class="current js_view_my_instances"><a href="" searchType="smartcaster_instances"><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
-						<span class="js_view_my_instances"><a href="" searchType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/><span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
-						<span class="js_view_myinstances"><a href="" searchType='running_instances'><fmt:message key="content.my_running_instance_count"/><span class="t_red_bold js_running_count">[<%=runningCounts.getRunningOnly() %>]</span> </a></span>
+						<span class="current js_view_my_instances"><a href="" viewType="smartcaster_instances"><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
+						<span class="js_view_my_instances"><a href="" viewType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/><span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
+						<span class="js_view_my_instances"><a href="" viewType='running_instances'><fmt:message key="content.my_running_instance_count"/><span class="t_red_bold js_running_count">[<%=runningCounts.getRunningOnly() %>]</span> </a></span>
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<form name="frmSearchInstance" class="fl js_search_running_instance">
+					<form name="frmSearchInstance" class="fr js_search_running_instance">
 						<div class="srch_wh srch_wsize">
 							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
 							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>
 					</form>
-					<form class="form_space po_left js_form_filter_name" name="frmHomeFilterName">
+<%-- 					<form class="form_space po_left js_form_filter_name" name="frmHomeFilterName">
 						<select name="selFilterName" class="js_select_search_filter">
 							<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
 								<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
@@ -133,7 +133,7 @@
 					<a href="search_filter.sw?workId=smartcaster" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
 						<div class="icon_btn_edit"></div>
 					</a>					
-					<span class="js_progress_span"></span>
+ --%>					<span class="js_progress_span"></span>
 					
 				</div>
 				
@@ -142,16 +142,6 @@
 				<div class="js_instance_list_table">
 					<jsp:include page="/jsp/content/more_smartcast.jsp"/>
 				</div>
-				<!-- 진행중인 업무목록 및 더보기 버튼 //-->
-<%-- 				<!-- 더보기 버튼 -->
-				<%if(runningCounts.getTotal() > 20){ %>
-					<div class="js_more_list">
-						<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
-						<span class="js_progress_span"></span>
-					</div>
-				<%} %>
-				<!-- 더보기 버튼 !!-->
- --%>	
 			</div>
 		</ul>
 	</div>

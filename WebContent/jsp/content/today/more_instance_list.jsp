@@ -49,9 +49,10 @@ LocalDate lastDate = new LocalDate();
 if(!SmartUtil.isBlankObject(strLastDate))		
 	lastDate = LocalDate.convertLocalStringToLocalDate(request.getParameter("lastDate"));
 boolean assignedOnly = Boolean.parseBoolean(request.getParameter("assignedOnly"));
+boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
-InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, params);
+InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, runningOnly, params);
 if (instances != null) {
 %>
 	<table>
@@ -485,6 +486,15 @@ if (instances != null) {
 		<%
 		}
 		%>
+		<!-- 더보기 버튼 -->
+		<%if(instances.length > 20){ %>
+			<div class="js_more_list">
+				<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
+				<span class="js_progress_span"></span>
+			</div>
+		<%} %>
+		<!-- 더보기 버튼 !!-->
+	
 	</table>
 <%
 }

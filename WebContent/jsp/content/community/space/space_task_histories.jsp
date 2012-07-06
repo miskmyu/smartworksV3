@@ -298,9 +298,9 @@
 						switch(taskInstance.getTaskType()){
 						case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
 						%>
-							<fmt:message key="content.sentence.stask_forwarded">
+							<fmt:message key="content.sentence.atask_assigned">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -322,9 +322,9 @@
 							break;
 						case TaskInstance.TYPE_APPROVAL_TASK_FORWARDED:
 						%>
-							<fmt:message key="content.sentence.stask_forwarded">
+							<fmt:message key="content.sentence.atask_forwarded">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -348,7 +348,7 @@
 						%>
 							<fmt:message key="content.sentence.itask_assigned">
 								<fmt:param>
-									<a href='<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>'>
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class='t_woname'><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -376,7 +376,7 @@
 						%>
 							<fmt:message key="content.sentence.itask_forwarded">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span>
 									</a>
 								</fmt:param>
@@ -402,7 +402,7 @@
 						%>
 							<fmt:message key="content.sentence.ptask_assigned">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -426,7 +426,7 @@
 						%>
 							<fmt:message key="content.sentence.ptask_forwarded">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -450,7 +450,7 @@
 						%>
 							<fmt:message key="content.sentence.stask_assigned">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -474,7 +474,7 @@
 						%>
 							<fmt:message key="content.sentence.stask_forwarded">
 								<fmt:param>
-									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
+									<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
@@ -499,7 +499,7 @@
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						</div>			
 						<div>
-							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&wid=<%=cUser.getId()%>">
+							<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 								<span class="<%=work.getIconClass()%>"></span>
 								<span class="t_date"><%=work.getFullpathName()%></span>
 							</a>
