@@ -20,17 +20,9 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="js_user_space_page">
-	<!-- Title -->
-	<div class="body_titl space">
-		<div class="user fl"></div>
-			<div class="info">
-				<div class="title">개인이름</div>
-				<div>한줄분량(00자)이하의 개인의 간단한 설명이 들어갑니다.  예)취미,성격 ,학력 등... </div>
-			</div>
-		<div class="solid_line"></div>
-	</div>
-	<!-- Title //-->
-	
+
+	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+		
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
 	<div class="js_space_instance_list">

@@ -21,20 +21,24 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
-
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "image_list.sw");
 	
 	User cUser = SmartUtil.getCurrentUser();
 	
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "image_list.sw");
+	session.setAttribute("workSpace", workSpace);
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 타이틀 -->
-<div class="body_titl space">
+
+<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+
+<%-- <div class="body_titl space">
 	<div class="body_titl_area ti_picture title">
 		<div class="title myspace_h"><%=workSpace.getName() %>
 			<span class="bul_space"><fmt:message key="space.title.pictures"/></span>
@@ -52,7 +56,7 @@
 	<div class="solid_line"></div>
 </div>
 <!-- 타이틀 -->
-			
+ --%>			
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
 <!-- 컨텐츠 레이아웃-->
