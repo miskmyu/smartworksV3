@@ -22,17 +22,9 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="js_group_space_page">
-	<!-- Title -->
-	<div class="body_titl space">
-		<div class="group fl"></div>
-			<div class="info">
-				<div class="title">그룹명</div>
-				<div>그룹 설명이 들어갑니다.</div>
-			</div>
-		<div class="solid_line"></div>
-	</div>
-	<!-- Title //-->
 
+	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+	
 	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
 	<div class="js_space_instance_list">
