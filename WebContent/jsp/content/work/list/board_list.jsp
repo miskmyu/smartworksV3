@@ -83,6 +83,19 @@
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+<!-- 타이틀 -->
+<div class="body_titl">
+	<div class="body_titl_iworks title">
+		<div class="title myspace_h"><%=workSpaceName %>
+			<span class="bul_space"><fmt:message key="space.title.boards"/></span>
+		</div>
+	</div>
+	<!-- 우측 버튼 -->
+	<div class="txt_btn">
+	</div>
+	<div class="solid_line"></div>
+</div>
+<!-- 타이틀 -->
 
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
@@ -91,20 +104,6 @@
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_iworks title">
-					<div class="title myspace_h"><%=workSpaceName %>
-						<span class="bul_space"><fmt:message key="space.title.boards"/></span>
-					</div>
-				</div>
-				<!-- 우측 버튼 -->
-				<div class="txt_btn">
-				</div>
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">

@@ -144,7 +144,20 @@
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
-
+<!-- 타이틀 -->
+<div class="body_titl space">
+	<div class="body_titl_iworks title">
+		<div class="title myspace_h"><%=workSpaceName %>
+			<span class="bul_space"><fmt:message key="space.title.works"/></span>
+		</div>
+	</div>
+	<!-- 우측 버튼 -->
+	<div class="txt_btn">
+	</div>
+	<div class="solid_line"></div>
+</div>
+<!-- 타이틀 -->
+			
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
 <!-- 컨텐츠 레이아웃-->
@@ -153,35 +166,21 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_iworks title">
-					<div class="title myspace_h"><%=workSpaceName %>
-						<span class="bul_space"><fmt:message key="space.title.works"/></span>
-					</div>
-				</div>
-				<!-- 우측 버튼 -->
-				<div class="txt_btn">
-				</div>
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
-
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 				<!-- 목록보기 타이틀-->
-				<div class="list_title_space js_work_list_title mt15">
-					<div class="title"><fmt:message key="common.title.instance_list" /></div>
+				<div class="list_title_space js_work_list_title">
+					<%-- <div class="title"><fmt:message key="common.title.instance_list" /></div> --%>
 					<div class="title_line_btns">
 						<!-- div class="icon_btn_edit">
 							<a href="search_filter.sw?workId=" class="js_edit_search_filter icon_btn_tail"><fmt:message key='filter.button.edit_search_filter' /></a>
 						</div-->
 					</div>
 					
-					<div class="title_line_options">
+					<div class="title_line_options fr">
 						<form name="frmSearchInstance" class="po_left">
 							<span class="js_progress_span"></span>
-							<div class="srch_wh srch_wsize">
+							<div class="srch_wh srch_wsize m0">
 								<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
