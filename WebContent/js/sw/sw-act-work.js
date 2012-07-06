@@ -1431,6 +1431,8 @@ $(function() {
 					smartPop.closeProgress();					
 				}
 			});			
+		}else{
+			smartPop.closeProgress();			
 		}
 		return false;
 	});
