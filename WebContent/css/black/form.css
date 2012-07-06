@@ -6,7 +6,7 @@
 .form_label, .form_value {float:left; margin:1px 0}
 .form_label {color:#23579e; font-weight: bold; text-align: right}
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
-.form_layout td, .form_layout th {border-top: 1px dotted #c7c7c7}
+.form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 
 .js_type_imageBox .form_label {background-color:#FFF; width:0}
 

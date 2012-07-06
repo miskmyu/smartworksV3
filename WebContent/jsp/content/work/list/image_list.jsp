@@ -21,19 +21,42 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
-
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "image_list.sw");
 	
 	User cUser = SmartUtil.getCurrentUser();
 	
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "image_list.sw");
+	session.setAttribute("workSpace", workSpace);
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+<!-- 타이틀 -->
 
+<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+
+<%-- <div class="body_titl space">
+	<div class="body_titl_area ti_picture title">
+		<div class="title myspace_h"><%=workSpace.getName() %>
+			<span class="bul_space"><fmt:message key="space.title.pictures"/></span>
+		</div>
+	</div>                   
+   			<!-- 필터 -->
+        		<div class="txt_btn">
+    				<select class="js_image_display_by">
+            			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
+        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
+        				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
+          		</select>
+       		</div>
+     		<!-- 필터//-->
+	<div class="solid_line"></div>
+</div>
+<!-- 타이틀 -->
+ --%>			
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
 <!-- 컨텐츠 레이아웃-->
@@ -41,25 +64,6 @@
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_area ti_picture title">
-					<div class="title myspace_h"><%=workSpace.getName() %>
-						<span class="bul_space"><fmt:message key="space.title.pictures"/></span>
-					</div>
-				</div>                   
-      			<!-- 필터 -->
-           		<div class="txt_btn">
-       				<select class="js_image_display_by">
-               			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
-           				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
-           				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
-             		</select>
-          		</div>
-        		<!-- 필터//-->
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
                

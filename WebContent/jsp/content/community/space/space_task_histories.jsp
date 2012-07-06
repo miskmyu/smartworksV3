@@ -115,8 +115,19 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-							<!-- 인스턴스 마지막수정일자 -->
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
@@ -141,7 +152,19 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<a href="<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
@@ -165,7 +188,19 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
@@ -182,7 +217,19 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<%if(image.isNew()){ %><span class="icon_new"></span><%} %>
@@ -199,7 +246,19 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<a href="<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
@@ -219,10 +278,23 @@
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
 						<div class="noti_in_m">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+							<%
+							if(cUser.getId().equals(owner.getId())){
+							%>
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}else{
+							%>
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+								<!-- 인스턴스 마지막수정일자 -->
+							<%
+							}
+							%>
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 						<%
 						String runningTaskName = taskInstance.getName();
+						UserInfo assignee = taskInstance.getAssignee();
 						switch(taskInstance.getTaskType()){
 						case TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED:
 						%>
@@ -231,6 +303,19 @@
 									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
+								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
 								</fmt:param>
 							</fmt:message>
 						<%
@@ -243,6 +328,19 @@
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
+								</fmt:param>
 							</fmt:message>
 						<%
 							break;
@@ -253,6 +351,19 @@
 									<a href='<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>'>
 										<span class='t_woname'><%=runningTaskName%></span> 
 									</a>
+								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
 								</fmt:param>
 							</fmt:message>
 						<%
@@ -269,6 +380,19 @@
 										<span class="t_woname"><%=runningTaskName%></span>
 									</a>
 								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
+								</fmt:param>
 							</fmt:message>
 						<%
 							break;
@@ -282,6 +406,19 @@
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
+								</fmt:param>
 							</fmt:message>
 							<%
 							break;
@@ -292,6 +429,19 @@
 									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
+								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
 								</fmt:param>
 							</fmt:message>
 						<%
@@ -304,6 +454,19 @@
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
 								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
+								</fmt:param>
 							</fmt:message>
 						<%
 							break;
@@ -314,6 +477,19 @@
 									<a href="<%=taskInstance.getController()%>?cid=<%=taskInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>">
 										<span class="t_woname"><%=runningTaskName%></span> 
 									</a>
+								</fmt:param>
+								<fmt:param>
+									<%
+									if(cUser.getId().equals(assignee.getId())){
+									%>
+										<span class="t_name"><%=assignee.getLongName()%></span>
+									<%
+									}else{
+									%>
+										<a href="<%=assignee.getSpaceController() %>?cid=<%=assignee.getSpaceContextId()%>"><span class="t_name"><%=assignee.getLongName()%></span></a>
+									<%
+									}
+									%>
 								</fmt:param>
 							</fmt:message>
 						<%

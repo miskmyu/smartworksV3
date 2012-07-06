@@ -4,6 +4,9 @@
 <!-- Author			: Maninsoft, Inc.													 -->
 <!-- Created Date	: 2011.9.															 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
+<%@page import="net.smartworks.model.filter.SearchFilter"%>
 <%@page import="net.smartworks.model.instance.RunningCounts"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.community.User"%>
@@ -66,6 +69,8 @@
 	// 현재사용자의 진행중인 업무들의 갯수(전체업무, 할당업무)를 가져온다.
 	RunningCounts runningCounts = smartWorks.getMyRunningInstancesCounts();
 	if(SmartUtil.isBlankObject(runningCounts)) runningCounts = new RunningCounts();
+	
+	String selectedFilterId = "";
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -77,49 +82,68 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<div id="work_ing">		
-				<div class="titl_section js_running_instance_title">
+				<div class="titl_section">
 				
 					<!-- 타이틀을 나타내는 곳 -->
-					<%-- <div class="tit js_running_instance_title pr10"><fmt:message key="content.my_running_instance_list" /></div> --%>
-					<div class="title js_running_instance_title pr10 fl">
-						<span><a href="">전체보기</a></span> | 
-						<span class="current js_view_assigned_instances"><a href="" searchType='assigned_instances'>처리할 업무 <span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
-						<span><a href="">내가 시작한 업무</a></span>
+					<div class="title pr10 fl js_running_instance_title js_instance_count">
+						<span class="current js_view_my_instances"><a href="" searchType="smartcaster_instances"><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
+						<span class="js_view_my_instances"><a href="" searchType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/><span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
+						<span class="js_view_myinstances"><a href="" searchType='running_instances'><fmt:message key="content.my_running_instance_count"/><span class="t_red_bold js_running_count">[<%=runningCounts.getRunningOnly() %>]</span> </a></span>
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
 					
-					<form name="frmSearchInstance" class="po_left js_search_running_instance">
+					<form name="frmSearchInstance" class="fl js_search_running_instance">
 						<div class="srch_wh srch_wsize">
 							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
 							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>
 					</form>
+					<form class="form_space po_left js_form_filter_name" name="frmHomeFilterName">
+						<select name="selFilterName" class="js_select_search_filter">
+							<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
+								<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+								<fmt:message key='filter.name.all_instances' />
+							</option>
+							<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
+								<%if(SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+								<fmt:message key='filter.name.my_instances' />
+							</option>
+							<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
+								<%if(SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+								<fmt:message key='filter.name.recent_instances' />
+							</option>
+							<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
+								<%if(SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+								<fmt:message key='filter.name.my_recent_instances' />
+							</option>
+							<%
+							SearchFilterInfo[] filters = runningCounts.getCasterFilters();
+							if (filters != null) {
+								for (SearchFilterInfo filter : filters) {
+									if(SmartUtil.isBlankObject(filter.getId())) continue;
+							%>
+									<option class="js_custom_filter" value="<%=filter.getId()%>" <%if(filter.getId().equals(selectedFilterId)){%> selected <%} %>><%=CommonUtil.toNotNull(filter.getName())%></option>
+							<%
+								}
+							}
+							%>
+						</select>
+					</form>
+					<a href="search_filter.sw?workId=smartcaster" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+						<div class="icon_btn_edit"></div>
+					</a>					
 					<span class="js_progress_span"></span>
-					
-					<!-- 전체/할당업무만의 갯수와 선택버튼들 -->
-					<%-- <div class="txt_btn fr js_instance_counts">
-						<a href="" searchType='assigned_instances' class="current js_view_assigned_instances" instanceCount="<%=runningCounts.getAssignedOnly()%>"><fmt:message key="content.my_running_assigned_count"/> 
-							<span class="t_red_bold js_assigned_count">[<%=runningCounts.getAssignedOnly() %>]</span>
-						</a>
-						 | 
-						<a href="" searchType='my_running_instances' class="js_view_my_running_instances" instanceCount="<%=runningCounts.getTotal()%>"><fmt:message key="content.my_running_instance_count"/> 
-							<span class="t_red_bold js_all_running_count">[<%=runningCounts.getTotal() %>]</span>
-						</a>
-					</div> --%>
-					<!-- 전체/할당업무만의 갯수와 선택버튼들 //-->
 					
 				</div>
 				
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
-				<div class="solid_line"></div>
-				<table class="js_instance_list_table">
-					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
-						<jsp:param value="true" name="assignedOnly"/>
-					</jsp:include>
-				</table>
+				<div class="solid_line mb5"></div>
+				<div class="js_instance_list_table">
+					<jsp:include page="/jsp/content/more_smartcast.jsp"/>
+				</div>
 				<!-- 진행중인 업무목록 및 더보기 버튼 //-->
-				<!-- 더보기 버튼 -->
+<%-- 				<!-- 더보기 버튼 -->
 				<%if(runningCounts.getTotal() > 20){ %>
 					<div class="js_more_list">
 						<a href="more_instance_list.sw"><fmt:message key="content.more_running_instance"/></a>
@@ -127,7 +151,7 @@
 					</div>
 				<%} %>
 				<!-- 더보기 버튼 !!-->
-	
+ --%>	
 			</div>
 		</ul>
 	</div>

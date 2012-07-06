@@ -24,21 +24,24 @@
 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
 
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "event_list.sw");
 	
 	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
 	User cUser = SmartUtil.getCurrentUser();
 	InformationWork work = (InformationWork) smartWorks.getWorkById(workId);
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName(); 
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
+	session.setAttribute("lastLocation", "event_list.sw");
 	session.setAttribute("smartWork", work);
+	session.setAttribute("workSpace", workSpace);
 	session.removeAttribute("workInstance");
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
+<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
+			
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
 <!-- 컨텐츠 레이아웃-->
@@ -46,26 +49,13 @@
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_area ti_event title">
-					<div class="title myspace_h"><%=workSpaceName %>
-						<span class="bul_space"><%=work.getName()%></span>
-					</div>
-				</div>
-				<!-- 우측 버튼 -->
-				<div class="txt_btn">
-				</div>
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
 
 			<!-- 목록영역  -->
 			<div class="contents_space">
 				<!-- 목록보기 -->
 				<div>
 					<!-- 목록 테이블 -->
-					<div class="list_contents">
+					<div class="">
 						<table>
 							<tr class="tit_bg" style="height:2px"></tr>
 							<tr class="js_calendar_space"></tr>
