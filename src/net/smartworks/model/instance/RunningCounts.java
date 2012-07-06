@@ -1,10 +1,14 @@
 package net.smartworks.model.instance;
 
+import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.filter.info.SearchFilterInfo;
+
 public class RunningCounts {
 
 	private int total;
 	private int assignedOnly;
 	private int runningOnly;
+	private SearchFilterInfo[] casterFilters;
 	
 	public int getTotal() {
 		return total;
@@ -24,6 +28,12 @@ public class RunningCounts {
 	}
 	public void setRunningOnly(int runningOnly) {
 		this.runningOnly = runningOnly;
+	}
+	public SearchFilterInfo[] getCasterFilters() {
+		return casterFilters;
+	}
+	public void setCasterFilters(SearchFilterInfo[] casterFilters) {
+		this.casterFilters = casterFilters;
 	}
 
 	public RunningCounts() {
