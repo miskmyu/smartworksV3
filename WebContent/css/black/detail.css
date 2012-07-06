@@ -85,7 +85,9 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 .reply li a img, .reply li img {float:left} 
 .btns_action {margin:0 0 5px 70px}
-.btns_action + a {margin:0 7px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
+.btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important; font-size:10.5px}
+.btns_action a:hover, .btns_action a:focus {text-decoration: underline}
+.btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
 
 /* 목록보기 부분 타이틀 */
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
