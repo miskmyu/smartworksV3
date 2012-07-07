@@ -427,10 +427,14 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 	
 			TaskWorkCond taskCond = new TaskWorkCond();
-			if (assignedOnly) {
+			if (assignedOnly && (runningOnly == false)) {
 				taskCond.setTskStatus(TskTask.TASKSTATUS_ASSIGN);
 				taskCond.setTskAssignee(user.getId());
-			} else {
+			}
+			if (runningOnly && (assignedOnly == false)){
+				taskCond.setTskStartOnly(user.getId());
+			}
+			if (runningOnly && assignedOnly) {
 				taskCond.setTskStartOrAssigned(user.getId());
 			}
 			if (lastInstanceDate != null) {
@@ -7413,9 +7417,11 @@ public class InstanceServiceImpl implements IInstanceService {
 		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
 		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
 		
-		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
-		if (tasks == null || tasks.length == 0)
-			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
+//		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
+//		if (tasks == null || tasks.length == 0)
+//			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
+//		tasks[0].setIsStartActivity("true");
+//		getTskManager().setTask(userId, tasks[0], IManager.LEVEL_ALL);
 
 		setReferenceApprovalToRecord(userId, record, requestBody);
 		

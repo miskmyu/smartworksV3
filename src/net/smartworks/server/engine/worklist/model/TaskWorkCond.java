@@ -27,6 +27,7 @@ public class TaskWorkCond extends Cond {
 	private String tskAssigneeIdIns;
 	private String tskAssigneeOrSpaceId;
 	private String tskStartOrAssigned;
+	private String tskStartOnly;
 	private Date taskLastModifyDate;
 	private String tskCreateUser;
 	private Date tskCreateDate;
@@ -417,6 +418,12 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setPrcStatusIns(String[] prcStatusIns) {
 		this.prcStatusIns = prcStatusIns;
+	}
+	public String getTskStartOnly() {
+		return tskStartOnly;
+	}
+	public void setTskStartOnly(String tskStartOnly) {
+		this.tskStartOnly = tskStartOnly;
 	}
 
 }
