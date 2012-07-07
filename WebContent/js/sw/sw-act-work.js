@@ -724,7 +724,7 @@ $(function() {
 		if (!SmartWorks.GridLayout.validate(iworkSpace.find('.js_form_task_forward form'), $('.js_space_error_message'))) return false;
 		
 		smartPop.confirm(smartMessage.get("forwardConfirmation"), function(){
-			var forms = iworkSpace.find('.js_form_task_forwar form');
+			var forms = iworkSpace.find('form');
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
@@ -758,9 +758,8 @@ $(function() {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("forwardIWorkInstanceSucceed"), function(){
-						iworkSpace.find('.js_form_task_forward').hide().html('');
-						iworkSpace.find('.js_btn_save').show().siblings().hide();						
-						iworkSpace.find('.js_btn_modify').show();						
+						smartPop.progressCenter();
+						window.location.reload();
 						return false;
 					});
 				},

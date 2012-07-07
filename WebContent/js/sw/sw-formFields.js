@@ -386,8 +386,13 @@ function loadTaskForwardFields() {
 			var subjectTitle = taskForwardField.attr("subjectTitle");
 			var forwardeeTitle = taskForwardField.attr("forwardeeTitle");
 			var commentsTitle = taskForwardField.attr("commentsTitle");
+			var forwarderTitle = taskForwardField.attr("forwarderTitle");
+			var forwardDateTitle = taskForwardField.attr("forwardDateTitle");
 			var subject = taskForwardField.attr("subject");
 			var comments = taskForwardField.attr("content");
+			var forwarderId = taskForwardField.attr("forwarderId");
+			var forwarderName = taskForwardField.attr("forwarderName");
+			var forwardDate = taskForwardField.attr("forwardDate");
 			var readOnly = isEmpty(subject) ? false : true;
 
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
@@ -395,7 +400,8 @@ function loadTaskForwardFields() {
 				fieldId: "txtForwardSubject",
 				fieldName: subjectTitle,
 				value: subject,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				required: true,
 				readOnly: readOnly
 			});
@@ -406,7 +412,8 @@ function loadTaskForwardFields() {
 					container: gridRow,
 					fieldId: "txtForwardForwardee",
 					fieldName: forwardeeTitle,
-					columns: 1,
+					columns: 2,
+					colSpan: 2,
 					multiUsers: true,
 					required: true,
 					readOnly: readOnly
@@ -419,12 +426,40 @@ function loadTaskForwardFields() {
 				fieldId: "txtForwardComments",
 				fieldName: commentsTitle,
 				value: comments,
-				columns: 1,
+				columns: 2,
+				colSpan: 2,
 				multiLines: 4,
 				required: false,
 				readOnly: readOnly
 			});
 			
+			if(readOnly){
+				var users = new Array();
+				users.push({userId : forwarderId, longName: forwarderName});
+				gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+				SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtForwardForwarder",
+					fieldName: forwarderTitle,
+					columns: 2,
+					colSpan: 1,
+					users: users,
+					multiUsers: false,
+					required: false,
+					readOnly: readOnly
+				});
+				SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+					container: gridRow,
+					fieldId: "txtForwarderForwardDate",
+					fieldName: forwardDateTitle,
+					value: forwardDate,
+					columns: 2,
+					colSpan: 1,
+					required: false,
+					readOnly: readOnly
+
+				});
+			}
 			var iworkSpace = taskForwardFields.parents('.js_iwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_forward_page').addClass('up');
@@ -530,6 +565,7 @@ function loadTaskApprovalFields() {
 			}
 
 			var iworkSpace = taskApprovalFields.parents('.js_iwork_space_page');
+			var pworkSpace = taskApprovalFields.parents('.js_pwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_approval_page').addClass('up');
 				if(actionRequired==="true"){
@@ -550,6 +586,27 @@ function loadTaskApprovalFields() {
 				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();
+			}else if(!isEmpty(pworkSpace)){
+				var target = pworkSpace.find('.js_append_task_approval_page').addClass('up');
+				if(actionRequired==="true"){
+					target.addClass('form_read');
+					if(isReturned=='true'){
+						pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
+						pworkSpace.find('.js_btn_reject_approval').show();						
+					}else{
+						pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
+						pworkSpace.find('.js_btn_return_approval').show();
+						pworkSpace.find('.js_btn_reject_approval').show();
+					}
+				}
+				
+				if(readOnly || isReturned=='true'){
+					pworkSpace.find('.js_toggle_forward_btn').hide();
+					pworkSpace.find('.js_toggle_approval_btn').hide();
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();
+				
 			}
 		}		
 	}

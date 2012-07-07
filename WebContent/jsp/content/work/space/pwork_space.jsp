@@ -50,6 +50,42 @@
 	
 	TaskInstanceInfo[] taskHistories = instance.getTasks();
 	
+	String approvalTaskInstId = "";
+	TaskInstanceInfo approvalTask = null;
+	TaskInstanceInfo forwardedTask = null;
+	if(taskHistories != null && instance.getStatus() != Instance.STATUS_REJECTED){
+		if(!SmartUtil.isBlankObject(taskInstId)){
+			for(TaskInstanceInfo task : taskHistories){
+				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
+					forwardedTask = task;
+					break;
+				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+					approvalTaskInstId = task.getId();
+					approvalTask = task;
+					taskInstId = task.getApprovalTaskId();
+					break;
+				}
+			}
+		}
+		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(approvalTask)){
+			approvalTask = instance.getMyRunningApprovalTask();
+			if(!SmartUtil.isBlankObject(approvalTask)){
+				approvalTaskInstId = approvalTask.getId();
+				taskInstId = approvalTask.getApprovalTaskId();
+			}
+		}
+		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(forwardedTask)){
+			forwardedTask = instance.getMyRunningForwardedTask();
+			if(!SmartUtil.isBlankObject(forwardedTask)){
+				taskInstId = forwardedTask.getId();
+			}			
+		}
+	}
+	if(SmartUtil.isBlankObject(approvalTask)){
+		approvalTaskInstId = "";
+	}
+	TaskInstanceInfo taskInstance = (SmartUtil.isBlankObject(taskInstId)) ? ((SmartUtil.isBlankObject(taskHistories)) ? null : taskHistories[0]) : instance.getTaskInstanceById(taskInstId);
+
 	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -116,13 +152,20 @@
 			        <div class="process_space js_instance_tasks">			        
 						<ul>
 				        	<%
-				        	if(!SmartUtil.isBlankObject(taskHistories)){	
+				        	if(!SmartUtil.isBlankObject(taskHistories)){
+				        		int count = 0;
 				        		for(int i=0; i<taskHistories.length; i++){
 				        			TaskInstanceInfo task = taskHistories[i];
+				        			if(!SmartUtil.isBlankObject(task.getForwardId()) || !SmartUtil.isBlankObject(task.getApprovalId())) continue;
+				        			count++;
 				        			String statusClass = "proc_task not_yet";
 				        			String formMode = (task.getAssignee().getId().equals(cUser.getId()) 
 				        								&& ( 	task.getStatus()==TaskInstance.STATUS_RUNNING
-				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) ) ? "edit" : "view";
+				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
+				        									 || (task.getStatus()==Instance.STATUS_APPROVAL_RUNNING
+				        									 		&& instance.getStatus()==Instance.STATUS_REJECTED
+				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
+				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
 				        										&& !task.getAssignee().getId().equals(cUser.getId())) ? false : true;
 				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED)
@@ -131,6 +174,8 @@
 				        				statusClass = "proc_task running";
 				        			else if(task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)
 				        				statusClass = "proc_task delayed";
+				        			else if(task.getStatus() == TaskInstance.STATUS_APPROVAL_RUNNING)
+				        				statusClass = "proc_task running";
 				        			else if(task.getStatus() == TaskInstance.STATUS_COMPLETED)
 				        				statusClass = "proc_task completed";
 				        			else
@@ -142,7 +187,7 @@
 					                    <!-- task 정보 -->
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s" title="<%=task.getPerformer().getLongName()%>">
 					                    <div class="noti_in_s">
-						                    <%=i+1%>) <%=task.getName() %>
+						                    <%=count%>) <%=task.getName() %>
 						                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
 					                    </div>
 					                    <!-- task 정보 //-->
@@ -176,31 +221,107 @@
 			<!-- 상세보기 컨텐츠 -->
 			<div class="contents_space">
 				<div class="up_point pos_default js_form_content_pointer"></div>
+
+				<!--  전자결재화면이 나타나는 곳 -->
+				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>>
+					<%
+					if(approvalTask!=null || (!SmartUtil.isBlankObject(taskInstance) && taskInstance.isApprovalWork())){
+					%>
+						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
+							<jsp:param value="<%=approvalTaskInstId %>" name="taskInstId"/>
+						</jsp:include>
+					<%
+					}
+					%>
+				</div>
+			
 				<div class="form_wrap up form_read js_form_content"></div>
 			</div>
+
+			<!-- 업무전달화면이 나타나는 곳 -->
+			<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
+				<%
+				if(forwardedTask!=null){
+				%>
+					<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+						<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
+					</jsp:include>
+				<%
+				}
+				%>
+			</div>
+				
 
 			<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
 			
-				<div class="txt_btn task_information">
-				    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
-				    	<%
-			    		User lastModifier = instance.getLastModifier();
-			    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
-			    		%>
-				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
-				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
-				    </div>
-				</div>     
-
 				<!-- 수정, 삭제버튼 -->
 			    <div class="fr">
-					<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-					<div class="form_space js_progress_span" ></div>
-					
-					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-					<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
 
+			        <span class="btn_gray js_btn_do_forward" style="display:none">
+			        	<a href="" class="js_forward_iwork_instance">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_reply_forward" style="display:none">
+			        	<a href="" class="js_reply_forward">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.reply_forward"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_do_approval" style="display:none">
+			        	<a href="" class="js_approval_iwork_instance">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_approve_approval" style="display:none">
+			        	<a href="" class="js_reply_approval">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.approve_approval"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_submit_approval" style="display:none">
+			        	<a href="" class="js_reply_approval">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.submit_approval"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_return_approval" style="display:none">
+			        	<a href="" class="js_reply_approval">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.return_approval"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_reject_approval" style="display:none">
+			        	<a href="" class="js_reply_approval">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.reject_approval"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+			
+			        <span class="btn_gray js_btn_do_email" style="display:none">
+			        	<a href="" class="js_email_iwork_instance">
+				            <span class="txt_btn_start"></span>
+				            <span class="txt_btn_center"><fmt:message key="common.button.do_email"/></span>
+				            <span class="txt_btn_end"></span>
+			            </a>
+			   		</span>
+				
 					<span class="btn_gray ml5 js_btn_complete" style="display:none">
 			        	<a href="" class="js_perform_task_instance">
 				            <span class="txt_btn_start"></span>
@@ -231,6 +352,24 @@
 			   		</span>
 				</div>
 				<!-- 수정, 삭제버튼 //-->    					  
+
+				<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+				<div class="fr form_space js_progress_span" ></div>
+
+				<div class="txt_btn task_information">
+				    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
+				    	<%
+			    		User lastModifier = instance.getLastModifier();
+			    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
+			    		%>
+				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
+				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
+				    </div>
+				</div>     
+
+				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+				<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
+
 			</div>
 			<!-- 버튼 영역 //-->     				
 		</ul>
@@ -240,6 +379,14 @@
 <!-- 컨텐츠 레이아웃//-->
 <script type="text/javascript">
 
+	var isReturned = false;
+	<%
+	if(instance.getStatus()==Instance.STATUS_RETURNED && !SmartUtil.isBlankObject(approvalTask)){
+	%>
+		isReturned = true;
+	<%
+	}
+	%>
 	function clickOnTask(input){
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
@@ -267,7 +414,7 @@
 				
 			}
 		});
-		if(formMode==="edit"){
+		if(formMode==="edit" && !isReturned){
 			pworkSpace.find('.js_btn_complete').show();
 			pworkSpace.find('.js_btn_return').show();
 			pworkSpace.find('.js_btn_reassign').show();

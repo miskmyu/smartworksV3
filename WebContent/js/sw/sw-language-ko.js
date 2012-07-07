@@ -163,6 +163,8 @@ smartMessage.bundle['ko'] = {
 	setMailFolderError : "메일폴더를 수정하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	removeMailFolderSucceed : "메일폴더가 정상적으로 삭제되었습니다.",
 	removeMailFolderError : "메일폴더를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	commentTaskForwardSucceed : "업무전달이 정상적으로 완료되었습니다.",
+	commentTaskForwardError : "업무전달을 완료하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	commentTaskApprovalSucceed : "전자결재가 정상적으로 수행되었습니다.",
 	commentTaskApprovalError : "전자결재를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	mailPasswordConfirmError : "보내는메일 암호가 잘못입력되었습니다. 확인하여 다시 입력 바랍니다.",
@@ -173,6 +175,7 @@ smartMessage.bundle['ko'] = {
 		
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
+	missingCommentTaskForward : "참조의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
 	missingCommentTaskApproval : "결재의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
 	
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",
@@ -186,6 +189,7 @@ smartMessage.bundle['ko'] = {
 	tempSaveConfirmation : "태스크를 임시저장하려고 합니다. 정말로 저장하시겠습니까? ",
 	publishConfirmation : "업무를 앱스토어 공유하려고 합니다. 정말로 공유하시겠습니까? ",
 	commentTaskApprovalConfirm : "전자결재를 수행하려고 합니다. 정말로 수행하시겠습니까? ",
+	commentTaskForwardConfirm : "업무전달을 완료하려고 합니다. 정말로 완료하시겠습니까? ",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

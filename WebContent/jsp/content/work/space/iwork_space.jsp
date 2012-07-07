@@ -44,7 +44,7 @@
 	TaskInstanceInfo[] tasks = instance.getTasks();
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
-	if(tasks != null && instance.getStatus() != Instance.STATUS_REJECTED){
+	if(tasks != null && instance.getStatus() != Instance.STATUS_REJECTED && instance.getStatus() != Instance.STATUS_REJECTED){
 		if(!SmartUtil.isBlankObject(taskInstId)){
 			for(TaskInstanceInfo task : tasks){
 				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
@@ -62,6 +62,16 @@
 				taskInstId = approvalTask.getId();
 			}
 		}
+		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(forwardedTask)){
+			forwardedTask = instance.getMyRunningForwardedTask();
+			if(!SmartUtil.isBlankObject(forwardedTask)){
+				taskInstId = forwardedTask.getId();
+			}			
+		}
+	}
+	if(SmartUtil.isBlankObject(forwardedTask) && (instance.getStatus() == Instance.STATUS_REJECTED || !instance.isApprovalWork())){
+		taskInstId = "";
+		approvalTask = null;
 	}
 	
 	session.setAttribute("cid", cid);
@@ -109,23 +119,23 @@
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
 							<%
-							if(instance.getOwner().equals(cUser.getId())){
+							if(instance.getOwner().getId().equals(cUser.getId())){
 							%>
 								<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
 							<%
 							}
 							%>
-							<%
-							if(cUser.isUseMail()){
-							%>
-		                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
-		                	<%
-		                	}
-		                	%>
-		                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 						<%
 						}
 						%>
+						<%
+						if(cUser.isUseMail()){
+						%>
+	                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+	                	<%
+	                	}
+	                	%>
+	                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 					</div>
 					<!-- 전자결재, 업무전달 버튼들 //-->
 		                    
@@ -378,7 +388,11 @@
 					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
 					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
-					    	<a href=""><img src="<%=instance.getLastModifier().getMinPicture() %>" class="profile_size_s" /> <%=instance.getLastModifier().getLongName() %></a>
+					    	<%
+				    		User lastModifier = instance.getLastModifier();
+				    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
+				    		%>
+				    		<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 					    </div>
 					</div>     
@@ -416,7 +430,7 @@
 	});
 	
 	<%
-	if(SmartUtil.isBlankObject(approvalTask) && instance.isApprovalWork()){
+	if(SmartUtil.isBlankObject(approvalTask) && SmartUtil.isBlankObject(forwardedTask) && instance.isApprovalWork()){
 	%>
 		iworkSpace.find('.js_btn_approve_approval').hide().siblings().hide();			
 	<%

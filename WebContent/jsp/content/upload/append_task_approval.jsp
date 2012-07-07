@@ -77,7 +77,7 @@
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
 		drafterId = workInstance.getOwner().getId();
 		drafterName = workInstance.getOwner().getLongName();
-		draftDate = workInstance.getCreatedDate().toLocalString();
+		draftDate = workInstance.getCreatedDate().toLocalDateTimeSimpleString();
 	}else{
 		approvalLine = smartWorks.getApprovalLineById(null);
 	}
