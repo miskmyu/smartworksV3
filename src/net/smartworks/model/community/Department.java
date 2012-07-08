@@ -14,6 +14,7 @@ public class Department extends WorkSpace {
 	private User	head = null;
 	private UserInfo[]	members = null;
 	private DepartmentInfo[] children = null;
+	private String fullpathName = "";
 
 	public String getDesc() {
 		return desc;
@@ -55,8 +56,13 @@ public class Department extends WorkSpace {
 	}
 	public int getSpaceType(){
 		return ISmartWorks.SPACE_TYPE_DEPARTMENT;
+	}	
+	public String getFullpathName() {
+		return fullpathName;
 	}
-	
+	public void setFullpathName(String fullpathName) {
+		this.fullpathName = fullpathName;
+	}
 	public Department(){
 		super();
 	}

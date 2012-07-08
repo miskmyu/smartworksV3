@@ -474,13 +474,9 @@
 			return;
 		
 		if(formMode==="edit"){
-			if(isApprovalWork == 'true' || isReturned || !isEmpty(approvalLineId)){
+			if(isReturned || !isEmpty(approvalLineId)){
 				pworkSpace.find('.js_toggle_approval_btn').hide();
-				if(isApprovalWork == 'true'){
-					pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
-					pworkSpace.find('.js_btn_return_approval').show();
-					pworkSpace.find('.js_btn_reject_approval').show();
-				}else if(!isEmpty(approvalLineId)){
+				if(!isEmpty(approvalLineId)){
 					pworkSpace.find('.js_btn_do_approval').show().siblings().hide();
 					pworkSpace.find('.js_btn_return').show();																
 				}else if(isReturned){
@@ -495,6 +491,12 @@
 				pworkSpace.find('.js_toggle_approval_btn').show();				
 			}
 		}else{
+			if(isApprovalWork == 'true'){
+				pworkSpace.find('.js_toggle_approval_btn').hide();
+				pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
+				pworkSpace.find('.js_btn_return_approval').show();
+				pworkSpace.find('.js_btn_reject_approval').show();
+			}
 			pworkSpace.find('.js_btn_complete').hide().siblings().hide();
 			pworkSpace.find('.js_toggle_approval_btn').hide();
 		}
