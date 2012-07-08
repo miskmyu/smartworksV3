@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.model.approval.ApprovalLine"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
@@ -188,21 +189,26 @@
 				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
 				        										&& !task.getAssignee().getId().equals(cUser.getId())) ? false : true;
-				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED)
+				        			String approvalLineId = "";
+				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED){
 				        				statusClass = "proc_task returned";
-				        			else if(task.getStatus() == TaskInstance.STATUS_RUNNING)
+				        			}else if(task.getStatus() == TaskInstance.STATUS_RUNNING){
+				        				approvalLineId = task.getApprovalLineId();
 				        				statusClass = "proc_task running";
-				        			else if(task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING)
+				        			}else if(task.getStatus() == TaskInstance.STATUS_DELAYED_RUNNING){
+				        				approvalLineId = task.getApprovalLineId();
 				        				statusClass = "proc_task delayed";
-				        			else if(task.getStatus() == TaskInstance.STATUS_APPROVAL_RUNNING)
+				        			}else if(task.getStatus() == TaskInstance.STATUS_APPROVAL_RUNNING){
 				        				statusClass = "proc_task running";
-				        			else if(task.getStatus() == TaskInstance.STATUS_COMPLETED)
+				        			}else if(task.getStatus() == TaskInstance.STATUS_COMPLETED){
 				        				statusClass = "proc_task completed";
-				        			else
-				        				statusClass = "proc_task not_yet";				        					
+				        			}else{
+				        				statusClass = "proc_task not_yet";
+				        			}
 				        	%>
 			            			<!-- 태스크 --> 
-						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>">
+						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
+						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s" title="<%=task.getPerformer().getLongName()%>">
 					                    <div class="noti_in_s">
@@ -414,6 +420,7 @@
 		var formMode = input.attr("formMode");
 		var instId = input.attr("taskInstId");
 		var isApprovalWork = input.attr("isApprovalWork");
+		var approvalLineId = input.attr("approvalLineId"); 
 		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
 		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
@@ -424,11 +431,23 @@
 					processTaskInstId : instId
 				},
 				success : function(data, status, jqXHR) {
-					target.html(data).show();
+					approvalContent.html(data).show();
 				},
 				error : function(xhr, ajaxOptions, thrownError){					
 				}
 			});
+		}else if(!isEmpty(approvalLineId) && formMode === "edit"){
+			$.ajax({
+				url : 'append_task_approval.sw',
+				data : { 
+					approvalLineId : approvalLineId
+				},
+				success : function(data, status, jqXHR) {
+					approvalContent.html(data).show();
+				},
+				error : function(xhr, ajaxOptions, thrownError){					
+				}
+			});			
 		}
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');
@@ -454,14 +473,25 @@
 		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
 			return;
 		
-		if(formMode==="edit" && !isReturned){
-			pworkSpace.find('.js_btn_complete').show().siblings().hide();
-			pworkSpace.find('.js_btn_return').show();
-			pworkSpace.find('.js_btn_reassign').show();
-			pworkSpace.find('.js_btn_temp_save').show();
-			if(isApprovalWork == 'true' || isReturned){
-				pworkSpace.find('.js_toggle_approval_btn').hide();				
+		if(formMode==="edit"){
+			if(isApprovalWork == 'true' || isReturned || !isEmpty(approvalLineId)){
+				pworkSpace.find('.js_toggle_approval_btn').hide();
+				if(isApprovalWork == 'true'){
+					pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
+					pworkSpace.find('.js_btn_return_approval').show();
+					pworkSpace.find('.js_btn_reject_approval').show();
+				}else if(!isEmpty(approvalLineId)){
+					pworkSpace.find('.js_btn_do_approval').show().siblings().hide();
+					pworkSpace.find('.js_btn_return').show();																
+				}else if(isReturned){
+					pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
+					pworkSpace.find('.js_btn_return').show();											
+				}
 			}else{
+				pworkSpace.find('.js_btn_complete').show().siblings().hide();
+				pworkSpace.find('.js_btn_return').show();
+				pworkSpace.find('.js_btn_reassign').show();
+				pworkSpace.find('.js_btn_temp_save').show();
 				pworkSpace.find('.js_toggle_approval_btn').show();				
 			}
 		}else{
