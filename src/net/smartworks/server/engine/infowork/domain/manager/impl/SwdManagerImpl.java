@@ -487,7 +487,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			SwdField field;
 			Map<String, SwdDataField> paramMap = new HashMap<String, SwdDataField>();
 			if (exist) {
-				buf.append("update ").append(tableName).append(" set modifier = :modifier, modifiedTime = :modifiedTime");
+				buf.append("update ").append(tableName).append(" set modifier = :modifier, modifiedTime = :modifiedTime, workSpaceId = :workSpaceId, workSpaceType = :workSpaceType, accessLevel = :accessLevel, accessValue = :accessValue");
 				if (!CommonUtil.isEmpty(dataFields)) {
 					int i = 0;
 					String param;
@@ -506,6 +506,10 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				query = createSqlQuery(buf.toString(), null);
 				query.setString("modifier", obj.getModificationUser());
 				query.setTimestamp("modifiedTime", obj.getModificationDate());
+				query.setString("workSpaceId", obj.getWorkSpaceId());
+				query.setString("workSpaceType", obj.getWorkSpaceType());
+				query.setString("accessLevel", obj.getAccessLevel());
+				query.setString("accessValue", obj.getAccessValue());
 				this.setQueryParameters(query, paramMap);
 				query.setString("id", obj.getRecordId());
 			} else {

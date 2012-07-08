@@ -334,23 +334,24 @@
 								<%
 								// 읽기권한이 공개 이면, 공개, 비공개, 사용자 지정중에 선택할 수 있다..
 								
-								int accessLevel = (SmartUtil.isBlankObject(instance.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : instance.getAccessPolicy().getLevel();
-								if (accessLevel == AccessPolicy.LEVEL_PUBLIC) {
+								int workAccessLevel = (SmartUtil.isBlankObject(work.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : work.getAccessPolicy().getLevel();
+								int instanceAccessLevel = (SmartUtil.isBlankObject(instance.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : instance.getAccessPolicy().getLevel();
+								if (workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
 								%>
-									<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
-									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PUBLIC%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PUBLIC){%>selected<%}%>><fmt:message key="common.security.access.public" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
+									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_CUSTOM){%>selected<%}%>><fmt:message key="common.security.access.custom" /></option>
 								<%
 								// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
-								} else if (accessLevel == AccessPolicy.LEVEL_CUSTOM) {
+								} else if (workAccessLevel == AccessPolicy.LEVEL_CUSTOM) {
 								%>
-									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-									<option selected class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
+									<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_CUSTOM){%>selected<%}%>><fmt:message key="common.security.access.custom" /></option>
 								<%
 								// 읽기권한이 비공개이면, 비공개만 해당된다...
-								} else if (accessLevel == AccessPolicy.LEVEL_PRIVATE) {
+								} else if (workAccessLevel == AccessPolicy.LEVEL_PRIVATE) {
 								%>
-									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+									<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" <%if(instanceAccessLevel == AccessPolicy.LEVEL_PRIVATE){%>selected<%}%>><fmt:message key="common.security.access.private" /></option>
 								<%
 								}
 								%>
@@ -359,7 +360,7 @@
 				
 						<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
 						<%
-						if(accessLevel == AccessPolicy.LEVEL_PUBLIC){
+						if(workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
 						%>
 							<div class="fr form_space js_access_level_custom" style="display:none">
 								<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">

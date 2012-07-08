@@ -229,12 +229,14 @@ $(function() {
 		}
 	});
 	
-	var ACCESS_LEVEL_CUSTOM = '2';
+	var ACCESS_LEVEL_CUSTOM = 2;
 	$('select.js_select_access_level').live('change', function(e) {
 		var input = $(targetElement(e));
-		var target = input.parents('.js_upload_buttons_page').find('.js_access_level_custom');
+		var target = input.parents('.js_upload_buttons_page').find('div.js_access_level_custom');
+		if(isEmpty(target))
+			target = input.parents('.js_iwork_space_page').find('div.js_access_level_custom');
 		var accessLevel = input.attr('value');
-		if(accessLevel === ACCESS_LEVEL_CUSTOM)
+		if(accessLevel == ACCESS_LEVEL_CUSTOM)
 			target.show();
 		else
 			target.hide();
