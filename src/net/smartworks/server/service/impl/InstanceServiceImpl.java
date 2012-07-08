@@ -503,11 +503,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 			
 			TaskWorkCond totalTaskCond = new TaskWorkCond();
-			totalTaskCond.setTskStartOrAssigned(user.getId());
+			totalTaskCond.setTskStartOnly(user.getId());
 			totalTaskCond.setLastInstanceDate(new LocalDate());
 			totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
+			long runningTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
 			
 			TaskWorkCond assignedTaskCond = new TaskWorkCond();
 
@@ -517,7 +517,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), assignedTaskCond);
 			
 			RunningCounts runningCounts = new RunningCounts();
-			runningCounts.setTotal((int)totalTaskSize);
+			runningCounts.setRunningOnly((int)runningTaskSize);
 			runningCounts.setAssignedOnly((int)assignedTaskSize);
 			return runningCounts;
 		}catch (Exception e){
@@ -7306,6 +7306,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		TskTask refTask = null;
 		Set refUserSet = new HashSet();
 		String refUser = null;
+		
+		String forwardId = "fwd_" + CommonUtil.newId();
+		
 		for (int i = 0; i < refUsers.length; i++) {
 			refUser = refUsers[i];
 			if (refUserSet.contains(refUser))
@@ -7327,6 +7330,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			refTask.setDef(tasks[0].getDef());
 			refTask.setFromRefId(tasks[0].getObjId());
 			refTask.setFromRefType(tasks[0].getType());
+			refTask.setForwardId(forwardId);
 			refTask.setExtendedPropertyValue("subject", txtForwardSubject);
 			refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
 			refTask.setExtendedPropertyValue("workContents", txtForwardComments);

@@ -71,6 +71,8 @@ public class TskTask extends MisObject {
 	public static final String A_ISSTARTACTIVITY = "isStartActivity";
 	public static final String A_FROMREFTYPE = "fromRefType";
 	public static final String A_FROMREFID = "fromRefId";
+	public static final String A_APPROVALID = "approvalId";
+	public static final String A_FORWARDID = "forwardId";
 	public static final String A_WORKSPACEID = "workSpaceId";
 	public static final String A_WORKSPACETYPE = "workSpaceType";
 	public static final String A_ACCESSLEVEL = "accessLevel";
@@ -102,6 +104,8 @@ public class TskTask extends MisObject {
 	private String isStartActivity;
 	private String fromRefType;
 	private String fromRefId;
+	private String approvalId;
+	private String forwardId;
 	private String workSpaceId;
 	private String workSpaceType;
 	private String accessLevel;
@@ -137,6 +141,8 @@ public class TskTask extends MisObject {
 		appendAttributeString(A_ISSTARTACTIVITY, isStartActivity, buf);
 		appendAttributeString(A_FROMREFTYPE, fromRefType, buf);
 		appendAttributeString(A_FROMREFID, fromRefId, buf);
+		appendAttributeString(A_APPROVALID, approvalId, buf);
+		appendAttributeString(A_FORWARDID, forwardId, buf);
 		appendAttributeString(A_WORKSPACEID, workSpaceId, buf);
 		appendAttributeString(A_WORKSPACETYPE, workSpaceType, buf);
 		appendAttributeString(A_ACCESSLEVEL, accessLevel, buf);
@@ -187,6 +193,8 @@ public class TskTask extends MisObject {
 			Node isStartActivity = attrMap.getNamedItem(A_ISSTARTACTIVITY);
 			Node fromRefType = attrMap.getNamedItem(A_FROMREFTYPE);
 			Node fromRefId = attrMap.getNamedItem(A_FROMREFID);
+			Node approvalId = attrMap.getNamedItem(A_APPROVALID);
+			Node forwardId = attrMap.getNamedItem(A_FORWARDID);
 			Node workSpaceId = attrMap.getNamedItem(A_WORKSPACEID);
 			Node workSpaceType = attrMap.getNamedItem(A_WORKSPACETYPE);
 			Node accessLevel = attrMap.getNamedItem(A_ACCESSLEVEL);
@@ -230,6 +238,10 @@ public class TskTask extends MisObject {
 				obj.setFromRefType(fromRefType.getNodeValue());
 			if (fromRefId != null)
 				obj.setFromRefId(fromRefId.getNodeValue());
+			if (approvalId != null)
+				obj.setApprovalId(approvalId.getNodeValue());
+			if (forwardId != null)
+				obj.setForwardId(forwardId.getNodeValue());
 			if (workSpaceId != null)
 				obj.setWorkSpaceId(workSpaceId.getNodeValue());
 			if (workSpaceType != null)
@@ -554,6 +566,18 @@ public class TskTask extends MisObject {
 	}
 	public String getWorkSpaceId() {
 		return workSpaceId;
+	}
+	public String getApprovalId() {
+		return approvalId;
+	}
+	public void setApprovalId(String approvalId) {
+		this.approvalId = approvalId;
+	}
+	public String getForwardId() {
+		return forwardId;
+	}
+	public void setForwardId(String forwardId) {
+		this.forwardId = forwardId;
 	}
 	public void setWorkSpaceId(String workSpaceId) {
 		this.workSpaceId = workSpaceId;

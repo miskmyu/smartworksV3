@@ -751,3 +751,12 @@ CREATE TABLE SwMailAccount (
 
 -- 회사 로그인페이지 이미지
 ALTER TABLE SWConfig add loginImage varchar(50);
+
+-- 전자결재, 업무참조 아이디
+
+alter table tsktask add tskApprovalId varchar(100)
+
+alter table tsktask add tskForwardId varchar(100)
+
+
+

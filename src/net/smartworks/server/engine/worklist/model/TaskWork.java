@@ -32,6 +32,8 @@ public class TaskWork {
 	private String tskAccessLevel;
 	private String tskAccessValue;
 	private String tskDef;
+	private String tskApprovalId;
+	private String tskForwardId;
 	private String packageId;  
 	private String packageName;
 	private String packageStatus;
@@ -390,5 +392,17 @@ public class TaskWork {
 	}
 	public void setPrcAccessValue(String prcAccessValue) {
 		this.prcAccessValue = prcAccessValue;
+	}
+	public String getTskApprovalId() {
+		return tskApprovalId;
+	}
+	public void setTskApprovalId(String tskApprovalId) {
+		this.tskApprovalId = tskApprovalId;
+	}
+	public String getTskForwardId() {
+		return tskForwardId;
+	}
+	public void setTskForwardId(String tskForwardId) {
+		this.tskForwardId = tskForwardId;
 	}
 }

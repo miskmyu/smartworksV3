@@ -43,6 +43,8 @@ public class TaskWorkCond extends Cond {
 	private String tskWorkSpaceId;
 	private String tskWorkSpaceType; 
 	private String tskDef;
+	private String tskApprovalId;
+	private String tskForwardId;
 	private String packageId;   
 	private String childCtgId;  
 	private String childCtgName;
@@ -424,6 +426,18 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTskStartOnly(String tskStartOnly) {
 		this.tskStartOnly = tskStartOnly;
+	}
+	public String getTskApprovalId() {
+		return tskApprovalId;
+	}
+	public void setTskApprovalId(String tskApprovalId) {
+		this.tskApprovalId = tskApprovalId;
+	}
+	public String getTskForwardId() {
+		return tskForwardId;
+	}
+	public void setTskForwardId(String tskForwardId) {
+		this.tskForwardId = tskForwardId;
 	}
 
 }
