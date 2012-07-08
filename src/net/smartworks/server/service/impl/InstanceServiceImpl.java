@@ -7588,7 +7588,106 @@ public class InstanceServiceImpl implements IInstanceService {
 			      }
 			   }
 			}*/
-		System.out.println(requestBody);
+		
+
+		String userId = SmartUtil.getCurrentUser().getId();
+
+		String workId = (String)requestBody.get("workId");
+		String instanceId = (String)requestBody.get("instanceId");
+		String formId = (String)requestBody.get("formId");
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setProcessInstId(instanceId);
+		taskCond.setAssignee(userId);
+		taskCond.setForm(formId);
+		taskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+		
+		TskTask[] tasks = getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
+		
+		if (tasks == null || tasks.length == 0 || tasks.length != 1)
+			throw new Exception("More than 1 task Or Not Exist task");
+		
+		TskTask task = tasks[0];
+		
+		SwfForm form = getSwfManager().getForm(userId, formId);
+		SwfField[] formFields = form.getFields();
+		List domainFieldList = new ArrayList();
+		
+		for (SwfField field: formFields) {
+			SwdField domainField = new SwdField();
+			domainField.setFormFieldId(field.getId());
+			domainField.setFormFieldName(field.getName());
+			domainField.setFormFieldType(field.getSystemType());
+			domainField.setArray(field.isArray());
+			domainField.setSystemField(field.isSystem());
+			domainFieldList.add(domainField);
+		}
+		SwdField[] domainFields = new SwdField[domainFieldList.size()];
+		domainFieldList.toArray(domainFields);
+		
+		SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
+		String taskDocument = null;
+		String groupId = null;
+		Map<String, List<Map<String, String>>> fileGroupMap = null;
+		if(recordObj != null) {
+			taskDocument = recordObj.toString();
+			groupId = recordObj.getFileGroupId();
+			fileGroupMap = recordObj.getFileGroupMap();
+		}
+		task.setDocument(taskDocument);
+		if (logger.isInfoEnabled()) {
+			logger.info("Start Approval Task [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + "), document : " + recordObj.toString() + " ] ");
+		}
+		//태스크의 실제 완료 시간을 입력한다
+		if (task.getRealStartDate() == null)
+			task.setRealStartDate(new LocalDate(new Date().getTime()));
+		task.setRealEndDate(new LocalDate(new Date().getTime()));
+		//태스크를 실행한다
+
+		setReferenceApprovalToTask(userId, task, requestBody);
+		
+		getTskManager().executeTask(userId, task, "execute");
+		
+		SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
+		
+		if (logger.isInfoEnabled()) {
+			logger.info("Start Approval Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
+		}
+
+		if(fileGroupMap.size() > 0) {
+			for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+				String fileGroupId = entry.getKey();
+				List<Map<String, String>> fileGroups = entry.getValue();
+
+				try {
+					for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+						Map<String, String> file = fileGroups.get(i);
+						String fileId = file.get("fileId");
+						String fileName = file.get("fileName");
+						String fileSize = file.get("fileSize");
+						getDocManager().insertFiles("Files", task.getObjId(), fileGroupId, fileId, fileName, fileSize);
+					}
+				} catch (Exception e) {
+					throw new DocFileException("file upload fail...");
+				}
+			}
+		}
+		if(groupId != null) {
+			List<IFileModel> iFileModelList = getDocManager().findFileGroup(groupId);
+			if(iFileModelList.size() > 0) {
+				for(int i=0; i<iFileModelList.size(); i++) {
+					IFileModel fileModel = iFileModelList.get(i);
+					String fileId = fileModel.getId();
+					String filePath = fileModel.getFilePath();
+					if(fileModel.isDeleteAction()) {
+						getDocManager().deleteFile(fileId);
+						File f = new File(filePath);
+						if(f.exists())
+							f.delete();
+					}
+				}
+			}
+		}
 	}
 	@Override
 	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
