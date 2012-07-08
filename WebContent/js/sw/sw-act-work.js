@@ -775,7 +775,7 @@ $(function() {
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("forwardWorkInstanceError"), function(){
 						return false;
 					});
-					smartPop.closeProgress();					
+					smartPop.closeProgress();
 				}
 			});
 		},
@@ -1092,7 +1092,7 @@ $(function() {
 						smartPop.showInfo(smartPop.ERROR, smartMessage.get("tempSaveTaskInstanceError"), function(){
 						return;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -1144,20 +1144,18 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("reassignTaskInstanceError"), function(){
 						return;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -1300,7 +1298,9 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
-		var target = input.parents('.js_form_header').siblings('.js_form_task_forward');
+		var isPworkSpace = workSpacePage.hasClass('js_pwork_space_page');
+		var target = (isPworkSpace) ? workSpacePage.find('.js_form_task_forward') : input.parents('.js_form_header').siblings('.js_form_task_forward');
+		console.log('target=', target);
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
@@ -1309,7 +1309,7 @@ $(function() {
 			}
 			return false;
 		}
-		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')) || (isPworkSpace && !isEmpty(workSpacePage.find('.js_form_task:visible')))) return false;
 		$.ajax({
 			url : 'append_task_forward.sw',
 			data : {},
@@ -1331,7 +1331,8 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
-		var target = (workSpacePage.hasClass('js_iwork_space_page')) ? input.parents('.js_form_header').siblings('.js_form_task_approval') : input.parents('.js_form_header').find('.js_form_task_approval');
+		var isPworkSpace = workSpacePage.hasClass('js_pwork_space_page');
+		var target = (isPworkSpace) ? workSpacePage.find('.js_form_task_approval') : input.parents('.js_form_header').siblings('.js_form_task_approval');
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
@@ -1340,7 +1341,7 @@ $(function() {
 			}
 			return false;
 		}
-		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')) || !isEmpty(input.parents('.js_form_header').find('.js_form_task:visible'))) return false;
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')) || (isPworkSpace && !isEmpty(workSpacePage.find('.js_form_task:visible')))) return false;
 		$.ajax({
 			url : 'append_task_approval.sw',
 			data : {},

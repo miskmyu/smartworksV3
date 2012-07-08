@@ -40,14 +40,14 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-					smartPop.progressCenter();
 					document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 				});
+				smartPop.closeProgress();
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -90,16 +90,16 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-						smartPop.progressCenter();
 						input.find('option:first').attr('selected', 'selected').siblings('selected', '');
 						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
+					smartPop.closeProgress();
 				}
 			});
 		});
@@ -132,14 +132,14 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("moveMailError"));
+					smartPop.closeProgress();
 				}
 			});
 		});
@@ -166,14 +166,14 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+					smartPop.closeProgress();
 				}
 			});
 		});
@@ -205,14 +205,14 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+					smartPop.closeProgress();
 				}
 			});
 		});
@@ -248,8 +248,8 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -280,8 +280,8 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -312,8 +312,8 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.closeProgress();
 			}
 		});
 		return false;
@@ -344,8 +344,8 @@ $(function() {
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailFolderError"));
+					smartPop.closeProgress();
 				}
 			});
 		});
@@ -374,8 +374,8 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.closeProgress();
 			}
 		});
 		return false;
