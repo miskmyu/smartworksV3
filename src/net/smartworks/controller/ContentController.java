@@ -20,6 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ContentController {
 	
+	@RequestMapping("/smart")
+	public ModelAndView layouts(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/layouts.jsp", "smart.tiles");
+	}
+
 	@RequestMapping("/home")
 	public ModelAndView home(HttpServletRequest request, HttpServletResponse response) {
 
@@ -61,10 +67,10 @@ public class ContentController {
 		return SmartUtil.returnMnv(request, "jsp/content/upload/upload_buttons.jsp", "");
 	}
 
-	@RequestMapping("/empty_content")
-	public ModelAndView emptyContent(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("/content")
+	public ModelAndView content(HttpServletRequest request, HttpServletResponse response) {
 
-		return SmartUtil.returnMnv(request, "jsp/content/empty_content.jsp", "");
+		return SmartUtil.returnMnv(request, "jsp/content/content.jsp", "");
 	}
 	@RequestMapping("/localdate_string")
 	public ModelAndView localdate_string(HttpServletRequest request, HttpServletResponse response) {

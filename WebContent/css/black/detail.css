@@ -77,14 +77,14 @@
 .reply_input {margin:5px 0 0 0} /* 댓글 입력 영역 */
 #upload_form_box .reply_input {margin:5px} /* Reply Input in upload_form_box */
 
-.list_reply li, .reply > ul > li, .space_section li {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; padding: 5px 0; overflow: hidden}
+.list_reply li, .reply > ul > li, .space_section > ul > li {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; padding: 5px 0; overflow: hidden}
 .list_reply .end, .reply .end, .noborder li {border-bottom: none !important; vertical-align: middle}
-.repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px}
+.repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px} /* 댓글모두보기 아이콘 */
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 .reply li a img, .reply li img {float:left; margin-right: 5px} 
-.btns_action {margin:0 0 0 68px}
+.btns_action {margin:0 0 0 62px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important; font-size:10.5px}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
 .btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}

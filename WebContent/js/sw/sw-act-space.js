@@ -455,7 +455,7 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = workSpacePage.attr('lastHref');
+						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
 					});
 				},
 				error : function(e) {
@@ -522,7 +522,7 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = workSpacePage.attr('lastHref');
+						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
 					});
 				},
 				error : function(e) {

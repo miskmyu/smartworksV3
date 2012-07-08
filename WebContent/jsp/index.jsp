@@ -3,6 +3,6 @@
 
 <%
 
-	response.sendRedirect("home.sw");
+	response.sendRedirect("smart.sw#home.sw");
 		
 %>

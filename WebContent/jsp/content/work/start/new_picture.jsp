@@ -94,7 +94,6 @@ function submitForms(e) {
 							success : function(data, status, jqXHR) {
 								smartPop.closeProgress();
 								smartPop.progressCenter();
-								//document.location.href = data.href;
 								window.location.reload();
 
 							},

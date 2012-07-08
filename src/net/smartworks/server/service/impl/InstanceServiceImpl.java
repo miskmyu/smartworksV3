@@ -7495,5 +7495,13 @@ public class InstanceServiceImpl implements IInstanceService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
+		return SmartTest.getEventInstances();
+	}
+	@Override
+	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
+		return SmartTest.getBoardInstances();
+	}
 
 }

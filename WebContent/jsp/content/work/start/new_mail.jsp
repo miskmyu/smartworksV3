@@ -62,7 +62,7 @@ function submitForms(action) {
 			smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
 				smartPop.closeProgress();
 				smartPop.progressCenter();
-				document.location.href = newMail.attr('lastHref');
+				document.location.href = "smart.sw#" + newMail.attr('lastHref');
 			});
 		},
 		error : function(e) {

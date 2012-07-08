@@ -86,8 +86,8 @@
 				
 					<!-- 타이틀을 나타내는 곳 -->
 					<div class="title pr10 fl js_running_instance_title js_instance_count">
-						<span class="current js_view_my_instances"><a href="" viewType="smartcaster_instances"><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
-						<span class="js_view_my_instances"><a href="" viewType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/> <span class="t_red_bold js_assigned_count"> [<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
+						<span class="js_view_my_instances"><a href="" viewType="smartcaster_instances"><fmt:message key="header.top_menu.smartcaster"/></a></span> | 
+						<span class="current js_view_my_instances"><a href="" viewType='assigned_instances'><fmt:message key="content.my_running_assigned_count"/> <span class="t_red_bold js_assigned_count"> [<%=runningCounts.getAssignedOnly() %>]</span> </a></span> | 
 						<span class="js_view_my_instances"><a href="" viewType='running_instances'><fmt:message key="content.my_running_instance_count"/> <span class="t_red_bold js_running_count"> [<%=runningCounts.getRunningOnly() %>]</span> </a></span>
 					</div>					
 					<!-- 타이틀을 나타내는 곳 // -->
@@ -140,7 +140,9 @@
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
 				<div class="solid_line mb5"></div>
 				<div class="js_instance_list_table">
-					<jsp:include page="/jsp/content/more_smartcast.jsp"/>
+					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
+						<jsp:param value="true" name="assignedOnly"/>
+					</jsp:include>
 				</div>
 			</div>
 		</ul>

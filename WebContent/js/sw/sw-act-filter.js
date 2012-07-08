@@ -168,7 +168,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeFilterSucceed'), function(){
 						smartPop.progressCenter();
-						document.location.href = href;
+						document.location.href = "smart.sw#" + href;
 					});
 				},
 				error : function(e) {
