@@ -165,7 +165,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
 .nav_list.recent .recent_notice td {border-bottom:none}
 .nav_list .t_date {color: #C9C9C9}
-.nav_list.comming .t_date {margin-right: 3px}
+.nav_list.comming .t_date {float:left; margin-right: 5px}
 .recent li, .comming li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 .recent li:hover, .comming li:hover { display:block; background-color:#555555}
 
