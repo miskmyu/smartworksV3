@@ -265,7 +265,7 @@ public class SmartUtil {
 		String lastLocation = (String)request.getSession().getAttribute("lastLocation");
 		if(isBlankObject(lastLocation)) return "home.sw";
 		
-		if(		lastLocation.equals("homew.sw") 
+		if(		lastLocation.equals("home.sw") 
 				 || lastLocation.equals("smartcaster.sw") 
 				 || lastLocation.equals("dashboard.sw")){ 
 			return lastLocation;

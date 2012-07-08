@@ -75,7 +75,6 @@ function submitForms() {
 				smartPop.closeProgress();
 				smartPop.showInfo(smartPop.INFO, smartMessage.get("createIWorkSucceed"), function(){
 					smartPop.progressCenter();
-					//document.location.href = data.href;
 					window.location.reload();
 
 				});

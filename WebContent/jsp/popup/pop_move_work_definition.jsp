@@ -72,7 +72,7 @@
 					smartPop.closeProgress();
  					smartPop.showInfo(smartPop.INFO, (type === "move") ? smartMessage.get('moveWorkDefinitionSucceed') : smartMessage.get('copyWorkDefinitionSucceed'), function(){
  						smartPop.progressCenter();
-						document.location.href = data.href;
+						document.location.href = "smart.sw#" + data.href;
   					});
 				},
 				error : function(e) {

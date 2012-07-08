@@ -68,7 +68,7 @@ function logout() {
 <!-- 회사 로고 및 연결 링크 -->
 <!--  style 확인 필요함 -->
 <div>
-	<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
+	<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
 		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyLogo%>" />
 	</a>
 </div>
@@ -188,7 +188,7 @@ function logout() {
 		<!--  홈메뉴  -->
 		<li class="idx1">
 			<span>
-				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
+				<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
 			</span> 
 		</li>
 		<!--  홈메뉴  //-->
@@ -196,7 +196,7 @@ function logout() {
 		<!--  스마트케스트 메뉴  -->
 		<li class="idx2">
  			<span>
- 				<a href="smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
+ 				<a href="smart.sw#smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
  			</span> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
@@ -204,7 +204,7 @@ function logout() {
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
  			<span>
- 				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
+ 				<a href="smart.sw#dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
  			</span> 
 		</li>
 		<!--  대시보드 메뉴  //-->
@@ -253,7 +253,7 @@ function logout() {
 	<div class="pop" style="display: none">
 		<ul>
 			<li><a
-				href="my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
+				href="smart.sw#my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
 						key="header.global_menu.edit_my_profile" /> </a>
 			</li>
 			<li><a href="javascript:logout();"><fmt:message key="header.global_menu.logout" />

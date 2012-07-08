@@ -50,7 +50,7 @@
 				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
 					forwardedTask = task;
 					break;
-				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId, null)){
 					approvalTask = task;
 					break;
 				}
