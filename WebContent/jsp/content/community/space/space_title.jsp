@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
@@ -23,8 +24,8 @@
 		<div class="body_titl space">
 			<div class="user fl"></div>
 				<div class="info">
-					<div class="title">개인이름</div>
-					<div>한줄분량(00자)이하의 개인의 간단한 설명이 들어갑니다.  예)취미,성격 ,학력 등... </div>
+					<div class="title"><%=user.getLongName() %></div>
+					<div></div>
 				</div>
 			<div class="solid_line"></div>
 		</div>
@@ -37,8 +38,8 @@
 		<div class="body_titl space">
 			<div class="depart fl"></div>
 				<div class="info">
-					<div class="title">부서명</div>
-					<div>부서 설명이 들어갑니다.</div>
+					<div class="title"><%=department.getName() %></div>
+					<div></div>
 				</div>
 			<div class="solid_line"></div>
 		</div>
@@ -51,8 +52,8 @@
 		<div class="body_titl space">
 			<div class="group fl"></div>
 				<div class="info">
-					<div class="title">그룹명</div>
-					<div>그룹 설명이 들어갑니다.</div>
+					<div class="title"><%=group.getName() %></div>
+					<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
 				</div>
 			<div class="solid_line"></div>
 		</div>

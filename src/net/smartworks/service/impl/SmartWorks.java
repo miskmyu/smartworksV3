@@ -1491,4 +1491,14 @@ public class SmartWorks implements ISmartWorks {
 		instanceService.approvalPworkInstance(requestBody, request);
 	}
 
+	@Override
+	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
+		return instanceService.getCommingEventInstances(spaceId, maxLength);
+	}
+
+	@Override
+	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
+		return instanceService.getRecentBoardInstances(spaceId, maxLength);
+	}
+
 }

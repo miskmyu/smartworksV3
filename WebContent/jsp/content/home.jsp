@@ -21,7 +21,8 @@
 %>
  --%>
 <script>
-	if(!Request.isAjaxCall()){
+
+if(!Request.isAjaxCall()){
 		document.location.href = "smart.sw#home.sw";
 	}
 	

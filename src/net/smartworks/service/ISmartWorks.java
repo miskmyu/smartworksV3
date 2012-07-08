@@ -670,4 +670,9 @@ public interface ISmartWorks {
 	public abstract String copyWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract String moveWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception;
+	
+	public abstract BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception;
+	
 }
