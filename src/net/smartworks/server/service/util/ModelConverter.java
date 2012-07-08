@@ -3371,7 +3371,6 @@ public class ModelConverter {
 
 		return getIWInstanceInfoByRecordId(iWInstanceInfo, swdRecord.getRecordId());
 	}
-
 	public static Instance getInstanceBySwdRecord(String userId, Instance instance, SwdRecord swdRecord) throws Exception {
 		if (swdRecord == null)
 			return null;
@@ -3410,8 +3409,9 @@ public class ModelConverter {
 
 		instance.setWork(getInformationWorkByPkgPackageId(userId, packageId));
 
-		instance.setWorkSpace(getUserByUserId(swdRecord.getCreationUser()));
+		instance.setWorkSpace(new WorkSpace(CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId), null));
 
+		instance.setAccessPolicy(new AccessPolicy(CommonUtil.toInt(swdRecord.getAccessLevel(), 0)));
 		return instance;
 	}
 
@@ -3481,7 +3481,7 @@ public class ModelConverter {
 				for(AprApproval aprApproval : aprApprovals) {
 					Approval approval = new Approval();
 					approval.setName(aprApproval.getName());
-					approval.setApproverType(Integer.parseInt(CommonUtil.toNotNull(aprApproval.getType())));
+					approval.setApproverType(CommonUtil.toInt(aprApproval.getType(), Approval.APPROVER_CHOOSE_ON_RUNNING));
 					approval.setApprover(getUserByUserId(aprApproval.getApprover()));
 					String dueDate = CommonUtil.toNotNull(aprApproval.getDueDate());
 					int meanTimeDays = 0;

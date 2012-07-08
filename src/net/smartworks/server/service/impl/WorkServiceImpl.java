@@ -961,7 +961,7 @@ public class WorkServiceImpl implements IWorkService {
 				SwdRecordCond swdRecordCond = new SwdRecordCond();
 				swdRecordCond.setRecordId(recordId);
 				swdRecordCond.setFormId(formId);
-				swdRecord = getSwdManager().getRecord("", swdRecordCond, IManager.LEVEL_ALL);
+				swdRecord = getSwdManager().getRecord(userId, swdRecordCond, IManager.LEVEL_ALL);
 				SwdDomainCond domainCond = new SwdDomainCond();
 				domainCond.setFormId(formId);
 				SwdDomain[] swdDomains = getSwdManager().getDomains(userId, domainCond, IManager.LEVEL_LITE);
