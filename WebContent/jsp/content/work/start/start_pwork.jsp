@@ -96,7 +96,7 @@ function submitForms(e) {
 	}
 	
 	SmartTaskInfo startTask = work.getDiagram().getStartTask();
-//	startTask.setApprovalLineId(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_2_LEVEL);
+	startTask.setApprovalLineId(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_2_LEVEL);
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
