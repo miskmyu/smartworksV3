@@ -818,6 +818,8 @@ public class SettingsServiceImpl implements ISettingsService {
 
 			long totalCount = getAprManager().getApprovalLineDefSize(userId, approvalLineDefCond);
 
+			totalCount += 2;
+			
 			int pageSize = params.getPageSize();
 			if(pageSize == 0) pageSize = 20;
 
@@ -864,6 +866,9 @@ public class SettingsServiceImpl implements ISettingsService {
 
 			ApprovalLine[] approvalLines = null;
 			List<ApprovalLine> approvalLineList = new ArrayList<ApprovalLine>();
+			for (int i = 0; i < ApprovalLine.SYSTEM_APPROVAL_LINES.length; i++) {
+				approvalLineList.add(ApprovalLine.SYSTEM_APPROVAL_LINES[i]);
+			}
 			if(approvalLineDefs != null) {
 				for(AprApprovalLineDef approvalLineDef : approvalLineDefs) {
 					ApprovalLine approvalLine = new ApprovalLine();
@@ -933,6 +938,10 @@ public class SettingsServiceImpl implements ISettingsService {
 			Approval[] approvals = null;
 			ApprovalLine approvalLine = new ApprovalLine();
 			if(SmartUtil.isBlankObject(id))
+				return ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+			if (id.equalsIgnoreCase(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_2_LEVEL)) 
+				return ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
+			if (id.equalsIgnoreCase(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_3_LEVEL)) 
 				return ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
 			
 			User cUser = SmartUtil.getCurrentUser();
