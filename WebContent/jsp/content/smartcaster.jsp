@@ -39,7 +39,7 @@
 		
 			<!-- 검색&필터 -->
 			<div class="contents_space oh">
-				<div class="title_line_options fr">
+				<div class="title_line_options fr mb2">
 					<form class="po_left" name="frmSearchInstance">
 						<div class="srch_wh srch_wsize">
 							<input class="nav_input" type="text" placeholder="항목 찾기" name="txtSearchInstance">
@@ -59,10 +59,10 @@
 					</a>
 				</div>
 				<div class="solid_line cb"></div>
-			</div>
 			<!-- 검색&필터 //-->
 			
 			<jsp:include page="/jsp/content/more_smartcast.jsp"></jsp:include>
+			</div>
 		</ul>
 	</div>
 	<div class="portlet_b" style="display: block;"></div>
