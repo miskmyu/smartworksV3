@@ -55,7 +55,8 @@ boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, runningOnly, params);
 if (instances != null) {
 %>
-	<table>
+<div class="space_section">
+<ul>
 		<%
 		// 인스턴스 갯수 만큼 리스트를 그린다...
 		for (InstanceInfo instance : instances) {
@@ -124,16 +125,17 @@ if (instances != null) {
 			}
 		%>
 			<!-- 진행중인 업무 아이템 -->
-			<tr class="working_br instance_list js_more_instance_item js_content_list" href="<%=trTarget%>" dateValue="<%=workInstance.getLastModifiedDate().toLocalDateString2()%>">
+			<li class="instance_list js_more_instance_item js_content_list" href="<%=trTarget%>" dateValue="<%=workInstance.getLastModifiedDate().toLocalDateString2()%>">
+				<div class="det_title">
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
-				<td class="pic">
+				<div class="noti_pic">
 					<span class="<%=statusImage%> tc vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 					<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_m" src="<%=owner.getMidPicture()%>"/></a>
-				</td>
+				</div>
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
 				
 				<!-- 인스턴스 상세내용 표시 -->
-				<td>
+				<div class="noti_in_m">
 					<!--  시작자 이름 -->
 					<%
 					if(cUser.getId().equals(owner.getId())){
@@ -465,23 +467,24 @@ if (instances != null) {
 						}
 					}
 					%>
+					<!-- 인스턴스 마지막수정일자 -->
+					<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+					<!-- 인스턴스 마지막수정일자 //-->
 					<br/>
 					<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="js_content">
 						<span class="<%=work.getIconClass()%>"></span>
 						<span class="t_date"><%=work.getFullpathName()%></span>
 					</a>
 					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>" class="js_content">
-						<span class="tb"><%=workInstance.getSubject()%></span> 
+						<span><%=workInstance.getSubject()%></span> 
 					</a>
 					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=workInstance.getSubInstanceCount() %></b>]</font><%} %>
 					<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
-				</td>
-				<!-- 인스턴스 상세내용 표시 //-->
-				
-				<!-- 인스턴스 마지막수정일자 -->
-				<td class="vb tr pr10"><span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span></td>
-				<!-- 인스턴스 마지막수정일자 //-->
-			</tr>
+					
+				</div>
+				<!-- 인스턴스 상세내용 표시 //-->			
+				</div>
+			</li>
 			<!-- 진행중인 업무 아이템 //-->
 		<%
 		}
@@ -494,8 +497,8 @@ if (instances != null) {
 			</div>
 		<%} %>
 		<!-- 더보기 버튼 !!-->
-	
-	</table>
+	</ul>
+	</div>
 <%
 }
 %>	
