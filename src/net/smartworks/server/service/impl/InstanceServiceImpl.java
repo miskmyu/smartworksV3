@@ -7432,7 +7432,62 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+
+		/*{
+			   workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d,
+			   instanceId=402880eb3865a03b013865a0ee9d0001,
+			   formId=frm_c19b1fe4bceb4732acbb8a4cd2a57474,
+			   formName=기안품의,
+			   frmSmartForm=   {
+			      4      =      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=1 유광민
+			            }
+			         ]
+			      },
+			      8      =      {
+			         users=         [
+
+			         ]
+			      },
+			      12      =      {
+			         users=         [
+
+			         ]
+			      },
+			      16      =      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=
+								1 유광민
+			            }
+			         ]
+			      },
+			      92      =12,
+			      142      =      {
+			         groupId=fg_002d59379aac99454e9915e92a053c0a0922
+			      },
+			      466      =false,
+			      535      =123
+			   },
+			   frmTaskForward=   {
+			      txtForwardSubject=111111111,
+			      txtForwardComments=111111111,
+			      txtForwardForwardee=      {
+			         users=         [
+			            {
+			               id=hsshin@maninsoft.co.kr,
+			               name=신현성
+			            }
+			         ]
+			      }
+			   }
+			}*/
+		
+		
 		
 	}
 	@Override
