@@ -184,7 +184,7 @@
 				        								&& ( 	task.getStatus()==TaskInstance.STATUS_RUNNING
 				        									 || task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING) 
 				        									 || (task.getStatus()==Instance.STATUS_APPROVAL_RUNNING
-				        									 		&& instance.getStatus()==Instance.STATUS_REJECTED
+				        									 		&& instance.getStatus()==Instance.STATUS_RETURNED
 				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
 				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
 				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
