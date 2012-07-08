@@ -18,6 +18,7 @@
 
 	UserInfo[] members = null;
 	DepartmentInfo[] children = null;
+	User leader = null;
 
 	// 호출할때 전달된 cid(Context ID, 패이지 컨택스트를 지정하는 변수) 를 가져옮..
 	String cid = request.getParameter("cid");
@@ -27,11 +28,14 @@
 	String communityId = SmartUtil.getSpaceIdFromContentContext(cid);
 	// 공간이 그룹일때와 부서일때를 구분하여 해당 정보를 서버에게 가져온다...
 	if (SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE, cid)) {
-		members = smartWorks.getGroupById(communityId).getMembers();
+		Group group = smartWorks.getGroupById(communityId);
+		members = group.getMembers();
+		leader = group.getLeader();
 	} else if (SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE, cid)) {
 		Department department = smartWorks.getDepartmentById(communityId);
 		members = department.getMembers();
 		children = department.getChildren();
+		leader = department.getHead();
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -46,7 +50,7 @@
 	<!--            아래의 js_callapsible 클래스를 찾아 toggle 한다 -->
 	<li>
 		<%
-		if(SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE, cid)){
+		if(SmartUtil.isBlankObject(children)){
 		%>
 			<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.group_members" /></a>
 		<%}else{ %>
@@ -74,33 +78,61 @@
 <!-- 커뮤너티멤버 와 검색박스가 있는 헤더 // -->
 
 <!--  커뮤너티멤버를 찾을수 있는 트리 화면  -->
-<div class='nav_sub_list js_collapsible js_nav_com_members'>
+<div class='nav_sub_list pt10 js_collapsible js_nav_com_members'>
 	<%
-	if (children != null) {
+	if (SmartUtil.isBlankObject(children) && !SmartUtil.isBlankObject(members)) {
 	%>
-		<!-- 내부 메뉴 -->
-		<div id='community_departments'>
+		<div id="community_group">
 			<ul>
+				<li>
+					<!-- 리더 -->
+					<a href="">
+					    <span class="icon_pe"><span class="leader"></span><img class="profile_size_s" src="<%=leader.getMinPicture()%>"></span>
+					    <span class="nav_sub_area"><fmt:message key="group.role.leader"/> <%=leader.getLongName() %></span>
+					</a>
+				</li>
+			</ul>
+			<div id="community_members">
 				<%
-				String contextId = null;
-				for (DepartmentInfo department : children) {
-					contextId = ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE + department.getId();
-				%>
-					<li>
-						<a href="<%=department.getSpaceController() %>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>">
-							<span class="icon_pe"><img src="<%=department.getMinPicture()%>" class="profile_size_s"></span> 
-							<span class="nav_sub_area"><%=department.getName()%></span>
+				int i=0;
+				boolean isLeaderCounted = false;
+				for(; i<members.length; i++){
+					UserInfo member = members[i];
+					if(member.getId().equals(leader.getId())){
+						isLeaderCounted = true;
+						continue;
+					}
+					if(i==(2+((isLeaderCounted)?1:0))){
+						break;
+					}else{
+					%>
+						<a title="<%=member.getLongName() %>" href="">
+							<span class="icon_pe">
+						    	<img class="profile_size_s" title="" src="<%=member.getMinPicture()%>">
+						    </span>
 						</a>
-					</li>
 				<%
+					}
 				}
 				%>
-			</ul>
+			</div>
+			<%
+			if(i+((isLeaderCounted)?1:0)<members.length){
+				int remains = members.length-i;
+			%>
+				<div class="fr">
+					<fmt:message key="content.sentence.with_other_users">
+						<fmt:param><%=remains %></fmt:param>							
+					</fmt:message>
+				</div>
+			<%
+			}
+			%>
+					
 		</div>
-		<!--내부메뉴//-->
+		<!-- 구성원, 하위부서 //-->
 	<%
-	}
-	if (members != null) {
+	}else if (members != null) {
 	%>
 		<!-- 내부 메뉴 -->
 		<div id='community_members'>
