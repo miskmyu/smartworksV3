@@ -1,3 +1,6 @@
+<%@page import="net.smartworks.server.engine.process.approval.model.AprApprovalDef"%>
+<%@page import="net.smartworks.model.approval.ApprovalLine"%>
+<%@page import="net.smartworks.server.engine.process.approval.model.AprApprovalLineDefCond"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebServiceParameter"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebService"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebServiceCond"%>
@@ -227,6 +230,28 @@
 		StringBuffer strBuf = new StringBuffer("<Result status=\"OK\">");
 		if (lineDefs != null) {
 			strBuf.append("<approvalLineDefs size='").append(lineDefs.length).append("'>");
+			
+			for (int i = 0; i < ApprovalLine.SYSTEM_APPROVAL_LINES.length; i++) {
+				ApprovalLine aprLine = ApprovalLine.SYSTEM_APPROVAL_LINES[i];
+				
+				AprApprovalLineDef aprLineDef = new AprApprovalLineDef();
+				aprLineDef.setObjId(aprLine.getId());
+				//aprLineDef.setCompanyId(companyId);
+				aprLineDef.setAprLineName(aprLine.getName());
+				aprLineDef.setAprDescription(aprLine.getDesc());
+				aprLineDef.setAprLevel(aprLine.getApprovalLevel() + "");
+				AprApprovalDef[] approvalDefs = new AprApprovalDef[aprLine.getApprovals().length];
+				for (int j = 0; j < aprLine.getApprovals().length; j++) {
+					AprApprovalDef approvalDef = new AprApprovalDef();
+					approvalDef.setType(aprLine.getApprovals()[j].getApproverType() + "");
+					approvalDef.setName(aprLine.getApprovals()[j].getName());
+					approvalDef.setDueDate(aprLine.getApprovals()[j].getDueDate());
+				}
+				aprLineDef.setApprovalDefs(approvalDefs);
+
+				strBuf.append(toXmlWithOutHeader(aprLineDef.toString()));
+			}
+			
 			for (int j = 0; j < lineDefs.length; j++) {
 				strBuf.append(toXmlWithOutHeader(lineDefs[j].toString()));
 			}
@@ -1095,7 +1120,16 @@
 		} else if(method.equals("getWorkCalendar")) {
 			throw new Exception("method : getWorkCalendar - Not Include From V2");
 		} else if(method.equals("getApprovalLineDefs")) {
-			throw new Exception("method : getApprovalLineDefs - Not Include From V2");
+			
+			String companyId = request.getParameter("companyId");		
+				
+			AprApprovalLineDefCond lineDefCond = new AprApprovalLineDefCond();
+			lineDefCond.setCompanyId(companyId);
+			
+			AprApprovalLineDef[] lineDefs = SwManagerFactory.getInstance().getAprManager().getApprovalLineDefs(userId, lineDefCond, "all");
+			
+			buffer.append(convertApprovalLineDef(lineDefs));
+
 		} else if(method.equals("retrieveRootCategory")) {
 			CtgCategory category = SwManagerFactory.getInstance().getCtgManager().getCategory(userId, CtgCategory.CATEGORY_ROOT_NAME_PKG, IManager.LEVEL_LITE);
 			buffer.append(convert(category));
