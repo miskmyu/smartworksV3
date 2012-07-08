@@ -1742,7 +1742,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedAttributeValue("tskRefType", TskTask.TASKREFTYPE_BOARD);
 			}
 
-			if (CommonUtil.isEmpty((String)requestBody.get("makeNewNotClone")))
+			if (!CommonUtil.isEmpty((String)requestBody.get("makeNewNotClone")))
 				obj.setExtendedAttributeValue("makeNewNotClone", (String)requestBody.get("makeNewNotClone"));
 			
 			instanceId = getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
