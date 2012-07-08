@@ -224,13 +224,13 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 			TskTask[] tasks = getTskManager().getTasks(user, cond, IManager.LEVEL_ALL);
 			TskTask task = null;
 			
-			String makeNewNotClon = obj.getExtendedAttributeValue("makeNewNotClon");
+			String makeNewNotClone = obj.getExtendedAttributeValue("makeNewNotClone");
 			
-			boolean isNewTask = CommonUtil.toBoolean(makeNewNotClon);
+			boolean isNewTask = CommonUtil.toBoolean(makeNewNotClone);
 			
 			if ((tasks != null && tasks.length != 0) && !isNewTask) {
 				task = (TskTask)tasks[0].clone();
-				if (task.getIsStartActivity().equalsIgnoreCase("true"))
+				if (task.getIsStartActivity() != null && task.getIsStartActivity().equalsIgnoreCase("true"))
 					task.setIsStartActivity(null);
 				
 				task.setObjId(null);

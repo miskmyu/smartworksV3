@@ -22,7 +22,10 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String content;
 	private String comments;
 	private String approvalId="";
+	private String approvalTaskId="";
 	private String forwardId="";
+	private boolean isApprovalWork;
+	
 	public String getName() {
 		return name;
 	}
@@ -59,7 +62,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	public void setPerformer(UserInfo performer) {
 		this.performer = performer;
 	}
-
+	public boolean isApprovalWork() {
+		return isApprovalWork;
+	}
+	public void setApprovalWork(boolean isApprovalWork) {
+		this.isApprovalWork = isApprovalWork;
+	}
 	public String getFormId() {
 		return formId;
 	}
@@ -118,9 +126,10 @@ public class TaskInstanceInfo extends InstanceInfo {
 		
 	}
 	
-	public boolean isRunningApprovalForMe(String userId, String taskInstId){
+	public boolean isRunningApprovalForMe(String userId, String taskInstId, String processTaskInstId){
 		if(SmartUtil.isBlankObject(taskInstId)) taskInstId = this.getId();
-		if(	taskInstId.equals(this.getId()) 
+		if(	taskInstId.equals(this.getId())
+			&& (SmartUtil.isBlankObject(processTaskInstId) || (!SmartUtil.isBlankObject(approvalTaskId) && approvalTaskId.equals(processTaskInstId)))
 			&& this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
@@ -153,5 +162,11 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setForwardId(String forwardId) {
 		this.forwardId = forwardId;
+	}
+	public String getApprovalTaskId() {
+		return approvalTaskId;
+	}
+	public void setApprovalTaskId(String approvalTaskId) {
+		this.approvalTaskId = approvalTaskId;
 	}
 }

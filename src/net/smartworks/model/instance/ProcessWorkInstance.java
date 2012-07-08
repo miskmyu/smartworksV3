@@ -1,8 +1,10 @@
 package net.smartworks.model.instance;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class ProcessWorkInstance extends WorkInstance {
 
