@@ -123,16 +123,10 @@
 				<div class="fr">
 					<div class="fr">
 						<%
-						if(approvalTask == null && forwardedTask == null){
+						if(forwardedTask == null){
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
-							<%
-							if(instance.getOwner().getId().equals(cUser.getId())){
-							%>
-								<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
-							<%
-							}
-							%>
+							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
 						<%
 						}
 						%>
@@ -435,7 +429,6 @@
 				error : function(xhr, ajaxOptions, thrownError){					
 				}
 			});
-		}else{
 		}
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');
@@ -456,18 +449,25 @@
 				
 			}
 		});
+		pworkSpace.attr("taskInstId", instId);
+		pworkSpace.attr("formMode", formMode);
+		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
+			return;
+		
 		if(formMode==="edit" && !isReturned){
-			pworkSpace.find('.js_btn_complete').show();
+			pworkSpace.find('.js_btn_complete').show().siblings().hide();
 			pworkSpace.find('.js_btn_return').show();
 			pworkSpace.find('.js_btn_reassign').show();
 			pworkSpace.find('.js_btn_temp_save').show();
+			if(isApprovalWork == 'true' || isReturned){
+				pworkSpace.find('.js_toggle_approval_btn').hide();				
+			}else{
+				pworkSpace.find('.js_toggle_approval_btn').show();				
+			}
 		}else{
-			pworkSpace.find('.js_btn_complete').hide();
-			pworkSpace.find('.js_btn_return').hide();
-			pworkSpace.find('.js_btn_reassign').hide();
-			pworkSpace.find('.js_btn_temp_save').hide();			
+			pworkSpace.find('.js_btn_complete').hide().siblings().hide();
+			pworkSpace.find('.js_toggle_approval_btn').hide();
 		}
-		pworkSpace.attr("taskInstId", instId);
 	}
 	
 	var getTasksWidth = function(tasks, arrows){

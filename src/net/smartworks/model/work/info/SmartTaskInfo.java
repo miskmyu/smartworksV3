@@ -9,6 +9,7 @@ public class SmartTaskInfo extends BaseObject{
 	private boolean startTask;
 	private UserInfo assignedUser;
 	private String assigningName;
+	private String approvalLineId;
 
 	public boolean isStartTask() {
 		return startTask;
@@ -35,6 +36,12 @@ public class SmartTaskInfo extends BaseObject{
 		this.assigningName = assigningName;
 	}
 
+	public String getApprovalLineId() {
+		return approvalLineId;
+	}
+	public void setApprovalLineId(String approvalLineId) {
+		this.approvalLineId = approvalLineId;
+	}
 	public SmartTaskInfo(){
 		super();
 	}

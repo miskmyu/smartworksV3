@@ -167,7 +167,32 @@ $(function() {
 				workId : workId,
 				onSuccess : function(){
 					$('#form_works').parent().show();
-					smartPop.closeProgress();					
+					var startPwork = formContent.parents('.js_start_pwork_page');
+					console.log('startPwork=', startPwork);
+					if(!isEmpty(startPwork)){
+						var approvalLineId = startPwork.attr("approvalLineId");
+						var formTaskApproval = formContent.siblings('.js_form_task_approval');
+						if(!isEmpty(approvalLineId)){
+							$.ajax({
+								url : 'append_task_approval.sw',
+								data : { 
+									approvalLineId : approvalLineId
+								},
+								success : function(data, status, jqXHR) {
+									formTaskApproval.html(data).show();
+									smartPop.closeProgress();																		
+								},
+								error : function(xhr, ajaxOptions, thrownError){					
+									smartPop.closeProgress();																		
+								}
+							});
+							
+						}else{
+							smartPop.closeProgress();																		
+						}
+					}else{
+						smartPop.closeProgress();											
+					}					
 				},
 				onError : function(){
 					smartPop.closeProgress();					
@@ -1304,8 +1329,20 @@ $(function() {
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
-				workSpacePage.find('.js_btn_save').show().siblings().hide();						
-				workSpacePage.find('.js_btn_modify').show();
+				if(isPworkSpace){
+					var formMode = workSpacePage.attr("formMode");
+					if(formMode==="edit"){
+						workSpacePage.find('.js_btn_complete').show().siblings().hide();
+						workSpacePage.find('.js_btn_return').show();
+						workSpacePage.find('.js_btn_reassign').show();
+						workSpacePage.find('.js_btn_temp_save').show();
+					}else{
+						workSpacePage.find('.js_btn_complete').hide().siblings().hide();
+					}					
+				}else{
+					workSpacePage.find('.js_btn_save').show().siblings().hide();						
+					workSpacePage.find('.js_btn_modify').show();					
+				}
 			}
 			return false;
 		}
@@ -1336,8 +1373,15 @@ $(function() {
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
-				workSpacePage.find('.js_btn_save').show().siblings().hide();						
-				workSpacePage.find('.js_btn_modify').show();						
+				if(isPworkSpace){
+					workSpacePage.find('.js_btn_complete').show().siblings().hide();
+					workSpacePage.find('.js_btn_return').show();
+					workSpacePage.find('.js_btn_reassign').show();
+					workSpacePage.find('.js_btn_temp_save').show();
+				}else{
+					workSpacePage.find('.js_btn_save').show().siblings().hide();						
+					workSpacePage.find('.js_btn_modify').show();					
+				}
 			}
 			return false;
 		}

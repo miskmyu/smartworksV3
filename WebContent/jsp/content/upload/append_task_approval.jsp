@@ -27,6 +27,7 @@
 
 	String taskInstId = request.getParameter("taskInstId");
 	String processTaskInstId = request.getParameter("processTaskInstId");
+	String approvalLineId = request.getParameter("approvalLineId");
 
 	TaskInstanceInfo approvalTask = null;
 	String subject = "";
@@ -36,7 +37,7 @@
 	String workInstId = null;
 	TaskInstanceInfo[] tasks = null;
 	WorkInstance workInstance = (WorkInstance)session.getAttribute("workInstance");
-	if (workInstance != null) {
+	if (workInstance != null && SmartUtil.isBlankObject(approvalLineId)) {
 		workInstId = workInstance.getId();
 		tasks = workInstance.getTasks();
 		if(!SmartUtil.isBlankObject(tasks)){
@@ -74,13 +75,15 @@
 	String drafterId = "";
 	String drafterName = "";
 	String draftDate = "";
-	if(!SmartUtil.isBlankObject(approvalInstId)){
+	if(!SmartUtil.isBlankObject(approvalInstId) && SmartUtil.isBlankObject(approvalLineId)){
 		approvalLineInst = smartWorks.getApprovalLineInstById(approvalInstId);
 		drafterId = workInstance.getOwner().getId();
 		drafterName = workInstance.getOwner().getLongName();
 		draftDate = workInstance.getCreatedDate().toLocalDateTimeSimpleString();
+	}else if(!SmartUtil.isBlankObject(approvalLineId)){
+		approvalLine = smartWorks.getApprovalLineById(approvalLineId);
 	}else{
-		approvalLine = smartWorks.getApprovalLineById(null);
+		approvalLine = smartWorks.getApprovalLineById(null);		
 	}
 
 %>
@@ -97,7 +100,7 @@
 			if(!SmartUtil.isBlankObject(approvalLine)){
 			%>
 				<div class="" style="height: 20px">
-					<a href="" class="js_pop_approval_line"><div class="fr icon_approval"></div></a>
+					<%if(SmartUtil.isBlankObject(approvalLineId)){ %><a href="" class="js_pop_approval_line"><div class="fr icon_approval"></div></a><%} %>
 	                <div class="fr mr5 js_approval_line_name"><%=approvalLine.getName() %></div>
 				</div>
 			<%
