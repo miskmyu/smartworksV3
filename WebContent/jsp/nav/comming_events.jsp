@@ -38,7 +38,11 @@
  			String target = "iwork_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + event.getId() + "&wid=" + communityId + "&workId=" + SmartWork.ID_EVENT_MANAGEMENT;
  	%>
       <li>
-       <a href="<%=target %>" class="js_content"><span class="t_date fr"><%=event.getStart().toLocalString() %></span><img class="profile_size_s" src="<%=event.getOwner().getMinPicture()%>"><%=event.getSubject() %></a>
+       <a href="<%=target %>" class="js_content">
+	       <span class="t_date"><%=event.getStart().toLocalString() %></span>
+	       <%-- <img class="profile_size_s" src="<%=event.getOwner().getMinPicture()%>"> --%>
+	       <div><%=event.getSubject() %></div>
+       </a>
       </li>	
  	
  	<%

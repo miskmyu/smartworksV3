@@ -146,8 +146,10 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 
 /* Nav List*/
 .nav_list {width:226px; border-bottom:1px solid #7a7a7a}
+.nav_list a:link, .nav_list a:visited {color:#dddddd !important}
 .nav_list.top { border-top:1px solid #7a7a7a}
-.nav_list.recent .profile_size_s {margin: 0 2px 0 0}
+.nav_list.recent .profile_size_s {float:left}
+.nav_list.recent .profile_size_s + div {margin:0 0 0 25px}
 .nav_current {color:#fcab4c; text-decoration:underline}
 .nav_tit {background: url("../../images/naviti_bg.jpg") repeat-x scroll 0 0; width:206px; height:38px; padding:7px 10px 10px; color:#FFF}
 .nav_sub_list {border:2px solid #363636; border-top:none; padding-bottom: 10px; background-color:#6b6b6b}
@@ -155,17 +157,17 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_tit_mail, .nav_tit_default {background: url("../../images/naviti_mail_bg.jpg") repeat-x scroll 0 0; width:206px; padding:4px 10px 4px; height:17px}
 .nav_tit_chat {background-color:#363636; border-top:1px solid #969696; width:205px; padding:10px}
 .nav_sub_list.coummi {min-height: 200px}
-.nav_list.recent {padding-bottom:10px}
-.nav_list.recent a:link, .nav_list.recent a:visited {color:#dddddd !important}
-.nav_list.recent .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
-.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works, .nav_list.recent .icon_all_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px}
-.nav_list.recent .t_date { margin-right:3px}
+.nav_list.recent, .nav_list.comming {padding-bottom:10px}
+.nav_list.recent .nav_tit, .nav_list.comming .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
+.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px}
 .nav_list.recent ul { line-height:16px}
 .nav_list.recent .works li { padding:7px 10px 0}
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
 .nav_list.recent .recent_notice td {border-bottom:none}
-.recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-.recent li:hover { display:block; background-color:#555555}
+.nav_list .t_date {color: #C9C9C9}
+.nav_list.comming .t_date {margin-right: 3px}
+.recent li, .comming li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+.recent li:hover, .comming li:hover { display:block; background-color:#555555}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
