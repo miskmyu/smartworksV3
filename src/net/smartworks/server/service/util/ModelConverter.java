@@ -3468,6 +3468,8 @@ public class ModelConverter {
 		Approval[] approvals = null;
 		if(aprApprovalLine != null) {
 			isApprovalWork = true;
+			if (aprApprovalLine.getStatus() != null && aprApprovalLine.getStatus().equalsIgnoreCase("24"))
+				isApprovalWork = false;
 			AprApproval[] aprApprovals = aprApprovalLine.getApprovals();
 			List<Approval> approvalList = new ArrayList<Approval>();
 			if(!CommonUtil.isEmpty(aprApprovals)) {
