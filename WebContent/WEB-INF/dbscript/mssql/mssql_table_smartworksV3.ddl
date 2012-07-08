@@ -884,6 +884,8 @@ CREATE TABLE tsktask (
     isStartActivity varchar(10),
     tskFromRefType varchar(50),
     tskFromRefId varchar(100),
+    tskApprovalId varchar(100),
+    tskForwardId varchar(100),
     tskWorkspaceId varchar(100),
     tskWorkspaceType varchar(50),
     tskAccessLevel varchar(50),

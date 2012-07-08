@@ -116,6 +116,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 					newTask.setFromRefType(obj.getFromRefType());
 					newTask.setFromRefId(obj.getFromRefId());
+					newTask.setApprovalId(apprLineId);
 					
 					newTask.setExtendedPropertyValue("taskRef", taskRef);
 //					newTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
@@ -446,7 +447,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setAssignee(approver);
 			apprTask.setAssignmentDate(new LocalDate());
 			apprTask.setForm(preApprTask != null ? preApprTask.getForm() : obj.getForm());
-		
+			apprTask.setApprovalId(apprLine.getObjId());
+			
 			apprTask.setWorkSpaceId(approver);
 			apprTask.setWorkSpaceType("4");
 			apprTask.setAccessLevel("3");
@@ -596,6 +598,9 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		TskTask refTask = null;
 		Set refUserSet = new HashSet();
 		String refUser = null;
+
+		String forwordId = "fwd_" + CommonUtil.newId();
+		
 		for (int i = 0; i < refUsers.length; i++) {
 			refUser = refUsers[i];
 			if (refUserSet.contains(refUser))
@@ -622,11 +627,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask.setExtendedPropertyValue("workContents", workContents);
 			//refTask.setExtendedPropertyValue("projectName", projectName);
 			refTask.setExtendedPropertyValue("isPublic", isPublic);
+			refTask.setExtendedPropertyValue("forwordId", forwordId);
 			
 			//TODO 참조 업무의 workspaceid, accesslevel 값정의
-			refTask.setWorkSpaceId(refUser);
-			refTask.setWorkSpaceType("4");
-			refTask.setAccessLevel("3");
+			refTask.setWorkSpaceId(obj.getWorkSpaceId());
+			refTask.setWorkSpaceType(obj.getWorkSpaceType());
+			refTask.setAccessLevel(obj.getAccessLevel());
+			refTask.setAccessValue(obj.getAccessValue());
 			
 			this.getTskManager().setTask(user, refTask, null);
 			

@@ -57,6 +57,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 		, task.isStartActivity  ");
 		queryBuffer.append(" 		, task.tskWorkSpaceId  ");
 		queryBuffer.append(" 		, task.tskDef  ");
+		queryBuffer.append(" 		, task.tskApprovalId  ");
+		queryBuffer.append(" 		, task.tskForwardId  ");
 		queryBuffer.append(" 		, form.packageId  ");
 		queryBuffer.append(" 		, pkg.name as packageName  ");
 		queryBuffer.append(" 		, pkg.status as packageStatus  ");
@@ -229,6 +231,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setIsStartActivity((String)fields[j++]); 
 				obj.setTskWorkSpaceId((String)fields[j++]);     
 				obj.setTskDef((String)fields[j++]);     
+				obj.setTskApprovalId((String)fields[j++]);     
+				obj.setTskForwardId((String)fields[j++]);     
 				obj.setPackageId((String)fields[j++]);     
 				obj.setPackageName((String)fields[j++]);   
 				obj.setPackageStatus((String)fields[j++]);   
@@ -315,6 +319,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		, task.tskAccessLevel ");
 		queryBuffer.append("		, task.tskAccessValue ");
 		queryBuffer.append("		, task.tskDef ");
+		queryBuffer.append("		, task.tskApprovalId ");
+		queryBuffer.append("		, task.tskForwardId ");
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
 		queryBuffer.append("		, pkg.status as packageStatus ");
@@ -568,6 +574,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setTskAccessLevel((String)fields[j++]);
 				obj.setTskAccessValue((String)fields[j++]);
 				obj.setTskDef((String)fields[j++]);
+				obj.setTskApprovalId((String)fields[j++]);
+				obj.setTskForwardId((String)fields[j++]);
 				obj.setPackageId((String)fields[j++]);
 				obj.setPackageName((String)fields[j++]);
 				obj.setPackageStatus((String)fields[j++]);
@@ -847,6 +855,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setTskAccessLevel((String)fields[j++]);
 				obj.setTskAccessValue((String)fields[j++]);
 				obj.setTskDef((String)fields[j++]);
+				obj.setTskApprovalId((String)fields[j++]);
+				obj.setTskForwardId((String)fields[j++]);
 				obj.setPackageId((String)fields[j++]);
 				obj.setPackageName((String)fields[j++]);
 				obj.setPackageStatus((String)fields[j++]);
