@@ -95,6 +95,10 @@ public interface IInstanceService {
 	
 	public void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String setFileInstance(HttpServletRequest request) throws Exception;
@@ -150,5 +154,9 @@ public interface IInstanceService {
 	public void commentOnTaskApproval(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
+	
+	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception;
+	
+	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception;
 	
 }

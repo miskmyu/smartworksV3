@@ -146,7 +146,10 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 
 /* Nav List*/
 .nav_list {width:226px; border-bottom:1px solid #7a7a7a}
+.nav_list a:link, .nav_list a:visited {color:#dddddd !important}
 .nav_list.top { border-top:1px solid #7a7a7a}
+.nav_list.recent .profile_size_s {float:left}
+.nav_list.recent .profile_size_s + div {margin:0 0 0 25px}
 .nav_current {color:#fcab4c; text-decoration:underline}
 .nav_tit {background: url("../../images/naviti_bg.jpg") repeat-x scroll 0 0; width:206px; height:38px; padding:7px 10px 10px; color:#FFF}
 .nav_sub_list {border:2px solid #363636; border-top:none; padding-bottom: 10px; background-color:#6b6b6b}
@@ -154,17 +157,17 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_tit_mail, .nav_tit_default {background: url("../../images/naviti_mail_bg.jpg") repeat-x scroll 0 0; width:206px; padding:4px 10px 4px; height:17px}
 .nav_tit_chat {background-color:#363636; border-top:1px solid #969696; width:205px; padding:10px}
 .nav_sub_list.coummi {min-height: 200px}
-.nav_list.recent {padding-bottom:10px}
-.nav_list.recent a:link, .nav_list.recent a:visited {color:#dddddd !important}
-.nav_list.recent .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
-.nav_list.recent .icon_event_works, .nav_list.recent .icon_board_works, .nav_list.recent .icon_all_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px}
-.nav_list.recent .t_date { margin-right:3px}
+.nav_list.recent, .nav_list.comming {padding-bottom:10px}
+.nav_list.recent .nav_tit, .nav_list.comming .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
+.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px}
 .nav_list.recent ul { line-height:16px}
 .nav_list.recent .works li { padding:7px 10px 0}
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
 .nav_list.recent .recent_notice td {border-bottom:none}
-.recent li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-.recent li:hover { display:block; background-color:#555555}
+.nav_list .t_date {color: #C9C9C9}
+.nav_list.comming .t_date {float:left; margin-right: 5px}
+.recent li, .comming li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+.recent li:hover, .comming li:hover { display:block; background-color:#555555}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat left top transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
@@ -191,15 +194,17 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
-.icon_user_space {background: url("../../images/body_icon.png") no-repeat -551px -579px; padding:0 0 0 21px; float: left; height:18px}
-.icon_all_works {background: url("../../images/body_icon.png") no-repeat -551px -453px; padding:0 0 0 21px; float: left; height:18px}
-.icon_image_works {background: url("../../images/body_icon.png") no-repeat -551px -478px; padding:0 0 0 21px; float: left; height:18px}
-.icon_file_works {background: url("../../images/body_icon.png") no-repeat -551px -503px; padding:0 0 0 21px; float: left; height:18px}
-.icon_event_works {background: url("../../images/body_icon.png") no-repeat -551px -529px; padding:0 0 0 21px; float: left; height:19px}
-.icon_memo_works {background: url("../../images/body_icon.png") no-repeat -551px -556px; padding:0 0 0 21px; float: left; height:18px}
-.icon_board_works {background: url("../../images/body_icon.png") no-repeat -551px -605px; padding:0 0 0 21px; float: left; height:18px}
-.icon_forum_works {background: url("../../images/body_icon.png") no-repeat -551px -627px; padding:0 0 0 21px; float: left; height:18px}
-.icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -551px -650px; padding:0 0 0 21px; float: left; height:18px}
+.icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 21px; float: left; height:18px}
+.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -784px; padding:0 0 0 21px; float: left; height:18px}
+.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -812px; padding:0 0 0 21px; float: left; height:18px}
+.icon_all_works {background: url("../../images/body_icon.png") no-repeat -550px -453px; padding:0 0 0 21px; float: left; height:18px}
+.icon_image_works {background: url("../../images/body_icon.png") no-repeat -550px -478px; padding:0 0 0 21px; float: left; height:18px}
+.icon_file_works {background: url("../../images/body_icon.png") no-repeat -550px -503px; padding:0 0 0 21px; float: left; height:18px}
+.icon_event_works {background: url("../../images/body_icon.png") no-repeat -550px -529px; padding:0 0 0 21px; float: left; height:19px}
+.icon_memo_works {background: url("../../images/body_icon.png") no-repeat -550px -556px; padding:0 0 0 21px; float: left; height:18px}
+.icon_board_works {background: url("../../images/body_icon.png") no-repeat -550px -605px; padding:0 0 0 21px; float: left; height:18px}
+.icon_forum_works {background: url("../../images/body_icon.png") no-repeat -550px -627px; padding:0 0 0 21px; float: left; height:18px}
+.icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 21px; float: left; height:18px}
 
 /* Nav Mail Btn*/
 .icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
@@ -294,31 +299,41 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
-li.sub_instance_list > div.det_title {}
-li.sub_instance_list > div.det_title:hover {background-color:#fff7eb; cursor:pointer}
+.det_title {overflow:hidden}
+li.sub_instance_list > .det_title {}
+li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.comment_list {}
 li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
-.arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
-.arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
+.arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
+.arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 
 /* 나의 커뮤니티, 나의 업무, 메일, 커뮤너티멤버 Hover */
 /* #my_works:업무 , #m_setting:나의공간, #my_communities:커뮤니티, #my_mail:메일, #all_works:스마트빌더-업무전체 */
 
-#all_works li, #my_works li, #my_communities li, #my_mail li, #m_setting li {position:relative; line-height:21px}
+#all_works li, #my_works li, #my_communities li, #my_mail li, #m_setting li, #community_departments li, #community_group li 
+{position:relative; line-height:21px}
 
-#all_works li a, #my_works li a, #my_communities li a, #my_mail li a {padding:1px 0 1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
-#all_works li a:hover, #my_works li a:hover, #my_communities li a:hover, #my_mail li a:hover {display:block; background-color:#4e4e4e}
+#all_works li a, #my_works li a, #my_communities li a, #my_mail li a, #community_departments li a, #community_group li a 
+{padding:1px 0 1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+#all_works li a:hover, #my_works li a:hover, #my_communities li a:hover, #my_mail li a:hover, #community_departments li a:hover, #community_group li a:hover 
+{display:block; background-color:#4e4e4e}
 
 #m_setting li {padding:1px 0 1px 20px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 #m_setting li:hover {display:block; background-color:#6b6b6b}
 
-#all_works .menu_2dep, #my_works .menu_2dep {padding:2px 0 2px 14px}
-#all_works .menu_2dep div, #my_works .menu_2dep div {padding:2px 0 2px 14px}
+#all_works .menu_2dep, #my_works .menu_2dep, #community_departments .menu_2dep {padding:2px 0 2px 14px}
+#all_works .menu_2dep div, #my_works .menu_2dep div, #community_departments .menu_2dep div {padding:2px 0 2px 14px}
 
-#all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #my_mail .nav_sub_area, #m_setting .nav_sub_area {display: inline; float: left; position: relative; width: 180px}
+#all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #my_mail .nav_sub_area, #m_setting .nav_sub_area, #community_departments .nav_sub_area, #community_group .nav_sub_area
+{display: inline; float: left; position: relative; width: 180px}
 
-#community_members {display: inline-block; padding: 4px 1px; margin-bottom: -10px}
+#community_members {display: inline-block; padding: 4px 10px}
 #community_members .icon_pe {padding: 1px}
+
+#community_departments .leader, #community_group .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+#nav .more a {background: url("../../images/nav_more.png") no-repeat 100% 7px; float: right; font-size: 11px; height: 12px; width: 51px}
+#nav .more a:hover {background-position: 100% -9px; color: #fab6b6 !important}
+
 
 /*Tab buttons */
 .tab_buttons {margin:0 2px 8px 0; height:20px; font-family:'돋움',Dotum; font-size: 11px; color:#c5c5c5; padding-top:2px}
@@ -527,13 +542,15 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
 /* Noice */
-.noti_pic {float:left; margin: 0 5px 0 0}
+.noti_pic {float:left; margin: 0 8px 0 0}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
 .noti_in { margin-left:33px; line-height: 14px}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
 .noti_in_s { margin-left:25px; line-height: 16px}
-.noti_in_m {word-wrap: break-word; text-align:left; padding:2px 0 0 58px; line-height:16px} /* M사이즈 등록글 사용시*/
-.noti_in_m + div {line-height: 19px}
+.noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* M사이즈 등록글 사용시*/
+.noti_in_m + div {line-height: 19px; padding:0 0 0 58px}
+.js_content_list .noti_in_m {padding:0 0 0 68px} /* 처리할 업무 List */
+
 .recent_notice { border-bottom:none !important}
 .recent_notice .end td {border-bottom:none !important}
 
@@ -597,9 +614,8 @@ margin: 0 auto}
 }
 			
 /* Work ING */
-#work_ing {margin:0 15px}
+#work_ing {margin:0 20px}
 #work_ing li.end { border:none} 
-.working_br td {padding:4px 0;border-bottom:1px solid #cfcfcf}
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
 #work_ing .titl_section {height:21px; padding-top:8px}
 #work_ing .title {font-size:12px; color:#bbbaba}
@@ -608,7 +624,7 @@ margin: 0 auto}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
 #work_ing .solid_line {margin:2px 0 5px}
-#work_ing .t_woname {font-size:14px; text-decoration:underline}
+#work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}

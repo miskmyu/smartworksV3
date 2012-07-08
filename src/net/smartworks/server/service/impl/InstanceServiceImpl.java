@@ -503,11 +503,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 			
 			TaskWorkCond totalTaskCond = new TaskWorkCond();
-			totalTaskCond.setTskStartOrAssigned(user.getId());
+			totalTaskCond.setTskStartOnly(user.getId());
 			totalTaskCond.setLastInstanceDate(new LocalDate());
 			totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
+			long runningTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
 			
 			TaskWorkCond assignedTaskCond = new TaskWorkCond();
 
@@ -517,7 +517,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), assignedTaskCond);
 			
 			RunningCounts runningCounts = new RunningCounts();
-			runningCounts.setTotal((int)totalTaskSize);
+			runningCounts.setRunningOnly((int)runningTaskSize);
 			runningCounts.setAssignedOnly((int)assignedTaskSize);
 			return runningCounts;
 		}catch (Exception e){
@@ -1742,6 +1742,9 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedAttributeValue("tskRefType", TskTask.TASKREFTYPE_BOARD);
 			}
 
+			if (!CommonUtil.isEmpty((String)requestBody.get("makeNewNotClone")))
+				obj.setExtendedAttributeValue("makeNewNotClone", (String)requestBody.get("makeNewNotClone"));
+			
 			instanceId = getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
 
 			TskTaskCond tskCond = new TskTaskCond();
@@ -2471,6 +2474,8 @@ public class InstanceServiceImpl implements IInstanceService {
 							txtForwardForwardee = "";
 							for(int i=0; i < forwardee.subList(0, forwardee.size()).size(); i++) {
 								Map<String, String> user = forwardee.get(i);
+								if (user.get("id").equalsIgnoreCase(userId))
+									continue;
 								txtForwardForwardee += user.get("id") + symbol;
 							}
 						}
@@ -7232,117 +7237,130 @@ public class InstanceServiceImpl implements IInstanceService {
 		String userId = SmartUtil.getCurrentUser().getId();
 
 		Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
+		Map<String, Object> frmSmartForm = (Map<String, Object>)requestBody.get("frmSmartForm");
 
 		String workId = (String)requestBody.get("workId");
 		String instanceId = (String)requestBody.get("instanceId");
-		//제목
-		String txtForwardSubject = (String)frmTaskForwardMap.get("txtForwardSubject");
-		//설명
-		String txtForwardComments = (String)frmTaskForwardMap.get("txtForwardComments");
 		
-		Map<String, Object> txtForwardForwardeeMap = (Map<String, Object>)frmTaskForwardMap.get("txtForwardForwardee");
-		
-		ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
-		
-		String[] refUsers = null;
-		if(!CommonUtil.isEmpty(userArray)) {
-			refUsers = new String[userArray.size()];
-			for (int i = 0; i < userArray.size(); i++) {
-				Map<String, String> userInfoMap = userArray.get(i);
-				refUsers[i] = userInfoMap.get("id");
-			}
+		if (frmSmartForm != null) {
+			requestBody.put("makeNewNotClone", "true");
+			setInformationWorkInstance(requestBody, request);
 		} else {
-			return;
-		}
-		
-		//레코드를 조회한다
-		SwfFormCond formCond = new SwfFormCond();
-		formCond.setPackageId(workId);
-		SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
-		if (forms == null || forms.length > 1)
-			throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
-		
-		String formId = forms[0].getId();
-		
-		SwdDomainCond domainCond = new SwdDomainCond();
-		domainCond.setFormId(formId);
-		SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
-		
-		if (domain == null)
-			throw new Exception("Not Exist Domain! - formId : " + formId);
-		
-		SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
-		if (record == null)
-			throw new Exception("Not Exist Record! - formId : " + formId + ", recordId : " + instanceId);
-		
-		//정보관리 작성시에 생성된 태스크 및 업무인스턴스(prcprcinst)를 조회 한다.
-		String recordId = record.getRecordId();
-		PrcProcessInstCond prcInstCond = new PrcProcessInstCond(); 
-		prcInstCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
-		
-		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
-		prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
-		prcInst.setTitle(txtForwardSubject);
-		getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
-		
-		String prcInstId = prcInst.getObjId();
 
-		TskTaskCond tskCond = new TskTaskCond();
-		tskCond.setProcessInstId(prcInstId);
-		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
-		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
-		
-		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
-		if (tasks == null || tasks.length == 0)
-			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
-		
-		//참조자가 존재한다면 참조타입의 태스크를 생성
-		
-		TskTask refTask = null;
-		Set refUserSet = new HashSet();
-		String refUser = null;
-		for (int i = 0; i < refUsers.length; i++) {
-			refUser = refUsers[i];
-			if (refUserSet.contains(refUser))
-				continue;
+			//제목
+			String txtForwardSubject = (String)frmTaskForwardMap.get("txtForwardSubject");
+			//설명
+			String txtForwardComments = (String)frmTaskForwardMap.get("txtForwardComments");
 			
-			refTask = new TskTask();
-			refTask.setProcessInstId(prcInstId);
-			refTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "reference"));
-			//refTask.setPriority(priority);
-//					refTask.setTitle(obj.getTitle());
-			refTask.setTitle(txtForwardSubject);
-			//refTask.setName(obj.getName());
-			refTask.setName(txtForwardSubject);
-			refTask.setAssigner(userId);
-			refTask.setAssignee(refUser);
-			refTask.setAssignmentDate(new LocalDate());
-			refTask.setStartDate(new LocalDate());
-			refTask.setForm(formId);
-			refTask.setDef(tasks[0].getDef());
-			refTask.setFromRefId(tasks[0].getObjId());
-			refTask.setFromRefType(tasks[0].getType());
-			refTask.setExtendedPropertyValue("subject", txtForwardSubject);
-			refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
-			refTask.setExtendedPropertyValue("workContents", txtForwardComments);
-			//refTask.setExtendedPropertyValue("projectName", projectName);
+			Map<String, Object> txtForwardForwardeeMap = (Map<String, Object>)frmTaskForwardMap.get("txtForwardForwardee");
 			
-			refTask.setWorkSpaceId(record.getWorkSpaceId());
-			refTask.setWorkSpaceType(record.getWorkSpaceType());
-			refTask.setAccessLevel(record.getAccessLevel());
-			refTask.setAccessValue(record.getAccessValue());
+			ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
 			
-			this.getTskManager().setTask(userId, refTask, null);
-			
-			PublishNotice pubNoticeObj = new PublishNotice(refUser, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, refTask.getObjId());
-			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
-			SmartUtil.increaseNoticeCountByNoticeType(refUser, Notice.TYPE_ASSIGNED);
-			
-			if (logger.isInfoEnabled()) {
-				logger.info("Assigned Reference Task [ " + txtForwardSubject + " ( Process Instance Id : " + refTask.getProcessInstId() + " , To User : " + refTask.getAssignee() + ")]");
+			String[] refUsers = null;
+			if(!CommonUtil.isEmpty(userArray)) {
+				refUsers = new String[userArray.size()];
+				for (int i = 0; i < userArray.size(); i++) {
+					Map<String, String> userInfoMap = userArray.get(i);
+					refUsers[i] = userInfoMap.get("id");
+				}
+			} else {
+				return;
 			}
-			refUserSet.add(refUser);
+			
+			//레코드를 조회한다
+			SwfFormCond formCond = new SwfFormCond();
+			formCond.setPackageId(workId);
+			SwfForm[] forms = getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+			if (forms == null || forms.length > 1)
+				throw new Exception("Not Exist Form! Or More Then 1 Forms! - packageId : " + workId );
+			
+			String formId = forms[0].getId();
+			
+			SwdDomainCond domainCond = new SwdDomainCond();
+			domainCond.setFormId(formId);
+			SwdDomain domain = getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
+			
+			if (domain == null)
+				throw new Exception("Not Exist Domain! - formId : " + formId);
+			
+			SwdRecord record = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
+			if (record == null)
+				throw new Exception("Not Exist Record! - formId : " + formId + ", recordId : " + instanceId);
+			
+			//정보관리 작성시에 생성된 태스크 및 업무인스턴스(prcprcinst)를 조회 한다.
+			String recordId = record.getRecordId();
+			PrcProcessInstCond prcInstCond = new PrcProcessInstCond(); 
+			prcInstCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
+			
+			PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
+			prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			prcInst.setTitle(txtForwardSubject);
+			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
+			
+			String prcInstId = prcInst.getObjId();
+
+			TskTaskCond tskCond = new TskTaskCond();
+			tskCond.setProcessInstId(prcInstId);
+			tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
+			tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
+			
+			TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+			if (tasks == null || tasks.length == 0)
+				throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
+			
+			//참조자가 존재한다면 참조타입의 태스크를 생성
+			
+			TskTask refTask = null;
+			Set refUserSet = new HashSet();
+			String refUser = null;
+			
+			String forwardId = "fwd_" + CommonUtil.newId();
+			
+			for (int i = 0; i < refUsers.length; i++) {
+				refUser = refUsers[i];
+				if (refUserSet.contains(refUser))
+					continue;
+				
+				refTask = new TskTask();
+				refTask.setProcessInstId(prcInstId);
+				refTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "reference"));
+				//refTask.setPriority(priority);
+//						refTask.setTitle(obj.getTitle());
+				refTask.setTitle(txtForwardSubject);
+				//refTask.setName(obj.getName());
+				refTask.setName(txtForwardSubject);
+				refTask.setAssigner(userId);
+				refTask.setAssignee(refUser);
+				refTask.setAssignmentDate(new LocalDate());
+				refTask.setStartDate(new LocalDate());
+				refTask.setForm(formId);
+				refTask.setDef(tasks[0].getDef());
+				refTask.setFromRefId(tasks[0].getObjId());
+				refTask.setFromRefType(tasks[0].getType());
+				refTask.setForwardId(forwardId);
+				refTask.setExtendedPropertyValue("subject", txtForwardSubject);
+				refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
+				refTask.setExtendedPropertyValue("workContents", txtForwardComments);
+				//refTask.setExtendedPropertyValue("projectName", projectName);
+				
+				refTask.setWorkSpaceId(record.getWorkSpaceId());
+				refTask.setWorkSpaceType(record.getWorkSpaceType());
+				refTask.setAccessLevel(record.getAccessLevel());
+				refTask.setAccessValue(record.getAccessValue());
+				
+				this.getTskManager().setTask(userId, refTask, null);
+				
+				PublishNotice pubNoticeObj = new PublishNotice(refUser, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, refTask.getObjId());
+				SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+				SmartUtil.increaseNoticeCountByNoticeType(refUser, Notice.TYPE_ASSIGNED);
+				
+				if (logger.isInfoEnabled()) {
+					logger.info("Assigned Reference Task [ " + txtForwardSubject + " ( Process Instance Id : " + refTask.getProcessInstId() + " , To User : " + refTask.getAssignee() + ")]");
+				}
+				refUserSet.add(refUser);
+			}
 		}
+		
 	}
 	
 	public void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -7410,25 +7428,89 @@ public class InstanceServiceImpl implements IInstanceService {
 		prcInst.setTitle(txtApprovalSubject);
 		getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 		
-		String prcInstId = prcInst.getObjId();
+		requestBody.put("makeNewNotClone", "true");
 		
-		TskTaskCond tskCond = new TskTaskCond();
-		tskCond.setProcessInstId(prcInstId);
-		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
-		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
+		setInformationWorkInstance(requestBody, request);
 		
-//		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
-//		if (tasks == null || tasks.length == 0)
-//			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
-//		tasks[0].setIsStartActivity("true");
-//		getTskManager().setTask(userId, tasks[0], IManager.LEVEL_ALL);
+//		setReferenceApprovalToRecord(userId, record, requestBody);
+//		record.setExtendedAttributeValue("makeNewNotClon", "true");
+//		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
+		
+		
+		
+	}
+	@Override
+	public void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
-		setReferenceApprovalToRecord(userId, record, requestBody);
+		/*{
+			   workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d,
+			   instanceId=402880eb3865a03b013865a0ee9d0001,
+			   formId=frm_c19b1fe4bceb4732acbb8a4cd2a57474,
+			   formName=기안품의,
+			   frmSmartForm=   {
+			      4      =      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=1 유광민
+			            }
+			         ]
+			      },
+			      8      =      {
+			         users=         [
+
+			         ]
+			      },
+			      12      =      {
+			         users=         [
+
+			         ]
+			      },
+			      16      =      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=
+								1 유광민
+			            }
+			         ]
+			      },
+			      92      =12,
+			      142      =      {
+			         groupId=fg_002d59379aac99454e9915e92a053c0a0922
+			      },
+			      466      =false,
+			      535      =123
+			   },
+			   frmTaskForward=   {
+			      txtForwardSubject=111111111,
+			      txtForwardComments=111111111,
+			      txtForwardForwardee=      {
+			         users=         [
+			            {
+			               id=hsshin@maninsoft.co.kr,
+			               name=신현성
+			            }
+			         ]
+			      }
+			   }
+			}*/
 		
-		record.setExtendedAttributeValue("makeNewNotClon", "true");
 		
-		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
 		
+	}
+	@Override
+	public void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
+		return SmartTest.getEventInstances();
+	}
+	@Override
+	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
+		return SmartTest.getBoardInstances();
 	}
 
 }

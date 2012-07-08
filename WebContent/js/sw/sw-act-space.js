@@ -425,56 +425,20 @@ $(function() {
 		
 	});
 	
-	$('.js_return_on_forward').live('keydown', function(e) {
-		var e = window.event || e;
-		var keyCode = e.which || e.keyCode;
-		if(e.shiftKey && keyCode==$.ui.keyCode.SHIFT){ return true;
-		}else if(e.shiftKey && keyCode==$.ui.keyCode.ENTER){
-			e.keyCode = $.ui.keyCode.ENTER;
-			e.which = $.ui.keyCode.ENTER;
-			return true;
-		}else if(keyCode != $.ui.keyCode.ENTER){
-			return;
-		}
-		var input = $(targetElement(e));
-		var appendTaskForward = input.parents('.js_append_task_forward_page');
-		var comment = input.attr('value');
-		if(isEmpty(comment)) return false;
-		smartPop.confirm(smartMessage.get("commentTaskForwardConfirm"), function(){
-			var paramsJson = {};
-			paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
-			paramsJson['forwardId'] = appendTaskForward.attr('forwardId');
-			paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
-			paramsJson['comments'] = comment;
-			console.log(JSON.stringify(paramsJson));
-			$.ajax({
-				url : "comment_on_task_forward.sw",
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
-						smartPop.progressCenter();
-						document.location.href = "";
-					});
-				},
-				error : function(e) {
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskForwardError"), function(){
-						smartPop.close();					
-					});
-				}
-				
-			});			
-		});
-	});
-	
 	$('.js_reply_forward').live('click', function(e) {
 		var input = $(targetElement(e));
-		var appendTaskForward = input.parents('.js_iwork_space_page').find('.js_append_task_forward_page');
+		var workSpacePage = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
+		if(isEmpty(workSpacePage)){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskApprovalError"));
+			return false;
+		}
+		var appendTaskForward = workSpacePage.find('.js_append_task_forward_page');
 		var comment = appendTaskForward.find('textarea[name="txtaCommentContent"]').attr('value');
-		if(isEmpty(comment)) return false;
+		if(isEmpty(comment)){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("missingCommentTaskForward"));			
+			return false;
+		}
 		smartPop.confirm(smartMessage.get("commentTaskForwardConfirm"), function(){
 			var paramsJson = {};
 			paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
@@ -491,7 +455,7 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = "";
+						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
 					});
 				},
 				error : function(e) {
@@ -509,7 +473,13 @@ $(function() {
 	
 	$('.js_reply_approval').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_reply_approval');
-		var appendTaskApproval = input.parents('.js_iwork_space_page').find('.js_append_task_approval_page');
+		var workSpacePage = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
+		if(isEmpty(workSpacePage)){
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskApprovalError"));
+			return false;
+		}
+		var appendTaskApproval = workSpacePage.find('.js_append_task_approval_page');
 		var comment = appendTaskApproval.find('textarea[name="txtaCommentContent"]').attr('value');
 		if(isEmpty(comment)){
 			smartPop.showInfo(smartPop.WARN, smartMessage.get("missingCommentTaskApproval"));			
@@ -527,8 +497,7 @@ $(function() {
 			paramsJson['comments'] = comment;
 			paramsJson['result'] = result;
 			if(result === "submited"){
-				var iworkSpace = input.parents('.js_iwork_space_page');
-				var forms = iworkSpace.find('form[name="frmSmartForm"]');
+				var forms = workSpacePage.find('form[name="frmSmartForm"]');
 				for(var i=0; i<forms.length; i++){
 					var form = $(forms[i]);
 					
@@ -553,7 +522,7 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = "";
+						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
 					});
 				},
 				error : function(e) {

@@ -78,7 +78,7 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 				buf.append(", multiInstId=:multiInstId, multiInstOrdering=:multiInstOrdering");
 				buf.append(", multiInstFlowCondition=:multiInstFlowCondition, loopCounterInteger=:loopCounterInteger");
 				buf.append(", stepInteger=:stepInteger, instVariable=:instVariable, isStartActivity=:isStartActivity");
-				buf.append(", fromRefType=:fromRefType, fromRefId=:fromRefId, workSpaceId=:workSpaceId, workSpaceType=:workSpaceType");
+				buf.append(", fromRefType=:fromRefType, fromRefId=:fromRefId, approvalId=:approvalId, forwardId=:forwardId, workSpaceId=:workSpaceId, workSpaceType=:workSpaceType");
 				buf.append(", accessLevel=:accessLevel, accessValue=:accessValue where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(MisObject.A_NAME, obj.getName());
@@ -117,6 +117,8 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 				query.setString("isStartActivity", obj.getIsStartActivity());
 				query.setString("fromRefType", obj.getFromRefType());
 				query.setString("fromRefId", obj.getFromRefId());
+				query.setString("approvalId", obj.getApprovalId());
+				query.setString("forwardId", obj.getForwardId());
 				query.setString(TskTask.A_WORKSPACEID, obj.getWorkSpaceId());
 				query.setString(TskTask.A_WORKSPACETYPE, obj.getWorkSpaceType());
 				query.setString(TskTask.A_ACCESSLEVEL, obj.getAccessLevel());
@@ -177,6 +179,8 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 		String isStartActivity = null;
 		String fromRefType = null;
 		String fromRefId = null;
+		String approvalId = null;
+		String forwardId = null;
 		String workSpaceId = null;
 		String workSpaceType = null;
 		String accessLevel = null;
@@ -236,6 +240,8 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 			isStartActivity = cond.getIsStartActivity();
 			fromRefType = cond.getFromRefType();
 			fromRefId = cond.getFromRefId();
+			approvalId = cond.getApprovalId();
+			forwardId = cond.getForwardId();
 			workSpaceId = cond.getWorkSpaceId();
 			workSpaceType = cond.getWorkSpaceType();
 			accessLevel = cond.getAccessLevel();
@@ -323,6 +329,10 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 				buf.append(" and obj.fromRefType = :fromRefType");
 			if (fromRefId != null)
 				buf.append(" and obj.fromRefId = :fromRefId");
+			if (approvalId != null)
+				buf.append(" and obj.approvalId = :approvalId");
+			if (forwardId != null)
+				buf.append(" and obj.forwardId = :forwardId");
 			if (workSpaceId != null)
 				buf.append(" and obj.workSpaceId = :workSpaceId");
 			if (workSpaceType != null)
@@ -529,6 +539,10 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 				query.setString("fromRefType", fromRefType);
 			if (fromRefId != null)
 				query.setString("fromRefId", fromRefId);
+			if (approvalId != null)
+				query.setString("approvalId", approvalId);
+			if (forwardId != null)
+				query.setString("forwardId", forwardId);
 			if (workSpaceId != null)
 				query.setString("workSpaceId", workSpaceId);
 			if (workSpaceType != null)
@@ -660,7 +674,7 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 				buf.append(", obj.description, obj.priority, obj.document, obj.assigner, obj.assignee, obj.performer");
 				buf.append(", obj.startDate, obj.assignmentDate, obj.executionDate, obj.dueDate, obj.def, obj.form");
 				buf.append(", obj.expectStartDate, obj.expectEndDate, obj.realStartDate, obj.realEndDate");
-				buf.append(", obj.multiInstId, obj.multiInstOrdering, obj.multiInstFlowCondition, obj.isStartActivity, obj.fromRefType, obj.fromRefId, obj.loopCounterInteger, obj.stepInteger");
+				buf.append(", obj.multiInstId, obj.multiInstOrdering, obj.multiInstFlowCondition, obj.isStartActivity, obj.fromRefType, obj.fromRefId, obj.approvalId, obj.forwardId, obj.loopCounterInteger, obj.stepInteger");
 				buf.append(", obj.instVariable, obj.workSpaceId, obj.workSpaceType, obj.accessLevel, obj.accessValue ");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -707,6 +721,8 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 					obj.setIsStartActivity(((String)fields[j++]));
 					obj.setFromRefType(((String)fields[j++]));
 					obj.setFromRefId(((String)fields[j++]));
+					obj.setApprovalId(((String)fields[j++]));
+					obj.setForwardId(((String)fields[j++]));
 					obj.setLoopCounterInteger(((Integer)fields[j++]));
 					obj.setStepInteger(((Integer)fields[j++]));
 					obj.setInstVariable(((String)fields[j++]));

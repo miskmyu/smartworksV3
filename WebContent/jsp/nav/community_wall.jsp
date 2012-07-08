@@ -37,11 +37,11 @@
 				<%
 				if(workSpace.getClass().equals(Group.class)){				
 				%>
-					<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId()%>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.group.all_items"/></span></span></a>
+					<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId()%>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_group_space ml-1"><span class="mt3"><fmt:message key="space.title.group.all_items"/></span></span></a>
 				<%
 				}else if(workSpace.getClass().equals(Department.class)){				
 				%>
-					<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId()%>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.department.all_items"/></span></span></a>
+					<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId()%>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_depart_space ml-1"><span class="mt3"><fmt:message key="space.title.department.all_items"/></span></span></a>
 				<%
 				}
 				%>

@@ -80,7 +80,6 @@
 				<div class="space_section js_space_timeline">
 					<div class="title"><fmt:message key="common.title.work_timeline"/></div>
 
-					<ul>
 						<%
 						if(!SmartUtil.isBlankObject(taskInstances)){
 							session.setAttribute("taskHistories", taskInstances);
@@ -89,11 +88,10 @@
 						<%
 						}else{
 						%>
-							<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+							<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 						<%
 						}
 						%>											
-					</ul>
 				</div>
 				<!-- 근무시간//-->
 			</div>

@@ -1284,15 +1284,20 @@ public class ModelConverter {
 //				}
 				
 				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+					tskInfo.setApprovalId(task.getTskApprovalId());
 					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
-					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
+					
 				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
 					
-					//TODO 정보관리업무의 참조업무인지 전자결재에서 파생된 참조업무인지 구분이 필요하다
-					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
-					tskInfo.setForwardId(task.getPrcObjId());
+					tskInfo.setForwardId(task.getTskForwardId());
+					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
+						tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
+					} else {
+						tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_FORWARDED);
+					}
 					
+				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+					tskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
 				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 					tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
 				}
@@ -2357,13 +2362,13 @@ public class ModelConverter {
 			taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
-			taskInstInfo.setForwardId(swTask.getProcessInstId());
+			taskInstInfo.setForwardId(swTask.getForwardId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			taskType = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("txtApprovalComments"));
-			taskInstInfo.setApprovalId(swTask.getExtendedPropertyValue("approvalLine"));
+			taskInstInfo.setApprovalId(swTask.getApprovalId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		}
 
@@ -3468,6 +3473,8 @@ public class ModelConverter {
 		Approval[] approvals = null;
 		if(aprApprovalLine != null) {
 			isApprovalWork = true;
+			if (aprApprovalLine.getStatus() != null && aprApprovalLine.getStatus().equalsIgnoreCase("24"))
+				isApprovalWork = false;
 			AprApproval[] aprApprovals = aprApprovalLine.getApprovals();
 			List<Approval> approvalList = new ArrayList<Approval>();
 			if(!CommonUtil.isEmpty(aprApprovals)) {
