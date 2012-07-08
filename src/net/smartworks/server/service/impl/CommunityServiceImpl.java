@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
+import net.smartworks.model.community.InstanceSpace;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
@@ -21,6 +22,7 @@ import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
@@ -684,6 +686,9 @@ public class CommunityServiceImpl implements ICommunityService {
 				} else if(type.equalsIgnoreCase(Community.COMMUNITY_GROUP)) {
 					Group group = this.getGroupById(workSpaceId);
 					return group;
+				} else {
+					return new InstanceSpace(workSpaceId, null);
+					
 				}
 			}
 

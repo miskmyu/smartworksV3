@@ -579,6 +579,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		String[] workSpaceIdIns = cond.getWorkSpaceIdIns();
 		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
 		String[] likeAccessValues = cond.getLikeAccessValues();
+		String searchKey = cond.getSearchKey();
 
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
@@ -588,8 +589,10 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			 prcInst.prcObjId ");
 		queryBuffer.append(" 			, prcInst.prcName ");
 		queryBuffer.append(" 			, prcInst.prcCreateUser ");
+		queryBuffer.append(" 			, (select name from sworguser where id = prcInst.prcCreateUser) as prcCreateUserName");
 		queryBuffer.append(" 			, prcInst.prcCreateDate ");
 		queryBuffer.append(" 			, prcInst.prcModifyUser ");
+		queryBuffer.append(" 			, (select name from sworguser where id = prcInst.prcModifyUser) as prcModifyUserName");
 		queryBuffer.append(" 			, prcInst.prcModifyDate ");
 		queryBuffer.append(" 			, prcInst.prcStatus ");
 		queryBuffer.append(" 			, prcInst.prcTitle ");
@@ -602,11 +605,13 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskobjid ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskname ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskcreateuser ");
+		queryBuffer.append(" 			, (select name from sworguser where id = prcInstInfo.lastTask_tskcreateuser) as lastTask_tskcreateuserName");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskcreateDate ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskstatus ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tsktype ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tsktitle ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskassignee ");
+		queryBuffer.append(" 			, (select name from sworguser where id = prcInstInfo.lastTask_tskassignee) as lastTask_tskassigneeName");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskexecuteDate ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskduedate ");
 		queryBuffer.append(" 			, prcInstInfo.lastTask_tskform ");
@@ -646,18 +651,34 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 			) prcInstInfo	 ");
 		queryBuffer.append(" 		where ");
 		queryBuffer.append(" 			prcInst.prcobjid=prcInstInfo.lastTask_tskprcinstid ");
+		queryBuffer.append(" 	)info ");
+		queryBuffer.append(" 	left outer join ");
+		queryBuffer.append(" 	( ");
+		queryBuffer.append(" 		select prcinst.prcobjid as prcinstid ");
+		queryBuffer.append(" 				, parentCtg.id as parentCtgId ");
+		queryBuffer.append(" 				, parentCtg.name as parentCtg ");
+		queryBuffer.append(" 				, ctg.id as subCtgId ");
+		queryBuffer.append(" 				, ctg.name as subCtg ");
+		queryBuffer.append(" 		from prcprcinst prcinst, swpackage pkg , swcategory ctg, swcategory parentCtg ");
+		queryBuffer.append(" 		where prcinst.prcdid = pkg.packageid ");
+		queryBuffer.append(" 			and pkg.categoryid = ctg.id ");
+		queryBuffer.append(" 			and ctg.parentid = parentCtg.id ");
+		queryBuffer.append(" 	) ctgInfo ");
+		queryBuffer.append(" 	on info.prcobjid = ctginfo.prcinstid ");
+		queryBuffer.append(" where 1=1 ");
+
 		if (!CommonUtil.isEmpty(prcStatus))
-			queryBuffer.append(" 			and prcInst.prcStatus = :prcStatus ");
+			queryBuffer.append(" 			and prcStatus = :prcStatus ");
 		if (!CommonUtil.isEmpty(packageId))
-			queryBuffer.append(" 			and prcInst.prcDid = :prcDid ");
+			queryBuffer.append(" 			and prcDid = :prcDid ");
 		if (!CommonUtil.isEmpty(createUser))
-			queryBuffer.append(" 			and prcInst.prcCreateUser = :createUser ");
+			queryBuffer.append(" 			and prcCreateUser = :createUser ");
 		if (creationDateFrom != null)
-			queryBuffer.append(" 			and prcInst.prcCreateDate > :creationDateFrom");
+			queryBuffer.append(" 			and prcCreateDate > :creationDateFrom");
 		if (creationDateTo != null)
-			queryBuffer.append(" 			and prcInst.prcCreateDate < :creationDateTo");
+			queryBuffer.append(" 			and prcCreateDate < :creationDateTo");
 		if (objIdIns != null && objIdIns.length != 0) {
-			queryBuffer.append(" 			and prcInst.prcObjId in (");
+			queryBuffer.append(" 			and prcObjId in (");
 			for (int i=0; i<objIdIns.length; i++) {
 				if (i != 0)
 					queryBuffer.append(", ");
@@ -665,26 +686,25 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			queryBuffer.append(")");
 		}
-
 		if (workSpaceIdIns != null) {
 			queryBuffer.append(" and");
-			queryBuffer.append(" (prcInst.prcCreateUser = '" + userId + "' or ((prcInst.prcWorkSpaceType = 6 and prcInst.prcWorkSpaceId in (");
+			queryBuffer.append(" (prcCreateUser = '" + userId + "' or ((prcWorkSpaceType = 6 and prcWorkSpaceId in (");
 			for (int j=0; j<workSpaceIdIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or (prcInst.prcWorkSpaceType = 5 and prcInst.prcWorkSpaceId in (");
+			queryBuffer.append(")) or (prcWorkSpaceType = 5 and prcWorkSpaceId in (");
 			for (int j=0; j<workSpaceIdIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or prcInst.prcWorkSpaceType = 4 or prcInst.prcWorkSpaceType = 2 or prcInst.prcWorkSpaceType is null))");
+			queryBuffer.append(")) or prcWorkSpaceType = 4 or prcWorkSpaceType = 2 or prcWorkSpaceType is null))");
 		}
 		if (workSpaceIdNotIns != null) {
 			queryBuffer.append(" and");
-			queryBuffer.append(" prcInst.prcWorkSpaceId not in (");
+			queryBuffer.append(" prcWorkSpaceId not in (");
 			for (int j=0; j<workSpaceIdNotIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
@@ -692,17 +712,21 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			queryBuffer.append(")");
 		}
-		String likeAccessValuesQuery = "prcInst.prcAccessValue like '%%'";
+		String likeAccessValuesQuery = "prcAccessValue like '%%'";
 		StringBuffer likeAccessValuesBuffer = new StringBuffer();
 		if(likeAccessValues != null) {
 			for (int j=0; j<likeAccessValues.length; j++) {
 				if(j==0)
-					likeAccessValuesBuffer.append("prcInst.prcAccessValue like :likeAccessValue").append(j);
-				likeAccessValuesBuffer.append(" or prcInst.prcAccessValue like :likeAccessValue").append(j);
+					likeAccessValuesBuffer.append("prcAccessValue like :likeAccessValue").append(j);
+				likeAccessValuesBuffer.append(" or prcAccessValue like :likeAccessValue").append(j);
 			}
 			likeAccessValuesQuery = likeAccessValuesBuffer.toString();
 		}
-		queryBuffer.append(" and (prcInst.prcAccessLevel is null or prcInst.prcAccessLevel = 3 or (prcInst.prcAccessLevel = 1 and prcInst.prcCreateUser = '" + userId + "') or (prcInst.prcAccessLevel = 2 and (").append(likeAccessValuesQuery).append(" or prcInst.prcCreateUser = '" + userId + "'))) ");
+		queryBuffer.append(" and (prcAccessLevel is null or prcAccessLevel = 3 or (prcAccessLevel = 1 and prcCreateUser = '" + userId + "') or (prcAccessLevel = 2 and (").append(likeAccessValuesQuery).append(" or prcCreateUser = '" + userId + "'))) ");
+		if (searchKey != null) {
+			queryBuffer.append("and (prcStatus like :searchKey or prcTitle like :searchKey or lastTask_tskname like :searchKey or prcCreateUserName like :searchKey ");
+			queryBuffer.append("or prcModifyUserName like :searchKey or lastTask_tskcreateuserName like :searchKey or lastTask_tskassigneeName like :searchKey)");
+		}
 
 		Map filterMap = new HashMap();
 		if (!CommonUtil.isEmpty(filters)) {
@@ -777,20 +801,6 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				}
 			}
 		}
-		queryBuffer.append(" 	)info ");
-		queryBuffer.append(" 	left outer join ");
-		queryBuffer.append(" 	( ");
-		queryBuffer.append(" 		select prcinst.prcobjid as prcinstid ");
-		queryBuffer.append(" 				, parentCtg.id as parentCtgId ");
-		queryBuffer.append(" 				, parentCtg.name as parentCtg ");
-		queryBuffer.append(" 				, ctg.id as subCtgId ");
-		queryBuffer.append(" 				, ctg.name as subCtg ");
-		queryBuffer.append(" 		from prcprcinst prcinst, swpackage pkg , swcategory ctg, swcategory parentCtg ");
-		queryBuffer.append(" 		where prcinst.prcdid = pkg.packageid ");
-		queryBuffer.append(" 			and pkg.categoryid = ctg.id ");
-		queryBuffer.append(" 			and ctg.parentid = parentCtg.id ");
-		queryBuffer.append(" 	) ctgInfo ");
-		queryBuffer.append(" 	on info.prcobjid = ctginfo.prcinstid ");
 
 		this.appendOrderQuery(queryBuffer, "info", cond);
 
@@ -830,6 +840,8 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				query.setString("likeAccessValue"+j, CommonUtil.toLikeString(likeAccessValues[j]));
 			}
 		}
+		if (searchKey != null)
+			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
 		if (!CommonUtil.isEmpty(filters)) {
 			if (!CommonUtil.isEmpty(filterMap)) {
 				Filter f;
@@ -918,8 +930,10 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				obj.setPrcObjId((String)fields[j++]);
 				obj.setPrcName((String)fields[j++]);
 				obj.setPrcCreateUser((String)fields[j++]);
+				obj.setPrcCreateUserName((String)fields[j++]);
 				obj.setPrcCreateDate((Timestamp)fields[j++]);
 				obj.setPrcModifyUser((String)fields[j++]);
+				obj.setPrcModifyUserName((String)fields[j++]);
 				obj.setPrcModifyDate((Timestamp)fields[j++]);
 				obj.setPrcStatus((String)fields[j++]);
 				obj.setPrcTitle((String)fields[j++]);
@@ -932,11 +946,13 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				obj.setLastTask_tskObjId((String)fields[j++]);
 				obj.setLastTask_tskName((String)fields[j++]);
 				obj.setLastTask_tskCreateUser((String)fields[j++]);
+				obj.setLastTask_tskCreateUserName((String)fields[j++]);
 				obj.setLastTask_tskCreateDate((Timestamp)fields[j++]);
 				obj.setLastTask_tskStatus((String)fields[j++]);
 				obj.setLastTask_tskType((String)fields[j++]);
 				obj.setLastTask_tskTitle((String)fields[j++]);
 				obj.setLastTask_tskAssignee((String)fields[j++]);
+				obj.setLastTask_tskAssigneeName((String)fields[j++]);
 				obj.setLastTask_tskExecuteDate((Timestamp)fields[j++]);
 				obj.setLastTask_tskDueDate((Timestamp)fields[j++]);
 				obj.setLastTask_tskForm((String)fields[j++]);
