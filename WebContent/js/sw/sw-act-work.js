@@ -218,7 +218,7 @@ $(function() {
 	
 	$('select.js_select_work_space').live('change', function(e) {
 		var input = $(targetElement(e));
-		var target = input.parents('.js_upload_buttons_page').find('input[name="selWorkSpaceType"]');
+		var target = input.parents('form[name="frmAccessSpace"]').find('input[name="selWorkSpaceType"]');
 		target.attr('value', input.find('option:selected').attr('workSpaceType'));
 	});
 	
@@ -725,6 +725,7 @@ $(function() {
 		}
 		var workId = workSpacePage.attr("workId");
 		var instId = workSpacePage.attr("instId");
+		var workSpaceType = workSpacePage.attr("workSpaceType");
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 		if (!SmartWorks.GridLayout.validate(workSpacePage.find('.js_form_task_forward form'), $('.js_space_error_message'))) return false;
 		
@@ -733,6 +734,7 @@ $(function() {
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
+			paramsJson['selWorkSpaceType'] = workSpaceType;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				

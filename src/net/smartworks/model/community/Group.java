@@ -2,6 +2,7 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 
 
@@ -88,6 +89,10 @@ public class Group extends WorkSpace {
 	public void setCreatedDate(LocalDate createdDate) {
 		this.createdDate = createdDate;
 	}
+	public int getSpaceType(){
+		return ISmartWorks.SPACE_TYPE_GROUP;
+	}
+	
 	public Group(){
 		super();
 	}

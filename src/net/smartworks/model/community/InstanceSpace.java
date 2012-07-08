@@ -2,6 +2,7 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.InstanceSpaceInfo;
 import net.smartworks.model.instance.Instance;
+import net.smartworks.service.ISmartWorks;
 
 public class InstanceSpace extends WorkSpace {
 
@@ -13,6 +14,10 @@ public class InstanceSpace extends WorkSpace {
 	public void setInstance(Instance instance) {
 		this.instance = instance;
 	}
+	public int getSpaceType(){
+		return ISmartWorks.SPACE_TYPE_WORK_INSTANCE;
+	}
+	
 	public InstanceSpace(){
 		super();
 	}

@@ -29,6 +29,7 @@
 <!-- 최근 공지 -->
 <div class="nav_tit">
 	<div class="icon_board_works fn js_content" href="<%=listTarget%>"><fmt:message key="common.title.recent_board"/></a></div>
+	<span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span>
 </div>    
 <ul>
  	<%

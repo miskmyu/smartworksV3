@@ -45,7 +45,15 @@
 	<!-- *** js_collapse_parent_siblings : sw_act_nav.js 에서 이클래스의 클릭이벤트를 받아서 -->
 	<!--            아래의 js_callapsible 클래스를 찾아 toggle 한다 -->
 	<li>
-		<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.community_members" /></a>
+		<%
+		if(SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE, cid)){
+		%>
+			<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.group_members" /></a>
+		<%}else{ %>
+			<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.department_members" /></a>
+		<%
+		}
+		%>
 		<span></span><!--  프로그래스아이콘이 실행되는 곳 -->
 	</li>
 	
