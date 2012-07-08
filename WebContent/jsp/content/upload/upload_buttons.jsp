@@ -176,7 +176,7 @@
 
 		<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
 		<%
-		if(accessLevel == AccessPolicy.LEVEL_PUBLIC){
+		if(accessLevel == AccessPolicy.LEVEL_PUBLIC) {
 		%>
 			<div class="fr form_space js_access_level_custom" style="display:none">
 				<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
