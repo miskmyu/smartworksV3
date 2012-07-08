@@ -294,7 +294,8 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
-li.sub_instance_list > .det_title {overflow:hidden}
+.det_title {overflow:hidden}
+li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.comment_list {}
 li.comment_list:hover {background-color:#fff7eb; cursor:pointer}

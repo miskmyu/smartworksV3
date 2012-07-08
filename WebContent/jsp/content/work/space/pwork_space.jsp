@@ -120,33 +120,39 @@
 	            </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
-				<div class="txt_btn fr">
-					<%
-					if(approvalTask == null && forwardedTask == null){
-					%>
-						<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+				<div class="fr">
+					<div class="fr">
 						<%
-						if(instance.getOwner().getId().equals(cUser.getId())){
+						if(approvalTask == null && forwardedTask == null){
 						%>
-							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+							<%
+							if(instance.getOwner().getId().equals(cUser.getId())){
+							%>
+								<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+							<%
+							}
+							%>
 						<%
 						}
 						%>
-					<%
-					}
-					%>
-					<%
-					if(cUser.isUseMail()){
-					%>
-                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
-                	<%
-                	}
-                	%>
-                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
-	                <div class="cb pt3">
+						<%
+						if(cUser.isUseMail()){
+						%>
+	                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+	                	<%
+	                	}
+	                	%>
+	                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
+	            	</div>
+	            	
+	            <!-- 다이어그램 보기 -->
+					<div class="cb">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
-	                <div class="cb pt3" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>
+	                <div class="cb" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+				<!--  다이어그램 보기// -->
+				
 	            </div>
 	            <!-- 우측 버튼 -->
 		                    
