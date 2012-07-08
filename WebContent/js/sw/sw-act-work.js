@@ -218,7 +218,7 @@ $(function() {
 	
 	$('select.js_select_work_space').live('change', function(e) {
 		var input = $(targetElement(e));
-		var target = input.parents('.js_upload_buttons_page').find('input[name="selWorkSpaceType"]');
+		var target = input.parents('form[name="frmAccessSpace"]').find('input[name="selWorkSpaceType"]');
 		target.attr('value', input.find('option:selected').attr('workSpaceType'));
 	});
 	

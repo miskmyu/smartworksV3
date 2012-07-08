@@ -88,7 +88,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-    <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" workSpaceType="<%=workSpace.getSpaceType() %>">
+    <div class="section_portlet js_iwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>">
     	<div class="portlet_t">
       		<div class="portlet_tl"></div>
     	</div>
@@ -292,6 +292,7 @@
 					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
 					<form name="frmAccessSpace" class="fr pr10 js_validation_required" style="display:none">
 						<div id="" class="fr form_space">						
+							<input name="selWorkSpaceType" type="hidden" value="<%=workSpace.getSpaceType()%>">
 							<select name="selWorkSpace" class="js_select_work_space">
 								<%
 								if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
