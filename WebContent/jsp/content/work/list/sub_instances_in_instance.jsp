@@ -56,7 +56,7 @@ if (subInstances != null) {
 			case Instance.TYPE_BOARD:
 				board = (BoardInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -65,7 +65,7 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 							<div>
 								<span class="<%=work.getIconClass()%>"></span>
@@ -78,14 +78,14 @@ if (subInstances != null) {
 						</a>
 						<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles()) %></div><%} %>
 					</div>
-				</div>
+				
 			<%
 				break;
 			// 태스크가 이벤트인 경우...									
 			case Instance.TYPE_EVENT:
 				event = (EventInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -94,7 +94,7 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=event.getSubject() %>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
@@ -102,14 +102,14 @@ if (subInstances != null) {
 						<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
 							<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
 					</div>
-				</div>
+				
 			<%
 				break;
 			// 태스크가 파일인 경우...									
 			case Instance.TYPE_FILE:
 				file = (FileInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -118,21 +118,21 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div><%} %>
 						<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 					</div>
-				</div>
+				
 			<%
 				break;
 			// 태스크가 사진인 경우...									
 			case Instance.TYPE_IMAGE:
 				image = (ImageInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -141,21 +141,21 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:100px;"></a>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="vt t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="vt icon_new"></span><%} %>
 						</div>
 						<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 					</div>
-				</div>
+				
 			<%
 				break;
 			// 태스크가 메모인 경우...									
 			case Instance.TYPE_MEMO:
 				memo = (MemoInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -164,20 +164,20 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=memo.getContent() %>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				</div>
+				
 			<%
 				break;
 			// 태스크가 댓글인 경우...									
 			case Instance.TYPE_COMMENT:
 				comment = (CommentInstanceInfo)workInstance;
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -185,17 +185,17 @@ if (subInstances != null) {
 					</div>
 					<div class="noti_in">
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=comment.getComment() %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				</div>
+				
 			<%
 				break;
 			default:
 			%>
-				<div class="det_title">
+				
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -204,13 +204,13 @@ if (subInstances != null) {
 					<div class="noti_in">
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=workInstance.getSubject() %>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				</div>
+				
 			<%
 			}
 			%>		

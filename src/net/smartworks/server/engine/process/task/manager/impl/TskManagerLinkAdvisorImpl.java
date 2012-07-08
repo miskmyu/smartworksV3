@@ -25,6 +25,8 @@ import net.smartworks.server.engine.common.util.Wrapper;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
@@ -114,6 +116,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 					newTask.setFromRefType(obj.getFromRefType());
 					newTask.setFromRefId(obj.getFromRefId());
+					newTask.setApprovalId(apprLineId);
 					
 					newTask.setExtendedPropertyValue("taskRef", taskRef);
 //					newTask.setExtendedPropertyValue("txtApprovalComments", txtApprovalComments);
@@ -160,9 +163,31 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				obj.setStatus(canceledStatus);
 				getTskManager().setTask("linkeadvisor", obj, null);
 				
+				
+				//인스턴스의 제목도 다시 필드 제목으로 변경한다
+				String title = null;
+				String[] recordInfos = StringUtils.tokenizeToStringArray(obj.getDef(), "|");
+				if (recordInfos.length == 2) {
+					String recordId = recordInfos[1];
+					
+					String formId = obj.getForm();
+					
+					SwdDomainCond domainCond = new SwdDomainCond();
+					domainCond.setFormId(formId);
+					SwdDomain domain = getSwdManager().getDomain(user, domainCond, IManager.LEVEL_LITE);
+					String domainId = domain.getObjId();
+					
+					SwdRecord record = getSwdManager().getRecord(user, domainId, recordId, IManager.LEVEL_ALL);
+					if (record != null) {
+						title = record.getDataFieldValue(domain.getTitleFieldId());
+					}
+				}
+				
 				//PrcInstance 종료
 				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_LITE);
 				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_CANCEL);
+				if (!CommonUtil.isEmpty(title))
+					prcInst.setTitle(title);
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
 				
 				//Apprline 종료
@@ -422,7 +447,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			apprTask.setAssignee(approver);
 			apprTask.setAssignmentDate(new LocalDate());
 			apprTask.setForm(preApprTask != null ? preApprTask.getForm() : obj.getForm());
-		
+			apprTask.setApprovalId(apprLine.getObjId());
+			
 			apprTask.setWorkSpaceId(approver);
 			apprTask.setWorkSpaceType("4");
 			apprTask.setAccessLevel("3");
@@ -572,6 +598,9 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		TskTask refTask = null;
 		Set refUserSet = new HashSet();
 		String refUser = null;
+
+		String forwordId = "fwd_" + CommonUtil.newId();
+		
 		for (int i = 0; i < refUsers.length; i++) {
 			refUser = refUsers[i];
 			if (refUserSet.contains(refUser))
@@ -598,11 +627,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask.setExtendedPropertyValue("workContents", workContents);
 			//refTask.setExtendedPropertyValue("projectName", projectName);
 			refTask.setExtendedPropertyValue("isPublic", isPublic);
+			refTask.setExtendedPropertyValue("forwordId", forwordId);
 			
 			//TODO 참조 업무의 workspaceid, accesslevel 값정의
-			refTask.setWorkSpaceId(refUser);
-			refTask.setWorkSpaceType("4");
-			refTask.setAccessLevel("3");
+			refTask.setWorkSpaceId(obj.getWorkSpaceId());
+			refTask.setWorkSpaceType(obj.getWorkSpaceType());
+			refTask.setAccessLevel(obj.getAccessLevel());
+			refTask.setAccessValue(obj.getAccessValue());
 			
 			this.getTskManager().setTask(user, refTask, null);
 			

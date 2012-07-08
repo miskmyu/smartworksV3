@@ -503,11 +503,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				return null;
 			
 			TaskWorkCond totalTaskCond = new TaskWorkCond();
-			totalTaskCond.setTskStartOrAssigned(user.getId());
+			totalTaskCond.setTskStartOnly(user.getId());
 			totalTaskCond.setLastInstanceDate(new LocalDate());
 			totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			
-			long totalTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
+			long runningTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
 			
 			TaskWorkCond assignedTaskCond = new TaskWorkCond();
 
@@ -517,7 +517,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			long assignedTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), assignedTaskCond);
 			
 			RunningCounts runningCounts = new RunningCounts();
-			runningCounts.setTotal((int)totalTaskSize);
+			runningCounts.setRunningOnly((int)runningTaskSize);
 			runningCounts.setAssignedOnly((int)assignedTaskSize);
 			return runningCounts;
 		}catch (Exception e){
@@ -1742,6 +1742,9 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setExtendedAttributeValue("tskRefType", TskTask.TASKREFTYPE_BOARD);
 			}
 
+			if (!CommonUtil.isEmpty((String)requestBody.get("makeNewNotClone")))
+				obj.setExtendedAttributeValue("makeNewNotClone", (String)requestBody.get("makeNewNotClone"));
+			
 			instanceId = getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
 
 			TskTaskCond tskCond = new TskTaskCond();
@@ -2471,6 +2474,8 @@ public class InstanceServiceImpl implements IInstanceService {
 							txtForwardForwardee = "";
 							for(int i=0; i < forwardee.subList(0, forwardee.size()).size(); i++) {
 								Map<String, String> user = forwardee.get(i);
+								if (user.get("id").equalsIgnoreCase(userId))
+									continue;
 								txtForwardForwardee += user.get("id") + symbol;
 							}
 						}
@@ -7301,6 +7306,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		TskTask refTask = null;
 		Set refUserSet = new HashSet();
 		String refUser = null;
+		
+		String forwardId = "fwd_" + CommonUtil.newId();
+		
 		for (int i = 0; i < refUsers.length; i++) {
 			refUser = refUsers[i];
 			if (refUserSet.contains(refUser))
@@ -7322,6 +7330,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			refTask.setDef(tasks[0].getDef());
 			refTask.setFromRefId(tasks[0].getObjId());
 			refTask.setFromRefType(tasks[0].getType());
+			refTask.setForwardId(forwardId);
 			refTask.setExtendedPropertyValue("subject", txtForwardSubject);
 			refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
 			refTask.setExtendedPropertyValue("workContents", txtForwardComments);
@@ -7410,24 +7419,15 @@ public class InstanceServiceImpl implements IInstanceService {
 		prcInst.setTitle(txtApprovalSubject);
 		getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 		
-		String prcInstId = prcInst.getObjId();
+		requestBody.put("makeNewNotClone", "true");
 		
-		TskTaskCond tskCond = new TskTaskCond();
-		tskCond.setProcessInstId(prcInstId);
-		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_SINGLE});
-		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, false)});
+		setInformationWorkInstance(requestBody, request);
 		
-//		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_ALL);
-//		if (tasks == null || tasks.length == 0)
-//			throw new Exception("Not Exist Single Tasks - processInstId : " + prcInstId );
-//		tasks[0].setIsStartActivity("true");
-//		getTskManager().setTask(userId, tasks[0], IManager.LEVEL_ALL);
-
-		setReferenceApprovalToRecord(userId, record, requestBody);
+//		setReferenceApprovalToRecord(userId, record, requestBody);
+//		record.setExtendedAttributeValue("makeNewNotClon", "true");
+//		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
 		
-		record.setExtendedAttributeValue("makeNewNotClon", "true");
 		
-		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
 		
 	}
 	@Override

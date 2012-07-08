@@ -119,22 +119,22 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
+							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
 							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
 							<a href="<%=board.getController() %>?cid=<%=board.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
-									<div><%=board.getSubject() %>
+									<div>
+										<%=board.getSubject() %>
 										<%if(board.isNew()){ %><span class="icon_new"></span><%} %>
 									</div>
 								</div>
@@ -156,17 +156,23 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
+								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								</a>
+							<%} %>
+							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<!-- 인스턴스 마지막수정일자 //-->
+							
 							<a href="<%=event.getController() %>?cid=<%=event.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
@@ -192,20 +198,33 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
+									<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								</a>
+							<%} %>
+							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
-							<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
-							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %></div><%} %>
-							<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
+							<!-- 인스턴스 마지막수정일자 //-->
+							
+							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %>
+								<div><%=SmartUtil.getFilesDetailInfo(file.getFiles()) %></div>
+							<%} %>
+							<%if(!SmartUtil.isBlankObject(file.getContent())){ %>
+							<div>
+								<%=file.getContent() %>
+								<%if(file.isNew()){ %><span class="icon_new"></span><%} %>
+							</div>
+							
+							<%} %>
 						</div>
 					</div>
 				<%
@@ -221,19 +240,28 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
+								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+								</a>
+							<%} %>
+							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
-							<%if(image.isNew()){ %><span class="icon_new"></span><%} %>
-							<div><a href="javascript:imgResize('<%=image.getOriginImgSource()%>')"><img src="<%=image.getImgSource()%>" style="min-height:20px;width:200px;"></a></div>
+							<!-- 인스턴스 마지막수정일자 //-->
+							
+							<div>
+								<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
+								<img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
+								<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
+							</div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 						</div>
 					</div>
@@ -250,17 +278,22 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
+							<%if(onWorkSpace){ %>
+								<span class="arr">▶</span>
+								<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>">
+								<span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span>
+							</a>
+							<%} %>
+							<!-- 인스턴스 마지막수정일자 -->
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-							<%if(onWorkSpace){ %><span class="arr">▶</span><a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>"><span class="<%=workSpace.getIconClass()%>"><%=workSpace.getName() %></span></a><%} %>
+							<!-- 인스턴스 마지막수정일자 //-->
 							<a href="<%=memo.getController() %>?cid=<%=memo.getContextId() %>&wid=<%=workSpace.getId() %>&workId=<%=work.getId() %>">
 								<div>
 									<span class="<%=work.getIconClass()%>"></span>
@@ -282,12 +315,10 @@
 							if(cUser.getId().equals(owner.getId())){
 							%>
 								<span class="t_name"><%=owner.getLongName()%></span>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}else{
 							%>
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-								<!-- 인스턴스 마지막수정일자 -->
 							<%
 							}
 							%>
@@ -527,8 +558,8 @@
 										</a>
 									</div>
 									<div class="noti_in">
-										<span class="t_name"><%=cUser.getLongName()%></span><span
-											class="t_date"><%=(new LocalDate()).toLocalString()%></span>
+										<span class="t_name"><%=cUser.getLongName()%></span>
+										<span	class="t_date pl10"><%=(new LocalDate()).toLocalString()%></span>
 										<div class="js_comment_content"></div>
 									</div>
 				            	</li>
@@ -565,7 +596,7 @@
 								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 							</div>
 							<div class="noti_in">
-								<textarea style="width:95%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+								<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
 							</div>
 				        </div>
 				    
