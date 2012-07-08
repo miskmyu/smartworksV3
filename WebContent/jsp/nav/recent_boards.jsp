@@ -12,11 +12,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	// 호출할때 전달된 cid(Context ID, 패이지 컨택스트를 지정하는 변수) 를 가져옮..
-	String cid = request.getParameter("cid");
-	if (SmartUtil.isBlankObject(cid))
-		cid = ISmartWorks.CONTEXT_HOME;
-
-	String communityId = SmartUtil.getSpaceIdFromContentContext(cid);
+	String communityId = request.getParameter("wid");
 
 	BoardInstanceInfo[] boards = smartWorks.getRecentBoardInstances(communityId, 5);
 	String listTarget = "board_list.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_BOARD_LIST + SmartWork.ID_BOARD_MANAGEMENT + "&wid=" + communityId;
@@ -28,8 +24,8 @@
 
 <!-- 최근 공지 -->
 <div class="nav_tit">
-	<div class="icon_board_works fn js_content" href="<%=listTarget%>"><fmt:message key="common.title.recent_board"/></a></div>
-	<span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span>
+	<div class="icon_board_works fn"><a class="js_content" href="<%=listTarget%>"><fmt:message key="common.title.recent_board"/></a></div>
+	<%if(!SmartUtil.isBlankObject(boards)){ %><span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span><%} %>
 </div>    
 <ul>
  	<%
