@@ -472,7 +472,7 @@
 		pworkSpace.attr("formMode", formMode);
 		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
 			return;
-		
+		console.log('formMode = ', formMode, ', isApprovalwork = ' , isApprovalWork );
 		if(formMode==="edit"){
 			if(isReturned || !isEmpty(approvalLineId)){
 				pworkSpace.find('.js_toggle_approval_btn').hide();
@@ -496,8 +496,9 @@
 				pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
 				pworkSpace.find('.js_btn_return_approval').show();
 				pworkSpace.find('.js_btn_reject_approval').show();
+			} else {
+				pworkSpace.find('.js_btn_complete').hide().siblings().hide();
 			}
-			pworkSpace.find('.js_btn_complete').hide().siblings().hide();
 			pworkSpace.find('.js_toggle_approval_btn').hide();
 		}
 	}
