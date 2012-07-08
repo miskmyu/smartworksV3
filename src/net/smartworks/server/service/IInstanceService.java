@@ -155,4 +155,8 @@ public interface IInstanceService {
 
 	public ApprovalLineInst getApprovalLineInstById(String instId) throws Exception;
 	
+	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception;
+	
+	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception;
+	
 }
