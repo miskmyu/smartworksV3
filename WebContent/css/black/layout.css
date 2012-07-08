@@ -326,7 +326,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 #nav .tab_buttons a:hover, #nav .tab_buttons a:focus, #nav .tab_buttons a:active, #nav .tab_buttons a:visited {color:#FFF; text-decoration:underline}
 
 /* Contents*/
-#content {margin:15px 10px 10px 240px; color:#454545; font-family: '돋움',dotum,Helvetica,sans-serif; max-width:950px; z-index:20}
+#content {margin:15px 10px 10px 240px; color:#454545; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
 #board {margin:5px 10px 10px 240px; color:#ea1a1a; font-family: '돋움',dotum,Helvetica,sans-serif; height:18px; z-index:20}
 
 /* UpLoad */
@@ -610,7 +610,7 @@ margin: 0 auto}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
 #work_ing .solid_line {margin:2px 0 5px}
-#work_ing .t_woname {font-size:14px; text-decoration:underline}
+#work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}
