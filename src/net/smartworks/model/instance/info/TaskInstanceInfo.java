@@ -25,6 +25,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String approvalTaskId="";
 	private String forwardId="";
 	private boolean isApprovalWork;
+	private String approvalLineId="";
 	
 	public String getName() {
 		return name;
@@ -73,6 +74,12 @@ public class TaskInstanceInfo extends InstanceInfo {
 	}
 	public void setFormId(String formId) {
 		this.formId = formId;
+	}
+	public String getApprovalLineId() {
+		return approvalLineId;
+	}
+	public void setApprovalLineId(String approvalLineId) {
+		this.approvalLineId = approvalLineId;
 	}
 	public String getController(){
 		if(getWork()==null) return "";
