@@ -59,7 +59,7 @@
 				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
 					forwardedTask = task;
 					break;
-				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId, null)){
 					approvalTaskInstId = task.getId();
 					approvalTask = task;
 					taskInstId = task.getApprovalTaskId();
@@ -121,8 +121,28 @@
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
 				<div class="txt_btn fr">
-                	<a href="" title="<fmt:message key='common.button.print'/>"><div class="icon_print_w fr ml5 js_select_print"></div></a>
-                	<a href="" title="<fmt:message key='common.button.email'/>"><div class="icon_mail_w fr"></div></a>
+					<%
+					if(approvalTask == null && forwardedTask == null){
+					%>
+						<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+						<%
+						if(instance.getOwner().getId().equals(cUser.getId())){
+						%>
+							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+						<%
+						}
+						%>
+					<%
+					}
+					%>
+					<%
+					if(cUser.isUseMail()){
+					%>
+                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+                	<%
+                	}
+                	%>
+                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
 	                <div class="cb pt3">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
@@ -179,11 +199,10 @@
 				        			else if(task.getStatus() == TaskInstance.STATUS_COMPLETED)
 				        				statusClass = "proc_task completed";
 				        			else
-				        				statusClass = "proc_task not_yet";				        				
-				        		
+				        				statusClass = "proc_task not_yet";				        					
 				        	%>
 			            			<!-- 태스크 --> 
-						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" formMode="<%=formMode %>">
+						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>">
 					                    <!-- task 정보 -->
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s" title="<%=task.getPerformer().getLongName()%>">
 					                    <div class="noti_in_s">
@@ -224,16 +243,17 @@
 
 				<!--  전자결재화면이 나타나는 곳 -->
 				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>>
-					<%
+<%-- 					<%
 					if(approvalTask!=null || (!SmartUtil.isBlankObject(taskInstance) && taskInstance.isApprovalWork())){
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
 							<jsp:param value="<%=approvalTaskInstId %>" name="taskInstId"/>
+							<jsp:param value="<%=taskInstId %>" name="processTaskInstId"/>
 						</jsp:include>
 					<%
 					}
 					%>
-				</div>
+ --%>				</div>
 			
 				<div class="form_wrap up form_read js_form_content"></div>
 			</div>
@@ -259,7 +279,7 @@
 			    <div class="fr">
 
 			        <span class="btn_gray js_btn_do_forward" style="display:none">
-			        	<a href="" class="js_forward_iwork_instance">
+			        	<a href="" class="js_forward_work_instance">
 				            <span class="txt_btn_start"></span>
 				            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
 				            <span class="txt_btn_end"></span>
@@ -275,7 +295,7 @@
 			   		</span>
 			
 			        <span class="btn_gray js_btn_do_approval" style="display:none">
-			        	<a href="" class="js_approval_iwork_instance">
+			        	<a href="" class="js_approval_work_instance">
 				            <span class="txt_btn_start"></span>
 				            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
 				            <span class="txt_btn_end"></span>
@@ -393,8 +413,24 @@
 		var formId = input.attr("formId");
 		var formMode = input.attr("formMode");
 		var instId = input.attr("taskInstId");
+		var isApprovalWork = input.attr("isApprovalWork");
+		var approvalContent = pworkSpace.find('div.js_form_task_approval').html('').hide();
 		var formContent = pworkSpace.find('div.js_form_content').html('');
 		var formContentPointer = pworkSpace.find('div.js_form_content_pointer');
+ 		if(isApprovalWork == 'true' && !isEmpty(approvalContent)){
+			$.ajax({
+				url : 'append_task_approval.sw',
+				data : { 
+					processTaskInstId : instId
+				},
+				success : function(data, status, jqXHR) {
+					target.html(data).show();
+				},
+				error : function(xhr, ajaxOptions, thrownError){					
+				}
+			});
+		}else{
+		}
 		var selectedTask = input;
 		pworkSpace.find('.js_instance_task').removeClass('selected');
 		selectedTask.addClass('selected');

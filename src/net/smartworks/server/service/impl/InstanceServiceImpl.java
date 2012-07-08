@@ -7430,5 +7430,15 @@ public class InstanceServiceImpl implements IInstanceService {
 		getSwdManager().setRecord(userId, record, IManager.LEVEL_ALL);
 		
 	}
+	@Override
+	public void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -461,6 +461,7 @@ function loadTaskForwardFields() {
 				});
 			}
 			var iworkSpace = taskForwardFields.parents('.js_iwork_space_page');
+			var pworkSpace = taskForwardFields.parents('.js_pwork_space_page');
 			if(!isEmpty(iworkSpace)){
 				var target = iworkSpace.find('.js_append_task_forward_page').addClass('up');
 				if(readOnly){
@@ -470,6 +471,15 @@ function loadTaskForwardFields() {
 				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();
+			}else if(!isEmpty(pworkSpace)){
+				var target = pworkSpace.find('.js_append_task_forward_page').addClass('up');
+				if(readOnly){
+					target.addClass('form_read');
+					pworkSpace.find('.js_btn_reply_forward').show().siblings().hide();
+					pworkSpace.find('.js_btn_cancel').show();						
+				}
+				target.parent().addClass('contents_space');
+				target.find('.dash_line').remove();				
 			}
 		}		
 	}

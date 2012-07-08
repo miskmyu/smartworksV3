@@ -1481,4 +1481,14 @@ public class SmartWorks implements ISmartWorks {
 		return builderService.moveWorkDefinition(requestBody, request);
 	}
 
+	@Override
+	public void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.forwardPworkInstance(requestBody, request);
+	}
+
+	@Override
+	public void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.approvalPworkInstance(requestBody, request);
+	}
+
 }

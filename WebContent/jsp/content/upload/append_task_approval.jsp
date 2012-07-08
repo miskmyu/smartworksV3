@@ -26,6 +26,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String taskInstId = request.getParameter("taskInstId");
+	String processTaskInstId = request.getParameter("processTaskInstId");
 
 	TaskInstanceInfo approvalTask = null;
 	String subject = "";
@@ -40,7 +41,7 @@
 		tasks = workInstance.getTasks();
 		if(!SmartUtil.isBlankObject(tasks)){
 			for(TaskInstanceInfo task : tasks){
-				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId)){
+				if(task.isRunningApprovalForMe(cUser.getId(), taskInstId, processTaskInstId)){
 					approvalTask = task;
 					approvalInstId = task.getApprovalId();
 					subject = task.getSubject();
@@ -56,7 +57,7 @@
 						subject = task.getSubject();
 						content = task.getContent();
 						for(TaskInstanceInfo tsk : tasks){
-							if(tsk.isRunningApprovalForMe(cUser.getId(), null)){
+							if(tsk.isRunningApprovalForMe(cUser.getId(), null, processTaskInstId)){
 								approvalTask = tsk;
 								taskInstId = tsk.getId();
 								break;

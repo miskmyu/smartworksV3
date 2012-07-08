@@ -195,7 +195,7 @@
 					   	%>
 				
 				        <span class="btn_gray js_btn_do_forward" style="display:none">
-				        	<a href="" class="js_forward_iwork_instance">
+				        	<a href="" class="js_forward_work_instance">
 					            <span class="txt_btn_start"></span>
 					            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
 					            <span class="txt_btn_end"></span>
@@ -211,7 +211,7 @@
 				   		</span>
 				
 				        <span class="btn_gray js_btn_do_approval" style="display:none">
-				        	<a href="" class="js_approval_iwork_instance">
+				        	<a href="" class="js_approval_work_instance">
 					            <span class="txt_btn_start"></span>
 					            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
 					            <span class="txt_btn_end"></span>

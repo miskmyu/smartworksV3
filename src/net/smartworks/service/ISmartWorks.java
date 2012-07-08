@@ -305,6 +305,10 @@ public interface ISmartWorks {
 	
 	public abstract void approvalIworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void forwardPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String startProcessWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	/**
 	 * @deprecated
