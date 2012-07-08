@@ -88,7 +88,6 @@ function submitForms() {
 						// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 						smartPop.closeProgress();
 						smartPop.progressCenter();
-						//document.location.href = data.href;
 						window.location.reload();
 					},
 					error : function(e) {

@@ -892,7 +892,7 @@ $(function() {
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
 								smartPop.progressCenter();
-								document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
+								document.location.href = "smart.sw#" + "iwork_list.sw?cid=iw.li." + workId;					
 							});
 				},
 				error : function(e) {
@@ -959,7 +959,7 @@ $(function() {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
+						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
 				},
@@ -1024,7 +1024,7 @@ $(function() {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
+						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
 				},
@@ -1155,7 +1155,7 @@ $(function() {
 					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = "pwork_list.sw?cid=pw.li." + workId;
+						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
 				},
@@ -1308,23 +1308,25 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
-		if(isEmpty(workSpacePage)) return false;
-		var target = workSpacePage.find('.js_form_task_forward');
+		var target = input.parents('.js_form_header').siblings('.js_form_task_forward');
 		if(target.is(':visible')){
 			target.hide().html('');
-			workSpacePage.find('.js_btn_save').show().siblings().hide();						
-			workSpacePage.find('.js_btn_modify').show();						
+			if(!isEmpty(workSpacePage)){
+				workSpacePage.find('.js_btn_save').show().siblings().hide();						
+				workSpacePage.find('.js_btn_modify').show();
+			}
 			return false;
 		}
-		if(!isEmpty(workSpacePage.find('.js_form_task:visible'))) return false;
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
 		$.ajax({
 			url : 'append_task_forward.sw',
 			data : {},
 			success : function(data, status, jqXHR) {
 				target.html(data).show();
-				console.log('target=', target);
-				workSpacePage.find('.js_btn_do_forward').show().siblings().hide();
-				workSpacePage.find('.js_btn_cancel').show();						
+				if(!isEmpty(workSpacePage)){
+					workSpacePage.find('.js_btn_do_forward').show().siblings().hide();
+					workSpacePage.find('.js_btn_cancel').show();
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				
@@ -1337,22 +1339,25 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
-		if(isEmpty(workSpacePage)) return false;
-		var target = workSpacePage.find('.js_form_task_approval');
+		var target = input.parents('.js_form_header').siblings('.js_form_task_approval');
 		if(target.is(':visible')){
 			target.hide().html('');
-			workSpacePage.find('.js_btn_save').show().siblings().hide();						
-			workSpacePage.find('.js_btn_modify').show();						
+			if(!isEmpty(workSpacePage)){
+				workSpacePage.find('.js_btn_save').show().siblings().hide();						
+				workSpacePage.find('.js_btn_modify').show();						
+			}
 			return false;
 		}
-		if(!isEmpty(workSpacePage.find('.js_form_task:visible'))) return false;
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
 		$.ajax({
 			url : 'append_task_approval.sw',
 			data : {},
 			success : function(data, status, jqXHR) {
 				target.html(data).show();
-				workSpacePage.find('.js_btn_do_approval').show().siblings().hide();
-				workSpacePage.find('.js_btn_cancel').show();						
+				if(!isEmpty(workSpacePage)){
+					workSpacePage.find('.js_btn_do_approval').show().siblings().hide();
+					workSpacePage.find('.js_btn_cancel').show();
+				}
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				

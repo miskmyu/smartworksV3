@@ -36,6 +36,8 @@
 		events = smartWorks.getCommunityEventInstances(new LocalDate(), 10, wid);
 	
 %>
+<fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
+<fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 	<!-- 이벤트,공지 포틀릿 -->	
 	<div class="section_portlet mb20">

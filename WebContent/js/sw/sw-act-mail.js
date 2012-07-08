@@ -41,7 +41,7 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
 					smartPop.progressCenter();
-					document.location.href = mailSpace.attr('lastHref');
+					document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 				});
 			},
 			error : function(e) {
@@ -92,7 +92,7 @@ $(function() {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
 						smartPop.progressCenter();
 						input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-						document.location.href = mailList.attr('currentHref');
+						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
 				},
 				error : function(e) {
@@ -133,7 +133,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = mailList.attr('currentHref');
+						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
 				},
 				error : function(e) {
@@ -167,7 +167,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = mailSpace.attr('lastHref');
+						document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 					});
 				},
 				error : function(e) {
@@ -206,7 +206,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
 						smartPop.progressCenter();
-						document.location.href = mailList.attr('currentHref');
+						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
 				},
 				error : function(e) {

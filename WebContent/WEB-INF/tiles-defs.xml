@@ -3,144 +3,144 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition name="layouts" template="/jsp/layouts.jsp">
+	<definition name="smart" template="/jsp/layouts.jsp">
 		<put-attribute name="header" value="/jsp/header.jsp" />
 		<put-attribute name="nav" value="/jsp/nav.jsp" />
 		<put-attribute name="board" value="/jsp/broadcasting_board.jsp" />
-		<put-attribute name="content" value="/jsp/content/home.jsp" />
+		<put-attribute name="content" value="/jsp/content/smart.jsp" />
 		<put-attribute name="footer" value="/jsp/footer.jsp" />
 	</definition>
-	<definition name="home" extends="layouts">
+	<definition name="home" extends="smart">
 		<put-attribute name="content" value="/jsp/content/home.jsp" />
 	</definition>
-	<definition name="smartcaster" extends="layouts">
+	<definition name="smartcaster" extends="smart">
 		<put-attribute name="content" value="/jsp/content/smartcaster.jsp" />
 	</definition>
-	<definition name="dashboard" extends="layouts">
+	<definition name="dashboard" extends="smart">
 		<put-attribute name="content" value="/jsp/content/dashboard.jsp" />
 	</definition>
-	<definition name="pwork_list" extends="layouts">
+	<definition name="pwork_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/pwork_list.jsp" />
 	</definition>
-	<definition name="iwork_list" extends="layouts">
+	<definition name="iwork_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/iwork_list.jsp" />
 	</definition>
-	<definition name="swork_list" extends="layouts">
+	<definition name="swork_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/swork_list.jsp" />
 	</definition>
-	<definition name="board_list" extends="layouts">
+	<definition name="board_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/board_list.jsp" />
 	</definition>
-	<definition name="event_list" extends="layouts">
+	<definition name="event_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/event_list.jsp" />
 	</definition>
-	<definition name="file_list" extends="layouts">
+	<definition name="file_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/file_list.jsp" />
 	</definition>
-	<definition name="image_list" extends="layouts">
+	<definition name="image_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/image_list.jsp" />
 	</definition>
-	<definition name="memo_list" extends="layouts">
+	<definition name="memo_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/memo_list.jsp" />
 	</definition>
-	<definition name="mail_list" extends="layouts">
+	<definition name="mail_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/mail_list.jsp" />
 	</definition>
-	<definition name="saved_list" extends="layouts">
+	<definition name="saved_list" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/list/saved_list.jsp" />
 	</definition>
-	<definition name="pwork_space" extends="layouts">
+	<definition name="pwork_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/pwork_space.jsp" />
 	</definition>
-	<definition name="iwork_space" extends="layouts">
+	<definition name="iwork_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/iwork_space.jsp" />
 	</definition>
-	<definition name="swork_space" extends="layouts">
+	<definition name="swork_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/swork_space.jsp" />
 	</definition>
-	<definition name="board_space" extends="layouts">
+	<definition name="board_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/board_space.jsp" />
 	</definition>
-	<definition name="event_space" extends="layouts">
+	<definition name="event_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/event_space.jsp" />
 	</definition>
-	<definition name="file_space" extends="layouts">
+	<definition name="file_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/file_space.jsp" />
 	</definition>
-	<definition name="image_space" extends="layouts">
+	<definition name="image_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/image_space.jsp" />
 	</definition>
-	<definition name="memo_space" extends="layouts">
+	<definition name="memo_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/memo_space.jsp" />
 	</definition>
-	<definition name="mail_space" extends="layouts">
+	<definition name="mail_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/work/space/mail_space.jsp" />
 	</definition>
-	<definition name="department_space" extends="layouts">
+	<definition name="department_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/community/space/department_space.jsp" />
 	</definition>
-	<definition name="group_space" extends="layouts">
+	<definition name="group_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/community/space/group_space.jsp" />
 	</definition>
-	<definition name="user_space" extends="layouts">
+	<definition name="user_space" extends="smart">
 		<put-attribute name="content" value="/jsp/content/community/space/user_space.jsp" />
 	</definition>
-	<definition name="my_profile" extends="layouts">
+	<definition name="my_profile" extends="smart">
 		<put-attribute name="content" value="/jsp/content/my_profile.jsp" />
 	</definition>
-	<definition name="settings_home" extends="layouts">
+	<definition name="settings_home" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/home.jsp" />
 	</definition>
-	<definition name="company_general" extends="layouts">
+	<definition name="company_general" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/company_general.jsp" />
 	</definition>
-	<definition name="company_work_hour" extends="layouts">
+	<definition name="company_work_hour" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/company_work_hour.jsp" />
 	</definition>
-	<definition name="company_event" extends="layouts">
+	<definition name="company_event" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/company_event.jsp" />
 	</definition>
-	<definition name="organization_management" extends="layouts">
+	<definition name="organization_management" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/organization_management.jsp" />
 	</definition>
-	<definition name="approval_line" extends="layouts">
+	<definition name="approval_line" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/approval_line.jsp" />
 	</definition>
-	<definition name="web_service" extends="layouts">
+	<definition name="web_service" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/web_service.jsp" />
 	</definition>
-	<definition name="external_form" extends="layouts">
+	<definition name="external_form" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/external_form.jsp" />
 	</definition>
-	<definition name="email_server" extends="layouts">
+	<definition name="email_server" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/settings.jsp" />
 		<put-attribute name="content" value="/jsp/content/settings/email_server.jsp" />
 	</definition>
-	<definition name="builder_home" extends="layouts">
+	<definition name="builder_home" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/home.jsp" />
 	</definition>
-	<definition name="smart_builder" extends="layouts">
+	<definition name="smart_builder" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/smart_builder.jsp" />
 	</definition>
-	<definition name="tab_workbench" extends="layouts">
+	<definition name="tab_workbench" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/tab_workbench.jsp" />
 	</definition>
-	<definition name="tab_work_settings" extends="layouts">
+	<definition name="tab_work_settings" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/tab_work_settings.jsp" />
 	</definition>
-	<definition name="tab_work_sharing" extends="layouts">
+	<definition name="tab_work_sharing" extends="smart">
 		<put-attribute name="nav" value="/jsp/nav/smartbuilder.jsp" />
 		<put-attribute name="content" value="/jsp/content/builder/tab_work_sharing.jsp" />
 	</definition>
