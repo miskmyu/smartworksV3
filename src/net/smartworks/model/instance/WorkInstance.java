@@ -130,4 +130,28 @@ public class WorkInstance extends Instance {
 		}
 		return null;
 	}
+	
+	public TaskInstanceInfo getMyRunningForwardedTask(){
+		if(SmartUtil.isBlankObject(tasks)) return null;
+		for(TaskInstanceInfo task : tasks){
+			if(	(task.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || task.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+				&& !SmartUtil.isBlankObject(task.getAssignee()) 
+				&& task.getAssignee().getId().equals(SmartUtil.getCurrentUser().getId())
+				&& task.getStatus() == TaskInstance.STATUS_RUNNING){
+
+					return task;
+				}
+		}
+		return null;
+	}
+	
+	public TaskInstanceInfo getTaskInstanceById(String taskInstId){
+		if(SmartUtil.isBlankObject(tasks) || SmartUtil.isBlankObject(taskInstId)) return null;
+		for(TaskInstanceInfo task : tasks){
+			if(task.getId().equals(taskInstId)){
+				return task;
+			}
+		}
+		return null;		
+	}
 }

@@ -39,7 +39,6 @@
 				before: null,
 				after: null
 			}, options);
-
 			if(ops.history && !target_) {
 				target_ = ops.target;
 				$.history.init(historic_load);

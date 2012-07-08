@@ -289,8 +289,6 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/forward_iwork_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> forwardIworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String instanceId = smartworks.setInformationWorkInstance(requestBody, request);
-		// TO DO : Exception handler
 		smartworks.forwardIworkInstance(requestBody, request);
 		return null;
 	}
@@ -298,9 +296,21 @@ public class WorkInstanceController extends ExceptionInterceptor {
 	@RequestMapping(value = "/approval_iwork_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> approvalIworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		String instanceId = smartworks.setInformationWorkInstance(requestBody, request);
-		// TO DO : Exception handler
 		smartworks.approvalIworkInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/forward_pwork_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> forwardPworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.forwardPworkInstance(requestBody, request);
+		return null;
+	}
+
+	@RequestMapping(value = "/approval_Pwork_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody Map<String, Object> approvalPworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.approvalPworkInstance(requestBody, request);
 		return null;
 	}
 
