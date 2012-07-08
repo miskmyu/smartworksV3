@@ -36,16 +36,25 @@
 		if(!workSpace.getClass().equals(User.class)) {
 	%>
 			<div class="nav_list">
-				<jsp:include page="/jsp/nav/community_wall.jsp" />
+				<jsp:include page="/jsp/nav/community_wall.jsp">
+					<jsp:param value="<%=wid %>" name="wid"/>
+				</jsp:include>
 			</div>	
 			<div class="nav_list top">
-				<jsp:include page="/jsp/nav/community_members.jsp" />
+				<jsp:include page="/jsp/nav/community_members.jsp">
+					<jsp:param value="<%=wid %>" name="wid"/>
+					<jsp:param value="<%=workSpace.getSpaceType() %>" name="workSpaceType"/>
+				</jsp:include>				
 			</div>
 			<div class="nav_list comming">
-				<jsp:include page="/jsp/nav/comming_events.jsp" />
+				<jsp:include page="/jsp/nav/comming_events.jsp">
+					<jsp:param value="<%=wid %>" name="wid"/>
+				</jsp:include>
 			</div>
 			<div class="nav_list recent mb20">
-				<jsp:include page="/jsp/nav/recent_boards.jsp" />
+				<jsp:include page="/jsp/nav/recent_boards.jsp">
+					<jsp:param value="<%=wid %>" name="wid"/>
+				</jsp:include>				
 			</div>			
 	<%
 		}else{

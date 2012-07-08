@@ -12,11 +12,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	// 호출할때 전달된 cid(Context ID, 패이지 컨택스트를 지정하는 변수) 를 가져옮..
-	String cid = request.getParameter("cid");
-	if (SmartUtil.isBlankObject(cid))
-		cid = ISmartWorks.CONTEXT_HOME;
-
-	String communityId = SmartUtil.getSpaceIdFromContentContext(cid);
+	String communityId = request.getParameter("wid");
 
 	EventInstanceInfo[] events = smartWorks.getCommingEventInstances(communityId, 5);
 	String listTarget = "event_list.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_EVENT_LIST + SmartWork.ID_EVENT_MANAGEMENT + "&wid=" + communityId;
@@ -28,8 +24,8 @@
 
 <!-- 최근 이벤트 -->
 <div class="nav_tit">
-	<div class="icon_event_works fn js_content" href="<%=listTarget%>"><fmt:message key="common.title.comming_event"/></a></div>
-	<span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span>
+	<div class="icon_event_works fn"><a class="js_content" href="<%=listTarget%>"><fmt:message key="common.title.comming_event"/></a></div>
+	<%if(!SmartUtil.isBlankObject(events)){%><span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span><%} %>
 </div>    
 <ul>
  	<%
@@ -41,7 +37,6 @@
       <li>
        <a href="<%=target %>" class="js_content">
 	       <span class="t_date"><%=event.getStart().toLocalString() %></span>
-	       <%-- <img class="profile_size_s" src="<%=event.getOwner().getMinPicture()%>"> --%>
 	       <div><%=event.getSubject() %></div>
        </a>
       </li>	

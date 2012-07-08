@@ -64,11 +64,10 @@
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-						smartPop.closeProgress();
 						smartPop.showInfo(smartPop.INFO, isEmpty(formId) ? smartMessage.get('createExternalFormSucceed') : smartMessage.get('setExternalFormSucceed'), function(){
-							smartPop.progressCenter();
 							document.location.href = "external_form.sw";					
 						});
+						smartPop.closeProgress();
 					},
 					error : function(e) {
 						smartPop.closeProgress();

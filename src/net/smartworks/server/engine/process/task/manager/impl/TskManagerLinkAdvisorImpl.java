@@ -65,6 +65,9 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 	
 	public void postExecuteTask(String user, TskTask obj, String action) throws Exception {
 		
+		if (obj.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
+			return;
+		
 		if (!obj.getType().equalsIgnoreCase("SINGLE"))
 			postMapping(user, obj, action);
 		
@@ -335,11 +338,11 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				|| objType.equalsIgnoreCase("or") || objType.equalsIgnoreCase("xor")) 
 			return;
 		
-		if (objType.equalsIgnoreCase("SINGLE")) {
-			Date cDate = obj.getCreationDate();
-			if (cDate.getTime() + 5000 < new LocalDate().getTime())//date to localdate - 
-				setSingleTask(user, obj);
-		}
+//		if (objType.equalsIgnoreCase("SINGLE")) {
+//			Date cDate = obj.getCreationDate();
+//			if (cDate.getTime() + 5000 < new LocalDate().getTime())//date to localdate - 
+//				setSingleTask(user, obj);
+//		}
 		
 	}
 	private TskTask applyApprovalTask(String user, TskTask obj) throws Exception {

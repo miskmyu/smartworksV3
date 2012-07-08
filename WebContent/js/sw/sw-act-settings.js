@@ -40,7 +40,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkHourSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "company_work_hour.sw";					
 					});					
 				},
@@ -96,7 +95,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCompanyEventSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "company_event.sw";					
 					});					
 				},
@@ -152,7 +150,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeApprovalLineSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "approval_line.sw";					
 					});					
 				},
@@ -236,7 +233,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWebServiceSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "web_service.sw";					
 					});					
 				},
@@ -292,7 +288,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeExternalFormSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "external_form.sw";					
 					});					
 				},
@@ -338,7 +333,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeDepartmentSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -384,7 +378,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeMemberSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "organization_management.sw";					
 					});					
 				},
@@ -626,7 +619,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeEmailServerSucceed'), function(){
-						smartPop.progressCenter();
 						document.location.href = "email_server.sw";					
 					});					
 				},

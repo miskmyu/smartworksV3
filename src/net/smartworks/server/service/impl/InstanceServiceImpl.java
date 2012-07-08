@@ -7447,41 +7447,6 @@ public class InstanceServiceImpl implements IInstanceService {
 			   instanceId=402880eb3865a03b013865a0ee9d0001,
 			   formId=frm_c19b1fe4bceb4732acbb8a4cd2a57474,
 			   formName=기안품의,
-			   frmSmartForm=   {
-			      4      =      {
-			         users=         [
-			            {
-			               id=kmyu@maninsoft.co.kr,
-			               name=1 유광민
-			            }
-			         ]
-			      },
-			      8      =      {
-			         users=         [
-
-			         ]
-			      },
-			      12      =      {
-			         users=         [
-
-			         ]
-			      },
-			      16      =      {
-			         users=         [
-			            {
-			               id=kmyu@maninsoft.co.kr,
-			               name=
-								1 유광민
-			            }
-			         ]
-			      },
-			      92      =12,
-			      142      =      {
-			         groupId=fg_002d59379aac99454e9915e92a053c0a0922
-			      },
-			      466      =false,
-			      535      =123
-			   },
 			   frmTaskForward=   {
 			      txtForwardSubject=111111111,
 			      txtForwardComments=111111111,
@@ -7495,14 +7460,135 @@ public class InstanceServiceImpl implements IInstanceService {
 			      }
 			   }
 			}*/
+
+		String userId = SmartUtil.getCurrentUser().getId();
 		
+		Map<String, Object> frmTaskForwardMap = (Map<String, Object>)requestBody.get("frmTaskForward");
 		
+
+		String instanceId = (String)requestBody.get("instanceId");
+		
+		//제목
+		String txtForwardSubject = (String)frmTaskForwardMap.get("txtForwardSubject");
+		//설명
+		String txtForwardComments = (String)frmTaskForwardMap.get("txtForwardComments");
+		
+		Map<String, Object> txtForwardForwardeeMap = (Map<String, Object>)frmTaskForwardMap.get("txtForwardForwardee");
+		
+		ArrayList<Map<String,String>> userArray = (ArrayList<Map<String,String>>)txtForwardForwardeeMap.get("users");
+		
+		String[] refUsers = null;
+		if(!CommonUtil.isEmpty(userArray)) {
+			refUsers = new String[userArray.size()];
+			for (int i = 0; i < userArray.size(); i++) {
+				Map<String, String> userInfoMap = userArray.get(i);
+				refUsers[i] = userInfoMap.get("id");
+			}
+		} else {
+			return;
+		}
+		
+		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, instanceId, IManager.LEVEL_ALL);
+		
+		TskTaskCond tskCond = new TskTaskCond();
+		tskCond.setProcessInstId(instanceId);
+		tskCond.setTypeIns(new String[]{TskTask.TASKTYPE_COMMON});
+		tskCond.setIsStartActivity("true");
+		tskCond.setOrders(new Order[]{new Order(TskTask.A_CREATIONDATE, true)});
+		
+		TskTask[] tasks = getTskManager().getTasks(userId, tskCond, IManager.LEVEL_LITE);
+		if (tasks == null || tasks.length == 0)
+			throw new Exception("Not Exist Start Task - processInstId : " + instanceId );
+		
+		//참조자가 존재한다면 참조타입의 태스크를 생성
+		
+		TskTask refTask = null;
+		Set refUserSet = new HashSet();
+		String refUser = null;
+		
+		String forwardId = "fwd_" + CommonUtil.newId();
+		
+		for (int i = 0; i < refUsers.length; i++) {
+			refUser = refUsers[i];
+			if (refUserSet.contains(refUser))
+				continue;
+			
+			refTask = new TskTask();
+			refTask.setProcessInstId(instanceId);
+			refTask.setType(CommonUtil.toDefault((String)MisUtil.taskDefTypeMap().get("reference"), "reference"));
+			//refTask.setPriority(priority);
+//					refTask.setTitle(obj.getTitle());
+			refTask.setTitle(txtForwardSubject);
+			//refTask.setName(obj.getName());
+			refTask.setName(txtForwardSubject);
+			refTask.setAssigner(userId);
+			refTask.setAssignee(refUser);
+			refTask.setAssignmentDate(new LocalDate());
+			refTask.setStartDate(new LocalDate());
+			refTask.setForm(tasks[0].getForm());
+			refTask.setDef(tasks[0].getDef());
+			refTask.setFromRefId(tasks[0].getObjId());
+			refTask.setFromRefType(tasks[0].getType());
+			refTask.setForwardId(forwardId);
+			refTask.setExtendedPropertyValue("subject", txtForwardSubject);
+			refTask.setExtendedPropertyValue("taskRef", tasks[0].getObjId());
+			refTask.setExtendedPropertyValue("workContents", txtForwardComments);
+			//refTask.setExtendedPropertyValue("projectName", projectName);
+			
+			refTask.setWorkSpaceId(prcInst.getWorkSpaceId());
+			refTask.setWorkSpaceType(prcInst.getWorkSpaceType());
+			refTask.setAccessLevel(prcInst.getAccessLevel());
+			refTask.setAccessValue(prcInst.getAccessValue());
+			
+			this.getTskManager().setTask(userId, refTask, null);
+			
+			PublishNotice pubNoticeObj = new PublishNotice(refUser, PublishNotice.TYPE_ASSIGNED, PublishNotice.REFTYPE_ASSIGNED_TASK, refTask.getObjId());
+			SwManagerFactory.getInstance().getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+			SmartUtil.increaseNoticeCountByNoticeType(refUser, Notice.TYPE_ASSIGNED);
+			
+			if (logger.isInfoEnabled()) {
+				logger.info("Assigned Reference Task [ " + txtForwardSubject + " ( Process Instance Id : " + refTask.getProcessInstId() + " , To User : " + refTask.getAssignee() + ")]");
+			}
+			refUserSet.add(refUser);
+		}
 		
 	}
 	@Override
 	public void approvalPworkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		/*{
+			   "workId":"pkg_cf3b0087995f4f99a41c93e2fe95b22d",
+			   "instanceId":"402880eb38678bbd013867b18ca60060",
+			   "frmApprovalLine":{
+			      "hdnApprovalLineId":"system.approvalLine.default.3level",
+			      "usrLevelApprover1":"kmyu@maninsoft.co.kr",
+			      "usrLevelApprover2":"kmyu@maninsoft.co.kr",
+			      "usrLevelApprover3":"kmyu@maninsoft.co.kr"
+			   },
+			   "frmTaskApproval":{
+			      "txtApprovalSubject":"333 ",
+			      "txtApprovalComments":"333",
+			      "txtApprovalForwardee":{
+			         "users":[
+
+			         ]
+			      }
+			   },
+			   "formId":"frm_b6ce4e4827f8454eb975cf485172a1cb",
+			   "formName":"대표이사승인",
+			   "frmSmartForm":{
+			      "4":"222ㄹㄹ",
+			      "12":"승인",
+			      "16":{
+			         "users":[
+			            {
+			               "id":"kmyu@maninsoft.co.kr",
+			               "name":"\n\t\t\t\t\t\t\t\t1 유광민\n\t\t\t\t\t\t\t"
+			            }
+			         ]
+			      }
+			   }
+			}*/
+		System.out.println(requestBody);
 	}
 	@Override
 	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {

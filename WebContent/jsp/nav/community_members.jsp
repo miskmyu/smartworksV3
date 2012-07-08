@@ -21,17 +21,14 @@
 	User leader = null;
 
 	// 호출할때 전달된 cid(Context ID, 패이지 컨택스트를 지정하는 변수) 를 가져옮..
-	String cid = request.getParameter("cid");
-	if (SmartUtil.isBlankObject(cid))
-		cid = ISmartWorks.CONTEXT_HOME;
-
-	String communityId = SmartUtil.getSpaceIdFromContentContext(cid);
+	String communityId = request.getParameter("wid");
+	int workSpaceType = Integer.parseInt(request.getParameter("workSpaceType"));
 	// 공간이 그룹일때와 부서일때를 구분하여 해당 정보를 서버에게 가져온다...
-	if (SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_GROUP_SPACE, cid)) {
+	if (workSpaceType == ISmartWorks.SPACE_TYPE_GROUP) {
 		Group group = smartWorks.getGroupById(communityId);
 		members = group.getMembers();
 		leader = group.getLeader();
-	} else if (SmartUtil.isSameContextPrefix(ISmartWorks.CONTEXT_PREFIX_DEPARTMENT_SPACE, cid)) {
+	} else if (workSpaceType == ISmartWorks.SPACE_TYPE_DEPARTMENT) {
 		Department department = smartWorks.getDepartmentById(communityId);
 		members = department.getMembers();
 		children = department.getChildren();
@@ -86,9 +83,9 @@
 			<ul>
 				<li>
 					<!-- 리더 -->
-					<a href="">
+					<a href="<%=leader.getSpaceController()%>?cid=<%=leader.getSpaceContextId()%>">
 					    <span class="icon_pe"><span class="leader"></span><img class="profile_size_s" src="<%=leader.getMinPicture()%>"></span>
-					    <span class="nav_sub_area"><fmt:message key="group.role.leader"/> <%=leader.getLongName() %></span>
+					    <span class="nav_sub_area"><%=leader.getLongName() %>(<fmt:message key="group.role.leader"/>)</span>
 					</a>
 				</li>
 			</ul>
@@ -102,11 +99,11 @@
 						isLeaderCounted = true;
 						continue;
 					}
-					if(i==(2+((isLeaderCounted)?1:0))){
+					if(i==(45+((isLeaderCounted)?1:0))){
 						break;
 					}else{
 					%>
-						<a title="<%=member.getLongName() %>" href="">
+						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>">
 							<span class="icon_pe">
 						    	<img class="profile_size_s" title="" src="<%=member.getMinPicture()%>">
 						    </span>

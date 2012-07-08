@@ -4,6 +4,9 @@
 <!-- Author			: Maninsoft, Inc.											 -->
 <!-- Created Date	: 2011.9.													 -->
 
+<%@page import="net.smartworks.model.approval.ApprovalLine"%>
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.work.info.SmartTaskInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
 <%@page import="net.smartworks.model.work.SmartForm"%>
 <%@page import="net.smartworks.model.work.InformationWork"%>
@@ -59,10 +62,8 @@ function submitForms(e) {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.closeProgress();
-				smartPop.progressCenter();
 				window.location.reload();
-
+				smartPop.closeProgress();
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -94,40 +95,37 @@ function submitForms(e) {
 		work = (ProcessWork)smartWorks.getWorkById(workId);
 	}
 	
+	SmartTaskInfo startTask = work.getDiagram().getStartTask();
+//	startTask.setApprovalLineId(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_2_LEVEL);
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="form_wrap up mb2 js_form_wrap js_start_pwork_page" workId="<%=workId%>">
+<div class="form_wrap up mb2 js_form_wrap js_start_pwork_page" workId="<%=workId%>" approvalLineId="<%=CommonUtil.toNotNull(startTask.getApprovalLineId())%>">
 	<div class="form_title js_form_header">
 		<!-- 해당 업무이름을 표시하는 곳 -->
 		<div class="icon_pworks title"><%=work.getFullpathName() %></div>
 
 		<!-- 전자결재, 업무전달 버튼들 -->
 		<div class="txt_btn">
-			<div class="fr">
-				<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
-			</div>
-			<div class="fr">
-				<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
-			</div>
+			<%
+			if(SmartUtil.isBlankObject(startTask.getApprovalLineId())){
+			%>
+				<div class="fr">
+					<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
+				</div>
+				<div class="fr">
+					<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
+				</div>
+			<%
+			}
+			%>
 		</div>
 		<div class="solid_line"></div>
 	</div>
 
-<%--
- 	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 -->
-	<div class="txt_btn txt_btn_height js_form_detail_buttons">
-		<div>
-			<a href="" class="js_toggle_form_detail" requiredOnly="false" workId="<%=workId%>"><fmt:message key="common.upload.button.detail" /> </a>
-		</div>
-		<div style="display: none">
-			<a href="" class="js_toggle_form_detail" requiredOnly="true" workId="<%=workId%>"><fmt:message key="common.upload.button.brief" /> </a>
-		</div>
-	</div>
-	<!-- 스마트폼 화면을 필수항목만 또는 모든항목을 표시하게하는 버튼 //-->
- --%>
 	<!--  전자결재화면이 나타나는 곳 -->
 	<div class="js_form_task_approval" style="display:none"></div>
 	
