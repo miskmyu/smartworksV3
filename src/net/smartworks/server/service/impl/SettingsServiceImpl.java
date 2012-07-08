@@ -939,10 +939,12 @@ public class SettingsServiceImpl implements ISettingsService {
 			ApprovalLine approvalLine = new ApprovalLine();
 			if(SmartUtil.isBlankObject(id))
 				return ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
-			if (id.equalsIgnoreCase(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_2_LEVEL)) 
-				return ApprovalLine.DEFAULT_APPROVAL_LINE_2_LEVEL;
-			if (id.equalsIgnoreCase(ApprovalLine.ID_DEFAULT_APPROVAL_LINE_3_LEVEL)) 
-				return ApprovalLine.DEFAULT_APPROVAL_LINE_3_LEVEL;
+			
+			for (int i = 0; i < ApprovalLine.SYSTEM_APPROVAL_LINES.length; i++) {
+				if (id.equalsIgnoreCase(ApprovalLine.SYSTEM_APPROVAL_LINES[i].getId())) {
+					return ApprovalLine.SYSTEM_APPROVAL_LINES[i];
+				}
+			}
 			
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
