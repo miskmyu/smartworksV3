@@ -2,6 +2,7 @@ package net.smartworks.model.work;
 
 import net.smartworks.model.BaseObject;
 import net.smartworks.model.work.info.SmartTaskInfo;
+import net.smartworks.util.SmartUtil;
 
 public class SmartDiagram extends BaseObject{
 
@@ -46,6 +47,15 @@ public class SmartDiagram extends BaseObject{
 	}
 	public void setTasks(SmartTaskInfo[] tasks) {
 		this.tasks = tasks;
+	}
+	public SmartTaskInfo getStartTask(){
+		if(SmartUtil.isBlankObject(tasks)) return null;
+		for(int i=0; i<tasks.length; i++){
+			SmartTaskInfo task = tasks[i];
+			if(task.isStartTask())
+				return task;
+		}
+		return null;
 	}
 	public SmartDiagram(){
 		super();
