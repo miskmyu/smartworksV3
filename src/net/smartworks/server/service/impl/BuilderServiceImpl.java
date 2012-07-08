@@ -367,6 +367,49 @@ public class BuilderServiceImpl implements IBuilderService {
 					resourceId = prcSwProcesses[0].getProcessId();
 			}
 
+			SwaResource[] swaResources = null;
+			if(resourceId != null) {
+				SwaResourceCond swaResourceCond = new SwaResourceCond();
+				swaResourceCond.setResourceId(resourceId);
+				swaResources = getSwaManager().getResources(userId, swaResourceCond, IManager.LEVEL_LITE);
+			}
+			if(!CommonUtil.isEmpty(swaResources)) {
+				for(SwaResource swaResource : swaResources) {
+					String objId = swaResource.getObjId();
+					String mode = swaResource.getMode();
+					if(mode.equalsIgnoreCase(SwaResource.MODE_DELETE)) {
+						getSwaManager().removeResource(userId, objId);
+					} else {
+						if(mode.equalsIgnoreCase(SwaResource.MODE_READ)) {
+							swaResource.setPermission(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+						} else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE)) {
+							swaResource.setPermission(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
+						} else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY)) {
+							swaResource.setPermission(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+						}
+						getSwaManager().setResource(userId, swaResource, null);
+					}
+				}
+			} else {
+				String[] modes = new String[]{SwaResource.MODE_READ, SwaResource.MODE_WRITE, SwaResource.MODE_MODIFY};
+				for(int i=0; i<modes.length; i++) {
+					SwaResource swaResource = new SwaResource();
+					swaResource.setCompanyId(companyId);
+					swaResource.setResourceId(resourceId);
+					swaResource.setType(0);
+					String mode = modes[i];
+					swaResource.setMode(mode);
+					if(mode.equalsIgnoreCase(SwaResource.MODE_READ)) {
+						swaResource.setPermission(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+					} else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE)) {
+						swaResource.setPermission(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
+					} else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY)) {
+						swaResource.setPermission(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+					}
+					getSwaManager().setResource(userId, swaResource, null);
+				}
+			}
+
 			SwaUser[] swaUsers = null;
 			if(resourceId != null) {
 				SwaUserCond swaUserCond = new SwaUserCond();
@@ -393,30 +436,6 @@ public class BuilderServiceImpl implements IBuilderService {
 					setSwaUsers(txtEditableUsers, resourceId, SwaUser.MODE_MODIFY);
 			}
 
-			SwaResource[] swaResources = null;
-			if(resourceId != null) {
-				SwaResourceCond swaResourceCond = new SwaResourceCond();
-				swaResourceCond.setResourceId(resourceId);
-				swaResources = getSwaManager().getResources(userId, swaResourceCond, IManager.LEVEL_LITE);
-			}
-			if(!CommonUtil.isEmpty(swaResources)) {
-				for(SwaResource swaResource : swaResources) {
-					String objId = swaResource.getObjId();
-					String mode = swaResource.getMode();
-					if(mode.equalsIgnoreCase(SwaResource.MODE_DELETE)) {
-						getSwaManager().removeResource(userId, objId);
-					} else {
-						if(mode.equalsIgnoreCase(SwaResource.MODE_READ)) {
-							swaResource.setPermission(rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoAccessLevel.equals(Integer.toString(AccessPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
-						} else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE)) {
-							swaResource.setPermission(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
-						} else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY)) {
-							swaResource.setPermission(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
-						}
-						getSwaManager().setResource(userId, swaResource, null);
-					}
-				}
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e);

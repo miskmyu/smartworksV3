@@ -19,8 +19,10 @@ public class PrcProcessInstExtend {
 	private String prcObjId;
 	private String prcName;
 	private String prcCreateUser;
+	private String prcCreateUserName;
 	private Date prcCreateDate;
 	private String prcModifyUser;
+	private String prcModifyUserName;
 	private Date prcModifyDate;
 	private String prcStatus;
 	private String prcTitle;
@@ -33,11 +35,13 @@ public class PrcProcessInstExtend {
 	private String lastTask_tskObjId;
 	private String lastTask_tskName;
 	private String lastTask_tskCreateUser;
+	private String lastTask_tskCreateUserName;
 	private Date lastTask_tskCreateDate;
 	private String lastTask_tskStatus;
 	private String lastTask_tskType;
 	private String lastTask_tskTitle;
 	private String lastTask_tskAssignee;
+	private String lastTask_tskAssigneeName;
 	private Date lastTask_tskExecuteDate;
 	private Date lastTask_tskDueDate;
 	private String lastTask_tskForm;
@@ -90,6 +94,12 @@ public class PrcProcessInstExtend {
 	public void setPrcCreateUser(String prcCreateUser) {
 		this.prcCreateUser = prcCreateUser;
 	}
+	public String getPrcCreateUserName() {
+		return prcCreateUserName;
+	}
+	public void setPrcCreateUserName(String prcCreateUserName) {
+		this.prcCreateUserName = prcCreateUserName;
+	}
 	public Date getPrcCreateDate() {
 		return prcCreateDate;
 	}
@@ -101,6 +111,12 @@ public class PrcProcessInstExtend {
 	}
 	public void setPrcModifyUser(String prcModifyUser) {
 		this.prcModifyUser = prcModifyUser;
+	}
+	public String getPrcModifyUserName() {
+		return prcModifyUserName;
+	}
+	public void setPrcModifyUserName(String prcModifyUserName) {
+		this.prcModifyUserName = prcModifyUserName;
 	}
 	public Date getPrcModifyDate() {
 		return prcModifyDate;
@@ -156,6 +172,12 @@ public class PrcProcessInstExtend {
 	public void setLastTask_tskCreateUser(String lastTask_tskCreateUser) {
 		this.lastTask_tskCreateUser = lastTask_tskCreateUser;
 	}
+	public String getLastTask_tskCreateUserName() {
+		return lastTask_tskCreateUserName;
+	}
+	public void setLastTask_tskCreateUserName(String lastTask_tskCreateUserName) {
+		this.lastTask_tskCreateUserName = lastTask_tskCreateUserName;
+	}
 	public Date getLastTask_tskCreateDate() {
 		return lastTask_tskCreateDate;
 	}
@@ -185,6 +207,12 @@ public class PrcProcessInstExtend {
 	}
 	public void setLastTask_tskAssignee(String lastTask_tskAssignee) {
 		this.lastTask_tskAssignee = lastTask_tskAssignee;
+	}
+	public String getLastTask_tskAssigneeName() {
+		return lastTask_tskAssigneeName;
+	}
+	public void setLastTask_tskAssigneeName(String lastTask_tskAssigneeName) {
+		this.lastTask_tskAssigneeName = lastTask_tskAssigneeName;
 	}
 	public Date getLastTask_tskExecuteDate() {
 		return lastTask_tskExecuteDate;
@@ -252,4 +280,5 @@ public class PrcProcessInstExtend {
 	public void setLastTask_tskAccessValue(String lastTask_tskAccessValue) {
 		this.lastTask_tskAccessValue = lastTask_tskAccessValue;
 	}
+
 }
