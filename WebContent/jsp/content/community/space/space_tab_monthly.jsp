@@ -169,7 +169,7 @@
 						<%
 						}
 						%>
-						<ul>
+						<div>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWeeks) && tasksByWeeks.length >i && !SmartUtil.isBlankObject(tasksByWeeks[i])){
 								session.setAttribute("taskHistories", tasksByWeeks[i]);
@@ -178,11 +178,11 @@
 							<%
 							}else{
 							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+								<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 							<%
 							}
 							%>											
-						</ul>
+						</div>
 					</div>
 				<%
 					weekStart = new LocalDate(weekEnd.getTime() + LocalDate.ONE_DAY);

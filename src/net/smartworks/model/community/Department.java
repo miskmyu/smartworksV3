@@ -2,6 +2,7 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
 public class Department extends WorkSpace {
@@ -51,6 +52,9 @@ public class Department extends WorkSpace {
 	public int getNumberOfSubDepartment(){
 		if(SmartUtil.isBlankObject(this.children)) return 0;
 		return this.children.length;
+	}
+	public int getSpaceType(){
+		return ISmartWorks.SPACE_TYPE_DEPARTMENT;
 	}
 	
 	public Department(){

@@ -98,7 +98,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId=<%=CommonUtil.toNotNull(taskInstId) %>>
+<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">
     <div class="portlet_t"><div class="portlet_tl"></div></div>
     <div class="portlet_l" style="display: block;">
 	    <ul class="portlet_r" style="display: block;">		            

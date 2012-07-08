@@ -29,6 +29,7 @@
 <!-- 최근 공지 -->
 <div class="nav_tit">
 	<div class="icon_board_works fn js_content" href="<%=listTarget%>"><fmt:message key="common.title.recent_board"/></a></div>
+	<span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span>
 </div>    
 <ul>
  	<%
@@ -38,7 +39,13 @@
  			String target = "iwork_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + board.getId() + "&wid=" + communityId + "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
  	%>
       <li>
-       <a href="<%=target %>" class="js_content"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>"><%=board.getSubject() %><span class="t_date fr"><%=board.getLastModifiedDate().toLocalString() %></span></a>
+       <a href="<%=target %>" class="js_content">
+	       <img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">
+	       <div>
+	       <%=board.getSubject() %>
+	       <span class="t_date fr"><%=board.getLastModifiedDate().toLocalString() %></span>
+	       </div>
+       </a>
       </li>	
  	
  	<%

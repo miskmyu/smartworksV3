@@ -5,6 +5,7 @@ import java.util.TimeZone;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.mail.MailAccount;
+import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.LocaleInfo;
 import net.smartworks.util.SmartUtil;
@@ -166,6 +167,10 @@ public class User extends WorkSpace {
 	public void setMailAccounts(MailAccount[] mailAccounts) {
 		this.mailAccounts = mailAccounts;
 	}
+	public int getSpaceType(){
+		return ISmartWorks.SPACE_TYPE_USER;
+	}
+	
 	public User(){
 		super();
 	}

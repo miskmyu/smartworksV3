@@ -29,6 +29,7 @@
 <!-- 최근 이벤트 -->
 <div class="nav_tit">
 	<div class="icon_event_works fn js_content" href="<%=listTarget%>"><fmt:message key="common.title.comming_event"/></a></div>
+	<span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span>
 </div>    
 <ul>
  	<%
@@ -38,7 +39,11 @@
  			String target = "iwork_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + event.getId() + "&wid=" + communityId + "&workId=" + SmartWork.ID_EVENT_MANAGEMENT;
  	%>
       <li>
-       <a href="<%=target %>" class="js_content"><span class="t_date fr"><%=event.getStart().toLocalString() %></span><img class="profile_size_s" src="<%=event.getOwner().getMinPicture()%>"><%=event.getSubject() %></a>
+       <a href="<%=target %>" class="js_content">
+	       <span class="t_date"><%=event.getStart().toLocalString() %></span>
+	       <%-- <img class="profile_size_s" src="<%=event.getOwner().getMinPicture()%>"> --%>
+	       <div><%=event.getSubject() %></div>
+       </a>
       </li>	
  	
  	<%
