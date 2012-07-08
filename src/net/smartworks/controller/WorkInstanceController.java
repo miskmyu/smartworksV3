@@ -307,7 +307,7 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return null;
 	}
 
-	@RequestMapping(value = "/approval_Pwork_instance", method = RequestMethod.POST)
+	@RequestMapping(value = "/approval_pwork_instance", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> approvalPworkInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.approvalPworkInstance(requestBody, request);
