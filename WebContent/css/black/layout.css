@@ -159,7 +159,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_sub_list.coummi {min-height: 200px}
 .nav_list.recent, .nav_list.comming {padding-bottom:10px}
 .nav_list.recent .nav_tit, .nav_list.comming .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
-.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 1px 22px}
+.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px}
 .nav_list.recent ul { line-height:16px}
 .nav_list.recent .works li { padding:7px 10px 0}
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
