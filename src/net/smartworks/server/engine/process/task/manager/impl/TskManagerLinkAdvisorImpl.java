@@ -599,7 +599,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		Set refUserSet = new HashSet();
 		String refUser = null;
 
-		String forwordId = "fwd_" + CommonUtil.newId();
+		String forwardId = "fwd_" + CommonUtil.newId();
 		
 		for (int i = 0; i < refUsers.length; i++) {
 			refUser = refUsers[i];
@@ -622,12 +622,12 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask.setDef(obj.getDef());
 			refTask.setFromRefId(obj.getObjId());
 			refTask.setFromRefType(obj.getType());
+			refTask.setForwardId(forwardId);
 			refTask.setExtendedPropertyValue("subject", subject);
 			refTask.setExtendedPropertyValue("taskRef", obj.getObjId());
 			refTask.setExtendedPropertyValue("workContents", workContents);
 			//refTask.setExtendedPropertyValue("projectName", projectName);
 			refTask.setExtendedPropertyValue("isPublic", isPublic);
-			refTask.setExtendedPropertyValue("forwordId", forwordId);
 			
 			//TODO 참조 업무의 workspaceid, accesslevel 값정의
 			refTask.setWorkSpaceId(obj.getWorkSpaceId());

@@ -39,7 +39,13 @@
  			String target = "iwork_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + board.getId() + "&wid=" + communityId + "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
  	%>
       <li>
-       <a href="<%=target %>" class="js_content"><img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>"><%=board.getSubject() %><span class="t_date fr"><%=board.getLastModifiedDate().toLocalString() %></span></a>
+       <a href="<%=target %>" class="js_content">
+	       <img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">
+	       <div>
+	       <%=board.getSubject() %>
+	       <span class="t_date fr"><%=board.getLastModifiedDate().toLocalString() %></span>
+	       </div>
+       </a>
       </li>	
  	
  	<%
