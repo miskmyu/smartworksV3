@@ -598,22 +598,6 @@ function loadTaskApprovalFields() {
 				target.find('.dash_line').remove();
 			}else if(!isEmpty(pworkSpace)){
 				var target = pworkSpace.find('.js_append_task_approval_page').addClass('up');
-				if(actionRequired==="true"){
-					target.addClass('form_read');
-					if(isReturned=='true'){
-						pworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
-						pworkSpace.find('.js_btn_reject_approval').show();						
-					}else{
-						pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
-						pworkSpace.find('.js_btn_return_approval').show();
-						pworkSpace.find('.js_btn_reject_approval').show();
-					}
-				}
-				
-				if(readOnly || isReturned=='true'){
-					pworkSpace.find('.js_toggle_forward_btn').hide();
-					pworkSpace.find('.js_toggle_approval_btn').hide();
-				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();
 				
