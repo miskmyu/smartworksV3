@@ -146,7 +146,7 @@
 					<!-- 휴일시간 -->
 					<div class="space_section js_space_dayly_work_hour" toDate="<%=toDateStr%>">
 	 					<div class="title"><%=dayTitle%></div>
-						<ul>
+
 							<%
 							int holidayTasks = 0;
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length > 0){
@@ -162,11 +162,10 @@
 							}
 							if(holidayTasks==0){
 							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+								<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 							<%
 							}
 							%>											
-						</ul>
 					</div>
 					<!-- 휴일시간 //-->
 				<%

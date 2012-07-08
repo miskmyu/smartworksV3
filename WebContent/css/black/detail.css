@@ -11,6 +11,7 @@
 .body_titl .bul_space {background: url("../../images/body_icon.png") no-repeat 0 -619px transparent; height:7px; padding:0 0 0 10px; margin-left:3px; font-weight:bold; color:#919191}
 .body_titl .info {font-size:11px; line-height:17px; display: table-cell; height: 50px; vertical-align: bottom}
 .body_titl .info > .title { font-size:16px; font-weight:bold; height:auto; float:none}
+.body_titl .info > .title + div {display:block; min-height: 14px}
 .body_titl img { width:50px; height:52px; padding:0 13px 0 0}
 .body_titl.space {padding: 0 7px 15px}
 .body_titl.list {padding: 0 7px 5px}

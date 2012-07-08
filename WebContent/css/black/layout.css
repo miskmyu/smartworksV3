@@ -192,8 +192,8 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 
 /* Nav MySpace */
 .icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 21px; float: left; height:18px}
-.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -394px; padding:0 0 0 21px; float: left; height:18px}
-.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -4v23px; padding:0 0 0 21px; float: left; height:18px}
+.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -784px; padding:0 0 0 21px; float: left; height:18px}
+.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -812px; padding:0 0 0 21px; float: left; height:18px}
 .icon_all_works {background: url("../../images/body_icon.png") no-repeat -550px -453px; padding:0 0 0 21px; float: left; height:18px}
 .icon_image_works {background: url("../../images/body_icon.png") no-repeat -550px -478px; padding:0 0 0 21px; float: left; height:18px}
 .icon_file_works {background: url("../../images/body_icon.png") no-repeat -550px -503px; padding:0 0 0 21px; float: left; height:18px}
@@ -301,8 +301,8 @@ li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.comment_list {}
 li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
-.arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
-.arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 13px}
+.arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
+.arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 
 /* 나의 커뮤니티, 나의 업무, 메일, 커뮤너티멤버 Hover */
 /* #my_works:업무 , #m_setting:나의공간, #my_communities:커뮤니티, #my_mail:메일, #all_works:스마트빌더-업무전체 */
