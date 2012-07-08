@@ -30,9 +30,9 @@ public class Community extends BaseObject {
 	public static final String ICON_CLASS_DEPARTMENT = "icon_division_s";
 	public static final String ICON_CLASS_GROUP = "icon_group_s";
 
-	public static final String CONTROLLER_USER_SPACE = "user_space.sw";
-	public static final String CONTROLLER_DEPARTMENT_SPACE = "department_space.sw";
-	public static final String CONTROLLER_GROUP_SPACE = "group_space.sw";
+	public static final String CONTROLLER_USER_SPACE = "smart.sw#user_space.sw";
+	public static final String CONTROLLER_DEPARTMENT_SPACE = "smart.sw#department_space.sw";
+	public static final String CONTROLLER_GROUP_SPACE = "smart.sw#group_space.sw";
 
 	public static final String IMAGE_TYPE_ORIGINAL = "_origin";
 	public static final String IMAGE_TYPE_THUMB = "_thumb";

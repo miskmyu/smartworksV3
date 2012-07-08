@@ -100,7 +100,7 @@
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">
     <div class="portlet_t"><div class="portlet_tl"></div></div>
-    <div class="portlet_l" style="display: block;">
+    <div class="portlet_l js_form_header" style="display: block;">
 	    <ul class="portlet_r" style="display: block;">		            
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
@@ -164,7 +164,7 @@
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space js_form_header" style="height:59px; padding: 0 45px;">
+			<div class="define_space" style="height:59px; padding: 0 45px;">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -244,7 +244,7 @@
 			<!--프로세스 영역//-->
 				
 			<!-- 상세보기 컨텐츠 -->
-			<div class="contents_space">
+			<div class="contents_space js_form_header">
 				<div class="up_point pos_default js_form_content_pointer"></div>
 
 				<!--  전자결재화면이 나타나는 곳 -->

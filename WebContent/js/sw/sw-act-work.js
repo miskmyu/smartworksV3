@@ -466,6 +466,7 @@ $(function() {
 		var input = $(targetElement(e));
 		if(!input.hasClass('js_select_task_instance')) input = input.parents('.js_select_task_instance:first');		
 		clickOnTask(input);
+		smartPop.closeProgress();
 		return false;
 	});
 
@@ -725,21 +726,21 @@ $(function() {
 		}
 		var workId = workSpacePage.attr("workId");
 		var instId = workSpacePage.attr("instId");
-		var workSpaceType = workSpacePage.attr("workSpaceType");
 		// iwork_instance 에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 		if (!SmartWorks.GridLayout.validate(workSpacePage.find('.js_form_task_forward form'), $('.js_space_error_message'))) return false;
 		
 		smartPop.confirm(smartMessage.get("forwardConfirmation"), function(){
 			var forms = workSpacePage.find('form');
+			var isIworkView = (workSpacePage.hasClass('js_iwork_space_page') && isEmpty(workSpacePage.find('form[name="frmAccessSpace"]:visible')));
 			var paramsJson = {};
 			paramsJson['workId'] = workId;
 			paramsJson['instanceId'] = instId;
-			paramsJson['selWorkSpaceType'] = workSpaceType;
 			for(var i=0; i<forms.length; i++){
 				var form = $(forms[i]);
 				
 				// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
 				if(form.attr('name') === 'frmSmartForm'){
+					if(isIworkView) continue;
 					paramsJson['formId'] = form.attr('formId');
 					paramsJson['formName'] = form.attr('formName');
 				}
@@ -763,20 +764,18 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("forwardWorkInstanceSucceed"), function(){
-						smartPop.progressCenter();
 						window.location.reload();
 						return false;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("forwardWorkInstanceError"), function(){
 						return false;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -841,20 +840,18 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalWorkInstanceSucceed"), function(){
-						smartPop.progressCenter();
 						window.location.reload();
 						return false;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("forwardWorkInstanceError"), function(){
 						return false;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -889,21 +886,19 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
 							function(){
 								// 정보관리업무 목록 페이지로 이동한다.....
-								smartPop.progressCenter();
 								document.location.href = "smart.sw#" + "iwork_list.sw?cid=iw.li." + workId;					
 							});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeIWorkInstanceError"), function(){
 						return false;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 			
@@ -958,20 +953,18 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("performTaskInstanceError"), function(){
 						return;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -1023,20 +1016,18 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
 						return;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("returnTaskInstanceError"), function(){
 						return;
 					});
-					
+					smartPop.closeProgress();					
 				}
 			});
 		},
@@ -1088,14 +1079,13 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("tempSaveTaskInstanceSucceed"), function(){
 						return;
 					});
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.closeProgress();
 					if(e.responseText === "duplicateKeyException")
 						smartPop.showInfo(smartPop.ERROR, smartMessage.get("duplicateKeyException"));
 					else
@@ -1341,7 +1331,7 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
-		var target = input.parents('.js_form_header').siblings('.js_form_task_approval');
+		var target = (workSpacePage.hasClass('js_iwork_space_page')) ? input.parents('.js_form_header').siblings('.js_form_task_approval') : input.parents('.js_form_header').find('.js_form_task_approval');
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
@@ -1350,7 +1340,7 @@ $(function() {
 			}
 			return false;
 		}
-		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible'))) return false;
+		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')) || !isEmpty(input.parents('.js_form_header').find('.js_form_task:visible'))) return false;
 		$.ajax({
 			url : 'append_task_approval.sw',
 			data : {},

@@ -389,6 +389,7 @@ $(function() {
 			url = "add_comment_on_instance.sw";
 		}
 		paramsJson['comment'] = comment;
+		smartPop.progressCenter();
 		console.log(JSON.stringify(paramsJson));
 		$.ajax({
 			url : url,
@@ -409,14 +410,15 @@ $(function() {
 						input.attr('value', '');
 					}
 				}else{
-					smartPop.progressCenter();
 					input.attr('value', '');
 					window.location.reload();
 				}
+				smartPop.closeProgress();				
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("addCommentError"), function(){
+					smartPop.closeProgress();
 				});
 				
 			}
@@ -446,6 +448,8 @@ $(function() {
 			paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
 			paramsJson['comments'] = comment;
 			console.log(JSON.stringify(paramsJson));
+			var progressSpan = workSpacePage.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
 			$.ajax({
 				url : "comment_on_task_forward.sw",
 				contentType : 'application/json',
@@ -454,16 +458,15 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+						smartPop.closeProgress();
 					});
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskForwardError"), function(){
-	 					smartPop.close();
-					});
-					
+						smartPop.closeProgress();
+					});					
 				}
 				
 			});			
@@ -513,6 +516,8 @@ $(function() {
 				
 			}
 			console.log(JSON.stringify(paramsJson));
+			var progressSpan = workSpacePage.find('.js_progress_span');
+			smartPop.progressCont(progressSpan);
 			$.ajax({
 				url : "comment_on_task_approval.sw",
 				contentType : 'application/json',
@@ -521,16 +526,15 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
-						smartPop.progressCenter();
 						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+						smartPop.closeProgress();
 					});
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskApprovalError"), function(){
-	 					smartPop.close();
+						smartPop.closeProgress();					
 					});
-					
 				}
 				
 			});			
