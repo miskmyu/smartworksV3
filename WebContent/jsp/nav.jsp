@@ -42,7 +42,7 @@
 				<jsp:include page="/jsp/nav/community_members.jsp" />
 			</div>
 			<div class="nav_list recent">
-				<jsp:include page="/jsp/nav/recent_events.jsp" />
+				<jsp:include page="/jsp/nav/comming_events.jsp" />
 			</div>
 			<div class="nav_list recent mb20">
 				<jsp:include page="/jsp/nav/recent_boards.jsp" />
