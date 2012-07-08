@@ -2537,7 +2537,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			obj.setExtendedPropertyValue("subject", txtForwardSubject);
 			obj.setExtendedPropertyValue("referenceUser", txtForwardForwardee);
 			obj.setExtendedPropertyValue("workContents", txtForwardComments);
-		
+			
 		} else if (frmApprovalLine != null) {
 			Iterator appLineItr = frmApprovalLine.keySet().iterator();
 			
@@ -2644,6 +2644,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				getAprManager().setApprovalLine(userId, apprLine, IManager.LEVEL_ALL);
 				obj.setExtendedPropertyValue("approvalLine", apprLine.getObjId());
+				
+				obj.setIsApprovalSourceTask("true");
+				obj.setTargetApprovalStatus(Instance.STATUS_APPROVAL_RUNNING + "");
+				
 			}
 		}
 	}
@@ -2889,6 +2893,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			setReferenceApprovalToTask(userId, task, requestBody);
 			
 			//태스크를 실행하며 프로세스업무를 실행한다
+			
 			task = getTskManager().executeTask(userId, task, "execute");
 
 			String taskInstId = task.getObjId();

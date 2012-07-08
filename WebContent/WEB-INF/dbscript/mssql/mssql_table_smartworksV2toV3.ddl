@@ -758,5 +758,8 @@ alter table tsktask add tskApprovalId varchar(100)
 
 alter table tsktask add tskForwardId varchar(100)
 
+alter table tsktask add tskIsApprovalSourceTask varchar(10)
+
+alter table tsktask add tskTargetApprovalStatus varchar(10)
 
 

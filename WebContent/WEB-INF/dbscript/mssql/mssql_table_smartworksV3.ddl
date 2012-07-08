@@ -886,6 +886,8 @@ CREATE TABLE tsktask (
     tskFromRefId varchar(100),
     tskApprovalId varchar(100),
     tskForwardId varchar(100),
+    tskIsApprovalSourceTask varchar(10),
+    tskTargetApprovalStatus varchar(10),
     tskWorkspaceId varchar(100),
     tskWorkspaceType varchar(50),
     tskAccessLevel varchar(50),

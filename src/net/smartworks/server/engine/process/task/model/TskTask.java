@@ -73,6 +73,8 @@ public class TskTask extends MisObject {
 	public static final String A_FROMREFID = "fromRefId";
 	public static final String A_APPROVALID = "approvalId";
 	public static final String A_FORWARDID = "forwardId";
+	public static final String A_ISAPPROVALSOURCETASK = "isApprovalSourceTask";
+	public static final String A_TARGETAPPROVALSTATUS = "targetApprovalStatus";
 	public static final String A_WORKSPACEID = "workSpaceId";
 	public static final String A_WORKSPACETYPE = "workSpaceType";
 	public static final String A_ACCESSLEVEL = "accessLevel";
@@ -106,6 +108,8 @@ public class TskTask extends MisObject {
 	private String fromRefId;
 	private String approvalId;
 	private String forwardId;
+	private String isApprovalSourceTask;
+	private String targetApprovalStatus;
 	private String workSpaceId;
 	private String workSpaceType;
 	private String accessLevel;
@@ -143,6 +147,8 @@ public class TskTask extends MisObject {
 		appendAttributeString(A_FROMREFID, fromRefId, buf);
 		appendAttributeString(A_APPROVALID, approvalId, buf);
 		appendAttributeString(A_FORWARDID, forwardId, buf);
+		appendAttributeString(A_ISAPPROVALSOURCETASK, isApprovalSourceTask, buf);
+		appendAttributeString(A_TARGETAPPROVALSTATUS, targetApprovalStatus, buf);
 		appendAttributeString(A_WORKSPACEID, workSpaceId, buf);
 		appendAttributeString(A_WORKSPACETYPE, workSpaceType, buf);
 		appendAttributeString(A_ACCESSLEVEL, accessLevel, buf);
@@ -195,6 +201,8 @@ public class TskTask extends MisObject {
 			Node fromRefId = attrMap.getNamedItem(A_FROMREFID);
 			Node approvalId = attrMap.getNamedItem(A_APPROVALID);
 			Node forwardId = attrMap.getNamedItem(A_FORWARDID);
+			Node isApprovalSourceTask = attrMap.getNamedItem(A_ISAPPROVALSOURCETASK);
+			Node targetApprovalStatus = attrMap.getNamedItem(A_TARGETAPPROVALSTATUS);
 			Node workSpaceId = attrMap.getNamedItem(A_WORKSPACEID);
 			Node workSpaceType = attrMap.getNamedItem(A_WORKSPACETYPE);
 			Node accessLevel = attrMap.getNamedItem(A_ACCESSLEVEL);
@@ -242,6 +250,10 @@ public class TskTask extends MisObject {
 				obj.setApprovalId(approvalId.getNodeValue());
 			if (forwardId != null)
 				obj.setForwardId(forwardId.getNodeValue());
+			if (isApprovalSourceTask != null)
+				obj.setIsApprovalSourceTask(isApprovalSourceTask.getNodeValue());
+			if (targetApprovalStatus != null)
+				obj.setTargetApprovalStatus(targetApprovalStatus.getNodeValue());
 			if (workSpaceId != null)
 				obj.setWorkSpaceId(workSpaceId.getNodeValue());
 			if (workSpaceType != null)
@@ -599,5 +611,17 @@ public class TskTask extends MisObject {
 	}
 	public void setAccessValue(String accessValue) {
 		this.accessValue = accessValue;
+	}
+	public String getIsApprovalSourceTask() {
+		return isApprovalSourceTask;
+	}
+	public void setIsApprovalSourceTask(String isApprovalSourceTask) {
+		this.isApprovalSourceTask = isApprovalSourceTask;
+	}
+	public String getTargetApprovalStatus() {
+		return targetApprovalStatus;
+	}
+	public void setTargetApprovalStatus(String targetApprovalStatus) {
+		this.targetApprovalStatus = targetApprovalStatus;
 	}
 }

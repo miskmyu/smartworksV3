@@ -210,6 +210,15 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 					}
 				}
 				
+				String sourceTaskId = obj.getFromRefId();
+				TskTask task = getTskManager().getTask(user, sourceTaskId, IManager.LEVEL_ALL);
+				
+				if (task != null) {
+					task.setIsApprovalSourceTask(null);
+					task.setTargetApprovalStatus(Instance.STATUS_REJECTED +"");
+					getTskManager().setTask(user, task, IManager.LEVEL_ALL);
+				}
+				
 				String aprStatus = "24";
 				apprLine.setStatus(aprStatus);
 				getAprManager().setApprovalLine("linkadvisor", apprLine, null);
@@ -234,6 +243,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				}
 				
 				obj = getTskManager().getTask(user, taskRef, null);
+				//전자결재를 시작한 태스크?
+				obj.setTargetApprovalStatus(Instance.STATUS_COMPLETED + "");
 			} else {
 				return;
 			}

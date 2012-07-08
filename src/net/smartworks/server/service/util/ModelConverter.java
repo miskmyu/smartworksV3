@@ -2294,6 +2294,11 @@ public class ModelConverter {
 			status = Instance.STATUS_RUNNING;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 			status = Instance.STATUS_COMPLETED;
+			if (task.getIsApprovalSourceTask() != null && task.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
+				if (task.getTargetApprovalStatus().equalsIgnoreCase(Instance.STATUS_APPROVAL_RUNNING + "")) {
+					status = Instance.STATUS_APPROVAL_RUNNING;
+				}
+			}
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			status = Instance.STATUS_RETURNED;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CREATE)) {
@@ -2369,9 +2374,14 @@ public class ModelConverter {
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("txtApprovalComments"));
 			taskInstInfo.setApprovalId(swTask.getApprovalId());
+			taskInstInfo.setApprovalTaskId(swTask.getFromRefId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		}
-
+		
+		if (swTask.getIsApprovalSourceTask() != null && swTask.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
+			taskInstInfo.setApprovalWork(true);
+		}
+		
 		String assignee = swTask.getAssignee();
 		String performer = swTask.getAssignee();
 		String formId = swTask.getForm();
