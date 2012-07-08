@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
@@ -77,13 +79,13 @@
 <!--  커뮤너티멤버를 찾을수 있는 트리 화면  -->
 <div class='nav_sub_list pt10 js_collapsible js_nav_com_members'>
 	<%
-	if (SmartUtil.isBlankObject(children) && !SmartUtil.isBlankObject(members)) {
+	if (workSpaceType == ISmartWorks.SPACE_TYPE_GROUP && !SmartUtil.isBlankObject(members)) {
 	%>
 		<div id="community_group">
 			<ul>
 				<li>
 					<!-- 리더 -->
-					<a href="<%=leader.getSpaceController()%>?cid=<%=leader.getSpaceContextId()%>">
+					<a href="<%=leader.getSpaceController()%>?cid=<%=leader.getSpaceContextId()%>&wid=<%=leader.getId()%>">
 					    <span class="icon_pe"><span class="leader"></span><img class="profile_size_s" src="<%=leader.getMinPicture()%>"></span>
 					    <span class="nav_sub_area"><%=leader.getLongName() %>(<fmt:message key="group.role.leader"/>)</span>
 					</a>
@@ -103,7 +105,7 @@
 						break;
 					}else{
 					%>
-						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>">
+						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>">
 							<span class="icon_pe">
 						    	<img class="profile_size_s" title="" src="<%=member.getMinPicture()%>">
 						    </span>
@@ -129,19 +131,49 @@
 		</div>
 		<!-- 구성원, 하위부서 //-->
 	<%
-	}else if (members != null) {
+	}else if (workSpaceType == ISmartWorks.SPACE_TYPE_DEPARTMENT) {
+		CommunityInfo[] communities = smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(communityId), false);
 	%>
 		<!-- 내부 메뉴 -->
-		<div id='community_members'>
-			<%		
-			for (UserInfo member : members) {
-			%>
-				<a href="<%=member.getSpaceController() %>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>">
-					<span class="icon_pe"><img src="<%=member.getMinPicture()%>" title="<%=member.getLongName() %>" class="profile_size_s"></span> 
-				</a>
-			<%
-			}
-			%>
+		<div id='community_department'>
+			<ul>
+					<%
+					if (!SmartUtil.isBlankObject(communities)) {
+						String iconType = "";
+						for (CommunityInfo community : communities) {
+							if (community.getClass().equals(UserInfo.class)) {
+								UserInfo user = (UserInfo)community;
+								if(user.getRole() == User.USER_ROLE_LEADER){
+									iconType = "leader";
+								} else if(user.getRole() == User.USER_ROLE_MEMBER){
+									iconType = "";
+								}
+					%>
+								<li>
+									<span class="dep">
+										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>">
+											<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
+										</a>
+									</span>
+								</li>
+							<%
+							} else if (community.getClass().equals(DepartmentInfo.class)) {
+								DepartmentInfo department = (DepartmentInfo)community;
+								iconType = "btn_tree_plus fn vm";
+							%>
+								<li class="js_drill_down">
+									<span class="dep">
+										<a href="communitylist_by_depart.sw" departmentId="<%=department.getId()%>" class="js_popup js_expandable"><span class="<%=iconType%>"></span></a>
+										<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>"><span> <%=department.getName()%> </span></a> 
+									</span>
+									<div style="display: none" class="menu_2dep js_drill_down_target"></div>
+								</li>
+					<%
+							}
+						}
+					}
+					%>
+			</ul>
 		</div>
 		<!--내부메뉴//-->
 	<%

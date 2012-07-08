@@ -80,6 +80,12 @@ public class NavController {
 		return SmartUtil.returnMnv(request, "jsp/nav/my_worklist_by_category.jsp", "");
 	}
 
+	@RequestMapping("/communitylist_by_depart")
+	public ModelAndView communitylistByDepart(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/nav/communitylist_by_depart.jsp", "");
+	}
+	
 	@RequestMapping(value = "/add_a_favorite_work", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void addAFavoriteWork(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -39,7 +39,7 @@
 			<div class="depart fl"></div>
 				<div class="info">
 					<div class="title"><%=department.getName() %></div>
-					<div></div>
+					<div><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
 				</div>
 			<div class="solid_line"></div>
 		</div>

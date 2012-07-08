@@ -137,7 +137,7 @@
 						String levelName = "";
 						if(approvals!=null && approvals.length>count) levelName = approvals[count].getName();
 					%>					
-						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
+						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="display:none; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
 					<%
 					}
 					%>
@@ -150,7 +150,7 @@
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
 						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
-							<select name="selLevelApproverType<%=count+1 %>" class="js_approval_approver_type">
+							<select <%if(approvalLine.getApprovalLevel()<count+1){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
@@ -187,7 +187,7 @@
 						Approval approval = new Approval();
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
-						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="display:none"<%} %>>
 							<input name="txtMeanTimeDays<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeDays()%>"/>
 							<span><fmt:message key="settings.title.mean_time.days"/></span>
 							<input name="txtMeanTimeHours<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeHours()%>"/>
@@ -207,7 +207,7 @@
 						String levelName = "";
 						if(approvals!=null && approvals.length>count) levelName = approvals[count].getName();
 					%>					
-						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
+						<td class="js_approval_level_name" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="display:none; width:<%=widthVal%>px"<%}else{ %>style="width:<%=widthVal%>px"<%} %>><input name="txtLevelName<%=count+1 %>" type="text" class="fieldline required" value="<%=CommonUtil.toNotNull(levelName)%>"/></td>
 					<%
 					}
 					%>
@@ -220,7 +220,7 @@
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
 						<td class="js_approver_type required vt" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
-							<select name="selLevelApproverType<%=count+1 %>" class="js_approval_approver_type">
+							<select <%if(approvalLine.getApprovalLevel()<count+1){ %>name="selLevelApproverType<%=count+1 %>"<%} %> class="js_approval_approver_type">
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_ON_RUNNING){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_ON_RUNNING%>"><fmt:message key="settings.title.approver.on_draft"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_MY_BOSS){ %>selected<%} %> value="<%=Approval.APPROVER_MY_BOSS%>"><fmt:message key="settings.title.approver.team_leader"/></option>
 								<option <%if(approval.getApproverType()== Approval.APPROVER_CHOOSE_USER){ %>selected<%} %> value="<%=Approval.APPROVER_CHOOSE_USER%>"><fmt:message key="settings.title.approver.select_user"/></option>
@@ -257,7 +257,7 @@
 						Approval approval = new Approval();
 						if(approvals!=null && approvals.length>count) approval = approvals[count];
 					%>					
-						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="visibility:hidden"<%} %>>
+						<td class="js_approval_mean_time" <%if(approvalLine.getApprovalLevel()<count+1){ %>style="display:none"<%} %>>
 							<input name="txtMeanTimeDays<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeDays()%>"/>
 							<span><fmt:message key="settings.title.mean_time.days"/></span>
 							<input name="txtMeanTimeHours<%=count+1 %>" type="text" class="fieldline number required" style="width:18px" value="<%=approval.getMeanTimeHours()%>"/>

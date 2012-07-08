@@ -169,15 +169,15 @@ $(function() {
 		var input = $(targetElement(e));
 		var approvalLevel = parseInt(input.attr('value'));
 		var approvalLine = input.parents('.js_approval_line_page');
-		var approvalLevelNames = approvalLine.find('.js_approval_level_name').css('visibility', 'hidden');
-		var approverTypes = approvalLine.find('.js_approver_type').css('visibility', 'hidden');
-		var approvalMeanTimes = approvalLine.find('.js_approval_mean_time').css('visibility', 'hidden');
+		var approvalLevelNames = approvalLine.find('.js_approval_level_name').hide();
+		var approverTypes = approvalLine.find('.js_approver_type').css('visibility', 'hidden').attr('name', '');
+		var approvalMeanTimes = approvalLine.find('.js_approval_mean_time').hide();
 		var approvalSecond5 = approvalLine.find('.js_approval_second_5').hide();
 		var widthVal = (approvalLevel<5) ? 80/approvalLevel : 80/5;
 		for(var i=0; i<approvalLevel; i++){
-			if(approvalLevelNames.length>i) $(approvalLevelNames[i]).css('visibility', 'visible');
-			if(approverTypes.length>i) $(approverTypes[i]).css('visibility', 'visible');
-			if(approvalMeanTimes.length>i) $(approvalMeanTimes[i]).css('visibility', 'visible');
+			if(approvalLevelNames.length>i) $(approvalLevelNames[i]).show();
+			if(approverTypes.length>i) $(approverTypes[i]).css('visibility', 'visible').attr('name', 'selLevelApproverType' + i+1);
+			if(approvalMeanTimes.length>i) $(approvalMeanTimes[i]).show();
 		}
 		if(approvalLevel>5)
 			approvalSecond5.show();

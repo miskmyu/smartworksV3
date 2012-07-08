@@ -9,7 +9,6 @@
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ page import="net.smartworks.model.work.*"%>
-
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String departmentId = request.getParameter("departmentId");
@@ -17,8 +16,7 @@
 	CommunityInfo[] communities = smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(departmentId), false);
 	String iconType = null;
 %>
-
-<form class="js_comlist_by_depart_page">
+<div id="community_members">
 	<ul>
 		<%
 		if (!SmartUtil.isBlankObject(communities)) {
@@ -32,22 +30,24 @@
 					}
 		%>
 					<li>
-						<span class="dep">												
-							<a href="" class="js_organization_member" userId="<%=user.getId()%>">
-								<img src="<%=user.getMinPicture() %>" class="profile_size_s mr5"><span class="<%=iconType%>"></span><%=user.getLongName()%>
+						<span class="dep">
+							<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>">
+								<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
 							</a>
 						</span>
 					</li>
 				<%
 				} else if (community.getClass().equals(DepartmentInfo.class)) {
 					DepartmentInfo department = (DepartmentInfo)community;
-					iconType = "icon_depart";
+					iconType = "btn_tree_plus fn vm";
 				%>
 					<li class="js_drill_down">
 						<span class="dep">
-							<a href="comlist_by_depart.sw" departmentId="<%=department.getId()%>" class="js_popup">
+							<a href="communitylist_by_depart.sw" departmentId="<%=department.getId()%>" class="js_popup js_expandable">
 								<span class="<%=iconType%>"></span>
-								<span><%=department.getName()%></span>
+							</a>
+							<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>">
+								<span> <%=department.getName()%> </span>
 							</a>
 						</span>
 						<div style="display: none" class="menu_2dep js_drill_down_target"></div>
@@ -58,4 +58,4 @@
 		}
 		%>
 	</ul>
-</form>
+</div>
