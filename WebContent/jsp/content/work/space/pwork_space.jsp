@@ -406,10 +406,16 @@
 <script type="text/javascript">
 
 	var isReturned = false;
+	var isApprovalForMe = false;
 	<%
 	if(instance.getStatus()==Instance.STATUS_RETURNED && !SmartUtil.isBlankObject(approvalTask)){
 	%>
 		isReturned = true;
+	<%
+	}
+	if(!SmartUtil.isBlankObject(approvalTask)){
+	%>
+		isApprovalForMe = true;
 	<%
 	}
 	%>
@@ -491,7 +497,7 @@
 				pworkSpace.find('.js_toggle_approval_btn').show();				
 			}
 		}else{
-			if(isApprovalWork == 'true'){
+			if(isApprovalWork == 'true' && isApprovalForMe){
 				pworkSpace.find('.js_toggle_approval_btn').hide();
 				pworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
 				pworkSpace.find('.js_btn_return_approval').show();

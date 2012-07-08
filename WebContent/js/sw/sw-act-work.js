@@ -1366,7 +1366,7 @@ $(function() {
 			}
 			return false;
 		}
-		if(!isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')) || (isPworkSpace && !isEmpty(workSpacePage.find('.js_form_task:visible')))) return false;
+		if((isPworkSpace && target.is(":visible")) || (!isPworkSpace && !isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')))) return false;
 		$.ajax({
 			url : 'append_task_forward.sw',
 			data : {},
