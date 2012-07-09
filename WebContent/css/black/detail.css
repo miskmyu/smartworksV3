@@ -51,7 +51,8 @@
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
 .contents_space table > td,
-.contents_space table > th { padding:3px 10px} 
+.contents_space table > th { padding:3px 10px}
+.contents_space table th {color: #23579E; font-weight: normal}
 
 /* Reply Info */
 .task_information {vertical-align:bottom; float:left}
@@ -84,7 +85,6 @@
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
-.reply li a img, .reply li img {float:left; margin-right: 5px} 
 .btns_action {margin:0 0 0 62px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important; font-size:10.5px}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
@@ -317,8 +317,9 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /*프로파일 화면 구성*/
 .photo_section {width:150px; float:left}
-.photo_section .qq-upload-button {top:115px; left:30px}
-.t_text_s11 {margin:28px 0 0 4px; text-align:center; width:110px}
+.photo_section .qq-upload-button {top:115px; left:24px}
+.photo_section .t_text_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
+
 
 /* Icon button style */
 .title_line_btns {float:right; position: relative}

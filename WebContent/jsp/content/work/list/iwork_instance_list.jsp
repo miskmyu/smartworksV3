@@ -151,7 +151,7 @@
 						<div class="noti_pic js_content_work_space">
 							<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
 						</div>
-						<div class="noti_in">
+						<div class="noti_in_s">
 							<span class="t_name"><%=lastModifier.getLongName()%></span>
 							<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
 						</div>
