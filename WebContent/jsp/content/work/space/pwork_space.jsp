@@ -138,7 +138,7 @@
 	                	<%
 	                	}
 	                	%>
-	                	<a title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
+	                	<a href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->

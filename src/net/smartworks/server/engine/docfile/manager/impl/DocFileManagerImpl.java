@@ -968,6 +968,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			else fileId = "file_" + fileId;
 
 			String tempFile = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + tempFileId + "." + extension;
+			File file = new File(tempFile);
+			if(!file.exists())
+				return;
 			String realFile = repository.getAbsolutePath() + File.separator + fileId + "." + extension;
 			if(workType.equals("Pictures")) {
 				String thumbFile = repository.getAbsolutePath() + File.separator + fileId + Community.IMAGE_TYPE_THUMB + "." + extension;

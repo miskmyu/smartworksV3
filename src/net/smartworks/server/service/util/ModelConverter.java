@@ -310,8 +310,7 @@ public class ModelConverter {
 		}
 		return likesArray;
 	}
-	
-	
+
 	public static WorkSpaceInfo getWorkSpaceInfo(String workSpaceType, String workSpaceId) throws Exception {
 		if(CommonUtil.isEmpty(workSpaceType) || CommonUtil.isEmpty(workSpaceId))
 			return null;
@@ -3398,18 +3397,7 @@ public class ModelConverter {
 		instance.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 		instance.setOwner(getUserByUserId(swdRecord.getCreationUser()));
-		
-		
-		
-		
-		
 		instance.setStatus(Instance.STATUS_COMPLETED);
-		
-		
-		
-		
-		
-		
 		instance.setType(WorkInstance.TYPE_INFORMATION);
 
 		String formId = swdDomain.getFormId();
@@ -3419,7 +3407,13 @@ public class ModelConverter {
 
 		instance.setWork(getInformationWorkByPkgPackageId(userId, packageId));
 
-		instance.setWorkSpace(new WorkSpace(CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId), null));
+		WorkSpaceInfo workSpaceInfo = getWorkSpaceInfo(CommonUtil.toDefault(swdRecord.getWorkSpaceType(), String.valueOf(ISmartWorks.SPACE_TYPE_USER)), CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId));
+		WorkSpace workSpace = new WorkSpace();
+		workSpace.setId(CommonUtil.toDefault(swdRecord.getWorkSpaceId(), userId));
+		workSpace.setName(workSpaceInfo.getName());
+		workSpace.setSpaceType(CommonUtil.toInt(swdRecord.getWorkSpaceType(), ISmartWorks.SPACE_TYPE_USER));
+
+		instance.setWorkSpace(workSpace);
 
 		instance.setAccessPolicy(new AccessPolicy(CommonUtil.toInt(swdRecord.getAccessLevel(), 0)));
 		return instance;

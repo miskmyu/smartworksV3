@@ -714,11 +714,15 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		}
 		String likeAccessValuesQuery = "prcAccessValue like '%%'";
 		StringBuffer likeAccessValuesBuffer = new StringBuffer();
+		String divisionUL = "";
+		if(this.getDbType().equals("sqlserver"))
+			divisionUL = "collate Korean_Wansung_CS_AS ";
 		if(likeAccessValues != null) {
 			for (int j=0; j<likeAccessValues.length; j++) {
 				if(j==0)
-					likeAccessValuesBuffer.append("prcAccessValue like :likeAccessValue").append(j);
-				likeAccessValuesBuffer.append(" or prcAccessValue like :likeAccessValue").append(j);
+					likeAccessValuesBuffer.append("prcAccessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
+				else
+					likeAccessValuesBuffer.append(" or prcAccessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
 			}
 			likeAccessValuesQuery = likeAccessValuesBuffer.toString();
 		}
