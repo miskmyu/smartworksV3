@@ -24,8 +24,21 @@
 
 <!-- 최근 공지 -->
 <div class="nav_tit">
-	<div class="icon_board_works fn"><a class="js_content" href="<%=listTarget%>"><fmt:message key="common.title.recent_board"/></a></div>
-	<%if(!SmartUtil.isBlankObject(boards)){ %><span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span><%} %>
+	<div class="icon_board_works fn">
+		<a class="js_content" href="<%=listTarget%>">
+		<fmt:message key="common.title.recent_board"/>
+		</a>
+		<!-- 전체보기 -->
+		<%if(!SmartUtil.isBlankObject(boards)){ %>
+		<span class="more">
+			<a href="<%=listTarget%>">
+			<fmt:message key="common.button.view_all"/>
+			</a>
+		</span>
+		<%} %>
+		<!-- 전체보기 //-->
+	</div>
+	
 </div>    
 <ul>
  	<%
