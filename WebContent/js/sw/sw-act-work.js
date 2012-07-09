@@ -1549,6 +1549,7 @@ $(function() {
 		styleSheets.push("css/default.css");
 		styleSheets.push("css/black/detail.css");
 		styleSheets.push("css/black/form.css");
+		styleSheets.push("css/black/layout.css");
 		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
 		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
 		return false;

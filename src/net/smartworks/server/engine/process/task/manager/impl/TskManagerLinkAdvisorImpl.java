@@ -244,7 +244,10 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				obj = getTskManager().getTask(user, taskRef, null);
 				//전자결재를 시작한 태스크?
-				obj.setTargetApprovalStatus(Instance.STATUS_COMPLETED + "");
+				if (obj.getIsApprovalSourceTask() != null && obj.getIsApprovalSourceTask().equalsIgnoreCase("true")) {
+					obj.setTargetApprovalStatus(Instance.STATUS_COMPLETED + "");
+					getTskManager().setTask(user, obj, null);
+				}
 			} else {
 				return;
 			}

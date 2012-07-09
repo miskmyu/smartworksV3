@@ -329,6 +329,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				userId = cuser.getId();
 			
 			TaskWorkCond cond = new TaskWorkCond();
+			cond.setPackageStatus("DEPLOYED");
 			cond.setTskAssignee(userId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
 			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
