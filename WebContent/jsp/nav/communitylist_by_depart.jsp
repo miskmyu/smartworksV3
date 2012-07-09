@@ -16,7 +16,7 @@
 	CommunityInfo[] communities = smartWorks.getAllComsByDepartmentId(CommonUtil.toNotNull(departmentId), false);
 	String iconType = null;
 %>
-<div id="community_members">
+<div class="members">
 	<ul>
 		<%
 		if (!SmartUtil.isBlankObject(communities)) {

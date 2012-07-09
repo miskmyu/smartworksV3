@@ -160,13 +160,13 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_list.recent, .nav_list.comming {padding-bottom:10px}
 .nav_list.recent .nav_tit, .nav_list.comming .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
 .nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px}
-.nav_list.recent ul { line-height:16px}
+.nav_list.recent ul, .nav_list.comming ul { line-height:17px}
 .nav_list.recent .works li { padding:7px 10px 0}
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
 .nav_list.recent .recent_notice td {border-bottom:none}
 .nav_list .t_date {color: #C9C9C9}
 .nav_list.comming .t_date {float:left; margin-right: 5px}
-.recent li, .comming li {padding:1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
+.recent li, .comming li {padding:1px 10px 1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 .recent li:hover, .comming li:hover { display:block; background-color:#555555}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; line-height:18px; float: left; height:18px}
@@ -194,17 +194,17 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
 
 /* Nav MySpace */
-.icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 21px; float: left; height:18px}
-.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -784px; padding:0 0 0 21px; float: left; height:18px}
-.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -812px; padding:0 0 0 21px; float: left; height:18px}
-.icon_all_works {background: url("../../images/body_icon.png") no-repeat -550px -453px; padding:0 0 0 21px; float: left; height:18px}
-.icon_image_works {background: url("../../images/body_icon.png") no-repeat -550px -478px; padding:0 0 0 21px; float: left; height:18px}
-.icon_file_works {background: url("../../images/body_icon.png") no-repeat -550px -503px; padding:0 0 0 21px; float: left; height:18px}
-.icon_event_works {background: url("../../images/body_icon.png") no-repeat -550px -529px; padding:0 0 0 21px; float: left; height:19px}
-.icon_memo_works {background: url("../../images/body_icon.png") no-repeat -550px -556px; padding:0 0 0 21px; float: left; height:18px}
-.icon_board_works {background: url("../../images/body_icon.png") no-repeat -550px -605px; padding:0 0 0 21px; float: left; height:18px}
-.icon_forum_works {background: url("../../images/body_icon.png") no-repeat -550px -627px; padding:0 0 0 21px; float: left; height:18px}
-.icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 21px; float: left; height:18px}
+.icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 22px; float: left; height:18px}
+.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -784px; padding:0 0 0 22px; float: left; height:18px}
+.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -812px; padding:0 0 0 22px; float: left; height:18px}
+.icon_all_works {background: url("../../images/body_icon.png") no-repeat -550px -453px; padding:0 0 0 22px; float: left; height:18px}
+.icon_image_works {background: url("../../images/body_icon.png") no-repeat -550px -478px; padding:0 0 0 22px; float: left; height:18px}
+.icon_file_works {background: url("../../images/body_icon.png") no-repeat -550px -503px; padding:0 0 0 22px; float: left; height:18px}
+.icon_event_works {background: url("../../images/body_icon.png") no-repeat -550px -529px; padding:0 0 0 22px; float: left; height:19px}
+.icon_memo_works {background: url("../../images/body_icon.png") no-repeat -550px -556px; padding:0 0 0 22px; float: left; height:18px}
+.icon_board_works {background: url("../../images/body_icon.png") no-repeat -550px -605px; padding:0 0 0 22px; float: left; height:18px}
+.icon_forum_works {background: url("../../images/body_icon.png") no-repeat -550px -627px; padding:0 0 0 22px; float: left; height:18px}
+.icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 22px; float: left; height:18px}
 
 /* Nav Mail Btn*/
 .icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
@@ -327,8 +327,8 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 #all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #my_mail .nav_sub_area, #m_setting .nav_sub_area, #community_departments .nav_sub_area, #community_group .nav_sub_area
 {display: inline; float: left; position: relative; width: 180px}
 
-#community_members {display: inline-block; padding: 4px 10px}
-#community_members .icon_pe {padding: 1px}
+.members {display: inline-block; padding: 4px 10px}
+.members .icon_pe {padding: 1px}
 
 #community_departments .leader, #community_group .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
 #nav .more a {background: url("../../images/nav_more.png") no-repeat 100% 7px; float: right; font-size: 11px; height: 12px; width: 51px}

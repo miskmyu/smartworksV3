@@ -24,8 +24,19 @@
 
 <!-- 최근 이벤트 -->
 <div class="nav_tit">
-	<div class="icon_event_works fn"><a class="js_content" href="<%=listTarget%>"><fmt:message key="common.title.comming_event"/></a></div>
-	<%if(!SmartUtil.isBlankObject(events)){%><span class="more"><a href="<%=listTarget%>"><fmt:message key="common.button.view_all"/></a></span><%} %>
+	<div class="icon_event_works fn">
+		<a class="js_content" href="<%=listTarget%>">
+		<fmt:message key="common.title.comming_event"/>
+		</a>
+		<!-- 전체보기 -->
+		<%if(!SmartUtil.isBlankObject(events)){%>
+		<span class="more">
+			<a href="<%=listTarget%>">	<fmt:message key="common.button.view_all"/>	</a>
+		</span>
+		<%} %>
+		<!-- 전체보기 //-->
+	</div>
+	
 </div>    
 <ul>
  	<%
