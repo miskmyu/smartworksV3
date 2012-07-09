@@ -91,7 +91,7 @@
 					</a>
 				</li>
 			</ul>
-			<div id="community_members">
+			<div class="members">
 				<%
 				int i=0;
 				boolean isLeaderCounted = false;
