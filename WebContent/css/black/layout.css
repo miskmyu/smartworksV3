@@ -625,7 +625,7 @@ margin: 0 auto}
 #work_ing .title a:hover {text-decoration:none}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
-#work_ing .solid_line {margin:2px 0 5px}
+#work_ing .solid_line {}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
 td.pic {width:85px}
