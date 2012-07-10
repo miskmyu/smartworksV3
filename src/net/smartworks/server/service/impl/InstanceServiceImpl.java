@@ -329,6 +329,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				userId = cuser.getId();
 			
 			TaskWorkCond cond = new TaskWorkCond();
+			cond.setPackageStatus("DEPLOYED");
 			cond.setTskAssignee(userId);
 			cond.setTskStatus(TskTask.TASKSTATUS_COMPLETE);
 			cond.setOrders(new Order[]{new Order("taskLastModifyDate", false)});
@@ -5462,6 +5463,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskExecuteDateFrom(fromDate);
 			taskWorkCond.setTskExecuteDateTo(toDate);
 		}
+		taskWorkCond.setPackageStatus(PkgPackage.STATUS_DEPLOYED);
 
 		long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
@@ -6119,6 +6121,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setTskAssigneeIdIns(userSelectStr.toString());
 			cond.setTskAssignee(userId);
 			cond.setTskModifyDateFrom(fromDate);
+			cond.setPackageStatus("DEPLOYED");
 			long totalSize = getWorkListManager().getCastWorkListSize(userId, cond);
 
 			cond.setPageNo(0);

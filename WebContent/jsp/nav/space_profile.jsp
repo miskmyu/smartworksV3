@@ -72,7 +72,7 @@
 			<div class="bul_org"><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
 		</li>
 		<!-- 가입하기/초대하기 아이콘 -->
-		<div class="tc">
+		<div class="tc cb">
 			<button>초대하기</button>
 			<span>
 				<a href="">탈퇴하기</a>

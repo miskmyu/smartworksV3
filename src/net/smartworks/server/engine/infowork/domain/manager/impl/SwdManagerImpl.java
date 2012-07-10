@@ -1155,11 +1155,15 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 
 			String likeAccessValuesQuery = "obj.accessValue like '%%'";
 			StringBuffer likeAccessValuesBuffer = new StringBuffer();
+			String divisionUL = "";
+			if(this.getDbType().equals("sqlserver"))
+				divisionUL = "collate Korean_Wansung_CS_AS ";
 			if(likeAccessValues != null) {
 				for (int j=0; j<likeAccessValues.length; j++) {
 					if(j==0)
-						likeAccessValuesBuffer.append("obj.accessValue like :likeAccessValue").append(j);
-					likeAccessValuesBuffer.append(" or obj.accessValue like :likeAccessValue").append(j);
+						likeAccessValuesBuffer.append("obj.accessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
+					else
+						likeAccessValuesBuffer.append(" or obj.accessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
 				}
 				likeAccessValuesQuery = likeAccessValuesBuffer.toString();
 			}

@@ -138,7 +138,7 @@
 				</div>
 				
 				<!-- 진행중인 업무목록 및 더보기 버튼 -->
-				<div class="solid_line mb5"></div>
+				<div class="solid_line"></div>
 				<div class="js_instance_list_table">
 					<jsp:include page="/jsp/content/today/more_instance_list.jsp">
 						<jsp:param value="true" name="assignedOnly"/>
