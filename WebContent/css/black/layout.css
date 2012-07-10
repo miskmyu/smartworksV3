@@ -330,7 +330,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .members {display: inline-block; padding: 4px 10px}
 .members .icon_pe {padding: 1px}
 
-#community_departments .leader, #community_group .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+#community_department .leader, #community_group .leader, .pop_list_area .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
 #community_department .profile_size_s {margin:0 5px 0 0}
 
 #nav .more a {background: url("../../images/nav_more.png") no-repeat 100% 7px; float: right; font-size: 11px; height: 12px; width: 51px}
@@ -476,7 +476,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .gray_style tr {height:32px}
 .gray_style th {border:1px solid #d8d8d8; padding: 2px 8px}
 .gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
-.gray_style td { background-color:#FFF; border-bottom:none}
+.gray_style td { background-color:#FFF; border-bottom:none; padding: 2px 8px}
 
 /*라운드 포틀릿*/
 .section_portlet {background: url("../../images/bg_portlet_b.jpg") no-repeat scroll 0 100% transparent; position:relative; width:100%; z-index:30}
@@ -519,8 +519,8 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
     background: url("../../images/bg_portlet.jpg") repeat-y scroll 0 -319px transparent;
     display:inline-block; width:10px; height:16px; left:0; position:absolute}
 		
-/* Head Line Section */	
-.headline_section {position:relative; padding:10px 20px; overflow:hidden}
+/* Head Line Section 0703 이벤트 변경 안 */	
+/* .headline_section {position:relative; padding:10px 20px; overflow:hidden}
 .headline_section .area {background-color:#f5f5f5; -webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px; padding: 8px 10px; overflow:hidden; box-shadow: 0 0 4px #CCCCCC inset; line-height: 17px; max-height:175px}
 .headline_section .area .t_date { margin-right:3px}
 .headline_section > ul > li { width:45.5%; float:left}
@@ -541,17 +541,17 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .cell_date {display:inline-block;border-bottom:1px dotted #cfcfcf;padding:0 5px 1px 5px;margin-bottom:3px}
 
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none} */
 
 /* Noice */
-.noti_pic {float:left; margin: 0 8px 0 0}
+.noti_pic {float:left; margin: 0 5px 0 0}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
-.noti_in { margin-left:33px; line-height: 14px}
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
-.noti_in_s { margin-left:25px; line-height: 16px}
-.noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* M사이즈 등록글 사용시*/
+.noti_in { margin-left:34px; line-height: 14px} /* img profile_size_c 뒤에 옴 */
+.noti_in_s { margin-left:26px; line-height: 14px} /* img profile_size_s 뒤에 옴 */
+.noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* img profile_size_m 뒤에 옴 */
 .noti_in_m + div {line-height: 19px; padding:0 0 0 58px}
-.js_content_list .noti_in_m {padding:0 0 0 68px} /* 처리할 업무 List */
+.js_content_list .noti_in_m {padding:0 0 0 87px} /* 처리할 업무 List */
 
 .recent_notice { border-bottom:none !important}
 .recent_notice .end td {border-bottom:none !important}
@@ -561,36 +561,19 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .recent_notice .title,.recent_notice .index {vertical-align:top}
 .recent_notice .title a {font-size:13px;font-weight:bold}
 .recent_notice .date {font-weight:normal;text-align:right;white-space:nowrap}
-.recent_notice .title img,.headline_notice .index img {margin:0 3px 0 0}
+.recent_notice .title img,.headline_notice .index img {float:left; margin:0 3px 0 0}
 
-/*Event old */	
-.event_space {position:relative; width:99%; display:inline-block; margin:0 0 10px 10px}
+/* Event */	
+.event_space {position:relative; width:99%; display:inline-block; margin:0 0 10px 15px}
 .event_space > ul > li { width:33%}
 .event_space .eventCell li { width: auto}
 .cell_date {display:inline-block; border-bottom:1px dotted #cfcfcf; padding:0 5px 1px 5px; margin-bottom:3px}
+.cell_date > span {font-size:15px}
 .event_cell li.event_list {}
 .event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
 
-/* Noice old */
-/* .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
-.notice .headline_notice {float:left; width:32.5%; padding-right:5px; border-right:1px solid #cfcfcf}
-.notice .recent_notice {float:left; width:64%; margin-left:10px}
-.notice > .headline_notice > a.more {background: url("../../images/main_notice.gif") no-repeat; width:50px; height:30px; float:left; margin-right:6px; padding:75px 15px 0 0; font-size:10px; text-align:right}
-.notice > .headline_notice > a.more:hover {background: url("../../images/main_notice.gif") -65px 0 no-repeat; color:#ba3938}
-.headline_notice .title {display:block; font-size:13px; font-weight:bold; padding:7px 0 4px 0}
-.headline_notice .info {display:block; font-size:11px; color:#696969}
-.headline_notice .content {display:block; font-size:12px; border-top:1px dotted #cfcfcf; padding-top:2px; clear:right}
-.headline_notice .icon_division_s {background-position:70px 0; padding-left:90px}
-.headline_notice .index {font-size:11px; color:#666; overflow:hidden}
-.headline_notice .index span.date {float:right; margin-right:9px; font-weight:normal}
-
-.headline_notice > div {}
-.headline_notice > div:hover {cursor:pointer; text-decoration: none} 
-.headline_notice > div {}
-.headline_notice > div:hover {cursor:pointer; text-decoration: none} */
-
 /* Notice New 3.0 */
-.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #ededed}
+.notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #c7c7c7}
 .notice .left_title {float:left; width:12%; min-width:80px; padding-right:5px; text-align: center}
 .notice .recent_notice {float:right; width:87%}
 .notice > .left_title > a.more {background: url("../../images/main_notice.jpg") no-repeat; width:60px; height:28px; margin-right:6px; padding:100px 16px 0 0; font-size:10.5px; text-align:right; color:#b5b5b5 !important; display: inline-block;
@@ -625,7 +608,7 @@ margin: 0 auto}
 #work_ing .title a:hover {text-decoration:none}
 #work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold {font-size:11px}
-#work_ing .solid_line {margin:2px 0 5px}
+#work_ing .solid_line {}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
 td.pic {width:85px}

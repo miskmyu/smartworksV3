@@ -39,6 +39,7 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		int pageSize = cond.getPageSize();
 		Date expectEndDateFrom = cond.getExpectEndDateFrom();
 		Date expectEndDateTo = cond.getExpectEndDateTo();
+		String packageStatus = cond.getPackageStatus();
 		
 		queryBuffer.append(" from ");
 		queryBuffer.append(" (  ");
@@ -102,6 +103,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 		swcategory ctg2  ");
 		queryBuffer.append(" 		on ctg.parentId = ctg2.id  ");
 		queryBuffer.append(" 	where task.tskform = form.formid  ");
+		if (!CommonUtil.isEmpty(packageStatus))
+			queryBuffer.append("	and pkg.status = :packageStatus ");
 		queryBuffer.append(" ) taskInfo  ");
 		queryBuffer.append(" join  ");
 		queryBuffer.append(" (  ");
@@ -169,6 +172,8 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			query.setTimestamp("expectEndDateFrom", expectEndDateFrom);
 		if (expectEndDateTo != null)
 			query.setTimestamp("expectEndDateTo", expectEndDateTo);
+		if (!CommonUtil.isEmpty(packageStatus))
+			query.setString("packageStatus", packageStatus);
 		
 		if (pageSize > 0|| pageNo >= 0) {
 			query.setFirstResult(pageNo * pageSize);

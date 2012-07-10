@@ -873,6 +873,8 @@ public class ModelConverter {
 	}
 	public static InstanceInfo[] getInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks) throws  Exception {
 		
+		if(CommonUtil.isEmpty(tasks))
+			return null;
 		List<InstanceInfo> resultInfoList = new ArrayList<InstanceInfo>();
 
 		for (int i = 0; i < tasks.length; i++) {
@@ -880,7 +882,7 @@ public class ModelConverter {
 			if (task.getPrcObjId() == null)
 				continue;
 			
-			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON) || ((task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE) && task.getIsStartActivity().equalsIgnoreCase("true")))) {
+			if (TskTask.TASKTYPE_COMMON.equalsIgnoreCase(task.getTskType()) || (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getTskType()) && "true".equalsIgnoreCase(task.getIsStartActivity()))) {
 				if (task.getIsStartActivity() != null && task.getIsStartActivity().equalsIgnoreCase("true")) {
 					PWInstanceInfo instInfo = new PWInstanceInfo();
 					

@@ -1,6 +1,7 @@
 package net.smartworks.model.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
@@ -10,6 +11,7 @@ import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.util.SmartUtil;
 
+@Component
 public class EditPolicy {
 
 	private static ICommunityService communityService;

@@ -48,9 +48,9 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
+					document.location.href = data.href;
 					smartPop.closeProgress();
-					smartPop.progressCenter();
-					document.location.href = "smart.sw#" + data.href;
+					smartPop.close();
 				},
 				error : function(e) {
 					smartPop.closeProgress();
@@ -82,7 +82,7 @@
 		<div class="contents_space">
 			<table>
 				<tr>
-					<td style="width:20%"><fmt:message key="group.title.picture" /></td>
+					<th style="width:20%"><fmt:message key="group.title.picture" /></th>
 					<td class="photo_section fl">			
 						<!--  *** js_group_profile_field : sw_act_work.js에서 화면로딩이 완료되면 이 클래스로 찾아서,  	-->
 						<!--      현재 커뮤너티 그룹의 사진을 보여주고, 다른 사진을 올리줄 있도록하는 기능을 제공한다. 			-->
@@ -91,19 +91,19 @@
 					</td>					
 				</tr>
 				<tr>
-					<td class="required_label"  style="width:12%"><fmt:message key="group.title.name" /></td>
+					<th class="required_label"  style="width:12%"><fmt:message key="group.title.name" /></th>
 					<td>
 						<input name="txtGroupName" class="fieldline required" type="text">		
 					</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="group.title.desc" /></td>
+					<th><fmt:message key="group.title.desc" /></th>
 					<td>
 						<textarea name="txtaGroupDesc" class="fieldline" rows="4"></textarea>	
 					</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="group.title.type" /></td>
+					<th><fmt:message key="group.title.type" /></th>
 					<td>
 						<select name="selGroupProfileType">
 							<option value="<%=Group.GROUP_TYPE_OPEN %>" selected><fmt:message key="group.title.type_open" /></option>
@@ -112,13 +112,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="group.title.leader" /></td>
+					<th><fmt:message key="group.title.leader" /></th>
 					<td>
 						<div><img src="<%=SmartUtil.getCurrentUser().getMinPicture()%>" class="profile_size_s"/><input name="txtGroupLeader" type="hidden" class=""  value="<%=SmartUtil.getCurrentUser().getId() %>"><%=SmartUtil.getCurrentUser().getLongName() %></div>
 					</td>
 				</tr>
 				<tr>
-					<td><fmt:message key="group.title.members" /></td>
+					<th><fmt:message key="group.title.members" /></th>
 					<td class="js_type_userField" fieldId="txtGroupMembers" multiUsers="true">
 						<div class="form_value w100">
 							<div class="fieldline community_names js_community_names">

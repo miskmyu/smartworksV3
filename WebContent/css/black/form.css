@@ -9,9 +9,12 @@
 .form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 
 /* 개인정보 수정 File Upload */
-.js_my_profile_field .js_type_imageBox .form_label {background-color:#FFF; width:0px !important}
-.js_my_profile_field .js_type_imageBox .form_value img {left:0}
-.js_type_imageBox .form_value img {position: relative; left: 20px}
+/* .js_my_profile_field .js_type_imageBox .form_label {background-color:#FFF; width:0px !important}
+.js_my_profile_field .js_type_imageBox .form_value img {left:0} */
+/* .js_type_imageBox .form_value img {position: relative; left: 20px} */
+
+/* 새그룹 등록하기 File Upload */
+.js_group_profile_field .form_label {width:0px !important}
 
 /* Form Old : label부분 회색음영 */
 /* .form_label {color:#23579e; background-color:#ededed}
@@ -123,7 +126,7 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .icon_file_zip {background: url("../../images/file/icon_zip.gif") no-repeat 0 0; height:18px; width:19px; position: relative; display: inline-block;}
 
 /* File Layer Popup */
-#sw_pop_files_detail {width:100%}
+#sw_pop_files_detail {}
 #sw_pop_files_detail .pop_corner_all {padding:5px}
 #sw_pop_files_detail li {clear:both; line-height: 18px}
 #sw_pop_files_detail li > span {float:left}
@@ -134,7 +137,7 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 
 /* Upload Control */
-.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px; margin:0 0 0 1px}
+.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
 .form_col iframe {margin-bottom:4px}
 
 #imgCompanyLogo .qq-upload-button {width:60px !important}
