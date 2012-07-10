@@ -6121,6 +6121,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			cond.setTskAssigneeIdIns(userSelectStr.toString());
 			cond.setTskAssignee(userId);
 			cond.setTskModifyDateFrom(fromDate);
+			cond.setPackageStatus("DEPLOYED");
 			long totalSize = getWorkListManager().getCastWorkListSize(userId, cond);
 
 			cond.setPageNo(0);
