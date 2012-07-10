@@ -34,7 +34,19 @@
 	<div id="m_setting">
 		<!-- 내부 메뉴 -->				
 		<ul>
-			<li><a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>&wid=<%=workSpace.getId() %>" class="js_content"><span class="js_collapse_detail  arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><%=((User)workSpace).getLongName() %> <fmt:message key="space.title.space.all_items"/></span></span></a></li>
+			<li>
+			<%
+			if(wid.equals(cUser.getId())){				
+			%>
+				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail  arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.my.all_items"/></span></span></a>
+			<%
+			}else{				
+			%>
+				<a href="<%=workSpace.getSpaceController() %>?cid=<%=workSpace.getSpaceContextId() %>" class="js_content"><span class="js_collapse_detail arr_off fl" style="margin-left:-11px;margin-top:2px"></span><span class="icon_user_space ml-1"><span class="mt3"><fmt:message key="space.title.user.all_items"/></span></span></a>
+			<%
+			}
+			%>
+			</li>
 		</ul>
 		<ul style="display:none">
 			<li><a href="<%=Work.CONTROLLER_WORK_LIST %>?cid=<%=ISmartWorks.CONTEXT_ALL_WORKS_LIST %>&wid=<%=workSpace.getId() %>" class="js_content"><span class="<%=Work.ICON_CLASS_ALL_WORKS%>"></span><span class="nav_sub_area"><fmt:message key="space.title.works"/></span></a></li>
