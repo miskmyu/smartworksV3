@@ -5463,6 +5463,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskWorkCond.setTskExecuteDateFrom(fromDate);
 			taskWorkCond.setTskExecuteDateTo(toDate);
 		}
+		taskWorkCond.setPackageStatus(PkgPackage.STATUS_DEPLOYED);
 
 		long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
 
