@@ -192,7 +192,7 @@ function logout() {
 			</span> 
 		</li>
 		<!--  홈메뉴  //-->
-
+<%-- 
 		<!--  스마트케스트 메뉴  -->
 		<li class="idx2">
  			<span>
@@ -200,7 +200,7 @@ function logout() {
  			</span> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
-
+ --%>
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
  			<span>

@@ -44,14 +44,14 @@
 	<div class="tab_buttons js_nav_tab_work">
 	
  		<a href="my_all_works.sw" title="<fmt:message key='nav.works.my_all_works' />"><span class="btn_all_works"/></span></a>
- 		<a href="my_favorite_works.sw" title="<fmt:message key='nav.works.my_favorite_works' />"><span class="btn_favorite"/></span></a>
- 		<a href="my_recent_instances.sw" title="<fmt:message key='nav.works.my_recent_instances' />" ><span class="btn_recent current"></span></a>
+ 		<a href="my_recent_instances.sw" title="<fmt:message key='nav.works.my_recent_instances' />" ><span class="btn_recent"></span></a>
+ 		<a href="my_favorite_works.sw" title="<fmt:message key='nav.works.my_favorite_works' />"><span class="btn_favorite current"/></span></a>
 		<span class="fr ml2 js_progress_span"></span><!--  프로그래스아이콘이 실행되는 곳 -->
  		
 	</div>
 	
 	<div id='my_works'>
-		<jsp:include page="my_recent_instances.jsp" />
+		<jsp:include page="my_favorite_works.jsp" />
 	</div>
 	<!--내부메뉴//-->
 </div>
