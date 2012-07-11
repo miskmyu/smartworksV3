@@ -39,6 +39,7 @@ function submitForms() {
 			else autoComplete.removeClass('required');
 		}
 	}
+	
 	// new_iwork에 있는 활성화되어 있는 모든 입력화면들을 validation하여 이상이 없으면 submit를 진행한다...
 	if (SmartWorks.GridLayout.validate(newIwork.find('form.js_validation_required'), $('.js_upload_error_message'))) {
 		var forms = newIwork.find('form');
@@ -55,6 +56,7 @@ function submitForms() {
 			
 			// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+			
 		}
 		console.log(JSON.stringify(paramsJson));
 		var url = "create_new_iwork.sw";
