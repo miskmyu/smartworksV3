@@ -8,6 +8,11 @@
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
 .form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 
+/* 개인정보 수정 File Upload */
+/* .js_my_profile_field .js_type_imageBox .form_label {background-color:#FFF; width:0px !important}
+.js_my_profile_field .js_type_imageBox .form_value img {left:0} */
+/* .js_type_imageBox .form_value img {position: relative; left: 20px} */
+
 /* 새그룹 등록하기 File Upload */
 .js_group_profile_field .form_label {width:0px !important}
 
@@ -25,9 +30,10 @@
 /* .setting_section tr {border-bottom: 1px dotted #C7C7C7} */
 .setting_section tr.end {border-bottom: none}
 .con td, .boTb td {color: #555555 !important}
-.con th, .boTb th, .js_my_profile_page th {color: #23579E; vertical-align: middle; padding: 0 5px; font-weight: normal}
+.con th, .boTb th, .js_my_profile_page th, .setting_section th {color: #23579E; vertical-align: middle; text-align:right; padding: 0 15px 0 0; font-weight: normal}
 /* .boTb table tr {border-bottom: 1px dotted #C7C7C7} */
 .boTb table tr.end {border-bottom: none}
+.setting_section .list_contents .buttonSet { text-align: right} /* 공간설정 리스트 버튼들 */
 
 /* 상세필터 */
 .filter_section {}

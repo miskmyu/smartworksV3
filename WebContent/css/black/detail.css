@@ -52,7 +52,6 @@
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
-.contents_space table th {font-weight: normal}
 
 /* Reply Info */
 .task_information {vertical-align:bottom; float:left}
@@ -94,7 +93,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /*.list_title_space {background-color:#ededed; padding:7px 5px; overflow:hidden}*/
 .default_title_space{padding-bottom:5px !important} /* Case in No right Button */
 .list_title_space,.default_title_space {padding:0 0 2px 0; overflow:hidden} /* Case in right Button */
-.list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 3px no-repeat; font-size:14px; font-weight:bold; padding: 3px 8px 0 20px; float:left}
+.list_title_space .title, .list_title, .default_title_space .title {background: url("../../images/iconTitle.gif") 0 3px no-repeat; font-size:14px; font-weight:bold; padding: 3px 8px 0 20px; color:#454545; float:left}
 
 .list_contents {}
 /*.list_contents table {min-width:700px}*/
@@ -315,10 +314,10 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .icon_btn_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -251px transparent; height:21px; display:inline-block; padding: 0 0 0 24px}
 .icon_btn_file {background: url("../../images/body_icon.png") no-repeat scroll -163px -364px transparent; height:20px; width:16px; display:inline-block}
 
-/* 개인정보 수정 File Upload */
+/*프로파일 화면 구성*/
 .photo_section {width:150px; float:left}
-.photo_section .qq-upload-button {top:115px; left:41px}
-.photo_section .t_text_s11 {margin:28px 0 0 17px; text-align:center; width:110px; line-height: 12px}
+.photo_section .qq-upload-button {top:115px; left:24px}
+.photo_section .t_text_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
 
 
 /* Icon button style */
