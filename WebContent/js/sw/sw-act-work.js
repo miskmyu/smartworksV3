@@ -1309,6 +1309,7 @@ $(function() {
 			var target = userField.find('.js_community_popup:first');
 			var width = userField.find('.form_value').find('div:first').width();
 			var isMultiUsers = userField.attr('multiUsers');
+			console.log('communityItems=', communityItems, ', target=', target, ', width=', width, ', isMultiUsers=', isMultiUsers);
 			smartPop.selectUser(communityItems, target, width, isMultiUsers);
 		}
 		return false;

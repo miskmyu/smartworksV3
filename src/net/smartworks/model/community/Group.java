@@ -2,8 +2,11 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.security.EditPolicy;
+import net.smartworks.model.security.WritePolicy;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 
 public class Group extends WorkSpace {
@@ -12,6 +15,7 @@ public class Group extends WorkSpace {
 	public static final String GROUP_TYPE_OPEN = "Open";
 	public static final String GROUP_TYPE_CLOSED = "Closed";
 	public static final String GROUP_TYPE_DEFAULT = GROUP_TYPE_OPEN;
+	public static final int MAX_MEMBERS_UNLIMITED = -1;
 	//public static final String GROUP_STATUS_CONTINUE = "Continue";
 	//public static final String GROUP_STATUS_SUSPEND = "Suspend";
 	//public static final String GROUP_STATUS_DEFAULT = GROUP_STATUS_CONTINUE;
@@ -26,7 +30,14 @@ public class Group extends WorkSpace {
 	private int numberOfGroupMember = 0;
 	private String type = GROUP_TYPE_DEFAULT;
 	private boolean autoApproval;
+	private int maxMembers=MAX_MEMBERS_UNLIMITED;
+	private UserInfo[] invitableMembers;
+	private WritePolicy boardWritePolicy;
+	private EditPolicy boardEditPolicy;
+	private WritePolicy eventWritePolicy;
+	private EditPolicy eventEditPolicy;
 	private LocalDate createdDate;
+	private UserInfo[] joinRequesters;
 
 	public String getType() {
 		return type;
@@ -93,6 +104,48 @@ public class Group extends WorkSpace {
 		return ISmartWorks.SPACE_TYPE_GROUP;
 	}
 	
+	public int getMaxMembers() {
+		return maxMembers;
+	}
+	public void setMaxMembers(int maxMembers) {
+		this.maxMembers = maxMembers;
+	}
+	public UserInfo[] getInvitableMembers() {
+		return invitableMembers;
+	}
+	public void setInvitableMembers(UserInfo[] invitableMembers) {
+		this.invitableMembers = invitableMembers;
+	}
+	public WritePolicy getBoardWritePolicy() {
+		return boardWritePolicy;
+	}
+	public void setBoardWritePolicy(WritePolicy boardWritePolicy) {
+		this.boardWritePolicy = boardWritePolicy;
+	}
+	public EditPolicy getBoardEditPolicy() {
+		return boardEditPolicy;
+	}
+	public void setBoardEditPolicy(EditPolicy boardEditPolicy) {
+		this.boardEditPolicy = boardEditPolicy;
+	}
+	public WritePolicy getEventWritePolicy() {
+		return eventWritePolicy;
+	}
+	public void setEventWritePolicy(WritePolicy eventWritePolicy) {
+		this.eventWritePolicy = eventWritePolicy;
+	}
+	public EditPolicy getEventEditPolicy() {
+		return eventEditPolicy;
+	}
+	public void setEventEditPolicy(EditPolicy eventEditPolicy) {
+		this.eventEditPolicy = eventEditPolicy;
+	}
+	public UserInfo[] getJoinRequesters() {
+		return joinRequesters;
+	}
+	public void setJoinRequesters(UserInfo[] joinRequesters) {
+		joinRequesters = joinRequesters;
+	}
 	public Group(){
 		super();
 	}
@@ -118,4 +171,32 @@ public class Group extends WorkSpace {
 		groupInfo.setSmallPictureName(getSmallPictureName());
 		return groupInfo;
 	}
+	
+	public boolean amIInvitableMember(){
+		if(SmartUtil.isBlankObject(invitableMembers)) return false;
+		for(UserInfo member : invitableMembers){
+			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean amIMember(){
+		if(SmartUtil.isBlankObject(members)) return false;
+		for(UserInfo member : members){
+			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		return false;		
+	}
+	
+	public boolean amIJoinRequester(){
+		if(SmartUtil.isBlankObject(joinRequesters)) return false;
+		for(UserInfo member : joinRequesters){
+			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+				return true;
+		}
+		return false;				
+	}
+	
 }

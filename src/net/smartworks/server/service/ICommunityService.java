@@ -19,6 +19,8 @@ public interface ICommunityService {
 
 	public abstract UserInfo[] searchCommunityMember(String communityId, String key) throws Exception;
 
+	public abstract UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception;
+
 	public abstract WorkSpaceInfo[] searchCommunity(String key, HttpServletRequest request) throws Exception;
 
 	public abstract User getUserById(String userId) throws Exception;

@@ -1501,4 +1501,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getRecentBoardInstances(spaceId, maxLength);
 	}
 
+	@Override
+	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
+		return communityService.searchCommunityNonMember(communityId, key);
+	}
+
 }

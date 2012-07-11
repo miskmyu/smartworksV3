@@ -1540,5 +1540,10 @@ public class CommunityServiceImpl implements ICommunityService {
 			return null;
 		}
 	}
+	@Override
+	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
+		// 테스트용도이니 구현바람.
+		return searchCommunityMember(communityId, key);
+	}
 
 }

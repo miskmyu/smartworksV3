@@ -32,6 +32,12 @@ public class SearchController {
 		return SmartUtil.returnMnv(request, "jsp/search/community_member.jsp", "");
 	}
 
+	@RequestMapping("/community_non_member")
+	public ModelAndView communityNonMember(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		return SmartUtil.returnMnv(request, "jsp/search/community_non_member.jsp", "");
+	}
+
 	@RequestMapping("/my_running_instance")
 	public ModelAndView myRunningInstance(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
