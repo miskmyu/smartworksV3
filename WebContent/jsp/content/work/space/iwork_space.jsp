@@ -115,9 +115,13 @@
 					<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="fr pt12">
 						<%
-						if(approvalTask == null && forwardedTask == null){
+						if(forwardedTask == null){
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+						<%
+						}
+						if(approvalTask == null && forwardedTask == null){
+						%>
 							<%
 							if(instance.getOwner().getId().equals(cUser.getId())){
 							%>
@@ -143,12 +147,12 @@
                 </div>
 		            <!-- 타이틀 -->
 		            
-				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && !instance.isApprovalWork()){ %>style="display:none"<%} %>>
+				<!-- 업무전달화면이 나타나는 곳 -->
+				<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
 					<%
-					if(approvalTask!=null || instance.isApprovalWork()){
+					if(forwardedTask!=null){
 					%>
-						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
+						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
 						</jsp:include>
 					<%
@@ -156,12 +160,12 @@
 					%>
 				</div>
 				
-				<!-- 업무전달화면이 나타나는 곳 -->
-				<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
+				<!--  전자결재화면이 나타나는 곳 -->
+				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && !instance.isApprovalWork()){ %>style="display:none"<%} %>>
 					<%
-					if(forwardedTask!=null){
+					if(approvalTask!=null || instance.isApprovalWork()){
 					%>
-						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
+						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
 						</jsp:include>
 					<%

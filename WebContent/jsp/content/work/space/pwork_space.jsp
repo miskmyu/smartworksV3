@@ -478,7 +478,6 @@
 		pworkSpace.attr("formMode", formMode);
 		if(!isEmpty(pworkSpace.find('.js_form_task_forward:visible'))) 
 			return;
-		console.log('formMode = ', formMode, ', isApprovalwork = ' , isApprovalWork );
 		if(formMode==="edit"){
 			if(isReturned || !isEmpty(approvalLineId)){
 				pworkSpace.find('.js_toggle_approval_btn').hide();

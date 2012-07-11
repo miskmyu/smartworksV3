@@ -1346,7 +1346,6 @@ $(function() {
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
 		var isPworkSpace = workSpacePage.hasClass('js_pwork_space_page');
 		var target = (isPworkSpace) ? workSpacePage.find('.js_form_task_forward') : input.parents('.js_form_header').siblings('.js_form_task_forward');
-		console.log('target=', target);
 		if(target.is(':visible')){
 			target.hide().html('');
 			if(!isEmpty(workSpacePage)){
@@ -1367,7 +1366,7 @@ $(function() {
 			}
 			return false;
 		}
-		if((isPworkSpace && target.is(":visible")) || (!isPworkSpace && !isEmpty(input.parents('.js_form_header').siblings('.js_form_task:visible')))) return false;
+		if((isPworkSpace && target.is(":visible")) || (!isPworkSpace && !isEmpty(input.parents('.js_form_header').siblings('.js_form_task_forward:visible')))) return false;
 		$.ajax({
 			url : 'append_task_forward.sw',
 			data : {},

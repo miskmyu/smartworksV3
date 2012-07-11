@@ -591,13 +591,21 @@ function loadTaskApprovalFields() {
 				}
 				
 				if(readOnly || isReturned=='true'){
-					iworkSpace.find('.js_toggle_forward_btn').hide();
+					if(isReturned == 'ture')
+						iworkSpace.find('.js_toggle_forward_btn').hide();
+					else
+						iworkSpace.find('.js_toggle_forward_btn').show();						
 					iworkSpace.find('.js_toggle_approval_btn').hide();
 				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();
 			}else if(!isEmpty(pworkSpace)){
 				var target = pworkSpace.find('.js_append_task_approval_page').addClass('up');
+				if(actionRequired==='true'){
+					pworkSpace.find('.js_toggle_forward_btn').hide();					
+				}else{
+					pworkSpace.find('.js_toggle_forward_btn').show();										
+				}
 				target.parent().addClass('contents_space');
 				target.find('.dash_line').remove();
 				
