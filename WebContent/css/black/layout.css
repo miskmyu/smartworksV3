@@ -54,7 +54,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 }
 
 /*Top Menu*/
-.top_menu {z-index:40; position:absolute; width:238px; height:34px; top:0px; left:388px; background:url("../../images/top_menu.png") no-repeat left top}
+.top_menu {z-index:40; width:138px; height:34px; margin:0 auto; background:url("../../images/top_menu.png") no-repeat left top}
 .top_menu ul {height:34px}
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
