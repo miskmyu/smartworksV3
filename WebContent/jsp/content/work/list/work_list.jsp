@@ -97,8 +97,13 @@
 	saveSearchFilter = function(){
 		var searchFilter = $('.js_search_filter_page');
 		var filterId = searchFilter.attr('filterId');
-		if(isEmpty(filterId)) searchFilter.find('input[name="txtNewFilterId"]').removeClass('required');
-		saveAsSearchFilter(filterId);
+		//filterId에 system 문자열이 들어가지 않을 시,fileterId를 전달
+		if(isEmpty(filterId) || filterId.match(".*system.*")){
+			searchFilter.find('input[name="txtNewFilterName"]').removeClass('required');
+			saveAsSearchFilter("");
+		}else{
+			saveAsSearchFilter(filterId);
+		}
 	};
 
 	selectListParam = function(progressSpan, isGray){
