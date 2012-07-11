@@ -295,7 +295,7 @@
  			if(!(!SmartUtil.isBlankObject(filter) && filter.isSystemFilter())){
 			%>
 				<span class="btn_gray"> 
-					<a href="" class="js_search_filter_save"> 
+					<a href="" class="js_search_filter_saveas"> 
 						<span class="txt_btn_start"></span> 
 						<span class="txt_btn_center"><fmt:message key="common.button.save_as"/></span> 
 						<span class="txt_btn_end"></span>
@@ -305,7 +305,7 @@
 			}
 			%>
 			<span class="btn_gray"> 
-				<a href="" class="js_search_filter_saveas"> 
+				<a href="" class="js_search_filter_save"> 
 					<span class="txt_btn_start"></span> 
 					<span class="txt_btn_center"><fmt:message key="common.button.save"/></span> 
 					<span class="txt_btn_end"></span>

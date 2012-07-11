@@ -110,7 +110,12 @@
 	saveSearchFilter = function(){
 		var searchFilter = $('.js_search_filter_page');
 		var filterId = searchFilter.attr('filterId');
-		saveAsSearchFilter(filterId);
+		//filterId에 system 문자열이 들어가지 않을 시,fileterId를 전달
+		if(filterId.match(".*system.*")){
+			saveAsSearchFilter("");
+		}else{
+			saveAsSearchFilter(filterId);
+		}
 	};
 
 	selectListParam = function(progressSpan, isGray){

@@ -863,7 +863,7 @@ public class ModelConverter {
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
 		}
-		workInstanceInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
+		workInstanceInfo.setOwner(getUserInfoByUserId(task.getPrcCreateUser()));
 		workInstanceInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
 		Date modifiedDate = task.getTaskLastModifyDate() == null ? task.getTskCreateDate() : task.getTaskLastModifyDate();
 		workInstanceInfo.setLastModifiedDate(new LocalDate(modifiedDate.getTime()));
