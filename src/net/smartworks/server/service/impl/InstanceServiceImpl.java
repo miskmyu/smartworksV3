@@ -434,6 +434,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			if (runningOnly && (assignedOnly == false)){
 				taskCond.setTskStartOnly(user.getId());
+				taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			}
 			if (runningOnly && assignedOnly) {
 				taskCond.setTskStartOrAssigned(user.getId());
@@ -450,7 +451,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 			taskCond.setPageNo(0);
 			taskCond.setPageSize(requestSize);
-			taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
+			//taskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			
 			taskCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 			
@@ -505,8 +506,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			TaskWorkCond totalTaskCond = new TaskWorkCond();
 			totalTaskCond.setTskStartOnly(user.getId());
-			totalTaskCond.setLastInstanceDate(new LocalDate());
-			totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			//totalTaskCond.setLastInstanceDate(new LocalDate());
+			//totalTaskCond.setPrcStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			totalTaskCond.setPrcStatusIns(new String[]{PrcProcessInst.PROCESSINSTSTATUS_RUNNING, PrcProcessInst.PROCESSINSTSTATUS_RETURN});
 			
 			long runningTaskSize = getWorkListManager().getTaskWorkListSize(user.getId(), totalTaskCond);
 			
