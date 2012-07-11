@@ -75,7 +75,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li span a {display:block; padding-top:8px}
 
 /*Search*/
-.global_srch {position:absolute; left:635px; top:5px}
+.global_srch {position:absolute; right:100px; top:5px}
 .nav_srch {float:left; padding-bottom:10px}
 .mail_srch { float:right}
 	
