@@ -354,9 +354,9 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		if (!CommonUtil.isEmpty(tskAssigneeOrTskSpaceId))
 			queryBuffer.append("	and (task.tskassignee = :tskAssigneeOrTskSpaceId or task.tskWorkSpaceId = :tskAssigneeOrTskSpaceId) ");
 		if (!CommonUtil.isEmpty(tskStartOrAssigned))
-			queryBuffer.append("	and ((task.tskassignee = :tskStartOrAssigned and task.isStartActivity = 'true') or (task.tskStatus = '11' and task.tskassignee = :tskStartOrAssigned)) ");
+			queryBuffer.append("	and ((task.tskassignee = :tskStartOrAssigned and task.isStartActivity = 'true' and tsktype in('SINGLE','COMMON')) or (task.tskStatus = '11' and task.tskassignee = :tskStartOrAssigned)) ");
 		if (!CommonUtil.isEmpty(tskStartOnly))
-			queryBuffer.append("	and (task.tskassignee = :tskStartOnly and task.isStartActivity = 'true') ");
+			queryBuffer.append("	and (task.tskassignee = :tskStartOnly and task.isStartActivity = 'true' and tsktype in('SINGLE','COMMON')) ");
 		if (!CommonUtil.isEmpty(tskStatus))
 			queryBuffer.append("	and task.tskstatus = :tskStatus ");
 		if (!CommonUtil.isEmpty(worksSpaceId))
