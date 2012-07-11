@@ -331,7 +331,7 @@ li.comment_list:hover {background-color:#fff7eb}
 .members .icon_pe {padding: 1px}
 
 #community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
-.setting_section .leader.m {margin: 41px 0 0 41px;}
+.setting_section .leader.m {margin: 41px 0 0 41px; height:7px !important}
 
 #community_department .profile_size_s {margin:0 5px 0 0}
 
@@ -611,6 +611,11 @@ margin: 0 auto}
 #work_ing .current, #work_ing .current a, .setting_section .current, .communities_setting .current a {font-size:16px; font-weight:bold; color:#333333}
 #work_ing .t_red_bold, .setting_section .t_red_bold {font-size:11px}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
+
+.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0; width:13%}
+.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; vertical-align: middle}
+.setting_section .instance_list .det_title div.buttonSet {width:90px; float:right}
+.setting_section .instance_list .det_title .profile_photo {width:50px}
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}

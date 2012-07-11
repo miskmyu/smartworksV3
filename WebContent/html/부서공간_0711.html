@@ -196,19 +196,6 @@
         <div class="portlet_r" style="display: block;">
     	<!-- 화면 -->
         <div class="contents_space setting_section oh">
-            <div class="titl_section">
-                <!-- 타이틀을 나타내는 곳 -->
-                <div class="title pr10 fl">
-                    <span class="current">
-                    	<a href="">설정</a>
-                    </span>
-                    |
-                    <span class=" ">
-                    	<a href="">구성원</a>
-                    </span>
-                </div>
-         	</div>
-            <div class="solid_line mb10"></div>
             <!-- 설정 부분 -->
             <!-- Left -->
             <div class="photo_section">
@@ -228,7 +215,7 @@
             </div>
             <!-- Left//-->
 			<!--Right-->
-			<div class="table_normal600 fl">
+			<div class="table_normal600">
             	<table>
                     <tbody>
                         <tr>
@@ -238,18 +225,13 @@
                             </td>
                         </tr>
                         <tr>
-                        <th class="vt" style=" line-height:31px">공지사항</th>
+                        <th>공지사항 (등록권한)</th>
                             <td>
-                            <div>
-                                <div class="t_blue">등록 권한</div>
-                                <div style="line-height:18px"> 
-                                <input type="checkbox" checked="" />시스템관리자
-                                <input type="checkbox" checked="" />관리자
-                                <input type="checkbox" checked="" />부서장
-                                <input type="checkbox" />부서원 전체
-                                <input type="checkbox" />사용자 지정
-                                </div>
-                            </div>
+                                <input type="checkbox" checked="" /><label>시스템관리자</label>
+                                <input type="checkbox" checked="" /><label>관리자</label>
+                                <input type="checkbox" checked="" /><label>부서장</label>
+                                <input type="checkbox" /><label>부서원 전체</label>
+                                <input type="checkbox" /><label>사용자 지정</label>
                             <!-- 사용자들 지정 -->
                             <div class="icon_fb_space mt5">
                                 <div class="fieldline community_names js_community_names">
@@ -262,43 +244,37 @@
                                 </a>
                             </div>
                             <!-- 사용자들 지정//-->
-                            
-                            <div class="mt5">
-                                <div class="t_blue">수정/삭제 권한</div>
-                                <div style="line-height:18px"> 
-                                <input type="checkbox" checked="" />작성자
-                                <input type="checkbox" />시스템 관리자
-                                <input type="checkbox" />관리자
-                                <input type="checkbox" />부서장
-                                <input type="checkbox" />사용자 지정
-                                </div>
-                            </div>
                             </td>
                         </tr>
                         <tr>
-                        <th class="vt" style=" line-height:31px">일정</th>
+                        <th>공지사항 (수정/삭제권한)</th>
                             <td>
-                            <div>
-                                <div class="t_blue">등록 권한</div>
-                                <div style="line-height:18px"> 
-                                <input type="checkbox" checked="" />부서원 전체
-                                <input type="checkbox" checked="" />시스템관리자
-                                <input type="checkbox" checked="" />관리자
-                                <input type="checkbox" />부서장
-                                <input type="checkbox" />사용자 지정
-                                </div>
-                            </div>
+                                <input type="checkbox" checked="" /><label>작성자</label>
+                                <input type="checkbox" /><label>시스템 관리자</label>
+                                <input type="checkbox" /><label>관리자</label>
+                                <input type="checkbox" /><label>부서장</label>
+                                <input type="checkbox" /><label>사용자 지정</label>
+                            </td>
+                        </tr>
+                        <tr>
+                        <th>일 정 (등록권한)</th>
+                            <td>
+                                <input type="checkbox" checked="" /><label>부서원 전체</label>
+                                <input type="checkbox" checked="" /><label>시스템관리자</label>
+                                <input type="checkbox" checked="" /><label>관리자</label>
+                                <input type="checkbox" /><label>부서장</label>
+                                <input type="checkbox" /><label>사용자 지정</label>
+							</td>
+                            </tr>
                             
-                            <div class="mt5">
-                                <div class="t_blue">수정/삭제 권한</div>
-                                <div style="line-height:18px"> 
-                                <input type="checkbox" checked="" />작성자
-                                <input type="checkbox" />시스템 관리자
-                                <input type="checkbox" />관리자
-                                <input type="checkbox" />부서장
-                                <input type="checkbox" />사용자 지정
-                                </div>
-                            </div>
+						<tr>
+                        <th>일 정 (수정/삭제권한)</th>
+                            <td>
+                                <input type="checkbox" checked="" /><label>작성자</label>
+                                <input type="checkbox" /><label>시스템 관리자</label>
+                                <input type="checkbox" /><label>관리자</label>
+                                <input type="checkbox" /><label>부서장</label>
+                                <input type="checkbox" /><label>사용자 지정</label>
                             </td>
                         </tr>
                     </tbody>
