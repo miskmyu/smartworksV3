@@ -274,4 +274,7 @@
 	</div>
 	<div class="portlet_b" style="display: block;"></div>
 </div>
+<script>
+loadMyProfileField();
+</script>
 <!-- 컨텐츠 레이아웃//-->		

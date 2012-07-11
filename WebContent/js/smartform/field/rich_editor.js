@@ -129,7 +129,9 @@ SmartWorks.FormRuntime.RichEditorBuilder.validate = function(richEditors){
 		var richEditor = $(richEditors[i]);
 		var id = richEditor.attr('fieldId');
 		if(!isEmpty(oEditors)) oEditors.getById[id].exec("UPDATE_IR_FIELD", []);
-		var value = richEditor.find('textarea')[0].value;
+		var value = richEditor.find('textarea')[0] ? richEditor.find('textarea')[0].value : richEditor.find('input')[0].value;
+		//var value = richEditor.find('textarea')[0].value;
+		
 		var required = richEditor.find('span.sw_required');
 		if(!isEmpty(required) && (isEmpty(value) || value === "<br>")){
 			richEditor.find('span.sw_required').addClass("sw_error");
