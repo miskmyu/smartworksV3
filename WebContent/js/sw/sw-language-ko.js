@@ -167,6 +167,13 @@ smartMessage.bundle['ko'] = {
 	commentTaskForwardError : "업무전달을 완료하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	commentTaskApprovalSucceed : "전자결재가 정상적으로 수행되었습니다.",
 	commentTaskApprovalError : "전자결재를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	inviteGroupMembersSucceed : "그룹 구성원 초대하기가 정상적으로 완료되었습니다.",
+	inviteGroupMembersError : "그룹 구성원 초대하기를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	leaveGroupRequestSucceed : "그룹탈퇴가 정상적으로 완료되었습니다.",
+	leaveGroupRequestError : "그룹탈퇴를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	joinGroupRequestSucceed : "그룹가입 요청이 정상적으로 완료되어, 그룹리더의 승인을 기다리고 있습니다.",
+	joinGroupSucceed : "그룹가입이 정상적으로 완료되었습니다.",
+	joinGroupRequestError : "그룹가입을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	mailPasswordConfirmError : "보내는메일 암호가 잘못입력되었습니다. 확인하여 다시 입력 바랍니다.",
 	duplicationCheckError : "아이디 중복확인이 되지 않았습니다. 중복확인을 실행한 후 다시 하시기 바랍니다.",
 	wsdlNotFetchedError : "WSDL 가져오기를 실행하지 않았습니다. WSDL 가져오기를 실행한 후 다시 하시기 바랍니다.",
@@ -190,6 +197,7 @@ smartMessage.bundle['ko'] = {
 	publishConfirmation : "업무를 앱스토어 공유하려고 합니다. 정말로 공유하시겠습니까? ",
 	commentTaskApprovalConfirm : "전자결재를 수행하려고 합니다. 정말로 수행하시겠습니까? ",
 	commentTaskForwardConfirm : "업무전달을 완료하려고 합니다. 정말로 완료하시겠습니까? ",
+	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

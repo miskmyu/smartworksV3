@@ -1309,6 +1309,7 @@ $(function() {
 			var target = userField.find('.js_community_popup:first');
 			var width = userField.find('.form_value').find('div:first').width();
 			var isMultiUsers = userField.attr('multiUsers');
+			console.log('communityItems=', communityItems, ', target=', target, ', width=', width, ', isMultiUsers=', isMultiUsers);
 			smartPop.selectUser(communityItems, target, width, isMultiUsers);
 		}
 		return false;
@@ -1453,6 +1454,7 @@ $(function() {
 
 	$('.js_view_my_instances').live('click',function(e) {
 		var input = $(targetElement(e));
+		if(isEmpty(input.attr('viewType'))) input = input.parent();
 		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
 		input.parent().addClass('current').siblings().removeClass('current');
 		var viewType = input.attr('viewType'); 

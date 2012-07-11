@@ -580,4 +580,79 @@ $(function() {
 		
 	});
 	
+	$('.js_invite_group_members').live('click', function(e){
+		var input = $(targetElement(e));
+		var spaceId = input.parents('.js_space_profile_page').attr('spaceId');
+		smartPop.inviteGroupMembers(spaceId);
+		return false;
+	});
+		
+	$('.js_join_group_request').live('click', function(e){
+		var input = $(targetElement(e));
+		var spaceId = input.parents('.js_space_profile_page').attr('spaceId');
+		var isAutoApproval = input.attr('isAutoApproval');
+		var paramsJson = {};
+		paramsJson['groupId'] = spaceId;
+		paramsJson['userId'] = currentUser.userId;	
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : "join_group_request.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				if(isAutoApproval == 'true'){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("joinGroupSucceed"), function(){
+						window.location.reload();
+						smartPop.closeProgress();
+					});
+				}else{
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("joinGroupRequestSucceed"), function(){
+						window.location.reload();
+						smartPop.closeProgress();
+					});					
+				}
+			},
+			error : function(e) {
+				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("commentTaskApprovalError"), function(){
+					smartPop.closeProgress();					
+				});
+			}
+			
+		});
+		return false;
+	});
+	
+	$('.js_leave_group_request').live('click', function(e){
+		smartPop.confirm(smartMessage.get("leaveGroupConfirmation"), function(){
+			var input = $(targetElement(e));
+			var isGroupLeader = input.attr('isGroupLeader');
+			var spaceId = input.parents('.js_space_profile_page').attr('spaceId');
+			var paramsJson = {};
+			paramsJson['groupId'] = spaceId;
+			paramsJson['leaveReason'] = "";	
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "leave_group.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("leaveGroupRequestSucceed"), function(){
+						document.location.href = "smart.sw#home.sw";
+						smartPop.closeProgress();
+					});
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("leaveGroupRequestError"), function(){
+						smartPop.closeProgress();					
+					});
+				}
+				
+			});
+		});
+		return false;
+	});
 });

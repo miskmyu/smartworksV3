@@ -646,6 +646,38 @@ smartPop = {
 		});
 	},
 
+	inviteGroupMembers : function(groupId){
+		$.get("pop_invite_group_members.sw?groupId=" + groupId, function(data){
+			$(data).modal({
+				opacity: 50,
+				overlayCss: {backgroundColor:"#fff"},
+				containerCss:{
+					height:500,
+					width:600
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_invite_member').die('click');
+					$('.js_close_invite_member').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('.js_close_invite_member').focus();
+					$('.js_close_invite_member').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            $('.js_close_invite_member').click();
+				            return false;
+				        } else {
+				            return true;
+				        }
+				    });
+				}
+			});
+		});
+	},
+
 	createWorkCategory : function(categoryId, categoryName, categoryDesc){
 		$.get("pop_new_category.sw?categoryId="+ categoryId + "&categoryName=" + categoryName + "&categoryDesc=" + categoryDesc, function(data){
 			$(data).modal({

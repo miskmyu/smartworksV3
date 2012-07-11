@@ -26,6 +26,12 @@
 	// 모든정보를 JSON형식으로 Serialize해서 서버의 update_my_profile.sw 서비스를 호출하여 수정한다.
 	function submitForms(e) {
 		var newGroup = $('.js_new_group_page');
+		var maxMembers = newGroup.find('input[name="rdoGroupMaxMembers"]:checked');
+		if(maxMembers.attr('value') == "UserDefined"){
+			newGroup.find('input[name="txtGroupMaxMembers"]').addClass('required');
+		}else{
+			newGroup.find('input[name="txtGroupMaxMembers"]').removeClass('required');			
+		}
 		if (SmartWorks.GridLayout.validate(newGroup.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			var forms = newGroup.find('form');
 			var paramsJson = {};
@@ -115,6 +121,26 @@
 					<th><fmt:message key="group.title.leader" /></th>
 					<td>
 						<div><img src="<%=SmartUtil.getCurrentUser().getMinPicture()%>" class="profile_size_s"/><input name="txtGroupLeader" type="hidden" class=""  value="<%=SmartUtil.getCurrentUser().getId() %>"><%=SmartUtil.getCurrentUser().getLongName() %></div>
+					</td>
+				</tr>
+				<tr>
+					<th><fmt:message key="group.title.join_approval" /></th>
+					<td>
+						<div>
+							<input name="rdoGroupAutoApproval" type="radio" value="true" checked><fmt:message key="group.label.auto_approval"/>
+							<input name="rdoGroupAutoApproval" type="radio" value="false"><fmt:message key="group.label.leader_approval"/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th><fmt:message key="group.title.max_members" /></th>
+					<td>
+						<div>
+							<input name="rdoGroupMaxMembers" type="radio" checked value="<%=Group.MAX_MEMBERS_UNLIMITED %>"><fmt:message key="group.label.unlimited_members"/>
+							<input name="rdoGroupMaxMembers" type="radio" value="UserDefined">
+							<input name="txtGroupMaxMembers" type="text" style="width:40px" class="fieldline number tr">
+							<fmt:message key="group.label.members"/>
+						</div>
 					</td>
 				</tr>
 				<tr>

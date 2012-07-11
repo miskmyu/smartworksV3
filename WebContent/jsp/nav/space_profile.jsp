@@ -56,11 +56,12 @@
 	}
 %>
 
-<ul>
+<ul class="js_space_profile_page" spaceId="<%=spaceId%>">
 	<%
 	// 그룹인경우....
 	if (thisGroup != null) {
 		String target = thisGroup.getSpaceController() + "?cid=" + thisGroup.getSpaceContextId() + "&wid=" + thisGroup.getId(); 
+		thisGroup.setPublic(true);
 	%>
 		<li>
 			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisGroup.getOrgPicture()%>"></a>
@@ -73,10 +74,34 @@
 		</li>
 		<!-- 가입하기/초대하기 아이콘 -->
 		<div class="tc cb">
-			<button>초대하기</button>
-			<span>
-				<a href="">탈퇴하기</a>
-			</span>
+			<%
+			if(true){//thisGroup.amIInvitableMember()){
+			%>
+				<button class="js_invite_group_members"><fmt:message key="group.button.invite_member"/></button>
+			<%
+			}
+			if(thisGroup.isPublic() && !thisGroup.amIMember()){
+				if(thisGroup.isAutoApproval()){
+			%>
+					<button class="js_join_group_request" isAutoApproval="true"><fmt:message key="group.button.join"/></button>
+				<%
+				}else if(thisGroup.amIJoinRequester()){
+				%>
+					<span><fmt:message key="group.title.waiting_approval"/></span>
+				<%
+				}else{
+				%>
+					<button class="js_join_group_request" isAutoApproval="false"><fmt:message key="group.button.join_request"/></button>
+			<%	
+				}
+			}else if(thisGroup.amIMember()){
+			%>
+				<span>
+					<a href="" class="js_leave_group_request"><fmt:message key="group.button.leave"/></a>
+				</span>
+			<%
+			}
+			%>
 		</div>
 		<!-- 가입하기/초대하기 아이콘 //-->
 	<%

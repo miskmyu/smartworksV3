@@ -161,6 +161,13 @@ smartMessage.bundle['en'] = {
 	commentTaskForwardError : "Error has been occured while performing the Forward Task. Please contact the Administrator!",
 	commentTaskApprovalSucceed : "Approval Task has been performed successfully.",
 	commentTaskApprovalError : "Error has been occured while performing the Approval Task. Please contact the Administrator!",
+	inviteGroupMembersSucceed : "Invite Group members has been performed successfully.",
+	inviteGroupMembersError : "Error has been occured while inviting the Group members. Please contact the Administrator!",
+	leaveGroupRequestSucceed : "Leave Group request has been performed successfully.",
+	leaveGroupRequestError : "Error has been occured while performing the Leave Group. Please contact the Administrator!",
+	joinGroupRequestSucceed : "Join Group request has been performed successfully and now waiting for Group leader to approve",
+	joinGroupSucceed : "Join Group request has been performed successfully",
+	joinGroupRequestError : "Error has been occured while performing the Join Group. Please contact the Administrator!",
 	mailPasswordConfirmError : "Send Mail Password confirmation error. Please retry password confirmation",
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
@@ -182,7 +189,8 @@ smartMessage.bundle['en'] = {
 	publishConfirmation : "Do you really want to publish this work to Appstore? ",
 	commentTaskForwardConfirm : "Do you really want to perform the Forward task? ",
 	commentTaskApprovalConfirm : "Do you really want to perform the Approval task? ",
-	
+	leaveGroupConfirmation : "Do you really want to leave this Group? ",
+		
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			
 	nullPointerException : "Null Pointer Exception. Please contact the Administrator!",
