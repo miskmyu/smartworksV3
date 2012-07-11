@@ -75,7 +75,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li span a {display:block; padding-top:8px}
 
 /*Search*/
-.global_srch {position:absolute; left:635px; top:5px}
+.global_srch {position:absolute; right:100px; top:5px}
 .nav_srch {float:left; padding-bottom:10px}
 .mail_srch { float:right}
 	
@@ -120,7 +120,7 @@ tr.list_action_item .list_action {display:none}
 tr.list_action_item:hover .list_action {display:block; cursor:pointer}
 tr.list_action_item td.rdo_key_field input{display:none} 
 tr.list_action_item td.rdo_key_field input:checked{display:block} 
-tr.list_action_item:hover td.rdo_key_field input{display:block} 
+tr.list_action_item:hover td.rdo_key_field input{display:block; cursor:pointer} 
 tr.list_action_item td.btn_move_field .move_actions{display:none} 
 tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:pointer} 
 .gray_style tr.list_action_item {height:auto}
@@ -330,7 +330,9 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .members {display: inline-block; padding: 4px 10px}
 .members .icon_pe {padding: 1px}
 
-#community_department .leader, #community_group .leader, .pop_list_area .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+#community_department .leader, #community_group .leader, .pop_list_area .leader, .setting_section .leader { position:absolute; background: url("../../images/nav_img.png") no-repeat -115px -699px; display: inline-block; height: 7px; margin: 13px 0 0 13px; width: 7px;}
+.setting_section .leader.m {margin: 41px 0 0 41px; height:7px !important}
+
 #community_department .profile_size_s {margin:0 5px 0 0}
 
 #nav .more a {background: url("../../images/nav_more.png") no-repeat 100% 7px; float: right; font-size: 11px; height: 12px; width: 51px}
@@ -388,7 +390,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
-.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:100%} /* 한줄 input, text박스 쓸때 */
+.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 .fieldline.community_names {line-height:17px}
 
@@ -570,7 +572,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .cell_date {display:inline-block; border-bottom:1px dotted #cfcfcf; padding:0 5px 1px 5px; margin-bottom:3px}
 .cell_date > span {font-size:15px}
 .event_cell li.event_list {}
-.event_cell li.event_list:hover {background-color:#fff7eb; cursor:pointer; text-decoration: none}
+.event_cell li.event_list:hover {background-color:#fff7eb; text-decoration: none}
 
 /* Notice New 3.0 */
 .notice {overflow:hidden; margin:0 12px 0 15px; padding-top:10px; border-top:1px solid #c7c7c7}
@@ -598,18 +600,22 @@ margin: 0 auto}
 .red_tab_content .right_cap {top:-22px;left:15px}
 }
 			
-/* Work ING */
+/* Work ING, Communities Setting - Title */
 #work_ing {margin:0 20px}
 #work_ing li.end { border:none} 
 #work_ing .tit { font-size:14px; font-weight:bold; float:left} /* old 2012.07.04 */
-#work_ing .titl_section {height:21px; padding-top:8px}
-#work_ing .title {font-size:12px; color:#bbbaba}
-#work_ing .title a {color:#888888}
-#work_ing .title a:hover {text-decoration:none}
-#work_ing .current, #work_ing .current a {font-size:16px; font-weight:bold; color:#333333}
-#work_ing .t_red_bold {font-size:11px}
-#work_ing .solid_line {}
+#work_ing .titl_section, .setting_section .titl_section {height:21px; padding-top:8px}
+#work_ing .title, .setting_section .title {font-size:12px; color:#bbbaba}
+#work_ing .title a, .setting_section .title a {color:#888888}
+#work_ing .title a:hover, .setting_section .title a:hover {text-decoration:none}
+#work_ing .current, #work_ing .current a, .setting_section .current, .communities_setting .current a {font-size:16px; font-weight:bold; color:#333333}
+#work_ing .t_red_bold, .setting_section .t_red_bold {font-size:11px}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
+
+.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0; width:13%}
+.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; vertical-align: middle}
+.setting_section .instance_list .det_title div.buttonSet {width:90px; float:right}
+.setting_section .instance_list .det_title .profile_photo {width:50px}
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}
@@ -662,7 +668,7 @@ td.pic {width:85px}
 .t_up_num {color:#e54b4b; font-weight:bold}
 .t_gbold {color:#656565; font-weight:bold}
 .t_gray { color:#919191; font-weight:normal}
-.t_name, .t_name a {color:#23579e !important}
+.t_name, .t_name a, .t_blue {color:#23579e !important}
 .space_name, .space_name a {color:#23579e !important; font-size:11px}
 .t_woname {color:#23579e; font-weight:bold}
 .t_size11 {font-size:11px}
