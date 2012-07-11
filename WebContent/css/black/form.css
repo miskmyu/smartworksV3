@@ -8,11 +8,6 @@
 .form_label > span {display: inline-block; margin: 0 17px 0 0; word-wrap: break-word;x}
 .form_layout td, .form_layout th {border-bottom: 1px dotted #c7c7c7}
 
-/* 개인정보 수정 File Upload */
-/* .js_my_profile_field .js_type_imageBox .form_label {background-color:#FFF; width:0px !important}
-.js_my_profile_field .js_type_imageBox .form_value img {left:0} */
-/* .js_type_imageBox .form_value img {position: relative; left: 20px} */
-
 /* 새그룹 등록하기 File Upload */
 .js_group_profile_field .form_label {width:0px !important}
 
