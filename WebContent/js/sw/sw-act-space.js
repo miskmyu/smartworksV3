@@ -627,6 +627,7 @@ $(function() {
 	$('.js_leave_group_request').live('click', function(e){
 		smartPop.confirm(smartMessage.get("leaveGroupConfirmation"), function(){
 			var input = $(targetElement(e));
+			var isGroupLeader = input.attr('isGroupLeader');
 			var spaceId = input.parents('.js_space_profile_page').attr('spaceId');
 			var paramsJson = {};
 			paramsJson['groupId'] = spaceId;
