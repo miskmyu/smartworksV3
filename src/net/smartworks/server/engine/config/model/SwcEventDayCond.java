@@ -40,6 +40,8 @@ public class SwcEventDayCond extends MisObjectCond {
 	private Date searchToDate;
 	private String reltdPerson;
 	private boolean searchMode = false;
+	private Date startAfterTomorrow;
+	private Date endAfterTomorrow;
 
 	public String toString(String name, String tab) {
 		if (name == null || name.trim().length() == 0)
@@ -241,6 +243,18 @@ public class SwcEventDayCond extends MisObjectCond {
 	}
 	public void setSearchDay(Date searchDay) {
 		this.searchDay = searchDay;
+	}
+	public Date getStartAfterTomorrow() {
+		return startAfterTomorrow;
+	}
+	public void setStartAfterTomorrow(Date startAfterTomorrow) {
+		this.startAfterTomorrow = startAfterTomorrow;
+	}
+	public Date getEndAfterTomorrow() {
+		return endAfterTomorrow;
+	}
+	public void setEndAfterTomorrow(Date endAfterTomorrow) {
+		this.endAfterTomorrow = endAfterTomorrow;
 	}
 
 }

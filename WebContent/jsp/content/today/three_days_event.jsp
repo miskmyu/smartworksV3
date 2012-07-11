@@ -27,6 +27,7 @@
 	CompanyCalendar[] threeDaysCC = smartWorks.getCompanyCalendars(new LocalDate(), 3);
 	LocalDate today = threeDaysCC[0].getDate();
 	LocalDate tomorrow = threeDaysCC[1].getDate();
+	LocalDate afterTomorrow = threeDaysCC[2].getDate();
 	
 	EventInstanceInfo[] events = null;
 	if(SmartUtil.isBlankObject(wid))
@@ -55,6 +56,7 @@
 			 	}
 			 	CompanyEvent[] cesToday = threeDaysCC[0].getCompanyEvents();
 			 	CompanyEvent[] cesTomorrow = threeDaysCC[1].getCompanyEvents();
+			 	CompanyEvent[] cesAfterTomorrow = threeDaysCC[2].getCompanyEvents();
 			 	// 오늘에 대한 이벤트를 표시한다..
 			 	if(cesToday != null) {
 			 	for (int i = 0; i < cesToday.length; i++) {
@@ -148,6 +150,20 @@
 				 										}
 				 										%>
 				 										<%=cesTomorrow[i].getName()%> 
+				 									<%
+				 									}
+				 									}
+				 									%>
+				 									<%
+				 									if(cesAfterTomorrow != null) {
+				 									for (int i = 0; (cnt == 2) && (i < cesAfterTomorrow.length); i++) {
+				 										if (i != 0) {
+				 									%>
+				 											, 
+				 										<%
+				 										}
+				 										%>
+				 										<%=cesAfterTomorrow[i].getName()%> 
 				 									<%
 				 									}
 				 									}

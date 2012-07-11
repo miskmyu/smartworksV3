@@ -488,7 +488,9 @@ public class SwcManagerImpl extends AbstractManager implements ISwcManager {
 		Date searchFromDate = null;
 		Date searchToDate = null;
 		Date searchDay = null;
-		
+		Date startAfterTomorrow = null;
+		Date endAfterTomorrow = null;
+
 		if (cond != null) {
 			id = cond.getObjId();
 			name = cond.getName();
@@ -505,6 +507,8 @@ public class SwcManagerImpl extends AbstractManager implements ISwcManager {
 			searchFromDate = cond.getSearchFromDate();
 			searchToDate = cond.getSearchToDate();
 			searchDay = cond.getSearchDay();
+			startAfterTomorrow = cond.getStartAfterTomorrow();
+			endAfterTomorrow = cond.getEndAfterTomorrow();
 		}
 		buf.append(" from SwcEventDay obj");
 		buf.append(" where obj.objId is not null");
@@ -544,6 +548,9 @@ public class SwcManagerImpl extends AbstractManager implements ISwcManager {
 				buf.append(" and obj.startDay <= :searchDay");
 				buf.append(" and obj.endDay >= :searchDay");
 			}
+			if (startAfterTomorrow != null && endAfterTomorrow != null) {
+				buf.append(" and ((obj.startDay >= :startAfterTomorrow and obj.startDay <= :endAfterTomorrow) or (obj.endDay >= :startAfterTomorrow and obj.endDay <= :endAfterTomorrow))");
+			}
 		}
 		
 		this.appendOrderQuery(buf, "obj", cond);
@@ -582,6 +589,10 @@ public class SwcManagerImpl extends AbstractManager implements ISwcManager {
 			}
 			if (searchDay != null) {
 				query.setTimestamp("searchDay", searchDay);
+			}
+			if (startAfterTomorrow != null && endAfterTomorrow != null) {
+				query.setTimestamp("startAfterTomorrow", startAfterTomorrow);
+				query.setTimestamp("endAfterTomorrow", endAfterTomorrow);
 			}
 		}
 		return query;

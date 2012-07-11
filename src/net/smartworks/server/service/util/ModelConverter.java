@@ -1169,12 +1169,12 @@ public class ModelConverter {
 				/*TYPE_INFORMATION = 21;
 				TYPE_PROCESS = 22;
 				TYPE_SCHEDULE = 23;*/
-				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+				if (TskTask.TASKTYPE_COMMON.equalsIgnoreCase(task.getTskType())) {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getTskType())) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
-					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_REFERENCE.equalsIgnoreCase(task.getTskType())) {
+					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
 						workInfo.setType(SmartWork.TYPE_INFORMATION);
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);
