@@ -169,4 +169,10 @@ public class CommunityController {
 		smartworks.updateGroupSetting(requestBody, request);
 	}
 
+	@RequestMapping(value = "/update_department_setting", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void updateDepartmentSetting(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateDepartmentSetting(requestBody, request);
+	}
+
 }

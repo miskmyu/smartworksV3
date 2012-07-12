@@ -50,6 +50,8 @@ public interface ICommunityService {
 
 	public abstract CommunityInfo[] getMyCommunities() throws Exception;
 
+	public abstract CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception;
+
 	public abstract String setMyProfile(HttpServletRequest request) throws Exception;
 
 	public abstract void joinGroupRequest(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
@@ -63,6 +65,8 @@ public interface ICommunityService {
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public abstract UserInfo[] searchCompanyUser(String key) throws Exception;
 
@@ -81,5 +85,7 @@ public interface ICommunityService {
 	public abstract GroupMemberList getGroupMemberInformList(String groupId) throws Exception;
 
 	public abstract UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception;
+
+	public abstract boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception;
 
 }

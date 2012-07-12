@@ -176,6 +176,8 @@ smartMessage.bundle['ko'] = {
 	joinGroupRequestError : "그룹가입을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setGroupSpaceSucceed : "그룹공간 설정이 정상적으로 완료되었습니다.",
 	setGroupSpaceError : "그룹공간 설정을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	setDepartmentSpaceSucceed : "부서공간 설정이 정상적으로 완료되었습니다.",
+	setDepartmentSpaceError : "부서공간 설정을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	pushoutGroupMemberSucceed : "강제탈퇴가 정상적으로 완료되었습니다.",
 	pushoutGroupMemberError : "강제탈퇴를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	acceptJoinGroupSucceed : "가입승인이 정상적으로 완료되었습니다.",

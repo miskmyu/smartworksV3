@@ -116,6 +116,30 @@ function loadGroupProfileField() {
 	}
 };
 
+function loadDepartmentProfileField() {
+	var departmentProfileFields = $('div.js_department_profile_field');
+	if(!isEmpty(departmentProfileFields)) {
+		for(var i=0; i<departmentProfileFields.length; i++) {
+			var departmentProfileField = $(departmentProfileFields[i]);
+			
+			var imgSource = departmentProfileField.attr('imgSource');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			departmentProfileField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgDepartmentProfile",
+				fieldName: "department profile",
+				imgSource: imgSource,
+				pictureWidth: 110,
+				pictureHeight: 110,
+				required: false
+			});
+		}		
+	}
+};
+
 function loadCheckScheduleFields() {
 	var checkScheduleFields = $('div.js_check_schedule_fields');
 	if(!isEmpty(checkScheduleFields)) {
