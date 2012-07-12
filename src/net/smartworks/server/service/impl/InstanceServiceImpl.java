@@ -3242,7 +3242,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				swdRecordCond.setCreationUser(userId);
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
-			swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
+			if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT) || workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
+				swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 

@@ -16,7 +16,6 @@ public class Department extends WorkSpace {
 	private UserInfo[]	members = null;
 	private DepartmentInfo[] children = null;
 	private String fullpathName = "";
-	private SpacePolicy invitableMembers=new SpacePolicy();
 	private SpacePolicy boardWritePolicy=new SpacePolicy();
 	private SpacePolicy boardEditPolicy=new SpacePolicy();
 	private SpacePolicy eventWritePolicy=new SpacePolicy();
@@ -68,12 +67,6 @@ public class Department extends WorkSpace {
 	}
 	public void setFullpathName(String fullpathName) {
 		this.fullpathName = fullpathName;
-	}
-	public SpacePolicy getInvitableMembers() {
-		return invitableMembers;
-	}
-	public void setInvitableMembers(SpacePolicy invitableMembers) {
-		this.invitableMembers = invitableMembers;
 	}
 	public SpacePolicy getBoardWritePolicy() {
 		return boardWritePolicy;
