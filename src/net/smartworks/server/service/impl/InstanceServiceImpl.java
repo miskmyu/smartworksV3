@@ -155,6 +155,7 @@ import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
@@ -221,6 +222,8 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Autowired
 	private ICommunityService communityService;
+	@Autowired
+	private ICalendarService calendarService;
 	@Autowired
 	private ISeraService seraService;
 
@@ -289,7 +292,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							SwdDataField swdDataField = swdDataFields[j];
 							String value = swdDataField.getValue();
 							if(swdDataField.getId().equals("0")) {
-								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 36, "..."));
 							} else if(swdDataField.getId().equals("1")) {
 								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
 							}
@@ -1631,16 +1634,18 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
 							if(fieldId.equals("1") || fieldId.equals("2")) {
 								if(!value.isEmpty())
-									value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
+									value = LocalDate.convertStringToLocalDate(value).toLocalDateString2();
 							}
-						}
-						if(type.equals("datetime")) {
-							if(value.length() == FieldData.SIZE_DATETIME)
-								value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();
-							else if(value.length() == FieldData.SIZE_DATE)
-								value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
-						} else if(type.equals("time")) {
-							value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+						} else {
+							if(type.equals("datetime")) {
+								if(value.length() == FieldData.SIZE_DATETIME) {
+									value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();								
+								} else if(value.length() == FieldData.SIZE_DATE) {
+									value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
+								}
+							} else if(type.equals("time")) {
+								value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+							}
 						}
 					}
 				} else if(fieldValue instanceof Integer) {
@@ -4925,7 +4930,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	public EventInstanceInfo[] getEventInstanceList(String workSpaceId, LocalDate fromDate, LocalDate toDate) throws Exception {
 
-		try {
+		/*try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 
@@ -5002,14 +5007,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
 					eventInstanceInfo.setLastModifiedDate(modifiedDate);
 
-					/*CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
+					CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
 					boolean isParticipant = false;
 					if(!CommonUtil.isEmpty(participants))
 						isParticipant =  calendarService.isParticipant(participants);
-					if(isParticipant || owner.equals(userId) || modifier.equals(userId))*/
+					if(isParticipant || owner.equals(userId) || modifier.equals(userId))
 						eventInstanceInfoList.add(eventInstanceInfo);
 
-					/*String tskAccessLevel = task.getTskAccessLevel();
+					String tskAccessLevel = task.getTskAccessLevel();
 					String tskAccessValue = task.getTskAccessValue();
 
 					if(startLocalDate.getTime() >= fromDate.getTime() && startLocalDate.getTime() <= toDate.getTime()) {
@@ -5037,7 +5042,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else {
 							eventInstanceInfoList.add(eventInstanceInfo);
 						}
-					}*/
+					}
 				}
 			}
 			if(eventInstanceInfoList.size() > 0) {
@@ -5049,9 +5054,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
-		
-		//return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+		}*/
+
+		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
 
 	}
 

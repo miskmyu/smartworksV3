@@ -334,7 +334,7 @@ public class CalendarServiceImpl implements ICalendarService {
 			filter2.setLeftOperandValue(tableColName);
 			filter2.setOperator("<=");
 			filter2.setRightOperandType(Filter.OPERANDTYPE_DATETIME);
-			filter2.setRightOperandValue(new LocalDate((LocalDate.convertLocalDateStringToLocalDate(toDate.toLocalDateSimpleString()).getTime() + LocalDate.ONE_DAY)).toGMTDateString());
+			filter2.setRightOperandValue(LocalDate.convertLocalDateStringToLocalDate(toDate.toLocalDateSimpleString()).toGMTDateString());
 			filterList.add(filter2);
 
 			Filter[] filters = new Filter[2];
@@ -345,7 +345,7 @@ public class CalendarServiceImpl implements ICalendarService {
 			swdRecordCond.setOrders(new Order[]{new Order(tableColName, true)});
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
-			if(workSpaceId != null) {
+			if(!SmartUtil.isBlankObject(workSpaceId)) {
 				if(workSpaceId.equals(userId))
 					swdRecordCond.setCreatorOrSpaceId(workSpaceId);
 				else
@@ -355,7 +355,7 @@ public class CalendarServiceImpl implements ICalendarService {
 			}
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
-			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
+/*			SwdRecord[] totalSwdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_ALL);
 			List<SwdRecord> swdRecordList = new ArrayList<SwdRecord>();
 			SwdRecord[] swdRecords = null;
 			if(!CommonUtil.isEmpty(totalSwdRecords)) {
@@ -370,11 +370,11 @@ public class CalendarServiceImpl implements ICalendarService {
 			if(swdRecordList.size() > 0) {
 				swdRecords = new SwdRecord[swdRecordList.size()];
 				swdRecordList.toArray(swdRecords);
-			}
+			}*/
 
-			//SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_ALL);
+			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
-			SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
+			//SwdRecordExtend[] swdRecordExtends = getSwdManager().getCtgPkg(workId);
 
 			List<EventInstanceInfo> eventInstanceInfoList = new ArrayList<EventInstanceInfo>();
 			EventInstanceInfo[] eventInstanceInfos = null;
@@ -396,7 +396,7 @@ public class CalendarServiceImpl implements ICalendarService {
 						workSpaceType = String.valueOf(ISmartWorks.SPACE_TYPE_USER);
 					eventInstanceInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(workSpaceType, workSpaceId));
 
-					WorkCategoryInfo workGroupInfo = null;
+					/*WorkCategoryInfo workGroupInfo = null;
 					if (!CommonUtil.isEmpty(swdRecordExtends[0].getSubCtgId()))
 						workGroupInfo = new WorkCategoryInfo(swdRecordExtends[0].getSubCtgId(), swdRecordExtends[0].getSubCtg());
 
@@ -405,7 +405,7 @@ public class CalendarServiceImpl implements ICalendarService {
 					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), type, workGroupInfo, workCategoryInfo);
 
 					eventInstanceInfo.setWork(workInfo);
-					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+*/					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
