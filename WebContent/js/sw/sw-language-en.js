@@ -168,6 +168,8 @@ smartMessage.bundle['en'] = {
 	joinGroupRequestSucceed : "Join Group request has been performed successfully and now waiting for Group leader to approve",
 	joinGroupSucceed : "Join Group request has been performed successfully",
 	joinGroupRequestError : "Error has been occured while performing the Join Group. Please contact the Administrator!",
+	setGroupSpaceSucceed : "Group Space setting has been performed successfully",
+	setGroupSpaceError : "Error has been occured while setting the Group Space. Please contact the Administrator!",
 	mailPasswordConfirmError : "Send Mail Password confirmation error. Please retry password confirmation",
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",

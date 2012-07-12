@@ -542,7 +542,9 @@ public interface ISmartWorks {
 	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-	
+
+	public abstract void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;

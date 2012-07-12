@@ -655,4 +655,9 @@ $(function() {
 		});
 		return false;
 	});
+	
+	$('.js_toggle_policy_custom').live('change', function(e){
+		var input = $(targetElement(e));
+		input.nextAll('.js_space_policy_custom:first').toggle();		
+	});
 });
