@@ -291,14 +291,21 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .icon_work_create a {background: url("../../images/body_icon.png") no-repeat scroll 0 -814px transparent; height:18px; width:17px; display:inline-block; margin:0 5px 0 0}
 .icon_excel a {background: url("../../images/body_icon.png") no-repeat scroll -115px -814px transparent; height:18px; width:17px; display:inline-block}
 
-/* 사진 이미지 사이즈 */
-.profile_size_b {width:110px; height:110px}
-.profile_size_66 {width:66px; height:66px}
-.profile_size_m {width:48px; height:48px}
+/* 사진 이미지 사이즈, Border */
+.profile_size_b {width:110px; height:110px; outline: 1px solid #999999}
+.profile_size_66 {width:66px; height:66px; outline: 1px solid #999999}
+.profile_size_m {width:48px; height:48px; outline: 1px solid #999999}
 /* profile size for comment -- added by ysjung */
-.profile_size_c {width:26px; height:26px}
-.profile_size_s {width:20px; height:20px}
-.profile_size_24 {width:24px; height:24px}
+.profile_size_c {width:26px; height:26px; outline: 1px solid #999999}
+.profile_size_s {width:20px; height:20px; outline: 1px solid #999999}
+.profile_size_24 {width:24px; height:24px; outline: 1px solid #999999}
+#nav .profile_size_b {outline:none !important}
+#nav .profile_size_66 {outline:none !important}
+#nav .profile_size_m {outline:none !important}
+#nav .profile_size_c {outline:none !important}
+#nav .profile_size_s {outline:none !important}
+#nav .profile_size_24 {outline:none !important}
+.photo_section img {border: 1px solid #999999}
 
 /* file_uploader */
 .file_uploader_area {margin-top:2px; text-align:center}

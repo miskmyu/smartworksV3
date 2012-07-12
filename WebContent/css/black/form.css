@@ -14,7 +14,7 @@
 /* .js_type_imageBox .form_value img {position: relative; left: 20px} */
 
 /* 새그룹 등록하기 File Upload */
-.js_group_profile_field .form_label {width:0px !important}
+.photo_section .form_label {width:0px !important}
 
 /* Form Old : label부분 회색음영 */
 /* .form_label {color:#23579e; background-color:#ededed}
