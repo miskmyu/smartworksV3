@@ -68,7 +68,7 @@
 			</a>
 		</span> 
 				
-		<span class="btn_gray ml3">
+		<span class="btn_gray">
 			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
 			<a href="" class="js_cancel_action"> 
 				<span class="txt_btn_start"></span> 
@@ -80,7 +80,7 @@
 	<!--  완료 및 취소 버튼 //-->
 
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
-	<form name="frmAccessSpace" class="fr pr10 js_validation_required">
+	<form name="frmAccessSpace" class="fr js_validation_required">
 		<div id="" class="fr form_space">
 		
 			<!--  현재사용자가 선택할 수 있는 업무공간들을 구성한다.. -->
