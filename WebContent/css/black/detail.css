@@ -370,7 +370,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_section .tit span, .forward_section .tit span { display:block; vertical-align:middle; text-align: center}
 
 .approval_group {margin: 0 5px; overflow:hidden}
-.approval_area { width:130px; height:134px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 0 -1px}
+.approval_area { width:126px; height:134px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 -1px -1px}
 .approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px}
 .approval_area .approval {text-align:center; height: 72px; overflow: hidden}
 .approval_area .name {height:24px; vertical-align: bottom; display: table-cell}
@@ -378,9 +378,10 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval_area .name .up {height: 17px ! important; color:#555555}
 .approval_area .name .noti_pic {margin: 0 3px 0 0}
 .approval_area .name .noti_pic img { width:24px; height:24px}
-.approval_area .name .noti_in {width: 101px; margin:0; float:left}
+.approval_area .name .noti_in {width: 96px; margin:0; float:left}
 .icon_approval {background: url("../../images/body_icon.png") no-repeat -529px -746px; width:75px; height:16px; margin:0 5px 0 0}
 .approval_area .t_date {margin:0 0 7px 0; height:12px}
+.js_approval_line_box {margin:0 0 1px 1px}
 
 /* Approval Status Image */
 .approval_status {background: url("../../images/status.png") no-repeat 0 0; width:88px; height:61px !important; margin: 10px 20px 6px}
