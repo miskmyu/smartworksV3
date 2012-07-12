@@ -61,6 +61,8 @@ public interface ICommunityService {
 
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract UserInfo[] searchCompanyUser(String key) throws Exception;
 
 	public abstract UserInfo[] searchContact(User currentUser, String key) throws Exception;

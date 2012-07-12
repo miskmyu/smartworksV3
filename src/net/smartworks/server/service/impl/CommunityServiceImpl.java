@@ -1545,5 +1545,10 @@ public class CommunityServiceImpl implements ICommunityService {
 		// 테스트용도이니 구현바람.
 		return searchCommunityMember(communityId, key);
 	}
+	@Override
+	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

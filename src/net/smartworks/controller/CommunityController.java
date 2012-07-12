@@ -92,6 +92,18 @@ public class CommunityController {
 		return SmartUtil.returnMnv(request, "jsp/chatting/available_chatter_list.jsp", "");
 	}
 
+	@RequestMapping("/update_group_space")
+	public ModelAndView updateGroupSpace(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/update_group_space.jsp", "");
+	}
+
+	@RequestMapping("/update_department_space")
+	public ModelAndView updateDepartmentSpace(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/update_department_space.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_group", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -131,6 +143,12 @@ public class CommunityController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody void leaveGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.leaveGroup(requestBody, request);
+	}
+
+	@RequestMapping(value = "/update_group_setting", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void updateGroupSetting(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.updateGroupSetting(requestBody, request);
 	}
 
 }

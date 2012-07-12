@@ -3,6 +3,7 @@ package net.smartworks.model.community;
 import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.security.EditPolicy;
+import net.smartworks.model.security.SpacePolicy;
 import net.smartworks.model.security.WritePolicy;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
@@ -29,13 +30,13 @@ public class Group extends WorkSpace {
 	private LocalDate openDate = null;
 	private int numberOfGroupMember = 0;
 	private String type = GROUP_TYPE_DEFAULT;
-	private boolean autoApproval;
+	private boolean autoApproval=true;
 	private int maxMembers=MAX_MEMBERS_UNLIMITED;
-	private UserInfo[] invitableMembers;
-	private WritePolicy boardWritePolicy;
-	private EditPolicy boardEditPolicy;
-	private WritePolicy eventWritePolicy;
-	private EditPolicy eventEditPolicy;
+	private SpacePolicy invitableMembers=new SpacePolicy();
+	private SpacePolicy boardWritePolicy=new SpacePolicy();
+	private SpacePolicy boardEditPolicy=new SpacePolicy();
+	private SpacePolicy eventWritePolicy=new SpacePolicy();
+	private SpacePolicy eventEditPolicy=new SpacePolicy();
 	private LocalDate createdDate;
 	private UserInfo[] joinRequesters;
 
@@ -110,41 +111,41 @@ public class Group extends WorkSpace {
 	public void setMaxMembers(int maxMembers) {
 		this.maxMembers = maxMembers;
 	}
-	public UserInfo[] getInvitableMembers() {
+	public SpacePolicy getInvitableMembers() {
 		return invitableMembers;
 	}
-	public void setInvitableMembers(UserInfo[] invitableMembers) {
+	public void setInvitableMembers(SpacePolicy invitableMembers) {
 		this.invitableMembers = invitableMembers;
 	}
-	public WritePolicy getBoardWritePolicy() {
+	public SpacePolicy getBoardWritePolicy() {
 		return boardWritePolicy;
 	}
-	public void setBoardWritePolicy(WritePolicy boardWritePolicy) {
+	public void setBoardWritePolicy(SpacePolicy boardWritePolicy) {
 		this.boardWritePolicy = boardWritePolicy;
 	}
-	public EditPolicy getBoardEditPolicy() {
+	public SpacePolicy getBoardEditPolicy() {
 		return boardEditPolicy;
 	}
-	public void setBoardEditPolicy(EditPolicy boardEditPolicy) {
+	public void setBoardEditPolicy(SpacePolicy boardEditPolicy) {
 		this.boardEditPolicy = boardEditPolicy;
 	}
-	public WritePolicy getEventWritePolicy() {
+	public SpacePolicy getEventWritePolicy() {
 		return eventWritePolicy;
 	}
-	public void setEventWritePolicy(WritePolicy eventWritePolicy) {
+	public void setEventWritePolicy(SpacePolicy eventWritePolicy) {
 		this.eventWritePolicy = eventWritePolicy;
 	}
-	public EditPolicy getEventEditPolicy() {
+	public SpacePolicy getEventEditPolicy() {
 		return eventEditPolicy;
 	}
-	public void setEventEditPolicy(EditPolicy eventEditPolicy) {
+	public void setEventEditPolicy(SpacePolicy eventEditPolicy) {
 		this.eventEditPolicy = eventEditPolicy;
 	}
 	public UserInfo[] getJoinRequesters() {
 		return joinRequesters;
 	}
 	public void setJoinRequesters(UserInfo[] joinRequesters) {
-		joinRequesters = joinRequesters;
+		this.joinRequesters = joinRequesters;
 	}
 	public Group(){
 		super();
@@ -174,9 +175,13 @@ public class Group extends WorkSpace {
 	
 	public boolean amIInvitableMember(){
 		if(SmartUtil.isBlankObject(invitableMembers)) return false;
-		for(UserInfo member : invitableMembers){
-			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
-				return true;
+		User currentUser = SmartUtil.getCurrentUser();
+		if(invitableMembers.isLeaderChecked() && !SmartUtil.isBlankObject(leader) && leader.getId().equals(currentUser.getId())) return true;
+		else if(invitableMembers.isMembersChecked() && this.amIMember()) return true;
+		else if(invitableMembers.isCustomChecked() && !SmartUtil.isBlankObject(invitableMembers.getCustoms())){
+			for(UserInfo custom : invitableMembers.getCustoms())
+				if(custom.getId().equals(currentUser.getId()))
+					return true;
 		}
 		return false;
 	}
@@ -199,4 +204,11 @@ public class Group extends WorkSpace {
 		return false;				
 	}
 	
+	public boolean amIAdministrator(User currentUser){
+		if(SmartUtil.isBlankObject(currentUser)) return false;
+		if(currentUser.getUserLevel()>User.USER_LEVEL_INTERNAL_USER) return true;
+		if(!SmartUtil.isBlankObject(this.leader) && currentUser.getId().equals(leader.getId())) return true;
+		return false;
+	}
+
 }
