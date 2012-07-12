@@ -89,7 +89,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="section_portlet js_space_tab_group_setting_page" groupId=<%=group.getId() %>>
+<div class="section_portlet js_space_tab_group_setting_page js_space_tab_group" groupId=<%=group.getId() %>>
 	<div class="portlet_t">
 		<div class="portlet_tl"></div>
 	</div>
@@ -100,8 +100,8 @@
 				<div class="titl_section">
 					<!-- 타이틀을 나타내는 곳 -->
 					<div class="title pr10 fl">
-						<span class="current"> <a href=""><fmt:message key="common.title.space_setting"/></a> </span> | <span class=" ">
-							<a href=""><fmt:message key="group.title.members"/></a> </span>
+						<span class="current"> <a href="" class="js_select_group_space_tab js_setting"><fmt:message key="common.title.space_setting"/></a> </span> | <span class=" ">
+							<a href="" class="js_select_group_space_tab js_members"><fmt:message key="group.title.members"/></a> </span>
 					</div>
 				</div>
 				<div class="solid_line mb10"></div>

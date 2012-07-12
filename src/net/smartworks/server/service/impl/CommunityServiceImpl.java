@@ -20,6 +20,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.TaskInstance;
@@ -1549,6 +1550,21 @@ public class CommunityServiceImpl implements ICommunityService {
 	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public GroupMemberList getGroupMemberInformList(String groupId) throws Exception {
+		// 테스트용도이니 삭제하고 구현 바람..
+		GroupMemberList memberInformList = new GroupMemberList();
+		memberInformList.setMembers(SmartTest.getAvailableChatter());
+		memberInformList.setTotalMembers(300);
+		memberInformList.setRequesters(SmartTest.getAvailableChatter());
+		memberInformList.setTotalRequesters(32);
+		return memberInformList;
+		// 테스트용도이니 삭제하고 구현 바람..
+	}
+	@Override
+	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
+		return SmartTest.getAvailableChatter();
 	}
 
 }

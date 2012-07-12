@@ -104,6 +104,24 @@ public class CommunityController {
 		return SmartUtil.returnMnv(request, "jsp/content/community/space/update_department_space.jsp", "");
 	}
 
+	@RequestMapping("/space_tab_group_setting")
+	public ModelAndView spaceTabGroupSetting(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/space_tab_group_setting.jsp", "");
+	}
+
+	@RequestMapping("/space_tab_group_members")
+	public ModelAndView spaceTabGroupMembers(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/space_tab_group_members.jsp", "");
+	}
+
+	@RequestMapping("/more_group_members")
+	public ModelAndView moreGroupMembers(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/community/space/more_group_members.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_new_group", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody Map<String, Object> createNewGroup(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {

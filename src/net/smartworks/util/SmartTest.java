@@ -122,6 +122,7 @@ public class SmartTest {
 		user.setId("kmyu@maninsoft.co.kr");
 		user.setName("유광민");
 		user.setPosition("기술연구소장");
+		user.setDepartment(getDepartmentInfo1());
 		return user;
 	}
 
@@ -130,6 +131,7 @@ public class SmartTest {
 		user.setId("hsshin@maninsoft.co.kr");
 		user.setName("신현성");
 		user.setPosition("개발팀");
+		user.setDepartment(getDepartmentInfo1());
 		return user;
 	}
 
@@ -138,6 +140,7 @@ public class SmartTest {
 		user.setId("hjlee@maninsoft.co.kr");
 		user.setName("이현정");
 		user.setPosition("대리");
+		user.setDepartment(getDepartmentInfo1());
 		return user;
 	}
 	

@@ -20,7 +20,7 @@
 
 	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
 	
-	<div class="js_space_instance_list">
+	<div class="js_space_tab_group_target">
 		<jsp:include page="/jsp/content/community/space/space_tab_group_setting.jsp"></jsp:include>
 	</div>
 	
