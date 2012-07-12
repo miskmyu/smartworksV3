@@ -2,6 +2,7 @@ package net.smartworks.model.community;
 
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.security.SpacePolicy;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
@@ -15,6 +16,10 @@ public class Department extends WorkSpace {
 	private UserInfo[]	members = null;
 	private DepartmentInfo[] children = null;
 	private String fullpathName = "";
+	private SpacePolicy boardWritePolicy=new SpacePolicy();
+	private SpacePolicy boardEditPolicy=new SpacePolicy();
+	private SpacePolicy eventWritePolicy=new SpacePolicy();
+	private SpacePolicy eventEditPolicy=new SpacePolicy();
 
 	public String getDesc() {
 		return desc;
@@ -62,6 +67,30 @@ public class Department extends WorkSpace {
 	}
 	public void setFullpathName(String fullpathName) {
 		this.fullpathName = fullpathName;
+	}
+	public SpacePolicy getBoardWritePolicy() {
+		return boardWritePolicy;
+	}
+	public void setBoardWritePolicy(SpacePolicy boardWritePolicy) {
+		this.boardWritePolicy = boardWritePolicy;
+	}
+	public SpacePolicy getBoardEditPolicy() {
+		return boardEditPolicy;
+	}
+	public void setBoardEditPolicy(SpacePolicy boardEditPolicy) {
+		this.boardEditPolicy = boardEditPolicy;
+	}
+	public SpacePolicy getEventWritePolicy() {
+		return eventWritePolicy;
+	}
+	public void setEventWritePolicy(SpacePolicy eventWritePolicy) {
+		this.eventWritePolicy = eventWritePolicy;
+	}
+	public SpacePolicy getEventEditPolicy() {
+		return eventEditPolicy;
+	}
+	public void setEventEditPolicy(SpacePolicy eventEditPolicy) {
+		this.eventEditPolicy = eventEditPolicy;
 	}
 	public Department(){
 		super();
