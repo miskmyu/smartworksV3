@@ -20,6 +20,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.company.CompanyGeneral;
@@ -1504,6 +1505,21 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
 		return communityService.searchCommunityNonMember(communityId, key);
+	}
+
+	@Override
+	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.updateGroupSetting(requestBody, request);
+	}
+
+	@Override
+	public GroupMemberList getGroupMemberInformList(String groupId) throws Exception {
+		return communityService.getGroupMemberInformList(groupId);
+	}
+
+	@Override
+	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
+		return communityService.getGroupMembersById(groupId, lastId, maxSize);
 	}
 
 }

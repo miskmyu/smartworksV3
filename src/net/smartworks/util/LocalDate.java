@@ -150,6 +150,15 @@ public class LocalDate extends Date{
 		return (new SimpleDateFormat("yyyy.MM.dd HH:mm")).format(getLocalTime());			
 	}
 
+	public String toString(){
+		if(isToday()){
+			return (new SimpleDateFormat("HH:mm")).format(getTime());
+		}else if(isThisYear()){
+			return (new SimpleDateFormat("MM.dd HH:mm")).format(getTime());
+		}
+		return (new SimpleDateFormat("yyyy.MM.dd HH:mm")).format(getTime());			
+	}
+
 	public String toLocalDateString(){
 		return DateFormat.getDateInstance(DateFormat.FULL, this.locale).format(getLocalTime());
 	}
@@ -182,6 +191,10 @@ public class LocalDate extends Date{
 		return (new SimpleDateFormat("yyyy.MM.dd", this.locale)).format(getLocalTime());
 	}
 
+	public String toDateSimpleString(){
+		return (new SimpleDateFormat("yyyy.MM.dd", this.locale)).format(getTime());
+	}
+
 	public String toLocalDateSimple2String(){
 		return (new SimpleDateFormat("yyyy-MM-dd", this.locale)).format(getLocalTime());
 	}
@@ -198,8 +211,16 @@ public class LocalDate extends Date{
 		return (new SimpleDateFormat("yyyy.MM.dd HH:mm", this.locale)).format(getLocalTime());
 	}
 
+	public String toDateTimeSimpleString(){
+		return (new SimpleDateFormat("yyyy.MM.dd HH:mm", this.locale)).format(getTime());
+	}
+
 	public String toLocalDateValue(){
 		return (new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", this.locale)).format(getLocalTime());
+	}
+
+	public String toDateValue(){
+		return (new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", this.locale)).format(getTime());
 	}
 
 	public String toLocalDateString2(){
@@ -247,7 +268,11 @@ public class LocalDate extends Date{
 	public String toLocalTimeShortString(){
 		return (new SimpleDateFormat("HH:mm")).format(getLocalTime());
 	}
-	
+
+	public String toTimeShortString(){
+		return (new SimpleDateFormat("HH:mm")).format(getTime());
+	}
+
 	public void plusToGMTTime(long timeValue){
 		this.setTime(this.getTime() + timeValue);
 	}

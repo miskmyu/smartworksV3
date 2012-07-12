@@ -11,6 +11,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.mail.MailAccount;
@@ -61,6 +62,8 @@ public interface ICommunityService {
 
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract UserInfo[] searchCompanyUser(String key) throws Exception;
 
 	public abstract UserInfo[] searchContact(User currentUser, String key) throws Exception;
@@ -74,5 +77,9 @@ public interface ICommunityService {
 	public abstract CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception;
 
 	public abstract MailAccount[] getMyMailAccounts() throws Exception;
+	
+	public abstract GroupMemberList getGroupMemberInformList(String groupId) throws Exception;
+
+	public abstract UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception;
 
 }

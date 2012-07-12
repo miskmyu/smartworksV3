@@ -168,6 +168,14 @@ smartMessage.bundle['en'] = {
 	joinGroupRequestSucceed : "Join Group request has been performed successfully and now waiting for Group leader to approve",
 	joinGroupSucceed : "Join Group request has been performed successfully",
 	joinGroupRequestError : "Error has been occured while performing the Join Group. Please contact the Administrator!",
+	setGroupSpaceSucceed : "Group Space setting has been performed successfully",
+	setGroupSpaceError : "Error has been occured while setting the Group Space. Please contact the Administrator!",
+	pushoutGroupMemberSucceed : "Push-out Group member has been performed successfully",
+	pushoutGroupMemberError : "Error has been occured while pushing-out Group member. Please contact the Administrator!",
+	acceptJoinGroupSucceed : "Accepting Join Request has been performed successfully",
+	acceptJoinGroupError : "Error has been occured while accepting Join Request. Please contact the Administrator!",
+	rejectJoinGroupSucceed : "Rejecting Join Request has been performed successfully",
+	rejectJoinGroupError : "Error has been occured while rejecting Join Request. Please contact the Administrator!",
 	mailPasswordConfirmError : "Send Mail Password confirmation error. Please retry password confirmation",
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
@@ -190,7 +198,8 @@ smartMessage.bundle['en'] = {
 	commentTaskForwardConfirm : "Do you really want to perform the Forward task? ",
 	commentTaskApprovalConfirm : "Do you really want to perform the Approval task? ",
 	leaveGroupConfirmation : "Do you really want to leave this Group? ",
-		
+	pushoutGroupMemberConfirmation : "Do you really push out the Group Member? ",
+	
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			
 	nullPointerException : "Null Pointer Exception. Please contact the Administrator!",
