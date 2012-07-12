@@ -8,7 +8,7 @@ import net.smartworks.util.LocalDate;
 
 public interface ICalendarService {
 
-	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate) throws Exception;
+	public abstract EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate, int maxLength) throws Exception;
 
 	public abstract EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, LocalDate toDate) throws Exception;
 

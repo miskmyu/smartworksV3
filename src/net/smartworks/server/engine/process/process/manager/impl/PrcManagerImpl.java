@@ -700,7 +700,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or prcWorkSpaceType = 4 or prcWorkSpaceType = 2 or prcWorkSpaceType is null))");
+			queryBuffer.append(")) or (prcWorkSpaceType = 4 and prcWorkSpaceId = '" + user + "') or prcWorkSpaceType = 2 or prcWorkSpaceType is null))");
 		}
 		if (workSpaceIdNotIns != null) {
 			queryBuffer.append(" and");

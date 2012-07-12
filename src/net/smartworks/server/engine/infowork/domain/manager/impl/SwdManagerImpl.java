@@ -1121,7 +1121,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						buf.append(", ");
 					buf.append(":workSpaceIdIn").append(j);
 				}
-				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2 or obj.workSpaceType is null))");
+				buf.append(")) or (obj.workSpaceType = 4 and obj.workSpaceId = '" + user + "') or obj.workSpaceType = 2 or obj.workSpaceType is null))");
 	
 				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
 				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
