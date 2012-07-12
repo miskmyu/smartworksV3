@@ -683,5 +683,7 @@ public interface ISmartWorks {
 	public abstract GroupMemberList getGroupMemberInformList(String groupId) throws Exception;
 
 	public abstract UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception;
+
+	public abstract void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 }

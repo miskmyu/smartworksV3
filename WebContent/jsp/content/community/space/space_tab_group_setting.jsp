@@ -109,7 +109,7 @@
 				<form name="frmGroupSpaceSetting" class="js_validation_required">
 					<!-- Left -->
 					<div class="photo_section">
-						<div class="js_group_profile_field js_auto_load_profile" imgSource=<%=group.getOrgPicture() %>></div>
+						<div class="js_group_profile_field" imgSource=<%=group.getOrgPicture() %>></div>
 						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
 					</div>
 					<!-- Left//-->
@@ -152,7 +152,6 @@
 									</td>
 								</tr>
 								<tr>
-								<tr>
 									<th><fmt:message key="group.title.max_members"/></th>
 									<td>
 										<input name="rdoGroupMaxMembers" type="radio" <%if(group.getMaxMembers()==Group.MAX_MEMBERS_UNLIMITED){ %>checked<%} %> value="<%=Group.MAX_MEMBERS_UNLIMITED %>" />
@@ -163,7 +162,6 @@
 										</label>
 									</td>
 								</tr>
-								<tr>
 								<tr>
 									<th><fmt:message key="group.title.join_approval"/></th>
 									<td>

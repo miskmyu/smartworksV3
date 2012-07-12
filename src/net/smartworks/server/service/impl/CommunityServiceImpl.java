@@ -1566,5 +1566,10 @@ public class CommunityServiceImpl implements ICommunityService {
 	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
 		return SmartTest.getAvailableChatter();
 	}
+	@Override
+	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

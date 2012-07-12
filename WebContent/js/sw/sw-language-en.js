@@ -170,6 +170,8 @@ smartMessage.bundle['en'] = {
 	joinGroupRequestError : "Error has been occured while performing the Join Group. Please contact the Administrator!",
 	setGroupSpaceSucceed : "Group Space setting has been performed successfully",
 	setGroupSpaceError : "Error has been occured while setting the Group Space. Please contact the Administrator!",
+	setDepartmentSpaceSucceed : "Department Space setting has been performed successfully",
+	setDepartmentSpaceError : "Error has been occured while setting the Department Space. Please contact the Administrator!",
 	pushoutGroupMemberSucceed : "Push-out Group member has been performed successfully",
 	pushoutGroupMemberError : "Error has been occured while pushing-out Group member. Please contact the Administrator!",
 	acceptJoinGroupSucceed : "Accepting Join Request has been performed successfully",

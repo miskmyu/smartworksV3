@@ -1522,4 +1522,9 @@ public class SmartWorks implements ISmartWorks {
 		return communityService.getGroupMembersById(groupId, lastId, maxSize);
 	}
 
+	@Override
+	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.updateDepartmentSetting(requestBody, request);
+	}
+
 }

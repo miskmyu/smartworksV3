@@ -6,6 +6,7 @@
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ page import="net.smartworks.service.ISmartWorks"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
@@ -56,7 +57,7 @@
 				<div class="title"><%=group.getName() %></div>
 				<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
 			</div>
-			<%if(group.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>">공간 설정<fmt:message key="common.title.space_setting"/></a><%} %>
+			<%if(group.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting" /></a><%} %>
 			<div class="solid_line"></div>
 		</div>
 		<!-- Title //-->
