@@ -1038,7 +1038,7 @@ public class WorkServiceImpl implements IWorkService {
 								try {
 									LocalDate localDate = LocalDate.convertGMTStringToLocalDate(value);
 									if(localDate != null)
-										value = localDate.toLocalDateTimeSimpleString();
+										value = localDate.toDateTimeSimpleString();
 								} catch (Exception e) {
 								}
 							}

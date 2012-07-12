@@ -210,5 +210,11 @@ public class Group extends WorkSpace {
 		if(!SmartUtil.isBlankObject(this.leader) && currentUser.getId().equals(leader.getId())) return true;
 		return false;
 	}
+	
+	public boolean amIGroupLeader(User currentUser){
+		if(SmartUtil.isBlankObject(leader)) return false;
+		if(leader.getId().equals(currentUser.getId())) return true;
+		return false;
+	}
 
 }

@@ -27,7 +27,6 @@ import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -155,6 +154,7 @@ import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.server.service.ICalendarService;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.ISeraService;
@@ -222,9 +222,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Autowired
 	private ICommunityService communityService;
 	@Autowired
+	private ICalendarService calendarService;
+	@Autowired
 	private ISeraService seraService;
 
-	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
+	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId, int maxLength) throws Exception {
 
 		try {
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
@@ -249,7 +251,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			swdRecordCond.setPageNo(0);
-			swdRecordCond.setPageSize(5);
+			swdRecordCond.setPageSize(maxLength);
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
@@ -289,7 +291,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							SwdDataField swdDataField = swdDataFields[j];
 							String value = swdDataField.getValue();
 							if(swdDataField.getId().equals("0")) {
-								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 24, "..."));
+								boardInstanceInfo.setSubject(StringUtil.subString(value, 0, 36, "..."));
 							} else if(swdDataField.getId().equals("1")) {
 								boardInstanceInfo.setBriefContent(StringUtil.subString(value, 0, 40, "..."));
 							}
@@ -312,12 +314,12 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
-		return getBoardInstancesByWorkSpaceId(null);
+		return getBoardInstancesByWorkSpaceId(null, 5);
 	}
 
 	@Override
 	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
-		return getBoardInstancesByWorkSpaceId(spaceId);
+		return getBoardInstancesByWorkSpaceId(spaceId, 5);
 	}
 
 	@Override
@@ -1631,16 +1633,18 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
 							if(fieldId.equals("1") || fieldId.equals("2")) {
 								if(!value.isEmpty())
-									value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
+									value = LocalDate.convertStringToLocalDate(value).toLocalDateString2();
 							}
-						}
-						if(type.equals("datetime")) {
-							if(value.length() == FieldData.SIZE_DATETIME)
-								value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();
-							else if(value.length() == FieldData.SIZE_DATE)
-								value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
-						} else if(type.equals("time")) {
-							value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+						} else {
+							if(type.equals("datetime")) {
+								if(value.length() == FieldData.SIZE_DATETIME) {
+									value = LocalDate.convertLocalDateTimeStringToLocalDate(value).toGMTDateString();								
+								} else if(value.length() == FieldData.SIZE_DATE) {
+									value = LocalDate.convertLocalDateStringToLocalDate(value).toGMTDateString();
+								}
+							} else if(type.equals("time")) {
+								value = LocalDate.convertLocalTimeStringToLocalDate(value).toGMTTimeString2();
+							}
 						}
 					}
 				} else if(fieldValue instanceof Integer) {
@@ -4925,7 +4929,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	public EventInstanceInfo[] getEventInstanceList(String workSpaceId, LocalDate fromDate, LocalDate toDate) throws Exception {
 
-		try {
+		/*try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 
@@ -5002,14 +5006,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(modifier));
 					eventInstanceInfo.setLastModifiedDate(modifiedDate);
 
-					/*CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
+					CommunityInfo[] participants = eventInstanceInfo.getRelatedUsers();
 					boolean isParticipant = false;
 					if(!CommonUtil.isEmpty(participants))
 						isParticipant =  calendarService.isParticipant(participants);
-					if(isParticipant || owner.equals(userId) || modifier.equals(userId))*/
+					if(isParticipant || owner.equals(userId) || modifier.equals(userId))
 						eventInstanceInfoList.add(eventInstanceInfo);
 
-					/*String tskAccessLevel = task.getTskAccessLevel();
+					String tskAccessLevel = task.getTskAccessLevel();
 					String tskAccessValue = task.getTskAccessValue();
 
 					if(startLocalDate.getTime() >= fromDate.getTime() && startLocalDate.getTime() <= toDate.getTime()) {
@@ -5037,7 +5041,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else {
 							eventInstanceInfoList.add(eventInstanceInfo);
 						}
-					}*/
+					}
 				}
 			}
 			if(eventInstanceInfoList.size() > 0) {
@@ -5049,9 +5053,9 @@ public class InstanceServiceImpl implements IInstanceService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
-		
-		//return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+		}*/
+
+		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, 0);
 
 	}
 
@@ -7701,11 +7705,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
-		return SmartTest.getEventInstances();
+		return calendarService.getEventInstanceInfosByWorkSpaceId(spaceId, new LocalDate(), null, 5);
 	}
 	@Override
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
-		return SmartTest.getBoardInstances();
+		return getBoardInstancesByWorkSpaceId(spaceId, maxLength);
 	}
 
 }

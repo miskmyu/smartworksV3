@@ -176,6 +176,12 @@ smartMessage.bundle['ko'] = {
 	joinGroupRequestError : "그룹가입을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setGroupSpaceSucceed : "그룹공간 설정이 정상적으로 완료되었습니다.",
 	setGroupSpaceError : "그룹공간 설정을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	pushoutGroupMemberSucceed : "강제탈퇴가 정상적으로 완료되었습니다.",
+	pushoutGroupMemberError : "강제탈퇴를 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	acceptJoinGroupSucceed : "가입승인이 정상적으로 완료되었습니다.",
+	acceptJoinGroupError : "가입승인을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	rejectJoinGroupSucceed : "가입거절이 정상적으로 완료되었습니다.",
+	rejectJoinGroupError : "가입거절을 수행하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	mailPasswordConfirmError : "보내는메일 암호가 잘못입력되었습니다. 확인하여 다시 입력 바랍니다.",
 	duplicationCheckError : "아이디 중복확인이 되지 않았습니다. 중복확인을 실행한 후 다시 하시기 바랍니다.",
 	wsdlNotFetchedError : "WSDL 가져오기를 실행하지 않았습니다. WSDL 가져오기를 실행한 후 다시 하시기 바랍니다.",
@@ -200,7 +206,8 @@ smartMessage.bundle['ko'] = {
 	commentTaskApprovalConfirm : "전자결재를 수행하려고 합니다. 정말로 수행하시겠습니까? ",
 	commentTaskForwardConfirm : "업무전달을 완료하려고 합니다. 정말로 완료하시겠습니까? ",
 	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
-	
+	pushoutGroupMemberConfirmation : "그룹구성원을 강퇴하려고 합니다. 정말로 강퇴시키시겠습니까? ",
+		
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	
 	nullPointerException : "접근할 수 없는 값을 호출 하였습니다. 관리자에게 확인바랍니다!",

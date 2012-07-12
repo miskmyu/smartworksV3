@@ -33,6 +33,7 @@
 		var more_anchor = $('#work_ing .js_more_list a');
 		var more_smartcaster = $('.js_smartcaster_page a.js_space_more_history');
 		var more_smartcaster_home = $('.js_my_running_instance_list_page a.js_space_more_history');
+		var more_group_members = $('.js_space_tab_group_members_page a.js_group_more_members');
 		if ($(window).scrollTop() == $(document).height() - $(window).height()){
 			
 			if(!isEmpty(more_anchor) && !more_anchor.isWaiting){
@@ -55,6 +56,13 @@
 					if ($(window).scrollTop() == $(document).height() - $(window).height())
 						more_smartcaster_home.trigger('click');
 					more_smartcaster_home.isWaiting = false;
+				}, 2000);
+			}else if(!isEmpty(more_group_members) && !more_group_members.isWaiting){
+				more_group_members.isWaiting = true;
+				setTimeout(function() {
+					if ($(window).scrollTop() == $(document).height() - $(window).height())
+						more_group_members.trigger('click');
+					more_group_members.isWaiting = false;
 				}, 2000);
 			}
 		}
