@@ -50,7 +50,18 @@
 	}
 	
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
-	CommunityInfo[] communities = smartWorks.getMyCommunities();
+	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
+	
+	boolean foundInCommunities = false;
+	if(!SmartUtil.isBlankObject(communities)){
+		for(CommunityInfo community : communities){
+			if(community.getId().equals(workSpace.getId())){
+				foundInCommunities = true;
+				break;
+			}
+		}
+	}		
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -85,12 +96,12 @@
 		
 			<!--  현재사용자가 선택할 수 있는 업무공간들을 구성한다.. -->
 			<%
-			if(workSpace.getClass().equals(Department.class)){
+			if(workSpace.getClass().equals(Department.class) && foundInCommunities){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT %>">
 			<%
-			}else if(workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Course.class)){
+			}else if((workSpace.getClass().equals(Group.class)  && foundInCommunities) || workSpace.getClass().equals(Course.class)){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_GROUP %>">

@@ -250,6 +250,8 @@ public interface ISmartWorks {
 
 	public abstract CommunityInfo[] getMyCommunities() throws Exception;
 
+	public abstract CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception;
+	
 	public abstract CommentInstanceInfo[] getRecentCommentsInWorkManual(String workId, int length) throws Exception;
 	
 	public abstract InstanceInfo[] getRecentSubInstancesInInstance(String workId, int length) throws Exception;
@@ -686,4 +688,6 @@ public interface ISmartWorks {
 
 	public abstract void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception;
+
 }

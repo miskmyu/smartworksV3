@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -15,6 +16,8 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	int spaceType = SmartUtil.getSpaceTypeFromContentContext((String)session.getAttribute("cid"));
+	String workSpaceId = SmartUtil.getSpaceIdFromContentContext((String)session.getAttribute("cid"));
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -155,11 +158,14 @@ default:
 		// 실행되는 위치가 태스크 공간일 경우에는 이벤트등록하는 기능은 제외한다...
 		if(spaceType != ISmartWorks.SPACE_TYPE_WORK_INSTANCE 
 			&& spaceType != ISmartWorks.SPACE_TYPE_TASK_INSTANCE) {
+			if((spaceType != ISmartWorks.SPACE_TYPE_DEPARTMENT && spaceType != ISmartWorks.SPACE_TYPE_GROUP) 
+					|| smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_EVENT_MANAGEMENT)){
 		%>
-			<div class="up_event up_icon_list">
-				<a href="new_event.sw"><fmt:message key='common.upload.event' /></a>
-			</div>
+				<div class="up_event up_icon_list">
+					<a href="new_event.sw"><fmt:message key='common.upload.event' /></a>
+				</div>
 		<%
+			}
 		} 
 		%>
 		<% 
@@ -167,11 +173,14 @@ default:
 		if(spaceType != ISmartWorks.SPACE_TYPE_WORK_INSTANCE 
 			&& spaceType != ISmartWorks.SPACE_TYPE_TASK_INSTANCE 
 			&& spaceType != ISmartWorks.SPACE_TYPE_USER) {
+			if((spaceType != ISmartWorks.SPACE_TYPE_DEPARTMENT && spaceType != ISmartWorks.SPACE_TYPE_GROUP) 
+					|| smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_BOARD_MANAGEMENT)){
 		%>
-			<div class="up_board up_icon_list">
-				<a href="new_board.sw"><fmt:message key='common.upload.board' /></a>
-			</div>
+				<div class="up_board up_icon_list">
+					<a href="new_board.sw"><fmt:message key='common.upload.board' /></a>
+				</div>
 		<%
+			}
 		} 
 		%>
 		<div class="up_works up_icon_list">

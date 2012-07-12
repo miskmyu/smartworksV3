@@ -387,6 +387,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
+		return communityService.getMyCommunitiesForUpload(workId);
+	}
+
+	@Override
 	public CommentInstanceInfo[] getRecentCommentsInWorkManual(String workId, int length) throws Exception {
 		return instanceService.getRecentCommentsInWorkManual(workId, length);
 	}
@@ -1525,6 +1530,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		communityService.updateDepartmentSetting(requestBody, request);
+	}
+
+	@Override
+	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
+		return communityService.canIUploadToWorkSpace(workSpaceId, workId);
 	}
 
 }

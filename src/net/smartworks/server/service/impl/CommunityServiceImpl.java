@@ -887,6 +887,30 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 
 	@Override
+	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
+
+		try{
+			DepartmentInfo[] departmentInfos = getMyDepartments();
+			GroupInfo[] groupInfos = getMyGroups();
+			int departmentInfosLength = departmentInfos.length;
+			int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+			CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+			for(int i=0; i<departmentInfosLength; i++) {
+				communityInfos[i] = departmentInfos[i];
+			}
+			for(int j=0; j<groupInfosLength; j++) {
+				communityInfos[departmentInfosLength+j] = groupInfos[j];
+			}
+			return communityInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
 	public String setMyProfile(HttpServletRequest request) throws Exception {
 
 		try{
@@ -1570,6 +1594,10 @@ public class CommunityServiceImpl implements ICommunityService {
 	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
+		return true;
 	}
 
 }
