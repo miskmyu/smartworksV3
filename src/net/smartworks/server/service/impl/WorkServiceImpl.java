@@ -1452,7 +1452,13 @@ public class WorkServiceImpl implements IWorkService {
 					} else { 
 						if(txtFilterStringOperand != null) {
 							rightOperand = txtFilterStringOperand;
-							rightOperandType = FormField.TYPE_TEXT;
+							String hdnFieldType = (String)filtersMap.get("hdnFieldType");
+							if (!CommonUtil.isEmpty(hdnFieldType) && hdnFieldType.equalsIgnoreCase("userField")) {
+								rightOperandType = FormField.TYPE_USER;
+							} else {
+								rightOperandType = FormField.TYPE_TEXT;
+							}
+							
 						} else if(txtFilterDateOperand != null){
 							rightOperand = LocalDate.convertLocalDateStringToLocalDate(txtFilterDateOperand).toGMTSimpleDateString();
 							rightOperandType = FormField.TYPE_DATE;
