@@ -95,8 +95,7 @@ public class CalendarServiceImpl implements ICalendarService {
 			SwcEventDayCond swcEventDayCond = new SwcEventDayCond();
 			swcEventDayCond.setCompanyId(cUser.getCompanyId());
 	
-			String fromDateString = null;
-			Date searchDay = null;
+			//String fromDateString = null;
 			CompanyCalendar[] companyCalendars = new CompanyCalendar[days];
 			SwcWorkHour swcWorkHour = new SwcWorkHour();
 			for(int i=0; i<days; i++) {
@@ -162,11 +161,24 @@ public class CalendarServiceImpl implements ICalendarService {
 				} else {
 					companyCalendar.setWorkHour(new WorkHourPolicy().getWorkHour(dayOfWeek));
 				}
-
 				companyCalendar.setDate(fromDate);
-				fromDateString = fromDate.toGMTDateString();
-				searchDay = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateString);
+
+				//Date searchDay = null;
+				//Date startAfterTomorrow = null;
+				//Date endAfterTomorrow = null;
+
+				//if(i == days-1) {
+				//	startAfterTomorrow = new LocalDate(LocalDate.convertLocalDateStringToLocalDate(fromDate.toLocalDateSimpleString()).getTime());
+				//	fromDate = new LocalDate(fromDate.getTime() + LocalDate.ONE_DAY*6);
+				//	endAfterTomorrow = new LocalDate(LocalDate.convertLocalDateStringToLocalDate(fromDate.toLocalDateSimpleString()).getTime());
+				//} else {
+				Date searchDay = new LocalDate(LocalDate.convertLocalDateStringToLocalDate(fromDate.toLocalDateSimpleString()).getTime());
+				//}
+				//swcEventDayCond.setStartAfterTomorrow(startAfterTomorrow);
+				//swcEventDayCond.setEndAfterTomorrow(endAfterTomorrow);
 				swcEventDayCond.setSearchDay(searchDay);
+				//fromDateString = fromDate.toGMTDateString();
+				//searchDay = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateString);
 				SwcEventDay[] swcEventDays = getSwcManager().getEventdays(cUser.getId(), swcEventDayCond, IManager.LEVEL_LITE);
 
 				if(swcEventDays != null) {
@@ -197,19 +209,6 @@ public class CalendarServiceImpl implements ICalendarService {
 									} else if(group != null) {
 										communityList.add(group);
 									}
-									if(reltdUser.equals(cUser.getId())) {
-										isMyEventExist = true;
-									} else if(reltdUser.equals(cUser.getDepartmentId())) {
-										isMyEventExist = true;
-									} else {
-										if(!CommonUtil.isEmpty(groupInfos)) {
-											for(GroupInfo groupInfo : groupInfos) {
-												if(reltdUser.equals(groupInfo.getId())) {
-													isMyEventExist = true;
-												}
-											}
-										}
-									}
 								}
 							}
 							if(communityList.size() != 0) {
@@ -223,11 +222,7 @@ public class CalendarServiceImpl implements ICalendarService {
 						companyEvent.setHoliday(isHoliDay);
 						companyEvent.setPlannedStart(plannedStart);
 						companyEvent.setPlannedEnd(plannedEnd);
-						if(isMyEventExist) {
-							companyEventList.add(companyEvent);
-						} else if(swcEventDay.getCreationUser().equals(cUser.getId()) || swcEventDay.getModificationUser().equals(cUser.getId())) {
-							companyEventList.add(companyEvent);
-						}
+						companyEventList.add(companyEvent);
 					}
 					if(companyEventList.size() != 0) {
 						companyEvents = new CompanyEvent[companyEventList.size()];
