@@ -27,7 +27,6 @@ import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -227,7 +226,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Autowired
 	private ISeraService seraService;
 
-	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId) throws Exception {
+	public BoardInstanceInfo[] getBoardInstancesByWorkSpaceId(String spaceId, int maxLength) throws Exception {
 
 		try {
 			String workId = SmartWork.ID_BOARD_MANAGEMENT;
@@ -252,7 +251,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			swdRecordCond.setPageNo(0);
-			swdRecordCond.setPageSize(5);
+			swdRecordCond.setPageSize(maxLength);
 			swdRecordCond.setOrders(new Order[]{new Order(FormField.ID_CREATED_DATE, false)});
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(userId, swdRecordCond, IManager.LEVEL_LITE);
@@ -315,12 +314,12 @@ public class InstanceServiceImpl implements IInstanceService {
 
 	@Override
 	public BoardInstanceInfo[] getMyRecentBoardInstances() throws Exception {
-		return getBoardInstancesByWorkSpaceId(null);
+		return getBoardInstancesByWorkSpaceId(null, 5);
 	}
 
 	@Override
 	public BoardInstanceInfo[] getCommunityRecentBoardInstances(String spaceId) throws Exception {
-		return getBoardInstancesByWorkSpaceId(spaceId);
+		return getBoardInstancesByWorkSpaceId(spaceId, 5);
 	}
 
 	@Override
@@ -5056,7 +5055,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;
 		}*/
 
-		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+		return calendarService.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, 0);
 
 	}
 
@@ -7706,11 +7705,11 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception {
-		return SmartTest.getEventInstances();
+		return calendarService.getEventInstanceInfosByWorkSpaceId(spaceId, new LocalDate(), null, 5);
 	}
 	@Override
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
-		return SmartTest.getBoardInstances();
+		return getBoardInstancesByWorkSpaceId(spaceId, maxLength);
 	}
 
 }

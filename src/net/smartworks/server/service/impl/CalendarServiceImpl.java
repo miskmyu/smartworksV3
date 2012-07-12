@@ -289,7 +289,7 @@ public class CalendarServiceImpl implements ICalendarService {
 	}
 
 	@Override
-	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate) throws Exception {
+	public EventInstanceInfo[] getEventInstanceInfosByWorkSpaceId(String workSpaceId, LocalDate fromDate, LocalDate toDate, int maxLength) throws Exception {
 		try{
 			String workId = SmartWork.ID_EVENT_MANAGEMENT;
 			User user = SmartUtil.getCurrentUser();
@@ -297,22 +297,22 @@ public class CalendarServiceImpl implements ICalendarService {
 
 			SwdDomainCond swdDomainCond = new SwdDomainCond();
 			swdDomainCond.setCompanyId(user.getCompanyId());
-	
+
 			SwfFormCond swfFormCond = new SwfFormCond();
 			swfFormCond.setCompanyId(user.getCompanyId());
 			swfFormCond.setPackageId(workId);
-	
+
 			SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
-	
+
 			if(swfForms == null)
 				return null;
-			
+
 			String formId = swfForms[0].getId();
-	
+
 			swdDomainCond.setFormId(formId);
-	
+
 			SwdDomain swdDomain = getSwdManager().getDomain(user.getId(), swdDomainCond, IManager.LEVEL_LITE);
-	
+
 			SwdRecordCond swdRecordCond = new SwdRecordCond();
 			swdRecordCond.setCompanyId(user.getCompanyId());
 			swdRecordCond.setFormId(swdDomain.getFormId());
@@ -324,23 +324,28 @@ public class CalendarServiceImpl implements ICalendarService {
 
 			String formFieldId = "1";
 			String tableColName = getSwdManager().getTableColName(swdDomain.getObjId(), formFieldId);
-	
-			filter1.setLeftOperandValue(tableColName);
-			filter1.setOperator(">=");
-			filter1.setRightOperandType(Filter.OPERANDTYPE_DATETIME);
-			filter1.setRightOperandValue(LocalDate.convertLocalDateStringToLocalDate(fromDate.toLocalDateSimpleString()).toGMTDateString());
-			filterList.add(filter1);
 
-			filter2.setLeftOperandValue(tableColName);
-			filter2.setOperator("<=");
-			filter2.setRightOperandType(Filter.OPERANDTYPE_DATETIME);
-			filter2.setRightOperandValue(LocalDate.convertLocalDateStringToLocalDate(toDate.toLocalDateSimpleString()).toGMTDateString());
-			filterList.add(filter2);
+			if(fromDate != null) {
+				filter1.setLeftOperandValue(tableColName);
+				filter1.setOperator(">=");
+				filter1.setRightOperandType(Filter.OPERANDTYPE_DATETIME);
+				filter1.setRightOperandValue(LocalDate.convertLocalDateStringToLocalDate(fromDate.toLocalDateSimpleString()).toGMTDateString());
+				filterList.add(filter1);
+			}
 
-			Filter[] filters = new Filter[2];
-			filterList.toArray(filters);
+			if(toDate != null) {
+				filter2.setLeftOperandValue(tableColName);
+				filter2.setOperator("<=");
+				filter2.setRightOperandType(Filter.OPERANDTYPE_DATETIME);
+				filter2.setRightOperandValue(LocalDate.convertLocalDateStringToLocalDate(toDate.toLocalDateSimpleString()).toGMTDateString());
+				filterList.add(filter2);
+			}
 
-			swdRecordCond.setFilter(filters);
+			if(filterList.size() != 0) {
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+				swdRecordCond.setFilter(filters);
+			}
 
 			swdRecordCond.setOrders(new Order[]{new Order(tableColName, true)});
 
@@ -371,6 +376,11 @@ public class CalendarServiceImpl implements ICalendarService {
 				swdRecords = new SwdRecord[swdRecordList.size()];
 				swdRecordList.toArray(swdRecords);
 			}*/
+
+			if(maxLength != 0) {
+				swdRecordCond.setPageNo(0);
+				swdRecordCond.setPageSize(maxLength);
+			}
 
 			SwdRecord[] swdRecords = getSwdManager().getRecords(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
 
@@ -485,7 +495,7 @@ public class CalendarServiceImpl implements ICalendarService {
 	@Override
 	public EventInstanceInfo[] getCommunityEventInstances(LocalDate fromDate, int days, String workSpaceId) throws Exception {
 		LocalDate toDate = new LocalDate(fromDate.getTime() + LocalDate.ONE_DAY*(days-1));
-		return this.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate);
+		return this.getEventInstanceInfosByWorkSpaceId(workSpaceId, fromDate, toDate, 0);
 	}
 
 	/*
@@ -497,7 +507,7 @@ public class CalendarServiceImpl implements ICalendarService {
 	 */
 	@Override
 	public EventInstanceInfo[] getMyEventInstances(LocalDate fromDate, LocalDate toDate) throws Exception {
-		return getEventInstanceInfosByWorkSpaceId(null, fromDate, toDate);
+		return getEventInstanceInfosByWorkSpaceId(null, fromDate, toDate, 0);
 	}
 
 	/*
