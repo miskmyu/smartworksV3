@@ -38,11 +38,14 @@
 		<!-- Title -->
 		<div class="body_titl space">
 			<div class="depart fl"></div>
-			<div class="info">
+			<div class="noti_in_bodytitle">
 				<div class="title"><%=department.getName() %></div>
 				<div><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
 			</div>
-			<%if(department.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
+			<%if(department.amIAdministrator(cUser)){ %>
+			<div class="txt_btn">	
+				<a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
+			</div>
 			<div class="solid_line"></div>
 		</div>
 		<!-- Title //-->
@@ -53,11 +56,15 @@
 		<!-- Title -->
 		<div class="body_titl space">
 			<div class="group fl"></div>
-			<div class="info">
+			<div class="noti_in_bodytitle">
 				<div class="title"><%=group.getName() %></div>
 				<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
 			</div>
-			<%if(group.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting" /></a><%} %>
+			<%if(group.amIAdministrator(cUser)){ %>
+			<div class="txt_btn">	
+				<a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting"/></a>
+			</div>
+			<%} %>
 			<div class="solid_line"></div>
 		</div>
 		<!-- Title //-->

@@ -4,6 +4,7 @@
 .pop_corner_all {border-radius: 4px; border: 1px solid #c7c7c7; background-color:#FFF; width:100%; z-index:202; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf}
 .pop_corner_all .txt_btn {margin-bottom: 5px}
 .pop_corner_all .profile_size_s, .pop_list_area .profile_size_s, .pop_list_area .icon_depart {margin:0 5px 0 0}
+.pop_corner_all th {font-weight: normal}
 .smart_pop_section {width:425px; border: 1px solid #c7c7c7; background-color:#FFF}
 .smart_userinfo_section {width:300px; border: 1px solid #c7c7c7; background-color:#FFF}
 .pop_contents {padding: 10px; overflow:hidden}
