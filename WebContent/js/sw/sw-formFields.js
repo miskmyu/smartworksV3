@@ -92,6 +92,30 @@ function loadCompanyLoginImageField() {
 	}
 };
 
+function loadGroupProfileField() {
+	var groupProfileFields = $('div.js_group_profile_field');
+	if(!isEmpty(groupProfileFields)) {
+		for(var i=0; i<groupProfileFields.length; i++) {
+			var groupProfileField = $(groupProfileFields[i]);
+			
+			var imgSource = groupProfileField.attr('imgSource');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			groupProfileField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgGroupProfile",
+				fieldName: "group profile",
+				imgSource: imgSource,
+				pictureWidth: 110,
+				pictureHeight: 110,
+				required: false
+			});
+		}		
+	}
+};
+
 function loadCheckScheduleFields() {
 	var checkScheduleFields = $('div.js_check_schedule_fields');
 	if(!isEmpty(checkScheduleFields)) {

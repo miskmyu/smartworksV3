@@ -37,10 +37,11 @@
 		<!-- Title -->
 		<div class="body_titl space">
 			<div class="depart fl"></div>
-				<div class="info">
-					<div class="title"><%=department.getName() %></div>
-					<div><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
-				</div>
+			<div class="info">
+				<div class="title"><%=department.getName() %></div>
+				<div><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
+			</div>
+			<%if(department.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
 			<div class="solid_line"></div>
 		</div>
 		<!-- Title //-->
@@ -51,10 +52,11 @@
 		<!-- Title -->
 		<div class="body_titl space">
 			<div class="group fl"></div>
-				<div class="info">
-					<div class="title"><%=group.getName() %></div>
-					<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
-				</div>
+			<div class="info">
+				<div class="title"><%=group.getName() %></div>
+				<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
+			</div>
+			<%if(group.amIAdministrator(cUser)){ %><a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>">공간 설정<fmt:message key="common.title.space_setting"/></a><%} %>
 			<div class="solid_line"></div>
 		</div>
 		<!-- Title //-->

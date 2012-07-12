@@ -1506,4 +1506,9 @@ public class SmartWorks implements ISmartWorks {
 		return communityService.searchCommunityNonMember(communityId, key);
 	}
 
+	@Override
+	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		communityService.updateGroupSetting(requestBody, request);
+	}
+
 }

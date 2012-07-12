@@ -91,4 +91,11 @@ public class Department extends WorkSpace {
 		departmentInfo.setSmallPictureName(getSmallPictureName());
 		return departmentInfo;
 	}
+	
+	public boolean amIAdministrator(User currentUser){
+		if(SmartUtil.isBlankObject(currentUser)) return false;
+		if(currentUser.getUserLevel()>User.USER_LEVEL_INTERNAL_USER) return true;
+		if(!SmartUtil.isBlankObject(this.head) && currentUser.getId().equals(head.getId())) return true;
+		return false;
+	}
 }
