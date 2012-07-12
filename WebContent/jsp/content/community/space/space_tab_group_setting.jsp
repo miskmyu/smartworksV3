@@ -155,11 +155,8 @@
 								<tr>
 									<th><fmt:message key="group.title.max_members"/></th>
 									<td>
-										<input name="rdoGroupMaxMembers" type="radio" <%if(group.getMaxMembers()==Group.MAX_MEMBERS_UNLIMITED){ %>checked<%} %> value="<%=Group.MAX_MEMBERS_UNLIMITED %>" />
-										<label><fmt:message key="group.label.unlimited_members"/></label>	
-										<input name="rdoGroupMaxMembers" type="radio" <%if(group.getMaxMembers()!=Group.MAX_MEMBERS_UNLIMITED){ %>checked<%} %> value="UserDefined" />
-										<label>
-											<input name="txtGroupMaxMembers" type="text" class="fieldline tr number" style="width: 50px" /><fmt:message key="group.label.members"/>
+										<input name="rdoGroupMaxMembers" type="radio" <%if(group.getMaxMembers()==Group.MAX_MEMBERS_UNLIMITED){ %>checked<%} %> value="<%=Group.MAX_MEMBERS_UNLIMITED %>" /><label><fmt:message key="group.label.unlimited_members"/></label>	
+										<input name="rdoGroupMaxMembers" type="radio" <%if(group.getMaxMembers()!=Group.MAX_MEMBERS_UNLIMITED){ %>checked<%} %> value="UserDefined" /><label><input name="txtGroupMaxMembers" type="text" class="fieldline tr number" style="width: 50px" /> <fmt:message key="group.label.members"/>
 										</label>
 									</td>
 								</tr>

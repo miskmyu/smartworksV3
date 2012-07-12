@@ -49,7 +49,7 @@
 		<div class="portlet_tl"></div>
 	</div>
 	<div class="portlet_l" style="display: block;">
-		<div class="portlet_r" style="display: block;">
+		<ul class="portlet_r" style="display: block;">
 			<!-- 화면 -->
 			<div class="contents_space setting_section oh">
 				<div class="titl_section">
@@ -83,13 +83,13 @@
 		                        <li class="instance_list">
 		                        	<div class="det_title">
 		                                <div class="profile_photo"><img class="profile_size_m" src="<%=requester.getMidPicture()%>"></div>
-		                                <div><span><%=requester.getLongName() %></span></div>
-		                                <div><span><%=requester.getDepartment().getFullpathName() %></span></div>
-		                                <div><span><%=requester.getId() %></span></div>
+		                                <div><span><%=requester.getLongName() %></span><span class="bar">|</span></div>
+		                                <div><span><%=requester.getDepartment().getFullpathName() %></span><span class="bar">|</span></div>
+		                                <div><span><%=requester.getId() %></div>
 		                                <div class="buttonSet">
 			                                <span>
-			                                    <a href="" class="js_accept_join_group" userId="<%=requester.getId()%>"><fmt:message key="group.button.accept_join"/></a>
-			                                    <a href="" class="js_reject_join_group" userId="<%=requester.getId()%>"><fmt:message key="group.button.reject_join"/></a>
+			                                    <a href="" class="js_accept_join_group button mr3" userId="<%=requester.getId()%>"><fmt:message key="group.button.accept_join"/></a>
+			                                    <a href="" class="js_reject_join_group button" userId="<%=requester.getId()%>"><fmt:message key="group.button.reject_join"/></a>
 			                                </span>
 		                                </div>
 		                            </div>
@@ -124,20 +124,23 @@
 				                                	<%if(member.getRole() == User.USER_ROLE_LEADER){ %><span class="leader m"></span><%} %>
 				                                  	<img class="profile_size_m" src="<%=member.getMidPicture()%>">
 				                         		</div>
-				                                <div><span><%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></span></div>
-				                                <div><span><%=member.getDepartment().getFullpathName() %></span></div>
-				                                <div><span><%=member.getId() %></span></div>
-				                                <div><span>가입일</span></div>
-				                                <div><span>최근 방문일</span></div>
+				                                <div>
+					                                <span><%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></span>
+					                                <span class="bar">|</span>
+				                                </div>
+				                                <div><span><%=member.getDepartment().getFullpathName() %></span><span class="bar">|</span></div>
+				                                <div><span><%=member.getId() %></span><span class="bar">|</span></div>
+				                                <div><span>가입일</span><span class="bar">|</span></div>
+				                                <div><span>최근 방문일</div>
 				                                <div class="buttonSet">
 				                                	<%
 				                                	if(member.getId().equals(cUser.getId())){
 				                                	%>
-				                                    	<span><a href="" class="js_leave_group_request" isGroupLeader="<%=group.amIGroupLeader(cUser)%>"><fmt:message key="group.button.leave"/></a></span>
+				                                    	<span><a href="" class="js_leave_group_request button" isGroupLeader="<%=group.amIGroupLeader(cUser)%>"><fmt:message key="group.button.leave"/></a></span>
 				                                	<%
 				                                	}else if(group.getLeader().getId().equals(cUser.getId()) && !member.getId().equals(cUser.getId())){
 				                                	%>
-	                                    				<span><a href="" class="js_pushout_group_member" memberId="<%=member.getId()%>"><fmt:message key="group.button.pushout"/></a></span>
+	                                    				<span><a href="" class="js_pushout_group_member button" memberId="<%=member.getId()%>"><fmt:message key="group.button.pushout"/></a></span>
 	                                    			<%
 	                                    			}
 	                                    			%>
@@ -169,7 +172,8 @@
 	            <!-- 설정 부분 //-->
 			</div>
 			<!-- 화면 //-->
-			<!-- 버튼 영역 -->
+		</div>
+		<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
 				<div class="fr pr10">
 					<span class="btn_gray ml5">
@@ -185,8 +189,8 @@
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
 				<span class="form_space sw_error_message js_profile_error_message" style="text-align: right; color: red"></span>
 			</div>
-			<!-- 버튼 영역 //-->
-		</div>
+		<!-- 버튼 영역 //-->
+	</ul>
 	</div>
 	<div class="portlet_b" style="display: block;"></div>
 </div>

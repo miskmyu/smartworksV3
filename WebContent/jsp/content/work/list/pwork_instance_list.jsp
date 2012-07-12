@@ -179,7 +179,7 @@
 						<div class="noti_pic">
 							<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s" />
 						</div>
-						<div class="noti_i_s">
+						<div class="noti_in_s">
 							<span class="t_name"><%=owner.getLongName()%></span>
 							<div class="t_date"><%if(instanceInfo.getCreatedDate()!=null){%><%=instanceInfo.getCreatedDate().toLocalString()%><%} %></div>
 						</div>
