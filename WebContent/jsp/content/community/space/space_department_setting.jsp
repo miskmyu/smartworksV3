@@ -114,8 +114,8 @@
 								<tr>
 									<th><fmt:message key="group.title.board.write_policy"/></th>
 									<td>
-										<input name="chkBoardWriteAdministrator" type="checkbox" disabled checked <%if(department.getBoardWritePolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
-										<input name="chkBoardWriteLeader" type="checkbox" disabled checked <%if(department.getBoardWritePolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label> 
+										<input name="chkBoardWriteAdministrator" type="checkbox" checked <%if(department.getBoardWritePolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
+										<input name="chkBoardWriteLeader" type="checkbox" checked <%if(department.getBoardWritePolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label> 
 										<input name="chkBoardWriteMembers" type="checkbox" <%if(department.getBoardWritePolicy().isMembersChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.member"/></label> 
 										<input name="chkBoardWriteCustom" type="checkbox" class="js_toggle_policy_custom" <%if(department.getBoardWritePolicy().isCustomChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.custom"/></label> <!-- 사용자 지정 -->
 										<div class="js_space_policy_custom" <%if(!department.getBoardWritePolicy().isCustomChecked()) {%>style="display:none"<%} %>>
@@ -149,9 +149,9 @@
 								<tr>
 									<th><fmt:message key="group.title.board.edit_policy"/></th>
 									<td>
-										<input name="chkBoardEditOwner" type="checkbox" disabled checked<%if(department.getBoardEditPolicy().isOwnerChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.owner"/></label>
-										<input name="chkBoardEditAdministrator" type="checkbox" disabled checked<%if(department.getBoardEditPolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label>
-										<input name="chkBoardEditLeader" type="checkbox" disabled checked<%if(department.getBoardEditPolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label>
+										<input name="chkBoardEditOwner" type="checkbox" checked<%if(department.getBoardEditPolicy().isOwnerChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.owner"/></label>
+										<input name="chkBoardEditAdministrator" type="checkbox" checked<%if(department.getBoardEditPolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label>
+										<input name="chkBoardEditLeader" type="checkbox" checked<%if(department.getBoardEditPolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label>
 										<input name="chkBoardEditCustom" type="checkbox" class="js_toggle_policy_custom" <%if(department.getBoardEditPolicy().isCustomChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.custom"/></label>
 										<div class="js_space_policy_custom" <%if(!department.getBoardEditPolicy().isCustomChecked()) {%>style="display:none"<%} %>>
 											<span class="form_col js_type_userField" fieldId="txtBoardEditCustoms" multiUsers="true">
@@ -184,8 +184,8 @@
 								<tr>
 									<th><fmt:message key="group.title.event.write_policy"/></th>
 									<td>
-										<input name="chkEventWriteAdministrator" type="checkbox" disabled checked <%if(department.getEventWritePolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
-										<input name="chkEventWriteLeader" type="checkbox" disabled checked<%if(department.getEventWritePolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label> 
+										<input name="chkEventWriteAdministrator" type="checkbox" checked <%if(department.getEventWritePolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
+										<input name="chkEventWriteLeader" type="checkbox" checked<%if(department.getEventWritePolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label> 
 										<input name="chkEventWriteMembers" type="checkbox" <%if(department.getEventWritePolicy().isMembersChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.member"/></label> 
 										<input name="chkEventWriteCustom" type="checkbox" class="js_toggle_policy_custom" <%if(department.getEventWritePolicy().isCustomChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.custom"/></label>
 										<div class="js_space_policy_custom" <%if(!department.getEventWritePolicy().isCustomChecked()) {%>style="display:none"<%} %>>
@@ -219,9 +219,9 @@
 								<tr>
 									<th><fmt:message key="group.title.event.edit_policy"/></th>
 									<td>
-										<input name="chkEventEditOwner" type="checkbox" disabled checked<%if(department.getEventEditPolicy().isOwnerChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.owner"/></label>
-										<input name="chkEventEditAdministrator" type="checkbox" disabled checked<%if(department.getEventEditPolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
-										<input name="chkEventEditLeader" type="checkbox" disabled checked<%if(department.getEventEditPolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label>
+										<input name="chkEventEditOwner" type="checkbox" checked<%if(department.getEventEditPolicy().isOwnerChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.owner"/></label>
+										<input name="chkEventEditAdministrator" type="checkbox" checked<%if(department.getEventEditPolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
+										<input name="chkEventEditLeader" type="checkbox" checked<%if(department.getEventEditPolicy().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="department.role.head"/></label>
 										<input name="chkEventEditCustom" type="checkbox" class="js_toggle_policy_custom" <%if(department.getEventEditPolicy().isCustomChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.custom"/></label>
 										<div class="js_space_policy_custom" <%if(!department.getEventEditPolicy().isCustomChecked()) {%>style="display:none"<%} %>>
 											<span class="form_col js_type_userField" fieldId="txtEventEditCustoms" multiUsers="true">
