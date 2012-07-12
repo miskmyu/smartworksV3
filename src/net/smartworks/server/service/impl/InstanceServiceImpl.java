@@ -7303,7 +7303,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			prcInstCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
 			
 			PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
-			prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			//prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
 			prcInst.setTitle(txtForwardSubject);
 			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 			
