@@ -1001,7 +1001,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			formFile.setFileName(fileName);
 			formFile.setWrittenTime(new Date(new LocalDate().getGMTDate()));
 			formFile.setFilePath(realFile);
-			formFile.setFileSize(Long.parseLong(fileSize, 16));
+			formFile.setFileSize(Long.parseLong(fileSize));
 			formFile.setType(extension);
 			formFile.setDeleteAction(false);
 			this.getHibernateTemplate().save(formFile);

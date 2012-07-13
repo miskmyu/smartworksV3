@@ -96,6 +96,8 @@
 				FormField[] fields = work.getDisplayFields();
 				if (fields != null) {
 					for (FormField field : fields) {
+						if (field.getType().equalsIgnoreCase("fileField"))
+							continue;
 				%>
 				 		<th class="r_line">
 				 			<a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%>
@@ -133,6 +135,8 @@
 				<%
 				if ((fieldDatas != null) && (fieldDatas.length == displayFields.length)) {
 					for (FieldData data : fieldDatas) {
+						if (data.getFieldType().equalsIgnoreCase("fileField"))
+							continue;
 				%>
 						<td><a href="<%=target%>" class=js_pop_select_work_item workId="<%=workId%>" instId="<%=instanceInfo.getId()%>"fieldId="<%=data.getFieldId()%>"><%=CommonUtil.toNotNull(data.getValue())%></a></td>
 				<%
