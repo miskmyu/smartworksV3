@@ -224,6 +224,51 @@ public class ModelConverter {
 	public void setCommunityService(ICommunityService communityService) {
 		ModelConverter.communityService = communityService;
 	}
+
+	public static String[] getGroupIdsByNotBelongToClosedGroup(User currentUser) throws Exception {
+		try {
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+
+			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PRIVATE);
+			//swoGroupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
+			SwoGroup[] swoGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_ALL);
+
+			List<String> groupList = new ArrayList<String>();
+			String[] groupIds = null;
+
+			if(!CommonUtil.isEmpty(swoGroups)) {
+				for(SwoGroup swoGroup : swoGroups) {
+					String groupId = swoGroup.getId();
+					SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+					if(!CommonUtil.isEmpty(swoGroupMembers)) {
+						boolean isExist = false;
+						for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+							String memberId = swoGroupMember.getUserId();
+							if(userId.equals(memberId)) {
+								isExist = true;
+								break;
+							}
+						}
+						if(!isExist)
+							groupList.add(groupId);
+					}
+				}
+			}
+			if(groupList.size() > 0) {
+				groupIds = new String[groupList.size()];
+				groupList.toArray(groupIds);
+			}
+			return groupIds;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static String[] getWorkSpaceIdIns(User currentUser) throws Exception {
 		try {
 			User user = currentUser;
@@ -736,9 +781,9 @@ public class ModelConverter {
 				PkgPackageCond pkgCond = new PkgPackageCond();
 				pkgCond.setPackageId(packageId);
 				PkgPackage pkg = getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_LITE);
-				if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				if (pkg.getType().equalsIgnoreCase("SINGLE")) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
-				} else if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+				} else if (pkg.getType().equalsIgnoreCase("PROCESS")) {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
 				}
 			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
@@ -820,6 +865,7 @@ public class ModelConverter {
 			TskTaskCond tskTaskCond = new TskTaskCond();
 			tskTaskCond.setProcessInstId(processInstId);
 			TskTask[] tskTasks = getTskManager().getTasks(userId, tskTaskCond, IManager.LEVEL_LITE);
+			workInstanceInfo.setId(processInstId);
 			if(!CommonUtil.isEmpty(tskTasks)) {
 				for(TskTask tskTask : tskTasks) {
 					if(tskTask.getType().equals(TskTask.TASKTYPE_SINGLE)) {
@@ -830,6 +876,7 @@ public class ModelConverter {
 							recordId = swdRecord.getRecordId();
 						}
 						workInstanceInfo.setId(recordId);
+						break;
 					}
 				}
 			}
@@ -1169,12 +1216,12 @@ public class ModelConverter {
 				/*TYPE_INFORMATION = 21;
 				TYPE_PROCESS = 22;
 				TYPE_SCHEDULE = 23;*/
-				if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+				if (TskTask.TASKTYPE_COMMON.equalsIgnoreCase(task.getTskType())) {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getTskType())) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
-				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
-					if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				} else if (TskTask.TASKTYPE_REFERENCE.equalsIgnoreCase(task.getTskType())) {
+					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
 						workInfo.setType(SmartWork.TYPE_INFORMATION);
 					} else {
 						workInfo.setType(SmartWork.TYPE_PROCESS);
@@ -2472,7 +2519,26 @@ public class ModelConverter {
 
 		return departmentInfo;
 	}
-
+	public static String getDepartmentInfoFullpathNameByDepartmentId(String departmentInfoId) throws Exception {
+		
+		User user = SmartUtil.getSystemUser();
+		SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentInfoId, true);
+		String fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(department,"");
+		return fullpathName;
+	}
+	
+	public static String getDepartmentInfoParentsfullpathNameByDepartmentId(SwoDepartmentExtend departmentInfo, String fullpathName) throws Exception {
+		
+		if(departmentInfo.getParentId()!= null){
+			fullpathName = departmentInfo.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			departmentInfo.getId();
+			departmentInfo.getParentId();
+			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
+			fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
+		}
+		return fullpathName;
+	}
+	
 	public static Department getDepartmentByDepartmentId(String departmentId) throws Exception {
 		if (CommonUtil.isEmpty(departmentId))
 			return null;
@@ -2544,6 +2610,26 @@ public class ModelConverter {
 		}
 
 		return department;
+	}
+	
+	public static String getFullpathNameByDepartmentId(String departmentId) throws Exception {
+		
+		User user = SmartUtil.getSystemUser();
+		SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentId, true);
+		String fullpathName = getParentsfullpathNameByDepartmentId(department,"");
+		return fullpathName;
+	}
+	
+	public static String getParentsfullpathNameByDepartmentId(SwoDepartmentExtend department, String fullpathName) throws Exception {
+		
+		if(department.getParentId()!= null){
+			fullpathName = department.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			department.getId();
+			department.getParentId();
+			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, department.getParentId(), true);								
+			fullpathName = getParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
+		}
+		return fullpathName;
 	}
 
 	public static GroupInfo getGroupInfoByGroupId(String groupId) throws Exception {
