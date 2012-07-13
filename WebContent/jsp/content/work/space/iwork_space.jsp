@@ -97,14 +97,18 @@
 		    	<!-- 타이틀 -->	    		            
             	<div class="body_titl_pic js_form_header">		
                         <div class="noti_pic mr7"><img class="profile_size_m" src="<%=instance.getOwner().getMidPicture() %>" /></div>
-                        <div class="noti_in_bodytitle">
+                        <div class="noti_in_bodytitle case_2line">
                         	<div>
 	                            <span class="t_name"><%=instance.getOwner().getLongName()%></span>
 	                            <%if(workSpace != null && !workSpace.getId().equals(owner.getId())){ %><span class="arr">▶</span><span class="icon_division_s"><%=workSpace.getName() %></span><%} %>
 	                            <span class="t_date"><%=instance.getCreatedDate().toLocalString() %></span>
                             </div>
-                           	<div class="title_picico"><%=instance.getSubject()%></div>
-                           	<div class="<%=work.getIconClass() %> t_date"> <%=work.getFullpathName() %></div>
+                            <div>
+	                           	<span class="<%=work.getIconClass() %> t_date"> <%=work.getFullpathName() %>
+	                           		<span class="title_picico ml5"><%=instance.getSubject()%></span>
+	                           	</span>
+	                           	
+                           	</div>
                         </div>
 		                    
 		            <!-- 우측 버튼-->

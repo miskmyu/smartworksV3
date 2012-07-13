@@ -308,9 +308,10 @@
 					break;
 				default:
 				%>
+				<!-- 실행된 업무정보 -->
 					<div class="det_title">
 						<div class="noti_pic"><a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=owner.getMidPicture()%>" class="profile_size_m"></a></div>
-						<div class="noti_in_m">
+						<div class="noti_in_m case_2line">
 							<%
 							if(cUser.getId().equals(owner.getId())){
 							%>
@@ -528,7 +529,8 @@
 						}
 						%>
 							<span class="t_date vb pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-						</div>			
+						<!-- 실행된 업무정보 //-->
+						<!-- 위치정보, 제목  -->		
 						<div>
 							<a class="js_content" href='<%=((TaskInstanceInfo)taskInstance).getController()%>?cid=<%=((TaskInstanceInfo)taskInstance).getContextId()%>&workId=<%=work.getId()%>&taskInstId=<%=taskInstance.getId()%>'>
 								<span class="<%=work.getIconClass()%>"></span>
@@ -540,6 +542,9 @@
 								</span> 
 							</a>
 						</div>
+						<!-- 위치정보, 제목  //-->
+						</div>
+						
 					</div>
 				<%
 				}

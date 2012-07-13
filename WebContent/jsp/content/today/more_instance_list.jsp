@@ -135,7 +135,7 @@ if (instances != null) {
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
 				
 				<!-- 인스턴스 상세내용 표시 -->
-				<div class="noti_in_m">
+				<div class="noti_in_m case_2line">
 					<!--  시작자 이름 -->
 					<%
 					if(cUser.getId().equals(owner.getId())){
