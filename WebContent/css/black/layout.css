@@ -159,7 +159,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .nav_sub_list.coummi {min-height: 200px}
 .nav_list.recent, .nav_list.comming {padding-bottom:10px}
 .nav_list.recent .nav_tit, .nav_list.comming .nav_tit { background:none; height:inherit; padding:10px 10px 7px}
-.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 22px; padding:0 0 3px 22px}
+.nav_list.comming .icon_event_works, .nav_list.recent .icon_board_works {border-bottom: 1px dotted #7A7A7A; line-height: 19px; padding-bottom: 3px}
 .nav_list.recent ul, .nav_list.comming ul { line-height:17px}
 .nav_list.recent .works li { padding:7px 10px 0}
 .nav_list.recent .works li a { border-bottom:1px dotted #7a7a7a; display:block}
@@ -223,6 +223,9 @@ a .btn_new_mail:hover, .btn_new_mail.current {background: url("../../images/nav_
 a .btn_folder_add {background: url("../../images/nav_img.png") no-repeat -25px -125px transparent; height:20px;  width:20px; display: inline-block; float:right}
 a .btn_folder_add:hover, .btn_folder_add.current {background: url("../../images/nav_img.png") no-repeat -25px -150px}
 
+a .btn_bfolder_add {background: url("../../images/nav_img.png") no-repeat -25px -583px transparent; height:20px;  width:20px; display: inline-block; float:right}
+a .btn_bfolder_add:hover {background: url("../../images/nav_img.png") no-repeat -25px -612px}
+
 /* Nav Community Btn */ 
 .btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
 a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
@@ -272,11 +275,18 @@ a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png"
 .btn_remove_folder {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; display: none}
 .folder_actions:hover .btn_remove_folder{display: inline-block}
 
+
+/* Btn Folder n Picture */
+.btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
+.btn_fold a:hover {background-position:-360px -536px}
+.lft_fd .btn_fold a {background-position:-395px -468px; left:4px}
+.lft_fd .btn_fold a:hover {background-position:-395px -536px}
+
 /* Icon Builder*/
 .icon_down {background: url("../../images/body_icon.png") no-repeat 0 -548px; width:13px; height:13px; display: inline-block}
 a.icon_down:hover {background: url("../../images/body_icon.png") no-repeat 0 -571px; width:13px; height:13px; display: inline-block}
 .icon_up {background: url("../../images/body_icon.png") no-repeat -14px -548px; width:13px; height:13px; display: inline-block}
-a.icon_up:hover {background: url("../../images/body_icon.png") no-repeat -14px -571px; width:13px; height:13px; display: inline-block}
+a.icon_up:hover {bazckground: url("../../images/body_icon.png") no-repeat -14px -571px; width:13px; height:13px; display: inline-block}
 .icon_hide {background: url("../../images/body_icon.png") no-repeat -28px -548px; width:13px; height:13px; display: inline-block}
 a.icon_hide:hover {background: url("../../images/body_icon.png") no-repeat -28px -571px; width:13px; height:13px; display: inline-block}
 .icon_show {background: url("../../images/body_icon.png") no-repeat -42px -548px; width:13px; height:13px; display: inline-block}

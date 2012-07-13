@@ -476,9 +476,9 @@ if (instances != null) {
 						<span class="t_date"><%=work.getFullpathName()%></span>
 					</a>
 					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>" class="js_content">
-						<span><%=workInstance.getSubject()%></span> 
+						<span class="tb"><%=workInstance.getSubject()%></span> 
 					</a>
-					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=workInstance.getSubInstanceCount() %></b>]</font><%} %>
+					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count tb">[<%=workInstance.getSubInstanceCount() %>]</font><%} %>
 					<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 					
 				</div>
