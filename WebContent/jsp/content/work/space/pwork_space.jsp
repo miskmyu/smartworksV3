@@ -248,7 +248,7 @@
 				<div class="up_point pos_default js_form_content_pointer"></div>
 
 				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>>
+				<div class="js_form_task_approval js_form_task p0 mb15" <%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>>
 <%-- 					<%
 					if(approvalTask!=null || (!SmartUtil.isBlankObject(taskInstance) && taskInstance.isApprovalWork())){
 					%>
@@ -259,8 +259,10 @@
 					<%
 					}
 					%>
- --%>				</div>
-			
+					
+ --%>
+ 			</div>
+				
 				<div class="form_wrap up form_read js_form_content"></div>
 			</div>
 

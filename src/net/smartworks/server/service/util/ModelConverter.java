@@ -736,9 +736,9 @@ public class ModelConverter {
 				PkgPackageCond pkgCond = new PkgPackageCond();
 				pkgCond.setPackageId(packageId);
 				PkgPackage pkg = getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_LITE);
-				if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				if (pkg.getType().equalsIgnoreCase("SINGLE")) {
 					workInfo.setType(SmartWork.TYPE_INFORMATION);
-				} else if (pkg.getType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+				} else if (pkg.getType().equalsIgnoreCase("PROCESS")) {
 					workInfo.setType(SmartWork.TYPE_PROCESS);
 				}
 			} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
@@ -820,6 +820,7 @@ public class ModelConverter {
 			TskTaskCond tskTaskCond = new TskTaskCond();
 			tskTaskCond.setProcessInstId(processInstId);
 			TskTask[] tskTasks = getTskManager().getTasks(userId, tskTaskCond, IManager.LEVEL_LITE);
+			workInstanceInfo.setId(processInstId);
 			if(!CommonUtil.isEmpty(tskTasks)) {
 				for(TskTask tskTask : tskTasks) {
 					if(tskTask.getType().equals(TskTask.TASKTYPE_SINGLE)) {
@@ -830,6 +831,7 @@ public class ModelConverter {
 							recordId = swdRecord.getRecordId();
 						}
 						workInstanceInfo.setId(recordId);
+						break;
 					}
 				}
 			}

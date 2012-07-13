@@ -627,8 +627,14 @@ $(function() {
 	$('.js_leave_group_request').live('click', function(e){
 		smartPop.confirm(smartMessage.get("leaveGroupConfirmation"), function(){
 			var input = $(targetElement(e));
+			var spaceProfile = input.parents('.js_space_profile_page');
+			var spaceTabGroupMembers = input.parents('.js_space_tab_group_members_page');
 			var isGroupLeader = input.attr('isGroupLeader');
-			var spaceId = input.parents('.js_space_profile_page').attr('spaceId');
+			var spaceId = "";
+			if(!isEmpty(spaceProfile))
+				spaceId = spaceProfile.attr('spaceId');
+			else if(!isEmpty(spaceTabGroupMembers))
+				spaceId = spaceTabGroupMembers.attr('groupId');
 			var paramsJson = {};
 			paramsJson['groupId'] = spaceId;
 			paramsJson['leaveReason'] = "";	
@@ -655,4 +661,152 @@ $(function() {
 		});
 		return false;
 	});
+	
+	$('.js_pushout_group_member').live('click', function(e){
+		smartPop.confirm(smartMessage.get("pushoutGroupMemberConfirmation"), function(){
+			var input = $(targetElement(e));
+			var groupId = input.parents('.js_space_tab_group_members_page').attr('groupId');
+			var userId = input.attr('memberId');
+			var paramsJson = {};
+			paramsJson['groupId'] = groupId;
+			paramsJson['userId'] = userId;		
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : 'pushout_group_member.sw',
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("pushoutGroupMemberSucceed"), function(){
+						input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+						smartPop.closeProgress();
+					});				
+				},
+				error : function(e) {
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("pushoutGroupMemberError"), function(){
+						smartPop.closeProgress();					
+					});
+				}
+			});
+		});
+		return false;
+	});
+	
+	$('.js_accept_join_group').live('click', function(e){
+		var input = $(targetElement(e));
+		var groupId = input.parents('.js_space_tab_group_members_page').attr('groupId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = groupId;
+		paramsJson['userId'] = userId;	
+		paramsJson['approval'] = true;
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : "approval_join_group.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, smartMessage.get("acceptJoinGroupSucceed"), function(){
+					input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+					smartPop.closeProgress();
+				});				
+			},
+			error : function(e) {
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("acceptJoinGroupError"), function(){
+					smartPop.closeProgress();					
+				});
+			}
+			
+		});
+		return false;
+	});
+	
+	$('.js_reject_join_group').live('click', function(e){
+		var input = $(targetElement(e));
+		var groupId = input.parents('.js_space_tab_group_members_page').attr('groupId');
+		var userId = input.attr('userId');
+		var paramsJson = {};
+		paramsJson['groupId'] = groupId;
+		paramsJson['userId'] = userId;	
+		paramsJson['approval'] = false;
+		console.log(JSON.stringify(paramsJson));
+		$.ajax({
+			url : "approval_join_group.sw",
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				smartPop.showInfo(smartPop.INFO, smartMessage.get("rejectJoinGroupSucceed"), function(){
+					input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+					smartPop.closeProgress();
+				});				
+			},
+			error : function(e) {
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("rejectJoinGroupError"), function(){
+					smartPop.closeProgress();					
+				});
+			}
+			
+		});
+		return false;
+	});
+	
+	$('.js_toggle_policy_custom').live('change', function(e){
+		var input = $(targetElement(e));
+		input.nextAll('.js_space_policy_custom:first').toggle();		
+	});
+	
+	$('.js_select_group_space_tab').live('click', function(e){
+		var input = $(targetElement(e));
+		input.parent().addClass('current').siblings().removeClass('current');
+		input.nextAll('.js_space_policy_custom:first').toggle();
+		var groupId = input.parents('.js_space_tab_group').attr('groupId');
+		var url = "";
+		if(input.hasClass('js_setting'))
+			url = "space_tab_group_setting.sw";
+		else if(input.hasClass('js_members'))
+			url = "space_tab_group_members.sw";
+
+		$.ajax({
+			url : url,
+			data : {groupId : groupId},
+			success : function(data, status, jqXHR) {
+				input.parents('.js_space_tab_group_target').html(data);
+			},
+			error : function(e) {
+			}
+		});
+		return false;
+	});
+	
+	$('a.js_group_more_members').live('click',function(e) {
+		var input = $(targetElement(e));
+		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
+			return false;
+		smartPop.progressCont(input.siblings('.js_progress_span'));
+		var lastId = input.attr('lastId');
+		var target = input.parents('ul:first');
+		var spacePage = input.parents('.js_space_tab_group_members_page');
+		var groupId = spacePage.attr('groupId');		
+		$.ajax({
+			url : "more_group_members.sw",
+			data : {
+				groupId : groupId,
+				lastId : lastId,
+				maxSize : 20
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('li:first').remove();
+				target.append(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+		
 });

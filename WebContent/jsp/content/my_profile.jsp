@@ -248,10 +248,6 @@
 			<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
 				<div class="fr pr10">
-					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-					<span class="form_space sw_error_message js_profile_error_message" style="text-align:right; color: red"></span>
-					<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-					<span class="js_progress_span"></span>
 					<span class="btn_gray">
 						<a href="" onclick='submitForms(); return false;'>
 							<span class="txt_btn_start"></span>
@@ -267,6 +263,10 @@
 						 </a>
 					</span>
 				</div>
+				<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+				<span class="fr form_space js_progress_span"></span>
+				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
+				<span class="form_space sw_error_message js_profile_error_message" style="text-align:right; color: red"></span>
 			</div>
 			<!-- 버튼 영역 //-->
 						

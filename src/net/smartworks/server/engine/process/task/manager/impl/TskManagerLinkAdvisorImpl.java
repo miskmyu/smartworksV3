@@ -1353,13 +1353,15 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 	}
 	public void postSetTask(String user, TskTask obj, String action) throws Exception {
 		super.postSetTask(user, obj, action);
-		
-		String type = obj.getType();
-		if (type.equalsIgnoreCase("SINGLE")) {
-			Date cDate = obj.getCreationDate();
-			if (cDate.getTime() + 5000 < new LocalDate().getTime())//date to localdate - 
-				setSingleTask(user, obj);
-		}
+
+//	20120712 머때문에 이짓을 하는지 모르겠어서.. 우선 주석처리를 한다. 필요시 주석 해제
+//	프로세스 태스크에서 정보관리 업무를 사용했을경우 그 정보관리 업무로 데이터를 입력하기 위한것 같음
+//		String type = obj.getType();
+//		if (type.equalsIgnoreCase("SINGLE")) {
+//			Date cDate = obj.getCreationDate();
+//			if (cDate.getTime() + 5000 < new LocalDate().getTime())//date to localdate - 
+//				setSingleTask(user, obj);
+//		}
 		
 	}
 	public void preExecuteTask(String user, TskTask obj, String action) throws Exception {

@@ -1057,7 +1057,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		Wrapper iWrap = new Wrapper();
 		Integer i = 0;
 		iWrap.setObj(i);
-		first = appendFilterConditions(cond.getFilter(), logicalOperator, first, true, iWrap, fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf);
+		first = appendFilterConditions(cond.getFilter(), logicalOperator, first, true, iWrap, fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf, domain);
 
 		i = (Integer)iWrap.getObj();
 
@@ -1075,7 +1075,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 					buf.append(CommonUtil.SPACE).append(logicalOperator).append(" (");
 				}
 				boolean fFirst = true;
-				fFirst = appendFilterConditions(filter, logOper, fFirst, false, iWrap,  fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf);
+				fFirst = appendFilterConditions(filter, logOper, fFirst, false, iWrap,  fieldColumnMap, fieldTypeMap, filterMap, paramTypeMap, buf, domain);
 				buf.append(")");
 			}
 		}
@@ -1121,7 +1121,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 						buf.append(", ");
 					buf.append(":workSpaceIdIn").append(j);
 				}
-				buf.append(")) or obj.workSpaceType = 4 or obj.workSpaceType = 2 or obj.workSpaceType is null))");
+				buf.append(")) or (obj.workSpaceType = 4 and obj.workSpaceId = '" + user + "') or obj.workSpaceType = 2 or obj.workSpaceType is null))");
 	
 				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
 				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
@@ -1271,7 +1271,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 	}
 	private static boolean appendFilterConditions(Filter[] filter, String logicalOperator, boolean first, boolean where, Wrapper iWrap, 
 			Map<String, String> fieldColumnMap, Map<String, String> fieldTypeMap, 
-			Map<String, Filter> filterMap, Map<String, String> paramTypeMap, StringBuffer buf) throws Exception {
+			Map<String, Filter> filterMap, Map<String, String> paramTypeMap, StringBuffer buf, SwdDomain domain) throws Exception {
 		if (CommonUtil.isEmpty(filter))
 			return first;
 
@@ -1297,82 +1297,115 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			right = f.getRightOperandValue();
 			rightType = f.getRightOperandType();
 
-			if (left == null)
-				throw new SwdException("left operand of filter condition is null.");
-			if (operator == null) {
-				operator = "=";
-			} else {
-				operator = operator.trim();
+			String formFieldId = null;
+			Iterator itr = fieldColumnMap.keySet().iterator();
+			while (itr.hasNext()) {
+				String key = (String)itr.next();
+				String value = fieldColumnMap.get(key);
+				if (value.equalsIgnoreCase(left)) {
+					formFieldId = key;
+					break;
+				}
 			}
-			if (left.equalsIgnoreCase("creationUser")) {
-				left = "obj.creator";
-			} else if (left.equalsIgnoreCase("creationDate")) {
-				left = "obj.createdTime";
-			} else if (left.equalsIgnoreCase("modificationUser")) {
-				left = "obj.modifier";
-			} else if (left.equalsIgnoreCase("modificationDate")) {
-				left = "obj.modifiedTime";
-			} else {
-				left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
-			}
-			if(leftType.equals("searchKey")) {
-				forSearchKeyCount++;
-				logicalOperator = "or";
-			} else {
-				logicalOperator = "and";
-			}
-			if (first) {
-				if (where)
-					buf.append(" where");
-				first = false;
-			} else {
+			
+			if (leftType.equalsIgnoreCase("userField") && !CommonUtil.isEmpty(formFieldId)) {
+				
+				String formId = domain.getFormId();
+				String userOperator = "in";
+				if (operator.equalsIgnoreCase("=") || operator.equalsIgnoreCase("like")) {
+					userOperator = "in";
+				} else if (operator.equalsIgnoreCase("!=") || operator.equalsIgnoreCase("not like")){
+					userOperator = "not in";
+				}
+				if (first) {
+					if (where)
+						buf.append(" where");
+					first = false;
+				} else {
 					buf.append(CommonUtil.SPACE).append(logicalOperator);
-			}
-			String fieldType = (String)fieldTypeMap.get(left);
-			buf.append(CommonUtil.SPACE);
-			boolean isLikeCast = false;
-			if (operator.equalsIgnoreCase("like")) {
-				if (fieldType != null && !fieldType.equalsIgnoreCase("string"))
-					isLikeCast = true;
-			}
-
-			if (isLikeCast)
-				buf.append(" cast(");
-			if (left.indexOf(".") == -1) {
+				}
+				buf.append(CommonUtil.SPACE);
+				buf.append("( obj.id ").append(userOperator).append(" (select myrecordId from swdataref where myFormFieldId = '").append(formFieldId).append("' and ");
+				buf.append(" myformid = '").append(formId).append("' and refRecordId = '").append(right).append("'))");
+				
+			} else {
+				if (left == null)
+					throw new SwdException("left operand of filter condition is null.");
+				if (operator == null) {
+					operator = "=";
+				} else {
+					operator = operator.trim();
+				}
+				if (left.equalsIgnoreCase("creationUser")) {
+					left = "obj.creator";
+				} else if (left.equalsIgnoreCase("creationDate")) {
+					left = "obj.createdTime";
+				} else if (left.equalsIgnoreCase("modificationUser")) {
+					left = "obj.modifier";
+				} else if (left.equalsIgnoreCase("modificationDate")) {
+					left = "obj.modifiedTime";
+				} else {
+					left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
+				}
 				if(leftType.equals("searchKey")) {
-					if(firstCnt) {
-						buf.append("(obj.");
-						firstCnt = false;
+					forSearchKeyCount++;
+					logicalOperator = "or";
+				} else {
+					logicalOperator = "and";
+				}
+				if (first) {
+					if (where)
+						buf.append(" where");
+					first = false;
+				} else {
+						buf.append(CommonUtil.SPACE).append(logicalOperator);
+				}
+				String fieldType = (String)fieldTypeMap.get(left);
+				buf.append(CommonUtil.SPACE);
+				boolean isLikeCast = false;
+				if (operator.equalsIgnoreCase("like")) {
+					if (fieldType != null && !fieldType.equalsIgnoreCase("string"))
+						isLikeCast = true;
+				}
+
+				if (isLikeCast)
+					buf.append(" cast(");
+				if (left.indexOf(".") == -1) {
+					if(leftType.equals("searchKey")) {
+						if(firstCnt) {
+							buf.append("(obj.");
+							firstCnt = false;
+						} else {
+							buf.append("obj.");
+						}
 					} else {
 						buf.append("obj.");
 					}
+				}
+				buf.append(left);
+				if (isLikeCast)
+					buf.append(" as varchar)");
+				if (right == null) {
+					if (operator.equals("!=") || 
+							(operator.indexOf("=") == -1 && !operator.equalsIgnoreCase("is"))) {
+						buf.append(" is not null");
+					} else {
+						buf.append(" is null");
+					}
 				} else {
-					buf.append("obj.");
+					if (rightType == null || !rightType.equalsIgnoreCase(Filter.OPERANDTYPE_FIELD)) {
+						right = "a" + i++;
+						filterMap.put(right, f);
+						if (!isLikeCast)
+							paramTypeMap.put(right, fieldType);
+					}
+					buf.append(CommonUtil.SPACE).append(operator);
+					buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
 				}
-			}
-			buf.append(left);
-			if (isLikeCast)
-				buf.append(" as varchar)");
-			if (right == null) {
-				if (operator.equals("!=") || 
-						(operator.indexOf("=") == -1 && !operator.equalsIgnoreCase("is"))) {
-					buf.append(" is not null");
-				} else {
-					buf.append(" is null");
+				if(leftType.equals("searchKey")) {
+					if(searchKeyCount > 0 && searchKeyCount == forSearchKeyCount)
+						buf.append(")");
 				}
-			} else {
-				if (rightType == null || !rightType.equalsIgnoreCase(Filter.OPERANDTYPE_FIELD)) {
-					right = "a" + i++;
-					filterMap.put(right, f);
-					if (!isLikeCast)
-						paramTypeMap.put(right, fieldType);
-				}
-				buf.append(CommonUtil.SPACE).append(operator);
-				buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
-			}
-			if(leftType.equals("searchKey")) {
-				if(searchKeyCount > 0 && searchKeyCount == forSearchKeyCount)
-					buf.append(")");
 			}
 		}
 		iWrap.setObj(i);
@@ -1956,7 +1989,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				//데이터 내보내기에서 연결되는 데이터가 없을경우 데이터를 새로 만든다
 				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
 				defaultSetRecord(user, mappingRecord);
-				setRecord(user, mappingRecord, null);
+				SwManagerFactory.getInstance().getSwdManager().setRecord(user, mappingRecord, null);
 				
 				setDataRefByRecord(user, mappingRecord);
 				

@@ -240,11 +240,11 @@ a .btn_member:hover, .btn_member.current {background: url("../../images/nav_img.
 a .btn_allmember:hover, .btn_allmember.current {background: url("../../images/nav_img.png") no-repeat -201px -666px}
 
 /* Nav Works Btn */
-.btn_recent {background: url("../../images/nav_img.png") no-repeat -115px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_recent:hover, .btn_recent.current {background: url("../../images/nav_img.png") no-repeat -115px -274px}
+.btn_recent {background: url("../../images/nav_img.png") no-repeat -158px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_recent:hover, .btn_recent.current {background: url("../../images/nav_img.png") no-repeat -158px -274px}
 
-.btn_favorite {background: url("../../images/nav_img.png") no-repeat -158px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
-a .btn_favorite:hover, .btn_favorite.current {background: url("../../images/nav_img.png") no-repeat -158px -274px}
+.btn_favorite {background: url("../../images/nav_img.png") no-repeat -115px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_favorite:hover, .btn_favorite.current {background: url("../../images/nav_img.png") no-repeat -115px -274px}
 
 .btn_all_works {background: url("../../images/nav_img.png") no-repeat -201px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
 a .btn_all_works:hover, .btn_all_works.current {background: url("../../images/nav_img.png") no-repeat -201px -274px}
@@ -460,7 +460,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; margin:0 10px; border-top: 1px solid #c7c7c7; overflow: hidden}
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; margin:0 10px; border-top: 1px solid #c7c7c7; min-height: 24px}
 .glo_btn_space .btn_finish {float:right; padding-right:10px}
 
 .pos_works {left:40px; top:1px; position:relative; z-index:20}
@@ -548,7 +548,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 /* Noice */
 .noti_pic {float:left; margin: 0 5px 0 0}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:65%} /* Body Title로 들어갈 때 */
-.noti_in [type="text"] {border:1px solid #c7c7c7; width:101px; height:20px} /* 전자결재 - 결재선 */
+.noti_in [type="text"] {border:1px solid #c7c7c7; width:96px; height:20px} /* 전자결재 - 결재선 */
 .noti_in { margin-left:34px; line-height: 14px} /* img profile_size_c 뒤에 옴 */
 .noti_in_s { margin-left:26px; line-height: 14px} /* img profile_size_s 뒤에 옴 */
 .noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* img profile_size_m 뒤에 옴 */
@@ -612,20 +612,24 @@ margin: 0 auto}
 #work_ing .t_red_bold, .setting_section .t_red_bold {font-size:11px}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
-.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0; width:13%}
+.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0}
 .setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; vertical-align: middle}
-.setting_section .instance_list .det_title div.buttonSet {width:90px; float:right}
+.setting_section .instance_list .det_title div.buttonSet {width:93px; float:right}
 .setting_section .instance_list .det_title .profile_photo {width:50px}
+.setting_section .bar {color:#c2c2c2; font-size: 18px; padding-left: 10px; text-align:right}
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}
 .subject_list li {color: #bababa; float: left; margin-right: 5px}
 .subject_list .on a {color: #2F3743; font-weight: bold}
 	
-/* Mail */
-.buttonSet {padding:5px 0 7px}
-.buttonSet button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
+/* Common Button */
+.buttonSet {padding:5px 0 7px} 
+.buttonSet button, .button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
 .buttonSet select {height:21px; margin:0; padding:0}
+.buttonSet .button {padding: 4px 8px 3px}
+    
+/* Mail */
 .mail_list_section {line-height:19px}
 .mail_list_section .not_read {color:#0459C1}
 .mail_list_section .icon_important {background: url("../../images/nav_img.png") no-repeat -115px -500px; width:13px; height:15px} 
@@ -659,6 +663,7 @@ td.pic {width:85px}
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
+.user_select + input[type="text"] {width:160 !importantpx}
 
 /* Text style */
 .t_red, .t_sunday {color:#e54b4b}
@@ -694,7 +699,7 @@ td.pic {width:85px}
 .solid_line_s { border-top:1px solid #c7c7c7; width:100%}
 .solid_line_sd2 {border-top:1px solid #ececec; width:100%; display:block}
 .solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%}
-.dash_line {border-top:1px dashed #9c9c9c; margin: 0 20px}
+.dash_line {border-top:1px dashed #9c9c9c; margin: 0 10px}
 .dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}
 .line_width {padding:0 10px}
 .dline_left_gray {border-left:1px dashed #c2c2c2}

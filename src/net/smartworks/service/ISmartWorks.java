@@ -24,6 +24,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.company.CompanyGeneral;
@@ -249,6 +250,8 @@ public interface ISmartWorks {
 
 	public abstract CommunityInfo[] getMyCommunities() throws Exception;
 
+	public abstract CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception;
+	
 	public abstract CommentInstanceInfo[] getRecentCommentsInWorkManual(String workId, int length) throws Exception;
 	
 	public abstract InstanceInfo[] getRecentSubInstancesInInstance(String workId, int length) throws Exception;
@@ -542,7 +545,9 @@ public interface ISmartWorks {
 	public abstract void pushoutGroupMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void leaveGroup(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
-	
+
+	public abstract void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract MissionInstanceInfo[] getMissionInstanceList(String courseId, LocalDate fromDate, LocalDate toDate) throws Exception;
 	
 	public abstract MissionInstance getMissionById(String missionId) throws Exception;
@@ -676,5 +681,13 @@ public interface ISmartWorks {
 	public abstract EventInstanceInfo[] getCommingEventInstances(String spaceId, int maxLength) throws Exception;
 	
 	public abstract BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception;
+
+	public abstract GroupMemberList getGroupMemberInformList(String groupId) throws Exception;
+
+	public abstract UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception;
+
+	public abstract void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception;
+
 }

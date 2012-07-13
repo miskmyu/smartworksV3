@@ -50,7 +50,18 @@
 	}
 	
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
-	CommunityInfo[] communities = smartWorks.getMyCommunities();
+	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
+	
+	boolean foundInCommunities = false;
+	if(!SmartUtil.isBlankObject(communities)){
+		for(CommunityInfo community : communities){
+			if(community.getId().equals(workSpace.getId())){
+				foundInCommunities = true;
+				break;
+			}
+		}
+	}		
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -68,7 +79,7 @@
 			</a>
 		</span> 
 				
-		<span class="btn_gray ml3">
+		<span class="btn_gray">
 			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
 			<a href="" class="js_cancel_action"> 
 				<span class="txt_btn_start"></span> 
@@ -80,17 +91,17 @@
 	<!--  완료 및 취소 버튼 //-->
 
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
-	<form name="frmAccessSpace" class="fr pr10 js_validation_required">
+	<form name="frmAccessSpace" class="fr js_validation_required">
 		<div id="" class="fr form_space">
 		
 			<!--  현재사용자가 선택할 수 있는 업무공간들을 구성한다.. -->
 			<%
-			if(workSpace.getClass().equals(Department.class)){
+			if(workSpace.getClass().equals(Department.class) && foundInCommunities){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT %>">
 			<%
-			}else if(workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Course.class)){
+			}else if((workSpace.getClass().equals(Group.class)  && foundInCommunities) || workSpace.getClass().equals(Course.class)){
 			%>
 				<input name="selWorkSpace" type="hidden" value="<%=spaceId%>">
 				<input name="selWorkSpaceType" type="hidden" value="<%=ISmartWorks.SPACE_TYPE_GROUP %>">

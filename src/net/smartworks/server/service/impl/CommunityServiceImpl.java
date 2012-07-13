@@ -20,6 +20,7 @@ import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
 import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.GroupInfo;
+import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.instance.TaskInstance;
@@ -886,6 +887,30 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 
 	@Override
+	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
+
+		try{
+			DepartmentInfo[] departmentInfos = getMyDepartments();
+			GroupInfo[] groupInfos = getMyGroups();
+			int departmentInfosLength = departmentInfos.length;
+			int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+			CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+			for(int i=0; i<departmentInfosLength; i++) {
+				communityInfos[i] = departmentInfos[i];
+			}
+			for(int j=0; j<groupInfosLength; j++) {
+				communityInfos[departmentInfosLength+j] = groupInfos[j];
+			}
+			return communityInfos;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
+
+	@Override
 	public String setMyProfile(HttpServletRequest request) throws Exception {
 
 		try{
@@ -1544,6 +1569,35 @@ public class CommunityServiceImpl implements ICommunityService {
 	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
 		// 테스트용도이니 구현바람.
 		return searchCommunityMember(communityId, key);
+	}
+	@Override
+	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public GroupMemberList getGroupMemberInformList(String groupId) throws Exception {
+		// 테스트용도이니 삭제하고 구현 바람..
+		GroupMemberList memberInformList = new GroupMemberList();
+		memberInformList.setMembers(SmartTest.getAvailableChatter());
+		memberInformList.setTotalMembers(300);
+		memberInformList.setRequesters(SmartTest.getAvailableChatter());
+		memberInformList.setTotalRequesters(32);
+		return memberInformList;
+		// 테스트용도이니 삭제하고 구현 바람..
+	}
+	@Override
+	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
+		return SmartTest.getAvailableChatter();
+	}
+	@Override
+	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
+		return true;
 	}
 
 }

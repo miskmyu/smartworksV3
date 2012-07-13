@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.model.community.User"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
@@ -8,25 +9,20 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 	
-	String cid = request.getParameter("cid");
-	String userId = SmartUtil.getSpaceIdFromContentContext(cid);
-	User user = (cUser.getId().equals(userId)) ? cUser : smartWorks.getUserById(userId);
-	session.setAttribute("cid", cid);
-	session.setAttribute("wid", userId);
-	session.setAttribute("workSpace", user);
-	session.setAttribute("lastLocation", "user_space.sw");
+	String groupId = request.getParameter("groupId");
+	Group group = smartWorks.getGroupById(groupId);
+
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_user_space_page">
+<div class="js_update_group_space_page">
 
 	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
-		
-	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 	
-	<div class="js_space_instance_list">
-		<jsp:include page="/jsp/content/community/space/space_tab_timeline.jsp"></jsp:include>
+	<div class="js_space_tab_group_target">
+		<jsp:include page="/jsp/content/community/space/space_tab_group_setting.jsp"></jsp:include>
 	</div>
+	
 </div>

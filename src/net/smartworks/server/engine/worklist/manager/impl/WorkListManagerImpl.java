@@ -85,12 +85,15 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 				and tskassignee != '' ");
 		queryBuffer.append(" 			) tsktask ");
 		queryBuffer.append(" 			where 1=1 ");
+		queryBuffer.append("			and (tsktask.tskAssignee ='").append(userId).append("' or (tsktask.tskAccessLevel not in ('1','2')) or (tsktask.tskaccessLevel = '2' and tsktask.tskaccessValue like '%").append(userId).append("%')) ");
 		if (fromDate != null)
 			queryBuffer.append(" 			and tsktask.tskModifyDate < :fromDate ");
 		if (expectEndDateFrom != null)
 			queryBuffer.append(" 			and tsktask.tskExpectEndDate > :expectEndDateFrom ");
 		if (expectEndDateTo != null)
 			queryBuffer.append(" 			and tsktask.tskExpectEndDate < :expectEndDateTo ");
+		
+		
 		queryBuffer.append(" 		) task,  ");
 		queryBuffer.append(" 		swform form  ");
 		queryBuffer.append(" 		left outer join  ");
