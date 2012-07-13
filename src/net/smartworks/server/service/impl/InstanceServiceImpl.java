@@ -7309,13 +7309,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
 			
-			//내보내기로 생성된 레코드에는 instance 및 task가 없다 그래서 instance가 없다면 setRecord를 기존 레코드를 이용해 한번한후
+			//instance가 없다면 setRecord를 기존 레코드를 이용해 한번한후
 			//instance및 task가 생성된 후 참조를 보낸다
 			
 			if (prcInst == null) {
 				SwdRecord recordOfNoTask = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
-				getSwdManager().setRecord(userId, recordOfNoTask, IManager.LEVEL_ALL);
-				prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
+				getSwdManager().setRecord(recordOfNoTask.getCreationUser(), recordOfNoTask, IManager.LEVEL_ALL);
+				prcInst = getPrcManager().getProcessInst(recordOfNoTask.getCreationUser(), prcInstCond, IManager.LEVEL_ALL);
 			}
 			
 			//prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
@@ -7450,7 +7450,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstCond, IManager.LEVEL_ALL);
 
-		//내보내기로 생성된 레코드에는 instance 및 task가 없다 그래서 instance가 없다면 setRecord를 기존 레코드를 이용해 한번한후
+		//instance가 없다면 setRecord를 기존 레코드를 이용해 한번한후
 		//instance및 task가 생성된 후 전자결재를 보낸다
 		if (prcInst == null) {
 			SwdRecord recordOfNoTask = getSwdManager().getRecord(userId, domain.getObjId(), instanceId, IManager.LEVEL_ALL);
