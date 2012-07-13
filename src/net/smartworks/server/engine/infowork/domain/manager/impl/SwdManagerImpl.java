@@ -1989,7 +1989,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				//데이터 내보내기에서 연결되는 데이터가 없을경우 데이터를 새로 만든다
 				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
 				defaultSetRecord(user, mappingRecord);
-				setRecord(user, mappingRecord, null);
+				SwManagerFactory.getInstance().getSwdManager().setRecord(user, mappingRecord, null);
 				
 				setDataRefByRecord(user, mappingRecord);
 				
