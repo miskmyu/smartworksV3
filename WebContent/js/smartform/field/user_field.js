@@ -178,7 +178,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.serializeObject = function(userFields){
 		for(var j=0; j<userList.length; j++)
 			users.push({
 				id : $(userList[j]).attr('comId'),
-				name : userList[j].childNodes[0].nodeValue
+				name : $.trim(userList[j].childNodes[0].nodeValue)
 			});
 		usersJson[fieldId] =  {users: users};
 	}
