@@ -3245,6 +3245,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT) || workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
 				swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+			swdRecordCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
+
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);

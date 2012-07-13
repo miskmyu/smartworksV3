@@ -37,7 +37,7 @@ function fileUploader(groupId, target) {
         params: {
         	groupId : groupId
         },
-        sizeLimit: 64*1024*1024,
+        sizeLimit: 100*1024*1024,
         messages: {
             typeError: smartMessage.get('uploadTypeError'),
             sizeError: smartMessage.get('uploadSizeError'),
