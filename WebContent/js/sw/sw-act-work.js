@@ -1428,21 +1428,12 @@ $(function() {
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
 		if(isEmpty(workSpacePage)) return false;
-		var target = workSpacePage.find('.js_form_task_email');
-		if(target.is(':visible')){
-			target.hide().html('');
-			workSpacePage.find('.js_btn_save').show().siblings().hide();						
-			workSpacePage.find('.js_btn_modify').show();						
-			return false;
-		}
-		if(!isEmpty(workSpacePage.find('.js_form_task:visible'))) return false;
+		var target = $('#content');
 		$.ajax({
-			url : 'append_task_approval.sw',
+			url : 'new_mail.sw',
 			data : {},
 			success : function(data, status, jqXHR) {
 				target.html(data).show();
-				workSpacePage.find('.js_btn_do_approval').show().siblings().hide();
-				workSpacePage.find('.js_btn_cancel').show();						
 			},
 			error : function(xhr, ajaxOptions, thrownError){
 				

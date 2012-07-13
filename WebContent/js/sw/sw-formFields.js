@@ -731,6 +731,8 @@ function loadWriteMailFields() {
 			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 			var attachments = writeMailField.attr('attachments');
+			
+			contents = "<html><body>" + $("#content").html() + "</body></html>";
 
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
