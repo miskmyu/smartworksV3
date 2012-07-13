@@ -106,13 +106,16 @@
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
 	                <div class="noti_pic mr7"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></div>
-	                <div class="noti_in_bodytitle">
+	                <div class="noti_in_bodytitle case_2line">
 	                    <div>
 		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
 		                    <span class="t_date"><%=instance.getCreatedDate().toLocalString()%></span>
 						</div>
-                    	<div class="title_picico"><%=instance.getSubject()%></div>
-                    	<div class="icon_pworks t_date"> <%=work.getFullpathName() %></div> 
+						<div>
+                    		<span class="icon_pworks t_date"> <%=work.getFullpathName() %>
+                    			<span class="title_picico ml5"><%=instance.getSubject()%></span>
+                    		</span> 
+                    	</div>
 	                </div>
 		                    
 	            <!-- 우측 버튼-->
