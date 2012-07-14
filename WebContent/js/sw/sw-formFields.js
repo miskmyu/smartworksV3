@@ -731,9 +731,22 @@ function loadWriteMailFields() {
 			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 			var attachments = writeMailField.attr('attachments');
+			var header = 	'<link href="../css/default.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/black/layout.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/black/detail.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/black/chat.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/black/form.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/black/pop.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />' +
+							'<link href="../css/ext/ext-all.css" type="text/css" rel="stylesheet" />' +
+							'<link href="../css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>' +
+							'<link href="../css/fullcalendar/fullcalendar.css" type="text/css" rel="stylesheet"/>' +
+							'<link href="../smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
+							'<link rel="shortcut icon" href="../images/favicon/smartworks.ico"/>' +
+							'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 			
-			contents = "<html><body>" + $("#content").html() + "</body></html>";
-
+			contents = "<html>" + header + "<body>" + $("#content").html() + "</body></html>";
+			console.log('content=', contents);
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
 				fieldId: "receivers",
