@@ -146,4 +146,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_invite_group_members.jsp", "");
 	}
 
+	@RequestMapping("/pop_new_file_folder")
+	public ModelAndView popNewFileFolder(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_file_folder.jsp", "");
+	}
+
 }

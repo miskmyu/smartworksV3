@@ -850,6 +850,35 @@ smartPop = {
 				}
 			});
 		});
-	}
+	},
+
+	createFileFolder : function(workSpaceId, parentId, folderId, folderName){
+		$.get("pop_new_file_folder.sw?workSpaceId=" + workSpaceId + "&parentId="+ parentId + "&folderId=" + folderId + "&folderName=" + folderName, function(data){
+			$(data).modal({
+				opacity: 10,
+				overlayCss: {backgroundColor:"#fff"},
+				containerCss:{
+					height:200,
+					width:460
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_new_folder').die('click');
+					$('.js_close_new_folder').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('input[name="txtFolderName"]').focus();
+					$('input[name="txtFolderName"]').keypress(function (e) {
+						var e = window.event || e;
+						var keyCode = e.which || e.keyCode;
+				        if (keyCode == $.ui.keyCode.ENTER) {
+				            return false;
+				        }
+				    });
+				}
+			});
+		});
+	},
 
 };

@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.mail.MailFolder;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
@@ -40,6 +41,13 @@ public class MailController extends ExceptionInterceptor {
 	public ModelAndView newMail(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_mail.jsp", "");
+	}
+
+	@RequestMapping(value = "/new_mail_post", method = RequestMethod.POST)
+	public ModelAndView sendMailPost(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String mailContents = (String)requestBody.get("contents");
+		request.setAttribute("mailContents", mailContents);
+		return SmartUtil.returnMnv(request, "jsp/content/work/start/new_mail.jsp?sendType=" + MailFolder.SEND_TYPE_WORK_CONTENT, "");
 	}
 
 	@RequestMapping("/my_all_mail_folders")

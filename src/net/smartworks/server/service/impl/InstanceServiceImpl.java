@@ -7734,5 +7734,15 @@ public class InstanceServiceImpl implements IInstanceService {
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
 		return getBoardInstancesByWorkSpaceId(spaceId, maxLength);
 	}
+	@Override
+	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -89,6 +89,10 @@ function submitForms(action) {
 	MailInstance instance = null;
 	if(!SmartUtil.isBlankObject(folderId) && !SmartUtil.isBlankObject(msgId)){
 		instance = smartWorks.getMailInstanceById(folderId, msgId, sendType);
+	}else if(sendType == MailFolder.SEND_TYPE_WORK_CONTENT){
+		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
+		instance = new MailInstance();
+		instance.setMailContents(mailContents);
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

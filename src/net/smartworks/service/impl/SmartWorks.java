@@ -1537,4 +1537,14 @@ public class SmartWorks implements ISmartWorks {
 		return communityService.canIUploadToWorkSpace(workSpaceId, workId);
 	}
 
+	@Override
+	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.createNewFileFolder(requestBody, request);
+	}
+
+	@Override
+	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.setFileFolder(requestBody, request);
+	}
+
 }

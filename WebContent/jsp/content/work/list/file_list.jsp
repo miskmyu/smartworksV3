@@ -71,7 +71,7 @@
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
-		if(isEmpty(progressSpan)) progressSpan = fileList.find('.js_search_filter').next('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = fileList.find('.js_file_list_header span.js_progress_span');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
@@ -85,6 +85,8 @@
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName();
 	int displayType = (SmartUtil.isBlankObject(wid)) ? FileCategory.DISPLAY_ALL : FileCategory.DISPLAY_BY_CATEGORY;
 
+	FileCategoryInfo[] categories = smartWorks.getFileCategoriesByType(displayType, wid, "");
+	
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "file_list.sw");
@@ -106,36 +108,47 @@
 		<ul class="portlet_r" style="display: block;">
 		
 			<!-- 왼쪽 폴더영역이  접혔을때 class:lft_fd를 추가 , 펼쳤을때는 class:lft_fd를 지움 --> 
-			<div class=" contents_space oh lft_fd"> 
+			<div class="contents_space oh lft_fd"> 
 				<!-- 컨텐츠 상단 영역 -->
-				<div class="">
+				<div class="js_file_list_header" style="height:25px">
 					<!-- 폴더구분  -->
 					<select class="js_file_display_by fl">
-					  <option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>
-					  <option value=<%=FileCategory.DISPLAY_BY_WORK %>><fmt:message key="space.title.by_work"/></option>
-					  <option value=<%=FileCategory.DISPLAY_BY_YEAR %>><fmt:message key="space.title.by_year"/></option>
-					  <option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
-					  <option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_WORK %>><fmt:message key="space.title.by_work"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_YEAR %>><fmt:message key="space.title.by_year"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
 					</select>
+					<select class="js_file_category_list fl">
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								FileCategoryInfo category = categories[i];
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+					</select>
+					<span class="js_progress_span fl"></span>
 					<!-- 폴더 구분//-->
 					<!-- 우측 검색영역 -->
-						<div class="list_title_space js_work_list_title">
-							<%-- <div class="title"><fmt:message key="common.title.instance_list" /></div>	 --%>				
-								<div class="title_line_options fr">
-									<form name="frmSearchInstance" class="po_left">
-										<span class="js_progress_span"></span>
-										<div class="srch_wh srch_wsize m0">
-											<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
-											<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-										</div>
-									</form>					
+					<div class="list_title_space js_work_list_title">
+						<div class="title_line_options fr">
+							<form name="frmSearchInstance" class="po_left">
+								<div class="srch_wh srch_wsize m0">
+									<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 								</div>
+							</form>					
 						</div>
-						<!-- 우측 검색영역//-->
+					</div>
+					<!-- 우측 검색영역//-->
 				</div>
 				<!-- 컨텐츠 상단 영역 //-->
 				<!-- 접기/열기 버튼 -->
-				<div class="btn_fold"><a href=""></a></div>
+				<div class="btn_fold"><a href="" class="js_file_category_tree"></a></div>
 				<!-- 접기/열기 버튼 -->		
 				<%
 				if(displayType!=FileCategory.DISPLAY_ALL){
@@ -146,13 +159,9 @@
 						<!-- 카테고리 -->
 						<div class="pop_list_area file_fd">
 							<!-- 우측 버튼영역 -->
-							<div class="tab_buttons">
-								<a href="">
-									<span class="btn_bfolder_add"></span>
-								</a>
-							</div>
+							<div class="tab_buttons js_add_file_folder_btn"><a href=""><span class="btn_bfolder_add"></span></a></div>
 							<!-- 우측 버튼영역 -->
-					
+
 							<ul class="js_file_categories">
 								<jsp:include page="/jsp/content/work/list/categories_by_type.jsp">
 									<jsp:param value="<%=displayType%>" name="displayType"/>
