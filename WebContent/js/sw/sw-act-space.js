@@ -254,7 +254,23 @@ $(function() {
 	
 	$('.js_image_display_by').live('change', function(e){
 		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
+		var wid = imageList.find('.js_image_instance_list_page').attr('spaceId');
 		var displayType = input.attr('value');
+		smartPop.progressCont(imageList.find('.js_image_list_header span.js_progress_span'));
+		$.ajax({
+			url : "get_image_category_list_page.sw",
+			data : {
+				displayType : displayType,
+				wid : wid,
+			},
+			success : function(data, status, jqXHR) {
+				imageList.find('.js_image_category_list').html(data.listPage);
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+			}
+		});
+
 		$.ajax({
 			url : "image_instance_list.sw",
 			data : {
@@ -264,18 +280,24 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
+				imageList.find('.js_image_instance_list_page').attr('displayType', displayType).attr('categoryId', "AllFiles");
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
 		
 	});
-	$('a.js_image_instance_list').live('click', function(e){
+	
+	$('a.js_image_instance_item').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		var imageInstanceList = input.parents('.js_image_instance_list_page');
 		var parentId = input.attr('categoryId');
 		var displayType = imageInstanceList.attr('displayType');
+		input.parents('.js_image_list_page').find('.js_image_category_list option[value="' + parentId + '"]').attr('selected', 'true');
+		smartPop.progressCont(imageInstanceList.parents('.js_image_list_page').find('.js_image_list_header span.js_progress_span'));
 		$.ajax({
 			url : "image_instance_list.sw",
 			data : {
@@ -285,19 +307,62 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
+				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
 		
 	});
+
+	$('.js_image_category_list').live('change', function(e){
+		var input = $(targetElement(e));
+		var imageInstanceList = input.parents('.js_image_list_page').find('.js_image_instance_list_page');
+		var displayType = imageInstanceList.attr('displayType');
+		var parentId = input.find('option:selected').attr('value');
+		smartPop.progressCont(imageInstanceList.parents('.js_image_list_page').find('.js_image_list_header span.js_progress_span'));
+		$.ajax({
+			url : "image_instance_list.sw",
+			data : {
+				displayType : displayType,
+				parentId : parentId
+			},
+			success : function(data, status, jqXHR) {
+				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
+				target.html(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;		
+	});
+	
 	
 	$('.js_file_display_by').live('change', function(e){
 		var input = $(targetElement(e));
 		var fileList = input.parents('.js_file_list_page');
 		var displayType = input.attr('value');
 		var wid = fileList.attr("workSpaceId");
+
+		smartPop.progressCont(fileList.find('.js_file_list_header span.js_progress_span'));
+		$.ajax({
+			url : "get_file_category_list_page.sw",
+			data : {
+				displayType : displayType,
+				wid : wid,
+				parentId : ""
+			},
+			success : function(data, status, jqXHR) {
+				fileList.find('.js_file_category_list').html(data.listPage);
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+			}
+		});
+
 		$.ajax({
 			url : "categories_by_type.sw",
 			data : {
@@ -308,23 +373,55 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var target = fileList.find('.js_file_categories');
 				target.html(data);
+				if(displayType == '1'){
+					fileList.find('.js_add_file_folder_btn').css('visibility', 'visible');
+				}else{
+					fileList.find('.js_add_file_folder_btn').css('visibility', 'hidden');			
+				}
 				fileList.attr('displayType', displayType);
 				fileList.attr('categoryId', "AllFiles");
+				smartPop.closeProgress();
 				selectListParam();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
 			}
 		});
 		return false;
 		
 	});
-	$('.js_file_category_list').live('click', function(e){
+
+	$('.js_file_category_item').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		input.parents('.js_file_list_page').attr('categoryId', input.attr('categoryId'));
 		selectListParam();
 		return false;		
 	});
 	
+	$('.js_file_category_list').live('change', function(e){
+		var input = $(targetElement(e));
+		input.parents('.js_file_list_page').attr('categoryId', input.find('option:selected').attr('value'));
+		selectListParam();
+		return false;		
+	});
+	
+	$('.js_file_category_tree').live('click', function(e){
+		var input = $(targetElement(e)).parent();
+		if(input.parent().hasClass('lft_fd')) input.parent().removeClass('lft_fd');
+		else input.parent().addClass('lft_fd');
+		return false;		
+	});
+		
+	$('.js_add_file_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var fileList = input.parents('.js_file_list_page');
+		var workSpaceId = fileList.attr("workSpaceId");
+		var parentId = fileList.attr("categoryId");
+		smartPop.createFileFolder(workSpaceId, parentId, null, null);
+		return false;
+		
+	});
+		
 	$('a.js_file_instance_list').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		var fileList = input.parents('.js_file_list_page');

@@ -731,10 +731,9 @@ function loadWriteMailFields() {
 			var contents = writeMailField.attr('contents');
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 			var attachments = writeMailField.attr('attachments');
-
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
-				fieldId: "receivers",
+				fieldId: "emailReceivers",
 				fieldName: receiversTitle,
 				columns: 1,
 				multiUsers: true,
@@ -746,7 +745,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
-				fieldId: "ccReceivers",
+				fieldId: "emailCcReceivers",
 				fieldName: ccReceiversTitle,
 				columns: 1,
 				multiUsers: true,
@@ -758,7 +757,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
-				fieldId: "bccReceivers",
+				fieldId: "emailBccReceivers",
 				fieldName: bccReceiversTitle,
 				columns: 1,
 				multiUsers: true,
@@ -770,7 +769,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
 				container: gridRow,
-				fieldId: "subject",
+				fieldId: "emailSubject",
 				fieldName: subjectTitle,
 				columns: 1,
 				value: subject,
@@ -780,7 +779,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.CheckBoxBuilder.buildEx({
 				container: gridRow,
-				fieldId: "priority",
+				fieldId: "emailPriority",
 				fieldName: priorityTitle,
 				columns: 1,
 				required: false
@@ -789,7 +788,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
 				container: gridRow,
-				fieldId: "attachments",
+				fieldId: "emailAttachments",
 				fieldName: attachmentsTitle,
 				columns: 1,
 				required: false
@@ -800,7 +799,7 @@ function loadWriteMailFields() {
 			gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
 			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 				container: gridRow,
-				fieldId: "contents",
+				fieldId: "emailContents",
 				fieldName: "",
 				columns: 1,
 				value: contents,
@@ -808,7 +807,7 @@ function loadWriteMailFields() {
 			});
 			gridRow.find('.form_label').hide();
 			gridRow.find('.form_value').css({width:"100%"});
-			gridRow.find('#contents').css({height:"400px"});
+			gridRow.find('#emailContents').css({height:"400px"});
 		}		
 	}
 };

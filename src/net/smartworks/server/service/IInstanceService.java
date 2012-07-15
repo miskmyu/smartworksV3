@@ -159,4 +159,8 @@ public interface IInstanceService {
 	
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception;
 	
+	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

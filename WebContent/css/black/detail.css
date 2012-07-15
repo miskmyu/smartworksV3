@@ -373,6 +373,13 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .right_auto2 { display: block; padding-left:320px; width:auto}
 .left_im2 table, .right_auto2 table { width:100% ; min-width:inherit}
 
+/* 2단구성 - 파일 공간 */
+.left_fold_area { float:left; width:200px}
+.right_content_area {margin:0 0 0 217px}
+/* 왼쪽 폴더 영역이 접혔을때 */
+.lft_fd .left_fold_area {display:none}
+.lft_fd .right_content_area {margin:0}
+.left_fold_area .tab_buttons {margin: 0 2px 0 0}
 
 /* Approval */
 .approval_section, .forward_section { padding:10px}

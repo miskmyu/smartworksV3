@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.server.service.util.ModelConverterInfo"%>
+<%@page import="net.smartworks.server.service.util.ModelConverter"%>
 <%@page import="org.apache.commons.codec.digest.DigestUtils"%>
 <%@page import="net.smartworks.model.community.info.CommunityInfo"%>
 <%@page import="java.util.Date"%>
@@ -566,6 +568,9 @@
 			SwManagerFactory.getInstance().getSwoManager().setUser(null, swoUser, null);
 		}
 	} */
+	
+/* 	String a =ModelConverter.getDepartmentInfoFullpathNameByDepartmentId("dept_d5ebabda5cfe4ccbb5374dd68395d329");
+	System.out.print(a); */
 %>
 <textarea style="width:800px;height:400px;">
 </textarea>

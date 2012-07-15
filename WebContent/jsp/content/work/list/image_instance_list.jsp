@@ -83,7 +83,7 @@ function viewImage(img){
 				<!--폴더 목록1 -->
 				<li>
 					<div class="folder_bg">
-						<a href="image_instance_list.sw" class="js_image_instance_list" categoryId="<%=category.getId()%>">
+						<a href="image_instance_list.sw" class="js_image_instance_item" categoryId="<%=category.getId()%>">
 							<div class="thum_picture"><img style="width:70px;height:70px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
 						</a>
 					</div>
@@ -111,7 +111,8 @@ function viewImage(img){
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
 						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
 						</a>												
-						<div style="float:right"><%=image.getLastModifiedDate().toLocalString()%></div>
+						<div style="float:right">파일이름<%=image.getFileName()%></div>
+						<div style="float:right"><%=image.getOwner().getLongName()%> <%=image.getLastModifiedDate().toLocalString()%></div>
  					</div>
  				</li>
 

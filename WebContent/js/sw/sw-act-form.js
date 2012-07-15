@@ -227,7 +227,7 @@ $(function() {
 		refreshRecord(input, paramsJson);
 	});
 
-	$('form[name="frmSmartForm"] .js_refFormField').live('change', function(e) {
+	$('form[name="frmSmartForm"] .js_type_refFormField').live('change', function(e) {
 		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
 		var paramsJson = {};
