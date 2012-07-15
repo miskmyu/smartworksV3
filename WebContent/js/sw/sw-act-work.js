@@ -1264,19 +1264,19 @@ $(function() {
 
 	$('a.js_todaypicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parent();
-		input.prev('.js_todaypicker').datepicker("show");
+		input.prevAll('.js_todaypicker').datepicker("show");
 		return false;
 	});
 
 	$('a.js_timepicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parent();
-		input.prev('.js_timepicker').timepicker("show");
+		input.prevAll('.js_timepicker').timepicker("show");
 		return false;
 	});
 	
 	$('a.js_todaytimepicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parent();
-		input.prev('.js_todaytimepicker').datetimepicker("show");
+		input.prevAll('.js_todaytimepicker').datetimepicker("show");
 		return false;
 	});
 
@@ -1328,6 +1328,10 @@ $(function() {
 	$('a.js_workitempicker_button').live('click', function(e) {
 		var target = $(targetElement(e)).parents('td.js_type_refFormField:first');
 		var formId = target.attr('refForm');
+		if(isEmpty(formId)){
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("noRefFormDefinedError"));
+			return false;
+		}
 		smartPop.selectWorkItem(formId, target);
 		return false;
 	});

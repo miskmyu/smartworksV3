@@ -187,6 +187,8 @@ smartMessage.bundle['en'] = {
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
 	noneDisplayFieldError : "Display field is none. Please select more than one Display field.",
 	eventOldEndDateError : "The End Date of Event is before the Start Date. Please retry with valid End Date", 
+	noRefFormDefinedError : "Refered Work has not been defined. Please contact the Admonistrator!",
+	notRefFormWorkingError : "Refered Work is not working. Please contact the Admonistrator!",
 
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",

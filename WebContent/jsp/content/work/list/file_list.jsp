@@ -25,7 +25,7 @@
 		if(isEmpty(progressSpan))
 			progressSpan = $('.js_work_list_title').find('.js_progress_span:first');
 		if(isGray)
-			smartPop.progressContGray(progressSpan);
+			smartPop.progressContGray(progressSpan); 
 		else
 			smartPop.progressCont(progressSpan);
 		console.log(JSON.stringify(paramsJson));

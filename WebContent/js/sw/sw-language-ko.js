@@ -193,7 +193,9 @@ smartMessage.bundle['ko'] = {
 	wsdlNotFetchedError : "WSDL 가져오기를 실행하지 않았습니다. WSDL 가져오기를 실행한 후 다시 하시기 바랍니다.",
 	noneDisplayFieldError : "보이는 항목이 존재하지 않습니다. 보이는 항목은 최소한 한개 이상이여야 합니다.",
 	eventOldEndDateError : "이벤트의 종료일자가 시작일자보자 이전일자입니다. 수정 후 다시 하시기 바랍니다.", 
-		
+	noRefFormDefinedError : "참고할 업무가 지정되지 않았습니다. 관리자에게 확인바랍니다.",
+	notRefFormWorkingError : "참고할 업무가 정상적으로 작동하지 않습니다. 관리자에게 확인바랍니다.",
+	
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
 	missingCommentTaskForward : "참조의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",

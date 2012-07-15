@@ -33,7 +33,9 @@
 
 	String instId = SmartUtil.getSpaceIdFromContentContext(cid);
 	String workId = request.getParameter("workId");
+	String formId = request.getParameter("formId");
 	String taskInstId = request.getParameter("taskInstId");
+	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
 	InformationWorkInstance instance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	User owner = instance.getOwner();
