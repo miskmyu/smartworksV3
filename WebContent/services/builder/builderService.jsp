@@ -1,11 +1,11 @@
+<%@page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%> 
 <%@page import="net.smartworks.server.engine.process.approval.model.AprApprovalDef"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
 <%@page import="net.smartworks.server.engine.process.approval.model.AprApprovalLineDefCond"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebServiceParameter"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebService"%>
 <%@page import="net.smartworks.server.engine.config.model.SwcWebServiceCond"%>
-<%@page import="net.smartworks.server.engine.config.manager.ISwcManager"%>
-<%@ page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%>  
+<%@page import="net.smartworks.server.engine.config.manager.ISwcManager"%> 
 <%@page import="net.smartworks.server.engine.resource.util.lang.ExceptionUtil"%>
 <%@page import="net.smartworks.server.engine.resource.model.IFormModelList"%>
 <%@page import="net.smartworks.server.engine.resource.model.enums.FormFieldEnum"%>
@@ -752,12 +752,12 @@
 		} else if(method.equals("saveForm")) {
 			// TODO 수정 필요
 			String formId = request.getParameter("formId");
-			
-			String name = StringUtil.toNotNull(request.getParameter("name"));
+
+			String name = new String(request.getParameter("name").getBytes("ISO-8859-1"), "UTF-8");
 			String keyword = StringUtil.toNotNull(request.getParameter("keyword"));
 			String ownerDept = StringUtil.toNotNull(request.getParameter("ownerDept"));
 			String owner = StringUtil.toNotNull(request.getParameter("owner"));
-			String description = StringUtil.toNotNull(request.getParameter("description"));
+			String description = new String(request.getParameter("description").getBytes("ISO-8859-1"), "UTF-8");
 			String type = StringUtil.toNotNull(request.getParameter("type"));
 			
 			IFormModel form = rscMgr.retrieveForm(userId, formId, 1);
@@ -976,7 +976,8 @@
 				} else if (method.equals("cloneForm")) {
 			String formId = request.getParameter("formId");
 			String toPkgId = request.getParameter("toPackageId");
-			String newFormName = request.getParameter("newFormName");
+			String newFormName = new String(request.getParameter("newFormName").getBytes("ISO-8859-1"), "UTF-8");
+			//String newFormName = request.getParameter("newFormName");
 			IFormModel form = rscMgr.cloneForm(userId, formId, 1, toPkgId, 1, newFormName);
 			buffer.append(convert(form));
 	

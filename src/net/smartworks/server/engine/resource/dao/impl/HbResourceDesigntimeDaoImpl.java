@@ -1467,21 +1467,21 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 	 */
 	public IFormModel updateForm(String userId, IFormModel obj) throws SmartServerRuntimeException {
 		// TODO interceptor로 빠져야 할 내용 Start
-		//String type = obj.getType();
-		//if (type != null && type.equalsIgnoreCase(IFormModel.TYPE_SINGLE)) {
-		//	if (obj.getPackageId() != null) {
-		//		IPackageModel pkg = this.retrievePackage(obj.getPackageId(), obj.getVersion());
-		//		if (pkg != null && !CommonUtil.isEqual(obj.getName(), pkg.getName())) {
-		//			pkg.setName(obj.getName());
-		//			this.update(userId, pkg);
-		//		}
-		//	}
-		//}
+		String type = obj.getType();
+		if (type != null && type.equalsIgnoreCase(IFormModel.TYPE_SINGLE)) {
+			if (obj.getPackageId() != null) {
+				IPackageModel pkg = this.retrievePackage(obj.getPackageId(), obj.getVersion());
+				if (pkg != null && !CommonUtil.isEqual(obj.getName(), pkg.getName())) {
+					pkg.setName(obj.getName());
+					this.update(userId, pkg);
+				}
+			}
+		}
 		// TODO interceptor로 빠져야 할 내용 End
 		
-		//obj.setModifier(userId);
-		//obj.setModifiedTime(new Date());
-		//this.getHibernateTemplate().update(obj);
+		obj.setModifier(userId);
+		obj.setModifiedTime(new Date());
+		this.getHibernateTemplate().update(obj);
 		
 		// 2. FORM의 XML내의  메타정보 변경
 		this.updateFormContentMetaInfo(obj);
@@ -1490,7 +1490,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		//this.updateWorkTypeMetaInfo(obj);
 		
 		// 4. 도메인 폼  메타정보 변경
-		//this.updateDomainMetaInfo(obj);
+		this.updateDomainMetaInfo(obj);
 		
 		//return (HbFormModel)this.getHibernateTemplate().get(HbFormModel.class, obj.getId());
 		return obj;
