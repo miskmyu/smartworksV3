@@ -108,7 +108,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	
 /*Left Navigation*/	
 #nav {background-color:#6b6b6b; float:left; width:226px; height:100%; z-index:30}
-
+/* In Hover Actions */
 li.ctgr_action_item .ctgr_action, 
 li .dep .ctgr_action,
 li.group_action_item a .group_action, 

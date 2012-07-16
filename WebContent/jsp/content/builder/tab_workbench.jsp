@@ -64,11 +64,14 @@
 				<!-- 설명 -->
 				<div>
 					<table cellspacing="0" cellpadding="0" border="0">
+					<colgroup>
+						<col width="110px">
+						<col width="">
+					</colgroup>
 						<tbody>
-							<tr></tr>
 							<tr>
-								<td class="bul_dot" width="80"><fmt:message key="common.title.desc"/> :</td>
-								<td class="content" width=""><%=CommonUtil.toNotNull(work.getDesc()) %></td>
+								<td class="bul_dot"><fmt:message key="common.title.desc"/> :</td>
+								<td class="content"><%=CommonUtil.toNotNull(work.getDesc()) %></td>
 							</tr>
 							<tr>
 								<td class="bul_dot"><fmt:message key="common.title.owner"/> :</td>
