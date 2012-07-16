@@ -379,7 +379,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 /* 왼쪽 폴더 영역이 접혔을때 */
 .lft_fd .left_fold_area {display:none}
 .lft_fd .right_content_area {margin:0}
-.left_fold_area .tab_buttons {margin: 0 2px 0 0}
+.left_fold_area .tab_buttons {margin: 0 2px 0 0; padding:0}
 
 /* Approval */
 .approval_section, .forward_section { padding:10px}
