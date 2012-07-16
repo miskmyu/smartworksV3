@@ -29,6 +29,12 @@ if(!SmartUtil.isBlankObject(categories) && categories.length>0){
 					<span class="<%=category.getIconClass()%>"></span>
 					<span><%=category.getName() %> (<%=category.getLength() %>)</span> 
 				</a> 
+				<!-- 삭제 , 수정버튼 -->
+				<span class="ctgr_action">
+					<span class="btn_remove_category" title="폴더삭제"></span>
+					<span class="btn_text_category" categorydesc="null" title="폴더 이름수정"></span>
+				</span>
+				<!-- 삭제 , 수정버튼//-->
 			</span>
 		</li>
 <%

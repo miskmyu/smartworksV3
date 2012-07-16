@@ -37,8 +37,8 @@
 					<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="<%=classType%>">
 						<span class="<%=work.getIconClass()%>"></span>
 						<span><%=work.getName()%></span>
-					</a>
 					<div class="check_option"><div title="<fmt:message key='nav.works.my_favorite_works'/>" class="js_check_favorite_work icon_fvrt <%if(((SmartWorkInfo)work).isFavorite()){ %> checked <%} %>" workId="<%=work.getId() %>" ></div></div>
+					</a>
 				</li>
 				
 			<%
