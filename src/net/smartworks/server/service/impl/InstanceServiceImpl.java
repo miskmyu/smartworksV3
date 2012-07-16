@@ -89,6 +89,9 @@ import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.folder.manager.IFdrManager;
+import net.smartworks.server.engine.folder.model.FdrFolder;
+import net.smartworks.server.engine.folder.model.FdrFolderCond;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
@@ -217,6 +220,9 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	private static IAprManager getAprManager() {
 		return SwManagerFactory.getInstance().getAprManager();
+	}
+	private static IFdrManager getFdrManager() {
+		return SwManagerFactory.getInstance().getFdrManager();
 	}
 
 	@Autowired
@@ -4574,16 +4580,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			fileWorkCond.setTskAssigneeOrSpaceId(workSpaceId);
 			fileWorkCond.setTskRefType(TskTask.TASKREFTYPE_IMAGE);
 
-			switch (displayBy) {
-			case FileCategory.DISPLAY_BY_CATEGORY:
-				fileWorkCond.setFolderId(parentId);
-				break;
-			case FileCategory.DISPLAY_BY_YEAR:
-				fileWorkCond.setWrittenTimeMonthString(parentId);
-				break;
-			case FileCategory.DISPLAY_BY_OWNER:
-				fileWorkCond.setTskAssignee(parentId);
-				break;
+			if(!FileCategory.ID_ALL_FILES.equals(parentId)) {
+				switch (displayBy) {
+				case FileCategory.DISPLAY_BY_CATEGORY:
+					fileWorkCond.setFolderId(parentId);
+					break;
+				case FileCategory.DISPLAY_BY_YEAR:
+					fileWorkCond.setWrittenTimeMonthString(parentId);
+					break;
+				case FileCategory.DISPLAY_BY_OWNER:
+					fileWorkCond.setTskAssignee(parentId);
+					break;
+				}
 			}
 
 			FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
@@ -7736,13 +7744,60 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			User cUser = SmartUtil.getCurrentUser();
+			String userId = cUser.getId();
+			String companyId = cUser.getCompanyId();
+
+			String workSpaceId = (String)requestBody.get("workSpaceId");
+
+			Map<String, Object> frmNewFileFolder = (Map<String, Object>)requestBody.get("frmNewFileFolder");
+			Set<String> keySet = frmNewFileFolder.keySet();
+			Iterator<String> itr = keySet.iterator();
+
+			String txtFolderName = null; 
+
+			while (itr.hasNext()) {
+				String fieldId = (String)itr.next();
+				Object fieldValue = frmNewFileFolder.get(fieldId);
+				if(fieldValue instanceof String) {
+					String valueString = (String)fieldValue;
+					if(fieldId.equals("txtFolderName"))
+						txtFolderName = valueString;
+				}
+			}
+
+			FdrFolderCond fdrFolderCond = new FdrFolderCond();
+			fdrFolderCond.setCompanyId(companyId);
+			fdrFolderCond.setParentId(FdrFolder.CATEGORY_ROOT_NAME_PKG);
+			fdrFolderCond.setCreationUser(userId);
+
+			long folderCount = getFdrManager().getFolderSize(userId, fdrFolderCond);
+
+			FdrFolder fdrFolder = new FdrFolder();
+			fdrFolder.setCompanyId(companyId);
+			fdrFolder.setParentId(FdrFolder.CATEGORY_ROOT_NAME_PKG); //TO-DO : 폴더하위구조 구현 시 parentId 받아서 처리
+			fdrFolder.setName(txtFolderName);
+			//fdrFolder.setDescription(description); TO-DO : 폴더에 대한 설명
+			fdrFolder.setDisplayOrder((int)folderCount);
+			fdrFolder.setWorkspaceId(workSpaceId);
+			fdrFolder.setRefType(TskTask.TASKREFTYPE_FILE); //TO-DO : 사진 메뉴에서도 폴더 생성 가능하게 될 시에 구현 (사진폴더 - 파일폴더)
+
+			getFdrManager().createFolder(userId, fdrFolder);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
 	}
 	@Override
 	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
 	}
 
 }
