@@ -18,6 +18,7 @@ public class MailFolder extends BaseObject {
 	public static final int SEND_TYPE_REPLY_ALL	= 2;
 	public static final int SEND_TYPE_FORWARD	= 3;
 	public static final int SEND_TYPE_DRAFTS	= 4;
+	public static final int SEND_TYPE_WORK_CONTENT = 5;
 
 	public static final String ID_ROOT 		= "0";
 		

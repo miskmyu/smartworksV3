@@ -135,7 +135,7 @@ if (instances != null) {
 				<!-- 인스턴스 상태 및 시작자 사진표시 -->
 				
 				<!-- 인스턴스 상세내용 표시 -->
-				<div class="noti_in_m">
+				<div class="noti_in_m case_2line">
 					<!--  시작자 이름 -->
 					<%
 					if(cUser.getId().equals(owner.getId())){
@@ -476,9 +476,9 @@ if (instances != null) {
 						<span class="t_date"><%=work.getFullpathName()%></span>
 					</a>
 					<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>" class="js_content">
-						<span><%=workInstance.getSubject()%></span> 
+						<span class="tb"><%=workInstance.getSubject()%></span> 
 					</a>
-					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=workInstance.getSubInstanceCount() %></b>]</font><%} %>
+					<%if(workInstance.getSubInstanceCount()>0){ %><font class="t_sub_count tb">[<%=workInstance.getSubInstanceCount() %>]</font><%} %>
 					<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 					
 				</div>

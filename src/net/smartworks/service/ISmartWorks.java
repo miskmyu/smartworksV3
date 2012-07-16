@@ -690,4 +690,8 @@ public interface ISmartWorks {
 	
 	public abstract boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception;
 
+	public abstract void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

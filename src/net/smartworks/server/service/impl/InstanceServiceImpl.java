@@ -3245,6 +3245,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(workId.equals(SmartWork.ID_BOARD_MANAGEMENT) || workId.equals(SmartWork.ID_EVENT_MANAGEMENT))
 				swdRecordCond.setWorkSpaceIdIns(workSpaceIdIns);
 
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+			swdRecordCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
+
 			swdRecordCond.setLikeAccessValues(workSpaceIdIns);
 
 			long totalCount = getSwdManager().getRecordSize(userId, swdRecordCond);
@@ -7730,6 +7733,16 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
 		return getBoardInstancesByWorkSpaceId(spaceId, maxLength);
+	}
+	@Override
+	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

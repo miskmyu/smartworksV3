@@ -1133,13 +1133,13 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				} else {
 					buf.append(" and");
 				}
-				buf.append(" obj.workSpaceId not in (");
+				buf.append(" (workspaceId is null or obj.workSpaceId not in (");
 				for (int j=0; j<workSpaceIdNotIns.length; j++) {
 					if (j != 0)
 						buf.append(", ");
 					buf.append(":workSpaceIdNotIn").append(j);
 				}
-				buf.append(")");
+				buf.append("))");
 				
 	//				buf.append(" where obj.workSpaceId not in " + workSpaceIdNotIns);
 	//			} else {

@@ -25,7 +25,7 @@
 		if(isEmpty(progressSpan))
 			progressSpan = $('.js_work_list_title').find('.js_progress_span:first');
 		if(isGray)
-			smartPop.progressContGray(progressSpan);
+			smartPop.progressContGray(progressSpan); 
 		else
 			smartPop.progressCont(progressSpan);
 		console.log(JSON.stringify(paramsJson));
@@ -71,7 +71,7 @@
 			}
 			paramsJson['frmSearchFilters'] = searchFilterArray;
 		}
-		if(isEmpty(progressSpan)) progressSpan = fileList.find('.js_search_filter').next('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = fileList.find('.js_file_list_header span.js_progress_span');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
@@ -85,6 +85,8 @@
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName();
 	int displayType = (SmartUtil.isBlankObject(wid)) ? FileCategory.DISPLAY_ALL : FileCategory.DISPLAY_BY_CATEGORY;
 
+	FileCategoryInfo[] categories = smartWorks.getFileCategoriesByType(displayType, wid, "");
+	
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "file_list.sw");
@@ -104,29 +106,62 @@
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
-
-			<div class=" contents_space oh">  
+		
+			<!-- 왼쪽 폴더영역이  접혔을때 class:lft_fd를 추가 , 펼쳤을때는 class:lft_fd를 지움 --> 
+			<div class="contents_space oh lft_fd"> 
+				<!-- 컨텐츠 상단 영역 -->
+				<div class="js_file_list_header" style="height:25px">
+					<!-- 폴더구분  -->
+					<select class="js_file_display_by fl">
+						<option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_WORK %>><fmt:message key="space.title.by_work"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_YEAR %>><fmt:message key="space.title.by_year"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
+						<option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
+					</select>
+					<select class="js_file_category_list fl">
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								FileCategoryInfo category = categories[i];
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+					</select>
+					<span class="js_progress_span fl"></span>
+					<!-- 폴더 구분//-->
+					<!-- 우측 검색영역 -->
+					<div class="list_title_space js_work_list_title">
+						<div class="title_line_options fr">
+							<form name="frmSearchInstance" class="po_left">
+								<div class="srch_wh srch_wsize m0">
+									<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
+								</div>
+							</form>					
+						</div>
+					</div>
+					<!-- 우측 검색영역//-->
+				</div>
+				<!-- 컨텐츠 상단 영역 //-->
+				<!-- 접기/열기 버튼 -->
+				<div class="btn_fold"><a href="" class="js_file_category_tree"></a></div>
+				<!-- 접기/열기 버튼 -->		
 				<%
 				if(displayType!=FileCategory.DISPLAY_ALL){
 				%>          
 					<!-- Left -->
-					<div class="left30 ">
-						<!-- 필 터 -->
-						<div class="fl">
-							<select class="js_file_display_by">
-							  <option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>
-							  <option value=<%=FileCategory.DISPLAY_BY_WORK %>><fmt:message key="space.title.by_work"/></option>
-							  <option value=<%=FileCategory.DISPLAY_BY_YEAR %>><fmt:message key="space.title.by_year"/></option>
-							  <option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
-							  <option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
-							</select>
-							<!-- 우측 구분 -->
-							<span>검색공간</span>
-							<!-- 우측 구분 //-->
-						</div>
-						<!-- 필 터 //-->
+					<div class="left_fold_area">
+
 						<!-- 카테고리 -->
-						<div class="pop_list_area mt25">
+						<div class="pop_list_area file_fd">
+							<!-- 우측 버튼영역 -->
+							<div class="tab_buttons js_add_file_folder_btn"><a href=""><span class="btn_bfolder_add"></span></a></div>
+							<!-- 우측 버튼영역 -->
+
 							<ul class="js_file_categories">
 								<jsp:include page="/jsp/content/work/list/categories_by_type.jsp">
 									<jsp:param value="<%=displayType%>" name="displayType"/>
@@ -139,23 +174,8 @@
 					</div>
 					<!-- Left//-->
 					<!-- Right -->	
-					<div class="right70">
+					<div class="right_content_area">
 					<!-- 목록보기 -->
-						<!-- 목록보기 타이틀-->
-						<div class="list_title_space js_work_list_title">
-							<%-- <div class="title"><fmt:message key="common.title.instance_list" /></div>	 --%>				
-								<div class="title_line_options fr">
-									<form name="frmSearchInstance" class="po_left">
-										<span class="js_progress_span"></span>
-										<div class="srch_wh srch_wsize m0">
-											<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
-											<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-										</div>
-									</form>					
-								</div>
-						</div>
-						<!-- 목록보기 타이틀-->
-							
 						<!-- 목록 테이블 -->
 						<div class="list_contents">
 							<div id="file_instance_list_page">
@@ -183,57 +203,6 @@
 					<!-- Right -->	
 					<div>
 					<!-- 목록보기 -->
-						<!-- 목록보기 타이틀-->
-						<div class="list_title_space js_work_list_title mt15">
-							<div class="title"><fmt:message key="common.title.instance_list" /></div>					
-							<div class="title_line_btns">
-								<div class="icon_filter_edit ">
-									<a href="search_filter.sw?workId=<%=SmartWork.ID_FILE_MANAGEMENT%>" class="js_edit_search_filter" title="상세필터 편집"><%-- <fmt:message key='filter.button.edit_search_filter' /> --%></a>
-								</div>
-							</div>
-						
-							<div class="title_line_options">
-								<form name="frmSearchInstance" class="po_left">
-									<span class="js_progress_span"></span>
-									<div class="srch_wh srch_wsize">
-										<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
-											<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
-									</div>
-								</form>
-								<form class="form_space po_left js_form_filter_name" name="frmIworkFilterName">
-									<select name="selFilterName" class="js_select_search_filter">
-										<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
-											<%if(SmartUtil.isBlankObject(work.getLastFilterId()) || SearchFilter.FILTER_ALL_INSTANCES.equals(work.getLastFilterId())){%> selected <%} %>>
-											<fmt:message key='filter.name.all_instances' />
-										</option>
-										<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
-											<%if(SearchFilter.FILTER_MY_INSTANCES.equals(work.getLastFilterId())){%> selected <%} %>>
-											<fmt:message key='filter.name.my_instances' />
-										</option>
-										<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
-											<%if(SearchFilter.FILTER_RECENT_INSTANCES.equals(work.getLastFilterId())){%> selected <%} %>>
-											<fmt:message key='filter.name.recent_instances' />
-										</option>
-										<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
-											<%if(SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(work.getLastFilterId())){%> selected <%} %>>
-											<fmt:message key='filter.name.my_recent_instances' />
-										</option>
-										<%
-										SearchFilterInfo[] filters = work.getSearchFilters();
-										if (filters != null) {
-											for (SearchFilterInfo filter : filters) {
-												if(SmartUtil.isBlankObject(filter.getId())) continue;
-										%>
-												<option value="<%=filter.getId()%>" <%if(filter.getId().equals(work.getLastFilterId())){%> selected <%} %>><%=CommonUtil.toNotNull(filter.getName())%></option>
-										<%
-											}
-										}
-										%>
-									</select>
-								</form>
-							</div>
-						</div>
-						<!-- 목록보기 타이틀-->
 
 						<!-- 상세필터 및 새업무등록하기 화면 -->
 						<div id="search_filter" class="filter_section js_new_work_form"></div>

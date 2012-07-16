@@ -12,7 +12,7 @@
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545}
 
 /* Layer popup list */
-.pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; padding-top:5px; font-size: 12px; line-height:19px}
+.pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; padding-top:5px; font-size: 12px; line-height:19px}
 .pop_list_area > form > ul {max-height:330px; overflow-y:auto}
 
 .pop_list_area li {display:block}
@@ -20,6 +20,9 @@
 
 .pop_list_area li .dep {padding:2px 0 2px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 .pop_list_area li .menu_2dep li {padding:0 0 0 13px}
+
+/* File fold */
+.pop_list_area.file_fd {min-height:500px}
 
 /*popup information*/
 .pop_i_info {border:1px solid #acacac; background-color:#242324; width:273px; position:absolute; top:33px; left:106px; padding-bottom:8px; z-index:39; color:#ececec}

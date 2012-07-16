@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.info.FileCategoryInfo"%>
 <%@page import="net.smartworks.model.work.FileCategory"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.work.info.ImageCategoryInfo"%>
@@ -26,6 +27,8 @@
 	
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 
+	ImageCategoryInfo[] categories = smartWorks.getImageCategoriesByType(FileCategory.DISPLAY_BY_CATEGORY, wid);
+		
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "image_list.sw");
@@ -38,25 +41,6 @@
 
 <jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
 
-<%-- <div class="body_titl space">
-	<div class="body_titl_area ti_picture title">
-		<div class="title myspace_h"><%=workSpace.getName() %>
-			<span class="bul_space"><fmt:message key="space.title.pictures"/></span>
-		</div>
-	</div>                   
-   			<!-- 필터 -->
-       		<div class="txt_btn">
-   				<select class="js_image_display_by">
-           			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
-       				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
-       				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
-         		</select>
-       		</div>
-     		<!-- 필터//-->
-	<div class="solid_line"></div>
-</div>
-<!-- 타이틀 -->
- --%>			
 <jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
 
 <!-- 컨텐츠 레이아웃-->
@@ -68,12 +52,25 @@
 			<div class="contents_space">
 			
 				<!-- 필터 -->
-	        	<div class="txt_btn tr mb2">
-	    				<select class="js_image_display_by">
+	        	<div class="txt_btn tr mb2 js_image_list_header" style="height:25px">
+    				<select class="js_image_display_by fl">
 	            			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
 	          		</select>
+    				<select class="js_image_category_list fl">
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								ImageCategoryInfo category = categories[i];
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+	          		</select>
+					<span class="js_progress_span fl"></span>
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>

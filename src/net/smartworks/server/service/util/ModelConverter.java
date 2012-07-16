@@ -224,6 +224,51 @@ public class ModelConverter {
 	public void setCommunityService(ICommunityService communityService) {
 		ModelConverter.communityService = communityService;
 	}
+
+	public static String[] getGroupIdsByNotBelongToClosedGroup(User currentUser) throws Exception {
+		try {
+			User user = currentUser;
+			if(user == null)
+				user = SmartUtil.getCurrentUser();
+
+			String userId = user.getId();
+
+			SwoGroupCond swoGroupCond = new SwoGroupCond();
+			swoGroupCond.setGroupType(SwoGroup.GROUP_TYPE_PRIVATE);
+			//swoGroupCond.setStatus(SwoGroup.GROUP_STATUS_OPEN);
+			SwoGroup[] swoGroups = getSwoManager().getGroups(userId, swoGroupCond, IManager.LEVEL_ALL);
+
+			List<String> groupList = new ArrayList<String>();
+			String[] groupIds = null;
+
+			if(!CommonUtil.isEmpty(swoGroups)) {
+				for(SwoGroup swoGroup : swoGroups) {
+					String groupId = swoGroup.getId();
+					SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
+					if(!CommonUtil.isEmpty(swoGroupMembers)) {
+						boolean isExist = false;
+						for(SwoGroupMember swoGroupMember : swoGroupMembers) {
+							String memberId = swoGroupMember.getUserId();
+							if(userId.equals(memberId)) {
+								isExist = true;
+								break;
+							}
+						}
+						if(!isExist)
+							groupList.add(groupId);
+					}
+				}
+			}
+			if(groupList.size() > 0) {
+				groupIds = new String[groupList.size()];
+				groupList.toArray(groupIds);
+			}
+			return groupIds;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static String[] getWorkSpaceIdIns(User currentUser) throws Exception {
 		try {
 			User user = currentUser;
@@ -2474,7 +2519,26 @@ public class ModelConverter {
 
 		return departmentInfo;
 	}
-
+	public static String getDepartmentInfoFullpathNameByDepartmentId(String departmentInfoId) throws Exception {
+		
+		User user = SmartUtil.getSystemUser();
+		SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentInfoId, true);
+		String fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(department,"");
+		return fullpathName;
+	}
+	
+	public static String getDepartmentInfoParentsfullpathNameByDepartmentId(SwoDepartmentExtend departmentInfo, String fullpathName) throws Exception {
+		
+		if(departmentInfo.getParentId()!= null){
+			fullpathName = departmentInfo.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			departmentInfo.getId();
+			departmentInfo.getParentId();
+			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, departmentInfo.getParentId(), true);								
+			fullpathName = getDepartmentInfoParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
+		}
+		return fullpathName;
+	}
+	
 	public static Department getDepartmentByDepartmentId(String departmentId) throws Exception {
 		if (CommonUtil.isEmpty(departmentId))
 			return null;
@@ -2546,6 +2610,26 @@ public class ModelConverter {
 		}
 
 		return department;
+	}
+	
+	public static String getFullpathNameByDepartmentId(String departmentId) throws Exception {
+		
+		User user = SmartUtil.getSystemUser();
+		SwoDepartmentExtend department = getSwoManager().getDepartmentExtend(user.getId(), departmentId, true);
+		String fullpathName = getParentsfullpathNameByDepartmentId(department,"");
+		return fullpathName;
+	}
+	
+	public static String getParentsfullpathNameByDepartmentId(SwoDepartmentExtend department, String fullpathName) throws Exception {
+		
+		if(department.getParentId()!= null){
+			fullpathName = department.getName() + (SmartUtil.isBlankObject(fullpathName) ? "" : ">") + fullpathName;
+			department.getId();
+			department.getParentId();
+			SwoDepartmentExtend departmentId = getSwoManager().getDepartmentExtend(null, department.getParentId(), true);								
+			fullpathName = getParentsfullpathNameByDepartmentId(departmentId, fullpathName);		
+		}
+		return fullpathName;
 	}
 
 	public static GroupInfo getGroupInfoByGroupId(String groupId) throws Exception {

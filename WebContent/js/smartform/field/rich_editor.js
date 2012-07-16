@@ -50,10 +50,11 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData){
 		$textarea.appendTo(options.container);
 		if (!readOnly) {
+			var skinURI = (currentUser.locale == 'ko') ? "smarteditor/SEditorSkinKOR.html" : "smarteditor/SEditorSkinENG.html";
 			nhn.husky.EZCreator.createInIFrame({
 				oAppRef: oEditors,
 				elPlaceHolder: id,
-				sSkinURI: "smarteditor/SEditorSkinKOR.html",
+				sSkinURI: skinURI,
 				fCreator: "createSEditorInIFrame"
 			});
 		}

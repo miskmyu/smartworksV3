@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.util.SmartMessage"%>
@@ -72,22 +73,36 @@
 							<tr>
 								<td class="bul_dot"><fmt:message key="common.title.owner"/> :</td>
 								<%
+								User creater = work.getCreater();
+								User lastModifer = work.getLastModifier();
 								String createrName = (SmartUtil.isBlankObject(work.getCreater())) ? "" : work.getCreater().getLongName();
 								String createdDate = (SmartUtil.isBlankObject(work.getCreatedDate())) ? "" : work.getCreatedDate().toLocalString();
 								%>
-								<td class="content"><a class="userFieldLink t_name" href=""><%=createrName%></a><span class="t_date ml5"><%=createdDate %></span></td>
+								<td class="content">
+									<a href="<%=creater.getSpaceController()%>?cid=<%=creater.getSpaceContextId() %>&wid=<%=creater.getId()%>"><img class="profile_size_s" src="<%=creater.getMinPicture() %>"></a>
+									<a class="userFieldLink t_name" href="<%=creater.getSpaceController()%>?cid=<%=creater.getSpaceContextId() %>&wid=<%=creater.getId()%>"><%=createrName%></a>
+									<span class="t_date ml5"><%=createdDate %></span>
+								</td>
 							</tr>
 							<tr>
 								<td class="bul_dot"><fmt:message key="common.title.last_modifier"/> :</td>
-								<td class="content"><a class="userFieldLink t_name" href=""><%=work.getLastModifier().getLongName() %></a><span class="t_date ml5"><%=work.getLastModifiedDate().toLocalString() %></span></td>
+								<td class="content">
+									<a href="<%=lastModifer.getSpaceController()%>?cid=<%=lastModifer.getSpaceContextId() %>&wid=<%=lastModifer.getId()%>"><img class="profile_size_s" src="<%=lastModifer.getMinPicture() %>"></a>
+									<a class="userFieldLink t_name" href="<%=lastModifer.getSpaceController()%>?cid=<%=lastModifer.getSpaceContextId() %>&wid=<%=lastModifer.getId()%>"><%=work.getLastModifier().getLongName() %></a>
+									<span class="t_date ml5"><%=work.getLastModifiedDate().toLocalString() %></span>
+								</td>
 							</tr>
 							<%
 							if(!SmartUtil.isBlankObject(work.getEditingUser())){
+								User editingUser = work.getEditingUser();
 							%>
 								<tr>
 									<td class="bul_dot"><fmt:message key="builder.title.editing_user"/> :</td>
-									<td class="content"><a class="userFieldLink t_name" href=""><%=work.getEditingUser().getLongName() %></a>
-										<span class="t_date ml5"><%=work.getEditingStartDate().toLocalString() %></span></td>
+									<td class="content">
+										<a href="<%=editingUser.getSpaceController()%>?cid=<%=editingUser.getSpaceContextId() %>&wid=<%=editingUser.getId()%>"><img class="profile_size_s" src="<%=editingUser.getMinPicture() %>"></a>
+										<a class="userFieldLink t_name" href="<%=editingUser.getSpaceController()%>?cid=<%=editingUser.getSpaceContextId() %>&wid=<%=editingUser.getId()%>"><%=editingUser.getLongName() %></a>
+										<span class="t_date ml5"><%=work.getEditingStartDate().toLocalString() %></span>
+									</td>
 								</tr>
 							<%
 							}

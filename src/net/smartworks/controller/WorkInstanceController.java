@@ -21,6 +21,8 @@ import net.smartworks.model.instance.info.EventInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.model.work.info.FileCategoryInfo;
+import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 import net.smartworks.util.LocalDate;
@@ -372,6 +374,47 @@ public class WorkInstanceController extends ExceptionInterceptor {
 
 	}
 
+	@RequestMapping("/get_file_category_list_page")
+	public @ResponseBody Map<String, Object> getFileCategoryListPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		int displayType = Integer.parseInt(request.getParameter("displayType"));
+		String wid = request.getParameter("wid");
+		String parentId = request.getParameter("parentId");
+		String listPage = "";
+		try{
+			FileCategoryInfo[] categories = smartworks.getFileCategoriesByType(displayType, wid, parentId);
+			for(int i=0; i<categories.length; i++){
+				FileCategoryInfo category = categories[i];
+				listPage = listPage + "<option value='" + category.getId() + "'>" + category.getName() + "</option>";
+			}
+		}catch(Exception e){
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listPage", listPage);
+		return map;		
+	}
+	
+	@RequestMapping("/get_image_category_list_page")
+	public @ResponseBody Map<String, Object> getImageCategoryListPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		int displayType = Integer.parseInt(request.getParameter("displayType"));
+		String wid = request.getParameter("wid");
+		String listPage = "";
+		try{
+			ImageCategoryInfo[] categories = smartworks.getImageCategoriesByType(displayType, wid);
+			for(int i=0; i<categories.length; i++){
+				ImageCategoryInfo category = categories[i];
+				listPage = listPage + "<option value='" + category.getId() + "'>" + category.getName() + "</option>";
+			}
+		}catch(Exception e){
+		}
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("listPage", listPage);
+		return map;		
+	}
+	
 	@RequestMapping(value = "/add_comment_on_work", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> addCommentOnWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -521,4 +564,17 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		map.put("messages", messages);
 		return map;
 	}
+
+	@RequestMapping(value = "/create_new_file_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void createNewFileFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.createNewFileFolder(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/set_file_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setFileFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setFileFolder(requestBody, request);
+	}
+	
 }

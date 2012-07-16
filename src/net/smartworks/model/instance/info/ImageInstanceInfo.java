@@ -1,9 +1,12 @@
 package net.smartworks.model.instance.info;
 
+import java.util.Map;
+
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class ImageInstanceInfo extends FileInstanceInfo {
 
@@ -52,6 +55,16 @@ public class ImageInstanceInfo extends FileInstanceInfo {
 	public ImageInstanceInfo(String id, String subject, WorkInfo work, UserInfo owner, LocalDate lastModifiedDate){
 		super(id, subject, work, owner, lastModifiedDate);
 		super.setType(Instance.TYPE_IMAGE);
+	}
+	
+	public String getFileName(){
+		if(SmartUtil.isBlankObject(getFiles())) return "";
+		
+		for(int i=0; i<getFiles().size(); i++){
+			Map<String, String> file = (Map<String, String>)getFiles().get(i);
+			return file.get("fileName");
+		}
+		return "";
 	}
 
 }
