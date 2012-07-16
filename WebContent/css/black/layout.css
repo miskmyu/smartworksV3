@@ -54,8 +54,8 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 }
 
 /*Top Menu*/
-.top_menu {z-index:40; width:138px; height:34px; margin:0 auto; background:url("../../images/top_menu.png") no-repeat left top}
-.top_menu ul {height:34px}
+.top_menu {z-index:40; margin:0 auto; width:345px}
+.top_menu ul {width:138px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
 .top_menu ul li .current {background:url("../../images/top_menu.png") no-repeat; height:34px}
@@ -75,7 +75,8 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li span a {display:block; padding-top:8px}
 
 /*Search*/
-.global_srch {position:absolute; right:100px; top:5px}
+.global_srch {float:left}
+.global_srch .srch_wsize {margin:5px 0 0 10px}
 .nav_srch {float:left; padding-bottom:10px}
 .mail_srch { float:right}
 	
