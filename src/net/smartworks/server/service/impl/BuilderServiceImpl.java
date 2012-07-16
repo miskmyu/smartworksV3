@@ -25,6 +25,7 @@ import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.category.model.CtgCategory;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.XmlUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
@@ -42,14 +43,21 @@ import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcSwProcess;
 import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
+import net.smartworks.server.engine.resource.model.IFormDef;
 import net.smartworks.server.engine.resource.model.IPackageModel;
 import net.smartworks.server.engine.resource.model.IProcessModel;
+import net.smartworks.server.engine.resource.util.SmartServerModelUtil;
 import net.smartworks.server.service.IBuilderService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
+import org.jdom.output.XMLOutputter;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 @Service
 public class BuilderServiceImpl implements IBuilderService {
@@ -605,7 +613,19 @@ public class BuilderServiceImpl implements IBuilderService {
 			// Exception Handling Required			
 		}
 	}
-
+	private void updateFormName(String packageId, String newName) throws Exception {
+		
+		SwfFormCond formCond = new SwfFormCond();
+		formCond.setPackageId(packageId);
+		SwfForm[] forms = getSwfManager().getForms("", formCond, IManager.LEVEL_ALL);
+		if (forms == null || forms.length > 1)
+			throw new Exception("More Then 1 Forms : packageId = " + packageId);
+		SwfForm form = forms[0];
+		
+		SwManagerFactory.getInstance().getDesigntimeManager().updateFormName("", form.getId(), 1, newName);
+		
+	}
+	
 	@Override
 	public void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
@@ -629,6 +649,11 @@ public class BuilderServiceImpl implements IBuilderService {
 				return;
 			
 			String workName = workDefinitionMap.get("txtWorkName");
+			
+			//업무 이름이 변경이 된다면 swform 의 formContents xml 안에 값도 변경을 해줘야한다
+			//폼을 배치할때 xml 안의 이름을 사용하기 때문에
+			updateFormName(workId, workName);
+			
 			String workCategoryId = workDefinitionMap.get("selWorkCategoryId");
 			String workGroupId = workDefinitionMap.get("selWorkGroupId");
 			String workDesc = workDefinitionMap.get("txtaWorkDesc");

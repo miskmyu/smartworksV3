@@ -169,7 +169,9 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.serializeObject = function(currencyI
 	for(var i=0; i<currencyInputs.length; i++){
 		var currencyInput = $(currencyInputs[i]);
 		var valueStr = currencyInput.find('input').attr('value');
-		currencyInputsJson[currencyInput.attr('fieldId')] = $.parseNumber( valueStr.substring(1, valueStr.length), {format:"-0,000.0", locale: currentUser.locale });
+		//valueStr 에는 통화구분(ex: $, w..)이 들어오지 않는다. subString할 필요없어 보임
+		//currencyInputsJson[currencyInput.attr('fieldId')] = $.parseNumber( valueStr.substring(1, valueStr.length), {format:"-0,000.0", locale: currentUser.locale });
+		currencyInputsJson[currencyInput.attr('fieldId')] = $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale });
 	}
 	return currencyInputsJson;
 };
