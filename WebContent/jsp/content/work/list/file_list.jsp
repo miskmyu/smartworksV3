@@ -119,7 +119,7 @@
 						<option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
 						<option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
 					</select>
-					<select class="js_file_category_list fl">
+					<select class="js_file_category_list fl ml5">
 						<%
 						if(!SmartUtil.isBlankObject(categories)){
 							for(int i=0; i<categories.length; i++){
@@ -131,7 +131,7 @@
 						}
 						%>
 					</select>
-					<span class="js_progress_span fl"></span>
+					<span class="js_progress_span fl ml5"></span>
 					<!-- 폴더 구분//-->
 					<!-- 우측 검색영역 -->
 					<div class="list_title_space js_work_list_title">
