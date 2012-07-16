@@ -1487,12 +1487,13 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		this.updateFormContentMetaInfo(obj);
 				
 		// 3. WORKTYPE  메타정보 변경
-		this.updateWorkTypeMetaInfo(obj);
+		//this.updateWorkTypeMetaInfo(obj);
 		
 		// 4. 도메인 폼  메타정보 변경
 		this.updateDomainMetaInfo(obj);
 		
-		return (HbFormModel)this.getHibernateTemplate().get(HbFormModel.class, obj.getId());
+		//return (HbFormModel)this.getHibernateTemplate().get(HbFormModel.class, obj.getId());
+		return obj;
 	}
 	private void updateFormContentMetaInfo(IFormModel obj) throws SmartServerRuntimeException {
 		String id = obj.getFormId();

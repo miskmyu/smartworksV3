@@ -45,7 +45,7 @@
 					<a href="<%=targetContent%>?cid=<%=workContext%>" class="<%=classType%>">
 						<span class="<%=work.getIconClass()%>"></span>
 						<span><%=work.getName()%></span>
-					</a>
+					
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
 						SmartWorkInfo smartWork = (SmartWorkInfo)work;
@@ -68,7 +68,7 @@
 					<%
 					}
 					%>
-					
+					</a>
 				</li>
 				
 			<%
@@ -81,7 +81,7 @@
 					<a href="<%=targetContent%>" categoryId="<%=work.getId()%>">
 						<span class="<%=work.getIconClass()%>"></span>
 						<span><%=work.getName()%></span>
-					</a>
+					
 					<%
 					if(work.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
 					%>
@@ -98,6 +98,7 @@
 					<%
 					}
 					%>
+					</a>
 					<div class="js_drill_down_target" style="display: none"></div>
 				</li>
 	<%
