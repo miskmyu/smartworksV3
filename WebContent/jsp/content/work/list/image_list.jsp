@@ -53,12 +53,12 @@
 			
 				<!-- 필터 -->
 	        	<div class="txt_btn tr mb2 js_image_list_header" style="height:25px">
-    				<select class="js_image_display_by fl">
+    				<select class="js_image_display_by fl mr5">
 	            			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
 	          		</select>
-    				<select class="js_image_category_list fl">
+    				<select class="js_image_category_list fl mr5">
 						<%
 						if(!SmartUtil.isBlankObject(categories)){
 							for(int i=0; i<categories.length; i++){
@@ -70,13 +70,33 @@
 						}
 						%>
 	          		</select>
+	          		<!-- 이동:사진공간  상세페이지에서만 나옴  -->
+	          		<select class="fl mr5">
+	          			<option>이동</option>
+	          		</select>
+	          		<!-- 이동:사진공간  상세페이지에서만 나옴  //-->
+	          		
 					<span class="js_progress_span fl"></span>
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
+	     			
+	     		<!-- 전체선택 : 사진공간  상세페이지에서만 나옴 -->
+	     		<div class="select_btn_space">
+	     			<input type="checkbox" />전체선택
+	     		</div>
+	     		<!-- 전체선택 : 사진공간  상세페이지에서만 나옴 //-->
                
 				<!-- 사진 목록 -->
 				<div class="picture_section js_image_instance_list">
+					<!-- 폴더 추가 -->
+					<div class="tab_buttons js_add_file_folder_btn">
+						<a href="" title="폴더 추가하기">
+							<span class="btn_bfolder_add"></span>
+						</a>
+					</div>
+					<!-- 폴더추가 //-->
+					
 					<jsp:include page="/jsp/content/work/list/image_instance_list.jsp">
 						<jsp:param value="<%=FileCategory.DISPLAY_BY_CATEGORY %>" name="displayType"/>
 						<jsp:param value="" name="parentId"/>

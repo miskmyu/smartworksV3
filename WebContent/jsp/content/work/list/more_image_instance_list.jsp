@@ -49,7 +49,7 @@
 	%>
 				<!--폴더 목록1 -->
 				<li>
-					<div class="folder_bg">
+					<div class="picture_folder">
 						<div class="thum_picture"><img href="image_instance_list.sw" class="" style="width:70px;height:70px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
 					</div>
 					<div class="title_folder"><%=category.getName() %></div>
