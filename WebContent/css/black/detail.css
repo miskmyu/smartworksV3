@@ -64,7 +64,7 @@
 .space_section .title {background: url("../../images/body_icon.png") no-repeat 5px -418px transparent; font-weight:bold; padding:3px 0 0 25px; border-bottom: 1px solid #C7C7C7; background-color:#dedede; line-height: 20px; margin-bottom: 8px}
 .space_section .title.off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent}
 .space_section .imag_area { margin:4px 0}
-.picture_section {overflow:hidden; margin-top: 5px}
+.picture_section {overflow:hidden}
 .picture_section li { float:left; margin:0 10px 15px}
 .picture_section .detail li { float:left; margin:0 10px 20px}
 .picture_section .tab_buttons {margin: 0 2px 0 0}
