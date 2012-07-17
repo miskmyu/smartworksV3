@@ -11,12 +11,14 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 /*Header*/
 #header {background: url("../../images/header_bg.jpg") repeat-x scroll left top transparent; height:34px; width:100%; z-index:40; position:relative; }
+#header span {display: table-cell; vertical-align:middle; height:31px}
 
 /*Company Logo*/
-.company_logo {background: url("../../images/top_logo.jpg") no-repeat left top; display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40}
+.company_logo {display:block; float:left; margin:0 0 0 12px; z-index:40}
+.company_logo img {wdth:85px; height:25px}
 
 /*Notice Icon*/
-.notice_icons {display:block; position:absolute; height:31px; left:106px; top:3px; z-index:40}
+.notice_icons {display:block; height:29px; margin:4px 0 0 15px; z-index:40}
 .notice_icons a:link, a:visited, a:hover, a:focus, a:active {text-decoration: none}
 .notice_icons li {float:left; margin-right:4px; width:34px; height:31px}
 .icon_info a {background: url("../../images/header_nico.png") no-repeat scroll -5px -14px transparent; display:block; height:30px; position:relative}
