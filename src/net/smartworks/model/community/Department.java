@@ -118,6 +118,7 @@ public class Department extends WorkSpace {
 		departmentInfo.setBigPictureName(getBigPictureName());
 		departmentInfo.setDesc(getDesc());
 		departmentInfo.setSmallPictureName(getSmallPictureName());
+		departmentInfo.setFullpathName(getFullpathName());		
 		return departmentInfo;
 	}
 	
