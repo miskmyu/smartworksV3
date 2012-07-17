@@ -115,11 +115,11 @@ function viewImage(img){
 				<li>
 					<input type="checkbox" class="tl">
 					<div class="picture_detail_area">	
-						<!-- 삭제 , 수정버튼 -->
+						<!-- 수정버튼 -->
 						<div class="ctgr_action">
 							<span class="btn_remove_category" title="삭제"></span>
 						</div>
-						<!-- 삭제 , 수정버튼//-->
+						<!-- 수정버튼//-->
 						
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
 						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
