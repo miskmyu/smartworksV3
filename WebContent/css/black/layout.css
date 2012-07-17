@@ -146,6 +146,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .global_menu div { float:left; margin-left:8px}
 .global_menu .pop {border:1px solid #acacac; border-top:none; background-color:#414041; position:absolute; top:23px; right:0; padding:4px 8px; width:66px; line-height:18px; z-index:39}
 .global_menu .pop_admin {position:absolute; top:23px; right:0; z-index:38}
+.global_menu .pop_admin a {float:left; margin-left:2px}
 
 /*Personal Info*/
 .personal_info {background: url("../../images/personal_info_bg.png")repeat-x scroll 0 0; padding:11px; border-bottom:1px solid #1f1f1f}
@@ -269,9 +270,9 @@ a .btn_favorite:hover, .btn_favorite.current {background: url("../../images/nav_
 a .btn_all_works:hover, .btn_all_works.current {background: url("../../images/nav_img.png") no-repeat -201px -274px}
 
 /* Navi Setting Btn */
-.btn_setting {background: url("../../images/body_icon.png") no-repeat -547px 0 transparent; height:26px; width:26px; display: inline-block}
-.btn_appstore {background: url("../../images/body_icon.png") no-repeat -574px 0 transparent; height:26px; width:26px; display: inline-block}
-.btn_builder {background: url("../../images/body_icon.png") no-repeat -601px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_setting {background: url("../../images/body_icon.png") no-repeat -547px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_appstore {background: url("../../images/body_icon.png") no-repeat -574px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_builder {background: url("../../images/body_icon.png") no-repeat -601px 0 transparent; height:26px; width:26px; display: inline-block}
 
 /* Navi Builder Btn */
 a .btn_add_category {background: url("../../images/nav_img.png") no-repeat -112px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
