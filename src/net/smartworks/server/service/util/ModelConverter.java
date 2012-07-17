@@ -720,11 +720,34 @@ public class ModelConverter {
 				if(filePath.indexOf(companyId) != -1)
 					imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 			}
+			if(!CommonUtil.isEmpty(fileGroupId)) {
+				tempWorkInstanceInfo.setFileGroupId(fileGroupId);
+				List<IFileModel> fileModelList = getDocManager().findFileGroup(fileGroupId);
+				List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+				int fileModelListSize = fileModelList.size();
+				if(fileList != null && fileModelListSize > 0) {
+					for(int i=0; i<fileModelListSize; i++) {
+						Map<String, String> fileMap = new LinkedHashMap<String, String>();
+						IFileModel fileModel = fileModelList.get(i);
+						String id = fileModel.getId();
+						String name = fileModel.getFileName();
+						String type = fileModel.getType();
+						String size = fileModel.getFileSize() + "";
+						fileMap.put("fileId", id);
+						fileMap.put("fileName", name);
+						fileMap.put("fileType", type);
+						fileMap.put("fileSize", size);
+						fileList.add(fileMap);
+					}
+					if(fileList.size() > 0)
+						tempWorkInstanceInfo.setFiles(fileList);
+				}
+			}
 			tempWorkInstanceInfo.setFileId(fileId);
 			tempWorkInstanceInfo.setOriginImgSource(originImgSrc);
 			tempWorkInstanceInfo.setImgSource(imgSrc);
 			tempWorkInstanceInfo.setContent(content);
-			
+
 			workInstanceInfo = tempWorkInstanceInfo;
 		} else if (task.getTskRefType() != null && task.getTskRefType().equalsIgnoreCase(TskTask.TASKREFTYPE_MEMO)) {
 			MemoInstanceInfo tempWorkInstanceInfo = new MemoInstanceInfo();
@@ -3647,6 +3670,35 @@ public class ModelConverter {
 			fileWorkCond.setTskRefType(TskTask.TASKREFTYPE_IMAGE);
 			fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", true)});
 			FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+/*
+			if(!CommonUtil.isEmpty(fileWorks)) {
+
+				ImageCategoryInfo allImageCategoryInfo = new ImageCategoryInfo();
+				allImageCategoryInfo.setId(FileCategory.ID_ALL_FILES);
+				allImageCategoryInfo.setName(FileCategory.NAME_ALL_FILES);
+				allImageCategoryInfo.setLength(fileWorks.length);
+
+				FileWork fileWork = fileWorks[0];
+				fileId = fileWork.getFileId();
+				IFileModel fileModel = getDocManager().getFileById(fileId);
+				if(fileModel != null) {
+					String filePath = fileModel.getFilePath();
+					String extension = filePath.lastIndexOf(".") > 1 ? filePath.substring(filePath.lastIndexOf(".")) : null;
+					filePath = StringUtils.replace(filePath, "\\", "/");
+					if(filePath.indexOf(companyId) != -1)
+						originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+					filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
+					if(filePath.indexOf(companyId) != -1)
+						imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+				}
+				ImageInstanceInfo firstImageInstanceInfo = new ImageInstanceInfo();
+				firstImageInstanceInfo.setFileId(fileId);
+				firstImageInstanceInfo.setOriginImgSource(originImgSrc);
+				firstImageInstanceInfo.setImgSource(imgSrc);
+				allImageCategoryInfo.setFirstImage(firstImageInstanceInfo);
+
+				imageCategoryMap.put(FileCategory.ID_ALL_FILES, allImageCategoryInfo);
+			}*/
 			switch (displayType) {
 			case FileCategory.DISPLAY_BY_CATEGORY:
 				FdrFolderCond fdrFolderCond = new FdrFolderCond();
@@ -3665,7 +3717,7 @@ public class ModelConverter {
 						String folderName = fileWork.getFolderName();
 						if(CommonUtil.isEmpty(folderId)) {
 							folderId = FileCategory.ID_UNCATEGORIZED;
-							folderName = SmartMessage.getString("common.title.uncategorized");
+							folderName = FileCategory.NAME_UNCATEGORIZED;
 						}
 						imageCategoryInfo.setId(folderId);
 						imageCategoryInfo.setName(folderName);
@@ -3681,6 +3733,18 @@ public class ModelConverter {
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
+						Map<String, String> fileMap = new LinkedHashMap<String, String>();
+						List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+						String fileName = fileModel.getFileName();
+						String fileType = fileModel.getType();
+						String fileSize = String.valueOf(fileModel.getFileSize());
+						fileMap.put("fileId", fileId);
+						fileMap.put("fileName", fileName);
+						fileMap.put("fileType", fileType);
+						fileMap.put("fileSize", fileSize);
+						fileList.add(fileMap);
+						if(fileList.size() > 0)
+							imageInstanceInfo.setFiles(fileList);
 						imageInstanceInfo.setFileId(fileId);
 						imageInstanceInfo.setOriginImgSource(originImgSrc);
 						imageInstanceInfo.setImgSource(imgSrc);
@@ -3861,6 +3925,18 @@ public class ModelConverter {
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
+						Map<String, String> fileMap = new LinkedHashMap<String, String>();
+						List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+						String fileName = fileModel.getFileName();
+						String fileType = fileModel.getType();
+						String fileSize = String.valueOf(fileModel.getFileSize());
+						fileMap.put("fileId", fileId);
+						fileMap.put("fileName", fileName);
+						fileMap.put("fileType", fileType);
+						fileMap.put("fileSize", fileSize);
+						fileList.add(fileMap);
+						if(fileList.size() > 0)
+							imageInstanceInfo.setFiles(fileList);
 						imageInstanceInfo.setFileId(fileId);
 						imageInstanceInfo.setOriginImgSource(originImgSrc);
 						imageInstanceInfo.setImgSource(imgSrc);
@@ -3984,6 +4060,18 @@ public class ModelConverter {
 							if(filePath.indexOf(companyId) != -1)
 								imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 						}
+						Map<String, String> fileMap = new LinkedHashMap<String, String>();
+						List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+						String fileName = fileModel.getFileName();
+						String fileType = fileModel.getType();
+						String fileSize = String.valueOf(fileModel.getFileSize());
+						fileMap.put("fileId", fileId);
+						fileMap.put("fileName", fileName);
+						fileMap.put("fileType", fileType);
+						fileMap.put("fileSize", fileSize);
+						fileList.add(fileMap);
+						if(fileList.size() > 0)
+							imageInstanceInfo.setFiles(fileList);
 						imageInstanceInfo.setFileId(fileId);
 						imageInstanceInfo.setOriginImgSource(originImgSrc);
 						imageInstanceInfo.setImgSource(imgSrc);
@@ -4156,6 +4244,18 @@ public class ModelConverter {
 						imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
 				}
 			}
+			Map<String, String> fileMap = new LinkedHashMap<String, String>();
+			List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+			String fileName = task.getFileName();
+			String fileType = task.getFileType();
+			String fileSize = String.valueOf(task.getFileSize());
+			fileMap.put("fileId", fileId);
+			fileMap.put("fileName", fileName);
+			fileMap.put("fileType", fileType);
+			fileMap.put("fileSize", fileSize);
+			fileList.add(fileMap);
+			if(fileList.size() > 0)
+				tempWorkInstanceInfo.setFiles(fileList);
 			tempWorkInstanceInfo.setFileId(fileId);
 			tempWorkInstanceInfo.setOriginImgSource(originImgSrc);
 			tempWorkInstanceInfo.setImgSource(imgSrc);
@@ -4307,6 +4407,11 @@ public class ModelConverter {
 		fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 		FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
 		if(!CommonUtil.isEmpty(fileWorks)) {
+			FileCategoryInfo allFileCategoryInfo = new FileCategoryInfo();
+			allFileCategoryInfo.setId(FileCategory.ID_ALL_FILES);
+			allFileCategoryInfo.setName(FileCategory.NAME_ALL_FILES);
+			allFileCategoryInfo.setLength(fileWorks.length);
+			fileCategoryMap.put(FileCategory.ID_ALL_FILES, allFileCategoryInfo);
 			switch (displayType) {
 			case FileCategory.DISPLAY_BY_CATEGORY:
 				FdrFolderCond fdrFolderCond = new FdrFolderCond();
@@ -4321,7 +4426,7 @@ public class ModelConverter {
 							int length = 1;
 							FileCategoryInfo fileCategoryInfo = new FileCategoryInfo();
 							String folderId = CommonUtil.toNotNull(fileWork.getFolderId()).equals("") ? FileCategory.ID_UNCATEGORIZED : fileWork.getFolderId();
-							String folderName = CommonUtil.toNotNull(fileWork.getFolderName()).equals("") ? SmartMessage.getString("common.title.uncategorized") : fileWork.getFolderName();
+							String folderName = CommonUtil.toNotNull(fileWork.getFolderName()).equals("") ? FileCategory.NAME_UNCATEGORIZED : fileWork.getFolderName();
 							fileCategoryInfo.setId(folderId);
 							fileCategoryInfo.setName(folderName);
 							if(!CommonUtil.isEmpty(fileCategoryMap)) {

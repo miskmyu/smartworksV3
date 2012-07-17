@@ -184,7 +184,7 @@ function logout() {
 
 <!-- 헤더에 있는 메뉴들 및 연결 기능 -->
 <div class="top_menu">
-	<ul>
+	<ul class="fl">
 		<!--  홈메뉴  -->
 		<li class="idx1">
 			<span>
@@ -209,17 +209,20 @@ function logout() {
 		</li>
 		<!--  대시보드 메뉴  //-->
 	</ul>
+	
+	<!-- 통합 검색 기능  -->
+	<div class="global_srch">
+		<div class="srch srch_wsize">
+			<input id="" class="nav_input" type="text" title="<fmt:message key='search.global_search'/>" placeholder="<fmt:message key='search.global_search'/>">
+			<button title="<fmt:message key='search.search'/>" onclick=""></button>
+		</div>
+	</div>
+	<!-- 통합 검색 기능  //-->
+
 </div>
 <!-- 헤더에 있는 메뉴들 및 연결 기능 // -->
 
-<!-- 통합 검색 기능  -->
-<div class="global_srch">
-	<div class="srch srch_wsize">
-		<input id="" class="nav_input" type="text" title="<fmt:message key='search.global_search'/>" placeholder="<fmt:message key='search.global_search'/>">
-		<button title="<fmt:message key='search.search'/>" onclick=""></button>
-	</div>
-</div>
-<!-- 통합 검색 기능  //-->
+
 
 <!--  전체 메뉴  -->
 <div class="global_menu">
