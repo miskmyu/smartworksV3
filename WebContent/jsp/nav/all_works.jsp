@@ -36,7 +36,6 @@
 				<a href="worklist_by_category.sw" categoryId="<%=workCategory.getId()%>">
 					<span class="<%=workCategory.getIconClass()%>"></span>
 					<span class="nav_sub_area"><%=workCategory.getName()%></span>
-				</a>
  				<%
 				if(workCategory.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
 				%>
@@ -54,6 +53,7 @@
 				<%
 				}
 				%>
+				</a>
 				<div class="menu_2dep js_drill_down_target" style="display: none"></div>
 			</li>
 	<%

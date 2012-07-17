@@ -583,7 +583,7 @@ smartPop = {
 					});
 				}
 			});
-		}, function(){
+		}).error( function(){
 			smartPop.showInfo(smartPop.WARN, smartMessage.get("notRefFormWorkingError"));			
 		});
 	},
