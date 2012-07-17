@@ -67,15 +67,18 @@ function logout() {
 
 <!-- 회사 로고 및 연결 링크 -->
 <!--  style 확인 필요함 -->
-<div>
-	<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
-		<img class="js_auto_picture" style="display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40;" src="<%=companyLogo%>" />
-	</a>
+<div class="company_logo">
+	<span>
+		<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
+			<img class="js_auto_picture" src="<%=companyLogo%>" />
+		</a>
+	</span>
 </div>
 <!-- 회사 로고 및 연결 링크 //-->
 
 <!-- Notice 아이콘들 및 연결 기능  -->
 <div class="notice_icons js_notice_icons_area">
+	<span>
 	<ul>
 		<!--  Notification 알림 영역 -->
 		<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
@@ -172,9 +175,8 @@ function logout() {
 			</a>
 		</li>
 		<!-- 임시저장 알림 영역  -->
-		<li></li>
 	</ul>
-	<ul></ul>
+	</span>
 </div>
 <!-- Notice 아이콘들 및 연결 기능  //-->
 
@@ -187,9 +189,7 @@ function logout() {
 	<ul class="fl">
 		<!--  홈메뉴  -->
 		<li class="idx1">
-			<span>
 				<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
-			</span> 
 		</li>
 		<!--  홈메뉴  //-->
 <%-- 
@@ -203,15 +203,13 @@ function logout() {
  --%>
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
- 			<span>
  				<a href="smart.sw#dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
- 			</span> 
 		</li>
 		<!--  대시보드 메뉴  //-->
 	</ul>
 	
 	<!-- 통합 검색 기능  -->
-	<div class="global_srch">
+	<div class="global_srch" style="display:none">
 		<div class="srch srch_wsize">
 			<input id="" class="nav_input" type="text" title="<fmt:message key='search.global_search'/>" placeholder="<fmt:message key='search.global_search'/>">
 			<button title="<fmt:message key='search.search'/>" onclick=""></button>

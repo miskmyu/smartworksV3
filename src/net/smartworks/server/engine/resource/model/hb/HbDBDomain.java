@@ -59,7 +59,7 @@ public class HbDBDomain implements IDBDomain, Serializable {
     /**
      * 키 필드값 중복 여부
      */
-    private boolean keyDuplicate;
+    private boolean keyDuplicable;
     /**
      * 마스터 도메인 아이디 - 자신이 마스터 도메인이라면 null이다.
      */
@@ -191,13 +191,13 @@ public class HbDBDomain implements IDBDomain, Serializable {
 	public void setTitleFieldId(String titleFieldId) {
 		this.titleFieldId = titleFieldId;
 	}
-	
-	public boolean isKeyDuplicate() {
-		return keyDuplicate;
+
+	public boolean isKeyDuplicable() {
+		return keyDuplicable;
 	}
 
-	public void setKeyDuplicate(boolean keyDuplicate) {
-		this.keyDuplicate = keyDuplicate;
+	public void setKeyDuplicable(boolean keyDuplicable) {
+		this.keyDuplicable = keyDuplicable;
 	}
 
 	/* (non-Javadoc)

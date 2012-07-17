@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.worklist.manager.impl;
 
+import java.math.BigInteger;
 import java.sql.Clob;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -27,9 +28,35 @@ import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.SQLServerDialect;
+import org.hibernate.engine.SessionFactoryImplementor;
 
 public class WorkListManagerImpl extends AbstractManager implements IWorkListManager {
-	
+
+	private String dbType;
+
+	public String getDbType() {
+		if (dbType == null) {
+			SessionFactory sf = getSessionFactory();
+			SessionFactoryImplementor sfi = (SessionFactoryImplementor)sf;
+			Dialect dialect = sfi.getDialect();
+			if (dialect instanceof PostgreSQLDialect) {
+				dbType = "postgresql";
+			} else if (dialect instanceof SQLServerDialect) {
+				dbType = "sqlserver";
+			} else {
+				dbType = "oracle";
+			}
+		}
+		return dbType;
+	}
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
+	}
+
 	private Query appendCastQuery(StringBuffer queryBuffer , TaskWorkCond cond) throws Exception {
 		
 		String userIdIns = cond.getTskAssigneeIdIns();
@@ -191,8 +218,16 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			buf.append(" count(*) ");
 			Query query = this.appendCastQuery(buf, cond);
 			List list = query.list();
-			
-			long count =((Integer)list.get(0)).longValue();
+
+			Object sizeObj = list.get(0);
+			long count = 0;
+			if (sizeObj instanceof BigInteger) {
+				count = ((BigInteger)sizeObj).longValue();
+			} else if (sizeObj instanceof Long) {
+				count = ((Long)sizeObj).longValue();
+			} else {
+				count = Long.parseLong(sizeObj.toString());
+			}
 			return count;
 		} catch (PrcException e) {
 			throw e;
@@ -218,13 +253,17 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				TaskWork obj = new TaskWork();
 				int j = 0;
 		
-				obj.setTskObjId((String)fields[j++]);    
-				obj.setTskTitle((String)fields[j++]); 
-				Clob varData = (Clob)fields[j++];
+				obj.setTskObjId((String)fields[j++]);
+				obj.setTskTitle((String)fields[j++]);
 				String tempCountStr = null;
-				if (varData != null) {
-					long length=varData.length();
-					tempCountStr=varData.getSubString(1, (int)length);
+				if(this.getDbType().equals("sqlserver")) {
+					Clob varData = (Clob)fields[j++];
+					if (varData != null) {
+						long length = varData.length();
+						tempCountStr = varData.getSubString(1, (int)length);
+					}
+				} else {
+					tempCountStr = (String)fields[j++];
 				}
 				obj.setTskDoc(tempCountStr);
 				obj.setTskType((String)fields[j++]);     
@@ -268,8 +307,20 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setLastTskExecuteDate((Timestamp)fields[j++]);                 
 				obj.setLastTskDueDate((Timestamp)fields[j++]); 
 				obj.setLastTskForm((String)fields[j++]);    
-				obj.setLastTskWorkSpaceId((String)fields[j++]);                    
-				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
+				obj.setLastTskWorkSpaceId((String)fields[j++]);
+				Object lastTaskCountObj = fields[j];
+				int lastTaskCount = 0;
+				if(lastTaskCountObj == null) {
+					lastTaskCount = -1;
+				} else {
+					if (lastTaskCountObj instanceof BigInteger) {
+						lastTaskCount = ((BigInteger)lastTaskCountObj).intValue();
+					} else if (lastTaskCountObj instanceof Long) {
+						lastTaskCount = ((Long)lastTaskCountObj).intValue();
+					} else {
+						lastTaskCount = Integer.parseInt(lastTaskCountObj.toString());
+					}
+				}
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);
 			}
@@ -530,9 +581,16 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 			buf.append(" count(*) ");
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
-			
-			long count =((Integer)list.get(0)).longValue();
-			return count;
+			Object sizeObj = list.get(0);
+			long size = 0;
+			if (sizeObj instanceof BigInteger) {
+				size = ((BigInteger)sizeObj).longValue();
+			} else if (sizeObj instanceof Long) {
+				size = ((Long)sizeObj).longValue();
+			} else {
+				size = Long.parseLong(sizeObj.toString());
+			}
+			return size;
 		} catch (PrcException e) {
 			throw e;
 		} catch (Exception e) {
@@ -558,13 +616,16 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				int j = 0;
 		
 				obj.setTskObjId((String)fields[j++]);    
-				obj.setTskTitle((String)fields[j++]); 
-				Clob varData = (Clob)fields[j++];
-				long length = 0;
-				String tempCountStr = "";
-				if(varData != null) {
-					length = varData.length();
-					tempCountStr = varData.getSubString(1, (int)length);
+				obj.setTskTitle((String)fields[j++]);
+				String tempCountStr = null;
+				if(this.getDbType().equals("sqlserver")) {
+					Clob varData = (Clob)fields[j++];
+					if (varData != null) {
+						long length = varData.length();
+						tempCountStr = varData.getSubString(1, (int)length);
+					}
+				} else {
+					tempCountStr = (String)fields[j++];
 				}
 				obj.setTskDoc(tempCountStr);
 				obj.setTskType((String)fields[j++]);
@@ -616,7 +677,19 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setLastTskForm((String)fields[j++]);
 				obj.setLastTskWorkSpaceId((String)fields[j++]);
 				obj.setLastTskWorkSpaceType((String)fields[j++]);
-				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
+				Object lastTaskCountObj = fields[j];
+				int lastTaskCount = 0;
+				if(lastTaskCountObj == null) {
+					lastTaskCount = -1;
+				} else {
+					if (lastTaskCountObj instanceof BigInteger) {
+						lastTaskCount = ((BigInteger)lastTaskCountObj).intValue();
+					} else if (lastTaskCountObj instanceof Long) {
+						lastTaskCount = ((Long)lastTaskCountObj).intValue();
+					} else {
+						lastTaskCount = Integer.parseInt(lastTaskCountObj.toString());
+					}
+				}
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);
 			}
@@ -840,13 +913,16 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				int j = 0;
 		
 				obj.setTskObjId((String)fields[j++]);    
-				obj.setTskTitle((String)fields[j++]); 
-				Clob varData = (Clob)fields[j++];
-				long length = 0;
-				String tempCountStr = "";
-				if(varData != null) {
-					length = varData.length();
-					tempCountStr = varData.getSubString(1, (int)length);
+				obj.setTskTitle((String)fields[j++]);
+				String tempCountStr = null;
+				if(this.getDbType().equals("sqlserver")) {
+					Clob varData = (Clob)fields[j++];
+					if (varData != null) {
+						long length = varData.length();
+						tempCountStr = varData.getSubString(1, (int)length);
+					}
+				} else {
+					tempCountStr = (String)fields[j++];
 				}
 				obj.setTskDoc(tempCountStr);
 				obj.setTskType((String)fields[j++]);
@@ -895,7 +971,19 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 				obj.setLastTskDueDate((Timestamp)fields[j++]);
 				obj.setLastTskForm((String)fields[j++]);
 				obj.setLastTskWorkSpaceId((String)fields[j++]);
-				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
+				Object lastTaskCountObj = fields[j];
+				int lastTaskCount = 0;
+				if(lastTaskCountObj == null) {
+					lastTaskCount = -1;
+				} else {
+					if (lastTaskCountObj instanceof BigInteger) {
+						lastTaskCount = ((BigInteger)lastTaskCountObj).intValue();
+					} else if (lastTaskCountObj instanceof Long) {
+						lastTaskCount = ((Long)lastTaskCountObj).intValue();
+					} else {
+						lastTaskCount = Integer.parseInt(lastTaskCountObj.toString());
+					}
+				}
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);
 			}

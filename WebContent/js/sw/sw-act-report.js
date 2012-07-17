@@ -1,6 +1,6 @@
 $(function() {
 
-	$('button.js_remove_condition').live('click', function(e) {
+	$('.js_remove_condition').live('click', function(e) {
 		$(targetElement(e)).parents('form.js_filter_condition:first').remove();
 		return false;
 	});
