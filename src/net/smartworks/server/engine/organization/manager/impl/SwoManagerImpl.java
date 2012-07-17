@@ -50,6 +50,7 @@ import net.smartworks.server.engine.organization.model.SwoUserExtend;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.LocaleInfo;
 import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartUtil;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -2456,12 +2457,15 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append("select user.id");
 		buff.append("  from SwoDepartment dept, SwoUser user");
 		buff.append(" where dept.id = user.deptId");
+		buff.append("   and user.type = 'BASIC'");
 		buff.append("   and user.roleId = 'DEPT LEADER'");
 		buff.append("   and dept.id = :id");
 		query = this.getSession().createQuery(buff.toString());
 		query.setString("id", departmentId);
 
-		String headId = (String)query.uniqueResult();
+		String headId = null;
+		if(!SmartUtil.isBlankObject(query.uniqueResult()))
+			headId = (String)query.uniqueResult();
 
 		departmentExtend.setHeadId(headId);
 
