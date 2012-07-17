@@ -2539,6 +2539,7 @@ public class ModelConverter {
 		departmentInfo.setName(departmentExtend.getName());
 		departmentInfo.setDesc(departmentExtend.getDescription());
 		departmentInfo.setSmallPictureName(departmentExtend.getSmallPictureName());
+		departmentInfo.setFullpathName(getDepartmentInfoFullpathNameByDepartmentId(departmentExtend.getId()));
 
 		return departmentInfo;
 	}
@@ -2581,6 +2582,7 @@ public class ModelConverter {
 		department.setId(departmentExtend.getId());
 		department.setName(departmentExtend.getName());
 		department.setDesc(departmentExtend.getDescription());
+		department.setFullpathName(getFullpathNameByDepartmentId(departmentExtend.getId()));
 
 		DepartmentInfo parent = getDepartmentInfoByDepartmentId(departmentExtend.getParentId());
 		if(parent != null) {

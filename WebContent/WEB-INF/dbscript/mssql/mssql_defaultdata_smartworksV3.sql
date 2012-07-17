@@ -214,6 +214,7 @@ INSERT INTO sworguser (id, companyid, deptid, roleid, authid, empno, name, type,
 INSERT INTO sworgrole (id, companyid, name, description, domainid, workitemid, createdtime, creator) VALUES ('ADMINISTRATOR', NULL, '시스템 관리자', '시스템 관리자', 'md_cc8ba6fe661b45e0b6dd5a8ffd21b091', NULL, getdate(), 'admin@maninsoft.co.kr');
 INSERT INTO sworgrole (id, companyid, name, description, domainid, workitemid, createdtime, creator) VALUES ('USER', NULL, '일반 사용자', '일반 사용자', 'md_cc8ba6fe661b45e0b6dd5a8ffd21b091', NULL, getdate(), 'admin@maninsoft.co.kr');
 INSERT INTO sworgrole (id, companyid, name, description, domainid, workitemid, createdtime, creator) VALUES ('OPERATOR', NULL, '운영자', '포털 운영자', 'md_cc8ba6fe661b45e0b6dd5a8ffd21b091', NULL, getdate(), 'admin@maninsoft.co.kr');
+INSERT INTO sworgrole (id, companyid, name, description, domainid, workitemid, createdtime, creator) VALUES ('EXTERNALUSER', NULL, '외부사용자', '외부사용자', 'md_cc8ba6fe661b45e0b6dd5a8ffd21b091', NULL, getdate(), 'admin@maninsoft.co.kr');
 
 -- category
 INSERT INTO swcategory (id, companyId, parentid, name, description, disporder, creator, createdtime, modifier, modifiedtime) VALUES ('root', 'Maninsoft', NULL, '루트', '카테고리 루트', 0, 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate());
