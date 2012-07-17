@@ -18,7 +18,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .company_logo img {min-wdith:85px; min-height:22px}
 
 /*Notice Icon*/
-.notice_icons {display:block; height:29px; float:left; z-index:40}
+.notice_icons {display:block; height:29px; float:left; margin:0 0 0 15px; z-index:40}
 .notice_icons a:link, a:visited, a:hover, a:focus, a:active {text-decoration: none}
 .notice_icons li {float:left; margin-right:4px; width:34px; height:31px}
 #header .notice_icons > span {vertical-align:bottom}
@@ -57,7 +57,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 }
 
 /*Top Menu*/
-.top_menu {z-index:40; margin:0 auto; width:345px}
+.top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */
 .top_menu ul {width:138px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
@@ -65,9 +65,9 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 .top_menu ul li > span {height:34px; width:70px; text-align:center}
 
-.top_menu ul li.idx1 {width:70px; height:34px; background-position:left top}
+.top_menu ul li.idx1 {width:70px; background-position:left top}
 .top_menu ul li.idx1 a:hover,
-.top_menu ul li.idx1 .current {width:70px; height:34px; background-position:left -60px}
+.top_menu ul li.idx1 .current {width:70px; background-position:left -60px}
 
 .top_menu ul li.idx2 {width:100px; background-position:-70px top}
 .top_menu ul li.idx2 a:hover,
@@ -77,7 +77,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li.idx3 a:hover,
 .top_menu ul li.idx3 .current {width:68px; background-position:-170px -60px}
 
-.top_menu ul li span a,.top_menu ul li span a:hover {display:block; height: 24px; padding-top: 10px}
+.top_menu ul li a,.top_menu ul li a:hover {display:block; height: 24px; padding-top: 10px}
 
 /*Search*/
 .global_srch {float:left}
