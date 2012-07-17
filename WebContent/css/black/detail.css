@@ -64,11 +64,15 @@
 .space_section .title {background: url("../../images/body_icon.png") no-repeat 5px -418px transparent; font-weight:bold; padding:3px 0 0 25px; border-bottom: 1px solid #C7C7C7; background-color:#dedede; line-height: 20px; margin-bottom: 8px}
 .space_section .title.off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent}
 .space_section .imag_area { margin:4px 0}
-.picture_section { overflow:hidden}
-.picture_section li { float:left; margin:20px 10px 0 10px}
+.picture_section {overflow:hidden}
+.picture_section li { float:left; margin:0 10px 15px}
 .picture_section .detail li { float:left; margin:0 10px 20px}
-.picture_section .folder_bg {background: url("../../images/body_icon.png") no-repeat 0 -644px transparent; width:112px; height:107px; display:inline-block}
-.picture_section .picture_bg {background: url("../../images/body_icon.png") no-repeat -129px -644px transparent; width:165px; height:135px; display:inline-block}
+.picture_section .tab_buttons {margin: 0 2px 0 0}
+.picture_section .picture_folder {background: url("../../images/body_icon.png") no-repeat 0 -644px transparent; width:112px; height:107px; position: relative}
+.picture_section .picture_folder .ctgr_action {margin:0; top:-11px}
+.picture_section .picture_detail_area {background: url("../../images/body_icon.png") no-repeat -129px -644px transparent; width:165px; height:135px; position: relative}
+.picture_section .picture_detail_area .ctgr_action {margin:0; top:-13px}
+.picture_section .picture_detail_area + div {margin:3px 0 0 0}
 .picture_section .thum_picture {height: 73px; padding: 22px 0 0 15px; width: 75px}
 .picture_section .detail_picture {height: 125px; padding: 5px; width: 155px}
 
@@ -217,7 +221,8 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .nav_paginate .next a:hover { background-position:-12px -552px}
 
 /* Prev Page, Next Page  */
-.move_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; border-top: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space, .select_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
+.select_btn_space {text-align:left; line-height: 24px; padding-left: 5px; margin-bottom:10px}
 .move_btn_space.top {border-top: none}
 .move_btn_space.bottom {border-bottom:none; background-color: #FFF}
 .move_btn_space span a {float:right; margin-top: 4px; color:#666666 !important}

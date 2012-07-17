@@ -82,7 +82,14 @@ function viewImage(img){
 	%>
 				<!--폴더 목록1 -->
 				<li>
-					<div class="folder_bg">
+					
+					<div class="picture_folder">
+						<!-- 삭제 , 수정버튼 -->
+						<div class="ctgr_action">
+							<span class="btn_text_category" categorydesc="null" title="폴더 이름수정"></span>
+							<span class="btn_remove_category" title="폴더삭제"></span>
+						</div>
+						<!-- 삭제 , 수정버튼//-->
 						<a href="image_instance_list.sw" class="js_image_instance_item" categoryId="<%=category.getId()%>">
 							<div class="thum_picture"><img style="width:70px;height:70px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
 						</a>
@@ -106,14 +113,20 @@ function viewImage(img){
 	%>
 				<!--폴더 목록1 -->
 				<li>
-					<div class="picture_bg">		
+					<input type="checkbox" class="tl">
+					<div class="picture_detail_area">	
+						<!-- 수정버튼 -->
+						<div class="ctgr_action">
+							<span class="btn_remove_category" title="삭제"></span>
+						</div>
+						<!-- 수정버튼//-->
 						
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
 						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
 						</a>												
-						<div style="float:right">파일이름<%=image.getFileName()%></div>
-						<div style="float:right"><%=image.getOwner().getLongName()%> <%=image.getLastModifiedDate().toLocalString()%></div>
  					</div>
+ 					<div><%=image.getFileName()%></div>
+					<div class="t_date"><%=image.getOwner().getLongName()%> <%=image.getLastModifiedDate().toLocalString()%></div>
  				</li>
 
 				<!--폴더 목록1 //--> 	 
