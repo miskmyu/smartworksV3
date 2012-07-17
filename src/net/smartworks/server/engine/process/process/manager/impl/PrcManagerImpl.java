@@ -688,19 +688,19 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		}
 		if (workSpaceIdIns != null) {
 			queryBuffer.append(" and");
-			queryBuffer.append(" (prcCreateUser = '" + userId + "' or ((prcWorkSpaceType = 6 and prcWorkSpaceId in (");
+			queryBuffer.append(" (prcCreateUser = '" + userId + "' or ((prcWorkSpaceType = '6' and prcWorkSpaceId in (");
 			for (int j=0; j<workSpaceIdIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or (prcWorkSpaceType = 5 and prcWorkSpaceId in (");
+			queryBuffer.append(")) or (prcWorkSpaceType = '5' and prcWorkSpaceId in (");
 			for (int j=0; j<workSpaceIdIns.length; j++) {
 				if (j != 0)
 					queryBuffer.append(", ");
 				queryBuffer.append(":workSpaceIdIn").append(j);
 			}
-			queryBuffer.append(")) or (prcWorkSpaceType = 4 and prcWorkSpaceId = '" + user + "') or prcWorkSpaceType = 2 or prcWorkSpaceType is null))");
+			queryBuffer.append(")) or (prcWorkSpaceType = '4' and prcWorkSpaceId = '" + user + "') or prcWorkSpaceType = '2' or prcWorkSpaceType is null))");
 		}
 		if (workSpaceIdNotIns != null) {
 			queryBuffer.append(" and");
@@ -726,7 +726,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			}
 			likeAccessValuesQuery = likeAccessValuesBuffer.toString();
 		}
-		queryBuffer.append(" and (prcAccessLevel is null or prcAccessLevel = 3 or (prcAccessLevel = 1 and prcCreateUser = '" + userId + "') or (prcAccessLevel = 2 and (").append(likeAccessValuesQuery).append(" or prcCreateUser = '" + userId + "'))) ");
+		queryBuffer.append(" and (prcAccessLevel is null or prcAccessLevel = '3' or (prcAccessLevel = '1' and prcCreateUser = '" + userId + "') or (prcAccessLevel = '2' and (").append(likeAccessValuesQuery).append(" or prcCreateUser = '" + userId + "'))) ");
 		if (searchKey != null) {
 			queryBuffer.append("and (prcStatus like :searchKey or prcTitle like :searchKey or lastTask_tskname like :searchKey or prcCreateUserName like :searchKey ");
 			queryBuffer.append("or prcModifyUserName like :searchKey or lastTask_tskcreateuserName like :searchKey or lastTask_tskassigneeName like :searchKey)");

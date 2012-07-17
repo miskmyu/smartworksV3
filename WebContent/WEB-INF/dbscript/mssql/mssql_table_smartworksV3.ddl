@@ -26,7 +26,7 @@ CREATE TABLE sworguser (
 	pos varchar(50),
 	email varchar(50),
 	useMail bit,
-	passwd varchar(20),
+	passwd varchar(50),
 	lang varchar(20),
 	stdtime varchar(20),
 	picture varchar(50),
