@@ -71,7 +71,7 @@
 						%>
 	          		</select>
 	          		<!-- 전체선택, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
-	     			<span class="js_image_select_buttons fl" style="display:none">
+	     			<span class="js_image_select_buttons fl mr5" style="display:none">
 	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
 	     			</span>
 	     		
@@ -80,6 +80,10 @@
 	          		<!-- 전체선택, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
 	          		
 					<span class="js_progress_span fl"></span>
+					
+					<!-- 사진공간  상세목록 페이지에서만 나옴 -->
+					<span class="fr">목록보기</span>
+					<!-- 사진공간  상세목록 페이지에서만 나옴 -->
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
