@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
 <%@page import="net.smartworks.model.instance.info.WorkInstanceInfo"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
@@ -50,13 +51,16 @@
 					<ul>
 					<li>
 					<div class="info_ms_section">
+						<a href="smart.sw#<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
+							<span class="<%=work.getIconClass()%>"></span>
+							<span><%=work.getName()%></span>
+						</a>
 						<div class="info_img">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>"><%=work.getName()%></a>
-							<%=commentInstance.getComment()%>
+							<div><%=commentInstance.getComment()%></div>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 									<div class="btn_x js_remove_notice" ></div></a>
@@ -72,13 +76,17 @@
 				%>
 					<li>
 					<div class="info_ms_section">
+						<a href="smart.sw#<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>">
+							<span class="<%=work.getIconClass()%>"></span>
+							<span class="tb"><%=workInstance.getSubject()%></span> 
+						</a>
+					
 						<div class="info_img">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId()%>&wid=<%=workInstance.getWorkSpace()%>&workId=<%=work.getId() %>"><%=workInstance.getSubject()%></a>
-							<%=commentInstance.getComment()%>
+							<div><%=commentInstance.getComment()%></div>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 									<div class="btn_x js_remove_notice" ></div></a>
@@ -93,13 +101,16 @@
 				%>
 					<li>
 					<div class="info_ms_section">
+						<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=work.getId() %>">
+							<span class="profile_size_m"><%=workSpace.getMinPicture()%></span>
+							<span><%=workSpace.getName()%></span>
+						</a>					
 						<div class="info_img">
 							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
 						</div>
 						<div class="info_list">
-							<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=work.getId() %>"><%=workSpace.getName()%></a>
-							<%=commentInstance.getComment()%>
+							<div><%=commentInstance.getComment()%></div>
 							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
 								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
 									<div class="btn_x js_remove_notice" ></div></a>

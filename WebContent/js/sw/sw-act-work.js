@@ -1570,4 +1570,8 @@ $(function() {
 		return false;
 	});
 
+	$('.js_notice_message_box_page').live("click", function(e){
+		$(targetElement(e)).parents('.js_notice_message_box_page').find('.js_close_message').click();
+		return true;
+	});
 });
