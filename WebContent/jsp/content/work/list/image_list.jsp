@@ -75,7 +75,7 @@
 	          			<option>이동</option>
 	          		</select>
 	          		
-	          		<button class="button fl">
+	          		<button class="button space fl mr5">
 						<span class="icon_mail_delet"></span> 삭제
 					</button>
 	          		<!-- 삭제, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->

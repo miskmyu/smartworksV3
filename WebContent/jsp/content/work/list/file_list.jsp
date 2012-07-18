@@ -132,13 +132,15 @@
 						%>
 					</select>
 					
-					<!-- 이동기능 -->
-					<div class="fl mr5">
-						<select>
-							<option>이동</option>
-						</select>
-					</div>
-					<!-- 이동기능// -->
+					<!-- 삭제, 이동 -->
+					<select class="fl mr5">
+						<option>이동</option>
+					</select>
+						
+					<button class="button space fl mr5">
+						<span class="icon_mail_delet"></span> 삭제
+					</button>
+					<!-- 삭제, 이동// -->
 					
 					<span class="js_progress_span fl"></span>
 					<!-- 폴더 구분//-->
