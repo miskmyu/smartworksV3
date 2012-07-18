@@ -192,6 +192,10 @@ smartMessage.bundle['en'] = {
 	removeImageFolderError : "Error has been occured while removing Image Folder. Please contact the Administrator!",
 	removeImageInstanceSucceed : "Image Instance has been removed successfully.",
 	removeImageInstanceError : "Error has been occured while removing Image Instance. Please contact the Administrator!",
+	moveImageInstancesSucceed : "Image Instance has been moved successfully.",
+	moveImageInstancesError : "Error has been occured while moving Image Instance. Please contact the Administrator!",
+	moveFileInstancesSucceed : "File Instance has been moved successfully.",
+	moveFileInstancesError : "Error has been occured while moving File Instance. Please contact the Administrator!",
 	mailPasswordConfirmError : "Send Mail Password confirmation error. Please retry password confirmation",
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",
@@ -204,7 +208,9 @@ smartMessage.bundle['en'] = {
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",
 	missingCommentTaskForward : "Forward comments is required field. Please input the comments.",
 	missingCommentTaskApproval : "Approval comments is required field. Please input the comments.",
-	
+	moveItemsNotSelected : "No selected items to move. Please retry after select items.",
+		
+	moveConfirmation : "Do you really want to move selected items?",
 	removeConfirmation : "Do you really want to remove?",
 	saveConfirmation : "Do you really want to save changes? ",
 	createConfirmation : "Do you really want to create? ",

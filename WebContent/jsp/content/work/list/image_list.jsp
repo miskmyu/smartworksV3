@@ -70,14 +70,22 @@
 						}
 						%>
 	          		</select>
-	          		<!-- 삭제, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
-	          		<select class="fl mr5 js_select_move_folder" style="display:none">
-	          		</select>
-	          		
-	          		<button class="button space fl mr5 js_remove_selected_images" style="display:none">
-						<span class="icon_mail_delet"></span><fmt:message key="common.button.remove_selected"/>
-					</button>
-	          		<!-- 삭제, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
+	          		<!-- 이동: 사진공간  상세목록 페이지에서만 나옴 -->
+	          		<select class="fl mr5 js_move_selected_files" style="display:none">
+						<option value="">[<fmt:message key="common.button.move_selected"/>]</option>
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								FileCategoryInfo category = categories[i];
+								if(category.getId().equals(FileCategory.ID_ALL_FILES)) continue;
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+	          		</select>	          		
+	          		<!-- 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
 					<span class="js_progress_span fl"></span>
 	       		</div>
 	     		<!-- 필터//-->
