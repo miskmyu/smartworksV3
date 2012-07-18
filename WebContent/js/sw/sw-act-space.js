@@ -287,7 +287,7 @@ $(function() {
 					imageList.find('.js_add_image_folder_btn').hide();
 				}
 				imageList.find('.js_image_select_buttons').hide();
-				imageList.find('.js_select_move_folder').hide();
+				imageList.find('.js_move_selected_images').hide();
 				imageList.find('.js_remove_selected_images').hide();					
 				smartPop.closeProgress();
 			},
@@ -319,11 +319,11 @@ $(function() {
 				imageList.find('.js_add_image_folder_btn').hide();
 				if(displayType == '1'){
 					imageList.find('.js_image_select_buttons').show();
-					imageList.find('.js_select_move_folder').show();
+					imageList.find('.js_move_selected_images').show();
 					imageList.find('.js_remove_selected_images').show();
 				}else{
 					imageList.find('.js_image_select_buttons').hide();
-					imageList.find('.js_select_move_folder').hide();
+					imageList.find('.js_move_selected_images').hide();
 					imageList.find('.js_remove_selected_images').hide();					
 				}
 				smartPop.closeProgress();
@@ -355,18 +355,18 @@ $(function() {
 					if(parentId !== "AllFiles"){
 						imageList.find('.js_add_image_folder_btn').show();
 						imageList.find('.js_image_select_buttons').hide();
-						imageList.find('.js_select_move_folder').hide();
+						imageList.find('.js_move_selected_images').hide();
 						imageList.find('.js_remove_selected_images').hide();
 					}else{
 						imageList.find('.js_add_image_folder_btn').hide();
 						imageList.find('.js_image_select_buttons').show();
-						imageList.find('.js_select_move_folder').show();
+						imageList.find('.js_move_selected_images').show();
 						imageList.find('.js_remove_selected_images').show();						
 					}
 				}else{
 					imageList.find('.js_add_image_folder_btn').hide();
 					imageList.find('.js_image_select_buttons').hide();
-					imageList.find('.js_select_move_folder').hide();
+					imageList.find('.js_move_selected_images').hide();
 					imageList.find('.js_remove_selected_images').hide();					
 				}
 				smartPop.closeProgress();
@@ -691,8 +691,7 @@ $(function() {
 	$('.js_check_all_image_instance').live('click', function(e){
 		var input = $(targetElement(e));
 		var imageInstanceList = input.parents('.js_image_list_page').find('.js_image_instance_list_page');
-		console.log('checked=', input.attr('checked'));
-		imageInstanceList.find('.js_check_file_instance').attr('checked', (input.attr('checked')=='checked'));
+		imageInstanceList.find('.js_check_image_instance').attr('checked', (input.attr('checked')=='checked'));
 		return true;
 	});
 	

@@ -75,7 +75,7 @@
 	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
 	     			</span>
 	     		
-	          		<select class="fl mr5 js_move_selected_files" style="display:none">
+	          		<select class="fl mr5 js_move_selected_images" style="display:none">
 						<option value="">[<fmt:message key="common.button.move_selected"/>]</option>
 						<%
 						if(!SmartUtil.isBlankObject(categories)){
