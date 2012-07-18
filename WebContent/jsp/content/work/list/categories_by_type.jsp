@@ -27,13 +27,23 @@ if(!SmartUtil.isBlankObject(categories) && categories.length>0){
 			<span class="dep">
 				<a class="js_file_category_item" href="" categoryId="<%=category.getId()%>"> 
 					<span class="<%=category.getIconClass()%>"></span>
-					<span><%=category.getName() %> (<%=category.getLength() %>)</span> 
-				<!-- 삭제 , 수정버튼 -->
-				<span class="ctgr_action">
-					<span class="btn_remove_category" title="폴더삭제"></span>
-					<span class="btn_text_category" categorydesc="null" title="폴더 이름수정"></span>
-				</span>
-				<!-- 삭제 , 수정버튼//-->
+					<span><%=category.getName() %> (<%=category.getLength() %>)</span>
+					<%
+					if(displayType == FileCategory.DISPLAY_BY_CATEGORY 
+						&& !category.getId().equals(FileCategory.ID_ALL_FILES) 
+						&& !category.getId().equals(FileCategory.ID_UNCATEGORIZED) ){
+					%> 
+						<!-- 삭제 , 수정버튼 -->
+						<span class="ctgr_action">
+							<%if(category.getLength()==0){ %>
+								<span class="btn_remove_category js_remove_file_folder_btn" folderId="<%=category.getId() %>" title="<fmt:message key='mail.button.remove_folder'/>"></span>
+							<%} %>
+							<span class="btn_text_category js_text_file_folder_btn" folderId="<%=category.getId() %>" folderName="<%=category.getName() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
+						</span>
+						<!-- 삭제 , 수정버튼//-->
+					<%
+					}
+					%>
 				</a>
 			</span>
 		</li>

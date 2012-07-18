@@ -577,4 +577,34 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		smartworks.setFileFolder(requestBody, request);
 	}
 	
+	@RequestMapping(value = "/remove_file_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeFileFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeFileFolder(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/create_new_image_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void createNewImageFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.createNewImageFolder(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/set_image_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setImageFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setImageFolder(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/remove_image_folder", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeImageFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeImageFolder(requestBody, request);
+	}
+	
+	@RequestMapping(value = "/remove_image_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeImageInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeImageInstance(requestBody, request);
+	}
+	
 }

@@ -1547,4 +1547,29 @@ public class SmartWorks implements ISmartWorks {
 		instanceService.setFileFolder(requestBody, request);
 	}
 
+	@Override
+	public void removeFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeFileFolder(requestBody, request);
+	}
+
+	@Override
+	public void createNewImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.createNewImageFolder(requestBody, request);
+	}
+
+	@Override
+	public void setImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.setImageFolder(requestBody, request);
+	}
+
+	@Override
+	public void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeImageFolder(requestBody, request);
+	}
+
+	@Override
+	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeImageInstance(requestBody, request);
+	}
+
 }
