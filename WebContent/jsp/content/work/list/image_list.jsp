@@ -29,7 +29,7 @@
 
 	ImageCategoryInfo[] categories = smartWorks.getImageCategoriesByType(FileCategory.DISPLAY_BY_CATEGORY, wid);
 		
-	session.setAttribute("cid", cid);
+	session.setAttribute("cid", cid); 
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "image_list.sw");
 	session.setAttribute("workSpace", workSpace);
@@ -58,7 +58,7 @@
 	        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_OWNER%>"><fmt:message key="space.title.by_owner"/></option>
 	          		</select>
-    				<select class="js_image_category_list fl mr5">
+    				<select class="js_image_category_list fl mr10">
 						<%
 						if(!SmartUtil.isBlankObject(categories)){
 							for(int i=0; i<categories.length; i++){
@@ -70,7 +70,15 @@
 						}
 						%>
 	          		</select>
+	          		<!-- 삭제, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
+	          		<select class="fl mr5">
+	          			<option>이동</option>
+	          		</select>
 	          		
+	          		<button class="button space fl mr5">
+						<span class="icon_mail_delet"></span> 삭제
+					</button>
+	          		<!-- 삭제, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
 					<span class="js_progress_span fl"></span>
 	       		</div>
 	     		<!-- 필터//-->
@@ -78,12 +86,11 @@
 	     		
 	     		<!-- 전체선택, 이동 : 사진공간  상세페이지에서만 나옴 -->
 	     		<div class="select_btn_space js_image_select_buttons" style="display:none">
-	     			<span class="mr5"><input type="checkbox" /><fmt:message key="mail.button.select_all"/></span>
-	     			<select>
-	          			<option>이동</option>
-	          		</select>
+	     			<span>
+	     				<input type="checkbox" /><fmt:message key="mail.button.select_all"/>
+	     			</span>
 	     		</div>
-	     		<!-- 전체선택, 이동 : 사진공간  상세페이지에서만 나옴 //-->
+	     		<!-- 전체선택 : 사진공간  상세목록 페이지에서만 나옴 //-->
                
 				<!-- 사진 목록 -->
 				<div class="picture_section js_image_instance_list">

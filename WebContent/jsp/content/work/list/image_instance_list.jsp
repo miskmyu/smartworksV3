@@ -41,7 +41,7 @@
 	Community workSpace = smartWorks.getWorkSpaceById(wid);
 	int displayType = Integer.parseInt(request.getParameter("displayType"));
 	String parentId = request.getParameter("parentId");
-	String strLastDate = request.getParameter("lastDate");
+	String strLastDate = request.getParameter("lastDate"); 
 	LocalDate lastDate = new LocalDate();
 	if(!SmartUtil.isBlankObject(strLastDate))		
 		lastDate = LocalDate.convertLocalStringToLocalDate(request.getParameter("lastDate"));
@@ -130,13 +130,14 @@ function viewImage(img){
 				<!--폴더 목록1 -->
 				<li>
 					<input type="checkbox" class="tl">
-					<div class="picture_detail_area">	
-						<!-- 수정버튼 -->
+					<div class="picture_detail_area">
+						
+						<!-- 삭제버튼 -->
 						<div class="ctgr_action">
 							<span class="btn_remove_category" title="삭제"></span>
 						</div>
-						<!-- 수정버튼//-->
-						
+						<!-- 삭제버튼//-->
+												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
 						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
 						</a>												
@@ -144,7 +145,6 @@ function viewImage(img){
  					<div><%=image.getFileName()%></div>
 					<div class="t_date"><%=image.getOwner().getLongName()%> <%=image.getLastModifiedDate().toLocalString()%></div>
  				</li>
-
 				<!--폴더 목록1 //--> 	 
 	<%
 			}
@@ -152,3 +152,14 @@ function viewImage(img){
 	}
 	%>
 </ul>
+<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
+<div class="tc cb">
+	<div class="btn_gray">
+		<a class="js_content" href="file_list.sw?cid=fl.li.pkg_309666dd2bb5493c9d7e618b3a0aad96&wid=">
+			<span class="txt_btn_start"></span>
+			<span class="txt_btn_center">목록보기</span>
+			<span class="txt_btn_end"></span>
+		</a>
+	</div>
+</div>
+<!-- 목록 버튼: 사진공간  상세목록 페이지에서만 나옴//-->
