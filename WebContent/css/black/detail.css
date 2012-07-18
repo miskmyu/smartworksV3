@@ -65,7 +65,7 @@
 .space_section .title.off {background: url("../../images/body_icon.png") no-repeat 0 -389px transparent}
 .space_section .imag_area { margin:4px 0}
 .picture_section {overflow:hidden}
-.picture_section li { float:left; margin:0 10px 15px}
+.picture_section li { float:left; margin:0 10px 10px}
 .picture_section .detail li { float:left; margin:0 10px 20px}
 .picture_section .tab_buttons {margin: 0 2px 0 0}
 .picture_section .picture_folder {background: url("../../images/body_icon.png") no-repeat 0 -644px transparent; width:112px; height:107px; position: relative}
@@ -76,6 +76,7 @@
 .picture_section .thum_picture {height: 73px; padding: 22px 0 0 15px; width: 75px}
 .picture_section .detail_picture {height: 125px; padding: 5px; width: 155px}
 .space_contents {padding: 0 10px 10px}
+.js_image_select_buttons {margin:4px 5px 0 0} /* CheckBox in Image List Header*/
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
