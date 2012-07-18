@@ -1120,14 +1120,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		try {
 			Map<String, List<Map<String, String>>> from = (Map<String, List<Map<String, String>>>)requestBody.get("from");
 			Map<String, Object> newMail = (HashMap<String, Object>)requestBody.get("frmNewMail");
-			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("receivers");
-			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("ccReceivers");
-			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("bccReceivers");
-			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("attachments");
-			String subject = (String)newMail.get("subject");
-			String body = (String)newMail.get("contents");
+			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailReceivers");
+			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailCcReceivers");
+			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailBccReceivers");
+			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("emailAttachments");
+			String subject = (String)newMail.get("emailSubject");
+			String body = (String)newMail.get("emailContents");
 			String requestReceiptNotification = (String)newMail.get("requestReceiptNotification");
-			String priority = (String)newMail.get("priority");
+			String priority = (String)newMail.get("emailPriority");
 			String sensitivity = (String)newMail.get("sensitivity");
 			
 			AuthProfile auth = getAuthProfile();
@@ -1296,14 +1296,14 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		try {
 			Map<String, List<Map<String, String>>> from = (Map<String, List<Map<String, String>>>)requestBody.get("from");
 			Map<String, Object> newMail = (HashMap<String, Object>)requestBody.get("frmNewMail");
-			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("receivers");
-			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("ccReceivers");
-			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("bccReceivers");
-			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("attachments");
-			String subject = (String)newMail.get("subject");
-			String body = (String)newMail.get("contents");
+			Map<String, List<Map<String, String>>> receivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailReceivers");
+			Map<String, List<Map<String, String>>> ccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailCcReceivers");
+			Map<String, List<Map<String, String>>> bccReceivers = (HashMap<String, List<Map<String, String>>>)newMail.get("emailBccReceivers");
+			Map<String, List<Map<String, String>>> attachments = (HashMap<String, List<Map<String, String>>>)newMail.get("emailAttachments");
+			String subject = (String)newMail.get("emailSubject");
+			String body = (String)newMail.get("emailContents");
 			String requestReceiptNotification = (String)newMail.get("requestReceiptNotification");
-			String priority = (String)newMail.get("priority");
+			String priority = (String)newMail.get("emailPriority");
 			String sensitivity = (String)newMail.get("sensitivity");
 			
 			AuthProfile auth = getAuthProfile();
