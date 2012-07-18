@@ -26,9 +26,9 @@
 .body_titl_pic .title_section {position:absolute}
 .body_titl_pworks {background: url("../../images/body_title_proces.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
 .body_titl_iworks {background: url("../../images/body_title_inform.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
-.body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
-.body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
-.body_titl > .user {background: url("../../images/body_title.png") no-repeat 0 -725px transparent; padding:0 13px 0 0; line-height:18px; min-height:52px; width:50px}
+.body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
+.body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
+.body_titl > .user, .form_title > .user {background: url("../../images/body_title.png") no-repeat 0 -725px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
 .body_titl > .smartcaster {background: url("../../images/body_title.png") no-repeat 0 -776px transparent; padding:20px 0 0 68px; line-height:18px}
 
 .body_titl_area {background: url("../../images/body_title.png") no-repeat 0 0 transparent; padding:22px 0 0 68px; line-height:18px}
@@ -75,6 +75,7 @@
 .picture_section .picture_detail_area + div {margin:3px 0 0 0}
 .picture_section .thum_picture {height: 73px; padding: 22px 0 0 15px; width: 75px}
 .picture_section .detail_picture {height: 125px; padding: 5px; width: 155px}
+.space_contents {padding: 0 10px 10px}
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
@@ -91,8 +92,8 @@
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
-.btns_action {margin:0 0 0 62px}
-.btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important; font-size:10.5px}
+.btns_action {margin:0 0 0 62px; font-size:10.5px}
+.btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
 .btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
 

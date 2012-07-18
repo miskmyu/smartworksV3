@@ -28,7 +28,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div>
+<div class="js_notice_message_box_page">
 	<%
 	// 알림 메시지
 	if (noticeType == Notice.TYPE_NOTIFICATION) {
