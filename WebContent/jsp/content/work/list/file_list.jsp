@@ -110,7 +110,7 @@
 			<!-- 왼쪽 폴더영역이  접혔을때 class:lft_fd를 추가 , 펼쳤을때는 class:lft_fd를 지움 --> 
 			<div class="contents_space oh lft_fd"> 
 				<!-- 컨텐츠 상단 영역 -->
-				<div class="js_file_list_header" style="height:25px">
+				<div class="js_file_list_header">
 					<!-- 폴더구분  -->
 					<select class="js_file_display_by fl mr5">
 						<option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>

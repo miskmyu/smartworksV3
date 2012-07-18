@@ -52,7 +52,7 @@
 			<div class="contents_space">
 			
 				<!-- 필터 -->
-	        	<div class="js_image_list_header" style="height:25px">
+	        	<div class="js_image_list_header">
     				<select class="js_image_display_by fl mr5">
 	            			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
