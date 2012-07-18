@@ -130,8 +130,8 @@ function viewImage(img){
 				ImageInstanceInfo image = imageInstances[i];		
 	%>
 				<!--폴더 목록1 -->
-				<li class="mt10">
-					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
+				<li>
+					<input type="checkbox" class="tl js_check_image_instance">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
@@ -148,7 +148,7 @@ function viewImage(img){
 						<!-- 삭제버튼//-->
 												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
-						<div class="detail_picture"><img src="<%=image.getImgSource()%>"></div>
+						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
 						</a>												
  					</div>
  					<div><%=image.getFileName()%></div>

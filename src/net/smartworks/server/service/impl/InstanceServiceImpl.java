@@ -7824,15 +7824,5 @@ public class InstanceServiceImpl implements IInstanceService {
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

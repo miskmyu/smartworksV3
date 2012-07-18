@@ -85,7 +85,6 @@
 		if(sortedField==null) sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
-			<th class="r_line" style="width:40px;"><input type="checkbox" class="js_check_all_file_instance" /></th>
 	 		<th class="r_line" style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
@@ -200,7 +199,6 @@
 				fileSize = SmartUtil.getBytesAsString(size);
 			%>
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
-					<td class="tc"><input name="chkSelectMail" class="js_check_file_instance" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 					<td class="tc"><%=currentCount%></td>
 					<td>
   						<span class="js_pop_files_detail" filesDetail="<%=fileInstance.getFilesHtml()%>"><%=fileName %></span>
