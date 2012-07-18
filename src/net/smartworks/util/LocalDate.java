@@ -489,7 +489,7 @@ public class LocalDate extends Date{
 	private LocalDate getLocalDateOnly(LocalDate localDate){
 		LocalDate lDate = null;
 		try{
-			lDate =  LocalDate.convertLocalDateStringToLocalDate(localDate.toLocalDateSimpleString());
+			lDate =  LocalDate.convertLocalDateStringToLocalDate(localDate.toDateSimpleString());
 		}catch (Exception e){
 		}
 		return lDate;
