@@ -25,7 +25,6 @@ public class Group extends WorkSpace {
 	private boolean	isPublic = false;
 	//private boolean isContinue = false;
 	private User	leader = null;
-	private UserInfo[] 	members = null;
 	private User	owner = null;
 	private LocalDate openDate = null;
 	private int numberOfGroupMember = 0;
@@ -63,12 +62,6 @@ public class Group extends WorkSpace {
 	}
 	public void setLeader(User leader) {
 		this.leader = leader;
-	}
-	public UserInfo[] getMembers() {
-		return members;
-	}
-	public void setMembers(UserInfo[] members) {
-		this.members = members;
 	}
 	public User getOwner() {
 		return owner;
@@ -156,12 +149,12 @@ public class Group extends WorkSpace {
 	public Group(String id, String name, UserInfo[] members){
 		
 		super(id, name);
-		this.members = members;
+		setMembers(members);
 	}
 	public Group(String id, String name, UserInfo[] members, User leader){
 		
 		super(id, name);
-		this.members = members;
+		setMembers(members);
 		this.leader = leader;
 	}
 
@@ -184,15 +177,6 @@ public class Group extends WorkSpace {
 					return true;
 		}
 		return false;
-	}
-	
-	public boolean amIMember(){
-		if(SmartUtil.isBlankObject(members)) return false;
-		for(UserInfo member : members){
-			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
-				return true;
-		}
-		return false;		
 	}
 	
 	public boolean amIJoinRequester(){

@@ -159,7 +159,7 @@
 						<!-- 카테고리 -->
 						<div class="pop_list_area file_fd">
 							<!-- 우측 버튼영역 -->
-							<div class="tab_buttons js_add_file_folder_btn"><a href=""><span class="btn_bfolder_add"></span></a></div>
+							<div class="tab_buttons js_add_file_folder_btn"><a href="" title="<fmt:message key='common.button.add_new_folder'/>" ><span class="btn_bfolder_add"></span></a></div>
 							<!-- 우측 버튼영역 -->
 
 							<ul class="js_file_categories">

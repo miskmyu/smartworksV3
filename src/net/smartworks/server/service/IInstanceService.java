@@ -163,4 +163,12 @@ public interface IInstanceService {
 	
 	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public void removeFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void createNewImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void setImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

@@ -75,13 +75,10 @@
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
-	     			
+	     		
 	     		<!-- 전체선택, 이동 : 사진공간  상세페이지에서만 나옴 -->
-	     		<div class="select_btn_space">
-	     			<span class="mr5">
-	     			<input type="checkbox" />전체선택
-	     			</span>
-	     			
+	     		<div class="select_btn_space js_image_select_buttons" style="display:none">
+	     			<span class="mr5"><input type="checkbox" /><fmt:message key="mail.button.select_all"/></span>
 	     			<select>
 	          			<option>이동</option>
 	          		</select>
@@ -91,10 +88,8 @@
 				<!-- 사진 목록 -->
 				<div class="picture_section js_image_instance_list">
 					<!-- 폴더 추가 -->
-					<div class="tab_buttons js_add_file_folder_btn">
-						<a href="" title="폴더 추가하기">
-							<span class="btn_bfolder_add"></span>
-						</a>
+					<div class="tab_buttons js_add_image_folder_btn">
+						<a href="" title="<fmt:message key='common.button.add_new_folder'/>"><span class="btn_bfolder_add"></span></a>
 					</div>
 					<!-- 폴더추가 //-->
 					

@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.model.community.Department"%>
+<%@page import="net.smartworks.model.community.Group"%>
+<%@page import="net.smartworks.model.community.Community"%>
+<%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.instance.info.ImageInstanceInfo"%>
 <%@page import="net.smartworks.model.work.ImageCategory"%>
 <%@page import="net.smartworks.model.work.info.ImageCategoryInfo"%>
@@ -34,6 +38,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	String cid = (String) session.getAttribute("cid");
 	String wid = (String) session.getAttribute("wid");
+	Community workSpace = smartWorks.getWorkSpaceById(wid);
 	int displayType = Integer.parseInt(request.getParameter("displayType"));
 	String parentId = request.getParameter("parentId");
 	String strLastDate = request.getParameter("lastDate");
@@ -84,15 +89,26 @@ function viewImage(img){
 				<li>
 					
 					<div class="picture_folder">
-						<!-- 삭제 , 수정버튼 -->
-						<div class="ctgr_action">
-							<span class="btn_text_category" categorydesc="null" title="폴더 이름수정"></span>
-							<span class="btn_remove_category" title="폴더삭제"></span>
-						</div>
-						<!-- 삭제 , 수정버튼//-->
+						<%
+						if(displayType == ImageCategory.DISPLAY_BY_CATEGORY && 
+							(wid.equals(cUser.getId()) 
+								|| ((workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Department.class))
+									&& workSpace.amIMember()))){
+						%>
+							<!-- 삭제 , 수정버튼 -->
+							<div class="ctgr_action">
+								<span class="btn_text_category js_text_image_folder_btn" folderId="<%=category.getId() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
+								<%if(category.getLength()==0){ %>
+									<span class="btn_remove_category js_remove_image_folder_btn" folderId="<%=category.getId() %>" folderName="<%=category.getName() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
+								<%} %>
+							</div>
+							<!-- 삭제 , 수정버튼//-->
+						<%
+						}
+						%>
 						<a href="image_instance_list.sw" class="js_image_instance_item" categoryId="<%=category.getId()%>">
 							<div class="thum_picture"><img style="width:70px;height:70px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
-						</a>
+						</a>						
 					</div>
 					<div class="title_folder"><%=category.getName() %></div>
 					<div class="t_gray"><fmt:message key="space.title.image_count"><fmt:param><%=category.getLength() %></fmt:param></fmt:message></div>
