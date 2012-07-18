@@ -702,4 +702,6 @@ public interface ISmartWorks {
 	
 	public abstract void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

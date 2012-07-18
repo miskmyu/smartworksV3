@@ -14,8 +14,8 @@ public class ImageInstanceInfo extends FileInstanceInfo {
 	private String fileId;
 	private String imgSource;
 	private	String originImgSource;
-
 	private String content;
+	private boolean isEditableForMe;
 	
 	public int getViews() {
 		return views;
@@ -47,6 +47,12 @@ public class ImageInstanceInfo extends FileInstanceInfo {
 	public void setFileId(String fileId) {
 		this.fileId = fileId;
 	}
+	public boolean isEditableForMe() {
+		return isEditableForMe;
+	}
+	public void setEditableForMe(boolean isEditableForMe) {
+		this.isEditableForMe = isEditableForMe;
+	}
 	public ImageInstanceInfo(){
 		super();
 		super.setType(Instance.TYPE_IMAGE);
@@ -66,5 +72,4 @@ public class ImageInstanceInfo extends FileInstanceInfo {
 		}
 		return "";
 	}
-
 }

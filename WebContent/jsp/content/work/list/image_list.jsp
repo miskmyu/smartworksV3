@@ -71,12 +71,11 @@
 						%>
 	          		</select>
 	          		<!-- 삭제, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
-	          		<select class="fl mr5">
-	          			<option>이동</option>
+	          		<select class="fl mr5 js_select_move_folder" style="display:none">
 	          		</select>
 	          		
-	          		<button class="button space fl mr5">
-						<span class="icon_mail_delet"></span> 삭제
+	          		<button class="button space fl mr5 js_remove_selected_images" style="display:none">
+						<span class="icon_mail_delet"></span><fmt:message key="common.button.remove_selected"/>
 					</button>
 	          		<!-- 삭제, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
 					<span class="js_progress_span fl"></span>
@@ -87,7 +86,7 @@
 	     		<!-- 전체선택, 이동 : 사진공간  상세페이지에서만 나옴 -->
 	     		<div class="select_btn_space js_image_select_buttons" style="display:none">
 	     			<span>
-	     				<input type="checkbox" /><fmt:message key="mail.button.select_all"/>
+	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
 	     			</span>
 	     		</div>
 	     		<!-- 전체선택 : 사진공간  상세목록 페이지에서만 나옴 //-->

@@ -190,6 +190,8 @@ smartMessage.bundle['en'] = {
 	setImageFolderError : "Error has been occured while changing Image Folder. Please contact the Administrator!",
 	removeImageFolderSucceed : "Image Folder has been removed successfully.",
 	removeImageFolderError : "Error has been occured while removing Image Folder. Please contact the Administrator!",
+	removeImageInstanceSucceed : "Image Instance has been removed successfully.",
+	removeImageInstanceError : "Error has been occured while removing Image Instance. Please contact the Administrator!",
 	mailPasswordConfirmError : "Send Mail Password confirmation error. Please retry password confirmation",
 	duplicationCheckError : "ID Duplication check has not been performed. Please perform the ID Duplication Check and retry it again",
 	wsdlNotFetchedError : "Fetch WSDL has not been performed. Please perform the Fetch WSDL and retry it again",

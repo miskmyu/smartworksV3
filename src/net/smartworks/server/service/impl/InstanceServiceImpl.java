@@ -7819,5 +7819,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

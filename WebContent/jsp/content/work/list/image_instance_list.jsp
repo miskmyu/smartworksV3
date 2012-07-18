@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.work.FileCategory"%>
 <%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.model.community.Community"%>
@@ -90,7 +91,8 @@ function viewImage(img){
 					
 					<div class="picture_folder">
 						<%
-						if(displayType == ImageCategory.DISPLAY_BY_CATEGORY && 
+						if(displayType == ImageCategory.DISPLAY_BY_CATEGORY &&
+							!category.getId().equals(FileCategory.ID_UNCATEGORIZED) &&
 							(wid.equals(cUser.getId()) 
 								|| ((workSpace.getClass().equals(Group.class) || workSpace.getClass().equals(Department.class))
 									&& workSpace.amIMember()))){
@@ -99,7 +101,7 @@ function viewImage(img){
 							<div class="ctgr_action">
 								<span class="btn_text_category js_text_image_folder_btn" folderId="<%=category.getId() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
 								<%if(category.getLength()==0){ %>
-									<span class="btn_remove_category js_remove_image_folder_btn" folderId="<%=category.getId() %>" folderName="<%=category.getName() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
+									<span class="btn_remove_category js_remove_image_folder_btn" folderId="<%=category.getId() %>" folderName="<%=category.getName() %>" title="<fmt:message key='mail.button.remove_folder'/>"></span>
 								<%} %>
 							</div>
 							<!-- 삭제 , 수정버튼//-->
@@ -129,13 +131,20 @@ function viewImage(img){
 	%>
 				<!--폴더 목록1 -->
 				<li>
-					<input type="checkbox" class="tl">
+					<input type="checkbox" class="tl js_check_image_instance">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
-						<div class="ctgr_action">
-							<span class="btn_remove_category" title="삭제"></span>
-						</div>
+						<%
+						image.setEditableForMe(true);
+						if(image.isEditableForMe()){
+						%>
+							<div class="ctgr_action">
+								<span class="btn_remove_category js_remove_image_instance_btn" instanceId="<%=image.getId() %>" title="<fmt:message key='common.button.delete'/>"></span>
+							</div>
+						<%
+						}
+						%>
 						<!-- 삭제버튼//-->
 												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">

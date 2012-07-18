@@ -601,4 +601,10 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		smartworks.removeImageFolder(requestBody, request);
 	}
 	
+	@RequestMapping(value = "/remove_image_instance", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void removeImageInstance(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.removeImageInstance(requestBody, request);
+	}
+	
 }

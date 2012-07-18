@@ -36,7 +36,7 @@ if(!SmartUtil.isBlankObject(categories) && categories.length>0){
 						<!-- 삭제 , 수정버튼 -->
 						<span class="ctgr_action">
 							<%if(category.getLength()==0){ %>
-								<span class="btn_remove_category js_remove_file_folder_btn" folderId="<%=category.getId() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
+								<span class="btn_remove_category js_remove_file_folder_btn" folderId="<%=category.getId() %>" title="<fmt:message key='mail.button.remove_folder'/>"></span>
 							<%} %>
 							<span class="btn_text_category js_text_file_folder_btn" folderId="<%=category.getId() %>" folderName="<%=category.getName() %>" title="<fmt:message key='mail.button.text_folder'/>"></span>
 						</span>

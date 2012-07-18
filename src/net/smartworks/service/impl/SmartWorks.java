@@ -1567,4 +1567,9 @@ public class SmartWorks implements ISmartWorks {
 		instanceService.removeImageFolder(requestBody, request);
 	}
 
+	@Override
+	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		instanceService.removeImageInstance(requestBody, request);
+	}
+
 }
