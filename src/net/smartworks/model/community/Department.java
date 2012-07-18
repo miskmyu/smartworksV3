@@ -13,7 +13,6 @@ public class Department extends WorkSpace {
 	private String 	desc = null;
 	private DepartmentInfo parent = null;
 	private User	head = null;
-	private UserInfo[]	members = null;
 	private DepartmentInfo[] children = null;
 	private String fullpathName = "";
 	private SpacePolicy boardWritePolicy=new SpacePolicy();
@@ -39,15 +38,9 @@ public class Department extends WorkSpace {
 	public void setHead(User head) {
 		this.head = head;
 	}
-	public UserInfo[] getMembers() {
-		return members;
-	}
-	public void setMembers(UserInfo[] members) {
-		this.members = members;
-	}
 	public int getNumberOfMember(){
-		if(SmartUtil.isBlankObject(this.members)) return 0;
-		return this.members.length;
+		if(SmartUtil.isBlankObject(getMembers())) return 0;
+		return getMembers().length;
 	}
 	public DepartmentInfo[] getChildren() {
 		return children;
@@ -103,13 +96,13 @@ public class Department extends WorkSpace {
 	public Department(String id, String name, UserInfo[] members){
 
 		super(id, name);
-		this.members = members;
+		setMembers(members);
 	}
 
 	public Department(String id, String name, UserInfo[] members, User head){
 		
 		super(id, name);
-		this.members = members;
+		setMembers(members);
 		this.head = head;
 	}
 
@@ -118,6 +111,7 @@ public class Department extends WorkSpace {
 		departmentInfo.setBigPictureName(getBigPictureName());
 		departmentInfo.setDesc(getDesc());
 		departmentInfo.setSmallPictureName(getSmallPictureName());
+		departmentInfo.setFullpathName(getFullpathName());		
 		return departmentInfo;
 	}
 	

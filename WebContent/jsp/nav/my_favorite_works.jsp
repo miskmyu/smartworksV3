@@ -31,8 +31,8 @@
 				<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>" class="js_content" title="<%=work.getFullpathName()%>">
 					<span class="<%=work.getIconClass()%>"></span>
 					<span  class="nav_sub_area"><%=work.getName()%></span>
+					<div class="check_option"><div title="<fmt:message key='common.button.delete'/>" class="js_check_favorite_work btn_remove_work" workId="<%=work.getId() %>"></div></div>
 				</a>
-				<div class="check_option"><div title="<fmt:message key='common.button.delete'/>" class="js_check_favorite_work btn_remove_work" workId="<%=work.getId() %>"></div></div>
 			</li>
 		<%
 			}

@@ -281,6 +281,14 @@ $(function() {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
 				imageList.find('.js_image_instance_list_page').attr('displayType', displayType).attr('categoryId', "AllFiles");
+				if(displayType == '1'){
+					imageList.find('.js_add_image_folder_btn').show();
+				}else{
+					imageList.find('.js_add_image_folder_btn').hide();
+				}
+				imageList.find('.js_image_select_buttons').hide();
+				imageList.find('.js_select_move_folder').hide();
+				imageList.find('.js_remove_selected_images').hide();					
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -294,6 +302,7 @@ $(function() {
 	$('a.js_image_instance_item').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		var imageInstanceList = input.parents('.js_image_instance_list_page');
+		var imageList = input.parents('.js_image_list_page');
 		var parentId = input.attr('categoryId');
 		var displayType = imageInstanceList.attr('displayType');
 		input.parents('.js_image_list_page').find('.js_image_category_list option[value="' + parentId + '"]').attr('selected', 'true');
@@ -307,6 +316,16 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
+				imageList.find('.js_add_image_folder_btn').hide();
+				if(displayType == '1'){
+					imageList.find('.js_image_select_buttons').show();
+					imageList.find('.js_select_move_folder').show();
+					imageList.find('.js_remove_selected_images').show();
+				}else{
+					imageList.find('.js_image_select_buttons').hide();
+					imageList.find('.js_select_move_folder').hide();
+					imageList.find('.js_remove_selected_images').hide();					
+				}
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -332,6 +351,24 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
+				if(displayType == '1'){
+					if(parentId !== "AllFiles"){
+						imageList.find('.js_add_image_folder_btn').show();
+						imageList.find('.js_image_select_buttons').hide();
+						imageList.find('.js_select_move_folder').hide();
+						imageList.find('.js_remove_selected_images').hide();
+					}else{
+						imageList.find('.js_add_image_folder_btn').hide();
+						imageList.find('.js_image_select_buttons').show();
+						imageList.find('.js_select_move_folder').show();
+						imageList.find('.js_remove_selected_images').show();						
+					}
+				}else{
+					imageList.find('.js_add_image_folder_btn').hide();
+					imageList.find('.js_image_select_buttons').hide();
+					imageList.find('.js_select_move_folder').hide();
+					imageList.find('.js_remove_selected_images').hide();					
+				}
 				smartPop.closeProgress();
 			},
 			error : function(xhr, ajaxOptions, thrownError){
@@ -422,6 +459,149 @@ $(function() {
 		
 	});
 		
+	$('.js_text_file_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var fileList = input.parents('.js_file_list_page');
+		var workSpaceId = fileList.attr("workSpaceId");
+		var parentId = fileList.attr("categoryId");
+		var folderId = input.attr("folderId");
+		var folderName = input.attr("folderName");
+		smartPop.createFileFolder(workSpaceId, parentId, folderId, folderName);
+		return false;
+		
+	});
+		
+	$('.js_remove_file_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var fileList = input.parents('.js_file_list_page');
+		var workSpaceId = fileList.attr("workSpaceId");
+		var parentId = fileList.attr("categoryId");
+		var folderId = input.attr("folderId");
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
+			var paramsJson = {};
+			paramsJson['workSpaceId'] = workSpaceId;
+			paramsJson['parentId'] = parentId;
+			paramsJson['folderId'] = folderId;
+			smartPop.progressCenter();
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "remove_file_folder.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeFileFolderSucceed"));
+					input.parents('li:first').remove();
+					smartPop.closeProgress();				
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeFileFolderError"), function(){
+						smartPop.closeProgress();
+					});
+				}
+			});
+		});
+		return false;
+		
+	});
+		
+	$('.js_add_image_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var ImageList = input.parents('.js_image_list_page');
+		var workSpaceId = ImageList.attr("workSpaceId");
+		var parentId = ImageList.attr("categoryId");
+		smartPop.createImageFolder(workSpaceId, parentId, null, null);
+		return false;
+		
+	});
+		
+	$('.js_text_image_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
+		var workSpaceId = imageList.attr("workSpaceId");
+		var parentId = imageList.attr("categoryId");
+		var folderId = input.attr("folderId");
+		var folderName = input.attr("folderName");
+		smartPop.createImageFolder(workSpaceId, parentId, folderId, folderName);
+		return false;
+		
+	});
+		
+	$('.js_remove_image_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
+		var workSpaceId = imageList.attr("workSpaceId");
+		var parentId = imageList.attr("categoryId");
+		var folderId = input.attr("folderId");
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
+			var paramsJson = {};
+			paramsJson['workSpaceId'] = workSpaceId;
+			paramsJson['parentId'] = parentId;
+			paramsJson['folderId'] = folderId;
+			smartPop.progressCenter();
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "remove_image_folder.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeImageFolderSucceed"));
+					smartPop.closeProgress();				
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeImageFolderError"), function(){
+						smartPop.closeProgress();
+					});
+				}
+			});
+		});
+		return false;
+		
+	});
+		
+	$('.js_remove_image_instance_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
+		var workSpaceId = imageList.attr("workSpaceId");
+		var instanceId = input.attr("instanceId");
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
+			var paramsJson = {};
+			paramsJson['workSpaceId'] = workSpaceId;
+			paramsJson['instanceId'] = instanceId;
+			smartPop.progressCenter();
+			console.log(JSON.stringify(paramsJson));
+			$.ajax({
+				url : "remove_image_instance.sw",
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeImageInstanceSucceed"));
+					smartPop.closeProgress();				
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeImageInstanceError"), function(){
+						smartPop.closeProgress();
+					});
+				}
+			});
+		});
+		return false;
+		
+	});
+
+	$('.js_check_all_image_instance').live('click', function(e){
+		var input = $(targetElement(e));
+		var imageInstanceList = input.parents('.js_image_list_page').find('.js_image_instance_list_page');
+		console.log('checked=', input.attr('checked'));
+		imageInstanceList.find('.js_check_image_instance').attr('checked', input.attr('checked'));
+		return true;
+	});
+	
 	$('a.js_file_instance_list').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		var fileList = input.parents('.js_file_list_page');

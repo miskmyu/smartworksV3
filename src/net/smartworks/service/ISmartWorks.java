@@ -694,4 +694,14 @@ public interface ISmartWorks {
 	
 	public abstract void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void removeFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void createNewImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void setImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public abstract void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

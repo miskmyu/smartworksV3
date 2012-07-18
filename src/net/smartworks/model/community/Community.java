@@ -1,6 +1,7 @@
 package net.smartworks.model.community;
 
 import net.smartworks.model.BaseObject;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.SeraUser;
 import net.smartworks.model.work.SmartWork;
@@ -37,9 +38,16 @@ public class Community extends BaseObject {
 	public static final String IMAGE_TYPE_ORIGINAL = "_origin";
 	public static final String IMAGE_TYPE_THUMB = "_thumb";
 
+	private UserInfo[] 	members = null;
 	private String bigPictureName;
 	private String smallPictureName;
 
+	public UserInfo[] getMembers() {
+		return members;
+	}
+	public void setMembers(UserInfo[] members) {
+		this.members = members;
+	}
 	public String getBigPictureName() {
 		return bigPictureName;
 	}
@@ -158,4 +166,12 @@ public class Community extends BaseObject {
 		super(id, name);
 	}
 
+	public boolean amIMember(){
+		if(SmartUtil.isBlankObject(getMembers())) return false;
+		for(UserInfo member : getMembers()){
+			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+				return true;			
+		}
+		return false;
+	}
 }

@@ -22,7 +22,7 @@
 .pop_list_area li .menu_2dep li {padding:0 0 0 13px}
 
 /* File fold */
-.pop_list_area.file_fd {min-height:500px}
+.pop_list_area.file_fd {min-height:500px; padding-top:2px}
 
 /*popup information*/
 .pop_i_info {border:1px solid #acacac; background-color:#242324; width:273px; position:absolute; top:33px; left:106px; padding-bottom:8px; z-index:39; color:#ececec}

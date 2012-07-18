@@ -49,6 +49,7 @@ import net.smartworks.server.engine.resource.util.SmartServerModelUtil;
 import net.smartworks.server.engine.resource.util.SmartServerUtil;
 import net.smartworks.server.engine.resource.util.XmlUtil;
 import net.smartworks.server.engine.resource.util.convert.Xml2Obj;
+import net.smartworks.util.LocalDate;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -111,7 +112,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 	public void checkInPackage(String userId, String packageId, int version)
 			throws SmartServerRuntimeException {
 		
-		Date currentTime = new Date();
+		LocalDate currentTime = new LocalDate();
 		IPackageModel pkg = this.retrievePackage(packageId, version);
 		
 		// 1. 체크 아웃상태가 아니라면 체크인이 불가능하다
@@ -145,7 +146,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 	public void checkOutPackage(String userId, String packageId, int version)
 			throws SmartServerRuntimeException {
 		
-		Date currentTime = new Date();
+		LocalDate currentTime = new LocalDate();
 		IPackageModel pkg = this.retrievePackage(packageId, version);
 		
 		// 1. 체크 인 상태가 아니라면 체크아웃이 불가능하다
@@ -190,7 +191,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		// 4. 체크아웃 플래그를 내린다.
 		form.setStatus(IFormModel.STATUS_CHECKED_IN);
 		form.setModifier(userId);
-		form.setModifiedTime(new Date());
+		form.setModifiedTime(new LocalDate());
 		this.updateForm(userId, form);
 	}
 
@@ -214,7 +215,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		// 4. 체크아웃 플래그를 내린다.
 		process.setStatus(IFormModel.STATUS_CHECKED_IN);
 		process.setModifier(userId);
-		process.setModifiedTime(new Date());
+		process.setModifiedTime(new LocalDate());
 		this.updateProcess(userId, process);
 	}
 
@@ -231,7 +232,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		if(IFormModel.STATUS_CHECKED_IN.equals(form.getStatus())) {
 			form.setStatus(IFormModel.STATUS_CHECKED_OUT);
 			form.setModifier(userId);
-			form.setModifiedTime(new Date());			
+			form.setModifiedTime(new LocalDate());			
 			this.updateForm(userId, form);
 			return this.retrieveFormContent(form.getFormId(), form.getVersion());
 		} else 
@@ -251,7 +252,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		if(IFormModel.STATUS_CHECKED_IN.equals(process.getStatus())) {
 			process.setStatus(IFormModel.STATUS_CHECKED_OUT);
 			process.setModifier(userId);
-			process.setModifiedTime(new Date());			
+			process.setModifiedTime(new LocalDate());			
 			this.updateProcess(userId, process);
 			return this.retrieveProcessContent(process.getProcessId(), process.getVersion());
 		} else 
@@ -391,7 +392,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		return obj;
 	}
 	public IFormModel createForm(String userId, IFormModel obj) throws SmartServerRuntimeException {
-		Date date = new Date();
+		LocalDate date = new LocalDate();
 		
 		obj.setId(null);
 		obj.setFormId(IDCreator.createId(SmartServerConstant.FORM_ABBR));
@@ -518,7 +519,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 	
 	public IPackageModel createPackage(String userId, String categoryId, IPackageModel pkg) throws SmartServerRuntimeException {
 		try {
-			Date currentTime = new Date();
+			LocalDate currentTime = new LocalDate();
 			String type = pkg.getType();
 
 			String pkgId = pkg.getPackageId();
@@ -673,7 +674,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		
 		IPackageModel pkg = new HbPackageModel();
 		String pkgId = IDCreator.createId(SmartServerConstant.PACKAGE_ABBR);
-		Date currentTime = new Date();
+		LocalDate currentTime = new LocalDate();
 		pkg.setCategoryId(categoryId);
 		pkg.setName(name);
 		pkg.setType(type);
@@ -786,7 +787,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		
 		IPackageModel pkg = new HbPackageModel();
 		String pkgId = IDCreator.createId(SmartServerConstant.PACKAGE_ABBR);
-		Date currentTime = new Date();
+		LocalDate currentTime = new LocalDate();
 		pkg.setCategoryId(categoryId);
 		pkg.setName(name);
 		pkg.setCreator(userId);
@@ -814,7 +815,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		IPackageModel pkg = this.retrievePackage(packageId, version);
 		
 		// 프로세스 생성
-		Date currentTime = new Date();
+		LocalDate currentTime = new LocalDate();
 		String prcId = IDCreator.createId(SmartServerConstant.PROCESS_ABBR);
 		IProcessModel prc = new HbProcessModel();
 		prc.setName(pkg.getName());
@@ -1480,7 +1481,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		// TODO interceptor로 빠져야 할 내용 End
 		
 		obj.setModifier(userId);
-		obj.setModifiedTime(new Date());
+		obj.setModifiedTime(new LocalDate());
 		this.getHibernateTemplate().update(obj);
 		
 		// 2. FORM의 XML내의  메타정보 변경
@@ -1696,7 +1697,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 	}
 	private IPackageModel update(String userId, IPackageModel pkg) throws SmartServerRuntimeException {
 		pkg.setModifier(userId);
-		pkg.setModifiedTime(new Date());
+		pkg.setModifiedTime(new LocalDate());
 		this.getHibernateTemplate().update(pkg);
 		return (HbPackageModel)this.getHibernateTemplate().get(HbPackageModel.class, pkg.getId());
 	}
@@ -1832,7 +1833,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		this.updateProcessContent(prcId, version, xmlContent);
 		
 		prc.setModifier(userId);
-		prc.setModifiedTime(new Date());
+		prc.setModifiedTime(new LocalDate());
 		prc.setName(xpdl.getName());
 		this.getHibernateTemplate().update(prc);
 	}

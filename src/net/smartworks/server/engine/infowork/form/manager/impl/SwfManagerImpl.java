@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.infowork.form.manager.impl;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -264,8 +265,16 @@ public class SwfManagerImpl extends AbstractManager implements ISwfManager {
 		query.setString("recordId", recordId);
 
 		int referenceFormSize = 0;
-		if(query.uniqueResult() != null)
-			referenceFormSize = (Integer)query.uniqueResult();
+		if(query.uniqueResult() != null) {
+			Object sizeObj = query.uniqueResult();
+			if (sizeObj instanceof BigInteger) {
+				referenceFormSize = ((BigInteger)sizeObj).intValue();
+			} else if (sizeObj instanceof Long) {
+				referenceFormSize = ((Long)sizeObj).intValue();
+			} else {
+				referenceFormSize = Integer.parseInt(sizeObj.toString());
+			}
+		}
 
 		return referenceFormSize;
 	}

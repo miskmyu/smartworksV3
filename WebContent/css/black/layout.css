@@ -10,15 +10,18 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 #content a:hover { text-decoration:underline}
 
 /*Header*/
-#header {background: url("../../images/header_bg.jpg") repeat-x scroll left top transparent; height:34px; width:100%; z-index:40; position:relative; }
+#header {display:block; height:34px}
+#header span {display: table-cell; vertical-align:middle; height:34px}
 
 /*Company Logo*/
-.company_logo {background: url("../../images/top_logo.jpg") no-repeat left top; display:block; position:absolute; left:12px; top:3px; width:81px; height:22px; z-index:40}
+.company_logo {display:block; float:left; margin:0 0 0 12px; z-index:40}
+.company_logo img {min-wdith:85px; height:22px}
 
 /*Notice Icon*/
-.notice_icons {display:block; position:absolute; height:31px; left:106px; top:3px; z-index:40}
+.notice_icons {display:block; height:29px; float:left; margin:0 0 0 15px; z-index:40}
 .notice_icons a:link, a:visited, a:hover, a:focus, a:active {text-decoration: none}
 .notice_icons li {float:left; margin-right:4px; width:34px; height:31px}
+#header .notice_icons > span {vertical-align:bottom}
 .icon_info a {background: url("../../images/header_nico.png") no-repeat scroll -5px -14px transparent; display:block; height:30px; position:relative}
 .icon_info a:hover  {background: url("../../images/header_nico.png") no-repeat scroll -5px -55px transparent; display:block; height:30px; position:relative}
 .icon_info .current, .icon_info a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -5px -94px transparent; display:block; height:31px; position:relative}
@@ -54,15 +57,17 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 }
 
 /*Top Menu*/
-.top_menu {z-index:40; width:138px; height:34px; margin:0 auto; background:url("../../images/top_menu.png") no-repeat left top}
-.top_menu ul {height:34px}
+.top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */
+.top_menu ul {width:138px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
 .top_menu ul li .current {background:url("../../images/top_menu.png") no-repeat; height:34px}
 
-.top_menu ul li.idx1 {width:70px; height:34px; background-position:left top}
+.top_menu ul li > span {height:34px; width:70px; text-align:center}
+
+.top_menu ul li.idx1 {width:70px; background-position:left top}
 .top_menu ul li.idx1 a:hover,
-.top_menu ul li.idx1 .current {width:70px; height:34px; background-position:left -60px}
+.top_menu ul li.idx1 .current {width:70px; background-position:left -60px}
 
 .top_menu ul li.idx2 {width:100px; background-position:-70px top}
 .top_menu ul li.idx2 a:hover,
@@ -72,10 +77,11 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .top_menu ul li.idx3 a:hover,
 .top_menu ul li.idx3 .current {width:68px; background-position:-170px -60px}
 
-.top_menu ul li span a {display:block; padding-top:8px}
+.top_menu ul li a,.top_menu ul li a:hover {display:block; height: 24px; padding-top: 10px}
 
 /*Search*/
-.global_srch {position:absolute; right:100px; top:5px}
+.global_srch {float:left}
+.global_srch .srch_wsize {margin:5px 0 0 10px}
 .nav_srch {float:left; padding-bottom:10px}
 .mail_srch { float:right}
 	
@@ -107,14 +113,24 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 }
 	
 /*Left Navigation*/	
-#nav {background-color:#6b6b6b; float:left; width:226px; height:100%; z-index:30}
+#nav {background-color:#6b6b6b; float:left; width:226px; height:100%; clear:both; z-index:30}
+/* In Hover Actions */
+/* ctgr_action_item:Nav-빌더nav, group_action_item:Nav-빌더 그룹 nav, work_action_item:Nav-빌더 work, folder_actions:Nav_Mail함, dep:파일공간, picture_folder:사진공간, picture_detail_area:사진 상세 - 폴더추가  */
+li.ctgr_action_item .ctgr_action, 
+li.group_action_item a .group_action, 
+li.work_action_item .work_action,
+li.folder_actions .ctgr_action,
+li .dep .ctgr_action,
+li .picture_folder .ctgr_action,
+li .picture_detail_area .ctgr_action {display:none; position:absolute; right:0; top:0; margin:4px 5px 0 0}
 
-li.ctgr_action_item .ctgr_action {display:none; position:absolute; right:0; top:0; margin:4px 5px 0 0}
-li.ctgr_action_item > a:hover + .ctgr_action {display:block}
-li.group_action_item .group_action {display:none; position:absolute; right:0; top:0; margin:4px 5px 0 0}
-li.group_action_item>a:hover + .group_action {display:block}
-li.work_action_item .work_action {display:none; position:absolute; right:0; top:0; margin:4px 5px 0 0}
-li.work_action_item>a:hover + .work_action {display:block}
+li.ctgr_action_item a:hover .ctgr_action, 
+li.group_action_item a:hover .group_action,
+li.work_action_item a:hover .work_action,
+li .dep:hover .ctgr_action,
+li.folder_actions a:hover .ctgr_action,
+li .picture_folder:hover .ctgr_action,
+li .picture_detail_area:hover .ctgr_action {display:block}
 
 tr.list_action_item .list_action {display:none}
 tr.list_action_item:hover .list_action {display:block; cursor:pointer}
@@ -130,6 +146,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .global_menu div { float:left; margin-left:8px}
 .global_menu .pop {border:1px solid #acacac; border-top:none; background-color:#414041; position:absolute; top:23px; right:0; padding:4px 8px; width:66px; line-height:18px; z-index:39}
 .global_menu .pop_admin {position:absolute; top:23px; right:0; z-index:38}
+.global_menu .pop_admin a {float:left; margin-left:2px}
 
 /*Personal Info*/
 .personal_info {background: url("../../images/personal_info_bg.png")repeat-x scroll 0 0; padding:11px; border-bottom:1px solid #1f1f1f}
@@ -253,9 +270,9 @@ a .btn_favorite:hover, .btn_favorite.current {background: url("../../images/nav_
 a .btn_all_works:hover, .btn_all_works.current {background: url("../../images/nav_img.png") no-repeat -201px -274px}
 
 /* Navi Setting Btn */
-.btn_setting {background: url("../../images/body_icon.png") no-repeat -547px 0 transparent; height:26px; width:26px; display: inline-block}
-.btn_appstore {background: url("../../images/body_icon.png") no-repeat -574px 0 transparent; height:26px; width:26px; display: inline-block}
-.btn_builder {background: url("../../images/body_icon.png") no-repeat -601px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_setting {background: url("../../images/body_icon.png") no-repeat -547px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_appstore {background: url("../../images/body_icon.png") no-repeat -574px 0 transparent; height:26px; width:26px; display: inline-block}
+#header span.btn_builder {background: url("../../images/body_icon.png") no-repeat -601px 0 transparent; height:26px; width:26px; display: inline-block}
 
 /* Navi Builder Btn */
 a .btn_add_category {background: url("../../images/nav_img.png") no-repeat -112px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
@@ -265,16 +282,14 @@ a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png"
 
 .btn_add_work {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; float:left}
 .btn_add_work:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:12px; float:left}
-.btn_text_category, .btn_change_work {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; float:left}
-.btn_text_category:hover, .btn_change_work:hover {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; float:left}
-.btn_remove_category, .btn_remove_work {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; float:left}
-.btn_remove_category:hover, .btn_remove_work:hover {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; float:left}
-
-.btn_text_folder {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; display: none}
-.folder_actions:hover .btn_text_folder {display: inline-block}
-.btn_remove_folder {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; display: none}
-.folder_actions:hover .btn_remove_folder{display: inline-block}
-
+.btn_text_category, .btn_change_work,.btn_text_folder
+ {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; float:left; cursor: pointer}
+.btn_text_category:hover, .btn_change_work:hover, .btn_text_folder:hover
+ {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; float:left}
+.btn_remove_category, .btn_remove_work, .btn_remove_folder
+ {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; float:left; cursor: pointer}
+.btn_remove_category:hover, .btn_remove_work:hover,.btn_remove_folder:hover
+ {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; float:left}
 
 /* Btn Folder n Picture */
 .btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
@@ -637,6 +652,7 @@ td.pic {width:85px}
 /* Common Button */
 .buttonSet {padding:5px 0 7px} 
 .buttonSet button, .button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; text-decoration: none !important; vertical-align: middle}
+button.space {height: 18px; padding: 1px 3px}
 .buttonSet select {height:21px; margin:0; padding:0}
 .buttonSet .button {padding: 4px 8px 3px}
     

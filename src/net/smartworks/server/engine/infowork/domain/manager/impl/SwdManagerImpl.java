@@ -574,7 +574,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			return obj.getRecordId();
 
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22")) {
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
@@ -709,7 +709,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} 
 			return size;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22")) {
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
@@ -751,7 +751,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			} 
 			return size;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22")) {
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				SwdDomain domain = getDomain(user, cond);
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
@@ -891,7 +891,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			objList.toArray(objs);
 			return objs;
 		} catch (SQLGrammarException e) {
-			if(e.getSQLState().equals("42S22")) {
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
 				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
 				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
 				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
@@ -1109,19 +1109,19 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				} else {
 					buf.append(" and");
 				}
-				buf.append(" (obj.creator = '" + user + "' or ((obj.workSpaceType = 6 and obj.workSpaceId in (");
+				buf.append(" (obj.creator = '" + user + "' or ((obj.workSpaceType = '6' and obj.workSpaceId in (");
 				for (int j=0; j<workSpaceIdIns.length; j++) {
 					if (j != 0)
 						buf.append(", ");
 					buf.append(":workSpaceIdIn").append(j);
 				}
-				buf.append(")) or (obj.workSpaceType = 5 and obj.workSpaceId in (");
+				buf.append(")) or (obj.workSpaceType = '5' and obj.workSpaceId in (");
 				for (int j=0; j<workSpaceIdIns.length; j++) {
 					if (j != 0)
 						buf.append(", ");
 					buf.append(":workSpaceIdIn").append(j);
 				}
-				buf.append(")) or (obj.workSpaceType = 4 and obj.workSpaceId = '" + user + "') or obj.workSpaceType = 2 or obj.workSpaceType is null))");
+				buf.append(")) or (obj.workSpaceType = '4' and obj.workSpaceId = '" + user + "') or obj.workSpaceType = '2' or obj.workSpaceType is null))");
 	
 				//buf.append(" where ((obj.workSpaceType = 6 and obj.workSpaceId in " + workSpaceIdIns + ") or (obj.workSpaceType = 5 and obj.workSpaceId in " + workSpaceIdIns + ") or obj.workSpaceType = 4 or obj.workSpaceType = 2)");
 				//buf.append(" where obj.workSpaceId in " + workSpaceIdIns);
@@ -1167,7 +1167,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				}
 				likeAccessValuesQuery = likeAccessValuesBuffer.toString();
 			}
-			buf.append("(obj.accessLevel is null or obj.accessLevel = 3 or (obj.accessLevel = 1 and obj.creator = '" + user + "') or (obj.accessLevel = 2 and (").append(likeAccessValuesQuery).append(" or obj.creator = '" + user + "'))) ");
+			buf.append("(obj.accessLevel is null or obj.accessLevel = '3' or (obj.accessLevel = '1' and obj.creator = '" + user + "') or (obj.accessLevel = '2' and (").append(likeAccessValuesQuery).append(" or obj.creator = '" + user + "'))) ");
 		} else if (domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM")) {
 			if(first) {
 				buf.append(" where");
@@ -1256,7 +1256,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATE)) {
 					query.setTimestamp(param, DateUtil.toDate(operValue));
 				} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATETIME)) {
-					query.setString(param, operValue);
+					query.setTimestamp(param, DateUtil.toDate(operValue));
 				} else if (operType.equalsIgnoreCase("number")) {
 					query.setDouble(param, Double.parseDouble(operValue));
 				} else if (operType.equalsIgnoreCase("boolean")) {

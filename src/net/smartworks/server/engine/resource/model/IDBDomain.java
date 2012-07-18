@@ -117,9 +117,9 @@ public interface IDBDomain extends IDomain {
 	 */
 	public void setTitleFieldId(String titleFieldId);
 
-	public boolean isKeyDuplicate();
+	public boolean isKeyDuplicable();
 
-	public void setKeyDuplicate(boolean keyDuplicate);
+	public void setKeyDuplicable(boolean keyDuplicable);
 
 	/**
 	 * 마스터 도메인 아이디

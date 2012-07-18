@@ -78,7 +78,7 @@
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	String cid = request.getParameter("cid");
-	String wid = request.getParameter("wid");
+	String wid = request.getParameter("wid"); 
 
 	User cUser = SmartUtil.getCurrentUser();
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
@@ -112,14 +112,14 @@
 				<!-- 컨텐츠 상단 영역 -->
 				<div class="js_file_list_header" style="height:25px">
 					<!-- 폴더구분  -->
-					<select class="js_file_display_by fl">
+					<select class="js_file_display_by fl mr5">
 						<option value=<%=FileCategory.DISPLAY_BY_CATEGORY %>><fmt:message key="space.title.by_category"/></option>
 						<option value=<%=FileCategory.DISPLAY_BY_WORK %>><fmt:message key="space.title.by_work"/></option>
 						<option value=<%=FileCategory.DISPLAY_BY_YEAR %>><fmt:message key="space.title.by_year"/></option>
 						<option value=<%=FileCategory.DISPLAY_BY_OWNER %>><fmt:message key="space.title.by_owner"/></option>
 						<option value=<%=FileCategory.DISPLAY_BY_FILE_TYPE %>><fmt:message key="space.title.by_filetype"/></option>
 					</select>
-					<select class="js_file_category_list fl">
+					<select class="js_file_category_list fl mr10">
 						<%
 						if(!SmartUtil.isBlankObject(categories)){
 							for(int i=0; i<categories.length; i++){
@@ -131,6 +131,17 @@
 						}
 						%>
 					</select>
+					
+					<!-- 삭제, 이동 -->
+					<select class="fl mr5">
+						<option>이동</option>
+					</select>
+						
+					<button class="button space fl mr5">
+						<span class="icon_mail_delet"></span> 삭제
+					</button>
+					<!-- 삭제, 이동// -->
+					
 					<span class="js_progress_span fl"></span>
 					<!-- 폴더 구분//-->
 					<!-- 우측 검색영역 -->
@@ -159,7 +170,7 @@
 						<!-- 카테고리 -->
 						<div class="pop_list_area file_fd">
 							<!-- 우측 버튼영역 -->
-							<div class="tab_buttons js_add_file_folder_btn"><a href=""><span class="btn_bfolder_add"></span></a></div>
+							<div class="tab_buttons js_add_file_folder_btn"><a href="" title="<fmt:message key='common.button.add_new_folder'/>" ><span class="btn_bfolder_add"></span></a></div>
 							<!-- 우측 버튼영역 -->
 
 							<ul class="js_file_categories">
