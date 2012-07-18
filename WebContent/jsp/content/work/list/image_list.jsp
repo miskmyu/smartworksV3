@@ -75,10 +75,21 @@
 	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
 	     			</span>
 	     		
-	          		<select class="fl mr5 js_select_move_folder" style="display:none">
-	          		</select>
+	          		<select class="fl mr5 js_move_selected_images" style="display:none">
+						<option value="">[<fmt:message key="common.button.move_selected"/>]</option>
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								FileCategoryInfo category = categories[i];
+								if(category.getId().equals(FileCategory.ID_ALL_FILES)) continue;
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+	          		</select>	          		
 	          		<!-- 전체선택, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
-	          		
 					<span class="js_progress_span fl"></span>
 					
 					<!-- 사진공간  상세목록 페이지에서만 나옴 -->

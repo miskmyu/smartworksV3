@@ -131,7 +131,7 @@ function viewImage(img){
 	%>
 				<!--폴더 목록1 -->
 				<li class="mt10">
-					<input type="checkbox" class="tl js_check_image_instance">
+					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
