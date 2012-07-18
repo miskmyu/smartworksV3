@@ -148,7 +148,7 @@ function viewImage(img){
 						<!-- 삭제버튼//-->
 												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
-						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
+						<div class="detail_picture"><img src="<%=image.getImgSource()%>"></div>
 						</a>												
  					</div>
  					<div><%=image.getFileName()%></div>
