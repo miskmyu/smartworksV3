@@ -172,5 +172,9 @@ public interface IInstanceService {
 	public void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 }

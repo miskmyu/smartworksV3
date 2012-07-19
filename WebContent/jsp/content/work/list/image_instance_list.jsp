@@ -83,6 +83,13 @@ function viewImage(img){
 	if(SmartUtil.isBlankObject(parentId)){
 		ImageCategoryInfo[] imageCategories = smartWorks.getImageCategoriesByType(displayType, wid);
 		if(!SmartUtil.isBlankObject(imageCategories) && imageCategories.length>0 ){
+	%>
+			<!-- 폴더 추가 -->
+			<div class="tab_buttons js_add_image_folder_btn">
+				<a href="" title="<fmt:message key='common.button.add_new_folder'/>"><span class="btn_bfolder_add"></span></a>
+			</div>
+			<!-- 폴더추가 //-->	
+	<%
 			for(int i=0; i<imageCategories.length; i++){
 				ImageCategoryInfo category = imageCategories[i];
 	%>
@@ -131,7 +138,7 @@ function viewImage(img){
 	%>
 				<!--폴더 목록1 -->
 				<li class="mt10">
-					<input type="checkbox" class="tl js_check_image_instance">
+					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
@@ -148,7 +155,7 @@ function viewImage(img){
 						<!-- 삭제버튼//-->
 												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
-						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
+						<div class="detail_picture"><img src="<%=image.getImgSource()%>"></div>
 						</a>												
  					</div>
  					<div><%=image.getFileName()%></div>
