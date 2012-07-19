@@ -1187,4 +1187,33 @@ $(function() {
 		return false;
 	});
 		
+	$('a.js_more_image_instance_list').live('click',function(e) {
+		var input = $(targetElement(e));
+		if(!isEmpty(input.siblings('.js_progress_span').find('.js_progress_icon'))) 
+			return false;
+		smartPop.progressCont(input.siblings('.js_progress_span'));
+		var fromDate = input.attr('lastDate');
+		var target = input.parents('ul:first');
+		var imageInstanceList = input.parents('.js_image_instance_list_page');
+		var parentId = imageInstanceList.attr('parentId');
+		var displayType = imageInstanceList.attr('displayType');
+		$.ajax({
+			url : "image_instance_list.sw",
+			data : {
+				parentId : parentId,
+				displayType : displayType,
+				lastDate : fromDate
+			},
+			success : function(data, status, jqXHR) {
+				input.parents('div:first').remove();
+				target.append(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError){
+				smartPop.closeProgress();
+			}
+		});
+		return false;
+	});
+	
 });

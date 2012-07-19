@@ -45,7 +45,7 @@
 	String strLastDate = request.getParameter("lastDate"); 
 	LocalDate lastDate = new LocalDate();
 	if(!SmartUtil.isBlankObject(strLastDate))		
-		lastDate = LocalDate.convertLocalStringToLocalDate(request.getParameter("lastDate"));
+		lastDate = LocalDate.convertLocalStringToLocalDate(strLastDate);
 %>
 <script type="text/javascript">
 
@@ -131,11 +131,21 @@ function viewImage(img){
 	<%
 		}
 	}else{
-		ImageInstanceInfo[] imageInstances = smartWorks.getImageInstancesByDate(displayType, wid, parentId, lastDate, 64);
+		ImageInstanceInfo[] imageInstances = smartWorks.getImageInstancesByDate(displayType, wid, parentId, lastDate, 6);
 		if(!SmartUtil.isBlankObject(imageInstances) && imageInstances.length>0 ){
 			for(int i=0; i<imageInstances.length; i++){
-				ImageInstanceInfo image = imageInstances[i];		
+				ImageInstanceInfo image = imageInstances[i];
+				if(i == 5){
+					String lastDateStr = (i>0) ? (new LocalDate(imageInstances[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
+					<div class="t_nowork">
+						<a href="" class="js_more_image_instance_list" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+						<span class="js_progress_span"></span>
+					</div>
+				<%				
+					break;
+				}
+				%>
 				<!--폴더 목록1 -->
 				<li class="mt10">
 					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
@@ -168,14 +178,3 @@ function viewImage(img){
 	}
 	%>
 </ul>
-<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
-<div class="tc cb">
-	<div class="btn_gray">
-		<a class="js_content" href="file_list.sw?cid=fl.li.pkg_309666dd2bb5493c9d7e618b3a0aad96&wid=">
-			<span class="txt_btn_start"></span>
-			<span class="txt_btn_center">목록보기</span>
-			<span class="txt_btn_end"></span>
-		</a>
-	</div>
-</div>
-<!-- 목록 버튼: 사진공간  상세목록 페이지에서만 나옴//-->

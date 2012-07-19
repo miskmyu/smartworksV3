@@ -107,6 +107,17 @@
 					</jsp:include>
 				</div>
       			<!-- 사진 목록// -->
+				<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
+				<div class="tc cb">
+					<div class="btn_gray">
+						<a class="js_content" href="file_list.sw?cid=fl.li.pkg_309666dd2bb5493c9d7e618b3a0aad96&wid=">
+							<span class="txt_btn_start"></span>
+							<span class="txt_btn_center">목록보기</span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</div>
+				</div>
+				<!-- 목록 버튼: 사진공간  상세목록 페이지에서만 나옴//-->
 			</div>
 			<!-- 컨텐츠 //-->
 		</ul>
