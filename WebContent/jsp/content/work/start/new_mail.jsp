@@ -167,4 +167,3 @@ function submitForms(action) {
 <script>
 	loadWriteMailFields();
 </script>
-<script type="text/javascript" src="js/sw/iframe.js"></script>
