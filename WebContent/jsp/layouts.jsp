@@ -155,7 +155,6 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-nav.js"></script>
 <script type="text/javascript" src="js/sw/sw-validate.js"></script>
 <script type="text/javascript" src="js/sw/sw-flash.js"></script>
-<script type="text/javascript" src="js/sw/sw-iframe.js"></script>
 
 <script type="text/javascript" src="js/sw/sw-faye.js"></script>
 <script type="text/javascript" src="js/sw/sw-chat.js"></script>
