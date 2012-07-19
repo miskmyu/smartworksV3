@@ -317,6 +317,7 @@ $(function() {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
 				imageList.find('.js_add_image_folder_btn').css('visibility', 'hidden');
+				imageList.find('.js_goto_parent_list').hide();
 				if(displayType == '1'){
 					imageList.find('.js_image_select_buttons').show();
 					imageList.find('.js_move_selected_images').show();
@@ -338,6 +339,7 @@ $(function() {
 
 	$('.js_image_category_list').live('change', function(e){
 		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
 		var imageInstanceList = input.parents('.js_image_list_page').find('.js_image_instance_list_page');
 		var displayType = imageInstanceList.attr('displayType');
 		var parentId = input.find('option:selected').attr('value');
@@ -352,22 +354,29 @@ $(function() {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
 				if(displayType == '1'){
-					if(parentId !== "AllFiles"){
+					if(parentId == "AllFiles"){
 						imageList.find('.js_add_image_folder_btn').css('visibility', 'visible');
 						imageList.find('.js_image_select_buttons').hide();
 						imageList.find('.js_move_selected_images').hide();
 						imageList.find('.js_remove_selected_images').hide();
+						imageList.find('.js_goto_parent_list').hide();
 					}else{
 						imageList.find('.js_add_image_folder_btn').css('visibility', 'hidden');
 						imageList.find('.js_image_select_buttons').show();
 						imageList.find('.js_move_selected_images').show();
 						imageList.find('.js_remove_selected_images').show();						
+						imageList.find('.js_goto_parent_list').show();
 					}
 				}else{
 					imageList.find('.js_add_image_folder_btn').css('visibility', 'hidden');
 					imageList.find('.js_image_select_buttons').hide();
 					imageList.find('.js_move_selected_images').hide();
-					imageList.find('.js_remove_selected_images').hide();					
+					imageList.find('.js_remove_selected_images').hide();
+					if(parentId != "AllFiles"){
+						imageList.find('.js_goto_parent_list').hide();						
+					}else{
+						imageList.find('.js_goto_parent_list').show();						
+					}
 				}
 				smartPop.closeProgress();
 			},
@@ -378,6 +387,14 @@ $(function() {
 		return false;		
 	});
 	
+	$('.js_goto_parent_list').live('click', function(e){
+		var input = $(targetElement(e));
+		var imageList = input.parents('.js_image_list_page');
+		var imageCategoryList = imageList.find('.js_image_category_list');
+		imageCategoryList.find('option[value="AllFiles"]').attr('selected', 'selected');
+		imageCategoryList.change();
+		return false;
+	});
 	
 	$('.js_file_display_by').live('change', function(e){
 		var input = $(targetElement(e));
