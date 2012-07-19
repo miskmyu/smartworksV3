@@ -100,13 +100,7 @@
 	     		<div class="solid_line"></div>
                
 				<!-- 사진 목록 -->
-				<div class="picture_section js_image_instance_list">
-					<!-- 폴더 추가 -->
-					<div class="tab_buttons js_add_image_folder_btn">
-						<a href="" title="<fmt:message key='common.button.add_new_folder'/>"><span class="btn_bfolder_add"></span></a>
-					</div>
-					<!-- 폴더추가 //-->
-					
+				<div class="picture_section js_image_instance_list">					
 					<jsp:include page="/jsp/content/work/list/image_instance_list.jsp">
 						<jsp:param value="<%=FileCategory.DISPLAY_BY_CATEGORY %>" name="displayType"/>
 						<jsp:param value="" name="parentId"/>
