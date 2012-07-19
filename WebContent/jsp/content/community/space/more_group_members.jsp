@@ -68,12 +68,25 @@
                      	<%if(member.getRole() == User.USER_ROLE_LEADER){ %><span class="leader m"></span><%} %>
                        	<img class="profile_size_m" src="<%=member.getMidPicture()%>">
               		</div>
-                     <div><span><%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></span></div>
-                     <div><span><%=member.getDepartment().getFullpathName() %></span></div>
-                     <div><span><%=member.getId() %></span></div>
-                     <div><span>가입일</span></div>
-                     <div><span>최근 방문일</span></div>
+                     <div>
+	                    <span>
+	                    <%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></br>
+	                    <%=member.getDepartment().getFullpathName() %>
+	                    </span>
+	                    <span class="bar">|</span>
+                      </div>
+                     <%-- <div><span><%=member.getDepartment().getFullpathName() %></span></div> --%>
+                      <div>
+                        <span>
+                        	<%=member.getId() %>
+                        </span>
+                        <span class="bar">|</span>
+                       </div>
+                       
+                       <div style="width:100px"><span>가입일: <br>2012.03.25</span><span class="bar">|</span></div>
+                       <div style="width:100px"><span>최근 방문일: <br>2012.05.12 18:50</div>
                      <div class="buttonSet">
+                       	<span class="bar">|</span>
                      	<%
                      	if(member.getId().equals(cUser.getId())){
                      	%>

@@ -3701,6 +3701,12 @@ public class ModelConverter {
 
 				imageCategoryMap.put(FileCategory.ID_ALL_FILES, allImageCategoryInfo);
 			}*/
+			ImageCategoryInfo allImageCategoryInfo = new ImageCategoryInfo();
+			allImageCategoryInfo.setId(FileCategory.ID_ALL_FILES);
+			allImageCategoryInfo.setName(FileCategory.NAME_ALL_FILES);
+			allImageCategoryInfo.setLength(fileWorks.length);
+			imageCategoryMap.put(FileCategory.ID_ALL_FILES, allImageCategoryInfo);
+
 			switch (displayType) {
 			case FileCategory.DISPLAY_BY_CATEGORY:
 				FdrFolderCond fdrFolderCond = new FdrFolderCond();
@@ -3788,7 +3794,11 @@ public class ModelConverter {
 					}
 				}
 				if(imageCategoryInfoList.size() > 0) {
-					Collections.sort(imageCategoryInfoList, Collections.reverseOrder());
+					if(displayType == FileCategory.DISPLAY_BY_YEAR){
+						Collections.sort(imageCategoryInfoList, Collections.reverseOrder());
+					}else{
+						Collections.sort(imageCategoryInfoList);						
+					}
 					imageCategoryInfos = new ImageCategoryInfo[imageCategoryInfoList.size()];
 					imageCategoryInfoList.toArray(imageCategoryInfos);
 				}
