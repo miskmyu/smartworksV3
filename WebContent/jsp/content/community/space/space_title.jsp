@@ -39,8 +39,8 @@
 		<div class="body_titl space">
 			<div class="depart fl"></div>
 			<div class="noti_in_bodytitle">
-				<div class="title"><%=department.getName() %></div>
-				<div><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
+				<div class="title"><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
+				<div><%=CommonUtil.toNotNull(department.getDesc()) %></div>
 			</div>
 			<%if(department.amIAdministrator(cUser)){ %>
 			<div class="txt_btn">	

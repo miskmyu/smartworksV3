@@ -683,7 +683,7 @@ smartPop = {
 	createWorkCategory : function(categoryId, categoryName, categoryDesc){
 		$.get("pop_new_category.sw?categoryId="+ categoryId + "&categoryName=" + categoryName + "&categoryDesc=" + categoryDesc, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:200,
@@ -725,7 +725,7 @@ smartPop = {
 						+ "&workName=" + workName + "&workTypeName=" + workTypeName + "&workDesc=" + workDesc + "&categoryId=" + categoryId + "&groupId=" + groupId;
 		$.get( url, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:300,
@@ -758,7 +758,7 @@ smartPop = {
 		var url = "pop_move_work_definition.sw?workId=" + workId + "&workName=" + workName + "&type=" + type + "&workFullName=" + workFullName + "&categoryId=" + categoryId + "&groupId=" + groupId + "&workDesc=" + workDesc;
 		$.get( url, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:300,
@@ -825,7 +825,7 @@ smartPop = {
 	createMailFolder : function(folderId, folderName, folderDesc){
 		$.get("pop_new_mail_folder.sw?folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:200,
@@ -857,7 +857,7 @@ smartPop = {
 	createFileFolder : function(workSpaceId, parentId, folderId, folderName){
 		$.get("pop_new_file_folder.sw?workSpaceId=" + workSpaceId + "&parentId="+ parentId + "&folderId=" + folderId + "&folderName=" + folderName, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:200,
@@ -886,7 +886,7 @@ smartPop = {
 	createImageFolder : function(workSpaceId, parentId, folderId, folderName){
 		$.get("pop_new_image_folder.sw?workSpaceId=" + workSpaceId + "&parentId="+ parentId + "&folderId=" + folderId + "&folderName=" + folderName, function(data){
 			$(data).modal({
-				opacity: 10,
+				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
 				containerCss:{
 					height:200,
