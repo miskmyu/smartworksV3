@@ -55,7 +55,7 @@
 								<span class="<%=work.getIconClass()%>"></span>
 								<span><%=work.getName()%></span>
 							</a>
-							<div class="cb">
+							<div class="reply">
 								<div class="info_img">
 									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 										<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
@@ -82,7 +82,7 @@
 							<span class="<%=work.getIconClass()%>"></span>
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>
-						<div class="cb">
+						<div class="reply">
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
@@ -108,7 +108,7 @@
 							<span class="profile_size_m"><%=workSpace.getMinPicture()%></span>
 							<span><%=workSpace.getName()%></span>
 						</a>	
-						<div class="cb">				
+						<div class="reply">				
 							<div class="info_img">
 								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
 									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
