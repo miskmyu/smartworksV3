@@ -56,7 +56,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
-#notice_message_box .reply {}
+#notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent; clear:both;overflow: hidden; padding-top: 4px}
 
 /*Top Menu*/
 .top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */
@@ -211,6 +211,7 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 /* new Icon added by ysjung */
 .icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:20px}
 .title_folder {height:14px; font-weight:bold; margin-top:3px}
+
 
 /* Nav MySpace */
 .icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 22px; float: left; height:18px}
