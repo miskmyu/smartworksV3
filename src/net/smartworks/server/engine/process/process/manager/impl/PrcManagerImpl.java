@@ -1,5 +1,6 @@
 package net.smartworks.server.engine.process.process.manager.impl;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -642,7 +643,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 		queryBuffer.append(" 				from ( ");
 		queryBuffer.append(" 						select tskprcinstId , max(tskCreatedate) as createDate  ");
 		queryBuffer.append(" 						from tsktask  ");
-		queryBuffer.append(" 						where tsktype='common'  ");
+		queryBuffer.append(" 						where tsktype = 'COMMON'  ");
 		queryBuffer.append(" 						group by tskprcinstid ");
 		queryBuffer.append(" 					  ) a,	 ");
 		queryBuffer.append(" 					  TskTask task		 ");
@@ -898,9 +899,16 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 			buf.append(" count(*) ");
 			Query query = this.appendExtendQuery(buf, cond);
 			List list = query.list();
-			
-			long count =((Integer)list.get(0)).longValue();
-			return count;
+			Object sizeObj = list.get(0);
+			long size = 0;
+			if (sizeObj instanceof BigInteger) {
+				size = ((BigInteger)sizeObj).longValue();
+			} else if (sizeObj instanceof Long) {
+				size = ((Long)sizeObj).longValue();
+			} else {
+				size = Long.parseLong(sizeObj.toString());
+			} 
+			return size;
 		} catch (PrcException e) {
 			throw e;
 		} catch (Exception e) {
@@ -964,7 +972,19 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				obj.setLastTask_tskWorkSpaceType((String)fields[j++]);
 				obj.setLastTask_tskAccessLevel((String)fields[j++]);
 				obj.setLastTask_tskAccessValue((String)fields[j++]);
-				int lastTaskCount = (Integer)fields[j++];
+				Object lastTaskCountObj = fields[j];
+				int lastTaskCount = 0;
+				if(lastTaskCountObj == null) {
+					lastTaskCount = -1;
+				} else {
+					if (lastTaskCountObj instanceof BigInteger) {
+						lastTaskCount = ((BigInteger)lastTaskCountObj).intValue();
+					} else if (lastTaskCountObj instanceof Long) {
+						lastTaskCount = ((Long)lastTaskCountObj).intValue();
+					} else {
+						lastTaskCount = Integer.parseInt(lastTaskCountObj.toString());
+					}
+				}
 				obj.setLastTask_tskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);
 			}
