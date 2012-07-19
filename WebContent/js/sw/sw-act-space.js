@@ -317,7 +317,7 @@ $(function() {
 				var target = input.parents('.js_image_list_page').find('.js_image_instance_list');
 				target.html(data);
 				imageList.find('.js_add_image_folder_btn').css('visibility', 'hidden');
-				imageList.find('.js_goto_parent_list').hide();
+				imageList.find('.js_goto_parent_list').show();
 				if(displayType == '1'){
 					imageList.find('.js_image_select_buttons').show();
 					imageList.find('.js_move_selected_images').show();
@@ -372,7 +372,7 @@ $(function() {
 					imageList.find('.js_image_select_buttons').hide();
 					imageList.find('.js_move_selected_images').hide();
 					imageList.find('.js_remove_selected_images').hide();
-					if(parentId != "AllFiles"){
+					if(parentId == "AllFiles"){
 						imageList.find('.js_goto_parent_list').hide();						
 					}else{
 						imageList.find('.js_goto_parent_list').show();						
