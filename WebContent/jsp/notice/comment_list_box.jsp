@@ -50,23 +50,25 @@
 %>
 					<ul>
 					<li>
-					<div class="info_ms_section">
-						<a href="smart.sw#<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
-							<span class="<%=work.getIconClass()%>"></span>
-							<span><%=work.getName()%></span>
-						</a>
-						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
-								<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
-						</div>
-						<div class="info_list">
-							<div><%=commentInstance.getComment()%></div>
-							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-									<div class="btn_x js_remove_notice" ></div></a>
+						<div class="info_ms_section">
+							<a href="smart.sw#<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
+								<span class="<%=work.getIconClass()%>"></span>
+								<span><%=work.getName()%></span>
+							</a>
+							<div class="cb">
+								<div class="info_img">
+									<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
+										<img src="<%=owner.getMinPicture()%>" class="profile_size_s"> </a>
+								</div>
+								<div class="info_list">
+									<div><%=commentInstance.getComment()%></div>
+									<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+										<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+											<div class="btn_x js_remove_notice" ></div></a>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
 					</li>
 				<%
 				// 업무 인스턴스 공간에 댓글을 남긴 경우   
@@ -80,19 +82,20 @@
 							<span class="<%=work.getIconClass()%>"></span>
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>
-					
-						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
-								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
-						</div>
-						<div class="info_list">
-							<div><%=commentInstance.getComment()%></div>
-							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-									<div class="btn_x js_remove_notice" ></div></a>
+						<div class="cb">
+							<div class="info_img">
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>"title="<%=owner.getLongName()%>">
+									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
+							</div>
+							<div class="info_list">
+								<div><%=commentInstance.getComment()%></div>
+								<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+										<div class="btn_x js_remove_notice" ></div></a>
+								</div>
 							</div>
 						</div>
-						</div>
+					</div>
 					</li>
 				<%
 				// Community 및 업무 공간에 댓글을 남긴 경우   
@@ -104,19 +107,21 @@
 						<a href="<%=workSpace.getSpaceController()%>?cid=<%=workSpace.getSpaceContextId()%>&workId=<%=work.getId() %>">
 							<span class="profile_size_m"><%=workSpace.getMinPicture()%></span>
 							<span><%=workSpace.getName()%></span>
-						</a>					
-						<div class="info_img">
-							<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
-								<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
-						</div>
-						<div class="info_list">
-							<div><%=commentInstance.getComment()%></div>
-							<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
-								<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
-									<div class="btn_x js_remove_notice" ></div></a>
+						</a>	
+						<div class="cb">				
+							<div class="info_img">
+								<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>&workId=<%=work.getId() %>" title="<%=owner.getLongName()%>">
+									<img src="<%=owner.getMinPicture()%>"  class="profile_size_s"> </a>
+							</div>
+							<div class="info_list">
+								<div><%=commentInstance.getComment()%></div>
+								<div class="t_date"><%=commentInstance.getLastModifiedDate().toLocalString()%>
+									<a href="" noticeId=<%=nMessage.getId() %> noticeType="<%=noticeType%>" lastNoticeId=<%=lastNoticeId %>>
+										<div class="btn_x js_remove_notice" ></div></a>
+								</div>
 							</div>
 						</div>
-						</div>
+					</div>
 					</li>
 					</ul>
 	<%
