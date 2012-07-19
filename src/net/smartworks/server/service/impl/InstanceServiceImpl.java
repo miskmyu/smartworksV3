@@ -3865,7 +3865,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				prcInstCond.setCreationUser(userId);
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
-			prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+			//prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+			prcInstCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
 
 			prcInstCond.setLikeAccessValues(workSpaceIdIns);
 
