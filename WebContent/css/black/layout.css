@@ -56,7 +56,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
-#notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 25px; margin: 4px 0 0 4px}
+#notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 23px; margin: 6px 0 0 4px}
 
 /*Top Menu*/
 .top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */

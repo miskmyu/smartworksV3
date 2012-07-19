@@ -41,8 +41,8 @@
 .pop_i_info li:hover {background-color:#484848}
 .pop_i_info li:hover .btn_x {display:block; overflow: hidden; vertical-align:middle}
 .pop_i_info li .btn_x {display:none}
-.pop_i_info li .info_ms_section {margin:0 15px; padding: 6px 0; overflow: hidden; border-bottom: 1px dotted #9f9f9f}
-.pop_i_info .info_ms_title {margin:10px 15px 5px; border-bottom: 1px solid #9f9f9f} /* title */
+.pop_i_info li .info_ms_section {margin:0 10px; padding: 5px 0; overflow: hidden; border-bottom: 1px dotted #9f9f9f}
+.pop_i_info .info_ms_title {margin:10px 15px 5px; line-height: 19px; border-bottom: 1px solid #9f9f9f} /* title */
 
 .pop_i_info .info_img,.pop_i_info .info_list {float:left}
 .pop_i_info .info_img img {width:20px}
