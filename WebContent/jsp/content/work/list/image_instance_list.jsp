@@ -134,14 +134,14 @@ function viewImage(img){
 	<%
 		}
 	}else{
-		ImageInstanceInfo[] imageInstances = smartWorks.getImageInstancesByDate(displayType, wid, parentId, lastDate, 6);
+		ImageInstanceInfo[] imageInstances = smartWorks.getImageInstancesByDate(displayType, wid, parentId, lastDate, 64);
 		if(!SmartUtil.isBlankObject(imageInstances) && imageInstances.length>0 ){
 			for(int i=0; i<imageInstances.length; i++){
 				ImageInstanceInfo image = imageInstances[i];
-				if(i == 5){
+				if(i == 64){
 					String lastDateStr = (i>0) ? (new LocalDate(imageInstances[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
-					<div class="t_nowork">
+					<div class="t_nowork cb">
 						<a href="" class="js_more_image_instance_list" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
 						<span class="js_progress_span"></span>
 					</div>
