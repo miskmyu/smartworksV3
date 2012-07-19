@@ -130,7 +130,7 @@ function viewImage(img){
 				ImageInstanceInfo image = imageInstances[i];		
 	%>
 				<!--폴더 목록1 -->
-				<li>
+				<li class="mt10">
 					<input type="checkbox" class="tl js_check_image_instance">
 					<div class="picture_detail_area">
 						
