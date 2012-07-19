@@ -85,8 +85,9 @@
 		                                <div class="profile_photo"><img class="profile_size_m" src="<%=requester.getMidPicture()%>"></div>
 		                                <div><span><%=requester.getLongName() %></span><span class="bar">|</span></div>
 		                                <div><span><%=requester.getDepartment().getFullpathName() %></span><span class="bar">|</span></div>
-		                                <div><span><%=requester.getId() %></div>
+		                                <div><span><%=requester.getId() %></span></div>
 		                                <div class="buttonSet">
+		                                	<span class="bar">|</span>
 			                                <span>
 			                                    <a href="" class="js_accept_join_group button mr3" userId="<%=requester.getId()%>"><fmt:message key="group.button.accept_join"/></a>
 			                                    <a href="" class="js_reject_join_group button" userId="<%=requester.getId()%>"><fmt:message key="group.button.reject_join"/></a>

@@ -641,9 +641,9 @@ margin: 0 auto}
 #work_ing .t_red_bold, .setting_section .t_red_bold {font-size:11px}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
-.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0}
-.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; vertical-align: middle}
-.setting_section .instance_list .det_title div.buttonSet {width:93px; float:right}
+.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0; width:25%}
+.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; width:100%; vertical-align: middle}
+.setting_section .instance_list .det_title div.buttonSet {width:100px; padding: 0; float:right}
 .setting_section .instance_list .det_title .profile_photo {width:50px}
 .setting_section .bar {color:#c2c2c2; font-size: 18px; padding-left: 10px; text-align:right}
 

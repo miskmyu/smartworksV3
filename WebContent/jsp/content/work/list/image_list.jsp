@@ -90,7 +90,7 @@
 						%>
 	          		</select>	          		
 	          		<!-- 전체선택, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
-					<span class="js_progress_span fl"></span>					
+					<span class="js_progress_span mt5"></span>					
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
