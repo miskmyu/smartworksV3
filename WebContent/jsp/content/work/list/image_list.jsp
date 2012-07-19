@@ -90,11 +90,7 @@
 						%>
 	          		</select>	          		
 	          		<!-- 전체선택, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
-					<span class="js_progress_span fl"></span>
-					
-					<!-- 사진공간  상세목록 페이지에서만 나옴 -->
-					<span class="fr">목록보기</span>
-					<!-- 사진공간  상세목록 페이지에서만 나옴 -->
+					<span class="js_progress_span fl"></span>					
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
@@ -109,10 +105,10 @@
       			<!-- 사진 목록// -->
 				<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
 				<div class="tc cb">
-					<div class="btn_gray">
-						<a class="js_content" href="file_list.sw?cid=fl.li.pkg_309666dd2bb5493c9d7e618b3a0aad96&wid=">
+					<div class="btn_gray js_goto_parent_list" style="display:none">
+						<a href="">
 							<span class="txt_btn_start"></span>
-							<span class="txt_btn_center">목록보기</span>
+							<span class="txt_btn_center"><fmt:message key="common.button.list"/></span>
 							<span class="txt_btn_end"></span>
 						</a>
 					</div>

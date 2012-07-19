@@ -42,6 +42,8 @@
 	Community workSpace = smartWorks.getWorkSpaceById(wid);
 	int displayType = Integer.parseInt(request.getParameter("displayType"));
 	String parentId = request.getParameter("parentId");
+	if(!SmartUtil.isBlankObject(parentId) && parentId.equals(FileCategory.ID_ALL_FILES)) 
+		parentId = "";
 	String strLastDate = request.getParameter("lastDate"); 
 	LocalDate lastDate = new LocalDate();
 	if(!SmartUtil.isBlankObject(strLastDate))		
@@ -92,6 +94,7 @@ function viewImage(img){
 	<%
 			for(int i=0; i<imageCategories.length; i++){
 				ImageCategoryInfo category = imageCategories[i];
+				if(category.getId().equals(FileCategory.ID_ALL_FILES)) continue;
 	%>
 				<!--폴더 목록1 -->
 				<li>
