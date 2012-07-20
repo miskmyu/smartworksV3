@@ -357,7 +357,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				if (prcInstIdList.contains(task.getTskPrcInstId()))
 					continue;
 				prcInstIdList.add(task.getTskPrcInstId());
-				instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+				instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
 			}
 			InstanceInfo[] resultTasks = new InstanceInfo[instanceInfoList.size()];
 			instanceInfoList.toArray(resultTasks);
@@ -3056,7 +3056,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						if (prcInstIdList.contains(task.getTskPrcInstId()))
 							continue;
 						prcInstIdList.add(task.getTskPrcInstId());
-						instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+						instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
 					}
 				}
 			}
@@ -3446,14 +3446,14 @@ public class InstanceServiceImpl implements IInstanceService {
 											if(value != null) {
 												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
 												if(localDateValue != null)
-													value = LocalDate.convertGMTStringToLocalDate(value).toLocalDateSimpleString();
+													value = localDateValue.toLocalDateSimpleString();
 											}
 										} else if(formatType.equals(FormField.TYPE_TIME)) {
 											LocalDate localDateValue = null;
 											if(value != null) {
-												localDateValue = LocalDate.convertGMTStringToLocalDate(value);
+												localDateValue = LocalDate.convertGMTTimeStringToLocalDate(value);
 												if(localDateValue != null)
-													value = LocalDate.convertGMTStringToLocalDate(value).toLocalTimeSimpleString();
+													value = localDateValue.toLocalTimeSimpleString();
 											}
 										} else if(formatType.equals(FormField.TYPE_DATETIME)) {
 											LocalDate localDateValue = null;
@@ -4597,18 +4597,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 			}
 
-			FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
-			int viewCount = 0;
-			if(!CommonUtil.isEmpty(totalFileWorks)) {
-				for(FileWork totalFileWork : totalFileWorks) {
-					boolean isAccessForMe = ModelConverter.isAccessableInstance(totalFileWork);
-					if(isAccessForMe) {
-						viewCount = viewCount + 1;
-					}
-				}
-			}
-
-			//long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
+			long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -4636,12 +4625,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-			int totalPages = viewCount % pageSize;
+			int totalPages = (int)totalCount % pageSize;
 
 			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
+				totalPages = (int)totalCount / pageSize;
 			else
-				totalPages = viewCount / pageSize + 1;
+				totalPages = (int)totalCount / pageSize + 1;
 
 			int result = 0;
 
@@ -4663,7 +4652,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > totalCount)
 				currentPage = 1;
 
 			if (currentPage > 0)
@@ -4672,13 +4661,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			fileWorkCond.setPageSize(pageSize);
 			//fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 
-			List<FileWork> fileWorkList = new ArrayList<FileWork>();
-			FileWork[] finalFileWorks = null;
+/*			List<FileWork> fileWorkList = new ArrayList<FileWork>();
+			FileWork[] finalFileWorks = null;*/
 
 			FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
 
 			WorkInstanceInfo[] workInstanceInfos = null;
-			if(!CommonUtil.isEmpty(fileWorks)) {
+			/*if(!CommonUtil.isEmpty(fileWorks)) {
 				for(FileWork fileWork : fileWorks) {
 					boolean isAccessForMe = ModelConverter.isAccessableInstance(fileWork);
 					if(isAccessForMe) {
@@ -4689,9 +4678,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(fileWorkList.size() > 0) {
 				finalFileWorks = new FileWork[fileWorkList.size()];
 				fileWorkList.toArray(finalFileWorks);
-			}
-			if(!CommonUtil.isEmpty(finalFileWorks))
-				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_IMAGE, displayBy);
+			}*/
+			if(!CommonUtil.isEmpty(fileWorks))
+				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(fileWorks, TskTask.TASKREFTYPE_IMAGE, displayBy);
 
 /*			List<WorkInstanceInfo> newWorkInstanceInfoList = new ArrayList<WorkInstanceInfo>();
 			for(WorkInstanceInfo workInstanceInfo : workInstanceInfos) {
@@ -4707,7 +4696,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				workInstanceInfos = null;
 			}*/
 
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
 			instanceInfoList.setPageSize(pageSize);
@@ -4755,6 +4744,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				fileWorkCond.setSearchKey(CommonUtil.toNull(params.getSearchKey()));
 			}
 			fileWorkCond.setTskAssigneeOrSpaceId(workSpaceId);
+			fileWorkCond.setPackageStatus(PkgPackage.STATUS_DEPLOYED);
 
 			SearchFilter searchFilter = params.getSearchFilter();
 			if(searchFilter != null) {
@@ -4818,7 +4808,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				fileWorkCond.addFilters(filters);
 			}*/
 
-			FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
+			/*FileWork[] totalFileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
 			int viewCount = 0;
 			if(!CommonUtil.isEmpty(totalFileWorks)) {
 				for(FileWork totalFileWork : totalFileWorks) {
@@ -4827,9 +4817,16 @@ public class InstanceServiceImpl implements IInstanceService {
 						viewCount = viewCount + 1;
 					}
 				}
-			}
+			}*/
 
-			//long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
+			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(cUser);
+
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(cUser);
+			fileWorkCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
+
+			fileWorkCond.setLikeAccessValues(workSpaceIdIns);
+
+			long totalCount = getDocManager().getFileWorkListSize(userId, fileWorkCond);
 
 			SortingField sf = params.getSortingField();
 			String columnName = "";
@@ -4857,12 +4854,12 @@ public class InstanceServiceImpl implements IInstanceService {
 			int currentPage = params.getCurrentPage();
 			if(currentPage == 0) currentPage = 1;
 
-			int totalPages = viewCount % pageSize;
+			int totalPages = (int)totalCount % pageSize;
 
 			if(totalPages == 0)
-				totalPages = viewCount / pageSize;
+				totalPages = (int)totalCount / pageSize;
 			else
-				totalPages = viewCount / pageSize + 1;
+				totalPages = (int)totalCount / pageSize + 1;
 
 			int result = 0;
 
@@ -4884,7 +4881,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			previousPageSize = pageSize;
 
-			if((long)((pageSize * (currentPage - 1)) + 1) > viewCount)
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
 				currentPage = 1;
 
 			if (currentPage > 0)
@@ -4893,13 +4890,13 @@ public class InstanceServiceImpl implements IInstanceService {
 			fileWorkCond.setPageSize(pageSize);
 			//fileWorkCond.setOrders(new Order[]{new Order("tskCreatedate", false)});
 
-			List<FileWork> fileWorkList = new ArrayList<FileWork>();
-			FileWork[] finalFileWorks = null;
+			/*List<FileWork> fileWorkList = new ArrayList<FileWork>();
+			FileWork[] finalFileWorks = null;*/
 
 			FileWork[] fileWorks = getDocManager().getFileWorkList(userId, fileWorkCond);
 
 			WorkInstanceInfo[] workInstanceInfos = null;
-			if(!CommonUtil.isEmpty(fileWorks)) {
+			/*if(!CommonUtil.isEmpty(fileWorks)) {
 				for(FileWork fileWork : fileWorks) {
 					boolean isAccessForMe = ModelConverter.isAccessableInstance(fileWork);
 					if(isAccessForMe) {
@@ -4910,11 +4907,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			if(fileWorkList.size() > 0) {
 				finalFileWorks = new FileWork[fileWorkList.size()];
 				fileWorkList.toArray(finalFileWorks);
-			}
-			if(!CommonUtil.isEmpty(finalFileWorks))
-				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(finalFileWorks, TskTask.TASKREFTYPE_FILE, 0);
+			}*/
+			if(!CommonUtil.isEmpty(fileWorks))
+				workInstanceInfos = ModelConverter.getWorkInstanceInfosByFileWorks(fileWorks, TskTask.TASKREFTYPE_FILE, 0);
 
-			instanceInfoList.setTotalSize(viewCount);
+			instanceInfoList.setTotalSize((int)totalCount);
 			instanceInfoList.setSortedField(sortingField);
 			instanceInfoList.setInstanceDatas(workInstanceInfos);
 			instanceInfoList.setType(InstanceInfoList.TYPE_INFORMATION_INSTANCE_LIST);
@@ -6014,7 +6011,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					if (prcInstIdList.contains(task.getTskPrcInstId()))
 						continue;
 					prcInstIdList.add(task.getTskPrcInstId());
-					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(task));
+					instanceInfoList.add(ModelConverter.getWorkInstanceInfoByTaskWork(cuser, task));
 				}
 			}
 
@@ -6153,9 +6150,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			TaskWork[] tasks = getWorkListManager().getCastWorkList(userId, cond);
 			TaskInstanceInfo[] taskInfos = null;
 			if(!CommonUtil.isEmpty(tasks))
-				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
-
-			if(!CommonUtil.isEmpty(taskInfos)) {
+				taskInfos = ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, (int)totalSize);
+			/*if(!CommonUtil.isEmpty(taskInfos)) {
 				if (totalSize > maxSize) {
 					TaskInstanceInfo[] tempTaskInfos = new TaskInstanceInfo[taskInfos.length + 1];
 					for (int i = 0; i < taskInfos.length + 1; i++) {
@@ -6169,7 +6165,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 					taskInfos = tempTaskInfos;
 				}
-			}
+			}*/
 
 			return taskInfos;
 			//return ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks);
