@@ -56,7 +56,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 	background: url("../../images/header_nico.png") no-repeat scroll -412px -102px transparent !important;
 	display:inline-block; font-size:0; height:12px; line-height:0; overflow:hidden; position:absolute; right:0;  top:0; width:5px;
 }
-#notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 25px; margin: 4px 0 0 4px}
+#notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 23px; margin: 6px 0 0 4px}
 
 /*Top Menu*/
 .top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */
@@ -641,11 +641,12 @@ margin: 0 auto}
 #work_ing .t_red_bold, .setting_section .t_red_bold {font-size:11px}
 #work_ing .js_more_instance_item .t_woname {font-size:14px; text-decoration:underline} /* 처리할 업무 - 태스크 이름 */
 
-.setting_section .instance_list .det_title div {float:left; padding:0 10px 0 0}
-.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; vertical-align: middle}
-.setting_section .instance_list .det_title div.buttonSet {width:93px; float:right}
-.setting_section .instance_list .det_title .profile_photo {width:50px}
-.setting_section .bar {color:#c2c2c2; font-size: 18px; padding-left: 10px; text-align:right}
+.setting_section .instance_list .det_title div {float:left; width:30%; padding-right: 5px}
+.setting_section .member .instance_list .det_title div {width:21%}
+.setting_section .instance_list .det_title div > span {display: table-cell; height: 48px; width:100%; vertical-align: middle}
+.setting_section .instance_list .det_title div.buttonSet {width:110px; padding: 0; float:right}
+.setting_section .instance_list .det_title .profile_photo {width:50px !important}
+.setting_section .bar {color:#c2c2c2; font-size: 23px; text-align:right; width: 5px !important;}
 
 td.pic {width:85px}
 .subject_list { margin-left:5px}
@@ -713,7 +714,7 @@ button.space {height: 18px; padding: 1px 3px}
 .t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}
 .t_white {font-size:12px; font-weight:normal}
 .t_nav {font-size:14px; font-weight:bold; color:#FFF}
-.t_nowork { text-align:center; padding:8px 0 !important; color:#b2b2b2}
+.t_nowork, .t_nowork a { text-align:center; padding:8px 0 !important; color:#666 !important}
 .t_mail { font-size:11px; color:#333333}
 .new_mail {color:#f38f1b}
 .bar { font-weight:normal; color:#999999}

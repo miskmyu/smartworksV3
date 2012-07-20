@@ -66,6 +66,9 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
+import net.smartworks.server.engine.autoindex.model.AutoIndexRule;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
@@ -154,6 +157,7 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.engine.resource.util.XmlUtil;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -174,6 +178,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -663,7 +670,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			setDataFieldsInfo(newRecord, form);
 			
-			if (logger.isInfoEnabled()) {
+			if (logger.isDebugEnabled()) {
 				StringBuffer infoBuff = new StringBuffer();
 				infoBuff.append("Refresh Data Field \r\n[\r\n Original Record : \r\n").append(oldRecord.toString());
 				infoBuff.append(", \r\n New Record : \r\n").append(newRecord.toString()).append(" \r\n]\r\n");
@@ -735,7 +742,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			setDataFieldsInfo(newRecord, form);
 			
-			if (logger.isInfoEnabled()) {
+			if (logger.isDebugEnabled()) {
 				StringBuffer infoBuff = new StringBuffer();
 				infoBuff.append("Refresh Data Field \r\n[\r\n Original Record : \r\n").append(oldRecord.toString());
 				infoBuff.append(", \r\n New Record : \r\n").append(newRecord.toString()).append(" \r\n]\r\n");
@@ -762,10 +769,100 @@ public class InstanceServiceImpl implements IInstanceService {
 			String fieldType = field.getSystemType();
 			
 			SwfMappings mappings = field.getMappings();
-			if (mappings == null) {
-				resultMap.put(fieldId, oldRecord.getDataField(fieldId));
-				newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
-				return;
+			String formatType = field.getFormat().getType();
+			
+			if (mappings == null || formatType.equalsIgnoreCase("autoIndex")) {
+				if (formatType.equalsIgnoreCase("autoIndex") && isFirst) {
+					
+					AutoIndexDefCond autoIndexDefCond = new AutoIndexDefCond();
+					autoIndexDefCond.setFormId(form.getId());
+					autoIndexDefCond.setFieldId(fieldId);
+					AutoIndexDef autoIndexDef = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexDef(userId, autoIndexDefCond, null);
+					if (autoIndexDef == null) {
+						resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+						newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
+						return;
+					}
+					
+					StringBuffer valueBuff = new StringBuffer();
+					
+					AutoIndexRule[] rules = autoIndexDef.getRules();
+					if (rules == null || rules.length == 0) {
+						resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+						newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
+						return;
+					}
+
+					SwdDataField[] subDataFields = null;
+					
+					for (int i = 0; i < rules.length; i++) {
+						AutoIndexRule rule = rules[i];
+						String ruleId = rule.getRuleId();
+						
+						if (ruleId.equalsIgnoreCase("ruleId.code")) {
+							valueBuff.append(rule.getCodeValue()).append(CommonUtil.toNotNull(rule.getSeperator()));
+						} else if (ruleId.equalsIgnoreCase("ruleId.date")) {
+							String dateFormat = "yyyyMMdd";
+							LocalDate now = new LocalDate();
+							SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+							String dateStr = sdf.format(now);
+							valueBuff.append(dateStr).append(CommonUtil.toNotNull(rule.getSeperator()));
+						} else if (ruleId.equalsIgnoreCase("ruleId.sequence")) {
+							
+							/*<autoIndexRule ruleId="ruleId.sequence" increment="2"
+								incrementBy="incrementBy.day" digits="3" seperator="_" />*/
+							
+							int increment = rule.getIncrement();
+							String incrementBy = rule.getIncrementBy();
+							String digits = rule.getDigits();
+
+							/*int user_no = 30;
+							String result_user_no = String.format("%04d", user_no);
+							%04d 의 의미
+							 % -  명령의시작
+							 0 - 채워질 문자
+							 4 - 총 자리수
+							 d - 십진정수*/
+							
+							
+							//TODO 구현필요
+							
+						} else if (ruleId.equalsIgnoreCase("ruleId.list")) {
+							String itemsStr = rule.getItems();
+							String[] items = StringUtils.tokenizeToStringArray(itemsStr, "||");
+							
+							subDataFields = new SwdDataField[items.length];
+							for (int j = 0; j < items.length; j++) {
+								String subValue = items[j];
+								SwdDataField subDataField = new SwdDataField();
+								
+								if (CommonUtil.isEmpty(subValue)) {
+									subDataField.setValue(null);
+									subDataField.setRefRecordId(null);
+								} else {
+									subDataField.setValue(subValue);
+								}
+								subDataFields[j] = subDataField;
+							}
+							valueBuff.append(items[0]).append(CommonUtil.toNotNull(rule.getSeperator()));
+						}
+					}
+					
+					SwdDataField dataField = toDataField(userId, field, valueBuff.toString());
+					if (subDataFields != null) {
+						//만약에 룰집합중에 한개 이상의 콤보형태의 룰이 존재한다면 두콤포리스트 아이템을 같이 올릴수 있는 방안이 필요하다
+						//subDataFields를 한번 더 랩핑하여 시퀀스아이디별로 따로주어야 할듯
+						dataField.setDataFields(subDataFields);
+					}
+					resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+					newRecord.setDataField(fieldId, dataField);
+					return;
+					
+				} else {
+					resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+					newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
+					return;
+				}
 			}	
 			SwfMapping[] preMappings = mappings.getPreMappings();
 			if (CommonUtil.isEmpty(preMappings)){
@@ -965,7 +1062,6 @@ public class InstanceServiceImpl implements IInstanceService {
 								SwfFormat format = field.getFormat();
 								if (format == null)
 									continue;
-								String formatType = format.getType();
 								if (!"refFormField".equalsIgnoreCase(formatType))
 									continue;
 								SwfFormRef formRef = format.getRefForm();

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="net.smartworks.server.engine.autoindex.model" default-lazy="false">
+	<class name="AutoIndexDef" table="SwAutoIndexDef">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="formId" type="string" length="100"/>
+		<property name="version" column="version" type="int"/>
+		<property name="fieldId" type="string" length="10"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+		<array name="rules" table="SwAutoIndexRuls">
+			<key column="objId" foreign-key="FkAutoIndexDef"/>
+			<list-index column="indexSeq"/>
+			<composite-element class="AutoIndexRule">
+				<property name="ruleId" type="string" length="100"/>
+				<property name="type" type="string" length="50"/>
+				<property name="codeValue" type="string" length="100"/>
+				<property name="seperator" type="string" length="10"/>
+				<property name="increment" type="int"/>
+				<property name="incrementBy" type="string" length="50"/>
+				<property name="digits" type="string" length="10"/>
+				<property name="items" type="string" length="500"/>
+			</composite-element>
+		</array>
+	</class>
+	<class name="AutoIndexSeq" table="SwAutoIndexSeq">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="formId" type="string" length="100"/>
+		<property name="fieldId" type="string" length="10"/>
+		<property name="refType" type="string" length="100"/>
+		<property name="refId" type="string" length="100"/>
+		<property name="seqValue" type="string" length="100"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+</hibernate-mapping>

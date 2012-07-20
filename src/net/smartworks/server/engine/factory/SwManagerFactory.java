@@ -10,6 +10,7 @@ package net.smartworks.server.engine.factory;
 
 //import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.autoindex.manager.IIdxManager;
 import net.smartworks.server.engine.category.manager.ICtgManager;
 import net.smartworks.server.engine.common.collection.manager.IColManager;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
@@ -74,6 +75,7 @@ public class SwManagerFactory {
 	private IResourceRuntimeManager runtimeManager;
 	private IPublishNoticeManager publishNoticeManager;
 	private IMailManager mailManager;
+	private IIdxManager autoIndexManager;
 
 	//SERA
 	private ISeraManager seraManager;
@@ -273,6 +275,12 @@ public class SwManagerFactory {
 	}
 	public void setMailManager(IMailManager mailManager) {
 		this.mailManager = mailManager;
+	}
+	public IIdxManager getAutoIndexManager() {
+		return autoIndexManager;
+	}
+	public void setAutoIndexManager(IIdxManager autoIndexManager) {
+		this.autoIndexManager = autoIndexManager;
 	}
 
 //	public IChtManager getChtManager() {

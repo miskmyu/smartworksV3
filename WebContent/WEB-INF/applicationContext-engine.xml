@@ -92,12 +92,14 @@
 		<beans:property name="runtimeManager" ref="resourceRuntimeManager"/>
 		<beans:property name="publishNoticeManager" ref="publishNoticeManager"/>
 		<beans:property name="mailManager" ref="mailManager"/>
+		<beans:property name="autoIndexManager" ref="autoIndexManager"/>
 
 		<!-- beans:property name="chtManager" ref="chtManager"/>
 		<beans:property name="lcsManager" ref="lcsManager"/>
 		<beans:property name="updManager" ref="updManager"/-->
 	</beans:bean>
 
+	<beans:bean id="autoIndexManager" class="net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl"/>
 	<beans:bean id="mailManager" class="net.smartworks.server.engine.mail.manager.impl.MailManagerImpl"/>
 	<beans:bean id="publishNoticeManager" class="net.smartworks.server.engine.publishnotice.manager.impl.PublishNoticeManagerImpl"/>
 	<beans:bean id="loginUserManager" class="net.smartworks.server.engine.common.loginuser.manager.impl.LoginUserManagerImpl"/>
