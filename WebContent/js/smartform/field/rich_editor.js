@@ -40,7 +40,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	var $textarea = null;
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
-	}else{	
+	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+value+'</textarea></span></div>');
 	}
 	if ($graphic.attr('hidden') == 'true'){
@@ -59,16 +59,18 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 			});
 		}
 	}else{
-		if(readOnly)
-			options.container.find('.form_value').text(value);
-		else
+		if(readOnly) {
+			options.container.find('.form_value').text('');
+			options.container.find('.form_value').append(value);
+		} else {
 			options.container.find('.form_value textarea').attr('value', value);		
+		}
 	}
 
 	if (readOnly) {
 		var $richEditorHiddenInput = $('#richEditorHiddenInput'+id);
 		if ($richEditorHiddenInput.length === 0) {
-			options.container.append('<input id="richEditorHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
+			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + value + "'>");
 		} else {
 			$richEditorHiddenInput.attr('value', value);
 		}

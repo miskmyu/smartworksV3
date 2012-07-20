@@ -2398,3 +2398,44 @@ CREATE TABLE SwMailAccount (
 	modifiedtime datetime,
     primary key (id)
 );
+
+-- 아이디 자동생성
+CREATE TABLE SwAutoIndexDef (
+	objId varchar(50) NOT NULL,
+	formId varchar(100) NOT NULL,
+	version int,
+	fieldId varchar(10) NOT NULL,	
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (objId)
+);
+
+CREATE TABLE SwAutoIndexRuls (
+	objId varchar(50) NOT NULL,
+	ruleId varchar(100),
+	type varchar(50),
+	codeValue varchar(100),
+	seperator varchar(10),
+	increment int,
+	incrementBy varchar(50),
+	digits varchar(10),
+	items varchar(500),
+	indexSeq int NOT NULL,	
+    primary key (objId, indexSeq)
+);
+
+CREATE TABLE SwAutoIndexSeq (
+	objId varchar(50) NOT NULL,
+	formId varchar(100),
+	fieldId varchar(10),
+	refType varchar(100),
+	refId varchar(100),
+	seqValue varchar(100),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (objId)
+);

@@ -162,7 +162,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.serializeObject = function(numberInput
 	for(var i=0; i<numberInputs.length; i++){
 		var numberInput = $(numberInputs[i]);
 		var valueStr = numberInput.find('input').attr('value');
-		numberInputsJson[numberInput.attr('fieldId')] = $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale });
+		numberInputsJson[numberInput.attr('fieldId')] = $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale })+'';
 	}
 	return numberInputsJson;
 };
