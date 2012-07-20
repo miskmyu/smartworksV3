@@ -74,8 +74,6 @@
 	<%
 	if(!SmartUtil.isBlankObject(tasksHistories) && tasksHistories.length > 0){
 		for(int i=0; i<tasksHistories.length; i++){
-			if(i == 20)
-				continue;
 			TaskInstanceInfo taskInstance = tasksHistories[i];
 			if(taskInstance.getType()<0){
 				String lastDateStr = (i>0) ? (new LocalDate(tasksHistories[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 

@@ -74,7 +74,7 @@ $(function() {
 		var spaceInstanceList = input.parents('.js_space_instance_list_page');
 		var smartcaster = input.parents('.js_smartcaster_page');
 		var myRunningInstanceList = input.parents('.js_my_running_instance_list_page');
-		if(!isEmpty(myRunningInstanceList)) target = target.find('.js_instance_list_table');
+		//if(!isEmpty(myRunningInstanceList)) target = target.find('.js_instance_list_table');
 		var spacePage = [];
 		var toDate = "";
 		if(!isEmpty(spaceTimeline)){

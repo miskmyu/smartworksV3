@@ -1,7 +1,5 @@
 package net.smartworks.server.service.util;
 
-import java.util.Date;
-
 import net.smartworks.model.community.User;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.server.engine.worklist.model.TaskWork;
