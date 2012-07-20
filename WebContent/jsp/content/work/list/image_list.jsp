@@ -52,7 +52,7 @@
 			<div class="contents_space">
 			
 				<!-- 필터 -->
-	        	<div class="txt_btn tr mb2 js_image_list_header" style="height:25px">
+	        	<div class="js_image_list_header" style="height:25px">
     				<select class="js_image_display_by fl mr5">
 	            			<option selected value="<%=FileCategory.DISPLAY_BY_CATEGORY%>"><fmt:message key="space.title.by_category"/></option>
 	        				<option value="<%=FileCategory.DISPLAY_BY_YEAR%>"><fmt:message key="space.title.by_year"/></option>
@@ -70,41 +70,50 @@
 						}
 						%>
 	          		</select>
-	          		<!-- 삭제, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
-	          		<select class="fl mr5 js_select_move_folder" style="display:none">
-	          		</select>
-	          		
-	          		<button class="button space fl mr5 js_remove_selected_images" style="display:none">
-						<span class="icon_mail_delet"></span><fmt:message key="common.button.remove_selected"/>
-					</button>
-	          		<!-- 삭제, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
-					<span class="js_progress_span fl"></span>
+	          		<!-- 전체선택, 이동: 사진공간  상세목록 페이지에서만 나옴 -->
+	     			<span class="js_image_select_buttons fl mr5" style="display:none">
+	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
+	     			</span>
+	     		
+	          		<select class="fl mr5 js_move_selected_images" style="display:none">
+						<option value="">[<fmt:message key="common.button.move_selected"/>]</option>
+						<%
+						if(!SmartUtil.isBlankObject(categories)){
+							for(int i=0; i<categories.length; i++){
+								FileCategoryInfo category = categories[i];
+								if(category.getId().equals(FileCategory.ID_ALL_FILES)) continue;
+						%>
+								<option value=<%=category.getId() %>><%=category.getName() %></option>
+						<%								
+							}
+						}
+						%>
+	          		</select>	          		
+	          		<!-- 전체선택, 이동 : 사진공간  상세목록 페이지에서만 나옴//-->
+					<span class="js_progress_span mt5"></span>					
 	       		</div>
 	     		<!-- 필터//-->
 	     		<div class="solid_line"></div>
-	     		
-	     		<!-- 전체선택, 이동 : 사진공간  상세페이지에서만 나옴 -->
-	     		<div class="select_btn_space js_image_select_buttons" style="display:none">
-	     			<span>
-	     				<input type="checkbox" class="js_check_all_image_instance" /><fmt:message key="mail.button.select_all"/>
-	     			</span>
-	     		</div>
-	     		<!-- 전체선택 : 사진공간  상세목록 페이지에서만 나옴 //-->
                
 				<!-- 사진 목록 -->
-				<div class="picture_section js_image_instance_list">
-					<!-- 폴더 추가 -->
-					<div class="tab_buttons js_add_image_folder_btn">
-						<a href="" title="<fmt:message key='common.button.add_new_folder'/>"><span class="btn_bfolder_add"></span></a>
-					</div>
-					<!-- 폴더추가 //-->
-					
+				<div class="picture_section js_image_instance_list">					
 					<jsp:include page="/jsp/content/work/list/image_instance_list.jsp">
 						<jsp:param value="<%=FileCategory.DISPLAY_BY_CATEGORY %>" name="displayType"/>
 						<jsp:param value="" name="parentId"/>
 					</jsp:include>
 				</div>
       			<!-- 사진 목록// -->
+				<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
+				<div class="tc cb">
+					<div class="btn_gray js_goto_parent_list" style="display:none">
+						<a href="">
+							<span class="txt_btn_start"></span>
+							<span class="txt_btn_center"><fmt:message key="common.button.list"/></span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</div>
+				</div>
+				<!-- 목록 버튼: 사진공간  상세목록 페이지에서만 나옴//-->
 			</div>
 			<!-- 컨텐츠 //-->
 		</ul>

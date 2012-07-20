@@ -42,10 +42,12 @@
 	Community workSpace = smartWorks.getWorkSpaceById(wid);
 	int displayType = Integer.parseInt(request.getParameter("displayType"));
 	String parentId = request.getParameter("parentId");
+	if(!SmartUtil.isBlankObject(parentId) && parentId.equals(FileCategory.ID_ALL_FILES)) 
+		parentId = "";
 	String strLastDate = request.getParameter("lastDate"); 
 	LocalDate lastDate = new LocalDate();
 	if(!SmartUtil.isBlankObject(strLastDate))		
-		lastDate = LocalDate.convertLocalStringToLocalDate(request.getParameter("lastDate"));
+		lastDate = LocalDate.convertLocalStringToLocalDate(strLastDate);
 %>
 <script type="text/javascript">
 
@@ -83,8 +85,16 @@ function viewImage(img){
 	if(SmartUtil.isBlankObject(parentId)){
 		ImageCategoryInfo[] imageCategories = smartWorks.getImageCategoriesByType(displayType, wid);
 		if(!SmartUtil.isBlankObject(imageCategories) && imageCategories.length>0 ){
+	%>
+			<!-- 폴더 추가 -->
+			<div class="tab_buttons js_add_image_folder_btn">
+				<a href="" title="<fmt:message key='common.button.add_new_folder'/>"><span class="btn_bfolder_add"></span></a>
+			</div>
+			<!-- 폴더추가 //-->	
+	<%
 			for(int i=0; i<imageCategories.length; i++){
 				ImageCategoryInfo category = imageCategories[i];
+				if(category.getId().equals(FileCategory.ID_ALL_FILES)) continue;
 	%>
 				<!--폴더 목록1 -->
 				<li>
@@ -127,11 +137,21 @@ function viewImage(img){
 		ImageInstanceInfo[] imageInstances = smartWorks.getImageInstancesByDate(displayType, wid, parentId, lastDate, 64);
 		if(!SmartUtil.isBlankObject(imageInstances) && imageInstances.length>0 ){
 			for(int i=0; i<imageInstances.length; i++){
-				ImageInstanceInfo image = imageInstances[i];		
+				ImageInstanceInfo image = imageInstances[i];
+				if(i == 64){
+					String lastDateStr = (i>0) ? (new LocalDate(imageInstances[i-1].getLastModifiedDate().getTime())).toLocalDateString2() : ""; 
 	%>
+					<div class="t_nowork cb">
+						<a href="" class="js_more_image_instance_list" lastDate="<%=lastDateStr%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+						<span class="js_progress_span"></span>
+					</div>
+				<%				
+					break;
+				}
+				%>
 				<!--폴더 목록1 -->
-				<li>
-					<input type="checkbox" class="tl js_check_image_instance">
+				<li class="mt10">
+					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
@@ -148,7 +168,7 @@ function viewImage(img){
 						<!-- 삭제버튼//-->
 												
 						<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
-						<div class="detail_picture"><img style="width:155px;height:125px;" src="<%=image.getImgSource()%>"></div>
+						<div class="detail_picture"><img src="<%=image.getImgSource()%>"></div>
 						</a>												
  					</div>
  					<div><%=image.getFileName()%></div>
@@ -161,14 +181,3 @@ function viewImage(img){
 	}
 	%>
 </ul>
-<!-- 목록 버튼:사진공간  상세목록 페이지에서만 나옴 -->
-<div class="tc cb">
-	<div class="btn_gray">
-		<a class="js_content" href="file_list.sw?cid=fl.li.pkg_309666dd2bb5493c9d7e618b3a0aad96&wid=">
-			<span class="txt_btn_start"></span>
-			<span class="txt_btn_center">목록보기</span>
-			<span class="txt_btn_end"></span>
-		</a>
-	</div>
-</div>
-<!-- 목록 버튼: 사진공간  상세목록 페이지에서만 나옴//-->

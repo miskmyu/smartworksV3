@@ -3961,7 +3961,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				prcInstCond.setCreationUser(userId);
 
 			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
-			prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+			//prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+
+			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+			prcInstCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
 
 			prcInstCond.setLikeAccessValues(workSpaceIdIns);
 
@@ -7917,6 +7920,16 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

@@ -83,10 +83,17 @@
 		                        <li class="instance_list">
 		                        	<div class="det_title">
 		                                <div class="profile_photo"><img class="profile_size_m" src="<%=requester.getMidPicture()%>"></div>
-		                                <div><span><%=requester.getLongName() %></span><span class="bar">|</span></div>
-		                                <div><span><%=requester.getDepartment().getFullpathName() %></span><span class="bar">|</span></div>
-		                                <div><span><%=requester.getId() %></div>
+		                                <div>
+			                                <span>
+			                                <%=requester.getLongName() %> </br>
+			                                <%=requester.getDepartment().getFullpathName() %>
+			                                </span>
+		                                	<span class="bar">|</span>
+		                                </div>
+		                                <%-- <div><span><%=requester.getDepartment().getFullpathName() %></span><span class="bar">|</span></div> --%>
+		                                <div><span><%=requester.getId() %></span></div>
 		                                <div class="buttonSet">
+		                                	<span class="bar">|</span>
 			                                <span>
 			                                    <a href="" class="js_accept_join_group button mr3" userId="<%=requester.getId()%>"><fmt:message key="group.button.accept_join"/></a>
 			                                    <a href="" class="js_reject_join_group button" userId="<%=requester.getId()%>"><fmt:message key="group.button.reject_join"/></a>
@@ -109,7 +116,7 @@
 	                        <div class="title"><fmt:message key="group.title.members"/> <span class="t_red_bold">[<%=groupMemberList.getTotalMembers() %>]</span> </div>
 	                    </div>
 	                    <!-- 타이틀 //-->
-	                  	<div class="space_section">
+	                  	<div class="space_section member">
 	                    	<ul>
 	                    		<%
 	                    		if(!SmartUtil.isBlankObject(groupMemberList.getMembers())){
@@ -125,14 +132,23 @@
 				                                  	<img class="profile_size_m" src="<%=member.getMidPicture()%>">
 				                         		</div>
 				                                <div>
-					                                <span><%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></span>
+					                                <span>
+					                                <%=member.getLongName() %><%if(member.getRole()==User.USER_ROLE_LEADER){ %>(<fmt:message key="group.title.leader"/>)<%} %></br>
+					                                <%=member.getDepartment().getFullpathName() %>
+					                                </span>
 					                                <span class="bar">|</span>
 				                                </div>
-				                                <div><span><%=member.getDepartment().getFullpathName() %></span><span class="bar">|</span></div>
-				                                <div><span><%=member.getId() %></span><span class="bar">|</span></div>
-				                                <div><span>가입일</span><span class="bar">|</span></div>
-				                                <div><span>최근 방문일</div>
+				                                <div>
+					                                <span>
+					                                	<%=member.getId() %>
+					                                </span>
+					                                <span class="bar">|</span>
+				                                </div>
+				                                <%-- <div><span><%=member.getId() %></span><span class="bar">|</span></div> --%>
+				                                <div style="width:100px"><span>가입일: <br>2012.03.25</span><span class="bar">|</span></div>
+				                                <div style="width:100px"><span>최근 방문일: <br>2012.05.12 18:50</div>
 				                                <div class="buttonSet">
+				                                	<span class="bar">|</span>
 				                                	<%
 				                                	if(member.getId().equals(cUser.getId())){
 				                                	%>

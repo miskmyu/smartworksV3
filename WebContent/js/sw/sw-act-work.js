@@ -1433,20 +1433,14 @@ $(function() {
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
 		if(isEmpty(workSpacePage)) return false;
 		var target = $('#content');	
-		var header = 	'<link href="../css/default.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/black/layout.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/black/detail.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/black/chat.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/black/form.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/black/pop.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />' +
-		'<link href="../css/ext/ext-all.css" type="text/css" rel="stylesheet" />' +
-		'<link href="../css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>' +
-		'<link href="../css/fullcalendar/fullcalendar.css" type="text/css" rel="stylesheet"/>' +
-		'<link href="../smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
+		var header = 	'<link href="http://localhost:8080/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
+		'<link href="http://localhost:8080/smartworksV3/css/black/layout.css" type="text/css" rel="stylesheet" />' +
+		'<link href="http://localhost:8080/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
+		'<link href="http://localhost:8080/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
+		'<link href="http://localhost:8080/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
 		'<link rel="shortcut icon" href="../images/favicon/smartworks.ico"/>' +
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		var contents = '<html>' + header + '<body><div id="content">' + $('#content').html() + '</div></body></html>';
+		var contents = '<html>' + header + '<body><div style="background-color:white">' + $('ul.portlet_r').html() + '</div></body></html>';
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
 //		console.log(JSON.stringify(paramsJson));

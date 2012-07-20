@@ -32,8 +32,6 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<script type="text/javascript" src="js/sw/iframe.js"></script>
-
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
@@ -175,3 +173,4 @@
 	<div class="portlet_b" style="display: block;"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->
+<script type="text/javascript" src="js/sw/iframe.js"></script>
