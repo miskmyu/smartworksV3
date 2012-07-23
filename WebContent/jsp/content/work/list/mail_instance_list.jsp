@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.server.engine.mail.model.MailContent"%>
 <%@page import="org.claros.commons.mail.models.EmailPriority"%>
 <%@page import="net.smartworks.model.instance.info.MailInstanceInfo"%>
@@ -144,10 +145,8 @@
 			if(!SmartUtil.isBlankObject(instanceList.getInstanceDatas())) {
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
-					//UserInfo owner = instanceInfo.getOwner();
-					//UserInfo lastModifier = instanceInfo.getLastModifier();
-					//String cid = SmartWorks.CONTEXT_PREFIX_MAIL_SPACE + instanceInfo.getId();
-					//String wid = instanceInfo.getWorkSpace().getId();
+					String sender = (SmartUtil.isBlankObject(instanceInfo.getSender())) ? SmartMessage.getString("mail.title.no.sender") : instanceInfo.getSender().getName();
+					String subject = (SmartUtil.isBlankObject(instanceInfo.getSubject())) ? SmartMessage.getString("mail.title.unknown.subject") : instanceInfo.getSubject();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 					String sendDateStr = (SmartUtil.isBlankObject(instanceInfo.getSendDate())) ? "" : instanceInfo.getSendDate().toLocalString();
 				%>
@@ -155,8 +154,8 @@
 						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
-						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSender().getName())%></a></td>
-						<td><a href="<%=target%>" class="js_content"><%=CommonUtil.toNotNull(instanceInfo.getSubject())%></a></td>
+						<td><a href="<%=target%>" class="js_content"><%=sender%></a></td>
+						<td><a href="<%=target%>" class="js_content"><%=subject%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>
 					</tr>
 		<%
