@@ -76,9 +76,11 @@ public class TaskWorkCond extends Cond {
 	private LocalDate lastInstanceDate; 
 	private Date expectEndDateFrom;
 	private Date expectEndDateTo;
+	private String[] workSpaceIdNotIns;
+	private String[] likeAccessValues;
 	
 	private String searchKey;
-	
+
 	public LocalDate getLastInstanceDate() {
 		return lastInstanceDate;
 	}
@@ -438,6 +440,18 @@ public class TaskWorkCond extends Cond {
 	}
 	public void setTskForwardId(String tskForwardId) {
 		this.tskForwardId = tskForwardId;
+	}
+	public String[] getWorkSpaceIdNotIns() {
+		return workSpaceIdNotIns;
+	}
+	public void setWorkSpaceIdNotIns(String[] workSpaceIdNotIns) {
+		this.workSpaceIdNotIns = workSpaceIdNotIns;
+	}
+	public String[] getLikeAccessValues() {
+		return likeAccessValues;
+	}
+	public void setLikeAccessValues(String[] likeAccessValues) {
+		this.likeAccessValues = likeAccessValues;
 	}
 
 }

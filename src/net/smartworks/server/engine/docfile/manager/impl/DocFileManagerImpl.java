@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.Clob;
@@ -1117,7 +1118,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		return fileModels[0];
 	}
 
-	private Query appendQuery(StringBuffer queryBuffer, FileWorkCond cond) throws Exception {
+	private Query appendQuery(String user, StringBuffer queryBuffer, FileWorkCond cond) throws Exception {
 
 		String tskAssignee = cond.getTskAssignee();
 		String tskAssigneeOrTskSpaceId = cond.getTskAssigneeOrSpaceId();
@@ -1129,16 +1130,20 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String folderId = cond.getFolderId();
 		String writtenTimeMonthString = cond.getWrittenTimeMonthString();
 		String packageId = cond.getPackageId();
+		String packageStatus = cond.getPackageStatus();
 		String fileType = cond.getFileType();
 		int pageNo = cond.getPageNo();
 		int pageSize = cond.getPageSize();
-		
+
 		String searchKey = cond.getSearchKey();
 
 		String worksSpaceId = cond.getTskWorkSpaceId();
 		Date executionDateFrom = cond.getTskExecuteDateFrom();
 		Date executionDateTo = cond.getTskExecuteDateTo();
 		Filters[] filtersArray = cond.getFilters();
+
+		String[] workSpaceIdNotIns = cond.getWorkSpaceIdNotIns();
+		String[] likeAccessValues = cond.getLikeAccessValues();
 
 		queryBuffer.append("from ");
 		queryBuffer.append("( ");
@@ -1157,6 +1162,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, task.tsktype ");
 		queryBuffer.append("		, task.tskReftype ");
 		queryBuffer.append("		, task.tskstatus ");
+		queryBuffer.append("		, task.tskCreateUser ");
 		queryBuffer.append("		, task.tskassignee ");
 		queryBuffer.append("		, case when task.tskstatus='11' then task.tskassigndate else task.tskexecuteDate end as taskLastModifyDate ");
 		queryBuffer.append("		, task.tskcreatedate ");
@@ -1171,6 +1177,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		, task.tskDef ");
 		queryBuffer.append("		, form.packageId ");
 		queryBuffer.append("		, pkg.name as packageName ");
+		queryBuffer.append("		, pkg.status as packageStatus ");
 		queryBuffer.append("		, ctg.id as childCtgId ");
 		queryBuffer.append("		, ctg.name as childCtgName ");
 		queryBuffer.append("		, case when ctg.parentId = '_PKG_ROOT_' then null else ctg2.id end as parentCtgId ");
@@ -1200,6 +1207,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		queryBuffer.append("		on ctg.parentId = ctg2.id ");
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
+		if (!CommonUtil.isEmpty(packageStatus))
+			queryBuffer.append("	and pkg.status = :packageStatus ");
 		/*if (!CommonUtil.isEmpty(filtersArray)) {
 			for(Filters filters : filtersArray) {
 				Filter[] filterArray = filters.getFilter();
@@ -1312,22 +1321,41 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			queryBuffer.append("		and prcInst.prcStatus = :prcStatus ");
 		queryBuffer.append(") prcInstInfo ");
 		queryBuffer.append("on taskInfo.tskPrcInstId = prcInstInfo.prcObjId ");
-		if (lastInstanceDate != null) {
-			queryBuffer.append("where taskInfo.tskCreateDate < :lastInstanceDate ");
-			if (tskRefType != null) {
-				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
-					queryBuffer.append("and taskInfo.tskReftype is null ");
-				else 
-					queryBuffer.append("and taskInfo.tskReftype = :tskRefType ");
-			}
-		} else {
-			if (tskRefType != null) {
-				if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
-					queryBuffer.append("where taskInfo.tskReftype is null ");
-				else 
-					queryBuffer.append("where taskInfo.tskReftype = :tskRefType ");
-			}
+		queryBuffer.append("where 1=1 ");
+		if (lastInstanceDate != null)
+			queryBuffer.append("and taskInfo.tskCreateDate < :lastInstanceDate ");
+		if (tskRefType != null) {
+			if(tskRefType.equals(TskTask.TASKREFTYPE_NOTHING))
+				queryBuffer.append("and taskInfo.tskReftype is null ");
+			else 
+				queryBuffer.append("and taskInfo.tskReftype = :tskRefType ");
 		}
+
+		if (workSpaceIdNotIns != null) {
+			queryBuffer.append(" and");
+			queryBuffer.append(" tskWorkSpaceId not in (");
+			for (int j=0; j<workSpaceIdNotIns.length; j++) {
+				if (j != 0)
+					queryBuffer.append(", ");
+				queryBuffer.append(":workSpaceIdNotIn").append(j);
+			}
+			queryBuffer.append(")");
+		}
+		String likeAccessValuesQuery = "tskAccessValue like '%%'";
+		StringBuffer likeAccessValuesBuffer = new StringBuffer();
+		String divisionUL = "";
+		if(this.getDbType().equals("sqlserver"))
+			divisionUL = "collate Korean_Wansung_CS_AS ";
+		if(likeAccessValues != null) {
+			for (int j=0; j<likeAccessValues.length; j++) {
+				if(j==0)
+					likeAccessValuesBuffer.append("tskAccessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
+				else
+					likeAccessValuesBuffer.append(" or tskAccessValue ").append(divisionUL).append("like :likeAccessValue").append(j);
+			}
+			likeAccessValuesQuery = likeAccessValuesBuffer.toString();
+		}
+		queryBuffer.append(" and (tskAccessLevel is null or tskAccessLevel = '3' or (tskAccessLevel = '1' and tskCreateUser = '" + user + "') or (tskAccessLevel = '2' and (").append(likeAccessValuesQuery).append(" or tskCreateUser = '" + user + "'))) ");
 
 		this.appendOrderQuery(queryBuffer, "taskInfo", cond);
 		//queryBuffer.append("order by taskInfo.tskCreatedate desc ");
@@ -1382,6 +1410,18 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			query.setString("tskRefType", tskRefType);
 		if (!CommonUtil.isEmpty(searchKey)) 
 			query.setString("searchKey", CommonUtil.toLikeString(searchKey));
+		if (workSpaceIdNotIns != null) {
+			for (int j=0; j<workSpaceIdNotIns.length; j++) {
+				query.setString("workSpaceIdNotIn"+j, workSpaceIdNotIns[j]);
+			}
+		}
+		if (likeAccessValues != null) {
+			for (int j=0; j<likeAccessValues.length; j++) {
+				query.setString("likeAccessValue"+j, CommonUtil.toLikeString(likeAccessValues[j]));
+			}
+		}
+		if (!CommonUtil.isEmpty(packageStatus))
+			query.setString("packageStatus", packageStatus);
 
 		return query;
 	}
@@ -1392,7 +1432,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			StringBuffer buf = new StringBuffer();
 			buf.append("select");
 			buf.append(" count(*) ");
-			Query query = this.appendQuery(buf, cond);
+			Query query = this.appendQuery(user, buf, cond);
 			List list = query.list();
 			
 			long count =((Integer)list.get(0)).longValue();
@@ -1411,7 +1451,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			queryBuffer.append(" select taskInfo.*, ");
 			queryBuffer.append(" prcInstInfo.* ");
 			
-			Query query = this.appendQuery(queryBuffer, cond);
+			Query query = this.appendQuery(user, queryBuffer, cond);
 
 			List list = query.list();
 			if (list == null || list.isEmpty())
@@ -1433,18 +1473,22 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setFolderName((String)fields[j++]);
 				obj.setTskObjId((String)fields[j++]);
 				obj.setTskTitle((String)fields[j++]);
-				Clob varData = (Clob)fields[j++];
-				long length = 0;
-				String tempCountStr = "";
-				if(varData != null) {
-					length = varData.length();
-					tempCountStr = varData.getSubString(1, (int)length);
+				String tempCountStr = null;
+				if(this.getDbType().equals("sqlserver")) {
+					Clob varData = (Clob)fields[j++];
+					if (varData != null) {
+						long length = varData.length();
+						tempCountStr = varData.getSubString(1, (int)length);
+					}
+				} else {
+					tempCountStr = (String)fields[j++];
 				}
 				obj.setTskDoc(tempCountStr);
 				obj.setTskType((String)fields[j++]);     
 				obj.setTskRefType((String)fields[j++]);     
 				obj.setTskStatus((String)fields[j++]);   
-				obj.setTskAssignee((String)fields[j++]); 
+				obj.setTskCreateUser((String)fields[j++]);
+				obj.setTskAssignee((String)fields[j++]);
 				obj.setTaskLastModifyDate((Timestamp)fields[j++]);
 				obj.setTskCreateDate((Timestamp)fields[j++]);
 				obj.setTskName((String)fields[j++]);
@@ -1458,6 +1502,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setTskDef((String)fields[j++]);
 				obj.setPackageId((String)fields[j++]);
 				obj.setPackageName((String)fields[j++]);
+				obj.setPackageStatus((String)fields[j++]);
 				obj.setChildCtgId((String)fields[j++]);
 				obj.setChildCtgName((String)fields[j++]);
 				obj.setParentCtgId((String)fields[j++]);
@@ -1487,7 +1532,19 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				obj.setLastTskForm((String)fields[j++]);    
 				obj.setLastTskWorkSpaceId((String)fields[j++]);
 				obj.setLastTskWorkSpaceType((String)fields[j++]);
-				int lastTaskCount = (Integer)fields[j] == null ? -1 : (Integer)fields[j];
+				Object lastTaskCountObj = fields[j];
+				int lastTaskCount = 0;
+				if(lastTaskCountObj == null) {
+					lastTaskCount = -1;
+				} else {
+					if (lastTaskCountObj instanceof BigInteger) {
+						lastTaskCount = ((BigInteger)lastTaskCountObj).intValue();
+					} else if (lastTaskCountObj instanceof Long) {
+						lastTaskCount = ((Long)lastTaskCountObj).intValue();
+					} else {
+						lastTaskCount = Integer.parseInt(lastTaskCountObj.toString());
+					}
+				}
 				obj.setLastTskCount(lastTaskCount == 0 ? 1 : lastTaskCount);
 				objList.add(obj);
 			}

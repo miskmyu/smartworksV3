@@ -156,6 +156,7 @@ import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
@@ -467,7 +468,133 @@ public class ModelConverter {
 		}
 		return workSpaceInfo;
 	}
-	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int maxSize) throws Exception {
+	public static TaskInstanceInfo getTaskInstanceInfo(User currentUser, TaskWork task) throws Exception {
+
+		TaskInstanceInfo taskInfo = new TaskInstanceInfo();
+		taskInfo.setId(task.getTskObjId());
+		taskInfo.setSubject(task.getPrcTitle());
+		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+			taskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			taskInfo.setTaskType(TaskInstance.TYPE_PROCESS_TASK_ASSIGNED);
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+			taskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+			taskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED);
+		}
+
+		SmartWorkInfo workInfo = new SmartWorkInfo();
+		workInfo.setId(task.getPackageId());
+		workInfo.setName(task.getPackageName());
+		
+		/*TYPE_INFORMATION = 21;
+		TYPE_PROCESS = 22;
+		TYPE_SCHEDULE = 23;*/
+		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			workInfo.setType(SmartWork.TYPE_PROCESS);
+			taskInfo.setType(SmartWork.TYPE_PROCESS);
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+			workInfo.setType(SmartWork.TYPE_INFORMATION);
+			taskInfo.setType(SmartWork.TYPE_INFORMATION);
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
+			if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
+				taskInfo.setType(SmartWork.TYPE_INFORMATION);
+			} else {
+				workInfo.setType(SmartWork.TYPE_PROCESS);
+				taskInfo.setType(SmartWork.TYPE_PROCESS);
+			}
+		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
+			if (task.getPrcType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				workInfo.setType(SmartWork.TYPE_INFORMATION);
+				taskInfo.setType(SmartWork.TYPE_INFORMATION);
+			} else {
+				workInfo.setType(SmartWork.TYPE_PROCESS);
+				taskInfo.setType(SmartWork.TYPE_PROCESS);
+			}
+		}
+		if (task.getParentCtgId() != null) {
+			workInfo.setMyCategory(new WorkCategoryInfo(task.getParentCtgId(), task.getParentCtgName()));
+			workInfo.setMyGroup(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
+		} else {
+			workInfo.setMyCategory(new WorkCategoryInfo(task.getChildCtgId(), task.getChildCtgName()));
+		}
+		String packageStatus = task.getPackageStatus();
+		boolean isRunningPackage = true;
+		boolean isEditingPackage = false;
+		if (packageStatus != null && packageStatus.equalsIgnoreCase("DEPLOYED")) {
+			isRunningPackage = true;
+		} else {
+			if (packageStatus.equalsIgnoreCase("CHECKED-OUT"))
+				isEditingPackage = true;
+			isRunningPackage = false;
+		}
+		workInfo.setRunning(isRunningPackage);
+		workInfo.setEditing(isEditingPackage);
+		
+		taskInfo.setWork(workInfo); //workInfo
+
+		taskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
+
+		
+		if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+			taskInfo.setStatus(TaskInstance.STATUS_RUNNING);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+			taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
+			taskInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
+			taskInfo.setStatus(TaskInstance.STATUS_RETURNED);
+		}
+
+		//taskInfo.setNumberOfAssociatedWorks(numberOfAssociatedWorks);
+		taskInfo.setOwner(getUserInfoByUserId(task.getTskAssignee()));
+		taskInfo.setLastModifiedDate(new LocalDate( task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) ? task.getTskCreateDate().getTime() : task.getTaskLastModifyDate().getTime()));
+		taskInfo.setLastModifier(getUserInfoByUserId(task.getTskAssignee()));
+		taskInfo.setCreatedDate(new LocalDate(task.getTskCreateDate().getTime()));
+		taskInfo.setName(task.getTskName());
+		taskInfo.setWorkInstance(getWorkInstanceInfoByTaskWork(currentUser, task));//WorkInstanceInfo
+		taskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
+		taskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
+		taskInfo.setFormId(task.getTskForm());
+
+		return taskInfo;
+	}
+	public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int totalCount) throws Exception {
+
+		User currentUser = SmartUtil.getCurrentUser();
+		if (tasks == null || tasks.length == 0)
+			return null;
+		List<TaskInstanceInfo> resultInfoList = new ArrayList<TaskInstanceInfo>();
+
+		int taskLenth = tasks.length;
+
+		Semaphore semaphore = new Semaphore(taskLenth);
+		Thread currentThread = Thread.currentThread();
+		TaskParallelProcessing[] taskPP = new TaskParallelProcessing[taskLenth];
+		for (int i = 0; i < taskLenth; i++) {
+			taskPP[i] = new TaskParallelProcessing(semaphore, currentThread, currentUser, tasks[i]);
+			taskPP[i].start();
+		}
+
+		synchronized (currentThread) {
+			currentThread.wait();
+		}
+		for(int i=0; i<taskPP.length; i++) {
+			resultInfoList.add((TaskInstanceInfo)taskPP[i].getResult());
+		}
+
+		if(totalCount > taskLenth) {
+			TaskInstanceInfo taskInstanceInfo = new TaskInstanceInfo();
+			taskInstanceInfo.setType(-21);
+			resultInfoList.add(taskInstanceInfo);
+		}
+		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
+		resultInfoList.toArray(resultInfo);
+		return resultInfo;
+	}
+
+	/*public static TaskInstanceInfo[] getTaskInstanceInfoArrayByTaskWorkArray(String userId, TaskWork[] tasks, int maxSize) throws Exception {
 		if (tasks == null || tasks.length == 0)
 			return null;
 		List<TaskInstanceInfo> resultInfoList = new ArrayList<TaskInstanceInfo>();
@@ -495,9 +622,9 @@ public class ModelConverter {
 			workInfo.setId(task.getPackageId());
 			workInfo.setName(task.getPackageName());
 			
-			/*TYPE_INFORMATION = 21;
+			TYPE_INFORMATION = 21;
 			TYPE_PROCESS = 22;
-			TYPE_SCHEDULE = 23;*/
+			TYPE_SCHEDULE = 23;
 			if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
 				workInfo.setType(SmartWork.TYPE_PROCESS);
 				taskInfo.setType(SmartWork.TYPE_PROCESS);
@@ -577,24 +704,24 @@ public class ModelConverter {
 		TaskInstanceInfo[] resultInfo = new TaskInstanceInfo[resultInfoList.size()];
 		resultInfoList.toArray(resultInfo);
 		return resultInfo;
-	}
-
+	}*/
 	public static WorkInstanceInfo[] getWorkInstanceInfosByTaskWorks(TaskWork[] tasks) throws Exception {
 		if(CommonUtil.isEmpty(tasks))
 			return null;
+		User currentUser = SmartUtil.getCurrentUser();
 		int tasksLength = tasks.length;
 		WorkInstanceInfo[] workInstanceInfos = new WorkInstanceInfo[tasksLength];
 		for(int i=0; i<tasksLength; i++) {
 			TaskWork task = tasks[i];
-			workInstanceInfos[i] = getWorkInstanceInfoByTaskWork(task);
+			workInstanceInfos[i] = getWorkInstanceInfoByTaskWork(currentUser, task);
 		}
 		return workInstanceInfos;
 	}
 
-	public static WorkInstanceInfo getWorkInstanceInfoByTaskWork(TaskWork task) throws Exception {
+	public static WorkInstanceInfo getWorkInstanceInfoByTaskWork(User currentUser, TaskWork task) throws Exception {
 		if (task == null)
 			return null;
-		User cUser = SmartUtil.getCurrentUser();
+		User cUser = currentUser;
 		String userId = null;
 		String companyId = null;
 		if (cUser != null) {
@@ -4487,6 +4614,18 @@ public class ModelConverter {
 		SmartWorkInfo workInfo = new SmartWorkInfo();
 		workInfo.setId(task.getPackageId());
 		workInfo.setName(task.getPackageName());
+		String packageStatus = task.getPackageStatus();
+		boolean isRunning = false;
+		boolean isEditing = false;
+		if (packageStatus != null) {
+			if(PkgPackage.STATUS_DEPLOYED.equalsIgnoreCase(packageStatus)) {
+				isRunning = true;
+			} else if(PkgPackage.STATUS_UNDER_DEVEL.equalsIgnoreCase(packageStatus)) {
+				isEditing = true;
+			}
+		}
+		workInfo.setRunning(isRunning);
+		workInfo.setEditing(isEditing);
 		/*TYPE_INFORMATION = 21;
 		TYPE_PROCESS = 22;
 		TYPE_SCHEDULE = 23;*/
