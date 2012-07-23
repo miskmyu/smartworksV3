@@ -886,6 +886,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 	}
 	private Query appendQuery(StringBuffer buf, SwoDepartmentCond cond) throws Exception {
 		String id = null;
+		String[] idIns = null;
 		String companyId = null;
 		String parentId = null;
 		boolean isParentNull = false;
@@ -900,6 +901,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				
 		if (cond != null) {
 			id = cond.getId();
+			idIns = cond.getIdIns();
 			companyId = cond.getCompanyId();
 			parentId = cond.getParentId();
 			isParentNull = cond.isParentNull();
@@ -918,6 +920,15 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		if (cond != null) {
 			if (id != null)
 				buf.append(" and obj.id = :id");
+			if (idIns != null && idIns.length != 0) {
+				buf.append(" and obj.id in (");
+				for (int i=0; i<idIns.length; i++) {
+					if (i != 0)
+						buf.append(", ");
+					buf.append(":idIn").append(i);
+				}
+				buf.append(")");
+			}
 			if (companyId != null)
 				buf.append(" and obj.companyId = :companyId");
 			if (parentId != null)
@@ -947,6 +958,11 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		if (cond != null) {
 			if (id != null)
 				query.setString("id", id);
+			if (idIns != null && idIns.length != 0) {
+				for (int i=0; i<idIns.length; i++) {
+					query.setString("idIn"+i, idIns[i]);
+				}
+			}
 			if (companyId != null)
 				query.setString("companyId", companyId);
 			if (parentId != null)

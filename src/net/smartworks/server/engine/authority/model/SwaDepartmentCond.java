@@ -19,7 +19,14 @@ public class SwaDepartmentCond extends MisObjectCond {
 	String roleKeyLike = null;
 	String customUser = null;
 	String customUserLikek = null;
+	String adminOrCustomUserLike = null;
 
+	public String getAdminOrCustomUserLike() {
+		return adminOrCustomUserLike;
+	}
+	public void setAdminOrCustomUserLike(String adminOrCustomUserLike) {
+		this.adminOrCustomUserLike = adminOrCustomUserLike;
+	}
 	public String getDeptAuthTypeLike() {
 		return deptAuthTypeLike;
 	}

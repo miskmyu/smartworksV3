@@ -50,6 +50,7 @@ import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.manager.impl.SwoManagerImpl;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
@@ -887,22 +888,139 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
+	private DepartmentInfo[] getDepartmentInfoForUpload(String type) throws Exception {
+		//내가 속한 부서 + 사용자 선택이 userId 인 부서
+		List<SwoDepartment> deptList = new ArrayList<SwoDepartment>();	
+		List<String> deptIdList = new ArrayList();
+
+		User user = SmartUtil.getCurrentUser();
+
+		SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+		String myDeptId = userExtend.getDepartmentId();
+		boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+		
+		SwoDepartmentCond deptCond = new SwoDepartmentCond();
+		deptCond.setId(myDeptId);
+		SwoDepartment[] dept = getSwoManager().getDepartments("", deptCond, IManager.LEVEL_LITE);
+		for (int i = 0; i < dept.length; i++) {
+			boolean result = false;
+			
+			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
+			
+			SwaDepartmentCond myDeptAuthCond = new SwaDepartmentCond();
+			myDeptAuthCond.setDeptId(dept[i].getId());
+			myDeptAuthCond.setDeptAuthType(type);
+			SwaDepartment myDeptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), myDeptAuthCond, null);
+			String roleKey = myDeptAuth.getRoleKey();
+			
+			if (isLeader) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1 ? true : false;
+			} else {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1 ? true : false;
+			}
+			if (isAdmin) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
+			}
+			if (result && !deptIdList.contains(dept[i].getId())) {
+				deptList.add(dept[i]);
+				deptIdList.add(dept[i].getId());
+			}
+		}
+		
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		if (isAdmin) {
+			deptAuthCond.setAdminOrCustomUserLike(user.getId());
+		} else {
+			deptAuthCond.setCustomUserLikek(user.getId());
+		}
+		deptAuthCond.setDeptAuthType(type);
+		SwaDepartment[] deptAuths = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(user.getId(), deptAuthCond, null);
+		if (deptAuths != null && deptAuths.length != 0) {
+			String[] idIns = new String[deptAuths.length];
+			for (int i = 0; i < deptAuths.length; i++) {
+				idIns[i] = deptAuths[i].getDeptId();
+			}
+			SwoDepartmentCond deptCustomCond = new SwoDepartmentCond();
+			deptCustomCond.setIdIns(idIns);
+			SwoDepartment[] deptCustom = getSwoManager().getDepartments(user.getId(), deptCustomCond, IManager.LEVEL_LITE);
+			for (int i = 0; i < deptCustom.length; i++) {
+				if (!deptIdList.contains(deptCustom[i].getId())) {
+					deptList.add(deptCustom[i]);
+					deptIdList.add(deptCustom[i].getId());
+				}
+			}
+		}
+			
+		DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
+		for (int i = 0; i < deptList.size(); i++) {
+			DepartmentInfo deptInfo = new DepartmentInfo();
+			SwoDepartment swDept = deptList.get(i);
+			deptInfo.setId(swDept.getId());
+			deptInfo.setName(swDept.getName());
+			deptInfo.setDesc(swDept.getDescription());
+			deptInfos[i] = deptInfo;
+		}		
+		
+		return deptInfos;
+	}
+	private GroupInfo[] getGroupInfoForUpload(String type) throws Exception {
+		
+		
+		return null;
+	}
+	
 	@Override
 	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
 
 		try{
-			DepartmentInfo[] departmentInfos = getMyDepartments();
-			GroupInfo[] groupInfos = getMyGroups();
-			int departmentInfosLength = departmentInfos.length;
-			int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
-			CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
-			for(int i=0; i<departmentInfosLength; i++) {
-				communityInfos[i] = departmentInfos[i];
+			if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+				//공지사항
+				//내가 등록할수 있는 부서
+				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
+				//TODO 등록할수 있는 그룹
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
+				
+			} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+				//이벤트
+				//내가 등록할수 있는 부서
+				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
+				//TODO 등록할수 있는 그룹
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
+			} else {
+				DepartmentInfo[] departmentInfos = getMyDepartments();
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
 			}
-			for(int j=0; j<groupInfosLength; j++) {
-				communityInfos[departmentInfosLength+j] = groupInfos[j];
-			}
-			return communityInfos;
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1898,7 +2016,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			//dept.setImage();
 		}
 		SwManagerFactory.getInstance().getSwoManager().setDepartment(userId, dept, null);
-		
+		getSwoManager().getDepartmentExtend(userId, departmentId, false);
 	}
 	private String getUserIdsStrByList(List<Map<String, String>> users) throws Exception {
 		if (users == null || users.size() == 0)
@@ -1921,7 +2039,56 @@ public class CommunityServiceImpl implements ICommunityService {
 	
 	@Override
 	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
-		return true;
+		//workspaceId 는 부서아이디, 그룹아이디가 넘어온다
+		
+		User user = SmartUtil.getCurrentUser();
+		String type = null;
+		if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+			//공지사항
+			type = SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE;
+		} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+			//일정
+			type = SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE;
+		} else {
+			return false;
+		}
+		
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		deptAuthCond.setDeptId(workSpaceId);
+		deptAuthCond.setDeptAuthType(type);
+		SwaDepartment deptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), deptAuthCond, null);
+		
+		if (deptAuth != null) {
+
+			String roleKey = deptAuth.getRoleKey();
+			String customUser = deptAuth.getCustomUser();
+			SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+			String myDepartmentId = userExtend.getDepartmentId();
+			boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
+			
+			if (isAdmin && roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1)
+				return true;
+			if (customUser != null && customUser.indexOf(user.getId()) != -1)
+				return true;
+			
+			if (workSpaceId.equalsIgnoreCase(myDepartmentId)) {
+				if (isLeader) {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1) {
+						return true;
+					}
+				} else {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1) {
+						return true;
+					}
+				}
+			}
+			return false;
+			
+		} else {
+			//TODO 그룹 공간 구현필요
+			return true;
+		}
 	}
 
 }

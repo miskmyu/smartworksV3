@@ -669,6 +669,7 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 		String roleKeyLike = null;
 		String customUser = null;
 		String customUserLike = null;
+		String adminOrCustomUserLike = null;
 		
 		if (cond != null) {
 			objId = cond.getObjId();
@@ -679,6 +680,7 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 			roleKeyLike = cond.getRoleKeyLike();
 			customUser = cond.getCustomUser();
 			customUserLike = cond.getCustomUserLikek();
+			adminOrCustomUserLike = cond.getAdminOrCustomUserLike();
 			
 		}
 		buf.append(" from SwaDepartment obj");
@@ -702,6 +704,8 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 				buf.append(" and obj.customUser = :customUser");
 			if (customUserLike != null)
 				buf.append(" and obj.customUser like :customUserLike");
+			if (adminOrCustomUserLike != null)
+				buf.append(" and (obj.customUser like :adminOrCustomUserLike or obj.roleKey like '%admin%')");
 		}
 		this.appendOrderQuery(buf, "obj", cond);
 		
@@ -722,7 +726,9 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 			if (customUser != null)
 				query.setString("customUser", customUser);
 			if (customUserLike != null)
-				query.setString("customUser", CommonUtil.toLikeString(customUserLike));
+				query.setString("customUserLike", CommonUtil.toLikeString(customUserLike));
+			if (adminOrCustomUserLike != null)
+				query.setString("adminOrCustomUserLike", CommonUtil.toLikeString(adminOrCustomUserLike));
 		}
 		return query;
 	}

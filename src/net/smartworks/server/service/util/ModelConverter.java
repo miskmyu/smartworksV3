@@ -2764,11 +2764,6 @@ public class ModelConverter {
 			department.setChildren(children);
 		}
 
-//		private SpacePolicy boardWritePolicy=new SpacePolicy();
-//		private SpacePolicy boardEditPolicy=new SpacePolicy();
-//		private SpacePolicy eventWritePolicy=new SpacePolicy();
-//		private SpacePolicy eventEditPolicy=new SpacePolicy();
-
 		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
 		deptAuthCond.setDeptId(departmentExtend.getId());
 		SwaDepartment[] authDepts = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(cUser.getId(), deptAuthCond, null);
