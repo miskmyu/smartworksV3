@@ -53,6 +53,7 @@ import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.instance.info.WorkInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.security.EditPolicy;
+import net.smartworks.model.security.SpacePolicy;
 import net.smartworks.model.security.WritePolicy;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
@@ -71,6 +72,8 @@ import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.authority.model.SwaDepartment;
+import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
@@ -2634,6 +2637,168 @@ public class ModelConverter {
 			department.setChildren(children);
 		}
 
+//		private SpacePolicy boardWritePolicy=new SpacePolicy();
+//		private SpacePolicy boardEditPolicy=new SpacePolicy();
+//		private SpacePolicy eventWritePolicy=new SpacePolicy();
+//		private SpacePolicy eventEditPolicy=new SpacePolicy();
+
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		deptAuthCond.setDeptId(departmentExtend.getId());
+		SwaDepartment[] authDepts = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(cUser.getId(), deptAuthCond, null);
+
+		SwaDepartment boardWrite = null;
+		SwaDepartment boardEdit = null;
+		SwaDepartment eventWrite = null;
+		SwaDepartment eventEdit = null;
+		
+		if (authDepts == null || authDepts.length == 0) {
+
+			boardWrite = new SwaDepartment();
+			boardWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
+			boardWrite.setDeptId(departmentExtend.getId());
+			boardWrite.setRoleKey(SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+
+			boardEdit = new SwaDepartment();
+			boardEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT);
+			boardEdit.setDeptId(departmentExtend.getId());
+			boardEdit.setRoleKey(SwaDepartment.DEPT_ROLEKYE_OWNER + ";" + SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+
+			eventWrite = new SwaDepartment();
+			eventWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
+			eventWrite.setDeptId(departmentExtend.getId());
+			eventWrite.setRoleKey(SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+			
+			eventEdit = new SwaDepartment();
+			eventEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT);
+			eventEdit.setDeptId(departmentExtend.getId());
+			eventEdit.setRoleKey(SwaDepartment.DEPT_ROLEKYE_OWNER + ";" + SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+			
+			SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), boardWrite, null);
+			SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), boardEdit, null);
+			SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), eventWrite, null);
+			SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), eventEdit, null);
+			
+		} else {
+			for (int i = 0; i < authDepts.length; i++) {
+				SwaDepartment deptAuth = authDepts[i];
+				String deptAuthType = deptAuth.getDeptAuthType();
+				if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE)) {
+					boardWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT)) {
+					boardEdit = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE)) {
+					eventWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT)) {
+					eventEdit = deptAuth;
+				}
+			}
+		}
+		
+		SpacePolicy boardWritePolicy = new SpacePolicy();
+		String roleKeysStr = boardWrite.getRoleKey();
+		String[] roleKeys = StringUtils.tokenizeToStringArray(roleKeysStr, ";");
+		for (int i = 0; i < roleKeys.length; i++) {
+			if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_ADMIN)) {
+				boardWritePolicy.setSystemAdministratorChecked(true);
+			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_CUSTOM)) {
+				boardWritePolicy.setCustomChecked(true);
+				String usersStr = boardWrite.getCustomUser();
+				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				for (int j = 0; j < userExtendsArray.length; j++) {
+					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				}
+				boardWritePolicy.setCustoms(userInfoArray);
+			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
+				boardWritePolicy.setLeaderChecked(true);
+			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
+				boardWritePolicy.setMembersChecked(true);
+			} else if (roleKeys[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_OWNER)) {
+				boardWritePolicy.setOwnerChecked(true);
+			}
+		}
+		
+		SpacePolicy boardEditPolicy = new SpacePolicy();
+		String roleKeysBoardEditStr = boardEdit.getRoleKey();
+		String[] roleKeyBoardEdits = StringUtils.tokenizeToStringArray(roleKeysBoardEditStr, ";");
+		for (int i = 0; i < roleKeyBoardEdits.length; i++) {
+			if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_ADMIN)) {
+				boardEditPolicy.setSystemAdministratorChecked(true);
+			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_CUSTOM)) {
+				boardEditPolicy.setCustomChecked(true);
+				String usersStr = boardEdit.getCustomUser();
+				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				for (int j = 0; j < userExtendsArray.length; j++) {
+					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				}
+				boardEditPolicy.setCustoms(userInfoArray);
+			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
+				boardEditPolicy.setLeaderChecked(true);
+			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
+				boardEditPolicy.setMembersChecked(true);
+			} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_OWNER)) {
+				boardEditPolicy.setOwnerChecked(true);
+			}
+		}
+		
+		SpacePolicy eventWritePolicy = new SpacePolicy();
+		String roleKeysEventWriteStr = eventWrite.getRoleKey();
+		String[] roleKeyEventWrites = StringUtils.tokenizeToStringArray(roleKeysEventWriteStr, ";");
+		for (int i = 0; i < roleKeyEventWrites.length; i++) {
+			if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_ADMIN)) {
+				eventWritePolicy.setSystemAdministratorChecked(true);
+			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_CUSTOM)) {
+				eventWritePolicy.setCustomChecked(true);
+				String usersStr = eventWrite.getCustomUser();
+				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				for (int j = 0; j < userExtendsArray.length; j++) {
+					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				}
+				eventWritePolicy.setCustoms(userInfoArray);
+			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
+				eventWritePolicy.setLeaderChecked(true);
+			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
+				eventWritePolicy.setMembersChecked(true);
+			} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_OWNER)) {
+				eventWritePolicy.setOwnerChecked(true);
+			}
+		}
+		
+		SpacePolicy eventEditPolicy = new SpacePolicy();
+		String roleKeysEventEditStr = eventEdit.getRoleKey();
+		String[] roleKeyEventEdits = StringUtils.tokenizeToStringArray(roleKeysEventEditStr, ";");
+		for (int i = 0; i < roleKeyEventEdits.length; i++) {
+			if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_ADMIN)) {
+				eventEditPolicy.setSystemAdministratorChecked(true);
+			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_CUSTOM)) {
+				eventEditPolicy.setCustomChecked(true);
+				String usersStr = eventEdit.getCustomUser();
+				String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+				SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(cUser.getId(), users);
+				UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+				for (int j = 0; j < userExtendsArray.length; j++) {
+					userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+				}
+				eventEditPolicy.setCustoms(userInfoArray);
+			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_LEADER)) {
+				eventEditPolicy.setLeaderChecked(true);
+			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_MEMBER)) {
+				eventEditPolicy.setMembersChecked(true);
+			} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaDepartment.DEPT_ROLEKYE_OWNER)) {
+				eventEditPolicy.setOwnerChecked(true);
+			}
+		}
+		
+		department.setBoardWritePolicy(boardWritePolicy);
+		department.setBoardEditPolicy(boardEditPolicy);
+		department.setEventWritePolicy(eventWritePolicy);
+		department.setEventEditPolicy(eventEditPolicy);
+		
 		return department;
 	}
 	
