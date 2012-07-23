@@ -25,4 +25,14 @@
 		<property name="userId" type="string" length="50"/>
 		<property name="companyId" type="string" length="50"/>
 	</class>
+	<class name="SwaDepartment" table="SWAuthDepartment">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="deptId" type="string" length="100"/>
+		<property name="deptAuthType" type="string" length="50"/>
+		<property name="roleKey" type="string" length="50"/>
+		<property name="customUser" type="string" length="4000"/>
+	</class>
+	
 </hibernate-mapping>

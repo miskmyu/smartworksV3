@@ -88,7 +88,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	@Override
 	public void removeAutoIndexDef(String userId, String objId) throws AutoIndexException {
 		try {
-			remove(PkgPackage.class, objId);
+			remove(AutoIndexDef.class, objId);
 		} catch (Exception e) {
 			logger.error(e, e);
 			throw new AutoIndexException(e);
