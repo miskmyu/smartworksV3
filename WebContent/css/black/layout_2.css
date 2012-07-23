@@ -150,6 +150,10 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block}
 .up_board a:hover, .up_board .current,  .up_board a.current:hover {background-position: -564px -190px; font-weight:bold}
 
+/* Noice */
+.noti_pic {float:left; margin: 0 5px 0 0}
+.noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:70%} /* Body Title로 들어갈 때 */
+.case_2line {line-height:21px}
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
@@ -178,7 +182,6 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .txt_btn a:hover {text-decoration:underline; }
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
 .txt_btn.deliver {margin: 0 10px 10px; color: #979797; border-bottom: 1px dotted #cccccc}
-
 
 /* 검색- community name list */
 .com_list {z-index:100; position:absolute; width:250px; max-height:330px; overflow-y:auto; margin-top: 1px; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}

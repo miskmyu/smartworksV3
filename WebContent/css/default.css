@@ -125,7 +125,8 @@ table {
 	border-spacing: 0;
 	border-collapse: collapse;
 	width: 100%;
-	line-height: 22px
+	line-height: 22px;
+	font-size:12px
 }
 td, th {display: table-cell; vertical-align: inherit}
 
