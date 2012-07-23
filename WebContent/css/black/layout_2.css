@@ -1,0 +1,305 @@
+@charset "utf-8";
+
+#wrap_mpform {height:100%; width:757px; margin:0 auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px}
+#header_mpform {text-align:center; margin:0 0 10px 0}
+#header_mpform .company_logo { margin:0 0 10px 0}
+#header_mpform .company_logo img {max-width:205px; max-height:50px}
+#header_mpform .company_logo.print {text-align:right}
+#header_mpform .company_logo.print img {max-width:125px; max-height:30px}
+#header_mpform .title { font-size:14px; font-weight:bold}
+
+.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; height:18px}
+.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:18px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_cworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 20px; float: left; height:17px}
+.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_gworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
+.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; height:17px}
+.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; height:17px}
+.icon_stworks {background: url("../../images/icon_stworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; height:17px}
+
+.icon_depart {background: url("../../images/icon_depart.gif") no-repeat 0 0 transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
+.icon_group {background: url("../../images/icon_group.gif") no-repeat 0 0 transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
+.icon_pe {height:20px; padding:0 5px 0 0; display: inline-block; float:left}
+.icon_b1dep {background: url("../../images/nav_img.png") no-repeat 0 -349px transparent; padding:0 0 0 13px}
+.icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -366px transparent; padding:0 0 0 12px}
+.icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 21px; font-weight:bold}
+/* new Icon added by ysjung */
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:20px}
+.title_folder {height:14px; font-weight:bold; margin-top:3px}
+
+
+/* Nav MySpace */
+.icon_user_space {background: url("../../images/body_icon.png") no-repeat -550px -579px; padding:0 0 0 22px; float: left; height:18px}
+.icon_depart_space {background: url("../../images/body_icon.png") no-repeat -550px -784px; padding:0 0 0 22px; float: left; height:18px}
+.icon_group_space {background: url("../../images/body_icon.png") no-repeat -550px -812px; padding:0 0 0 22px; float: left; height:18px}
+.icon_all_works {background: url("../../images/body_icon.png") no-repeat -550px -453px; padding:0 0 0 22px; float: left; height:18px}
+.icon_image_works {background: url("../../images/body_icon.png") no-repeat -550px -478px; padding:0 0 0 22px; float: left; height:18px}
+.icon_file_works {background: url("../../images/body_icon.png") no-repeat -550px -503px; padding:0 0 0 22px; float: left; height:18px}
+.icon_event_works {background: url("../../images/body_icon.png") no-repeat -550px -529px; padding:0 0 0 22px; float: left; height:19px}
+.icon_memo_works {background: url("../../images/body_icon.png") no-repeat -550px -556px; padding:0 0 0 22px; float: left; height:18px}
+.icon_board_works {background: url("../../images/body_icon.png") no-repeat -550px -605px; padding:0 0 0 22px; float: left; height:18px}
+.icon_forum_works {background: url("../../images/body_icon.png") no-repeat -550px -627px; padding:0 0 0 22px; float: left; height:18px}
+.icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 22px; float: left; height:18px}
+
+/* Nav Mail Btn*/
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+
+a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right}
+a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px}
+
+a .btn_new_mail {background: url("../../images/nav_img.png") no-repeat -50px -125px transparent; height:20px;  width:20px; display: inline-block; float:right}
+a .btn_new_mail:hover, .btn_new_mail.current {background: url("../../images/nav_img.png") no-repeat -50px -150px}
+
+a .btn_folder_add {background: url("../../images/nav_img.png") no-repeat -25px -125px transparent; height:20px;  width:20px; display: inline-block; float:right}
+a .btn_folder_add:hover, .btn_folder_add.current {background: url("../../images/nav_img.png") no-repeat -25px -150px}
+
+a .btn_bfolder_add {background: url("../../images/nav_img.png") no-repeat -25px -583px transparent; height:20px;  width:20px; display: inline-block; float:right}
+a .btn_bfolder_add:hover {background: url("../../images/nav_img.png") no-repeat -25px -612px}
+
+/* Nav Community Btn */ 
+.btn_depart {background: url("../../images/nav_img.png") no-repeat -115px -188px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_depart:hover, .btn_depart.current {background: url("../../images/nav_img.png") no-repeat -115px -217px}
+
+.btn_my_group {background: url("../../images/nav_img.png") no-repeat -158px -188px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_my_group:hover, .btn_my_group.current {background: url("../../images/nav_img.png") no-repeat -158px -217px}
+
+.btn_add_group {background: url("../../images/nav_img.png") no-repeat -212px -219px transparent; height:13px; width:13px; display: inline-block; float: right; margin: 2px 5px 0 0} 
+ a .btn_add_group:hover {background: url("../../images/nav_img.png") no-repeat -237px -219px } 
+
+.btn_member {background: url("../../images/nav_img.png") no-repeat -158px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_member:hover, .btn_member.current {background: url("../../images/nav_img.png") no-repeat -158px -666px}
+
+.btn_allmember {background: url("../../images/nav_img.png") no-repeat -201px -637px transparent; height:20px; width:43px; display: inline-block; float:right} 
+a .btn_allmember:hover, .btn_allmember.current {background: url("../../images/nav_img.png") no-repeat -201px -666px}
+
+/* Nav Works Btn */
+.btn_recent {background: url("../../images/nav_img.png") no-repeat -158px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_recent:hover, .btn_recent.current {background: url("../../images/nav_img.png") no-repeat -158px -274px}
+
+.btn_favorite {background: url("../../images/nav_img.png") no-repeat -115px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_favorite:hover, .btn_favorite.current {background: url("../../images/nav_img.png") no-repeat -115px -274px}
+
+.btn_all_works {background: url("../../images/nav_img.png") no-repeat -201px -246px transparent; height:20px; width:43px; display: inline-block; float:right}
+a .btn_all_works:hover, .btn_all_works.current {background: url("../../images/nav_img.png") no-repeat -201px -274px}
+
+/* Navi Builder Btn */
+a .btn_add_category {background: url("../../images/nav_img.png") no-repeat -112px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
+a .btn_add_category:hover, .btn_add_category.current {background: url("../../images/nav_img.png") no-repeat -112px -379px}
+a .btn_apps {background: url("../../images/nav_img.png") no-repeat -157px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
+a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png") no-repeat -157px -379px}
+
+.btn_add_work {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; float:left}
+.btn_add_work:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:12px; float:left}
+.btn_text_category, .btn_change_work,.btn_text_folder
+ {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; float:left; cursor: pointer}
+.btn_text_category:hover, .btn_change_work:hover, .btn_text_folder:hover
+ {background: url("../../images/nav_img.png") no-repeat -23px -417px transparent; height:15px;  width:17px; float:left}
+.btn_remove_category, .btn_remove_work, .btn_remove_folder
+ {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; float:left; cursor: pointer}
+.btn_remove_category:hover, .btn_remove_work:hover,.btn_remove_folder:hover
+ {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; float:left}
+
+/* Btn Folder n Picture */
+.btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
+.btn_fold a:hover {background-position:-360px -536px}
+.lft_fd .btn_fold a {background-position:-395px -468px; left:4px}
+.lft_fd .btn_fold a:hover {background-position:-395px -536px}
+
+/* Icon Builder*/
+.icon_down {background: url("../../images/body_icon.png") no-repeat 0 -548px; width:13px; height:13px; display: inline-block}
+a.icon_down:hover {background: url("../../images/body_icon.png") no-repeat 0 -571px; width:13px; height:13px; display: inline-block}
+.icon_up {background: url("../../images/body_icon.png") no-repeat -14px -548px; width:13px; height:13px; display: inline-block}
+a.icon_up:hover {bazckground: url("../../images/body_icon.png") no-repeat -14px -571px; width:13px; height:13px; display: inline-block}
+.icon_hide {background: url("../../images/body_icon.png") no-repeat -28px -548px; width:13px; height:13px; display: inline-block}
+a.icon_hide:hover {background: url("../../images/body_icon.png") no-repeat -28px -571px; width:13px; height:13px; display: inline-block}
+.icon_show {background: url("../../images/body_icon.png") no-repeat -42px -548px; width:13px; height:13px; display: inline-block}
+a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px -571px; width:13px; height:13px; display: inline-block}
+
+.arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
+.arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
+
+/* upload Icon */
+.up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:39px; padding:4px 0 3px 26px; display:block}
+.up_works a:hover, .up_works .current,  .up_works a.current:hover {background-position: -4px -190px; font-weight:bold}
+
+.up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; width:26px; padding:4px 0 3px 25px; display:block}
+.up_file a:hover, .up_file .current,  .up_file a.current:hover {background-position: -147px -190px; font-weight:bold}
+
+.up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block}
+.up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background-position: -677px -190px; font-weight:bold}
+
+.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 22px; display:block}
+.up_event a:hover, .up_event .current,  .up_event a.current:hover {background-position: -278px -190px; font-weight:bold}
+
+.up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
+.up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background-position: -426px -190px; font-weight:bold}
+
+.up_comment a {background: url("../../images/header_nico.png") no-repeat -827px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
+.up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background-position: -827px -190px; font-weight:bold}
+
+.up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:26px; padding:4px 0 3px 27px; display:block}
+.up_board a:hover, .up_board .current,  .up_board a.current:hover {background-position: -564px -190px; font-weight:bold}
+
+
+/* Table Format */
+.up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
+.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%} /* 한줄 input, text박스 쓸때 */
+.up_padding {padding:0; position:relative; width:100%}
+.fieldline.community_names {line-height:17px}
+
+.up_form {position:absolute}
+.up_point {background: url("../../images/up_point.gif") no-repeat left top; width:11px; height:7px}
+.up_point_sgr {background: url("../../images/up_point_sgr.png") no-repeat left top; width:11px; height:7px}
+.up_point_b {background: url("../../images/up_point_b.gif") no-repeat left top; width:11px; height:7px}
+.up_textarea {height:30px; width: 100%; vertical-align:top; border: 1px solid #c7c7c7} /* 라인 포함된 textarea h50 */
+.input_1line_first { height:21px; padding-bottom: 5px; position:relative} /* 한줄라인 input정보- 맨위줄*/
+.input_1line {overflow:hidden; width:100%; position:relative; margin:8px 0} /* 한줄라인 input정보 */
+
+.txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal}
+.txt_btn .po_right {float:right; margin-left:10px}
+.txt_btn .po_left {float:left; margin-right:10px}
+.txt_btn .po_left > span {line-height: 20px}
+.txt_btn .ch_right {float:right; margin-left:7px}
+.txt_btn .btn_r {float:right; margin:5px 0 0 0; display: inline-block}
+.txt_btn .btn_r .fr {line-height: 17px; margin-left:3px}
+
+.txt_btn .current { font-weight:bold}
+.txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none}
+.txt_btn a:hover {text-decoration:underline; }
+.txt_btn_height {height:16px; padding: 5px 0; text-align: center}
+.txt_btn.deliver {margin: 0 10px 10px; color: #979797; border-bottom: 1px dotted #cccccc}
+
+
+/* 검색- community name list */
+.com_list {z-index:100; position:absolute; width:250px; max-height:330px; overflow-y:auto; margin-top: 1px; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
+.com_list li {position:relative; color:#454545}
+.com_list li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545}
+/*.com_list li a:hover {display:block; background-color:#fffccd; color:#454545}*/
+.com_list li.sw_hover {display:block; background-color:#fff7eb; color:#454545}
+.com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
+
+/* 입력폼 */
+.form_wrap {background: none repeat scroll 0 0 #FFFFFF; height:100%}
+.form_wrap .input_check {float:left; margin-left:5px}
+.form_title {padding:10px}
+.form_title .title {font-weight:bold; font-size:14px; padding:0 0 0 19px; position:absolute} /* 타이틀 우측으로 아이콘이 있을때 */
+.form_title .title_noico  {font-weight:bold; font-size:14px; font-family:'돋움',Dotum, Arial, sans-serif; padding: 0 0 0 19px; margin-bottom:2px; float: none} /* 타이틀 우측으로 아이콘이 없을때 */
+.form_contents {padding:0 20px 10px; text-align: center}
+/* .form_contents table tr {height:30px} */
+.form_contents table .before_icon {padding:2px 10px 2px 0}
+.form_contents .title_2dep {text-align:left} 
+.form_contents .item {width:80px}
+.form_contents .tcontents {width:100%}
+.form_space {padding-right:5px}
+
+.report_title th{width:17%;font-weight:normal}
+.icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
+
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; margin:0 10px; border-top: 1px solid #c7c7c7; min-height: 24px}
+.glo_btn_space .btn_finish {float:right; padding-right:10px}
+
+/* Table - Nomal */
+.table_normal {position: relative}
+.table_normal table tr {height:32px}
+
+/* Table - Fix 600px */
+.table_normal600 {width:558px}
+.boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; padding:10px 0}
+
+/* table Gray */
+.gray_style table {border-collapse:collapse; border:1px solid #d8d8d8}
+.gray_style tr {height:32px}
+.gray_style th {border:1px solid #d8d8d8; padding: 2px 8px}
+.gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
+.gray_style td { background-color:#FFF; border-bottom:none; padding: 2px 8px}
+
+
+
+/* 상단 날짜 */	
+.tab_portletx {color:#ffffff; text-align:center; vertical-align:middle; padding-top:10px}
+.date {font-size:14px; font-weight:bold}
+.eventd {font-size:12px; color:#f8c8c8}
+
+.date_section {text-align:center; vertical-align:middle; padding: 7px 0 18px}
+.date_section .date_start {background: url("../../images/top_date_bg_l.gif") repeat scroll 0 0 transparent; height:28px; width:14px; height: 28px;display: inline-block;vertical-align:middle}
+.date_section .date_center { background-color:#f3f3f3; height:23px; padding: 5px 20px 0 30px; text-align:center; margin: 0 -5px; text-align:center; display: inline-block;;vertical-align:middle}	
+.date_section .date_end {background: url("../../images/top_date_bg_r.gif") repeat scroll 0 0 transparent; height:28px; width:14px;display: inline-block;;vertical-align:middle}
+				
+/* Icon */
+.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
+.icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
+.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
+.icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
+.icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
+    
+/* 사람지정  */
+.user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
+-webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
+.user_select + input[type="text"] {width:160 !importantpx}
+
+/* Text style */
+.t_red, .t_sunday {color:#e54b4b}
+.t_saturday {color:#4b79c8}
+.t_light_orange {color:#fff4a7;font-weight:normal}
+.t_red_bold {color:#e54b4b; font-weight:bold}
+.t_up_num {color:#e54b4b; font-weight:bold}
+.t_gbold {color:#656565; font-weight:bold}
+.t_gray { color:#919191; font-weight:normal}
+.t_name, .t_name a, .t_blue {color:#23579e !important}
+.space_name, .space_name a {color:#23579e !important; font-size:11px}
+.t_woname {color:#23579e; font-weight:bold}
+.t_size11 {font-size:11px}
+.t_size12 {font-size:12px}
+.t_action_disabled {color:#454545 !important; text-decoration:none !important}
+.t_date, .t_text_s11, .t_s11,
+.t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}
+.t_white {font-size:12px; font-weight:normal}
+.t_nav {font-size:14px; font-weight:bold; color:#FFF}
+.t_nowork, .t_nowork a { text-align:center; padding:8px 0 !important; color:#666 !important}
+.t_mail { font-size:11px; color:#333333}
+.t_smartworks {color:#3f83bf}
+.new_mail {color:#f38f1b}
+.bar { font-weight:normal; color:#999999}
+.arr {font-size:10px; margin-right:2px; color:#23579E}
+.t_location {font-size:11px; color:#999897; position:relative; top:27px; margin-left:5px}
+.bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
+.bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
+.bul_org {background: url("../../images/nav_img.png") no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
+
+/* Line Style */
+.solid_line { border-top:2px solid #999999; width:100%}
+.table_line { border-top:2px solid #7f7f7f; width:100%}
+.solid_line_s { border-top:1px solid #c7c7c7; width:100%}
+.solid_line_sd2 {border-top:1px solid #ececec; width:100%; display:block}
+.solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%}
+.dash_line {border-top:1px dashed #9c9c9c; margin: 0 10px}
+.dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}
+.line_width {padding:0 10px}
+.dline_left_gray {border-left:1px dashed #c2c2c2}
+.line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
+
+/*Footer*/
+#footer_mpform {text-align:center; height:28px; color:#777777; font-size:11px; margin: 15px 5px 0}
+#footer_mpform .logo {background: url("../../images/footer_sm_logo.jpg") no-repeat 0 0; width:97px; text-align:left; float:left; height:23px; display:inline-block}
+#footer_mpform .info { text-align:left; width:630px; float:right}
+#footer_mpform a:link, a:visited {color:#454545; text-decoration: none}
+#footer_mpform a:hover, a:focus, a:active {color:#454545; text-decoration: underline}
+
+/* Status Icons */
+.icon_status_running {background: url("../../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_d_running {background: url("../../images/icon_status_d_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_returned {background: url("../../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
