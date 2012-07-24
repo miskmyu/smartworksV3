@@ -1435,7 +1435,7 @@ $(function() {
 		var target = $('#content');
 		var hostNPort = getHostNPort();
 		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
-		'<link href="' + hostNPort + '/smartworksV3/css/black/layout.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
@@ -1451,7 +1451,7 @@ $(function() {
 		body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
 		body.find('.glo_btn_space .task_information a').attr('userDetail', '');
-		var contents = '<html>' + header + '<body><br/><br/><div style="background-color:white">' + body.html() + '</div></body></html>';
+		var contents = '<html>' + header + '<body><br/><br/><div id="wrap"><div id="header"><span class="company_logo"><img src="http://localhost:8080/smartworksV3/images/clogo_inmail.gif">회사이름</span></div><div>' + body.html() + '</div><div id="footer"><div class="logo"></div><div class="info tr">출력자 : 연구원 장 소라 / 출력일시 : 2012.7.21 15:35</div></div></div></body></html>';
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
 		$.ajax({

@@ -1,12 +1,12 @@
 @charset "utf-8";
 
-#wrap_mpform {height:100%; width:757px; margin:0 auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px}
-#header_mpform {text-align:center; margin:0 0 10px 0}
-#header_mpform .company_logo { margin:0 0 10px 0}
-#header_mpform .company_logo img {max-width:205px; max-height:50px}
-#header_mpform .company_logo.print {text-align:right}
-#header_mpform .company_logo.print img {max-width:125px; max-height:30px}
-#header_mpform .title { font-size:14px; font-weight:bold}
+#wrap {height:100%; width:757px; margin:0 auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px}
+#header {text-align:center; margin:0 0 10px 0}
+#header .company_logo { margin:0 0 10px 0}
+#header .company_logo img {max-width:205px; max-height:50px}
+#header .company_logo.print {text-align:right}
+#header .company_logo.print img {max-width:125px; max-height:30px}
+#header .title { font-size:14px; font-weight:bold}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:18px}
@@ -294,11 +294,11 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
 
 /*Footer*/
-#footer_mpform {text-align:center; height:28px; color:#777777; font-size:11px; margin: 15px 5px 0}
-#footer_mpform .logo {background: url("../../images/footer_sm_logo.jpg") no-repeat 0 0; width:97px; text-align:left; float:left; height:23px; display:inline-block}
-#footer_mpform .info { text-align:left; width:630px; float:right}
-#footer_mpform a:link, a:visited {color:#454545; text-decoration: none}
-#footer_mpform a:hover, a:focus, a:active {color:#454545; text-decoration: underline}
+#footer {text-align:center; height:28px; color:#777777; font-size:11px; margin: 15px 5px 0}
+#footer .logo {background: url("../../images/footer_sm_logo.jpg") no-repeat 0 0; width:97px; text-align:left; float:left; height:23px; display:inline-block}
+#footer .info { text-align:left; width:630px; float:right}
+#footer a:link, a:visited {color:#454545; text-decoration: none}
+#footer a:hover, a:focus, a:active {color:#454545; text-decoration: underline}
 
 /* Status Icons */
 .icon_status_running {background: url("../../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
