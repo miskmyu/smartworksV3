@@ -918,7 +918,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			} else {
 				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1 ? true : false;
 			}
-			if (isAdmin) {
+			if (isAdmin && !result) {
 				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
 			}
 			if (result && !deptIdList.contains(dept[i].getId())) {
