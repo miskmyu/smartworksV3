@@ -9,9 +9,9 @@
 #header .title { font-size:14px; font-weight:bold} */
 
 #wrap {height:100%; width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
-.company_logo {float:right; margin-bottom:2px}
+.company_logo {float:right; margin-bottom:7px}
 .company_logo img {max-width:125px; max-height:30px; vertical-align:bottom}
-.company_logo img + span { margin-left:5px; font-weight:bold}
+.company_logo img + div {font-weight:bold; text-align:right; margin-top:3px}
  
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:18px}
@@ -297,15 +297,6 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .line_width {padding:0 10px}
 .dline_left_gray {border-left:1px dashed #c2c2c2}
 .line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
-
-/* 사진 이미지 사이즈, Border */
-.profile_size_b {width:110px; height:110px; outline: 1px solid #999999}
-.profile_size_66 {width:66px; height:66px; outline: 1px solid #999999}
-.profile_size_m {width:48px; height:48px; outline: 1px solid #999999}
-/* profile size for comment -- added by ysjung */
-.profile_size_c {width:26px; height:26px; outline: 1px solid #999999}
-.profile_size_s {width:20px; height:20px; outline: 1px solid #999999}
-.profile_size_24 {width:24px; height:24px; outline: 1px solid #999999}
 
 /*Footer*/
 .footer {text-align:right; color:#777777; font-size:11px; float:right}
