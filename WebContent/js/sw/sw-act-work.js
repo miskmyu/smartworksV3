@@ -1442,16 +1442,21 @@ $(function() {
 		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_eng.css" rel="stylesheet" type="text/css" />' +
 //		'<link rel="shortcut icon" href="' + hostNPort + 'smartworkV3/images/favicon/smartworks.ico"/>' +
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+		var topLogo = $('<div class="company_logo"><img src="http://localhost:8080/smartworksV3/images/clogo_inmail.gif" /><div>위더스 비전</div></div>');
+		var bottomLogo = $('<div class="footer"><div class="logo"> </div><div class="info tr">출력자: 연구원 장소라 / 출력일시: 2012.7.21 15:35</div></div>');
 		var body = $('ul.portlet_r');
 		body.find('.js_form_header #js_copy_address').remove();
 		body.find('.js_form_header .js_toggle_forward_btn').remove();
 		body.find('.js_form_header .js_toggle_approval_btn').remove();
 		body.find('.js_form_header .js_email_content_btn').remove();
 		body.find('.js_form_header .js_print_content_btn').remove();
+		body.find('.js_form_header .solid_line').before(topLogo);		
 		body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
 		body.find('.glo_btn_space .task_information a').attr('userDetail', '');
-		var contents = '<html>' + header + '<body><br/><br/><div id="wrap"><div id="header"><span class="company_logo"><img src="http://localhost:8080/smartworksV3/images/clogo_inmail.gif">회사이름</span></div><div>' + body.html() + '</div><div id="footer"><div class="logo"></div><div class="info tr">출력자 : 연구원 장 소라 / 출력일시 : 2012.7.21 15:35</div></div></div></body></html>';
+		body.find('.glo_btn_space').append(bottomLogo);
+		var contents = '<html>' + header + '<body><br/><br/><div id="wrap"><div>' + body.html() + '</div></div></body></html>';
+		
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
 		$.ajax({
