@@ -6605,7 +6605,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
 				getTskManager().executeTask(userId, task, action);
-				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
+ 				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 			}
 			if (logger.isInfoEnabled()) {
 				logger.info(action + " Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
