@@ -145,7 +145,7 @@
 	                	<%
 	                	}
 	                	%>
-	                	<a href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
+	                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
 					</div>
 					<!-- 전자결재, 업무전달 버튼들 //-->
 		                    

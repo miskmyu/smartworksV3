@@ -1432,18 +1432,28 @@ $(function() {
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
 		if(isEmpty(workSpacePage)) return false;
-		var target = $('#content');	
-		var header = 	'<link href="http://localhost:8080/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/layout.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
-		'<link rel="shortcut icon" href="../images/favicon/smartworks.ico"/>' +
+		var target = $('#content');
+		var hostNPort = getHostNPort();
+		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/layout.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
+		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_eng.css" rel="stylesheet" type="text/css" />' +
+//		'<link rel="shortcut icon" href="' + hostNPort + 'smartworkV3/images/favicon/smartworks.ico"/>' +
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		var contents = '<html>' + header + '<body><div style="background-color:white">' + $('ul.portlet_r').html() + '</div></body></html>';
+		var body = $('ul.portlet_r');
+		body.find('.js_form_header #js_copy_address').remove();
+		body.find('.js_form_header .js_toggle_forward_btn').remove();
+		body.find('.js_form_header .js_toggle_approval_btn').remove();
+		body.find('.js_form_header .js_email_content_btn').remove();
+		body.find('.js_form_header .js_print_content_btn').remove();
+		body.find('.js_form_content').removeClass('up');
+		body.find('.glo_btn_space span.btn_gray').remove();
+		body.find('.glo_btn_space .task_information a').attr('userDetail', '');
+		var contents = '<html>' + header + '<body><br/><br/><div style="background-color:white">' + body.html() + '</div></body></html>';
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
-//		console.log(JSON.stringify(paramsJson));
 		$.ajax({
 			url : "new_mail_post.sw",
 			contentType : 'application/json',
