@@ -921,7 +921,7 @@ smartPop = {
 				overlayCss: {backgroundColor:"#fff"},
 				autoPosition: false,
 				containerCss:{
-					top: 40,
+					top: 30,
 					left: left,
 					width: height
 				},
@@ -938,12 +938,6 @@ smartPop = {
 					$('.js_do_print_content').live( 'click', function(e){
 						frames["printFrame"].focus();
 						frames["printFrame"].print();
-//						
-//						var pwin;
-//						$.when(pwin = $('iframe[name="printFrame"]')[0].contentWindow).done('', function() {
-//							pwin.focus();
-//							pwin.print();
-//						});
 						return false;
 					});
 					doIframeAutoHeight();

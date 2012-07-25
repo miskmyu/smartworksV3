@@ -201,7 +201,10 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
 
 /* 입력폼 */
+/*
 .form_wrap {background: none repeat scroll 0 0 #FFFFFF; height:100%}
+*/
+.form_wrap {background: none repeat scroll 0 0 #FFFFFF}
 .form_wrap .input_check {float:left; margin-left:5px}
 .form_title {padding:10px}
 .form_title .title {font-weight:bold; font-size:14px; padding:0 0 0 19px; position:absolute} /* 타이틀 우측으로 아이콘이 있을때 */

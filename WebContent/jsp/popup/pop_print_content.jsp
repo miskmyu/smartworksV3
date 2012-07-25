@@ -32,21 +32,14 @@
 		<div class="pop_title"><fmt:message key="common.title.print_content"></fmt:message></div>
 		<div class="txt_btn">
 			<a href="" onclick="smartPop.close();return false;"><div class="btn_x"></div></a>
-			<div class="fr pr10">
-				<span class="btn_gray">
-					<a href="" class="js_do_print_content">
-						<span class="txt_btn_start"></span>
-						<span class="txt_btn_center"><fmt:message key="common.button.print"/></span>
-						<span class="txt_btn_end"></span>
-					</a> 
-				</span>
-			</div>
 		</div>
 		<div class="solid_line"></div>
 	</div>
 	<!-- 팝업 타이틀 //-->
 	<!-- 컨텐츠 -->
-	<iframe name="printFrame" id="printFrame" class="autoHeight" scrolling="no" style="border:none;width:100%;"></iframe>
+	<div style="max-height: 600px;overflow:auto">
+		<iframe name="printFrame" id="printFrame" class="autoHeight" scrolling="no" style="border:none;width:100%;"></iframe>
+	</div>
 	<!-- 컨텐츠 //-->
 	<!-- 버튼 영역 -->
 	<div class="glo_btn_space">
