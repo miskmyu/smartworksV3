@@ -9,6 +9,8 @@
 package net.smartworks.server.engine.authority.manager;
 
 import net.smartworks.server.engine.authority.exception.SwaException;
+import net.smartworks.server.engine.authority.model.SwaDepartment;
+import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
@@ -38,4 +40,11 @@ public interface ISwaManager extends IManager {
 
 	public String getUserMode(String user, String rscId, int type, String instId, String companyId) throws SwaException, SwoException, SwdException, PrcException;
 
+	public SwaDepartment getAuthDepartment(String user, String objId, String level) throws SwaException;
+	public SwaDepartment getAuthDepartment(String user, SwaDepartmentCond cond, String level) throws SwaException;
+	public void setAuthDepartment(String user, SwaDepartment obj, String level) throws SwaException;
+	public void removeAuthDepartment(String user, String objId) throws SwaException;
+	public void removeAuthDepartment(String user, SwaDepartmentCond cond) throws SwaException;
+	public long getAuthDepartmentSize(String user, SwaDepartmentCond cond) throws SwaException;
+	public SwaDepartment[] getAuthDepartments(String user, SwaDepartmentCond cond, String level) throws SwaException;
 }

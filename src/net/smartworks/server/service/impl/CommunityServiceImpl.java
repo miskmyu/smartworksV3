@@ -23,10 +23,11 @@ import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.model.community.info.GroupMemberList;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
-import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
+import net.smartworks.server.engine.authority.model.SwaDepartment;
+import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -49,6 +50,7 @@ import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.manager.impl.SwoManagerImpl;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
@@ -886,22 +888,139 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 
+	private DepartmentInfo[] getDepartmentInfoForUpload(String type) throws Exception {
+		//내가 속한 부서 + 사용자 선택이 userId 인 부서
+		List<SwoDepartment> deptList = new ArrayList<SwoDepartment>();	
+		List<String> deptIdList = new ArrayList();
+
+		User user = SmartUtil.getCurrentUser();
+
+		SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+		String myDeptId = userExtend.getDepartmentId();
+		boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+		
+		SwoDepartmentCond deptCond = new SwoDepartmentCond();
+		deptCond.setId(myDeptId);
+		SwoDepartment[] dept = getSwoManager().getDepartments("", deptCond, IManager.LEVEL_LITE);
+		for (int i = 0; i < dept.length; i++) {
+			boolean result = false;
+			
+			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
+			
+			SwaDepartmentCond myDeptAuthCond = new SwaDepartmentCond();
+			myDeptAuthCond.setDeptId(dept[i].getId());
+			myDeptAuthCond.setDeptAuthType(type);
+			SwaDepartment myDeptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), myDeptAuthCond, null);
+			String roleKey = myDeptAuth.getRoleKey();
+			
+			if (isLeader) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1 ? true : false;
+			} else {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1 ? true : false;
+			}
+			if (isAdmin && !result) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
+			}
+			if (result && !deptIdList.contains(dept[i].getId())) {
+				deptList.add(dept[i]);
+				deptIdList.add(dept[i].getId());
+			}
+		}
+		
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		if (isAdmin) {
+			deptAuthCond.setAdminOrCustomUserLike(user.getId());
+		} else {
+			deptAuthCond.setCustomUserLikek(user.getId());
+		}
+		deptAuthCond.setDeptAuthType(type);
+		SwaDepartment[] deptAuths = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(user.getId(), deptAuthCond, null);
+		if (deptAuths != null && deptAuths.length != 0) {
+			String[] idIns = new String[deptAuths.length];
+			for (int i = 0; i < deptAuths.length; i++) {
+				idIns[i] = deptAuths[i].getDeptId();
+			}
+			SwoDepartmentCond deptCustomCond = new SwoDepartmentCond();
+			deptCustomCond.setIdIns(idIns);
+			SwoDepartment[] deptCustom = getSwoManager().getDepartments(user.getId(), deptCustomCond, IManager.LEVEL_LITE);
+			for (int i = 0; i < deptCustom.length; i++) {
+				if (!deptIdList.contains(deptCustom[i].getId())) {
+					deptList.add(deptCustom[i]);
+					deptIdList.add(deptCustom[i].getId());
+				}
+			}
+		}
+			
+		DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
+		for (int i = 0; i < deptList.size(); i++) {
+			DepartmentInfo deptInfo = new DepartmentInfo();
+			SwoDepartment swDept = deptList.get(i);
+			deptInfo.setId(swDept.getId());
+			deptInfo.setName(swDept.getName());
+			deptInfo.setDesc(swDept.getDescription());
+			deptInfos[i] = deptInfo;
+		}		
+		
+		return deptInfos;
+	}
+	private GroupInfo[] getGroupInfoForUpload(String type) throws Exception {
+		
+		
+		return null;
+	}
+	
 	@Override
 	public CommunityInfo[] getMyCommunitiesForUpload(String workId) throws Exception {
 
 		try{
-			DepartmentInfo[] departmentInfos = getMyDepartments();
-			GroupInfo[] groupInfos = getMyGroups();
-			int departmentInfosLength = departmentInfos.length;
-			int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
-			CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
-			for(int i=0; i<departmentInfosLength; i++) {
-				communityInfos[i] = departmentInfos[i];
+			if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+				//공지사항
+				//내가 등록할수 있는 부서
+				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
+				//TODO 등록할수 있는 그룹
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
+				
+			} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+				//이벤트
+				//내가 등록할수 있는 부서
+				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
+				//TODO 등록할수 있는 그룹
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
+			} else {
+				DepartmentInfo[] departmentInfos = getMyDepartments();
+				GroupInfo[] groupInfos = getMyGroups();
+				int departmentInfosLength = departmentInfos.length;
+				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
+				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
+				for(int i=0; i<departmentInfosLength; i++) {
+					communityInfos[i] = departmentInfos[i];
+				}
+				for(int j=0; j<groupInfosLength; j++) {
+					communityInfos[departmentInfosLength+j] = groupInfos[j];
+				}
+				return communityInfos;
 			}
-			for(int j=0; j<groupInfosLength; j++) {
-				communityInfos[departmentInfosLength+j] = groupInfos[j];
-			}
-			return communityInfos;
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -1592,12 +1711,384 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	@Override
 	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			   departmentId=dept_302bcb7c7db04a7ba03a7bc43da23a07,
+			   frmDepartmentSpaceSetting=   {
+			      txtaDepartmentDesc=description,
+			      chkBoardWriteAdministrator=on,
+			      chkBoardWriteLeader=on,
+			      chkBoardWriteMembers=on,
+			      chkBoardWriteCustom=on,
+			      chkBoardEditOwner=on,
+			      chkBoardEditAdministrator=on,
+			      chkBoardEditLeader=on,
+			      chkBoardEditCustom=on,
+			      chkEventWriteAdministrator=on,
+			      chkEventWriteLeader=on,
+			      chkEventWriteMembers=on,
+			      chkEventWriteCustom=on,
+			      chkEventEditOwner=on,
+			      chkEventEditAdministrator=on,
+			      chkEventEditLeader=on,
+			      chkEventEditCustom=on,
+			      txtBoardWriteCustoms=      {
+			         users=         [
+			            {
+			               id=gdhong@maninsoft.co.kr,
+			               name=홍길동
+			            }
+			         ]
+			      },
+			      txtBoardEditCustoms=      {
+			         users=         [
+			            {
+			               id=gdhong@maninsoft.co.kr,
+			               name=홍길동
+			            }
+			         ]
+			      },
+			      txtEventWriteCustoms=      {
+			         users=         [
+			            {
+			               id=gdhong@maninsoft.co.kr,
+			               name=홍길동
+			            }
+			         ]
+			      },
+			      txtEventEditCustoms=      {
+			         users=         [
+			            {
+			               id=gdhong@maninsoft.co.kr,
+			               name=홍길동
+			            }
+			         ]
+			      },
+			      imgDepartmentProfile=      {
+			         groupId=fg_741486c3b7679b4b7abb1c3b0b12c702087b,
+			         files=         [
+
+			         ]
+			      }
+			   }
+			}*/
+		String userId = SmartUtil.getCurrentUser().getId();
+		String departmentId = (String)requestBody.get("departmentId");
 		
+		SwaDepartmentCond cond = new SwaDepartmentCond();
+		cond.setDeptId(departmentId);
+		SwaDepartment[] deptAuths = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(userId, cond, null);
+		
+		SwaDepartment boardWrite = null;
+		SwaDepartment boardEdit = null;
+		SwaDepartment eventWrite = null;
+		SwaDepartment eventEdit = null;
+		
+		if (deptAuths != null && deptAuths.length != 0) {
+			for (int i = 0; i < deptAuths.length; i++) {
+				SwaDepartment deptAuth = deptAuths[i];
+				String deptAuthType = deptAuth.getDeptAuthType();
+				if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE)) {
+					boardWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT)) {
+					boardEdit = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE)) {
+					eventWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT)) {
+					eventEdit = deptAuth;
+				}
+			}
+		}
+		
+		Map<String, Object> frmDepartmentSpaceSetting = (Map<String, Object>)requestBody.get("frmDepartmentSpaceSetting");
+	    String txtaDepartmentDesc = (String)frmDepartmentSpaceSetting.get("txtaDepartmentDesc");
+	    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    
+		String chkBoardWriteAdministrator = (String)frmDepartmentSpaceSetting.get("chkBoardWriteAdministrator");
+		String chkBoardWriteLeader = (String)frmDepartmentSpaceSetting.get("chkBoardWriteLeader");
+		String chkBoardWriteMembers = (String)frmDepartmentSpaceSetting.get("chkBoardWriteMembers");
+		String chkBoardWriteCustom = (String)frmDepartmentSpaceSetting.get("chkBoardWriteCustom");
+		
+		if (boardWrite == null) { 
+			boardWrite = new SwaDepartment();
+			boardWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
+			boardWrite.setDeptId(departmentId);
+		}
+		StringBuffer boardWriteRoleKeyBuff = new StringBuffer();
+		boolean isBoardWriteFirst = true;
+		if (chkBoardWriteAdministrator != null && chkBoardWriteAdministrator.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_ADMIN);
+			isBoardWriteFirst = false;
+		}
+		if (chkBoardWriteLeader != null && chkBoardWriteLeader.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_LEADER);
+			isBoardWriteFirst = false;
+		}
+		if (chkBoardWriteMembers != null && chkBoardWriteMembers.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_MEMBER);
+			isBoardWriteFirst = false;
+		}
+		String chkBoardWriteCustomUsersStr = null;
+		if (chkBoardWriteCustom != null && chkBoardWriteCustom.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_CUSTOM);
+			isBoardWriteFirst = false;
+			
+			Map<String, Object> txtBoardWriteCustoms = (Map<String, Object>)frmDepartmentSpaceSetting.get("txtBoardWriteCustoms");    
+			List<Map<String, String>> txtBoardWriteUsers = (ArrayList<Map<String,String>>)txtBoardWriteCustoms.get("users");
+			chkBoardWriteCustomUsersStr = getUserIdsStrByList(txtBoardWriteUsers);
+		}
+		boardWrite.setRoleKey(boardWriteRoleKeyBuff.toString());
+		boardWrite.setCustomUser(chkBoardWriteCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkBoardEditOwner = (String)frmDepartmentSpaceSetting.get("chkBoardEditOwner");
+		String chkBoardEditAdministrator = (String)frmDepartmentSpaceSetting.get("chkBoardEditAdministrator");
+		String chkBoardEditLeader = (String)frmDepartmentSpaceSetting.get("chkBoardEditLeader");
+		String chkBoardEditCustom = (String)frmDepartmentSpaceSetting.get("chkBoardEditCustom");
+		
+		if (boardEdit == null) { 
+			boardEdit = new SwaDepartment();
+			boardEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT);
+			boardEdit.setDeptId(departmentId);
+		}
+		StringBuffer boardEditRoleKeyBuff = new StringBuffer();
+		boolean isBoardEditFirst = true;
+		
+		if (chkBoardEditOwner != null && chkBoardEditOwner.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_OWNER);
+			isBoardEditFirst = false;
+		}
+		if (chkBoardEditAdministrator != null && chkBoardEditAdministrator.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_ADMIN);
+			isBoardEditFirst = false;
+		}
+		if (chkBoardEditLeader != null && chkBoardEditLeader.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_LEADER);
+			isBoardEditFirst = false;
+		}
+		
+		String chkBoardEditCustomUsersStr = null;
+		if (chkBoardEditCustom != null && chkBoardEditCustom.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_CUSTOM);
+			isBoardEditFirst = false;
+			
+			Map<String, Object> txtBoardEditCustoms = (Map<String, Object>)frmDepartmentSpaceSetting.get("txtBoardEditCustoms");    
+			List<Map<String, String>> txtBoardEditUsers = (ArrayList<Map<String,String>>)txtBoardEditCustoms.get("users");
+			chkBoardEditCustomUsersStr = getUserIdsStrByList(txtBoardEditUsers);
+		}
+		boardEdit.setRoleKey(boardEditRoleKeyBuff.toString());
+		boardEdit.setCustomUser(chkBoardEditCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkEventWriteAdministrator = (String)frmDepartmentSpaceSetting.get("chkEventWriteAdministrator");
+		String chkEventWriteLeader = (String)frmDepartmentSpaceSetting.get("chkEventWriteLeader");
+		String chkEventWriteMembers = (String)frmDepartmentSpaceSetting.get("chkEventWriteMembers");
+		String chkEventWriteCustom = (String)frmDepartmentSpaceSetting.get("chkEventWriteCustom");
+		
+		if (eventWrite == null) { 
+			eventWrite = new SwaDepartment();
+			eventWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
+			eventWrite.setDeptId(departmentId);
+		}
+		StringBuffer eventWriteRoleKeyBuff = new StringBuffer();
+		boolean isEventWriteFirst = true;
+		
+		if (chkEventWriteAdministrator != null && chkEventWriteAdministrator.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_ADMIN);
+			isEventWriteFirst = false;
+		}
+		if (chkEventWriteLeader != null && chkEventWriteLeader.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_LEADER);
+			isEventWriteFirst = false;
+		}
+		if (chkEventWriteMembers != null && chkEventWriteMembers.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_MEMBER);
+			isEventWriteFirst = false;
+		}
+		String chkEventWriteCustomUsersStr = null;
+		if (chkEventWriteCustom != null && chkEventWriteCustom.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_CUSTOM);
+			isEventWriteFirst = false;
+			
+			Map<String, Object> txtEventWriteCustoms = (Map<String, Object>)frmDepartmentSpaceSetting.get("txtEventWriteCustoms");    
+			List<Map<String, String>> txtEventWriteUsers = (ArrayList<Map<String,String>>)txtEventWriteCustoms.get("users");
+			chkEventWriteCustomUsersStr = getUserIdsStrByList(txtEventWriteUsers);
+		}
+		eventWrite.setRoleKey(eventWriteRoleKeyBuff.toString());
+		eventWrite.setCustomUser(chkEventWriteCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkEventEditOwner = (String)frmDepartmentSpaceSetting.get("chkEventEditOwner");
+		String chkEventEditAdministrator = (String)frmDepartmentSpaceSetting.get("chkEventEditAdministrator");
+		String chkEventEditLeader = (String)frmDepartmentSpaceSetting.get("chkEventEditLeader");
+		String chkEventEditCustom = (String)frmDepartmentSpaceSetting.get("chkEventEditCustom");
+		
+		if (eventEdit == null) { 
+			eventEdit = new SwaDepartment();
+			eventEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT);
+			eventEdit.setDeptId(departmentId);
+		}
+		StringBuffer eventEditRoleKeyBuff = new StringBuffer();
+		boolean isEventEditFirst = true;
+
+		if (chkEventEditOwner != null && chkEventEditOwner.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_OWNER);
+			isEventEditFirst = false;
+		}
+		if (chkEventEditAdministrator != null && chkEventEditAdministrator.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_ADMIN);
+			isEventEditFirst = false;
+		}
+		if (chkEventEditLeader != null && chkEventEditLeader.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_LEADER);
+			isEventEditFirst = false;
+		}
+		String chkEventEditCustomUsersStr = null;
+		if (chkEventEditCustom != null && chkEventEditCustom.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaDepartment.DEPT_ROLEKYE_CUSTOM);
+			isEventEditFirst = false;
+			
+			Map<String, Object> txtEventEditCustoms = (Map<String, Object>)frmDepartmentSpaceSetting.get("txtEventEditCustoms");    
+			List<Map<String, String>> txtEventEditUsers = (ArrayList<Map<String,String>>)txtEventEditCustoms.get("users");
+			chkEventEditCustomUsersStr = getUserIdsStrByList(txtEventEditUsers);
+		}
+		eventEdit.setRoleKey(eventEditRoleKeyBuff.toString());
+		eventEdit.setCustomUser(chkEventEditCustomUsersStr);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(userId, boardWrite, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(userId, boardEdit, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(userId, eventWrite, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(userId, eventEdit, null);
+
+		Map<String, Object> imgDepartmentProfile = (Map<String, Object>)frmDepartmentSpaceSetting.get("imgDepartmentProfile"); 
+		String fileGroupId = (String)imgDepartmentProfile.get("groupId");   
+		List<Map<String, String>> deptImgFiles = (ArrayList<Map<String,String>>)imgDepartmentProfile.get("files");
+		
+//		if(!deptImgFiles.isEmpty()) {
+//			for(int i=0; i < deptImgFiles.subList(0, deptImgFiles.size()).size(); i++) {
+//				Map<String, String> fileMap = deptImgFiles.get(i);
+//				String groupFileId = fileMap.get("fileId");
+//				String groupFileName = fileMap.get("fileName");
+//			}
+//		}
+		
+		SwoDepartment dept = SwManagerFactory.getInstance().getSwoManager().getDepartment(userId, departmentId, null);
+		if (dept != null) {
+			dept.setDescription(txtaDepartmentDesc);
+			//TODO
+			//dept.setImage();
+		}
+		SwManagerFactory.getInstance().getSwoManager().setDepartment(userId, dept, null);
+		getSwoManager().getDepartmentExtend(userId, departmentId, false);
 	}
+	private String getUserIdsStrByList(List<Map<String, String>> users) throws Exception {
+		if (users == null || users.size() == 0)
+			return null;
+		
+		StringBuffer userIdBuff = new StringBuffer();
+		boolean isFirst = true;
+		if(!CommonUtil.isEmpty(users)) {
+			for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+				Map<String, String> userMap = users.get(i);
+				if (!isFirst)
+					userIdBuff.append(";");
+				userIdBuff.append(userMap.get("id"));
+				isFirst = false;
+			}
+		}
+		return userIdBuff.toString();
+	}
+	
+	
 	@Override
 	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
-		return true;
+		//workspaceId 는 부서아이디, 그룹아이디가 넘어온다
+		
+		User user = SmartUtil.getCurrentUser();
+		String type = null;
+		if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+			//공지사항
+			type = SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE;
+		} else if (workId.equalsIgnoreCase("pkg_c08a02b36192489fbc13fdb6bed6f5fc")) {
+			//일정
+			type = SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE;
+		} else {
+			return false;
+		}
+		
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		deptAuthCond.setDeptId(workSpaceId);
+		deptAuthCond.setDeptAuthType(type);
+		SwaDepartment deptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), deptAuthCond, null);
+		
+		if (deptAuth != null) {
+
+			String roleKey = deptAuth.getRoleKey();
+			String customUser = deptAuth.getCustomUser();
+			SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+			String myDepartmentId = userExtend.getDepartmentId();
+			boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
+			
+			if (isAdmin && roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1)
+				return true;
+			if (customUser != null && customUser.indexOf(user.getId()) != -1)
+				return true;
+			
+			if (workSpaceId.equalsIgnoreCase(myDepartmentId)) {
+				if (isLeader) {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1) {
+						return true;
+					}
+				} else {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1) {
+						return true;
+					}
+				}
+			}
+			return false;
+			
+		} else {
+			//TODO 그룹 공간 구현필요
+			return true;
+		}
 	}
 
 }

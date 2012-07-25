@@ -38,6 +38,8 @@ import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WSDLOperation;
 import net.smartworks.model.service.WSDLPort;
 import net.smartworks.model.service.WebService;
+import net.smartworks.server.engine.authority.model.SwaDepartment;
+import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -61,6 +63,7 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoConfig;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
+import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.process.approval.manager.IAprManager;
 import net.smartworks.server.engine.process.approval.model.AprApprovalDef;
@@ -1999,6 +2002,7 @@ public class SettingsServiceImpl implements ISettingsService {
 				swoDepartment = getSwoManager().getDepartment(userId, departmentId, IManager.LEVEL_ALL);
 			} else {
 				swoDepartment = new SwoDepartment();
+				swoDepartment.setId(CommonUtil.newId());
 				swoDepartment.setCompanyId(companyId);
 				swoDepartment.setType("BASIC");
 				swoDepartment.setDomainId("frm_dept_SYSTEM");
@@ -2019,8 +2023,40 @@ public class SettingsServiceImpl implements ISettingsService {
 			}
 
 			getSwoManager().setDepartment(userId, swoDepartment, IManager.LEVEL_ALL);
+			
 			if(!departmentId.equals("") && !departmentId.equalsIgnoreCase("null") && departmentId != null)
 				getSwoManager().getDepartmentExtend(userId, departmentId, false);
+			
+			SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+			deptAuthCond.setDeptId(swoDepartment.getId());
+			long deptAuthSize = SwManagerFactory.getInstance().getSwaManager().getAuthDepartmentSize(cUser.getId(), deptAuthCond);
+			if (deptAuthSize == 0 ) {
+				SwaDepartment boardWrite = new SwaDepartment();
+				boardWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
+				boardWrite.setDeptId(swoDepartment.getId());
+				boardWrite.setRoleKey(SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+
+				SwaDepartment boardEdit = new SwaDepartment();
+				boardEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_BOARD_EDIT);
+				boardEdit.setDeptId(swoDepartment.getId());
+				boardEdit.setRoleKey(SwaDepartment.DEPT_ROLEKYE_OWNER + ";" + SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+
+				SwaDepartment eventWrite = new SwaDepartment();
+				eventWrite.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
+				eventWrite.setDeptId(swoDepartment.getId());
+				eventWrite.setRoleKey(SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+				
+				SwaDepartment eventEdit = new SwaDepartment();
+				eventEdit.setDeptAuthType(SwaDepartment.DEPT_AUTHTYPE_EVENT_EDIT);
+				eventEdit.setDeptId(swoDepartment.getId());
+				eventEdit.setRoleKey(SwaDepartment.DEPT_ROLEKYE_OWNER + ";" + SwaDepartment.DEPT_ROLEKYE_ADMIN + ";" + SwaDepartment.DEPT_ROLEKYE_LEADER);
+				
+				SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), boardWrite, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), boardEdit, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), eventWrite, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthDepartment(cUser.getId(), eventEdit, null);
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();			
 		}

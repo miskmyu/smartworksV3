@@ -2439,3 +2439,12 @@ CREATE TABLE SwAutoIndexSeq (
 	modifiedtime datetime,
     primary key (objId)
 );
+--부서 권한
+CREATE TABLE SwAuthDepartment (
+	id varchar(50) NOT NULL,
+	deptId varchar(100),
+	deptAuthType varchar(50),
+	roleKey varchar(50),
+	customUser varchar(4000),
+    primary key (id)
+);

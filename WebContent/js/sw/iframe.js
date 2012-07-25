@@ -19,6 +19,7 @@ $(function() {
 	    } else {
 	        e.height = e.contentWindow.document.body.scrollHeight;
 	    }
+	    console.log('e.height=', e.height);
 	}
 	
 	function addEvent(obj, evType, fn){

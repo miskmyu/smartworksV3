@@ -10,15 +10,23 @@ package net.smartworks.server.engine.authority.manager.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.smartworks.server.engine.authority.exception.SwaException;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
+import net.smartworks.server.engine.authority.model.SwaDepartment;
+import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
 import net.smartworks.server.engine.authority.model.SwaUserCond;
+import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -29,6 +37,7 @@ import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
@@ -588,5 +597,174 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 		}
 		return false;
 	}
-
+	@Override
+	public SwaDepartment getAuthDepartment(String user, String objId, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				SwaDepartment obj = (SwaDepartment)this.get(SwaDepartment.class, objId);
+				return obj;
+			} else {
+				SwaDepartmentCond cond = new SwaDepartmentCond();
+				cond.setObjId(objId);
+				return getAuthDepartment(user, cond, level);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaDepartment getAuthDepartment(String user, SwaDepartmentCond cond, String level) throws SwaException {
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		SwaDepartment[] objs = getAuthDepartments(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		try {
+			if (objs.length != 1)
+				throw new SwaException("More than 1 Object");
+		} catch (SwaException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return objs[0];
+	}
+	@Override
+	public void setAuthDepartment(String user, SwaDepartment obj, String level) throws SwaException {
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (SwaException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthDepartment(String user, String objId) throws SwaException {
+		try {
+			remove(SwaDepartment.class, objId);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthDepartment(String user, SwaDepartmentCond cond) throws SwaException {
+		SwaDepartment obj = getAuthDepartment(user, cond, null);
+		if (obj == null)
+			return;
+		removeAuthDepartment(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, SwaDepartmentCond cond) throws Exception {
+		
+		String objId = null;
+		String deptId = null;
+		String deptAuthType = null;
+		String deptAuthTypeLike = null;
+		String roleKey = null;
+		String roleKeyLike = null;
+		String customUser = null;
+		String customUserLike = null;
+		String adminOrCustomUserLike = null;
+		
+		if (cond != null) {
+			objId = cond.getObjId();
+			deptId = cond.getDeptId();
+			deptAuthType = cond.getDeptAuthType();
+			deptAuthTypeLike = cond.getDeptAuthTypeLike();
+			roleKey = cond.getRoleKey();
+			roleKeyLike = cond.getRoleKeyLike();
+			customUser = cond.getCustomUser();
+			customUserLike = cond.getCustomUserLikek();
+			adminOrCustomUserLike = cond.getAdminOrCustomUserLike();
+			
+		}
+		buf.append(" from SwaDepartment obj");
+		buf.append(" where obj.objId is not null");
+		Map filterMap = new HashMap();
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (deptId != null)
+				buf.append(" and obj.deptId = :deptId");
+			if (deptAuthType != null)
+				buf.append(" and obj.deptAuthType = :deptAuthType");
+			if (deptAuthTypeLike != null)
+				buf.append(" and obj.deptAuthType like :deptAuthTypeLike");
+			if (roleKey != null)
+				buf.append(" and obj.roleKey = :roleKey");
+			if (roleKeyLike != null)
+				buf.append(" and obj.roleKey like :roleKeyLike");
+			if (customUser != null)
+				buf.append(" and obj.customUser = :customUser");
+			if (customUserLike != null)
+				buf.append(" and obj.customUser like :customUserLike");
+			if (adminOrCustomUserLike != null)
+				buf.append(" and (obj.customUser like :adminOrCustomUserLike or obj.roleKey like '%admin%')");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (deptId != null)
+				query.setString("deptId", deptId);
+			if (deptAuthType != null)
+				query.setString("deptAuthType", deptAuthType);
+			if (deptAuthTypeLike != null)
+				query.setString("deptAuthType", CommonUtil.toLikeString(deptAuthTypeLike));
+			if (roleKey != null)
+				query.setString("roleKey", roleKey);
+			if (roleKeyLike != null)
+				query.setString("roleKey", CommonUtil.toLikeString(roleKeyLike));
+			if (customUser != null)
+				query.setString("customUser", customUser);
+			if (customUserLike != null)
+				query.setString("customUserLike", CommonUtil.toLikeString(customUserLike));
+			if (adminOrCustomUserLike != null)
+				query.setString("adminOrCustomUserLike", CommonUtil.toLikeString(adminOrCustomUserLike));
+		}
+		return query;
+	}
+	@Override
+	public long getAuthDepartmentSize(String user, SwaDepartmentCond cond) throws SwaException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf,cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaDepartment[] getAuthDepartments(String user, SwaDepartmentCond cond, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SwaDepartment[] objs = new SwaDepartment[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
 }

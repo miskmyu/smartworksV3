@@ -817,7 +817,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							String digits = rule.getDigits();
 
 							/*int user_no = 30;
-							String result_user_no = String.format("%04d", user_no);
+							String result_user_no = String.format("%0"+digit+"d", user_no);
 							%04d 의 의미
 							 % -  명령의시작
 							 0 - 채워질 문자
@@ -2543,7 +2543,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					String name = (String)userMap.get("name");
 
 					AprApproval apr = new AprApproval();
-					apr.setName(aprAprDefs[i-1].getName());
+					apr.setName(aprAprDefs[i-1].getAprName());
 					apr.setType(aprAprDefs[i-1].getType());
 					apr.setApprover(id);
 					apr.setMandatory(true);
@@ -6646,7 +6646,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
 				getTskManager().executeTask(userId, task, action);
-				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
+ 				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 			}
 			if (logger.isInfoEnabled()) {
 				logger.info(action + " Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");

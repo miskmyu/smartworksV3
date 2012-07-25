@@ -1185,10 +1185,10 @@
 				String catId = pkg.getCategoryId();
 				if (catId == null)
 					continue;
-				CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(compId, userId, catId);
+				CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(userId, catId, null);
 				if (cat == null)
 					continue;
-				CtgCategory superCat = getParentCategory(compId, userId, catId);
+				CtgCategory superCat = getParentCategory(userId, catId, null);
 				if (superCat == null || superCat.getObjId().equals("_PKG_ROOT_")) {
 					pkg.setExtendedAttributeValue("categoryName", cat.getName());
 					continue;

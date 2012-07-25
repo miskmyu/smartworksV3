@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.								 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.instance.MailInstance"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
@@ -130,6 +131,7 @@ function submitForms(action) {
 				<div class="buttonSet">
 					<button class="tb js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
 					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
+					<button class="js_cancel_mail_btn"><fmt:message key="common.button.cancel"/></button>
 				</div>
 				<div class="table_line"></div>
 				<!-- 메일 리스트-->
@@ -141,7 +143,7 @@ function submitForms(action) {
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
 								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
 								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=instance.getReceiversHtml() %>" ccReceivers="<%=instance.getCcReceiversHtml() %>" bccReceivers="<%=instance.getBccReceiversHtml() %>" 
-									priority="<%=instance.getPriority()%>" subject="<%=instance.getSubject() %>" contents="<%=instance.getMailContents() %>" attachments="<%=instance.getAttachmentsHtml()%>"<%} %>>
+									priority="<%=instance.getPriority()%>" subject="<%=CommonUtil.toNotNull(instance.getSubject()) %>" contents="<%=CommonUtil.toNotNull(instance.getMailContents()) %>" attachments="<%=instance.getAttachmentsHtml()%>"<%} %>>
 							</div>
 						</form>
 					</div>
@@ -152,6 +154,7 @@ function submitForms(action) {
 				<div class="buttonSet">
 					<button class="tb js_send_mail_btn"><span class="icon_mail_send"></span><fmt:message key="mail.button.send"/></button>
 					<button class="js_save_mail_btn"><fmt:message key="mail.button.save"/></button>
+					<button class="js_cancel_mail_btn"><fmt:message key="common.button.cancel"/></button>
 				</div>
 			</div>
 			<!-- 컨텐츠 //-->
@@ -167,4 +170,3 @@ function submitForms(action) {
 <script>
 	loadWriteMailFields();
 </script>
-<script type="text/javascript" src="js/sw/iframe.js"></script>
