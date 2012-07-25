@@ -1528,6 +1528,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\u011E", "G");
 			folderName = org.claros.commons.utility.Utility.replaceAllOccurances(folderName, "\"", "_");
 
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		    request = attr.getRequest();
 			AuthProfile auth = getAuthProfile(request);
 			ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 			ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");

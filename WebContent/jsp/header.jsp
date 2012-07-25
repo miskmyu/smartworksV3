@@ -81,7 +81,7 @@ function logout() {
 	<span>
 		<ul>
 			<!--  Notification 알림 영역 -->
-			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
+			<%-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. -->
 			<li class="icon_info js_notice_count">
 				<a id="notification_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_NOTIFICATION%>" 
 					title="<fmt:message key='header.notice.icon.notification'/>">
@@ -93,8 +93,8 @@ function logout() {
 					}
 					%>
 				</a>
-			</li>
-			<!--  Notification 알림 영역 //-->
+			</li> 
+			<!--  Notification 알림 영역 //--%>
 	
 			<!-- 쪽지 알림 영역 -->
 			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
@@ -161,7 +161,7 @@ function logout() {
 			<!-- 메일 알림 영역  //-->
 	
 			<!-- 임시저장 알림 영역  -->
-			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
+			<%-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
 			<li class="icon_saved js_notice_count">
 				<a id="savedbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_SAVEDBOX%>"
 					title="<fmt:message key='header.notice.icon.savedbox'/>"> 
@@ -174,7 +174,7 @@ function logout() {
 					%>
 				</a>
 			</li>
-			<!-- 임시저장 알림 영역  -->
+			<!-- 임시저장 알림 영역  --%>
 			<li></li>
 		</ul>
 	</span>

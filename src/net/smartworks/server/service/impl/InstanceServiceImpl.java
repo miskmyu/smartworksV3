@@ -817,7 +817,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							String digits = rule.getDigits();
 
 							/*int user_no = 30;
-							String result_user_no = String.format("%04d", user_no);
+							String result_user_no = String.format("%0"+digit+"d", user_no);
 							%04d 의 의미
 							 % -  명령의시작
 							 0 - 채워질 문자
@@ -2543,7 +2543,7 @@ public class InstanceServiceImpl implements IInstanceService {
 					String name = (String)userMap.get("name");
 
 					AprApproval apr = new AprApproval();
-					apr.setName(aprAprDefs[i-1].getName());
+					apr.setName(aprAprDefs[i-1].getAprName());
 					apr.setType(aprAprDefs[i-1].getType());
 					apr.setApprover(id);
 					apr.setMandatory(true);
@@ -5592,7 +5592,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 		TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
 
-		TaskWork[] newTasks = null;
+		/*TaskWork[] newTasks = null;
 		TaskWork task = new TaskWork();
 
 		if(totalCount > maxSize) {
@@ -5603,7 +5603,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				newTasks[maxSize] = task;
 				return newTasks;
 			}
-		}
+		}*/
 		return tasks;
 	}
 
@@ -5999,38 +5999,41 @@ public class InstanceServiceImpl implements IInstanceService {
 			int endOfWeek = endOfLocalDate.getWeekOfMonth(1);
 			
 			Map<Integer, List<TaskWork>> weekMappingMap = new HashMap<Integer, List<TaskWork>>();
-			
+
 			for (int i = 0; i < endOfWeek; i++) {
 				List<TaskWork> tempList = new ArrayList<TaskWork>();
 				weekMappingMap.put(i, tempList);
 			}
-			for (int i = 0; i < tasks.length; i++) {
-				TaskWork task = tasks[i];
-				Date executeDate = tasks[i].getTaskLastModifyDate();
-				LocalDate tempExecuteDate = new LocalDate(executeDate.getTime());
-				int weekOfMonth = tempExecuteDate.getWeekOfMonth(1);
-				weekMappingMap.get(weekOfMonth-1).add(task);
-			}
-			
-			TaskInstanceInfo[][] result = new TaskInstanceInfo[endOfWeek][];
-			for (int i : weekMappingMap.keySet()) {
-				List taskWorksList = weekMappingMap.get(i);
-				TaskWork[] taskWorks = new TaskWork[taskWorksList.size()];
-				taskWorksList.toArray(taskWorks);
-				result[i] = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskWorks, maxSize);
-
-				if (result[i] != null && result[i].length > maxSize) {
-					TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
-					for (int j = 0; j < maxSize; j++) {
-						tempTaskInstanceInfo[j] = result[i][j];
-					}
-					TaskInstanceInfo moreInstance = new TaskInstanceInfo();
-					moreInstance.setType(-21);
-					tempTaskInstanceInfo[maxSize] = moreInstance;
-					result[i] = tempTaskInstanceInfo;
+			if(!CommonUtil.isEmpty(tasks)) {
+				for (int i = 0; i < tasks.length; i++) {
+					TaskWork task = tasks[i];
+					Date executeDate = tasks[i].getTaskLastModifyDate();
+					LocalDate tempExecuteDate = new LocalDate(executeDate.getTime());
+					int weekOfMonth = tempExecuteDate.getWeekOfMonth(1);
+					weekMappingMap.get(weekOfMonth-1).add(task);
 				}
 			}
-			
+
+			TaskInstanceInfo[][] result = new TaskInstanceInfo[endOfWeek][];
+			if(!CommonUtil.isEmpty(weekMappingMap)) {
+				for (int i : weekMappingMap.keySet()) {
+					List taskWorksList = weekMappingMap.get(i);
+					TaskWork[] taskWorks = new TaskWork[taskWorksList.size()];
+					taskWorksList.toArray(taskWorks);
+					result[i] = (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, taskWorks, maxSize);
+	
+					if (result[i] != null && result[i].length > maxSize) {
+						TaskInstanceInfo[] tempTaskInstanceInfo = new TaskInstanceInfo[maxSize + 1];
+						for (int j = 0; j < maxSize; j++) {
+							tempTaskInstanceInfo[j] = result[i][j];
+						}
+						TaskInstanceInfo moreInstance = new TaskInstanceInfo();
+						moreInstance.setType(-21);
+						tempTaskInstanceInfo[maxSize] = moreInstance;
+						result[i] = tempTaskInstanceInfo;
+					}
+				}
+			}
 			return result;
 		}catch (Exception e){
 			// Exception Handling Required
@@ -6065,10 +6068,48 @@ public class InstanceServiceImpl implements IInstanceService {
 				tempToDate.setTime(toDate.getLocalTime());
 				tempToDate.setTime(tempToDate.getTime() - TimeZone.getDefault().getRawOffset());
 			}
-			TaskWork[] tasks = getTaskWorkByFromToDate(contextId, spaceId, tempFromDate, tempToDate, maxSize);
 
-			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, maxSize);
-			
+			TaskWorkCond taskWorkCond = new TaskWorkCond();
+			if (contextId.equalsIgnoreCase("us.sp")) {
+				
+				//커런트 유져와 공간아이디가 같다면
+				//assignee가 유져아이디 와 spaceid가 유져아이디인 테스크를 조회한다
+				//커런트 유져와 공간아이디가 같지 않다면
+				//spaceid가 공간아이디인 테스크를 조회한다
+				if (userId.equalsIgnoreCase(spaceId)) {
+					taskWorkCond.setTskAssigneeOrSpaceId(spaceId);
+				} else {
+					taskWorkCond.setTskWorkSpaceId(spaceId);
+				}
+			} else {
+				taskWorkCond.setTskWorkSpaceId(spaceId);
+			}
+
+			if(tempFromDate != null && tempToDate == null) {
+				taskWorkCond.setTskExecuteDateBefore(tempFromDate);
+			} else {
+				taskWorkCond.setTskExecuteDateFrom(tempFromDate);
+				taskWorkCond.setTskExecuteDateTo(tempToDate);
+			}
+			taskWorkCond.setPackageStatus(PkgPackage.STATUS_DEPLOYED);
+
+			long totalCount = getWorkListManager().getTaskWorkListSize(userId, taskWorkCond);
+
+			if(tempFromDate != null && tempToDate == null) {
+				taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", false)});
+			} else {
+				taskWorkCond.setOrders(new Order[]{new Order("tskcreatedate", true)});
+			}
+
+			taskWorkCond.setPageNo(0);
+			taskWorkCond.setPageSize(maxSize);
+
+			TaskWork[] tasks = getWorkListManager().getTaskWorkList(userId, taskWorkCond);
+
+			//TaskWork[] tasks = getTaskWorkByFromToDate(contextId, spaceId, tempFromDate, tempToDate, maxSize);
+
+			return (TaskInstanceInfo[])ModelConverter.getTaskInstanceInfoArrayByTaskWorkArray(userId, tasks, (int)totalCount);
+
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
