@@ -262,7 +262,7 @@ public class DbFolderControllerImpl implements FolderController {
 			try {
 				Long folderId = new Long(folder);
 				String sql = "SELECT COUNT(*) AS NUMBER FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ? AND UNREAD = ?";
-				result = (HashMap)run.query(sql, new Object[] {username, folderId, new Boolean(true)}, new MapHandler());
+				result = (HashMap)run.query(sql, new Object[] {username, folderId, 1}, new MapHandler());
 			} catch (SQLException e) {
 				return new Integer(0);
 			}
