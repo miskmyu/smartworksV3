@@ -85,7 +85,7 @@ public class DbMailControllerImpl implements MailController {
 		} else {
 			// it is fetched from the db
 			MsgDbObject item = getEmailDbItemById(emailId);
-			
+
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props);
 			ByteArrayInputStream bis = new ByteArrayInputStream(item.getEmail());

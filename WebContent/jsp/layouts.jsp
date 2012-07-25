@@ -78,6 +78,7 @@ currentUser = {
 	name : "<%=currentUser.getName()%>",
 	longName : "<%=currentUser.getLongName()%>",
 	nickName : "<%=currentUser.getNickName()%>",
+	company : "<%=currentUser.getCompany()%>",
 	companyId : "<%=currentUser.getCompanyId()%>",
 	department : "<%=currentUser.getDepartment()%>",
 	departmentId : "<%=currentUser.getDepartmentId()%>",
@@ -138,7 +139,6 @@ function logout() {
 <script type="text/javascript" src="js/jquery/jquery.formatCurrency-1.4.0.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.simplemodal.1.4.2.min.js"></script>
 <script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
-<script type="text/javascript" src="js/jquery/jquery-div-print.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-1.8.21.custom.min.js"></script>
 
 <script type="text/javascript" src="js/jstorage/jstorage.js"></script>
@@ -155,6 +155,7 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-nav.js"></script>
 <script type="text/javascript" src="js/sw/sw-validate.js"></script>
 <script type="text/javascript" src="js/sw/sw-flash.js"></script>
+<script type="text/javascript" src="js/sw/sw-iframe-autoheight.js"></script>
 
 <script type="text/javascript" src="js/sw/sw-faye.js"></script>
 <script type="text/javascript" src="js/sw/sw-chat.js"></script>
