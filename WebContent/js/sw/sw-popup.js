@@ -910,6 +910,40 @@ smartPop = {
 				}
 			});
 		});
+	},
+
+	printContent : function(header, contents){
+		$.get("pop_print_content.sw", function(data){
+			var height = 860;
+			var left = (($(window).width() - height) / 2) + $(window).scrollLeft();
+			$(data).modal({
+				opacity: 50,
+				overlayCss: {backgroundColor:"#fff"},
+				autoPosition: false,
+				containerCss:{
+					top: 30,
+					left: left,
+					width: height
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('iframe[name="printFrame"]').contents().find('head').html(header);
+					$('iframe[name="printFrame"]').contents().find('body').html(contents);
+					$('.js_close_print_content').die('click');
+					$('.js_close_print_content').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+					$('.js_do_print_content').die('click');
+					$('.js_do_print_content').live( 'click', function(e){
+						frames["printFrame"].focus();
+						frames["printFrame"].print();
+						return false;
+					});
+					doIframeAutoHeight();
+				}
+			});
+		});
 	}
 
 };

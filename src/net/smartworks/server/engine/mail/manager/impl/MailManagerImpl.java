@@ -24,7 +24,6 @@ import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.mail.model.MailContentCond;
 import net.smartworks.server.engine.mail.model.MailServer;
 import net.smartworks.server.engine.mail.model.MailServerCond;
-import net.smartworks.server.engine.message.model.Message;
 
 import org.hibernate.Query;
 
@@ -602,7 +601,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 	@Override
 	public void removeMailAccount(String user, String objId) throws MailException {
 		try {
-			remove(Message.class, objId);
+			remove(MailAccount.class, objId);
 		} catch (Exception e) {
 			throw new MailException(e);
 		}

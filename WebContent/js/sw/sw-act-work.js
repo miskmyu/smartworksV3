@@ -1438,24 +1438,32 @@ $(function() {
 		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
-		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
-		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_eng.css" rel="stylesheet" type="text/css" />' +
-//		'<link rel="shortcut icon" href="' + hostNPort + 'smartworkV3/images/favicon/smartworks.ico"/>' +
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		var topLogo = $('<div class="company_logo"><img src="http://localhost:8080/smartworksV3/images/clogo_inmail.gif" /><div>위더스 비전</div></div>');
-		var bottomLogo = $('<div class="footer"><div class="logo"> </div><div class="info tr">출력자: 연구원 장소라 / 출력일시: 2012.7.21 15:35</div></div>');
-		var body = $('ul.portlet_r');
-		body.find('.js_form_header #js_copy_address').remove();
-		body.find('.js_form_header .js_toggle_forward_btn').remove();
-		body.find('.js_form_header .js_toggle_approval_btn').remove();
-		body.find('.js_form_header .js_email_content_btn').remove();
-		body.find('.js_form_header .js_print_content_btn').remove();
-		body.find('.js_form_header .solid_line').before(topLogo);		
+		var companyLogoSrc = $('.js_company_logo_src').attr('src');
+		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
+		var bottomLogo = $('<div class="footer"><div class="logo"> </div></div>');
+		var body = $('ul.portlet_r').clone();
+		body.find('#js_copy_address').parents('.txt_btn').remove();
+		body.find('.js_toggle_forward_btn').remove();
+		body.find('.js_toggle_approval_btn').remove();
+		body.find('.js_email_content_btn').remove();
+		body.find('.js_print_content_btn').remove();
+		body.find('.js_view_instance_diagram').remove();
+		body.find('.body_titl_pic .solid_line').before(topLogo);
+//		body.find('.js_instance_tasks_left').remove();
+//		body.find('.js_instance_tasks_right').remove();
+//		body.find('.js_task_start').remove();
+//		body.find('.js_task_stop').remove();
+//		body.find('.js_instance_task_arrow').remove();
+//		body.find('.js_instance_tasks li.selected').siblings().remove();
 		body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
-		body.find('.glo_btn_space .task_information a').attr('userDetail', '');
 		body.find('.glo_btn_space').append(bottomLogo);
-		var contents = '<html>' + header + '<body><br/><br/><div id="wrap"><div>' + body.html() + '</div></div></body></html>';
+		body.find('a').attr('userDetail', '');
+		body.find('textarea').css({height:"56px"});
+		body.html(body.html().replace(/\"images\//g, "\"" + hostNPort + "/smartworksV3/images/"));
+		body.html(body.html().replace(/textarea/g,  "div"));
+		var contents = '<html>' + header + '<body><br/><br/><br/><div id="wrap"><div>' + body.html() + '</div></div><br/><br/><br/></body></html>';
 		
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
@@ -1475,15 +1483,48 @@ $(function() {
 	});
 
 	$('.js_print_content_btn').live("click", function(e){
-		var print_content = $(".js_form_content")[0].contentWindow.print();
-//		var title = $(".title_picico").text();
-//		styleSheets = [];
-//		styleSheets.push("css/default.css");
-//		styleSheets.push("css/black/detail.css");
-//		styleSheets.push("css/black/form.css");
-//		styleSheets.push("css/black/layout_2.css");
-//		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
-//		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
+
+		var input = $(targetElement(e));
+		var workSpacePage = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
+		if(isEmpty(workSpacePage)) return false;
+		var target = $('#content');
+		var hostNPort = getHostNPort();
+		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" media="all" rel="stylesheet" />' +
+		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+//		var header = 	'<link href="css/default.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/layout_2.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/detail.css" type="text/css" media="all" rel="stylesheet" />' +
+//		'<link href="css/black/form.css" type="text/css" media="all" rel="stylesheet" />';
+		var companyLogoSrc = $('.js_company_logo_src').attr('src');
+		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
+		var bottomLogo = $('<div class="footer"><div class="logo"> </div></div>');
+		var body = $('ul.portlet_r').clone();
+		body.find('#js_copy_address').parents('.txt_btn').remove();
+		body.find('.js_toggle_forward_btn').remove();
+		body.find('.js_toggle_approval_btn').remove();
+		body.find('.js_email_content_btn').remove();
+		body.find('.js_print_content_btn').remove();
+		body.find('.js_view_instance_diagram').remove();
+		body.find('.body_titl_pic .solid_line').before(topLogo);
+//		body.find('.js_instance_tasks_left').remove();
+//		body.find('.js_instance_tasks_right').remove();
+//		body.find('.js_task_start').remove();
+//		body.find('.js_task_stop').remove();
+//		body.find('.js_instance_task_arrow').remove();
+//		body.find('.js_instance_tasks li.selected').siblings().remove();
+		body.find('.js_form_content').removeClass('up');
+		body.find('.glo_btn_space span.btn_gray').remove();
+		body.find('.glo_btn_space').append(bottomLogo);
+		body.find('a').attr('userDetail', '');
+		body.find('textarea').css({height:"56px"});
+		body.html(body.html().replace(/\"images\//g, "\"" + hostNPort + "/smartworksV3/images/"));
+		body.html(body.html().replace(/textarea/g,  "div"));
+		var contents = '<div id="wrap" style="overflow:auto;"><div>' + body.html() + '</div><div class="info tr">' + smartMessage.get("printUserText") + ' : ' +  currentUser.longName + ' / ' +  smartMessage.get("printTimeText") + ' : ' + printCurrentTime() + '</div></div>';
+		smartPop.printContent(header, contents);
 		return false;
 	});
 

@@ -2219,9 +2219,9 @@ CREATE TABLE SWOrgGroup (
 CREATE TABLE SWOrgGroupMember (
 	groupId	character varying(50) not null,
 	userId	character varying(50) not null,
-	jointegerype	character varying(1),
+	joinType	character varying(1),
 	joinStatus	character varying(1),
-	jointegerime	timestamp without time zone,
+	joinTime	timestamp without time zone,
 	outTime 	timestamp without time zone,
 	memberSeq	integer,
 	creator character varying(50),

@@ -890,11 +890,11 @@ public class WorkServiceImpl implements IWorkService {
 			user.setEmpNo(txtUserProfileEmpId);
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);
+				MailAccountCond mailAccountCond = new MailAccountCond();
+				mailAccountCond.setUserId(txtUserProfileUserId);
+				mailAccountCond.setMailServerId(selUserProfileEmailServerName);
+				MailAccount mailAccount = getMailManager().getMailAccount(txtUserProfileUserId, mailAccountCond, IManager.LEVEL_ALL);
 				if(chkUserProfileUseEmail) {
-					MailAccountCond mailAccountCond = new MailAccountCond();
-					mailAccountCond.setUserId(txtUserProfileUserId);
-					mailAccountCond.setMailServerId(selUserProfileEmailServerName);
-					MailAccount mailAccount = getMailManager().getMailAccount(txtUserProfileUserId, mailAccountCond, IManager.LEVEL_ALL);
 					if(SmartUtil.isBlankObject(mailAccount))
 						mailAccount = new MailAccount();
 					mailAccount.setUserId(txtUserProfileUserId);
@@ -920,6 +920,9 @@ public class WorkServiceImpl implements IWorkService {
 				    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 					handler = MailAuth.authenticate(profile, auth, handler);
 					request.getSession().setAttribute("handler", handler);
+				} else {
+					if(!SmartUtil.isBlankObject(mailAccount))
+						getMailManager().removeMailAccount(txtUserProfileUserId, mailAccount.getObjId());
 				}
 				UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());
 		        Authentication authentication = authenticationManager.authenticate(authRequest);

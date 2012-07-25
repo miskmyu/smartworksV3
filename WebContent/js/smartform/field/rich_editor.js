@@ -41,7 +41,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
 	}else{
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+value+'</textarea></span></div>');
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();

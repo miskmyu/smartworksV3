@@ -305,6 +305,11 @@ var printDateTime = function(date){
 	return date.format("HH:MM");
 };
 
+var printCurrentTime = function(){
+	var today = new Date();
+	return today.format("yyyy.mm.dd HH:MM");
+};
+
 var targetElement = function(e){
 	return (typeof e.target != 'undefined') ? e.target : e.srcElement;
 };

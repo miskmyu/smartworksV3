@@ -158,4 +158,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_new_image_folder.jsp", "");
 	}
 
+	@RequestMapping("/pop_print_content")
+	public ModelAndView popPrintContent(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_print_content.jsp", "");
+	}
+
 }

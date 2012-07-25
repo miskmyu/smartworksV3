@@ -184,8 +184,9 @@ $(document).ready(function(){
 	    	var tokens = titleText.split('&amp;');
 	    	var titleHtml = (tokens.length==3) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] : tokens[0]; 
 	    	title.html(titleHtml);
-	    	var eventTime = $(element).find('.fc-event-time').html();
-	    	if(eventTime === '0') $(element).find('.fc-event-time').html('');
+	    	//var eventTime = $(element).find('.fc-event-time').html();
+	    	//if(eventTime === '0') $(element).find('.fc-event-time').html('');
+	    	$(element).find('.fc-event-time').html('');
 	    },
 		firstDay: 1,
 		weekMode: 'liquid',
