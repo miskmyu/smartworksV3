@@ -120,7 +120,7 @@
 		                    
 	            <!-- 우측 버튼-->
 	            <div class="txt_btn">
-	                <div class="fr t_s11"><a class="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
+	                <div class="fr t_s11"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
 	            </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
@@ -141,7 +141,7 @@
 	                	<%
 	                	}
 	                	%>
-	                	<a href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w js_select_print"></span></a>
+	                	<a href="" class="js_print_content_btn" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->

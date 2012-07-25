@@ -173,4 +173,6 @@
 	<div class="portlet_b" style="display: block;"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->
-<script type="text/javascript" src="js/sw/iframe.js"></script>
+<script type="text/javascript">
+	doIframeAutoHeight();
+</script>

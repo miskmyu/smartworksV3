@@ -7,9 +7,12 @@
 #header .company_logo.print {text-align:right}
 #header .company_logo.print img {max-width:125px; max-height:30px}
 #header .title { font-size:14px; font-weight:bold} */
-
+/*
 #wrap {height:100%; width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
+*/
+#wrap {width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
 #wrap > div {border: 1px solid #C7C7C7}
+
 .company_logo {float:right; margin-bottom:7px}
 .company_logo img {max-width:125px; max-height:30px; vertical-align:bottom}
 .company_logo img + div {font-weight:bold; text-align:right; margin-top:3px}

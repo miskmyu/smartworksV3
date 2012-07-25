@@ -70,7 +70,7 @@ function logout() {
 <div class="company_logo">
 	<span>
 		<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
-			<img class="js_auto_picture" src="<%=companyLogo%>" />
+			<img class="js_auto_picture js_company_logo_src" src="<%=companyLogo%>" />
 		</a>
 	</span>
 </div>

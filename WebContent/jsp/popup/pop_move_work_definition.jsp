@@ -202,8 +202,8 @@
 				}
 				%>
 			</table>
-		</form>
-	</div>
+		</div>
+	</form>
 	<!-- 컨텐츠 //-->
 	<!-- 버튼 영역 -->
 	<div class="glo_btn_space">
