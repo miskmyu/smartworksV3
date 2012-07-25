@@ -44,6 +44,11 @@ $.fn.serializeObject = function()
     return o;
 };
 
+var getHostNPort = function(){
+	var array = window.location.href.split(':');
+	return array[0] + ':' + array[1] + ':' + array[2].split('/')[0];
+};
+
 var getBytesWithUnit = function( bytes ){
 	if( isNaN( bytes ) ){ return; }
 	var units = [ ' bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB' ];

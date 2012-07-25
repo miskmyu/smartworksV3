@@ -202,6 +202,17 @@ smartMessage.bundle['ko'] = {
 	moveImageInstancesError : "이미지를 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	moveFileInstancesSucceed : "파일이 정상적으로 이동되었습니다.",
 	moveFileInstancesError : "파일을 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	removeMailFolderSucceed : "메일폴더가 정상적으로 삭제되었습니다.",
+	removeMailFolderError : "메일폴더를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	sendMailSucceed : "메일 보내기가 정상적으로 이루어졌습니다.",
+	sendMailError : "메일을 보내는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	moveMailSucceed : "메일이 정상적으로 이동되었습니다.",
+	moveMailError : "메일을 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	removeMailSucceed : "메일이 정상적으로 삭제되었습니다.",
+	removeMailError : "메일을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	mailPasswordConfirmError : "보내는메일 암호가 잘못입력되었습니다. 확인하여 다시 입력 바랍니다.",
 	duplicationCheckError : "아이디 중복확인이 되지 않았습니다. 중복확인을 실행한 후 다시 하시기 바랍니다.",
 	wsdlNotFetchedError : "WSDL 가져오기를 실행하지 않았습니다. WSDL 가져오기를 실행한 후 다시 하시기 바랍니다.",
@@ -215,6 +226,9 @@ smartMessage.bundle['ko'] = {
 	missingCommentTaskForward : "참조의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
 	missingCommentTaskApproval : "결재의견을 반드시 입력하여야 합니다. 입력 후 다시 하시기 바랍니다.",
 	moveItemsNotSelected : "이동할 항목들을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
+	removeItemsNotSelected : "삭제할 항목들을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
+	replyItemNotSelected : "답장할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
+	forwardItemNotSelected : "전달할 항목을 선택하지 않았습니다. 항목을 선택하고 다시 하시기 바랍니다.",
 	
 	moveConfirmation : "선택한 항목들을 이동하려고 합니다. 정말로 이동하시겠습니까? ",
 	removeConfirmation : "항목을 삭제하려고 합니다. 정말로 삭제하시겠습니까? ",
@@ -231,7 +245,8 @@ smartMessage.bundle['ko'] = {
 	commentTaskForwardConfirm : "업무전달을 완료하려고 합니다. 정말로 완료하시겠습니까? ",
 	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
 	pushoutGroupMemberConfirmation : "그룹구성원을 강퇴하려고 합니다. 정말로 강퇴시키시겠습니까? ",
-		
+	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
+	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	
 	nullPointerException : "접근할 수 없는 값을 호출 하였습니다. 관리자에게 확인바랍니다!",

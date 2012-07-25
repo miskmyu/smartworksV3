@@ -19,6 +19,13 @@ $(function() {
 		return false;
 	});
 
+	$('.js_cancel_mail_btn').live('click', function(e) {
+		var input = $(targetElement(e));
+		var newMail = input.parents('.js_new_mail_page');
+		document.location.href = "smart.sw#" + newMail.attr('lastHref');
+		return false;
+	});
+
 	$('.js_move_mail_btn').live('click', function(e) {
 		var input = $(targetElement(e));
 		var mailSpace = input.parents('.js_mail_space_page');
@@ -65,7 +72,7 @@ $(function() {
 			sourceId = mailList.attr('folderId');
 			var mails = mailList.find('input[name="chkSelectMail"]:checked');
 			if(isEmpty(mails)){
-				smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+				smartPop.showInfo(smartPop.WARN, smartMessage.get("moveItemsNotSelected"), function(){});
 				input.find('option:first').attr('selected', 'selected').siblings('selected', '');
 				return false;
 			}
@@ -81,7 +88,7 @@ $(function() {
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
 		console.log(JSON.stringify(paramsJson));
-		smartPop.confirm(smartMessage.get("moveMailConfirm"), function(){
+		smartPop.confirm(smartMessage.get("moveConfirmation"), function(){
 			smartPop.progressCenter();
 			$.ajax({
 				url : "move_mails.sw",
@@ -112,7 +119,7 @@ $(function() {
 		var targetId = input.attr('targetId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
 		if(isEmpty(mails)){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("moveItemsNotSelected"), function(){});
 			return false;
 		}
 		var paramsJson = {};
@@ -123,7 +130,7 @@ $(function() {
 		paramsJson['source'] = sourceId;
 		paramsJson['target'] = targetId;
 		console.log(JSON.stringify(paramsJson));
-		smartPop.confirm(smartMessage.get("moveMailConfirm"), function(){
+		smartPop.confirm(smartMessage.get("moveConfirmation"), function(){
 			smartPop.progressCenter();
 			$.ajax({
 				url : "move_mails.sw",
@@ -157,7 +164,7 @@ $(function() {
 		paramsJson['ids'] = msgIds;
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		smartPop.confirm(smartMessage.get("deletMailConfirm"), function(){
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			smartPop.progressCenter();
 			$.ajax({
 				url : "delete_mails.sw",
@@ -165,14 +172,14 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailSucceed"), function(){
 						document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 					});
 					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailError"));
 					smartPop.closeProgress();
 				}
 			});
@@ -186,7 +193,7 @@ $(function() {
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
 		if(isEmpty(mails)){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("removeItemsNotSelected"), function(){});
 			return false;
 		}
 		var paramsJson = {};
@@ -196,7 +203,7 @@ $(function() {
 		paramsJson['ids'] = msgIds;
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		smartPop.confirm(smartMessage.get("deletMailConfirm"), function(){
+		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			smartPop.progressCenter();
 			$.ajax({
 				url : "delete_mails.sw",
@@ -204,14 +211,14 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("deleteMailSucceed"), function(){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailSucceed"), function(){
 						document.location.href = "smart.sw#" + mailList.attr('currentHref');
 					});
 					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("deleteMailError"));
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeMailError"));
 					smartPop.closeProgress();
 				}
 			});
@@ -229,7 +236,7 @@ $(function() {
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
 		if(isEmpty(mails) || mails.length != 1){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("replyItemNotSelected"), function(){});
 			return false;
 		}
 			
@@ -261,7 +268,7 @@ $(function() {
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
 		if(isEmpty(mails) || mails.length != 1){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("replyItemNotSelected"), function(){});
 			return false;
 		}
 			
@@ -293,7 +300,7 @@ $(function() {
 		var folderId = mailList.attr('folderId');
 		var mails = mailList.find('input[name="chkSelectMail"]:checked');
 		if(isEmpty(mails) || mails.length != 1){
-			smartPop.showInfo(smartPop.WARN, smartMessage.get("noSelectedMails"), function(){});
+			smartPop.showInfo(smartPop.WARN, smartMessage.get("forwardItemNotSelected"), function(){});
 			return false;
 		}
 
@@ -312,7 +319,7 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("forwardMailError"));
 				smartPop.closeProgress();
 			}
 		});
@@ -331,7 +338,7 @@ $(function() {
 		var paramsJson = {};
 		paramsJson['folderId'] = folderId;
 		console.log(JSON.stringify(paramsJson));
-		smartPop.confirm(smartMessage.get("removeMailFolderConfirm"), function(){
+		smartPop.confirm(smartMessage.get("removeMailFolderConfirmation"), function(){
 			smartPop.progressCenter();
 			$.ajax({
 				url : "delete_mail_folder.sw",
@@ -340,6 +347,8 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailFolderSucceed"));
+					window.location.reload();
 					smartPop.closeProgress();
 				},
 				error : function(e) {
@@ -374,7 +383,7 @@ $(function() {
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-				smartPop.showInfo(smartPop.ERROR, smartMessage.get("replyMailError"));
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get("fetchMailsError"));
 				smartPop.closeProgress();
 			}
 		});

@@ -1432,18 +1432,33 @@ $(function() {
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
 		if(isEmpty(workSpacePage)) return false;
-		var target = $('#content');	
-		var header = 	'<link href="http://localhost:8080/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/layout.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
-		'<link href="http://localhost:8080/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
-		'<link rel="shortcut icon" href="../images/favicon/smartworks.ico"/>' +
+		var target = $('#content');
+		var hostNPort = getHostNPort();
+		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/detail.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/css/black/form.css" type="text/css" rel="stylesheet" />' +
+		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />' +
+		'<link href="' + hostNPort + '/smartworksV3/smarteditor/css/default_eng.css" rel="stylesheet" type="text/css" />' +
+//		'<link rel="shortcut icon" href="' + hostNPort + 'smartworkV3/images/favicon/smartworks.ico"/>' +
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
-		var contents = '<html>' + header + '<body><div style="background-color:white">' + $('ul.portlet_r').html() + '</div></body></html>';
+		var topLogo = $('<div class="company_logo"><img src="http://localhost:8080/smartworksV3/images/clogo_inmail.gif" /><div>위더스 비전</div></div>');
+		var bottomLogo = $('<div class="footer"><div class="logo"> </div><div class="info tr">출력자: 연구원 장소라 / 출력일시: 2012.7.21 15:35</div></div>');
+		var body = $('ul.portlet_r');
+		body.find('.js_form_header #js_copy_address').remove();
+		body.find('.js_form_header .js_toggle_forward_btn').remove();
+		body.find('.js_form_header .js_toggle_approval_btn').remove();
+		body.find('.js_form_header .js_email_content_btn').remove();
+		body.find('.js_form_header .js_print_content_btn').remove();
+		body.find('.js_form_header .solid_line').before(topLogo);		
+		body.find('.js_form_content').removeClass('up');
+		body.find('.glo_btn_space span.btn_gray').remove();
+		body.find('.glo_btn_space .task_information a').attr('userDetail', '');
+		body.find('.glo_btn_space').append(bottomLogo);
+		var contents = '<html>' + header + '<body><br/><br/><div id="wrap"><div>' + body.html() + '</div></div></body></html>';
+		
 		var paramsJson = {};
 		paramsJson['contents'] = contents;
-//		console.log(JSON.stringify(paramsJson));
 		$.ajax({
 			url : "new_mail_post.sw",
 			contentType : 'application/json',
@@ -1459,6 +1474,20 @@ $(function() {
 		return false;
 	});
 
+	$('.js_print_content_btn').live("click", function(e){
+		var print_content = $(".js_form_content")[0].contentWindow.print();
+//		var title = $(".title_picico").text();
+//		styleSheets = [];
+//		styleSheets.push("css/default.css");
+//		styleSheets.push("css/black/detail.css");
+//		styleSheets.push("css/black/form.css");
+//		styleSheets.push("css/black/layout_2.css");
+//		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
+//		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
+		return false;
+	});
+
+	
 	$('.js_view_my_instances').live('click',function(e) {
 		var input = $(targetElement(e));
 		if(isEmpty(input.attr('viewType'))) input = input.parent();
@@ -1548,19 +1577,6 @@ $(function() {
 //		var width = startWork.find('.js_auto_complete:first').parent().outerWidth();
 //		smartPop.selectWork(target, width);
 		smartPop.selectApprovalLine(target);
-		return false;
-	});
-
-	$('.js_select_print').live("click", function(e){
-		var print_content = $(".js_form_content").html();
-		var title = $(".title_picico").text();
-		styleSheets = [];
-		styleSheets.push("css/default.css");
-		styleSheets.push("css/black/detail.css");
-		styleSheets.push("css/black/form.css");
-		styleSheets.push("css/black/layout.css");
-		styleSheets.push("css/ui-lightness/jquery-ui-1.8.21.custom.css");
-		print_div_iframe(print_content, styleSheets, title, "Print Confirm");
 		return false;
 	});
 
