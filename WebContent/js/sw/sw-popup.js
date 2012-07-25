@@ -936,11 +936,14 @@ smartPop = {
 					});
 					$('.js_do_print_content').die('click');
 					$('.js_do_print_content').live( 'click', function(e){
-						var pwin;
-						$.when(pwin = $('iframe[name="printFrame"]')[0].contentWindow).done('', function() {
-							pwin.focus();
-							pwin.print();
-						});
+						frames["printFrame"].focus();
+						frames["printFrame"].print();
+//						
+//						var pwin;
+//						$.when(pwin = $('iframe[name="printFrame"]')[0].contentWindow).done('', function() {
+//							pwin.focus();
+//							pwin.print();
+//						});
 						return false;
 					});
 					doIframeAutoHeight();
