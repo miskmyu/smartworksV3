@@ -62,7 +62,7 @@ function logout() {
 	Notice[] notices = smartWorks.getNoticesForMe();
 	//로고반영 구현을 위해 추가
 	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
-	String companyLogo = (SmartUtil.isBlankObject(companyGeneral) || SmartUtil.isBlankObject(companyGeneral.getCompanyLogo())) ? "images/logo_compay.gif" : companyGeneral.getCompanyLogo();
+	String companyLogo = (SmartUtil.isBlankObject(companyGeneral) || SmartUtil.isBlankObject(companyGeneral.getCompanyLogo())) ? "images/logo_compay.png" : companyGeneral.getCompanyLogo();
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
