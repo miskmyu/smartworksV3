@@ -12,8 +12,9 @@
 */
 #wrap {width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
 #wrap > div {border: 1px solid #C7C7C7}
+#wrap > div.info {border:none; margin-top: 5px}
 
-.company_logo {float:right; margin-bottom:10px}
+.company_logo {float:right; margin-bottom:15px}
 .company_logo img {max-width:125px; max-height:30px; vertical-align:bottom}
 .company_logo img + div {font-weight:bold; text-align:right; margin-top:3px}
  

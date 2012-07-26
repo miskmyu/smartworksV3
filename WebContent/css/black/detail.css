@@ -166,6 +166,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /* 프로세스 */
 .process_section { position:relative; float: left; height: 59px; width:100%}
 .process_space {line-height:15px}
+.process_space ul {margin:0}
 .process_space li { float:left}
 
 .process_space li.js_select_task_manual {}
