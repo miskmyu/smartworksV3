@@ -60,6 +60,7 @@ public class Smtp {
 		if (profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")) {
 			if (profile.getSmtpSSL() != null && profile.getSmtpSSL().toLowerCase().equals("true")) {
 				props.setProperty("mail.smtps.auth", "true");
+				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			} else {
 				props.setProperty("mail.smtp.auth", "true");
 			}
