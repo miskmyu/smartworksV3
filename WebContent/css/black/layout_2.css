@@ -10,7 +10,8 @@
 /*
 #wrap {height:100%; width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
 */
-#wrap {width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
+#wrap, #wrap_noborder {width:757px; margin:10px auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px} 
+#wrap_noborder > div {border:none}
 #wrap > div {border: 1px solid #C7C7C7}
 #wrap > div.info {border:none; margin-top: 5px}
 
@@ -231,6 +232,14 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 /* Table - Fix 600px */
 .table_normal600 {width:558px}
 .boTb { border-top:1px solid #DCDFE0; border-bottom:1px solid #DCDFE0; padding:10px 0}
+
+/* Mail */
+.icon_file {background: url("../../images/nav_img.png") no-repeat -115px -471px; width:16px; height:17px}
+.view_title {border-bottom: 1px solid #E8E8E8; color: #454545; overflow: hidden; position: relative; width: auto}
+.view_title h1 {color: #333333; font-size: 13px; font-weight: bold; line-height: 18px; margin: 10px 0 5px 0; overflow: hidden; float:left; padding:0; line-height:18px}
+.view_title dl { clear:both; font-size:12px; margin:0 0 10px; overflow:hidden}
+.view_title dt { clear:both; float:left; min-width:65px; text-align:right; color:#919191}
+.view_title dd { margin:0 0 0 70px; word-wrap: break-word}
 
 /* table Gray */
 .gray_style table {border-collapse:collapse; border:1px solid #d8d8d8}
