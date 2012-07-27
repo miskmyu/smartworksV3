@@ -56,6 +56,7 @@
 		<property name="name" type="string" length="50"/>
 		<property name="description" type="string" length="4000"/>
 		<property name="domainId" type="string" length="50"/>
+		<property name="picture" type="string" length="50"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
@@ -140,6 +141,8 @@
 		<property name="status" type="string" length="1"/>
 		<property name="picture" type="string" length="100"/>
 		<property name="description" type="string" length="4000"/>
+		<property name="maxMember" type="int"/>
+		<property name="autoApproval" type="boolean"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="50"/>
