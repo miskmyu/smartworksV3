@@ -35,6 +35,8 @@ public class SwoGroup extends SwoObject {
 	public static final String A_GROUPTYPE = "groupType";
 	public static final String A_STATUS = "status";
 	public static final String A_DESCRIPTION = "description";
+	public static final String A_MAXMEMBER = "maxMember";
+	public static final String A_AUTOAPPROVAL = "autoApproval";
 	public static final String A_PICTUTRE = "picture";
 	public static final String A_GROUP_MEMBER = "swoGroupMember";
 	public static final String A_GROUP_MEMBERS = "swoGroupMembers";
@@ -50,6 +52,9 @@ public class SwoGroup extends SwoObject {
 	private String status;
 	private String description;
 	private String picture;
+	private int maxMember = -1;
+	private boolean autoApproval = false;
+	
 	private SwoGroupMember[] swoGroupMembers;
 
 	public String getPicture() {
@@ -81,6 +86,18 @@ public class SwoGroup extends SwoObject {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public int getMaxMember() {
+		return maxMember;
+	}
+	public void setMaxMember(int maxMember) {
+		this.maxMember = maxMember;
+	}
+	public boolean isAutoApproval() {
+		return autoApproval;
+	}
+	public void setAutoApproval(boolean autoApproval) {
+		this.autoApproval = autoApproval;
 	}
 	public SwoGroup() {
 		super();

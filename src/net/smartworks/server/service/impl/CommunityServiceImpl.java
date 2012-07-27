@@ -28,6 +28,8 @@ import net.smartworks.model.notice.Notice;
 import net.smartworks.model.sera.Course;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
+import net.smartworks.server.engine.authority.model.SwaGroup;
+import net.smartworks.server.engine.authority.model.SwaGroupCond;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -50,7 +52,6 @@ import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
-import net.smartworks.server.engine.organization.manager.impl.SwoManagerImpl;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
@@ -965,6 +966,103 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private GroupInfo[] getGroupInfoForUpload(String type) throws Exception {
 		
+		/*User user = SmartUtil.getCurrentUser();
+
+		SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+		boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+		
+		List<GroupInfo> resultGroupInfoList = new ArrayList<GroupInfo>();
+		
+		SwoGroupCond swoGroupCond = new SwoGroupCond();
+		SwoGroupMember swoGroupMember = new SwoGroupMember();       
+		swoGroupMember.setUserId(user.getId());		
+		SwoGroupMember[] swoGroupMembers = new SwoGroupMember[1];
+		swoGroupMembers[0] = swoGroupMember;
+		swoGroupCond.setSwoGroupMembers(swoGroupMembers);
+		swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
+		SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
+		
+		if(swoGroups != null) {
+			for(SwoGroup swoGroup : swoGroups) {
+				GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
+				groupInfoList.add(groupInfo);
+			}
+			GroupInfo[] groupInfos = new GroupInfo[groupInfoList.size()];
+			groupInfoList.toArray(groupInfos);
+			return groupInfos;
+		}
+		
+		
+		
+		
+		for (int i = 0; i < dept.length; i++) {
+			boolean result = false;
+			
+			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
+			
+			SwaDepartmentCond myDeptAuthCond = new SwaDepartmentCond();
+			myDeptAuthCond.setDeptId(dept[i].getId());
+			myDeptAuthCond.setDeptAuthType(type);
+			SwaDepartment myDeptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), myDeptAuthCond, null);
+			String roleKey = myDeptAuth.getRoleKey();
+			
+			if (isLeader) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1 ? true : false;
+			} else {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1 ? true : false;
+			}
+			if (isAdmin && !result) {
+				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
+			}
+			if (result && !deptIdList.contains(dept[i].getId())) {
+				deptList.add(dept[i]);
+				deptIdList.add(dept[i].getId());
+			}
+		}
+		
+		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
+		if (isAdmin) {
+			deptAuthCond.setAdminOrCustomUserLike(user.getId());
+		} else {
+			deptAuthCond.setCustomUserLikek(user.getId());
+		}
+		deptAuthCond.setDeptAuthType(type);
+		SwaDepartment[] deptAuths = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(user.getId(), deptAuthCond, null);
+		if (deptAuths != null && deptAuths.length != 0) {
+			String[] idIns = new String[deptAuths.length];
+			for (int i = 0; i < deptAuths.length; i++) {
+				idIns[i] = deptAuths[i].getDeptId();
+			}
+			SwoDepartmentCond deptCustomCond = new SwoDepartmentCond();
+			deptCustomCond.setIdIns(idIns);
+			SwoDepartment[] deptCustom = getSwoManager().getDepartments(user.getId(), deptCustomCond, IManager.LEVEL_LITE);
+			for (int i = 0; i < deptCustom.length; i++) {
+				if (!deptIdList.contains(deptCustom[i].getId())) {
+					deptList.add(deptCustom[i]);
+					deptIdList.add(deptCustom[i].getId());
+				}
+			}
+		}
+			
+		DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
+		for (int i = 0; i < deptList.size(); i++) {
+			DepartmentInfo deptInfo = new DepartmentInfo();
+			SwoDepartment swDept = deptList.get(i);
+			deptInfo.setId(swDept.getId());
+			deptInfo.setName(swDept.getName());
+			deptInfo.setDesc(swDept.getDescription());
+			deptInfos[i] = deptInfo;
+		}		
+		*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		return null;
 	}
@@ -977,8 +1075,11 @@ public class CommunityServiceImpl implements ICommunityService {
 				//공지사항
 				//내가 등록할수 있는 부서
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
-				//TODO 등록할수 있는 그룹
+				//등록할수 있는 그룹
+				
 				GroupInfo[] groupInfos = getMyGroups();
+//				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
+				
 				int departmentInfosLength = departmentInfos.length;
 				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
 				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
@@ -1685,13 +1786,381 @@ public class CommunityServiceImpl implements ICommunityService {
 		}
 	}
 	@Override
-	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
-		// 테스트용도이니 구현바람.
-		return searchCommunityMember(communityId, key);
-	}
-	@Override
 	public void updateGroupSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			   groupId=group_3060deb892c04390a3c5f8a57402049f,
+			   frmGroupSpaceSetting=   {
+			      txtGroupName=광민그룹,
+			      txtaGroupDesc=그룹설명입니다.,
+			      rdoGroupMaxMembers=-1,(rdoGroupMaxMembers=UserDefined)
+			      txtGroupMaxMembers=, (txtGroupMaxMembers=111)
+			      rdoGroupAutoApproval=true, (false)
+			      chkInvitableMembersLeader=on,
+			      chkInvitableMembersMembers=on,
+			      chkInvitableMembersCustom=on,
+			      chkBoardWriteLeader=on,
+			      chkBoardWriteMembers=on,
+			      chkBoardWriteCustom=on,
+			      chkBoardEditOwner=on,
+			      chkBoardEditAdministrator=on,
+			      chkBoardEditLeader=on,
+			      chkBoardEditCustom=on,
+			      chkEventWriteLeader=on,
+			      chkEventWriteMembers=on,
+			      chkEventWriteCustom=on,
+			      chkEventEditOwner=on,
+			      chkEventEditAdministrator=on,
+			      chkEventEditLeader=on,
+			      chkEventEditCustom=on,
+			      txtGroupLeader=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      txtInvitableMembersCustoms=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      txtBoardWriteCustoms=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      txtBoardEditCustoms=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      txtEventWriteCustoms=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      txtEventEditCustoms=      {
+			         users=         [
+			            {
+			               id=kmyu@maninsoft.co.kr,
+			               name=선임 유광민
+			            }
+			         ]
+			      },
+			      imgGroupProfile=      {
+			         groupId=fg_f4854c39ec146e4939e9196e6bdc18cce48b,
+			         files=         [
+
+			         ]
+			      }
+			   }
+			}*/
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		String groupId = (String)requestBody.get("groupId");
+		
+		SwaGroupCond cond = new SwaGroupCond();
+		cond.setGroupId(groupId);
+		SwaGroup[] groupAuths = SwManagerFactory.getInstance().getSwaManager().getAuthGroups(userId, cond, null);
+		
+		SwaGroup boardWrite = null;
+		SwaGroup boardEdit = null;
+		SwaGroup eventWrite = null;
+		SwaGroup eventEdit = null;
+		SwaGroup memberInvite = null;
+		
+		if (groupAuths != null && groupAuths.length != 0) {
+			for (int i = 0; i < groupAuths.length; i++) {
+				SwaGroup deptAuth = groupAuths[i];
+				String deptAuthType = deptAuth.getGroupAuthType();
+				if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE)) {
+					boardWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_BOARD_EDIT)) {
+					boardEdit = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_EVENT_WRITE)) {
+					eventWrite = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_EVENT_EDIT)) {
+					eventEdit = deptAuth;
+				} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_MEMBER_INVITE)) {
+					memberInvite = deptAuth;
+				}
+			}
+		}
+		
+		Map<String, Object> frmGroupSpaceSetting = (Map<String, Object>)requestBody.get("frmGroupSpaceSetting");
+		String txtGroupName = (String)frmGroupSpaceSetting.get("txtGroupName");
+	    String txtaGroupDesc = (String)frmGroupSpaceSetting.get("txtaGroupDesc");
+	    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    
+		String chkBoardWriteLeader = (String)frmGroupSpaceSetting.get("chkBoardWriteLeader");
+		String chkBoardWriteMembers = (String)frmGroupSpaceSetting.get("chkBoardWriteMembers");
+		String chkBoardWriteCustom = (String)frmGroupSpaceSetting.get("chkBoardWriteCustom");
+		
+		if (boardWrite == null) { 
+			boardWrite = new SwaGroup();
+			boardWrite.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
+			boardWrite.setGroupId(groupId);
+		}
+		StringBuffer boardWriteRoleKeyBuff = new StringBuffer();
+		boolean isBoardWriteFirst = true;
+		if (chkBoardWriteLeader != null && chkBoardWriteLeader.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_LEADER);
+			isBoardWriteFirst = false;
+		}
+		if (chkBoardWriteMembers != null && chkBoardWriteMembers.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_MEMBER);
+			isBoardWriteFirst = false;
+		}
+		String chkBoardWriteCustomUsersStr = null;
+		if (chkBoardWriteCustom != null && chkBoardWriteCustom.equalsIgnoreCase("on")) {
+			if (!isBoardWriteFirst)
+				boardWriteRoleKeyBuff.append(";");
+			boardWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_CUSTOM);
+			isBoardWriteFirst = false;
+			
+			Map<String, Object> txtBoardWriteCustoms = (Map<String, Object>)frmGroupSpaceSetting.get("txtBoardWriteCustoms");    
+			List<Map<String, String>> txtBoardWriteUsers = (ArrayList<Map<String,String>>)txtBoardWriteCustoms.get("users");
+			chkBoardWriteCustomUsersStr = getUserIdsStrByList(txtBoardWriteUsers);
+		}
+		boardWrite.setRoleKey(boardWriteRoleKeyBuff.toString());
+		boardWrite.setCustomUser(chkBoardWriteCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkBoardEditOwner = (String)frmGroupSpaceSetting.get("chkBoardEditOwner");
+		String chkBoardEditAdministrator = (String)frmGroupSpaceSetting.get("chkBoardEditAdministrator");
+		String chkBoardEditLeader = (String)frmGroupSpaceSetting.get("chkBoardEditLeader");
+		String chkBoardEditCustom = (String)frmGroupSpaceSetting.get("chkBoardEditCustom");
+		
+		if (boardEdit == null) { 
+			boardEdit = new SwaGroup();
+			boardEdit.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_BOARD_EDIT);
+			boardEdit.setGroupId(groupId);
+		}
+		StringBuffer boardEditRoleKeyBuff = new StringBuffer();
+		boolean isBoardEditFirst = true;
+		
+		if (chkBoardEditOwner != null && chkBoardEditOwner.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_OWNER);
+			isBoardEditFirst = false;
+		}
+		if (chkBoardEditAdministrator != null && chkBoardEditAdministrator.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_ADMIN);
+			isBoardEditFirst = false;
+		}
+		if (chkBoardEditLeader != null && chkBoardEditLeader.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_LEADER);
+			isBoardEditFirst = false;
+		}
+		
+		String chkBoardEditCustomUsersStr = null;
+		if (chkBoardEditCustom != null && chkBoardEditCustom.equalsIgnoreCase("on")) {
+			if (!isBoardEditFirst)
+				boardEditRoleKeyBuff.append(";");
+			boardEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_CUSTOM);
+			isBoardEditFirst = false;
+			
+			Map<String, Object> txtBoardEditCustoms = (Map<String, Object>)frmGroupSpaceSetting.get("txtBoardEditCustoms");    
+			List<Map<String, String>> txtBoardEditUsers = (ArrayList<Map<String,String>>)txtBoardEditCustoms.get("users");
+			chkBoardEditCustomUsersStr = getUserIdsStrByList(txtBoardEditUsers);
+		}
+		boardEdit.setRoleKey(boardEditRoleKeyBuff.toString());
+		boardEdit.setCustomUser(chkBoardEditCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkEventWriteLeader = (String)frmGroupSpaceSetting.get("chkEventWriteLeader");
+		String chkEventWriteMembers = (String)frmGroupSpaceSetting.get("chkEventWriteMembers");
+		String chkEventWriteCustom = (String)frmGroupSpaceSetting.get("chkEventWriteCustom");
+		
+		if (eventWrite == null) { 
+			eventWrite = new SwaGroup();
+			eventWrite.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_EVENT_WRITE);
+			eventWrite.setGroupId(groupId);
+		}
+		StringBuffer eventWriteRoleKeyBuff = new StringBuffer();
+		boolean isEventWriteFirst = true;
+		
+		if (chkEventWriteLeader != null && chkEventWriteLeader.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_LEADER);
+			isEventWriteFirst = false;
+		}
+		if (chkEventWriteMembers != null && chkEventWriteMembers.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_MEMBER);
+			isEventWriteFirst = false;
+		}
+		String chkEventWriteCustomUsersStr = null;
+		if (chkEventWriteCustom != null && chkEventWriteCustom.equalsIgnoreCase("on")) {
+			if (!isEventWriteFirst)
+				eventWriteRoleKeyBuff.append(";");
+			eventWriteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_CUSTOM);
+			isEventWriteFirst = false;
+			
+			Map<String, Object> txtEventWriteCustoms = (Map<String, Object>)frmGroupSpaceSetting.get("txtEventWriteCustoms");    
+			List<Map<String, String>> txtEventWriteUsers = (ArrayList<Map<String,String>>)txtEventWriteCustoms.get("users");
+			chkEventWriteCustomUsersStr = getUserIdsStrByList(txtEventWriteUsers);
+		}
+		eventWrite.setRoleKey(eventWriteRoleKeyBuff.toString());
+		eventWrite.setCustomUser(chkEventWriteCustomUsersStr);
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		String chkEventEditOwner = (String)frmGroupSpaceSetting.get("chkEventEditOwner");
+		String chkEventEditAdministrator = (String)frmGroupSpaceSetting.get("chkEventEditAdministrator");
+		String chkEventEditLeader = (String)frmGroupSpaceSetting.get("chkEventEditLeader");
+		String chkEventEditCustom = (String)frmGroupSpaceSetting.get("chkEventEditCustom");
+		
+		if (eventEdit == null) { 
+			eventEdit = new SwaGroup();
+			eventEdit.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_EVENT_EDIT);
+			eventEdit.setGroupId(groupId);
+		}
+		StringBuffer eventEditRoleKeyBuff = new StringBuffer();
+		boolean isEventEditFirst = true;
+
+		if (chkEventEditOwner != null && chkEventEditOwner.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_OWNER);
+			isEventEditFirst = false;
+		}
+		if (chkEventEditAdministrator != null && chkEventEditAdministrator.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_ADMIN);
+			isEventEditFirst = false;
+		}
+		if (chkEventEditLeader != null && chkEventEditLeader.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_LEADER);
+			isEventEditFirst = false;
+		}
+		String chkEventEditCustomUsersStr = null;
+		if (chkEventEditCustom != null && chkEventEditCustom.equalsIgnoreCase("on")) {
+			if (!isEventEditFirst)
+				eventEditRoleKeyBuff.append(";");
+			eventEditRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_CUSTOM);
+			isEventEditFirst = false;
+			
+			Map<String, Object> txtEventEditCustoms = (Map<String, Object>)frmGroupSpaceSetting.get("txtEventEditCustoms");    
+			List<Map<String, String>> txtEventEditUsers = (ArrayList<Map<String,String>>)txtEventEditCustoms.get("users");
+			chkEventEditCustomUsersStr = getUserIdsStrByList(txtEventEditUsers);
+		}
+		eventEdit.setRoleKey(eventEditRoleKeyBuff.toString());
+		eventEdit.setCustomUser(chkEventEditCustomUsersStr);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		
+		String chkInvitableMembersLeader = (String)frmGroupSpaceSetting.get("chkInvitableMembersLeader");
+		String chkInvitableMembersMembers = (String)frmGroupSpaceSetting.get("chkInvitableMembersMembers");
+		String chkInvitableMembersCustom = (String)frmGroupSpaceSetting.get("chkInvitableMembersCustom");
+		
+		if (memberInvite == null) { 
+			memberInvite = new SwaGroup();
+			memberInvite.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_MEMBER_INVITE);
+			memberInvite.setGroupId(groupId);
+		}
+		StringBuffer memberInviteRoleKeyBuff = new StringBuffer();
+		boolean isMemberInviteFirst = true;
+		
+		if (chkInvitableMembersLeader != null && chkInvitableMembersLeader.equalsIgnoreCase("on")) {
+			if (!isMemberInviteFirst)
+				memberInviteRoleKeyBuff.append(";");
+			memberInviteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_LEADER);
+			isMemberInviteFirst = false;
+		}
+		if (chkInvitableMembersMembers != null && chkInvitableMembersMembers.equalsIgnoreCase("on")) {
+			if (!isMemberInviteFirst)
+				memberInviteRoleKeyBuff.append(";");
+			memberInviteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_MEMBER);
+			isMemberInviteFirst = false;
+		}
+		String chkMemberInviteCustomUsersStr = null;
+		if (chkInvitableMembersCustom != null && chkInvitableMembersCustom.equalsIgnoreCase("on")) {
+			if (!isMemberInviteFirst)
+				memberInviteRoleKeyBuff.append(";");
+			memberInviteRoleKeyBuff.append(SwaGroup.GROUP_ROLEKYE_CUSTOM);
+			isMemberInviteFirst = false;
+			
+			Map<String, Object> txtMemberInviteCustoms = (Map<String, Object>)frmGroupSpaceSetting.get("txtInvitableMembersCustoms");    
+			List<Map<String, String>> txtMemberInviteUsers = (ArrayList<Map<String,String>>)txtMemberInviteCustoms.get("users");
+			chkMemberInviteCustomUsersStr = getUserIdsStrByList(txtMemberInviteUsers);
+		}
+		memberInvite.setRoleKey(memberInviteRoleKeyBuff.toString());
+		memberInvite.setCustomUser(chkMemberInviteCustomUsersStr);		
+		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, boardWrite, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, boardEdit, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, eventWrite, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, eventEdit, null);
+		SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, memberInvite, null);
+
+		Map<String, Object> imgGroupProfile = (Map<String, Object>)frmGroupSpaceSetting.get("imgGroupProfile"); 
+		String fileGroupId = (String)imgGroupProfile.get("groupId");   
+		List<Map<String, String>> groupImgFiles = (ArrayList<Map<String,String>>)imgGroupProfile.get("files");
+		
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, groupId, null);
+		if (group != null) {
+			group.setDescription(txtaGroupDesc);
+			group.setName(txtGroupName);
+			if(!groupImgFiles.isEmpty()) {
+				for(int i=0; i < groupImgFiles.subList(0, groupImgFiles.size()).size(); i++) {
+					Map<String, String> file = groupImgFiles.get(i);
+					String profileFileId = file.get("fileId");
+					String profileFileName = file.get("fileName");
+					String txtGroupProfilePicture = getDocManager().insertProfilesFile(profileFileId, profileFileName, group.getId() + "_p");
+					group.setPicture(txtGroupProfilePicture);
+				}
+			}
+		}
+		
+		String rdoGroupMaxMembers = (String)frmGroupSpaceSetting.get("rdoGroupMaxMembers"); 
+		String txtGroupMaxMembers = (String)frmGroupSpaceSetting.get("txtGroupMaxMembers"); 
+		String rdoGroupAutoApproval = (String)frmGroupSpaceSetting.get("rdoGroupAutoApproval"); 
+		
+		if (rdoGroupMaxMembers != null && rdoGroupMaxMembers.equalsIgnoreCase("UserDefined")) {
+			group.setMaxMember(CommonUtil.isEmpty(txtGroupMaxMembers) ? 0 : Integer.parseInt(txtGroupMaxMembers));
+		} else {
+			group.setMaxMember(-1);
+		}
+		if (!CommonUtil.isEmpty(rdoGroupAutoApproval) && rdoGroupAutoApproval.equalsIgnoreCase("true")) {
+			group.setAutoApproval(CommonUtil.toBoolean(rdoGroupAutoApproval));
+		} else {
+			group.setAutoApproval(false);
+		}
+		
+		SwManagerFactory.getInstance().getSwoManager().setGroup(userId, group, null);
 		
 	}
 	@Override
@@ -1708,6 +2177,11 @@ public class CommunityServiceImpl implements ICommunityService {
 	@Override
 	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
 		return SmartTest.getAvailableChatter();
+	}
+	@Override
+	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
+		// 테스트용도이니 구현바람.
+		return searchCommunityMember(communityId, key);
 	}
 	@Override
 	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -2001,19 +2475,18 @@ public class CommunityServiceImpl implements ICommunityService {
 		String fileGroupId = (String)imgDepartmentProfile.get("groupId");   
 		List<Map<String, String>> deptImgFiles = (ArrayList<Map<String,String>>)imgDepartmentProfile.get("files");
 		
-//		if(!deptImgFiles.isEmpty()) {
-//			for(int i=0; i < deptImgFiles.subList(0, deptImgFiles.size()).size(); i++) {
-//				Map<String, String> fileMap = deptImgFiles.get(i);
-//				String groupFileId = fileMap.get("fileId");
-//				String groupFileName = fileMap.get("fileName");
-//			}
-//		}
-		
 		SwoDepartment dept = SwManagerFactory.getInstance().getSwoManager().getDepartment(userId, departmentId, null);
 		if (dept != null) {
 			dept.setDescription(txtaDepartmentDesc);
-			//TODO
-			//dept.setImage();
+			if(!deptImgFiles.isEmpty()) {
+				for(int i=0; i < deptImgFiles.subList(0, deptImgFiles.size()).size(); i++) {
+					Map<String, String> file = deptImgFiles.get(i);
+					String profileFileId = file.get("fileId");
+					String profileFileName = file.get("fileName");
+					String txtDepartmentProfilePicture = getDocManager().insertProfilesFile(profileFileId, profileFileName, dept.getId() + "_p");
+					dept.setPicture(txtDepartmentProfilePicture);
+				}
+			}
 		}
 		SwManagerFactory.getInstance().getSwoManager().setDepartment(userId, dept, null);
 		getSwoManager().getDepartmentExtend(userId, departmentId, false);

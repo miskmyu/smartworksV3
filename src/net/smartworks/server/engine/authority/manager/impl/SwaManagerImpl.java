@@ -20,6 +20,8 @@ import net.smartworks.server.engine.authority.exception.SwaException;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
+import net.smartworks.server.engine.authority.model.SwaGroup;
+import net.smartworks.server.engine.authority.model.SwaGroupCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
@@ -760,6 +762,176 @@ public class SwaManagerImpl extends AbstractManager implements ISwaManager {
 			if (list == null || list.isEmpty())
 				return null;
 			SwaDepartment[] objs = new SwaDepartment[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaGroup getAuthGroup(String user, String objId, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				SwaGroup obj = (SwaGroup)this.get(SwaGroup.class, objId);
+				return obj;
+			} else {
+				SwaGroupCond cond = new SwaGroupCond();
+				cond.setObjId(objId);
+				return getAuthGroup(user, cond, level);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaGroup getAuthGroup(String user, SwaGroupCond cond, String level) throws SwaException {
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		SwaGroup[] objs = getAuthGroups(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		try {
+			if (objs.length != 1)
+				throw new SwaException("More than 1 Object");
+		} catch (SwaException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return objs[0];
+	}
+	@Override
+	public void setAuthGroup(String user, SwaGroup obj, String level) throws SwaException {
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (SwaException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthGroup(String user, String objId) throws SwaException {
+		try {
+			remove(SwaGroup.class, objId);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public void removeAuthGroup(String user, SwaGroupCond cond) throws SwaException {
+		SwaGroup obj = getAuthGroup(user, cond, null);
+		if (obj == null)
+			return;
+		removeAuthGroup(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, SwaGroupCond cond) throws Exception {
+		
+		String objId = null;
+		String groupId = null;
+		String groupAuthType = null;
+		String groupAuthTypeLike = null;
+		String roleKey = null;
+		String roleKeyLike = null;
+		String customUser = null;
+		String customUserLike = null;
+		String adminOrCustomUserLike = null;
+		
+		if (cond != null) {
+			objId = cond.getObjId();
+			groupId = cond.getGroupId();
+			groupAuthType = cond.getGroupAuthType();
+			groupAuthTypeLike = cond.getGroupAuthTypeLike();
+			roleKey = cond.getRoleKey();
+			roleKeyLike = cond.getRoleKeyLike();
+			customUser = cond.getCustomUser();
+			customUserLike = cond.getCustomUserLike();
+			adminOrCustomUserLike = cond.getAdminOrCustomUserLike();
+			
+		}
+		buf.append(" from SwaGroup obj");
+		buf.append(" where obj.objId is not null");
+		Map filterMap = new HashMap();
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (groupId != null)
+				buf.append(" and obj.groupId = :groupId");
+			if (groupAuthType != null)
+				buf.append(" and obj.groupAuthType = :groupAuthType");
+			if (groupAuthTypeLike != null)
+				buf.append(" and obj.groupAuthType like :groupAuthTypeLike");
+			if (roleKey != null)
+				buf.append(" and obj.roleKey = :roleKey");
+			if (roleKeyLike != null)
+				buf.append(" and obj.roleKey like :roleKeyLike");
+			if (customUser != null)
+				buf.append(" and obj.customUser = :customUser");
+			if (customUserLike != null)
+				buf.append(" and obj.customUser like :customUserLike");
+			if (adminOrCustomUserLike != null)
+				buf.append(" and (obj.customUser like :adminOrCustomUserLike or obj.roleKey like '%admin%')");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (groupId != null)
+				query.setString("groupId", groupId);
+			if (groupAuthType != null)
+				query.setString("groupAuthType", groupAuthType);
+			if (groupAuthTypeLike != null)
+				query.setString("groupAuthType", CommonUtil.toLikeString(groupAuthTypeLike));
+			if (roleKey != null)
+				query.setString("roleKey", roleKey);
+			if (roleKeyLike != null)
+				query.setString("roleKey", CommonUtil.toLikeString(roleKeyLike));
+			if (customUser != null)
+				query.setString("customUser", customUser);
+			if (customUserLike != null)
+				query.setString("customUserLike", CommonUtil.toLikeString(customUserLike));
+			if (adminOrCustomUserLike != null)
+				query.setString("adminOrCustomUserLike", CommonUtil.toLikeString(adminOrCustomUserLike));
+		}
+		return query;
+	}
+	@Override
+	public long getAuthGroupSize(String user, SwaGroupCond cond) throws SwaException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf,cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new SwaException(e);
+		}
+	}
+	@Override
+	public SwaGroup[] getAuthGroups(String user, SwaGroupCond cond, String level) throws SwaException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			SwaGroup[] objs = new SwaGroup[list.size()];
 			list.toArray(objs);
 			return objs;
 		} catch (Exception e) {
