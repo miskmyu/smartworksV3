@@ -834,7 +834,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update SwoDepartment set");
 				buf.append(" companyId=:companyId, parentId=:parentId, type=:type, name=:name, description=:description,");
-				buf.append(" domainId=:domainId,");
+				buf.append(" domainId=:domainId, picture=:picture,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
 				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate");
 				buf.append(" where id=:id");
@@ -845,6 +845,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoDepartment.A_NAME, obj.getName());
 				query.setString(SwoDepartment.A_DESCRIPTION, obj.getDescription());
 				query.setString(SwoDepartment.A_DOMAINID, obj.getDomainId());
+				query.setString(SwoDepartment.A_PICTURE, obj.getPicture());
 				query.setTimestamp(SwoDepartment.A_CREATIONDATE, obj.getCreationDate());
 				query.setString(SwoDepartment.A_CREATIONUSER, obj.getCreationUser());
 				query.setTimestamp(SwoDepartment.A_MODIFICATIONUSER, obj.getModificationDate());
@@ -1012,7 +1013,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.id, obj.companyId, obj.parentId, obj.type, obj.name, obj.description,");
-				buf.append(" obj.domainId,");
+				buf.append(" obj.domainId, obj.picture,");
 				buf.append(" obj.creationUser, obj.creationDate,");
 				buf.append(" obj.modificationUser, obj.modificationDate");
 			}
@@ -1033,6 +1034,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setName((String)fields[j++]);
 					obj.setDescription((String)fields[j++]);
 					obj.setDomainId(((String)fields[j++]));
+					obj.setPicture(((String)fields[j++]));
 					obj.setCreationUser(((String)fields[j++]));
 					obj.setCreationDate(((Timestamp)fields[j++]));
 					obj.setModificationUser(((String)fields[j++]));
@@ -2458,7 +2460,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 
 		StringBuffer buff = new StringBuffer();
 		buff.append("	select new net.smartworks.server.engine.organization.model.SwoDepartmentExtend(");
-		buff.append("          id, name, description, parentId)");
+		buff.append("          id, name, description, parentId, picture)");
 		buff.append("     from SwoDepartment");
 		buff.append("    where id = :id");
 		Query query = this.getSession().createQuery(buff.toString());
@@ -2693,7 +2695,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update SwoGroup set");
-				buf.append(" companyId=:companyId, name=:name, groupLeader=:groupLeader, groupType=:groupType, status=:status, picture=:picture, description=:description,");
+				buf.append(" companyId=:companyId, name=:name, groupLeader=:groupLeader, groupType=:groupType, status=:status, picture=:picture, description=:description, maxMember=:maxMember, autoApproval=:autoApproval, ");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
 				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate");
 				buf.append(" where id=:id");
@@ -2705,6 +2707,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString(SwoGroup.A_STATUS, obj.getStatus());
 				query.setString(SwoGroup.A_PICTUTRE, obj.getPicture());
 				query.setString(SwoGroup.A_DESCRIPTION, obj.getDescription());
+				query.setInteger(SwoGroup.A_MAXMEMBER, obj.getMaxMember());
+				query.setBoolean(SwoGroup.A_AUTOAPPROVAL, obj.isAutoApproval());
 				query.setString(SwoGroup.A_CREATIONUSER, obj.getCreationUser());
 				query.setTimestamp(SwoGroup.A_CREATIONDATE, obj.getCreationDate());
 				query.setString(SwoGroup.A_MODIFICATIONUSER, obj.getModificationUser());
@@ -2969,7 +2973,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.id, obj.companyId, obj.name, obj.groupLeader, obj.groupType, obj.status, obj.picture, obj.description,");
+				buf.append(" obj.id, obj.companyId, obj.name, obj.groupLeader, obj.groupType, obj.status, obj.picture, obj.description, obj.maxMember, obj.autoApproval, ");
 				buf.append(" obj.creationUser, obj.creationDate,");
 				buf.append(" obj.modificationUser, obj.modificationDate");
 			}
@@ -2991,6 +2995,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setStatus((String)fields[j++]);
 					obj.setPicture((String)fields[j++]);
 					obj.setDescription((String)fields[j++]);
+					obj.setMaxMember((Integer)fields[j++]);
+					obj.setAutoApproval((Boolean)fields[j++]);
 					obj.setCreationUser((String)fields[j++]);
 					obj.setCreationDate((Timestamp)fields[j++]);
 					obj.setModificationUser((String)fields[j++]);

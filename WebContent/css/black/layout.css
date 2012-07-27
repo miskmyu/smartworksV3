@@ -578,7 +578,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:83%} /* Body Title로 들어갈 때 */
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:96px; height:20px} /* 전자결재 - 결재선 */
 .noti_in { margin-left:34px; line-height: 14px} /* img profile_size_c 뒤에 옴 */
-.noti_in_s { margin-left:26px; line-height: 14px} /* img profile_size_s 뒤에 옴 */
+.noti_in_s { margin-left:26px; line-height: 13px} /* img profile_size_s 뒤에 옴 */
 .noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* img profile_size_m 뒤에 옴 */
 .noti_in_m + div {line-height: 19px; padding:0 0 0 58px}
 .js_content_list .noti_in_m {padding:0 0 0 87px} /* 처리할 업무 List */
@@ -673,10 +673,9 @@ button.space {height: 18px; padding: 1px 3px}
 .mail_list_section textarea { width:99.5%; height:360px; overflow-y: auto}
 .mail_list_section .view_title {border-bottom: 1px solid #E8E8E8; color: #454545; overflow: hidden; position: relative; width: auto}
 .mail_list_section .view_title h1 {color: #333333; font-size: 13px; font-weight: bold; line-height: 18px; margin: 10px 0 5px 0; overflow: hidden; float:left; padding:0; line-height:18px}
-.mail_list_section .view_title dl { clear:both; font-size:12px; color:#777777; margin:0 0 10px; overflow:hidden}
-.mail_list_section .view_title dt, .mail_list_section .view_title dd { float:left}
-.mail_list_section .view_title dt { clear:both; min-width:65px; text-align:right}
-.mail_list_section .view_title dd { margin:0 0 0 5px}
+.mail_list_section .view_title dl { clear:both; font-size:12px; margin:0 0 10px; overflow:hidden}
+.mail_list_section .view_title dt { clear:both; float:left; min-width:65px; text-align:right; color:#919191}
+.mail_list_section .view_title dd { margin:0 0 0 70px; word-wrap: break-word}
 .mail_list_section .read_frame { margin:10px}
 .nav_mail_list {height: 16px; vertical-align: top !important}
 .nav_mail_list span {vertical-align: top !important; color: #FFA24D}
@@ -723,6 +722,7 @@ button.space {height: 18px; padding: 1px 3px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 .bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
+.bul_gray {background: url("../../images/dot-gray.gif")no-repeat; padding:0 0 0 7px; line-height:15px}
 
 /* Line Style */
 .solid_line { border-top:2px solid #999999; width:100%}

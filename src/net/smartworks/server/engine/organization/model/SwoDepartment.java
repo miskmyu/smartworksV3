@@ -30,11 +30,13 @@ public class SwoDepartment extends SwoObject {
 	public static final String A_PARENTID = "parentId";
 	public static final String A_TYPE = "type";
 	public static final String A_DESCRIPTION = "description";
+	public static final String A_PICTURE = "picture";
 
 	private String companyId;
 	private String parentId;
 	private String type;
 	private String description;
+	private String picture;
 
 	public SwoDepartment() {
 		super();
@@ -224,6 +226,12 @@ public class SwoDepartment extends SwoObject {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getPicture() {
+		return picture;
+	}
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 }

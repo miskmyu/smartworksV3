@@ -8,17 +8,26 @@
 
 package net.smartworks.server.engine.organization.model;
 
+import net.smartworks.model.community.Community;
+import net.smartworks.server.engine.common.util.CommonUtil;
+
 public class SwoDepartmentExtend {
 
 	public SwoDepartmentExtend() {
 		super();
 	}
 
-	public SwoDepartmentExtend(String id, String name, String description, String parentId) {
+	public SwoDepartmentExtend(String id, String name, String description, String parentId, String picture) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.parentId = parentId;
+		if(!CommonUtil.isEmpty(picture)) {
+			String extension = picture.lastIndexOf(".") > 0 ? picture.substring(picture.lastIndexOf(".") + 1) : null;
+			String pictureId = picture.substring(0, (picture.length() - extension.length())-1);
+			this.bigPictureName = pictureId + Community.IMAGE_TYPE_ORIGINAL + "." + extension;
+			this.smallPictureName = pictureId + Community.IMAGE_TYPE_THUMB + "." + extension;
+		}
 	}
 
 	private String id = null;

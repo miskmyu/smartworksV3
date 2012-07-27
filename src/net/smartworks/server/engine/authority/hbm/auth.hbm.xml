@@ -34,5 +34,14 @@
 		<property name="roleKey" type="string" length="50"/>
 		<property name="customUser" type="string" length="4000"/>
 	</class>
+	<class name="SwaGroup" table="SWAuthGroup">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="groupId" type="string" length="100"/>
+		<property name="groupAuthType" type="string" length="50"/>
+		<property name="roleKey" type="string" length="50"/>
+		<property name="customUser" type="string" length="4000"/>
+	</class>
 	
 </hibernate-mapping>

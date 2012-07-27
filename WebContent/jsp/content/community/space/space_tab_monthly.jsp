@@ -169,7 +169,7 @@
 						<%
 						}
 						%>
-						<div>
+						<div class="space_content_area">
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWeeks) && tasksByWeeks.length >i && !SmartUtil.isBlankObject(tasksByWeeks[i])){
 								session.setAttribute("taskHistories", tasksByWeeks[i]);

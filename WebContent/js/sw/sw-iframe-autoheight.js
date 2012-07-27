@@ -14,12 +14,8 @@ var setHeight = function(e){
     if(e.contentDocument){
 //        e.height = e.contentDocument.body.offsetHeight + 35; //높이 조절
         e.height = e.contentDocument.body.scrollHeight + 35; //높이 조절
-        console.log('1contentDocument scrollHeight = ', e.contentDocument.body.scrollHeight, ', offsetHeight = ', e.contentDocument.body.offsetHeight);
-        console.log('1document scrollHeight = ', e.contentWindow.document.body.scrollHeight, ', offsetHeight = ', e.contentWindow.document.body.offsetHeight);
     } else {
         e.height = e.contentWindow.document.body.scrollHeight + 35;
-        console.log('2contentDocument scrollHeight = ', e.contentDocument.body.scrollHeight, ', offsetHeight = ', e.contentDocument.body.offsetHeight);
-        console.log('2document scrollHeight = ', e.contentWindow.document.body.scrollHeight, ', offsetHeight = ', e.contentWindow.document.body.offsetHeight);
     }
 };
 

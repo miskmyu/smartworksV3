@@ -413,9 +413,9 @@ public class CalendarServiceImpl implements ICalendarService {
 					WorkCategoryInfo workCategoryInfo = new WorkCategoryInfo(swdRecordExtends[0].getParentCtgId(), swdRecordExtends[0].getParentCtg());
 
 					WorkInfo workInfo = new SmartWorkInfo(swdRecord.getFormId(), swdRecord.getFormName(), type, workGroupInfo, workCategoryInfo);
-
-					eventInstanceInfo.setWork(workInfo);
-*/					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
+*/	
+					eventInstanceInfo.setWork(ModelConverter.getWorkInfoByPackageId(workId));
+					eventInstanceInfo.setLastModifier(ModelConverter.getUserInfoByUserId(swdRecord.getModificationUser()));
 					eventInstanceInfo.setLastModifiedDate(new LocalDate((swdRecord.getModificationDate()).getTime()));
 
 					SwdDataField[] swdDataFields = swdRecord.getDataFields();
