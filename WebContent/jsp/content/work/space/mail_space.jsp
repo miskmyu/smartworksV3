@@ -24,8 +24,8 @@
 
 	MailInstance instance = smartWorks.getMailInstanceById(folderId, msgId, MailFolder.SEND_TYPE_NONE);
 
-	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
-	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
+	String targetPrev = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getPrevMsgId();
+	String targetNext = "mail_space.sw?folderId=" + folderId + "&msgId=" + instance.getNextMsgId();
 
 	MailFolder mailFolder = instance.getMailFolder();
 %>
@@ -51,14 +51,9 @@
 					</div>
 				</div>
 
-				<!-- 메일 검색 -->
-				<div class="mail_srch">
-					<div class="srch_wh srch_wsize_mail">
-						<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key='search.search_mail'/>" title="<fmt:message key='search.search_mail'/>">
-						<button onclick="" title="<fmt:message key='search.search'/>"></button>
-					</div>
+				<div class="fr">
+                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 				</div>
-				<!-- 메일 검색//-->
 			    			    
 			    <div class="solid_line cb"></div>
 			</div>
@@ -93,8 +88,8 @@
 				
 				<!-- 이전 다음 목록 버튼 -->
 				<div class="move_btn_space top">
-					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
-					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
 					<span><a href="<%=lastHref%>" class="mr5 js_content"><fmt:message key='common.button.list'/></a></span>
 				</div>
 				<!-- 이전 다음 목록 버튼 //-->
@@ -155,8 +150,8 @@
 					
 				<!-- 이전 다음 목록 버튼 -->
 				<div class="move_btn_space bottom">
-					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
-					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_npage" title="<fmt:message key='common.button.next'/>"><a <%if(!SmartUtil.isBlankObject(instance.getPrevMsgId())){ %>href="<%=targetPrev%>" class="js_content"<%} %>> </a></span>
+					<span class="icon_arr_ppage" title="<fmt:message key='common.button.prev'/>"><a <%if(!SmartUtil.isBlankObject(instance.getNextMsgId())){ %>href="<%=targetNext%>" class="js_content"<%} %>> </a></span>
 					<span><a href="<%=lastHref%>" class="mr5 js_content"><fmt:message key='common.button.list'/></a></span>
 				</div>
 				<!-- 이전 다음 목록 버튼 //-->

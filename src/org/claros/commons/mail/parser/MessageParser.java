@@ -124,7 +124,8 @@ public class MessageParser {
 	 */
 	private static ArrayList fetchParts(Part p, ArrayList parts) {
 		if (p == null) return null;
-
+		System.setProperty("mail.mime.base64.ignoreerrors", "true");
+		
 		try {
             if (!p.isMimeType("text/rfc822-headers") && p.isMimeType("text/*")) {
             	try {

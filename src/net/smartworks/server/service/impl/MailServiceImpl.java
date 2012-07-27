@@ -1041,10 +1041,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
-							attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
-							attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
-							attachments[count].setPart(tmp);
-							count++;
+							if( !fileName.equals("Html Body")){
+								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
+								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
+								attachments[count].setPart(tmp);
+								count++;
+							}
 						}
 					}
 				}
