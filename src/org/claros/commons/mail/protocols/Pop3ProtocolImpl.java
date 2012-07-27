@@ -77,12 +77,14 @@ public class Pop3ProtocolImpl implements Protocol {
 				if (profile.getFetchSSL() != null && profile.getFetchSSL().toLowerCase().equals("true")) {
 					Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider());
 					
-					Security.setProperty("ssl.SocketFactory.provider", "org.claros.commons.mail.protocols.DummySSLSocketFactory");
+//					Security.setProperty("ssl.SocketFactory.provider", "org.claros.commons.mail.protocols.DummySSLSocketFactory");
+//					Security.setProperty("ssl.SocketFactory.provider", "javax.net.ssl.SSLSocketFactory");
 					props.setProperty("mail.store.protocol", "pop3");
 					props.setProperty("mail.pop3.host", profile.getFetchServer());
 					props.setProperty("mail.pop3.port", profile.getFetchPort());
 				      
 					props.setProperty("mail.pop3.socketFactory.class", "org.claros.commons.mail.protocols.DummySSLSocketFactory");
+//					props.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 					props.setProperty("mail.pop3.socketFactory.fallback", "false");
 					props.setProperty("mail.pop3.port", profile.getFetchPort());
 					props.setProperty("mail.pop3.socketFactory.port", profile.getFetchPort());

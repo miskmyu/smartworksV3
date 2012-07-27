@@ -116,7 +116,7 @@ public class Smtp {
 			mimeMsg.addHeader("Sensitivity", EmailSensitivity.toStringValue(sensitivity));
 		}
 
-		String charset = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.charset");
+		String charset = "utf-8";
 		
 		mimeMsg.setSubject(MimeUtility.encodeText(subject,charset,null));
 		ArrayList parts = msg.getParts();
