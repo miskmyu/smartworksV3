@@ -1077,8 +1077,8 @@ public class CommunityServiceImpl implements ICommunityService {
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
 				//등록할수 있는 그룹
 				
-//				GroupInfo[] groupInfos = getMyGroups();
-				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
+				GroupInfo[] groupInfos = getMyGroups();
+//				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
 				
 				int departmentInfosLength = departmentInfos.length;
 				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
