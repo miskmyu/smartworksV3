@@ -1488,8 +1488,9 @@ $(function() {
 		var input = $(targetElement(e));
 		var workSpacePage = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_pwork_space_page');
+		if(isEmpty(workSpacePage)) workSpacePage = input.parents('.js_mail_space_page');
 		if(isEmpty(workSpacePage)) return false;
-		var target = $('#content');
+		var isMailSpace = workSpacePage.hasClass('js_mail_space_page');
 		var hostNPort = getHostNPort();
 		var header = 	'<link href="' + hostNPort + '/smartworksV3/css/default.css" type="text/css" media="all" rel="stylesheet" />' +
 		'<link href="' + hostNPort + '/smartworksV3/css/black/layout_2.css" type="text/css" media="all" rel="stylesheet" />' +
@@ -1504,27 +1505,32 @@ $(function() {
 		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
 		var bottomLogo = $('<div class="footer"><img src="' + hostNPort + '/smartworksV3/images/footer_sw_logo.jpg"></div>');
 		var body = $('ul.portlet_r').clone();
-		body.find('#js_copy_address').parents('.txt_btn').remove();
-		body.find('.js_toggle_forward_btn').remove();
-		body.find('.js_toggle_approval_btn').remove();
-		body.find('.js_email_content_btn').remove();
-		body.find('.js_print_content_btn').remove();
-		body.find('.js_view_instance_diagram').remove();
-		body.find('.body_titl_pic .solid_line').before(topLogo);
-//		body.find('.js_instance_tasks_left').remove();
-//		body.find('.js_instance_tasks_right').remove();
-//		body.find('.js_task_start').remove();
-//		body.find('.js_task_stop').remove();
-//		body.find('.js_instance_task_arrow').remove();
-//		body.find('.js_instance_tasks li.selected').siblings().remove();
-		body.find('.js_form_content').removeClass('up');
-		body.find('.glo_btn_space span.btn_gray').remove();
-		body.find('.glo_btn_space').append(bottomLogo);
-		body.find('a').attr('userDetail', '');
-		body.find('textarea').css({height:"56px"});
+		if(isMailSpace){
+			body = $('ul.portlet_r .mail_list_section').clone();
+			body.find('.move_btn_space span').remove();
+		}else{
+			body.find('#js_copy_address').parents('.txt_btn').remove();
+			body.find('.js_toggle_forward_btn').remove();
+			body.find('.js_toggle_approval_btn').remove();
+			body.find('.js_email_content_btn').remove();
+			body.find('.js_print_content_btn').remove();
+			body.find('.js_view_instance_diagram').remove();
+			body.find('.body_titl_pic .solid_line').before(topLogo);
+	//		body.find('.js_instance_tasks_left').remove();
+	//		body.find('.js_instance_tasks_right').remove();
+	//		body.find('.js_task_start').remove();
+	//		body.find('.js_task_stop').remove();
+	//		body.find('.js_instance_task_arrow').remove();
+	//		body.find('.js_instance_tasks li.selected').siblings().remove();
+			body.find('.js_form_content').removeClass('up');
+			body.find('.glo_btn_space span.btn_gray').remove();
+			body.find('.glo_btn_space').append(bottomLogo);
+			body.find('a').attr('userDetail', '');
+			body.find('textarea').css({height:"56px"});
+		}
 		body.html(body.html().replace(/\"images\//g, "\"" + hostNPort + "/smartworksV3/images/"));
 		body.html(body.html().replace(/textarea/g,  "div"));
-		var contents = '<div id="wrap" style="overflow:auto;"><div>' + body.html() + '</div><div class="info tr">' + smartMessage.get("printUserText") + ' : ' +  currentUser.longName + ' / ' +  smartMessage.get("printTimeText") + ' : ' + printCurrentTime() + '</div></div>';
+		var contents = '<div id="' + ((isMailSpace) ? 'wrap_noborder' : 'wrap') + '" style="overflow:auto;"><div>' + body.html() + '</div><div class="info tr">' + smartMessage.get("printUserText") + ' : ' +  currentUser.longName + ' / ' +  smartMessage.get("printTimeText") + ' : ' + printCurrentTime() + '</div></div>';
 		smartPop.printContent(header, contents);
 		return false;
 	});
