@@ -60,6 +60,7 @@ public class Smtp {
 		if (profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")) {
 			if (profile.getSmtpSSL() != null && profile.getSmtpSSL().toLowerCase().equals("true")) {
 				props.setProperty("mail.smtps.auth", "true");
+				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			} else {
 				props.setProperty("mail.smtp.auth", "true");
 			}
@@ -115,7 +116,7 @@ public class Smtp {
 			mimeMsg.addHeader("Sensitivity", EmailSensitivity.toStringValue(sensitivity));
 		}
 
-		String charset = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.charset");
+		String charset = "utf-8";
 		
 		mimeMsg.setSubject(MimeUtility.encodeText(subject,charset,null));
 		ArrayList parts = msg.getParts();
