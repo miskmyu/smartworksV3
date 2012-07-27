@@ -1458,6 +1458,7 @@ $(function() {
 //		body.find('.js_instance_tasks li.selected').siblings().remove();
 		body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
+		body.find('.glo_btn_space span.js_space_error_message').remove();
 		body.find('.glo_btn_space').append(bottomLogo);
 		body.find('a').attr('userDetail', '');
 		body.find('textarea').css({height:"56px"});
