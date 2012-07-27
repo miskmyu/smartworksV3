@@ -1441,7 +1441,7 @@ $(function() {
 		'<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
 		var companyLogoSrc = $('.js_company_logo_src').attr('src');
 		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
-		var bottomLogo = $('<div class="footer"><div class="logo"> </div></div>');
+		var bottomLogo = $('<div class="footer"><img src="../images/footer_sw_logo.jpg"></div>');
 		var body = $('ul.portlet_r').clone();
 		body.find('#js_copy_address').parents('.txt_btn').remove();
 		body.find('.js_toggle_forward_btn').remove();
@@ -1458,6 +1458,7 @@ $(function() {
 //		body.find('.js_instance_tasks li.selected').siblings().remove();
 		body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
+		body.find('.glo_btn_space span.js_space_error_message').remove();
 		body.find('.glo_btn_space').append(bottomLogo);
 		body.find('a').attr('userDetail', '');
 		body.find('textarea').css({height:"56px"});
@@ -1501,7 +1502,7 @@ $(function() {
 //		'<link href="css/black/form.css" type="text/css" media="all" rel="stylesheet" />';
 		var companyLogoSrc = $('.js_company_logo_src').attr('src');
 		var topLogo = $('<div class="company_logo"><img src="' + companyLogoSrc + '" /><div>' + currentUser.company + '</div></div>');
-		var bottomLogo = $('<div class="footer"><div class="logo"> </div></div>');
+		var bottomLogo = $('<div class="footer"><img src="../images/footer_sw_logo.jpg"></div>');
 		var body = $('ul.portlet_r').clone();
 		body.find('#js_copy_address').parents('.txt_btn').remove();
 		body.find('.js_toggle_forward_btn').remove();
