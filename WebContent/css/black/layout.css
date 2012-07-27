@@ -21,7 +21,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 /*Notice Icon*/
 .notice_icons {display:block; height:29px; float:left; margin:0 0 0 15px; z-index:40}
 .notice_icons a:link, a:visited, a:hover, a:focus, a:active {text-decoration: none}
-.notice_icons li {float:left; margin-right:4px; width:34px; height:31px}
+.notice_icons li {float:left; margin-right:4px; width:34px}
 .notice_icons > span {vertical-align:bottom}
 .icon_info a {background: url("../../images/header_nico.png") no-repeat scroll -5px -14px transparent; display:block; height:30px; position:relative}
 .icon_info a:hover  {background: url("../../images/header_nico.png") no-repeat scroll -5px -55px transparent; display:block; height:30px; position:relative}
