@@ -404,15 +404,15 @@ public class SmartUtil {
 		String roleStr = (user.getRole() == User.USER_ROLE_LEADER) ? SmartMessage.getString("department.role.head") : SmartMessage.getString("department.role.member");
 		String info = "<div><span class='smartp_name'>" + user.getLongName() + "</span><div>";
 		if(!SmartUtil.isBlankObject(user.getDepartment())){
-			info = info + "<div class='smartp_info'>" + SmartMessage.getString("profile.title.department") + ": " + user.getDepartment().getName() + " (" + roleStr + ")</div>";
+			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.department") + ":</span> " + user.getDepartment().getName() + " (" + roleStr + ")</div>";
 		}
 		if(!SmartUtil.isBlankObject(user.getPhoneNo())){
-			info = info + "<div class='smartp_info'>" + SmartMessage.getString("profile.title.phone_no") + ": " + user.getPhoneNo() + "</div>";
+			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.phone_no") + ":</span> " + user.getPhoneNo() + "</div>";
 		}
 		if(!SmartUtil.isBlankObject(user.getCellPhoneNo())){		
-			info = info + "<div class='smartp_info'>" + SmartMessage.getString("profile.title.cell_phone_no") + ": " + user.getCellPhoneNo() + "</div>";
+			info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.cell_phone_no") + ":</span> " + user.getCellPhoneNo() + "</div>";
 		}
-		info = info + "<div class='smartp_info'>" + SmartMessage.getString("profile.title.email") + ": " + user.getId() + "</div>";
+		info = info + "<div class='smartp_info'><span>" + SmartMessage.getString("profile.title.email") + ":</span> " + user.getId() + "</div>";
 		
 		return info;
 	}

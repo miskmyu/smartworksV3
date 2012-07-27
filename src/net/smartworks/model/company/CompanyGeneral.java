@@ -11,7 +11,7 @@ public class CompanyGeneral extends BaseObject {
 
 	public static final String PICTURE_PATH = SmartConfUtil.getInstance().getImageServer();
 	public static final String NO_LOGO_PATH = "images/";
-	public static final String DEFAULT_COMPANY_LOGO = "default_company_logo.jpg";
+	public static final String DEFAULT_COMPANY_LOGO = "default_company_logo.png";
 	public static final String DEFAULT_COMPANY_LOGIN_IMAGE = "login_img.gif";
 	public static final String PROFILES_DIR = "Profiles";
 
