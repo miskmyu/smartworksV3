@@ -762,4 +762,12 @@ alter table tsktask add tskIsApprovalSourceTask varchar(10)
 
 alter table tsktask add tskTargetApprovalStatus varchar(10)
 
+ALTER TABLE sworgdept add picture varchar(50);
 
+ALTER TABLE sworggroup add maxMember int;
+
+ALTER TABLE sworggroup add autoApproval bit;
+
+update sworggroup set maxmember='-1'
+
+update sworggroup set autoApproval='0'

@@ -21,6 +21,7 @@
 .smart_userinfo_section {width:300px; border: 1px solid #c7c7c7; background-color:#FFF}
 .pop_contents {padding: 10px; overflow:hidden}
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545}
+.smart_userinfo_section .userinfo_area {float:left; line-height:18px; margin-left:8px; width:160px}
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; padding-top:5px; font-size: 12px; line-height:19px}
@@ -69,7 +70,8 @@
 
 /* Smart User Info */
 .smartp_name { font-weight:bold; color:#3B5998}
-.smartp_info {}
+.smartp_info {background: url("../../images/dot_gray.gif")no-repeat 0 7px; padding:0 0 0 7px}
+.smartp_info > span {color:#919191}
 .smartp_btn_space {background-color: #c7c7c7; height: 19px; padding: 4px 5px 2px}
 .pop_icon_chat a {background: url("../../images/nav_img.png") no-repeat scroll -151px 0 transparent; display: inline-block; height: 19px; width:20px}
 .pop_icon_mail a {background: url("../../images/nav_img.png") no-repeat scroll -177px 0 transparent; display: inline-block; height: 19px; width:20px}

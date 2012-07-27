@@ -1735,7 +1735,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
 							if(fieldId.equals("1") || fieldId.equals("2")) {
 								if(!value.isEmpty())
-									value = LocalDate.convertStringToLocalDate(value).toLocalDateString2();
+									value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
 							}
 						} else {
 							if(type.equals("datetime")) {
@@ -2376,8 +2376,8 @@ public class InstanceServiceImpl implements IInstanceService {
 							value = StringUtil.subString(value, 0, 20, "...");
 					} else if(formId.equals(SmartForm.ID_EVENT_MANAGEMENT)) {
 						if(fieldId.equals("1") || fieldId.equals("2")) {
-							if(!value.isEmpty())
-								value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
+//							if(!value.isEmpty())
+//								value = LocalDate.convertStringToLocalDate(value).toGMTDateString();
 						}
 					}
 				} else if (fieldValue instanceof Integer) {

@@ -55,6 +55,7 @@ CREATE TABLE sworgdept (
 	name varchar(50),
 	description varchar(4000),
 	domainid varchar(50),
+	picture varchar(50),
 	workitemid varchar(50),
 	creator	varchar(50),
 	createdtime datetime,
@@ -2216,6 +2217,8 @@ CREATE TABLE SWOrgGroup (
 	status	varchar(1),
 	picture varchar(100),
 	description	varchar(4000),
+	maxMember int,
+	autoApproval bit,
 	creator	varchar(50),
 	createdTime	datetime,
 	modifier	varchar(50),
@@ -2444,6 +2447,15 @@ CREATE TABLE SwAuthDepartment (
 	id varchar(50) NOT NULL,
 	deptId varchar(100),
 	deptAuthType varchar(50),
+	roleKey varchar(50),
+	customUser varchar(4000),
+    primary key (id)
+);
+--그룹 권한
+CREATE TABLE SwAuthGroup (
+	id varchar(50) NOT NULL,
+	groupId varchar(100),
+	groupAuthType varchar(50),
 	roleKey varchar(50),
 	customUser varchar(4000),
     primary key (id)

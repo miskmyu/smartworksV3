@@ -11,6 +11,8 @@ package net.smartworks.server.engine.authority.manager;
 import net.smartworks.server.engine.authority.exception.SwaException;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
+import net.smartworks.server.engine.authority.model.SwaGroup;
+import net.smartworks.server.engine.authority.model.SwaGroupCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
@@ -47,4 +49,12 @@ public interface ISwaManager extends IManager {
 	public void removeAuthDepartment(String user, SwaDepartmentCond cond) throws SwaException;
 	public long getAuthDepartmentSize(String user, SwaDepartmentCond cond) throws SwaException;
 	public SwaDepartment[] getAuthDepartments(String user, SwaDepartmentCond cond, String level) throws SwaException;
+
+	public SwaGroup getAuthGroup(String user, String objId, String level) throws SwaException;
+	public SwaGroup getAuthGroup(String user, SwaGroupCond cond, String level) throws SwaException;
+	public void setAuthGroup(String user, SwaGroup obj, String level) throws SwaException;
+	public void removeAuthGroup(String user, String objId) throws SwaException;
+	public void removeAuthGroup(String user, SwaGroupCond cond) throws SwaException;
+	public long getAuthGroupSize(String user, SwaGroupCond cond) throws SwaException;
+	public SwaGroup[] getAuthGroups(String user, SwaGroupCond cond, String level) throws SwaException;
 }

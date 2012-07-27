@@ -72,7 +72,7 @@ smartPop = {
 					'<div class="pop_corner_all smart_userinfo_section">' + 
 						'<div class="pop_contents">' + 
 							'<img src="' + profile + '" class="profile_size_b fl">' + 
-							' <div class="pop_notice_section js_user_information"></div>' +
+							' <div class="js_user_information userinfo_area"></div>' +
 						'</div>' +
 						'<div class="smartp_btn_space">' +
 							'<div class="fr">' +
