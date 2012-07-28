@@ -490,6 +490,9 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 	var imageBoxs = SmartWorks.FormRuntime.ImageBoxBuilder.validate(form.find('.js_type_imageBox:visible'));
 	var videoYTBoxs = SmartWorks.FormRuntime.VideoYTBoxBuilder.validate(form.find('.js_type_videoYTBox:visible'));
 	var radioButtons = SmartWorks.FormRuntime.RadioButtonBuilder.validate(form.find('.js_type_radioButton:visible'));
+	var numberInputs = SmartWorks.FormRuntime.NumberInputBuilder.validate(form.find('.js_type_numberInput'));
+	var percentInputs = SmartWorks.FormRuntime.PercentInputBuilder.validate(form.find('.js_type_percentInput'));
+	var currencyInputs = SmartWorks.FormRuntime.CurrencyInputBuilder.validate(form.find('.js_type_currencyInput'));
 	var dataGrids = true;
 	var jq_validate = true;
 	
@@ -501,7 +504,7 @@ SmartWorks.GridLayout.validate = function(form, messageTarget){
 		jq_validate = $(this).validate({ showErrors: showErrors, ignore:":not(:visible)" }).form() && jq_validate;
 	});
 
-	var sw_validate = (fileFields && userFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && jq_validate);
+	var sw_validate = (fileFields && userFields && richEditors && refFormFields && imageBoxs && videoYTBoxs && dataGrids && radioButtons && numberInputs && percentInputs && currencyInputs && jq_validate);
 	if(!sw_validate || !jq_validate){
 		showErrors();
 	}

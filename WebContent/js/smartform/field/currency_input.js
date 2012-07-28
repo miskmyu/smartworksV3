@@ -16,10 +16,10 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 
-	var value = (options.dataField && parseFloat(options.dataField.value)) || 0;
+	var value = (options.dataField==null || isEmpty(options.dataField.value)) ? '' : parseFloat(options.dataField.value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
-
+	
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
@@ -32,19 +32,24 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
-		required = " class='js_currency_input fieldline tr required' ";
+		required = " class='js_currency_input fieldline tr sw_required' ";
 	}else{
 		required = " class='js_currency_input fieldline tr' ";
 	}
 	if(!options.refreshData)
 		$label.appendTo(options.container);
 	
+	
 	var $currency = null;
 	if(readOnly){
-		$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+		if(value=='')
+			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value);
+		else
+			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}else{	
 		$currency = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text" symbol="' + currency + '"'  + required + '></div>');
-		$currency.find('input').attr('value',value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+		if(value!='')
+			$currency.find('input').attr('value',value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -52,7 +57,7 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 	}
 	if(!options.refreshData){
 		$currency.appendTo(options.container);
-	}else{
+	}else if(value!=''){
 		if(readOnly)
 			options.container.find('.form_value').text(value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		else
@@ -169,9 +174,21 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.serializeObject = function(currencyI
 	for(var i=0; i<currencyInputs.length; i++){
 		var currencyInput = $(currencyInputs[i]);
 		var valueStr = currencyInput.find('input').attr('value');
-		//valueStr 에는 통화구분(ex: $, w..)이 들어오지 않는다. subString할 필요없어 보임
-		//currencyInputsJson[currencyInput.attr('fieldId')] = $.parseNumber( valueStr.substring(1, valueStr.length), {format:"-0,000.0", locale: currentUser.locale });
-		currencyInputsJson[currencyInput.attr('fieldId')] = $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale });
+		currencyInputsJson[currencyInput.attr('fieldId')] = isEmpty(valueStr) ? '' : $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale });
 	}
 	return currencyInputsJson;
+};
+
+SmartWorks.FormRuntime.CurrencyInputBuilder.validate = function(currencyInputs){
+	var currencyInputsValid = true;
+	for(var i=0; i<currencyInputs.length; i++){
+		var currencyInput = $(currencyInputs[i]);
+		var input = currencyInput.find('input.sw_required');
+		if(isEmpty(input)) continue;
+		if(isEmpty(input.attr('value'))){
+			input.addClass("sw_error");
+			currencyInputsValid = false;
+		}
+	}
+	return currencyInputsValid;
 };

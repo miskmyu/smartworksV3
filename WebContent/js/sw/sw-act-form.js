@@ -97,6 +97,7 @@ $(function() {
 	$('form[name="frmSmartForm"] .form_value input.js_number_input').live('blur', function(e) {
 		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
+		if(!isEmpty(input.attr('value'))) input.removeClass('sw_error');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -116,6 +117,7 @@ $(function() {
 	$('form[name="frmSmartForm"] .form_value input.js_currency_input').live('blur', function(e) {
 		var input = $(targetElement(e));
 		var forms = input.parents('form[name="frmSmartForm"]');
+		if(!isEmpty(input.attr('value'))) input.removeClass('sw_error');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -134,7 +136,10 @@ $(function() {
 
 	$('form[name="frmSmartForm"] .form_value input.js_percent_input').live('blur', function(e) {
 		var input = $(targetElement(e));
+		var value = input.attr('value');
+		if(value!='') input.attr('value', value+'%');
 		var forms = input.parents('form[name="frmSmartForm"]');
+		if(!isEmpty(input.attr('value'))) input.removeClass('sw_error');
 		var paramsJson = {};
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);

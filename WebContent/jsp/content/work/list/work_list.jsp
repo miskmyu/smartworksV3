@@ -109,7 +109,6 @@
 	selectListParam = function(progressSpan, isGray){
 		var pworkList = $('.js_space_work_list_page');
 		var forms = pworkList.find('form:visible');
-		console.log(forms);
 		var paramsJson = {};
 		var workId = pworkList.attr('workId');
 		paramsJson["href"] = "jsp/content/work/list/work_instance_list.jsp?workId=" + workId;
