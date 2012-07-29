@@ -421,6 +421,46 @@
 						</table>
 					</div>
 					<!-- 권한 //-->					
+
+					<!-- 권한 -->
+					<div class="mt10 gray_style">
+						<table>
+							<tr>
+								<th width="30%"><fmt:message key="common.security.title.builder"/></th>
+								<td width="70%" class="js_select_edit_builder">
+									<input name="chkBuilderPolicyAdministrator" disabled type="checkbox" <%if(work.getBuilderPolicy().isSystemAdministratorChecked()){ %>checked<%} %> /><label><fmt:message key="organization.user_level.administrator"/></label> 
+									<input name="chkBuilderPolicyCustom" type="checkbox" class="js_toggle_builder_policy_custom" <%if(work.getBuilderPolicy().isCustomChecked()){ %>checked<%} %> /><label><fmt:message key="common.security.custom"/></label>
+									<div class="js_builder_policy_custom" <%if(!work.getBuilderPolicy().isCustomChecked()) {%>style="display:none"<%} %>>
+										<span class="form_col js_type_userField" fieldId="txtBuilderPolicyCustoms" multiUsers="true">
+											<div class="w100 form_value">
+												<div class="icon_fb_space">
+													<div class="fieldline community_names js_community_names sw_required">
+														<%
+														UserInfo[] users = work.getBuilderPolicy().getCustoms();
+														if(!SmartUtil.isBlankObject(users)){
+															for(int i=0; i<users.length; i++){
+																UserInfo user = users[i];
+														%>
+																<span class="js_community_item user_select" comId="<%=user.getId() %>"><%=user.getLongName() %><a class="js_remove_community" href="">&nbsp;x</a></span>								
+														<%
+															}
+														}
+														
+														%>
+														<input class="m0 js_auto_complete" href="community_name.sw" type="text" style="width:100px">
+													</div>
+													<div class="js_community_list srch_list_nowid" style="display: none"></div>
+													<span class="js_community_popup"></span>
+													<a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+												</div>
+											</div>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- 권한 //-->					
 				<!-- 목록 //-->
 				</div>
 				<!-- 컨텐츠 //-->

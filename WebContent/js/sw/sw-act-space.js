@@ -1152,6 +1152,11 @@ $(function() {
 		input.nextAll('.js_space_policy_custom:first').toggle();		
 	});
 	
+	$('.js_toggle_builder_policy_custom').live('change', function(e){
+		var input = $(targetElement(e));
+		input.nextAll('.js_builder_policy_custom:first').toggle();		
+	});
+	
 	$('.js_select_group_space_tab').live('click', function(e){
 		var input = $(targetElement(e));
 		input.parent().addClass('current').siblings().removeClass('current');
