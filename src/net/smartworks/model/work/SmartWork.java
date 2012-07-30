@@ -4,6 +4,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.filter.info.SearchFilterInfo;
 import net.smartworks.model.report.info.ReportInfo;
 import net.smartworks.model.security.AccessPolicy;
+import net.smartworks.model.security.BuilderPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.WritePolicy;
 import net.smartworks.util.LocalDate;
@@ -35,6 +36,7 @@ public class SmartWork extends Work {
 	private AccessPolicy accessPolicy = new AccessPolicy();
 	private WritePolicy writePolicy = new WritePolicy();
 	private EditPolicy editPolicy = new EditPolicy();
+	private BuilderPolicy builderPolicy = new BuilderPolicy();
 	private String lastReportId;
 	private ReportInfo[] reports;
 	private String lastFilterId;
@@ -86,6 +88,12 @@ public class SmartWork extends Work {
 	}
 	public void setEditPolicy(EditPolicy editPolicy) {
 		this.editPolicy = editPolicy;
+	}
+	public BuilderPolicy getBuilderPolicy() {
+		return builderPolicy;
+	}
+	public void setBuilderPolicy(BuilderPolicy builderPolicy) {
+		this.builderPolicy = builderPolicy;
 	}
 	public String getLastReportId() {
 		return lastReportId;

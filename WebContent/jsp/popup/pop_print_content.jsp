@@ -37,7 +37,7 @@
 	</div>
 	<!-- 팝업 타이틀 //-->
 	<!-- 컨텐츠 -->
-	<div style="max-height: 600px;overflow:auto">
+	<div style="max-height: 540px;overflow:auto">
 		<iframe name="printFrame" id="printFrame" class="autoHeight" scrolling="no" style="border:none;width:100%;"></iframe>
 	</div>
 	<!-- 컨텐츠 //-->

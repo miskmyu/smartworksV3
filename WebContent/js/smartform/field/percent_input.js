@@ -16,7 +16,7 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 
-	var value = (options.dataField && parseFloat(options.dataField.value)) || 0;
+	var value = (options.dataField==null || isEmpty(options.dataField.value)) ? '' : parseFloat(options.dataField.value);
 	$entity = options.entity;
 	$graphic = $entity.find('graphic');
 	$format = $entity.find('format');
@@ -31,22 +31,28 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
-		required = " class='js_percent_input fieldline tr required' ";
+		required = " class='js_percent_input fieldline tr sw_required' ";
 	}else{
 		required = " class='js_percent_input fieldline tr' ";
 	}
 	if(!options.refreshData)
 		$label.appendTo(options.container);
-	
-	var percentValue = value + '%';
-		
+
 	var $percent = null;
 	
 	if (readOnly) {
-		$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(percentValue);
+		if(value==''){
+			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>');
+		}else{
+			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			$percent.text($percent.text() + "%");
+		}
 	} else {
 		$percent = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text"' + required + '/></div>');
-		$percent.find('input').attr('value', percentValue);
+		if(value!=''){
+			$percent.find('input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			$percent.find('input').attr('value', $percent.find('input').attr('value') + '%');
+		}
 	}
 
 	if ($graphic.attr('hidden') == 'true'){
@@ -55,52 +61,27 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 	}
 	if(!options.refreshData){
 		$percent.appendTo(options.container);
-	}else{
-		if(readOnly)
-			options.container.find('.form_value').text(percentValue);
-		else
-			options.container.find('.form_value input').attr('value', percentValue);
+	}else if(value!=''){
+		if(readOnly){
+			options.container.find('.form_value').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			options.container.find('.form_value').text(options.container.find('.form_value').text() + '%');
+		}else{
+			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			options.container.find('.form_value input').attr('value', options.container.find('.form_value input').attr('value') + '%');
+		}
 	}
 
 	if (readOnly) {
 		var $percentHiddenInput = $('#percentHiddenInput'+id);
 		if ($percentHiddenInput.length === 0) {
-			options.container.append('<input id="percentHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '%">');
+			options.container.append('<input id="percentHiddenInput'+id+'" type="hidden" name="' + id + '" value="' + value + '">');
 		} else {
-			$percentHiddenInput.attr('value', value + '%');
+			$percentHiddenInput.attr('value', value);
 		}
 	}
 	
 	return options.container;
 };
-
-$('input.js_percent_input').live('blur', function(e) {
-	$input = $(targetElement(e));
-	
-	var value = $input.attr('value');
-	
-	value = ($.parseNumber(value, {format: "-0,000.0", locale: currentUser.locale}) * 100) + '';
-	
-	var idx = value.lastIndexOf('%');
-	
-	if(idx === -1)
-	$input.attr('value', $.formatNumber(value, {format: "-#,###.#", locale: currentUser.locale}) + '%');
-});
-
-$('input.js_percent_input').live('focusin', function(e) {
-	$input = $(targetElement(e));
-	
-	var value = $input.attr('value');
-	
-	var idx = value.lastIndexOf('%');
-	
-	if(idx > -1)
-		value = value.substring(0, idx);
-	
-	value = ($.parseNumber(value, {format: "-0,000.0", locale: currentUser.locale}) / 100) + '';
-	
-	$input.attr('value', $.formatNumber(value, {format: "-#,###.#", locale: currentUser.locale}));
-});
 
 $('input.js_percent_input').live('keyup', function(e) {
 	var e = window.event || e;
@@ -121,6 +102,8 @@ $('input.js_percent_input').live('keyup', function(e) {
 			case 110: break; // . number block (Opera 9.63+ maps the "." from the number block to the "N" key (78) !!!)
 			case 190: break; // .
 			default:
+				value = $(this).attr('value');
+				if(value && value.length>0 && (value=='%' || value.substring(value.length-1, 1)=='%')) $(this).attr('value', value.substirng(0, value.length-1));
 				if($(this).attr('value') === '0-') $(this).attr('value', '-');
 				var value = $(this).attr('value');
 				var firstStr = value.substring(0,1);
@@ -129,7 +112,7 @@ $('input.js_percent_input').live('keyup', function(e) {
 					if(isEmpty(value) || (firstStr !== '-' && firstStr !== '.' && (firstStr<'0' || firstStr>'9')) || (((firstStr === '-' && secondStr !== '.') || firstStr === '.') && (secondStr<'0' || secondStr>'9'))){
 						$(this).attr('value', 0);
 					}
-				$(this).formatCurrency({ symbol: '' , colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+				$(this).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		}
 	}
 });
@@ -199,3 +182,17 @@ SmartWorks.FormRuntime.PercentInputBuilder.serializeObject = function(percentInp
 	return percentInputsJson;
 };
 
+
+SmartWorks.FormRuntime.PercentInputBuilder.validate = function(percentInputs){
+	var percentInputsValid = true;
+	for(var i=0; i<percentInputs.length; i++){
+		var percentInput = $(percentInputs[i]);
+		var input = percentInput.find('input.sw_required');
+		if(isEmpty(input)) continue;
+		if(isEmpty(input.attr('value'))){
+			input.addClass("sw_error");
+			percentInputsValid = false;
+		}
+	}
+	return percentInputsValid;
+};

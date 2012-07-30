@@ -15,10 +15,10 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
-	var value = (options.dataField && parseFloat(options.dataField.value)) || 0;
+	var value = (options.dataField==null || isEmpty(options.dataField.value)) ? '' : parseFloat(options.dataField.value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
-
+	
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
 	var id = $entity.attr('id');
 	var name = $entity.attr('name');
@@ -29,7 +29,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	var required = $entity.attr('required');
 	if(required === 'true' && !readOnly){
 		$label.addClass('required_label');
-		required = " class='js_number_input fieldline tr required' ";
+		required = " class='js_number_input fieldline tr sw_required' ";
 	}else{
 		required = " class='js_number_input fieldline tr' ";
 	}
@@ -38,10 +38,14 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	
 	var $number = null;
 	if(readOnly){
-		$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+		if(value=='')
+			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>');
+		else
+			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}else{	
 		$number = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text"' + required + '></div>');
-		$number.find('input').attr('value',value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+		if(value!='')
+			$number.find('input').attr('value',value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -50,7 +54,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	
 	if(!options.refreshData){
 		$number.appendTo(options.container);
-	}else{
+	}else if(value!=''){
 		if(readOnly)
 			options.container.find('.form_value').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		else
@@ -162,7 +166,21 @@ SmartWorks.FormRuntime.NumberInputBuilder.serializeObject = function(numberInput
 	for(var i=0; i<numberInputs.length; i++){
 		var numberInput = $(numberInputs[i]);
 		var valueStr = numberInput.find('input').attr('value');
-		numberInputsJson[numberInput.attr('fieldId')] = $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale })+'';
+		numberInputsJson[numberInput.attr('fieldId')] = isEmpty(valueStr) ? '' : $.parseNumber( valueStr, {format:"-0,000.0", locale: currentUser.locale })+'';
 	}
 	return numberInputsJson;
+};
+
+SmartWorks.FormRuntime.NumberInputBuilder.validate = function(numberInputs){
+	var numberInputsValid = true;
+	for(var i=0; i<numberInputs.length; i++){
+		var numberInput = $(numberInputs[i]);
+		var input = numberInput.find('input.sw_required');
+		if(isEmpty(input)) continue;
+		if(isEmpty(input.attr('value'))){
+			input.addClass("sw_error");
+			numberInputsValid = false;
+		}
+	}
+	return numberInputsValid;
 };

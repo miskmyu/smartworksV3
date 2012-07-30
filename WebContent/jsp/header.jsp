@@ -73,6 +73,7 @@ function logout() {
 			<img class="js_auto_picture js_company_logo_src" src="<%=companyLogo%>" />
 		</a>
 	</span>
+	<span class="line"> </span>
 </div>
 <!-- 회사 로고 및 연결 링크 //-->
 

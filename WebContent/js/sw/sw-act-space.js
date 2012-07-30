@@ -715,7 +715,6 @@ $(function() {
 	$('.js_check_all_file_instance').live('click', function(e){
 		var input = $(targetElement(e));
 		var fileInstanceList = input.parents('.js_file_list_page').find('.js_file_instance_list_page');
-		console.log('checked=', input.attr('checked'));
 		fileInstanceList.find('.js_check_file_instance').attr('checked', (input.attr('checked')=='checked'));
 		return true;
 	});
@@ -1151,6 +1150,11 @@ $(function() {
 	$('.js_toggle_policy_custom').live('change', function(e){
 		var input = $(targetElement(e));
 		input.nextAll('.js_space_policy_custom:first').toggle();		
+	});
+	
+	$('.js_toggle_builder_policy_custom').live('change', function(e){
+		var input = $(targetElement(e));
+		input.nextAll('.js_builder_policy_custom:first').toggle();		
 	});
 	
 	$('.js_select_group_space_tab').live('click', function(e){
