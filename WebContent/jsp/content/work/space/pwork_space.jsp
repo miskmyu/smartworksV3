@@ -124,7 +124,7 @@
 	            </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
-				<div class="fr">
+				<div class="">
 					<div class="fr">
 						<%
 						if(forwardedTask == null){
@@ -145,7 +145,7 @@
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->
-					<div class="cb">
+					<div class="fr">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
 	                <div class="cb" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
