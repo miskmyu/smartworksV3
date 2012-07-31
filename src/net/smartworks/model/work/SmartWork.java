@@ -1,6 +1,7 @@
 package net.smartworks.model.work;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.filter.info.SearchFilterInfo;
 import net.smartworks.model.report.info.ReportInfo;
 import net.smartworks.model.security.AccessPolicy;
@@ -8,6 +9,7 @@ import net.smartworks.model.security.BuilderPolicy;
 import net.smartworks.model.security.EditPolicy;
 import net.smartworks.model.security.WritePolicy;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class SmartWork extends Work {
 
@@ -185,5 +187,14 @@ public class SmartWork extends Work {
 	public boolean isEditable(){
 		if(isEditing || isRunning) return false;
 		return true;
+	}
+	
+	public boolean amIBuilderUser(){
+		if(SmartUtil.isBlankObject(builderPolicy) || !builderPolicy.isCustomChecked() || SmartUtil.isBlankObject(builderPolicy.getCustoms())) return false;
+		String currentUserId = SmartUtil.getCurrentUser().getId();
+		for(UserInfo user : builderPolicy.getCustoms())
+			if(user.getId().equals(currentUserId))
+				return true;
+		return false;
 	}
 }
