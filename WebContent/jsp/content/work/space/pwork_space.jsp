@@ -251,22 +251,13 @@
 				<div class="up_point pos_default js_form_content_pointer"></div>
 
 				<!--  전자결재화면이 나타나는 곳 -->
-				<div class="js_form_task_approval js_form_task p0 mb15" <%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>>
-<%-- 					<%
-					if(approvalTask!=null || (!SmartUtil.isBlankObject(taskInstance) && taskInstance.isApprovalWork())){
-					%>
-						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
-							<jsp:param value="<%=approvalTaskInstId %>" name="taskInstId"/>
-							<jsp:param value="<%=taskInstId %>" name="processTaskInstId"/>
-						</jsp:include>
-					<%
-					}
-					%>
-					
- --%>
- 			</div>
+				<div class="js_form_task_approval js_form_task p0 mb15" 
+					<%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>></div>
 				
 				<div class="form_wrap up form_read js_form_content"></div>
+				<div class="js_check_completion_notice" style="display:none">
+					<jsp:include page="/jsp/content/upload/check_completion_notice.jsp"></jsp:include>
+				</div>
 			</div>
 
 			<!-- 업무전달화면이 나타나는 곳 -->
@@ -282,7 +273,6 @@
 				%>
 			</div>
 				
-
 			<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
 			
@@ -500,6 +490,7 @@
 				pworkSpace.find('.js_btn_temp_save').show();
 				pworkSpace.find('.js_toggle_approval_btn').show();				
 			}
+			pworkSpace.find('.js_check_completion_notice').show();
 		}else{
 			if(isApprovalWork == 'true' && isApprovalForMe){
 				pworkSpace.find('.js_toggle_approval_btn').hide();
@@ -510,6 +501,7 @@
 				pworkSpace.find('.js_btn_complete').hide().siblings().hide();
 			}
 			pworkSpace.find('.js_toggle_approval_btn').hide();
+			pworkSpace.find('.js_check_completion_notice').hide();
 		}
 	}
 	
@@ -583,3 +575,16 @@
 	<jsp:param value="<%=work.getId() %>" name="workId"/>
 	<jsp:param value="<%=instId %>" name="instId"/>
 </jsp:include>	
+
+<!-- 목록 버튼 -->
+<div class="tc">
+	<div class="btn_gray" >
+    	<a href="<%=workInstance.getWork().getController(wid) %>?cid=<%=workInstance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(wid) %>" class="js_content"> 
+    		<span class="txt_btn_start"></span> 
+    		<span class="txt_btn_center"><fmt:message key="common.button.list"/></span> 
+    		<span class="txt_btn_end"></span>
+    	</a>
+	</div>
+</div>
+<!-- 목록 버튼//-->
+
