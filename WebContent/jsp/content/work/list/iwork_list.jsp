@@ -183,9 +183,13 @@
 			<div class="body_titl">
 				<div class="body_titl_iworks title"><%=work.getName()%></div>
 				<!-- 우측 버튼 -->
+				<div class="fr txt_btn icon_smartbuilder">
 				<%if(true/*work.amIBuilderUser()*/){ %>
-					<a href="tab_workbench.sw?cid=<%=work.getContextId() %>" class="js_content"><div class="fr"><fmt:message key="header.global_menu.smartbuilder"/></div></a>
+					<a href="tab_workbench.sw?cid=<%=work.getContextId() %>" class="js_content">
+						<fmt:message key="header.global_menu.smartbuilder"/>
+					</a>
 				<%} %>
+				</div>
 				<div class="txt_btn" style="line-height: 27px">
 					<span class="js_progress_span"></span>
 					<a class="js_view_work_manual" href="iwork_manual.sw"><fmt:message key="common.button.view.work_manual" /><span class="icon_in_down"></span></a>
