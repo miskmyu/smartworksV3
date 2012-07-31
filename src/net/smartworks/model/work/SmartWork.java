@@ -190,6 +190,7 @@ public class SmartWork extends Work {
 	}
 	
 	public boolean amIBuilderUser(){
+		if(SmartUtil.getCurrentUser().getUserLevel() > User.USER_LEVEL_INTERNAL_USER) return true;
 		if(SmartUtil.isBlankObject(builderPolicy) || !builderPolicy.isCustomChecked() || SmartUtil.isBlankObject(builderPolicy.getCustoms())) return false;
 		String currentUserId = SmartUtil.getCurrentUser().getId();
 		for(UserInfo user : builderPolicy.getCustoms())
