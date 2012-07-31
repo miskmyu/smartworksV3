@@ -184,6 +184,7 @@
 				<div class="body_titl_iworks title"><%=work.getName()%></div>
 				<!-- 우측 버튼 -->
 				<div class="txt_btn" style="line-height: 27px">
+					<span><img src="../images/avatar_load.gif"></span>
 					<a class="js_view_work_manual" href="iwork_manual.sw"><fmt:message key="common.button.view.work_manual" /><span class="icon_in_down"></span></a>
 					<a style="display: none" class="js_view_work_manual" href=""><fmt:message key="common.button.close.work_manual" /><span class="icon_in_down"></span></a>
 				</div>
