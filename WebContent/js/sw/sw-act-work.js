@@ -356,7 +356,7 @@ $(function() {
 		if(isEmpty(href)){
 			target.html('');
 		}else{
-			var progressSpan = input.parent().next('span.js_progress_span');
+			var progressSpan = input.prev('span.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			$.ajax({
 				url : href,
