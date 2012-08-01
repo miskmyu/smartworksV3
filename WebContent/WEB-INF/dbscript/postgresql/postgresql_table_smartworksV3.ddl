@@ -2316,7 +2316,7 @@ CREATE SEQUENCE msg_db_objects_seq
 
 CREATE TABLE msg_db_objects (
     id bigint DEFAULT nextval('msg_db_objects_seq'::regclass) NOT NULL,
-    uid character varying(100) NOT NULL,
+    uid character varying(100),
     username character varying(255) NOT NULL,
     folder_id bigint NOT NULL,
     unique_id character varying(100) NOT NULL,
