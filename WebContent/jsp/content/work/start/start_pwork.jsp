@@ -136,7 +136,9 @@ function submitForms(e) {
 
 <%-- 	<!-- 업무를 시작할 때 계획업무로 지정하는 화면 -->
 	<jsp:include page="/jsp/content/upload/check_schedule_work.jsp"></jsp:include>
- --%>	
+ --%>
+ 
+ 	<jsp:include page="/jsp/content/upload/check_completion_notice.jsp"></jsp:include>	
 	<!-- 새업무를 시작하기위한 완료 버튼과 취소 버튼 -->
 	<div class="js_upload_buttons"></div>
 </div>

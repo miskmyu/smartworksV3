@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.model.security.AccessPolicy"%>
@@ -453,4 +454,17 @@
 <jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
 	<jsp:param value="<%=work.getId() %>" name="workId"/>
 	<jsp:param value="<%=instId %>" name="instId"/> 
-</jsp:include>	
+</jsp:include>
+
+<!-- 목록 버튼 -->
+<div class="tc">
+	<div class="btn_gray" >
+    	<a href="<%=instance.getWork().getController(wid) %>?cid=<%=instance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(wid) %>" class="js_content"> 
+    		<span class="txt_btn_start"></span> 
+    		<span class="txt_btn_center"><fmt:message key="common.button.list"/></span> 
+    		<span class="txt_btn_end"></span>
+    	</a>
+	</div>
+</div>
+<!-- 목록 버튼//-->
+
