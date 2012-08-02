@@ -177,11 +177,14 @@
 			<div class="body_titl">
 				<div class="body_titl_pworks title"><%=work.getName()%></div>				
 				<!-- 우측 버튼 -->
+				<%if(work.amIBuilderUser()){ %>
+					<a href="tab_workbench.sw?cid=<%=work.getContextId() %>" class="js_content"><div class="fr"><fmt:message key="header.global_menu.smartbuilder"/></div></a>
+				<%} %>
 				<div class="txt_btn" style="line-height: 27px">
+					<span class="js_progress_span"></span>
 					<a class="js_view_work_manual" href="pwork_manual.sw?workId=<%=workId%>"><fmt:message key="common.button.view.work_manual" /><span class="icon_in_down"></span></a>
 					<a style="display: none" class="js_view_work_manual" href=""><fmt:message key="common.button.close.work_manual" /><span class="icon_in_down"></span></a>
 				</div>
-				<span class="js_progress_span"></span>
 				<!-- 우측 버튼 //-->
 
 				<div class="solid_line"></div>

@@ -39,6 +39,7 @@ import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
+import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcSwProcess;
 import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
@@ -626,6 +627,17 @@ public class BuilderServiceImpl implements IBuilderService {
 		
 	}
 	
+	private void updateProcessName(String packageId, String newName) throws Exception{ 
+		
+		PrcSwProcessCond prcSwProcessCond = new PrcSwProcessCond();
+		prcSwProcessCond.setPackageId(packageId);
+		PrcSwProcess[] prcSwProcesses = getPrcManager().getSwProcesses("", prcSwProcessCond);
+	
+		PrcSwProcess process = prcSwProcesses[0];
+		
+		SwManagerFactory.getInstance().getDesigntimeManager().updateProcessName("", process.getProcessId(), 1, newName);
+		
+	}
 	@Override
 	public void setWorkDefinition(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
@@ -650,14 +662,6 @@ public class BuilderServiceImpl implements IBuilderService {
 			
 			String workName = workDefinitionMap.get("txtWorkName");
 			
-			//업무 이름이 변경이 된다면 swform 의 formContents xml 안에 값도 변경을 해줘야한다
-			//폼을 배치할때 xml 안의 이름을 사용하기 때문에
-			updateFormName(workId, workName);
-			
-			String workCategoryId = workDefinitionMap.get("selWorkCategoryId");
-			String workGroupId = workDefinitionMap.get("selWorkGroupId");
-			String workDesc = workDefinitionMap.get("txtaWorkDesc");
-			
 			String userId = SmartUtil.getCurrentUser().getId();
 			
 			PkgPackageCond pkgCond = new PkgPackageCond();
@@ -665,9 +669,22 @@ public class BuilderServiceImpl implements IBuilderService {
 			
 			PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_ALL);
 			
+			//업무 이름이 변경이 된다면 swform 의 formContents xml 안에 값도 변경을 해줘야한다
+			//폼을 배치할때 xml 안의 이름을 사용하기 때문에
+			if(pkg.getType().equals(PkgPackage.TYPE_SINGLE)){ 
+				updateFormName(workId, workName);
+			}else{
+				updateProcessName(workId,workName);
+			}
+			
+			
+			String workCategoryId = workDefinitionMap.get("selWorkCategoryId");
+			String workGroupId = workDefinitionMap.get("selWorkGroupId");
+			String workDesc = workDefinitionMap.get("txtaWorkDesc");
+			
 			if (pkg == null)
 				return;
-			
+		
 			pkg.setCategoryId(workCategoryId);
 			//업무 그룹아이디가 넘어 온다면 카테고리 아이디가 의미가 없다 업무그룹아이디로 지정을 해놓으면 그 업무그룹이 상위
 			//카테고리아이디를 가지고 있기 때문
@@ -676,7 +693,7 @@ public class BuilderServiceImpl implements IBuilderService {
 				pkg.setCategoryId(workGroupId);
 			pkg.setDescription(workDesc);
 			pkg.setName(workName);
-			
+	
 			SwManagerFactory.getInstance().getPkgManager().setPackage(userId, pkg, IManager.LEVEL_ALL);
 			
 		}catch (Exception e){

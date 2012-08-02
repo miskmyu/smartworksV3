@@ -76,16 +76,4 @@
   	<!-- 댓글 목록 //-->
   
 <!-- 댓글 영역 //-->
-
-	<!-- 목록 버튼 -->
-	<div class="tc">
-		<div class="btn_gray" >
-	    	<a href="<%=workInstance.getWork().getController(wid) %>?cid=<%=workInstance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(wid) %>" class="js_content"> 
-	    		<span class="txt_btn_start"></span> 
-	    		<span class="txt_btn_center"><fmt:message key="common.button.list"/></span> 
-	    		<span class="txt_btn_end"></span>
-	    	</a>
-		</div>
-	</div>
-	<!-- 목록 버튼//-->
 </div>
