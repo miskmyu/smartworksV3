@@ -1631,4 +1631,11 @@ $(function() {
 		$(targetElement(e)).parents('.js_notice_message_box_page').find('.js_close_message').click();
 		return true;
 	});
+	
+	$('.js_show_picture_detail').live("click", function(e){
+		var input = $(targetElement(e)).parent();
+		var instanceId = input.attr('instanceId');
+		smartPop.showPicture(instanceId);
+		return false;
+	});
 });

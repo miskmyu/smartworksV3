@@ -76,7 +76,7 @@
 .picture_section .picture_detail_area + div {margin:3px 0 0 0}
 .picture_section .thum_picture {height: 73px; padding: 22px 0 0 15px; width: 75px}
 .picture_section .detail_picture {height: 125px; padding: 5px; width: 155px}
-.picture_section .detail_picture img {width: 155px; height: 125px}
+.picture_section .detail_picture img {max-width: 155px; max-height: 125px}
 .space_contents {padding: 0 10px 10px}
 .js_image_list_header, .js_file_list_header {margin:0 0 2px 0; padding:3px 0 0 0; line-height: 20px} /* CheckBox in Image List Header*/
 

@@ -2410,3 +2410,61 @@ CREATE TABLE SwMailAccount (
 	modifiedtime timestamp without time zone,
     primary key (id)
 );
+-- 아이디 자동생성
+CREATE TABLE SwAutoIndexDef (
+	objId character varying(50) NOT NULL,
+	formId character varying(100) NOT NULL,
+	version integer,
+	fieldId character varying(10) NOT NULL,	
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
+    primary key (objId)
+);
+
+CREATE TABLE SwAutoIndexRuls (
+	objId character varying(50) NOT NULL,
+	ruleId character varying(100),
+	type character varying(50),
+	codeValue character varying(100),
+	seperator character varying(10),
+	increment integer,
+	incrementBy character varying(50),
+	digits character varying(10),
+	items character varying(500),
+	indexSeq int NOT NULL,	
+    primary key (objId, indexSeq)
+);
+
+CREATE TABLE SwAutoIndexSeq (
+	objId character varying(50) NOT NULL,
+	formId character varying(100),
+	fieldId character varying(10),
+	refType character varying(100),
+	refId character varying(100),
+	seqValue character varying(100),
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
+    primary key (objId)
+);
+--부서 권한
+CREATE TABLE SwAuthDepartment (
+	id character varying(50) NOT NULL,
+	deptId character varying(100),
+	deptAuthType character varying(50),
+	roleKey character varying(50),
+	customUser character varying(4000),
+    primary key (id)
+);
+--그룹 권한
+CREATE TABLE SwAuthGroup (
+	id character varying(50) NOT NULL,
+	groupId character varying(100),
+	groupAuthType character varying(50),
+	roleKey character varying(50),
+	customUser character varying(4000),
+    primary key (id)
+);
