@@ -20,4 +20,5 @@ public interface ISchManager {
 
 	public SchUser[] getSchCommunityMember(String companyId, String userId, String communityId, String key) throws SchException;
 
+	public SchUser[] getSchCommunityNonMember(String companyId, String userId, String communityId, String key) throws SchException;
 }

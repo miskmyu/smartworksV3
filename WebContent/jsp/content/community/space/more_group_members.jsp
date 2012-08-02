@@ -52,10 +52,10 @@
 	if(!SmartUtil.isBlankObject(groupMembers) && groupMembers.length > 0){
 		for(int i=0; i<groupMembers.length; i++){
 			UserInfo member = groupMembers[i];
-			if(i==GroupMemberList.MAX_MEMBER_LIST+1){
+			if(i==GroupMemberList.MAX_MEMBER_LIST){
 	%>
 				<li class="t_nowork">
-					<a href="" class="js_group_more_members" lastId="<%=groupMembers[i-1]%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
+					<a href="" class="js_group_more_members" lastId="<%=groupMembers[i-1].getId()%>"><fmt:message key="common.message.more_work_task"></fmt:message></a>
 					<span class="js_progress_span"></span>
 				</li>
 			<%

@@ -93,7 +93,7 @@
 						<div class="form_value w100">
 							<div>
 								<div class="fieldline community_names js_community_names sw_required">
-									<input class="m0 js_auto_complete" style="width:100px" href="community_non_member.sw" type="text">
+									<input class="m0 js_auto_complete" style="width:100px" href="community_non_member.sw?communityId=<%=groupId %>" type="text">
 								</div>
 								<div class="js_community_list srch_list_nowid" style="display: none"></div>
 							</div>

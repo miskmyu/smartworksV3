@@ -15,6 +15,7 @@ import net.smartworks.model.community.Community;
 import net.smartworks.model.community.Department;
 import net.smartworks.model.community.Group;
 import net.smartworks.model.community.InstanceSpace;
+import net.smartworks.model.community.OverflowGroupMemberException;
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.WorkSpace;
 import net.smartworks.model.community.info.CommunityInfo;
@@ -74,6 +75,9 @@ import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.session.SessionRegistry;
@@ -81,6 +85,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
+	
+	protected final Log logger = LogFactory.getLog(getClass());
 
 	private static ISwoManager getSwoManager() {
 		return SwManagerFactory.getInstance().getSwoManager();
@@ -110,7 +116,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	@Autowired
 	private SessionRegistry sessionRegistry;
 
-	@Autowired
+	//@Autowired
 	private ISeraService seraService;
 
 	/*
@@ -663,7 +669,7 @@ public class CommunityServiceImpl implements ICommunityService {
 			// Exception Handling Required			
 		}
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -966,7 +972,7 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	private GroupInfo[] getGroupInfoForUpload(String type) throws Exception {
 		
-		/*User user = SmartUtil.getCurrentUser();
+		User user = SmartUtil.getCurrentUser();
 
 		SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
 		boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
@@ -982,89 +988,70 @@ public class CommunityServiceImpl implements ICommunityService {
 		swoGroupCond.setOrders(new Order[]{new Order("creationDate", false)});
 		SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 		
+		List groupList = new ArrayList();
+		List groupIdList = new ArrayList();
+		
 		if(swoGroups != null) {
 			for(SwoGroup swoGroup : swoGroups) {
-				GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
-				groupInfoList.add(groupInfo);
-			}
-			GroupInfo[] groupInfos = new GroupInfo[groupInfoList.size()];
-			groupInfoList.toArray(groupInfos);
-			return groupInfos;
-		}
-		
-		
-		
-		
-		for (int i = 0; i < dept.length; i++) {
-			boolean result = false;
-			
-			boolean isLeader = userExtend.getRoleId().equalsIgnoreCase("DEPT LEADER") ? true : false;
-			
-			SwaDepartmentCond myDeptAuthCond = new SwaDepartmentCond();
-			myDeptAuthCond.setDeptId(dept[i].getId());
-			myDeptAuthCond.setDeptAuthType(type);
-			SwaDepartment myDeptAuth = SwManagerFactory.getInstance().getSwaManager().getAuthDepartment(user.getId(), myDeptAuthCond, null);
-			String roleKey = myDeptAuth.getRoleKey();
-			
-			if (isLeader) {
-				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1 ? true : false;
-			} else {
-				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1 ? true : false;
-			}
-			if (isAdmin && !result) {
-				result = roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1 ? true : false;
-			}
-			if (result && !deptIdList.contains(dept[i].getId())) {
-				deptList.add(dept[i]);
-				deptIdList.add(dept[i].getId());
-			}
-		}
-		
-		SwaDepartmentCond deptAuthCond = new SwaDepartmentCond();
-		if (isAdmin) {
-			deptAuthCond.setAdminOrCustomUserLike(user.getId());
-		} else {
-			deptAuthCond.setCustomUserLikek(user.getId());
-		}
-		deptAuthCond.setDeptAuthType(type);
-		SwaDepartment[] deptAuths = SwManagerFactory.getInstance().getSwaManager().getAuthDepartments(user.getId(), deptAuthCond, null);
-		if (deptAuths != null && deptAuths.length != 0) {
-			String[] idIns = new String[deptAuths.length];
-			for (int i = 0; i < deptAuths.length; i++) {
-				idIns[i] = deptAuths[i].getDeptId();
-			}
-			SwoDepartmentCond deptCustomCond = new SwoDepartmentCond();
-			deptCustomCond.setIdIns(idIns);
-			SwoDepartment[] deptCustom = getSwoManager().getDepartments(user.getId(), deptCustomCond, IManager.LEVEL_LITE);
-			for (int i = 0; i < deptCustom.length; i++) {
-				if (!deptIdList.contains(deptCustom[i].getId())) {
-					deptList.add(deptCustom[i]);
-					deptIdList.add(deptCustom[i].getId());
+				
+				boolean result = false;
+				
+				String leaderId = swoGroup.getGroupLeader();
+				boolean isLeader = !CommonUtil.isEmpty(leaderId) && leaderId.equalsIgnoreCase(user.getId())? true : false;
+				
+				SwaGroupCond myGroupAuthCond = new SwaGroupCond();
+				myGroupAuthCond.setGroupId(swoGroup.getId());
+				myGroupAuthCond.setGroupAuthType(type);
+				SwaGroup myGroupAuth = SwManagerFactory.getInstance().getSwaManager().getAuthGroup(user.getId(), myGroupAuthCond, null);
+				String roleKey = myGroupAuth.getRoleKey();
+				
+				if (isLeader) {
+					result = roleKey.indexOf(SwaGroup.GROUP_ROLEKYE_LEADER) != -1 ? true : false;
+				} else {
+					result = roleKey.indexOf(SwaGroup.GROUP_ROLEKYE_MEMBER) != -1 ? true : false;
+				}
+				if (isAdmin && !result) {
+					result = roleKey.indexOf(SwaGroup.GROUP_ROLEKYE_ADMIN) != -1 ? true : false;
+				}
+				if (result && !groupIdList.contains(swoGroup.getId())) {
+					groupList.add(swoGroup);
+					groupIdList.add(swoGroup.getId());
 				}
 			}
 		}
-			
-		DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
-		for (int i = 0; i < deptList.size(); i++) {
-			DepartmentInfo deptInfo = new DepartmentInfo();
-			SwoDepartment swDept = deptList.get(i);
-			deptInfo.setId(swDept.getId());
-			deptInfo.setName(swDept.getName());
-			deptInfo.setDesc(swDept.getDescription());
-			deptInfos[i] = deptInfo;
+		SwaGroupCond groupAuthCond = new SwaGroupCond();
+		if (isAdmin) {
+			groupAuthCond.setAdminOrCustomUserLike(user.getId());
+		} else {
+			groupAuthCond.setCustomUserLike(user.getId());
+		}
+		groupAuthCond.setGroupAuthType(type);
+		SwaGroup[] groupAuths = SwManagerFactory.getInstance().getSwaManager().getAuthGroups(user.getId(), groupAuthCond, null);
+		if (groupAuths != null && groupAuths.length != 0) {
+			String[] idIns = new String[groupAuths.length];
+			for (int i = 0; i < groupAuths.length; i++) {
+				idIns[i] = groupAuths[i].getGroupId();
+			}
+			SwoGroupCond groupCustomCond = new SwoGroupCond();
+			groupCustomCond.setGroupIdIns(idIns);
+			SwoGroup[] groupCustom = getSwoManager().getGroups(user.getId(), groupCustomCond, IManager.LEVEL_LITE);
+			for (int i = 0; i < groupCustom.length; i++) {
+				if (!groupIdList.contains(groupCustom[i].getId())) {
+					groupList.add(groupCustom[i]);
+					groupIdList.add(groupCustom[i].getId());
+				}
+			}
+		}
+		if (groupList.size() == 0) {
+			return null;
+		}
+		GroupInfo[] groupInfos = new GroupInfo[groupList.size()];
+		for (int i = 0; i < groupList.size(); i++) {
+			GroupInfo groupInfo = new GroupInfo();
+			SwoGroup swGroup = (SwoGroup)groupList.get(i);
+			groupInfos[i] = ModelConverter.getGroupInfoBySwoGroup(null, swGroup);
 		}		
-		*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		return null;
+		return groupInfos;
 	}
 	
 	@Override
@@ -1077,8 +1064,8 @@ public class CommunityServiceImpl implements ICommunityService {
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_BOARD_WRITE);
 				//등록할수 있는 그룹
 				
-				GroupInfo[] groupInfos = getMyGroups();
-//				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
+				//GroupInfo[] groupInfos = getMyGroups();
+				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
 				
 				int departmentInfosLength = departmentInfos.length;
 				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
@@ -1095,8 +1082,11 @@ public class CommunityServiceImpl implements ICommunityService {
 				//이벤트
 				//내가 등록할수 있는 부서
 				DepartmentInfo[] departmentInfos =  getDepartmentInfoForUpload(SwaDepartment.DEPT_AUTHTYPE_EVENT_WRITE);
-				//TODO 등록할수 있는 그룹
-				GroupInfo[] groupInfos = getMyGroups();
+				
+				//등록할수 있는 그룹
+				//GroupInfo[] groupInfos = getMyGroups();
+				GroupInfo[] groupInfos = getGroupInfoForUpload(SwaGroup.GROUP_AUTHTYPE_EVENT_WRITE);
+				
 				int departmentInfosLength = departmentInfos.length;
 				int groupInfosLength = groupInfos == null ? 0 : groupInfos.length;
 				CommunityInfo[] communityInfos = new CommunityInfo[departmentInfosLength + groupInfosLength];
@@ -1153,45 +1143,97 @@ public class CommunityServiceImpl implements ICommunityService {
 			courseId=group_8e04540e1f8a4791bbef78eacd1acc1a, 
 			userId=kj@maninsoft.co.kr
 		}*/
-		String groupId = (String)requestBody.get("courseId");
+		String courseId = (String)requestBody.get("courseId");
+		String groupId = (String)requestBody.get("groupId");
 		String userId = (String)requestBody.get("userId");
-		
-		SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
-		if (group == null)
-			return;
-		if (group.isContainGroupMember(userId))
-			return;
-		SwoGroupMember groupMember = new SwoGroupMember();
-		groupMember.setGroupId(groupId);
-		groupMember.setUserId(userId);
-		groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
 
-		CourseDetail courseDetail = getSeraManager().getCourseDetailById(groupId);
-		
-		boolean isNoticeToGroupLeader = false;
-		if (courseDetail == null) {
-			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
-			isNoticeToGroupLeader = true;
-		} else {
-			boolean autoApproval = courseDetail.isAutoApproval();
+		if (CommonUtil.isEmpty(courseId) && !CommonUtil.isEmpty(groupId)) {
+			//스마트웍스닷넷
+			
+			SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
+			
+			int totalMember = group.getSwoGroupMembers() == null || group.getSwoGroupMembers().length == 0 ? 0 : group.getSwoGroupMembers().length;
+			if (group.getMaxMember() != -1 && group.getMaxMember() <= totalMember) {
+				throw new OverflowGroupMemberException("Overflow Group Member - Check Group MaxMember Count!");
+			}
+			
+			if (group == null)
+				return;
+			if (group.isContainGroupMember(userId))
+				return;
+			SwoGroupMember groupMember = new SwoGroupMember();
+			groupMember.setGroupId(groupId);
+			groupMember.setUserId(userId);
+			groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
+
+			boolean isNoticeToGroupLeader = false;
+			boolean autoApproval = group.isAutoApproval();
+			
 			if (autoApproval) {
+				groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 				groupMember.setJoinDate(new LocalDate());
-				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
 			} else {
+				groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
 				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
 				isNoticeToGroupLeader = true;
 			}
+			
+			group.addGroupMember(groupMember);
+			
+			getSwoManager().setGroup(userId, group, IManager.LEVEL_ALL);
+			
+			if (isNoticeToGroupLeader) {
+				PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
+				getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+				SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
+			}	
+			
+		} else {
+			//세라캠퍼스
+			groupId = courseId;
+			
+			SwoGroup group = getSwoManager().getGroup(userId, groupId, IManager.LEVEL_ALL);
+			if (group == null)
+				return;
+			if (group.isContainGroupMember(userId))
+				return;
+			SwoGroupMember groupMember = new SwoGroupMember();
+			groupMember.setGroupId(groupId);
+			groupMember.setUserId(userId);
+			groupMember.setJoinType(SwoGroupMember.JOINTYPE_REQUEST);
+
+			CourseDetail courseDetail = getSeraManager().getCourseDetailById(groupId);
+			
+			boolean isNoticeToGroupLeader = false;
+			if (courseDetail == null) {
+				groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+				isNoticeToGroupLeader = true;
+			} else {
+				boolean autoApproval = courseDetail.isAutoApproval();
+				if (autoApproval) {
+					groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+					groupMember.setJoinDate(new LocalDate());
+					if (seraService != null) {
+						seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+					} else {
+						logger.warn("Sera Service is Disabled. Check CommunityService Autowired!!!");
+					}
+				} else {
+					groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+					isNoticeToGroupLeader = true;
+				}
+			}
+			group.addGroupMember(groupMember);
+			
+			getSwoManager().setGroup(userId, group, IManager.LEVEL_ALL);
+			
+			if (isNoticeToGroupLeader) {
+				PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
+				getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+				SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
+			}	
 		}
-		group.addGroupMember(groupMember);
-		
-		getSwoManager().setGroup(userId, group, IManager.LEVEL_ALL);
-		
-		if (isNoticeToGroupLeader) {
-			PublishNotice pubNoticeObj = new PublishNotice(group.getGroupLeader(), PublishNotice.TYPE_NOTIFICATION, PublishNotice.REFTYPE_GROUPJOINREQUEST, group.getId());
-			getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
-			SmartUtil.increaseNoticeCountByNoticeType(group.getGroupLeader(), Notice.TYPE_NOTIFICATION);
-		}	
 	}
 
 	/*
@@ -1226,6 +1268,12 @@ public class CommunityServiceImpl implements ICommunityService {
 			return;
 		
 		SwoGroup group = getSwoManager().getGroup("", groupId, IManager.LEVEL_ALL);
+		
+		int totalMember = group.getSwoGroupMembers() == null || group.getSwoGroupMembers().length == 0 ? 0 : group.getSwoGroupMembers().length;
+		if (group.getMaxMember() != -1 && group.getMaxMember() <= totalMember) {
+			throw new OverflowGroupMemberException("Overflow Group Member - Check Group MaxMember Count!");
+		}
+		
 		if (group == null)
 			return;
 		for (int i = 0; i < userIdArray.length; i++) {
@@ -1243,7 +1291,11 @@ public class CommunityServiceImpl implements ICommunityService {
 			group.addGroupMember(groupMember);
 			
 		}
-		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
+		if (seraService != null) {
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, userIdArray.length, true);
+		} else {
+			logger.warn("Sera Service is Disabled. Check CommunityService Autowired!!!");
+		}
 		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 	}
 
@@ -1272,7 +1324,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		if (approval) {
 			groupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 			groupMember.setJoinDate(new LocalDate());
-			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+			if (seraService != null) {
+				seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, true);
+			} else {
+				logger.warn("Sera Service is Disabled. Check CommunityService Autowired!!!");
+			}
 		} else {
 			group.removeGroupMember(groupMember);
 		}
@@ -1303,8 +1359,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
-
-		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		if (seraService != null) {
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		} else {
+			logger.warn("Sera Service is Disabled. Check CommunityService Autowired!!!");
+		}
 
 		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 	}
@@ -1330,8 +1389,11 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
-
-		seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		if (seraService != null) {
+			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
+		} else {
+			logger.warn("Sera Service is Disabled. Check CommunityService Autowired!!!");
+		}
 
 		getSwoManager().setGroup("", group, IManager.LEVEL_ALL);
 
@@ -2160,28 +2222,187 @@ public class CommunityServiceImpl implements ICommunityService {
 			group.setAutoApproval(false);
 		}
 		
+		Map<String, Object> txtGroupLeader = (Map<String, Object>)frmGroupSpaceSetting.get("txtGroupLeader");    
+		List<Map<String, String>> txtGroupLeaderList = (ArrayList<Map<String,String>>)txtGroupLeader.get("users");
+		chkMemberInviteCustomUsersStr = getUserIdsStrByList(txtGroupLeaderList);
+		if (!CommonUtil.isEmpty(chkMemberInviteCustomUsersStr)) {
+			if (!group.getGroupLeader().equalsIgnoreCase(chkMemberInviteCustomUsersStr)) {
+				
+				SwoGroupMember[] groupMember = group.getSwoGroupMembers();
+				boolean isNewMember = true;
+				for (int i = 0; i < groupMember.length; i++) {
+					String groupMemberId = groupMember[i].getUserId();
+					if (groupMemberId.equalsIgnoreCase(group.getGroupLeader())) {
+						groupMember[i].setJoinType(SwoGroupMember.JOINTYPE_INVITE);
+						groupMember[i].setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+					}
+					if (groupMemberId.equalsIgnoreCase(chkMemberInviteCustomUsersStr)) {
+						groupMember[i].setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+						groupMember[i].setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+						isNewMember = false;
+					}
+				}
+				if (isNewMember) {
+					SwoGroupMember newMember = new SwoGroupMember();
+					newMember.setUserId(chkMemberInviteCustomUsersStr);
+					newMember.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+					newMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
+					newMember.setJoinDate(new LocalDate());
+					group.addGroupMember(newMember);
+				}
+				group.setGroupLeader(chkMemberInviteCustomUsersStr);
+			}
+		}
+		
 		SwManagerFactory.getInstance().getSwoManager().setGroup(userId, group, null);
 		
 	}
 	@Override
 	public GroupMemberList getGroupMemberInformList(String groupId) throws Exception {
-		// 테스트용도이니 삭제하고 구현 바람..
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
 		GroupMemberList memberInformList = new GroupMemberList();
-		memberInformList.setMembers(SmartTest.getAvailableChatter());
-		memberInformList.setTotalMembers(300);
-		memberInformList.setRequesters(SmartTest.getAvailableChatter());
-		memberInformList.setTotalRequesters(32);
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, groupId, null);
+		if (group == null)
+			return memberInformList;
+		
+		List memberIdList = new ArrayList();
+		List requestMemberIdList = new ArrayList();
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			String joinType = groupMember.getJoinType();
+			String joinStatus = groupMember.getJoinStatus();
+			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+				memberIdList.add(groupMember.getUserId());
+			} else if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)
+						&& joinType.equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST)) {
+				requestMemberIdList.add(groupMember.getUserId());
+			}
+		}
+		if (memberIdList.size() != 0) {
+			String[] memberIdArray = new String[memberIdList.size()];
+			memberIdList.toArray(memberIdArray);
+			
+			SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, memberIdArray, GroupMemberList.MAX_MEMBER_LIST, null, null, null);
+
+			UserInfo[] userInfos = new UserInfo[userExtends.length];
+				
+			for (int i = 0; i < userExtends.length; i++) {
+				userInfos[i] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtends[i]);
+			}
+			
+			memberInformList.setMembers(userInfos);
+			memberInformList.setTotalMembers(memberIdArray.length);
+		} else {
+			memberInformList.setTotalMembers(0);
+		}
+		
+		if (requestMemberIdList.size() != 0) {
+			String[] memberIdArray = new String[requestMemberIdList.size()];
+			requestMemberIdList.toArray(memberIdArray);
+			
+			SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, memberIdArray);
+			UserInfo[] userInfos = new UserInfo[userExtends.length];
+			for (int i = 0; i < userExtends.length; i++) {
+				userInfos[i] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtends[i]);
+			}
+			memberInformList.setRequesters(userInfos);
+			memberInformList.setTotalRequesters(userInfos.length);
+		} else {
+			memberInformList.setTotalRequesters(0);
+		}
 		return memberInformList;
-		// 테스트용도이니 삭제하고 구현 바람..
 	}
 	@Override
 	public UserInfo[] getGroupMembersById(String groupId, String lastId, int maxSize) throws Exception {
-		return SmartTest.getAvailableChatter();
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		GroupMemberList memberInformList = new GroupMemberList();
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, groupId, null);
+		if (group == null)
+			return null;
+		
+		List memberIdList = new ArrayList();
+		SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+		for (int i = 0; i < groupMembers.length; i++) {
+			SwoGroupMember groupMember = groupMembers[i];
+			String joinType = groupMember.getJoinType();
+			String joinStatus = groupMember.getJoinStatus();
+			if (joinStatus.equalsIgnoreCase(SwoGroupMember.JOINSTATUS_COMPLETE)) {
+				memberIdList.add(groupMember.getUserId());
+			}
+		}
+		if (memberIdList.size() != 0) {
+			String[] memberIdArray = new String[memberIdList.size()];
+			memberIdList.toArray(memberIdArray);
+			
+			SwoUser lastUser = SwManagerFactory.getInstance().getSwoManager().getUser(userId, lastId, IManager.LEVEL_LITE);
+			
+			if (lastUser == null)
+				return null;
+			
+			SwoUserExtend[] totaluserExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, memberIdArray, -1, lastUser.getName(), lastUser.getModificationDate(), null);
+			SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, memberIdArray, maxSize, lastUser.getName(), lastUser.getModificationDate(), null);
+
+			UserInfo[] userInfos = null;
+			if (totaluserExtends.length > userExtends.length) {
+				userInfos = new UserInfo[userExtends.length + 1];
+				userInfos[userExtends.length] = new UserInfo();
+			} else {
+				userInfos = new UserInfo[userExtends.length];
+			}
+			
+			for (int i = 0; i < userExtends.length; i++) {
+				userInfos[i] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtends[i]);
+			}
+			return userInfos;
+		} else {
+			return null;
+		}
 	}
 	@Override
 	public UserInfo[] searchCommunityNonMember(String communityId, String key) throws Exception {
-		// 테스트용도이니 구현바람.
-		return searchCommunityMember(communityId, key);
+		try{
+			if (CommonUtil.isEmpty(communityId) || CommonUtil.isEmpty(key))
+				return null;
+	
+			User cUser = SmartUtil.getCurrentUser();
+	
+			SchUser[] schUsers = getSchManager().getSchCommunityNonMember(cUser.getCompanyId(), cUser.getId(), communityId, key);
+			List<UserInfo> userList = new ArrayList<UserInfo>();
+	
+			if(schUsers != null) {
+				for(SchUser schUser : schUsers) {
+					UserInfo userInfo = new UserInfo();
+					userInfo.setId(schUser.getId());
+					userInfo.setName(schUser.getName());
+					userInfo.setPosition(schUser.getPosition());
+					userInfo.setRole(schUser.getRole());
+					DepartmentInfo departmentInfo = new DepartmentInfo();
+					departmentInfo.setId(schUser.getDeptId());
+					departmentInfo.setName(schUser.getDeptName());
+					departmentInfo.setDesc(schUser.getDeptDesc());
+					userInfo.setDepartment(departmentInfo);
+					userList.add(userInfo);
+				}
+		
+				UserInfo[] userInfos = new UserInfo[userList.size()];
+				userList.toArray(userInfos);
+	
+				return userInfos;
+			}
+			return null;
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
 	}
 	@Override
 	public void updateDepartmentSetting(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
@@ -2559,9 +2780,53 @@ public class CommunityServiceImpl implements ICommunityService {
 			return false;
 			
 		} else {
-			//TODO 그룹 공간 구현필요
-			return true;
+			SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(user.getId(), workSpaceId, null);
+			if (group == null)
+				return false;
+			
+			SwaGroupCond groupAuthCond = new SwaGroupCond();
+			groupAuthCond.setGroupId(workSpaceId);
+			groupAuthCond.setGroupAuthType(type);
+			SwaGroup groupAuth = SwManagerFactory.getInstance().getSwaManager().getAuthGroup(user.getId(), groupAuthCond, null);
+			if (groupAuth == null)
+				return false;
+			
+			String roleKey = groupAuth.getRoleKey();
+			String customUser = groupAuth.getCustomUser();
+			SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
+			
+			boolean isAdmin = userExtend.getAuthId().equalsIgnoreCase("ADMINISTRATOR") ? true : false;
+			boolean isLeader = group.getGroupLeader().equalsIgnoreCase(user.getId()) ? true : false;
+			
+			boolean isMyGroups = false;
+			
+			SwoGroupMember[] groupMember = group.getSwoGroupMembers();
+			if (groupMember != null && groupMember.length != 0) {
+				for (int i = 0; i < groupMember.length; i++) {
+					if (groupMember[i].getUserId().equalsIgnoreCase(user.getId())) {
+						isMyGroups = true;
+						break;
+					}
+				}
+			}
+			
+			if (isAdmin && roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_ADMIN) != -1)
+				return true;
+			if (customUser != null && customUser.indexOf(user.getId()) != -1)
+				return true;
+			
+			if (isMyGroups) {
+				if (isLeader) {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_LEADER) != -1) {
+						return true;
+					}
+				} else {
+					if (roleKey.indexOf(SwaDepartment.DEPT_ROLEKYE_MEMBER) != -1) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
-
 }

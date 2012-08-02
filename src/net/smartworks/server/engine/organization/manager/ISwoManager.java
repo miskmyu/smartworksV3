@@ -124,6 +124,8 @@ public interface ISwoManager {
 	
 	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, Date lastModifiedTime, String key) throws SwoException;
 
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, int size, String lastName, Date lastModifiedTime, String key) throws SwoException;
+
 	public SwoUserExtend[] getUsersExtendNotIn(String userId, String[] ids, String lastName) throws SwoException;
 
 	public SwoDepartmentExtend getDepartmentExtend(String userId, String departmentId, boolean inMemory) throws SwoException;
