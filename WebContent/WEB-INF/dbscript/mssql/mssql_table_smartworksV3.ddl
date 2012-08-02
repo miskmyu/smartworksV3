@@ -2315,7 +2315,7 @@ CREATE TABLE folder_db_objects (
 
 CREATE TABLE msg_db_objects (
     id bigint IDENTITY(1,1) NOT NULL,
-    uid varchar(100) NOT NULL,
+    uid varchar(100),
     username varchar(255) NOT NULL,
     folder_id bigint NOT NULL,
     unique_id varchar(100) NOT NULL,

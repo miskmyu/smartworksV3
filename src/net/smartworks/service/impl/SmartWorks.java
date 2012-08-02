@@ -25,6 +25,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
@@ -1580,6 +1581,11 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		instanceService.moveImageInstances(requestBody, request);
+	}
+
+	@Override
+	public ImageInstance getImageInstanceById(String instId) throws Exception {
+		return instanceService.getImageInstanceById(instId);
 	}
 
 }

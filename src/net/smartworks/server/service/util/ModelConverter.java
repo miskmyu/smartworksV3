@@ -36,6 +36,7 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.filter.info.SearchFilterInfo;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
@@ -3944,6 +3945,66 @@ public class ModelConverter {
 		return informationWorkInstance;
 	}
 
+	public static ImageInstance getImageInstanceBySwdRecord(String userId, ImageInstance imageInstance, SwdRecord swdRecord) throws Exception {
+		if (swdRecord == null)
+			return null;
+		if (imageInstance == null)
+			imageInstance = new ImageInstance();
+
+		String companyId = SmartUtil.getCurrentUser().getCompanyId();
+		ImageInstance tempWorkInstance = new ImageInstance();
+		getWorkInstanceBySwdRecord(userId, tempWorkInstance, swdRecord);
+		tempWorkInstance.setType(Instance.TYPE_IMAGE);
+
+		String fileGroupId = swdRecord.getDataFieldValue("5");//TODO 첨부파일 파일 그룹아이디를 가져오기 위한 하드코딩
+		String content = swdRecord.getDataFieldValue("4");
+		
+		List<IFileModel> files = getDocManager().findFileGroup(fileGroupId);
+		String fileName = null;
+		String originImgSrc = "";
+		String imgSrc = "";
+		if (files != null && files.size() != 0) {
+			fileName = files.get(0).getFileName();
+			String filePath = files.get(0).getFilePath();
+			String extension = filePath.lastIndexOf(".") > 1 ? filePath.substring(filePath.lastIndexOf(".")) : null;
+			filePath = StringUtils.replace(filePath, "\\", "/");
+			if(filePath.indexOf(companyId) != -1)
+				originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+			filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
+			if(filePath.indexOf(companyId) != -1)
+				imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+		}
+		if(!CommonUtil.isEmpty(fileGroupId)) {
+			tempWorkInstance.setGroupId(fileGroupId);
+			List<IFileModel> fileModelList = getDocManager().findFileGroup(fileGroupId);
+			List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+			int fileModelListSize = fileModelList.size();
+			if(fileList != null && fileModelListSize > 0) {
+				for(int i=0; i<fileModelListSize; i++) {
+					Map<String, String> fileMap = new LinkedHashMap<String, String>();
+					IFileModel fileModel = fileModelList.get(i);
+					String id = fileModel.getId();
+					String name = fileModel.getFileName();
+					String type = fileModel.getType();
+					String size = fileModel.getFileSize() + "";
+					fileMap.put("fileId", id);
+					fileMap.put("fileName", name);
+					fileMap.put("fileType", type);
+					fileMap.put("fileSize", size);
+					fileList.add(fileMap);
+				}
+			}
+		}
+		tempWorkInstance.setFileName(fileName);
+		tempWorkInstance.setOriginImgSource(originImgSrc);
+		tempWorkInstance.setImgSource(imgSrc);
+		tempWorkInstance.setContent(content);
+
+		imageInstance = tempWorkInstance;
+		return imageInstance;
+		
+	}
+	
 	public static ImageCategoryInfo[] getImageCategoriesByType(int displayType, String spaceId) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
@@ -4677,14 +4738,14 @@ public class ModelConverter {
 			workInstanceInfo.setId(task.getPrcObjId());
 		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 			String singleWorkInfos = task.getTskDef();
-			String recordId = null;
+			String swdRecordId = null;
 			String domainId = null;
 			if (!CommonUtil.isEmpty(singleWorkInfos)) {
 				String[] singleWorkInfo = StringUtils.tokenizeToStringArray(singleWorkInfos, "|");	
 				domainId = singleWorkInfo[0];
-				recordId = singleWorkInfo[1];
+				swdRecordId = singleWorkInfo[1];
 			}
-			workInstanceInfo.setId(recordId);
+			workInstanceInfo.setId(swdRecordId);
 		}
 		workInstanceInfo.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
 		//workInstanceInfo.setType(Instance.TYPE_WORK);

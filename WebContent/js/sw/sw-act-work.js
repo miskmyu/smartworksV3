@@ -356,7 +356,7 @@ $(function() {
 		if(isEmpty(href)){
 			target.html('');
 		}else{
-			var progressSpan = input.parent().next('span.js_progress_span');
+			var progressSpan = input.prev('span.js_progress_span');
 			smartPop.progressCont(progressSpan);
 			$.ajax({
 				url : href,
@@ -1630,5 +1630,12 @@ $(function() {
 	$('.js_notice_message_box_page').live("click", function(e){
 		$(targetElement(e)).parents('.js_notice_message_box_page').find('.js_close_message').click();
 		return true;
+	});
+	
+	$('.js_show_picture_detail').live("click", function(e){
+		var input = $(targetElement(e)).parent();
+		var instanceId = input.attr('instanceId');
+		smartPop.showPicture(instanceId);
+		return false;
 	});
 });

@@ -10,9 +10,10 @@ public class ImageInstance extends WorkInstance {
 	private String groupId;
 	private String imgSource;
 	private	String originImgSource;
-
-	private String content;
-	
+	private String content;	
+	private String fileName;
+	private String prevInstId;
+	private String nextInstId;
 	
 	public int getViews() {
 		return views;
@@ -43,6 +44,24 @@ public class ImageInstance extends WorkInstance {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getPrevInstId() {
+		return prevInstId;
+	}
+	public void setPrevInstId(String prevInstId) {
+		this.prevInstId = prevInstId;
+	}
+	public String getNextInstId() {
+		return nextInstId;
+	}
+	public void setNextInstId(String nextInstId) {
+		this.nextInstId = nextInstId;
 	}
 	public ImageInstance(){
 		super();

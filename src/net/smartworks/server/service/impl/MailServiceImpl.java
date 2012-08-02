@@ -420,7 +420,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			if (profile.getProtocol().equals(Constants.POP3)) {
 				if (sFolder == null || sFolder.equals("INBOX")) {
 					FolderDbObject foldObj = folderCont.getInboxFolder();
-					sFolder = foldObj.getId().toString();
+					if(!SmartUtil.isBlankObject(foldObj))
+						sFolder = foldObj.getId().toString();
 				}
 			}
 			
@@ -436,8 +437,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 			return mailFolders;
 		}catch (Exception e){
-			throw e;
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
@@ -467,8 +469,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 			return null;
 		}catch (Exception e){
-			throw e;
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	int previousPageSize = 0;
@@ -871,8 +874,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				throw e;
 			}*/
 		}catch (Exception e){
-			throw e;
+			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	@Override
@@ -1077,8 +1081,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 			return instance;
 		}catch (Exception e){
-			throw e;			
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
@@ -1112,8 +1117,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			mailFolder.setTotalItemCount(fld.getTotalItemCount().intValue());
 			return mailFolder;
 		}catch (Exception e){
-			throw e;		
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
@@ -1288,7 +1294,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			saveSentMail(auth, msg, header, request);
 
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}
 	}
 	
@@ -1425,7 +1431,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			saveDraft(auth, msg, header, request);
 
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}
 	}
 
@@ -1456,7 +1462,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}
 	}
 
@@ -1502,9 +1508,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -1594,8 +1599,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 
 		} catch (Exception e) {
-			throw e;
-		}		
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -1615,7 +1620,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}		
 	}
 
