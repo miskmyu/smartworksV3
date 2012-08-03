@@ -1582,4 +1582,14 @@ public class SmartWorks implements ISmartWorks {
 		instanceService.moveImageInstances(requestBody, request);
 	}
 
+	@Override
+	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		workService.setIWorkManual(requestBody, request);
+	}
+
+	@Override
+	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		workService.setPWorkManual(requestBody, request);
+	}
+
 }

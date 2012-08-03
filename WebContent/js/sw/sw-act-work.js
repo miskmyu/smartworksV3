@@ -1631,4 +1631,97 @@ $(function() {
 		$(targetElement(e)).parents('.js_notice_message_box_page').find('.js_close_message').click();
 		return true;
 	});
+
+	$('.js_modify_work_manual').live('click', function(e){
+		var target = $(targetElement(e)).parents('.js_modify_work_manual');
+		target.hide().siblings().show();
+		var workManual = target.parents('.js_iwork_manual_page');
+		if(isEmpty(workManual)) workManual = target.parents('.js_pwork_manual_page');
+		workManual.find('.js_work_comment_list').hide();
+		workManual.find('.js_work_desc_view').hide().next().show();
+		workManual.find('.js_form_desc_view').hide().next().show();
+
+		var manualAttachmentsField = workManual.find('.js_manual_attachments_field');		
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		var gridTable = SmartWorks.GridLayout.newGridTable();
+		manualAttachmentsField.html(gridTable.html(gridRow));
+		
+		var manualFileText = manualAttachmentsField.attr('manualFileText');
+		var helpUrlText = manualAttachmentsField.attr('helpUrlText');
+		var manualFile = manualAttachmentsField.attr('manualFile');
+		var helpUrl = manualAttachmentsField.attr('helpUrl');
+		
+		SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "fileManualFile",
+			fieldName: manualFileText,
+			value: manualFile,
+			columns: 3,
+			colSpan: 1,
+			required: false
+		});
+		
+		gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
+		SmartWorks.FormRuntime.TextInputBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtHelpUrl",
+			fieldName: helpUrlText,
+			value: helpUrl,
+			columns: 3,
+			colSpan: 1,
+			required: false
+		});
+		gridRow.find('input').attr('placeholder', "http://");
+		manualAttachmentsField.show();
+		return false;
+	});
+
+	$('.js_cancel_work_manual').live('click', function(e){
+		var target = $(targetElement(e)).parents('.js_cancel_work_manual');
+		target.hide().siblings('.js_modify_work_manual').show().siblings('.js_save_work_manual').hide();
+		var workManual = target.parents('.js_iwork_manual_page');
+		if(isEmpty(workManual)) workManual = target.parents('.js_pwork_manual_page');
+		workManual.find('.js_work_comment_list').show();
+		workManual.find('.js_work_desc_view').show().next().hide();
+		workManual.find('.js_form_desc_view').show().next().hide();
+		workManual.find('.js_manual_attachments_field').hide().html('');
+		return false;
+	});
+	
+	$('.js_save_work_manual').live('click', function(e){
+		submitForms();
+		return false;
+	});
+		
+	$('.js_select_editor_box').live('click', function(e){
+		var input = $(targetElement(e));
+		var formDescEdit = input.parents('.js_form_desc_edit');
+		var formDescText = formDescEdit.find('.js_form_desc_text');
+		var formDescEditor = formDescEdit.find('.js_form_desc_editor');
+		var formDesc = formDescText.attr('value');
+		if(input.attr('value') == 'editor' && isEmpty(formDescEditor.html())){
+			formDescEdit.find('.js_form_desc_text').hide().attr('name', '');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			formDescEditor.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+				container: gridRow,
+				fieldId: "txtaFormDesc",
+				fieldName: "",
+				columns: 1,
+				value: formDesc,
+				required: false
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value').css({width:"100%"});
+			gridRow.find('#txtaFormDesc').css({height:"280px"});
+						
+		}else if(input.attr('value') == 'text' && !formDescText.is(':visible')){
+			formDescEdit.find('.js_form_desc_text').show().attr('name', 'txtaFormDesc');
+			formDescEditor.html('');
+		}
+		return;
+	});
+
 });

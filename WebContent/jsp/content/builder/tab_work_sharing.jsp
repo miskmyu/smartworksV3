@@ -197,11 +197,13 @@
 						<div class="right_auto2">
 							<table>
 								<tbody>
-									<tr><th><fmt:message key="builder.title.form_desc"/></th></tr>
 									<tr>
 										<td>
-											<input type="radio" value="" /><fmt:message key="builder.button.text"/>
-											<input type="radio" value="" /><fmt:message key="builder.button.editor"/>
+											<span><fmt:message key="builder.title.form_desc"/></span>
+											<span class="fr">
+												<input name="rdoEditor" type="radio" value="" /><fmt:message key="builder.button.text"/>
+												<input name="rdoEditor" type="radio" value="" /><fmt:message key="builder.button.editor"/>
+											</span>
 											<textarea class="fieldline" name="txtaFormDesc" cols="" rows="9"></textarea>
 										</td>
 									</tr>
@@ -229,11 +231,13 @@
 						<div class="right_auto2">
 							<table>
 								<tbody>
-									<tr><th><fmt:message key="builder.title.form_desc"/></th></tr>
 									<tr>
 										<td>
-											<input type="radio" value="" /><fmt:message key="builder.button.text"/>
-											<input type="radio" value="" /><fmt:message key="builder.button.editor"/>
+											<span><fmt:message key="builder.title.form_desc"/></span>
+											<span class="fr">
+												<input name="rdoEditor" type="radio" value="" /><fmt:message key="builder.button.text"/>
+												<input name="rdoEditor" type="radio" value="" /><fmt:message key="builder.button.editor"/>
+											</span>
 											<textarea class="fieldline" name="txtaProcessDesc" cols="" rows="9"></textarea>
 										</td>
 									</tr>

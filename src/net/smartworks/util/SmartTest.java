@@ -243,8 +243,6 @@ public class SmartTest {
 		work.setKeyField(new FormField("f1", "제 목", "String"));
 		work.setDisplayFields(new FormField[] {new FormField("f1", "제 목", FormField.TYPE_TEXT), new FormField("f2", "작성자", FormField.TYPE_USER), new FormField("f3", "관리부서", FormField.TYPE_OTHER_WORK), new FormField("f4", "상세설명", FormField.TYPE_RICHTEXT_EDITOR), new FormField("f5", "첨부파일", FormField.TYPE_FILE)});
 		work.setHelpUrl("http://manual.smartworks.net");
-		work.setManualFilePath("test/files/");
-		work.setManualFileName("법무지원시스템_dashboard디자인가이드.pptx");
 		SearchFilter sf = new SearchFilter();
 		sf.setId("searchFilter1");
 		sf.setName("테스트필터");
@@ -261,8 +259,6 @@ public class SmartTest {
 		work.setLastModifier(getUser1());
 		work.setLastModifiedDate(new LocalDate());
 		work.setHelpUrl("http://manual.smartworks.net");
-		work.setManualFilePath("test/files/");
-		work.setManualFileName("법무지원시스템_dashboard디자인가이드.pptx");
 		work.setDiagram(getDiagram1());
 		return work;
 	}

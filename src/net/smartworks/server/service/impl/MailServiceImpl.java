@@ -99,33 +99,36 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 	    HttpServletRequest request = attr.getRequest();
 
+	    User currentUser = SmartUtil.getCurrentUser();
+	    
 	    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
-
-	    if(handler != null && profile != null && auth != null)
+	    
+	    if(!currentUser.isUseMail() || SmartUtil.isBlankObject(currentUser.getMailAccounts()))
+	    	return null;
+	    
+	    MailAccount mailAccount = currentUser.getMailAccounts()[0];
+    
+	    if(handler != null && profile != null && auth != null &&  auth.getUsername().equals(mailAccount.getUserName()) && auth.getPassword().equals(mailAccount.getPassword()) )
 	    	return handler;
 
-	    if(profile == null) {
-		    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
-		    if(profiles == null || profiles.length == 0)
-		    	return null;
-		    profile = profiles[0];
-	    }
+	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
+	    if(profiles == null || profiles.length == 0)
+	    	return null;
+	    profile = profiles[0];
 
-	    if(auth == null) {
-		    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
-		    if(mailAccounts == null || mailAccounts.length == 0)
-				throw new LoginInvalidException();
+	    MailAccount[] mailAccounts = communityService.getMyMailAccounts();
+	    if(mailAccounts == null || mailAccounts.length == 0)
+			throw new LoginInvalidException();
 
-			String username = mailAccounts[0].getUserName();
-			String password = mailAccounts[0].getPassword();
-			if (username != null && password != null) {
-				auth = new AuthProfile();
-				auth.setUsername(username);
-				auth.setPassword(password);
-			}
-	    }
+		String username = mailAccounts[0].getUserName();
+		String password = mailAccounts[0].getPassword();
+		if (username != null && password != null) {
+			auth = new AuthProfile();
+			auth.setUsername(username);
+			auth.setPassword(password);
+		}
 
 		try {
 			if(handler == null)

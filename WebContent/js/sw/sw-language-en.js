@@ -206,6 +206,8 @@ smartMessage.bundle['en'] = {
 	moveMailError : "Error has been occured while moving Mail Instance. Please contact the Administrator!",
 	removeMailSucceed : "Mail Instance has been removed successfully.",
 	removeMailError : "Error has been occured while removing Mail Instance. Please contact the Administrator!",
+	setWorkManualSucceed : "Work Manual has been modified successfully.",
+	setWorkManualError : "Error has been occured while modifing Work Manual. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",
@@ -216,6 +218,7 @@ smartMessage.bundle['en'] = {
 	eventOldEndDateError : "The End Date of Event is before the Start Date. Please retry with valid End Date", 
 	noRefFormDefinedError : "Refered Work has not been defined. Please contact the Admonistrator!",
 	notRefFormWorkingError : "Refered Work is not working. Please contact the Admonistrator!",
+	helpUrlSyntaxError : "Web User Manual is not valid url starting with http://. Please retry with valid url",
 
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",

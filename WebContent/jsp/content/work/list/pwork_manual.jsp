@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.work.info.SmartFormInfo"%>
@@ -31,6 +32,66 @@
 	if (diagram != null)
 		tasks = diagram.getTasks();
 %>
+<script type="text/javascript">
+
+// 완료버튼 클릭시 create_new_iwork.sw 서비스를 실행하기 위해 submit하는 스크립트..
+function submitForms() {
+	var pworkManual = $('.js_pwork_manual_page');
+	var helpUrl = pworkManual.find('input[name="txtHelpUrl"]').attr('value');
+	console.log('helpUrl=', helpUrl, ', substring=', helpUrl.substring(0,6))
+	if(!isEmpty(helpUrl) && (helpUrl.length<8 || helpUrl.substring(0,7).toLowerCase() != 'http://')){
+		smartPop.showInfo(smartPop.ERROR, smartMessage.get("helpUrlSyntaxError"));
+		return;		
+	}
+	
+	var forms = pworkManual.find('form');
+	var workId = pworkManual.attr('workId');
+	var paramsJson = {};
+	paramsJson['workId'] = workId;
+	for(var i=0; i<forms.length; i++){
+		var form = $(forms[i]);
+		
+		// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
+		if(form.attr('name') === 'frmSmartForm'){
+			paramsJson['formId'] = form.attr('formId');
+			paramsJson['formName'] = form.attr('formName');
+		}
+		
+		// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
+		paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+		
+	}
+	console.log(JSON.stringify(paramsJson));
+	var url = "set_pwork_manual.sw";
+	
+	// 서비스요청 프로그래스바를 나타나게 한다....
+	var progressSpan = pworkManual.find('.js_progress_span');
+	smartPop.progressCont(progressSpan);
+	
+	// set_iwork_manual.sw서비스를 요청한다..
+	$.ajax({
+		url : url,
+		contentType : 'application/json',
+		type : 'POST',
+		data : JSON.stringify(paramsJson),
+		success : function(data, status, jqXHR) {
+			
+			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
+			smartPop.showInfo(smartPop.INFO, smartMessage.get("setWorkManualSucceed"), function(){
+				window.location.reload();
+			});
+			smartPop.closeProgress();
+		},
+		error : function(e) {
+			// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+			smartPop.closeProgress();
+			smartPop.showInfo(smartPop.ERROR, smartMessage.get("setWorkManualError"));
+		}
+	});
+	return;
+}
+
+</script>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
@@ -39,89 +100,154 @@
 
 	<!-- 보더 -->
 	<div class="border">
-	
-		<!-- 업무 정의 -->
-		<!-- <div class=""><%if(!SmartUtil.isBlankObject(work.getDesc())) {%><%=work.getDesc()%><%}else{ %><fmt:message key="common.message.no_work_desc" /><%} %></div> -->
-		<!-- 업무 정의 //-->
-	
-		<!-- 프로세스 영역 -->
-		<div class="define_space" style="height:59px">
+
+		<form name="frmPWorkManual">	
+			<!-- 업무 정의 -->
+			<div class="js_work_desc_view"><%if(!SmartUtil.isBlankObject(work.getDesc())) {%><%=work.getDesc()%><%}else{ %><fmt:message key="common.message.no_work_desc" /><%} %></div>
+			<div class="js_work_desc_edit" style="display:none">
+				<div><fmt:message key="builder.title.work_desc"/> : </div>
+				<textarea class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
+			</div>		
+			<!-- 업무 정의 //-->
 		
-		 <!-- 방향 Prev -->
-		       <a href="" class="js_manual_tasks_left" style="display:block"><div class="proc_btn_prev" style="margin: 22px 0 0 35px;"></div></a>
-			<!-- 방향 Prev //-->
+			<!-- 프로세스 영역 -->
+			<div class="define_space" style="height:59px">
 			
-	        <div class="process_section">
-	        
-				<!--  태스크 시작 -->
-				<div class="process_space js_manual_tasks_holder" style="overflow:hidden">
-					<div class="js_manual_tasks">
-						<ul>
-						<%
-						if (tasks != null) {
-							int count = 0;
-							for (SmartTaskInfo task : tasks) {
-								count++;
-								UserInfo assignedUser = task.getAssignedUser();
-								String assigningName = task.getAssigningName();
-						%>
+			 <!-- 방향 Prev -->
+			       <a href="" class="js_manual_tasks_left" style="display:block"><div class="proc_btn_prev" style="margin: 22px 0 0 35px;"></div></a>
+				<!-- 방향 Prev //-->
+				
+		        <div class="process_section">
+		        
+					<!--  태스크 시작 -->
+					<div class="process_space js_manual_tasks_holder" style="overflow:hidden">
+						<div class="js_manual_tasks">
+							<ul>
 								<!-- 태스크 -->
-								<li class="proc_task not_yet js_manual_task js_select_task_manual <%if(count==1){%>selected<%} %>" taskId="<%=task.getId() %>">
-									<div><%=count%>) <%=task.getName()%></div>
-									<div class="t_date"><%=task.getAssigningName()%></div>
+								<li class="proc_task not_yet js_manual_task js_select_task_manual selected">
+									<div><%=work.getName()%></div>
+									<div>프로세스다이어그램</div>
 								</li>
 								<!-- 태스크 //-->
-						<%
-							}
-						}
-						%>
-						</ul>
-					</div>
-				</div>
-				<!--  태스크 시작// -->
-			</div>
-			<!-- 방향 Next -->
-		   <a href="" class="js_manual_tasks_right" style="display:block"><div class="proc_btn_next" style="margin: 22px 35px 0 0"></div></a>
-		  	<!-- 방향 Next //-->  
-		</div>
-		<!--프로세스 영역//-->
-
-		<!-- 업무설명 영역 -->
-		<%
-		if(tasks!=null){
-			for(int i=0; i<tasks.length; i++){				
-				SmartFormInfo form = tasks[i].getForm();
-				if(form!=null){
-		%>
-					<div class="js_task_manual" id="<%=tasks[i].getId() %>" <%if(i!=0){ %>style="display:none"<%} %>>
-						<div class="up_point pos_default"></div>
-						<div class="form_wrap up">
-							<div class="area">
-								<!-- 업무설명 -->
-								<div class="det_contents">
-									<table>
-										<tbody>
-											<tr>
-												<td><img src="<%=form.getOrgImage() %>" width="349" height="289" /></td>
-												<%if(SmartUtil.isBlankObject(form.getDescription())){ %><td><fmt:message key="common.message.no_form_desc"/></td><%}else{ %><td><%=form.getDescription() %></td><%} %>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<!-- 업무 설명 //-->
-							</div>
+								<%
+								if (tasks != null) {
+									int count = 0;
+									for (SmartTaskInfo task : tasks) {
+										count++;
+										UserInfo assignedUser = task.getAssignedUser();
+										String assigningName = task.getAssigningName();
+								%>
+										<!-- 태스크 -->
+										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
+											<div><%=count%>) <%=task.getName()%></div>
+											<div class="t_date"><%=task.getAssigningName()%></div>
+										</li>
+										<!-- 태스크 //-->
+								<%
+									}
+								}
+								%>
+							</ul>
 						</div>
 					</div>
-		<%
+					<!--  태스크 시작// -->
+				</div>
+				<!-- 방향 Next -->
+			   <a href="" class="js_manual_tasks_right" style="display:block"><div class="proc_btn_next" style="margin: 22px 35px 0 0"></div></a>
+			  	<!-- 방향 Next //-->  
+			</div>
+			<!--프로세스 영역//-->
+	
+			<!-- 업무설명 영역 -->
+			<%
+			String diagramImage = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getOrgImage();
+			String diagramDesc = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getDescription(); 
+			%>
+			<div class="js_task_manual">
+				<div class="up_point pos_default"></div>
+				<div class="form_wrap up">
+					<div class="area">
+						<!-- 업무설명 -->
+						<div class="det_contents">
+							<table>
+								<tbody>
+									<tr>
+										<td>
+											<img src="<%=diagramImage %>" width="349" height="289" />
+										</td>
+										<td class ="dline_left_gray pl10" style="width:100%">
+			 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(diagramDesc)){%><%=diagramDesc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
+											<div class="js_form_desc_edit"  style="display:none">
+			 									<span><fmt:message key="builder.title.form_desc"/> : </span>
+			 									<span class="fr js_select_editor_box">
+				 									<input name="rdoEditor" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
+													<input name="rdoEditor" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+												</span>
+												<textarea class="fieldline js_form_desc_text" name="txtaFormDesc" cols="" rows="22"><%=CommonUtil.toNotNull(diagramDesc) %></textarea>
+												<div class="js_form_desc_editor"></div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- 업무 설명 //-->
+					</div>
+				</div>
+			</div>
+			<%
+			if(tasks!=null){
+				for(int i=0; i<tasks.length; i++){				
+					SmartFormInfo form = tasks[i].getForm();
+					if(form!=null){
+						String desc = form.getDescription();
+			%>
+						<div class="js_task_manual" id="<%=tasks[i].getId() %>" style="display:none">
+							<div class="up_point pos_default"></div>
+							<div class="form_wrap up">
+								<div class="area">
+									<!-- 업무설명 -->
+									<div class="det_contents">
+										<table>
+											<tbody>
+												<tr>
+													<td>
+														<img src="<%=form.getOrgImage() %>" width="349" height="289" />
+													</td>
+													<td class ="dline_left_gray pl10" style="width:100%">
+						 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
+														<div class="js_form_desc_edit"  style="display:none">
+						 									<span><fmt:message key="builder.title.form_desc"/> : </span>
+						 									<span class="fr js_select_editor_box">
+							 									<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
+																<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+															</span>
+															<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=i %>" cols="" rows="22"><%=CommonUtil.toNotNull(desc) %></textarea>
+															<div class="js_form_desc_editor"></div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<!-- 업무 설명 //-->
+								</div>
+							</div>
+						</div>
+			<%
+					}
 				}
 			}
-		}
-		%>
-		<!-- 업무설명 영역 //-->
-		
+			%>
+			<!-- 업무설명 영역 //-->
+		    <div class="js_manual_attachments_field" style="display:none" 
+		    	manualFileText="<fmt:message key='work.title.manual_file'/>" helpUrlText="<fmt:message key='work.title.help_url'/>"
+		    	manualFile="<%=work.getManualFileId()%>" helpUrl="<%=CommonUtil.toNotNull(work.getHelpUrl())%>"></div>
+		</form>
+				
 	   <!-- 댓글 -->
-	   <div class="reply_point posit_default"></div>
-	   <div class="reply_section">  
+	   <div class="reply_point posit_default js_work_comment_list"></div>
+	   <div class="reply_section js_work_comment_list">  
 	        <div class="list_reply">
 	            <ul class="js_comment_list">
 	            	<li class="js_comment_instance" style="display:none">
@@ -182,12 +308,28 @@
 			<!-- 수정하기 -->
 			<div class="fr ml5">
 				<%
-				if (cUser.getUserLevel() == User.USER_LEVEL_AMINISTRATOR) {
+				if(work.amIBuilderUser()) {
 				%>
-					<span class="btn_gray"> 
-						<span class="txt_btn_start"></span>
-						<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
-						<span class="txt_btn_end"></span>
+					<span class="btn_gray js_modify_work_manual"> 
+						<a href="">
+							<span class="txt_btn_start"></span>
+							<span class="txt_btn_center"><fmt:message key='common.button.modify' /> </span> 
+							<span class="txt_btn_end"></span>
+						</a>
+					</span>
+					<span class="btn_gray js_save_work_manual" style="display:none"> 
+						<a href="">
+							<span class="txt_btn_start"></span> 
+							<span class="txt_btn_center"><fmt:message key='common.button.save' /> </span>
+							<span class="txt_btn_end"></span>
+						</a>
+					</span>
+					<span class="btn_gray js_cancel_work_manual" style="display:none"> 
+						<a href="">
+							<span class="txt_btn_start"></span> 
+							<span class="txt_btn_center"><fmt:message key='common.button.cancel' /> </span>
+							<span class="txt_btn_end"></span>
+						</a>
 					</span>
 				<%
 				}
@@ -205,9 +347,9 @@
 		
 			<span class="po_left">
 				<%
-				if (work.getManualFileName() != null) {
+				if (work.getManualFileId() != null) {
 				%>
-					<a href="" class="icon_btn_video mr2" title="<fmt:message key='work.title.manual_file'/>"></a> 
+					<a href="<%=work.getManualFilePath() %>" class="icon_btn_video mr2" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
 				<%
 				}
 				if (work.getHelpUrl() != null) {
@@ -278,11 +420,11 @@
 				 	break;
 				 }
 				%>
-		
 				<span class="fr ml5"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></span>
-		
 			</span>
 			<!-- 우측 권한 아이콘//-->
+			<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
+			<div class="fr form_space js_progress_span" ></div>
 		</div>
 		<!-- 우측 버튼 //-->
 	</div>

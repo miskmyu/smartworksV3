@@ -707,5 +707,9 @@ public interface ISmartWorks {
 	public abstract void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+		
 }
