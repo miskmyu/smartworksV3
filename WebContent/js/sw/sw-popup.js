@@ -914,8 +914,8 @@ smartPop = {
 
 	printContent : function(header, contents){
 		$.get("pop_print_content.sw", function(data){
-			var height = 860;
-			var left = (($(window).width() - height) / 2) + $(window).scrollLeft();
+			var width = 860;
+			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({
 				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
@@ -923,7 +923,7 @@ smartPop = {
 				containerCss:{
 					top: 30,
 					left: left,
-					width: height
+					width: width
 				},
 				overlayClose: false,
 				onShow: function(dialog){
@@ -941,6 +941,26 @@ smartPop = {
 						return false;
 					});
 					doIframeAutoHeight();
+				}
+			});
+		});
+	},
+
+	showPicture : function(instanceId){
+		$.get("pop_show_picture.sw?instId=" + instanceId, function(data){
+			var width = 610;
+			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
+			$(data).modal({
+				opacity: 50,
+				overlayCss: {backgroundColor:"#fff"},
+				autoPosition: false,
+				containerCss:{
+					top: 30,
+					left: left,
+					width: width
+				},
+				overlayClose: true,
+				onShow: function(dialog){
 				}
 			});
 		});

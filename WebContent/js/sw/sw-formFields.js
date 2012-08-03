@@ -661,8 +661,8 @@ function loadTaskApprovalFields() {
 		}		
 	}
 };
-
-function loadGroupProfileField() {
+//같은이름의 함수가 2개존재한다 그중하나인 아래 함수가 사용하지 않는것 같아...뒤에다 언더바를 붙임..실제로 사용하지 않는지 테스트중
+function loadGroupProfileField_() {
 	var groupProfileFields = $('div.js_group_profile_field');
 	if(!isEmpty(groupProfileFields)) {
 		for(var i=0; i<groupProfileFields.length; i++) {

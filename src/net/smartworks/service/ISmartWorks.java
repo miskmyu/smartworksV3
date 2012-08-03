@@ -29,6 +29,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.filter.SearchFilter;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
@@ -712,4 +713,6 @@ public interface ISmartWorks {
 	
 	public abstract void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 		
+	public abstract ImageInstance getImageInstanceById(String instId) throws Exception;
+
 }

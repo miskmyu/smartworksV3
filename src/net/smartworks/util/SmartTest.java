@@ -27,6 +27,7 @@ import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.EventInstance;
 import net.smartworks.model.instance.FieldData;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.TaskInstance;
@@ -1424,6 +1425,15 @@ public class SmartTest {
 		image.setImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr_big.png");
 		image.setOriginImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr.png");
 		image.setContent("안녕하세요......?그동안 무슨일이 있었나요, 통 연락이 없던데...ㅋㅋㅋㅋㅋㅋ");
+		return image;
+	}
+	
+	public static ImageInstance getImageInstance() throws Exception{
+		ImageInstance image = new ImageInstance("imageInst1", "사진입니다", new Work(), SmartTest.getUser1(), new LocalDate() );
+		image.setImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr_big.png");
+		image.setOriginImgSource("http://localhost:8081/imageServer/Semiteq/Profiles/ysjung@maninsoft.co.kr.png");
+		image.setContent("안녕하세요......?그동안 무슨일이 있었나요, 통 연락이 없던데...ㅋㅋㅋㅋㅋㅋ");
+		image.setFileName("파일제목부분");
 		return image;
 	}
 	

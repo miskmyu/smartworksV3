@@ -665,7 +665,7 @@ CREATE TABLE msg_db_objects (
     unread smallint NOT NULL,
     msg_size bigint NOT NULL,
     email varbinary(max) NOT NULL,
-    uid varchar(100) NOT NULL
+    uid varchar(100)
     primary key (id)
 );
 

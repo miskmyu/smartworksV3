@@ -1724,4 +1724,10 @@ $(function() {
 		return;
 	});
 
+	$('.js_show_picture_detail').live("click", function(e){
+		var input = $(targetElement(e)).parent();
+		var instanceId = input.attr('instanceId');
+		smartPop.showPicture(instanceId);
+		return false;
+	});
 });

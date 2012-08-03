@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.approval.ApprovalLineInst;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.WorkInstance;
@@ -176,5 +177,7 @@ public interface IInstanceService {
 	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public ImageInstance getImageInstanceById(String instId) throws Exception;
 	
 }

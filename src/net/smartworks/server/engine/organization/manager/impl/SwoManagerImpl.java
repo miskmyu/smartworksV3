@@ -2332,7 +2332,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		}
 		return usersExtendsArray;
 	}
-	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, Date lastModifiedTime, String key) throws SwoException {
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, int size, String lastName, Date lastModifiedTime, String key) throws SwoException {
 
 		if (CommonUtil.isEmpty(ids))
 			return null;
@@ -2364,6 +2364,13 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		Query query = this.getSession().createQuery(buff.toString());
 
+		if (size != -1) {
+			int pageSize = size;
+			int pageNo = 0;
+			query.setFirstResult(pageNo * pageSize);
+			query.setMaxResults(pageSize);
+		}
+		
 		if (!CommonUtil.isEmpty(lastName))
 			query.setString("lastName", lastName);
 		if (!CommonUtil.isEmpty(lastModifiedTime))
@@ -2410,6 +2417,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			i++;
 		}
 		return usersExtendsArray;
+	}
+	public SwoUserExtend[] getUsersExtend(String userId, String[] ids, String lastName, Date lastModifiedTime, String key) throws SwoException {
+		return getUsersExtend(userId, ids, -1, lastName, lastModifiedTime, key);
 	}
 	public SwoUserExtend[] getUsersExtend(String userId, String[] ids) throws SwoException {
 

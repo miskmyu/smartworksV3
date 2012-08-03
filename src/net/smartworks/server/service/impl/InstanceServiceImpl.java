@@ -34,6 +34,7 @@ import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.AsyncMessageInstance;
 import net.smartworks.model.instance.CommentInstance;
 import net.smartworks.model.instance.FieldData;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
@@ -5444,6 +5445,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	
+	public ImageInstance getImageInstanceById(String companyId, String userId, SwdRecord swdRecord) throws Exception {
+
+		try{
+			return ModelConverter.getImageInstanceBySwdRecord(userId, null, swdRecord);
+		}catch (Exception e){
+			// Exception Handling Required
+			e.printStackTrace();
+			return null;			
+			// Exception Handling Required			
+		}
+	}
 	private Map getLongTimeByTodayWorkHour(SwcWorkHour workHour) throws Exception {
 		//type = start, end
 		long workStartTime = 30600000;//오전 8시30분의 밀리세컨드
@@ -7969,6 +7982,22 @@ public class InstanceServiceImpl implements IInstanceService {
 	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public ImageInstance getImageInstanceById(String instId) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		SwfFormCond swfFormCond = new SwfFormCond();
+		swfFormCond.setCompanyId(user.getCompanyId());
+		swfFormCond.setPackageId(SmartWork.ID_FILE_MANAGEMENT);
+		SwfForm[] swfForms = getSwfManager().getForms(user.getId(), swfFormCond, IManager.LEVEL_LITE);
+		SwdRecordCond swdRecordCond = new SwdRecordCond();
+		swdRecordCond.setCompanyId(user.getCompanyId());
+		swdRecordCond.setFormId(swfForms[0].getId());
+		swdRecordCond.setRecordId(instId);
+		SwdRecord swdRecord = getSwdManager().getRecord(user.getId(), swdRecordCond, IManager.LEVEL_LITE);
+		return getImageInstanceById(user.getCompanyId(), user.getId(), swdRecord);
+
 	}
 
 }

@@ -36,6 +36,7 @@ import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
 import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.filter.info.SearchFilterInfo;
+import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.InformationWorkInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
@@ -74,6 +75,8 @@ import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.authority.manager.ISwaManager;
 import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
+import net.smartworks.server.engine.authority.model.SwaGroup;
+import net.smartworks.server.engine.authority.model.SwaGroupCond;
 import net.smartworks.server.engine.authority.model.SwaResource;
 import net.smartworks.server.engine.authority.model.SwaResourceCond;
 import net.smartworks.server.engine.authority.model.SwaUser;
@@ -2997,6 +3000,9 @@ public class ModelConverter {
 
 	public static Group getGroupBySwoGroup(Group group, SwoGroup swoGroup) throws Exception {
 		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			
 			if (swoGroup == null)
 				return null;
 			if (group == null)
@@ -3044,7 +3050,198 @@ public class ModelConverter {
 				group.setBigPictureName(picture);
 				group.setSmallPictureName(picture);
 			}
+			
+			
+			SwaGroupCond groupAuthCond = new SwaGroupCond();
+			groupAuthCond.setGroupId(swoGroup.getId());
+			SwaGroup[] groupDepts = SwManagerFactory.getInstance().getSwaManager().getAuthGroups(userId, groupAuthCond, null);
 
+			SwaGroup boardWrite = null;
+			SwaGroup boardEdit = null;
+			SwaGroup eventWrite = null;
+			SwaGroup eventEdit = null;
+			SwaGroup inviteMemter = null;
+			
+			if (groupDepts == null || groupDepts.length == 0) {
+
+				boardWrite = new SwaGroup();
+				boardWrite.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE);
+				boardWrite.setGroupId(swoGroup.getId());
+				boardWrite.setRoleKey(SwaGroup.GROUP_ROLEKYE_LEADER);
+
+				boardEdit = new SwaGroup();
+				boardEdit.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_BOARD_EDIT);
+				boardEdit.setGroupId(swoGroup.getId());
+				boardEdit.setRoleKey(SwaGroup.GROUP_ROLEKYE_OWNER + ";" + SwaGroup.GROUP_ROLEKYE_LEADER);
+
+				eventWrite = new SwaGroup();
+				eventWrite.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_EVENT_WRITE);
+				eventWrite.setGroupId(swoGroup.getId());
+				eventWrite.setRoleKey(SwaGroup.GROUP_ROLEKYE_LEADER);
+				
+				eventEdit = new SwaGroup();
+				eventEdit.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_EVENT_EDIT);
+				eventEdit.setGroupId(swoGroup.getId());
+				eventEdit.setRoleKey(SwaGroup.GROUP_ROLEKYE_OWNER + ";" + SwaGroup.GROUP_ROLEKYE_LEADER);
+
+				inviteMemter = new SwaGroup();
+				inviteMemter.setGroupAuthType(SwaGroup.GROUP_AUTHTYPE_MEMBER_INVITE);
+				inviteMemter.setGroupId(swoGroup.getId());
+				inviteMemter.setRoleKey(SwaGroup.GROUP_ROLEKYE_LEADER);
+				
+				SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, boardWrite, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, boardEdit, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, eventWrite, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, eventEdit, null);
+				SwManagerFactory.getInstance().getSwaManager().setAuthGroup(userId, inviteMemter, null);
+				
+			} else {
+				for (int i = 0; i < groupDepts.length; i++) {
+					SwaGroup groupAuth = groupDepts[i];
+					String deptAuthType = groupAuth.getGroupAuthType();
+					if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_BOARD_WRITE)) {
+						boardWrite = groupAuth;
+					} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_BOARD_EDIT)) {
+						boardEdit = groupAuth;
+					} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_EVENT_WRITE)) {
+						eventWrite = groupAuth;
+					} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_EVENT_EDIT)) {
+						eventEdit = groupAuth;
+					} else if (deptAuthType.equalsIgnoreCase(SwaGroup.GROUP_AUTHTYPE_MEMBER_INVITE)) {
+						inviteMemter = groupAuth;
+					}
+				}
+			}
+			
+			SpacePolicy boardWritePolicy = new SpacePolicy();
+			String roleKeysStr = boardWrite.getRoleKey();
+			String[] roleKeys = StringUtils.tokenizeToStringArray(roleKeysStr, ";");
+			for (int i = 0; i < roleKeys.length; i++) {
+				if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					boardWritePolicy.setCustomChecked(true);
+					String usersStr = boardWrite.getCustomUser();
+					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					for (int j = 0; j < userExtendsArray.length; j++) {
+						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					}
+					boardWritePolicy.setCustoms(userInfoArray);
+				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					boardWritePolicy.setLeaderChecked(true);
+				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
+					boardWritePolicy.setMembersChecked(true);
+				} else if (roleKeys[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_OWNER)) {
+					boardWritePolicy.setOwnerChecked(true);
+				}
+			}
+			
+			SpacePolicy boardEditPolicy = new SpacePolicy();
+			String roleKeysBoardEditStr = boardEdit.getRoleKey();
+			String[] roleKeyBoardEdits = StringUtils.tokenizeToStringArray(roleKeysBoardEditStr, ";");
+			for (int i = 0; i < roleKeyBoardEdits.length; i++) {
+				if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_ADMIN)) {
+					boardEditPolicy.setSystemAdministratorChecked(true);
+				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					boardEditPolicy.setCustomChecked(true);
+					String usersStr = boardEdit.getCustomUser();
+					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					for (int j = 0; j < userExtendsArray.length; j++) {
+						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					}
+					boardEditPolicy.setCustoms(userInfoArray);
+				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					boardEditPolicy.setLeaderChecked(true);
+				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
+					boardEditPolicy.setMembersChecked(true);
+				} else if (roleKeyBoardEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_OWNER)) {
+					boardEditPolicy.setOwnerChecked(true);
+				}
+			}
+			
+			SpacePolicy eventWritePolicy = new SpacePolicy();
+			String roleKeysEventWriteStr = eventWrite.getRoleKey();
+			String[] roleKeyEventWrites = StringUtils.tokenizeToStringArray(roleKeysEventWriteStr, ";");
+			for (int i = 0; i < roleKeyEventWrites.length; i++) {
+				if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					eventWritePolicy.setCustomChecked(true);
+					String usersStr = eventWrite.getCustomUser();
+					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					for (int j = 0; j < userExtendsArray.length; j++) {
+						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					}
+					eventWritePolicy.setCustoms(userInfoArray);
+				} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					eventWritePolicy.setLeaderChecked(true);
+				} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
+					eventWritePolicy.setMembersChecked(true);
+				} else if (roleKeyEventWrites[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_OWNER)) {
+					eventWritePolicy.setOwnerChecked(true);
+				}
+			}
+			
+			SpacePolicy eventEditPolicy = new SpacePolicy();
+			String roleKeysEventEditStr = eventEdit.getRoleKey();
+			String[] roleKeyEventEdits = StringUtils.tokenizeToStringArray(roleKeysEventEditStr, ";");
+			for (int i = 0; i < roleKeyEventEdits.length; i++) {
+				if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_ADMIN)) {
+					eventEditPolicy.setSystemAdministratorChecked(true);
+				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					eventEditPolicy.setCustomChecked(true);
+					String usersStr = eventEdit.getCustomUser();
+					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					for (int j = 0; j < userExtendsArray.length; j++) {
+						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					}
+					eventEditPolicy.setCustoms(userInfoArray);
+				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					eventEditPolicy.setLeaderChecked(true);
+				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
+					eventEditPolicy.setMembersChecked(true);
+				} else if (roleKeyEventEdits[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_OWNER)) {
+					eventEditPolicy.setOwnerChecked(true);
+				}
+			}
+			
+			SpacePolicy inviteMemberPolicy = new SpacePolicy();
+			String roleKeysInviteMemberStr = inviteMemter.getRoleKey();
+			String[] roleKeyInviteMembers = StringUtils.tokenizeToStringArray(roleKeysInviteMemberStr, ";");
+			for (int i = 0; i < roleKeyInviteMembers.length; i++) {
+				if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_CUSTOM)) {
+					inviteMemberPolicy.setCustomChecked(true);
+					String usersStr = eventEdit.getCustomUser();
+					String[] users = StringUtils.tokenizeToStringArray(usersStr, ";");
+					SwoUserExtend[] userExtendsArray = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, users);
+					UserInfo[] userInfoArray = new UserInfo[userExtendsArray.length];
+					for (int j = 0; j < userExtendsArray.length; j++) {
+						userInfoArray[j] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtendsArray[j]);
+					}
+					inviteMemberPolicy.setCustoms(userInfoArray);
+				} else if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_LEADER)) {
+					inviteMemberPolicy.setLeaderChecked(true);
+				} else if (roleKeyInviteMembers[i].equalsIgnoreCase(SwaGroup.GROUP_ROLEKYE_MEMBER)) {
+					inviteMemberPolicy.setMembersChecked(true);
+				}
+			}
+			
+			group.setBoardWritePolicy(boardWritePolicy);
+			group.setBoardEditPolicy(boardEditPolicy);
+			group.setEventWritePolicy(eventWritePolicy);
+			group.setEventEditPolicy(eventEditPolicy);
+			group.setInvitableMembers(inviteMemberPolicy);
+						
+			int maxMembers = swoGroup.getMaxMember();
+			group.setMaxMembers(maxMembers);
+			
+			boolean autoApproval = swoGroup.isAutoApproval();
+			group.setAutoApproval(autoApproval);
+			
 			return group;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -3946,6 +4143,66 @@ public class ModelConverter {
 		return informationWorkInstance;
 	}
 
+	public static ImageInstance getImageInstanceBySwdRecord(String userId, ImageInstance imageInstance, SwdRecord swdRecord) throws Exception {
+		if (swdRecord == null)
+			return null;
+		if (imageInstance == null)
+			imageInstance = new ImageInstance();
+
+		String companyId = SmartUtil.getCurrentUser().getCompanyId();
+		ImageInstance tempWorkInstance = new ImageInstance();
+		getWorkInstanceBySwdRecord(userId, tempWorkInstance, swdRecord);
+		tempWorkInstance.setType(Instance.TYPE_IMAGE);
+
+		String fileGroupId = swdRecord.getDataFieldValue("5");//TODO 첨부파일 파일 그룹아이디를 가져오기 위한 하드코딩
+		String content = swdRecord.getDataFieldValue("4");
+		
+		List<IFileModel> files = getDocManager().findFileGroup(fileGroupId);
+		String fileName = null;
+		String originImgSrc = "";
+		String imgSrc = "";
+		if (files != null && files.size() != 0) {
+			fileName = files.get(0).getFileName();
+			String filePath = files.get(0).getFilePath();
+			String extension = filePath.lastIndexOf(".") > 1 ? filePath.substring(filePath.lastIndexOf(".")) : null;
+			filePath = StringUtils.replace(filePath, "\\", "/");
+			if(filePath.indexOf(companyId) != -1)
+				originImgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+			filePath = filePath.replaceAll(extension, Community.IMAGE_TYPE_THUMB + extension);
+			if(filePath.indexOf(companyId) != -1)
+				imgSrc = Community.PICTURE_PATH + filePath.substring(filePath.indexOf(companyId), filePath.length());
+		}
+		if(!CommonUtil.isEmpty(fileGroupId)) {
+			tempWorkInstance.setGroupId(fileGroupId);
+			List<IFileModel> fileModelList = getDocManager().findFileGroup(fileGroupId);
+			List<Map<String, String>> fileList = new ArrayList<Map<String,String>>();
+			int fileModelListSize = fileModelList.size();
+			if(fileList != null && fileModelListSize > 0) {
+				for(int i=0; i<fileModelListSize; i++) {
+					Map<String, String> fileMap = new LinkedHashMap<String, String>();
+					IFileModel fileModel = fileModelList.get(i);
+					String id = fileModel.getId();
+					String name = fileModel.getFileName();
+					String type = fileModel.getType();
+					String size = fileModel.getFileSize() + "";
+					fileMap.put("fileId", id);
+					fileMap.put("fileName", name);
+					fileMap.put("fileType", type);
+					fileMap.put("fileSize", size);
+					fileList.add(fileMap);
+				}
+			}
+		}
+		tempWorkInstance.setFileName(fileName);
+		tempWorkInstance.setOriginImgSource(originImgSrc);
+		tempWorkInstance.setImgSource(imgSrc);
+		tempWorkInstance.setContent(content);
+
+		imageInstance = tempWorkInstance;
+		return imageInstance;
+		
+	}
+	
 	public static ImageCategoryInfo[] getImageCategoriesByType(int displayType, String spaceId) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
@@ -4679,14 +4936,14 @@ public class ModelConverter {
 			workInstanceInfo.setId(task.getPrcObjId());
 		} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
 			String singleWorkInfos = task.getTskDef();
-			String recordId = null;
+			String swdRecordId = null;
 			String domainId = null;
 			if (!CommonUtil.isEmpty(singleWorkInfos)) {
 				String[] singleWorkInfo = StringUtils.tokenizeToStringArray(singleWorkInfos, "|");	
 				domainId = singleWorkInfo[0];
-				recordId = singleWorkInfo[1];
+				swdRecordId = singleWorkInfo[1];
 			}
-			workInstanceInfo.setId(recordId);
+			workInstanceInfo.setId(swdRecordId);
 		}
 		workInstanceInfo.setSubject(StringUtil.subString(task.getPrcTitle(), 0, 30, "..."));
 		//workInstanceInfo.setType(Instance.TYPE_WORK);
