@@ -1,7 +1,9 @@
 package net.smartworks.model.work;
 
 import net.smartworks.model.BaseObject;
+import net.smartworks.model.KeyMap;
 import net.smartworks.service.ISmartWorks;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class Work extends BaseObject{
@@ -56,6 +58,34 @@ public class Work extends BaseObject{
 	public static final String CONTROLLER_MEMO_LIST = "memo_list.sw";
 	
 	public static final String ID_EMPTY_WORK = "EmptyWorkId";
+
+	public static final KeyMap[] CATEGORIES_BY_INDUSTRY = new KeyMap[]{
+		new KeyMap("CBI01", SmartMessage.getString("category.industry.1")),
+		new KeyMap("CBI02", SmartMessage.getString("category.industry.2")),
+		new KeyMap("CBI03", SmartMessage.getString("category.industry.3")),
+		new KeyMap("CBI04", SmartMessage.getString("category.industry.4")),
+		new KeyMap("CBI05", SmartMessage.getString("category.industry.5")),
+		new KeyMap("CBI06", SmartMessage.getString("category.industry.6")),
+		new KeyMap("CBI07", SmartMessage.getString("category.industry.7")),
+		new KeyMap("CBI08", SmartMessage.getString("category.industry.8")),
+		new KeyMap("CBI09", SmartMessage.getString("category.industry.9")),
+		new KeyMap("CBI10", SmartMessage.getString("category.industry.10")),
+		new KeyMap("CBI11", SmartMessage.getString("category.industry.11")),
+		new KeyMap("CBI99", SmartMessage.getString("category.industry.99"))
+	};
+	public static final KeyMap[] CATEGORIES_BY_JOB = new KeyMap[]{
+		new KeyMap("CBJ01", SmartMessage.getString("category.job.1")),
+		new KeyMap("CBJ02", SmartMessage.getString("category.job.2")),
+		new KeyMap("CBJ03", SmartMessage.getString("category.job.3")),
+		new KeyMap("CBJ04", SmartMessage.getString("category.job.4")),
+		new KeyMap("CBJ05", SmartMessage.getString("category.job.5")),
+		new KeyMap("CBJ06", SmartMessage.getString("category.job.6")),
+		new KeyMap("CBJ07", SmartMessage.getString("category.job.7")),
+		new KeyMap("CBJ08", SmartMessage.getString("category.job.8")),
+		new KeyMap("CBJ09", SmartMessage.getString("category.job.9")),
+		new KeyMap("CBJ10", SmartMessage.getString("category.job.10")),
+		new KeyMap("CBJ99", SmartMessage.getString("category.job.99"))
+	};
 
 	private int 	type=-1; 
 	private int 	providedBy;

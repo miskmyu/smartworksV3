@@ -9,6 +9,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		container : $('<div></div>'),
 		entity : null,
 		dataField : '',
+		resizer : true,
 		refreshData : false,
 		layoutInstance : null
 	};
@@ -86,7 +87,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.buildEx = function(config){
 			fieldName: '',
 			value: '',
 			columns: 1,
-			colSpan: 1, 
+			colSpan: 1,
+			resizer: true,
 			required: false,
 			readOnly: false		
 	};
@@ -104,6 +106,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.buildEx = function(config){
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
+			resizer : options.resizer,
 			dataField : SmartWorks.FormRuntime.RichEditorBuilder.dataField({
 				fieldId: options.fieldId,
 				value: options.value

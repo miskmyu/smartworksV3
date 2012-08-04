@@ -27,7 +27,6 @@
 function submitForms() {
 	var iworkManual = $('.js_iwork_manual_page');
 	var helpUrl = iworkManual.find('input[name="txtHelpUrl"]').attr('value');
-	console.log('helpUrl=', helpUrl, ', substring=', helpUrl.substring(0,6))
 	if(!isEmpty(helpUrl) && (helpUrl.length<8 || helpUrl.substring(0,7).toLowerCase() != 'http://')){
 		smartPop.showInfo(smartPop.ERROR, smartMessage.get("helpUrlSyntaxError"));
 		return;		
@@ -93,7 +92,7 @@ function submitForms() {
 			<div class="js_work_desc_view"><%if(!SmartUtil.isBlankObject(work.getDesc())) {%><%=work.getDesc()%> <%}else{ %><fmt:message key="common.message.no_work_desc" /><%}%></div>
 			<div class="js_work_desc_edit" style="display:none">
 				<div><fmt:message key="builder.title.work_desc"/> : </div>
-				<textarea class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
+				<textarea name="txtaWorkDesc" class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
 			</div>
 			<!-- 업무 정의 영역 //-->
 			
@@ -238,12 +237,12 @@ function submitForms() {
 	
 			<span class="po_left">
 				<%
-				if (work.getManualFileId() != null) {
+				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
 					<a href="<%=work.getManualFilePath() %>" class="icon_btn_video mr2" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
 				<%
 				}
-				if (work.getHelpUrl() != null) {
+				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
 				%> 
 					<a href="<%=work.getHelpUrl()%>" class="icon_btn_webex" title="<fmt:message key='work.title.help_url'/>" target="_blank"></a>
 				<%

@@ -1699,6 +1699,7 @@ $(function() {
 		var formDescText = formDescEdit.find('.js_form_desc_text');
 		var formDescEditor = formDescEdit.find('.js_form_desc_editor');
 		var formDesc = formDescText.attr('value');
+		var fieldName = input.parents('.js_select_editor_box').attr('fieldName');
 		if(input.attr('value') == 'editor' && isEmpty(formDescEditor.html())){
 			formDescEdit.find('.js_form_desc_text').hide().attr('name', '');
 			var gridRow = SmartWorks.GridLayout.newGridRow();
@@ -1707,18 +1708,19 @@ $(function() {
 
 			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
 				container: gridRow,
-				fieldId: "txtaFormDesc",
+				fieldId: fieldName,
 				fieldName: "",
 				columns: 1,
 				value: formDesc,
+				resizer: false,
 				required: false
 			});
 			gridRow.find('.form_label').hide();
 			gridRow.find('.form_value').css({width:"100%"});
-			gridRow.find('#txtaFormDesc').css({height:"280px"});
+			gridRow.find('#'+ fieldName).css({height:"280px"});
 						
 		}else if(input.attr('value') == 'text' && !formDescText.is(':visible')){
-			formDescEdit.find('.js_form_desc_text').show().attr('name', 'txtaFormDesc');
+			formDescEdit.find('.js_form_desc_text').show().attr('name', fieldName);
 			formDescEditor.html('');
 		}
 		return;

@@ -38,7 +38,6 @@
 function submitForms() {
 	var pworkManual = $('.js_pwork_manual_page');
 	var helpUrl = pworkManual.find('input[name="txtHelpUrl"]').attr('value');
-	console.log('helpUrl=', helpUrl, ', substring=', helpUrl.substring(0,6))
 	if(!isEmpty(helpUrl) && (helpUrl.length<8 || helpUrl.substring(0,7).toLowerCase() != 'http://')){
 		smartPop.showInfo(smartPop.ERROR, smartMessage.get("helpUrlSyntaxError"));
 		return;		
@@ -106,7 +105,7 @@ function submitForms() {
 			<div class="js_work_desc_view"><%if(!SmartUtil.isBlankObject(work.getDesc())) {%><%=work.getDesc()%><%}else{ %><fmt:message key="common.message.no_work_desc" /><%} %></div>
 			<div class="js_work_desc_edit" style="display:none">
 				<div><fmt:message key="builder.title.work_desc"/> : </div>
-				<textarea class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
+				<textarea name="txtaWorkDesc" class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
 			</div>		
 			<!-- 업무 정의 //-->
 		
@@ -124,9 +123,9 @@ function submitForms() {
 						<div class="js_manual_tasks">
 							<ul>
 								<!-- 태스크 -->
-								<li class="proc_task not_yet js_manual_task js_select_task_manual selected">
+								<li class="proc_task not_yet js_manual_task js_select_task_manual selected" taskId="js_process_diagram">
 									<div><%=work.getName()%></div>
-									<div>프로세스다이어그램</div>
+									<div><fmt:message key="common.title.process_diagram"/></div>
 								</li>
 								<!-- 태스크 //-->
 								<%
@@ -135,12 +134,16 @@ function submitForms() {
 									for (SmartTaskInfo task : tasks) {
 										count++;
 										UserInfo assignedUser = task.getAssignedUser();
-										String assigningName = task.getAssigningName();
+										String assignedUserImg = (SmartUtil.isBlankObject(assignedUser)) ? User.getNoUserPicture() : assignedUser.getMinPicture();
+										String assigningPosition = (SmartUtil.isBlankObject(assignedUser)) ? "" : assignedUser.getPosition();
+										String assigningName = (SmartUtil.isBlankObject(assignedUser)) ? task.getAssigningName() : assignedUser.getName();
 								%>
 										<!-- 태스크 -->
 										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
 											<div><%=count%>) <%=task.getName()%></div>
-											<div class="t_date"><%=task.getAssigningName()%></div>
+											
+					                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
+						                    <div class="noti_in_s"><div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div><div class="t_date"><%=assigningName %></div></div>
 										</li>
 										<!-- 태스크 //-->
 								<%
@@ -163,7 +166,7 @@ function submitForms() {
 			String diagramImage = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getOrgImage();
 			String diagramDesc = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getDescription(); 
 			%>
-			<div class="js_task_manual">
+			<div class="js_task_manual" id="js_process_diagram">
 				<div class="up_point pos_default"></div>
 				<div class="form_wrap up">
 					<div class="area">
@@ -178,12 +181,12 @@ function submitForms() {
 										<td class ="dline_left_gray pl10" style="width:100%">
 			 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(diagramDesc)){%><%=diagramDesc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 											<div class="js_form_desc_edit"  style="display:none">
-			 									<span><fmt:message key="builder.title.form_desc"/> : </span>
-			 									<span class="fr js_select_editor_box">
+			 									<span><fmt:message key="builder.title.process_desc"/> : </span>
+			 									<span class="fr js_select_editor_box" fieldName="txtaProcessDesc">
 				 									<input name="rdoEditor" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
 													<input name="rdoEditor" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 												</span>
-												<textarea class="fieldline js_form_desc_text" name="txtaFormDesc" cols="" rows="22"><%=CommonUtil.toNotNull(diagramDesc) %></textarea>
+												<textarea class="fieldline js_form_desc_text" name="txtaProcessDesc" cols="" rows="22"><%=CommonUtil.toNotNull(diagramDesc) %></textarea>
 												<div class="js_form_desc_editor"></div>
 											</div>
 										</td>
@@ -218,11 +221,11 @@ function submitForms() {
 						 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 														<div class="js_form_desc_edit"  style="display:none">
 						 									<span><fmt:message key="builder.title.form_desc"/> : </span>
-						 									<span class="fr js_select_editor_box">
+						 									<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
 							 									<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
 																<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 															</span>
-															<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=i %>" cols="" rows="22"><%=CommonUtil.toNotNull(desc) %></textarea>
+															<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22"><%=CommonUtil.toNotNull(desc) %></textarea>
 															<div class="js_form_desc_editor"></div>
 														</div>
 													</td>
@@ -347,12 +350,12 @@ function submitForms() {
 		
 			<span class="po_left">
 				<%
-				if (work.getManualFileId() != null) {
+				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
 					<a href="<%=work.getManualFilePath() %>" class="icon_btn_video mr2" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
 				<%
 				}
-				if (work.getHelpUrl() != null) {
+				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
 				%> 
 					<a href="<%=work.getHelpUrl()%>" class="icon_btn_webex" title="<fmt:message key='work.title.help_url'/>" target="_blank"></a>
 				<%
