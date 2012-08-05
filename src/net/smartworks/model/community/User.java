@@ -203,4 +203,8 @@ public class User extends WorkSpace {
 		if(USER_ID_ANONYMOUS.equals(getId())) return true;
 		return false;
 	}
+	
+	public static String getNoUserPicture(){
+		return NO_PICTURE_PATH + User.NO_USER_PICTURE + ".jpg";
+	}
 }

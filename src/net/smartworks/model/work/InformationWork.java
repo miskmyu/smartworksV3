@@ -7,8 +7,9 @@ public class InformationWork extends SmartWork {
 	private boolean keyDuplicatable=true;
 	private FormField[] displayFields;
 	private String helpUrl;
-	private String manualFilePath;
+	private String manualFileId;
 	private String manualFileName;
+	private String manualFilePath;
 	private int commentCount;
 	
 	public SmartForm getForm() {
@@ -41,17 +42,23 @@ public class InformationWork extends SmartWork {
 	public void setHelpUrl(String helpUrl) {
 		this.helpUrl = helpUrl;
 	}
-	public String getManualFilePath() {
-		return manualFilePath;
+	public String getManualFileId() {
+		return manualFileId;
 	}
-	public void setManualFilePath(String manualFilePath) {
-		this.manualFilePath = manualFilePath;
+	public void setManualFileId(String manualFileId) {
+		this.manualFileId = manualFileId;
 	}
 	public String getManualFileName() {
 		return manualFileName;
 	}
 	public void setManualFileName(String manualFileName) {
 		this.manualFileName = manualFileName;
+	}
+	public String getManualFilePath() {
+		return manualFilePath;
+	}
+	public void setManualFilePath(String manualFilePath) {
+		this.manualFilePath = manualFilePath;
 	}
 	public int getCommentCount() {
 		return commentCount;

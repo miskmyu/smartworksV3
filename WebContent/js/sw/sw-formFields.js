@@ -811,3 +811,25 @@ function loadWriteMailFields() {
 		}		
 	}
 };
+
+function loadWorkManualField() {
+	var loadWorkManualField = $('div.js_work_manual_field');
+	if(!isEmpty(loadWorkManualField)){
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		var gridTable = SmartWorks.GridLayout.newGridTable();
+		loadWorkManualField.html(gridTable.html(gridRow));
+		var value = loadWorkManualField.attr("groupId");
+
+		SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtWorkManual",
+			fieldName: "",
+			value: value,
+			columns: 1,
+			required: false
+		});
+		gridRow.find('.form_label').hide();
+		gridRow.find('.form_value').css({width:"100%"});
+	}
+};
+

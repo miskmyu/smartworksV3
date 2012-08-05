@@ -3352,9 +3352,10 @@ public class ModelConverter {
 		
 		getSmartWorkByPkgPackage(userId, processWork, pkg);
 		processWork.setType(SmartWork.TYPE_PROCESS);
-		processWork.setHelpUrl("HELP URL");
-		processWork.setManualFileName("MANUAL FILE NAME");
-		processWork.setManualFilePath("MANUAL FILE PATH");
+		processWork.setHelpUrl("");
+		processWork.setManualFileId("");// Manual File Group Id
+		processWork.setManualFileName("");
+		processWork.setManualFilePath("");
 
 		processWork.setDiagram(getSmartDiagramByPkgInfo(userId, pkg));
 
@@ -3922,9 +3923,10 @@ public class ModelConverter {
 		
 		getSmartWorkByPkgPackage(userId, informationWork, pkg);
 		informationWork.setType(SmartWork.TYPE_INFORMATION);
-		informationWork.setHelpUrl("HELP URL");
-		informationWork.setManualFileName("MANUAL FILE NAME");
-		informationWork.setManualFilePath("MANUAL FILE PATH");
+		informationWork.setHelpUrl("");
+		informationWork.setManualFileId("");// Manual File Group Id
+		informationWork.setManualFileName("");
+		informationWork.setManualFilePath("");
 
 		return informationWork;
 	}

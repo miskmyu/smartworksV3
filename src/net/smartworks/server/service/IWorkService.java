@@ -61,4 +61,8 @@ public interface IWorkService {
 
 	public void removeAFavoriteWork(String workId) throws Exception;
 
+	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
+	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

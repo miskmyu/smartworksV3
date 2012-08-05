@@ -1644,4 +1644,14 @@ public class WorkServiceImpl implements IWorkService {
 		return new LocalDate(calendar.getTime().getTime()).toGMTSimpleDateString(); 
 
 	}
+	@Override
+	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

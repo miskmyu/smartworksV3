@@ -204,4 +204,16 @@ public class WorkController extends ExceptionInterceptor {
 		smartworks.removeWorkSearchFilter(requestBody, request);
 	}
 
+	@RequestMapping(value = "/set_iwork_manual", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setIWorkManual(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setIWorkManual(requestBody, request);
+	}
+
+	@RequestMapping(value = "/set_pwork_manual", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody void setPWorkManual(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.setPWorkManual(requestBody, request);
+	}
+
 }

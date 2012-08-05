@@ -1584,6 +1584,15 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		workService.setIWorkManual(requestBody, request);
+	}
+
+	@Override
+	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		workService.setPWorkManual(requestBody, request);
+	}
+		
 	public ImageInstance getImageInstanceById(String instId) throws Exception {
 		return instanceService.getImageInstanceById(instId);
 	}
