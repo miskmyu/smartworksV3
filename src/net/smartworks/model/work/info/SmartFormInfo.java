@@ -32,10 +32,10 @@ public class SmartFormInfo extends BaseObject{
 		this.orgImageName = orgImageName;
 	}
 	public String getOrgImage(){
-		return SmartForm.FORM_IMAGE_PATH + getOrgImageName();
+		return getOrgImageName();
 	}
 	public String getMinImage(){
-		return SmartForm.FORM_IMAGE_PATH + getMinImageName();
+		return getMinImageName();
 	}
 	public SmartFormInfo(){
 		super();

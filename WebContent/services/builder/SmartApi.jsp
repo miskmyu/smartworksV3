@@ -1,3 +1,9 @@
+<%@page import="net.smartworks.server.engine.common.manager.IManager"%>
+<%@page import="net.smartworks.server.engine.pkg.model.PkgPackage"%>
+<%@page import="net.smartworks.server.engine.pkg.model.PkgPackageCond"%>
+<%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
+<%@page import="java.io.File"%>
+<%@page import="net.smartworks.util.OSValidator"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@page import="net.smartworks.model.work.Work"%>
 <%@page import="net.smartworks.server.engine.common.util.FileUtil"%>
@@ -21,23 +27,13 @@ try {
 		if (base64 == null)
 			throw new MisException("errorCodeNullBase64", "Base64 is null.");
 		
-		StringBuffer buf = new StringBuffer(Work.PICTURE_PATH).append(SmartUtil.getCurrentUser().getCompanyId()).append("/").append(Work.WORKDEF_IMG_DIR).append("/");
+		StringBuffer buf = new StringBuffer(OSValidator.getImageDirectory()).append("/SmartFiles/").append(SmartUtil.getCurrentUser().getCompanyId()).append("/").append(Work.WORKDEF_IMG_DIR).append("/");
 		if (!CommonUtil.isEmpty(group))
 			buf.append(group).append("/");
+		
 		buf.append(id).append(".png");
 		
 		FileUtil.writeByBase64(buf.toString(), base64, true);
-		
-	} else if (method.equals("getImageAsBase64")) {
-		String group = CommonUtil.toNotNull(request.getParameter("group"));
-		String id = CommonUtil.toNull(request.getParameter("id"));
-		if (id != null) {
-			StringBuffer buf = new StringBuffer("/systemImages/workDef/");
-			if (!CommonUtil.isEmpty(group))
-				buf.append(group).append("/");
-			buf.append(id);
-			res.setObjString(FileUtil.encodeAsBase64(buf.toString()));
-		}
 		
 	} else {
 		throw new MisException("errorCodeNoSuchMethod", "No such method has been found.");
