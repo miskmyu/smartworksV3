@@ -603,8 +603,35 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						else
 							senderId = sender.substring(start+1, end);
 					}
+					
+					// start -- added by sjlee
+					//private UserInfo[] receivers;
+					String receiversStr = mailContent.getReceiver();
+					UserInfo[] receivers = null;
+					if(!SmartUtil.isBlankObject(receiversStr)){
+						String[] receiversArr = receiversStr.split(",");
+						if(!SmartUtil.isBlankObject(receiversArr)){
+							receivers = new UserInfo[receiversArr.length];
+							for(int j=0; j<receiversArr.length; j++){
+								sender = receiversArr[j];
+								senderId = null;
+								if(!SmartUtil.isBlankObject(receiversArr[j])){
+									int start = receiversArr[j].indexOf("<");
+									int end = receiversArr[j].indexOf(">");
+									if(start == -1 || end == -1)
+										senderId = receiversArr[j];
+									else
+										senderId = receiversArr[j].substring(start+1, end);
+								}
+								receivers[j] = new UserInfo(senderId, sender);
+							}
+						}
+					}					
+					// end -- added by sjlee
+					
 					mailInstanceInfo.setSubject(mailContent.getSubject());
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
+					mailInstanceInfo.setReceivers(receivers);
 					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
 						mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
 					mailInstanceInfo.setPriority(mailContent.getPriority());
@@ -614,7 +641,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					mailInstanceInfo.setType(Instance.TYPE_MAIL);
 					mailInstanceInfoList.add(mailInstanceInfo);
 					/*
-					private UserInfo[] receivers;
 					private UserInfo[] ccReceivers;
 					private MailFolder mailFolder;
 					private MailFolder parentMailFolder;*/

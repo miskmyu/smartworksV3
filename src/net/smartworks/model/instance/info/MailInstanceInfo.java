@@ -2,10 +2,10 @@ package net.smartworks.model.instance.info;
 
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
-import net.smartworks.model.instance.WorkInstance;
-import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
+import net.smartworks.util.SmartUtil;
 
 public class MailInstanceInfo extends InstanceInfo {
 
@@ -111,5 +111,17 @@ public class MailInstanceInfo extends InstanceInfo {
 		this.sender = sender;
 		this.sendDate = sendDate;
 	}
+
+	public String getReceiversShown(){
+		if(SmartUtil.isBlankObject(this.receivers)) return "";
+		String shown = receivers[0].getEmailAddressShown();
+		if(this.receivers.length==1){
+			return receivers[0].getEmailAddressShown();
+		}else{
+			shown = receivers[0].getEmailAddressShown() + SmartMessage.getString("content.sentence.with_other_users", new Object[]{this.receivers.length-1});
+		}
+		return shown;
+	}
+	
 
 }
