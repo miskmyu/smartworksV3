@@ -1716,7 +1716,14 @@ public class CommunityServiceImpl implements ICommunityService {
 			if(!CommonUtil.isEmpty(categoryId)) {
 				String colCategory = getSwdManager().getTableColName(domainId, SwdDomainFieldConstants.CONTACT_FIELDID_CATEGORY);
 				Filters fs2 = new Filters();
-				fs2.addFilter(new Filter("=", colCategory, Filter.OPERANDTYPE_STRING, categoryId));
+				//start added by jybae, 2012-8-5
+				// categoryId가 uncategorized일때, null로 검색 추가
+				if(categoryId.equalsIgnoreCase("uncategorized")){
+					fs2.addFilter(new Filter("=", colCategory, Filter.OPERANDTYPE_STRING, null));
+				//end added by jybae, 2012-8-5
+				}else{
+					fs2.addFilter(new Filter("=", colCategory, Filter.OPERANDTYPE_STRING, categoryId));
+				}
 				swdRecordCond.addFilters(fs2);
 			}
 
