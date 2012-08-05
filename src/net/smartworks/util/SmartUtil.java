@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -366,6 +367,16 @@ public class SmartUtil {
 					user.setEmployeeId(login.getEmpNo());
 					user.setUseMail(login.isUseMail());
 					user.setUseSignPicture(login.isUseSign());
+					if (!CommonUtil.isEmpty(login.getMailServerId())) {
+						MailAccount[] mailAccounts = new MailAccount[1];
+						MailAccount mailAccount = new MailAccount();
+						mailAccount.setEmailServerId(login.getMailServerId());
+						mailAccount.setEmailServerName(login.getMailServerName());
+						mailAccount.setPassword(login.getMailPassword());
+						mailAccount.setUserName(login.getMailId() + "@" + login.getMailServerName());
+						mailAccounts[0] = mailAccount;
+						user.setMailAccounts(mailAccounts);
+					}
 				}
 				return user;
 			} else {

@@ -946,7 +946,7 @@ public class CopyOfModelConverter {
 		getSmartWorkByPkgPackage(userId, processWork, pkg);
 		
 		processWork.setHelpUrl("HELP URL");
-		processWork.setManualFile("MANUAL FILE GROUP ID");
+//		processWork.setManualFile("MANUAL FILE GROUP ID");
 		
 		return processWork;
 	}

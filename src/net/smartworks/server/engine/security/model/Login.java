@@ -42,6 +42,12 @@ public class Login implements UserDetails {
 	private String smallPictureName;
 	private boolean useSign;
 	private String signPictureName;
+	private String mailUserId;
+	private String mailServerId;
+	private String mailServerName;
+	private String mailId;
+	private String mailPassword;
+	
 	private Collection<GrantedAuthority> authorities; // 권한
 
 	public String getId() {
@@ -199,6 +205,36 @@ public class Login implements UserDetails {
 	}
 	public void setAuthorities(Collection<GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+	public String getMailUserId() {
+		return mailUserId;
+	}
+	public void setMailUserId(String mailUserId) {
+		this.mailUserId = mailUserId;
+	}
+	public String getMailServerId() {
+		return mailServerId;
+	}
+	public void setMailServerId(String mailServerId) {
+		this.mailServerId = mailServerId;
+	}
+	public String getMailId() {
+		return mailId;
+	}
+	public void setMailId(String mailId) {
+		this.mailId = mailId;
+	}
+	public String getMailPassword() {
+		return mailPassword;
+	}
+	public void setMailPassword(String mailPassword) {
+		this.mailPassword = mailPassword;
+	}
+	public String getMailServerName() {
+		return mailServerName;
+	}
+	public void setMailServerName(String mailServerName) {
+		this.mailServerName = mailServerName;
 	}
 	@Override
 	public boolean isAccountNonExpired() {
