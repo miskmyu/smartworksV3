@@ -318,7 +318,7 @@
 			String catId = pkg.getCategoryId();
 			if (catId == null)
 				continue;
-			CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(companyId, user, catId);
+			CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(user, catId, null);
 			if (cat == null)
 				continue;
 			CtgCategory superCat = getParentCategory(companyId, user, catId);

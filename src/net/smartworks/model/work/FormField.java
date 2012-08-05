@@ -1,5 +1,9 @@
 package net.smartworks.model.work;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.smartworks.model.BaseObject;
 import net.smartworks.util.SmartMessage;
 
@@ -138,4 +142,80 @@ public class FormField extends BaseObject{
 		}
 		return null;
 	}
+	
+	public String getDataFormat(String data, String viewingType, int fieldSize) {
+		//StringBuffer str = new StringBuffer();
+		DecimalFormat df = new java.text.DecimalFormat("###,###,###,###,###,###");
+		String tdAlign = "left";
+		//날짜
+		if( viewingType.equalsIgnoreCase("dateChooser") ) {
+			if (data.length() > 10) {
+				data = data.substring(0, 10);
+			}
+			tdAlign="center";
+		// 시간
+		} else if( viewingType.equalsIgnoreCase("timeField") ) {
+			if (data.length() == 21) {
+				data = data.substring(11, 16);
+			} else if(data.length() == 8) {
+				data = data.substring(0, 5);
+			}
+			tdAlign="center";
+		// 숫자
+		} else if( viewingType.equalsIgnoreCase("numberInput") ) {
+			try{      
+				double dataDouble = new Double(data).doubleValue();
+				data = df.format(dataDouble);
+			} catch(Exception e){      
+
+			} finally {      
+				tdAlign="right";
+			}
+		// 숫자
+		} else if( viewingType.equalsIgnoreCase("numericStepper") ) {
+			try{      
+				double dataDouble = new Double(data).doubleValue();
+				data = df.format(dataDouble);
+			} catch(Exception e){      
+
+			} finally {      
+				tdAlign="right";
+			}
+		// 통화
+		} else if( viewingType.startsWith("currencyInput") ) {
+			try{      
+				double dataDouble = new Double(data).doubleValue();
+				data = df.format(dataDouble);
+				if(data.length() > 0) {
+					data = viewingType.substring(14,viewingType.length()) + data.toString();
+				}
+			} catch(Exception e){      
+				if(data.length() > 0) {
+					data = viewingType.substring(14,viewingType.length()) + data.toString();
+				}
+			} finally {      
+				tdAlign="right";
+			}
+		} else if( viewingType.equalsIgnoreCase("percentInput") ) {
+			try{      
+				double dataDouble = new Double(data).doubleValue();
+				data = df.format(dataDouble);
+				if(data.length() > 0) {
+					data = data+"%";
+				}
+			} catch(Exception e){      
+				if(data.length() > 0) {
+					data = data+"%";
+				}
+			} finally {      
+				tdAlign="right";
+			}
+			tdAlign="right";
+		//첨부파일
+		} else if( viewingType.equalsIgnoreCase("fileField") ) {
+			tdAlign="center";
+		}
+		return "<td style='text-align:" + tdAlign + ";'>" + data + "</td>";
+	}
+	
 }
