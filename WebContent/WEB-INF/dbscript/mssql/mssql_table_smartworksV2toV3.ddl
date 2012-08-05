@@ -659,7 +659,7 @@ CREATE TABLE msg_db_objects (
     bcc varchar(8000),
     replyTo varchar(255),
     subject varchar(255),
-    multipart bit,
+    multipart smallint,
     priority int,
     sentdate datetime,
     unread smallint NOT NULL,
