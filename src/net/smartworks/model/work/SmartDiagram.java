@@ -6,7 +6,6 @@ import net.smartworks.util.SmartUtil;
 
 public class SmartDiagram extends BaseObject{
 
-	public static final String DIAGRAM_IMAGE_PATH = "images/";
 	public static final String  NO_PROCESS_IMAGE  = "no_process_image";
 	
 	private String description;
@@ -37,10 +36,10 @@ public class SmartDiagram extends BaseObject{
 		this.orgImageName = orgImageName;
 	}
 	public String getOrgImage(){
-		return DIAGRAM_IMAGE_PATH + getOrgImageName();
+		return getOrgImageName();
 	}
 	public String getMinImage(){
-		return DIAGRAM_IMAGE_PATH + getMinImageName();
+		return getMinImageName();
 	}
 	public SmartTaskInfo[] getTasks() {
 		return tasks;

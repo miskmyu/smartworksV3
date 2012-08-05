@@ -4,7 +4,6 @@ import net.smartworks.model.BaseObject;
 
 public class SmartForm extends BaseObject{
 
-	public static final String FORM_IMAGE_PATH = "images/";
 	public static final String  NO_FORM_IMAGE  = "no_form_image";
 
 	public final static String ID_MEMO_MANAGEMENT = "frm_memo_SYSTEM";
@@ -49,10 +48,10 @@ public class SmartForm extends BaseObject{
 		this.orgImageName = orgImageName;
 	}
 	public String getOrgImage(){
-		return FORM_IMAGE_PATH + getOrgImageName();
+		return getOrgImageName();
 	}
 	public String getMinImage(){
-		return FORM_IMAGE_PATH + getMinImageName();
+		return getMinImageName();
 	}
 	public SmartForm(){
 		super();
