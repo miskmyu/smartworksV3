@@ -605,7 +605,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 					
 					// start -- added by sjlee
-					//private UserInfo[] receivers;
 					String receiversStr = mailContent.getReceiver();
 					UserInfo[] receivers = null;
 					if(!SmartUtil.isBlankObject(receiversStr)){
