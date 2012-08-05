@@ -4,6 +4,7 @@ SmartWorks.GridLayout = function(config) {
 		formXml : '',
 		formValues : '',
 		mode : 'edit',
+		first : null,
 		requiredOnly : 'false',
 		workId : null,
 		formId : null,
@@ -159,6 +160,7 @@ SmartWorks.GridLayout = function(config) {
 	var onError = this.options.onError;
 	var getLayout = this.getLayout;
 	var refreshData = this.options.refreshData;
+	var firstFlag = this.options.first;
 	var this_ = this;
 
 	if(!isEmpty(refreshData)){

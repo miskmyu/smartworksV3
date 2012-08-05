@@ -164,6 +164,7 @@ $(function() {
 			new SmartWorks.GridLayout({
 				target : formContent,
 				mode : "edit",
+				first : true,
 				workId : workId,
 				onSuccess : function(){
 					$('#form_works').parent().show();

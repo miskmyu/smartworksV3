@@ -458,6 +458,7 @@
 		new SmartWorks.GridLayout({
 			target : formContent,
 			mode : formMode,
+			first : (formMode=='edit'),
 			workId : workId,
 			formId : formId,
 			taskInstId : instId,
