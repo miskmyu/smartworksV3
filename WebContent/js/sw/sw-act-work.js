@@ -253,6 +253,7 @@ $(function() {
 		var url = input.attr('href');
 		var target = input.parents('.js_work_list_page').find('div.js_new_work_form');
 		$('a.js_search_filter_close').click();
+		$('a.js_excel_import_close').click();
 		$.ajax({
 			url : url,
 			data : {},
@@ -1732,4 +1733,33 @@ $(function() {
 		smartPop.showPicture(instanceId);
 		return false;
 	});
+
+	$('.js_import_from_excel').live('click', function(e){
+		var input = $(targetElement(e)).parent();		
+		var target = input.parents('.js_work_list_page').find('div.js_new_work_form');
+		$('a.js_search_filter_close').click();
+		$.ajax({
+			url : "import_from_excel.sw",
+			data : {},
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+			}
+			
+		});
+		return false;
+	});
+
+	$('a.js_excel_import_close').live('click', function(e) {
+		var input = $(targetElement(e));		
+		input.parents('.js_work_list_page').find('div.js_new_work_form').slideUp(500).html('');
+		return false;
+	});
+
+	$('a.js_download_excel_template').live('click', function(e) {
+		var input = $(targetElement(e));		
+		var iworkList = input.parents('.js_iwork_list_page');
+		window.open('download_excel_template.sw?workId=' + iworkList.attr('workId'));
+		return false;
+	});
+
 });

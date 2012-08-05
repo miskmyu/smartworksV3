@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -128,6 +130,18 @@ public class WorkController extends ExceptionInterceptor {
 	public ModelAndView commentListInManual(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnv(request, "jsp/content/work/list/comment_list_in_manual.jsp", "");
+	}
+
+	@RequestMapping("/import_from_excel")
+	public ModelAndView importFromExcel(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/list/import_from_excel.jsp", "");
+	}
+
+	@RequestMapping("/download_excel_template")
+	public ModelAndView downloadExcelTemplate(HttpServletRequest request, HttpServletResponse response) {
+ 		ISmartWorks smartworks = (ISmartWorks)SmartUtil.getBean("smartWorks", request);
+		return new ModelAndView("jsp/content/work/list/download_excel_template.jsp", "smartWorks", smartworks);
 	}
 
 	@RequestMapping(value = "/get_form_xml", method = RequestMethod.GET)
