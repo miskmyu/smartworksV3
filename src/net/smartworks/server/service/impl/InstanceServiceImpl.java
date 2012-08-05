@@ -760,6 +760,118 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	
+	public SwdDataField getAutoIndexSwdDataField(String userId, SwfForm form, SwfField field) throws Exception {
+		if (field == null)
+			return null;
+		
+		String fieldId = field.getId();
+		
+		AutoIndexDefCond autoIndexDefCond = new AutoIndexDefCond();
+		autoIndexDefCond.setFormId(form.getId());
+		autoIndexDefCond.setFieldId(fieldId);
+		AutoIndexDef autoIndexDef = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexDef(userId, autoIndexDefCond, null);
+		if (autoIndexDef == null) {
+			return null;
+		}
+		
+		StringBuffer valueBuff = new StringBuffer();
+		
+		AutoIndexRule[] rules = autoIndexDef.getRules();
+		if (rules == null || rules.length == 0) {
+			return null;
+		}
+
+		SwdDataField[] selectedDataField = null;
+		
+		for (int i = 0; i < rules.length; i++) {
+			AutoIndexRule rule = rules[i];
+			String ruleId = rule.getRuleId();
+			
+			if (ruleId.equalsIgnoreCase("ruleId.code")) {
+				valueBuff.append(rule.getCodeValue()).append(CommonUtil.toNotNull(rule.getSeperator()));
+			} else if (ruleId.equalsIgnoreCase("ruleId.date")) {
+				String dateFormat = rule.getType();
+				if (CommonUtil.isEmpty(dateFormat)) {
+					dateFormat = "yyyyMMdd";
+				} else {
+					if (dateFormat.equalsIgnoreCase("YYYYMMDD")) {
+						dateFormat = "yyyyMMdd";
+					} else if (dateFormat.equalsIgnoreCase("YYYYMM")) {
+						dateFormat = "yyyyMM";
+					} else if (dateFormat.equalsIgnoreCase("YYYY")) {
+						dateFormat = "yyyy";
+					} else if (dateFormat.equalsIgnoreCase("MMDD")) {
+						dateFormat = "MMdd";
+					} else if (dateFormat.equalsIgnoreCase("MM")) {
+						dateFormat = "MM";
+					} else if (dateFormat.equalsIgnoreCase("DD")) {
+						dateFormat = "dd";
+					}
+					LocalDate now = new LocalDate();
+					SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+					String dateStr = sdf.format(now);
+					valueBuff.append(dateStr).append(CommonUtil.toNotNull(rule.getSeperator()));
+				}
+			} else if (ruleId.equalsIgnoreCase("ruleId.sequence")) {
+				
+				/*<autoIndexRule ruleId="ruleId.sequence" increment="2"
+					incrementBy="incrementBy.day" digits="3" seperator="_" />*/
+				
+				int increment = rule.getIncrement();
+				String incrementBy = rule.getIncrementBy();
+				String digits = rule.getDigits();
+
+				/*int user_no = 30;
+				String result_user_no = String.format("%0"+digit+"d", user_no);
+				%04d 의 의미
+				 % -  명령의시작
+				 0 - 채워질 문자
+				 4 - 총 자리수
+				 d - 십진정수*/
+				
+				
+				//TODO 구현필요
+				
+			} else if (ruleId.equalsIgnoreCase("ruleId.list")) {
+				String itemsStr = rule.getItems();
+				String[] items = StringUtils.tokenizeToStringArray(itemsStr, "||");
+				if (items == null || items.length == 0) {
+					items = new String[1];
+					items[0] = " ";
+				}
+				SwdDataField[] subDataFields = new SwdDataField[items.length];
+				selectedDataField = new SwdDataField[1];
+				
+				//TODO 이전에 사용자가 선택해놓았던 값이 들어 와야 한다
+				selectedDataField[0].setValue(items[0]);
+				
+				for (int j = 0; j < items.length; j++) {
+					String subValue = items[j];
+					SwdDataField subDataField = new SwdDataField();
+					
+					if (CommonUtil.isEmpty(subValue)) {
+						subDataField.setValue(null);
+						subDataField.setRefRecordId(null);
+					} else {
+						subDataField.setValue(subValue);
+					}
+					subDataFields[j] = subDataField;
+				}
+				selectedDataField[0].setDataFields(subDataFields);
+				valueBuff.append(items[0]).append(CommonUtil.toNotNull(rule.getSeperator()));
+			}
+		}
+		
+		SwdDataField dataField = toDataField(userId, field, valueBuff.toString());
+		if (selectedDataField != null) {
+			//만약에 룰집합중에 한개 이상의 콤보형태의 룰이 존재한다면 두콤포리스트 아이템을 같이 올릴수 있는 방안이 필요하다
+			//subDataFields를 한번 더 랩핑하여 시퀀스아이디별로 따로주어야 할듯
+			dataField.setDataFields(selectedDataField);
+		}
+		return dataField;
+	}
+	
 	private void setResultFieldMapByFields(String userId, SwfForm form, Map<String, SwdDataField> resultMap, SwfField field, SwdRecord newRecord, SwdRecord oldRecord, boolean isFirst) throws Exception {
 		
 		try{
@@ -775,90 +887,16 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (mappings == null || formatType.equalsIgnoreCase("autoIndex")) {
 				if (formatType.equalsIgnoreCase("autoIndex") && isFirst) {
 					
-					AutoIndexDefCond autoIndexDefCond = new AutoIndexDefCond();
-					autoIndexDefCond.setFormId(form.getId());
-					autoIndexDefCond.setFieldId(fieldId);
-					AutoIndexDef autoIndexDef = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexDef(userId, autoIndexDefCond, null);
-					if (autoIndexDef == null) {
+					SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field);
+					
+					if (dataField == null) {
 						resultMap.put(fieldId, oldRecord.getDataField(fieldId));
 						newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
 						return;
 					}
-					
-					StringBuffer valueBuff = new StringBuffer();
-					
-					AutoIndexRule[] rules = autoIndexDef.getRules();
-					if (rules == null || rules.length == 0) {
-						resultMap.put(fieldId, oldRecord.getDataField(fieldId));
-						newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
-						return;
-					}
-
-					SwdDataField[] subDataFields = null;
-					
-					for (int i = 0; i < rules.length; i++) {
-						AutoIndexRule rule = rules[i];
-						String ruleId = rule.getRuleId();
-						
-						if (ruleId.equalsIgnoreCase("ruleId.code")) {
-							valueBuff.append(rule.getCodeValue()).append(CommonUtil.toNotNull(rule.getSeperator()));
-						} else if (ruleId.equalsIgnoreCase("ruleId.date")) {
-							String dateFormat = "yyyyMMdd";
-							LocalDate now = new LocalDate();
-							SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-							String dateStr = sdf.format(now);
-							valueBuff.append(dateStr).append(CommonUtil.toNotNull(rule.getSeperator()));
-						} else if (ruleId.equalsIgnoreCase("ruleId.sequence")) {
-							
-							/*<autoIndexRule ruleId="ruleId.sequence" increment="2"
-								incrementBy="incrementBy.day" digits="3" seperator="_" />*/
-							
-							int increment = rule.getIncrement();
-							String incrementBy = rule.getIncrementBy();
-							String digits = rule.getDigits();
-
-							/*int user_no = 30;
-							String result_user_no = String.format("%0"+digit+"d", user_no);
-							%04d 의 의미
-							 % -  명령의시작
-							 0 - 채워질 문자
-							 4 - 총 자리수
-							 d - 십진정수*/
-							
-							
-							//TODO 구현필요
-							
-						} else if (ruleId.equalsIgnoreCase("ruleId.list")) {
-							String itemsStr = rule.getItems();
-							String[] items = StringUtils.tokenizeToStringArray(itemsStr, "||");
-							
-							subDataFields = new SwdDataField[items.length];
-							for (int j = 0; j < items.length; j++) {
-								String subValue = items[j];
-								SwdDataField subDataField = new SwdDataField();
-								
-								if (CommonUtil.isEmpty(subValue)) {
-									subDataField.setValue(null);
-									subDataField.setRefRecordId(null);
-								} else {
-									subDataField.setValue(subValue);
-								}
-								subDataFields[j] = subDataField;
-							}
-							valueBuff.append(items[0]).append(CommonUtil.toNotNull(rule.getSeperator()));
-						}
-					}
-					
-					SwdDataField dataField = toDataField(userId, field, valueBuff.toString());
-					if (subDataFields != null) {
-						//만약에 룰집합중에 한개 이상의 콤보형태의 룰이 존재한다면 두콤포리스트 아이템을 같이 올릴수 있는 방안이 필요하다
-						//subDataFields를 한번 더 랩핑하여 시퀀스아이디별로 따로주어야 할듯
-						dataField.setDataFields(subDataFields);
-					}
-					resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+					resultMap.put(fieldId, dataField);
 					newRecord.setDataField(fieldId, dataField);
 					return;
-					
 				} else {
 					resultMap.put(fieldId, oldRecord.getDataField(fieldId));
 					newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
