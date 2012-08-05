@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.process.xpdl.util.ProcessModelHelper;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Activities;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Activity;
@@ -1596,7 +1598,16 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 		
 		this.enableFormUpdate(userId, formId, version);
 		
+		this.releaseAutoIndexFieldOption(userId, formId, content);
+		
 		updateFormContent(formId, version, content);
+	}
+	private void releaseAutoIndexFieldOption(String userId, String formId, String content) throws SmartServerRuntimeException {
+		try {
+			SwManagerFactory.getInstance().getAutoIndexManager().createAutoIndexDefByFormXml(userId, content);
+		} catch (AutoIndexException e) {
+			throw new SmartServerRuntimeException(e);
+		}
 	}
 	private void updateFormContent(String formId, int version, String content) throws SmartServerRuntimeException {
 		String hql = "update HbFormContent set content = :content where formId = :formId and version = :version";

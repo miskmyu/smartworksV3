@@ -436,7 +436,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 						if (ruleId.equalsIgnoreCase("ruleId.code")) {
 							rule.setCodeValue(ruleEle.getAttribute("codeValue"));
 						} else if (ruleId.equalsIgnoreCase("ruleId.date")) {
-							//rule.setDateFormat("");
+							rule.setType(ruleEle.getAttribute("dateFormat"));
 						} else if (ruleId.equalsIgnoreCase("ruleId.sequence")) {
 							String increment = ruleEle.getAttribute("increment");
 							rule.setIncrement(CommonUtil.isEmpty(increment) ? -1 : Integer.parseInt(increment));
@@ -471,6 +471,10 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 				} else {
 					continue;
 				}
+				AutoIndexDefCond autoIndexDefCond = new AutoIndexDefCond();
+				autoIndexDefCond.setFormId(formId);
+				autoIndexDefCond.setFieldId(fieldId);
+				SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexDef(userId, autoIndexDefCond);
 				SwManagerFactory.getInstance().getAutoIndexManager().setAutoIndexDef(userId, autoIndexDef, null);
 			}
 		} catch (Exception e) {
