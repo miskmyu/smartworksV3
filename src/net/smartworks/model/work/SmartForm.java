@@ -9,7 +9,10 @@ public class SmartForm extends BaseObject{
 	public final static String ID_MEMO_MANAGEMENT = "frm_memo_SYSTEM";
 	public final static String NAME_MEMO_MANAGEMENT = "메모";
 	public final static String ID_EVENT_MANAGEMENT = "frm_event_SYSTEM";
-	public final static String NAME_EVENT_MANAGEMENT = "이벤트";
+	//start added by jybae, 2012-8-5
+	//이벤트 > 일정으로 수정
+	public final static String NAME_EVENT_MANAGEMENT = "일정";
+	//end added by jybae, 2012-8-5
 
 	private String description;
 	private String minImageName;

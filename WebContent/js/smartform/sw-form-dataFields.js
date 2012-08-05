@@ -125,7 +125,10 @@ function createEventDataFields(config){
 	var formXml = options.formXml;
 	var dataFields = new Array();
 	dataFields.push(SmartWorks.FormRuntime.TextInputBuilder.dataField({
-		fieldName: '이벤트이름',
+		//start added by jybae, 2012-8-5
+		//이벤트이름 > 일정이름으로 수정
+		fieldName: '일정이름',
+		//end added by jybae, 2012-8-5
 		formXml: formXml,
 		value: options.name
 	}));
@@ -155,7 +158,10 @@ function createEventDataFields(config){
 		users: options.relatedUsers
 	}));
 	dataFields.push(SmartWorks.FormRuntime.RichEditorBuilder.dataField({
-		fieldName: '이벤트내용',
+		//start added by jybae, 2012-8-5
+		//이벤트내용 > 일정내용으로 수정
+		fieldName: '일정내용',
+		//end added by jybae, 2012-8-5
 		formXml: formXml,
 		value : options.content
 	}));

@@ -759,8 +759,13 @@ $(function() {
 		var iworkManual = input.parents('.js_iwork_manual_page');
 		var pworkManual = input.parents('.js_pwork_manual_page');
 		var newComment = input.parents('.js_new_comment_page');
+		var showPicture = input.parents('.js_show_picture_page');
 		var workId="", workInstanceId="", workType="", url="";
-		if(!isEmpty(iworkManual)){
+
+		if(!isEmpty(showPicture)){
+			workInstanceId = showPicture.attr('instanceId');
+			workType = showPicture.attr('workType');
+		}else if(!isEmpty(iworkManual)){
 			workId = iworkManual.attr('workId');
 			workType = iworkManual.attr('workType');
 		}else if(!isEmpty(pworkManual)){

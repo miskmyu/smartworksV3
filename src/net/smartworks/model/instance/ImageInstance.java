@@ -14,6 +14,8 @@ public class ImageInstance extends WorkInstance {
 	private String fileName;
 	private String prevInstId;
 	private String nextInstId;
+	private int subInstanceCount;
+	private Instance[] subInstances;
 	
 	public int getViews() {
 		return views;
@@ -62,6 +64,18 @@ public class ImageInstance extends WorkInstance {
 	}
 	public void setNextInstId(String nextInstId) {
 		this.nextInstId = nextInstId;
+	}
+	public int getSubInstanceCount() {
+		return subInstanceCount;
+	}
+	public void setSubInstanceCount(int subInstanceCount) {
+		this.subInstanceCount = subInstanceCount;
+	}
+	public Instance[] getSubInstances() {
+		return subInstances;
+	}
+	public void setSubInstances(Instance[] subInstances) {
+		this.subInstances = subInstances;
 	}
 	public ImageInstance(){
 		super();
