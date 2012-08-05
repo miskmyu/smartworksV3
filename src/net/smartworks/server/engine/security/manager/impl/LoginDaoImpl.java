@@ -33,14 +33,20 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 
-	private static String RETRIVE_USER = "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
+	private static String RETRIVE_USER = " select userInfo.*, mailAccount.userId as mailUserId, mailAccount.mailServerId, mailAccount.mailServerName, mailAccount.mailId, mailAccount.mailPassword " +
+										 " from (" +
+										 "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
 										 "		   	orguser.empNo, orguser.mobileNo, orguser.internalNo, orguser.locale, orguser.timeZone,										" +
 										 "          orguser.type, orguser.lang, orguser.pos, orguser.stdtime, orguser.authId,													" +
 										 "	        orguser.email, orguser.useMail, useSign, sign, orguser.passwd, orguser.picture, orguser.roleId								" +
 										 "    from 	sworguser orguser, sworgdept orgdept, sworgcompany orgcompany																" +
 										 "	 where 	orguser.deptid = orgdept.id																									" +
 										 "	   and 	orguser.companyid = orgcompany.id																							" +
-										 "	   and 	orguser.id = ?																												";
+										 "	   and 	orguser.id = ?" +
+										 " ) userInfo " +
+										 " left outer join " +
+										 " swmailaccount mailAccount " +
+										 " on userInfo.id = mailAccount.userId ";
 	protected SelectQuery00 selectQuery00;
 
 	/*
@@ -107,6 +113,11 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			login.setUseSign(rs.getBoolean("useSign"));
 			login.setPassword(rs.getString("passwd"));
 			login.setLocale(rs.getString("locale"));
+			login.setMailUserId(rs.getString("mailUserId"));
+			login.setMailServerId(rs.getString("mailServerId"));
+			login.setMailServerName(rs.getString("mailServerName"));
+			login.setMailId(rs.getString("mailId"));
+			login.setMailPassword(rs.getString("mailPassword"));
 
 			String locale = CommonUtil.toNotNull(login.getLocale());
 			if(locale.equals(""))
