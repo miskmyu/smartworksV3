@@ -771,3 +771,9 @@ ALTER TABLE sworggroup add autoApproval bit;
 update sworggroup set maxmember='-1'
 
 update sworggroup set autoApproval='0'
+
+
+ALTER TABLE SWpackage add helpUrl varchar(500);
+
+ALTER TABLE SWpackage add manualFileName varchar(100);
+

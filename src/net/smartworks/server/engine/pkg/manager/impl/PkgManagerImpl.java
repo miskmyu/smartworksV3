@@ -72,6 +72,7 @@ public class PkgManagerImpl extends AbstractManager implements IPkgManager {
 				buf.append("update PkgPackage set");
 				buf.append(" packageId=:packageId, version=:version, latestDeployedYn=:latestDeployedYn,");
 				buf.append(" categoryId=:categoryId, type=:type,");
+				buf.append(" helpUrl=:helpUrl, manualFileName=:manualFileName,");
 				buf.append(" creationUser=:creationUser, creationDate=:creationDate,");
 				buf.append(" modificationUser=:modificationUser, modificationDate=:modificationDate");
 				buf.append(" where objId=:objId");
@@ -81,6 +82,8 @@ public class PkgManagerImpl extends AbstractManager implements IPkgManager {
 				query.setString(PkgPackage.A_LATESTDEPLOYEDYN, obj.getLatestDeployedYn());
 				query.setString(PkgPackage.A_CATEGORYID, obj.getCategoryId());
 				query.setString(PkgPackage.A_TYPE, obj.getType());
+				query.setString(PkgPackage.A_HELPURL, obj.getHelpUrl());
+				query.setString(PkgPackage.A_MANUALFILENAME, obj.getManualFileName());
 				query.setString(PkgPackage.A_CREATIONUSER, obj.getCreationUser());
 				query.setTimestamp(PkgPackage.A_CREATIONDATE, obj.getCreationDate());
 				query.setString(PkgPackage.A_MODIFICATIONUSER, obj.getModificationUser());
@@ -388,6 +391,7 @@ public class PkgManagerImpl extends AbstractManager implements IPkgManager {
 				buf.append(", obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 				buf.append(", obj.packageId, obj.version");
 				buf.append(", obj.latestDeployedYn, obj.categoryId, obj.type");
+				buf.append(", obj.helpUrl, obj.manualFileName, obj.description ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -411,6 +415,9 @@ public class PkgManagerImpl extends AbstractManager implements IPkgManager {
 					obj.setLatestDeployedYn((String)fields[j++]);
 					obj.setCategoryId((String)fields[j++]);
 					obj.setType((String)fields[j++]);
+					obj.setHelpUrl((String)fields[j++]);
+					obj.setManualFileName((String)fields[j++]);
+					obj.setDescription((String)fields[j++]);
 					objList.add(obj);
 				}
 				list = objList;
