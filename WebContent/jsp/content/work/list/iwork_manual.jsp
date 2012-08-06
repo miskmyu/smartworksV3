@@ -237,11 +237,11 @@ function submitForms() {
 			</div>
 			<!-- 최종수정자 //-->
 	
-			<span class="po_left" style="line-height:27px">
+			<span class="po_left pt3">
 				<%
 				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
-					<a href="<%=work.getManualFilePath() %>" class="icon_file_manual mr2" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
+					<a href="<%=work.getManualFilePath() %>" class="icon_file_manual mr7" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
 				<%
 				}
 				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
