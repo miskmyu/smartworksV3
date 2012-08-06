@@ -24,14 +24,8 @@ public class MailAuth {
 
 	public static ConnectionMetaHandler authenticate(ConnectionProfile profile, AuthProfile auth, ConnectionMetaHandler handler) throws SystemException, LoginInvalidException, ServerDownException {
 		try {
-			AuthProfile authTemp = new AuthProfile();
-			String username =  auth.getUsername();
-			if(!SmartUtil.isBlankObject(username))
-				username = username.split("@")[0];
-			authTemp.setUsername(username);
-			authTemp.setPassword(auth.getPassword());
 			
-			ProtocolFactory factory = new ProtocolFactory(profile, authTemp, handler);
+			ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 			Protocol protocol = factory.getProtocol(null);
 			handler = protocol.connect(Constants.CONNECTION_READ_WRITE);
 			if (handler == null || !handler.getStore().isConnected()) {

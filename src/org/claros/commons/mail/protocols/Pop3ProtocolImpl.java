@@ -26,6 +26,8 @@ import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 
+import net.smartworks.util.SmartUtil;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.claros.commons.auth.models.AuthProfile;
@@ -93,7 +95,12 @@ public class Pop3ProtocolImpl implements Protocol {
 				Session session = Session.getInstance(props);
 				handler = new ConnectionMetaHandler();
 				handler.setStore(session.getStore(profile.getProtocol()));
-				handler.getStore().connect(profile.getFetchServer(), profile.getIFetchPort(), auth.getUsername(), auth.getPassword());
+				
+				String username =  auth.getUsername();
+				if(!SmartUtil.isBlankObject(username))
+					username = username.split("@")[0];
+
+				handler.getStore().connect(profile.getFetchServer(), profile.getIFetchPort(), username, auth.getPassword());
 				handler.setMbox(handler.getStore().getDefaultFolder());
 				handler.setMbox(handler.getMbox().getFolder(Constants.FOLDER_INBOX(profile)));
 				handler.getMbox().open(connectType);
