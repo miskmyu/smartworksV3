@@ -53,10 +53,8 @@
 				type : 'POST',
 				data : JSON.stringify(newParamsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("inviteGroupMembersSucceed"), function(){
-						window.location.reload();
-						smartPop.closeProgress();
-					});
+					window.location.reload();
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					smartPop.closeProgress();

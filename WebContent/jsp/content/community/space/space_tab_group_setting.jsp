@@ -72,9 +72,7 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('setGroupSpaceSucceed'), function(){
-						document.location.href = "group_space.sw?cid=gp.sp." + groupId + "&wid=" + groupId;
-					});
+					document.location.href = "group_space.sw?cid=gp.sp." + groupId + "&wid=" + groupId;
 					smartPop.closeProgress();
 				},
 				error : function(e) {

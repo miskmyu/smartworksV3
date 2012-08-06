@@ -964,6 +964,27 @@ smartPop = {
 				}
 			});
 		});
+	},
+
+	reassignPerformer : function(workId, instanceId, taskInstId){
+		$.get("pop_reassign_performer.sw?workId=" + workId + "&instanceId="+ instanceId + "&taskInstId=" + taskInstId, function(data){
+			$(data).modal({
+				opacity: 50,
+				overlayCss: {backgroundColor:"#fff"},
+				containerCss:{
+					height:200,
+					width:460
+				},
+				overlayClose: false,
+				onShow: function(dialog){
+					$('.js_close_reassign_performer').die('click');
+					$('.js_close_reassign_performer').live( 'click', function(e){
+						smartPop.close();
+						return false;
+					});
+				}
+			});
+		});
 	}
 
 };
