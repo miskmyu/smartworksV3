@@ -17,6 +17,8 @@
 		<property name="version" type="int"/>
 		<property name="type" type="string" length="20"/>
 		<property name="latestDeployedYn" type="string" length="1" access="field"/>
+		<property name="helpUrl" type="string" length="500"/>
+		<property name="manualFileName" type="string" length="100"/>
 		<!-- property name="domainId" type="string" length="50"/-->
 	</class>
 </hibernate-mapping>

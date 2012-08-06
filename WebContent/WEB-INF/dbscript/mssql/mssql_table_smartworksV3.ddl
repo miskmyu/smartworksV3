@@ -159,6 +159,8 @@ CREATE TABLE swpackage (
 	type varchar(20),
 	status varchar(30),
 	latestdeployedyn char(1),
+	helpUrl varchar(500),
+	manualFileName varchar(100),
 	creator varchar(30),
 	createdtime datetime,
 	modifier varchar(30),

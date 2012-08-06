@@ -43,6 +43,7 @@ public interface IDocFileManager extends IManager {
 	public void deleteFileGroup(String groupId) throws DocFileException;
 	public List<IFileModel> findFileGroup(String groupId) throws DocFileException;
 	public List<String> findFileIdListByGroup(String groupId) throws DocFileException;
+	public String insertWorkManualFile(String workId, String fileId, String fileName) throws DocFileException;
 	public String insertProfilesFile(String fileId, String fileName, String communityId) throws DocFileException;
 	public void insertFiles(String workType, String tskInstanceId, String groupId, String tempFileId, String fileName, String fileSize) throws DocFileException;
 	public void updateDocument(String userId, IDocumentModel document) throws DocFileException;

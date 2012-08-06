@@ -35,6 +35,8 @@ public class PkgPackage extends MisObject{
 	public static final String A_CONTENT = "content";
 	public static final String A_FORMCONTENTS = "formContents";
 	public static final String A_FORMCONTENT = "formContent";
+	public static final String A_HELPURL = "helpUrl";
+	public static final String A_MANUALFILENAME = "manualFileName";
 	
 	private String packageId;
 	private int version;
@@ -43,6 +45,8 @@ public class PkgPackage extends MisObject{
 	private String type;
 	private String content;
 	private String[] formContents;
+	private String helpUrl;
+	private String manualFileName;
 	
 	public PkgPackage() {
 		super();
@@ -267,5 +271,17 @@ public class PkgPackage extends MisObject{
 	}
 	public void setFormContents(String[] formContents) {
 		this.formContents = formContents;
+	}
+	public String getHelpUrl() {
+		return helpUrl;
+	}
+	public void setHelpUrl(String helpUrl) {
+		this.helpUrl = helpUrl;
+	}
+	public String getManualFileName() {
+		return manualFileName;
+	}
+	public void setManualFileName(String manualFileName) {
+		this.manualFileName = manualFileName;
 	}
 }

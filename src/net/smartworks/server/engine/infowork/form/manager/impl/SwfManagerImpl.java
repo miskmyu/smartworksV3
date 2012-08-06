@@ -125,7 +125,7 @@ public class SwfManagerImpl extends AbstractManager implements ISwfManager {
 			} else {
 				buf.append(" obj.objId, obj.name, obj.creationUser, obj.creationDate");
 				buf.append(", obj.modificationUser, obj.modificationDate, obj.status");
-				buf.append(", obj.id, obj.version, obj.packageId, obj.formType, obj.keyword");
+				buf.append(", obj.id, obj.version, obj.packageId, obj.formType, obj.keyword, obj.description ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -150,15 +150,18 @@ public class SwfManagerImpl extends AbstractManager implements ISwfManager {
 					obj.setPackageId((String) fields[j++]);
 					obj.setFormType((String) fields[j++]);
 					obj.setKeyword((String) fields[j++]);
+					obj.setDescription((String) fields[j++]);
 				} else {
 					obj = (SwfForm) itr.next();
 					String pkgId = obj.getPackageId();
 					String objId = obj.getObjId();
 					String objStr = obj.getObjString();
+					String desc = obj.getDescription();
 					if (objStr != null) {
 						obj = (SwfForm) SwfForm.toObject(objStr);
 						obj.setPackageId(pkgId);
 						obj.setObjString(objStr);
+						obj.setDescription(desc);
 						if (obj.getObjId() == null)
 							obj.setObjId(objId);
 					}
