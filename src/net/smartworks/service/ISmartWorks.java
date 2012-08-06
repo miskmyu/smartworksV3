@@ -715,4 +715,6 @@ public interface ISmartWorks {
 		
 	public abstract ImageInstance getImageInstanceById(String instId) throws Exception;
 
+	public abstract boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 }

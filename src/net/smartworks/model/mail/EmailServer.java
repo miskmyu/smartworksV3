@@ -1,5 +1,7 @@
 package net.smartworks.model.mail;
 
+import org.claros.commons.mail.models.ConnectionProfile;
+
 import net.smartworks.model.BaseObject;
 
 public class EmailServer extends BaseObject {
@@ -73,5 +75,19 @@ public class EmailServer extends BaseObject {
 
 	public EmailServer(String id, String name) {
 		super(id, name);
+	}
+	
+	public ConnectionProfile getConnectionProfile(){
+		ConnectionProfile profile = new ConnectionProfile();
+		profile.setShortName(this.getName());
+		profile.setFetchServer(this.getFetchServer());
+		profile.setFetchPort(String.valueOf(this.getFetchServerPort()));
+		profile.setFetchSSL(String.valueOf(this.isFetchSsl()));
+		profile.setProtocol(this.getFetchProtocol());
+		profile.setSmtpServer(this.getSmtpServer());
+		profile.setSmtpPort(String.valueOf(this.getSmtpServerPort()));
+		profile.setSmtpSSL(String.valueOf(this.isSmtpSsl()));
+		profile.setSmtpAuthenticated(String.valueOf(this.isSmtpAuthenticated()));
+		return profile;
 	}
 }

@@ -219,7 +219,8 @@ smartMessage.bundle['en'] = {
 	noRefFormDefinedError : "Refered Work has not been defined. Please contact the Admonistrator!",
 	notRefFormWorkingError : "Refered Work is not working. Please contact the Admonistrator!",
 	helpUrlSyntaxError : "Web User Manual is not valid url starting with http://. Please retry with valid url",
-
+	invalidMailAccountError : "Mail Acount or password is not valid. Please retry with valid Mail Acount or password",
+	
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",
 	missingCommentTaskForward : "Forward comments is required field. Please input the comments.",
