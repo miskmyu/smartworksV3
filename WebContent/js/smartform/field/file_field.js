@@ -9,7 +9,8 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		entity : null,
 		dataField : '',
 		refreshData : false,
-		layoutInstance : null
+		layoutInstance : null,
+		isMultiple : true
 	};
 	SmartWorks.extend(options, config);
 
@@ -19,6 +20,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 
 	var value = (options.dataField && options.dataField.value) || '';
 	var isTempfile = (options.dataField && options.dataField.isTempfile) || false;
+	var isMultiple = (options.isMultiple) || false;
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 
@@ -54,7 +56,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.build = function(config) {
 		if(isTempfile){
 			fileList = 	(options.dataField && options.dataField.fileList) || '';
 		}	
-		createUploader(value, options.container.find('#'+id), true, false, isTempfile, fileList);
+		createUploader(value, options.container.find('#'+id), isMultiple, false, isTempfile, fileList);
 	}
 	return options.container;
 
@@ -69,7 +71,8 @@ SmartWorks.FormRuntime.FileFieldBuilder.buildEx = function(config){
 			columns: 1,
 			colSpan: 1, 
 			required: false,
-			readOnly: false		
+			readOnly: false,
+			isMultiple: true
 	};
 	SmartWorks.extend(options, config);
 
@@ -85,6 +88,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.buildEx = function(config){
 			mode : options.readOnly, // view or edit
 			container : $formCol,
 			entity : $formEntity,
+			isMultiple : options.isMultiple,
 			dataField : SmartWorks.FormRuntime.FileFieldBuilder.dataField({
 				fieldId: options.fieldId,
 				groupId: options.groupId
@@ -181,7 +185,7 @@ SmartWorks.FormRuntime.FileFieldBuilder.dataField = function(config){
 			value: options.groupId,
 			isTempfile: options.isTempfile,
 			isMultiple: options.isMultiple,
-			isProfile: options.isProfiel,
+			isProfile: options.isProfile,
 			fileList: options.fileList
 	};
 	return dataField;

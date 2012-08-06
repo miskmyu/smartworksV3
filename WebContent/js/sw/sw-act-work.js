@@ -1583,10 +1583,11 @@ $(function() {
 			container: gridRow,
 			fieldId: "fileManualFile",
 			fieldName: manualFileText,
-			value: manualFile,
+			groupId: manualFile,
 			columns: 3,
 			colSpan: 1,
-			required: false
+			required: false,
+			isMultiple: false
 		});
 		
 		gridRow = SmartWorks.GridLayout.newGridRow().appendTo(gridTable);
