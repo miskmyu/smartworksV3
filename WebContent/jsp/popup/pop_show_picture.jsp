@@ -3,6 +3,8 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2012.08.01.										-->
 
+<%@page import="net.smartworks.model.work.Work"%>
+<%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.model.instance.ImageInstance"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.instance.InformationWorkInstance"%>
@@ -31,7 +33,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all pop_section_400 js_show_picture_page">
+<div class="pop_corner_all pop_section_400 js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
 
 	<div class="body_titl space">
 		<div class="noti_pic">
@@ -61,14 +63,18 @@
 	<!-- 타이틀//-->
 
 	<!-- 팝업 컨텐츠 -->
-	<div class="space_contents">
-		<!-- 사진 -->
+	<div class="space_contents js_sub_instance_list" style="max-height:500px;overflow-y:auto;overflow-x:hidden">
+		<!-- 사진   -->
 		<div class="original_picture">
+			<!-- start : added by sjlee 2012.08.05 -->
 			<div class="arrow_space">
+			<%if(!SmartUtil.isBlankObject(image.getPrevInstId())){%>
 				<div class="btn_arr_prev js_prev_picture_btn" instId="<%=image.getPrevInstId()%>"></div>
+			<%}if(!SmartUtil.isBlankObject(image.getNextInstId())){%>	
 				<div class="btn_arr_next js_next_picture_btn" instId="<%=image.getNextInstId()%>"></div>
+			<%}%>
 			</div>
-
+			<!-- end : added by sjlee 2012.08.05 -->
 			<img src="<%=image.getOriginImgSource()%>" />
 		</div>
 		<!-- 사진 //-->
@@ -80,13 +86,69 @@
 			</div>
 		</div>
 		<!-- 컨텐츠 //-->
-<%-- 
-		<jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
-			<jsp:param value="<%=SmartWork.ID_FILE_MANAGEMENT %>" name="workId"/>
-			<jsp:param value="<%=instId %>" name="instId"/> 
-		</jsp:include>	
-
- --%>
+		
+		<div class="js_comments_box" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+			<!-- 댓글 -->
+		   <div class="reply_point pos_reply_point"></div>
+		   <div class="reply_section pos_reply">  
+		        <div class="list_reply">
+		            <ul class="js_comment_list">
+		            	<li class="comment_list js_comment_instance" style="display:none">
+							<div class="noti_pic">
+								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+									<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+								</a>
+							</div>
+							<div class="noti_in">
+								<span class="t_name"><%=cUser.getLongName()%></span>
+								<span	class="t_date pl10"><%=(new LocalDate()).toLocalString()%></span>
+								<div class="js_comment_content"></div>
+							</div>
+		            	</li>
+		            	<%
+		            	if(image.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+		            		session.setAttribute("subComments", null);
+		            	%>
+			            	<li>
+			            		<img class="repl_tinfo">
+		            			<a href="sub_instances_in_instance.sw?instanceId=<%=image.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
+		            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=image.getSubInstanceCount() %></fmt:param><</fmt:message></strong></span>
+		            			</a>
+			            	</li>
+							<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+								<jsp:param value="<%=image.getId() %>" name="instanceId"/>
+								<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+							</jsp:include>
+						<%
+						} else {
+							session.setAttribute("subComments", image.getSubInstances());
+						%>
+							<jsp:include page="/jsp/content/work/list/sub_instances_in_instance.jsp" >
+								<jsp:param value="<%=image.getId() %>" name="instanceId"/>
+								<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT %>" name="fetchCount"/>
+							</jsp:include>
+						<%
+						}
+						%>
+					</ul>
+		        </div>
+		        
+		        <div class="reply_input js_return_on_comment" style="display:none">
+					<div class="noti_pic">
+						<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+					</div>
+					<div class="noti_in">
+						<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+					</div>
+		        </div>
+		    
+		    </div>
+		    <!-- 댓글 //-->
+		</div>
+	    <div class="btns_action js_action_btns">
+	    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+	    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+	    </div>
 	</div>
 	<!-- 팝업 컨텐츠 //-->
 

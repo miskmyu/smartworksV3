@@ -137,6 +137,8 @@ import net.smartworks.server.engine.process.approval.model.AprApproval;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
+import net.smartworks.server.engine.process.process.model.PrcProcess;
+import net.smartworks.server.engine.process.process.model.PrcProcessCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInst;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstCond;
 import net.smartworks.server.engine.process.process.model.PrcProcessInstExtend;
@@ -160,6 +162,7 @@ import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.Semaphore;
+import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
@@ -3374,11 +3377,17 @@ public class ModelConverter {
 		
 		SmartDiagram smartDiagram = new SmartDiagram();
 		smartDiagram.setDescription(pkg.getDescription());
-		smartDiagram.setId("id");
-		smartDiagram.setMinImageName("minImageName");
+		smartDiagram.setId(pkg.getPackageId());
 		smartDiagram.setName(pkg.getName());
-		smartDiagram.setOrgImageName("orgImageName");
 		
+		PrcProcessCond cond = new PrcProcessCond();
+		cond.setDiagramId(pkg.getPackageId());
+		PrcProcess[] prc = SwManagerFactory.getInstance().getPrcManager().getProcesses(userId, cond, IManager.LEVEL_LITE);
+
+		if (prc != null && prc.length != 0) {
+			smartDiagram.setMinImageName(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + prc[0].getProcessId() + "_tn.png");
+			smartDiagram.setOrgImageName(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + prc[0].getProcessId() + ".png");
+		}
 		smartDiagram.setTasks(getSmartTaskInfosByPkgId(userId, pkg.getPackageId()));
 		
 		return smartDiagram;
@@ -3452,7 +3461,14 @@ public class ModelConverter {
 				String isStartActivityStr = taskDef.getExtendedPropertyValue("startActivity");
 				boolean isStartActivity = CommonUtil.toBoolean(isStartActivityStr);
 				SmartTaskInfo smartTaskInfo = new SmartTaskInfo();
-				smartTaskInfo.setAssigningName((String)activityPerformerMap.get(actId));
+				
+				if (taskDef != null && taskDef.getAssignee().indexOf("@") != -1) {
+					UserInfo performerInfo = getUserInfoByUserId(taskDef.getAssignee());
+					smartTaskInfo.setAssignedUser(performerInfo);
+				} else {
+					smartTaskInfo.setAssigningName((String)activityPerformerMap.get(actId));
+				}
+				
 				smartTaskInfo.setId(actId);
 				smartTaskInfo.setName(taskDef.getName());
 				smartTaskInfo.setStartTask(isStartActivity);
@@ -3461,8 +3477,12 @@ public class ModelConverter {
 				formInfo.setDescription(taskDef.getDescription());
 				formInfo.setId(taskDef.getForm());
 				formInfo.setName(taskDef.getName());
-				formInfo.setMinImageName("minImageName");
-				formInfo.setOrgImageName("orgImageName");
+				
+				String minImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swPrcs[0].getPackageId() + "/" + taskDef.getForm() + "_tn.png";
+				String orgImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swPrcs[0].getPackageId() + "/" + taskDef.getForm() + ".png";
+				
+				formInfo.setMinImageName(minImageName);
+				formInfo.setOrgImageName(orgImageName);
 				smartTaskInfo.setForm(formInfo);
 				smartTaskInfoList.add(smartTaskInfo);
 			}
@@ -3817,8 +3837,10 @@ public class ModelConverter {
 		
 		String description = swForm.getDescription();
 		String id = swForm.getId();
-		String minImageName = "";
-		String orgImageName = "";
+		
+		String minImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swForm.getPackageId() + "/" + swForm.getId() + "_tn.png";
+		String orgImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swForm.getPackageId() + "/" + swForm.getId() + ".png";
+		
 		String name = swForm.getName();
 		SwfField[] swFields = swForm.getFields();
 		
