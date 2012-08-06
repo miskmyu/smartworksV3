@@ -85,7 +85,6 @@
 				selectSearchFilter.append(data);
 				$('a.js_search_filter_close').click();
 				smartPop.closeProgress();
-				smartPop.showInfo(smartPop.INFO, smartMessage.get('setFilterSucceed'));
 			},
 			error : function(xhr, ajaxOptions, thrownError) {
 				smartPop.closeProgress();

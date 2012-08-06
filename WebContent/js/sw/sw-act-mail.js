@@ -46,10 +46,8 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-					document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
-				});
 				smartPop.closeProgress();
+				document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -96,11 +94,9 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-						input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-						document.location.href = "smart.sw#" + mailList.attr('currentHref');
-					});
 					smartPop.closeProgress();
+					input.find('option:first').attr('selected', 'selected').siblings('selected', '');
+					document.location.href = "smart.sw#" + mailList.attr('currentHref');
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -138,10 +134,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveMailSucceed"), function(){
-						document.location.href = "smart.sw#" + mailList.attr('currentHref');
-					});
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + mailList.attr('currentHref');
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -172,10 +166,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailSucceed"), function(){
-						document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
-					});
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -211,10 +203,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailSucceed"), function(){
-						document.location.href = "smart.sw#" + mailList.attr('currentHref');
-					});
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + mailList.attr('currentHref');
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -347,7 +337,6 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeMailFolderSucceed"));
 					window.location.reload();
 					smartPop.closeProgress();
 				},

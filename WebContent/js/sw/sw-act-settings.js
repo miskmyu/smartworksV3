@@ -39,9 +39,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkHourSucceed'), function(){
-						document.location.href = "company_work_hour.sw";					
-					});					
+					document.location.href = "company_work_hour.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -94,9 +92,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCompanyEventSucceed'), function(){
-						document.location.href = "company_event.sw";					
-					});					
+					document.location.href = "company_event.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -149,9 +145,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeApprovalLineSucceed'), function(){
-						document.location.href = "approval_line.sw";					
-					});					
+					document.location.href = "approval_line.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -232,9 +226,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWebServiceSucceed'), function(){
-						document.location.href = "web_service.sw";					
-					});					
+					document.location.href = "web_service.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -287,9 +279,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeExternalFormSucceed'), function(){
-						document.location.href = "external_form.sw";					
-					});					
+					document.location.href = "external_form.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -332,9 +322,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeDepartmentSucceed'), function(){
-						document.location.href = "organization_management.sw";					
-					});					
+					document.location.href = "organization_management.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -377,9 +365,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeMemberSucceed'), function(){
-						document.location.href = "organization_management.sw";					
-					});					
+					document.location.href = "organization_management.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -432,7 +418,6 @@ $(function() {
 				wsdlUri : wsdlUri
 			},
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFO, smartMessage.get('fetchWsdlSucceed'));
 				target.addClass('sw_fetched').attr('readonly', true);
 				input.hide().siblings().show();
 				var tbody = input.parents('.js_edit_webservice_tbody');
@@ -618,9 +603,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeEmailServerSucceed'), function(){
-						document.location.href = "email_server.sw";					
-					});					
+					document.location.href = "email_server.sw";					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

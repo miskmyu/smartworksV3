@@ -60,9 +60,7 @@
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
 						// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-						smartPop.showInfo(smartPop.INFO, isEmpty(emailServerId) ? smartMessage.get('createEmailServerSucceed') : smartMessage.get('setEmailServerSucceed'), function(){
-							document.location.href = "email_server.sw";					
-						});
+						document.location.href = "email_server.sw";					
 						smartPop.closeProgress();
 					},
 					error : function(e) {

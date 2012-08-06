@@ -170,4 +170,10 @@ public class PopupController {
 		return SmartUtil.returnMnv(request, "jsp/popup/pop_show_picture.jsp", "");
 	}
 
+	@RequestMapping("/pop_reassign_performer")
+	public ModelAndView popReassignPerformer(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/popup/pop_reassign_performer.jsp", "");
+	}
+
 }

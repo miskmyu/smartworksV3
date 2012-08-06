@@ -164,6 +164,7 @@ $(function() {
 			new SmartWorks.GridLayout({
 				target : formContent,
 				mode : "edit",
+				first : true,
 				workId : workId,
 				onSuccess : function(){
 					$('#form_works').parent().show();
@@ -717,30 +718,24 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.closeProgress();
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("setIWorkInstanceSucceed"), function(){
-						// 서비스요청 프로그래스바를 나타나게 한다....
-						var progressSpan = iworkSpace.find('.js_progress_span');
-						smartPop.progressCont(progressSpan);
-						formContent.html('');
-						formContent.addClass('list_contents');
-						new SmartWorks.GridLayout({
-							target : formContent,
-							mode : "view",
-							workId : workId,
-							recordId : instId,
-							onSuccess : function(){
-								iworkSpace.find('.js_btn_modify').show();
-								iworkSpace.find('.js_btn_delete').show();
-								iworkSpace.find('.js_btn_save').hide();
-								iworkSpace.find('.js_btn_cancel').hide();
-								iworkSpace.find('form[name="frmAccessSpace"]').hide();
-								smartPop.closeProgress();								
-							},
-							onError : function(){
-								smartPop.closeProgress();																
-							}
-						});
+					formContent.html('');
+					formContent.addClass('list_contents');
+					new SmartWorks.GridLayout({
+						target : formContent,
+						mode : "view",
+						workId : workId,
+						recordId : instId,
+						onSuccess : function(){
+							iworkSpace.find('.js_btn_modify').show();
+							iworkSpace.find('.js_btn_delete').show();
+							iworkSpace.find('.js_btn_save').hide();
+							iworkSpace.find('.js_btn_cancel').hide();
+							iworkSpace.find('form[name="frmAccessSpace"]').hide();
+							smartPop.closeProgress();								
+						},
+						onError : function(){
+							smartPop.closeProgress();																
+						}
 					});
 				},
 				error : function(e) {
@@ -809,12 +804,9 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					
-					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("forwardWorkInstanceSucceed"), function(){
-						window.location.reload();
-						return false;
-					});
 					smartPop.closeProgress();
+					window.location.reload();
+					return false;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -885,12 +877,9 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					
-					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("approvalWorkInstanceSucceed"), function(){
-						window.location.reload();
-						return false;
-					});
 					smartPop.closeProgress();
+					window.location.reload();
+					return false;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -931,13 +920,9 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					
-					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeIWorkInstanceSucceed"), 
-							function(){
-								// 정보관리업무 목록 페이지로 이동한다.....
-								document.location.href = "smart.sw#" + "iwork_list.sw?cid=iw.li." + workId;					
-							});
+					// 정보관리업무 목록 페이지로 이동한다.....
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + "iwork_list.sw?cid=iw.li." + workId;					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -999,11 +984,9 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("performTaskInstanceSucceed"), function(){
-						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
-						return;
-					});
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
+					return;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1062,11 +1045,9 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("returnTaskInstanceSucceed"), function(){
-						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
-						return;
-					});
 					smartPop.closeProgress();
+					document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
+					return;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1125,10 +1106,8 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("tempSaveTaskInstanceSucceed"), function(){
-						return;
-					});
 					smartPop.closeProgress();
+					return;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1155,59 +1134,7 @@ $(function() {
 		var instId = pworkSpace.attr("instId");
 		var formContent = pworkSpace.find('div.js_form_content');
 		var taskInstId = formContent.attr("taskInstId");
-		
-		smartPop.confirm(smartMessage.get("reassignConfirmation"), function(){
-			var forms = formContent.find('form');
-			var paramsJson = {};
-			paramsJson['workId'] = workId;
-			paramsJson['instanceId'] = instId;
-			paramsJson['taskInstId'] = taskInstId;
-			for(var i=0; i<forms.length; i++){
-				var form = $(forms[i]);
-				
-				// 폼이 스마트폼이면 formId와 formName 값을 전달한다...
-				if(form.attr('name') === 'frmSmartForm'){
-					paramsJson['formId'] = form.attr('formId');
-					paramsJson['formName'] = form.attr('formName');
-				}
-				
-				// 폼이름 키값으로 하여 해당 폼에 있는 모든 입력항목들을 JSON형식으로 Serialize 한다...
-				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
-			}
-			console.log(JSON.stringify(paramsJson));
-			var url = "reassign_task_instance.sw";
-			
-			// 서비스요청 프로그래스바를 나타나게 한다....
-			var progressSpan = pworkSpace.find('.js_progress_span');
-			smartPop.progressCont(progressSpan);
-			
-			// perform_task_instance.sw서비스를 요청한다..
-			$.ajax({
-				url : url,
-				contentType : 'application/json',
-				type : 'POST',
-				data : JSON.stringify(paramsJson),
-				success : function(data, status, jqXHR) {
-					
-					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("reassignTaskInstanceSucceed"), function(){
-						document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
-						return;
-					});
-					smartPop.closeProgress();
-				},
-				error : function(e) {
-					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.ERROR, smartMessage.get("reassignTaskInstanceError"), function(){
-						return;
-					});
-					smartPop.closeProgress();					
-				}
-			});
-		},
-		function(){
-			return false;
-		});
+		smartPop.reassignPerformer(workId, instId, taskInstId);
 		return false;
 	});
 
