@@ -161,6 +161,7 @@ import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.OSValidator;
 import net.smartworks.util.Semaphore;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
@@ -3355,10 +3356,17 @@ public class ModelConverter {
 		
 		getSmartWorkByPkgPackage(userId, processWork, pkg);
 		processWork.setType(SmartWork.TYPE_PROCESS);
-		processWork.setHelpUrl("");
-		processWork.setManualFileId("");// Manual File Group Id
-		processWork.setManualFileName("");
-		processWork.setManualFilePath("");
+		processWork.setHelpUrl(pkg.getHelpUrl());
+		processWork.setManualFileId(pkg.getManualFileName());// Manual File Group Id
+		processWork.setDesc(pkg.getDescription());
+		
+		List<IFileModel> file = SwManagerFactory.getInstance().getDocManager().findFileGroup(pkg.getManualFileName());
+		if (file != null && file.size() != 0) {
+			processWork.setManualFileName(file.get(0).getFileName());
+			processWork.setManualFilePath(file.get(0).getFilePath());
+		}
+		//processWork.setManualFileName(pkg.getManualFileName());
+		//processWork.setManualFilePath(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + pkg.getManualFileName());
 
 		processWork.setDiagram(getSmartDiagramByPkgInfo(userId, pkg));
 
@@ -3376,15 +3384,15 @@ public class ModelConverter {
 	private static SmartDiagram getSmartDiagramByPkgInfo(String userId, PkgPackage pkg) throws Exception {
 		
 		SmartDiagram smartDiagram = new SmartDiagram();
-		smartDiagram.setDescription(pkg.getDescription());
 		smartDiagram.setId(pkg.getPackageId());
 		smartDiagram.setName(pkg.getName());
 		
-		PrcProcessCond cond = new PrcProcessCond();
-		cond.setDiagramId(pkg.getPackageId());
-		PrcProcess[] prc = SwManagerFactory.getInstance().getPrcManager().getProcesses(userId, cond, IManager.LEVEL_LITE);
+		PrcSwProcessCond cond = new PrcSwProcessCond();
+		cond.setPackageId(pkg.getPackageId());
+		PrcSwProcess[] prc = SwManagerFactory.getInstance().getPrcManager().getSwProcesses(userId, cond);
 
 		if (prc != null && prc.length != 0) {
+			smartDiagram.setDescription(prc[0].getDescription());
 			smartDiagram.setMinImageName(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + prc[0].getProcessId() + "_tn.png");
 			smartDiagram.setOrgImageName(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + prc[0].getProcessId() + ".png");
 		}
@@ -3945,10 +3953,18 @@ public class ModelConverter {
 		
 		getSmartWorkByPkgPackage(userId, informationWork, pkg);
 		informationWork.setType(SmartWork.TYPE_INFORMATION);
-		informationWork.setHelpUrl("");
-		informationWork.setManualFileId("");// Manual File Group Id
-		informationWork.setManualFileName("");
-		informationWork.setManualFilePath("");
+		
+		informationWork.setHelpUrl(pkg.getHelpUrl());
+		informationWork.setManualFileId(pkg.getManualFileName());// Manual File Group Id
+		
+		List<IFileModel> file = SwManagerFactory.getInstance().getDocManager().findFileGroup(pkg.getManualFileName());
+		if (file != null && file.size() != 0) {
+			informationWork.setManualFileName(file.get(0).getFileName());
+			informationWork.setManualFilePath(file.get(0).getFilePath());
+		}
+		
+		//informationWork.setManualFileName(pkg.getManualFileName());
+		//informationWork.setManualFilePath(SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + pkg.getPackageId() + "/" + pkg.getManualFileName());
 
 		return informationWork;
 	}

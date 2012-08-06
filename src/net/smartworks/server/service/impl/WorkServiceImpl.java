@@ -47,6 +47,7 @@ import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -74,11 +75,15 @@ import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.process.process.model.PrcSwProcess;
+import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
+import net.smartworks.server.engine.resource.model.IFormModel;
+import net.smartworks.server.engine.resource.model.IProcessModel;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.util.ModelConverter;
@@ -667,6 +672,15 @@ public class WorkServiceImpl implements IWorkService {
 			long commentCount = getOpinionManager().getOpinionSize(userId, opinionCond);
 			resultwork.setCommentCount((int)commentCount);
 
+			resultwork.setHelpUrl(pkg.getHelpUrl());
+			resultwork.setManualFileId(pkg.getManualFileName());// Manual File Group Id
+			
+			List<IFileModel> file = SwManagerFactory.getInstance().getDocManager().findFileGroup(pkg.getManualFileName());
+			if (file != null && file.size() != 0) {
+				resultwork.setManualFileName(file.get(0).getFileName());
+				resultwork.setManualFilePath(file.get(0).getFilePath());
+			}
+			
 			return resultwork;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -1646,12 +1660,195 @@ public class WorkServiceImpl implements IWorkService {
 	}
 	@Override
 	public void setIWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			   workId=pkg_f6910726728d44199e253658c7937b4e,
+			   frmIWorkManual=   {
+			      txtaWorkDesc=업무 섦명,
+			      rdoEditor=text,
+			      txtaFormDesc=화면설명,
+			      txtHelpUrl=http://abc.com,
+			      fileManualFile=      {
+			         groupId=fg_d510d6efab164a471bab33ca40fdfc540983,
+			         files=         [
+			            {
+			               fileId=temp_5d330d5d35d643f4a2e9ecc089d93656,
+			               fileName=Icon8AD2EA30.exe,
+			               fileSize=6656,
+			               localFilePath=D:KmWorkspaceTomcat7-imagewebappsimageServerSmartFilesManinsoftTempsemp_5d330d5d35d643f4a2e9ecc089d93656.exe
+			            }
+			         ]
+			      }
+			   }
+			}*/
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
 		
+		String workId = (String)requestBody.get("workId");
+		Map<String, Object> frmIWorkManual = (Map<String, Object>)requestBody.get("frmIWorkManual");
+		String txtaWorkDesc = (String)frmIWorkManual.get("txtaWorkDesc");
+		String txtaFormDesc = (String)frmIWorkManual.get("txtaFormDesc");
+		String txtHelpUrl = (String)frmIWorkManual.get("txtHelpUrl");
+		
+		//패키지의 설명을 저장한다
+		PkgPackageCond pkgCond = new PkgPackageCond();
+		pkgCond.setPackageId(workId);
+		PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_ALL);
+		if (pkg != null) {
+			pkg.setDescription(txtaWorkDesc);
+			pkg.setHelpUrl(txtHelpUrl);
+			//패키지의 메뉴얼파일을 저장한다
+			Map<String, Object> fileManualFile = (Map<String, Object>)frmIWorkManual.get("fileManualFile");
+			
+			List<Map<String, String>> fielList = (ArrayList<Map<String, String>>)fileManualFile.get("files");
+			String fileGroupId = (String)fileManualFile.get("groupId");
+			
+//			if(!fielList.isEmpty()) {
+//				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
+//					Map<String, String> file = fielList.get(i);
+//					String fileId = file.get("fileId");
+//					String fileName = file.get("fileName");
+//					String manualFileName = getDocManager().insertWorkManualFile(workId, fileId, fileName);
+//					pkg.setManualFileName(manualFileName);
+//				}
+//			}
+			
+			try {
+				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
+					Map<String, String> file = fielList.get(i);
+					String fileId = file.get("fileId");
+					String fileName = file.get("fileName");
+					String fileSize = file.get("fileSize");
+					getDocManager().insertFiles("Files", workId, fileGroupId, fileId, fileName, fileSize);
+					pkg.setManualFileName(fileGroupId);
+				}
+			} catch (Exception e) {
+				throw new DocFileException("file upload fail...");
+			}
+			
+			SwManagerFactory.getInstance().getPkgManager().setPackage(userId, pkg, IManager.LEVEL_ALL);
+		}
+		SwfFormCond formCond = new SwfFormCond();
+		formCond.setPackageId(workId);
+		SwfForm[] swForm = SwManagerFactory.getInstance().getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+		if (swForm != null && swForm.length != 0) {
+
+			IFormModel form = SwManagerFactory.getInstance().getRuntimeManager().retrieveForm(userId, swForm[0].getId(), 1);
+			if (form != null) {
+				form.setDescription(txtaFormDesc);
+				SwManagerFactory.getInstance().getDesigntimeManager().updateForm(userId, form);
+			}
+		}
 	}
 	@Override
 	public void setPWorkManual(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
+		/*{
+			   workId=pkg_fe5c6d8f2c0f48eb989bc44a0d5cff4a,
+			   frmPWorkManual=   {
+			      txtaWorkDesc=packageDesc,
+			      rdoEditor=text,
+			      txtaProcessDesc=prcDesc,
+			      rdoEditor0=text,
+			      txtaFormDesc2=formDesc1,
+			      rdoEditor1=text,
+			      txtaFormDesc7=formDesc2,
+			      rdoEditor2=text,
+			      txtaFormDesc8=,
+			      txtHelpUrl=http://webManualUrl.com,
+			      fileManualFile=      {
+			         groupId=fg_c35e20c6f8694f4065f865cfa1d9ffc32956,
+			         files=         [
+			            {
+			               fileId=temp_4df9d14a86ca458c850dc3562ea14d94,
+			               fileName=firefox.exe,
+			               fileSize=924632,
+			               localFilePath=D:KmWorkspaceTomcat7-imagewebappsimageServerSmartFilesManinsoftTempsemp_4df9d14a86ca458c850dc3562ea14d94.exe
+			            }
+			         ]
+			      }
+			   }
+			}*/
 		
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		String workId = (String)requestBody.get("workId");
+		Map<String, Object> frmPWorkManual = (Map<String, Object>)requestBody.get("frmPWorkManual");
+		String txtaWorkDesc = (String)frmPWorkManual.get("txtaWorkDesc");
+		String txtaProcessDesc = (String)frmPWorkManual.get("txtaProcessDesc");
+		String txtHelpUrl = (String)frmPWorkManual.get("txtHelpUrl");
+		
+		//패키지의 설명을 저장한다
+		PkgPackageCond pkgCond = new PkgPackageCond();
+		pkgCond.setPackageId(workId);
+		PkgPackage pkg = SwManagerFactory.getInstance().getPkgManager().getPackage(userId, pkgCond, IManager.LEVEL_ALL);
+		if (pkg != null) {
+			pkg.setDescription(txtaWorkDesc);
+			pkg.setHelpUrl(txtHelpUrl);
+			//패키지의 메뉴얼파일을 저장한다
+			Map<String, Object> fileManualFile = (Map<String, Object>)frmPWorkManual.get("fileManualFile");
+			
+			List<Map<String, String>> fielList = (ArrayList<Map<String, String>>)fileManualFile.get("files");
+			String fileGroupId = (String)fileManualFile.get("groupId");
+			
+//			if(!fielList.isEmpty()) {
+//				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
+//					Map<String, String> file = fielList.get(i);
+//					String fileId = file.get("fileId");
+//					String fileName = file.get("fileName");
+//					String manualFileName = getDocManager().insertWorkManualFile(workId, fileId, fileName);
+//					pkg.setManualFileName(manualFileName);
+//				}
+//			}
+			try {
+				for(int i=0; i < fielList.subList(0, fielList.size()).size(); i++) {
+					Map<String, String> file = fielList.get(i);
+					String fileId = file.get("fileId");
+					String fileName = file.get("fileName");
+					String fileSize = file.get("fileSize");
+					getDocManager().insertFiles("Files", workId, fileGroupId, fileId, fileName, fileSize);
+					pkg.setManualFileName(fileGroupId);
+				}
+			} catch (Exception e) {
+				throw new DocFileException("file upload fail...");
+			}
+			
+			SwManagerFactory.getInstance().getPkgManager().setPackage(userId, pkg, IManager.LEVEL_ALL);
+		}
+		//프로세스의 설명을 저장한다
+		IProcessModel prc = SwManagerFactory.getInstance().getRuntimeManager().retrieveProcessByPackage(userId, workId, 1);
+		String processId = null;
+		if (prc != null) {
+			processId = prc.getProcessId();
+			prc.setName(pkg.getName());
+			prc.setDescription(txtaProcessDesc);
+			SwManagerFactory.getInstance().getDesigntimeManager().updateProcess(userId, prc);
+		}
+		
+		TskTaskDefCond tskCond = new TskTaskDefCond();
+		tskCond.setExtendedProperties(new Property[]{new Property("processId", processId)});
+		TskTaskDef[] tskDefs = SwManagerFactory.getInstance().getTskManager().getTaskDefs(userId, tskCond, IManager.LEVEL_ALL);
+		if (tskDefs != null && tskDefs.length != 0) {
+			for (int i = 0; i < tskDefs.length; i++) {
+				String actId = tskDefs[i].getExtendedPropertyValue("activityId");
+				if (CommonUtil.isEmpty(actId))
+					continue;
+
+				//태스크의 데피니션의 설명을 저장한다
+				String tskDesc = (String)frmPWorkManual.get("txtaFormDesc" + actId);
+				if (CommonUtil.isEmpty(tskDesc))
+					continue;
+				
+				tskDefs[i].setDescription(tskDesc);
+				SwManagerFactory.getInstance().getTskManager().setTaskDef(userId, tskDefs[i], IManager.LEVEL_ALL);
+				
+				//태스크들의 폼의 설명을 저장한다]
+				IFormModel form = SwManagerFactory.getInstance().getRuntimeManager().retrieveForm(userId, tskDefs[i].getForm(), 1);
+				if (form != null) {
+					form.setDescription(tskDesc);
+					SwManagerFactory.getInstance().getDesigntimeManager().updateForm(userId, form);
+				}
+			}
+		}
 	}
 }

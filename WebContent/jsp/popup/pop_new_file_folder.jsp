@@ -59,10 +59,8 @@
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
 					smartPop.closeProgress();
- 					smartPop.showInfo(smartPop.INFO, isEmpty(folderId) ? smartMessage.get('createFileFolderSucceed') : smartMessage.get('setFileFolderSucceed'), function(){
-						smartPop.close();
- 						$('.js_file_list_page .js_file_display_by').change();
-  					});
+					smartPop.close();
+					$('.js_file_list_page .js_file_display_by').change();
 				},
 				error : function(e) {
 					smartPop.closeProgress();

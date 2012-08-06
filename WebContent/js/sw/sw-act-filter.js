@@ -166,10 +166,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeFilterSucceed'), function(){
-						smartPop.progressCenter();
-						document.location.href = "smart.sw#" + href;
-					});
+					smartPop.progressCenter();
+					document.location.href = "smart.sw#" + href;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

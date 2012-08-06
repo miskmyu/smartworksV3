@@ -507,7 +507,6 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeFileFolderSucceed"));
 					input.parents('li:first').remove();
 					smartPop.closeProgress();				
 				},
@@ -553,7 +552,6 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveFileInstancesSucceed"));
 					window.location.reload();
 					smartPop.closeProgress();				
 				},
@@ -610,7 +608,6 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeImageFolderSucceed"));
 					input.parents('li:first').remove();
 					smartPop.closeProgress();				
 				},
@@ -643,7 +640,6 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("removeImageInstanceSucceed"));
 					input.parents('li:first').remove();
 					smartPop.closeProgress();				
 				},
@@ -689,7 +685,6 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("moveImageInstancesSucceed"));
 					window.location.reload();
 					smartPop.closeProgress();				
 				},
@@ -856,10 +851,8 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskForwardSucceed"), function(){
-						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
-						smartPop.closeProgress();
-					});
+					document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -924,10 +917,8 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("commentTaskApprovalSucceed"), function(){
-						document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
-						smartPop.closeProgress();
-					});
+					document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1044,10 +1035,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("leaveGroupRequestSucceed"), function(){
-						document.location.href = "smart.sw#home.sw";
-						smartPop.closeProgress();
-					});
+					document.location.href = "smart.sw#home.sw";
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -1077,10 +1066,8 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					smartPop.showInfo(smartPop.INFO, smartMessage.get("pushoutGroupMemberSucceed"), function(){
-						input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
-						smartPop.closeProgress();
-					});				
+					input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+					smartPop.closeProgress();
 				},
 				error : function(e) {
 					smartPop.showInfo(smartPop.ERROR, smartMessage.get("pushoutGroupMemberError"), function(){
@@ -1107,10 +1094,8 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFO, smartMessage.get("acceptJoinGroupSucceed"), function(){
-					input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
-					smartPop.closeProgress();
-				});				
+				input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+				smartPop.closeProgress();
 			},
 			error : function(e) {
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("acceptJoinGroupError"), function(){
@@ -1137,10 +1122,8 @@ $(function() {
 			type : 'POST',
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
-				smartPop.showInfo(smartPop.INFO, smartMessage.get("rejectJoinGroupSucceed"), function(){
-					input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
-					smartPop.closeProgress();
-				});				
+				input.parents('.js_space_tab_group_members_page').find('.js_group_members_tab').click();
+				smartPop.closeProgress();
 			},
 			error : function(e) {
 				smartPop.showInfo(smartPop.ERROR, smartMessage.get("rejectJoinGroupError"), function(){

@@ -93,9 +93,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeCategorySucceed'), function(){
-							document.location.href = "builder_home.sw";
-	  					});
+						document.location.href = "builder_home.sw";
 					},
 					error : function() {
 	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeCategoryError'), function(){
@@ -144,9 +142,7 @@ $(function() {
 					type : 'POST',
 					data : JSON.stringify(paramsJson),
 					success : function(data, status, jqXHR) {
-	 					smartPop.showInfo(smartPop.INFO, smartMessage.get('removeWorkDefinitionSucceed'), function(){
-							document.location.href = "builder_home.sw";
-	  					});
+						document.location.href = "builder_home.sw";
 					},
 					error : function() {
 	 					smartPop.showInfo(smartPop.ERROR, smartMessage.get('removeWorkDefinitionError'), function(){

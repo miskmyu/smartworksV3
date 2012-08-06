@@ -1,5 +1,7 @@
 package org.claros.commons.auth;
 
+import net.smartworks.util.SmartUtil;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.claros.commons.auth.exception.LoginInvalidException;
@@ -22,7 +24,14 @@ public class MailAuth {
 
 	public static ConnectionMetaHandler authenticate(ConnectionProfile profile, AuthProfile auth, ConnectionMetaHandler handler) throws SystemException, LoginInvalidException, ServerDownException {
 		try {
-			ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+			AuthProfile authTemp = new AuthProfile();
+			String username =  auth.getUsername();
+			if(!SmartUtil.isBlankObject(username))
+				username = username.split("@")[0];
+			authTemp.setUsername(username);
+			authTemp.setPassword(auth.getPassword());
+			
+			ProtocolFactory factory = new ProtocolFactory(profile, authTemp, handler);
 			Protocol protocol = factory.getProtocol(null);
 			handler = protocol.connect(Constants.CONNECTION_READ_WRITE);
 			if (handler == null || !handler.getStore().isConnected()) {

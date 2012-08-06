@@ -35,6 +35,7 @@ import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.work.FileCategory;
+import net.smartworks.model.work.Work;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filters;
@@ -873,7 +874,54 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		this.uploadAjaxYTVideo(request, response, formFile);
 
 	}
+	public String insertWorkManualFile(String workId, String fileId, String fileName) throws DocFileException {
+		try {
+			if (fileName.indexOf(File.separator) > 1)
+				fileName = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
 
+			String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+			if(!CommonUtil.isEmpty(extension))
+				extension = extension.toLowerCase();
+
+			User user = SmartUtil.getCurrentUser();
+			String companyId = "Maninsoft";
+			if (user != null) {
+				companyId = user.getCompanyId();
+			} else {
+				ISwoManager swoMgr = SwManagerFactory.getInstance().getSwoManager();
+				
+				SwoCompanyCond cond = new SwoCompanyCond();
+				SwoCompany[] companys = swoMgr.getCompanys("", cond, IManager.LEVEL_LITE);
+				if (companys != null) {
+					companyId = companys[0].getId();
+				}				
+			}
+
+			String tempFilePath = this.getFileDirectory() + "/SmartFiles/" + companyId + "/" + FILE_DIVISION_TEMPS + "/" + fileId + "." + extension;
+
+			//String realFile = OSValidator.getImageDirectory() + "/" + originId + "." + extension;
+			StringBuffer realFilePath = new StringBuffer(OSValidator.getImageDirectory()).append("/SmartFiles/").append(SmartUtil.getCurrentUser().getCompanyId()).append("/").append(Work.WORKDEF_IMG_DIR).append("/");
+			realFilePath.append("/").append(workId).append("/").append(fileName);
+			
+			File tempFile = new File(tempFilePath);
+			File targetFile = new File(realFilePath.toString());
+			
+			File dir = targetFile.getParentFile();
+			if(dir != null && !dir.exists())
+				dir.mkdirs();
+			
+			FileInputStream is = new FileInputStream(tempFile);
+			FileOutputStream os = new FileOutputStream(targetFile);
+			IOUtils.copy(is, os);
+			is.close();
+			os.close();
+
+			return fileName;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public String insertProfilesFile(String fileId, String fileName, String communityId) throws DocFileException {
 
 		try {

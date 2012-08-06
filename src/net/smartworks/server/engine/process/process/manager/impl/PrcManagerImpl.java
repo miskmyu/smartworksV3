@@ -1175,7 +1175,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId, obj.name, obj.creationUser, obj.creationDate, obj.modificationUser");
-				buf.append(", obj.modificationDate, obj.diagramId, obj.diagramVersion, obj.processId, obj.diagram");
+				buf.append(", obj.modificationDate, obj.diagramId, obj.diagramVersion, obj.processId, obj.diagram, obj.description ");
 			}
 			Query query = this.appendQuery(buf, cond);
 			List list = query.list();
@@ -1197,6 +1197,7 @@ public class PrcManagerImpl extends AbstractManager implements IPrcManager {
 					obj.setDiagramVersion(((String)fields[j++]));
 					obj.setProcessId(((String)fields[j++]));
 					obj.setDiagram(((String)fields[j++]));
+					obj.setDescription(((String)fields[j++]));
 					objList.add(obj);
 				}
 				list = objList;

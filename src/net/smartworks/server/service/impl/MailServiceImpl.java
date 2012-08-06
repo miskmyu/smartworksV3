@@ -29,6 +29,7 @@ import net.smartworks.model.instance.SortingField;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.MailInstanceInfo;
 import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
@@ -114,7 +115,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    	return handler;
 
 	    ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();
-	    if(profiles == null || profiles.length == 0)
+	    if(SmartUtil.isBlankObject(profiles))
 	    	return null;
 	    profile = profiles[0];
 
@@ -161,7 +162,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
 
-	    if(handler != null && profile != null && auth != null)
+	    User currentUser = SmartUtil.getCurrentUser();
+	    if(!currentUser.isUseMail() || SmartUtil.isBlankObject(currentUser.getMailAccounts()))
+	    	return null;
+	    
+	    MailAccount mailAccount = currentUser.getMailAccounts()[0];
+	    if(handler != null && profile != null && auth != null &&  auth.getUsername().equals(mailAccount.getUserName()) && auth.getPassword().equals(mailAccount.getPassword()) )
 	    	return profile;
 
 	    if(profile == null) {
@@ -216,7 +222,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
 	    AuthProfile auth = (AuthProfile)request.getSession().getAttribute("auth");
 
-	    if(handler != null && profile != null && auth != null)
+	    User currentUser = SmartUtil.getCurrentUser();
+	    if(!currentUser.isUseMail() || SmartUtil.isBlankObject(currentUser.getMailAccounts()))
+	    	return null;
+	    
+	    MailAccount mailAccount = currentUser.getMailAccounts()[0];
+	    if(handler != null && profile != null && auth != null &&  auth.getUsername().equals(mailAccount.getUserName()) && auth.getPassword().equals(mailAccount.getPassword()) )
 	    	return auth;
 
 	    if(profile == null) {
@@ -612,17 +623,17 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						if(!SmartUtil.isBlankObject(receiversArr)){
 							receivers = new UserInfo[receiversArr.length];
 							for(int j=0; j<receiversArr.length; j++){
-								sender = receiversArr[j];
-								senderId = null;
+								String receiver = receiversArr[j];
+								String receiverId = null;
 								if(!SmartUtil.isBlankObject(receiversArr[j])){
 									int start = receiversArr[j].indexOf("<");
 									int end = receiversArr[j].indexOf(">");
 									if(start == -1 || end == -1)
-										senderId = receiversArr[j];
+										receiverId = receiversArr[j];
 									else
-										senderId = receiversArr[j].substring(start+1, end);
+										receiverId = receiversArr[j].substring(start+1, end);
 								}
-								receivers[j] = new UserInfo(senderId, sender);
+								receivers[j] = new UserInfo(receiverId, receiver);
 							}
 						}
 					}					
@@ -1683,5 +1694,39 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		} catch (Exception e) {
 		}
 		return 0;
+	}
+
+	@Override
+	public boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+
+		EmailServer[] emailServers = settingsService.getEmailServers();
+		String mailServerId = (String)requestBody.get("mailServerId");
+		String username = (String)requestBody.get("username");
+		String password = (String)requestBody.get("password");
+	    
+		ConnectionMetaHandler handler = null;
+		ConnectionProfile profile = null;
+		if(SmartUtil.isBlankObject(mailServerId) || SmartUtil.isBlankObject(emailServers))
+			return false;
+
+		for(int i=0; i<emailServers.length; i++){
+			if(emailServers[i].getId().equals(mailServerId)){
+				profile = emailServers[i].getConnectionProfile();
+				break;
+			}
+		}
+		
+		AuthProfile auth = new AuthProfile();
+		auth.setUsername(username);
+		auth.setPassword(password);
+		try {
+			handler = MailAuth.authenticate(profile, auth, handler);
+			if (handler != null) {
+				return true;
+			}
+		} catch (LoginInvalidException e) {
+		} catch (ServerDownException e) {
+		}
+		return false;
 	}
 }

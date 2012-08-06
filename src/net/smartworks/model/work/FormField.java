@@ -142,8 +142,87 @@ public class FormField extends BaseObject{
 		}
 		return null;
 	}
+
+	public String getMSOFormat(){
+		if(this.type == null) return "";
+		if(type.equals(TYPE_TEXT) || type.equals(TYPE_RICHTEXT_EDITOR) || type.equals(TYPE_COMBO) || type.equals(TYPE_IMAGE) || type.equals(TYPE_EMAIL) || type.equals(TYPE_RADIO_BUTTON)){
+			return "";
+		}else if(type.equals(TYPE_USER)){
+			return "";
+		}else if(type.equals(TYPE_FILE)){
+			return "";
+		}else if(type.equals(TYPE_OTHER_WORK)){
+			return "";
+		}else if(type.equals(TYPE_NUMBER)){
+			return "mso-number-format:#,##0.#";
+		}else if(type.equals(TYPE_CURRENCY)){
+			return "mso-number-format:#,##0.#";			
+		}else if(type.equals(TYPE_PERCENT)){
+			return "mso-number-format:#,##0.#%";
+		}else if(type.equals(TYPE_CHECK_BOX)){
+			return "";
+		}else if(type.equals(TYPE_DATE)){
+			return "mso-number-format:YYYY-MM-DD";
+		}else if(type.equals(TYPE_TIME)){
+			return "mso-number-format:h:mm";
+		}else if(type.equals(TYPE_DATETIME)){
+			return "mso-number-format:YYYY-MM-DD h:mm";
+		}
+		return null;
+	}
 	
 	public String getDataFormat(String data, String viewingType, int fieldSize) {
+//
+//		mso-number-format:"0"                       
+//	        NO Decimals 
+//	mso-number-format:"0\.000"                       
+//	        3 Decimals 
+//	mso-number-format:"\#\,\#\#0\.000"                       
+//	        Comma with 3 dec 
+//	mso-number-format:"mm\/dd\/yy"                       
+//	        Date7 
+//	mso-number-format:"mmmm\ d\,\ yyyy"                       
+//	        Date9 
+//	mso-number-format:"m\/d\/yy\ h\:mm\ AM\/PM"                       
+//	        D -T AMPM 
+//	mso-number-format:"Short Date"                       
+//	        01/03/1998 
+//	mso-number-format:"Medium Date"                       
+//	        01-mar-98 
+//	mso-number-format:"d\-mmm\-yyyy"                       
+//	        01-mar-1998 
+//	mso-number-format:"Short Time"                      
+//	        5:16 
+//	mso-number-format:"Medium Time"                       
+//	        5:16 am 
+//	mso-number-format:"Long Time"                       
+//	        5:16:21:00 
+//	mso-number-format:"Percent"                       
+//	        Percent - two decimals 
+//	mso-number-format:"0%"                         
+//	        Percent - no decimals 
+//	mso-number-format:"0\.E+00"                       
+//	        Scientific Notation 
+//	mso-number-format:"\@"                         
+//	        Text 
+//	mso-number-format:"\#\ ???\/???"                       
+//	        Fractions - up to 3 digits (312/943) 
+//	mso-number-format:"\0022￡\0022\#\,\#\#0\.00"                       
+//	        ￡12.76 
+//	mso-number-format:"\#\,\#\#0\.00_ \;\[Red\]\-\#\,\#\#0\.00\"                       
+//	        2 decimals, negative numbers in red and signed(1.56   -1.56)
+//	 
+//	 
+//	한 셀 안에서 줄바꿈
+//	<style>   
+//	.xl24   {mso-number-format:"\@";}   
+//	br      {mso-data-placement:same-cell;}   
+//	</style>
+//	이 게시물을...
+//		
+//		
+//		
+		
 		//StringBuffer str = new StringBuffer();
 		DecimalFormat df = new java.text.DecimalFormat("###,###,###,###,###,###");
 		String tdAlign = "left";
