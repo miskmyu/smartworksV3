@@ -278,6 +278,7 @@
 					<%
 					if(!SmartUtil.isBlankObject(diagram.getTasks()) && diagram.getTasks().length>0){
 						for(SmartTaskInfo task : diagram.getTasks()){
+							desc = task.getForm().getDescription();
 					%>
 							<!-- 사용자 가이드 -->
 							<div class="form_wrap up form_layout pt10 pb10" style="height:215px">

@@ -824,9 +824,10 @@ function loadWorkManualField() {
 			container: gridRow,
 			fieldId: "txtWorkManual",
 			fieldName: "",
-			value: value,
+			groupId: value,
 			columns: 1,
-			required: false
+			required: false,
+			isMultiple: false
 		});
 		gridRow.find('.form_label').hide();
 		gridRow.find('.form_value').css({width:"100%"});
