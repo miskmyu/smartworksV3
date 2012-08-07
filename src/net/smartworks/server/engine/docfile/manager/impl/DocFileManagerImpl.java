@@ -64,10 +64,6 @@ import net.smartworks.util.SmartUtil;
 import net.smartworks.util.Thumbnail;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
@@ -855,20 +851,20 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			throw new DocFileException("File Information is incorrect...");
 		}
 		try{
-			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(localFilePath));
-			HSSFSheet sheet = wb.getSheetAt(0);
-			int rows = sheet.getPhysicalNumberOfRows();
-			for(int r=1; r<rows; r++){
-				HSSFRow row = sheet.getRow(r);
-				if (row == null) {
-					continue;
-				}
-				int cells = row.getPhysicalNumberOfCells();
-				for (int c = 0; c < cells; c++) {
-					HSSFCell cell = row.getCell(c);
-					String value = null;
-				}
-			}
+//			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(localFilePath));
+//			HSSFSheet sheet = wb.getSheetAt(0);
+//			int rows = sheet.getPhysicalNumberOfRows();
+//			for(int r=1; r<rows; r++){
+//				HSSFRow row = sheet.getRow(r);
+//				if (row == null) {
+//					continue;
+//				}
+//				int cells = row.getPhysicalNumberOfCells();
+//				for (int c = 0; c < cells; c++) {
+//					HSSFCell cell = row.getCell(c);
+//					String value = null;
+//				}
+//			}
 		}catch(Exception e){
 			throw new DocFileException("Excel File opening error...");			
 		}
