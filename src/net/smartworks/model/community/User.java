@@ -8,6 +8,7 @@ import net.smartworks.model.mail.MailAccount;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.LocaleInfo;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class User extends WorkSpace {
@@ -37,6 +38,7 @@ public class User extends WorkSpace {
 	private String timeZone = LocalDate.TIMEZONE_SEOUL; 
 	private String departmentId;
 	private String department;
+	private DepartmentInfo[] departments; 
 	private String employeeId;
 	private String password;
 	private String phoneNo;
@@ -131,6 +133,12 @@ public class User extends WorkSpace {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
+	public DepartmentInfo[] getDepartments() {
+		return departments;
+	}
+	public void setDepartments(DepartmentInfo[] departments) {
+		this.departments = departments;
+	}
 	public String getCompany() {
 		return company;
 	}
@@ -204,7 +212,22 @@ public class User extends WorkSpace {
 		return false;
 	}
 	
+	public boolean isAdjunctUser(){
+		if(SmartUtil.isBlankObject(this.departments)) return false;
+		if(this.departments.length>1) return true;
+		return false;
+	}
+	
+	public String getFullDepartment(){
+		if(!this.isAdjunctUser() || SmartUtil.isBlankObject(departments)) return this.department;
+		String fullDepartment = "";
+		for(int i=0; i<departments.length; i++){
+			fullDepartment = fullDepartment + departments[i].getName() + "(" + SmartMessage.getString("organization.title.adjunct") + ")" + ((i==departments.length-1) ? "" : ", ");
+		}
+		return fullDepartment;
+	}
 	public static String getNoUserPicture(){
 		return NO_PICTURE_PATH + User.NO_USER_PICTURE + ".jpg";
 	}
+	
 }

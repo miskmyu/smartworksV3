@@ -1,6 +1,7 @@
 package net.smartworks.model.community.info;
 
 import net.smartworks.model.community.User;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class UserInfo extends WorkSpaceInfo {
@@ -8,12 +9,15 @@ public class UserInfo extends WorkSpaceInfo {
 	private String nickName;
 	private int role = User.USER_ROLE_MEMBER;
 	private DepartmentInfo department;
+	private DepartmentInfo[] departments;
 	private String position = "";
 	private String phoneNo = "";
 	private String cellPhoneNo = "";
 	private boolean online;
 	private boolean useSignPicture;
 	private String signPicture;
+	private boolean adjunctUser;
+
 
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -39,6 +43,12 @@ public class UserInfo extends WorkSpaceInfo {
 	}
 	public void setDepartment(DepartmentInfo department) {
 		this.department = department;
+	}
+	public DepartmentInfo[] getDepartments() {
+		return departments;
+	}
+	public void setDepartments(DepartmentInfo[] departments) {
+		this.departments = departments;
 	}
 	public String getLongName(){
 		return (SmartUtil.isBlankObject(position)) ? getNickName() : position + " " + getNickName(); 
@@ -73,6 +83,12 @@ public class UserInfo extends WorkSpaceInfo {
 	public void setSignPicture(String signPicture) {
 		this.signPicture = signPicture;
 	}
+	public boolean isAdjunctUser() {
+		return adjunctUser;
+	}
+	public void setAdjunctUser(boolean adjunctUser) {
+		this.adjunctUser = adjunctUser;
+	}
 	public UserInfo(){
 		super();
 	}
@@ -85,4 +101,12 @@ public class UserInfo extends WorkSpaceInfo {
 		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
 
+	public String getFullDepartment(){
+		if(!this.isAdjunctUser() || SmartUtil.isBlankObject(departments)) return this.department.getName();
+		String fullDepartment = "";
+		for(int i=0; i<departments.length; i++){
+			fullDepartment = fullDepartment + departments[i].getName() + "(" + SmartMessage.getString("organization.title.adjunct") + ")" + ((i==departments.length-1) ? "" : ", ");
+		}
+		return fullDepartment;
+	}	
 }

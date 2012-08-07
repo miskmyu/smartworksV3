@@ -234,6 +234,12 @@ public class SettingsController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/settings/edit_member.jsp", "");
 	}
 
+	@RequestMapping("/edit_adjunct_member")
+	public ModelAndView editAdjunctMember(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/settings/edit_adjunct_member.jsp", "");
+	}
+
 	@RequestMapping(value = "/create_member", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody void createMember(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
