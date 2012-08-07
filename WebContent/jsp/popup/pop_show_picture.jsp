@@ -39,6 +39,7 @@
 		<div class="noti_pic mr7">
 			<img class="profile_size_m" src="<%=image.getOwner().getMidPicture()%>" />
 		</div>
+
 		<div class="noti_in_bodytitle case_2line">
 			<div>
 				<span class="t_name"><%=image.getOwner().getLongName()%></span>
@@ -56,7 +57,6 @@
 			</div>
 			<!-- Title //-->
 		</div>
-
 		<div class="txt_btn">
 			<a onclick="smartPop.close();return false;" href="">
 				<div class="btn_x"></div>
@@ -64,7 +64,6 @@
 		</div>
 
 		<div class="solid_line"></div>
-	</div>
 	<!-- 타이틀//-->
 
 	<!-- 팝업 컨텐츠 -->
