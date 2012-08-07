@@ -107,7 +107,11 @@ function submitForms() {
 							if(work.getForm() != null){
 								String desc = work.getForm().getDescription();
 							%>
-								<td><img src="<%=work.getForm().getOrgImage()%>" width="349" height="289" /></td>
+								<td>
+								<div class="manual_df_img">
+									<img src="<%=work.getForm().getOrgImage()%>"/>
+								</div>
+								</td>
 								<td class ="dline_left_gray pl10" style="width:100%">
 	 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 									<div class="js_form_desc_edit"  style="display:none">
@@ -116,7 +120,7 @@ function submitForms() {
 		 									<input name="rdoEditor" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
 											<input name="rdoEditor" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 										</span>
-										<textarea class="fieldline js_form_desc_text" name="txtaFormDesc" cols="" rows="22"><%=CommonUtil.toNotNull(desc) %></textarea>
+										<textarea class="fieldline js_form_desc_text" name="txtaFormDesc" cols="" rows="18" style="height: 262px"><%=CommonUtil.toNotNull(desc) %></textarea>
 										<div class="js_form_desc_editor"></div>
 									</div>
 								</td>
@@ -233,16 +237,16 @@ function submitForms() {
 			</div>
 			<!-- 최종수정자 //-->
 	
-			<span class="po_left">
+			<span class="po_left pt3">
 				<%
 				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
-					<a href="<%=work.getManualFilePath() %>" class="icon_btn_video mr2" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
+					<a href="<%=work.getManualFilePath() %>" class="icon_file_manual mr7" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
 				<%
 				}
 				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
 				%> 
-					<a href="<%=work.getHelpUrl()%>" class="icon_btn_webex" title="<fmt:message key='work.title.help_url'/>" target="_blank"></a>
+					<a href="<%=work.getHelpUrl()%>" class="icon_web_manual" title="<fmt:message key='work.title.help_url'/>" target="_blank"></a>
 				<%
 				}
 				%>

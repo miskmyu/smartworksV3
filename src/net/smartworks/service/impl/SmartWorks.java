@@ -1597,4 +1597,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getImageInstanceById(instId);
 	}
 
+	@Override
+	public boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return mailService.authenticateEmailAccount(requestBody, request);
+	}
+
 }

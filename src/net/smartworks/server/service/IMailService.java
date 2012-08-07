@@ -38,5 +38,7 @@ public interface IMailService {
 	public void checkEmail() throws Exception;
 	
 	public int getUnreadEmails() throws Exception;
-	
+
+	public boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+		
 }

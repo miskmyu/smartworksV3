@@ -97,4 +97,12 @@ public class MailController extends ExceptionInterceptor {
 	public @ResponseBody void deleteMailFolder(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.deleteMailFolder(requestBody, request);
 	}
+	
+	@RequestMapping(value = "/authenticate_email_account", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody String authenticateEmailAccount(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		boolean result = smartworks.authenticateEmailAccount(requestBody, request);
+		return result ? "true" : "false";
+		
+	}
 }

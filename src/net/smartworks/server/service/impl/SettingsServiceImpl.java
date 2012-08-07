@@ -2346,17 +2346,7 @@ public class SettingsServiceImpl implements ISettingsService {
 		for(int i=0; i<mailAccounts.length; i++){
 			MailAccount mailAccount = mailAccounts[i];
 			EmailServer server = getEmailServerById(mailAccount.getEmailServerId());
-			ConnectionProfile profile = new ConnectionProfile();
-			profile.setShortName(server.getName());
-			profile.setFetchServer(server.getFetchServer());
-			profile.setFetchPort(String.valueOf(server.getFetchServerPort()));
-			profile.setFetchSSL(String.valueOf(server.isFetchSsl()));
-			profile.setProtocol(server.getFetchProtocol());
-			profile.setSmtpServer(server.getSmtpServer());
-			profile.setSmtpPort(String.valueOf(server.getSmtpServerPort()));
-			profile.setSmtpSSL(String.valueOf(server.isSmtpSsl()));
-			profile.setSmtpAuthenticated(String.valueOf(server.isSmtpAuthenticated()));
-			connectionProfiles[i] = profile;
+			connectionProfiles[i] = server.getConnectionProfile();
 		}
 		return connectionProfiles;
 	}

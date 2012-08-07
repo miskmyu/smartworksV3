@@ -19,6 +19,7 @@ try {
 	if (method == null)
 		throw new MisException("errorCodeNullMethod", "Method is null.");
 	if (method.equals("setImage")) {
+		String companyId = CommonUtil.toNotNull(request.getParameter("companyId"));
 		String group = CommonUtil.toNotNull(request.getParameter("group"));
 		String id = CommonUtil.toNull(request.getParameter("id"));
 		String base64 = CommonUtil.toNull(request.getParameter("base64"));
@@ -27,7 +28,7 @@ try {
 		if (base64 == null)
 			throw new MisException("errorCodeNullBase64", "Base64 is null.");
 		
-		StringBuffer buf = new StringBuffer(OSValidator.getImageDirectory()).append("/SmartFiles/").append(SmartUtil.getCurrentUser().getCompanyId()).append("/").append(Work.WORKDEF_IMG_DIR).append("/");
+		StringBuffer buf = new StringBuffer(OSValidator.getImageDirectory()).append("/SmartFiles/").append(companyId).append("/").append(Work.WORKDEF_IMG_DIR).append("/");
 		if (!CommonUtil.isEmpty(group))
 			buf.append(group).append("/");
 		

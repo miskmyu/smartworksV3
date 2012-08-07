@@ -35,6 +35,7 @@
 	function submitForms(e) {
 		var myProfile = $('.js_my_profile_page');
 		if (SmartWorks.GridLayout.validate(myProfile.find('form.js_validation_required'), $('.js_profile_error_message'))) {
+			
 			var forms = myProfile.find('form');
 			var paramsJson = {};
 			for(var i=0; i<forms.length; i++){
@@ -49,6 +50,51 @@
 			var url = "update_my_profile.sw";
 			var progressSpan = myProfile.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);
+			if(!isEmpty(myProfile.find('input[name="chkUserProfileUseEmail"]:checked'))){
+				var mailServerId = myProfile.find('select[name="selUserProfileEmailServerName"] option:selected').attr('value');
+				var username = myProfile.find('input[name="txtUserProfileEmailId"]').attr('value');
+				var password = myProfile.find('input[name="pwUserProfileEmailPW"]').attr('value');
+				var accountJson = {};
+				accountJson['mailServerId'] = mailServerId;
+				accountJson['username'] = username;
+				accountJson['password'] = password;
+				$.ajax({
+					url : "authenticate_email_account.sw",
+					contentType : 'application/json',
+					type : 'POST',
+					data : JSON.stringify(accountJson),
+					success : function(data, status, jqXHR) {
+						console.log('data=', data);
+						if(data != 'true'){
+							smartPop.closeProgress();
+							smartPop.showInfo(smartPop.ERROR, smartMessage.get('invalidMailAccountError'));
+							return;
+						}
+						$.ajax({
+							url : url,
+							contentType : 'application/json',
+							type : 'POST',
+							data : JSON.stringify(paramsJson),
+							success : function(data, status, jqXHR) {
+								// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
+								document.location.href = "smart.sw#home.sw";
+								smartPop.closeProgress();
+							},
+							error : function(e) {
+								smartPop.closeProgress();
+								smartPop.showInfo(smartPop.ERROR, smartMessage.get('setMyProfileError'));
+							}
+						});
+					},
+					error : function(e) {
+						smartPop.closeProgress();
+						smartPop.showInfo(smartPop.ERROR, smartMessage.get('invalidMailAccountError'));
+					}
+				});
+				
+				return;
+			}
+			
 			$.ajax({
 				url : url,
 				contentType : 'application/json',
