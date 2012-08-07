@@ -33,7 +33,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all pop_section_400 js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
+<div class="pop_corner_all js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
 	
 	<!-- 타이틀 -->
 	<div class="body_titl_pic mt5">
@@ -89,7 +89,7 @@
 		<div class="mb5"><%=CommonUtil.toNotNull(image.getContent()) %></div>
 		<!-- 컨텐츠 //-->
 		
-		<div class="js_comments_box mb3" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+		<div class="js_comments_box" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
 			<!-- 댓글 -->
 		   <div class="reply_point pos_reply_point"></div>
 		   <div class="reply_section" >  
@@ -148,8 +148,9 @@
 		    <!-- 댓글 //-->
 		</div>
 	    <div class="btns_action m0 js_action_btns">
-	    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
-	    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+	    	<a class="js_add_comment" href="" style="background:none; padding:0"><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+	    	<!-- 좋아요 기능 임시 사용정지합니다 -->
+	    	<!--  <a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a> -->
 	    </div>
 	</div>
 	<!-- 팝업 컨텐츠 //-->
