@@ -230,4 +230,10 @@ public class WorkController extends ExceptionInterceptor {
 		smartworks.setPWorkManual(requestBody, request);
 	}
 
+	@RequestMapping(value = "/upload_excel_to_work", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody String uploadExcelToWork(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return "" + smartworks.uploadExcelToWork(requestBody, request);
+	}
+
 }

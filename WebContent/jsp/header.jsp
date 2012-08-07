@@ -253,7 +253,7 @@ function logout() {
 	</div>
 
 	<!-- 위의 사용자정보 클릭시 나타나는 개인정보수정 및 로그아웃 버튼들  -->
-	<div class="pop" style="display: none">
+	<div class="pop js_header_user_settings" style="display: none">
 		<ul>
 			<li><a
 				href="smart.sw#my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message

@@ -4247,7 +4247,14 @@ public class ModelConverter {
 		tempWorkInstance.setOriginImgSource(originImgSrc);
 		tempWorkInstance.setImgSource(imgSrc);
 		tempWorkInstance.setContent(content);
-
+		//start : sjlee
+		InstanceInfo[] subInstancesInInstances = instanceService.getRecentSubInstancesInInstance(swdRecord.getRecordId(), -1);
+		int subInstanceCount = 0;
+		if(!CommonUtil.isEmpty(subInstancesInInstances))
+			subInstanceCount = subInstancesInInstances.length;
+		tempWorkInstance.setSubInstanceCount(subInstanceCount);
+		tempWorkInstance.setSubInstances(subInstancesInInstances);
+		//end : sjlee		
 		imageInstance = tempWorkInstance;
 		return imageInstance;
 		

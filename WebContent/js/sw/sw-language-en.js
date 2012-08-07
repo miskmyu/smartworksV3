@@ -208,6 +208,8 @@ smartMessage.bundle['en'] = {
 	removeMailError : "Error has been occured while removing Mail Instance. Please contact the Administrator!",
 	setWorkManualSucceed : "Work Manual has been modified successfully.",
 	setWorkManualError : "Error has been occured while modifing Work Manual. Please contact the Administrator!",
+	importFromExcelSuccess : "records has been uploaded successfully.",
+	importFromExcelError : "Error has been occured while importing from Excel File. Please contact the Administrator!",
 	replyMailError : "Error has been occured while repling Mail Instance. Please contact the Administrator!",
 	forwardMailError : "Error has been occured while forwarding Mail Instance. Please contact the Administrator!",
 	fetchMailsError : "Error has been occured while fetching Mail Instances. Please contact the Administrator!",

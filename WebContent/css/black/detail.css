@@ -82,7 +82,7 @@
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
-.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:5px}
+.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:7px}
 .reply {margin:0 20px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
 .reply .bg {background-color:#ededed}
 .list_reply {margin:0} /* 댓글 목록 */
@@ -166,7 +166,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
     display:inline-block; width:10px; height:16px; left:0; position:absolute}
 		
 /* 프로세스 */
-.process_section { position:relative; float: left; height: 59px; width:100%}
+.process_section { position:relative; float: left; width:100%}
 .process_space {line-height:15px}
 .process_space ul {margin:0}
 .process_space li { float:left}
@@ -185,7 +185,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .proc_arr_next {background: url("../../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
 .proc_start_compl {background: url("../../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
 
-.proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px; width:150px; margin-right:5px; height:43px}
+.proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px; width:150px; margin-right:5px}
 .proc_task.completed {background-color: #e4e4e4} /* 완료 */			
 .proc_task.not_yet {background-color: #cfe2f3} /* 미처리 */
 .proc_task.returned {background-color: #dac8e2}	/* 반려 */	
