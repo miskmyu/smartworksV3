@@ -40,7 +40,7 @@
 			<img class="profile_size_m" src="<%=image.getOwner().getMidPicture()%>" />
 		</div>
 
-		<div class="noti_in_bodytitle case_2line">
+		<div class="noti_in_bodytitle case_2line ">
 			<div>
 				<span class="t_name"><%=image.getOwner().getLongName()%></span>
 				<!-- 인스턴스 마지막수정일자 -->
