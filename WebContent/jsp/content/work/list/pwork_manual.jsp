@@ -122,7 +122,7 @@ function submitForms() {
 							<ul>
 								<!-- 태스크 -->
 								<li class="proc_task not_yet js_manual_task js_select_task_manual selected" taskId="js_process_diagram">
-									<div><%=work.getName()%></div>
+									<div class="mb5"><%=work.getName()%></div>
 									<div><fmt:message key="common.title.process_diagram"/></div>
 								</li>
 								<!-- 태스크 //-->
