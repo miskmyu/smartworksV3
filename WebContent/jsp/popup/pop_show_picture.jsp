@@ -47,9 +47,7 @@
 			<!-- 인스턴스 마지막수정일자 //-->
 		</div>
 		<div class="info fl">
-			<div class="title"><%=image.getOwner().getLongName()%>
-				>
-				<%=image.getFileName()%></div>
+			<div class="title"><%=image.getFileName()%></div>
 		</div>
 
 		<div class="txt_btn">
