@@ -185,7 +185,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .proc_arr_next {background: url("../../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
 .proc_start_compl {background: url("../../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
 
-.proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px 7px 3px; width:150px; margin:2px 5px 2px 0; min-height: 40px}
+.proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px 7px 3px; width:150px; margin:2px 5px 2px 0; min-height: 45px}
 .proc_task.completed {background-color: #e4e4e4} /* 완료 */			
 .proc_task.not_yet {background-color: #cfe2f3} /* 미처리 */
 .proc_task.returned {background-color: #dac8e2}	/* 반려 */	
@@ -423,5 +423,5 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 
 /* Manual */
 .manual_df_img {min-height: 288px; vertical-align: top}
-.manual_df_img img {border: 1px solid #C7C7C7; max-width:389px; max-height:288px; display:block; margin-right: 10px}
+.manual_df_img img {border: 1px solid #C7C7C7; max-width:380px; max-height:280px; display:block; margin-right: 10px}
 .js_form_desc_view {min-height: 290px}

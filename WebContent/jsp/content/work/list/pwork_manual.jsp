@@ -108,7 +108,7 @@ function submitForms() {
 			<!-- 업무 정의 //-->
 		
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="height:59px">
+			<div class="define_space" style="height:62px">
 			
 			 <!-- 방향 Prev -->
 			       <a href="" class="js_manual_tasks_left" style="display:block"><div class="proc_btn_prev" style="margin: 22px 0 0 35px;"></div></a>
@@ -138,7 +138,7 @@ function submitForms() {
 								%>
 										<!-- 태스크 -->
 										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
-											<div><%=count%>) <%=task.getName()%></div>
+											<div class="mb5"><%=count%>) <%=task.getName()%></div>
 											
 					                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
 						                    <div class="noti_in_s"><div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div><div class="t_date"><%=assigningName %></div></div>
@@ -173,7 +173,7 @@ function submitForms() {
 							<table>
 								<tbody>
 									<tr>
-										<td>
+										<td class="vt">
 											<div class="manual_df_img">
 												<img src="<%=diagramImage %>"/>
 											</div>
