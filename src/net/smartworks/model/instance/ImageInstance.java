@@ -1,6 +1,7 @@
 package net.smartworks.model.instance;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.instance.info.InstanceInfo;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
 
@@ -15,7 +16,7 @@ public class ImageInstance extends WorkInstance {
 	private String prevInstId;
 	private String nextInstId;
 	private int subInstanceCount;
-	private Instance[] subInstances;
+	private InstanceInfo[] subInstances;
 	
 	public int getViews() {
 		return views;
@@ -71,10 +72,10 @@ public class ImageInstance extends WorkInstance {
 	public void setSubInstanceCount(int subInstanceCount) {
 		this.subInstanceCount = subInstanceCount;
 	}
-	public Instance[] getSubInstances() {
+	public InstanceInfo[] getSubInstances() {
 		return subInstances;
 	}
-	public void setSubInstances(Instance[] subInstances) {
+	public void setSubInstances(InstanceInfo[] subInstances) {
 		this.subInstances = subInstances;
 	}
 	public ImageInstance(){
