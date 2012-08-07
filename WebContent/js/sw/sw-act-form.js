@@ -22,7 +22,6 @@ $(function() {
 			taskInstId = pworkSpace.attr('taskInstId');
 			target = pworkSpace.find('.js_form_content');
 			formId = $('.form_layout[name=frmSmartForm]').attr('formid');
-			
 		}
 		refreshData['workId'] = workId;
 		refreshData['recordId'] = recordId;
