@@ -851,6 +851,11 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			throw new DocFileException("File Information is incorrect...");
 		}
 		try{
+			FileInputStream fis = new FileInputStream(localFilePath);
+			byte[] html = new byte[fis.available()];
+			int length = fis.read(html);
+			String htmlStr = html.toString();
+			String test = htmlStr;
 //			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(localFilePath));
 //			HSSFSheet sheet = wb.getSheetAt(0);
 //			int rows = sheet.getPhysicalNumberOfRows();
