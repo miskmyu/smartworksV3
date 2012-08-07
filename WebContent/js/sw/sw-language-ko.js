@@ -14,7 +14,7 @@ smartMessage.bundle['ko'] = {
 	uploadDropArea : '업로드할 파일들을 이곳에 드롭하십시요!',
 	uploadTypeError: "{file} 의 확장자가 허용되지 않습니다, {extensions} 만 허용합니다.",
 	uploadSizeError: "{file} 의 사이즈가 너무 큽니다, 파일의 최대 허용 사이즈는 {sizeLimit} 입니다.",
-	uploadMinSizeError: "{file} 의 사이즈가 너무 작습니다, 파일의 최소 허용 사이즈는 {minSizeLimit} 초과입니다.",
+	uploadMinSizeError: "{file} 의 사이즈가 너무 작습니다, 파일의 최소 허용 사이즈는 {minSizeLimit} 입니다.",
 	uploadEmptyError: "{file} 이 비어있습니다, 다른 파일을 선택하십시오.",
 	uploadOnLeave: "파일이 이미 업로드되는 중입니다, 지금 이동하면 업로드가 취소됩니다.",
 	chatNoChatters : '대화상대 없음',
@@ -214,6 +214,8 @@ smartMessage.bundle['ko'] = {
 	removeMailError : "메일을 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setWorkManualSucceed : "업무매뉴얼이 정상적으로 수정되었습니다.",
 	setWorkManualError : "업무매뉴얼을 수정하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
+	importFromExcelSuccess : "의 항목이 정상적으로 등록되었습니다.",
+	importFromExcelError : "엑셀로 등록하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	replyMailError : "메일에 답장하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	forwardMailError : "메일을 전달하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	fetchMailsError : "메일을 가져오는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
@@ -226,6 +228,7 @@ smartMessage.bundle['ko'] = {
 	notRefFormWorkingError : "참고할 업무가 정상적으로 작동하지 않습니다. 관리자에게 확인바랍니다.",
 	helpUrlSyntaxError : "웹사용설명서가 http://으로 시작하는 웹주소가 아닙니다. 수정 후 다시 하시기 바랍니다.",
 	invalidMailAccountError : "메일계정이 없거나 암호가 잘못되었습니다. 수정 후 다시 하시기 바랍니다.",
+	addAdjunctError : "겸직원을 추가하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
@@ -252,6 +255,7 @@ smartMessage.bundle['ko'] = {
 	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
 	pushoutGroupMemberConfirmation : "그룹구성원을 강퇴하려고 합니다. 정말로 강퇴시키시겠습니까? ",
 	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
+	addAdjunctConfirmation : "겸직원을 추가하려고 합니다. 정말로 추가하시겠습니까?",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

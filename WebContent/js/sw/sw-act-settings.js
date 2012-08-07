@@ -351,6 +351,21 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_adjunct_member').live('click', function(e) {
+		var input = $(targetElement(e));
+		var organizationManagement = input.parents('.js_organization_management_page');
+		var departId = organizationManagement.find('.js_edit_department_page').attr('departId');
+		if(isEmpty(departId)) departId = currentUser.companyId;
+		var target = organizationManagement.find('.js_edit_member');
+		$.ajax({
+			url : "edit_adjunct_member.sw?departId=" + departId,
+			success : function(data, status, jqXHR) {
+				target.html(data).slideDown(500);
+			}			
+		});
+		return false;
+	});
+
 	$('a.js_delete_member').live('click', function(e) {
 		var input = $(targetElement(e));
 		

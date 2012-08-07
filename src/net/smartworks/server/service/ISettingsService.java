@@ -87,4 +87,6 @@ public interface ISettingsService {
 	
 	public abstract ConnectionProfile[] getMailConnectionProfiles() throws Exception;
 	
+	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

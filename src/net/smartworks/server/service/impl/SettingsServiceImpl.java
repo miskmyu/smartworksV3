@@ -2350,5 +2350,9 @@ public class SettingsServiceImpl implements ISettingsService {
 		}
 		return connectionProfiles;
 	}
+	@Override
+	public void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		// TODO Auto-generated method stub		
+	}
 
 }

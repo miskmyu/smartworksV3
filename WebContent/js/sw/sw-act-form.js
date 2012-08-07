@@ -4,8 +4,8 @@ $(function() {
 		var newIwork = input.parents('.js_new_iwork_page');
 		var startPwork = input.parents('.js_start_pwork_page');
 		var iworkSpace =input.parents('.js_iwork_space_page');
-		var pworkSpace = input.parents('.js_iwork_space_page');
-		var workId = "", target = [], recordId = "", taskInstId = "";
+		var pworkSpace = input.parents('.js_pwork_space_page');
+		var workId = "", target = [], recordId = "", taskInstId = "", formId = "";
 		if(!isEmpty(newIwork)){
 			workId = newIwork.attr('workId');
 			target = newIwork.find('.js_form_content');		
@@ -20,7 +20,8 @@ $(function() {
 			workId = pworkSpace.attr('workId');
 			recordId = pworkSpace.attr('instId');
 			taskInstId = pworkSpace.attr('taskInstId');
-			target = pworkSpace.find('.js_form_content');						
+			target = pworkSpace.find('.js_form_content');
+			formId = $('.form_layout[name=frmSmartForm]').attr('formid');
 		}
 		refreshData['workId'] = workId;
 		refreshData['recordId'] = recordId;
@@ -32,6 +33,7 @@ $(function() {
 			recordId : recordId,
 			taskInstId : taskInstId,
 			refreshData : refreshData,
+			formId : formId,
 			onSuccess : function(){
 			}
 		});

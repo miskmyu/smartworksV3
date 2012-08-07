@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.util.SmartMessage"%>
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.util.LocalDate"%>
 <%@page import="net.smartworks.model.KeyMap"%>
 <%@page import="net.smartworks.model.community.Department"%>
@@ -51,7 +53,7 @@
 			var confirmMessage = smartMessage.get("saveConfirmation");
 			if(isEmpty(userId)){
 				url = "create_member.sw";
-				confirmMessage = smartMessage.get("createConfirmation")
+				confirmMessage = smartMessage.get("createConfirmation");
 			}
 			smartPop.confirm( confirmMessage, function(){
 				var progressSpan = editMember.find('.js_progress_span');
@@ -112,7 +114,7 @@
 						<%
 						}else{
 						%>
-							<td width="78%"><%=CommonUtil.toNotNull(user.getDepartment()) %></td>
+							<td width="78%"><%=CommonUtil.toNotNull(user.getFullDepartment()) %></td>
 						<%
 						}
 						%>

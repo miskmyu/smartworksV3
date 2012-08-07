@@ -717,4 +717,8 @@ public interface ISmartWorks {
 
 	public abstract boolean authenticateEmailAccount(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
+	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }

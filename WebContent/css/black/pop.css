@@ -5,12 +5,14 @@
 .pop_corner_all .txt_btn {margin-bottom: 5px}
 .pop_corner_all .profile_size_s, .pop_list_area .profile_size_s, .pop_list_area .icon_depart {margin:0 5px 0 0}
 .pop_corner_all th {font-weight: normal}
-/*공간 > 사진 상세팝업 */
-.pop_corner_all .body_titl .txt_btn {padding: 8px 0 24px; margin:0}
+
+/* 공간 > 사진 상세팝업 */
+.pop_corner_all .body_titl_pic .txt_btn {padding: 0 0 33px; margin:0}
 .pop_corner_all .body_titl .info { line-height:24px}
-.pop_corner_all .original_picture {margin-bottom:15px;min-height:200px;}
-.pop_corner_all .original_picture img { max-height:410px; max-width:580px}
-.pop_corner_all .reply_section {width:500px}
+.pop_corner_all .original_picture {margin:0 0 15px 0; min-height:200px;}
+.pop_corner_all .original_picture img {max-width:580px}
+.pop_picture_section {max-height:550px; overflow-y:auto; overflow-x:hidden; margin:0 20px 10px}
+.pop_picture_section .reply_section {width:auto}
 .original_picture .arrow_space { position:absolute; width:580px; max-height:410px}
 .original_picture .arrow_space:hover .btn_arr_prev, .original_picture .arrow_space:hover .btn_arr_next {display:inline-block}
 .original_picture .arrow_space > div {position: absolute; top:100px; margin:0; width:22px; height:35px; cursor:pointer; float:none; display: none}
@@ -22,6 +24,7 @@
 .pop_contents {padding: 10px; overflow:hidden}
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545}
 .smart_userinfo_section .userinfo_area {float:left; line-height:18px; margin-left:8px; width:160px}
+.simplemodal-wrap .case_2line {line-height: 26px}
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; padding-top:5px; font-size: 12px; line-height:19px}

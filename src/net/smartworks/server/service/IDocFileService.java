@@ -9,6 +9,7 @@
 package net.smartworks.server.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,5 +62,7 @@ public interface IDocFileService {
 	public abstract void deleteFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	public abstract void downloadFile(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	public abstract int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 }

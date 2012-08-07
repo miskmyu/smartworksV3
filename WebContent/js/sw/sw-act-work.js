@@ -1690,4 +1690,9 @@ $(function() {
 		return false;
 	});
 
+	$('a.js_excel_import_excute').live('click', function(e){
+		submitForms();
+		return false;
+	});
+
 });

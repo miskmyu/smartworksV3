@@ -33,37 +33,43 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all pop_section_400 js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
-
-	<div class="body_titl space">
-		<div class="noti_pic">
-			<img class="profile_size_m" src="<%=image.getOwner().getMidPicture()%>" />
+<div class="pop_corner_all js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
+	
+	<!-- 타이틀 -->
+	<div class="body_titl_pic mt5">
+			<div class="noti_pic mr7">
+				<img class="profile_size_m" src="<%=image.getOwner().getMidPicture()%>" />
+			</div>
+	
+			<div class="noti_in_bodytitle case_2line ">
+				<div>
+					<span class="t_name"><%=image.getOwner().getLongName()%></span>
+					<!-- 인스턴스 마지막수정일자 -->
+					<span class="t_date"><%=image.getLastModifiedDate().toLocalString()%></span>
+					<!-- 인스턴스 마지막수정일자 //-->
+				</div>
+				<!-- Title -->
+				<div>
+					<span class="title_picico">
+					<%=image.getOwner().getLongName()%>
+					>
+					<%=image.getFileName()%>
+					</span>
+				</div>
+				<!-- Title //-->
+			</div>
+			<div class="txt_btn">
+				<a onclick="smartPop.close();return false;" href="">
+					<div class="btn_x"></div>
+				</a>
+			</div>
+	
+			<div class="solid_line"></div>
 		</div>
-		<div class="noti_in_m">
-			<a href=""> <span class="t_name"><%=image.getOwner().getLongName()%></span>
-			</a>
-			<!-- 인스턴스 마지막수정일자 -->
-			<span class="t_date pl10"><%=image.getLastModifiedDate().toLocalString()%></span>
-			<!-- 인스턴스 마지막수정일자 //-->
-		</div>
-		<div class="info fl">
-			<div class="title"><%=image.getOwner().getLongName()%>
-				>
-				<%=image.getFileName()%></div>
-		</div>
-
-		<div class="txt_btn">
-			<a onclick="smartPop.close();return false;" href="">
-				<div class="btn_x"></div>
-			</a>
-		</div>
-
-		<div class="solid_line"></div>
-	</div>
 	<!-- 타이틀//-->
 
 	<!-- 팝업 컨텐츠 -->
-	<div class="space_contents js_sub_instance_list" style="max-height:500px;overflow-y:auto;overflow-x:hidden">
+	<div class="js_sub_instance_list pop_picture_section">
 		<!-- 사진   -->
 		<div class="original_picture">
 			<!-- start : added by sjlee 2012.08.05 -->
@@ -80,17 +86,13 @@
 		<!-- 사진 //-->
 
 		<!-- 컨텐츠 -->
-		<div class="det_title">
-			<div class="noti_in_m">
-				<div><%=CommonUtil.toNotNull(image.getContent()) %></div>
-			</div>
-		</div>
+		<div class="mb5"><%=CommonUtil.toNotNull(image.getContent()) %></div>
 		<!-- 컨텐츠 //-->
 		
 		<div class="js_comments_box" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
 			<!-- 댓글 -->
 		   <div class="reply_point pos_reply_point"></div>
-		   <div class="reply_section pos_reply">  
+		   <div class="reply_section" >  
 		        <div class="list_reply">
 		            <ul class="js_comment_list">
 		            	<li class="comment_list js_comment_instance" style="display:none">
@@ -138,16 +140,17 @@
 						<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 					</div>
 					<div class="noti_in">
-						<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+						<textarea class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
 					</div>
 		        </div>
 		    
 		    </div>
 		    <!-- 댓글 //-->
 		</div>
-	    <div class="btns_action js_action_btns">
-	    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
-	    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+	    <div class="btns_action m0 js_action_btns">
+	    	<a class="js_add_comment" href="" style="background:none; padding:0"><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+	    	<!-- 좋아요 기능 임시 사용정지합니다 -->
+	    	<!--  <a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a> -->
 	    </div>
 	</div>
 	<!-- 팝업 컨텐츠 //-->

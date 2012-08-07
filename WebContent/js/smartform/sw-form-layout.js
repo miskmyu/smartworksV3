@@ -85,7 +85,6 @@ SmartWorks.GridLayout = function(config) {
 			$htmlForm.appendTo(refreshTarget);
 			mode = "edit";
 		}
-		
 		this_.$layout = $form.find('layout');
 
 		var $rows = this_.$layout.find('gridRow');
@@ -98,7 +97,6 @@ SmartWorks.GridLayout = function(config) {
 		for(var i = 0 ; i < $columns.length ; i++){
 			totalWidth += parseFloat($columns.eq(i).attr('size'));
 		}
-		
 		for ( var i = 0; i < $rows.length; i++) {
 			var $row = $rows.eq(i);
 			
@@ -150,7 +148,7 @@ SmartWorks.GridLayout = function(config) {
 			return this_;
 		}
 	};
-		
+	
 	SmartWorks.extend(this.options, config);
 	var workId = this.options.workId;
 	var formId = this.options.formId;
