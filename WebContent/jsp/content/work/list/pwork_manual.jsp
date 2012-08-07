@@ -108,7 +108,7 @@ function submitForms() {
 			<!-- 업무 정의 //-->
 		
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="height:62px">
+			<div class="define_space" style="height:80px">
 			
 			 <!-- 방향 Prev -->
 			       <a href="" class="js_manual_tasks_left" style="display:block"><div class="proc_btn_prev" style="margin: 22px 0 0 35px;"></div></a>
@@ -122,7 +122,7 @@ function submitForms() {
 							<ul>
 								<!-- 태스크 -->
 								<li class="proc_task not_yet js_manual_task js_select_task_manual selected" taskId="js_process_diagram">
-									<div class="mb5"><%=work.getName()%></div>
+									<div class="title"><%=work.getName()%></div>
 									<div><fmt:message key="common.title.process_diagram"/></div>
 								</li>
 								<!-- 태스크 //-->
@@ -138,7 +138,7 @@ function submitForms() {
 								%>
 										<!-- 태스크 -->
 										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
-											<div class="mb5"><%=count%>) <%=task.getName()%></div>
+											<div class="title"><%=count%>) <%=task.getName()%></div>
 											
 					                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
 						                    <div class="noti_in_s"><div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div><div class="t_date"><%=assigningName %></div></div>
@@ -178,7 +178,7 @@ function submitForms() {
 												<img src="<%=diagramImage %>"/>
 											</div>
 										</td>
-										<td class ="dline_left_gray pl10" style="width:100%">
+										<td class ="dline_left_gray pl10 vt" style="width:100%">
 			 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(diagramDesc)){%><%=diagramDesc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 											<div class="js_form_desc_edit"  style="display:none">
 			 									<span><fmt:message key="builder.title.process_desc"/> : </span>
@@ -214,12 +214,12 @@ function submitForms() {
 										<table>
 											<tbody>
 												<tr>
-													<td>
+													<td class="vt">
 														<div class="manual_df_img">
 															<img src="<%=form.getOrgImage() %>"/>
 														</div>
 													</td>
-													<td class ="dline_left_gray pl10" style="width:100%">
+													<td class ="dline_left_gray pl10 vt" style="width:100%">
 						 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 														<div class="js_form_desc_edit"  style="display:none">
 						 									<span><fmt:message key="builder.title.form_desc"/> : </span>
