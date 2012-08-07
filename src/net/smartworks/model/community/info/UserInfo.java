@@ -16,8 +16,6 @@ public class UserInfo extends WorkSpaceInfo {
 	private boolean online;
 	private boolean useSignPicture;
 	private String signPicture;
-	private boolean adjunctUser;
-
 
 	public String getNickName() {
 		if(SmartUtil.isBlankObject(nickName)) return getName();
@@ -83,12 +81,6 @@ public class UserInfo extends WorkSpaceInfo {
 	public void setSignPicture(String signPicture) {
 		this.signPicture = signPicture;
 	}
-	public boolean isAdjunctUser() {
-		return adjunctUser;
-	}
-	public void setAdjunctUser(boolean adjunctUser) {
-		this.adjunctUser = adjunctUser;
-	}
 	public UserInfo(){
 		super();
 	}
@@ -101,6 +93,12 @@ public class UserInfo extends WorkSpaceInfo {
 		return this.getLongName() + "&lt;" + super.getId() + "&gt;";
 	}
 
+	public boolean isAdjunctUser(){
+		if(SmartUtil.isBlankObject(this.departments)) return false;
+		if(this.departments.length>1) return true;
+		return false;
+	}
+	
 	public String getFullDepartment(){
 		if(!this.isAdjunctUser() || SmartUtil.isBlankObject(departments)) return this.department.getName();
 		String fullDepartment = "";
