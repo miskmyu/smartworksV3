@@ -145,7 +145,7 @@
 					<div class="fr txt_btn" style="height:auto">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
-	                <div class="cb" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+	                <div class="fr txt_btn" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				
 	            <!-- 우측 버튼 -->
@@ -209,7 +209,7 @@
 						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
 						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
-					                    <div class="mb3"><%=count%>) <%=task.getName() %></div>
+					                    <div class="mb5"><%=count%>) <%=task.getName() %></div>
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
 					                    <div class="noti_in_s">
 						                    <div class="t_date"><%=task.getPerformer().getLongName()%></div>
