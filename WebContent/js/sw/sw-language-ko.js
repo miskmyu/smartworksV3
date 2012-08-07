@@ -228,6 +228,7 @@ smartMessage.bundle['ko'] = {
 	notRefFormWorkingError : "참고할 업무가 정상적으로 작동하지 않습니다. 관리자에게 확인바랍니다.",
 	helpUrlSyntaxError : "웹사용설명서가 http://으로 시작하는 웹주소가 아닙니다. 수정 후 다시 하시기 바랍니다.",
 	invalidMailAccountError : "메일계정이 없거나 암호가 잘못되었습니다. 수정 후 다시 하시기 바랍니다.",
+	addAdjunctError : "겸직원을 추가하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다.",
 	
 	usableUserId : "사용가능한 사용자 아이디 입니다. 다른아이디로 변경하려면 아이디변경버튼을 클릭하십시요.",
 	duplicatedUserId : "이미사용중인 사용자 아이디 입니다. 다른아이디를 입력하시기 바랍니다.",
@@ -254,6 +255,7 @@ smartMessage.bundle['ko'] = {
 	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
 	pushoutGroupMemberConfirmation : "그룹구성원을 강퇴하려고 합니다. 정말로 강퇴시키시겠습니까? ",
 	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
+	addAdjunctConfirmation : "겸직원을 추가하려고 합니다. 정말로 추가하시겠습니까?",
 	
 	spaceOverDateSeleted : "미래의 날짜를 선택하였습니다. 오늘이나 과거의 날짜를 선택하십시요!",
 	

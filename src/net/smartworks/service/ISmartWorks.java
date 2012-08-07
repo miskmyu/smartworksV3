@@ -719,4 +719,6 @@ public interface ISmartWorks {
 
 	public abstract int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 }
