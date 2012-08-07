@@ -3015,7 +3015,7 @@ public class ModelConverter {
 			group.setId(swoGroup.getId());
 			group.setName(swoGroup.getName());
 			group.setDesc(swoGroup.getDescription());
-			group.setPublic(swoGroup.equals("O") ? true : false);
+			group.setPublic(swoGroup.getStatus().equals("O") ? true : false);
 			//group.setContinue(swoGroup.getStatus().equals("C") ? true : false);
 			User leader = getUserByUserId(swoGroup.getGroupLeader());
 			if(leader != null)
@@ -3029,12 +3029,17 @@ public class ModelConverter {
 			group.setOpenDate(openDate);
 
 			List<UserInfo> groupMemberList = new ArrayList<UserInfo>();
+			List<UserInfo> groupJoinRequestMemberList = new ArrayList<UserInfo>();
+
 			SwoGroupMember[] swoGroupMembers = swoGroup.getSwoGroupMembers();
 			if(!CommonUtil.isEmpty(swoGroupMembers)) {
 				groupMemberList.add(getUserInfoByUserId(swoGroup.getGroupLeader()));
 				for(SwoGroupMember swoGroupMember : swoGroupMembers) {
 					if(!swoGroupMember.getUserId().equals(swoGroup.getGroupLeader())) {
 						UserInfo groupMember = getUserInfoByUserId(swoGroupMember.getUserId());
+						if (swoGroupMember.getJoinType().equalsIgnoreCase(SwoGroupMember.JOINTYPE_REQUEST) && swoGroupMember.getJoinStatus().equalsIgnoreCase(SwoGroupMember.JOINSTATUS_READY)) {
+							groupJoinRequestMemberList.add(groupMember);
+						}
 						groupMemberList.add(groupMember);
 					}
 				}
@@ -3245,6 +3250,10 @@ public class ModelConverter {
 			
 			boolean autoApproval = swoGroup.isAutoApproval();
 			group.setAutoApproval(autoApproval);
+			
+			UserInfo[] joinRequestMembers = new UserInfo[groupJoinRequestMemberList.size()];
+			groupJoinRequestMemberList.toArray(joinRequestMembers);
+			group.setJoinRequesters(joinRequestMembers);
 			
 			return group;
 		} catch(Exception e) {
@@ -3960,6 +3969,9 @@ public class ModelConverter {
 		List<IFileModel> file = SwManagerFactory.getInstance().getDocManager().findFileGroup(pkg.getManualFileName());
 		if (file != null && file.size() != 0) {
 			informationWork.setManualFileName(file.get(0).getFileName());
+			
+			//SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/"
+			
 			informationWork.setManualFilePath(file.get(0).getFilePath());
 		}
 		
@@ -4235,7 +4247,14 @@ public class ModelConverter {
 		tempWorkInstance.setOriginImgSource(originImgSrc);
 		tempWorkInstance.setImgSource(imgSrc);
 		tempWorkInstance.setContent(content);
-
+		//start : sjlee
+		InstanceInfo[] subInstancesInInstances = instanceService.getRecentSubInstancesInInstance(swdRecord.getRecordId(), -1);
+		int subInstanceCount = 0;
+		if(!CommonUtil.isEmpty(subInstancesInInstances))
+			subInstanceCount = subInstancesInInstances.length;
+		tempWorkInstance.setSubInstanceCount(subInstanceCount);
+		tempWorkInstance.setSubInstances(subInstancesInInstances);
+		//end : sjlee		
 		imageInstance = tempWorkInstance;
 		return imageInstance;
 		

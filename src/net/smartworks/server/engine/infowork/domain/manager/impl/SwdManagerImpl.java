@@ -1834,6 +1834,139 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		
 		return task;
 	}
+	private boolean isExecutablePostMappingCondition(SwdRecord record, SwfField field) throws Exception {
+		SwfMappings mappings = field.getMappings();
+		//내보내기 조건식
+		SwfConditions swfConds = mappings.getConds();
+		if (swfConds == null)
+			return true;
+		
+		String condsOperator = swfConds.getOperator();//OR, AND
+		
+		SwfCondition[] conds = swfConds.getCond();
+		if (CommonUtil.isEmpty(conds))
+			return true;
+		for (int i = 0; i < conds.length; i++) {
+			boolean result = false;
+			
+			String operator = conds[i].getOperator();
+			SwfOperand first = conds[i].getFirst();
+			SwfOperand second = conds[i].getSecond();
+			
+			String selfFieldId = first.getFieldId();
+			String selfFieldIdValue = CommonUtil.toNotNull(record.getDataFieldValue(selfFieldId));
+			
+			String secondType = second.getType();
+			if (secondType.equalsIgnoreCase("expression")) {
+				String secondValue = CommonUtil.toNotNull(second.getExpression());
+				if (operator.equalsIgnoreCase("=")) {
+					result = selfFieldIdValue.equalsIgnoreCase(secondValue);
+				} else if (operator.equalsIgnoreCase("!=")) {
+					result = !selfFieldIdValue.equalsIgnoreCase(secondValue);
+				} else if (operator.equalsIgnoreCase("like")) {
+					result = selfFieldIdValue.indexOf(secondValue) != -1;
+				} else if (operator.equalsIgnoreCase(">=")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf >= tempSecond;
+				} else if (operator.equalsIgnoreCase("&lt;=") || operator.equalsIgnoreCase("<=")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf <= tempSecond;
+				} else if (operator.equalsIgnoreCase(">")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf > tempSecond;
+				} else if (operator.equalsIgnoreCase("&lt;") || operator.equalsIgnoreCase("<")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf < tempSecond;
+				}
+			} else {
+				String secondFieldId = second.getFieldId();
+				String secondFieldIdValue = CommonUtil.toNotNull(record.getDataFieldValue(secondFieldId));
+				if (operator.equalsIgnoreCase("=")) {
+					result = selfFieldIdValue.equalsIgnoreCase(secondFieldIdValue);
+				} else if (operator.equalsIgnoreCase("!=")) {
+					result = !selfFieldIdValue.equalsIgnoreCase(secondFieldIdValue);
+				} else if (operator.equalsIgnoreCase("like")) {
+					result = selfFieldIdValue.indexOf(secondFieldIdValue) != -1;
+				} else if (operator.equalsIgnoreCase(">=")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondFieldIdValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf >= tempSecond;
+				} else if (operator.equalsIgnoreCase("&lt;=") || operator.equalsIgnoreCase("<=")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondFieldIdValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf <= tempSecond;
+				} else if (operator.equalsIgnoreCase(">")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondFieldIdValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf > tempSecond;
+				} else if (operator.equalsIgnoreCase("&lt;") || operator.equalsIgnoreCase("<")) {
+					int tempSelf = 0;
+					int tempSecond = 0;
+					try {
+						tempSelf = Integer.parseInt(selfFieldIdValue);
+						tempSecond = Integer.parseInt(secondFieldIdValue);
+					} catch (Exception e) {
+						result = false;
+					}
+					result = tempSelf < tempSecond;
+				}
+			}
+			if (condsOperator.equalsIgnoreCase("or")) {
+				if (result)
+					return result;
+			} else {
+				if (!result)
+					return result;
+			}
+		}
+		return condsOperator.equalsIgnoreCase("or") ? false : true;
+	}
 	private void postFieldMapping(String user, SwdRecord record, SwfField[] fields, SwfFormLink[] mappingForms, Map context) throws Exception {
 		if (record == null || CommonUtil.isEmpty(fields))
 			return;
@@ -1845,8 +1978,13 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			SwfMappings mappings = field.getMappings();
 			if (mappings == null)
 				continue;
+			
 			SwfMapping[] maps = mappings.getPostMappings();
 			if (CommonUtil.isEmpty(maps))
+				continue;
+			
+			//내보내기 조건식을 비교하고 결과가 TURE 라면 내보내기 진행을 한다
+			if (!isExecutablePostMappingCondition(record, field)) 
 				continue;
 			
 			if (context == null)

@@ -38,6 +38,7 @@ public class SwdDataField extends BaseObject {
 	public static final String A_REFFORMFIELD = "refFormField";
 	public static final String A_REFRECORDID = "refRecordId";
 	public static final String A_DATAFIELD = "DataField";
+	public static final String A_SELECTEDVALUE = "selectedValue";
 	
 	private String id;
 	private String name;
@@ -47,6 +48,7 @@ public class SwdDataField extends BaseObject {
 	private String refFormField;
 	private String refRecordId;
 	private String value;
+	private String selectedValue;
 
 	private SwdDataField[] dataFields;
 	
@@ -318,6 +320,12 @@ public class SwdDataField extends BaseObject {
 	}
 	public void setRow(int rowCnt) {
 		this.row = rowCnt;
+	}
+	public String getSelectedValue() {
+		return selectedValue;
+	}
+	public void setSelectedValue(String selectedValue) {
+		this.selectedValue = selectedValue;
 	}
 
 }

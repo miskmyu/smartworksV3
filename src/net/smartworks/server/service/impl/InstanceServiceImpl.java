@@ -761,7 +761,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 	
-	public SwdDataField getAutoIndexSwdDataField(String userId, SwfForm form, SwfField field) throws Exception {
+	public SwdDataField getAutoIndexSwdDataField(String userId, SwfForm form, SwfField field, SwdRecord oldRecord) throws Exception {
 		if (field == null)
 			return null;
 		
@@ -782,8 +782,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;
 		}
 
-		SwdDataField[] selectedDataField = null;
-		
+		String selectedListValue = null;
 		for (int i = 0; i < rules.length; i++) {
 			AutoIndexRule rule = rules[i];
 			String ruleId = rule.getRuleId();
@@ -840,35 +839,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					items = new String[1];
 					items[0] = " ";
 				}
-				SwdDataField[] subDataFields = new SwdDataField[items.length];
-				selectedDataField = new SwdDataField[1];
-				
-				//TODO 이전에 사용자가 선택해놓았던 값이 들어 와야 한다
-				selectedDataField[0].setValue(items[0]);
-				
-				for (int j = 0; j < items.length; j++) {
-					String subValue = items[j];
-					SwdDataField subDataField = new SwdDataField();
-					
-					if (CommonUtil.isEmpty(subValue)) {
-						subDataField.setValue(null);
-						subDataField.setRefRecordId(null);
-					} else {
-						subDataField.setValue(subValue);
-					}
-					subDataFields[j] = subDataField;
-				}
-				selectedDataField[0].setDataFields(subDataFields);
+				selectedListValue = items[0];
 				valueBuff.append(items[0]).append(CommonUtil.toNotNull(rule.getSeperator()));
 			}
 		}
 		
 		SwdDataField dataField = toDataField(userId, field, valueBuff.toString());
-		if (selectedDataField != null) {
-			//만약에 룰집합중에 한개 이상의 콤보형태의 룰이 존재한다면 두콤포리스트 아이템을 같이 올릴수 있는 방안이 필요하다
-			//subDataFields를 한번 더 랩핑하여 시퀀스아이디별로 따로주어야 할듯
-			dataField.setDataFields(selectedDataField);
-		}
+		if (!CommonUtil.isEmpty(selectedListValue))
+			dataField.setSelectedValue(selectedListValue);
 		return dataField;
 	}
 	
@@ -887,16 +865,31 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (mappings == null || formatType.equalsIgnoreCase("autoIndex")) {
 				if (formatType.equalsIgnoreCase("autoIndex") && isFirst) {
 					
-					SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field);
-					
-					if (dataField == null) {
-						resultMap.put(fieldId, oldRecord.getDataField(fieldId));
-						newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
+					boolean isEditMode = false;
+					if (isEditMode) {
+						//수정모드 = 업무를 수정하는 단계로 이전에 사용자 선택 리스트가 있다면 이전에 사용자가 선택하였던 아이템을 넘겨야 한다
+
+						SwdDataField oldDataField = oldRecord.getDataField(fieldId);
+						//TODO 레코드 아이디로 콤보박스가 선택되어진 값을 가져와서 입력해준다
+						//oldDataField.setSelectedValue(selectedValue);
+						
+						resultMap.put(fieldId, oldDataField);
+						newRecord.setDataField(fieldId, oldDataField);
+						return;
+						
+					} else {
+						//입력모드 = 업무를 처음 작성하는 단계로 아이디값을 새로 따야한다
+						SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field, oldRecord);
+						
+						if (dataField == null) {
+							resultMap.put(fieldId, oldRecord.getDataField(fieldId));
+							newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
+							return;
+						}
+						resultMap.put(fieldId, dataField);
+						newRecord.setDataField(fieldId, dataField);
 						return;
 					}
-					resultMap.put(fieldId, dataField);
-					newRecord.setDataField(fieldId, dataField);
-					return;
 				} else {
 					resultMap.put(fieldId, oldRecord.getDataField(fieldId));
 					newRecord.setDataField(fieldId, oldRecord.getDataField(fieldId));
