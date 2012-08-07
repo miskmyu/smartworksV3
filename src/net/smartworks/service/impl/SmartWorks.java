@@ -1607,4 +1607,9 @@ public class SmartWorks implements ISmartWorks {
 		return docFileService.uploadExcelToWork(requestBody, request);
 	}
 
+	@Override
+	public void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		settingsService.addAdjunctMember(requestBody, request);
+	}
+
 }

@@ -312,4 +312,10 @@ public class SettingsController extends ExceptionInterceptor {
 		smartworks.removeEmailServer(requestBody, request);
 	}
 	
+	@RequestMapping(value = "/add_adjunct_member", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public @ResponseBody void addAdjunctMember(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		smartworks.addAdjunctMember(requestBody, request);
+	}
+	
 }

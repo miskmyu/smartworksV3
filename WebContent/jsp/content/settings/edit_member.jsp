@@ -53,7 +53,7 @@
 			var confirmMessage = smartMessage.get("saveConfirmation");
 			if(isEmpty(userId)){
 				url = "create_member.sw";
-				confirmMessage = smartMessage.get("createConfirmation")
+				confirmMessage = smartMessage.get("createConfirmation");
 			}
 			smartPop.confirm( confirmMessage, function(){
 				var progressSpan = editMember.find('.js_progress_span');
