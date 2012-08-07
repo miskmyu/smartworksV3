@@ -6,7 +6,7 @@
 .pop_corner_all .profile_size_s, .pop_list_area .profile_size_s, .pop_list_area .icon_depart {margin:0 5px 0 0}
 .pop_corner_all th {font-weight: normal}
 /*공간 > 사진 상세팝업 */
-.pop_corner_all .body_titl .txt_btn {padding: 8px 0 24px; margin:0}
+.pop_corner_all .body_titl .txt_btn, .pop_corner_all .body_titl_pic .txt_btn {padding: 8px 0 24px; margin:0}
 .pop_corner_all .body_titl .info { line-height:24px}
 .pop_corner_all .original_picture {margin-bottom:15px;min-height:200px;}
 .pop_corner_all .original_picture img { max-height:410px; max-width:580px}
