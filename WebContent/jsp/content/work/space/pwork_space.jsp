@@ -145,7 +145,7 @@
 					<div class="fr txt_btn" style="height:auto">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
-	                <div class="cb" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+	                <div class="fr txt_btn" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				
 	            <!-- 우측 버튼 -->
@@ -158,7 +158,7 @@
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="padding: 0 45px;">
+			<div class="define_space" style="padding: 0 45px; height:80px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -209,7 +209,7 @@
 						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
 						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
-					                    <div class="mb3"><%=count%>) <%=task.getName() %></div>
+					                    <div class="title"><%=count%>) <%=task.getName() %></div>
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
 					                    <div class="noti_in_s">
 						                    <div class="t_date"><%=task.getPerformer().getLongName()%></div>
