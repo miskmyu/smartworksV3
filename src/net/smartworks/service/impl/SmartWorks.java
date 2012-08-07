@@ -1602,4 +1602,9 @@ public class SmartWorks implements ISmartWorks {
 		return mailService.authenticateEmailAccount(requestBody, request);
 	}
 
+	@Override
+	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return docFileService.uploadExcelToWork(requestBody, request);
+	}
+
 }

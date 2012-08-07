@@ -225,6 +225,11 @@ public class DocFileServiceImpl implements IDocFileService {
 		getDocManager().uploadYTVideo(request, response);
 	}
 
+	@Override
+	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return getDocManager().uploadExcelToWork(requestBody, request);
+	}
+
 /*	@Override
 	public String createFile(String userId, String groupId, IFileModel file) throws Exception {
 		return getDocManager().createFile(userId, groupId, file);

@@ -64,6 +64,10 @@ import net.smartworks.util.SmartUtil;
 import net.smartworks.util.Thumbnail;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
@@ -829,6 +833,48 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 	}
 
+	@Override
+	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws DocFileException {
+		String workId = (String)requestBody.get("workId");
+		Map<String, Object> smartFormInfoMap = (Map<String, Object>)requestBody.get("frmImportFromExcel");
+		Map<String, Object> importFile = (Map<String, Object>)smartFormInfoMap.get("txtImportFile");
+		List<Map<String, String>> files = (List<Map<String, String>>)importFile.get("files");
+		String groupId = (String)importFile.get("groupId");
+		String fileId=null;
+		String fileName=null;
+		String fileSize=null;
+		String localFilePath=null;
+		if(files != null && files.size() == 1) {
+			Map<String, String> file = files.get(0);
+			fileId = file.get("fileId");
+			fileName = file.get("fileName");
+			fileSize = file.get("fileSize");
+			localFilePath = file.get("localFilePath");
+		}
+		if(localFilePath==null){
+			throw new DocFileException("File Information is incorrect...");
+		}
+		try{
+			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(localFilePath));
+			HSSFSheet sheet = wb.getSheetAt(0);
+			int rows = sheet.getPhysicalNumberOfRows();
+			for(int r=1; r<rows; r++){
+				HSSFRow row = sheet.getRow(r);
+				if (row == null) {
+					continue;
+				}
+				int cells = row.getPhysicalNumberOfCells();
+				for (int c = 0; c < cells; c++) {
+					HSSFCell cell = row.getCell(c);
+					String value = null;
+				}
+			}
+		}catch(Exception e){
+			throw new DocFileException("Excel File opening error...");			
+		}
+		return 0;
+	}
+	
 	@Override
 	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws DocFileException {
 		IFileModel formFile = new HbFileModel();

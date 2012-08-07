@@ -1722,6 +1722,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		try {
 			handler = MailAuth.authenticate(profile, auth, handler);
 			if (handler != null) {
+			    request.getSession().removeAttribute("handler");
+			    request.getSession().removeAttribute("profile");
+			    request.getSession().removeAttribute("auth");
 				return true;
 			}
 		} catch (LoginInvalidException e) {

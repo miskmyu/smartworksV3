@@ -926,14 +926,14 @@ public class WorkServiceImpl implements IWorkService {
 					if(!CommonUtil.isEmpty(profiles)) {
 					    profile = profiles[0];	
 					}
-					request.getSession().setAttribute("profile", profile);
-					AuthProfile auth = new AuthProfile();
-					auth.setUsername(txtUserProfileEmailId+"@"+mailServerName);
-					auth.setPassword(pwUserProfileEmailPW);
-					request.getSession().setAttribute("auth", auth);
-				    ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
-					handler = MailAuth.authenticate(profile, auth, handler);
-					request.getSession().setAttribute("handler", handler);
+//					request.getSession().setAttribute("profile", profile);
+//					AuthProfile auth = new AuthProfile();
+//					auth.setUsername(txtUserProfileEmailId+"@"+mailServerName);
+//					auth.setPassword(pwUserProfileEmailPW);
+//					request.getSession().setAttribute("auth", auth);
+//				    ConnectionMetaHandler handler = null;
+//				    handler = MailAuth.authenticate(profile, auth, handler);
+//					request.getSession().setAttribute("handler", handler);
 				} else {
 					if(!SmartUtil.isBlankObject(mailAccount))
 						getMailManager().removeMailAccount(txtUserProfileUserId, mailAccount.getObjId());

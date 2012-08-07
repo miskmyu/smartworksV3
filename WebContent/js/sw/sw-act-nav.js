@@ -299,4 +299,7 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_header_user_settings').live('click', function(e){
+		$(targetElement(e)).parents('.js_header_user_settings').hide();
+	});
 });
