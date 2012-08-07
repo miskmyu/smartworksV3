@@ -8,6 +8,9 @@
 
 package net.smartworks.server.engine.infowork.form.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.smartworks.server.engine.common.model.BaseObject;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
@@ -30,9 +33,11 @@ public class SwfMappings extends BaseObject {
 	public static final String A_PREMAPPING = "mapping";
 	public static final String A_POSTMAPPINGS = "post";
 	public static final String A_POSTMAPPING = "mapping";
+	public static final String A_POSTMAPPINGCONDS = "conds";
 	
 	private SwfMapping[] preMappings;
 	private SwfMapping[] postMappings;
+	private SwfConditions conds;
 	public SwfMappings() {
 		super();
 	}
@@ -51,6 +56,7 @@ public class SwfMappings extends BaseObject {
 		buf.append(super.toElementsString(tab, lite));
 		appendElementsString(A_PREMAPPINGS, A_PREMAPPING, getPreMappings(), tab, lite, buf);
 		appendElementsString(A_POSTMAPPINGS, A_POSTMAPPING, getPostMappings(), tab, lite, buf);
+		appendElementString(A_POSTMAPPINGCONDS, getConds(), tab, buf);
 		return buf.toString();
 	}
 	public static BaseObject toObject(Node node, BaseObject baseObj) throws Exception {
@@ -86,10 +92,23 @@ public class SwfMappings extends BaseObject {
 				Node[] nodes = getNodes(childNode);
 				if (nodes == null || nodes.length == 0)
 					continue;
-				SwfMapping[] objs = new SwfMapping[nodes.length];
-				for (int j=0; j<nodes.length; j++)
-					objs[j] = (SwfMapping)SwfMapping.toObject(nodes[j], null);
+				List<SwfMapping> postMappingList = new ArrayList<SwfMapping>();
+				List<SwfConditions> postMappingConditionList = new ArrayList<SwfConditions>();
+				for (int j=0; j<nodes.length; j++) {
+					if (nodes[j].getNodeName().equalsIgnoreCase("mapping")) {
+						postMappingList.add((SwfMapping)SwfMapping.toObject(nodes[j], null));
+					} else if (nodes[j].getNodeName().equalsIgnoreCase("conds")) {
+						postMappingConditionList.add((SwfConditions)SwfConditions.toObject(nodes[j], null));
+					}
+				}
+				SwfMapping[] objs = new SwfMapping[postMappingList.size()];
+				postMappingList.toArray(objs);
+				
+				SwfConditions postMappingConditions = null;
+				if (postMappingConditionList != null && postMappingConditionList.size() != 0)
+					postMappingConditions = postMappingConditionList.get(0);
 				obj.setPostMappings(objs);
+				obj.setConds(postMappingConditions);
 			}
 		}
 		return obj;
@@ -203,5 +222,10 @@ public class SwfMappings extends BaseObject {
 	public void setPreMappings(SwfMapping[] preMappings) {
 		this.preMappings = preMappings;
 	}
-
+	public SwfConditions getConds() {
+		return conds;
+	}
+	public void setConds(SwfConditions conds) {
+		this.conds = conds;
+	}
 }
