@@ -96,8 +96,10 @@ public class FormField extends BaseObject{
 		FIELD_STATUS, FIELD_SUBJECT, FIELD_TASK_NAME, FIELD_LAST_TASK, FIELD_PROCESS_TIME, FIELD_PROCESS_TYPE, 
 		FIELD_OWNER, FIELD_CREATED_DATE, FIELD_LAST_MODIFIER, FIELD_LAST_MODIFIED_DATE
 	};
+	
 	private String type;
 	private int displayOrder;
+	private boolean mandatory;
 	
 	public int getDisplayOrder() {
 		return displayOrder;
@@ -110,6 +112,12 @@ public class FormField extends BaseObject{
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public boolean isMandatory() {
+		return mandatory;
+	}
+	public void setMandatory(boolean mandatory) {
+		this.mandatory = mandatory;
 	}
 	public FormField(){
 		super();
@@ -207,6 +215,12 @@ public class FormField extends BaseObject{
 			return "";
 		}
 		return "";
+	}
+	public boolean isImportableField() {
+		if(this.type == null) return false;
+		if(	type.equals(TYPE_FILE) || type.equals(TYPE_OTHER_WORK) || type.equals(TYPE_IMAGE) || type.equals(TYPE_DATA_GRID))
+			return false;
+		return true;
 	}
 	
 }

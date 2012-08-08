@@ -1,6 +1,7 @@
 package net.smartworks.model.work;
 
 import net.smartworks.model.BaseObject;
+import net.smartworks.util.SmartUtil;
 
 public class SmartForm extends BaseObject{
 
@@ -58,5 +59,23 @@ public class SmartForm extends BaseObject{
 	}
 	public SmartForm(String id, String name){
 		super(id, name);
+	}
+	
+	public FormField[] getImportFields(){
+		if(SmartUtil.isBlankObject(fields)) return null;
+		int importFieldCount = 0;
+		for(int i=0; i<fields.length; i++)
+			if(fields[i].isImportableField())
+				importFieldCount++;
+		
+		FormField[] importFields = new FormField[importFieldCount];
+		importFieldCount = 0;
+		for(int i=0; i<fields.length; i++){
+			if(fields[i].isImportableField()){
+				importFields[importFieldCount] = fields[i];
+				importFieldCount++;
+			}
+		}
+		return importFields;
 	}
 }
