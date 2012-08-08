@@ -209,7 +209,7 @@
 						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
 						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
-					                    <div class="title"><%=count%>) <%=task.getName() %></div>
+					                    <div><%=count%>) <%=task.getName() %></div>
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
 					                    <div class="noti_in_s">
 						                    <div class="t_date"><%=task.getPerformer().getLongName()%></div>

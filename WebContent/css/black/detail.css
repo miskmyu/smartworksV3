@@ -192,7 +192,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .proc_task.running {background-color: #daf3cc} /* 진행중 */
 .proc_task.delayed {background-color: #f8dede} /* 지연 */
 .proc_task.entrust {background-color: #ceeeee} /* 위임 */
-.proc_task .title {margin-bottom:3px; height:30px}
+.proc_task .title {margin-bottom:3px; height:30px; overflow: hidden}
 
 /* 프로세스 포인트 위치 */
 .pos_default {left: 58px; position: relative; top: 1px; margin-top:5px; z-index: 20}
