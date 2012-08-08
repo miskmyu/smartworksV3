@@ -207,7 +207,7 @@
 	<div class="glo_btn_space">
 	<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 
-		<div class="fr pr10">
+		<div class="fr">
 
 			<span class="btn_gray">
 				<a href="" onclick='submitForms(); return false;'>

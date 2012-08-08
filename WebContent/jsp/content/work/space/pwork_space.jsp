@@ -119,7 +119,7 @@
 	                </div>
 		                    
 	            <!-- 우측 버튼-->
-	                <div class="fr t_s11"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
+	                <div class="txt_btn t_s11 fr h_auto"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="fr">

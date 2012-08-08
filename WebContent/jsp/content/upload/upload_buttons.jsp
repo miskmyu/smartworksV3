@@ -91,7 +91,7 @@
 	<!--  완료 및 취소 버튼 //-->
 
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
-	<form name="frmAccessSpace" class="fr js_validation_required">
+	<form name="frmAccessSpace" class="js_validation_required">
 		<div id="" class="fr form_space">
 		
 			<!--  현재사용자가 선택할 수 있는 업무공간들을 구성한다.. -->
