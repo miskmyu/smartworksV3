@@ -96,7 +96,7 @@
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 .reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
-.btns_action {margin:0 0 0 62px; font-size:10.5px}
+.btns_action {margin:5px 0 0 62px; font-size:10.5px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
 .btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
@@ -198,10 +198,6 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .pos_default {left: 58px; position: relative; top: 1px; margin-top:5px; z-index: 20}
 .pos_reply_point {left: 86px; position: relative; top: 1px; z-index: 20}
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
-
-/* Manual */
-.det_contents {margin: 15px 0 10px}
-.js_manual_tasks .proc_task {min-height: 61px}
 
 /* 페이징 */
 .paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold}
@@ -339,7 +335,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 .photo_section {width:150px; float:left}
 .photo_section .qq-upload-button {top:115px; left:24px}
 .photo_section .t_text_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
-
+.js_my_signpic_field .form_value img {margin-left: 20px}
 
 /* Icon button style */
 .title_line_btns {float:right; position: relative}
@@ -424,6 +420,8 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .approval img {width:80px; height:67px}
 
 /* Manual */
+.det_contents {margin: 15px 0 10px}
+.js_manual_tasks .proc_task {min-height: 61px}
 .manual_df_img {min-height: 288px; vertical-align: top}
-.manual_df_img img {border: 1px solid #C7C7C7; width:360px; height:289px; display:block; margin-right: 10px}
+.manual_df_img img {border: 1px solid #C7C7C7; width:360px; min-height:200px; display:block; margin-right: 10px}
 .js_form_desc_view {min-height: 290px}
