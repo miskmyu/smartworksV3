@@ -60,7 +60,6 @@ function submitForms() {
 		}
 		console.log(JSON.stringify(paramsJson));
 		var url = "create_new_iwork.sw";
-		
 		// 서비스요청 프로그래스바를 나타나게 한다....
 		var progressSpan = newIwork.find('.js_progress_span');
 		smartPop.progressCont(progressSpan);

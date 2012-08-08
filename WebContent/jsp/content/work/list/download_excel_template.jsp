@@ -28,16 +28,11 @@
 				
 					<th	style="background-color:#D3D3D3;width:20px">NO</th>					
 					<%
-					FormField[] fields = (work.getForm()!=null) ? work.getForm().getFields() : null;
-					if(!SmartUtil.isBlankObject(fields)){
-						for(int i=0; i<fields.length; i++){
-							FormField field = fields[i];
+					FormField[] importFields = work.getForm().getImportFields();
+					if(!SmartUtil.isBlankObject(importFields)){
+						for(int i=0; i<importFields.length; i++){
+							FormField field = importFields[i];
 							String type = field.getType();
-							if(		type.equals(FormField.TYPE_DATA_GRID) 
-								|| type.equals(FormField.TYPE_FILE) 
-								|| type.equals(FormField.TYPE_IMAGE) 
-								|| type.equals(FormField.TYPE_OTHER_WORK) 
-								|| type.equals(FormField.TYPE_RICHTEXT_EDITOR)) continue;
 					%>
 							<th	id="<%=field.getId()%>" style="background-color:#D3D3D3;"><%=field.getName()%></th>
 					<%
@@ -50,17 +45,12 @@
 				%>
 					<tr style="height:24px; border:1;">
 						<th style="text-align:center;width:30px"><%=j+1%></th>
-						<%			
-						if(!SmartUtil.isBlankObject(fields)){
+						<%
+						if(!SmartUtil.isBlankObject(importFields)){
 							String msgFormat = null;
-							for(int i=0; i<fields.length; i++){
-								FormField field = fields[i];
+							for(int i=0; i<importFields.length; i++){
+								FormField field = importFields[i];
 								String type = field.getType();
-								if(		type.equals(FormField.TYPE_DATA_GRID) 
-									|| type.equals(FormField.TYPE_FILE) 
-									|| type.equals(FormField.TYPE_IMAGE) 
-									|| type.equals(FormField.TYPE_OTHER_WORK) 
-									|| type.equals(FormField.TYPE_RICHTEXT_EDITOR)) continue;
 						%>
 								<th	id="<%=field.getId()%>" style="<%=field.getStyle()%>"></th>
 						<%
