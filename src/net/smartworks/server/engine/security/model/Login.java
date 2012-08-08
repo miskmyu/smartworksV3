@@ -10,6 +10,7 @@ package net.smartworks.server.engine.security.model;
 import java.util.Collection;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.DepartmentInfo;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +29,7 @@ public class Login implements UserDetails {
 	private String locale;
 	private String timeZone;
 	private String departmentId;
+	private String adjunctDeptIds;
 	private String department;
 	private String phoneNo;
 	private String cellPhoneNo;
@@ -47,6 +49,7 @@ public class Login implements UserDetails {
 	private String mailServerName;
 	private String mailId;
 	private String mailPassword;
+	private DepartmentInfo[] departments;
 	
 	private Collection<GrantedAuthority> authorities; // 권한
 
@@ -235,6 +238,18 @@ public class Login implements UserDetails {
 	}
 	public void setMailServerName(String mailServerName) {
 		this.mailServerName = mailServerName;
+	}
+	public String getAdjunctDeptIds() {
+		return adjunctDeptIds;
+	}
+	public void setAdjunctDeptIds(String adjunctDeptIds) {
+		this.adjunctDeptIds = adjunctDeptIds;
+	}
+	public DepartmentInfo[] getDepartments() {
+		return departments;
+	}
+	public void setDepartments(DepartmentInfo[] departments) {
+		this.departments = departments;
 	}
 	@Override
 	public boolean isAccountNonExpired() {

@@ -60,11 +60,14 @@ import net.smartworks.server.engine.mail.manager.IMailManager;
 import net.smartworks.server.engine.mail.model.MailServer;
 import net.smartworks.server.engine.mail.model.MailServerCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.model.SwoAdjunctDepartment;
+import net.smartworks.server.engine.organization.model.SwoAdjunctDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoConfig;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentExtend;
 import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.process.approval.manager.IAprManager;
 import net.smartworks.server.engine.process.approval.model.AprApprovalDef;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineDef;
@@ -2352,7 +2355,60 @@ public class SettingsServiceImpl implements ISettingsService {
 	}
 	@Override
 	public void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub		
+		/*{
+			   frmAdjunctMember=   {
+			      hdnDepartmentId=dept_302bcb7c7db04a7ba03a7bc43da23a07,
+			      txtAdjunctUser=      {
+			         users=         [
+			            {
+			               id=ktsoo@maninsoft.co.kr,
+			               name=김태수
+			            }
+			         ]
+			      }
+			   }
+			}*/
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		
+		Map<String, Object> frmAdjunctMember = (Map<String, Object>)requestBody.get("frmAdjunctMember");
+		String departmentId = (String)frmAdjunctMember.get("hdnDepartmentId");
+		Map<String, Object> txtAdjunctUser = (Map<String, Object>)frmAdjunctMember.get("txtAdjunctUser");
+		List<Map<String,String>> users = (ArrayList<Map<String,String>>)txtAdjunctUser.get("users");
+		
+		SwoUserCond userCond = new SwoUserCond();
+		userCond.setDeptId(departmentId);
+		SwoUser[] deptMemberUsers = SwManagerFactory.getInstance().getSwoManager().getUsers(userId, userCond, IManager.LEVEL_LITE);
+		List deptMemberIdList = new ArrayList();
+		if (deptMemberUsers != null && deptMemberUsers.length != 0) {
+			for (int i = 0; i < deptMemberUsers.length; i++) {
+				deptMemberIdList.add(deptMemberUsers[i].getId());
+			}
+		}
+		SwoUserCond userAjtCond = new SwoUserCond();
+		userAjtCond.setAdjunctDeptIdsLike(departmentId);
+		SwoUser[] deptAjtMemberUsers = SwManagerFactory.getInstance().getSwoManager().getUsers(userId, userCond, IManager.LEVEL_LITE);
+		List deptAjtMemberIdList = new ArrayList();
+		if (deptAjtMemberUsers != null && deptAjtMemberUsers.length != 0) {
+			for (int i = 0; i < deptAjtMemberUsers.length; i++) {
+				deptAjtMemberIdList.add(deptAjtMemberUsers[i].getId());
+			}
+		}
+		
+		if(users != null && users.size() != 0) {
+			for (int i = 0; i < users.size(); i++) {
+				Map<String, String> userMap = users.get(i);
+				String addUserId = userMap.get("id");
+				
+				if (deptMemberIdList.contains(addUserId))
+					continue;
+				SwoUser swoUser = SwManagerFactory.getInstance().getSwoManager().getUser(userId, addUserId, IManager.LEVEL_ALL);
+				String adjunctMemberStr = CommonUtil.toNotNull(swoUser.getAdjunctDeptIds());
+				adjunctMemberStr = adjunctMemberStr + departmentId + "|LEADER" + ";";
+				swoUser.setAdjunctDeptIds(adjunctMemberStr);
+				SwManagerFactory.getInstance().getSwoManager().setUser(userId, swoUser, IManager.LEVEL_ALL);
+				SwManagerFactory.getInstance().getSwoManager().getUserExtend(userId, swoUser.getId(), false);
+			}
+		}
 	}
-
 }

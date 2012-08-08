@@ -69,6 +69,7 @@
 		</id>
 		<property name="companyId" type="string" length="50"/>
 		<property name="deptId" type="string" length="50"/>
+		<property name="adjunctDeptIds" type="string" length="500"/>
 		<property name="roleId" type="string" length="50"/>
 		<property name="authId" type="string" length="50"/>
 		<property name="empNo" type="string" length="50"/>

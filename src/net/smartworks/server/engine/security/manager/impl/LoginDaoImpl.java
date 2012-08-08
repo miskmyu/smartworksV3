@@ -15,7 +15,12 @@ import javax.sql.DataSource;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.DepartmentInfo;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.organization.model.SwoDepartment;
+import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.security.manager.LoginDao;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.util.LocalDate;
@@ -26,6 +31,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.springframework.util.StringUtils;
 
 /**
  * @spring.bean id= "loginDao"
@@ -35,7 +41,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 
 	private static String RETRIVE_USER = " select userInfo.*, mailAccount.userId as mailUserId, mailAccount.mailServerId, mailAccount.mailServerName, mailAccount.mailId, mailAccount.mailPassword " +
 										 " from (" +
-										 "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orgdept.name as deptName, 		" +
+										 "	select 	orguser.id, orguser.name, orguser.nickName, orguser.companyId, orgcompany.name as companyName, orguser.deptId, orguser.adjunctDeptIds, orgdept.name as deptName, 		" +
 										 "		   	orguser.empNo, orguser.mobileNo, orguser.internalNo, orguser.locale, orguser.timeZone,										" +
 										 "          orguser.type, orguser.lang, orguser.pos, orguser.stdtime, orguser.authId,													" +
 										 "	        orguser.email, orguser.useMail, useSign, sign, orguser.passwd, orguser.picture, orguser.roleId								" +
@@ -48,7 +54,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 										 " swmailaccount mailAccount " +
 										 " on userInfo.id = mailAccount.userId ";
 	protected SelectQuery00 selectQuery00;
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.dao.support.DaoSupport#initDao()
@@ -80,6 +86,34 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 	 */
 	public Login retrieveUserId(String userId) throws DataAccessException, ObjectRetrievalFailureException {
 		Login login = (Login) selectQuery00.findObject(userId);
+		
+		String adjunctDeptIds = login.getAdjunctDeptIds();
+		if (!CommonUtil.isEmpty(adjunctDeptIds)) {
+			
+			String[] ajtDeptInfo = StringUtils.tokenizeToStringArray(adjunctDeptIds, ";");
+			String[] idIns = new String[ajtDeptInfo.length];
+			for (int i = 0; i < ajtDeptInfo.length; i++) {
+				String[] ajtDeptIdInfo = StringUtils.tokenizeToStringArray(ajtDeptInfo[i], "|");
+				String deptId = ajtDeptIdInfo[0];
+				idIns[i]= deptId;
+			}
+			try {
+				SwoDepartmentCond cond = new SwoDepartmentCond();
+				cond.setIdIns(idIns);
+				SwoDepartment[] swoDepts = SwManagerFactory.getInstance().getSwoManager().getDepartments(userId, cond, IManager.LEVEL_LITE);
+				DepartmentInfo[] depts = null;
+				if (swoDepts != null && swoDepts.length != 0) {
+					depts = new DepartmentInfo[swoDepts.length];
+					for (int i = 0; i < swoDepts.length; i++) {
+						depts[i] = new DepartmentInfo(swoDepts[i].getId(), swoDepts[i].getName(), swoDepts[i].getDescription()); 
+					}
+				}
+				login.setDepartments(depts);
+				
+			} catch (Exception e) {
+				throw new ObjectRetrievalFailureException("SwoException", e);
+			}
+		}
 		if(login == null){
 			throw new ObjectRetrievalFailureException("tried Login Id: "+userId+" ", login);
 		}
@@ -101,6 +135,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 			login.setCompanyId(rs.getString("companyId"));
 			login.setCompany(rs.getString("companyName"));
 			login.setDepartmentId(rs.getString("deptId"));
+			login.setAdjunctDeptIds(rs.getString("adjunctDeptIds"));
 			login.setDepartment(rs.getString("deptName"));
 			login.setEmpNo(rs.getString("empNo"));
 			login.setCellPhoneNo(rs.getString("mobileNo"));

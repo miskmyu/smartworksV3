@@ -15,7 +15,7 @@ public class SwoUserExtend {
 		super();
 	}
 	
-	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String departmentName, String departmentDesc, String locale,
+	public SwoUserExtend(String id, String name, String nickName, String password, String companyId, String companyName, String departmentId, String adjunctDeptIds, String departmentName, String departmentDesc, String locale,
 			String timeZone, String pictureName, String position, String roleId, String authId, String employeeId, String email, boolean useMail, boolean useSign, String sign, String phoneNo, String cellPhoneNo) {
 		this.id = id;
 		this.name = name;
@@ -24,6 +24,7 @@ public class SwoUserExtend {
 		this.companyId = companyId;
 		this.companyName = companyName;
 		this.departmentId = departmentId;
+		this.adjunctDeptIds = adjunctDeptIds;
 		this.departmentName = departmentName;
 		this.departmentDesc = departmentDesc;
 		this.locale = locale;
@@ -49,6 +50,7 @@ public class SwoUserExtend {
 	private String companyId = null;
 	private String companyName = null;
 	private String departmentId = null;
+	private String adjunctDeptIds = null;
 	private String departmentName = null;
 	private String departmentDesc = null;
 	private String locale = null;
@@ -226,6 +228,14 @@ public class SwoUserExtend {
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
+	public String getAdjunctDeptIds() {
+		return adjunctDeptIds;
+	}
+
+	public void setAdjunctDeptIds(String adjunctDeptIds) {
+		this.adjunctDeptIds = adjunctDeptIds;
+	}
+
 	public Date getModifiedTime() {
 		return modifiedTime;
 	}
