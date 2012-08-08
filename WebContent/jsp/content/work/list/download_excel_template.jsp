@@ -22,19 +22,24 @@
 		<style>td.text {mso-number-format:\@}</style>       		
 	</head>
 	<body>
-		<table style="width:100%;cellpadding:0; cellspacing;0; border:1;" id="<%=work.getId()%>" name="<%=work.getName()%>">
+		<table style="width:100%;cellpadding:0; cellspacing; 0;" id="<%=work.getId()%>" name="<%=work.getName()%>">
 			<thead>
-				<tr	style="height:24px">
+				<tr>
 				
-					<th	style="background-color:#D3D3D3;width:20px">NO</th>					
+					<th	style="border-collapse:collapse; border-spacing:0; border:1px solid #c7c7c7; background-color:#d8d8d8;width:20px">NO</th>					
 					<%
 					FormField[] importFields = work.getForm().getImportFields();
 					if(!SmartUtil.isBlankObject(importFields)){
 						for(int i=0; i<importFields.length; i++){
 							FormField field = importFields[i];
 							String type = field.getType();
+							String nameDesc = "";
+							if(type.equals(FormField.TYPE_DATE)) nameDesc = "yyyy.mm.dd";
+							else if(type.equals(FormField.TYPE_DATETIME)) nameDesc = "yyyy.mm.dd hh:mm";
+							else if(type.equals(FormField.TYPE_TIME)) nameDesc = "hh:mm";
+							
 					%>
-							<th	id="<%=field.getId()%>" style="background-color:#D3D3D3;"><%=field.getName()%></th>
+							<th	id="<%=field.getId()%>" style="background-color:#d8d8d8; border-collapse:collapse; border-spacing:0; border:1px solid #c7c7c7;"><%=field.getName()%><%if(!SmartUtil.isBlankObject(nameDesc)){%><br/><%=nameDesc%><%}%></th>
 					<%
 						}
 					}
@@ -43,16 +48,18 @@
 				<%
 				for(int j=0; j<100; j++){
 				%>
-					<tr style="height:24px; border:1;">
-						<th style="text-align:center;width:30px"><%=j+1%></th>
+					<tr>
+						<td style="border-collapse:collapse; border-spacing:0; border:1px dotted #c7c7c7;text-align:center;width:30px"><%=j+1%></td>
 						<%
 						if(!SmartUtil.isBlankObject(importFields)){
 							String msgFormat = null;
 							for(int i=0; i<importFields.length; i++){
 								FormField field = importFields[i];
 								String type = field.getType();
+								if(type.equals(FormField.TYPE_DATE)) field.setMandatory(true);
+								String mandatoryColor = (field.isMandatory()) ? "background-color:#fceaea" : "";
 						%>
-								<th	id="<%=field.getId()%>" style="<%=field.getStyle()%>"></th>
+								<td	id="<%=field.getId()%>" style="border-collapse:collapse; border-spacing:0; border:1px dotted #c7c7c7;<%if(!SmartUtil.isBlankObject(field.getStyle())){%><%=field.getStyle()%>;<%}%><%=mandatoryColor%>"></td>
 						<%
 							}
 						}
