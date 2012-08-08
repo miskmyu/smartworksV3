@@ -266,7 +266,7 @@ INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, l
 INSERT INTO swpackage (id, categoryId, packageId, version, name, type, status, latestDeployedYn, creator, createdTime, modifier, modifiedTime, description) values ('5e6caf381f26b928011f37cbba6c04c9', '40288afb1b25f00b011b25f3c7950001', 'pkg_cf3b0087995f4f99a41c93e2fe95b22d', 1, '일반기안', 'PROCESS', 'DEPLOYED', 'Y', 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), '근태를위한 기안서품의에서 승인자, 검토자 및 대표이사 승인의 결재업무를 통해서 근태이력을 남기고 개인별 근태현황을 작성 및 관리하는 프로세스업무입니다.');
 
 -- 3.0 추가
-INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880ec34e3d85d0134e3eb5768000b', '40288afb1b25f00b011b25f3c7950001', 'pkg_c08a02b36192489fbc13fdb6bed6f5fc', 1, '이벤트', 'SINGLE', 'DEPLOYED', 'Y', 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), '이벤트');
+INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880ec34e3d85d0134e3eb5768000b', '40288afb1b25f00b011b25f3c7950001', 'pkg_c08a02b36192489fbc13fdb6bed6f5fc', 1, '일정', 'SINGLE', 'DEPLOYED', 'Y', 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), '일정');
 INSERT INTO swpackage (id, categoryid, packageid, version, name, type, status, latestdeployedyn, creator, createdtime, modifier, modifiedtime, description) VALUES ('402880ec34e3d85d0134e3e13e9a0004', '40288afb1b25f00b011b25f3c7950001', 'pkg_62eeb90b11e1466b86d2d7c4dadf63ca', 1, '공지사항', 'SINGLE', 'DEPLOYED', 'Y', 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), '공지사항');
 
 -- domain
@@ -286,7 +286,7 @@ INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tb
 --INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('md_0ea261f8b455402a9f794d967c0aa3ea','Maninsoft', 'frm_c466f747a4bc413ea33acfbb40e72525', 1, '업무보고', '', 'dt_1287553898894', 'id', '0', NULL, NULL, 'Y', 'PUB_ALL');
 
 -- 3.0 추가
-INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('frm_event_SYSTEM','Maninsoft', 'frm_event_SYSTEM', 1, '이벤트', '', 'SWEvent', 'id', '0', NULL, NULL, 'Y', 'PUB_ALL');
+INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('frm_event_SYSTEM','Maninsoft', 'frm_event_SYSTEM', 1, '일정', '', 'SWEvent', 'id', '0', NULL, NULL, 'Y', 'PUB_ALL');
 INSERT INTO swdomain (id, companyId, formid, formversion, formname, tblowner, tblname, keycolumn, titlefieldid, masterid, masterfieldid, systemdomainyn, publishmode) VALUES ('frm_notice_SYSTEM','Maninsoft', 'frm_notice_SYSTEM', 1, '공지사항', '', 'SWNotice', 'id', '0', NULL, NULL, 'Y', 'PUB_ALL');
 
 -- domain field
@@ -386,8 +386,8 @@ INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldna
 --INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('df_fdda949f7f4d44abac7103c1f158c56e', 'md_0ea261f8b455402a9f794d967c0aa3ea', '17', NULL, '이슈사항', 'text', 'c17', NULL, 'N', 'Y', NULL, -1, 0);
 
 -- 3.0 추가
-INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_content', 'frm_event_SYSTEM', '6', NULL, '이벤트내용', 'text', 'content', NULL, 'N', 'Y', NULL, 6, 0);
-INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_name', 'frm_event_SYSTEM', '0', NULL, '이벤트이름', 'string', 'name', NULL, 'N', 'Y', NULL, 1, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_content', 'frm_event_SYSTEM', '6', NULL, '일정내용', 'text', 'content', NULL, 'N', 'Y', NULL, 6, 0);
+INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_name', 'frm_event_SYSTEM', '0', NULL, '일정이름', 'string', 'name', NULL, 'N', 'Y', NULL, 1, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_start', 'frm_event_SYSTEM', '1', NULL, '시작일자', 'datetime', 'startdate', NULL, 'N', 'Y', NULL, 2, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_end', 'frm_event_SYSTEM', '2', NULL, '종료일자', 'datetime', 'enddate', NULL, 'N', 'Y', NULL, 3, 0);
 INSERT INTO swdomainfield (id, domainid, formfieldid, formfieldpath, formfieldname, formfieldtype, tablecolname, reftblname, arrayyn, systemfieldyn, uniqueyn, disporder, tablewidth) VALUES ('event_alarm', 'frm_event_SYSTEM', '7', NULL, '미리알림', 'string', 'alarm', NULL, 'N', 'Y', NULL, -1, 0);
@@ -2448,10 +2448,10 @@ VALUES ('5e6caf3822c510890122c59199010038', 'pkg_309666dd2bb5493c9d7e618b3a0aad9
 </form>', 'PUB_ALL');
 
 INSERT INTO swform (id, packageid, formid, version, name, type, status, keyword, creator, createdtime, modifier, modifiedtime, ownerdept, owner, encoding, description, content, publishmode) 
-VALUES ('402880ec34e3d85d0134e3eb5768000c', 'pkg_c08a02b36192489fbc13fdb6bed6f5fc', 'frm_event_SYSTEM', 1, '이벤트', 'SINGLE', 'DEPLOYED', NULL, 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), NULL, NULL, NULL, '',
-'<form id="frm_event_SYSTEM" version="1" name="이벤트">
+VALUES ('402880ec34e3d85d0134e3eb5768000c', 'pkg_c08a02b36192489fbc13fdb6bed6f5fc', 'frm_event_SYSTEM', 1, '일정', 'SINGLE', 'DEPLOYED', NULL, 'admin@maninsoft.co.kr', getdate(), 'admin@maninsoft.co.kr', getdate(), NULL, NULL, NULL, '',
+'<form id="frm_event_SYSTEM" version="1" name="일정">
   <children>
-    <formEntity id="0" name="이벤트이름" systemType="string" required="true" system="false">
+    <formEntity id="0" name="일정이름" systemType="string" required="true" system="false">
       <children/>
       <format type="textInput" viewingType="textInput"></format>
       <graphic hidden="false" readOnly="false" labelWidth="146" contentWidth="347" height="23" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="false"/>
@@ -2480,7 +2480,7 @@ VALUES ('402880ec34e3d85d0134e3eb5768000c', 'pkg_c08a02b36192489fbc13fdb6bed6f5f
       <format type="userField" viewingType="userField"></format>
       <graphic hidden="false" readOnly="false" labelWidth="146" contentWidth="237" height="23" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="true"/>
     </formEntity>
-    <formEntity id="6" name="이벤트내용" systemType="text" required="false" system="false">
+    <formEntity id="6" name="일정내용" systemType="text" required="false" system="false">
       <children/>
       <format type="richEditor" viewingType="richEditor"></format>
       <graphic hidden="false" readOnly="false" labelWidth="146" contentWidth="915" height="259" cellSize="1" fitWidth="false" verticalScrollPolicy="true" textAlign="left" fitToScreen="false" listEditable="false" multipleUsers="false"/>
