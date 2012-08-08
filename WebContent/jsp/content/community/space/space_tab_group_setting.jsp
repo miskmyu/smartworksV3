@@ -94,7 +94,7 @@
 	<div class="portlet_l" style="display: block;">
 		<div class="portlet_r" style="display: block;">
 			<!-- 화면 -->
-			<div class="contents_space setting_section oh">
+			<div class="contents_space setting_section" style="display: table-cell">
 				<div class="titl_section">
 					<!-- 타이틀을 나타내는 곳 -->
 					<div class="title pr10 fl">
@@ -349,7 +349,7 @@
 			<!-- 화면 //-->
 			<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
-				<div class="fr pr10">
+				<div class="fr">
 					<span class="btn_gray">
 						<a onclick="submitForms(); return false;" href="">
 							<span class="txt_btn_start"></span> 

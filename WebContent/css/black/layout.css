@@ -490,7 +490,9 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; margin:0 10px; border-top: 1px solid #c7c7c7; min-height: 24px}
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }
+.js_upload_buttons .glo_btn_space  {display: table; width:100%; margin:0}
+.glo_btn_space > div.fr {margin-right: 10px}
 .glo_btn_space .btn_finish {float:right; padding-right:10px}
 
 .pos_works {left:40px; top:1px; position:relative; z-index:20}
