@@ -17,6 +17,7 @@ CREATE TABLE sworguser (
 	id varchar(50) NOT NULL,
 	companyid varchar(50),
 	deptid varchar(50),
+	adjunctDeptIds varchar(500),
 	roleid varchar(50),
 	authid varchar(50),
 	empno varchar(50),

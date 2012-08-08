@@ -777,3 +777,4 @@ ALTER TABLE SWpackage add helpUrl varchar(500);
 
 ALTER TABLE SWpackage add manualFileName varchar(100);
 
+ALTER TABLE SwOrgUser add adjunctDeptIds varchar(500);

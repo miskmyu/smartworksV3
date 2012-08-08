@@ -82,6 +82,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class CommunityServiceImpl implements ICommunityService {
@@ -135,6 +136,17 @@ public class CommunityServiceImpl implements ICommunityService {
 			SwoUserExtend userExtend = getSwoManager().getUserExtend(user.getId(), user.getId(), true);
 			String myDeptId = userExtend.getDepartmentId();
 			List<SwoDepartment> deptList = new ArrayList<SwoDepartment>();
+			//겸직적용
+			String adjunctDeptids = userExtend.getAdjunctDeptIds();
+			if (!CommonUtil.isEmpty(adjunctDeptids)) {
+				String[] ajtDeptInfo = StringUtils.tokenizeToStringArray(adjunctDeptids, ";");
+				for (int i = 0; i < ajtDeptInfo.length; i++) {
+					String[] ajtDeptIdInfo = StringUtils.tokenizeToStringArray(ajtDeptInfo[i], "|");
+					String deptId = ajtDeptIdInfo[0];
+					String position = ajtDeptIdInfo[1];
+					getDeptTreeByDeptId(deptList, deptId);
+				}
+			}
 			getDeptTreeByDeptId(deptList, myDeptId);
 			DepartmentInfo[] deptInfos = new DepartmentInfo[deptList.size()];
 			int index = deptList.size() - 1;
@@ -160,7 +172,8 @@ public class CommunityServiceImpl implements ICommunityService {
 			SwoDepartment dept = getSwoManager().getDepartment("", deptId, IManager.LEVEL_LITE);
 			if (dept == null)
 				return;
-			deptList.add(dept);
+			if (!deptList.contains(dept))
+				deptList.add(dept);
 			if (!dept.getParentId().equalsIgnoreCase("root")) {
 				getDeptTreeByDeptId(deptList, dept.getParentId());
 			}

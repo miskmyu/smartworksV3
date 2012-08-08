@@ -1110,7 +1110,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update SwoUser set");
-				buf.append(" companyId=:companyId, deptId=:deptId, roleId=:roleId, authId=:authId, empNo=:empNo,");
+				buf.append(" companyId=:companyId, deptId=:deptId, adjunctDeptIds=:adjunctDeptIds, roleId=:roleId, authId=:authId, empNo=:empNo,");
 				buf.append(" name=:name, nickName:nickName, type=:type, position=:position, email=:email, useMail=:useMail, password=:password,");
 				buf.append(" lang=:lang, stdTime=:stdTime, picture=:picture,");
 				buf.append(" creationDate=:creationDate, creationUser=:creationUser,");
@@ -1121,6 +1121,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(SwoUser.A_COMPANYID, obj.getCompanyId());
 				query.setString(SwoUser.A_DEPTID, obj.getDeptId());
+				query.setString(SwoUser.A_ADJUNCTDEPTIDS, obj.getAdjunctDeptIds());
 				query.setString(SwoUser.A_ROLEID, obj.getRoleId());
 				query.setString(SwoUser.A_AUTHID, obj.getAuthId());
 				query.setString(SwoUser.A_EMPNO, obj.getEmpNo());
@@ -1185,6 +1186,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String id = null;
 		String companyId = null;
 		String deptId = null;
+		String adjunctDeptIdsLike = null;
 		String roleId = null;
 		String authId = null;
 		String empNo = null;
@@ -1213,6 +1215,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			id = cond.getId();
 			companyId = cond.getCompanyId();
 			deptId = cond.getDeptId();
+			adjunctDeptIdsLike = cond.getAdjunctDeptIdsLike();
 			roleId = cond.getRoleId();
 			authId = cond.getAuthId();
 			empNo = cond.getEmpNo();
@@ -1247,6 +1250,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.companyId = :companyId");
 			if (deptId != null)
 				buf.append(" and obj.deptId = :deptId");
+			if (adjunctDeptIdsLike != null)
+				buf.append(" and obj.adjunctDeptIds like :adjunctDeptIdsLike");
 			if (roleId != null)
 				buf.append(" and obj.roleId = :roleId");
 			if (authId != null)
@@ -1325,6 +1330,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("companyId", companyId);
 			if (deptId != null)
 				query.setString("deptId", deptId);
+			if (adjunctDeptIdsLike != null)
+				query.setString("adjunctDeptIdsLike", CommonUtil.toLikeString(adjunctDeptIdsLike));
 			if (roleId != null)
 				query.setString("roleId", roleId);
 			if (authId != null)
@@ -1447,7 +1454,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			if (level.equals(LEVEL_ALL)) {
 				buf.append(" obj");
 			} else {
-				buf.append(" obj.id, obj.companyId, obj.deptId, obj.roleId, obj.authId, obj.empNo,");
+				buf.append(" obj.id, obj.companyId, obj.deptId, obj.adjunctDeptIds, obj.roleId, obj.authId, obj.empNo,");
 				buf.append(" obj.name, obj.nickName, obj.type, obj.position, obj.email, obj.useMail, obj.password,");
 				buf.append(" obj.lang, obj.stdTime, obj.picture,");
 				buf.append(" obj.creationUser, obj.creationDate,");
@@ -1467,6 +1474,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					obj.setId((String)fields[j++]);
 					obj.setCompanyId((String)fields[j++]);
 					obj.setDeptId((String)fields[j++]);
+					obj.setAdjunctDeptIds((String)fields[j++]);
 					obj.setRoleId((String)fields[j++]);
 					obj.setAuthId((String)fields[j++]);
 					obj.setEmpNo((String)fields[j++]);
@@ -2053,6 +2061,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		StringBuffer sqlBuf = new StringBuffer();
 		sqlBuf.append(" select id, deptId, name, 'u' as type from sworguser where deptId = '"+ deptId +"' ");
 		sqlBuf.append(" union ");
+		sqlBuf.append(" select id, deptId, name, 'u' as type from sworguser where adjunctDeptIds like = '%"+ deptId +"%' ");
+		sqlBuf.append(" union ");
 		sqlBuf.append(" select id, parentId as deptId, name, 'd' as type from sworgDept where parentId = '"+ deptId +"'");
 		
 		Query query = getSession().createSQLQuery(sqlBuf.toString());
@@ -2099,6 +2109,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 					list = objList;
 				}
 			} else {
+				//겸직적용
+				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where adjunctDeptIds like '%"+ departmentId +"%' ");
+				sqlBuf.append(" union ");
 				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where deptId = '" + departmentId + "' and type != 'SYSTEM'");
 				sqlBuf.append(" union ");
 				sqlBuf.append(" select id, name, '' as deptId, '' as pos, 'z' as roleId, '' as picture, description, 'd' as type from sworgDept where parentId = '" + departmentId + "'");
@@ -2214,7 +2227,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			StringBuffer buff = new StringBuffer();
 			buff.append("	select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
 			buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
-			buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
+			buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 			buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 			buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 			buff.append("     from SwoUser user, SwoDepartment dept, SwoCompany company ");
@@ -2274,7 +2287,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId, company.name, ");
-		buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
+		buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
@@ -2341,7 +2354,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		
 		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
 		buff.append("  		   user.id, user.name, user.nickName, user.password, user.companyId,  company.name, ");
-		buff.append(" 		   user.deptId, dept.name, dept.description, user.locale, ");
+		buff.append(" 		   user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" 		   user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 		buff.append("     	   user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
@@ -2509,7 +2522,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		StringBuffer buff = new StringBuffer();
 		buff.append("select new net.smartworks.server.engine.organization.model.SwoUserExtend( ");
 		buff.append(" user.id,  user.name, user.nickName, user.password, user.companyId,  company.name, ");
-		buff.append(" user.deptId, dept.name, dept.description, user.locale, ");
+		buff.append(" user.deptId, user.adjunctDeptIds, dept.name, dept.description, user.locale, ");
 		buff.append(" user.timeZone, user.picture, user.position, user.roleId, user.authId, ");
 		buff.append(" user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
@@ -3121,6 +3134,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			queryBuffer.append(" 		, usr.internalNo ");
 			queryBuffer.append(" 		, usr.modifiedTime ");
 			queryBuffer.append(" 		, dept.id as deptId ");
+			queryBuffer.append(" 		, user.adjunctDeptIds ");
 			queryBuffer.append(" 		, dept.name as deptName ");
 			queryBuffer.append(" 		, dept.description as deptDesc ");
 			queryBuffer.append("  from sworguser usr, sworgdept dept ");
@@ -3187,6 +3201,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				obj.setPhoneNo((String)fields[j++]);
 				obj.setModifiedTime((Timestamp)fields[j++]);
 				obj.setDepartmentId((String)fields[j++]);
+				obj.setAdjunctDeptIds((String)fields[j++]);
 				obj.setDepartmentName((String)fields[j++]);
 				obj.setDepartmentDesc((String)fields[j++]);
 				objList.add(obj);
@@ -3200,5 +3215,4 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			return null;
 		}
 	}
-
 }
