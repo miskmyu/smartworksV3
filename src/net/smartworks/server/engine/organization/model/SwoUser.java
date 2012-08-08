@@ -37,6 +37,7 @@ public class SwoUser extends SwoObject {
 	public static final String A_PASSWORD = "password";
 	public static final String A_COMPANYID = "companyId";
 	public static final String A_DEPTID = "deptId";
+	public static final String A_ADJUNCTDEPTIDS = "adjunctDeptIds";
 	public static final String A_ROLEID = "roleId";
 	public static final String A_AUTHID = "authId";
 	public static final String A_EMPNO = "empNo";
@@ -59,6 +60,7 @@ public class SwoUser extends SwoObject {
 	private String password;
 	private String companyId;
 	private String deptId;
+	private String adjunctDeptIds;
 	private String roleId;
 	private String authId;
 	private String empNo;
@@ -97,6 +99,7 @@ public class SwoUser extends SwoObject {
 		appendAttributeString(A_PASSWORD, password, true, buf);
 		appendAttributeString(A_COMPANYID, companyId, buf);
 		appendAttributeString(A_DEPTID, deptId, buf);
+		appendAttributeString(A_ADJUNCTDEPTIDS, adjunctDeptIds, buf);
 		appendAttributeString(A_ROLEID, roleId, buf);
 		appendAttributeString(A_AUTHID, authId, buf);
 		appendAttributeString(A_EMPNO, empNo, buf);
@@ -138,6 +141,7 @@ public class SwoUser extends SwoObject {
 			Node password = attrMap.getNamedItem(A_PASSWORD);
 			Node companyId = attrMap.getNamedItem(A_COMPANYID);
 			Node deptId = attrMap.getNamedItem(A_DEPTID);
+			Node adjunctDeptIds = attrMap.getNamedItem(A_ADJUNCTDEPTIDS);
 			Node roleId = attrMap.getNamedItem(A_ROLEID);
 			Node authId = attrMap.getNamedItem(A_AUTHID);
 			Node empNo = attrMap.getNamedItem(A_EMPNO);
@@ -162,6 +166,8 @@ public class SwoUser extends SwoObject {
 				obj.setCompanyId(companyId.getNodeValue());
 			if (deptId != null)
 				obj.setDeptId(deptId.getNodeValue());
+			if (adjunctDeptIds != null)
+				obj.setAdjunctDeptIds(adjunctDeptIds.getNodeValue());
 			if (roleId != null)
 				obj.setRoleId(roleId.getNodeValue());
 			if (authId != null)
@@ -319,6 +325,12 @@ public class SwoUser extends SwoObject {
 	}
 	public void setDeptId(String deptId) {
 		this.deptId = deptId;
+	}
+	public String getAdjunctDeptIds() {
+		return adjunctDeptIds;
+	}
+	public void setAdjunctDeptIds(String adjunctDeptIds) {
+		this.adjunctDeptIds = adjunctDeptIds;
 	}
 	public String getRoleId() {
 		return roleId;
