@@ -1187,6 +1187,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		String companyId = null;
 		String deptId = null;
 		String adjunctDeptIdsLike = null;
+		String deptIdWithAdjunct = null;
 		String roleId = null;
 		String authId = null;
 		String empNo = null;
@@ -1216,6 +1217,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			companyId = cond.getCompanyId();
 			deptId = cond.getDeptId();
 			adjunctDeptIdsLike = cond.getAdjunctDeptIdsLike();
+			deptIdWithAdjunct = cond.getDeptIdWithAdjunct();
 			roleId = cond.getRoleId();
 			authId = cond.getAuthId();
 			empNo = cond.getEmpNo();
@@ -1252,6 +1254,8 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				buf.append(" and obj.deptId = :deptId");
 			if (adjunctDeptIdsLike != null)
 				buf.append(" and obj.adjunctDeptIds like :adjunctDeptIdsLike");
+			if (deptIdWithAdjunct != null)
+				buf.append(" and ( obj.deptId = :deptIdWithAdjunct or obj.adjunctDeptIds like :deptIdWithAdjunct2)");
 			if (roleId != null)
 				buf.append(" and obj.roleId = :roleId");
 			if (authId != null)
@@ -1332,6 +1336,10 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				query.setString("deptId", deptId);
 			if (adjunctDeptIdsLike != null)
 				query.setString("adjunctDeptIdsLike", CommonUtil.toLikeString(adjunctDeptIdsLike));
+			if (deptIdWithAdjunct != null) {
+				query.setString("deptIdWithAdjunct", deptIdWithAdjunct);
+				query.setString("deptIdWithAdjunct2", CommonUtil.toLikeString(deptIdWithAdjunct));
+			}
 			if (roleId != null)
 				query.setString("roleId", roleId);
 			if (authId != null)
@@ -2527,8 +2535,9 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" user.empNo, user.email, user.useMail, user.useSign, user.sign, user.extensionNo, user.mobileNo )");
 		buff.append(" from SwoUser user, SwoDepartment dept, SwoCompany company ");
 		buff.append(" where user.deptId = dept.id");
+		buff.append(" and user.id != 'admin@maninsoft.co.kr' ");
 		buff.append(" and user.companyId = company.id");
-		buff.append(" and dept.id = :deptId");
+		buff.append(" and (dept.id = :deptId or user.adjunctDeptIds like '%").append(departmentId).append("%')");
 		buff.append(" order by user.roleId asc, user.name asc");
 		Query query = this.getSession().createQuery(buff.toString());
 		query.setString("deptId", departmentId);

@@ -118,7 +118,8 @@
 		} else if(method.equals("findUserByDept")) {
 			String deptId = StringUtil.toNotNull(request.getParameter("deptId"));
 			SwoUserCond cond = new SwoUserCond();
-			cond.setDeptId(deptId);
+			//cond.setDeptId(deptId);
+			cond.setDeptIdWithAdjunct(deptId);
 			long totalSize = SwManagerFactory.getInstance().getSwoManager().getUserSize(userId, cond);
 			cond.setOrders(new Order[] {new Order("name", true)});
 			SwoUser[] users = SwManagerFactory.getInstance().getSwoManager().getUsers(userId, cond, null);
