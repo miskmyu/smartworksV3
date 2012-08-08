@@ -88,7 +88,7 @@
 	<div class="portlet_l" style="display: block;">
 		<div class="portlet_r" style="display: block;">
 			<!-- 화면 -->
-			<div class="contents_space setting_section pt20" style="height:290px">
+			<div class="contents_space setting_section pt20" style="display: table">
 				<!-- 설정 부분 -->
 				<form name="frmDepartmentSpaceSetting" class="js_validation_required">
 					<!-- Left -->
