@@ -1387,7 +1387,8 @@ $(function() {
 //		body.find('.js_task_stop').remove();
 //		body.find('.js_instance_task_arrow').remove();
 //		body.find('.js_instance_tasks li.selected').siblings().remove();
-		body.find('.js_form_content').removeClass('up');
+		if(workSpacePage.hasClass('js_iwork_space_page'))
+			body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
 		body.find('.glo_btn_space span.js_space_error_message').remove();
 		body.find('.glo_btn_space').append(bottomLogo);
@@ -1453,7 +1454,8 @@ $(function() {
 	//		body.find('.js_task_stop').remove();
 	//		body.find('.js_instance_task_arrow').remove();
 	//		body.find('.js_instance_tasks li.selected').siblings().remove();
-			body.find('.js_form_content').removeClass('up');
+			if(workSpacePage.hasClass('js_iwork_space_page'))
+				body.find('.js_form_content').removeClass('up');
 			body.find('.glo_btn_space span.btn_gray').remove();
 			body.find('.glo_btn_space').append(bottomLogo);
 			body.find('a').attr('userDetail', '');
