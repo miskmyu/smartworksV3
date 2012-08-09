@@ -75,7 +75,7 @@
  -->				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
-					<th class="r_line">
+					<th class="r_line to">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
@@ -87,7 +87,7 @@
 				<%
 				}else{
 				%>
-					<th class="r_line">
+					<th class="r_line from">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENDER)){
@@ -111,7 +111,7 @@
 				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
-					<th class="r_line">
+					<th class="r_line date">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
@@ -123,7 +123,7 @@
 				<%
 				}else{
 				%>
-					<th class="r_line">
+					<th class="r_line date">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
@@ -174,7 +174,7 @@
  -->				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
-					<th class="r_line">
+					<th class="r_line to">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_RECEIVER%>"><fmt:message key='common.title.receivers'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_RECEIVER)){
@@ -186,7 +186,7 @@
 				<%
 				}else{
 				%>
-					<th class="r_line">
+					<th class="r_line from">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENDER%>"><fmt:message key='common.title.sender'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENDER)){
@@ -210,7 +210,7 @@
 				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
-					<th class="r_line">
+					<th class="r_line date">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.received_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
@@ -222,7 +222,7 @@
 				<%
 				}else{
 				%>
-					<th class="r_line">
+					<th class="r_line date">
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=MailContent.A_SENTDATE%>"><fmt:message key='common.title.send_date'/>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENTDATE)){
