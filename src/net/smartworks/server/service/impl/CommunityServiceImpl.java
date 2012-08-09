@@ -1852,7 +1852,8 @@ public class CommunityServiceImpl implements ICommunityService {
 					MailAccount vMailAccount = new MailAccount();
 					vMailAccount.setEmailServerId(sMailAccount.getMailServerId());
 					vMailAccount.setEmailServerName(sMailAccount.getMailServerName());
-					vMailAccount.setUserName(sMailAccount.getMailId()+"@"+sMailAccount.getMailServerName());
+					vMailAccount.setEmailId(sMailAccount.getMailId()+"@"+sMailAccount.getMailServerName());
+					vMailAccount.setUserName(sMailAccount.getMailUserName());
 					vMailAccount.setPassword(sMailAccount.getMailPassword());
 					vMailAccountList.add(vMailAccount);
 				}

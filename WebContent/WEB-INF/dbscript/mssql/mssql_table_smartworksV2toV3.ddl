@@ -741,6 +741,7 @@ CREATE TABLE SwMailAccount (
 	mailServerId varchar(50) NOT NULL,
 	mailServerName varchar(100) NOT NULL,
 	mailId varchar(50) NOT NULL,
+	mailUserNameId varchar(50) NOT NULL,
 	mailPassword varchar(50) NOT NULL,
 	creator	varchar(50),
 	createdtime datetime,
@@ -778,3 +779,5 @@ ALTER TABLE SWpackage add helpUrl varchar(500);
 ALTER TABLE SWpackage add manualFileName varchar(100);
 
 ALTER TABLE SwOrgUser add adjunctDeptIds varchar(500);
+
+ALTER TABLE SwMailAccount add mailUserName varchar(50);
