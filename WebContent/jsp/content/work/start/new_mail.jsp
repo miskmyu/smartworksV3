@@ -60,7 +60,11 @@ function submitForms(action) {
 		data : JSON.stringify(paramsJson),
 		success : function(data, status, jqXHR) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-			document.location.href = "smart.sw#" + newMail.attr('lastHref');
+			var lastHref = newMail.attr('lastHref');
+			if(isEmpty(lastHref))
+				window.location.reload();
+			else
+				document.location.href = "smart.sw#" + lastHref; 
 			smartPop.closeProgress();
 		},
 		error : function(e) {
