@@ -72,7 +72,7 @@ public class DbFolderControllerImpl implements FolderController {
 		FolderDbObject folder = null;
 		try {
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND FOLDER_TYPE = ?"; 
 			folder = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, folderType});
@@ -131,7 +131,7 @@ public class DbFolderControllerImpl implements FolderController {
 		ArrayList myList = null;
 		try {
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 		
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=?";
 			List folders = dao.readList(FolderDbObject.class, sql, new Object[] {username});
@@ -168,7 +168,7 @@ public class DbFolderControllerImpl implements FolderController {
 			Long lFolder = new Long(folder);
 			
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND ID = ?";
 			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, lFolder});
@@ -190,7 +190,7 @@ public class DbFolderControllerImpl implements FolderController {
 			Long lFolder = new Long(folderId);
 			
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND ID = ?";
 			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, lFolder});
@@ -217,7 +217,7 @@ public class DbFolderControllerImpl implements FolderController {
 		try {
 			Long folderId = new Long(folder);
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
 			msgs = dao.readList(MsgDbObject.class, sql, new Object[] {username, folderId});
@@ -258,7 +258,7 @@ public class DbFolderControllerImpl implements FolderController {
 				
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
 			HashMap result = null;
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			try {
 				Long folderId = new Long(folder);
 				String sql = "SELECT COUNT(*) AS NUMBER FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ? AND UNREAD = ?";
@@ -287,7 +287,7 @@ public class DbFolderControllerImpl implements FolderController {
 			// it is a database folder
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
 			HashMap result = null;
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			try {
 				Long folderId = new Long(folder);
 				String sql = "SELECT COUNT(*) AS NUMBER FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ? ";
@@ -315,7 +315,7 @@ public class DbFolderControllerImpl implements FolderController {
 		} else {
 			// it is a database folder
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			try {
 				Long folderId = new Long(folder);
 				String sql = "DELETE FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID=?";
@@ -339,11 +339,11 @@ public class DbFolderControllerImpl implements FolderController {
 		IGenericDao dao = null;
 		try {
 			dao = org.claros.intouch.common.utility.Utility.getTxnDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			Long folderId = new Long(folder);
 			FolderDbObject fld = getFolder(folder);
-			if (!fld.getUsername().equals(auth.getUsername())) {
+			if (!fld.getUsername().equals(auth.getEmailId())) {
 				throw new NoPermissionException();
 			}
 
@@ -436,7 +436,7 @@ public class DbFolderControllerImpl implements FolderController {
 			try {
 				Long folderId = new Long(folder);
 				dao = Utility.getDbConnection();
-				String username = auth.getUsername();
+				String username = auth.getEmailId();
 				
 				String sql = "SELECT id, folder_id, unique_id, sender, receiver, cc, bcc, replyTo, subject, multipart, priority, sentdate, unread, msg_size FROM MSG_DB_OBJECTS WHERE USERNAME=? AND FOLDER_ID = ?";
 				mails = dao.readList(MsgDbObject.class, sql, new Object[] {username, folderId});
@@ -495,19 +495,19 @@ public class DbFolderControllerImpl implements FolderController {
 	 */
 	public void createDefaultFolders() throws Exception {
 		if (getInboxFolder() == null) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile), Constants.FOLDER_TYPE_INBOX));
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile), Constants.FOLDER_TYPE_INBOX));
 		}
 		if (getJunkFolder() == null) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_JUNK(profile), Constants.FOLDER_TYPE_JUNK));
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_JUNK(profile), Constants.FOLDER_TYPE_JUNK));
 		}
 		if (getSentItems() == null) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_SENT(profile), Constants.FOLDER_TYPE_SENT));
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_SENT(profile), Constants.FOLDER_TYPE_SENT));
 		}
 		if (getTrashFolder() == null) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_TRASH(profile), Constants.FOLDER_TYPE_TRASH));
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_TRASH(profile), Constants.FOLDER_TYPE_TRASH));
 		}
 		if (getDraftsFolder() == null) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_DRAFTS(profile), Constants.FOLDER_TYPE_DRAFTS));
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_DRAFTS(profile), Constants.FOLDER_TYPE_DRAFTS));
 		}
 	}
 

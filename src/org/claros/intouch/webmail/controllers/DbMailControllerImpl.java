@@ -118,7 +118,7 @@ public class DbMailControllerImpl implements MailController {
 		IGenericDao dao = null;
 		try {
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT * FROM MSG_DB_OBJECTS WHERE USERNAME=? AND ID = ?";
 			email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, emailId});
@@ -147,7 +147,7 @@ public class DbMailControllerImpl implements MailController {
 			MsgDbObject tmp = getEmailDbItemById(emailId);
 			if (tmp != null) {
 				String user = tmp.getUsername();
-				if (!auth.getUsername().equals(user)) {
+				if (!auth.getEmailId().equals(user)) {
 					throw new NoPermissionException();
 				}
 			
@@ -230,7 +230,7 @@ public class DbMailControllerImpl implements MailController {
 	private void updateEmail(MsgDbObject item) throws Exception {
 		MsgDbObject tmp = getEmailDbItemById(item.getId());
 		String user = tmp.getUsername();
-		if (!auth.getUsername().equals(user)) {
+		if (!auth.getEmailId().equals(user)) {
 			throw new NoPermissionException();
 		}
 
@@ -280,7 +280,7 @@ public class DbMailControllerImpl implements MailController {
 			// do nothing
 		} else {
 			QueryRunner run = new QueryRunner(DbConfigList.getDataSourceById("file"));
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			try {
 				String sql = "UPDATE MSG_DB_OBJECTS SET UNREAD = ? WHERE USERNAME=? AND ID=?";
 				run.update(sql, new Object[] {new Integer(0), username, msgId});
@@ -302,7 +302,7 @@ public class DbMailControllerImpl implements MailController {
 		boolean result = true;
 		try {
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT unique_id FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, md5Header});
@@ -321,7 +321,7 @@ public class DbMailControllerImpl implements MailController {
 		boolean result = true;
 		try {
 			dao = Utility.getDbConnection();
-			String username = auth.getUsername();
+			String username = auth.getEmailId();
 			
 			String sql = "SELECT UID FROM MSG_DB_UIDS WHERE USERNAME=? AND UID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, uid});

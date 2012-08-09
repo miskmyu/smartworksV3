@@ -20,6 +20,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.net.ssl.SSLException;
 
+import net.smartworks.util.SmartUtil;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.claros.commons.auth.models.AuthProfile;
@@ -62,10 +64,11 @@ public class Smtp {
 				props.setProperty("mail.smtps.auth", "true");
 				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			} else {
+				props.setProperty("mail.smtp.submitter", auth.getUsername());
 				props.setProperty("mail.smtp.auth", "true");
 			}
 			SmtpAuthenticator authenticator = new SmtpAuthenticator(auth.getUsername(), auth.getPassword());
-			session = Session.getInstance(props, authenticator);
+			session = Session.getDefaultInstance(props, authenticator);
 		} else {
 			session = Session.getInstance(props, null);
 		}
@@ -213,6 +216,10 @@ public class Smtp {
 							throw f;
 						}
 					}
+				}else if(profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")){
+					Transport tr = session.getTransport("smtp");
+					tr.connect(auth.getUsername(), auth.getPassword());
+					tr.sendMessage(mimeMsg, mimeMsg.getAllRecipients());
 				} else {
 					Transport.send(mimeMsg);
 				}
