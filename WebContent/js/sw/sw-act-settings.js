@@ -371,8 +371,10 @@ $(function() {
 		
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var userId = input.parents('.js_edit_member_page').attr('userId');
+			var departmentId = input.parents('.js_edit_member_page').attr('parentId');
 			var paramsJson = {};
 			paramsJson['userId'] = userId;
+			paramsJson['departmentId'] = departmentId;
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
 				url : "remove_member.sw",
@@ -539,8 +541,9 @@ $(function() {
 		var organizationManagement = input.parents('.js_organization_management_page');
 		var target = organizationManagement.find('.js_edit_member');
 		var userId = input.attr('userId');
+		var parentId = input.attr('parentId');
 		$.ajax({
-			url : "edit_member.sw?userId=" + userId,
+			url : "edit_member.sw?userId=" + userId + "&parentId=" + parentId,
 			success : function(data, status, jqXHR) {
 				target.html(data).slideDown();;
 			}			

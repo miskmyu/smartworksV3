@@ -17,6 +17,7 @@
 
 	String userId = request.getParameter("userId");
 	String departId = request.getParameter("departId");
+	String parentId = request.getParameter("parentId");
 	User user = (SmartUtil.isBlankObject(userId)) ? new User() : smartWorks.getUserById(userId);
 	Department department = (SmartUtil.isBlankObject(departId)) ? new Department() : smartWorks.getDepartmentById(departId);
 
@@ -81,7 +82,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_edit_member_page" userId="<%=userId%>" departId="<%=departId%>">
+<div class="js_edit_member_page" userId="<%=userId%>" departId="<%=departId%>" parentId="<%=parentId%>">
 
 	<!-- 사용자추가 -->
 	<!-- 타이틀 영역 -->

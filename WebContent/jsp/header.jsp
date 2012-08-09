@@ -4,6 +4,7 @@
 <!-- Author			: Y.S. JUNG										 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.util.SmartUtil"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -63,6 +64,9 @@ function logout() {
 	//로고반영 구현을 위해 추가
 	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
 	String companyLogo = (SmartUtil.isBlankObject(companyGeneral) || SmartUtil.isBlankObject(companyGeneral.getCompanyLogo())) ? "images/logo_compay.gif" : companyGeneral.getCompanyLogo();
+
+	String mailInboxId = smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_INBOX);
+	
 %>
 
 <!-- 회사 로고 및 연결 링크 -->
@@ -147,8 +151,9 @@ function logout() {
 	
 			<!-- 메일 알림 영역  -->
 			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
-			<li class="icon_mail js_notice_count">
-				<a id="mailbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MAILBOX%>"
+			<li class="icon_mail">
+				<%--<a id="mailbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MAILBOX%> --%>
+				<a id="mailbox_count" href="mail_list.sw?cid=<%=mailInboxId%>" class="js_content"
 					title="<fmt:message key='header.notice.icon.mailbox'/>">
 					<%
 				 	if (notices.length > Notice.TYPE_MAILBOX && notices[Notice.TYPE_MAILBOX].getLength() > 0) {
