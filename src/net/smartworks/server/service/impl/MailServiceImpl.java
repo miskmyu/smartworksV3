@@ -368,16 +368,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
-		try{
-			mailCont.deleteEmail(new Long(1212));
-		}catch(Exception e){
-			
-		}
-		try{
-			mailCont.deleteEmail(new Long(1213));
-		}catch(Exception e){
-			
-		}
 		mailCont.appendEmail(item);
 	}
 	

@@ -68,7 +68,7 @@ public class Smtp {
 				props.setProperty("mail.smtp.auth", "true");
 			}
 			SmtpAuthenticator authenticator = new SmtpAuthenticator(auth.getUsername(), auth.getPassword());
-			session = Session.getDefaultInstance(props, authenticator);
+			session = Session.getInstance(props, authenticator);
 		} else {
 			session = Session.getInstance(props, null);
 		}
