@@ -116,7 +116,7 @@
 	<!-- 컨텐츠 //-->
 	<!-- 버튼 영역 -->
 	<div class="glo_btn_space">	
-		<div class="fr pr10">
+		<div class="fr">
 			<span class="btn_gray">
 				<a href="" onclick='submitForms(); return false;'>
 					<span class="txt_btn_start"></span>

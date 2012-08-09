@@ -51,7 +51,7 @@
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
 			<!-- 화면 -->
-			<div class="contents_space setting_section oh">
+			<div class="contents_space setting_section">
 				<div class="titl_section">
 					<!-- 타이틀을 나타내는 곳 -->
 					<div class="title pr10 fl">
@@ -191,7 +191,7 @@
 		</div>
 		<!-- 버튼 영역 -->
 			<div class="glo_btn_space">
-				<div class="fr pr10">
+				<div class="fr">
 					<span class="btn_gray ml5">
 						<a onclick="return true;" href="<%=group.getSpaceController()%>?cid=<%=group.getSpaceContextId()%>&wid=<%=group.getId()%>"> 
 							<span class="txt_btn_start"></span>

@@ -340,7 +340,7 @@
 				</a> 
 			</span>
 		</div>
-		<form name="frmSearchFilterActions" class="fr pr10 js_validation_required">
+		<form name="frmSearchFilterActions" class="pr10 js_validation_required">
 			<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
 		</form>
 		

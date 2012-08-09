@@ -32,6 +32,7 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_COMPANYID = "companyId";
 	public static final String A_DEPTID = "deptId";
 	public static final String A_ADJUNCTDEPTIDSLIKE = "adjunctDeptIdsLike";
+	public static final String A_DEPTIDWITHADJUNCT = "deptIdWithAdjunct";
 	public static final String A_ROLEID = "roleId";
 	public static final String A_AUTHID = "authId";
 	public static final String A_EMPNO = "empNo";
@@ -56,6 +57,7 @@ public class SwoUserCond extends SwoObjectCond {
 	private String companyId;
 	private String deptId;
 	private String adjunctDeptIdsLike;
+	private String deptIdWithAdjunct;
 	private String roleId;
 	private String authId;
 	private String empNo;
@@ -472,6 +474,12 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setUseSign(boolean useSign) {
 		this.useSign = useSign;
+	}
+	public String getDeptIdWithAdjunct() {
+		return deptIdWithAdjunct;
+	}
+	public void setDeptIdWithAdjunct(String deptIdWithAdjunct) {
+		this.deptIdWithAdjunct = deptIdWithAdjunct;
 	}
 
 }

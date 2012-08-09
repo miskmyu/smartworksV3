@@ -626,8 +626,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								String receiver = receiversArr[j];
 								String receiverId = null;
 								if(!SmartUtil.isBlankObject(receiversArr[j])){
-									int start = receiversArr[j].indexOf("<");
-									int end = receiversArr[j].indexOf(">");
+									int start = receiversArr[j].lastIndexOf("<");
+									int end = receiversArr[j].lastIndexOf(">");
 									if(start == -1 || end == -1)
 										receiverId = receiversArr[j];
 									else

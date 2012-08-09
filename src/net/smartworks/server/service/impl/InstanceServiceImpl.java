@@ -6755,8 +6755,25 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			return taskInstId;
 		}  else if (action.equalsIgnoreCase("delegate")) {
-			String taskInstId = "";
+			/*{
+				   workId=pkg_26f24cff544f4f2e9a1b87599b6d041a,
+				   instanceId=ff8080813904bc93013904c459b70007,
+				   taskInstId=ff8080813904bc93013904c45be60008,
+				   newPerformer=   [
+				      {
+				         id=kmyu@maninsoft.co.kr,
+				         name=선임 연구원 유광민
+				      }
+				   ]
+				}*/
+			String taskInstId = (String)requestBody.get("taskInstId");
 			String delegateUserId = "";
+			List<Map<String, String>> newPerformer = (List<Map<String, String>>)requestBody.get("newPerformer");
+			if (newPerformer != null && newPerformer.size() != 0) {
+				Map<String, String> userMap = newPerformer.get(0);
+				delegateUserId = userMap.get("id");
+			}
+			
 			if (CommonUtil.isEmpty(taskInstId) || CommonUtil.isEmpty(delegateUserId))
 				return null;
 			

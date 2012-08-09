@@ -149,7 +149,7 @@
 		</span>
 	</div>
 
-	<form name="frmAccessPolicy" class="fr pr10 js_validation_required">
+	<form name="frmAccessPolicy" class="js_validation_required">
 		<div class="fr form_space">	
 			<select name="selAccessPolicy">
 				<option value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public"/></option>
