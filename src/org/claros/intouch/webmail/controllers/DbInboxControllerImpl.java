@@ -62,7 +62,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		checkingQueue.add(new CheckingModel(userId, companyId));
 		return checkingQueue.size()-1;
 	}
-	static void addThreadToChecking(int index, Thread thread){
+	synchronized static void addThreadToChecking(int index, Thread thread){
 		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
 		
 		CheckingModel checkingModel = checkingQueue.get(index);
@@ -70,7 +70,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		checkingQueue.set(index, checkingModel);
 	}
 	
-	static CheckingModel getChecking(Thread thread){
+	synchronized static CheckingModel getChecking(Thread thread){
 		if(thread==null || SmartUtil.isBlankObject(checkingQueue))
 			return null;
 		
@@ -95,7 +95,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 				try {
@@ -177,7 +176,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					}
 				
 					// fetched messages are deleted if the user requested so.
-					String deleteFetched = (checkingEmail.isDeleteAfterFetched()) ? "yes" : "no";
+					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -200,30 +199,30 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				FolderController foldCont = fFactory.getFolderController();				
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
 			}
 		});
-		checkingEmail.start();
 		addThreadToChecking(index, checkingEmail);
+		checkingEmail.start();
 	}
 	public void checkEmail() throws Exception {
 		
 		int index = -1;
-		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;
-		
+		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;		
 		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 
 				try {
+
 					// fetch all messages from the remote pop3 server
 					protocol.disconnect();
 					handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
@@ -304,7 +303,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					}
 				
 					// fetched messages are deleted if the user requested so.					
-					String deleteFetched = (checkingEmail.isDeleteAfterFetched()) ? "yes" : "no";
+					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -327,14 +326,15 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				FolderController foldCont = fFactory.getFolderController();
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
 			}
 		});
-		checkingEmail.start();
 		addThreadToChecking(index, checkingEmail);
+		checkingEmail.start();
 	}
 }
 
