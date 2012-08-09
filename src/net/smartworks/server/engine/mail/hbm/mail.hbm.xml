@@ -57,7 +57,9 @@
 		<property name="mailServerId" column="mailServerId" type="string" length="50" not-null="true"/>
 		<property name="mailServerName" column="mailServerName" type="string" length="100"/>
 		<property name="mailId" column="mailId" type="string" length="50" not-null="true"/>
+		<property name="mailUserName" column="mailUserName" type="string" length="50"/>
 		<property name="mailPassword" column="mailPassword" type="string" length="50" not-null="true"/>
+		<property name="mailDeleteFetched" column="mailDeleteFetched" type="string" length="10"/>
 		<property name="creationUser" column="creator" type="string" length="30"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="30"/>

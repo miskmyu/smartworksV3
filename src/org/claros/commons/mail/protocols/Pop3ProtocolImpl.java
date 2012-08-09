@@ -96,17 +96,13 @@ public class Pop3ProtocolImpl implements Protocol {
 				handler = new ConnectionMetaHandler();
 				handler.setStore(session.getStore(profile.getProtocol()));
 				
-				String username =  auth.getUsername();
-				if(!SmartUtil.isBlankObject(username))
-					username = username.split("@")[0];
-
-				handler.getStore().connect(profile.getFetchServer(), profile.getIFetchPort(), username, auth.getPassword());
+				handler.getStore().connect(profile.getFetchServer(), profile.getIFetchPort(), auth.getUsername(), auth.getPassword());
 				handler.setMbox(handler.getStore().getDefaultFolder());
 				handler.setMbox(handler.getMbox().getFolder(Constants.FOLDER_INBOX(profile)));
 				handler.getMbox().open(connectType);
 					
 				// storing the folder in map
-				pop3Folders.put(auth.getUsername(), handler.getMbox());
+				pop3Folders.put(auth.getEmailId(), handler.getMbox());
 
 				handler.setTotalMessagesCount(handler.getMbox().getMessageCount());
 			}
@@ -142,7 +138,7 @@ public class Pop3ProtocolImpl implements Protocol {
 			connect(Constants.CONNECTION_READ_WRITE);
 			return handler;
 		} catch (Exception e) {
-			pop3Folders.put(auth.getUsername(), null);
+			pop3Folders.put(auth.getEmailId(), null);
 			System.out.println("Could not delete message ids: " + messageIds);
 			throw new MailboxActionException(e);
 		}
@@ -369,7 +365,7 @@ public class Pop3ProtocolImpl implements Protocol {
 	 */
 	public void disconnect() {
 		try {
-			Folder fold = (Folder)pop3Folders.get(auth.getUsername());
+			Folder fold = (Folder)pop3Folders.get(auth.getEmailId());
 			if (fold != null) {
 				fold.close(true);
 			}
@@ -386,7 +382,7 @@ public class Pop3ProtocolImpl implements Protocol {
 			} catch (Exception e) {}
 		} catch (Exception e) {
 		}
-		pop3Folders.put(auth.getUsername(), null);
+		pop3Folders.put(auth.getEmailId(), null);
 	}
 
 	public void emptyFolder() throws Exception {
@@ -418,7 +414,7 @@ public class Pop3ProtocolImpl implements Protocol {
 	public synchronized Folder getFolder() throws Exception {
 		String folder = Constants.FOLDER_INBOX(profile);
 
-		Folder fold = (Folder)pop3Folders.get(auth.getUsername());
+		Folder fold = (Folder)pop3Folders.get(auth.getEmailId());
 		if (fold != null && fold.isOpen()) {
 			return fold;
 		} else {
@@ -435,7 +431,7 @@ public class Pop3ProtocolImpl implements Protocol {
 					fold.open(Constants.CONNECTION_READ_WRITE);
 					System.out.println("Folder is open again.");
 					
-					pop3Folders.put(auth.getUsername(), fold);
+					pop3Folders.put(auth.getEmailId(), fold);
 				}
 			}
 		}
@@ -490,7 +486,7 @@ public class Pop3ProtocolImpl implements Protocol {
 				System.out.println("Error while closing folder: " + f.getName());
 			}
 		}
-		pop3Folders.put(auth.getUsername(), null);
+		pop3Folders.put(auth.getEmailId(), null);
 	}
 
 	/**

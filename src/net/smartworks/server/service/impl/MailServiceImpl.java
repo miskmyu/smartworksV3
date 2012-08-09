@@ -123,12 +123,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    if(mailAccounts == null || mailAccounts.length == 0)
 			throw new LoginInvalidException();
 
+	    String emailId = mailAccounts[0].getEmailId();
 		String username = mailAccounts[0].getUserName();
 		String password = mailAccounts[0].getPassword();
+		boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 		if (username != null && password != null) {
 			auth = new AuthProfile();
+			auth.setEmailId(emailId);
 			auth.setUsername(username);
 			auth.setPassword(password);
+			auth.setDeleteAfterFetched(isDeleteAfterFetched);
 		}
 
 		try {
@@ -182,12 +186,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    if(mailAccounts == null || mailAccounts.length == 0)
 				throw new LoginInvalidException();
 
+		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
+			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
+				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
+				auth.setDeleteAfterFetched(isDeleteAfterFetched);
 			}
 	    }
 
@@ -242,12 +250,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    if(mailAccounts == null || mailAccounts.length == 0)
 				throw new LoginInvalidException();
 
+		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
+			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
+				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
+				auth.setDeleteAfterFetched(isDeleteAfterFetched);
 			}
 	    }
 
@@ -340,7 +352,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setUniqueId(md5Header);
 		item.setFolderId(fItem.getId());
 		item.setUnread(new Boolean(false));
-		item.setUsername(auth.getUsername());
+		item.setUsername(auth.getEmailId());
 		item.setMsgSize(new Long(bMsg.length));
 
 		item.setSender(header.getFromShown());
@@ -393,7 +405,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setUniqueId(md5Header);
 		item.setFolderId(fItem.getId());
 		item.setUnread(new Boolean(false));
-		item.setUsername(auth.getUsername());
+		item.setUsername(auth.getEmailId());
 		item.setMsgSize(new Long(bMsg.length));
 
 		item.setSender(header.getFromShown());
@@ -1594,7 +1606,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			FolderDbObject folder = new FolderDbObject();
 			folder.setFolderType(org.claros.intouch.common.utility.Constants.FOLDER_TYPE_CUSTOM);
 			folder.setFolderName(folderName);
-			folder.setUsername(auth.getUsername());
+			folder.setUsername(auth.getEmailId());
 			folder.setParentId(new Long(0));
 			
 			foldCont.createFolder(folder);

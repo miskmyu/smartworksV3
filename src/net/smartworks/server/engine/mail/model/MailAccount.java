@@ -31,12 +31,16 @@ public class MailAccount extends MisObject {
 	public static final String A_MAILSERVERID = "mailServerId";
 	public static final String A_MAILSERVERNAME = "mailServerName";
 	public static final String A_MAILID = "mailId";
+	public static final String A_MAILUSERNAME = "mailUserName";
+	public static final String A_MAILDELETEFETCHED = "mailDeleteFetched";
 	public static final String A_MAILPASSWORD = "mailPassword";
 
 	private String userId;
 	private String mailServerId;
 	private String mailServerName;
 	private String mailId;
+	private String mailUserName;
+	private String mailDeleteFetched;
 	private String mailPassword;
 
 	public MailAccount() {
@@ -231,6 +235,18 @@ public class MailAccount extends MisObject {
 	}
 	public void setMailId(String mailId) {
 		this.mailId = mailId;
+	}
+	public String getMailUserName() {
+		return mailUserName;
+	}
+	public void setMailUserName(String mailUserName) {
+		this.mailUserName = mailUserName;
+	}
+	public String getMailDeleteFetched() {
+		return mailDeleteFetched;
+	}
+	public void setMailDeleteFetched(String mailDeleteFetched) {
+		this.mailDeleteFetched = mailDeleteFetched;
 	}
 	public String getMailPassword() {
 		return mailPassword;

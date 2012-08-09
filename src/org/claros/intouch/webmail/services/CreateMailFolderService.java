@@ -77,7 +77,7 @@ public class CreateMailFolderService extends BaseService {
 			FolderDbObject folder = new FolderDbObject();
 			folder.setFolderType(Constants.FOLDER_TYPE_CUSTOM);
 			folder.setFolderName(folderName);
-			folder.setUsername(auth.getUsername());
+			folder.setUsername(auth.getEmailId());
 			folder.setParentId(new Long(0));
 			
 			foldCont.createFolder(folder);
