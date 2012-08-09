@@ -781,3 +781,5 @@ ALTER TABLE SWpackage add manualFileName varchar(100);
 ALTER TABLE SwOrgUser add adjunctDeptIds varchar(500);
 
 ALTER TABLE SwMailAccount add mailUserName varchar(50);
+
+ALTER TABLE SwMailAccount add mailDeleteFetched varchar(10);

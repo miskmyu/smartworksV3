@@ -570,7 +570,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update MailAccount set ");
-				buf.append(" userId=:userId, mailServerId=:mailServerId, mailServerName=:mailServerName, mailId=:mailId,mailUserName=:mailUserName, mailPassword=:mailPassword");
+				buf.append(" userId=:userId, mailServerId=:mailServerId, mailServerName=:mailServerName, mailId=:mailId,mailUserName=:mailUserName,mailDeleteFetched=:mailDeleteFetched, mailPassword=:mailPassword");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(MailAccount.A_USERID, obj.getUserId());
@@ -578,6 +578,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				query.setString(MailAccount.A_MAILSERVERNAME, obj.getMailServerName());
 				query.setString(MailAccount.A_MAILID, obj.getMailId());
 				query.setString(MailAccount.A_MAILUSERNAME, obj.getMailUserName());
+				query.setString(MailAccount.A_MAILDELETEFETCHED, obj.getMailDeleteFetched());
 				query.setString(MailAccount.A_MAILPASSWORD, obj.getMailPassword());
 				query.setString(MailAccount.A_OBJID, obj.getObjId());
 				query.executeUpdate();
@@ -709,7 +710,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId,");
-				buf.append(" obj.userId, obj.mailServerId, obj.mailServerName, obj.mailId,obj.mailUserName, obj.mailPassword,");
+				buf.append(" obj.userId, obj.mailServerId, obj.mailServerName, obj.mailId,obj.mailUserName,obj.mailDeleteFetched, obj.mailPassword,");
 				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -728,6 +729,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 					obj.setMailServerName((String)fields[j++]);
 					obj.setMailId((String)fields[j++]);
 					obj.setMailUserName((String)fields[j++]);
+					obj.setMailDeleteFetched((String)fields[j++]);
 					obj.setMailPassword((String)fields[j++]);
 					obj.setCreationUser((String)fields[j++]);
 					obj.setCreationDate((Timestamp)fields[j++]);
