@@ -234,8 +234,12 @@ $(function() {
 	$('select.js_select_access_level').live('change', function(e) {
 		var input = $(targetElement(e));
 		var target = input.parents('.js_upload_buttons_page').find('div.js_access_level_custom');
-		if(isEmpty(target))
+		if(isEmpty(target)){
 			target = input.parents('.js_iwork_space_page').find('div.js_access_level_custom');
+			if(isEmpty(target)){
+				target = input.parents('.js_import_from_excel_page').find('div.js_access_level_custom');				
+			}
+		}
 		var accessLevel = input.attr('value');
 		if(accessLevel == ACCESS_LEVEL_CUSTOM)
 			target.show();
@@ -1383,7 +1387,8 @@ $(function() {
 //		body.find('.js_task_stop').remove();
 //		body.find('.js_instance_task_arrow').remove();
 //		body.find('.js_instance_tasks li.selected').siblings().remove();
-		body.find('.js_form_content').removeClass('up');
+		if(workSpacePage.hasClass('js_iwork_space_page'))
+			body.find('.js_form_content').removeClass('up');
 		body.find('.glo_btn_space span.btn_gray').remove();
 		body.find('.glo_btn_space span.js_space_error_message').remove();
 		body.find('.glo_btn_space').append(bottomLogo);
@@ -1449,7 +1454,8 @@ $(function() {
 	//		body.find('.js_task_stop').remove();
 	//		body.find('.js_instance_task_arrow').remove();
 	//		body.find('.js_instance_tasks li.selected').siblings().remove();
-			body.find('.js_form_content').removeClass('up');
+			if(workSpacePage.hasClass('js_iwork_space_page'))
+				body.find('.js_form_content').removeClass('up');
 			body.find('.glo_btn_space span.btn_gray').remove();
 			body.find('.glo_btn_space').append(bottomLogo);
 			body.find('a').attr('userDetail', '');

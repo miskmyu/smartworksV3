@@ -27,6 +27,7 @@ import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -158,7 +159,6 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
-import net.smartworks.server.engine.resource.util.XmlUtil;
 import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
@@ -179,9 +179,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -6305,6 +6302,31 @@ public class InstanceServiceImpl implements IInstanceService {
 				//자기 하위부서의 사람들도 포함시킨다(재귀함수를 이용)
 				addSubDepartmentUsers(userId, departmentId, relatedUserIdArray);//userDeptId의 자식 부서들의 사용자들을 array에 추가시킨다
 			}
+			//겸직적용
+			//DepartmentInfo[] deptInfos = cuser.getDepartments();
+			SwoUser user = SwManagerFactory.getInstance().getSwoManager().getUser(userId, userId, IManager.LEVEL_LITE);
+			if (user != null && !CommonUtil.isEmpty(user.getAdjunctDeptIds())) {
+				String[] ajtDeptInfo = StringUtils.tokenizeToStringArray(user.getAdjunctDeptIds(), ";");
+				for (int i = 0; i < ajtDeptInfo.length; i++) {
+					String[] ajtDeptIdInfo = StringUtils.tokenizeToStringArray(ajtDeptInfo[i], "|");
+					String deptId = ajtDeptIdInfo[0];
+
+					SwoUserCond userCond = new SwoUserCond();
+					userCond.setDeptId(deptId);
+					userCond.setRoleId("DEPT MEMBER");//모든 부서원들을 가져온다, 내 아디디는 무조건 포함되기 때문에 내가 부서장이면 나머지 부서원, 부서원이면 나머지 부서원을 가져온다
+					SwoUser[] relatedUserObjs = getSwoManager().getUsers(userId, userCond, IManager.LEVEL_LITE);
+					if (relatedUserObjs != null) {
+						for (int j = 0; j < relatedUserObjs.length; j++) {
+							SwoUser relatedUserObj = relatedUserObjs[j];
+							if (!relatedUserObj.getId().equalsIgnoreCase(userId))
+								relatedUserIdArray.add(relatedUserObj.getId());//자기 부서원들을 array에 포함시킨다
+						}
+					}
+					//자기 하위부서의 사람들도 포함시킨다(재귀함수를 이용)
+					addSubDepartmentUsers(userId, deptId, relatedUserIdArray);//userDeptId의 자식 부서들의 사용자들을 array에 추가시킨다
+				}
+			}
+			
 			StringBuffer userSelectStr = new StringBuffer();
 			boolean isFirst = true;
 			for (int i = 0; i < relatedUserIdArray.size(); i++) {
@@ -6733,8 +6755,25 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			return taskInstId;
 		}  else if (action.equalsIgnoreCase("delegate")) {
-			String taskInstId = "";
+			/*{
+				   workId=pkg_26f24cff544f4f2e9a1b87599b6d041a,
+				   instanceId=ff8080813904bc93013904c459b70007,
+				   taskInstId=ff8080813904bc93013904c45be60008,
+				   newPerformer=   [
+				      {
+				         id=kmyu@maninsoft.co.kr,
+				         name=선임 연구원 유광민
+				      }
+				   ]
+				}*/
+			String taskInstId = (String)requestBody.get("taskInstId");
 			String delegateUserId = "";
+			List<Map<String, String>> newPerformer = (List<Map<String, String>>)requestBody.get("newPerformer");
+			if (newPerformer != null && newPerformer.size() != 0) {
+				Map<String, String> userMap = newPerformer.get(0);
+				delegateUserId = userMap.get("id");
+			}
+			
 			if (CommonUtil.isEmpty(taskInstId) || CommonUtil.isEmpty(delegateUserId))
 				return null;
 			

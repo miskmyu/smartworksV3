@@ -107,12 +107,12 @@ function submitForms() {
 							if(work.getForm() != null){
 								String desc = work.getForm().getDescription();
 							%>
-								<td>
+								<td class="vt">
 								<div class="manual_df_img">
 									<img src="<%=work.getForm().getOrgImage()%>"/>
 								</div>
 								</td>
-								<td class ="dline_left_gray pl10" style="width:100%">
+								<td class ="dline_left_gray vt pl10" style="width:100%">
 	 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
 									<div class="js_form_desc_edit"  style="display:none">
 	 									<span><fmt:message key="builder.title.form_desc"/> : </span>

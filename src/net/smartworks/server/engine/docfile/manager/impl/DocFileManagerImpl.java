@@ -8,33 +8,44 @@
 
 package net.smartworks.server.engine.docfile.manager.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.Clob;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
 import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.work.FileCategory;
+import net.smartworks.model.work.FormField;
+import net.smartworks.model.work.InformationWork;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
@@ -57,6 +68,10 @@ import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.task.model.TskTask;
+import net.smartworks.server.service.ICommunityService;
+import net.smartworks.server.service.IInstanceService;
+import net.smartworks.server.service.ISettingsService;
+import net.smartworks.server.service.IWorkService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.OSValidator;
 import net.smartworks.util.SmartConfUtil;
@@ -64,15 +79,30 @@ import net.smartworks.util.SmartUtil;
 import net.smartworks.util.Thumbnail;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tuscany.sdo.api.SDOUtil;
+import org.dom4j.Document;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.htmlcleaner.HtmlCleaner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.xml.sax.InputSource;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.media.MediaFileSource;
@@ -85,8 +115,20 @@ import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import commonj.sdo.DataObject;
+import commonj.sdo.helper.HelperContext;
+import commonj.sdo.helper.XMLDocument;
+import commonj.sdo.helper.XMLHelper;
 
 public class DocFileManagerImpl extends AbstractManager implements IDocFileManager {
+
+	@Autowired
+	private IWorkService workService;
+	@Autowired
+	private IInstanceService instanceService;
+	@Autowired
+	private ICommunityService communityService;
 
 	public DocFileManagerImpl() {
 		super();
@@ -832,6 +874,13 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	@Override
 	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws DocFileException {
 		String workId = (String)requestBody.get("workId");
+		InformationWork work = (InformationWork)request.getSession().getAttribute("smartWork");
+		try{
+			if(SmartUtil.isBlankObject(work) || !work.getId().equals(workId))
+				work = (InformationWork)workService.getWorkById(workId);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		Map<String, Object> smartFormInfoMap = (Map<String, Object>)requestBody.get("frmImportFromExcel");
 		Map<String, Object> importFile = (Map<String, Object>)smartFormInfoMap.get("txtImportFile");
 		List<Map<String, String>> files = (List<Map<String, String>>)importFile.get("files");
@@ -850,25 +899,106 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		if(localFilePath==null){
 			throw new DocFileException("File Information is incorrect...");
 		}
-		try{
-//			HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(localFilePath));
-//			HSSFSheet sheet = wb.getSheetAt(0);
-//			int rows = sheet.getPhysicalNumberOfRows();
-//			for(int r=1; r<rows; r++){
-//				HSSFRow row = sheet.getRow(r);
-//				if (row == null) {
-//					continue;
-//				}
-//				int cells = row.getPhysicalNumberOfCells();
-//				for (int c = 0; c < cells; c++) {
-//					HSSFCell cell = row.getCell(c);
-//					String value = null;
-//				}
-//			}
-		}catch(Exception e){
-			throw new DocFileException("Excel File opening error...");			
+		int count = 0;
+		try {
+
+			XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(localFilePath));
+			XSSFSheet sheet = wb.getSheetAt(0);
+			int rows = sheet.getPhysicalNumberOfRows();
+			Map<String, Object> requestMap = new HashMap<String, Object>();
+			requestMap.put("workId", workId);
+			requestMap.put("formId", work.getForm().getId());
+			requestMap.put("formName", work.getForm().getName());
+			requestMap.put("frmAccessSpace", requestBody.get("frmAccessSpace"));
+			FormField[] importFields = work.getForm().getImportFields();
+			for(int r=1; r<rows; r++){
+				XSSFRow row = sheet.getRow(r);
+				if (row == null) {
+					continue;
+				}
+				int cells = row.getPhysicalNumberOfCells();
+				Map<String, Object> smartForm = new HashMap<String, Object>();
+				if((cells-1) != importFields.length) return 0;
+				for (int c = 1; c < cells; c++) {
+					XSSFCell cell = row.getCell(c);
+					FormField field = importFields[c-1];
+
+					String sValue = null;
+					Date dValue = null;
+					boolean bValue;
+					double douValue;
+					String value = null;
+					User user = null;
+					switch (cell.getCellType()) {
+		                case Cell.CELL_TYPE_STRING:
+		                	sValue = cell.getRichStringCellValue().getString();
+		                    break;
+		                case Cell.CELL_TYPE_NUMERIC:
+		                    if (DateUtil.isCellDateFormatted(cell)) {
+		                    	dValue = cell.getDateCellValue();
+		                    } else {
+		                    	sValue = "" + cell.getNumericCellValue();
+		                    }
+		                    break;
+		                case Cell.CELL_TYPE_BOOLEAN:
+		                	sValue = (cell.getBooleanCellValue()) ? "true" : "false";
+		                    break;
+		                case Cell.CELL_TYPE_FORMULA:
+		                	sValue = cell.getCellFormula();
+		                    break;
+		                default:				
+					}
+					
+					if(field.getType().equals(FormField.TYPE_DATE) && dValue!=null){
+						value = (new SimpleDateFormat("yyyy.MM.dd")).format(dValue);
+					}else if(field.getType().equals(FormField.TYPE_DATETIME) && dValue!=null){
+						value = (new SimpleDateFormat("yyyy.MM.dd HH:mm")).format(dValue);
+					}else if(field.getType().equals(FormField.TYPE_TIME) && dValue!=null){
+						value = (new SimpleDateFormat("HH:mm")).format(dValue);
+					}else if(field.getType().equals(FormField.TYPE_USER) && sValue!=null){
+						user = communityService.getUserById(sValue);
+					}else{
+						value = sValue;
+					}
+					
+					if(field.isMandatory() && (value==null && user==null)){
+						smartForm.clear();
+						break;
+					}
+					if(value!=null){
+						smartForm.put(field.getId(), value);
+					}else if(user!=null){
+						Map<String, Object> usersMap = new LinkedHashMap<String, Object>();
+						List<Map<String, Object>> userArrayMap = new ArrayList<Map<String, Object>>();
+						Map<String, Object> userMap = new HashMap<String, Object>();
+						userMap.put("id", user.getId());
+						userMap.put("name", user.getLongName());
+						userArrayMap.add(userMap);
+						usersMap.put("users", userArrayMap);
+						smartForm.put(field.getId(), usersMap);
+					}
+					
+				}
+				
+				if(smartForm.isEmpty()) continue;
+				
+				requestMap.put("frmSmartForm", smartForm);
+				String instanceId = null;
+				try{
+					instanceId = instanceService.setInformationWorkInstance(requestMap, request);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+				if(instanceId!=null) count++;
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch(Exception e){
+			e.printStackTrace();
+		} finally {
 		}
-		return 0;
+		return count;
 	}
 	
 	@Override

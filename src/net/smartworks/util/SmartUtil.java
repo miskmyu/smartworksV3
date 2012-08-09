@@ -353,6 +353,7 @@ public class SmartUtil {
 					user.setCompanyId(login.getCompanyId());
 					user.setCompany(login.getCompany());
 					user.setDepartmentId(login.getDepartmentId());
+					user.setDepartments(login.getDepartments());
 					user.setDepartment(login.getDepartment());
 					user.setPosition(login.getPosition());
 					user.setBigPictureName(login.getBigPictureName());

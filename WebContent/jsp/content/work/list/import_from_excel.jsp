@@ -1,3 +1,7 @@
+<%@page import="net.smartworks.model.community.info.GroupInfo"%>
+<%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
+<%@page import="net.smartworks.model.community.info.CommunityInfo"%>
+<%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.work.SocialWork"%>
 <%@page import="net.smartworks.server.engine.infowork.form.model.SwfFormModel"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -29,6 +33,15 @@
 	SmartWork work = (SmartWork)session.getAttribute("smartWork");
 	String workId = work.getId();
 	int workType = work.getType();
+
+	String cid = (String)session.getAttribute("cid");
+	String spaceId = SmartUtil.getSpaceIdFromContentContext(cid);
+	// cid를 가지고 현재 공간과 공간의 타입을 가져온다.
+	WorkSpace workSpace = smartWorks.getWorkSpaceById(spaceId);
+	int spaceType = SmartUtil.getSpaceTypeFromContentContext(cid);
+
+	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
+	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
 	
 %>
 
@@ -72,7 +85,7 @@ function submitForms() {
 			success : function(data, status, jqXHR) {
 				
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-				smartPop.showInfo(smartPop.ERROR, data + smartMessage.get("importFromExcelSuccess"), function(e){
+				smartPop.showInfo(smartPop.INFO, data + smartMessage.get("importFromExcelSuccess"), function(e){
 					window.location.reload();
 					smartPop.closeProgress();					
 				});
@@ -121,6 +134,100 @@ function submitForms() {
 				</a> 
 			</span>
 		</div>
+
+		<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
+		<form name="frmAccessSpace" class="js_validation_required">
+			<div id="" class="fr form_space">						
+				<input name="selWorkSpaceType" type="hidden" value="<%=workSpace.getSpaceType()%>">
+				<select name="selWorkSpace" class="js_select_work_space">
+					<%
+					if(!workId.equals(SmartWork.ID_BOARD_MANAGEMENT)){ 
+					%>
+						<option  <%if(workSpace.getId().equals(cUser.getId())){ %>selected<%} %> value="<%=cUser.getId()%>" workSpaceType="<%=ISmartWorks.SPACE_TYPE_USER%>"><fmt:message key="common.upload.space.self" /></option>
+					<%
+					}
+					%>
+					<optgroup class="js_optgroup_department" label="<fmt:message key="common.upload.space.department"/>">
+						<%
+						// 현재사용자가 속해있는 부서들을 선택하는 옵션들을 구성한다..
+						for (CommunityInfo community : communities) {
+							if (community.getClass().equals(DepartmentInfo.class)) {
+						%>
+								<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_DEPARTMENT%>"><%=community.getName()%></option>
+						<%
+							}
+						}
+						%>
+					</optgroup>
+					<optgroup class="js_optgroup_group" label="<fmt:message key="common.upload.space.group"/>">
+						<%
+						// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
+						for (CommunityInfo community : communities) {
+							if (community.getClass().equals(GroupInfo.class)) {
+						%>
+								<option <%if(workSpace.getId().equals(community.getId())){ %>selected<%} %> value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_GROUP%>"><%=community.getName()%></option>
+						<%
+							}
+						}
+						%>
+					</optgroup>
+				</select>
+			</div>
+	
+			<div id="" class="fr form_space">
+				<!--  현재업무의 접근(읽기)권한 중에 선택가능한 권한들을 구성한다... -->
+				<select name="selAccessLevel" class="js_select_access_level">
+					<%
+					// 읽기권한이 공개 이면, 공개, 비공개, 사용자 지정중에 선택할 수 있다..
+					
+					int workAccessLevel = (SmartUtil.isBlankObject(work.getAccessPolicy())) ? AccessPolicy.LEVEL_PUBLIC : work.getAccessPolicy().getLevel();
+					if (workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
+					%>
+						<option value="<%=AccessPolicy.LEVEL_PUBLIC%>" selected><fmt:message key="common.security.access.public" /></option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+						<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<%
+					// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
+					} else if (workAccessLevel == AccessPolicy.LEVEL_CUSTOM) {
+					%>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+						<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>" selected><fmt:message key="common.security.access.custom" /></option>
+					<%
+					// 읽기권한이 비공개이면, 비공개만 해당된다...
+					} else if (workAccessLevel == AccessPolicy.LEVEL_PRIVATE) {
+					%>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>" selected><fmt:message key="common.security.access.private" /></option>
+					<%
+					}
+					%>
+				</select>
+			</div>
+	
+			<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 -->
+			<%
+			if(workAccessLevel == AccessPolicy.LEVEL_PUBLIC) {
+			%>
+				<div class="fr form_space js_access_level_custom" style="display:none">
+					<span class="js_type_userField" fieldId="txtAccessableUsers" multiUsers="true">
+						<div class="form_value">
+							<div class="icon_fb_space">
+								<div class="fieldline community_names js_community_names sw_required">
+									<input class="js_auto_complete" href="community_name.sw" type="text">
+								</div>
+								<div class="js_community_list com_list" style="display: none"></div>
+								<span class="js_community_popup"></span><a href="" class="js_userpicker_button"><span class="icon_fb_users"></span></a>
+							</div>
+						</div>
+					</span>
+				</div>
+			<%
+			}
+			%>
+			<!-- 접근권한이 사용자지정인 경우에 공개할 사용자들을 선택하는 화면 //-->
+			
+		</form>
+		<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 //-->
+
 		<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
 		<div class="fr form_space js_progress_span" ></div>
 		

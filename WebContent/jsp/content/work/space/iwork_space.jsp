@@ -115,8 +115,8 @@
                         </div>
 		                    
 		            <!-- 우측 버튼-->
-		            <div class="txt_btn t_s11">
-		                <div class="fr"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
+		            <div class="txt_btn t_s11 fr">
+		                <a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
 		            </div>
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
@@ -301,7 +301,7 @@
 					<!-- 수정, 삭제버튼 //--> 
 					  					  
 					<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
-					<form name="frmAccessSpace" class="fr pr10 js_validation_required" style="display:none">
+					<form name="frmAccessSpace" class="js_validation_required" style="display:none">
 						<div id="" class="fr form_space">						
 							<input name="selWorkSpaceType" type="hidden" value="<%=workSpace.getSpaceType()%>">
 							<select name="selWorkSpace" class="js_select_work_space">

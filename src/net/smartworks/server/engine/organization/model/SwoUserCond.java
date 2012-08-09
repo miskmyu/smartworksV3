@@ -31,6 +31,8 @@ public class SwoUserCond extends SwoObjectCond {
 	public static final String A_NICKNAME = "nickName";
 	public static final String A_COMPANYID = "companyId";
 	public static final String A_DEPTID = "deptId";
+	public static final String A_ADJUNCTDEPTIDSLIKE = "adjunctDeptIdsLike";
+	public static final String A_DEPTIDWITHADJUNCT = "deptIdWithAdjunct";
 	public static final String A_ROLEID = "roleId";
 	public static final String A_AUTHID = "authId";
 	public static final String A_EMPNO = "empNo";
@@ -54,6 +56,8 @@ public class SwoUserCond extends SwoObjectCond {
 	private String nickName;
 	private String companyId;
 	private String deptId;
+	private String adjunctDeptIdsLike;
+	private String deptIdWithAdjunct;
 	private String roleId;
 	private String authId;
 	private String empNo;
@@ -103,6 +107,7 @@ public class SwoUserCond extends SwoObjectCond {
 		appendAttributeString(A_STDTIME, stdTime, buf);
 		appendAttributeString(A_COMPANYID, companyId, buf);
 		appendAttributeString(A_DEPTID, deptId, buf);
+		appendAttributeString(A_ADJUNCTDEPTIDSLIKE, adjunctDeptIdsLike, buf);
 		appendAttributeString(A_ROLEID, roleId, buf);
 		appendAttributeString(A_AUTHID, authId, buf);
 		appendAttributeString(A_EMPNO, empNo, buf);
@@ -143,6 +148,7 @@ public class SwoUserCond extends SwoObjectCond {
 			Node stdTime = attrMap.getNamedItem(A_STDTIME);
 			Node companyId = attrMap.getNamedItem(A_COMPANYID);
 			Node deptId = attrMap.getNamedItem(A_DEPTID);
+			Node adjunctDeptIdsLike = attrMap.getNamedItem(A_ADJUNCTDEPTIDSLIKE);
 			Node roleId = attrMap.getNamedItem(A_ROLEID);
 			Node authId = attrMap.getNamedItem(A_AUTHID);
 			Node empNo = attrMap.getNamedItem(A_EMPNO);
@@ -168,6 +174,8 @@ public class SwoUserCond extends SwoObjectCond {
 				obj.setCompanyId(companyId.getNodeValue());
 			if (deptId != null)
 				obj.setDeptId(deptId.getNodeValue());
+			if (adjunctDeptIdsLike != null)
+				obj.setAdjunctDeptIdsLike(adjunctDeptIdsLike.getNodeValue());
 			if (roleId != null)
 				obj.setRoleId(roleId.getNodeValue());
 			if (authId != null)
@@ -329,6 +337,12 @@ public class SwoUserCond extends SwoObjectCond {
 	public void setDeptId(String deptId) {
 		this.deptId = deptId;
 	}
+	public String getAdjunctDeptIdsLike() {
+		return adjunctDeptIdsLike;
+	}
+	public void setAdjunctDeptIdsLike(String adjunctDeptIdsLike) {
+		this.adjunctDeptIdsLike = adjunctDeptIdsLike;
+	}
 	public String getRoleId() {
 		return roleId;
 	}
@@ -460,6 +474,12 @@ public class SwoUserCond extends SwoObjectCond {
 	}
 	public void setUseSign(boolean useSign) {
 		this.useSign = useSign;
+	}
+	public String getDeptIdWithAdjunct() {
+		return deptIdWithAdjunct;
+	}
+	public void setDeptIdWithAdjunct(String deptIdWithAdjunct) {
+		this.deptIdWithAdjunct = deptIdWithAdjunct;
 	}
 
 }
