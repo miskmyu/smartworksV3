@@ -10,6 +10,7 @@ import java.util.List;
 import javax.mail.Folder;
 import javax.mail.Message;
 
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.util.SmartUtil;
 
@@ -61,7 +62,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		checkingQueue.add(new CheckingModel(userId, companyId));
 		return checkingQueue.size()-1;
 	}
-	static void addThreadToChecking(int index, Thread thread){
+	synchronized static void addThreadToChecking(int index, Thread thread){
 		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
 		
 		CheckingModel checkingModel = checkingQueue.get(index);
@@ -69,7 +70,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		checkingQueue.set(index, checkingModel);
 	}
 	
-	static CheckingModel getChecking(Thread thread){
+	synchronized static CheckingModel getChecking(Thread thread){
 		if(thread==null || SmartUtil.isBlankObject(checkingQueue))
 			return null;
 		
@@ -105,7 +106,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (headers != null) {
 						EmailHeader header = null;
-						for (int i=0;i<headers.size();i++) {
+						for (int i=0;i<headers.size()  && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							header = (EmailHeader)headers.get(i);
 							int msgId = header.getMessageId();
 							try {
@@ -145,7 +146,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setUniqueId(md5Header);
 										item.setFolderId(new Long(folderId));
 										item.setUnread(new Boolean(true));
-										item.setUsername(auth.getUsername());
+										item.setUsername(auth.getEmailId());
 										item.setMsgSize(new Long(bMsg.length));
 										
 										item.setSender(header.getFromShown());
@@ -160,6 +161,9 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 
 										// save the email db item.
 										mailCont.appendEmail(item);
+										msg = null;
+										bMsg = null;
+										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}else{
@@ -172,8 +176,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					}
 				
 					// fetched messages are deleted if the user requested so.
-//					String deleteFetched = UserPrefsController.getUserSetting(auth, UserPrefConstants.deleteFetched);
-					String deleteFetched = "no";
+					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -193,25 +196,23 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				if(newMessages != -1)
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
-				FolderController foldCont = fFactory.getFolderController();
-				
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
+				FolderController foldCont = fFactory.getFolderController();				
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
 			}
 		});
-		checkingEmail.start();
 		addThreadToChecking(index, checkingEmail);
+		checkingEmail.start();
 	}
 	public void checkEmail() throws Exception {
 		
 		int index = -1;
-		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;
-		
+		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;		
 		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
@@ -221,6 +222,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				Protocol protocol = factory.getProtocol(null);
 
 				try {
+
 					// fetch all messages from the remote pop3 server
 					protocol.disconnect();
 					handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
@@ -229,7 +231,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
 						EmailHeader header = null;
-						for (int i=0;i<msgs.length;i++) {
+						for (int i=0;i<msgs.length && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							Message msg = msgs[i];
 							int msgId = i+1;
 							try {
@@ -273,7 +275,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setUid(uid);
 										item.setFolderId(new Long(folderId));
 										item.setUnread(new Boolean(true));
-										item.setUsername(auth.getUsername());
+										item.setUsername(auth.getEmailId());
 										item.setMsgSize(new Long(bMsg.length));
 										
 										item.setSender(header.getFromShown());
@@ -288,6 +290,9 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 
 										// save the email db item.
 										mailCont.appendEmail(item);
+										msg = null;
+										bMsg = null;
+										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}
@@ -297,9 +302,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					}
 				
-					// fetched messages are deleted if the user requested so.
-//					String deleteFetched = UserPrefsController.getUserSetting(auth, UserPrefConstants.deleteFetched);
-					String deleteFetched = "no";
+					// fetched messages are deleted if the user requested so.					
+					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -320,17 +324,17 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
 			}
 		});
-		checkingEmail.start();
 		addThreadToChecking(index, checkingEmail);
+		checkingEmail.start();
 	}
 }
 
@@ -338,11 +342,13 @@ class CheckingModel {
 	CheckingModel(String userId, String companyId) {
 		this.userId = userId;
 		this.companyId = companyId;
+		this.deleteAfterFetched = false;
 	}
 	
 	protected Thread thread=null;
 	protected String userId=null;
 	protected String companyId=null;
+	protected boolean deleteAfterFetched=false;
 	public Thread getThread() {
 		return thread;
 	}
@@ -360,6 +366,12 @@ class CheckingModel {
 	}
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
+	}
+	public boolean isDeleteAfterFetched() {
+		return deleteAfterFetched;
+	}
+	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
+		this.deleteAfterFetched = deleteAfterFetched;
 	}	
 }
 

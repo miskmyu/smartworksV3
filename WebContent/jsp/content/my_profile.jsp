@@ -52,7 +52,7 @@
 			smartPop.progressCont(progressSpan);
 			if(!isEmpty(myProfile.find('input[name="chkUserProfileUseEmail"]:checked'))){
 				var mailServerId = myProfile.find('select[name="selUserProfileEmailServerName"] option:selected').attr('value');
-				var username = myProfile.find('input[name="txtUserProfileEmailId"]').attr('value');
+				var username = myProfile.find('input[name="txtUserProfileEmailUserName"]').attr('value');
 				var password = myProfile.find('input[name="pwUserProfileEmailPW"]').attr('value');
 				var accountJson = {};
 				accountJson['mailServerId'] = mailServerId;
@@ -64,7 +64,6 @@
 					type : 'POST',
 					data : JSON.stringify(accountJson),
 					success : function(data, status, jqXHR) {
-						console.log('data=', data);
 						if(data != 'true'){
 							smartPop.closeProgress();
 							smartPop.showInfo(smartPop.ERROR, smartMessage.get('invalidMailAccountError'));
@@ -254,7 +253,7 @@
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
 									<th  class="required_label"><fmt:message key="profile.title.email.id" /></th>
 									<td>
-											<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName()).split("@")[0]%>" title="">
+											<input style="width:45%" name="txtUserProfileEmailId" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getEmailId()).split("@")[0]%>" title="">
 											@
 											<select style="width:45%" name="selUserProfileEmailServerName" class="fieldline">
 												<%
@@ -269,6 +268,12 @@
 									</td>
 								</tr>
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th class="required_label"><fmt:message key="profile.title.email.username" /></th>
+									<td>
+										<input name="txtUserProfileEmailUserName" class="fieldline required" type="text" value="<%=CommonUtil.toNotNull(mailAccount.getUserName())%>">		
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
 									<th class="required_label"><fmt:message key="profile.title.email.password" /></th>
 									<td>
 										<input name="pwUserProfileEmailPW" class="fieldline required" type="password" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
@@ -278,6 +283,12 @@
 									<th class="required_label"><fmt:message key="profile.title.email.password_confirm" /></th>
 									<td>
 										<input name="pwUserProfileEmailPWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th class=""><fmt:message key="profile.title.email.delete_fetched" /></th>
+									<td>
+										<input name="chkUserProfileEmailDeleteFetched" type="checkbox" class="" <%if(mailAccount.isDeleteAfterFetched()){%>checked<%}%>>		
 									</td>
 								</tr>
 							<%

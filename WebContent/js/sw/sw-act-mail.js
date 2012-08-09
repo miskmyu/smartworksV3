@@ -22,7 +22,11 @@ $(function() {
 	$('.js_cancel_mail_btn').live('click', function(e) {
 		var input = $(targetElement(e));
 		var newMail = input.parents('.js_new_mail_page');
-		document.location.href = "smart.sw#" + newMail.attr('lastHref');
+		var lastHref = newMail.attr('lastHref');
+		if(isEmpty(lastHref))
+			window.location.reload();
+		else
+			document.location.href = "smart.sw#" + lastHref;
 		return false;
 	});
 
@@ -47,7 +51,11 @@ $(function() {
 			data : JSON.stringify(paramsJson),
 			success : function(data, status, jqXHR) {
 				smartPop.closeProgress();
-				document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
+				var lastHref = mailSpace.attr('lastHref');
+				if(isEmpty(lastHref))
+					window.location.reload();
+				else
+					document.location.href = "smart.sw#" + lastHref;
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -167,7 +175,11 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + mailSpace.attr('lastHref');
+					var lastHref = mailSpace.attr('lastHref');
+					if(isEmpty(lastHref))
+						window.location.reload();
+					else
+						document.location.href = "smart.sw#" + lastHref;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

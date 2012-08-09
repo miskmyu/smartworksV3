@@ -46,7 +46,7 @@
 			<div class="txt_btn">	
 				<a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
 			</div>
-			<div class="solid_line"></div>
+			<div class="solid_line cb"></div>
 		</div>
 		<!-- Title //-->
 	<%
@@ -65,7 +65,7 @@
 				<a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting"/></a>
 			</div>
 			<%} %>
-			<div class="solid_line"></div>
+			<div class="solid_line cb"></div>
 		</div>
 		<!-- Title //-->
 	<%

@@ -27,8 +27,8 @@
 .body_titl_pic .title_section {position:absolute}
 .body_titl_pworks {background: url("../../images/body_title_proces.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
 .body_titl_iworks {background: url("../../images/body_title_inform.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
-.body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
-.body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
+.body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 10px 0 0; line-height:18px; min-height:51px; width:50px}
+.body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 10px 0 0; line-height:18px; min-height:51px; width:50px}
 .body_titl > .user, .form_title > .user {background: url("../../images/body_title.png") no-repeat 0 -725px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
 .body_titl > .smartcaster {background: url("../../images/body_title.png") no-repeat 0 -776px transparent; padding:20px 0 0 68px; line-height:18px}
 
@@ -111,11 +111,14 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /*.list_contents table {min-width:700px}*/
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background: url("../../images/bg_thGradient.gif") 0 100% repeat-x}
-.list_contents table .tit_bg th{border-bottom:1px solid #ccc;border-top:2px solid #7f7f7f}
+.list_contents table .tit_bg th{border-bottom:1px solid #ccc;border-top:2px solid #7f7f7f; font-size: 12px}
 .list_contents table .tit_bg .check {width:37px}
 .list_contents table .tit_bg .important {width:17px}
 .list_contents table .tit_bg .read {width:27px}
 .list_contents table .tit_bg .file {width:16px}
+.list_contents table .tit_bg .to, .list_contents table .tit_bg .from {width:135px}
+.list_contents table .tit_bg .date {width:100px}
+
 .list_contents table th {text-align:center}
 .list_contents table th, .list_contents table td {border-bottom: 1px dotted #C7C7C7}
 .list_contents table td {padding:4px 5px}
