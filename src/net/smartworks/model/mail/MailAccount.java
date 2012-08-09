@@ -1,11 +1,17 @@
 package net.smartworks.model.mail;
 
+import net.smartworks.util.SmartUtil;
+
 public class MailAccount{
 
+	public static final int MAX_MESSAGES_PER_FETCH = 100;
+	
 	private String emailServerId;
 	private String emailServerName;
+	private String emailId;
 	private String userName;
 	private String password;
+	private boolean deleteAfterFetched;
 	
 	public String getEmailServerId() {
 		return emailServerId;
@@ -23,7 +29,18 @@ public class MailAccount{
 		this.emailServerName = emailServerName;
 	}
 
+	public String getEmailId() {
+		if(SmartUtil.isBlankObject(this.emailId)) return this.userName;
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
 	public String getUserName() {
+		if(SmartUtil.isBlankObject(this.emailId) && !SmartUtil.isBlankObject(this.userName))
+			return userName.split("@")[0];
 		return userName;
 	}
 
@@ -39,6 +56,14 @@ public class MailAccount{
 		this.password = password;
 	}
 
+	public boolean isDeleteAfterFetched() {
+		return deleteAfterFetched;
+	}
+
+	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
+		this.deleteAfterFetched = deleteAfterFetched;
+	}
+
 	public MailAccount() {
 		super();
 	}
@@ -48,5 +73,14 @@ public class MailAccount{
 		this.emailServerName = emailServerName;
 		this.userName = userName;
 		this.password = password;
+	}
+
+	public MailAccount(String emailServer, String emailServerName, String emailId, String userName, String password, boolean deleteAfterFetched) {
+		super();
+		this.emailServerName = emailServerName;
+		this.emailId = emailId;
+		this.userName = userName;
+		this.password = password;
+		this.deleteAfterFetched = deleteAfterFetched;
 	}
 }

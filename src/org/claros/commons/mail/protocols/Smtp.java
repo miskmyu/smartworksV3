@@ -60,16 +60,15 @@ public class Smtp {
 
 		
 		if (profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")) {
-			String username = (SmartUtil.isBlankObject(auth.getUsername())) ? auth.getUsername() : auth.getUsername().split("@")[0];
 			if (profile.getSmtpSSL() != null && profile.getSmtpSSL().toLowerCase().equals("true")) {
 				props.setProperty("mail.smtps.auth", "true");
 				props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			} else {
-				props.setProperty("mail.smtp.submitter", username);
+				props.setProperty("mail.smtp.submitter", auth.getUsername());
 				props.setProperty("mail.smtp.auth", "true");
 			}
-			SmtpAuthenticator authenticator = new SmtpAuthenticator(username, auth.getPassword());
-			session = Session.getInstance(props, authenticator);
+			SmtpAuthenticator authenticator = new SmtpAuthenticator(auth.getUsername(), auth.getPassword());
+			session = Session.getDefaultInstance(props, authenticator);
 		} else {
 			session = Session.getInstance(props, null);
 		}
@@ -200,12 +199,11 @@ public class Smtp {
 			try {
 				mimeMsg.setSendPartial(true);
 				mimeMsg.setSentDate(new Date());
-				String username = (SmartUtil.isBlankObject(auth.getUsername())) ? auth.getUsername() : auth.getUsername().split("@")[0];
 				
 				if (profile.getSmtpSSL() != null && profile.getSmtpSSL().toLowerCase().equals("true")) {
 					try {
 						Transport tr = session.getTransport("smtps");
-						tr.connect(profile.getSmtpServer(), username, auth.getPassword());
+						tr.connect(profile.getSmtpServer(), auth.getUsername(), auth.getPassword());
 						tr.sendMessage(mimeMsg, mimeMsg.getAllRecipients());
 						tr.close();
 					} catch (Exception f) {
@@ -218,8 +216,11 @@ public class Smtp {
 							throw f;
 						}
 					}
+				}else if(profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")){
+					Transport tr = session.getTransport("smtp");
+					tr.connect(auth.getUsername(), auth.getPassword());
+					tr.sendMessage(mimeMsg, mimeMsg.getAllRecipients());
 				} else {
-					
 					Transport.send(mimeMsg);
 				}
 				Address[] sent = mimeMsg.getAllRecipients();

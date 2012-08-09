@@ -191,7 +191,7 @@ public class SaveDraftService extends BaseService {
 		item.setUniqueId(md5Header);
 		item.setFolderId(fItem.getId());
 		item.setUnread(new Boolean(false));
-		item.setUsername(auth.getUsername());
+		item.setUsername(auth.getEmailId());
 		item.setMsgSize(new Long(bMsg.length));
 
 		// save the email db item.

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.mail.Folder;
 import javax.mail.Message;
 
+import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.util.SmartUtil;
 
@@ -94,6 +95,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
+				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 				try {
@@ -105,7 +107,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (headers != null) {
 						EmailHeader header = null;
-						for (int i=0;i<headers.size();i++) {
+						for (int i=0;i<headers.size()  && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							header = (EmailHeader)headers.get(i);
 							int msgId = header.getMessageId();
 							try {
@@ -145,7 +147,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setUniqueId(md5Header);
 										item.setFolderId(new Long(folderId));
 										item.setUnread(new Boolean(true));
-										item.setUsername(auth.getUsername());
+										item.setUsername(auth.getEmailId());
 										item.setMsgSize(new Long(bMsg.length));
 										
 										item.setSender(header.getFromShown());
@@ -160,6 +162,9 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 
 										// save the email db item.
 										mailCont.appendEmail(item);
+										msg = null;
+										bMsg = null;
+										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}else{
@@ -172,8 +177,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					}
 				
 					// fetched messages are deleted if the user requested so.
-//					String deleteFetched = UserPrefsController.getUserSetting(auth, UserPrefConstants.deleteFetched);
-					String deleteFetched = "no";
+					String deleteFetched = (checkingEmail.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -193,9 +197,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				if(newMessages != -1)
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
-				FolderController foldCont = fFactory.getFolderController();
-				
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
+				FolderController foldCont = fFactory.getFolderController();				
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
@@ -217,6 +219,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
+				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 
@@ -229,7 +232,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
 						EmailHeader header = null;
-						for (int i=0;i<msgs.length;i++) {
+						for (int i=0;i<msgs.length && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							Message msg = msgs[i];
 							int msgId = i+1;
 							try {
@@ -273,7 +276,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setUid(uid);
 										item.setFolderId(new Long(folderId));
 										item.setUnread(new Boolean(true));
-										item.setUsername(auth.getUsername());
+										item.setUsername(auth.getEmailId());
 										item.setMsgSize(new Long(bMsg.length));
 										
 										item.setSender(header.getFromShown());
@@ -288,6 +291,9 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 
 										// save the email db item.
 										mailCont.appendEmail(item);
+										msg = null;
+										bMsg = null;
+										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}
@@ -297,9 +303,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 						}
 					}
 				
-					// fetched messages are deleted if the user requested so.
-//					String deleteFetched = UserPrefsController.getUserSetting(auth, UserPrefConstants.deleteFetched);
-					String deleteFetched = "no";
+					// fetched messages are deleted if the user requested so.					
+					String deleteFetched = (checkingEmail.isDeleteAfterFetched()) ? "yes" : "no";
 					if (deleteFetched != null && deleteFetched.equals("yes")) {
 						if (toBeDeleted.size() > 0) {
 							int ids[] = new int[toBeDeleted.size()];
@@ -320,7 +325,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
-				CheckingModel checkingEmail = getChecking(Thread.currentThread());
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
@@ -338,11 +342,13 @@ class CheckingModel {
 	CheckingModel(String userId, String companyId) {
 		this.userId = userId;
 		this.companyId = companyId;
+		this.deleteAfterFetched = false;
 	}
 	
 	protected Thread thread=null;
 	protected String userId=null;
 	protected String companyId=null;
+	protected boolean deleteAfterFetched=false;
 	public Thread getThread() {
 		return thread;
 	}
@@ -360,6 +366,12 @@ class CheckingModel {
 	}
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
+	}
+	public boolean isDeleteAfterFetched() {
+		return deleteAfterFetched;
+	}
+	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
+		this.deleteAfterFetched = deleteAfterFetched;
 	}	
 }
 

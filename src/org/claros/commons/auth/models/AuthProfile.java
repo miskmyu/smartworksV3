@@ -7,6 +7,7 @@ package org.claros.commons.auth.models;
 public class AuthProfile {
     private String username;
     private String password;
+    private String emailId;
 
     public AuthProfile() {
         super();
@@ -36,4 +37,12 @@ public class AuthProfile {
     public void setUsername(String username) {
         this.username = username;
     }
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 }
