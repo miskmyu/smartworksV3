@@ -13,7 +13,6 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		refreshData : false,
 		layoutInstance : null
 	};
-
 	SmartWorks.extend(options, config);
 	if(!options.refreshData)
 		options.container.html('');
