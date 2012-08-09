@@ -85,6 +85,7 @@ function submitForms(action) {
 	User cUser = SmartUtil.getCurrentUser();
 	String lastHref = SmartUtil.getLastHref(request);
 
+	String receiverId = request.getParameter("receiverId");
 	String folderId = request.getParameter("folderId");
 	String msgId = request.getParameter("msgId");
 	String sSendType = request.getParameter("sendType");
@@ -96,7 +97,12 @@ function submitForms(action) {
 		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
 		instance = new MailInstance();
 		instance.setMailContents(mailContents);
+	}else if(!SmartUtil.isBlankObject(receiverId)){
+		instance = new MailInstance();
+		User receiver = smartWorks.getUserById(receiverId);
+		instance.setReceivers(new User[]{receiver});
 	}
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

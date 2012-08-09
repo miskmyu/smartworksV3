@@ -1,3 +1,4 @@
+<%@page import="java.text.NumberFormat"%>
 <%@page import="net.smartworks.model.instance.SortingField"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.service.impl.SmartWorks"%>
@@ -42,7 +43,7 @@
 	
 	popSelectListParam = function(progressSpan, isGray){
 		var selectWorkItem = $('.js_select_work_item_page');
-		var forms = selectWorkItem.find('form.js_pop_select_work_item:visible');
+		var forms = selectWorkItem.find('form:visible');
 		var paramsJson = {};
 		var workId = selectWorkItem.find('form[name="frmSortingField"]').attr('workId');
 		paramsJson["href"] = "jsp/popup/pop_iwork_instance_list.jsp?workId=" + workId;
@@ -69,6 +70,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	InformationWork work = (InformationWork) smartWorks.getWorkById(workId);
 	InstanceInfoList instanceList = smartWorks.getIWorkInstanceList(workId, params);
+	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -77,20 +79,14 @@
 
 	<!-- 목록 테이블 -->
 	<table>
-	<%
-	SortingField sortedField = null;
-	int pageSize = 0, totalPages = 0, currentPage = 0;
-	if (instanceList != null && work != null) {
-		int type = instanceList.getType();
-		sortedField = instanceList.getSortedField();
-		if(sortedField==null) sortedField = new SortingField();
-		pageSize = instanceList.getPageSize();
-		totalPages = instanceList.getTotalPages();
-		currentPage = instanceList.getCurrentPage();
-		FormField[] displayFields = work.getDisplayFields();
-		if(instanceList.getInstanceDatas() != null) {
-			IWInstanceInfo[] instanceInfos = (IWInstanceInfo[]) instanceList.getInstanceDatas();
-	%>
+		<%
+		SortingField sortedField = null;
+		int pageSize = 20, totalPages = 1, currentPage = 1;
+		if (instanceList != null && work != null) {
+			int type = instanceList.getType();
+			sortedField = instanceList.getSortedField();
+			if(sortedField==null) sortedField = new SortingField();
+		%>
 			<tr class="tit_bg js_instance_list_header">
 				<%
 				FormField[] fields = work.getDisplayFields();
@@ -99,72 +95,154 @@
 						if (field.getType().equalsIgnoreCase("fileField"))
 							continue;
 				%>
-				 		<th class="r_line">
-				 			<a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%>
-			 					<%if(sortedField.getFieldId().equals(field.getId())){if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %>
-			 				</a>
-							<span class="js_progress_span"></span>
-						</th>
+			 		<th class="r_line">
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%>
+					 		<span class="<%
+							if(sortedField.getFieldId().equals(field.getId())){
+								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}}%>"></span>
+						</a>
+						<span class="js_progress_span"></span>
+					</th>
+				<%
+					}
+				}
+				%>
+				<th class="r_line">
+					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
+						<fmt:message key='common.title.last_modifier' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+					</a>/
+					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
+						<fmt:message key='common.title.last_modified_date' /><span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
+					</a>
+					<span class="js_progress_span"></span>
+				</th>		
+			</tr>
+	
+			<%
+			pageSize = instanceList.getPageSize();
+			totalPages = instanceList.getTotalPages();
+			currentPage = instanceList.getCurrentPage();
+			int currentCount = instanceList.getTotalSize()-(currentPage-1)*pageSize;
+			FormField[] displayFields = work.getDisplayFields();
+			if(instanceList.getInstanceDatas() != null) {
+				IWInstanceInfo[] instanceInfos = (IWInstanceInfo[]) instanceList.getInstanceDatas();
+				for (IWInstanceInfo instanceInfo : instanceInfos) {
+					UserInfo owner = instanceInfo.getOwner();
+					UserInfo lastModifier = instanceInfo.getLastModifier();
+					FieldData[] fieldDatas = instanceInfo.getDisplayDatas();
+					String target = instanceInfo.getController() + "?cid=" + instanceInfo.getContextId() + "&workId=" + workId;
+			%>
+					<tr class="instance_list js_pop_select_work_item" href="<%=target%>" workId="<%=workId%>" instId="<%=instanceInfo.getId()%>">
+						<%
+						currentCount--;
+						if ((fieldDatas != null) && (fieldDatas.length == displayFields.length)) {
+							NumberFormat nf = NumberFormat.getNumberInstance();
+							int count = 0;
+							for (FieldData data : fieldDatas) {
+								if (data.getFieldType().equalsIgnoreCase("fileField"))
+									continue;
+						%>
+								<td <%if(data.getFieldType().equals(FormField.TYPE_CURRENCY) || 
+									data.getFieldType().equals(FormField.TYPE_NUMBER) || 
+									data.getFieldType().equals(FormField.TYPE_PERCENT)){ %>
+											class="tr pr10"
+										<%}else if(data.getFieldType().equals(FormField.TYPE_FILE)){%>
+											class="tc"
+										<%}%>>
+										<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
+										<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
+												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml()%>">
+										<%	} %>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_CURRENCY)){%><%=data.getSymbol()%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_IMAGE) ||
+													data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
+													data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
+										<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
+										<%
+										if(displayFields[count++].getId().equals(work.getKeyField())){
+										%>
+											<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
+											<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+										<%
+										}
+										%>
+								</td>
+						<%
+							}
+						}
+						%>
+						<td>
+							<div class="noti_pic js_content_work_space">
+								<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
+							</div>
+							<div class="noti_in_s">
+								<span class="t_name"><%=lastModifier.getLongName()%></span>
+								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
+							</div>
+						</td>
+					</tr>
+		<%
+				}
+			}
+		}else if(!SmartUtil.isBlankObject(work)){
+		%>
+			<tr class="tit_bg">
+				<%
+				sortedField = new SortingField();
+				FormField[] fields = work.getDisplayFields();
+				if (fields != null) {
+					for (FormField field : fields) {
+				%>
+			 		<th class="r_line">
+			 			<a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%>
+					 		<span class="<%
+							if(sortedField.getFieldId().equals(field.getId())){
+								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+							%>"></span>
+						</a>
+						<span class="js_progress_span"></span>
+					</th>
 				<%
 					}
 				}
 				%>
 				<th>
 					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-						<fmt:message key='common.title.last_modifier' /> <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
-							if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %>
+						<fmt:message key='common.title.last_modifier' /> 
+						<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 					</a>/
 					<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-						<fmt:message key='common.title.last_modified_date' /> <%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
-							if(sortedField.isAscending()){ %>▼<%}else{ %>▼<%}} %>
+						<fmt:message key='common.title.last_modified_date' />
+						<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 					</a>
 					<span class="js_progress_span"></span>
 				</th>		
-			</tr>
-
-			<%
-			for (IWInstanceInfo instanceInfo : instanceInfos) {
-				UserInfo owner = instanceInfo.getOwner();
-				UserInfo lastModifier = instanceInfo.getLastModifier();
-				FieldData[] fieldDatas = instanceInfo.getDisplayDatas();
-				String cid = SmartWorks.CONTEXT_PREFIX_IWORK_SPACE + instanceInfo.getId();
-				String wid = instanceInfo.getWorkSpace().getId();
-				String target = "iwork_space.sw?cid=" + cid + "&wid=" + wid;
-			%>
-				<tr>
-				<%
-				if ((fieldDatas != null) && (fieldDatas.length == displayFields.length)) {
-					for (FieldData data : fieldDatas) {
-						if (data.getFieldType().equalsIgnoreCase("fileField"))
-							continue;
-				%>
-						<td><a href="<%=target%>" class=js_pop_select_work_item workId="<%=workId%>" instId="<%=instanceInfo.getId()%>"fieldId="<%=data.getFieldId()%>"><%=CommonUtil.toNotNull(data.getValue())%></a></td>
-				<%
-					}
-				}
-				%>
-					<td>
-						<a href="<%=target%>">
-							<div class="noti_pic js_content_work_space"><img src="<%=lastModifier.getMinPicture()%>"
-								title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
-							</div>
-							<div class="noti_in">
-								<span class="t_name"><%=lastModifier.getLongName()%></span>
-								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-							</div>
-						</a>
-					</td>
-				</tr>
-	<%
-			}
+			</tr>	
+		<%
 		}
+		%>
+	</table>
+	<%
+	if(instanceList == null || work == null || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
+	%>
+		<div class="tc"><fmt:message key="common.message.no_instance"/></div>
+	<%
+	}
+	if(!SmartUtil.isBlankObject(sortedField)){
+	%>
+		<form name="frmSortingField" class="js_pop_select_work_item" workId="<%=workId%>" >
+			<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>">
+			<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>">
+		</form>
+	<%
 	}
 	%>
-	</table>
-	<form name="frmSortingField" class="js_pop_select_work_item" workId="<%=workId%>">
-		<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>">
-		<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>">
-	</form>
 	<!-- 목록 테이블 //-->
 
 	<form name="frmInstanceListPaging"  class="js_pop_select_work_item">
