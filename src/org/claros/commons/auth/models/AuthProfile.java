@@ -8,6 +8,7 @@ public class AuthProfile {
     private String username;
     private String password;
     private String emailId;
+    private boolean deleteAfterFetched=false;
 
     public AuthProfile() {
         super();
@@ -44,5 +45,13 @@ public class AuthProfile {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+
+	public boolean isDeleteAfterFetched() {
+		return deleteAfterFetched;
+	}
+
+	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
+		this.deleteAfterFetched = deleteAfterFetched;
 	}
 }

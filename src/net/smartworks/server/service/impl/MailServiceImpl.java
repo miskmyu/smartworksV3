@@ -126,11 +126,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    String emailId = mailAccounts[0].getEmailId();
 		String username = mailAccounts[0].getUserName();
 		String password = mailAccounts[0].getPassword();
+		boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 		if (username != null && password != null) {
 			auth = new AuthProfile();
 			auth.setEmailId(emailId);
 			auth.setUsername(username);
 			auth.setPassword(password);
+			auth.setDeleteAfterFetched(isDeleteAfterFetched);
 		}
 
 		try {
@@ -187,11 +189,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
+			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
+				auth.setDeleteAfterFetched(isDeleteAfterFetched);
 			}
 	    }
 
@@ -249,11 +253,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
+			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
+				auth.setDeleteAfterFetched(isDeleteAfterFetched);
 			}
 	    }
 
