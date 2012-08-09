@@ -1854,6 +1854,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					vMailAccount.setEmailServerName(sMailAccount.getMailServerName());
 					vMailAccount.setEmailId(sMailAccount.getMailId()+"@"+sMailAccount.getMailServerName());
 					vMailAccount.setUserName(sMailAccount.getMailUserName());
+					vMailAccount.setDeleteAfterFetched(CommonUtil.toBoolean(sMailAccount.getMailDeleteFetched()));
 					vMailAccount.setPassword(sMailAccount.getMailPassword());
 					vMailAccountList.add(vMailAccount);
 				}
