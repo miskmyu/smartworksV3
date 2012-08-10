@@ -269,7 +269,7 @@
 		if (packagesList != null) {
 			for (int i = 0; i < packagesList.length; i++) {
 				PkgPackage pkg = (PkgPackage) packagesList[i];
-				str.append(StringUtils.replace(StringUtils.replace(pkg.toString(), "<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""), "<package ", "<workPackage "));
+				str.append(StringUtils.replace(StringUtils.replace(StringUtils.replace(pkg.toString(), "<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""), "<package ", "<workPackage "),"</package","</workPackage"));
 			}
 		}
 		
@@ -1172,32 +1172,33 @@
 			packageCond.setOrders(new Order[] {new Order("name", true)});
 			
 			PkgPackage[] pkgs = SwManagerFactory.getInstance().getPkgManager().getPackages(userId, packageCond, null);
-			for (PkgPackage pkg : pkgs) {
-				if ("SINGLE".equals(pkg.getType()) && CommonUtil.isEmpty(pkg.getExtendedAttributeValue("formId"))) {
-					SwfFormCond formCond = new SwfFormCond();
-					formCond.setPackageId(pkg.getPackageId());
-					SwfForm[] forms = SwManagerFactory.getInstance().getSwfManager().getForms(userId, formCond, null);
-					if (!CommonUtil.isEmpty(forms))
-						pkg.setExtendedAttributeValue("formId", forms[forms.length-1].getId());
+			if (pkgs != null && pkgs.length != 0) {
+				for (PkgPackage pkg : pkgs) {
+					if ("SINGLE".equals(pkg.getType()) && CommonUtil.isEmpty(pkg.getExtendedAttributeValue("formId"))) {
+						SwfFormCond formCond = new SwfFormCond();
+						formCond.setPackageId(pkg.getPackageId());
+						SwfForm[] forms = SwManagerFactory.getInstance().getSwfManager().getForms(userId, formCond, null);
+						if (!CommonUtil.isEmpty(forms))
+							pkg.setExtendedAttributeValue("formId", forms[forms.length-1].getId());
+					}
+					
+					// 카테고리 정보
+					String catId = pkg.getCategoryId();
+					if (catId == null)
+						continue;
+					CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(userId, catId, null);
+					if (cat == null)
+						continue;
+					CtgCategory superCat = getParentCategory(userId, catId, null);
+					if (superCat == null || superCat.getObjId().equals("_PKG_ROOT_")) {
+						pkg.setExtendedAttributeValue("categoryName", cat.getName());
+						continue;
+					}
+					pkg.setExtendedAttributeValue("categoryName", superCat.getName());
+					pkg.setExtendedAttributeValue("groupName", cat.getName());
 				}
-				
-				// 카테고리 정보
-				String catId = pkg.getCategoryId();
-				if (catId == null)
-					continue;
-				CtgCategory cat = SwManagerFactory.getInstance().getCtgManager().getCategory(userId, catId, null);
-				if (cat == null)
-					continue;
-				CtgCategory superCat = getParentCategory(userId, catId, null);
-				if (superCat == null || superCat.getObjId().equals("_PKG_ROOT_")) {
-					pkg.setExtendedAttributeValue("categoryName", cat.getName());
-					continue;
-				}
-				pkg.setExtendedAttributeValue("categoryName", superCat.getName());
-				pkg.setExtendedAttributeValue("groupName", cat.getName());
+				buffer.append(convert(pkgs));
 			}
-			buffer.append(convert(pkgs));
-			
 			
 		} else if(method.equals("deployGanttProcessContent")) {
 			throw new Exception("method : deployGanttProcessContent - Not Include From V2");
