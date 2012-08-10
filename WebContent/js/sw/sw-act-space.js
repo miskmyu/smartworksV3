@@ -851,7 +851,11 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+					var lastHref = workSpacePage.attr('lastHref');
+					if(isEmpty(lastHref))
+						window.location.reload(); 
+					else
+						document.location.href = "smart.sw#" + lastHref; 
 					smartPop.closeProgress();
 				},
 				error : function(e) {
@@ -917,7 +921,11 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
-					document.location.href = "smart.sw#" + workSpacePage.attr('lastHref');
+					var lastHref =  workSpacePage.attr('lastHref');
+					if(isEmpty(lastHref))
+						window.location.reload();
+					else
+						document.location.href = "smart.sw#" + lastHref;
 					smartPop.closeProgress();
 				},
 				error : function(e) {

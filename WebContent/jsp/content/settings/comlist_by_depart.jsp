@@ -33,7 +33,7 @@
 		%>
 					<li>
 						<span class="dep">												
-							<a href="" class="js_organization_member" userId="<%=user.getId()%>">
+							<a href="" class="js_organization_member" userId="<%=user.getId()%>" parentId="<%=CommonUtil.toNotNull(departmentId)%>">
 								<span class="<%=iconType%>"></span>
 								<img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
 							</a>

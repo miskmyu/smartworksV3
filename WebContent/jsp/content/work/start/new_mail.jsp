@@ -60,7 +60,11 @@ function submitForms(action) {
 		data : JSON.stringify(paramsJson),
 		success : function(data, status, jqXHR) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-			document.location.href = "smart.sw#" + newMail.attr('lastHref');
+			var lastHref = newMail.attr('lastHref');
+			if(isEmpty(lastHref))
+				window.location.reload();
+			else
+				document.location.href = "smart.sw#" + lastHref; 
 			smartPop.closeProgress();
 		},
 		error : function(e) {
@@ -81,6 +85,7 @@ function submitForms(action) {
 	User cUser = SmartUtil.getCurrentUser();
 	String lastHref = SmartUtil.getLastHref(request);
 
+	String receiverId = request.getParameter("receiverId");
 	String folderId = request.getParameter("folderId");
 	String msgId = request.getParameter("msgId");
 	String sSendType = request.getParameter("sendType");
@@ -92,7 +97,12 @@ function submitForms(action) {
 		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
 		instance = new MailInstance();
 		instance.setMailContents(mailContents);
+	}else if(!SmartUtil.isBlankObject(receiverId)){
+		instance = new MailInstance();
+		User receiver = smartWorks.getUserById(receiverId);
+		instance.setReceivers(new User[]{receiver});
 	}
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

@@ -33,7 +33,7 @@ if (comments != null) {
 %>
 		<li>
 			<div class="noti_pic">
-				<a class="js_pop_user_info" href="<%=commentor.getSpaceController() %>?cid=<%=commentor.getSpaceContextId()%>" userId="<%=commentor.getId()%>" profile="<%=commentor.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(commentor)%>">
+				<a class="js_pop_user_info" href="<%=commentor.getSpaceController() %>?cid=<%=commentor.getSpaceContextId()%>" userId="<%=commentor.getId()%>" longName="<%=commentor.getLongName() %>" minPicture="<%=commentor.getMinPicture() %>" profile="<%=commentor.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(commentor)%>">
 					<img src="<%=commentor.getMinPicture()%>" class="profile_size_c"/>
 				</a>
 			</div>

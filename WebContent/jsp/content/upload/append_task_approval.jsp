@@ -53,7 +53,7 @@
 			}
 			if(SmartUtil.isBlankObject(approvalTask)){
 				for(TaskInstanceInfo task : tasks){
-					if(!SmartUtil.isBlankObject(task.getApprovalId())){
+					if(!SmartUtil.isBlankObject(task.getApprovalId()) && task.getStatus()!=Instance.STATUS_REJECTED){
 						approvalInstId = task.getApprovalId();
 						subject = task.getSubject();
 						content = task.getContent();
@@ -255,7 +255,7 @@
 								<li class="sub_instance_list">
 										<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 										<span class="approval_stage"><%=task.getName() %></span>
-										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 										</a>
 										<span class="fl">

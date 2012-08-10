@@ -405,7 +405,7 @@
 				    		User lastModifier = instance.getLastModifier();
 				    		String userDetailInfo = SmartUtil.getUserDetailInfo(lastModifier.getUserInfo());
 				    		%>
-				    		<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
+				    		<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 					    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 					    </div>
 					</div>     
