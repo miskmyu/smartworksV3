@@ -47,6 +47,8 @@ smartMessage.bundle['ko'] = {
 	wholeDayText : "종일행사",
 	printUserText : "출력자",
 	printTimeText : "출력일시",
+	sendMailText : "메일 보내기",
+	startChatText : "채팅/쪽지 보내기",
 	setMyProfileSucceed : "개인정보수정이 정상적으로 완료되었습니다.",
 	setMyProfileError : "개인정보수정하는 중 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	setCompanyGeneralSucceed : "회사일반정보수정이 정상적으로 완료되었습니다.",

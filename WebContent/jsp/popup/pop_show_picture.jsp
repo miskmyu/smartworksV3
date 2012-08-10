@@ -97,7 +97,7 @@
 		            <ul class="js_comment_list">
 		            	<li class="comment_list js_comment_instance" style="display:none">
 							<div class="noti_pic">
-								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+								<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
 									<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
 								</a>
 							</div>

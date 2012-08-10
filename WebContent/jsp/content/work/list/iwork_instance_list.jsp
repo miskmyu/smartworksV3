@@ -69,8 +69,7 @@
 			 			<a href="" class="js_select_field_sorting" fieldId="<%=field.getId()%>"><%=field.getName()%>
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(field.getId())){
-								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-							%>"></span>
+								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}}%>"></span>
 						</a>
 						<span class="js_progress_span"></span>
 					</th>

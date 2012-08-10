@@ -52,7 +52,7 @@ SmartWorks.FormRuntime.CheckBoxBuilder.build = function(config) {
 		$check.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(smartMessage.get((value===true) ? "trueText" : "falseText"));
+			options.container.find('.form_value').text(smartMessage.get((value==true) ? "trueText" : "falseText"));
 		else
 			options.container.find('.form_value input').attr('checked', value);
 	}

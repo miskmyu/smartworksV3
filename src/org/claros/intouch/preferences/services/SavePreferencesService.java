@@ -96,9 +96,9 @@ public class SavePreferencesService extends BaseService {
 			chatSound = "yes";
 		}
 		if (newsUrl == null || newsUrl.trim().equals("")) {
-			try {
-				newsUrl = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.rss-feed");
-			} catch (ConfigurationException e) {}
+//			try {
+//				newsUrl = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.rss-feed");
+//			} catch (ConfigurationException e) {}
 		}
 		
 		AuthProfile auth = getAuthProfile(request);

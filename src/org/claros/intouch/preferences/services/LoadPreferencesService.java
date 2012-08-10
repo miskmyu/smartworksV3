@@ -75,7 +75,7 @@ public class LoadPreferencesService extends BaseService {
 				String chatSound = (String)prefs.get("chatSound");
 				if (chatSound == null) chatSound = "yes";
 				String newsUrl = (String)prefs.get("newsUrl");
-				if (newsUrl == null) newsUrl = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.rss-feed");
+//				if (newsUrl == null) newsUrl = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.rss-feed");
 
 				out.write("<fullName> " + fullName + "</fullName>");
 				out.write("<emailAddress> " + emailAddress + "</emailAddress>");

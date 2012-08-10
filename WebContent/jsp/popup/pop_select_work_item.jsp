@@ -22,22 +22,21 @@
 <!--  전체 레이아웃 -->
 <div class="pop_corner_all js_select_work_item_page">
 
-	<!-- 팝업 타이틀 -->
+ 	<!-- 팝업 타이틀 -->
 	<div class="pop_title_space w_margin"> 
 		<div class="txt_btn">
 			<div class="title_work"><fmt:message key="popup.select.work_item"/></div>
 			
 			<!-- 검색 -->
 			<form class="po_left" name="frmSearchInstance">
-				<span class="js_progress_span"></span>
 				<div class="srch_wh srch_wsize">
 					<input class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance'/>" name="txtSearchInstance">
-					<button onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;" title="<fmt:message key='search.search_instance'/>"></button>
+					<button onclick="popSelectListParam($(this).parents('form').next(), false);return false;" title="<fmt:message key='search.search_instance'/>"></button>
 				</div>
 			</form>
-			
-			<div class="txt_btn">
-					<a onclick="$.modal.close();return false;" href=""><div class="pop_btn_x"></div></a>
+			<span class="js_progress_span"></span>			
+			<div class="txt_btn">			
+				<a href="" onclick="smartPop.close();return false;"><div class="btn_x"></div></a>
 			</div>
 		
 		</div>

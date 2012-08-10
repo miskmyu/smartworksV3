@@ -32,10 +32,9 @@
 	// 검색된 사용자가 있으면 목록을 만들어 보여준다...
 	if (users != null) {
 		for (UserInfo user : users) {
-			String comContext = ISmartWorks.CONTEXT_PREFIX_USER_SPACE + user.getId();
 	%>
 			<li>
-				<a href="user_space.sw?cid=<%=comContext%>&wid=<%=user.getId()%>" class="js_location">
+				<a comName="<%=user.getLongName()%>" comId="<%=user.getId() %>"  class="js_select_community">
 					<img src="<%=user.getMinPicture()%>" class="profile_size_s">
 					<span class="nav_sub_area"><%=user.getLongName()%></span>
 				</a>

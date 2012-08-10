@@ -24,30 +24,6 @@ public class Constants {
 	private static String STR_FOLDER_SENT = "Sent Mail";
 	private static String STR_FOLDER_TRASH = "Trash";
 	private static String STR_FOLDER_DRAFTS = "Drafts";
-
-	static {
-		try {
-			STR_FOLDER_DRAFTS = PropertyFile.getConfiguration("/config/config.xml").getString("mail-folder-names.folder-drafts");
-		} catch (Exception e) {
-			STR_FOLDER_DRAFTS = "Drafts";
-		}
-		try {
-			STR_FOLDER_JUNK = PropertyFile.getConfiguration("/config/config.xml").getString("mail-folder-names.folder-junk");
-		} catch (Exception e) {
-			STR_FOLDER_JUNK = "Junk Mail";
-		}
-		try {
-			STR_FOLDER_SENT = PropertyFile.getConfiguration("/config/config.xml").getString("mail-folder-names.folder-sent");
-		} catch (Exception e) {
-			STR_FOLDER_SENT = "Sent Mail";
-		}
-		try {
-			STR_FOLDER_TRASH = PropertyFile.getConfiguration("/config/config.xml").getString("mail-folder-names.folder-trash");
-		} catch (Exception e) {
-			STR_FOLDER_TRASH = "Trash";
-		}
-	}
-	
 	
 	/**
 	 * 

@@ -56,30 +56,9 @@ public class Constants {
 	public static final String DISPLAY_TYPE_SURNAME_FIRST = "surnameFirst";
 
 	static {
-		try {
-			charset = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.charset");
-		} catch (Exception e) {
 			charset = "utf-8";
 			tmpDir = ".";
-		}
-
-		try {
-			tmpDir = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.tmp-dir");
-		} catch (Exception e) {
-			tmpDir = ".";
-		}
-
-		try {
-			maxAttSize = Integer.parseInt(PropertyFile.getConfiguration("/config/config.xml").getString("common-params.max-attachment-size"));
-		} catch (Exception e) {
 			maxAttSize = 5;
-		}
-
-		try {
-			maxMailSize = Integer.parseInt(PropertyFile.getConfiguration("/config/config.xml").getString("common-params.max-mail-size"));
-		} catch (Exception e) {
 			maxMailSize = 10;
-		}
-
 	}
 }

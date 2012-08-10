@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.								 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.model.mail.MailAccount"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.instance.MailInstance"%>
@@ -40,7 +41,7 @@ function submitForms(action) {
 		paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 	}
 	var fromUsers = new Array();
-	var user = {id : currentUser.userId, name: currentUser.longName};
+	var user = {id : newMail.attr('senderId'), name: currentUser.longName};
 	fromUsers.push(user);
 	paramsJson['from'] = {users: fromUsers };
 	console.log(JSON.stringify(paramsJson));
@@ -85,6 +86,7 @@ function submitForms(action) {
 	User cUser = SmartUtil.getCurrentUser();
 	String lastHref = SmartUtil.getLastHref(request);
 
+	String receiverId = request.getParameter("receiverId");
 	String folderId = request.getParameter("folderId");
 	String msgId = request.getParameter("msgId");
 	String sSendType = request.getParameter("sendType");
@@ -96,14 +98,19 @@ function submitForms(action) {
 		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
 		instance = new MailInstance();
 		instance.setMailContents(mailContents);
+	}else if(!SmartUtil.isBlankObject(receiverId)){
+		instance = new MailInstance();
+		User receiver = smartWorks.getUserById(receiverId);
+		instance.setReceivers(new User[]{receiver});
 	}
+	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
+<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" senderId="<%=cUser.getMailId()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">

@@ -61,6 +61,8 @@ smartPop = {
 
 	showUserInfo : function(input, top, left, directionUp){
 		var userId = input.attr("userId");
+		var longName = input.attr("longName");
+		var minPicture = input.attr("minPicture");
 		var profile = input.attr("profile");
 		var userDetail = input.attr("userDetail");		
 		var popUserInfo = $('#sw_pop_user_info');
@@ -76,9 +78,8 @@ smartPop = {
 						'</div>' +
 						'<div class="smartp_btn_space">' +
 							'<div class="fr">' +
-								'<span class="pop_icon_mail"><a href="" class="js_send_mail_to_user" userId="' + userId + '"></a></span>' +
-								'<span class="pop_icon_message"><a href="" class="js_leave_message_for_user" userId="' + userId + '"></a></span>' + 
-								'<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="' + userId + '"></a></span>' +
+								'<span class="pop_icon_mail"><a href="" class="js_send_mail_to_user" userId="' + userId + '" title="' + smartMessage.get("sendMailText") + '"></a></span>' +
+								'<span class="pop_icon_chat"><a href="" class="js_start_chat_with_user" userId="' + userId + '" longName="' + longName + '" minPicture="' + minPicture + '" title="' + smartMessage.get("startChatText") + '"></a></span>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -86,19 +87,36 @@ smartPop = {
 			'</div>').appendTo($(document.body));
 
 			popUserInfo = $('#sw_pop_user_info');
-
-			$('#sw_pop_user_info .js_send_mail_to_user').live('click', function(){
-				alert('Send mail to user!!');
+			$('#sw_pop_user_info .js_send_mail_to_user').die('click');
+			$('#sw_pop_user_info .js_send_mail_to_user').live('click', function(e){
+				var input = $(targetElement(e));
+				var receiverId = input.attr('userId');
+				smartPop.progressCenter();
+				$.get('new_mail.sw?receiverId=' + receiverId, function(data){
+					$('#content').html(data);
+					smartPop.closeProgress();
+				});
 				popUserInfo.hide();
 				return false;
 			});
-			$('#sw_pop_user_info .js_leave_message_for_user').live('click', function(){
-				alert('Leave message for user!!');
-				popUserInfo.hide();
-				return false;
-			});
-			$('#sw_pop_user_info .js_start_chat_with_user').live('click', function(){
-				alert('Start chat with user!!');
+			$('#sw_pop_user_info .js_start_chat_with_user').die('click');
+			$('#sw_pop_user_info .js_start_chat_with_user').live('click', function(e){
+				var input = $(targetElement(e));
+				var chatterId = input.attr('userId');
+				var chatterName = input.attr('longName');
+				var chatterPicture = input.attr('minPicture');
+				smartTalk.chattingRequest(new Array({
+					userId : currentUserId,
+					longName : currentUser.longName,
+					minPicture : currentUser.minPicture
+				}, {
+					userId : chatterId,
+					longName : chatterName,
+					minPicture : chatterPicture
+				}));
+				setTimeout(function(){
+					setRightPosition("resize", null);
+				}, 600);
 				popUserInfo.hide();
 				return false;
 			});
@@ -106,8 +124,7 @@ smartPop = {
 		popUserInfo.find('img').attr('src', profile);
 		popUserInfo.find('.js_user_information').html(userDetail);
 		popUserInfo.find('.js_send_mail_to_user').attr('userId', userId);
-		popUserInfo.find('.js_leave_message_for_user').attr('userId', userId);
-		popUserInfo.find('.js_start_chat_with_user').attr('userId', userId);
+		popUserInfo.find('.js_start_chat_with_user').attr('userId', userId).attr('longName', longName).attr('minPicture', minPicture);
 		if(directionUp){
 			popUserInfo.find('.up_point_b').hide();
 			popUserInfo.find('.up_point').show();
