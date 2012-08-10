@@ -579,7 +579,7 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 
 /* Noice */
 .noti_pic {float:left; margin: 0 5px 0 0}
-.noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:83%} /* Body Title로 들어갈 때 */
+.noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:72%} /* Body Title로 들어갈 때 */
 .noti_in [type="text"] {border:1px solid #c7c7c7; width:96px; height:20px} /* 전자결재 - 결재선 */
 .noti_in { margin-left:34px; line-height: 14px} /* img profile_size_c 뒤에 옴 */
 .noti_in_s { margin-left:26px; line-height: 13px} /* img profile_size_s 뒤에 옴 */
