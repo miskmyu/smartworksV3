@@ -53,7 +53,7 @@
 			}
 			if(SmartUtil.isBlankObject(approvalTask)){
 				for(TaskInstanceInfo task : tasks){
-					if(!SmartUtil.isBlankObject(task.getApprovalId())){
+					if(!SmartUtil.isBlankObject(task.getApprovalId()) && task.getStatus()!=Instance.STATUS_REJECTED){
 						approvalInstId = task.getApprovalId();
 						subject = task.getSubject();
 						content = task.getContent();
