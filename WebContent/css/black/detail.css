@@ -328,7 +328,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
  */
 .icon_video_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -118px transparent; height:16px; display:inline-block}
 .icon_web_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -1019px transparent; height:14px; display: block; line-height: 17px; padding: 0 0 0 18px; float:left}
-.icon_file_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -989px transparent; height:15px; display: block; line-height: 17px; padding: 0 0 0 18px; float:left}
+.icon_file_manual {background: url("../../images/body_icon.png") no-repeat scroll 0 -989px transparent; height:16px; display: block; line-height: 17px; padding: 0 0 0 18px; float:left}
 .icon_btn_newwork {background: url("../../images/body_icon.png") no-repeat scroll -249px 0 transparent; height:20px; display:inline-block; padding: 0 0 0 24px}
 .icon_btn_arrb {background: url("../../images/body_icon.png") no-repeat scroll -286px 0 transparent; height:4px; display:inline-block}
 .icon_btn_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -251px transparent; height:21px; display:inline-block; padding: 0 0 0 24px}
