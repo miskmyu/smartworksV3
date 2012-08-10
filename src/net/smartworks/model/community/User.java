@@ -175,6 +175,10 @@ public class User extends WorkSpace {
 	public void setMailAccounts(MailAccount[] mailAccounts) {
 		this.mailAccounts = mailAccounts;
 	}
+	public String getMailId(){
+		if(!this.isUseMail() || SmartUtil.isBlankObject(this.mailAccounts)) return null;
+		return this.mailAccounts[0].getEmailId();
+	}
 	public int getSpaceType(){
 		return ISmartWorks.SPACE_TYPE_USER;
 	}

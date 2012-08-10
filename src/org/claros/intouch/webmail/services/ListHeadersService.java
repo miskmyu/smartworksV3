@@ -262,14 +262,6 @@ public class ListHeadersService extends BaseService {
 			if (headers != null || supportsServerSorting) {
 				EmailHeader tmp = null;
 				int pageSize = 25;
-				String strPageSize = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.mailbox-page-size");
-				if (strPageSize != null) {
-					try {
-						pageSize = Integer.parseInt(strPageSize);
-					} catch (Exception e) {
-						pageSize = 25;
-					}
-				}
 				
 				// determine the message count. the method varies if server side or client side 
 				// sorting is used. 

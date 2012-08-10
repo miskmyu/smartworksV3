@@ -216,10 +216,10 @@ public class Smtp {
 							throw f;
 						}
 					}
-				}else if(profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")){
-					Transport tr = session.getTransport("smtp");
-					tr.connect(auth.getUsername(), auth.getPassword());
-					tr.sendMessage(mimeMsg, mimeMsg.getAllRecipients());
+//				}else if(profile.getSmtpAuthenticated() != null && profile.getSmtpAuthenticated().equals("true")){
+//					Transport tr = session.getTransport("smtp");
+//					tr.connect(auth.getUsername(), auth.getPassword());
+//					tr.sendMessage(mimeMsg, mimeMsg.getAllRecipients());
 				} else {
 					Transport.send(mimeMsg);
 				}
