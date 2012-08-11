@@ -61,7 +61,7 @@
 				success : function(data, status, jqXHR) {					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
+					document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 					smartPop.close();
 					return;
 				},

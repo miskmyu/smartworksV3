@@ -63,9 +63,9 @@ function submitForms(action) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 			var lastHref = newMail.attr('lastHref');
 			if(isEmpty(lastHref))
-				window.location.reload();
+				window.location.reload(true);
 			else
-				document.location.href = "smart.sw#" + lastHref; 
+				document.location.href = lastHref; 
 			smartPop.closeProgress();
 		},
 		error : function(e) {

@@ -32,10 +32,12 @@
 			if(workCategory.getProvidedBy() == Work.PROVIDED_BY_SYSTEM || workCategory.getProvidedBy() == Work.PROVIDED_BY_APPSTORE) continue;
 	%>
 			<!--  *** js_drill_down : sw_act_work.js에서 이클래스의 클릭이벤트를 받아서 트리구조르 드릴다운할수 있게 한다.. -->
-			<li class="js_drill_down ctgr_action_item">
-				<a href="worklist_by_category.sw" categoryId="<%=workCategory.getId()%>">
+			<li class="js_drill_down ctgr_action_item ">
+				<a href="worklist_by_category.sw" class="js_builder" categoryId="<%=workCategory.getId()%>">
 					<span class="<%=workCategory.getIconClass()%>"></span>
-					<span class="nav_sub_area"><%=workCategory.getName()%></span>
+					<span class="nav_sub_area"><%=workCategory.getName()%>
+						<span class="js_progress_span"></span>
+					</span>
  				<%
 				if(workCategory.getProvidedBy()!=Work.PROVIDED_BY_SYSTEM){
 				%>

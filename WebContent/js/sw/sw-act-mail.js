@@ -24,9 +24,9 @@ $(function() {
 		var newMail = input.parents('.js_new_mail_page');
 		var lastHref = newMail.attr('lastHref');
 		if(isEmpty(lastHref))
-			window.location.reload();
+			window.location.reload(true);
 		else
-			document.location.href = "smart.sw#" + lastHref;
+			document.location.href = lastHref;
 		return false;
 	});
 
@@ -53,9 +53,9 @@ $(function() {
 				smartPop.closeProgress();
 				var lastHref = mailSpace.attr('lastHref');
 				if(isEmpty(lastHref))
-					window.location.reload();
+					window.location.reload(true);
 				else
-					document.location.href = "smart.sw#" + lastHref;
+					document.location.href = lastHref;
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -104,7 +104,11 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
 					input.find('option:first').attr('selected', 'selected').siblings('selected', '');
-					document.location.href = "smart.sw#" + mailList.attr('currentHref');
+					var currentHref = mailList.attr('currentHref');
+					if(isEmpty(currentHref))
+						window.location.reload(true);
+					else
+						document.location.href = currentHref; 
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -143,7 +147,11 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + mailList.attr('currentHref');
+					var currentHref = mailList.attr('currentHref');
+					if(isEmpty(currentHref))
+						window.location.reload(true);
+					else
+						document.location.href = currentHref;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -176,10 +184,12 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
 					var lastHref = mailSpace.attr('lastHref');
-					if(isEmpty(lastHref))
-						window.location.reload();
-					else
-						document.location.href = "smart.sw#" + lastHref;
+					
+					if(isEmpty(lastHref)){
+						window.location.reload(true);
+					}else{
+						document.location.href = lastHref;
+					}
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -216,7 +226,11 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + mailList.attr('currentHref');
+					var currentHref = mailList.attr('currentHref');
+					if(isEmpty(currentHref))
+						window.location.reload(true);
+					else
+						document.location.href = currentHref; 
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -349,7 +363,7 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-					window.location.reload();
+					window.location.reload(true);
 					smartPop.closeProgress();
 				},
 				error : function(e) {

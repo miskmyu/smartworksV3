@@ -552,7 +552,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					window.location.reload();
+					window.location.reload(true);
 					smartPop.closeProgress();				
 				},
 				error : function(e) {
@@ -685,7 +685,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					window.location.reload();
+					window.location.reload(true);
 					smartPop.closeProgress();				
 				},
 				error : function(e) {
@@ -805,7 +805,7 @@ $(function() {
 					}
 				}else{
 					input.attr('value', '');
-					window.location.reload();
+					window.location.reload(true);
 				}
 				smartPop.closeProgress();				
 			},
@@ -853,9 +853,9 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					var lastHref = workSpacePage.attr('lastHref');
 					if(isEmpty(lastHref))
-						window.location.reload(); 
+						window.location.reload(true); 
 					else
-						document.location.href = "smart.sw#" + lastHref; 
+						document.location.href = lastHref; 
 					smartPop.closeProgress();
 				},
 				error : function(e) {
@@ -923,9 +923,9 @@ $(function() {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
 					var lastHref =  workSpacePage.attr('lastHref');
 					if(isEmpty(lastHref))
-						window.location.reload();
+						window.location.reload(true);
 					else
-						document.location.href = "smart.sw#" + lastHref;
+						document.location.href = lastHref;
 					smartPop.closeProgress();
 				},
 				error : function(e) {
@@ -1001,12 +1001,12 @@ $(function() {
 			success : function(data, status, jqXHR) {
 				if(isAutoApproval == 'true'){
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("joinGroupSucceed"), function(){
-						window.location.reload();
+						window.location.reload(true);
 						smartPop.closeProgress();
 					});
 				}else{
 					smartPop.showInfo(smartPop.INFO, smartMessage.get("joinGroupRequestSucceed"), function(){
-						window.location.reload();
+						window.location.reload(true);
 						smartPop.closeProgress();
 					});					
 				}
@@ -1043,7 +1043,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					document.location.href = "smart.sw#home.sw";
+					document.location.href = "home.sw";
 					smartPop.closeProgress();
 				},
 				error : function(e) {
