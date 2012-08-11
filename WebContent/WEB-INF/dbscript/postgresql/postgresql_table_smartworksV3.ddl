@@ -588,6 +588,7 @@ CREATE TABLE aprapr (
     aprstatus character varying(50),
     aprtype character varying(50),
     aprapprover character varying(50),
+    aprDueDate character varying(100),
     aprismanda boolean,
     aprismodify boolean,
     approvalline character varying(100),
