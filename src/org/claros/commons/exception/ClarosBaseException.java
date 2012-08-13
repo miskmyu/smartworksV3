@@ -66,27 +66,27 @@ public class ClarosBaseException extends ServletException {
 	
 	static {
 		try {
-			String configPath = "/config/config.xml";
-			Configuration configXml = PropertyFile.getConfiguration(configPath);
-			String resourceType = configXml.getString("error-handling.resource-type");
-			if (resourceType != null) {
-				if (resourceType.equals("FILE")) {
-					log.debug("Error messages are read from FILE resource");
-					String resourceFile = configXml.getString("error-handling.resource-path");
-					if (resourceFile != null) {
-						if (resourceFile.indexOf("%respath%") >= 0) {
-							resourceFile = Utility.replaceAllOccurances(resourceFile, "%respath%", Paths.getResFolder());
-						}
-						log.debug("Error messages are read from path: " + resourceFile);
-						msgs = new PropertiesConfiguration(resourceFile);
-						log.debug("Error messages file initialized successfully");
-					}
-				} else if (resourceType.equals("DB")) {
-					// TODO: not implemented yet
-				}
-			} else {
-//				log.fatal("Could not initialize error messages file. Check the config-error statements in config.xml file. resource-type can not be read.");
-			}
+//			String configPath = "/config/config.xml";
+//			Configuration configXml = PropertyFile.getConfiguration(configPath);
+//			String resourceType = configXml.getString("error-handling.resource-type");
+//			if (resourceType != null) {
+//				if (resourceType.equals("FILE")) {
+//					log.debug("Error messages are read from FILE resource");
+//					String resourceFile = configXml.getString("error-handling.resource-path");
+//					if (resourceFile != null) {
+//						if (resourceFile.indexOf("%respath%") >= 0) {
+//							resourceFile = Utility.replaceAllOccurances(resourceFile, "%respath%", Paths.getResFolder());
+//						}
+//						log.debug("Error messages are read from path: " + resourceFile);
+//						msgs = new PropertiesConfiguration(resourceFile);
+//						log.debug("Error messages file initialized successfully");
+//					}
+//				} else if (resourceType.equals("DB")) {
+//					// TODO: not implemented yet
+//				}
+//			} else {
+////				log.fatal("Could not initialize error messages file. Check the config-error statements in config.xml file. resource-type can not be read.");
+//			}
 		} catch (Exception e) {
 //			log.fatal("Could not initialize error messages file. Check the config-error statements in config.xml file", e);
 		}

@@ -73,7 +73,7 @@ function logout() {
 <!--  style 확인 필요함 -->
 <div class="company_logo">
 	<span>
-		<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
+		<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>">
 			<img class="js_auto_picture js_company_logo_src" src="<%=companyLogo%>" />
 		</a>
 	</span>
@@ -150,20 +150,24 @@ function logout() {
 			<!-- 할당업무 알림 영역  //-->
 	
 			<!-- 메일 알림 영역  -->
-			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 
-			<li class="icon_mail">
-				<%--<a id="mailbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MAILBOX%> --%>
-				<a id="mailbox_count" href="mail_list.sw?cid=<%=mailInboxId%>" class="js_content"
-					title="<fmt:message key='header.notice.icon.mailbox'/>">
-					<%
-				 	if (notices.length > Notice.TYPE_MAILBOX && notices[Notice.TYPE_MAILBOX].getLength() > 0) {
-					%> 
-						<em class="icon_number"><%=notices[Notice.TYPE_MAILBOX].getLength()%><span></span></em> 
-					<%
-					}
-					%>
-				</a>
-			</li>
+			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. -->
+			<%if(cUser.isUseMail()){ %> 
+				<li class="icon_mail js_notice_count">
+					<%--<a id="mailbox_count" href="notice_message_box.sw?noticeType=<%=Notice.TYPE_MAILBOX%> --%>
+					<a id="mailbox_count" class="js_mailbox_notice" href="" mailInboxId="<%=mailInboxId%>"
+						title="<fmt:message key='header.notice.icon.mailbox'/>">
+						<%
+					 	if (notices.length > Notice.TYPE_MAILBOX && notices[Notice.TYPE_MAILBOX].getLength() > 0) {
+						%> 
+							<em class="icon_number"><%=notices[Notice.TYPE_MAILBOX].getLength()%><span></span></em> 
+						<%
+						}
+						%>
+					</a>
+				</li>
+			<%
+			} 
+			%>
 			<!-- 메일 알림 영역  //-->
 	
 			<!-- 임시저장 알림 영역  -->
@@ -196,21 +200,21 @@ function logout() {
 	<ul class="fl">
 		<!--  홈메뉴  -->
 		<li class="idx1">
-				<a href="smart.sw#home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
+				<a href="home.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_HOME + cUser.getId()%>"><fmt:message key="header.top_menu.home" /></a>
 		</li>
 		<!--  홈메뉴  //-->
 <%-- 
 		<!--  스마트케스트 메뉴  -->
 		<li class="idx2">
  			<span>
- 				<a href="smart.sw#smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
+ 				<a href="smartcaster.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_SMARTCASTER + cUser.getId()%>"><fmt:message key="header.top_menu.smartcaster" /></a> 
  			</span> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
  --%>
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
- 				<a href="smart.sw#dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
+ 				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
 		</li>
 		<!--  대시보드 메뉴  //-->
 	</ul>
@@ -261,7 +265,7 @@ function logout() {
 	<div class="pop js_header_user_settings" style="display: none">
 		<ul>
 			<li><a
-				href="smart.sw#my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
+				href="my_profile.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_MYPROFILE + cUser.getId()%>"><fmt:message
 						key="header.global_menu.edit_my_profile" /> </a>
 			</li>
 			<li><a href="javascript:logout();"><fmt:message key="header.global_menu.logout" />

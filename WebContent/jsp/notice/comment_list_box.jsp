@@ -51,7 +51,7 @@
 					<ul>
 					<li>
 						<div class="info_ms_section">
-							<a href="smart.sw#<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
+							<a href="<%=work.getController()%>?cid=<%=work.getContextId()%>&workId=<%=work.getId() %>">
 								<span class="<%=work.getIconClass()%>"></span>
 								<span><%=work.getName()%></span>
 							</a>
@@ -78,7 +78,7 @@
 				%>
 					<li>
 					<div class="info_ms_section">
-						<a href="smart.sw#<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>">
+						<a href="<%=workInstance.getController()%>?cid=<%=workInstance.getContextId() %>&workId=<%=work.getId() %>">
 							<span class="<%=work.getIconClass()%>"></span>
 							<span class="tb"><%=workInstance.getSubject()%></span> 
 						</a>

@@ -65,7 +65,7 @@ function submitForms() {
 		success : function(data, status, jqXHR) {
 			
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
-			window.location.reload();
+			window.location.reload(true);
 			smartPop.closeProgress();
 		},
 		error : function(e) {

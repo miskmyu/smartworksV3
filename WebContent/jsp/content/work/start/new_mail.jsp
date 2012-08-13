@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.								 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="net.smartworks.model.mail.MailAccount"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.instance.MailInstance"%>
@@ -40,7 +41,7 @@ function submitForms(action) {
 		paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 	}
 	var fromUsers = new Array();
-	var user = {id : currentUser.userId, name: currentUser.longName};
+	var user = {id : newMail.attr('senderId'), name: currentUser.longName};
 	fromUsers.push(user);
 	paramsJson['from'] = {users: fromUsers };
 	console.log(JSON.stringify(paramsJson));
@@ -62,9 +63,9 @@ function submitForms(action) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 			var lastHref = newMail.attr('lastHref');
 			if(isEmpty(lastHref))
-				window.location.reload();
+				window.location.reload(true);
 			else
-				document.location.href = "smart.sw#" + lastHref; 
+				document.location.href = lastHref; 
 			smartPop.closeProgress();
 		},
 		error : function(e) {
@@ -109,7 +110,7 @@ function submitForms(action) {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>">
+<div class="section_portlet js_new_mail_page js_mail_space_page" lastHref="<%=lastHref %>" msgId="<%=msgId %>" folderId="<%=folderId%>" senderId="<%=cUser.getMailId()%>">
 	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block;">
 		<ul class="portlet_r" style="display: block;">
