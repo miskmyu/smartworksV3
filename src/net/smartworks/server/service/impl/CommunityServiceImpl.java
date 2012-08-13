@@ -1274,7 +1274,7 @@ public class CommunityServiceImpl implements ICommunityService {
 		if(!CommonUtil.isEmpty(users)) {
 			for(int i=0; i < users.subList(0, users.size()).size(); i++) {
 				Map<String, String> userMap = users.get(i);
-				userIdArray[i] = userMap.get("userId");
+				userIdArray[i] = userMap.get("id");
 			}
 		}
 		if (userIdArray == null || userIdArray.length == 0)
