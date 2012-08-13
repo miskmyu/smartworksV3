@@ -3479,7 +3479,7 @@ public class ModelConverter {
 				boolean isStartActivity = CommonUtil.toBoolean(isStartActivityStr);
 				SmartTaskInfo smartTaskInfo = new SmartTaskInfo();
 				
-				if (taskDef != null && taskDef.getAssignee().indexOf("@") != -1) {
+				if (taskDef != null && taskDef.getAssignee() != null && taskDef.getAssignee().indexOf("@") != -1) {
 					UserInfo performerInfo = getUserInfoByUserId(taskDef.getAssignee());
 					smartTaskInfo.setAssignedUser(performerInfo);
 				} else {

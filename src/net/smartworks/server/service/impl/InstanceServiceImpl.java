@@ -1787,6 +1787,9 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else {
 						continue;
 					}
+				} else {
+					if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("boolean"))
+						value = "true";
 				}
 				SwdDataField fieldData = new SwdDataField();
 				fieldData.setId(fieldId);
@@ -2399,7 +2402,18 @@ public class InstanceServiceImpl implements IInstanceService {
 						value = resultValue;
 					}
 				} else if(fieldValue instanceof String) {
-					value = (String)smartFormInfoMap.get(fieldId);
+					
+					if (fieldTemp.getFormFieldType().equalsIgnoreCase("boolean")) {
+						String tempValue = (String)smartFormInfoMap.get(fieldId);
+						if (tempValue == null || tempValue.equalsIgnoreCase("off") || tempValue.equalsIgnoreCase("false")) {
+							value = "false";
+						} else if (tempValue.equalsIgnoreCase("on") || tempValue.equalsIgnoreCase("true")) {
+							value = "true";
+						}
+					} else {
+						value = (String)smartFormInfoMap.get(fieldId);
+					}
+					
 					if(formId.equals(SmartForm.ID_MEMO_MANAGEMENT)) {
 						if(fieldId.equals("12"))
 							value = StringUtil.subString(value, 0, 20, "...");
