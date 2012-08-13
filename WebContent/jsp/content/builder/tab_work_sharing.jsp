@@ -124,7 +124,7 @@
 					</ul>
 				</div>
 				<!-- tab//-->
-				<div class="solid_line"></div>
+				<div class="solid_line cb"></div>
 			</div>
 			<!-- 타이틀 -->
 			<!-- 컨텐츠 -->

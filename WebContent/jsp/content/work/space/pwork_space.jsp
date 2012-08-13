@@ -143,10 +143,10 @@
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->
-					<div class="txt_btn fr cb" style="height:auto">
+					<div class="txt_btn fr cb h_auto">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
-	                <div class="fr txt_btn" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+	                <div class="txt_btn fr cb h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				</div>
 				
