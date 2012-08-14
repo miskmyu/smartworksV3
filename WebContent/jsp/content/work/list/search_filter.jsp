@@ -63,7 +63,7 @@
 
 
 <!-- 상세 필터 -->
-<div class="filter_group fr js_search_filter_page" filterId="<%=filterId%>" workType="<%=workType%>" workId="<%=workId%>">
+<div class="filter_group js_search_filter_page" filterId="<%=filterId%>" workType="<%=workType%>" workId="<%=workId%>">
 	<table>
 		<tr>
 			<td>
@@ -340,7 +340,7 @@
 				</a> 
 			</span>
 		</div>
-		<form name="frmSearchFilterActions" class="pr10 js_validation_required">
+		<form name="frmSearchFilterActions" class="pr10 fr js_validation_required">
 			<input class="fieldline" style="width:160px; line-height: 16px" type="text" name="txtNewFilterName" value="<%=filterName %>" />
 		</form>
 		
