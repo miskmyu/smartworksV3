@@ -107,21 +107,45 @@ $(function() {
 	 * 한다. 실행후에는, class="js_notice_message_box'로 지정된 알림아이콘들에서 모든 current를 지우고,
 	 * 현재 선택된곳에만 current를 추가한다.
 	 */
-	$('.js_notice_count a').swnavi({
-		target : 'notice_message_box',
-		before : function(event) {
-			smartPop.progressNav($('div.js_notice_icons_area li:last'));
-			$('#notice_message_box').hide();
-			$('.js_notice_count').find('a').removeClass('current');
-		},
-		after : function(event) {
-			$(targetElement(event)).parents('.js_notice_count:first').find('a')
-					.addClass('current');
-			smartPop.closeProgress();
-			$('#notice_message_box').show();
+	$('.js_notice_count a').live('click', function(event){
+		var input = $(targetElement(event)).parents('.js_notice_count:first').find('a');
+		smartPop.progressNav($('div.js_notice_icons_area li:last'));
+		$('#notice_message_box').hide();
+		$('.js_notice_count').find('a').removeClass('current');
+		if(input.hasClass('js_mailbox_notice')){
+			var mailInboxId = input.attr('mailInboxId');
+			$.ajax({
+				url : "mail_list.sw?cid=" + mailInboxId,
+				data : {},
+				success : function(data, status, jqXHR) {
+					$('#content').html(data);
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
+				}
+			});
+			
+		}else if(!isEmpty(input.children())){
+			var href = input.attr('href');
+			$.ajax({
+				url : href,
+				data : {},
+				success : function(data, status, jqXHR) {
+					input.addClass('current');
+					$('#notice_message_box').html(data).show();
+					smartPop.closeProgress();
+				},
+				error : function(xhr, ajaxOptions, thrownError){
+					smartPop.closeProgress();
+				}
+			});
+		}else{
+			smartPop.closeProgress();			
 		}
+		return false;
 	});
-
+	
 	// Notice Message Box 에서 항목의 삭제버튼을 클릭하면 실행되는 기능.
 	// 선택된 항목에서, noticeId, noticeType, lastNoticeId 를 가져와서, ajax 호출을 한다.
 	// 서버에서는 항목을 삭제하고, 삭제된 상태에서의 10개의 항목을 가져다고 전달해준다.
@@ -213,6 +237,8 @@ $(function() {
 		if(isEmpty($(target).children())){
 			if(input.hasClass('js_popup'))
 				smartPop.progressCont(input.find('span:last'));
+			else if(input.hasClass('js_builder'))
+				smartPop.progressNav(input.find('span.js_progress_span'));						
 			else
 				smartPop.progressNav(input.find('span:last'));						
 			$.ajax({

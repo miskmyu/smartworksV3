@@ -110,7 +110,10 @@ function logout() {
 <link href="css/fullcalendar/fullcalendar.css" type="text/css" rel="stylesheet"/>
 <link href="smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="images/favicon/smartworks.ico"/>
-	
+
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<!--[if lte IE 8]><link rel="stylesheet" href="css/black/ie8.css" type="text/css" media="all"><![endif]-->
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
  
 <script type="text/javascript" src="js/jquery/jquery-1.6.2.min.js"></script>

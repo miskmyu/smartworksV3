@@ -7,7 +7,7 @@ $(function() {
 		$.ajax({
 			url : "start_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
-				window.location.reload();
+				window.location.reload(true);
 			}			
 		});
 		return false;
@@ -20,7 +20,7 @@ $(function() {
 		$.ajax({
 			url : "stop_work_service.sw?workId=" + workId,
 			success : function(data, status, jqXHR) {
-				window.location.reload();
+				window.location.reload(true);
 			}			
 		});
 		return false;

@@ -115,12 +115,13 @@
                         </div>
 		                    
 		            <!-- 우측 버튼-->
-		            <div class="txt_btn t_s11 fr">
+		            <div class="fr"  style="line-height: 30px">
+		            <div class="txt_btn t_s11 h_auto fr">
 		                <a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
 		            </div>
 		            
 					<!-- 전자결재, 업무전달 버튼들 -->
-					<div class="fr pt12">
+					<div class="fr cb" style="height:22px">
 						<%
 						if(forwardedTask == null){
 						%>
@@ -149,6 +150,8 @@
 	                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 					</div>
 					<!-- 전자결재, 업무전달 버튼들 //-->
+					</div>
+					<!-- 우측 버튼//-->
 		                    
                 	<div class="solid_line cb"></div>
                 </div>

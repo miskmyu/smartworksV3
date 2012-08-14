@@ -11,6 +11,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -124,8 +125,7 @@ public class MessageParser {
 	 */
 	private static ArrayList fetchParts(Part p, ArrayList parts) {
 		if (p == null) return null;
-		System.setProperty("mail.mime.base64.ignoreerrors", "true");
-		
+		System.setProperty("mail.mime.base64.ignoreerrors", "true");		
 		try {
             if (!p.isMimeType("text/rfc822-headers") && p.isMimeType("text/*")) {
             	try {
@@ -141,7 +141,16 @@ public class MessageParser {
 						pContent = "Message has an illegal encoding. " + e.getLocalizedMessage();
 					}
                     if (pContent != null) {
-                    	myPart.setContent(pContent.toString());
+                    	String[] htmlArray = pContent.toString().split("</html>");
+                    	if(htmlArray.length>1){
+                    		myPart.setContent(htmlArray[0] + "</html>");
+                    	}else{
+                    		htmlArray = pContent.toString().split("</HTML>");
+                        	if(htmlArray.length>1)
+                        		myPart.setContent(htmlArray[0] + "</html>");
+                        	else
+                        		myPart.setContent(pContent.toString());
+                    	}
                     } else {
                     	myPart.setContent("Illegal content");
                     }

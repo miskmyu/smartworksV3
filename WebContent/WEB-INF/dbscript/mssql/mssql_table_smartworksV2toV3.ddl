@@ -783,3 +783,5 @@ ALTER TABLE SwOrgUser add adjunctDeptIds varchar(500);
 ALTER TABLE SwMailAccount add mailUserName varchar(50);
 
 ALTER TABLE SwMailAccount add mailDeleteFetched varchar(10);
+
+ALTER TABLE aprapr add aprDueDate character varying(100);

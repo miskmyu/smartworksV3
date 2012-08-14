@@ -92,7 +92,7 @@ function submitForms(e) {
 							type : 'POST',
 							data : JSON.stringify(paramsJson),
 							success : function(data, status, jqXHR) {
-								window.location.reload();
+								window.location.reload(true);
 								smartPop.closeProgress();
 							},
 							error : function(e) {

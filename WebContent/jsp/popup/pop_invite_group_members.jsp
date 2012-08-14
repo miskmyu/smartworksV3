@@ -53,7 +53,7 @@
 				type : 'POST',
 				data : JSON.stringify(newParamsJson),
 				success : function(data, status, jqXHR) {
-					window.location.reload();
+					window.location.reload(true);
 					smartPop.closeProgress();
 				},
 				error : function(e) {

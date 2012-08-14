@@ -9,25 +9,6 @@
 <%@page import="net.smartworks.service.ISmartWorks"%>
 <%@ page contentType="text/html; charset=utf-8"%>
 
-<%-- <%
-	System.out.println("request url = " + request.getRequestURI());
-	StringBuffer url = request.getRequestURL();
-	String uri = request.getRequestURI();
-	String req = request.toString();
-	String[] contents = request.getRequestURI().split("#");
- 	if(request.getRequestURI().split("#").length==1){
-		response.sendRedirect("smart.sw#home.sw");
-	}else{
-%>
- --%>
-<script>
-
-if(!Request.isAjaxCall()){
-		document.location.href = "smart.sw#home.sw";
-	}
-	
-</script>
-
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();

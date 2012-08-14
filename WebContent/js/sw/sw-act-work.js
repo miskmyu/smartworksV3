@@ -809,7 +809,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					smartPop.closeProgress();
-					window.location.reload();
+					window.location.reload(true);
 					return false;
 				},
 				error : function(e) {
@@ -882,7 +882,7 @@ $(function() {
 				success : function(data, status, jqXHR) {
 					
 					smartPop.closeProgress();
-					window.location.reload();
+					window.location.reload(true);
 					return false;
 				},
 				error : function(e) {
@@ -926,7 +926,7 @@ $(function() {
 					
 					// 정보관리업무 목록 페이지로 이동한다.....
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + "iwork_list.sw?cid=iw.li." + workId;					
+					document.location.href = "iwork_list.sw?cid=iw.li." + workId;					
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -989,7 +989,7 @@ $(function() {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
+					document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 					return;
 				},
 				error : function(e) {
@@ -1050,7 +1050,7 @@ $(function() {
 					
 					// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 					smartPop.closeProgress();
-					document.location.href = "smart.sw#" + "pwork_list.sw?cid=pw.li." + workId;
+					document.location.href = "pwork_list.sw?cid=pw.li." + workId;
 					return;
 				},
 				error : function(e) {

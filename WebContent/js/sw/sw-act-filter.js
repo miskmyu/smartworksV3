@@ -167,7 +167,7 @@ $(function() {
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					smartPop.progressCenter();
-					document.location.href = "smart.sw#" + href;
+					document.location.href = href;
 				},
 				error : function(e) {
 					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

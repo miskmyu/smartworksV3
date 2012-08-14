@@ -76,7 +76,7 @@
 							data : JSON.stringify(paramsJson),
 							success : function(data, status, jqXHR) {
 								// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-								document.location.href = "smart.sw#home.sw";
+								document.location.href = "home.sw";
 								smartPop.closeProgress();
 							},
 							error : function(e) {
@@ -101,7 +101,7 @@
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
 					// 사용자정보 수정이 정상적으로 완료되었으면, 현재 페이지에 그대로 있는다.
-					document.location.href = "smart.sw#home.sw";
+					document.location.href = "home.sw";
 					smartPop.closeProgress();
 				},
 				error : function(e) {
