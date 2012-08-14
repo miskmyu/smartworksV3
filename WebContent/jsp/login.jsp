@@ -47,7 +47,7 @@
 			<!-- Header -->
 			<div id="lo_header">
 				<div class="lo_logo">
-					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="images/lo_logo_f.gif" /></a>
+					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="images/lo_logo_f.png" /></a>
 				</div>
 	
 				<form class="lo_idp t_wh" action="j_spring_security_check" method="post">
