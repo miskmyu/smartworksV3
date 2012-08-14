@@ -42,10 +42,10 @@
 				<div class="title"><%=CommonUtil.toNotNull(department.getFullpathName()) %></div>
 				<div><%=CommonUtil.toNotNull(department.getDesc()) %></div>
 			</div>
-			<%if(department.amIAdministrator(cUser)){ %>
-			<div class="txt_btn">	
+			<%--<%if(department.amIAdministrator(cUser)){ %>
+			 <div class="txt_btn">	
 				<a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
-			</div>
+			</div> --%>
 			<div class="solid_line cb"></div>
 		</div>
 		<!-- Title //-->
