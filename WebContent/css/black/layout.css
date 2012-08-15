@@ -446,7 +446,6 @@ li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .txt_btn_height {height:16px; padding: 5px 0; text-align: center}
 .txt_btn.deliver {margin: 0 10px 10px; color: #979797; border-bottom: 1px dotted #cccccc}
 
-    
 /* 검색- 자동 완성어 list, layer_pop list */
 .srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; max-height:330px; overflow-y:auto; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
 .srch_list li, .srch_list_nowid li {position:relative; color:#454545}

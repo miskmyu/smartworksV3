@@ -82,7 +82,7 @@
 
 /* 본문 댓글 관련 */
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
-.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:5px}
+.reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:7px}
 .reply {margin:0 20px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
 .reply .bg {background-color:#ededed}
 .list_reply {margin:0} /* 댓글 목록 */

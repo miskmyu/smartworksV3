@@ -119,12 +119,9 @@
 	                </div>
 		                    
 	            <!-- 우측 버튼-->
-	            <div class="txt_btn">
 	                <div class="fr t_s11"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
-	            </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
-				<div class="">
 					<div class="fr">
 						<%
 						if(forwardedTask == null){
@@ -145,13 +142,12 @@
 	            	</div>
 	            	
 	            <!-- 다이어그램 보기 -->
-					<div class="fr txt_btn">
+					<div class="fr txt_btn" style="height:auto">
 	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
 	                </div>
 	                <div class="cb" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				
-	            </div>
 	            <!-- 우측 버튼 -->
 		                    
                	<div class="solid_line cb"></div>

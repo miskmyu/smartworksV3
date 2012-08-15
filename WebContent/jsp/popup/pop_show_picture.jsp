@@ -89,7 +89,7 @@
 		<div class="mb5"><%=CommonUtil.toNotNull(image.getContent()) %></div>
 		<!-- 컨텐츠 //-->
 		
-		<div class="js_comments_box mb3" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
+		<div class="js_comments_box" <%if(image.getSubInstanceCount()==0){%>style="display:none"<%} %>>
 			<!-- 댓글 -->
 		   <div class="reply_point pos_reply_point"></div>
 		   <div class="reply_section" >  
