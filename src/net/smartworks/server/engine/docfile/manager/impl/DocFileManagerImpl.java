@@ -100,6 +100,7 @@ import org.hibernate.engine.SessionFactoryImplementor;
 import org.htmlcleaner.HtmlCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.xml.sax.InputSource;
@@ -582,7 +583,11 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
             jsonObject.put("fullPathName", formFile.getImageServerPath());
             jsonObject.put("fileSize", formFile.getFileSize());
             writer.print(jsonObject.toString());*/
-            writer.print("{success: \"" + true + "\", fileId: \"" + formFile.getId() + "\", fullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() +"\", localFilePath: \"" + formFile.getFilePath() + "\"}");
+            
+            String encodingFilePath = StringUtils.replace(formFile.getFilePath(), "\\", "[R_S]");
+            
+            
+            writer.print("{success: \"" + true + "\", fileId: \"" + formFile.getId() + "\", fullPathName: \"" + formFile.getImageServerPath() + "\", fileSize: \"" + formFile.getFileSize() +"\", localFilePath: \"" + encodingFilePath + "\"}");
         } catch (FileNotFoundException ex) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.print("{success: false}");

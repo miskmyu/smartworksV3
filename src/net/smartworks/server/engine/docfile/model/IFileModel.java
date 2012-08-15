@@ -38,5 +38,6 @@ public interface IFileModel {
 	public boolean isDeleteAction();
 	public void setDeleteAction(boolean deleteAction);
 	public int compareTo(HbFileModel o);
+	public String getFilePathUrl(String subPath);
 	
 }
