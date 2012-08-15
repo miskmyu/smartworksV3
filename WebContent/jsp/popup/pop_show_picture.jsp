@@ -148,8 +148,8 @@
 		    <!-- 댓글 //-->
 		</div>
 	    <div class="btns_action m0 js_action_btns">
-	    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
-	    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+	    	<a class="js_add_comment" href="" style="background:none; padding:0"><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+	    	<!--  <a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a> -->
 	    </div>
 	</div>
 	<!-- 팝업 컨텐츠 //-->
