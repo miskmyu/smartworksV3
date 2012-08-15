@@ -13,6 +13,8 @@ import net.smartworks.util.SmartUtil;
 public class Group extends WorkSpace {
 
 	public static final String DEFAULT_GROUP_PICTURE  = "default_group_picture";
+	public static final String GROUP_ID_PREFIX = "group_";
+
 	public static final String GROUP_TYPE_OPEN = "Open";
 	public static final String GROUP_TYPE_CLOSED = "Closed";
 	public static final String GROUP_TYPE_DEFAULT = GROUP_TYPE_OPEN;

@@ -1212,6 +1212,7 @@ $(function() {
 		return false;
 	});
 
+	var MAX_USERPICKER_HEIGHT = 330;
 	$('a.js_userpicker_button').live('click', function(e) {
 		var input = $(targetElement(e)).parents('.js_userpicker_button');
 		if(input.hasClass('js_selected_approver_info')){
@@ -1225,7 +1226,8 @@ $(function() {
 			listLeft = inputPosition.left;
 			var widthGap = listWidth - (approvalLineBox.width() - (inputPosition.left - approvalLineBoxPosition.left));
 			if(widthGap>0)
-				listLeft = listLeft-widthGap;  
+				listLeft = listLeft-widthGap;
+			
 			target.css({ "top" : listTop + "px"});
 			target.css({ "left" : listLeft + "px"});
 			target.css({ "position" : "absolute"});
@@ -1241,7 +1243,18 @@ $(function() {
 			var target = userField.find('.js_community_popup:first');
 			var width = userField.find('.form_value').find('div:first').width();
 			var isMultiUsers = userField.attr('multiUsers');
-			smartPop.selectUser(communityItems, target, width, isMultiUsers);
+
+			var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+			var inputPosition = input.position();
+			var inputOffset = input.offset();
+			var listTop = inputOffset.top + input.height();
+			var bottomUp = false;
+			if(listTop + MAX_USERPICKER_HEIGHT > documentHeight){
+				target.css({ "bottom" : inputPosition.top + "px"});
+				target.css({ "position" : "absolute"});
+				bottomUp = true;
+			}
+			smartPop.selectUser(communityItems, target, width, isMultiUsers, null, null, bottomUp);
 		}
 		return false;
 	});
@@ -1252,7 +1265,19 @@ $(function() {
 		var target = userField.find('.js_community_popup:first');
 		var width = userField.find('.form_value').find('div:first').width();
 		var isMultiUsers = userField.attr('multiUsers');
-		smartPop.selectEmailAddress(communityItems, target, width, isMultiUsers);
+
+		var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+		var inputPosition = userField.position();
+		var inputOffset = userField.offset();
+		var listTop = inputOffset.top + userField.height();
+		var bottomUp = false;
+		if(listTop + MAX_USERPICKER_HEIGHT > documentHeight){
+			target.css({ "bottom" : inputPosition.top + "px"});
+			target.css({ "position" : "absolute"});
+			bottomUp = true;
+		}
+
+		smartPop.selectEmailAddress(communityItems, target, width, isMultiUsers, bottomUp);
 		return false;
 	});
 

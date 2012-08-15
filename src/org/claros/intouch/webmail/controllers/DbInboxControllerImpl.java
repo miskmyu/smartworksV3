@@ -106,7 +106,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (headers != null) {
 						EmailHeader header = null;
-						for (int i=0;i<headers.size()  && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
+						for (int i=0;i<headers.size()  && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							header = (EmailHeader)headers.get(i);
 							int msgId = header.getMessageId();
 							try {
@@ -231,7 +231,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
 						EmailHeader header = null;
-						for (int i=0;i<msgs.length && toBeDeleted.size()<=MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
+						for (int i=0;i<msgs.length && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
 							Message msg = msgs[i];
 							int msgId = i+1;
 							try {

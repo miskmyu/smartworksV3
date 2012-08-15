@@ -10,9 +10,11 @@ import javax.mail.Address;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import net.smartworks.model.community.Department;
+import net.smartworks.model.community.Group;
+import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
-
-import org.claros.commons.configuration.PropertyFile;
 import org.claros.commons.mail.models.EmailPart;
 
 /**
@@ -163,19 +165,75 @@ public class Utility {
 		}
 	}
 
+	private static UserInfo[] addUserInfoArrays(UserInfo[] array1, UserInfo[] array2){
+		if(SmartUtil.isBlankObject(array1)) return array2;
+		if(SmartUtil.isBlankObject(array2)) return array1;
+		UserInfo[] result = new UserInfo[array1.length + array2.length];
+		for(int i=0; i<array1.length; i++)
+			result[i] = array1[i];
+		for(int i=0; i<array2.length; i++)
+			result[array1.length+i] = array2[i];
+		return result;
+		
+	}
+	
 	public static Address[] stringListToAddressArray(List<Map<String, String>> strList) throws Exception {
 		if (strList == null)
 			return null;
 		int size = strList.size();
 		if (size > 0) {
-			Address[] outAddr = new Address[size];
-			for(int counter=0; counter<size; counter++) {
-				Map<String, String> addr = (Map<String, String>)strList.get(counter);
+			UserInfo[] users = new UserInfo[size];
+			UserInfo[] departmentUsers = null;
+			UserInfo[] groupUsers = null;
+			UserInfo[] categoryUsers = null;
+			int userCount = 0;
+			
+			for(int i=0; i<size; i++){
+				Map<String, String> addr = (Map<String, String>)strList.get(i);
 				String fullname = addr.get("name");
 				String email = addr.get("id");
+				if(SmartUtil.isEmailAddress(email)){
+					users[userCount++] = new UserInfo(email, fullname);
+				}else if(!SmartUtil.isBlankObject(email)){
+					if(email.startsWith(Department.DEPARTMENT_ID_PREFIX)){
+						departmentUsers = Utility.addUserInfoArrays(departmentUsers, SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(email));
+					}else if(email.startsWith(Group.GROUP_ID_PREFIX)){
+						groupUsers = Utility.addUserInfoArrays(groupUsers, (UserInfo[])SwServiceFactory.getInstance().getCommunityService().getAllComsByGroupId(email));						
+					}else{
+						categoryUsers = Utility.addUserInfoArrays(categoryUsers, (UserInfo[])SwServiceFactory.getInstance().getCommunityService().getAllComsByCategoryId(email));
+					}
+				}
+			}
+			
+			UserInfo[] newUsers = new UserInfo[userCount];
+			for(int i=0; i<userCount; i++)
+				newUsers[i] = users[i];
+			
+			UserInfo[] totalUsers = null;
+			totalUsers = Utility.addUserInfoArrays(totalUsers, newUsers);
+			totalUsers = Utility.addUserInfoArrays(totalUsers, departmentUsers);
+			totalUsers = Utility.addUserInfoArrays(totalUsers, groupUsers);
+			totalUsers = Utility.addUserInfoArrays(totalUsers, categoryUsers);
+			
+			int totalCount = (SmartUtil.isBlankObject(totalUsers)) ? 0 : totalUsers.length;
+			int newTotalCount = 0;
+			UserInfo[] newTotalUsers = new UserInfo[totalCount];
+			for(int i=0; i<totalCount; i++){
+				int j=i+1;
+				for(; j<totalCount; j++)
+					if(totalUsers[i].getId().equals(totalUsers[j].getId()))
+						break;
+				if(j==totalCount){
+					newTotalUsers[newTotalCount++] = totalUsers[i];
+				}
+			}
+			size = newTotalCount;
+			Address[] outAddr = new Address[size];
+			for(int counter=0; counter<size; counter++) {
 				try {
+					UserInfo user = newTotalUsers[counter];
 					String charset = "utf-8";
-					outAddr[counter] = new InternetAddress(email, fullname, charset);
+					outAddr[counter] = new InternetAddress(user.getId(), user.getLongName(), charset);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
