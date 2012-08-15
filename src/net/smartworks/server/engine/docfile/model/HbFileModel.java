@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
+import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.XmlUtil;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -231,6 +232,16 @@ public class HbFileModel implements IFileModel, Serializable, Comparable<HbFileM
 	@Override
 	public int compareTo(HbFileModel o) {
 		return String.valueOf(this.getWrittenTime()).compareTo(String.valueOf(((HbFileModel)o).getWrittenTime()));
+	}
+	public String getFilePathUrl(String subPath) {
+		
+		String fileName = this.getFileName();
+		String imageServerPath = this.getImageServerPath();
+		if (CommonUtil.isEmpty(subPath)) {
+			return imageServerPath + "/"+ fileName;
+		} else {
+			return imageServerPath + "/"+ subPath +"/"+ fileName;
+		}
 	}
 
 }

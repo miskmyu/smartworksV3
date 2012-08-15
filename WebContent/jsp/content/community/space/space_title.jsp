@@ -43,9 +43,10 @@
 				<div><%=CommonUtil.toNotNull(department.getDesc()) %></div>
 			</div>
 			<%if(department.amIAdministrator(cUser)){ %>
-			<div class="txt_btn">	
-				<a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a><%} %>
+			 <div class="txt_btn">	
+				<a class="fr js_content" href="update_department_space.sw?departmentId=<%=department.getId()%>"><fmt:message key="common.title.space_setting"/></a>
 			</div>
+			<%} %>
 			<div class="solid_line cb"></div>
 		</div>
 		<!-- Title //-->
@@ -61,9 +62,9 @@
 				<div><%=CommonUtil.toNotNull(group.getDesc()) %></div>
 			</div>
 			<%if(group.amIAdministrator(cUser)){ %>
-			<div class="txt_btn">	
-				<a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting"/></a>
-			</div>
+				<div class="txt_btn">	
+					<a class="fr js_content" href="update_group_space.sw?groupId=<%=group.getId()%>"><fmt:message key="common.title.space_setting"/></a>
+				</div>
 			<%} %>
 			<div class="solid_line cb"></div>
 		</div>

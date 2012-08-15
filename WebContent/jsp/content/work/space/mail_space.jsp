@@ -98,7 +98,9 @@
 				<div class="list_contents mail_list_section">
 					<div class="view_title">
 						<h1><%=instance.getSubject() %></h1>
-					    <span class="fr t_date mt10"><%=instance.getSendDate().toLocalDateLongString() %></span>
+						<!-- Start jy,bae 메일상세보기에서 미래시간으로 나오는 버그 수정(toLocalDateLongString()에서 toDateTimeSimpleString()로 수정 -->
+					    <span class="fr t_date mt10"><%=instance.getSendDate().toDateTimeSimpleString() %></span>
+					    <!-- End 2012.08.14-->
 					    <dl>
 					    	<dt><fmt:message key="common.title.sender"/> :</dt>
 					        <dd><%=instance.getSender().getEmailAddressShown() %></dd>

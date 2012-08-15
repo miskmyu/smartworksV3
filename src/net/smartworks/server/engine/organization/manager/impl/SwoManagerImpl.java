@@ -3143,7 +3143,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			queryBuffer.append(" 		, usr.internalNo ");
 			queryBuffer.append(" 		, usr.modifiedTime ");
 			queryBuffer.append(" 		, dept.id as deptId ");
-			queryBuffer.append(" 		, user.adjunctDeptIds ");
+			queryBuffer.append(" 		, usr.adjunctDeptIds ");
 			queryBuffer.append(" 		, dept.name as deptName ");
 			queryBuffer.append(" 		, dept.description as deptDesc ");
 			queryBuffer.append("  from sworguser usr, sworgdept dept ");
