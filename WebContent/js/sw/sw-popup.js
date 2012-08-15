@@ -580,13 +580,12 @@ smartPop = {
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
 						var input = $(targetElement(e));
-						var recordId = input.attr('instId');
+						var recordId = input.parents('tr:first').attr('instId');
 						var fieldId = target.attr('refFormField');
-						/*var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
-						var keyPos = keyField.prevAll('th').length;*/
-						
+						//Start. jy.Bae 기존 소스는 keyField가 기존 필드들을 건너뛰고 있는 것만 숫자를 세어서, 빌더설정한 것과 값이 틀려 fieldId로 비교하게 함.
 						//pop_iwork_instance_list.jsp의  td의 필드아이디와 빌더설정한 필드아이디가 같은걸 반환함.
-						var value = $(input.parents('tr').find('td')).find('a[fieldId="'+fieldId+'"]').text();
+						var value = input.parents('tr:first').find('td[fieldId="' + fieldId +'"]').text();
+						//End.  2012.08.15
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
 						inputTarget.attr('value', value);
@@ -819,11 +818,11 @@ smartPop = {
 					$('.js_pop_select_work_item').die('click');
 					$('.js_pop_select_work_item').live( 'click', function(e){
 						var input = $(targetElement(e));
-						var recordId = input.attr('instId');
+						var recordId = input.parents('tr:first').attr('instId');
 						var fieldId = target.attr('refFormField');
 						/*var keyField = input.parents('tbody').find('tr.js_instance_list_header').find('th[fieldId="'+fieldId+'"]');
 						var keyPos = keyField.prevAll('th').length;*/
-						var value = $(input.parents('tr').find('td')).find('a[fieldId="'+fieldId+'"]').text();
+						var value = input.parents('tr:first').find('td[fieldId="' + fieldId +'"]').text();
 						target.attr('refRecordId', recordId);
 						var inputTarget = target.find('input');
 						inputTarget.attr('value', value);
