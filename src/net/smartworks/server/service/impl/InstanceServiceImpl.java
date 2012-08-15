@@ -1033,8 +1033,14 @@ public class InstanceServiceImpl implements IInstanceService {
 								mappingRecords = getSwdManager().getRecordsByMappingForm(userId, newRecord,  formLinkMap.get(formLinkId));
 							}
 							
-							if (CommonUtil.isEmpty(mappingRecords)) 
+							if (CommonUtil.isEmpty(mappingRecords)) {
+
+								SwdDataField tempDataField = oldRecord.getDataField(fieldId);
+								tempDataField.setValue("");
+								resultStack.push(tempDataField);							
+								
 								continue;
+							}
 							
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
 								
