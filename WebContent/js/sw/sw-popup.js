@@ -948,7 +948,7 @@ smartPop = {
 
 	showPicture : function(instanceId){
 		$.get("pop_show_picture.sw?instId=" + instanceId, function(data){
-			var width = 610;
+			var width = 620;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({
 				opacity: 50,

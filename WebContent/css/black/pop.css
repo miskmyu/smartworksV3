@@ -10,7 +10,7 @@
 .pop_corner_all .body_titl_pic .txt_btn {padding: 0 0 33px; margin:0}
 .pop_corner_all .body_titl .info { line-height:24px}
 .pop_corner_all .original_picture {margin:0 0 15px 0; min-height:200px;}
-.pop_corner_all .original_picture img {max-width:570px}
+.pop_corner_all .original_picture img {max-width:580px}
 .pop_picture_section {max-height:550px; overflow-y:auto; overflow-x:hidden; margin:0 20px 10px}
 .pop_picture_section .reply_section {width:auto}
 .original_picture .arrow_space { position:absolute; width:580px; max-height:410px}

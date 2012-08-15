@@ -33,7 +33,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all pop_section_400 js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
+<div class="pop_corner_all js_show_picture_page" instanceId="<%=instId %>" workType="<%=SmartWork.TYPE_INFORMATION%>">
 	
 	<!-- 타이틀 -->
 	<div class="body_titl_pic mt5">
@@ -149,6 +149,7 @@
 		</div>
 	    <div class="btns_action m0 js_action_btns">
 	    	<a class="js_add_comment" href="" style="background:none; padding:0"><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+	    	<!-- 좋아요 기능 임시 사용정지합니다 -->
 	    	<!--  <a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a> -->
 	    </div>
 	</div>
