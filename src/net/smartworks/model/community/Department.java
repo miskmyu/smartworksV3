@@ -9,6 +9,7 @@ import net.smartworks.util.SmartUtil;
 public class Department extends WorkSpace {
 
 	public static final String  DEFAULT_DEPART_PICTURE  = "default_depart_picture";
+	public static final String DEPARTMENT_ID_PREFIX = "dept_";
 
 	private String 	desc = null;
 	private DepartmentInfo parent = null;

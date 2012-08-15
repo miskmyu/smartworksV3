@@ -1612,4 +1612,9 @@ public class SmartWorks implements ISmartWorks {
 		settingsService.addAdjunctMember(requestBody, request);
 	}
 
+	@Override
+	public UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception {
+		return communityService.getAllUsersByDepartmentId(departmentId);
+	}
+
 }

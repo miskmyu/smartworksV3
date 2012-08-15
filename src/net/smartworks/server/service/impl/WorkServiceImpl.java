@@ -88,6 +88,7 @@ import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
@@ -678,7 +679,9 @@ public class WorkServiceImpl implements IWorkService {
 			List<IFileModel> file = SwManagerFactory.getInstance().getDocManager().findFileGroup(pkg.getManualFileName());
 			if (file != null && file.size() != 0) {
 				resultwork.setManualFileName(file.get(0).getFileName());
-				resultwork.setManualFilePath(file.get(0).getFilePath());
+				if (CommonUtil.isEmpty(companyId))
+					companyId = SmartUtil.getCurrentUser().getCompanyId();
+				resultwork.setManualFilePath(SmartConfUtil.getInstance().getImageServer() +  companyId + "/" + file.get(0).getFileName());
 			}
 			
 			return resultwork;

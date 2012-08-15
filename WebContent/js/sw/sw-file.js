@@ -78,7 +78,13 @@ function fileUploader(groupId, target) {
         	}
         	if(isEmpty(file) || !responseJSON.success) return;
         	
-        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize).attr('fullPathName', responseJSON.fullPathName).attr('localFilePath', responseJSON.localFilePath);
+        	var localFilePath = responseJSON.localFilePath;
+        	while( localFilePath.indexOf('[R_S]') != -1 )
+        	{
+        		localFilePath = localFilePath.replace('[R_S]', '/');
+        	}
+        	
+        	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize).attr('fullPathName', responseJSON.fullPathName).attr('localFilePath', localFilePath);
         	var ext = getExt(fileName);
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
         	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);

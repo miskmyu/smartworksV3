@@ -335,6 +335,8 @@ public interface ISmartWorks {
 
 	public abstract CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception;
 
+	public abstract UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception;
+
 	public abstract CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception;
 
 	public abstract MailFolder[] getMailFoldersById(String folderId) throws Exception;
