@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.process.process.exception.PrcException;
@@ -26,6 +27,7 @@ import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.SubTaskWorkCond;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.util.SmartUtil;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -400,6 +402,11 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("		on ctg.parentId = ctg2.id ");
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
+		
+		//assginee가 나거나 엑세스레벨이 공개이거나 만약 비공개라면 엑세스벨류에 내가 있는것
+		String currentUser = SmartUtil.getCurrentUser().getId();
+		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and task.tskaccessValue like '%").append(currentUser).append("%')) ");
+		
 		queryBuffer.append("	and form.packageId is not null ");
 		if (!CommonUtil.isEmpty(packageStatus))
 			queryBuffer.append("	and pkg.status = :packageStatus ");

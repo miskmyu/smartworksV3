@@ -159,7 +159,7 @@ default:
 		if(spaceType != ISmartWorks.SPACE_TYPE_WORK_INSTANCE 
 			&& spaceType != ISmartWorks.SPACE_TYPE_TASK_INSTANCE) {
 			if((spaceType != ISmartWorks.SPACE_TYPE_DEPARTMENT && spaceType != ISmartWorks.SPACE_TYPE_GROUP) 
-					|| smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_EVENT_MANAGEMENT)){
+					&& smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_EVENT_MANAGEMENT)){
 		%>
 				<div class="up_event up_icon_list">
 					<a href="new_event.sw"><fmt:message key='common.upload.event' /></a>
@@ -174,7 +174,7 @@ default:
 			&& spaceType != ISmartWorks.SPACE_TYPE_TASK_INSTANCE 
 			&& spaceType != ISmartWorks.SPACE_TYPE_USER) {
 			if((spaceType != ISmartWorks.SPACE_TYPE_DEPARTMENT && spaceType != ISmartWorks.SPACE_TYPE_GROUP) 
-					|| smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_BOARD_MANAGEMENT)){
+					&& smartWorks.canIUploadToWorkSpace(workSpaceId, SmartWork.ID_BOARD_MANAGEMENT)){
 		%>
 				<div class="up_board up_icon_list">
 					<a href="new_board.sw"><fmt:message key='common.upload.board' /></a>
