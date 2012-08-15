@@ -84,6 +84,7 @@
 		session.setAttribute("wid", wid);
 	session.setAttribute("workInstance", instance);
 	session.setAttribute("workSpaceId", instance.getId());
+	session.setAttribute("tasks", tasks);
 		
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
 	CommunityInfo[] communities = smartWorks.getMyCommunities();
@@ -402,7 +403,7 @@
 					
 					<div class="txt_btn task_information">
 					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
-					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
+					    <%if(numberOfHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_instance_histories"><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfHistories %>]</span></a></div><%} %>
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
 					    	<%
 				    		User lastModifier = instance.getLastModifier();
@@ -418,6 +419,8 @@
 				</div>
 				<!-- 버튼 영역 //-->     				
 			</ul>
+			<div class="js_instance_histories">
+			</div>
 		</div>
 		<div class="portlet_b" style="display: block;"></div>
 	</div> 

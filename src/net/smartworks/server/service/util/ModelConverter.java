@@ -2569,7 +2569,7 @@ public class ModelConverter {
 			if(tskStatus.equals("11")) {
 				taskType = TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED;
 			} else if(tskStatus.equals("21")) {
-				taskType = TaskInstance.TYPE_INFORMATION_TASK_UDATED;
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_UPDATED;
 			}
 		} else if(tskType.equals(TskTask.TASKTYPE_REFERENCE)) {
 			taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;

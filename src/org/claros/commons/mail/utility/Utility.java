@@ -201,6 +201,9 @@ public class Utility {
 						groupUsers = Utility.addUserInfoArrays(groupUsers, (UserInfo[])SwServiceFactory.getInstance().getCommunityService().getAllComsByGroupId(email));						
 					}else{
 						categoryUsers = Utility.addUserInfoArrays(categoryUsers, (UserInfo[])SwServiceFactory.getInstance().getCommunityService().getAllComsByCategoryId(email));
+						if(SmartUtil.isBlankObject(categoryUsers)){
+							departmentUsers = Utility.addUserInfoArrays(departmentUsers, SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(email));							
+						}
 					}
 				}
 			}

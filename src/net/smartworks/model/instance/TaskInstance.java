@@ -13,7 +13,7 @@ public class TaskInstance extends Instance {
 	public final static int TYPE_INFORMATION_TASK_ASSIGNED = 11;
 	public final static int TYPE_INFORMATION_TASK_FORWARDED = 12;
 	public final static int TYPE_INFORMATION_TASK_CREATED = 13;
-	public final static int TYPE_INFORMATION_TASK_UDATED = 14;
+	public final static int TYPE_INFORMATION_TASK_UPDATED = 14;
 	public final static int TYPE_INFORMATION_TASK_DELETED = 15;
 
 	public final static int TYPE_PROCESS_TASK_ASSIGNED = 21;

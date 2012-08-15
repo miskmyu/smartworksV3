@@ -5,6 +5,7 @@ import net.smartworks.model.community.User;
 import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.work.Work;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class InformationWorkInstance extends WorkInstance {
 
@@ -53,11 +54,26 @@ public class InformationWorkInstance extends WorkInstance {
 		int numberOfHistories = 0;
 		if (this.getTasks() == null)
 			return numberOfHistories;
-		for(TaskInstanceInfo task : (TaskInstanceInfo[])this.getTasks()){
-			if(task.getType() == TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED || task.getType() == TaskInstance.TYPE_INFORMATION_TASK_CREATED
-				|| task.getType() == TaskInstance.TYPE_INFORMATION_TASK_UDATED){
-				numberOfHistories++;
+		TaskInstanceInfo[] histories = this.getTasks().clone();
+		for(int i=0; i<histories.length; i++){
+			TaskInstanceInfo task = histories[i];
+			if(SmartUtil.isBlankObject(task)) continue;
+			if(!SmartUtil.isBlankObject(task.getApprovalId())){
+				for(int j=i+1; j<histories.length; j++){
+					TaskInstanceInfo tempTask = histories[j];
+					if(!SmartUtil.isBlankObject(tempTask) && task.getApprovalId().equals(tempTask.getApprovalId())){
+						histories[j] = null;
+					}
+				}
+			}else if(!SmartUtil.isBlankObject(task.getForwardId())){
+				for(int j=i+1; j<histories.length; j++){
+					TaskInstanceInfo tempTask = histories[j];
+					if(!SmartUtil.isBlankObject(tempTask) && task.getForwardId().equals(tempTask.getForwardId())){
+						histories[j] = null;
+					}
+				}
 			}
+			numberOfHistories++;
 		}
 		return numberOfHistories;
 		

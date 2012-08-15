@@ -1233,4 +1233,23 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_toggle_instance_histories').live('click', function(e){
+//		var input = $(targetElement(e));
+//		var target = input.parents('.js_iwork_space_page').find('.js_instance_histories');
+//		if(isEmpty(target.children())){
+//			$.ajax({
+//				url : 'instance_histories.sw',
+//				success : function(data, status, jqXHR) {
+//					target.html(data).show();
+//				},
+//				error : function(e) {
+//				}
+//			});
+//			
+//		}else{
+//			target.html('').hide();
+//		}
+		return false;
+	});
+	
 });
