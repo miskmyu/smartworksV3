@@ -136,7 +136,7 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .form_value label { margin:0 10px 0 0; line-height: 20px}
 
 /* Upload Control */
-.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px}
+.form_col .qq-upload-button {width:60px !important; height:15px; line-height:17px; margin-left:1px}
 .form_col iframe {margin-bottom:4px}
 
 #imgCompanyLogo .qq-upload-button {width:60px !important}
