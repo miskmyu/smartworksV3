@@ -92,7 +92,7 @@
 						}
 						%>
 						<a href="image_instance_list.sw" class="js_image_instance_item" categoryId="<%=category.getId()%>">
-							<div class="thum_picture"><img style="max-width:70px;max-height:70px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
+							<div class="thum_picture"><img style="max-width:75px;max-height:75px;" src="<%=category.getFirstImage().getImgSource()%>"></div>
 						</a>						
 					</div>
 					<div class="title_folder"><%=category.getName() %></div>

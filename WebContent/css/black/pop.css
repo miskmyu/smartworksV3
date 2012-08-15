@@ -24,6 +24,7 @@
 .pop_contents {padding: 10px; overflow:hidden}
 .pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545}
 .smart_userinfo_section .userinfo_area {float:left; line-height:18px; margin-left:8px; width:160px}
+.simplemodal-wrap .case_2line {line-height: 26px}
 
 /* Layer popup list */
 .pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; padding-top:5px; font-size: 12px; line-height:19px}
