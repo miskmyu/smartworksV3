@@ -33,6 +33,8 @@ import net.smartworks.model.mail.EmailServer;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
+import net.smartworks.model.notice.Notice;
+import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -1116,6 +1118,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				String nextMsgId = String.valueOf(getMailManager().getNextMailId(null, mailContentCond));
 				instance.setPrevMsgId("0".equals(prevMsgId) ? null : prevMsgId);
 				instance.setNextMsgId("0".equals(nextMsgId) ? null : nextMsgId);
+				
+				SmartUtil.publishNoticeCount(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId(), new Notice(Notice.TYPE_MAILBOX, getUnreadEmails()));
 
 			} catch (Exception e) {
 				throw e;

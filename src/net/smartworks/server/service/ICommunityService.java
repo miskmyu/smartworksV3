@@ -76,6 +76,8 @@ public interface ICommunityService {
 
 	public abstract CommunityInfo[] getAllComsByDepartmentId(String departmentId, boolean departmentOnly) throws Exception;
 
+	public abstract UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception;
+
 	public abstract CommunityInfo[] getAllComsByGroupId(String groupId) throws Exception;
 
 	public abstract CommunityInfo[] getAllComsByCategoryId(String categoryId) throws Exception;

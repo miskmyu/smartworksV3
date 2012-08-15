@@ -144,7 +144,7 @@
 								if (data.getFieldType().equalsIgnoreCase("fileField"))
 									continue;
 						%>
-								<td <%if(data.getFieldType().equals(FormField.TYPE_CURRENCY) || 
+								<td fieldId="<%=data.getFieldId()%>" <%if(data.getFieldType().equals(FormField.TYPE_CURRENCY) || 
 									data.getFieldType().equals(FormField.TYPE_NUMBER) || 
 									data.getFieldType().equals(FormField.TYPE_PERCENT)){ %>
 											class="tr pr10"
