@@ -297,7 +297,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 									toBeDeleted.add(new Integer(msgId));
 								}
 							} catch (Exception e) {
-								toBeDeleted.add(new Integer(msgId));
+								//toBeDeleted.add(new Integer(msgId));
 							}
 						}
 					}
