@@ -9,6 +9,7 @@
 package net.smartworks.server.engine.docfile.manager;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,7 @@ public interface IDocFileManager extends IManager {
 	public void ajaxUploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
 	public void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
 	public void uploadYTVideo(HttpServletRequest request, HttpServletResponse response) throws DocFileException;
+	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws DocFileException;
 	public String deleteTempFile() throws DocFileException;
 	public IFileModel retrieveFile(String fileId) throws DocFileException;
 	public void updateFile(String userId, IFileModel file) throws DocFileException;

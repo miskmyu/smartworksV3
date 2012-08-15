@@ -834,3 +834,24 @@ function loadWorkManualField() {
 	}
 };
 
+function loadExcelImportField() {
+	var loadExcelImportField = $('div.js_excel_import_field');
+	if(!isEmpty(loadExcelImportField)){
+		var gridRow = SmartWorks.GridLayout.newGridRow();
+		var gridTable = SmartWorks.GridLayout.newGridTable();
+		loadExcelImportField.html(gridTable.html(gridRow));
+
+		SmartWorks.FormRuntime.FileFieldBuilder.buildEx({
+			container: gridRow,
+			fieldId: "txtImportFile",
+			fieldName: "",
+			columns: 2,
+			colSpan: 1,
+			required: true,
+			isMultiple: false
+		});
+		gridRow.find('.form_label').hide();
+		gridRow.find('.form_value').css({width:"50%"});
+	}
+};
+
