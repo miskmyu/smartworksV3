@@ -2862,7 +2862,63 @@ public class CommunityServiceImpl implements ICommunityService {
 	}
 	@Override
 	public UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		
+		List<String> relatedUserIdList = new ArrayList<String>();
+		if (departmentId != null) {
+
+			SwoUserCond userCond = new SwoUserCond();
+			userCond.setDeptIdWithAdjunct(departmentId);
+			
+			SwoUser[] relatedUserObjs = getSwoManager().getUsers(userId, userCond, IManager.LEVEL_LITE);
+			if (relatedUserObjs != null) {
+				for (int i = 0; i < relatedUserObjs.length; i++) {
+					SwoUser relatedUserObj = relatedUserObjs[i];
+					
+					relatedUserIdList.add(relatedUserObj.getId());//자기 부서원들을 array에 포함시킨다
+				}
+			}
+			//자기 하위부서의 사람들도 포함시킨다(재귀함수를 이용)
+			addSubDepartmentUsers(userId, departmentId, relatedUserIdList);//userDeptId의 자식 부서들의 사용자들을 array에 추가시킨다
+		}
+		
+		String[] relatedUserIdArray = new String[relatedUserIdList.size()];
+		relatedUserIdList.toArray(relatedUserIdArray);
+		
+		SwoUserExtend[] userExtends = SwManagerFactory.getInstance().getSwoManager().getUsersExtend(userId, relatedUserIdArray);
+		
+		UserInfo[] userInfos = new UserInfo[userExtends.length];
+		for (int i = 0; i < userExtends.length; i++) {
+			SwoUserExtend userExtend = userExtends[i];
+			userInfos[i] = ModelConverter.getUserInfoBySwoUserExtend(null, userExtend);
+		}
+		return userInfos;
+	}
+	private void addSubDepartmentUsers(String user, String parentDeptId, List<String> userList) throws Exception {
+
+		SwoDepartmentCond deptCond = new SwoDepartmentCond();
+		deptCond.setParentId(parentDeptId);
+		SwoDepartment[] subDeptObjs = getSwoManager().getDepartments(user, deptCond, IManager.LEVEL_LITE);
+		if (subDeptObjs == null)
+			return;
+		for (int i = 0; i < subDeptObjs.length; i++) {
+			SwoDepartment subDeptObj = subDeptObjs[i];
+			SwoUserCond userCond = new SwoUserCond();
+			userCond.setDeptIdWithAdjunct(subDeptObj.getId());
+			SwoUser[] teamUsers = getSwoManager().getUsers(user, userCond, IManager.LEVEL_LITE);
+			if (teamUsers != null) {
+				for (int j = 0; j < teamUsers.length; j++) {
+					SwoUser teamUser = teamUsers[j];
+					String teamUserId = teamUser.getId();
+					
+					if (!userList.contains(teamUserId)); {
+						userList.add(teamUserId);
+					}
+				}
+			}
+			//재귀호출
+			addSubDepartmentUsers(user, subDeptObj.getId(), userList);
+		}	
 	}
 }
