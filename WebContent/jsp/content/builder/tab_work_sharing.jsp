@@ -124,9 +124,10 @@
 					</ul>
 				</div>
 				<!-- tab//-->
-				<div class="solid_line"></div>
+				<div class="solid_line cb"></div>
 			</div>
 			<!-- 타이틀 -->
+			
 			<!-- 컨텐츠 -->
 			<form name="frmWorkSharing" class="contents_space js_validation_required">
 				<!-- 타이틀 영역 -->
@@ -337,9 +338,8 @@
 				</div>
 				<!-- 버튼 영역 //-->
 			</ul>
-		</div>
-		<div class="portlet_b" style="display: block;"></div>
 	</div>
+	<div class="portlet_b" style="display: block;"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->
 

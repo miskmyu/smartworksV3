@@ -122,7 +122,7 @@
 				%>
 				<div class="default_title_space"><div class="title"><%=title %></div></div>
 				<!-- 타이틀 영역// -->
-
+				
 				<!-- 목록 -->
 				<form name="frmWorkSettings" class="list_contents js_validation_required">
 
@@ -460,7 +460,8 @@
 							</tr>
 						</table>
 					</div>
-					<!-- 권한 //-->					
+					<!-- 권한 //-->	
+					</form>				
 				<!-- 목록 //-->
 				</div>
 				<!-- 컨텐츠 //-->
@@ -483,9 +484,8 @@
 					</div>
 				</div>
 				<!-- 버튼영역 //-->
-			</ul>		
-		</div>	
-		<div class="portlet_b" style="display: block;"></div>
-	</div>
+		</ul>		
+	</div>	
+	<div class="portlet_b" style="display: block;"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->

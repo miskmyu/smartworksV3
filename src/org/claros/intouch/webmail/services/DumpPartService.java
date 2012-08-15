@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.html.parser.Parser;
 
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
@@ -66,7 +67,6 @@ public class DumpPartService extends BaseService {
 			}
 		} catch (Exception e) {}
 		
-		
 		Email email = (Email)request.getSession().getAttribute("email");
 		
 		try {
@@ -121,6 +121,7 @@ public class DumpPartService extends BaseService {
                 	String content = "";
                 	Object obj = part.getContent();
                 	if(null!=obj) content = obj.toString();
+                	
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
 						HtmlCleaner cleaner = new HtmlCleaner(content);
@@ -156,7 +157,7 @@ public class DumpPartService extends BaseService {
 					} else {
 						response.setContentType(part.getContentType());
 					}
-					out.write(content);
+					out.print(content);
 				} else {
 					String tmpContType = (part.getContentType() == null) ? "application/octet-stream" : part.getContentType();
 					int pos = tmpContType.indexOf(";");
