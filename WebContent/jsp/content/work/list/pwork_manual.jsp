@@ -354,7 +354,7 @@ function submitForms() {
 				<%
 				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
-					<a href="<%=work.getManualFilePath() %>" class="icon_file_manual mr7" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
+					<span class="fl mr7 js_manual_file" title="<fmt:message key='work.title.manual_file'/>" groupId="<%=work.getManualFileId()%>"></span> 
 				<%
 				}
 				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
@@ -371,61 +371,61 @@ function submitForms() {
 				switch (work.getAccessPolicy().getLevel()) {
 				case AccessPolicy.LEVEL_PUBLIC:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.access.public" /></span>
+					<div class="fr"><fmt:message key="common.security.access.public" /></div>
 				<%
 					break;
 				case AccessPolicy.LEVEL_PRIVATE:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.access.private" /></span>
+					<div class="fr"><fmt:message key="common.security.access.private" /></div>
 				<%
 					break;
 				case AccessPolicy.LEVEL_CUSTOM:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.access.custom" /></span>
+					<div class="fr"><fmt:message key="common.security.access.custom" /></div>
 				<%
 					break;
 				}
 				%>
 		
-				<span class="fr ml5"><span class="icon_body_read"  title="<fmt:message key='common.security.title.access'/>"></span></span>
+				<div class="ch_right"><span class="icon_body_read"  title="<fmt:message key='common.security.title.access'/>"></span></div>
 		
 				<%
 				switch (work.getWritePolicy().getLevel()) {
 				case WritePolicy.LEVEL_PUBLIC:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.write.public" /></span>
+					<div class="fr"><fmt:message key="common.security.write.public" /></div>
 				<%
 					break;
 				case WritePolicy.LEVEL_CUSTOM:
 				%>
-					<span class="ch_right"><fmt:message key="common.security.write.custom" /></span>
+					<div class="fr"><fmt:message key="common.security.write.custom" /></div>
 				<%
 					break;
 				}
 				%>
 		
-				<span class="fr ml5"><span class="icon_body_register" title="<fmt:message key='common.security.title.write'/>"></span></span>
+				<div class="ch_right"><span class="icon_body_register" title="<fmt:message key='common.security.title.write'/>"></span></div>
 		
 				<%
 				switch (work.getEditPolicy().getLevel()) {
 				case EditPolicy.LEVEL_PUBLIC:
 				 %>
-					<div class="ch_right"><fmt:message key="common.security.edit.public" /></div> 
+					<div class="fr"><fmt:message key="common.security.edit.public" /></div> 
 				<%
 					break;
 				case EditPolicy.LEVEL_PRIVATE:
 				%>
-					<div class="ch_right"><fmt:message key="common.security.edit.private" /></div> 
+					<div class="fr"><fmt:message key="common.security.edit.private" /></div> 
 				<%
 				 	break;
 				case EditPolicy.LEVEL_CUSTOM:
 				%>
-					<div class="ch_right"><fmt:message key="common.security.edit.custom" /></div> 
+					<div class="fr"><fmt:message key="common.security.edit.custom" /></div> 
 				<%
 				 	break;
 				 }
 				%>
-				<span class="fr ml5"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></span>
+				<div class="ch_right"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></div>
 			</span>
 			<!-- 우측 권한 아이콘//-->
 			<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
@@ -436,4 +436,12 @@ function submitForms() {
 	<!-- 보더 // -->			
 </div>
 <!-- 업무 설명 보기 -->
+
+<script>
+	var manualFile = $('.js_pwork_manual_page').find('.js_manual_file');
+	if(!isEmpty(manualFile)){
+		var groupId = manualFile.attr('groupId');
+		viewFiles(groupId, manualFile);
+	}
+</script>
 
