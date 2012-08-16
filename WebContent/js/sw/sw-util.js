@@ -44,9 +44,10 @@ $.fn.serializeObject = function()
     return o;
 };
 
-var getHostNPort = function(){
-	var array = window.location.href.split(':');
-	return array[0] + ':' + array[1] + ':' + array[2].split('/')[0];
+var getHostNPort = function(){	
+	var array = window.location.href.split('//');
+	return 'http://' + array[1].substr(0, array[1].indexOf('/'));
+	//return array[0] + ':' + array[1] + ':' + array[2].split('/')[0];
 };
 
 var getBytesWithUnit = function( bytes ){
