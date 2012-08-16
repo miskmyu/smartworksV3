@@ -253,4 +253,12 @@ $(function() {
 		refreshRecord(input, paramsJson);
 	});
 
+	$('.js_show_instance').live('click', function(e) {
+		var input = $(targetElement(e));
+		var instanceId = input.attr('instanceId');
+		var formId = input.attr('formId');
+		smartPop.showInstance(instanceId, null, formId);
+		return false;
+	});
+
 });

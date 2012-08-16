@@ -241,7 +241,7 @@ function submitForms() {
 				<%
 				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
-					<a href="<%=work.getManualFilePath() %>" class="icon_file_manual mr7" title="<fmt:message key='work.title.manual_file'/>"><%=work.getManualFileName() %></a> 
+					<span class="fl mr7 js_manual_file" title="<fmt:message key='work.title.manual_file'/>" groupId="<%=work.getManualFileId()%>"></span> 
 				<%
 				}
 				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
@@ -318,6 +318,12 @@ function submitForms() {
 		</div>
 		<!-- 우측 버튼 //-->
 	</div>
-
-	
 </div>
+
+<script>
+	var manualFile = $('.js_iwork_manual_page').find('.js_manual_file');
+	if(!isEmpty(manualFile)){
+		var groupId = manualFile.attr('groupId');
+		viewFiles(groupId, manualFile);
+	}
+</script>

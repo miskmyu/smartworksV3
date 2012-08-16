@@ -428,7 +428,7 @@
 							</fmt:message>
 						<%
 							break;
-						case TaskInstance.TYPE_INFORMATION_TASK_UDATED:
+						case TaskInstance.TYPE_INFORMATION_TASK_UPDATED:
 							break;
 						case TaskInstance.TYPE_PROCESS_TASK_ASSIGNED:
 						%>

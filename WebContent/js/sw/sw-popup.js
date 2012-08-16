@@ -981,6 +981,26 @@ smartPop = {
 		});
 	},
 
+	showInstance : function(instanceId, workId, formId){
+		$.get("pop_show_instance.sw?instId=" + instanceId + "&workId=" + workId + "&formId=" + formId, function(data){
+			var width = 800;
+			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
+			$(data).modal({
+				opacity: 50,
+				overlayCss: {backgroundColor:"#fff"},
+				autoPosition: false,
+				containerCss:{
+					top: 30,
+					left: left,
+					width: width
+				},
+				overlayClose: true,
+				onShow: function(dialog){
+				}
+			});
+		});
+	},
+
 	reassignPerformer : function(workId, instanceId, taskInstId){
 		$.get("pop_reassign_performer.sw?workId=" + workId + "&instanceId="+ instanceId + "&taskInstId=" + taskInstId, function(data){
 			$(data).modal({
