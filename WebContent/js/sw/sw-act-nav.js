@@ -211,7 +211,8 @@ $(function() {
 
 	$('.js_drill_down').live('click', function(e) {
 		if($(targetElement(e)).hasClass('js_checkbox')) return true;
-		var input = $(targetElement(e)).parents('li.js_drill_down:first').find('a');
+		if($(targetElement(e)).hasClass('js_department')) return true;
+		var input = $(targetElement(e)).parents('li.js_drill_down:first').find('a:first');
 		var target = input.siblings('div.js_drill_down_target:first');
 		if(input.hasClass('js_popup')) target = input.parent().siblings('div.js_drill_down_target:first');
 		if(input.parent().hasClass('ctgr_action_item') || input.parent().hasClass('group_action_item')){

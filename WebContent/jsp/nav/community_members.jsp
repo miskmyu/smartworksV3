@@ -164,7 +164,7 @@
 								<li class="js_drill_down">
 									<span class="dep">
 										<a href="communitylist_by_depart.sw" departmentId="<%=department.getId()%>" class="js_popup js_expandable"><span class="<%=iconType%>"></span></a>
-										<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>"><span> <%=department.getName()%> </span></a> 
+										<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>"><span class="js_department"> <%=department.getName()%> </span></a> 
 									</span>
 									<div style="display: none" class="menu_2dep js_drill_down_target"></div>
 								</li>
