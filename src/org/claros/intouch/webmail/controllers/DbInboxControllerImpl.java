@@ -217,6 +217,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
+				int exCount = 0;
+				int dupCount = 0;
 				
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
@@ -226,7 +228,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 					// fetch all messages from the remote pop3 server
 					protocol.disconnect();
 					handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
-
 					Message[] msgs = protocol.fetchAllMessagesWithUid();
 					ArrayList toBeDeleted = new ArrayList();
 					if (msgs != null) {
@@ -241,7 +242,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 								MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, null);
 								MailController mailCont = mailFact.getMailController();
 								DbMailControllerImpl dbMailCont = (DbMailControllerImpl)mailCont;
-								if (!dbMailCont.msgAlreadyFetched(uid)) {
+								if (!SmartUtil.isBlankObject(uid) && !dbMailCont.msgAlreadyFetched(uid)) {
 									header = protocol.fetchHeader(msg, msgId);
 									msg = protocol.getMessage(msgId);
 									if (!msg.getFolder().isOpen()) {
@@ -295,9 +296,14 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
+								}else{
+									System.out.println("Duplicated UID = " + uid);
+									dupCount++;
 								}
 							} catch (Exception e) {
 								//toBeDeleted.add(new Integer(msgId));
+								System.out.println("============= Fetch Exception======(" + (1+exCount++) + ")");
+								e.printStackTrace();
 							}
 						}
 					}
@@ -322,6 +328,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" End Checking Email : " + (new Date()));
 				if(newMessages != -1)
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
+				System.out.println("=============== Dup count (" + dupCount +  ") ======================");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
 				try{

@@ -312,6 +312,8 @@ public class DbMailControllerImpl implements MailController {
 			String sql = "SELECT unique_id FROM MSG_DB_OBJECTS WHERE USERNAME=? AND UNIQUE_ID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, md5Header});
 			if (email == null) {
+				JdbcUtil.close(dao);
+				dao = null;
 				result = false;
 			}
 		} finally {
@@ -331,8 +333,15 @@ public class DbMailControllerImpl implements MailController {
 			String sql = "SELECT UID FROM MSG_DB_UIDS WHERE USERNAME=? AND UID = ?";
 			MsgDbObject email = (MsgDbObject)dao.read(MsgDbObject.class, sql, new Object[] {username, uid});
 			if (email == null) {
+				JdbcUtil.close(dao);
+				dao = null;
 				result = false;
+			}else{
+				System.out.println("username = " + username + ", UID = " + uid + " found, email = " + email.getSubject());
 			}
+		}catch (Exception e){
+			System.out.println("=========== Message Checek Exception ================");
+			e.printStackTrace();
 		} finally {
 			JdbcUtil.close(dao);
 			dao = null;

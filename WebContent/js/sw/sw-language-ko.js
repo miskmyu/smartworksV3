@@ -5,9 +5,9 @@
 // Created Date : 2011.11.
 
 smartMessage.bundle['ko'] = {
-	illegalAcountError : '로그인 계정이 없거나 암호가 잘못되었습니다. 확인 후 다시 시도하십시요!',
+	illegalAcountError : '계정이 없거나 암호가 잘못되었습니다. 확인 후 다시 시도하십시요!',
 	logoutSucceed : '정상적으로 로그아웃 되었습니다.',
-	sessionTimeouted : '스마트웍스연결 정보가 존재하지 않습니다. 다시 로그인 하시기 바랍니다 !',
+	sessionTimeouted : '스마트웍스연결 정보가 존재하지않습니다. 다시 로그인 하시기바랍니다!',
 	uploadFile : '파일선택',
 	cancelUpload : '취소',
 	uploadFailed : '실패',

@@ -47,7 +47,7 @@
 								<span class="<%=iconType%>"></span>
 							</a>
 							<a href="<%=department.getSpaceController()%>?cid=<%=department.getSpaceContextId()%>&wid=<%=department.getId()%>">
-								<span> <%=department.getName()%> </span>
+								<span class="js_department"> <%=department.getName()%> </span>
 							</a>
 						</span>
 						<div style="display: none" class="menu_2dep js_drill_down_target"></div>
