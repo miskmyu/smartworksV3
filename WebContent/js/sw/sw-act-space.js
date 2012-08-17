@@ -799,7 +799,7 @@ $(function() {
 						input.attr('value', '');
 					}else{
 						var newCommentInstance = target.find('.js_comment_instance').clone().show().removeClass('js_comment_instance');
-						newCommentInstance.find('.js_comment_content').html(comment).append("<span class='icon_new'></span>");
+						newCommentInstance.find('.js_comment_content').html(comment).append("<span class='ml5 icon_new'></span>");
 						target.append(newCommentInstance);
 						input.attr('value', '');
 					}
