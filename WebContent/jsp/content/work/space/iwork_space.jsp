@@ -418,9 +418,9 @@
 					<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
 				</div>
 				<!-- 버튼 영역 //-->     				
+			
+				<div class="js_instance_histories"></div>
 			</ul>
-			<div class="js_instance_histories">
-			</div>
 		</div>
 		<div class="portlet_b" style="display: block;"></div>
 	</div> 
