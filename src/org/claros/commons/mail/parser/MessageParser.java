@@ -11,13 +11,12 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
-import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.claros.commons.mail.models.Email;
-import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.models.EmailHeader;
+import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.models.EmailSensitivity;
 import org.claros.commons.mail.utility.Utility;
 import org.claros.commons.utility.Formatter;
