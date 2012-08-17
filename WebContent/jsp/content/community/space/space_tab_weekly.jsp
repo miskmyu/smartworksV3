@@ -153,7 +153,6 @@
 					<!-- 5일 -->					
 					<div class="space_section js_space_weekly_day" toDate="<%=toDateStr%>">
 						<div class="<%=titleClass%>"><%=calendars[i].getDate().toLocalDateLongString() + calendars[i].toCompanyEventsString()%></div>
-						<div>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByDates) && tasksByDates.length >i && !SmartUtil.isBlankObject(tasksByDates[i])){
 								session.setAttribute("taskHistories", tasksByDates[i]);
@@ -166,7 +165,6 @@
 							<%
 							}
 							%>											
-						</div>
 					</div>
 					<!-- 5일//-->
 				<%
