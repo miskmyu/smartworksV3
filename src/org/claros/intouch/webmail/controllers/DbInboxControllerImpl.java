@@ -297,12 +297,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}else{
-									System.out.println("Duplicated UID = " + uid);
 									dupCount++;
 								}
 							} catch (Exception e) {
 								//toBeDeleted.add(new Integer(msgId));
-								System.out.println("============= Fetch Exception======(" + (1+exCount++) + ")");
 								e.printStackTrace();
 							}
 						}
@@ -328,7 +326,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" End Checking Email : " + (new Date()));
 				if(newMessages != -1)
 					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
-				System.out.println("=============== Dup count (" + dupCount +  ") ======================");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
 				try{
