@@ -86,7 +86,7 @@
 										<span class="t_name"><%=owner.getLongName()%></span>
 									</a>
 									<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
- 									<div><%=task.getSubject()%><%if(task.isNew()){ %><span class="icon_new"></span><%} %></div>
+ 									<div><%=task.getSubject()%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
 								</span>
 							</li>					
 				<%						
@@ -120,7 +120,7 @@
 									<span class="t_name"><%=owner.getLongName()%></span>
 								</a>
 								<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-								<div><%if(task.isNew()){ %><span class="icon_new"></span><%} %></div>
+								<div><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
 							</span>
 						</li>					
 				<%
