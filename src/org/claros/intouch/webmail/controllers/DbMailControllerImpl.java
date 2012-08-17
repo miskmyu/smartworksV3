@@ -336,6 +336,8 @@ public class DbMailControllerImpl implements MailController {
 				JdbcUtil.close(dao);
 				dao = null;
 				result = false;
+			}else{
+				System.out.println("username = " + username + ", UID = " + uid + " found, email = " + email.getSubject());
 			}
 		}catch (Exception e){
 			System.out.println("=========== Message Checek Exception ================");

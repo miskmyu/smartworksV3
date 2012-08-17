@@ -242,7 +242,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 								MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, null);
 								MailController mailCont = mailFact.getMailController();
 								DbMailControllerImpl dbMailCont = (DbMailControllerImpl)mailCont;
-								if (!dbMailCont.msgAlreadyFetched(uid)) {
+								if (!SmartUtil.isBlankObject(uid) && !dbMailCont.msgAlreadyFetched(uid)) {
 									header = protocol.fetchHeader(msg, msgId);
 									msg = protocol.getMessage(msgId);
 									if (!msg.getFolder().isOpen()) {
@@ -297,6 +297,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 									}
 									toBeDeleted.add(new Integer(msgId));
 								}else{
+									System.out.println("Duplicated UID = " + uid);
 									dupCount++;
 								}
 							} catch (Exception e) {
