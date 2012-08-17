@@ -176,7 +176,6 @@
 					<!-- 근무시간 전 -->
 					<div class="space_section  js_space_dayly_work_hour" toDate="<%=workStartStr%>">
 	 					<div class="title"><fmt:message key="common.title.before_work"/>( ~ <%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getStart())%>)</div>
-						<ul>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length==3 && !SmartUtil.isBlankObject(tasksByWorkHours[0])){
 								session.setAttribute("taskHistories", tasksByWorkHours[0]);
@@ -185,11 +184,10 @@
 							<%
 							}else{
 							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+								<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 							<%
 							}
 							%>											
-						</ul>
 					</div>
 					<!-- 근무시간 전//-->
 	
@@ -197,7 +195,6 @@
 					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=workEndStr%>">
 						<div class="title"><fmt:message key="common.title.work_hour"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getStart())%> ~ <%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%>)</div>
 	
-						<ul>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[1])){
 								session.setAttribute("taskHistories", tasksByWorkHours[1]);
@@ -206,18 +203,16 @@
 							<%
 							}else{
 							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+								<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 							<%
 							}
 							%>											
-						</ul>
 					</div>
 					<!-- 근무시간//-->
 	
 					<!-- 근무시간 후 -->
 					<div class="space_section mt10 js_space_dayly_work_hour" toDate="<%=toDateStr%>">
 						<div class="title off"><fmt:message key="common.title.after_work"/>(<%=LocalDate.convertTimeToString(selectedCalendar.getWorkHour().getEnd())%> ~ )</div>
-						<ul>
 							<%
 							if(!SmartUtil.isBlankObject(tasksByWorkHours) && tasksByWorkHours.length ==3 && !SmartUtil.isBlankObject(tasksByWorkHours[2])){
 								session.setAttribute("taskHistories", tasksByWorkHours[2]);
@@ -226,11 +221,10 @@
 							<%
 							}else{
 							%>
-								<li class="t_nowork"><fmt:message key="common.message.no_work_task"/></li>
+								<div class="t_nowork"><fmt:message key="common.message.no_work_task"/></div>
 							<%
 							}
 							%>											
-						</ul>
 					</div>
 					<!-- 근무시간 후//-->
 				<%

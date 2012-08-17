@@ -537,6 +537,7 @@
 								<span class="t_date"><%=work.getFullpathName()%></span>
 							</a>
 							<a href="<%=((WorkInstanceInfo)workInstance).getController()%>?cid=<%=((WorkInstanceInfo)workInstance).getContextId()%>&wid=<%=workInstance.getWorkSpace().getId()%>&workId=<%=work.getId()%>">
+									<!-- 전자결재 아이콘: <span class="icon_txt blue">전자결재</span> -->
 									<span class="tb"><%=workInstance.getSubject()%>
 									<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 								</span> 
