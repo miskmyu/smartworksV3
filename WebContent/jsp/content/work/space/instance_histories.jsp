@@ -36,7 +36,6 @@
 		<div class="up_point pos_works"></div> 
             
 		<!-- 컨텐츠 -->
-		<div class="up_wrap">
 		   	<div class="form_wrap up history_list">    
 			    <!-- 리스트 -->       
 				<ul class="p10">
@@ -79,24 +78,27 @@
 							activity = "전자결재";
 					%>
 							<li class="sub_instance_list js_show_instance" instId="" workId="">
-					        	<span class="number"><%=i %></span>
-					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>">
-					            <span class="task_state">
-					            	<span class="icon_txt blue"><%=activity %></span>
-					            </span>
-					            <a href="">
-					                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
-					            </a>
-					            <span class="vb">
-					                <div>
-					                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-					                        <span class="t_name"><%=owner.getLongName()%></span>
-					                    </a>
-					                    <span class="t_gray">/ [참조] 유광민 외 12명</span>
-					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
-					                </div>
-					                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><span class="ml5 t_s11">3단 결재(기본)</span></div>
-					            </span>
+								<div class="det_title" style="line-height: 16px">
+						        	<span class="number"><%=i %></span>
+						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
+						            <span class="task_state">
+						            	<!-- 아이콘 컬러 - 최초등록:gray, 수정:red, 업무전달:orange -->
+						            	<span class="icon_txt blue"><%=activity %></span>
+						            </span>
+						            <a href="">
+						                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
+						            </a>
+						            <span class="vm">
+						                <div>
+						                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+						                        <span class="t_name"><%=owner.getLongName()%></span>
+						                    </a>
+						                    <span class="t_gray">/ [참조] 유광민 외 12명</span>
+						                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
+						                </div>
+						                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %><span class="ml5 t_s11">3단 결재(기본)</span></div>
+						            </span>
+					            </div>
 							</li>					
 					<%						
 						}else if(!SmartUtil.isBlankObject(task.getForwardId())){
@@ -122,22 +124,24 @@
 							}
 					%>
 							<li class="sub_instance_list">
-					        	<span class="number"><%=i %></span>
-					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
-					            <span class="task_state">
-					            	<span class="icon_txt blue"><%=activity %></span>
-					            </span>
-					            <a href="">
-					                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
-					            </a>
-					            <span class="vb">
-					                <div>
-					                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-					                        <span class="t_name"><%=owner.getLongName()%></span>
-					                    </a>
-					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
-					                </div>
-					            </span>
+								<div class="det_title" style="line-height: 16px">
+						        	<span class="number"><%=i %></span>
+						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
+						            <span class="task_state">
+						            	<span class="icon_txt blue"><%=activity %></span>
+						            </span>
+						            <a href="">
+						                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
+						            </a>
+						            <span class="vm">
+						                <div>
+						                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+						                        <span class="t_name"><%=owner.getLongName()%></span>
+						                    </a>
+						                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
+						                </div>
+						            </span>
+						        </div>
 							</li>					
 					<%
 						}
@@ -145,7 +149,6 @@
 					%>
 				</ul>
 			</div>
-		</div>
 	<%
 	}
 	%>					

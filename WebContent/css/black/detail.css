@@ -101,7 +101,8 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .history_list .task_state {min-width: 55px; line-height: 22px; margin: 2px 0 0 0; text-align:center}
 .history_list .number { text-align:right; min-width:20px; padding-right:5px}
 .history_list .noti_pic {float:none}
-.history_list > ul > .sub_instance_list > span {float:none; display:inline-block}
+.history_list > ul > .sub_instance_list span {float:none; display:inline-block}
+.js_instance_histories {padding:0 20px}
 
 .btns_action {margin:5px 0 0 62px; font-size:10.5px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important}
