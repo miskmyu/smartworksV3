@@ -77,7 +77,7 @@
 						if(!SmartUtil.isBlankObject(task.getApprovalId())){
 							activity = "전자결재";
 					%>
-							<li class="sub_instance_list js_show_instance" instId="" workId="">
+							<li class="sub_instance_list js_show_instance" instanceId="<%=task.getWorkInstance().getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=i %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
@@ -85,7 +85,7 @@
 						            	<!-- 아이콘 컬러 - 최초등록:gray, 수정:red, 업무전달:orange -->
 						            	<span class="icon_txt blue"><%=activity %></span>
 						            </span>
-						            <a href="">
+						            <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 						                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
 						            </a>
 						            <span class="vm">
@@ -123,14 +123,14 @@
 								}
 							}
 					%>
-							<li class="sub_instance_list">
+							<li class="sub_instance_list js_show_instance" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=i %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 						            <span class="task_state">
-						            	<span class="icon_txt blue"><%=activity %></span>
+						            	<span class="icon_txt gray"><%=activity %></span>
 						            </span>
-						            <a href="">
+						            <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 						                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
 						            </a>
 						            <span class="vm">

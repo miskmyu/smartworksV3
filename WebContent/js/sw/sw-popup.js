@@ -981,8 +981,8 @@ smartPop = {
 		});
 	},
 
-	showInstance : function(instanceId, workId, formId){
-		$.get("pop_show_instance.sw?instId=" + instanceId + "&workId=" + workId + "&formId=" + formId, function(data){
+	showInstance : function(instanceId, taskInstId, workId, formId){
+		$.get("pop_show_instance.sw?instId=" + instanceId + "&taskInstId=" + taskInstId + "&workId=" + workId + "&formId=" + formId, function(data){
 			var width = 800;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({

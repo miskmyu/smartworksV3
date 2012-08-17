@@ -29,6 +29,7 @@
 	User cUser = SmartUtil.getCurrentUser();
 	String workId = request.getParameter("workId");
 	String instId = request.getParameter("instId");
+	String taskInstId = request.getParameter("taskInstId");
 	String formId = request.getParameter("formId");
 	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
@@ -40,20 +41,16 @@
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
 	
-	if(!SmartUtil.isBlankObject(formId)){
+	if(!SmartUtil.isBlankObject(formId) && !SmartUtil.isBlankObject(instId)){
 		iworkInstance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 		instance = (Instance)iworkInstance;
 	}else{
-		instance = smartWorks.getInstanceById(instId);		
+		instance = smartWorks.getInstanceById(instId);
 	}
 
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();
 	SmartWork work = (SmartWork)instance.getWork();
-	
-	session.setAttribute("workInstance", instance);
-
-	
 	
 	switch(instance.getType()){
 	case WorkInstance.TYPE_INFORMATION:
@@ -67,6 +64,7 @@
 	case Instance.TYPE_TASK:
 		workType = SmartWork.TYPE_INFORMATION;
 		taskInstance = (TaskInstance)instance;
+
 		break;
 	}
 
