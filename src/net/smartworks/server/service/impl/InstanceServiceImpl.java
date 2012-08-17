@@ -2592,7 +2592,14 @@ public class InstanceServiceImpl implements IInstanceService {
 					String name = (String)userMap.get("name");
 
 					AprApproval apr = new AprApproval();
-					apr.setName(aprAprDefs[i-1].getAprName());
+					
+
+					if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level") || hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
+						apr.setName(aprAprDefs[i-1].getName());
+					} else {
+						apr.setName(aprAprDefs[i-1].getAprName());
+					}
+					
 					apr.setType(aprAprDefs[i-1].getType());
 					apr.setApprover(id);
 					apr.setMandatory(true);
