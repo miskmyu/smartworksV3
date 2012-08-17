@@ -47,7 +47,7 @@
 			<!-- Header -->
 			<div id="lo_header">
 				<div class="lo_logo pt3 vb">
-					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="images/lo_logo_f.png" /></a>
+					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="images/lo_logo_f.gif" /></a>
 					<!--원래 SmartWorks이미지는  lo_logo_f.gif -->
 				</div>
 	
