@@ -23,7 +23,6 @@
 	
 	TaskInstanceInfo[] histories = ((TaskInstanceInfo[])session.getAttribute("tasks")).clone();
 	
-	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -79,9 +78,9 @@
 						if(!SmartUtil.isBlankObject(task.getApprovalId())){
 							activity = "전자결재";
 					%>
-							<li class="sub_instance_list">
+							<li class="sub_instance_list js_show_instance" instId="<%=task.getId() %>" workId="<%=task.getWork().getId()%>">
 					        	<span class="number"><%=i %></span>
-					            <span class="<%=statusImage %> vm" title="<%=statusTitle%>"></span>
+					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>">
 					            <span class="task_state">
 					            	<span class="icon_txt blue"><%=activity %></span>
 					            </span>
@@ -94,7 +93,7 @@
 					                        <span class="t_name"><%=owner.getLongName()%></span>
 					                    </a>
 					                    <span class="t_gray">/ [참조] 유광민 외 12명</span>
-					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
 					                </div>
 					                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><span class="ml5 t_s11">3단 결재(기본)</span></div>
 					            </span>
@@ -103,25 +102,28 @@
 						}else if(!SmartUtil.isBlankObject(task.getForwardId())){
 							
 						}else{
-							switch(task.getTaskType()){
-							case TaskInstance.TYPE_INFORMATION_TASK_CREATED:
-								activity = "최초 생성";
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_UPDATED:
-								activity = "수정";
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED:
-								activity = "할당";
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_DELETED:
-								activity = "삭제";
-								break;
-							
+							if(i==0){
+								activity = "최초 생성";								
+							}else{
+								switch(task.getTaskType()){
+								case TaskInstance.TYPE_INFORMATION_TASK_CREATED:
+									activity = "최초 생성";
+									break;
+								case TaskInstance.TYPE_INFORMATION_TASK_UPDATED:
+									activity = "수정";
+									break;
+								case TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED:
+									activity = "할당";
+									break;
+								case TaskInstance.TYPE_INFORMATION_TASK_DELETED:
+									activity = "삭제";
+									break;								
+								}
 							}
 					%>
-							<li class="sub_instance_list">
+							<li class="sub_instance_list js_show_instance" instId="<%=task.getId() %>" workId="<%=task.getWork().getId()%>">
 					        	<span class="number"><%=i %></span>
-					            <span class="<%=statusImage %> vm" title="<%=statusTitle%>"></span>
+					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 					            <span class="task_state">
 					            	<span class="icon_txt blue"><%=activity %></span>
 					            </span>
@@ -133,10 +135,8 @@
 					                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 					                        <span class="t_name"><%=owner.getLongName()%></span>
 					                    </a>
-					                    <span class="t_gray">/ [참조] 유광민 외 12명</span>
-					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
 					                </div>
-					                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><span class="ml5 t_s11">3단 결재(기본)</span></div>
 					            </span>
 							</li>					
 					<%
