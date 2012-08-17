@@ -255,6 +255,7 @@ $(function() {
 
 	$('.js_show_instance').live('click', function(e) {
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_show_instance')) input = input.parents('.js_show_instance');
 		var instanceId = input.attr('instanceId');
 		var formId = input.attr('formId');
 		smartPop.showInstance(instanceId, null, formId);
