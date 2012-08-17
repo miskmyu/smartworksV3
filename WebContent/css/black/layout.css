@@ -693,8 +693,13 @@ button.space {height: 18px; padding: 1px 3px}
 .icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
 .icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
 .icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
-.icon_txt {text-decoration: none!important; border-radius: 3px 3px 3px 3px; display: inline-block; color: #FFF; padding: 0 1px; font-size:10.5px; height:14px; letter-spacing:-1px; margin-right:3px; line-height:16px}
+
+.icon_txt {text-decoration: none!important; border-radius: 3px 3px 3px 3px; display: inline-block; color: #FFF; padding: 0 1px; font-size:10.5px; height:14px; letter-spacing:-1px; margin-right:3px; line-height:16px; min-width:42px; text-align:center}
 .icon_txt.blue {background: -moz-linear-gradient(center top , #8bbaf2, #468ee3) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#8bbaf2),to(#468ee3)); background: -o-linear-gradient(top,#8bbaf2,#468ee3); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#8bbaf2,endColorStr=#468ee3); border: 1px solid #3a87e1}
+.icon_txt.gray {background: -moz-linear-gradient(center top , #adadad, #838383) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#adadad),to(#838383)); background: -o-linear-gradient(top,#adadad,#838383); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#adadad,endColorStr=#838383); border: 1px solid #7a7a7a}
+.icon_txt.red {background: -moz-linear-gradient(center top , #ca9191, #ae5858) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#ca9191),to(#ae5858)); background: -o-linear-gradient(top,#ca9191,#ae5858); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ca9191,endColorStr=#ae5858); border: 1px solid #a55050}
+.icon_txt.orange {background: -moz-linear-gradient(center top , #e8a96a, #dd832d) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#e8a96a),to(#dd832d)); background: -o-linear-gradient(top,#e8a96a,#dd832d); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#e8a96a,endColorStr=#dd832d); border: 1px solid #d97c27}
+.download_section .icon_txt {min-width:30px}
 
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
