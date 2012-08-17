@@ -78,7 +78,7 @@
 						if(!SmartUtil.isBlankObject(task.getApprovalId())){
 							activity = "전자결재";
 					%>
-							<li class="sub_instance_list js_show_instance" instId="<%=task.getId() %>" workId="<%=task.getWork().getId()%>">
+							<li class="sub_instance_list js_show_instance" instId="" workId="">
 					        	<span class="number"><%=i %></span>
 					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>">
 					            <span class="task_state">
@@ -121,7 +121,7 @@
 								}
 							}
 					%>
-							<li class="sub_instance_list js_show_instance" instId="<%=task.getId() %>" workId="<%=task.getWork().getId()%>">
+							<li class="sub_instance_list">
 					        	<span class="number"><%=i %></span>
 					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 					            <span class="task_state">

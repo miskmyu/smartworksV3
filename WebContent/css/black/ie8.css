@@ -4,3 +4,4 @@
 .lo_idp input[type="text"], .lo_idp input[type="password"] {vertical-align:middle; height:15px !important; width:136px !important}
 
 .glo_btn_space .btn_gray {display:block; float:left; margin-right: 5px}
+.btn_gray {line-height:17px}
