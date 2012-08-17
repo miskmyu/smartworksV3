@@ -217,9 +217,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
-				int exCount = 0;
-				int dupCount = 0;
-				
+
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 
@@ -296,8 +294,6 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item = null;
 									}
 									toBeDeleted.add(new Integer(msgId));
-								}else{
-									dupCount++;
 								}
 							} catch (Exception e) {
 								//toBeDeleted.add(new Integer(msgId));
