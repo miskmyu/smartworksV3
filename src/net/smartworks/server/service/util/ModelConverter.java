@@ -4008,6 +4008,9 @@ public class ModelConverter {
 		if (iWInstanceInfo == null) 
 			iWInstanceInfo = new IWInstanceInfo();
 
+		if (!CommonUtil.isEmpty(recordId))
+			iWInstanceInfo.setId(recordId);
+		
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
 		TskTask[] tasks = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);

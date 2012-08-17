@@ -785,3 +785,6 @@ ALTER TABLE SwMailAccount add mailUserName varchar(50);
 ALTER TABLE SwMailAccount add mailDeleteFetched varchar(10);
 
 ALTER TABLE aprapr add aprDueDate character varying(100);
+
+
+alter table msg_db_uids alter column uid varchar(100) collate Korean_Wansung_CS_AS
