@@ -19,7 +19,25 @@
 	</aop:config-->
 	
 	<!-- Mail Advisor -->
-	<beans:bean id="tskManagerMailAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl"/>
+	
+ 	<beans:bean id="misExecutor" class="org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor" destroy-method="destroy">
+ 		<beans:property name="threadCount" value="10"/>
+ 	</beans:bean>
+	<beans:bean id="tskManagerMailAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl">
+		<beans:property name="mailMode" value="${tskManagerMailAdvisor.mailMode}"/>
+		<beans:property name="mailExecutor" ref="misExecutor"/>
+		<beans:property name="mailContentUrl" value="${tskManagerMailAdvisor.mailContentUrl}"/>
+		<beans:property name="isEnableReferenceMail" value="${tskManagerMailAdvisor.isEnableReferenceMail}"/>
+		<beans:property name="mailContent">
+			<beans:value><![CDATA[
+				title : {$title} <br>
+				name : {&name} <br>
+				priority : {$priority} <br>
+				assigner : {$assigner} <br>
+				assignee : {$assignee} <br>
+			]]></beans:value>
+		</beans:property>
+	</beans:bean>
 	<aop:config>
 		<aop:aspect id="tskMailAdvisor" ref="tskManagerMailAdvisor">
 			<aop:pointcut id="mailMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>

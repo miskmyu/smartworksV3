@@ -21,6 +21,8 @@ import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.DateUtil;
 import net.smartworks.server.engine.common.util.ServletUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.mail.model.MailAccount;
+import net.smartworks.server.engine.mail.model.MailAccountCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoConfig;
 import net.smartworks.server.engine.organization.model.SwoUser;
@@ -34,7 +36,6 @@ import org.springframework.util.StringUtils;
 
 public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 	private static final String COUNTER = "counter";
-	private JavaMailSender mailSender;
 	private TaskExecutor mailExecutor;
 	private String mailContent;
 	private String mailContentUrl = null;
@@ -161,25 +162,42 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 		String assigner = obj.getAssigner();
 		if (assigner == null)
 			return null;
+		
+		MailAccountCond cond = new MailAccountCond();
+		cond.setUserId(user);
+		MailAccount mailAccount = SwManagerFactory.getInstance().getMailManager().getMailAccount(user, cond, IManager.LEVEL_LITE);
 		SwoUser userObj = getSwoManager().getUser(user, assigner, IManager.LEVEL_LITE);
 		if (userObj == null)
 			return null;
-		return userObj.getEmail();
+		if (userObj.isUseMail() && mailAccount != null) {
+			if (mailAccount != null || mailAccount.getMailUserName() != null) {
+				return mailAccount.getMailUserName();
+			} else {
+				return userObj.getId();
+			}
+		} else {
+			return userObj.getId();
+		}
 	}
 	public String toMailTo(String user, TskTask obj) throws Exception {
 		String assignee = obj.getAssignee();
 		if (assignee == null)
 			return null;
+		MailAccountCond cond = new MailAccountCond();
+		cond.setUserId(user);
+		MailAccount mailAccount = SwManagerFactory.getInstance().getMailManager().getMailAccount(user, cond, IManager.LEVEL_LITE);
 		SwoUser userObj = getSwoManager().getUser(user, assignee, IManager.LEVEL_LITE);
 		if (userObj == null)
 			return null;
-		return userObj.getEmail();
-	}
-	public JavaMailSender getMailSender() {
-		return mailSender;
-	}
-	public void setMailSender(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
+		if (userObj.isUseMail() && mailAccount != null) {
+			if (mailAccount != null || mailAccount.getMailUserName() != null) {
+				return mailAccount.getMailUserName();
+			} else {
+				return userObj.getId();
+			}
+		} else {
+			return userObj.getId();
+		}
 	}
 	public String getMailContent() {
 		return mailContent;
@@ -293,21 +311,6 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 			ex.printStackTrace();
 			throw new MessagingException(ex.getMessage());
 		}
-	}
-	private void sendMail(String from, String to, String title, String content) throws Exception {
-		MimeMessage mimeMsg = mailSender.createMimeMessage();
-		MimeMessageHelper msgHelper = new MimeMessageHelper(mimeMsg, true);
-		msgHelper.setTo(to);
-		msgHelper.setFrom(from);
-		msgHelper.setSubject(title);
-		mimeMsg.setContent(content, "text/html;charset=UTF-8");
-		
-		if (logger.isInfoEnabled()) {
-			StringBuffer buf = new StringBuffer();
-			buf.append("Send mail from:").append(from).append(" to:").append(to).append(" title:").append(title);
-			logger.info(buf);
-		}
-		mailSender.send(mimeMsg);
 	}
 }
 class PassAuthenticator extends Authenticator {
