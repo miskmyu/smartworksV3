@@ -8132,8 +8132,51 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		String userId = SmartUtil.getCurrentUser().getId();
+
+		int currentPage = params.getCurrentPage()-1;
+		int pageCount = params.getPageSize();
+
+		TskTaskCond tempTaskCond = new TskTaskCond();
+		tempTaskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tempTaskCond, IManager.LEVEL_ALL);
+		if (tasks == null || tasks.length == 0)
+			return new InstanceInfoList();
+		
+		String prcInstId = tasks[0].getProcessInstId();
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setProcessInstId(prcInstId);
+		taskCond.setType(TskTask.TASKTYPE_SINGLE);
+		long totalSize = SwManagerFactory.getInstance().getTskManager().getTaskSize(userId, taskCond);
+		if (totalSize == 0)
+			return new InstanceInfoList();
+		
+		taskCond.setPageSize(pageCount);
+		taskCond.setPageNo(currentPage);
+		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		
+		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
+		
+		InstanceInfoList instanceInfoList = new InstanceInfoList();
+		
+		IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, instanceId);
+		TaskInstanceInfo[] taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		
+		instanceInfoList.setInstanceDatas(taskInstanceInfo);
+		instanceInfoList.setPageSize(pageCount);
+		int totalPages = (int)totalSize % pageCount;
+		if(totalPages == 0)
+			totalPages = (int)totalSize / pageCount;
+		else
+			totalPages = (int)totalSize / pageCount + 1;
+		
+		instanceInfoList.setTotalPages(totalPages);
+		instanceInfoList.setCurrentPage(currentPage + 1);
+		instanceInfoList.setTotalSize((int)totalSize);
+		
+		return instanceInfoList;
 	}
 	@Override
 	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
