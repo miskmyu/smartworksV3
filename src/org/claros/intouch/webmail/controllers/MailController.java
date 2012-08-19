@@ -12,7 +12,7 @@ public interface MailController {
 	public void deleteEmails(int msgs[]) throws Exception;
 	public void moveEmail(Long msgId, String destFolder) throws Exception;
 	public void moveEmails(int msgs[], String destFolder) throws Exception;
-	public void appendEmail(MsgDbObject item) throws Exception;
+	public void appendEmail(MsgDbObject item, String companyId) throws Exception;
 	public void markAsRead(Long msgId) throws Exception;
 	public void markAsDeleted(int[] ids) throws Exception;
 }

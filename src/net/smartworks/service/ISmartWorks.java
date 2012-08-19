@@ -1,5 +1,6 @@
 package net.smartworks.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +80,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.util.LocalDate;
@@ -724,4 +726,9 @@ public interface ISmartWorks {
 
 	public abstract void addAdjunctMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String createMailContent(String companyId, String emailId, byte[] content, Date receivedDate) throws DocFileException;
+	
+	public abstract byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException;
+	
+	public abstract void deleteMailContent(String fileId, Date receivedDate) throws DocFileException;	
 }

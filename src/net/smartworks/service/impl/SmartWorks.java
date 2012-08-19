@@ -1,5 +1,6 @@
 
 package net.smartworks.service.impl;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +76,7 @@ import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.service.IBuilderService;
@@ -1616,6 +1618,21 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public UserInfo[] getAllUsersByDepartmentId(String departmentId) throws Exception {
 		return communityService.getAllUsersByDepartmentId(departmentId);
+	}
+
+	@Override
+	public String createMailContent(String companyId, String emailId, byte[] content, Date receivedDate) throws DocFileException {
+		return docFileService.createMailContent(companyId, emailId, content, receivedDate);
+	}
+
+	@Override
+	public byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException {
+		return docFileService.readMailContent(fileId, receivedDate);
+	}
+
+	@Override
+	public void deleteMailContent(String fileId, Date receivedDate) throws DocFileException {
+		docFileService.deleteMailContent(fileId, receivedDate);
 	}
 
 }

@@ -299,7 +299,7 @@ public class SendMailService extends BaseService {
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
-		mailCont.appendEmail(item);
+		mailCont.appendEmail(item, null);
 	}
 }
 

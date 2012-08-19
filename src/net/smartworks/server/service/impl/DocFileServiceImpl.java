@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
 import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -228,6 +230,21 @@ public class DocFileServiceImpl implements IDocFileService {
 	@Override
 	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return getDocManager().uploadExcelToWork(requestBody, request);
+	}
+
+	@Override
+	public String createMailContent(String companyId, String emailId, byte[] content, Date receivedDate) throws DocFileException {
+		return getDocManager().createMailContent(companyId, emailId, content, receivedDate);
+	}
+
+	@Override
+	public byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException {
+		return getDocManager().readMailContent(fileId, receivedDate);
+	}
+
+	@Override
+	public void deleteMailContent(String fileId, Date receivedDate) throws DocFileException {
+		getDocManager().deleteMailContent(fileId, receivedDate);
 	}
 
 /*	@Override

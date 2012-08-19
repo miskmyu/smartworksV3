@@ -370,7 +370,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
-		mailCont.appendEmail(item);
+		mailCont.appendEmail(item, null);
 	}
 	
 	private void saveDraft(AuthProfile auth, MimeMessage msg, EmailHeader header, HttpServletRequest request) throws Exception {
@@ -413,7 +413,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
-		mailCont.appendEmail(item);
+		mailCont.appendEmail(item, null);
 	}
 
 	@Override

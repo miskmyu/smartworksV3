@@ -52,6 +52,7 @@ import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.FileUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
@@ -140,6 +141,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	public static final String FILE_DIVISION_PROFILES = "Profiles";
 	public static final String FILE_DIVISION_TEMPS = "Temps";
 	public static final String FILE_DIVISION_WORKIMAGES = "WorkImages";
+	public static final String FILE_DIVISION_MAILS = "Mails";
 
 	private String dbType;
 
@@ -168,7 +170,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 	 * 
 	 * @return
 	 */
-	private File getFileRepository(String companyId, String fileDivision) throws DocFileException {
+	private File getFileRepository(String companyId, String fileDivision, Date date, String emailId) throws DocFileException {
 
 		if (this.fileDirectory == null)
 			throw new DocFileException("Attachment directory is not specified!");
@@ -195,7 +197,39 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		if (!storage.exists())
 			storage.mkdir();
 
-		if(!fileDivision.equals(FILE_DIVISION_TEMPS) && !fileDivision.equals(FILE_DIVISION_PROFILES) && !fileDivision.equals(FILE_DIVISION_WORKIMAGES)) {
+		if(fileDivision.equals(FILE_DIVISION_MAILS)){
+			// 현재사용자의 이메일서버이름으로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + emailId; 
+			storage = new File(storageDir);
+				
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+
+			// 메일 받은날짜의 년, 월 정보를 얻는다.
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH) + 1;
+	
+			// 기본 파일 저장 디렉토리와 받은날짜 년 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "Y" + year;
+			storage = new File(storageDir);
+	
+			// 없다면 생성한다.
+			if (!storage.exists())
+				storage.mkdir();
+
+			// 기본 파일 저장 디렉토리와 받은날짜 월 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "M" + month;
+	
+			// 만일 디렉토리가 없다면 생성한다.
+			storage = new File(storageDir);
+	
+			if (!storage.exists())
+				storage.mkdir();
+		}else if(!fileDivision.equals(FILE_DIVISION_TEMPS) && !fileDivision.equals(FILE_DIVISION_PROFILES) && !fileDivision.equals(FILE_DIVISION_WORKIMAGES)) {
+
 			// 현재 년, 월 정보를 얻는다.
 			Calendar currentDate = Calendar.getInstance();
 			int year = currentDate.get(Calendar.YEAR);
@@ -220,6 +254,53 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		}
 
 		return storage;
+	}
+
+	private String getFileFullPath(String companyId, String fileDivision, Date date, String fileName) throws DocFileException {
+
+		if (this.fileDirectory == null)
+			throw new DocFileException("Attachment directory is not specified!");
+		// 파일 홈 디렉토리 선택
+		String storageDir = this.fileDirectory + File.separator + "SmartFiles";
+
+		// 사용자의 회사아이디의 디렉토리 선택
+		storageDir =  storageDir + File.separator + companyId;
+
+		// 파일 형태 구분에 따른 디렉토리 선택
+		storageDir = storageDir + File.separator + fileDivision;
+
+		if(fileDivision.equals(FILE_DIVISION_MAILS)){
+			// 현재사용자의 이메일서버이름으로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + SmartUtil.getCurrentUser().getEmailId(); 
+				
+			// 메일 받은날짜의 년, 월 정보를 얻는다.
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			int year = calendar.get(Calendar.YEAR);
+			int month = calendar.get(Calendar.MONTH) + 1;
+	
+			// 기본 파일 저장 디렉토리와 받은날짜 년 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "Y" + year;
+	
+			// 기본 파일 저장 디렉토리와 받은날짜 월 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "M" + month;
+	
+		}else if(!fileDivision.equals(FILE_DIVISION_TEMPS) && !fileDivision.equals(FILE_DIVISION_PROFILES) && !fileDivision.equals(FILE_DIVISION_WORKIMAGES)) {
+
+			// 현재 년, 월 정보를 얻는다.
+			Calendar currentDate = Calendar.getInstance();
+			int year = currentDate.get(Calendar.YEAR);
+			int month = currentDate.get(Calendar.MONTH) + 1;
+	
+			// 기본 파일 저장 디렉토리와 현재 년 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "Y" + year;
+	
+			// 기본 파일 저장 디렉토리와 현재 월 정보로 파일 디렉토리를 설정한다.
+			storageDir = storageDir + File.separator + "M" + month;
+	
+		}
+
+		return storageDir + File.separator + fileName;
 	}
 
 	/**
@@ -459,6 +540,54 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		Query query = this.getSession().createSQLQuery("select docId from SWDocGroup where groupId = '" + groupId + "'");
 		return query.list();
 	}
+
+	public String createMailContent(String companyId, String emailId, byte[] content, Date receivedDate) throws DocFileException {
+
+		
+		String fileId = IDCreator.createId(SmartServerConstant.MAIL_ABBR);
+		this.setFileDirectory(OSValidator.getImageDirectory());
+
+		File repository = this.getFileRepository(companyId, FILE_DIVISION_MAILS, receivedDate, emailId);
+		String filePath = repository.getAbsolutePath() + File.separator + (String) fileId;
+
+		try{
+			FileUtil.write(filePath, content, false);
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new DocFileException("Create Mail Content Failed Error !");
+		}
+		return fileId;
+	}
+
+	public byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException {
+
+		this.setFileDirectory(OSValidator.getImageDirectory());
+		String filePath = getFileFullPath(SmartUtil.getCurrentUser().getCompanyId(),  FILE_DIVISION_MAILS, receivedDate, fileId);
+		File file = new File(filePath);
+		try{
+			if(file.exists())
+				return FileUtil.readBytes(filePath);
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new DocFileException("Read Mail Content Failed Error !");
+		}
+		return null;
+	}
+
+	public void deleteMailContent(String fileId, Date receivedDate) throws DocFileException {
+
+		this.setFileDirectory(OSValidator.getImageDirectory());
+		String filePath = getFileFullPath(SmartUtil.getCurrentUser().getCompanyId(),  FILE_DIVISION_MAILS, receivedDate, fileId);
+		File file = new File(filePath);
+		try{
+			if(file.exists())
+				FileUtil.delete(file);
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new DocFileException("Delete Mail Content Failed Error !");
+		}
+	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -718,7 +847,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		String fileDivision = "Files";
 
-		File repository = this.getFileRepository(companyId, fileDivision);
+		File repository = this.getFileRepository(companyId, fileDivision, null, null);
 		String filePath = "";
 		if (formFile != null) {
 			String fileName = "";
@@ -772,7 +901,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		String fileDivision = FILE_DIVISION_TEMPS;
 
-		File repository = this.getFileRepository(companyId, fileDivision);
+		File repository = this.getFileRepository(companyId, fileDivision, null, null);
 		String filePath = "";
 		String extension = "";
 		if (formFile != null) {
@@ -826,7 +955,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		String fileId = IDCreator.createId(SmartServerConstant.TEMP_ABBR);
 		String fileDivision = FILE_DIVISION_TEMPS;
-		File repository = this.getFileRepository(companyId, fileDivision);
+		File repository = this.getFileRepository(companyId, fileDivision, null, null);
 		String filePath = "";
 		String imagerServerPath = "";
 		String extension = "";
@@ -1017,7 +1146,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		String companyId = SmartUtil.getCurrentUser().getCompanyId();
 
 		String fileDivision = FILE_DIVISION_TEMPS;
-		File repository = this.getFileRepository(companyId, fileDivision);
+		File repository = this.getFileRepository(companyId, fileDivision, null, null);
 		String filePath = "";
 		String imagerServerPath = "";
 		String extension = "";
@@ -1127,7 +1256,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 				}				
 			}
 
-			File repository = this.getFileRepository(companyId, FILE_DIVISION_PROFILES);
+			File repository = this.getFileRepository(companyId, FILE_DIVISION_PROFILES, null, null);
 
 			String communityPictureId = communityId + "." + extension;
 			//String bigId = null;
@@ -1188,7 +1317,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 					companyId = companys[0].getId();
 				}
 			}
-			File repository = this.getFileRepository(companyId, workType);
+			File repository = this.getFileRepository(companyId, workType, null, null);
 			String fileId = tempFileId.split("temp_")[tempFileId.split("temp_").length-1];
 			if(workType.equals("Pictures")) fileId = "pic_" + fileId;
 			else fileId = "file_" + fileId;

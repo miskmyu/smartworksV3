@@ -234,4 +234,8 @@ public class User extends WorkSpace {
 		return NO_PICTURE_PATH + User.NO_USER_PICTURE + ".jpg";
 	}
 	
+	public String getEmailId(){
+		if(SmartUtil.isBlankObject(mailAccounts)) return null;
+		return mailAccounts[0].getEmailId();
+	}
 }
