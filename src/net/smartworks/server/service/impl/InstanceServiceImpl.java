@@ -91,6 +91,8 @@ import net.smartworks.server.engine.config.model.SwcWorkHour;
 import net.smartworks.server.engine.config.model.SwcWorkHourCond;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistory;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistoryCond;
 import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -8135,8 +8137,42 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		String userId = SmartUtil.getCurrentUser().getId();
+
+		int currentPage = params.getCurrentPage();
+		int pageCount = params.getPageSize();
+		//instanceId = recordId
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
+		if (tasks == null || tasks.length == 0)
+			return new InstanceInfoList();
+		
+		String prcInstId = tasks[0].getProcessInstId();
+		FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
+		cond.setRefPrcInstId(prcInstId);
+		cond.setPageSize(pageCount);
+		cond.setPageNo(currentPage);
+		
+		FileDownloadHistory[] downloadHistorys = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorys(userId, cond, IManager.LEVEL_ALL);
+		if (downloadHistorys == null || downloadHistorys.length == 0)
+			return new InstanceInfoList();
+		
+		InstanceInfoList instanceInfolist = new InstanceInfoList();
+		InstanceInfo[] instanceInfos = new InstanceInfo[downloadHistorys.length];
+		for (int i = 0; i < downloadHistorys.length; i++) {
+			FileDownloadHistory downloadHistory = downloadHistorys[i];
+			InstanceInfo instanceInfo = new InstanceInfo();
+			instanceInfo.setSubject(downloadHistory.getFileName());
+			instanceInfo.setOwner(ModelConverter.getUserInfoByUserId(downloadHistory.getDownloadUserId()));
+			instanceInfo.setCreatedDate(new LocalDate(downloadHistory.getCreationDate().getTime()));
+			instanceInfos[i] = instanceInfo;
+		}
+		instanceInfolist.setInstanceDatas(instanceInfos);
+		
+		return instanceInfolist;
 	}
 	@Override
 	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception {
