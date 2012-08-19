@@ -2127,7 +2127,12 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 				//데이터 내보내기에서 연결되는 데이터가 없을경우 데이터를 새로 만든다
 				//만들때 accessLevel createUser createDate 등 기본적으로 들어가야 할데이터를 셋팅한다
 				defaultSetRecord(user, mappingRecord);
-				SwManagerFactory.getInstance().getSwdManager().setRecord(user, mappingRecord, null);
+				
+				//내보내기 할시에는 어드민 계정으로 내보내기를 한다
+				mappingRecord.setCreationUser("admin");
+				mappingRecord.setWorkSpaceId("admin");
+				mappingRecord.setWorkSpaceType("4");
+				SwManagerFactory.getInstance().getSwdManager().setRecord("admin", mappingRecord, null);
 				
 				setDataRefByRecord(user, mappingRecord);
 				

@@ -8140,7 +8140,7 @@ public class InstanceServiceImpl implements IInstanceService {
 
 		String userId = SmartUtil.getCurrentUser().getId();
 
-		int currentPage = params.getCurrentPage();
+		int currentPage = params.getCurrentPage()-1;
 		int pageCount = params.getPageSize();
 		//instanceId = recordId
 		
@@ -8155,6 +8155,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		cond.setRefPrcInstId(prcInstId);
 		cond.setPageSize(pageCount);
 		cond.setPageNo(currentPage);
+		
+		cond.setOrders(new Order[]{new Order("creationDate", false)});
 		
 		FileDownloadHistory[] downloadHistorys = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorys(userId, cond, IManager.LEVEL_ALL);
 		if (downloadHistorys == null || downloadHistorys.length == 0)
