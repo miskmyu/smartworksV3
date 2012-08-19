@@ -406,7 +406,7 @@
 					<div class="txt_btn task_information">
 					    <%if(numberOfRelatedWorks > 0){ %><div class="po_left pt3"><a href=""><fmt:message key="common.title.refering_works"/> <span class="t_up_num">[<%=numberOfRelatedWorks %>]</span></a></div><%} %>
 					    <%if(numberOfUpdateHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_instance_histories"><fmt:message key="common.title.update_history"/> <span class="t_up_num">[<%=numberOfUpdateHistories %>]</span></a></div><%} %>
-					    <%if(numberOfDownloadHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_instance_histories"><fmt:message key="common.title.download_history"/> <span class="t_up_num">[<%=numberOfDownloadHistories %>]</span></a></div><%} %>
+					    <%if(numberOfDownloadHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_download_histories"><fmt:message key="common.title.download_history"/> <span class="t_up_num">[<%=numberOfDownloadHistories %>]</span></a></div><%} %>
 					    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
 					    	<%
 				    		User lastModifier = instance.getLastModifier();
