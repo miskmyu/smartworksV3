@@ -18,8 +18,10 @@ import net.smartworks.server.engine.common.loginuser.exception.LoginUserExceptio
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
+import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.docfile.exception.DocFileException;
 
 import org.hibernate.Query;
 
@@ -218,6 +220,19 @@ public class LoginUserManagerImpl extends AbstractManager implements ILoginUserM
 
 		query.executeUpdate();
 
+	}
+
+	@Override
+	public void setLoginUserHistory(String user, LoginUserHistory obj) throws LoginUserException {
+		try {
+			fill(user, obj);
+			set(obj);
+		} catch (LoginUserException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new LoginUserException(e);
+		}
+		
 	}
 
 }

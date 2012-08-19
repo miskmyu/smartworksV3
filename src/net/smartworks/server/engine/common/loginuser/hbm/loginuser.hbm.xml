@@ -6,5 +6,11 @@
 		<id name="userId" type="string" length="50" unsaved-value="undefined"/>
 		<property name="loginTime" type="timestamp"/>
 	</class>
-
+	<class name="LoginUserHistory" table="SwLoginUserHistory">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="userId" type="string" length="50"/>
+		<property name="loginTime" type="timestamp"/>
+	</class>
 </hibernate-mapping>

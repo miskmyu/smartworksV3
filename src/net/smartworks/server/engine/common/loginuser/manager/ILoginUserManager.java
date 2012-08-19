@@ -11,6 +11,7 @@ package net.smartworks.server.engine.common.loginuser.manager;
 import net.smartworks.server.engine.common.loginuser.exception.LoginUserException;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
+import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
 
 public interface ILoginUserManager {
 
@@ -23,5 +24,7 @@ public interface ILoginUserManager {
 	public long getLoginUserSize(String user, LoginUserCond cond) throws LoginUserException;
 	public LoginUser[] getLoginUsers(String user, LoginUserCond cond, String level) throws LoginUserException;
 	public void deleteAllLoginUser(String user) throws LoginUserException;
+	
+	public void setLoginUserHistory(String user, LoginUserHistory obj) throws LoginUserException;
 
 }

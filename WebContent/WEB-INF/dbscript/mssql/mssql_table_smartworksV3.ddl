@@ -2483,3 +2483,9 @@ CREATE TABLE SWFileDownHistory (
     primary key (id)
 );
 
+CREATE TABLE SwLoginUserHistory (
+	id varchar(50) NOT NULL,
+	userId varchar(50),
+	loginTime datetime,
+    primary key (id)
+);
