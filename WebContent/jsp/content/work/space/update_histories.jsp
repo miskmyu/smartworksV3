@@ -148,7 +148,7 @@
 							}
 						}
 					%>
-						<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
+						<li class="sub_instance_list js_show_instance" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
 							<div class="det_title" style="line-height: 16px">
 					        	<span class="number"><%=currentCount %></span>
 					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>

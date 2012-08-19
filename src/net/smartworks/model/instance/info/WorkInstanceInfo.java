@@ -118,4 +118,19 @@ public class WorkInstanceInfo extends InstanceInfo {
 		return false;
 	}
 	
+	public WorkInstance getWorkInstance(){
+		WorkInstance workInstance = new WorkInstance();
+		workInstance.setCreatedDate(this.getCreatedDate());
+		workInstance.setId(this.getId());
+		workInstance.setLastModifiedDate(this.getLastModifiedDate());
+		workInstance.setLastModifier((this.getLastModifier()!=null) ? this.getLastModifier().getUser():null);
+		workInstance.setOwner((this.getOwner()!=null) ? this.getOwner().getUser() : null);
+		workInstance.setStatus(this.getStatus());
+		workInstance.setSubject(this.getSubject());
+		workInstance.setType(this.getType());
+		workInstance.setWork((this.getWork()!=null) ? this.getWork().getWork():null);
+		workInstance.setWorkSpace((this.getWorkSpace()!=null) ? this.getWorkSpace().getWorkSpace() : null);
+		return workInstance;
+	}
+	
 }

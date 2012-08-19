@@ -107,4 +107,17 @@ public class UserInfo extends WorkSpaceInfo {
 		}
 		return fullDepartment;
 	}	
+	
+	public User getUser(){
+		User user = new User();
+		user.setBigPictureName(this.getBigPictureName());
+		user.setCellPhoneNo(this.getCellPhoneNo());
+		user.setId(this.getId());
+		user.setName(this.getName());
+		user.setPosition(this.getPosition());
+		user.setRole(this.getRole());
+		user.setSignPicture(this.getSignPicture());
+		user.setSmallPictureName(this.getSmallPictureName());
+		return user;
+	}
 }

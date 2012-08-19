@@ -27,7 +27,7 @@ public class FileInstanceInfo extends WorkInstanceInfo {
 	public void setViews(int views) {
 		this.views = views;
 	}
-	public WorkInstanceInfo getWorkInstance() {
+	public WorkInstanceInfo getWorkInstanceInfo() {
 		return workInstance;
 	}
 	public void setWorkInstance(WorkInstanceInfo workInstance) {

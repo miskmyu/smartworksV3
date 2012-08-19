@@ -49,8 +49,8 @@
 	if(!SmartUtil.isBlankObject(formId) && !SmartUtil.isBlankObject(instId)){
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else if(!SmartUtil.isBlankObject(taskInstId)){
-		instanceInfo = smartWorks.getTaskInstanceById(taskInstId);		
-		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
+		instance = (Instance)session.getAttribute("workInstance");
+		taskInstance = ((TaskInstanceInfo)smartWorks.getTaskInstanceById(taskInstId)).getTaskInstance();		
 	}else{
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	}		
@@ -63,7 +63,10 @@
 	case WorkInstance.TYPE_INFORMATION:
 		workType = SmartWork.TYPE_INFORMATION;
 		iworkInstance = (InformationWorkInstance)instance;
-		targetInstId = instance.getId();
+		if(SmartUtil.isBlankObject(taskInstance))
+			targetInstId = instance.getId();
+		else
+			targetInstId = taskInstance.getWorkInstance().getId();
 		break;
 	case WorkInstance.TYPE_PROCESS:
 		workType = SmartWork.TYPE_PROCESS;
