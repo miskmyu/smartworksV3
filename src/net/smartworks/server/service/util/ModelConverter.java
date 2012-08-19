@@ -4007,9 +4007,6 @@ public class ModelConverter {
 			return null;
 		if (iWInstanceInfo == null) 
 			iWInstanceInfo = new IWInstanceInfo();
-
-		if (!CommonUtil.isEmpty(recordId))
-			iWInstanceInfo.setId(recordId);
 		
 		TskTaskCond tskCond = new TskTaskCond();
 		tskCond.setExtendedProperties(new Property[] {new Property("recordId", recordId)});
@@ -4019,6 +4016,11 @@ public class ModelConverter {
 		if(tasks != null)
 			processInstId = tasks[0].getProcessInstId();
 
+		
+		if (!CommonUtil.isEmpty(recordId))
+			iWInstanceInfo.setId(processInstId);
+		
+		
 //		TskTask[] lastSwTask = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
 		TskTask lastSwTask = getLastTskTaskByInstanceId(processInstId);
 
