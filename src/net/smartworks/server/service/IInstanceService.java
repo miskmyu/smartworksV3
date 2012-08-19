@@ -181,4 +181,10 @@ public interface IInstanceService {
 	
 	public ImageInstance getImageInstanceById(String instId) throws Exception;
 	
+	public InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception;
+
+	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception;
+	
+	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
+	
 }

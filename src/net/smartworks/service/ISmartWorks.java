@@ -731,4 +731,12 @@ public interface ISmartWorks {
 	public abstract byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException;
 	
 	public abstract void deleteMailContent(String fileId, Date receivedDate) throws DocFileException;	
+
+	public abstract InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception;
+	
+	public abstract InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception;
+	
+	public abstract InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
+	
+
 }

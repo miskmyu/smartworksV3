@@ -1635,4 +1635,19 @@ public class SmartWorks implements ISmartWorks {
 		docFileService.deleteMailContent(fileId, receivedDate);
 	}
 
+	@Override
+	public InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception {
+		return instanceService.getUpdateHistoryList(instanceId, params);
+	}
+
+	@Override
+	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
+		return instanceService.getDownloadHistoryList(instanceId, params);
+	}
+
+	@Override
+	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception {
+		return instanceService.getRelatedWorkList(instanceId, params);
+	}
+
 }
