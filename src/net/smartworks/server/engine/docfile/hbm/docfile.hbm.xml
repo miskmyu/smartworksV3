@@ -36,4 +36,24 @@
 		<property name="writtenTime" column="writtenTime" type="timestamp"/>
 		<property name="deleteAction" type="boolean"/>
 	</class>
+	
+	<class name="FileDownloadHistory" table="SWFileDownHistory">
+		<id name="objId" column="id" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="fileId" type="string" length="50"/>
+		<property name="fileName" type="string" length="255"/>
+		<property name="downloadUserId" type="string" length="50"/>
+		<property name="refPackageId" type="string" length="100"/>
+		<property name="refPackageName" type="string" length="255"/>
+		<property name="refPrcInstId" type="string" length="100"/>
+		<property name="refPrcInstName" type="string" length="200"/>
+		<property name="refTaskId" type="string" length="50"/>
+		<property name="refTaskName" type="string" length="200"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+	
 </hibernate-mapping>
