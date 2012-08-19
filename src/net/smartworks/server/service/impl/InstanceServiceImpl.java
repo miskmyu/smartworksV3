@@ -8128,5 +8128,20 @@ public class InstanceServiceImpl implements IInstanceService {
 		return getImageInstanceById(user.getCompanyId(), user.getId(), swdRecord);
 
 	}
+	@Override
+	public InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
