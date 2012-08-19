@@ -24,7 +24,7 @@ $(function() {
 		var newMail = input.parents('.js_new_mail_page');
 		var lastHref = newMail.attr('lastHref');
 		if(isEmpty(lastHref))
-			window.location.reload(true);
+			document.location.href = "home.sw";
 		else
 			document.location.href = lastHref;
 		return false;

@@ -646,4 +646,10 @@ $(function() {
 		return true;
 	});
 
+	$('.js_check_mail_auto_backup').live('click', function(e){
+		var input = $(targetElement(e));
+		if(input.is(':checked')) input.next().show();
+		else input.next().hide();
+	});
+	
 });

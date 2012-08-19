@@ -107,7 +107,7 @@
 						if(!SmartUtil.isBlankObject(task.getApprovalId())){
 							owner = task.getAssigner();
 					%>
-							<li class="sub_instance_list js_show_instance" instanceId="<%=task.getWorkInstance().getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>">
+							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>" isApproval="true">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=historyCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
@@ -139,7 +139,7 @@
 						}else if(!SmartUtil.isBlankObject(task.getForwardId())){
 							owner = task.getAssigner();
 						%>
-							<li class="sub_instance_list js_show_instance" instanceId="<%=task.getWorkInstance().getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>">
+							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>" isForward="true">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=historyCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
@@ -182,7 +182,7 @@
 								}
 							}
 						%>
-							<li class="sub_instance_list js_show_instance" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
+							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=historyCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>

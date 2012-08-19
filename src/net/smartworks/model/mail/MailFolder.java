@@ -12,6 +12,10 @@ public class MailFolder extends BaseObject {
 	public static final int TYPE_SYSTEM_TRASH 	= 4;
 	public static final int TYPE_SYSTEM_JUNK 	= 5;
 	public static final int TYPE_USER 			= 6;
+	public static final int TYPE_SYSTEM_BACKUP 	= 7;
+	public static final int TYPE_SYSTEM_B_INBOX = 71;
+	public static final int TYPE_SYSTEM_B_SENT 	= 73;
+	
 	
 	public static final int SEND_TYPE_NONE		= 0;
 	public static final int SEND_TYPE_REPLY		= 1;
@@ -28,8 +32,10 @@ public class MailFolder extends BaseObject {
 	public static final String ID_STRING_TRASH 	= "Trash";
 	public static final String ID_STRING_DRAFTS = "Drafts";
 	public static final String ID_STRING_USER 	= "User";
+	public static final String ID_STRING_BACKUP = "Backup";
 	
 	private int type = TYPE_USER;
+	private String parentId;
 	private String desc;
 	private int unreadItemCount = 0;
 	private int totalItemCount = 0;
@@ -46,6 +52,12 @@ public class MailFolder extends BaseObject {
 			return SmartMessage.getString("mail.title.folder.trash");
 		case 5:
 			return SmartMessage.getString("mail.title.folder.junk");
+		case 7:
+			return SmartMessage.getString("mail.title.folder.backup");
+		case 71:
+			return SmartMessage.getString("mail.title.folder.inbox");
+		case 73:
+			return SmartMessage.getString("mail.title.folder.sent");
 		}
 		return super.getName();
 	}
@@ -64,6 +76,12 @@ public class MailFolder extends BaseObject {
 			return ID_STRING_JUNK;
 		case 6:
 			return ID_STRING_USER;
+		case 7:
+			return ID_STRING_BACKUP;
+		case 71:
+			return ID_STRING_INBOX;
+		case 73:
+			return ID_STRING_SENT;
 		}
 		return "";
 	}
@@ -73,6 +91,14 @@ public class MailFolder extends BaseObject {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public String getParentId() {
+		return this.parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getDesc() {
@@ -106,6 +132,12 @@ public class MailFolder extends BaseObject {
 
 	public MailFolder(String id, String name, int type) {
 		super(id, name);
+		this.type = type;
+	}
+	
+	public MailFolder(String id, String parentId, String name, int type) {
+		super(id, name);
+		this.parentId = parentId;
 		this.type = type;
 	}	
 }

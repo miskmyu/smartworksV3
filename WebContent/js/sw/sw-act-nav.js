@@ -223,6 +223,7 @@ $(function() {
 		var groupId = input[0].getAttribute("groupId");
 		var departmentId = input[0].getAttribute("departmentId");
 		var comlistByDepart = input.parents('.js_comlist_by_depart_page');
+		var folderId = input[0].getAttribute("folderId");
 		if(!isEmpty(comlistByDepart)){
 			var editMember = comlistByDepart.parents('.js_organization_management_page').find('.js_edit_member');
 			$.ajax({
@@ -232,7 +233,7 @@ $(function() {
 				}			
 			});			
 		}
-		if (url == 'undefined' || (categoryId==null && isEmpty(groupId) && isEmpty(departmentId))) {
+		if (url == 'undefined' || (categoryId==null && isEmpty(groupId) && isEmpty(departmentId) && isEmpty(folderId))) {
 			return false;
 		}
 		if(isEmpty($(target).children())){
@@ -247,7 +248,8 @@ $(function() {
 				data : {
 					categoryId : categoryId,
 					groupId : groupId,
-					departmentId : departmentId
+					departmentId : departmentId,
+					folderId : folderId
 				},
 				context : input,
 				success : function(data, status, jqXHR) {

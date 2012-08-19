@@ -128,7 +128,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	    String emailId = mailAccounts[0].getEmailId();
 		String username = mailAccounts[0].getUserName();
 		String password = mailAccounts[0].getPassword();
-		boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
+		boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
 		if (username != null && password != null) {
 			auth = new AuthProfile();
 			auth.setEmailId(emailId);
@@ -191,7 +191,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
-			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
+			boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
@@ -255,7 +255,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		    String emailId = mailAccounts[0].getEmailId();
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
-			boolean isDeleteAfterFetched = mailAccounts[0].isDeleteAfterFetched();
+			boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
@@ -428,29 +428,64 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			ConnectionProfile profile = getConnectionProfile();
 			AuthProfile auth = getAuthProfile();
 			
-			String sFolder = folderId;
-			if (sFolder == null || sFolder.equals("")) {
-				sFolder = Constants.FOLDER_INBOX(profile);
-			}
-	
 			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
 			FolderController folderCont = foldFact.getFolderController();
-			if (profile.getProtocol().equals(Constants.POP3)) {
-				if (sFolder == null || sFolder.equals("INBOX")) {
-					FolderDbObject foldObj = folderCont.getInboxFolder();
-					if(!SmartUtil.isBlankObject(foldObj))
-						sFolder = foldObj.getId().toString();
-				}
-			}
 			
-			List folders = folderCont.getFolders();
+			List folders = folderCont.getFolders(folderId);
 			if (folders != null) {
 				FolderDbObjectWrapper tmp = null;
 				mailFolders = new MailFolder[folders.size()];
-				for(int i=0; i<mailFolders.length; i++){
-					tmp = (FolderDbObjectWrapper)folders.get(i);
-					mailFolders[i] = new MailFolder(tmp.getId().toString(), tmp.getFolderName(), tmp.getFolderType());
-					mailFolders[i].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+				if(SmartUtil.isBlankObject(folderId)){
+					int customCount = 0;
+					for(int i=0; i<mailFolders.length; i++){
+						tmp = (FolderDbObjectWrapper)folders.get(i);
+						int index = 0;
+						switch(tmp.getFolderType()){
+						case MailFolder.TYPE_SYSTEM_INBOX:
+							index = 0;
+							break;
+						case MailFolder.TYPE_SYSTEM_SENT:
+							index = 1;
+							break;
+						case MailFolder.TYPE_SYSTEM_DRAFTS:
+							index = 2;
+							break;
+						case MailFolder.TYPE_SYSTEM_TRASH:
+							index = 3;
+							break;
+						case MailFolder.TYPE_SYSTEM_JUNK:
+							index = 4;
+							break;
+						case MailFolder.TYPE_SYSTEM_BACKUP:
+							index = 5;
+							break;
+						case MailFolder.TYPE_USER:
+							index = 6 + customCount++;
+						}
+						mailFolders[index] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
+						mailFolders[index].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+					}
+				}else if((Integer.parseInt(folderId) == MailFolder.TYPE_SYSTEM_BACKUP) && folders.size()==2){
+					for(int i=0; i<mailFolders.length; i++){
+						tmp = (FolderDbObjectWrapper)folders.get(i);
+						int index = 0;
+						switch(tmp.getFolderType()){
+						case MailFolder.TYPE_SYSTEM_B_INBOX:
+							index = 0;
+							break;
+						case MailFolder.TYPE_SYSTEM_B_SENT:
+							index = 1;
+							break;
+						}
+						mailFolders[index] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
+						mailFolders[index].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+					}
+				}else{
+					for(int i=0; i<mailFolders.length; i++){
+						tmp = (FolderDbObjectWrapper)folders.get(i);
+						mailFolders[i] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
+						mailFolders[i].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+					}					
 				}
 			}
 			return mailFolders;

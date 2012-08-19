@@ -33,6 +33,7 @@ import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -245,7 +246,7 @@ public interface ISmartWorks {
 
 	public abstract Work getWorkById(String workId) throws Exception;
 
-	public abstract Instance getInstanceById(String instanceId) throws Exception;
+	public abstract TaskInstance getTaskInstanceById(String taskInstId) throws Exception;
 	
 	public abstract InstanceInfo[] searchMyRunningInstance(String key) throws Exception;
 

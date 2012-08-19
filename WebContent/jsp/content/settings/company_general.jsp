@@ -111,6 +111,28 @@
 					</table>
 				</div>
 				<!-- 목록영역 -->
+				<!-- 목록영역 -->
+				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.titlelogo_setting"/></div></div>
+				
+				<div class="boTb">
+					<table>
+						<colgroup>
+							<col width="25%" />
+							<col width="75%" />
+						</colgroup>
+						<tbody>
+							<tr class="end">
+								<th rowspan="2"><fmt:message key="settings.title.company.titlelogo_setting"/></th>
+								<td>
+									<div class="js_company_titlelogo_field js_company_titlelogo" imgSource="<%=companyGeneral.getCompanyTitleLogo()%>"></div>
+									<div class="t_s11" style="vertical-align:bottom"><fmt:message key="settings.title.company.titlelogo_desc"/></div>
+
+ 								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 목록영역 -->
 				<!-- 로그인화면 이미지 설정 -->
 				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.loginimage_setting"/></div></div>
 				
@@ -199,6 +221,12 @@
 	if(!isEmpty(companyLogos)) {
 		for(var i=0; i<companyLogos.length; i++) {			
 			loadCompanyLogoField();
+		}		
+	}
+	var companyTitleLogos = $('div.js_company_titlelogo');
+	if(!isEmpty(companyTitleLogos)) {
+		for(var i=0; i<companyTitleLogos.length; i++) {			
+			loadCompanyTitleLogoField();
 		}		
 	}
 	var companyLoginImages = $('div.js_company_loginimage');

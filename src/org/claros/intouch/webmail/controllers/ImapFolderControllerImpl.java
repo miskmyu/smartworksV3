@@ -132,6 +132,73 @@ public class ImapFolderControllerImpl implements FolderController {
 		return res;
 	}
 
+	public List getFolders(String parentId) throws Exception {
+		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(null);
+		Folder folders[] = protocol.listFolders();
+		
+		ArrayList res = new ArrayList();
+		boolean inboxAdded = false;
+		if (folders != null) {
+			Folder tmp = null;
+			String n, fn = null;
+			for (int i=0; i<folders.length; i++) {
+				try {
+					tmp = folders[i];
+					if (tmp != null) {
+						n = tmp.getName();
+						fn = tmp.getFullName();
+//						if (fn != null && fn.startsWith("INBOX.")) {
+						//	n = fn;
+//						}
+						Integer type = determineFolderType(fn);
+						if (type.equals(Constants.FOLDER_TYPE_INBOX)) {
+							inboxAdded = true;
+						}
+						FolderDbObject item = new FolderDbObject(null, null, auth.getUsername(), n, type);
+						FolderDbObjectWrapper wr = new FolderDbObjectWrapper(item);
+						wr.setUnreadItemCount(new Integer(tmp.getUnreadMessageCount()));
+						wr.setTotalItemCount(new Integer(tmp.getMessageCount()));
+						res.add(wr);
+					}
+				} catch (MessagingException e) {
+					// do not worry about this. folder might be deleted but still subscribed.
+					log.debug(e);
+				}
+			}
+		}
+		
+		// inbox is not added in this server implementation(weird!!!) . Please add it.
+		if (!inboxAdded) {
+			FolderDbObject item = new FolderDbObject(null, null, auth.getUsername(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile).toUpperCase(), Constants.FOLDER_TYPE_INBOX);
+			FolderDbObjectWrapper wr = new FolderDbObjectWrapper(item);
+			Folder inbox = protocol.getFolder();
+			if (inbox.exists()) {
+				wr.setUnreadItemCount(new Integer(inbox.getUnreadMessageCount()));
+				wr.setTotalItemCount(new Integer(inbox.getMessageCount()));
+				res.add(wr);
+			}
+		}
+		
+		Collections.sort(res, new Comparator() {
+			public int compare(Object f1, Object f2) {
+				FolderDbObjectWrapper fw1 = (FolderDbObjectWrapper)f1;
+				FolderDbObjectWrapper fw2 = (FolderDbObjectWrapper)f2;
+				
+				Integer t1 = fw1.getFolderType();
+				Integer t2 = fw2.getFolderType();
+				
+				if (t1.equals(Constants.FOLDER_TYPE_CUSTOM) && t2.equals(Constants.FOLDER_TYPE_CUSTOM)) {
+					return fw1.getFolderName().compareTo(fw2.getFolderName());
+				} else {
+					return t1.compareTo(t2);
+				}
+			}
+		});
+
+		return res;
+	}
+
 	/**
 	 * 
 	 * @param folderName
@@ -319,6 +386,24 @@ public class ImapFolderControllerImpl implements FolderController {
 
 	@Override
 	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FolderDbObject getBackupFolder() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FolderDbObject getBackupInboxFolder() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FolderDbObject getBackupSentFolder() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -42,13 +42,23 @@
 					break;
 				}
 			}
+			if(SmartUtil.isBlankObject(forwardedTask)){
+				for(TaskInstanceInfo task : tasks){
+					if(task.isForwardedTask(taskInstId)){
+						forwardId = task.getForwardId();
+						subject = task.getSubject();
+						content = task.getContent();
+						break;
+					}
+				}
+			}
 		}
 	}
 
 	String forwarderId = "";
 	String forwarderName = "";
 	String forwardDate = "";
-	if(!SmartUtil.isBlankObject(forwardedTask)){
+	if(!SmartUtil.isBlankObject(forwardId)){
 		forwarderId = forwardedTask.getAssigner().getId();
 		forwarderName = forwardedTask.getAssigner().getLongName();
 		forwardDate = forwardedTask.getCreatedDate().toLocalDateTimeSimpleString();
@@ -75,7 +85,7 @@
 				forwardDateTitle="<fmt:message key='forward.title.forward_date' />" forwardDate="<%=CommonUtil.toNotNull(forwardDate)%>">
 			</div>
 			<%
-			if(!SmartUtil.isBlankObject(forwardedTask) && !SmartUtil.isBlankObject(tasks)){
+			if(!SmartUtil.isBlankObject(forwardId) && !SmartUtil.isBlankObject(tasks)){
 			%>
 				<div class="reply">
 					<div class="up_point_sgr pos_works"></div>
@@ -130,15 +140,18 @@
 								</li>					
 						<%
 						}
+						if(!SmartUtil.isBlankObject(forwardedTask)){
 						%>
-						<li class="sub_instance_list">
-								<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
-								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-					        	<span class="comment_box">
-									<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
-					        	</span>								
-						</li>
-						
+							<li class="sub_instance_list">
+									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+						        	<span class="comment_box">
+										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+						        	</span>								
+							</li>
+						<%
+						}
+						%>
 					</ul>
 				</div>
 			<%

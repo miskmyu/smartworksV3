@@ -24,6 +24,7 @@ public class Constants {
 	private static String STR_FOLDER_SENT = "Sent Mail";
 	private static String STR_FOLDER_TRASH = "Trash";
 	private static String STR_FOLDER_DRAFTS = "Drafts";
+	private static String STR_FOLDER_BACKUP = "Backup";
 	
 	/**
 	 * 
@@ -80,5 +81,11 @@ public class Constants {
 			return profile.getFolderNameSpace() + STR_FOLDER_DRAFTS;
 		}
 		return STR_FOLDER_DRAFTS;
+	}
+	public static String FOLDER_BACKUP(ConnectionProfile profile) {
+		if (profile.getProtocol().equals(IMAP)) {
+			return profile.getFolderNameSpace() + STR_FOLDER_BACKUP;
+		}
+		return STR_FOLDER_BACKUP;
 	}
 }

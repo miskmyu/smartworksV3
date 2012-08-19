@@ -19,6 +19,9 @@ public class Constants {
 	public static final Integer FOLDER_TYPE_TRASH = new Integer(4);
 	public static final Integer FOLDER_TYPE_JUNK = new Integer(5);
 	public static final Integer FOLDER_TYPE_CUSTOM = new Integer(6);
+	public static final Integer FOLDER_TYPE_BACKUP = new Integer(7);
+	public static final Integer FOLDER_TYPE_B_INBOX = new Integer(71);
+	public static final Integer FOLDER_TYPE_B_SENT = new Integer(73);
 	
 	public static String tmpDir;
 	public static String charset;

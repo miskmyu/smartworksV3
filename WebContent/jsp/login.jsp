@@ -12,6 +12,7 @@
 	CompanyGeneral companyGeneral = SmartUtil.isBlankObject(smartWorks.getCompanyGeneral()) ? new CompanyGeneral() : smartWorks.getCompanyGeneral();
 
 	String companyLoginImage = companyGeneral.getCompanyLoginImage();
+	String companyTitleLogo = companyGeneral.getCompanyTitleLogo();
 %>
 <html>
 <fmt:setLocale value="<%=java.util.Locale.getDefault().getLanguage() %>" scope="request" />
@@ -47,7 +48,7 @@
 			<!-- Header -->
 			<div id="lo_header">
 				<div class="lo_logo pt3 vb">
-					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="images/lo_logo_f.gif" /></a>
+					<a title="Smartworks.net" href="http://www.smartworks.net"><img src="<%=companyTitleLogo%>" /></a>
 					<!--원래 SmartWorks이미지는  lo_logo_f.gif -->
 				</div>
 	

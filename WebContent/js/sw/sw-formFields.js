@@ -67,6 +67,31 @@ function loadCompanyLogoField() {
 	}
 };
 
+function loadCompanyTitleLogoField() {
+	var companyTitleLogoFields = $('div.js_company_titlelogo_field');
+	if(!isEmpty(companyTitleLogoFields)) {
+		for(var i=0; i<companyTitleLogoFields.length; i++) {
+			var companyTitleLogoField = $(companyTitleLogoFields[i]);
+			
+			var imgSource = companyTitleLogoField.attr('imgSource');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			companyTitleLogoField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.ImageBoxBuilder.buildEx({
+				container: gridRow,
+				fieldId: "imgCompanyTitleLogo",
+				fieldName: "picture profile",
+				imgSource: imgSource,
+				columns: 1,
+				pictureWidth: 130,
+				pictureHeight: 35,
+				required: false
+			});
+		}		
+	}
+};
+
 function loadCompanyLoginImageField() {
 	var companyLoginImageFields = $('div.js_company_loginimage_field');
 	if(!isEmpty(companyLoginImageFields)) {

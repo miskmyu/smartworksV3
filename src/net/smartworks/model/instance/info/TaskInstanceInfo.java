@@ -121,6 +121,17 @@ public class TaskInstanceInfo extends InstanceInfo {
 		this.name = name;
 		this.taskType = taskType;
 	}
+	
+	public boolean isForwardedTask(String taskInstId){
+		if(	taskInstId.equals(this.getId()) 
+			&& (this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			&& !SmartUtil.isBlankObject(this.getAssignee())){ 
+			return true;
+		}
+		return false;
+		
+	}
+	
 	public boolean isRunningForwardedForMe(String userId, String taskInstId){
 		if(	taskInstId.equals(this.getId()) 
 			&& (this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
