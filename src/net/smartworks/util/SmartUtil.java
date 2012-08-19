@@ -474,6 +474,21 @@ public class SmartUtil {
 		
 	}
 	
+//	public static List sortListByString(List input, String key){
+//        for (int x=0; x<input.size(); x++) // bubble sort outer loop
+//        {
+//            for (int i=0; i < input.size()-i; i++) {
+//            	if((String)input.get(i).getClass().getField(key) > (String)input.get(i+1).getClass().getField(key))
+//                {
+//                    Object temp = input.get(i);
+//                    input.set(i,input.get(i+1) );
+//                    input.set(i+1, temp);
+//                }
+//            }
+//        }
+//
+//	}
+//	
 	public static String getSubjectString(String userId){
 		return userId.replace('.' , '_');
 	}

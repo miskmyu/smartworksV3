@@ -11,6 +11,7 @@ import org.claros.intouch.webmail.models.FolderDbObjectWrapper;
  */
 public interface FolderController {
 	public List getFolders() throws Exception;
+	public List getFolders(String parentId) throws Exception;
 	public FolderDbObject getFolder(String folder) throws Exception;
 	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception;
 	public List getMailsByFolder(String folder) throws Exception;
@@ -27,5 +28,8 @@ public interface FolderController {
 	public FolderDbObject getSentItems() throws Exception;
 	public FolderDbObject getTrashFolder() throws Exception;
 	public FolderDbObject getDraftsFolder() throws Exception;
+	public FolderDbObject getBackupFolder() throws Exception;
+	public FolderDbObject getBackupInboxFolder() throws Exception;
+	public FolderDbObject getBackupSentFolder() throws Exception;
 	public List getHeadersByFolder(String currFolder, int[] msgs) throws Exception;
 }

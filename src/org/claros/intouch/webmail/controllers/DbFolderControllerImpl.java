@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.mail.Session;
 
 import net.smartworks.model.mail.MailFolder;
+import net.smartworks.util.SmartUtil;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -76,6 +77,8 @@ public class DbFolderControllerImpl implements FolderController {
 			
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND FOLDER_TYPE = ?"; 
 			folder = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, folderType});
+		}catch (Exception e){
+			e.printStackTrace();
 		} finally { 
 			JdbcUtil.close(dao);
 			dao = null;
@@ -158,6 +161,41 @@ public class DbFolderControllerImpl implements FolderController {
 		return myList;
 	}
 
+	public List getFolders(String parentId) throws Exception {
+		IGenericDao dao = null;
+		ArrayList myList = null;
+		try {
+			dao = Utility.getDbConnection();
+			String username = auth.getEmailId();
+			Long lParent = (SmartUtil.isBlankObject(parentId)) ? new Long(0) : new Long(parentId);
+		
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND PARENT_ID = ?";
+			List folders = dao.readList(FolderDbObject.class, sql, new Object[] {username, lParent});
+		
+			myList = new ArrayList();
+			if (folders != null) {
+				FolderDbObject tmp = null;
+				for (int i=0;i<folders.size();i++) {
+					tmp = (FolderDbObject)folders.get(i);
+					FolderDbObjectWrapper fd = new FolderDbObjectWrapper(tmp);
+					try {
+						fd.setUnreadItemCount(countUnreadMessages(tmp.getId().toString()));
+						fd.setTotalItemCount(countTotalMessages(tmp.getId().toString()));
+					} catch (Exception f) {
+						log.debug("unable to fetch unread/total count for folder");
+					}
+					myList.add(fd);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(dao);
+			dao = null;
+		}
+		return myList;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#getFolder(org.claros.commons.models.AuthProfile, java.lang.String)
 	 */
@@ -172,6 +210,8 @@ public class DbFolderControllerImpl implements FolderController {
 			
 			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND ID = ?";
 			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, lFolder});
+		}catch (Exception e){
+			e.printStackTrace();
 		} finally {
 			JdbcUtil.close(dao);
 			dao = null;
@@ -509,6 +549,15 @@ public class DbFolderControllerImpl implements FolderController {
 		if (getDraftsFolder() == null) {
 			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_DRAFTS(profile), Constants.FOLDER_TYPE_DRAFTS));
 		}
+		if (getBackupFolder() == null && profile.isAutoBackup()) {
+			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_BACKUP(profile), Constants.FOLDER_TYPE_BACKUP));
+		}
+		if (getBackupInboxFolder() == null && profile.isAutoBackup()) {
+			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile), Constants.FOLDER_TYPE_B_INBOX));
+		}
+		if (getBackupSentFolder() == null && profile.isAutoBackup()) {
+			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_SENT(profile), Constants.FOLDER_TYPE_B_SENT));
+		}
 	}
 
 	/* (non-Javadoc)
@@ -561,5 +610,20 @@ public class DbFolderControllerImpl implements FolderController {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public FolderDbObject getBackupFolder() throws Exception {
+		return getSpecialFolderByType(Constants.FOLDER_TYPE_BACKUP);
+	}
+
+	@Override
+	public FolderDbObject getBackupInboxFolder() throws Exception {
+		return getSpecialFolderByType(Constants.FOLDER_TYPE_B_INBOX);
+	}
+
+	@Override
+	public FolderDbObject getBackupSentFolder() throws Exception {
+		return getSpecialFolderByType(Constants.FOLDER_TYPE_B_SENT);
 	}
 }

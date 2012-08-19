@@ -29,6 +29,7 @@ import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.MailInstance;
 import net.smartworks.model.instance.RunningCounts;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -378,8 +379,8 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public Instance getInstanceById(String instanceId) throws Exception {
-		return instanceService.getInstanceById(instanceId);
+	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception {
+		return instanceService.getTaskInstanceById(taskInstId);
 	}
 
 	@Override

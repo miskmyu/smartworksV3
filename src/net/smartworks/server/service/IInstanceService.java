@@ -9,6 +9,7 @@ import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.instance.ImageInstance;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.RunningCounts;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -32,7 +33,7 @@ public interface IInstanceService {
 
 	public InstanceInfo[] getMyRecentInstances() throws Exception;
 
-	public Instance getInstanceById(String instanceId) throws Exception;
+	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception;
 
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception;
 

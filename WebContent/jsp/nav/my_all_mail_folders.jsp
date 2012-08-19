@@ -17,8 +17,9 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
 
+	String folderId = request.getParameter("folderId");
 	// 메일서버에서 현재사용자의 폴더정보들을 가져온다...
-	MailFolder[] folders = smartWorks.getMailFoldersById("");
+	MailFolder[] folders = smartWorks.getMailFoldersById(folderId);
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
@@ -30,6 +31,7 @@
 		for (MailFolder folder : folders) {
 			String iconClass = "";
 			String unreadCountTarget = "";
+			String listClass = "";
 			switch(folder.getType()){
 			case MailFolder.TYPE_SYSTEM_INBOX :
 				iconClass = "icon_mail_inbox";
@@ -50,23 +52,42 @@
 			case MailFolder.TYPE_USER :
 				iconClass = "icon_mail_user";
 				break;
+			case MailFolder.TYPE_SYSTEM_BACKUP :
+				iconClass = "icon_mail_user";
+				listClass = "js_drill_down";
+				break;
+			case MailFolder.TYPE_SYSTEM_B_INBOX :
+				iconClass = "icon_mail_inbox";
+				break;
+			case MailFolder.TYPE_SYSTEM_B_SENT :
+				iconClass = "icon_mail_sent";
+				break;
 			}
 	%>
-			<li class="folder_actions">
-				<!--  모든폴더에 공통으로 필요한 html -->
-				<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>"> 
-					<span class="<%=iconClass%>"></span><span class="nav_mail_list"><%=folder.getName() %><span class="<%=unreadCountTarget%>"><%if (folder.getUnreadItemCount() > 0) {%> [<b><%=folder.getUnreadItemCount()%></b>]<%}%></span></span>								
-					<%
-					if(folder.getType() == MailFolder.TYPE_USER){
-					%>
-						<span class="ctgr_action">
-							<span title="<fmt:message key='mail.button.remove_folder'/>" class="js_remove_mail_folder_btn btn_remove_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>"></span>
-							<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
-						</span>
-					<%
-					}
-					%>
+			<li class="<%=listClass %> folder_actions">
+			<!--  모든폴더에 공통으로 필요한 html -->
+				<%if(folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
+					<a href="my_all_mail_folders.sw" class="" folderId="<%=folder.getId()%>">
+				<%}else{ %>
+					<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>">
+				<%} %> 
+						<span class="<%=iconClass%>"></span>
+						<span class="nav_mail_list"><%=folder.getName() %><span class="<%=unreadCountTarget%>"><%if (folder.getUnreadItemCount() > 0) {%> [<b><%=folder.getUnreadItemCount()%></b>]<%}%></span></span>								
+						<span class="js_progress_span"></span>
+						<%
+						if(folder.getType() == MailFolder.TYPE_USER){
+						%>
+							<span class="ctgr_action">
+								<span title="<fmt:message key='mail.button.remove_folder'/>" class="js_remove_mail_folder_btn btn_remove_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>"></span>
+								<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
+							</span>
+						<%
+						}
+						%>
 				</a>
+				<%if(folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
+					<div class="js_drill_down_target" style="display: none"></div>
+				<%} %>
 			</li>
 	<%
 		}

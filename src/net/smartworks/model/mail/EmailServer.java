@@ -9,6 +9,8 @@ public class EmailServer extends BaseObject {
 	public static final String PROTOCOL_POP3 	= "pop3";
 	public static final String PROTOCOL_IMAP 	= "imap";
 	public static final String PROTOCOL_SMTP 	= "smtp";
+	
+	public static final int DEFAULT_MAIL_KEEPING_MONTHS = 6;
 
 	private String fetchServer;
 	private int fetchServerPort;
@@ -19,6 +21,10 @@ public class EmailServer extends BaseObject {
 	private int smtpServerPort;
 	private boolean smtpAuthenticated;
 	private boolean smtpSsl;
+	
+	private boolean deleteFetched;
+	private boolean autoBackup;
+	private int mailKeepingMonths=DEFAULT_MAIL_KEEPING_MONTHS;
 	
 	public String getFetchServer() {
 		return fetchServer;
@@ -68,7 +74,24 @@ public class EmailServer extends BaseObject {
 	public void setSmtpSsl(boolean smtpSsl) {
 		this.smtpSsl = smtpSsl;
 	}
-
+	public boolean isDeleteFetched() {
+		return deleteFetched;
+	}
+	public void setDeleteFetched(boolean deleteFetched) {
+		this.deleteFetched = deleteFetched;
+	}
+	public boolean isAutoBackup() {
+		return autoBackup;
+	}
+	public void setAutoBackup(boolean autoBackup) {
+		this.autoBackup = autoBackup;
+	}
+	public int getMailKeepingMonths() {
+		return mailKeepingMonths;
+	}
+	public void setMailKeepingMonths(int mailKeepingMonths) {
+		this.mailKeepingMonths = mailKeepingMonths;
+	}
 	public EmailServer() {
 		super();
 	}
@@ -88,6 +111,9 @@ public class EmailServer extends BaseObject {
 		profile.setSmtpPort(String.valueOf(this.getSmtpServerPort()));
 		profile.setSmtpSSL(String.valueOf(this.isSmtpSsl()));
 		profile.setSmtpAuthenticated(String.valueOf(this.isSmtpAuthenticated()));
+		profile.setDeleteFetched(this.deleteFetched);
+		profile.setAutoBackup(this.autoBackup);
+		profile.setMailKeepingMonths(this.mailKeepingMonths);
 		return profile;
 	}
 }

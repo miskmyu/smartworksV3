@@ -257,8 +257,11 @@ $(function() {
 		var input = $(targetElement(e));
 		if(!input.hasClass('js_show_instance')) input = input.parents('.js_show_instance');
 		var instanceId = input.attr('instanceId');
+		var taskInstId = input.attr('taskInstId');
 		var formId = input.attr('formId');
-		smartPop.showInstance(instanceId, null, formId);
+		var isApproval = input.attr('isApproval');
+		var isForward = input.attr('isForward');
+		smartPop.showInstance(isEmpty(instanceId) ? null : instanceId, isEmpty(taskInstId) ? null : taskInstId, null, formId, isApproval=='true', isForward=='true');
 		return false;
 	});
 

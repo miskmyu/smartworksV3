@@ -29,7 +29,10 @@
 	User cUser = SmartUtil.getCurrentUser();
 	String workId = request.getParameter("workId");
 	String instId = request.getParameter("instId");
+	String taskInstId = request.getParameter("taskInstId");
 	String formId = request.getParameter("formId");
+	boolean isApproval = Boolean.parseBoolean(request.getParameter("approval"));
+	boolean isForward = Boolean.parseBoolean(request.getParameter("forward"));
 	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
 	int workType = WorkInstance.TYPE_INFORMATION;
@@ -39,34 +42,37 @@
 	TaskInstance taskInstance = null;
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
+	String targetInstId = "";
 	
-	if(!SmartUtil.isBlankObject(formId)){
-		iworkInstance = (InformationWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
-		instance = (Instance)iworkInstance;
+	if(!SmartUtil.isBlankObject(formId) && !SmartUtil.isBlankObject(instId)){
+		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
+	}else if(!SmartUtil.isBlankObject(taskInstId)){
+//		instance = smartWorks.getTaskInstanceById(taskInstId);		
+		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else{
-		instance = smartWorks.getInstanceById(instId);		
+		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	}
 
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();
 	SmartWork work = (SmartWork)instance.getWork();
 	
-	session.setAttribute("workInstance", instance);
-
-	
-	
 	switch(instance.getType()){
 	case WorkInstance.TYPE_INFORMATION:
 		workType = SmartWork.TYPE_INFORMATION;
 		iworkInstance = (InformationWorkInstance)instance;
+		targetInstId = instance.getId();
 		break;
 	case WorkInstance.TYPE_PROCESS:
 		workType = SmartWork.TYPE_PROCESS;
 		pworkInstance = (ProcessWorkInstance)instance;
+		targetInstId = instance.getId();
 		break;
 	case Instance.TYPE_TASK:
 		workType = SmartWork.TYPE_INFORMATION;
 		taskInstance = (TaskInstance)instance;
+		targetInstId = instance.getId();
+
 		break;
 	}
 
@@ -76,7 +82,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_show_instance_page" instId="<%=instId %>" workType="<%=workType%>" workId="<%=workId%>">
+<div class="pop_corner_all js_show_instance_page" instId="<%=targetInstId %>" workType="<%=workType%>" workId="<%=workId%>">
 	
 	<!-- 타이틀 -->
 	<div class="body_titl_pic mt5">
@@ -110,7 +116,7 @@
 		<!-- 업무전달화면이 나타나는 곳 -->
 		<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
 			<%
-			if(forwardedTask!=null){
+			if(isForward){
 			%>
 				<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 					<jsp:param value="<%=instId %>" name="taskInstId"/>
@@ -123,7 +129,7 @@
 		<!--  전자결재화면이 나타나는 곳 -->
 		<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && iworkInstance!=null && !iworkInstance.isApprovalWork()){ %>style="display:none"<%} %>>
 			<%
-			if(approvalTask!=null || iworkInstance.isApprovalWork()){
+			if(isApproval){
 			%>
 				<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
 					<jsp:param value="<%=instId %>" name="taskInstId"/>
@@ -145,13 +151,6 @@
 	<script type="text/javascript">
 	
 		var mode = "view";
-		<%
-		if(instance.getStatus() == Instance.STATUS_RETURNED){
-		%>
-			mode = "edit";
-		<%
-		}
-		%>
 		var showInstance = $('.js_show_instance_page');
 		var workId = showInstance.attr("workId");
 		var instId = showInstance.attr("instId");
@@ -164,14 +163,6 @@
 			onSuccess : function(){
 			}
 		});
-		
-		<%
-		if(SmartUtil.isBlankObject(approvalTask) && SmartUtil.isBlankObject(forwardedTask) && iworkInstance!=null && iworkInstance.isApprovalWork()){
-		%>
-			showInstance.find('.js_btn_approve_approval').hide().siblings().hide();			
-		<%
-		}
-		%>
 	</script>
 	
 <%-- 	<jsp:include page="/jsp/content/work/space/space_instance_list.jsp">

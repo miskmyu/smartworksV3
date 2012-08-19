@@ -41,6 +41,7 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -419,15 +420,8 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public Instance getInstanceById(String instanceId) throws Exception {
-		try{
-			return SmartTest.getInstanceById(instanceId);
-		}catch (Exception e){
-			// Exception Handling Required
-			e.printStackTrace();
-			return null;			
-			// Exception Handling Required
-		}
+	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception {
+		return null;
 	}
 
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception {

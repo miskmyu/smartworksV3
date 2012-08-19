@@ -263,9 +263,10 @@ public class DbMailControllerImpl implements MailController {
 				item.setUid(CommonUtil.newId());
 			dao.insert(myObj, item);
 
-			String sql = "INSERT INTO MSG_DB_UIDS (USERNAME, UID) VALUES ('" + item.getUsername() + "', '" + item.getUid() + "')";
-			dao.executeUpdate(sql);
-
+			if(!auth.isDeleteAfterFetched()){
+				String sql = "INSERT INTO MSG_DB_UIDS (USERNAME, UID) VALUES ('" + item.getUsername() + "', '" + item.getUid() + "')";
+				dao.executeUpdate(sql);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

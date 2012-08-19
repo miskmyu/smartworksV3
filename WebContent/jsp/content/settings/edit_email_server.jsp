@@ -138,6 +138,22 @@
 					<th width="15%"><fmt:message key="settings.title.email.smtp_ssl"/></th>
 					<td width="85%"><input name="txtEmailServerSmtpSsl" class="fieldline" type="checkbox" <%if(emailServer.isSmtpSsl()){ %>checked<%} %>/></td>
 				</tr>
+				
+				<tr></tr>
+				<tr>
+					<th width="15%"><fmt:message key="settings.title.email.delete_fetched"/></th>
+					<td width="85%"><input name="chkEmailServerDeleteFetched" class="fieldline" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
+				</tr>
+				<tr>
+					<th width="15%"><fmt:message key="settings.title.email.auto_backup"/></th>
+					<td width="85%">
+						<input name="chkEmailServerAutoBackup" class="fieldline js_check_mail_auto_backup" type="checkbox" style="width:20px" <%if(emailServer.isAutoBackup()){ %>checked<%} %>/>
+						<span <%if(!emailServer.isAutoBackup()){ %>style="display:none"<%} %> >
+							<input name="txtEmailServerMailKeepingMonths" class="fieldline tr" type="text" style="width:20px" value="<%=emailServer.getMailKeepingMonths()%>"/>
+							<fmt:message key="settings.title.email.save_after_months"/>
+						</span>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</form>

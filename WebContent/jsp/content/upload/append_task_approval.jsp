@@ -290,9 +290,15 @@
 			}
 			%>					
 		</form>
- 		<jsp:include page="/jsp/content/upload/check_completion_notice.jsp">
- 			<jsp:param value="approvalWork" name="workType"/>
- 		</jsp:include>	
+		<%
+		if(!SmartUtil.isBlankObject(approvalTask)){
+		%>
+	 		<jsp:include page="/jsp/content/upload/check_completion_notice.jsp">
+	 			<jsp:param value="approvalWork" name="workType"/>
+	 		</jsp:include>
+	 	<%
+	 	}
+	 	%>
 		<div class="dash_line"></div>
 	</div>
 </div>

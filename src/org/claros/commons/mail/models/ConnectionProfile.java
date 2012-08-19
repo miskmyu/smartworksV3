@@ -16,6 +16,33 @@ public class ConnectionProfile {
 	private String fetchSSL;
 	private String smtpSSL;
 	private boolean supportSort;
+	private boolean deleteFetched;
+	private boolean autoBackup;
+	private int mailKeepingMonths;
+
+	public boolean isDeleteFetched() {
+		return deleteFetched;
+	}
+
+	public void setDeleteFetched(boolean deleteFetched) {
+		this.deleteFetched = deleteFetched;
+	}
+
+	public boolean isAutoBackup() {
+		return autoBackup;
+	}
+
+	public void setAutoBackup(boolean autoBackup) {
+		this.autoBackup = autoBackup;
+	}
+
+	public int getMailKeepingMonths() {
+		return mailKeepingMonths;
+	}
+
+	public void setMailKeepingMonths(int mailKeepingMonths) {
+		this.mailKeepingMonths = mailKeepingMonths;
+	}
 
 	/**
 	 * Default constructor
