@@ -8153,16 +8153,18 @@ public class InstanceServiceImpl implements IInstanceService {
 		String prcInstId = tasks[0].getProcessInstId();
 		FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
 		cond.setRefPrcInstId(prcInstId);
+		
+		long totalSize = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize(userId, cond);
+		
 		cond.setPageSize(pageCount);
 		cond.setPageNo(currentPage);
-		
 		cond.setOrders(new Order[]{new Order("creationDate", false)});
 		
 		FileDownloadHistory[] downloadHistorys = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorys(userId, cond, IManager.LEVEL_ALL);
 		if (downloadHistorys == null || downloadHistorys.length == 0)
 			return new InstanceInfoList();
 		
-		InstanceInfoList instanceInfolist = new InstanceInfoList();
+		InstanceInfoList instanceInfoList = new InstanceInfoList();
 		InstanceInfo[] instanceInfos = new InstanceInfo[downloadHistorys.length];
 		for (int i = 0; i < downloadHistorys.length; i++) {
 			FileDownloadHistory downloadHistory = downloadHistorys[i];
@@ -8172,9 +8174,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			instanceInfo.setCreatedDate(new LocalDate(downloadHistory.getCreationDate().getTime()));
 			instanceInfos[i] = instanceInfo;
 		}
-		instanceInfolist.setInstanceDatas(instanceInfos);
+		instanceInfoList.setInstanceDatas(instanceInfos);
+		instanceInfoList.setPageSize(pageCount);
+		int totalPages = (int)totalSize % pageCount;
+		if(totalPages == 0)
+			totalPages = (int)totalSize / pageCount;
+		else
+			totalPages = (int)totalSize / pageCount + 1;
 		
-		return instanceInfolist;
+		instanceInfoList.setTotalPages(totalPages);
+		instanceInfoList.setCurrentPage(currentPage + 1);
+		instanceInfoList.setTotalSize((int)totalSize);
+		
+		return instanceInfoList;
 	}
 	@Override
 	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception {
