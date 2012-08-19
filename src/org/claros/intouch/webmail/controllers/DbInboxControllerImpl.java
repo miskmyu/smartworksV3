@@ -83,6 +83,19 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		return null;
 
 	}
+	
+	static CheckingModel getModel(Thread thread){
+		if(thread==null || SmartUtil.isBlankObject(checkingQueue))
+			return null;
+		
+		for(int index=0; index<checkingQueue.size(); index++){
+			CheckingModel checkingModel = checkingQueue.get(index);
+			if(checkingModel.getThread() == thread)
+				return checkingModel;
+		}
+		return null;
+
+	}
 	public void checkEmailWithHeader() throws Exception {
 		
 		int index = -1;
@@ -95,6 +108,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
+				CheckingModel thisModel = getModel(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 				try {
@@ -160,7 +174,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setSubject(header.getSubject());
 
 										// save the email db item.
-										mailCont.appendEmail(item);
+										mailCont.appendEmail(item, thisModel.getCompanyId());
 										msg = null;
 										bMsg = null;
 										item = null;
@@ -217,7 +231,8 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
-
+				
+				CheckingModel thisModel = getModel(Thread.currentThread());
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 
@@ -288,7 +303,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setSubject(header.getSubject());
 
 										// save the email db item.
-										mailCont.appendEmail(item);
+										mailCont.appendEmail(item, thisModel.getCompanyId());
 										msg = null;
 										bMsg = null;
 										item = null;

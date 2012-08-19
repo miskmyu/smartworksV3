@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.regex.Pattern;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.util.OSValidator;
+import net.smartworks.util.SmartUtil;
 
 import org.springframework.util.StringUtils;
 import org.w3c.dom.NamedNodeMap;
@@ -714,7 +716,7 @@ public class CommonUtil {
 		}
 	}
 
-	public static File getFileRepository(String fileDirectory, String companyId, String fileDivision) {
+	public static File getFileRepository(String fileDirectory, String companyId, String fileDivision, Date date) {
 
 		try {
 			// 파일 홈 디렉토리 선택
@@ -740,7 +742,38 @@ public class CommonUtil {
 			if (!storage.exists())
 				storage.mkdir();
 	
-			if(!fileDivision.equals("Temps") && !fileDivision.equals("Profiles") && !fileDivision.equals("WorkImages")) {
+			if(fileDivision.equals("Mails")){
+				// 현재사용자의 이메일서버이름으로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + SmartUtil.getCurrentUser().getEmailId(); 
+				storage = new File(storageDir);
+					
+				// 없다면 생성한다.
+				if (!storage.exists())
+					storage.mkdir();
+
+				// 메일 받은날짜의 년, 월 정보를 얻는다.
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				int year = calendar.get(Calendar.YEAR);
+				int month = calendar.get(Calendar.MONTH) + 1;
+		
+				// 기본 파일 저장 디렉토리와 받은날짜 년 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "Y" + year;
+				storage = new File(storageDir);
+		
+				// 없다면 생성한다.
+				if (!storage.exists())
+					storage.mkdir();
+
+				// 기본 파일 저장 디렉토리와 받은날짜 월 정보로 파일 디렉토리를 설정한다.
+				storageDir = storageDir + File.separator + "M" + month;
+		
+				// 만일 디렉토리가 없다면 생성한다.
+				storage = new File(storageDir);
+		
+				if (!storage.exists())
+					storage.mkdir();
+			}else if(!fileDivision.equals("Temps") && !fileDivision.equals("Profiles") && !fileDivision.equals("WorkImages")) {
 				// 현재 년, 월 정보를 얻는다.
 				Calendar currentDate = Calendar.getInstance();
 				int year = currentDate.get(Calendar.YEAR);
@@ -779,7 +812,7 @@ public class CommonUtil {
 				previousFileName = previousFileName.substring(0, previousFileName.lastIndexOf("."));
 			}
 			String imageDirectory = OSValidator.getImageDirectory();
-			File imageFile = getFileRepository(imageDirectory, companyId, fileDivision);
+			File imageFile = getFileRepository(imageDirectory, companyId, fileDivision, null);
 			String thumbFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_THUMB + "." + extension;
 			String originalFilePath = imageFile.getAbsolutePath() + File.separator + previousFileName + Community.IMAGE_TYPE_ORIGINAL + "." + extension;
 			File thumbFile = new File(thumbFilePath);

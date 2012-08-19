@@ -89,6 +89,10 @@ public class SmartServerConstant {
 	/**
 	 * 폴더 축약어 - folder
 	 */
-	public static final String FOLDER_APPR = "fdr";
+	public static final String FOLDER_ABBR = "fdr";
+	/**
+	 * 메일 축약어 - folder
+	 */
+	public static final String MAIL_ABBR = "mail";
 
 }

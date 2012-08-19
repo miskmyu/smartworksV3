@@ -22,6 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.util.SmartUtil;
+
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ByteArrayDataSource;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
@@ -197,7 +199,7 @@ public class SaveDraftService extends BaseService {
 		// save the email db item.
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
-		mailCont.appendEmail(item);
+		mailCont.appendEmail(item, null);
 	}
 
 }

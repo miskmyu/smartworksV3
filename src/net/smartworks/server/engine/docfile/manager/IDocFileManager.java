@@ -8,6 +8,7 @@
 
 package net.smartworks.server.engine.docfile.manager;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,9 @@ public interface IDocFileManager extends IManager {
 	public IFileModel getFileById(String fileId) throws DocFileException;
 	public long getFileWorkListSize(String user, FileWorkCond cond) throws Exception;
 	public FileWork[] getFileWorkList(String user, FileWorkCond cond) throws Exception;
-	
+	public String createMailContent(String companyId, String mailServerName, byte[] content, Date receivedDate) throws DocFileException;
+	public byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException;
+	public void deleteMailContent(String fileId, Date receivedDate) throws DocFileException;	
 	public FileDownloadHistory getFileDownloadHistory(String user, String id, String level) throws DocFileException;
 	public FileDownloadHistory getFileDownloadHistory(String user, FileDownloadHistoryCond cond, String level) throws DocFileException;
 	public FileDownloadHistory setFileDownloadHistory(String user, FileDownloadHistory obj, String level) throws DocFileException;
@@ -72,5 +75,4 @@ public interface IDocFileManager extends IManager {
 	public FileDownloadHistory[] getFileDownloadHistorys(String user, FileDownloadHistoryCond cond, String level) throws DocFileException;
 	
 	public FileDownloadHistory getFileDownloadHistoryInfoByFileId(String fileId) throws DocFileException;
-
 }

@@ -73,7 +73,7 @@ public class ImapMailControllerImpl implements MailController {
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.MailController#appendEmail(org.claros.groupware.webmail.models.EmailDbItem)
 	 */
-	public void appendEmail(MsgDbObject item) throws Exception {
+	public void appendEmail(MsgDbObject item, String companyId) throws Exception {
 		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(folder);
 		protocol.appendEmail(item.getEmail());

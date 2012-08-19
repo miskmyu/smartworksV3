@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -116,6 +117,41 @@ public class FileUtil {
 			throw e;
 		} finally {
 			close(ois);
+			close(is);
+		}
+	}
+	public static byte[] readBytes(String path) throws Exception {
+		InputStream is = null;
+		try {
+			File file = new File(path);
+			if(!file.exists())
+				return null;
+			
+			long length = file.length();
+		    
+	        // Create the byte array to hold the data
+	        byte[] bytes = new byte[(int)length];
+	    
+	        is = new FileInputStream(file);
+	        // Read in the bytes
+	        int offset = 0;
+	        int numRead = 0;
+	        while (offset < bytes.length
+	               && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+	            offset += numRead;
+	        }
+	    
+	        // Ensure all the bytes have been read in
+	        if (offset < bytes.length) {
+	            throw new IOException("Could not completely read file "+file.getName());
+	        }
+	    
+	        // Close the input stream and return bytes
+	        is.close();
+	        return bytes;			
+		} catch(Exception e) {
+			throw e;
+		} finally {
 			close(is);
 		}
 	}
