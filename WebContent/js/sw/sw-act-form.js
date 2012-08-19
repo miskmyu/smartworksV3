@@ -139,7 +139,7 @@ $(function() {
 	$('form[name="frmSmartForm"] .form_value input.js_percent_input').live('blur', function(e) {
 		var input = $(targetElement(e));
 		var value = input.attr('value');
-		if(value!='') input.attr('value', value+'%');
+		if(value!='' && value.indexOf("%")==-1) input.attr('value', value+'%');
 		var forms = input.parents('form[name="frmSmartForm"]');
 		if(!isEmpty(input.attr('value'))) input.removeClass('sw_error');
 		var paramsJson = {};

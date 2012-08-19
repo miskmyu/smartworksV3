@@ -1,9 +1,3 @@
-
-<!-- Name 			: append_task_forward.js							 -->
-<!-- Description	: 새업무를 등록시 다른사용자에게 업무전달을 위한 화	      	 -->
-<!-- Author			: Maninsoft, Inc.									 -->
-<!-- Created Date	: 2011.9.											 -->
-
 <%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
 <%@page import="net.smartworks.model.instance.info.InstanceInfoList"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
@@ -33,7 +27,7 @@
 		params.setPageSize(20);
 		params.setCurrentPage(1);
 	}
-	InstanceInfoList updateList = smartWorks.getUpdateHistoryList(instanceId, params);	
+	InstanceInfoList forwardList = smartWorks.getForwardHistoryList(instanceId, params);	
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -62,31 +56,31 @@
 	};
 	
 	selectListParam = function(progressSpan, isGray){
-		var updateHistories = $('.js_update_histories_page');
-		var forms = updateHistories.find('form:visible');
+		var forwardHistories = $('.js_forward_histories_page');
+		var forms = forwardHistories.find('form:visible');
 		var paramsJson = {};
-		var instanceId = updateHistories.parents('.js_iwork_space_page').attr('instId');
-		paramsJson["href"] = "jsp/content/work/space/update_histories.jsp?instanceId=" + instanceId;
+		var instanceId = forwardHistories.parents('.js_iwork_space_page').attr('instId');
+		paramsJson["href"] = "jsp/content/work/space/forward_histories.jsp?instanceId=" + instanceId;
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
-		if(isEmpty(progressSpan)) progressSpan = updateHistories.find('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = forwardHistories.find('span.js_progress_span:first');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
 
 <!-- 업무계획하기 -->
-<div class="js_update_histories_page">
+<div class="js_forward_histories_page">
 	<%
 	int pageSize = 20, totalPages = 1, currentPage = 1;
-	if (updateList != null) {
-		pageSize = updateList.getPageSize();
-		totalPages = updateList.getTotalPages();
-		currentPage = updateList.getCurrentPage();
-		int currentCount = updateList.getTotalSize()-(currentPage-1)*pageSize;
-		if(updateList.getInstanceDatas() != null) {
-			TaskInstanceInfo[] histories = (TaskInstanceInfo[]) updateList.getInstanceDatas();
+	if (forwardList != null) {
+		pageSize = forwardList.getPageSize();
+		totalPages = forwardList.getTotalPages();
+		currentPage = forwardList.getCurrentPage();
+		int currentCount = forwardList.getTotalSize()-(currentPage-1)*pageSize;
+		if(forwardList.getInstanceDatas() != null) {
+			TaskInstanceInfo[] histories = (TaskInstanceInfo[]) forwardList.getInstanceDatas();
 	%>
 			<div class="up_point pos_works"></div> 
 	            
@@ -128,48 +122,34 @@
 							statusImage = "icon_status_not_yet";
 							statusTitle = "content.status.not_yet";
 						}
-						owner = task.getOwner();
-						if(currentCount==1){
-							activity = SmartMessage.getString("common.title.created");								
-						}else{
-							switch(task.getTaskType()){
-							case TaskInstance.TYPE_INFORMATION_TASK_CREATED:
-								activity = SmartMessage.getString("common.title.created");
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_UPDATED:
-								activity = SmartMessage.getString("common.title.updated");
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED:
-								activity = SmartMessage.getString("common.title.assigned");
-								break;
-							case TaskInstance.TYPE_INFORMATION_TASK_DELETED:
-								activity = SmartMessage.getString("common.title.deleted");
-								break;								
-							}
-						}
-					%>
-						<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
-							<div class="det_title" style="line-height: 16px">
-					        	<span class="number"><%=currentCount %></span>
-					            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
-					            <span class="task_state">
-					            	<span class="icon_txt gray"><%=activity %></span>
-					            </span>
-					            <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-					                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
-					            </a>
-					            <span class="vm">
-					                <div>
-					                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-					                        <span class="t_name"><%=owner.getLongName()%></span>
-					                    </a>
-					                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
-					                </div>
-					                <div class="tb"><%=CommonUtil.toNotNull(task.getSubject())%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
-					            </span>
-					        </div>
-						</li>					
+						if(!SmartUtil.isBlankObject(task.getForwardId())){
+							owner = task.getAssigner();
+							int forwardedUserCount = 0;
+						%>
+							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>" isForward="true">
+								<div class="det_title" style="line-height: 16px">
+						        	<span class="number"><%=currentCount %></span>
+						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
+						            <span class="task_state">
+						            	<span class="icon_txt orange"><fmt:message key='common.button.forward'/></span>
+						            </span>
+						            <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+						                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
+						            </a>
+						            <span class="vm">
+						                <div>
+						                    <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+						                        <span class="t_name"><%=owner.getLongName()%></span>
+						                    </a>
+						                    <span class="t_gray"><span class="arr">▶</span><%=task.getOwner().getLongName() %><%if(forwardedUserCount>0){ %><fmt:message key="content.sentence.with_other_users"><fmt:param><%=forwardedUserCount %></fmt:param></fmt:message><%} %></span>
+						                    <span class="ml5 t_date"><%=task.getLastModifiedDate().toLocalDateTimeSimpleString()%></span>
+						                </div>
+						                <div class="tb"><%=task.getSubject()%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
+						            </span>
+					            </div>
+							</li>					
 					<%
+						}
 						currentCount--;
 					}
 					%>

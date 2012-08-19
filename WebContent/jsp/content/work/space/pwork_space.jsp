@@ -43,6 +43,8 @@
 		instance = (ProcessWorkInstance)smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	else
 		instance = (ProcessWorkInstance)workInstance;
+
+	int numberOfForwardHistories = instance.getNumberOfForwardHistories();
 	
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();
@@ -378,6 +380,7 @@
 				<div class="fr form_space js_progress_span" ></div>
 
 				<div class="txt_btn task_information">
+				    <%if(numberOfForwardHistories > 1){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
 				    <div class="po_left"><fmt:message key="common.title.last_modification"/> :  
 				    	<%
 			    		User lastModifier = instance.getLastModifier();
@@ -393,6 +396,7 @@
 
 			</div>
 			<!-- 버튼 영역 //-->     				
+			<div class="js_instance_histories"></div>
 		</ul>
 	</div>
 	<div class="portlet_b" style="display: block;"></div>
