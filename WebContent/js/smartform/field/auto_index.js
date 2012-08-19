@@ -41,7 +41,7 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 	if(!options.refreshData)
 		$label.appendTo(options.container);
 	
-	var $listItems = $format.find('list listItems listItem');
+	var $listItems = $format.find('autoIndexRule listItems listItem');
 	// 가져오기 값이 1개이상일 경우 그값으로 staticItmes를 변경한다
 	if (options.dataField != null && options.dataField.dataFields != null) {
 		var listItemsStr = '';
@@ -66,7 +66,7 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 	}
 	
 	if ($listItems.length == 0) {
-		$option = $('<option value="' + selectedValue + '" selected>'+value+'</option>');
+		$option = $('<option value="' + selectedValue + '" selected>'+selectedValue+'</option>');
 		$option.appendTo($input.find('select'));
 	} else {
 		for ( var i = 0; i < $listItems.length; i++) {
