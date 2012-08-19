@@ -79,12 +79,12 @@
 		approvalTask = null;
 	}
 		
-/* 	session.setAttribute("cid", cid);
+ 	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
 	else
 		session.setAttribute("wid", wid);
- */
+
  	session.setAttribute("workInstance", instance);
 	session.setAttribute("workSpaceId", instance.getId());
 	session.setAttribute("tasks", tasks);

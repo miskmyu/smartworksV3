@@ -23,7 +23,7 @@ $(function() {
 		var input = $(targetElement(e));
 		var newMail = input.parents('.js_new_mail_page');
 		var lastHref = newMail.attr('lastHref');
-		if(isEmpty(lastHref))
+		if(isEmpty(lastHref) || lastHref.indexOf('iwork_list.sw')!=-1 || lastHref.indexOf('pwork_list.sw')!=-1 )
 			document.location.href = "home.sw";
 		else
 			document.location.href = lastHref;

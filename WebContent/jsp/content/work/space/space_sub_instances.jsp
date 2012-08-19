@@ -244,6 +244,13 @@
 						</a>
 					</div>
 					<div class="noti_in_m">
+						<%
+						if(comment.getOwner().getId().equals(cUser.getId())){
+						%>
+							<div class="icon_delete fr"><a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>"></a></div>
+						<%
+						}
+						%>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 							<span class="t_name"><%=owner.getLongName()%></span>
 						</a>

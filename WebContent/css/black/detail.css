@@ -436,3 +436,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .manual_df_img {min-height: 288px; vertical-align: top}
 .manual_df_img img {border: 1px solid #C7C7C7; width:360px; display:block; margin-right: 10px}
 .js_form_desc_view {min-height: 290px}
+
+/* Comment Delete Icon */
+.icon_delete a, a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
+.icon_delete a:hover, a .icon_delete:hover {background-position:-219px -117px}

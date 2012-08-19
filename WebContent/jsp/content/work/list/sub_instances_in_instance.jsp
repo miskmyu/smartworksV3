@@ -184,6 +184,13 @@ if (subInstances != null) {
 						</a>
 					</div>
 					<div class="noti_in">
+						<%
+						if(comment.getOwner().getId().equals(cUser.getId())){
+						%>
+								<div class="icon_delete fr"><a href="" class=" js_delete_comment_btn" title="댓글삭제">삭제</a></div>
+						<%
+						}
+						%>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 						<div><%=comment.getComment() %>
