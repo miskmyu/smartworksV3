@@ -99,7 +99,6 @@
 					            <span class="task_state">
 					            	<span class="icon_txt gray">정 상</span>
 					            </span>
-					            <span><%=history.getSubject() %></span>
 					            <a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 					                <img class="profile_size_c" src="<%=owner.getMinPicture()%>">
 					            </a>
@@ -111,6 +110,7 @@
 					                    <span class="ml5 t_date"><%=history.getCreatedDate().toLocalDateTimeSimpleString()%></span>
 					                </div>
 					            </span>
+					            <span><%=history.getSubject() %></span>
 					    	</div>
 				        </li>
 					<%
