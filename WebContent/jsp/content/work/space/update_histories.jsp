@@ -4,6 +4,9 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
+<%@page import="net.smartworks.model.instance.info.InstanceInfoList"%>
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.model.instance.info.WorkInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
@@ -21,31 +24,80 @@
 	// 스마트웍스 서비스들을 사용하기위한 핸들러를 가져온다. 현재사용자 정보도 가져온다..
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
-	
-	TaskInstanceInfo[] histories = ((TaskInstanceInfo[])session.getAttribute("tasks")).clone();
+		
+	String instanceId = request.getParameter("instanceId");
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+
+	if(SmartUtil.isBlankObject(params)){
+		params = new RequestParams();
+		params.setPageSize(20);
+		params.setCurrentPage(1);
+	}
+	InstanceInfoList downloadList = smartWorks.getUpdateHistoryList(instanceId, params);	
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
+<script type="text/javascript">
+	getIntanceList = function(paramsJson, progressSpan, isGray){
+		smartPop.progressCont(progressSpan);
+		console.log(JSON.stringify(paramsJson));
+		var url = "set_instance_list_params.sw";
+		$.ajax({
+			url : url,
+			contentType : 'application/json',
+			type : 'POST',
+			data : JSON.stringify(paramsJson),
+			success : function(data, status, jqXHR) {
+				$('.js_instance_histories').html(data);
+				smartPop.closeProgress();
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				smartPop.closeProgress();
+				smartPop.showInfo(smartPop.ERROR, smartMessage.get('workListError'));
+			}
+		});
+	};
+	
+	selectListParam = function(progressSpan, isGray){
+		var updateHistories = $('.js_update_histories_page');
+		var forms = updateHistories.find('form:visible');
+		var paramsJson = {};
+		var instanceId = updateHistories.parents('.js_iwork_space_page').attr('instId');
+		paramsJson["href"] = "jsp/content/work/space/update_histories.jsp?instanceId=" + instanceId;
+		for(var i=0; i<forms.length; i++){
+			var form = $(forms[i]);
+			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
+		}
+		if(isEmpty(progressSpan)) progressSpan = updateHistories.find('span.js_progress_span:first');
+		getIntanceList(paramsJson, progressSpan, isGray);		
+	};
+</script>
+
 <!-- 업무계획하기 -->
 <div class="js_instance_histories_page">
 	<%
-	if(!SmartUtil.isBlankObject(histories)){
+	int pageSize = 20, totalPages = 1, currentPage = 1;
+	if (downloadList != null) {
+		pageSize = downloadList.getPageSize();
+		totalPages = downloadList.getTotalPages();
+		currentPage = downloadList.getCurrentPage();
+		int currentCount = downloadList.getTotalSize()-(currentPage-1)*pageSize;
+		if(downloadList.getInstanceDatas() != null) {
+			TaskInstanceInfo[] histories = (TaskInstanceInfo[]) downloadList.getInstanceDatas();
 	%>
-		<div class="up_point pos_works"></div> 
-            
-		<!-- 컨텐츠 -->
+			<div class="up_point pos_works"></div> 
+	            
+			<!-- 컨텐츠 -->
 		   	<div class="form_wrap up history_list">    
 			    <!-- 리스트 -->       
 				<ul class="p10">
 					<%
-					int historyCount = 0;
-					for(int i=0; i<histories.length; i++){
-						TaskInstanceInfo task = histories[i];
+					for (TaskInstanceInfo task : histories) {
+						currentCount--;
 						if(SmartUtil.isBlankObject(task)) continue;
-						historyCount++;
 						UserInfo owner = task.getAssignee();
 						WorkInstanceInfo workInstance = task.getWorkInstance();
 						String statusImage = "";
@@ -54,29 +106,7 @@
 						String forwardedUserName = "";
 						int forwardedUserCount = 0;
 						if(!SmartUtil.isBlankObject(task.getApprovalId())){
-							for(int j=i+1; j<histories.length; j++){
-								if(task.getApprovalId().equals(histories[j].getApprovalId())){
-									if(histories[j].getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED){
-										task.setStatus(histories[j].getStatus());
-									}else if(histories[j].getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
-										if(SmartUtil.isBlankObject(forwardedUserName))
-											forwardedUserName = task.getAssignee().getLongName();
-										else
-											forwardedUserCount++;
-									}
-									histories[j] = null;
-								}
-
-							}
 						}else if(!SmartUtil.isBlankObject(task.getForwardId())){
-							for(int j=i+1; j<histories.length; j++){
-								if(task.getForwardId().equals(histories[j].getForwardId())){
-									if(histories[j].getStatus()!= Instance.STATUS_COMPLETED) task.setStatus(histories[j].getStatus());
-									histories[j] = null;
-									forwardedUserCount++;
-								}
-
-							}
 						}
 						switch (task.getStatus()) {
 						// 인스턴스가 현재 진행중인 경우..
@@ -109,7 +139,7 @@
 					%>
 							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>" isApproval="true">
 								<div class="det_title" style="line-height: 16px">
-						        	<span class="number"><%=historyCount %></span>
+						        	<span class="number"><%=currentCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 						            <span class="task_state">
 						            	<span class="icon_txt blue"><fmt:message key='common.button.approval'/></span>
@@ -141,7 +171,7 @@
 						%>
 							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId() %>" formId="<%=task.getFormId()%>" isForward="true">
 								<div class="det_title" style="line-height: 16px">
-						        	<span class="number"><%=historyCount %></span>
+						        	<span class="number"><%=currentCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 						            <span class="task_state">
 						            	<span class="icon_txt orange"><fmt:message key='common.button.forward'/></span>
@@ -163,7 +193,7 @@
 							</li>					
 						<%						
 						}else{
-							if(i==0){
+							if(true){
 								activity = SmartMessage.getString("common.title.created");								
 							}else{
 								switch(task.getTaskType()){
@@ -184,7 +214,7 @@
 						%>
 							<li class="sub_instance_list js_show_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=task.getId()%>" formId="<%=task.getFormId()%>">
 								<div class="det_title" style="line-height: 16px">
-						        	<span class="number"><%=historyCount %></span>
+						        	<span class="number"><%=currentCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>
 						            <span class="task_state">
 						            	<span class="icon_txt gray"><%=activity %></span>
@@ -210,6 +240,7 @@
 				</ul>
 			</div>
 	<%
+		}
 	}
 	%>					
 </div>

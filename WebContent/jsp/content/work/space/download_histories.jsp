@@ -56,20 +56,19 @@
 	};
 	
 	selectListParam = function(progressSpan, isGray){
-		var downloadHistory = $('.js_download_history_page');
-		var forms = downloadHistory.find('form:visible');
+		var downloadHistories = $('.js_download_histories_page');
+		var forms = downloadHistories.find('form:visible');
 		var paramsJson = {};
-		var instanceId = downloadHistory.parents('.js_iwork_space_page').attr('instId');
+		var instanceId = downloadHistories.parents('.js_iwork_space_page').attr('instId');
 		paramsJson["href"] = "jsp/content/work/space/download_histories.jsp?instanceId=" + instanceId;
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
 			paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 		}
-		if(isEmpty(progressSpan)) progressSpan = downloadHistory.find('span.js_progress_span:first');
+		if(isEmpty(progressSpan)) progressSpan = downloadHistories.find('span.js_progress_span:first');
 		getIntanceList(paramsJson, progressSpan, isGray);		
 	};
 </script>
-
 
 <!-- 업무계획하기 -->
 <div class="js_download_histories_page">
