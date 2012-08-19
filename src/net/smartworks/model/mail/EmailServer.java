@@ -23,7 +23,7 @@ public class EmailServer extends BaseObject {
 	private boolean smtpSsl;
 	
 	private boolean deleteFetched;
-	private boolean autoBackup=true;
+	private boolean autoBackup;
 	private int mailKeepingMonths=DEFAULT_MAIL_KEEPING_MONTHS;
 	
 	public String getFetchServer() {
