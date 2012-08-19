@@ -17,10 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistory;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistoryCond;
 import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
+import net.smartworks.server.engine.folder.exception.FdrException;
 
 public interface IDocFileManager extends IManager {
 
@@ -62,4 +65,14 @@ public interface IDocFileManager extends IManager {
 	public String createMailContent(String companyId, String mailServerName, byte[] content, Date receivedDate) throws DocFileException;
 	public byte[] readMailContent(String fileId, Date receivedDate) throws DocFileException;
 	public void deleteMailContent(String fileId, Date receivedDate) throws DocFileException;	
+	public FileDownloadHistory getFileDownloadHistory(String user, String id, String level) throws DocFileException;
+	public FileDownloadHistory getFileDownloadHistory(String user, FileDownloadHistoryCond cond, String level) throws DocFileException;
+	public FileDownloadHistory setFileDownloadHistory(String user, FileDownloadHistory obj, String level) throws DocFileException;
+	public FileDownloadHistory createFileDownloadHistory(String user, FileDownloadHistory obj) throws DocFileException;
+	public void removeFileDownloadHistory(String user, String id) throws DocFileException;
+	public void removeFileDownloadHistory(String user, FileDownloadHistoryCond cond) throws DocFileException;
+	public long getFileDownloadHistorySize(String user, FileDownloadHistoryCond cond) throws DocFileException;
+	public FileDownloadHistory[] getFileDownloadHistorys(String user, FileDownloadHistoryCond cond, String level) throws DocFileException;
+	
+	public FileDownloadHistory getFileDownloadHistoryInfoByFileId(String fileId) throws DocFileException;
 }

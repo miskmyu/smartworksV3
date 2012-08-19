@@ -23,9 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
+import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistory;
 import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -39,8 +41,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Service
-public class DocFileServiceImpl implements IDocFileService {
+public class DocFileServiceImpl extends AbstractManager implements IDocFileService {
 
+	public DocFileServiceImpl() {
+		super();
+		if (logger.isInfoEnabled())
+			logger.info(this.getClass().getName() + " created");
+	}
+	
 	private static IDocFileManager getDocManager() {
 		return SwManagerFactory.getInstance().getDocManager();
 	}
@@ -165,12 +173,13 @@ public class DocFileServiceImpl implements IDocFileService {
 	    		String file_name = "";
 	
 	    		String extension = fileName.lastIndexOf(".") > 1 ? fileName.substring(fileName.lastIndexOf(".") + 1) : null;
+	    		IFileModel doc = null;
 	    		if(fileId.startsWith("temp_")) {
 	    			file_name = fileName;
 	    			sourceFile = OSValidator.getImageDirectory() + "/SmartFiles/" + user.getCompanyId() + "/"+ "Temps" + "/" + fileId + "." + extension;
 	    			//sourceFile = System.getenv("SMARTWORKS_FILE_HOME") == null ? System.getProperty("user.home") : System.getenv("SMARTWORKS_FILE_HOME") + File.separator + user.getCompanyId() + File.separator + "Temps" + File.separator + fileId + "." + extension;
 	    		} else {
-	    			IFileModel doc = getDocManager().retrieveFile(fileId);
+	    			doc = getDocManager().retrieveFile(fileId);
 		    		//파일명, UniqValue
 		    		file_name = doc.getFileName(); 
 	    			sourceFile = doc.getFilePath();
@@ -192,6 +201,9 @@ public class DocFileServiceImpl implements IDocFileService {
 	    		{
 	    			op.write(bbuf,0,length);
 	    		}
+	    		
+	    		//파일 다운로드 이력을 남긴다
+	    		saveFileDownloadHistory(user.getId(), doc);
 	    		
 	    	}catch(Throwable t){
 	    		t.printStackTrace();
@@ -216,7 +228,25 @@ public class DocFileServiceImpl implements IDocFileService {
 			// Exception Handling Required			
 		}
 	}
-
+	private void saveFileDownloadHistory(String userId, IFileModel file) throws Exception {
+		
+		FileDownloadHistory obj = getDocManager().getFileDownloadHistoryInfoByFileId(file.getId());
+		if (obj == null) {
+			obj = new FileDownloadHistory();
+		}
+		obj.setFileId(file.getId());
+		obj.setFileName(file.getFileName());
+		obj.setDownloadUserId(userId);
+		
+		getDocManager().createFileDownloadHistory(userId, obj);
+		
+		if (logger.isInfoEnabled()) {
+			StringBuffer strBuf = new StringBuffer();
+			strBuf.append("FILE DOWNLOAD [ ").append(obj.getFileName()).append(" (historyId : ").append(obj.getObjId()).append(") By ").append(userId).append("]");
+			logger.info(strBuf.toString());
+		}
+	}
+	
 	@Override
 	public void uploadTempFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		getDocManager().uploadTempFile(request, response);

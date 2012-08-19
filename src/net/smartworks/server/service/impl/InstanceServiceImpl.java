@@ -100,6 +100,8 @@ import net.smartworks.server.engine.folder.model.FdrFolder;
 import net.smartworks.server.engine.folder.model.FdrFolderCond;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
+import net.smartworks.server.engine.infowork.domain.model.SwdDataRef;
+import net.smartworks.server.engine.infowork.domain.model.SwdDataRefCond;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
 import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
 import net.smartworks.server.engine.infowork.domain.model.SwdField;
@@ -1034,6 +1036,8 @@ public class InstanceServiceImpl implements IInstanceService {
 								resultStack.push(tempDataField);							
 								
 								continue;
+							} else {
+								populateRecords(userId, mappingRecords);
 							}
 							
 							if (!CommonUtil.isEmpty(mappingFieldId)) {
@@ -1048,6 +1052,7 @@ public class InstanceServiceImpl implements IInstanceService {
 									subDataFields = new SwdDataField[mappingRecords.length];
 									for (int i = 0; i < mappingRecords.length; i++) {
 										SwdRecord subMappingRecord = mappingRecords[i];
+										
 										SwdDataField subMappingDataField = subMappingRecord.getDataField(mappingFieldId);
 										SwdDataField subDataField = new SwdDataField();
 										
@@ -1427,6 +1432,39 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			logger.error(e);
 			// Exception Handling Required			
+		}
+	}
+	private void populateRecords(String user, SwdRecord[] objs) throws Exception {
+		if (objs == null || objs.length == 0)
+			return;
+
+		for (int i = 0; i < objs.length; i++) {
+			
+			SwdRecord obj = objs[i];
+			
+			String formId = obj.getFormId();
+			String recordId = obj.getRecordId();
+			if (recordId == null)
+				return;
+			
+			SwdDataRefCond cond = new SwdDataRefCond();
+			cond.setMyFormId(formId);
+			cond.setMyRecordId(recordId);
+			SwdDataRef[] dataRefs = this.getSwdManager().getDataRefs(user, cond, null);
+			if (CommonUtil.isEmpty(dataRefs))
+				return;
+			
+			String fieldId;
+			SwdDataField dataField;
+			for (SwdDataRef dataRef : dataRefs) {
+				fieldId = dataRef.getMyFormFieldId();
+				dataField = obj.getDataField(fieldId);
+				if (dataField == null)
+					continue;
+				dataField.setRefForm(dataRef.getRefFormId());
+				dataField.setRefFormField(dataRef.getRefFormFieldId());
+				dataField.setRefRecordId(dataRef.getRefRecordId());
+			}
 		}
 	}
 	private SwdDataField toDataField(String user, SwfField field, String id) throws Exception {

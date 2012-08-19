@@ -10,8 +10,11 @@ package net.smartworks.server.engine.security.manager.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.security.manager.LoginDao;
 import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.util.LocalDate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,6 +69,15 @@ public class AuthenticationDaoImpl implements UserDetailsService {
 		}
 
 		((Login) user).setAuthorities(dbAuths);
+		
+		LoginUserHistory loginUserHistory = new LoginUserHistory();
+		loginUserHistory.setUserId(user.getId());
+		loginUserHistory.setLoginTime(new LocalDate());
+		try {
+			SwManagerFactory.getInstance().getLoginUserManager().setLoginUserHistory(user.getId(), loginUserHistory);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return user;
 	}
 }

@@ -47,6 +47,9 @@ import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.InformationWork;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
+import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
+import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filters;
@@ -56,6 +59,8 @@ import net.smartworks.server.engine.common.util.FileUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistory;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistoryCond;
 import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.HbDocumentModel;
@@ -63,6 +68,7 @@ import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.like.exception.LikeException;
 import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
@@ -1437,7 +1443,46 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 		return fileModels;
 	}
+	public FileDownloadHistory getFileDownloadHistoryInfoByFileId(String fileId) throws DocFileException {
+		if (CommonUtil.isEmpty(fileId))
+			return null;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(" select f.id, f.filename, g.tskinstanceid, t.tskname, t.tskprcinstid, p.prctitle, p.prcPackageId, pkg.name as pkgName ");
+		stringBuffer.append(" from swfile f, swdocgroup g, tsktask t, prcprcinst p, swpackage pkg ");
+		stringBuffer.append(" where f.id='").append(fileId).append("' ");
+		stringBuffer.append(" and f.id = g.docid ");
+		stringBuffer.append(" and t.tskobjid = g.tskinstanceid ");
+		stringBuffer.append(" and p.prcobjid = t.tskprcinstid ");
+		stringBuffer.append(" and p.prcPackageid = pkg.packageid ");
+		
+		Query query = this.getSession().createSQLQuery(stringBuffer.toString());
 
+		List list = query.list();
+		if (CommonUtil.isEmpty(list))
+			return null;
+
+		List<FileDownloadHistory> objList = new ArrayList<FileDownloadHistory>();
+		for (Iterator itr = list.iterator(); itr.hasNext();) {
+			Object[] fields = (Object[]) itr.next();
+			FileDownloadHistory obj = new FileDownloadHistory();
+			int j = 0;
+			obj.setFileId((String)fields[j++]);
+			obj.setFileName((String)fields[j++]);
+			obj.setRefTaskId((String)fields[j++]);
+			obj.setRefTaskName((String)fields[j++]);
+			obj.setRefPrcInstId((String)fields[j++]);
+			obj.setRefPrcInstName((String)fields[j++]);
+			obj.setRefPackageId((String)fields[j++]);
+			obj.setRefPackageName((String)fields[j++]);
+			objList.add(obj);
+		}
+		FileDownloadHistory[] fileModels = new FileDownloadHistory[objList.size()];
+		objList.toArray(fileModels);
+
+		return fileModels[0];
+		
+	}
+	
 	public IFileModel getFileById(String fileId) throws DocFileException {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append("select id, type, fileName, filePath, fileSize, writtenTime");
@@ -1474,6 +1519,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 	private Query appendQuery(String user, StringBuffer queryBuffer, FileWorkCond cond) throws Exception {
 
+		String fileId = cond.getFileId();
 		String tskAssignee = cond.getTskAssignee();
 		String tskAssigneeOrTskSpaceId = cond.getTskAssigneeOrSpaceId();
 		//assingnedOnly 값이 true 라면 실행중인(11) 태스크만 조회를 한다.
@@ -1930,4 +1976,215 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 		this.dbType = dbType;
 	}
 
+	@Override
+	public FileDownloadHistory getFileDownloadHistory(String user, String id, String level) throws DocFileException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			if (level.equals(LEVEL_ALL)) {
+				FileDownloadHistory obj = (FileDownloadHistory)this.get(FileDownloadHistory.class, id);
+				return obj;
+			} else {
+				FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
+				cond.setObjId(id);
+				return getFileDownloadHistory(user, cond, level);
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new DocFileException(e);
+		}
+	}
+	@Override
+	public FileDownloadHistory getFileDownloadHistory(String user, FileDownloadHistoryCond cond, String level) throws DocFileException {
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		FileDownloadHistory[] objs = getFileDownloadHistorys(user, cond, level);
+		if (CommonUtil.isEmpty(objs))
+			return null;
+		try {
+			if (objs.length != 1)
+				throw new DocFileException("More than 1 Object");
+		} catch (DocFileException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return objs[0];
+	}
+	@Override
+	public FileDownloadHistory setFileDownloadHistory(String user, FileDownloadHistory obj, String level) throws DocFileException {
+		try {
+			fill(user, obj);
+			set(obj);
+			return obj;
+		} catch (DocFileException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new DocFileException(e);
+		}
+	}
+	@Override
+	public FileDownloadHistory createFileDownloadHistory(String user, FileDownloadHistory obj) throws DocFileException {
+		try {
+			fill(user, obj);
+			create(obj);
+			return obj;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new DocFileException(e);
+		}
+	}
+	@Override
+	public void removeFileDownloadHistory(String user, String id) throws DocFileException {
+		try {
+			remove(FileDownloadHistory.class, id);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new DocFileException(e);
+		}
+	}
+	@Override
+	public void removeFileDownloadHistory(String user, FileDownloadHistoryCond cond) throws DocFileException {
+		FileDownloadHistory obj = getFileDownloadHistory(user, cond, null);
+		if (obj == null)
+			return;
+		removeFileDownloadHistory(user, obj.getObjId());
+	}
+	private Query appendQuery(StringBuffer buf, FileDownloadHistoryCond cond) throws Exception {
+		String objId = null;
+		String fileId = null;
+		String fileName = null;
+		String downloadUserId = null;
+		String refPackageId = null;
+		String refPackageName = null;
+		String refPrcInstId = null;
+		String refPrcInstName = null;
+		String refTaskId = null;
+		String refTaskName = null;
+		String creationUser = null;
+		Date creationDate = null;
+		String modificationUser = null;
+		Date modificationDate = null;
+		
+		if (cond != null) {
+			objId = cond.getObjId();
+			fileId = cond.getFileId();
+			fileName = cond.getFileName();
+			downloadUserId = cond.getDownloadUserId();
+			refPackageId = cond.getRefPackageId();
+			refPackageName = cond.getRefPackageName();
+			refPrcInstId = cond.getRefPrcInstId();
+			refPrcInstName = cond.getRefPrcInstName();
+			refTaskId = cond.getRefTaskId();
+			refTaskName = cond.getRefTaskName();
+			creationUser = cond.getCreationUser();
+			creationDate = cond.getCreationDate();
+			modificationUser = cond.getModificationUser();
+			modificationDate = cond.getModificationDate();
+		}
+		buf.append(" from FileDownloadHistory obj");
+		buf.append(" where obj.objId is not null");
+		Map filterMap = new HashMap();
+		//TODO 시간 검색에 대한 확인 필요
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId = :objId");
+			if (fileId != null)
+				buf.append(" and obj.fileId = :fileId");
+			if (fileName != null)
+				buf.append(" and obj.fileName = :fileName");
+			if (downloadUserId != null)
+				buf.append(" and obj.downloadUserId = :downloadUserId");
+			if (refPackageId != null)
+				buf.append(" and obj.refPackageId = :refPackageId");
+			if (refPackageName != null)
+				buf.append(" and obj.refPackageName = :refPackageName");
+			if (refPrcInstId != null)
+				buf.append(" and obj.refPrcInstId = :refPrcInstId");
+			if (refPrcInstName != null)
+				buf.append(" and obj.refPrcInstName = :refPrcInstName");
+			if (refTaskId != null)
+				buf.append(" and obj.refTaskId = :refTaskId");
+			if (refTaskName != null)
+				buf.append(" and obj.refTaskName = :refTaskName");
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (creationDate != null)
+				buf.append(" and obj.creationDate = :creationDate");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
+			if (modificationDate != null)
+				buf.append(" and obj.modificationDate = :modificationDate");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (fileId != null)
+				query.setString("fileId", fileId);
+			if (fileName != null)
+				query.setString("fileName", fileName);
+			if (downloadUserId != null)
+				query.setString("downloadUserId", downloadUserId);
+			if (refPackageId != null)
+				query.setString("refPackageId", refPackageId);
+			if (refPackageName != null)
+				query.setString("refPackageName", refPackageName);
+			if (refPrcInstId != null)
+				query.setString("refPrcInstId", refPrcInstId);
+			if (refPrcInstName != null)
+				query.setString("refPrcInstName", refPrcInstName);
+			if (refTaskId != null)
+				query.setString("refTaskId", refTaskId);
+			if (refTaskName != null)
+				query.setString("refTaskName", refTaskName);
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (creationDate != null)
+				query.setTimestamp("creationDate", creationDate);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
+			if (modificationDate != null)
+				query.setTimestamp("modificationDate", modificationDate);
+		}
+		return query;
+	}
+	
+	@Override
+	public long getFileDownloadHistorySize(String user, FileDownloadHistoryCond cond) throws DocFileException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(obj)");
+			Query query = this.appendQuery(buf,cond);
+			List list = query.list();
+			long count = ((Long)list.get(0)).longValue();
+			return count;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new DocFileException(e);
+		}
+	}
+	@Override
+	public FileDownloadHistory[] getFileDownloadHistorys(String user, FileDownloadHistoryCond cond, String level) throws DocFileException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" obj");
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			FileDownloadHistory[] objs = new FileDownloadHistory[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new DocFileException(e);
+		}
+	}
 }

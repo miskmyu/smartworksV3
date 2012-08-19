@@ -788,3 +788,28 @@ ALTER TABLE aprapr add aprDueDate character varying(100);
 
 
 alter table msg_db_uids alter column uid varchar(100) collate Korean_Wansung_CS_AS
+
+CREATE TABLE SWFileDownHistory (
+	id varchar(50) NOT NULL,
+	fileId varchar(50),
+	fileName varchar(255),
+	downloadUserId varchar(50),
+	refPackageId varchar(100),
+	refPackageName varchar(255),
+	refPrcInstId varchar(100),
+	refPrcInstName varchar(200),
+	refTaskId varchar(50),
+	refTaskName varchar(200),
+	creator	varchar(50),
+	createdtime datetime,
+	modifier varchar(50),
+	modifiedtime datetime,
+    primary key (id)
+);
+
+CREATE TABLE SwLoginUserHistory (
+	id varchar(50) NOT NULL,
+	userId varchar(50),
+	loginTime datetime,
+    primary key (id)
+);
