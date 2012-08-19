@@ -3,6 +3,7 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2012.08.01.										-->
 
+<%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.instance.info.TaskInstanceInfo"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
@@ -37,6 +38,7 @@
 	
 	int workType = WorkInstance.TYPE_INFORMATION;
 	Instance instance = null;
+	InstanceInfo instanceInfo = null;
 	InformationWorkInstance iworkInstance = null;
 	ProcessWorkInstance pworkInstance = null;
 	TaskInstance taskInstance = null;
@@ -47,11 +49,11 @@
 	if(!SmartUtil.isBlankObject(formId) && !SmartUtil.isBlankObject(instId)){
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else if(!SmartUtil.isBlankObject(taskInstId)){
-//		instance = smartWorks.getTaskInstanceById(taskInstId);		
+		instanceInfo = smartWorks.getTaskInstanceById(taskInstId);		
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else{
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
-	}
+	}		
 
 	User owner = instance.getOwner();
 	WorkSpace workSpace = instance.getWorkSpace();

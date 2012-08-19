@@ -248,7 +248,7 @@ public interface ISmartWorks {
 
 	public abstract Work getWorkById(String workId) throws Exception;
 
-	public abstract TaskInstance getTaskInstanceById(String taskInstId) throws Exception;
+	public abstract TaskInstanceInfo getTaskInstanceById(String taskInstId) throws Exception;
 	
 	public abstract InstanceInfo[] searchMyRunningInstance(String key) throws Exception;
 
