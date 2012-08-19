@@ -8,6 +8,15 @@ import net.smartworks.util.SmartUtil;
 
 public class ProcessWorkInstance extends WorkInstance {
 
+	private int numberOfForwardHistories = 0;
+
+	public int getNumberOfForwardHistories() {
+		return numberOfForwardHistories;
+	}
+	public void setNumberOfForwardHistories(int numberOfForwardHistories) {
+		this.numberOfForwardHistories = numberOfForwardHistories;
+	}
+
 	public ProcessWorkInstance() {
 		super();
 		super.setType(WorkInstance.TYPE_PROCESS);

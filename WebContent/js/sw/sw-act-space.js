@@ -1235,9 +1235,11 @@ $(function() {
 	
 	$('.js_toggle_update_histories').live('click', function(e){
 		var input = $(targetElement(e));
-		var target = input.parents('.js_iwork_space_page').find('.js_instance_histories');
+		var workSpace = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
+		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = input.parents('.js_iwork_space_page').attr('instId');
+			var instanceId = workSpace.attr('instId');
 			$.ajax({
 				url : 'update_histories.sw',
 				data : {
@@ -1258,9 +1260,12 @@ $(function() {
 	
 	$('.js_toggle_forward_histories').live('click', function(e){
 		var input = $(targetElement(e));
-		var target = input.parents('.js_iwork_space_page').find('.js_instance_histories');
+		var workSpace = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
+		var target = workSpace.find('.js_instance_histories');
+		
 		if(isEmpty(target.children())){
-			var instanceId = input.parents('.js_iwork_space_page').attr('instId');
+			var instanceId = workSpace.attr('instId');
 			$.ajax({
 				url : 'forward_histories.sw',
 				data : {
@@ -1281,9 +1286,11 @@ $(function() {
 	
 	$('.js_toggle_download_histories').live('click', function(e){
 		var input = $(targetElement(e));
-		var target = input.parents('.js_iwork_space_page').find('.js_instance_histories');
+		var workSpace = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
+		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = input.parents('.js_iwork_space_page').attr('instId');
+			var instanceId = workSpace.attr('instId');
 			$.ajax({
 				url : 'download_histories.sw',
 				data : {
@@ -1304,9 +1311,11 @@ $(function() {
 	
 	$('.js_toggle_related_instances').live('click', function(e){
 		var input = $(targetElement(e));
-		var target = input.parents('.js_iwork_space_page').find('.js_instance_histories');
+		var workSpace = input.parents('.js_iwork_space_page');
+		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
+		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = input.parents('.js_iwork_space_page').attr('instId');
+			var instanceId = workSpace.attr('instId');
 			$.ajax({
 				url : 'related_instances.sw',
 				data : {
