@@ -69,6 +69,7 @@ import net.smartworks.server.engine.process.approval.manager.IAprManager;
 import net.smartworks.server.engine.process.approval.model.AprApprovalDef;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineDef;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineDefCond;
+import net.smartworks.server.engine.process.task.manager.impl.TskManagerMailAdvisorImpl;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.util.ModelConverter;
@@ -79,6 +80,8 @@ import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 @Service
 public class SettingsServiceImpl implements ISettingsService {
@@ -240,6 +243,15 @@ public class SettingsServiceImpl implements ISettingsService {
 			swoConfig.setPassword(pasMailPassword);
 			swoConfig.setActivity(isActivity);
 			getSwoManager().setConfig(userId, swoConfig, IManager.LEVEL_ALL);
+			
+			String chkTestAfterSaving = (String)frmCompanyGeneral.get("chkTestAfterSaving");
+			if (!CommonUtil.isEmpty(chkTestAfterSaving) && chkTestAfterSaving.equalsIgnoreCase("on")) {
+				WebApplicationContext wac = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+				TskManagerMailAdvisorImpl mailAdvisor = (TskManagerMailAdvisorImpl) wac.getBean("tskManagerMailAdvisor");
+				mailAdvisor.sendMailByUserInfo(userId, userId, userId, "[SMARTWORKS]COMPANY MAIL SYSTEM CHECK", "[" + cUser.getCompany() + "] COMPANY MAIL SYSTEM CHECK RESULT : OK!");
+			}
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();			
 		}
