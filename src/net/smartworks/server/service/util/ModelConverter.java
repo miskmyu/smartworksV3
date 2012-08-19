@@ -4020,7 +4020,7 @@ public class ModelConverter {
 
 		
 		if (!CommonUtil.isEmpty(recordId))
-			iWInstanceInfo.setId(processInstId);
+			iWInstanceInfo.setId(recordId);
 		
 		
 //		TskTask[] lastSwTask = getTskManager().getTasks("", tskCond, IManager.LEVEL_LITE);
@@ -4199,7 +4199,12 @@ public class ModelConverter {
 		if (taskInfos != null && taskInfos.length != 0) {
 			TaskInstanceInfo taskInfo = taskInfos[0];
 			if (taskInfo.getWorkInstance() != null) {
-				String instanceId = taskInfo.getWorkInstance().getId();
+				//String recordId = taskInfo.getWorkInstance().getId();
+				
+				TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(userId, taskInfo.getId(), IManager.LEVEL_LITE);
+				
+				String instanceId = task.getProcessInstId();
+				
 				FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
 				cond.setRefPrcInstId(instanceId);
 				long downloadCount = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize(userId, cond);

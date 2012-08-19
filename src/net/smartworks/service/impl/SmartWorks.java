@@ -381,7 +381,7 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception {
+	public TaskInstanceInfo getTaskInstanceById(String taskInstId) throws Exception {
 		return instanceService.getTaskInstanceById(taskInstId);
 	}
 

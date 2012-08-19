@@ -33,7 +33,7 @@ public interface IInstanceService {
 
 	public InstanceInfo[] getMyRecentInstances() throws Exception;
 
-	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception;
+	public TaskInstanceInfo getTaskInstanceById(String taskInstId) throws Exception;
 
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly) throws Exception;
 

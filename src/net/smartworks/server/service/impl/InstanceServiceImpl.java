@@ -424,8 +424,23 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
-	public TaskInstance getTaskInstanceById(String taskInstId) throws Exception {
-		return null;
+	public TaskInstanceInfo getTaskInstanceById(String taskInstId) throws Exception {
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		
+		TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(userId, taskInstId, null);
+		if (task == null)
+			return null;
+		
+		TskTask[] tasks = new TskTask[1];
+		tasks[0] = task;
+		
+		IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, tasks[0].getProcessInstId());
+		TaskInstanceInfo[] taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, tasks);
+		if (taskInstanceInfo == null || taskInstanceInfo.length == 0)
+			return null;
+		
+		return taskInstanceInfo[0];
 	}
 
 	public InstanceInfo[] getMyRunningInstances(LocalDate lastInstanceDate, int requestSize, boolean assignedOnly, boolean runningOnly, RequestParams params) throws Exception {
