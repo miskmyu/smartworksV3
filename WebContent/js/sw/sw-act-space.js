@@ -1337,12 +1337,12 @@ $(function() {
 	$('.js_delete_comment_btn').live('click', function(e) {
 		smartPop.confirm(smartMessage.get("removeCommentConfirmation"), function(){
 			var input = $(targetElement(e));
-			var subInstanceList = input.parents('.js_sub_instance_list');
-			var commentItem = input.parents('.js_comment_item');
+			var spaceSubInstance = input.parents('.js_space_sub_instance');
+			var commentItem = input.parents('.js_sub_instance_list:first');
 			var paramsJson = {};
-			paramsJson['workType'] = parseInt(subInstanceList.attr('workType'));
-			paramsJson['workInstanceId'] = subInstanceList.attr('instanceId');
-			paramsJson['commentId'] = commentItem.attr('commentId');
+			paramsJson['workType'] = parseInt(spaceSubInstance.attr('workType'));
+			paramsJson['workInstanceId'] = spaceSubInstance.attr('instanceId');
+			paramsJson['commentId'] = commentItem.attr('instanceId');
 			url = "remove_comment_from_instance.sw";
 			console.log(JSON.stringify(paramsJson));
 			smartPop.progressCenter();				
@@ -1352,7 +1352,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					var showAllComments = subInstanceList.find('.js_show_all_comments');
+					var showAllComments = commentItem.find('.js_show_all_comments');
 					if(!isEmpty(showAllComments)){
 						showAllComments.find('span').click();
 					}else{
