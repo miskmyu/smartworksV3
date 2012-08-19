@@ -99,6 +99,7 @@ import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.StringUtil;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
+import net.smartworks.server.engine.docfile.model.FileDownloadHistoryCond;
 import net.smartworks.server.engine.docfile.model.FileWork;
 import net.smartworks.server.engine.docfile.model.FileWorkCond;
 import net.smartworks.server.engine.docfile.model.IFileModel;
@@ -167,6 +168,7 @@ import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.validator.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -4192,6 +4194,24 @@ public class ModelConverter {
 		int numberOfRelatedWorks = getSwfManager().getReferenceFormSize("", swdRecord.getRecordId());
 
 		informationWorkInstance.setNumberOfRelatedWorks(numberOfRelatedWorks);
+		
+		TaskInstanceInfo[] taskInfos = informationWorkInstance.getTasks();
+		if (taskInfos != null && taskInfos.length != 0) {
+			TaskInstanceInfo taskInfo = taskInfos[0];
+			if (taskInfo.getWorkInstance() != null) {
+				String instanceId = taskInfo.getWorkInstance().getId();
+				FileDownloadHistoryCond cond = new FileDownloadHistoryCond();
+				cond.setRefPrcInstId(instanceId);
+				long downloadCount = SwManagerFactory.getInstance().getDocManager().getFileDownloadHistorySize(userId, cond);
+				informationWorkInstance.setNumberOfDownloadHistories((int)downloadCount);
+
+				TskTaskCond taskCond = new TskTaskCond();
+				taskCond.setType(TskTask.TASKTYPE_SINGLE);
+				taskCond.setProcessInstId(instanceId);
+				long updateCount = SwManagerFactory.getInstance().getTskManager().getTaskSize(userId, taskCond);
+				informationWorkInstance.setNumberOfUpdateHistories((int)updateCount);
+			}
+		}
 
 		getApprovalWorkInformationByInstanceId(informationWorkInstance, swdRecord.getRecordId());
 
