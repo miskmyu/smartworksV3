@@ -8193,5 +8193,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -1650,4 +1650,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getRelatedWorkList(instanceId, params);
 	}
 
+	@Override
+	public InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception {
+		return instanceService.getForwardHistoryList(instanceId, params);
+	}
+
 }

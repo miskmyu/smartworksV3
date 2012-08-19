@@ -183,6 +183,8 @@ public interface IInstanceService {
 	
 	public InstanceInfoList getUpdateHistoryList(String instanceId, RequestParams params) throws Exception;
 
+	public InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception;
+
 	public InstanceInfoList getDownloadHistoryList(String instanceId, RequestParams params) throws Exception;
 	
 	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;

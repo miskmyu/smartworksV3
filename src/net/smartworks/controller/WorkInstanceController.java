@@ -172,6 +172,11 @@ public class WorkInstanceController extends ExceptionInterceptor {
 		return SmartUtil.returnMnv(request, "jsp/content/work/space/update_histories.jsp", "");
 	}
 
+	@RequestMapping("/forward_histories")
+	public ModelAndView forwardHistories(HttpServletRequest request, HttpServletResponse response) {
+		return SmartUtil.returnMnv(request, "jsp/content/work/space/forward_histories.jsp", "");
+	}
+
 	@RequestMapping("/download_histories")
 	public ModelAndView downloadHistories(HttpServletRequest request, HttpServletResponse response) {
 		return SmartUtil.returnMnv(request, "jsp/content/work/space/download_histories.jsp", "");
