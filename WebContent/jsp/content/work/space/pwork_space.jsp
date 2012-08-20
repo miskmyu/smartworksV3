@@ -388,7 +388,7 @@
 				    	<a class="js_pop_user_info" href="<%=lastModifier.getSpaceController() %>?cid=<%=lastModifier.getSpaceContextId()%>" userId="<%=lastModifier.getId()%>" longName="<%=lastModifier.getLongName() %>" minPicture="<%=lastModifier.getMinPicture() %>" profile="<%=lastModifier.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img src="<%=lastModifier.getMinPicture() %>" class="profile_size_s" /> <%=lastModifier.getLongName() %></a>
 				    	<span class="t_date"> <%= instance.getLastModifiedDate().toLocalString() %> </span>
 				    </div>
-				    <%if(numberOfForwardHistories > 1){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
+				    <%if(numberOfForwardHistories > 0){ %><div class="po_left pt3"><a href="" class="js_toggle_forward_histories"><fmt:message key="common.title.forward_history"/> <span class="t_up_num">[<%=numberOfForwardHistories %>]</span></a></div><%} %>
 				</div>     
 
 				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
