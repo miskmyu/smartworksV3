@@ -74,7 +74,7 @@
 			CommentInstanceInfo comment=null;
 			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 	%>
-			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>"  workType="<%=workType%>">
+			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>"  workType="<%=workType%>">
 				<%
 				switch(workInstance.getType()){
 				
@@ -244,6 +244,15 @@
 						</a>
 					</div>
 					<div class="noti_in_m">
+						<%
+						if(comment.getOwner().getId().equals(cUser.getId())){
+						%>
+							<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
+								<div class="btn_x fr"></div>
+							</a>
+						<%
+						}
+						%>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 							<span class="t_name"><%=owner.getLongName()%></span>
 						</a>

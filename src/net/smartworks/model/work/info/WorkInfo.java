@@ -181,4 +181,13 @@ public class WorkInfo extends BaseObject {
 		this.type = type;
 	}
 	
+	public Work getWork(){
+		Work work = new Work();
+		work.setDesc(this.getDesc());
+		work.setId(this.getId());
+		work.setName(this.getName());
+		work.setProvidedBy(this.getProvidedBy());
+		work.setType(this.getType());
+		return work;
+	}
 }

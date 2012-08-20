@@ -187,4 +187,26 @@ public class TaskInstanceInfo extends InstanceInfo {
 	public void setApprovalTaskId(String approvalTaskId) {
 		this.approvalTaskId = approvalTaskId;
 	}
+	
+	public TaskInstance getTaskInstance(){
+		TaskInstance taskInstance = new TaskInstance();
+		taskInstance.setId(this.getId());
+		taskInstance.setName(this.getName());
+		taskInstance.setAssignee((this.getAssignee()!=null) ? this.getAssignee().getUser():null);
+		taskInstance.setAssigner((this.getAssigner()!=null) ? this.getAssigner().getUser():null);
+		taskInstance.setCreatedDate(this.getCreatedDate());
+		taskInstance.setForwardId(this.getForwardId());
+		taskInstance.setLastModifiedDate(this.getLastModifiedDate());
+		taskInstance.setLastModifier((this.getLastModifier()!=null) ? this.getLastModifier().getUser():null);
+		taskInstance.setOwner((this.getOwner()!=null) ? this.getOwner().getUser():null);
+		taskInstance.setPerformer((this.getPerformer()!=null) ? this.getPerformer().getUser():null);
+		taskInstance.setStatus(this.getStatus());
+		taskInstance.setSubject(this.getSubject());
+		taskInstance.setTaskType(this.getTaskType());
+		taskInstance.setType(this.getType());
+		taskInstance.setWork((this.getWork()!=null) ? this.getWork().getWork():null);
+		taskInstance.setWorkInstance((this.getWorkInstance()!=null) ? this.getWorkInstance().getWorkInstance():null);
+		taskInstance.setWorkSpace((this.getWorkSpace()!=null) ? this.getWorkSpace().getWorkSpace():null);
+		return taskInstance;
+	}
 }

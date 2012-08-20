@@ -1334,4 +1334,43 @@ $(function() {
 		return false;
 	});
 	
+	$('.js_delete_comment_btn').live('click', function(e) {
+		smartPop.confirm(smartMessage.get("removeCommentConfirmation"), function(){
+			var input = $(targetElement(e));
+			var spaceSubInstance = input.parents('.js_space_sub_instance');
+			var commentItem = input.parents('.js_sub_instance_list:first');
+			var paramsJson = {};
+			paramsJson['workType'] = parseInt(spaceSubInstance.attr('workType'));
+			paramsJson['workInstanceId'] = spaceSubInstance.attr('instanceId');
+			paramsJson['commentId'] = commentItem.attr('instanceId');
+			url = "remove_comment_from_instance.sw";
+			console.log(JSON.stringify(paramsJson));
+			smartPop.progressCenter();				
+			$.ajax({
+				url : url,
+				contentType : 'application/json',
+				type : 'POST',
+				data : JSON.stringify(paramsJson),
+				success : function(data, status, jqXHR) {
+					var showAllComments = commentItem.find('.js_show_all_comments');
+					if(!isEmpty(showAllComments)){
+						showAllComments.find('span').click();
+					}else{
+						commentItem.remove();
+					}
+					smartPop.closeProgress();
+				},
+				error : function(e) {
+					// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
+					smartPop.closeProgress();
+					smartPop.showInfo(smartPop.ERROR, smartMessage.get("removeCommentError"), function(){
+					});
+				}
+				
+			});
+		});
+		return false;
+		
+	});
+	
 });

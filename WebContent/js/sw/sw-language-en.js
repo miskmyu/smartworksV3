@@ -224,7 +224,8 @@ smartMessage.bundle['en'] = {
 	notRefFormWorkingError : "Refered Work is not working. Please contact the Admonistrator!",
 	helpUrlSyntaxError : "Web User Manual is not valid url starting with http://. Please retry with valid url",
 	invalidMailAccountError : "Mail Acount or password is not valid. Please retry with valid Mail Acount or password",
-	addAdjunctError : "Error has beeon occured while adding Adjunct Member. Please contact the Admonistrator!",
+	addAdjunctError : "Error has beeon occured while adding Adjunct Member. Please contact the Administrator!",
+	removeCommentError : "Error has beeon occured while removing the Comment. Please contact the Administrator!",
 	
 	usableUserId : "The ID is not used, so you can user the ID. Please click the ID Change button to change the ID.",
 	duplicatedUserId : "The ID is already used by other. Please input another ID.",
@@ -250,6 +251,7 @@ smartMessage.bundle['en'] = {
 	pushoutGroupMemberConfirmation : "Do you really want to push out the Group Member? ",
 	removeMailFolderConfirmation : "Do you really want to remove Mail Folder? ",
 	addAdjunctConfirmation : "Do you really want to add Adjunct Member? ",
+	removeCommentConfirmation : "Do you really want to remove the Comment?",
 	
 	spaceOverDateSeleted : "Future date has been selected. Please select today or before!",
 			
