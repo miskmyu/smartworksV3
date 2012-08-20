@@ -333,6 +333,10 @@ li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
 li.js_comment_list {}
 li.js_comment_list:hover {background-color:#fff7eb; cursor:pointer}
+
+li.sub_instance_list > .det_title .delet_action, li.instance_list > .det_title .delet_action {display:none}
+li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_title:hover .delet_action {display:block}
+
 .arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 .arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 

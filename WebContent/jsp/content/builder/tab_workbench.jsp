@@ -70,11 +70,11 @@
 					</colgroup>
 						<tbody>
 							<tr>
-								<td class="bul_dot"><fmt:message key="common.title.desc"/> :</td>
+								<td class="bul_dot vt"><fmt:message key="common.title.desc"/> :</td>
 								<td class="content"><%=CommonUtil.toNotNull(work.getDesc()) %></td>
 							</tr>
 							<tr>
-								<td class="bul_dot"><fmt:message key="common.title.owner"/> :</td>
+								<td class="bul_dot vt"><fmt:message key="common.title.owner"/> :</td>
 								<%
 								User creater = work.getCreater();
 								User lastModifer = work.getLastModifier();
@@ -88,7 +88,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="bul_dot"><fmt:message key="common.title.last_modifier"/> :</td>
+								<td class="bul_dot vt"><fmt:message key="common.title.last_modifier"/> :</td>
 								<td class="content">
 									<a href="<%=lastModifer.getSpaceController()%>?cid=<%=lastModifer.getSpaceContextId() %>&wid=<%=lastModifer.getId()%>"><img class="profile_size_s" src="<%=lastModifer.getMinPicture() %>"></a>
 									<a class="userFieldLink t_name" href="<%=lastModifer.getSpaceController()%>?cid=<%=lastModifer.getSpaceContextId() %>&wid=<%=lastModifer.getId()%>"><%=work.getLastModifier().getLongName() %></a>
@@ -100,7 +100,7 @@
 								User editingUser = work.getEditingUser();
 							%>
 								<tr>
-									<td class="bul_dot"><fmt:message key="builder.title.editing_user"/> :</td>
+									<td class="bul_dot vt"><fmt:message key="builder.title.editing_user"/> :</td>
 									<td class="content">
 										<a href="<%=editingUser.getSpaceController()%>?cid=<%=editingUser.getSpaceContextId() %>&wid=<%=editingUser.getId()%>"><img class="profile_size_s" src="<%=editingUser.getMinPicture() %>"></a>
 										<a class="userFieldLink t_name" href="<%=editingUser.getSpaceController()%>?cid=<%=editingUser.getSpaceContextId() %>&wid=<%=editingUser.getId()%>"><%=editingUser.getLongName() %></a>

@@ -97,7 +97,6 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 /* 댓글 목록, 전자결재 결재 댓글, 대댓글(li:hover(det_title)가 필료없을 때  */
 .list_reply {margin:0} 
 .list_reply .bg {background-color:#ededed}
- .list_reply li {padding: 5px 0}
 .list_reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 
 /* 수정이력, 연결업무, 다운로드 이력 */

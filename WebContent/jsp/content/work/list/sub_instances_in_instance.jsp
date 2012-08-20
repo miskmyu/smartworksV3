@@ -56,7 +56,7 @@ if (subInstances != null) {
 			case Instance.TYPE_BOARD:
 				board = (BoardInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -78,6 +78,7 @@ if (subInstances != null) {
 						</a>
 						<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles()) %></div><%} %>
 					</div>
+			</div>
 				
 			<%
 				break;
@@ -85,7 +86,7 @@ if (subInstances != null) {
 			case Instance.TYPE_EVENT:
 				event = (EventInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -102,14 +103,14 @@ if (subInstances != null) {
 						<div><fmt:message key="common.upload.event.start_date"/> : <%=event.getStart().toLocalString() %> 
 							<%if(!SmartUtil.isBlankObject(event.getEnd())) {%><fmt:message key="common.upload.event.end_date"/> : <%=event.getEnd().toLocalString() %> <%} %></div>
 					</div>
-				
+			</div>
 			<%
 				break;
 			// 태스크가 파일인 경우...									
 			case Instance.TYPE_FILE:
 				file = (FileInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">	
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -125,14 +126,14 @@ if (subInstances != null) {
 						</div><%} %>
 						<%if(!SmartUtil.isBlankObject(file.getContent())){ %><div><%=file.getContent() %></div><%} %>
 					</div>
-				
+			</div>	
 			<%
 				break;
 			// 태스크가 사진인 경우...									
 			case Instance.TYPE_IMAGE:
 				image = (ImageInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">	
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -148,14 +149,14 @@ if (subInstances != null) {
 						</div>
 						<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>
 					</div>
-				
+			</div>	
 			<%
 				break;
 			// 태스크가 메모인 경우...									
 			case Instance.TYPE_MEMO:
 				memo = (MemoInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">	
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -170,14 +171,14 @@ if (subInstances != null) {
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				
+			</div>	
 			<%
 				break;
 			// 태스크가 댓글인 경우...									
 			case Instance.TYPE_COMMENT:
 				comment = (CommentInstanceInfo)workInstance;
 			%>
-				
+			<div class="det_title">	
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -187,9 +188,11 @@ if (subInstances != null) {
 						<%
 						if(comment.getOwner().getId().equals(cUser.getId())){
 						%>
+						<div class="delet_action">
 							<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
 								<div class="btn_x fr"></div>
 							</a>
+						</div>
 						<%
 						}
 						%>
@@ -199,12 +202,12 @@ if (subInstances != null) {
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				
+			</div>	
 			<%
 				break;
 			default:
 			%>
-				
+			<div class="det_title">	
 					<div class="noti_pic">
 						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
 							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
@@ -219,7 +222,7 @@ if (subInstances != null) {
 							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 						</div>
 					</div>
-				
+			</div>	
 			<%
 			}
 			%>		
