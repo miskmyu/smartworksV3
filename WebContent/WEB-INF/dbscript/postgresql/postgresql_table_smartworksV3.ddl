@@ -2469,3 +2469,27 @@ CREATE TABLE SwAuthGroup (
 	customUser character varying(4000),
     primary key (id)
 );
+CREATE TABLE SWFileDownHistory (
+	id character varying(50) NOT NULL,
+	fileId character varying(50),
+	fileName character varying(255),
+	downloadUserId character varying(50),
+	refPackageId character varying(100),
+	refPackageName character varying(255),
+	refPrcInstId character varying(100),
+	refPrcInstName character varying(200),
+	refTaskId character varying(50),
+	refTaskName character varying(200),
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
+    primary key (id)
+);
+
+CREATE TABLE SwLoginUserHistory (
+	id character varying(50) NOT NULL,
+	userId character varying(50),
+	loginTime timestamp,
+    primary key (id)
+);
