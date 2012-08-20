@@ -246,10 +246,12 @@
 					<div class="noti_in_m">
 						<%
 						if(comment.getOwner().getId().equals(cUser.getId())){
-						%>
+						%>	
+							<div class="delet_action">
 							<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
 								<div class="btn_x fr"></div>
 							</a>
+							</div>
 						<%
 						}
 						%>
@@ -297,7 +299,7 @@
 		        	WorkInstanceInfo instance = (WorkInstanceInfo)workInstance;
 				%>
 					<div class="js_comments_box" <%if(instance.getSubInstanceCount()==0){%>style="display:none"<%} %>>
-						<!-- 댓글 -->
+						<!-- 대댓글 -->
 					   <div class="reply_point pos_reply_point"></div>
 					   <div class="reply_section pos_reply">  
 					        <div class="list_reply">

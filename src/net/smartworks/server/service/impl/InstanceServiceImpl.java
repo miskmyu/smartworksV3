@@ -27,7 +27,6 @@ import net.smartworks.model.approval.Approval;
 import net.smartworks.model.approval.ApprovalLine;
 import net.smartworks.model.approval.ApprovalLineInst;
 import net.smartworks.model.community.User;
-import net.smartworks.model.community.info.DepartmentInfo;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.filter.Condition;
@@ -41,7 +40,6 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.SortingField;
-import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -8253,8 +8251,58 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+
+//		int currentPage = params.getCurrentPage()-1;
+//		int pageCount = params.getPageSize();
+
+		int currentPage = 0;
+		int pageCount = 10;
+		
+		TskTaskCond tempTaskCond = new TskTaskCond();
+		tempTaskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
+		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tempTaskCond, IManager.LEVEL_ALL);
+		if (tasks == null || tasks.length == 0)
+			return new InstanceInfoList();
+		
+		String prcInstId = tasks[0].getProcessInstId();
+		
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setProcessInstId(prcInstId);
+		long totalSize = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardIdSize(userId, taskCond);
+		if (totalSize == 0)
+			return new InstanceInfoList();
+		
+		taskCond.setPageSize(pageCount);
+		taskCond.setPageNo(currentPage);
+		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		
+		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardId(userId, taskCond, IManager.LEVEL_ALL);
+		
+		Map<String, List> forwardIdMap = new HashMap<String, List>();
+		
+		for (int i = 0; i < allTasks.length; i++) {
+			TskTask task = allTasks[i];
+			String referenceTaskId = task.getFromRefId();
+			task.setObjId(referenceTaskId);
+		}
+		InstanceInfoList instanceInfoList = new InstanceInfoList();
+		IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, instanceId);
+		TaskInstanceInfo[] taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		instanceInfoList.setInstanceDatas(taskInstanceInfo);
+		instanceInfoList.setPageSize(pageCount);
+		int totalPages = (int)totalSize % pageCount;
+		if(totalPages == 0)
+			totalPages = (int)totalSize / pageCount;
+		else
+			totalPages = (int)totalSize / pageCount + 1;
+		
+		instanceInfoList.setTotalPages(totalPages);
+		instanceInfoList.setCurrentPage(currentPage + 1);
+		instanceInfoList.setTotalSize((int)totalSize);
+		
+		return instanceInfoList;
 	}
 
 }

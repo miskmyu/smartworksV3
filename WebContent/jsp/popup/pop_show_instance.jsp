@@ -45,6 +45,7 @@
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
 	String targetInstId = "";
+	String targetTaskInstId = "";
 	
 	if(!SmartUtil.isBlankObject(formId) && !SmartUtil.isBlankObject(instId)){
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
@@ -66,7 +67,7 @@
 		if(SmartUtil.isBlankObject(taskInstance))
 			targetInstId = instance.getId();
 		else
-			targetInstId = taskInstance.getWorkInstance().getId();
+			targetTaskInstId = taskInstance.getId();
 		break;
 	case WorkInstance.TYPE_PROCESS:
 		workType = SmartWork.TYPE_PROCESS;
@@ -87,7 +88,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_show_instance_page" instId="<%=targetInstId %>" workType="<%=workType%>" workId="<%=workId%>">
+<div class="pop_corner_all js_show_instance_page" instId="<%=targetInstId %>" taskInstId="<%=targetTaskInstId %>" workType="<%=workType%>" workId="<%=workId%>">
 	
 	<!-- 타이틀 -->
 	<div class="body_titl_pic mt5">
@@ -159,12 +160,14 @@
 		var showInstance = $('.js_show_instance_page');
 		var workId = showInstance.attr("workId");
 		var instId = showInstance.attr("instId");
+		var taskInstId = showInstance.attr("taskInstId");
 		var formContent = showInstance.find('div.js_form_content');
 		new SmartWorks.GridLayout({
 			target : formContent,
 			mode : mode,
 			workId : workId,
 			recordId : instId,
+			taskInstId : taskInstId,
 			onSuccess : function(){
 			}
 		});

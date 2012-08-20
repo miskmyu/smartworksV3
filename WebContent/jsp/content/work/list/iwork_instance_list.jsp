@@ -155,7 +155,7 @@
 							<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
 						</div>
 					</td>
-					<td class="tc"><%=instanceInfo.getViews() %>
+					<td class="tc"><%=instanceInfo.getViews() %></td>
 				</tr>
 		<%
 			}

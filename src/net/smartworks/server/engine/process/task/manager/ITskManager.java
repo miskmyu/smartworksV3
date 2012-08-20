@@ -20,6 +20,9 @@ public interface ITskManager extends IManager {
 	public long getTskTaskExtendsSize(String userId, TskTaskCond cond) throws TskException;
 	public TskTaskExtend[] getTaskExtend(String userId, TskTaskCond cond) throws Exception;
 	
+	public long getFirstForwardTasksOnGroupByForwardIdSize(String userId, TskTaskCond cond) throws Exception;
+	public TskTask[] getFirstForwardTasksOnGroupByForwardId(String userId, TskTaskCond cond, String level) throws Exception;
+	
 	public TskTaskDef getTaskDef(String user, String id, String level) throws TskException;
 	public TskTaskDef setTaskDef(String user, TskTaskDef obj, String level) throws TskException;
 	public void removeTaskDef(String user, String id) throws TskException;
