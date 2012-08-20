@@ -1284,4 +1284,162 @@ public class TskManagerImpl extends AbstractManager implements ITskManager{
 			throw new TskException(e);
 		}
 	}
+	private Query appendForwardTaskQuery (StringBuffer buf, TskTaskCond cond) throws Exception {
+		String processInstId = null;
+		Property[] extProps = null;
+		if (cond != null) {
+			extProps = cond.getExtendedProperties();
+			processInstId = cond.getProcessInstId();
+		}
+		buf.append(" from TskTask obj");
+		if (extProps != null && extProps.length != 0) {
+			for (int i=0; i<extProps.length; i++) {
+				buf.append(" left join obj.extendedProperties as extProp").append(i);
+			}
+		}
+		buf.append(" where obj.objId is not null");
+		buf.append(" and tskcreatedate in (");
+		buf.append("	select min(creationDate)");
+		buf.append("	from TskTask ");
+		buf.append("	where 1=1 ");
+		if (!CommonUtil.isEmpty(processInstId))
+			buf.append("		and tskprcinstid=:processInstId");
+		buf.append("	and tskforwardid is not null ");
+		buf.append("	group by tskforwardid");
+		buf.append(")");
+		if (extProps != null && extProps.length != 0) {
+			for (int i=0; i<extProps.length; i++) {
+				Property extProp = extProps[i];
+				String extName = extProp.getName();
+				String extValue = extProp.getValue();
+				if (extName != null)
+					buf.append(" and extProp").append(i).append(".name = :extName").append(i);
+				if (extValue != null)
+					buf.append(" and extProp").append(i).append(".value = :extValue").append(i);
+			}
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		
+		if (cond != null) {
+			if (processInstId != null)
+				query.setString("processInstId", processInstId);
+		}
+		if (extProps != null && extProps.length != 0) {
+			for (int i=0; i<extProps.length; i++) {
+				Property extProp = extProps[i];
+				String extName = extProp.getName();
+				String extValue = extProp.getValue();
+				if (extName != null)
+					query.setString("extName"+i, extName);
+				if (extValue != null)
+					query.setString("extValue"+i, extValue);
+			}
+		}
+		return query;
+		
+	}
+	public long getFirstForwardTasksOnGroupByForwardIdSize(String userId, TskTaskCond cond) throws TskException {
+		try {
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			buf.append(" count(*) ");
+			Query query = this.appendForwardTaskQuery(buf, cond);
+			List list = query.list();
+			
+			long count = (Long)list.get(0);
+			return count;
+		} catch (TskException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new TskException(e);
+		}
+	}
+	public TskTask[] getFirstForwardTasksOnGroupByForwardId(String userId, TskTaskCond cond, String level) throws Exception {
+		try {
+			if (level == null)
+				level = LEVEL_LITE;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			if (level.equals(LEVEL_ALL)) {
+				buf.append(" obj");
+			} else {
+				buf.append(" obj.objId, obj.name, obj.creationUser, obj.creationDate, obj.modificationUser");
+				buf.append(", obj.modificationDate, obj.status, obj.correlation, obj.type, obj.refType, obj.processInstId, obj.title");
+				buf.append(", obj.description, obj.priority, obj.document, obj.assigner, obj.assignee, obj.performer");
+				buf.append(", obj.startDate, obj.assignmentDate, obj.executionDate, obj.dueDate, obj.def, obj.form");
+				buf.append(", obj.expectStartDate, obj.expectEndDate, obj.realStartDate, obj.realEndDate");
+				buf.append(", obj.multiInstId, obj.multiInstOrdering, obj.multiInstFlowCondition, obj.isStartActivity, obj.fromRefType, obj.fromRefId, obj.approvalId, obj.forwardId, obj.isApprovalSourceTask, obj.targetApprovalStatus, obj.loopCounterInteger, obj.stepInteger");
+				buf.append(", obj.instVariable, obj.workSpaceId, obj.workSpaceType, obj.accessLevel, obj.accessValue ");
+			}
+			Query query = this.appendForwardTaskQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			if (!level.equals(LEVEL_ALL)) {
+				List objList = new ArrayList();
+				for (Iterator itr = list.iterator(); itr.hasNext();) {
+					Object[] fields = (Object[]) itr.next();
+					TskTask obj = new TskTask();
+					int j = 0;
+					obj.setObjId((String)fields[j++]);
+					obj.setName((String)fields[j++]);
+					obj.setCreationUser((String)fields[j++]);
+					obj.setCreationDate(((Timestamp)fields[j++]));
+					obj.setModificationUser(((String)fields[j++]));
+					obj.setModificationDate(((Timestamp)fields[j++]));
+					obj.setStatus(((String)fields[j++]));
+					obj.setCorrelation(((String)fields[j++]));
+					obj.setType(((String)fields[j++]));
+					obj.setRefType(((String)fields[j++]));
+					obj.setProcessInstId(((String)fields[j++]));
+					obj.setTitle(((String)fields[j++]));
+					obj.setDescription(((String)fields[j++]));
+					obj.setPriority(((String)fields[j++]));
+					obj.setDocument((String)fields[j++]);
+					obj.setAssigner((String)fields[j++]);
+					obj.setAssignee(((String)fields[j++]));
+					obj.setPerformer(((String)fields[j++]));
+					obj.setStartDate(((Timestamp)fields[j++]));
+					obj.setAssignmentDate(((Timestamp)fields[j++]));
+					obj.setExecutionDate(((Timestamp)fields[j++]));
+					obj.setDueDate(((Timestamp)fields[j++]));
+					obj.setDef(((String)fields[j++]));
+					obj.setForm(((String)fields[j++]));
+					obj.setExpectStartDate(((Timestamp)fields[j++]));
+					obj.setExpectEndDate(((Timestamp)fields[j++]));
+					obj.setRealStartDate(((Timestamp)fields[j++]));
+					obj.setRealEndDate(((Timestamp)fields[j++]));
+					obj.setMultiInstId(((String)fields[j++]));
+					obj.setMultiInstOrdering(((String)fields[j++]));
+					obj.setMultiInstFlowCondition(((String)fields[j++]));
+					obj.setIsStartActivity(((String)fields[j++]));
+					obj.setFromRefType(((String)fields[j++]));
+					obj.setFromRefId(((String)fields[j++]));
+					obj.setApprovalId(((String)fields[j++]));
+					obj.setForwardId(((String)fields[j++]));
+					obj.setIsApprovalSourceTask(((String)fields[j++]));
+					obj.setTargetApprovalStatus(((String)fields[j++]));
+					obj.setLoopCounterInteger(((Integer)fields[j++]));
+					obj.setStepInteger(((Integer)fields[j++]));
+					obj.setInstVariable(((String)fields[j++]));
+					obj.setWorkSpaceId(((String)fields[j++]));
+					obj.setWorkSpaceType(((String)fields[j++]));
+					obj.setAccessLevel(((String)fields[j++]));
+					obj.setAccessValue(((String)fields[j++]));
+					objList.add(obj);
+				}
+				list = objList;
+			}
+			TskTask[] objs = new TskTask[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (TskException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new TskException(e);
+		}
+		
+	}
 }

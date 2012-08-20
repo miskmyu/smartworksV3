@@ -4219,6 +4219,11 @@ public class ModelConverter {
 				taskCond.setProcessInstId(instanceId);
 				long updateCount = SwManagerFactory.getInstance().getTskManager().getTaskSize(userId, taskCond);
 				informationWorkInstance.setNumberOfUpdateHistories((int)updateCount);
+				
+				TskTaskCond taskForwardCond = new TskTaskCond();
+				taskForwardCond.setProcessInstId(instanceId);
+				long forwardCount = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardIdSize(userId, taskCond);
+				informationWorkInstance.setNumberOfForwardHistories((int)forwardCount);
 			}
 		}
 
