@@ -189,18 +189,18 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .recent li, .comming li {padding:1px 10px 1px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 .recent li:hover, .comming li:hover { display:block; background-color:#555555}
 
-.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; height:18px}
-.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:18px}
-.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_cworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 20px; float: left; height:17px}
-.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_gworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; height:17px}
-.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; height:17px}
-.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; height:17px}
+.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; min-height:18px}
+.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:18px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_cworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 20px; float: left; min-height:17px}
+.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_gworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; min-height:17px}
+.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; min-height:17px}
 .icon_stworks {background: url("../../images/icon_stworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; height:17px}
 
 .icon_depart {background: url("../../images/icon_depart.gif") no-repeat 0 0 transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
