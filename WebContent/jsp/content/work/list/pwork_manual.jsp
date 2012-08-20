@@ -93,7 +93,7 @@ function submitForms() {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 업무 설명 보기 -->
-<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>">
+<div class="contents_space js_pwork_manual_page js_space_sub_instance" workId="<%=work.getId()%>">
 
 	<!-- 보더 -->
 	<div class="border">

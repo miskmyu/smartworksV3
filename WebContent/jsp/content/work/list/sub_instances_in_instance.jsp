@@ -179,29 +179,29 @@ if (subInstances != null) {
 				comment = (CommentInstanceInfo)workInstance;
 			%>
 			<div class="det_title">	
-					<div class="noti_pic">
-						<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
-							<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
+				<div class="noti_pic">
+					<a class="js_pop_user_info" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=userDetailInfo%>">
+						<img src="<%=owner.getMidPicture()%>" class="profile_size_c">
+					</a>
+				</div>
+				<div class="noti_in">
+					<%
+					if(comment.getOwner().getId().equals(cUser.getId())){
+					%>
+					<div class="delet_action">
+						<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
+							<div class="btn_x fr"></div>
 						</a>
 					</div>
-					<div class="noti_in">
-						<%
-						if(comment.getOwner().getId().equals(cUser.getId())){
-						%>
-						<div class="delet_action">
-							<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
-								<div class="btn_x fr"></div>
-							</a>
-						</div>
-						<%
-						}
-						%>
-						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
-						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-						<div><%=comment.getComment() %>
-							<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
-						</div>
+					<%
+					}
+					%>
+					<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
+					<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
+					<div><%=comment.getComment() %>
+						<%if(workInstance.isNew()){ %><span class="icon_new"></span><%} %>
 					</div>
+				</div>
 			</div>	
 			<%
 				break;
