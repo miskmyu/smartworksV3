@@ -50,7 +50,7 @@
 /* 본문 컨텐츠 */
 .define_space {padding: 0 25px; overflow: hidden} /* 상하 여백이 필요 없을때 */
 .contents_space {padding: 0 20px 10px}
-.contents_space .det_title, .reply .det_title {overflow:hidden} /* 타이틀 */
+.contents_space .det_title, .reply .det_title, .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
@@ -84,18 +84,21 @@
 .reply_point {background: url("../../images/reply_point.gif") no-repeat left top; width:11px; height:7px; margin-top: 5px}
 .reply_section {background-color:#ebf2fa; padding:10px; width:600px; margin-bottom:7px}
 .reply {margin:0 20px} /* 상세페이지에 댓글,업무,메모 입력 영역*/
-.reply .bg {background-color:#ededed}
-.list_reply {margin:0} /* 댓글 목록 */
 .reply_input {margin:5px 0 0 0} /* 댓글 입력 영역 */
 #upload_form_box .reply_input {margin:5px} /* Reply Input in upload_form_box */
-
+ .js_delete_comment_btn .btn_x {padding-right: 3px}
 .list_reply li, .reply > ul > li, .space_section > ul > li, .space_content_area > ul > li, .history_list > ul > li
- {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; padding: 5px 0; overflow: hidden}
+ {border-bottom: 1px dotted #9c9c9c; vertical-align: middle; overflow: hidden}
 .list_reply .end, .reply .end, .noborder li {border-bottom: none !important; vertical-align: middle}
 .repl_tinfo {background: url("../../images/header_nico.png") no-repeat 4px -267px; padding:0 0 0 20px} /* 댓글모두보기 아이콘 */
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
-.reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
+
+/* 댓글 목록, 전자결재 결재 댓글, 대댓글(li:hover(det_title)가 필료없을 때  */
+.list_reply {margin:0} 
+.list_reply .bg {background-color:#ededed}
+ .list_reply li {padding: 5px 0}
+.list_reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 
 /* 수정이력, 연결업무, 다운로드 이력 */
 .history_list .task_state {min-width: 55px; line-height: 22px; margin: 2px 0 0 0; text-align:center}
@@ -104,7 +107,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .history_list > ul > .sub_instance_list span {float:none; display:inline-block}
 .js_instance_histories {padding:0 20px}
 
-.btns_action {margin:5px 0 0 62px; font-size:10.5px}
+.btns_action {margin:5px 0 5px 62px; font-size:10.5px}
 .btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important}
 .btns_action a:hover, .btns_action a:focus {text-decoration: underline}
 .btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
@@ -436,7 +439,3 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 .manual_df_img {min-height: 288px; vertical-align: top}
 .manual_df_img img {border: 1px solid #C7C7C7; width:360px; display:block; margin-right: 10px}
 .js_form_desc_view {min-height: 290px}
-
-/* Comment Delete Icon */
-.icon_delete a, a .icon_delete { background: url("../images/icon.png") no-repeat scroll -200px -117px; width:11px; height:11px; display:block; padding:0; font-size:0}
-.icon_delete a:hover, a .icon_delete:hover {background-position:-219px -117px}
