@@ -328,11 +328,11 @@ li.fvrt_item:hover .check_option {display:block}
 /* CommentsBox added by ysjung */
 tr.instance_list {}
 tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
-.det_title {overflow:hidden}
+.det_title {padding:5px 0}
 li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
-li.comment_list {}
-li.comment_list:hover {background-color:#fff7eb; cursor:pointer}
+li.js_comment_list {}
+li.js_comment_list:hover {background-color:#fff7eb; cursor:pointer}
 .arr_off {background: url("../../images/arr_off.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 .arr_on {background: url("../../images/arr_on.gif") no-repeat left 1px transparent; height:9px; padding:0 0 10px 12px}
 
@@ -759,3 +759,4 @@ button.space {height: 18px; padding: 1px 3px}
 .icon_status_returned {background: url("../../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_rejected {background: url("../../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
