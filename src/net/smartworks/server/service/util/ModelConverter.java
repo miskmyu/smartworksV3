@@ -4129,8 +4129,12 @@ public class ModelConverter {
 		AprApprovalLineCond approvalLineCond = new AprApprovalLineCond();
 		Property[] extProps = new Property[] {new Property("recordId", instanceId)};
 		approvalLineCond.setExtendedProperties(extProps);
-		AprApprovalLine aprApprovalLine = getAprManager().getApprovalLine(cUser.getId(), approvalLineCond, IManager.LEVEL_ALL);
-
+		approvalLineCond.setOrders(new Order[]{new Order("creationDate", false)});
+		AprApprovalLine[] aprApprovalLines = getAprManager().getApprovalLines(cUser.getId(), approvalLineCond, IManager.LEVEL_ALL);
+		AprApprovalLine aprApprovalLine = null;
+		if (aprApprovalLines != null && aprApprovalLines.length != 0)
+			aprApprovalLine = aprApprovalLines[0];
+		
 		boolean isApprovalWork = false;
 		ApprovalLine approvalLine = new ApprovalLine();
 		Approval[] approvals = null;

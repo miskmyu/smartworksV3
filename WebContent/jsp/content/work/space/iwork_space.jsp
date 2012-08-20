@@ -90,7 +90,7 @@
 	session.setAttribute("tasks", tasks);
 		
 	// 현재 사용자가 속해있는 부서나 커뮤너티 목록들을 가져온다..
-	CommunityInfo[] communities = smartWorks.getMyCommunities();
+	CommunityInfo[] communities = smartWorks.getMyCommunitiesForUpload(workId);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
