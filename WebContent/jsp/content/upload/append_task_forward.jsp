@@ -88,6 +88,7 @@
 			if(!SmartUtil.isBlankObject(forwardId) && !SmartUtil.isBlankObject(tasks)){
 			%>
 				<div class="list_reply">
+				
 					<div class="up_point_sgr pos_works"></div>
 					<ul class="bg p10">
 						<%
@@ -126,6 +127,7 @@
 								continue;
 					%>
 								<li class="sub_instance_list">
+									<div class="det_title">	
 										<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
@@ -137,17 +139,20 @@
 											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
 											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
 										</span>
+									</div>
 								</li>					
 						<%
 						}
 						if(!SmartUtil.isBlankObject(forwardedTask)){
 						%>
 							<li class="sub_instance_list">
+								<div class="det_title">	
 									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 						        	<span class="comment_box">
 										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
-						        	</span>								
+						        	</span>		
+						        </div>						
 							</li>
 						<%
 						}

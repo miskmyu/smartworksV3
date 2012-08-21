@@ -115,12 +115,12 @@
 			
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
-	<div class="portlet_t" style="border:1px solid #F00"><div class="portlet_tl"></div></div>
+	<div class="portlet_t"><div class="portlet_tl"></div></div>
 	<div class="portlet_l" style="display: block ">
 		<ul class="portlet_r" style="display: block">
 
 			<!-- 컨텐츠 -->
-			<div class="contents_space" style="border:1px solid #F00">
+			<div class="contents_space">
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
  					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK)%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
