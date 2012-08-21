@@ -981,8 +981,8 @@ smartPop = {
 		});
 	},
 
-	showInstance : function(instanceId, taskInstId, workId, formId, isApproval, isForward){
-		$.get("pop_show_instance.sw?instId=" + instanceId + "&taskInstId=" + taskInstId + "&workId=" + workId + "&formId=" + formId + "&approval=" + isApproval + "&forward=" + isForward, function(data){
+	showInstance : function(instanceId, taskInstId, workId, formId, forwardId){
+		$.get("pop_show_instance.sw?instId=" + instanceId + "&taskInstId=" + taskInstId + "&workId=" + workId + "&formId=" + formId + "&forwardId=" + forwardId, function(data){
 			var width = 800;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({

@@ -32,9 +32,8 @@
 	String instId = request.getParameter("instId");
 	String taskInstId = request.getParameter("taskInstId");
 	String formId = request.getParameter("formId");
-	boolean isApproval = Boolean.parseBoolean(request.getParameter("approval"));
-	boolean isForward = Boolean.parseBoolean(request.getParameter("forward"));
-	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
+	String forwardId = request.getParameter("forwardId");
+	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId) && SmartUtil.isBlankObject(taskInstId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
 	int workType = WorkInstance.TYPE_INFORMATION;
 	Instance instance = null;
@@ -51,7 +50,7 @@
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_INFORMATION, workId, instId);
 	}else if(!SmartUtil.isBlankObject(taskInstId)){
 		instance = (Instance)session.getAttribute("workInstance");
-		taskInstance = ((TaskInstanceInfo)smartWorks.getTaskInstanceById(taskInstId)).getTaskInstance();		
+		taskInstance = ((TaskInstanceInfo)smartWorks.getTaskInstanceById(taskInstId)).getTaskInstance();
 	}else{
 		instance = smartWorks.getWorkInstanceById(SmartWork.TYPE_PROCESS, workId, instId);
 	}		
@@ -64,10 +63,14 @@
 	case WorkInstance.TYPE_INFORMATION:
 		workType = SmartWork.TYPE_INFORMATION;
 		iworkInstance = (InformationWorkInstance)instance;
-		if(SmartUtil.isBlankObject(taskInstance))
+		if(SmartUtil.isBlankObject(taskInstance)){
 			targetInstId = instance.getId();
-		else
+		}else{
 			targetTaskInstId = taskInstance.getId();
+			instance.setOwner(taskInstance.getOwner());
+			instance.setCreatedDate(taskInstance.getLastModifiedDate());
+			instance.setSubject(taskInstance.getSubject());
+		}
 		break;
 	case WorkInstance.TYPE_PROCESS:
 		workType = SmartWork.TYPE_PROCESS;
@@ -120,31 +123,17 @@
 	<div class="js_sub_instance_list pop_picture_section">
 	
 		<!-- 업무전달화면이 나타나는 곳 -->
-		<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
-			<%
-			if(isForward){
-			%>
+		<%
+		if(!SmartUtil.isBlankObject(taskInstance) && !SmartUtil.isBlankObject(forwardId)){
+		%>
+			<div class="js_form_task_forward  js_form_task">
 				<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 					<jsp:param value="<%=instId %>" name="taskInstId"/>
 				</jsp:include>
-			<%
-			}
-			%>
-		</div>
-		
-		<!--  전자결재화면이 나타나는 곳 -->
-		<div class="js_form_task_approval js_form_task" <%if(approvalTask==null && iworkInstance!=null && !iworkInstance.isApprovalWork()){ %>style="display:none"<%} %>>
-			<%
-			if(isApproval){
-			%>
-				<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
-					<jsp:param value="<%=instId %>" name="taskInstId"/>
-				</jsp:include>
-			<%
-			}
-			%>
-		</div>
-		
+			</div>
+		<%
+		}
+		%>
 		<!-- 상세보기 컨텐츠 -->
 		<div class="contents_space">				            
 	       <div class="up form_read js_form_content">      
@@ -172,11 +161,5 @@
 			}
 		});
 	</script>
-	
-<%-- 	<jsp:include page="/jsp/content/work/space/space_instance_list.jsp">
-		<jsp:param value="<%=workId %>" name="workId"/>
-		<jsp:param value="<%=instId %>" name="instId"/> 
-	</jsp:include>
- --%>
 </div>
 <!-- 전체 레이아웃//-->

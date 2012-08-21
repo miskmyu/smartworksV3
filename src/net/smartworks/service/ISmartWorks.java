@@ -742,5 +742,6 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
 	
+	public abstract InstanceInfoList getForwardTasksById(String forwardId, RequestParams params) throws Exception;
 
 }
