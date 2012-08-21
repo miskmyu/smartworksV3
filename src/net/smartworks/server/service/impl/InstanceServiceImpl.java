@@ -1049,7 +1049,7 @@ public class InstanceServiceImpl implements IInstanceService {
 							if (CommonUtil.isEmpty(mappingRecords)) {
 
 								SwdDataField tempDataField = oldRecord.getDataField(fieldId);
-								tempDataField.setValue("");
+								//tempDataField.setValue("");
 								resultStack.push(tempDataField);							
 								
 								continue;

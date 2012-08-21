@@ -231,12 +231,13 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));
 				int newMessages = -1;
+				Protocol protocol = null;
 				
-				CheckingModel thisModel = getModel(Thread.currentThread());
-				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
-				Protocol protocol = factory.getProtocol(null);
-
 				try {
+
+					CheckingModel thisModel = getModel(Thread.currentThread());
+					ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+					protocol = factory.getProtocol(null);
 
 					// fetch all messages from the remote pop3 server
 					protocol.disconnect();
@@ -333,18 +334,19 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				}catch(Exception e){
 				} finally {
 				}
-				protocol.disconnect();
-				System.out.println(" End Checking Email : " + (new Date()));
-				if(newMessages != -1)
-					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
-				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
-				FolderController foldCont = fFactory.getFolderController();
 				try{
+					protocol.disconnect();
+					System.out.println(" End Checking Email : " + (new Date()));
+					if(newMessages != -1)
+						System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
+					FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
+					FolderController foldCont = fFactory.getFolderController();
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
 					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
+					getChecking(Thread.currentThread());
 				}
 			}
 		});
