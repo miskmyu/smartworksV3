@@ -152,8 +152,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				foldCont.createDefaultFolders();
 			}
 		} catch (LoginInvalidException e) {
+			e.printStackTrace();
 			return null;
 		} catch (ServerDownException e) {
+			e.printStackTrace();
 			return null;
 		}
 		return handler;
