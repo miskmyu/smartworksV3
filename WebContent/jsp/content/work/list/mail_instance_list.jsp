@@ -92,7 +92,8 @@
 					 		<span class="<%
 							if(sortedField.getFieldId().equals(MailContent.A_SENDER)){
 								if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
-							%>"></span>
+							%>">
+							</span>
 						</a>				
 						<span class="js_progress_span"></span>
 					</th>
@@ -250,8 +251,8 @@ if(instanceList == null || work == null || SmartUtil.isBlankObject(instanceList.
 if(!SmartUtil.isBlankObject(sortedField)){
 %>
 	<form name="frmSortingField">
-		<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>">
-		<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>">
+		<input name="hdnSortingFieldId" type="hidden" value="<%=sortedField.getFieldId()%>" />
+		<input name="hdnSortingIsAscending" type="hidden" value="<%=sortedField.isAscending()%>" />
 	</form>
 <%
 }
@@ -271,11 +272,11 @@ if(!SmartUtil.isBlankObject(sortedField)){
 		%>
 				<a class="pre_end js_select_paging" href="" title="<fmt:message key='common.title.first_page'/>">
 					<span class="spr"></span>
-					<input name="hdnPrevEnd" type="hidden" value="false"> 
+					<input name="hdnPrevEnd" type="hidden" value="false" /> 
 				</a>		
 				<a class="pre js_select_paging" href="" title="<fmt:message key='common.title.prev_10_pages'/> ">
 					<span class="spr"></span>
-					<input name="hdnPrev10" type="hidden" value="false">
+					<input name="hdnPrev10" type="hidden" value="false" />
 				</a>
 			<%
 			}
