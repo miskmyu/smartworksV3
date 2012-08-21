@@ -243,6 +243,19 @@ public class ImapFolderControllerImpl implements FolderController {
 		return item;
 	}
 
+	public FolderDbObject getFolderByName(String folder) throws Exception {
+		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(folder);
+		Folder f = protocol.getFolder();
+
+		FolderDbObject item = null;
+		if (f.exists()) {
+			item = new FolderDbObject(null, null, auth.getUsername(), f.getName(), determineFolderType(f.getName()));
+		}
+//		ImapProtocolImpl.closeFolder(f);
+		return item;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#getMailsByFolder(java.lang.String)
 	 */

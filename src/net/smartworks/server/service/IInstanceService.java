@@ -189,4 +189,5 @@ public interface IInstanceService {
 	
 	public InstanceInfoList getRelatedWorkList(String instanceId, RequestParams params) throws Exception;
 	
+	public InstanceInfoList getForwardTasksById(String forwardId, RequestParams params) throws Exception;
 }
