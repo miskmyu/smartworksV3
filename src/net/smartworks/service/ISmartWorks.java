@@ -189,6 +189,8 @@ public interface ISmartWorks {
 
 	public abstract SmartWorkInfo[] getMyFavoriteWorks() throws Exception;
 
+	public abstract WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception;
+	
 	public abstract WorkInfo[] getMyAllWorksByCategoryId(String categoryId) throws Exception;
 
 	public abstract WorkInfo[] getAllWorksByCategoryId(String categoryId) throws Exception;

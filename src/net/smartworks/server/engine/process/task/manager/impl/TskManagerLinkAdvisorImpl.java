@@ -616,6 +616,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		Set refUserSet = new HashSet();
 		String refUser = null;
 
+		String apprLineId = obj.getExtendedPropertyValue("approvalLine");
 		String forwardId = "fwd_" + CommonUtil.newId();
 		
 		for (int i = 0; i < refUsers.length; i++) {
@@ -640,6 +641,8 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			refTask.setFromRefId(obj.getObjId());
 			refTask.setFromRefType(obj.getType());
 			refTask.setForwardId(forwardId);
+			if (!CommonUtil.isEmpty(apprLineId))
+				refTask.setApprovalId(apprLineId);
 			refTask.setExtendedPropertyValue("subject", subject);
 			refTask.setExtendedPropertyValue("taskRef", obj.getObjId());
 			refTask.setExtendedPropertyValue("workContents", workContents);

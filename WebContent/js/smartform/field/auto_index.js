@@ -54,7 +54,7 @@ SmartWorks.FormRuntime.AutoIndexBuilder.build = function(config) {
 	}
 	
 	var selectStr = "";
-	if(!isEmpty($listItems) || !readOnly){
+	if(!isEmpty($listItems) && !readOnly){
 		selectStr = '<select name="' + id + '"' + required + '></select>';
 	}
 	//
