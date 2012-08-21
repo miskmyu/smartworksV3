@@ -457,10 +457,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							index = 4;
 							break;
 						case MailFolder.TYPE_SYSTEM_BACKUP:
-							index = 5;
-							break;
 						case MailFolder.TYPE_USER:
-							index = 6 + customCount++;
+							index = 5 + customCount++;
 						}
 						mailFolders[index] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
 						mailFolders[index].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
@@ -1625,7 +1623,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			FolderDbObject tmp = null;
 			try{
-				tmp = foldCont.getFolder(folderName);
+				tmp = foldCont.getFolderByName(folderName);
 			}catch(Exception e){	
 			}
 			if(tmp != null){

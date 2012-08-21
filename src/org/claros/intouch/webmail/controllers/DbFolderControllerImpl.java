@@ -219,6 +219,24 @@ public class DbFolderControllerImpl implements FolderController {
 		return fld;
 	}
 
+	public FolderDbObject getFolderByName(String folderName) throws Exception {
+		IGenericDao dao = null;
+		FolderDbObject fld = null;
+		try {			
+			dao = Utility.getDbConnection();
+			String username = auth.getEmailId();
+			
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND FOLDER_NAME = ?";
+			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, folderName});
+		}catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(dao);
+			dao = null;
+		}
+		return fld;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#getFolder(org.claros.commons.models.AuthProfile, java.lang.String)
 	 */

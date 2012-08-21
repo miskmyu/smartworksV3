@@ -2566,6 +2566,11 @@ public class ModelConverter {
 
 		String tskType = swTask.getType();
 		String tskStatus = swTask.getStatus();
+		if (tskStatus.equalsIgnoreCase("11")) {
+			taskInstInfo.setStatus(Instance.STATUS_RUNNING);
+		} else if (tskStatus.equals("21")) {
+			taskInstInfo.setStatus(Instance.STATUS_COMPLETED);
+		}
 
 		if(tskType.equals(TskTask.TASKTYPE_SINGLE)) {
 			if(tskStatus.equals("11")) {
@@ -2574,7 +2579,12 @@ public class ModelConverter {
 				taskType = TaskInstance.TYPE_INFORMATION_TASK_UPDATED;
 			}
 		} else if(tskType.equals(TskTask.TASKTYPE_REFERENCE)) {
-			taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+			String approvalId = swTask.getApprovalId();
+			if (!CommonUtil.isEmpty(approvalId)) {
+				taskType = TaskInstance.TYPE_APPROVAL_TASK_FORWARDED;
+			} else {
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+			}
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
 			taskInstInfo.setForwardId(swTask.getForwardId());
@@ -4226,7 +4236,6 @@ public class ModelConverter {
 				informationWorkInstance.setNumberOfForwardHistories((int)forwardCount);
 			}
 		}
-
 		getApprovalWorkInformationByInstanceId(informationWorkInstance, swdRecord.getRecordId());
 
 		return informationWorkInstance;

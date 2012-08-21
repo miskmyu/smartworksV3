@@ -40,6 +40,7 @@ import net.smartworks.model.instance.Instance;
 import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.RunningCounts;
 import net.smartworks.model.instance.SortingField;
+import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.WorkInstance;
 import net.smartworks.model.instance.info.AsyncMessageInstanceInfo;
 import net.smartworks.model.instance.info.AsyncMessageList;
@@ -5539,7 +5540,33 @@ public class InstanceServiceImpl implements IInstanceService {
 	public InformationWorkInstance getInformationWorkInstanceById(String companyId, String userId, SwdRecord swdRecord) throws Exception {
 
 		try{
-			return ModelConverter.getInformationWorkInstanceBySwdRecord(userId, null, swdRecord);
+			InformationWorkInstance result = ModelConverter.getInformationWorkInstanceBySwdRecord(userId, null, swdRecord);
+			
+			TaskInstanceInfo[] tasks = result.getTasks();
+			List<TaskInstanceInfo> taskResult = new ArrayList<TaskInstanceInfo>();
+			
+			//정보관리 업무를 조회할때에는 tasks에 참조업무는 제외된다 단, 전자결재와 동시에 진행된 참조업무및 로그인사용자에게 할당된 
+			//참조업무는 포함되어야 한다
+			for (int i = 0; i < tasks.length; i++) {
+				TaskInstanceInfo task = tasks[i];
+				int type = task.getTaskType();
+				if (type == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED || type == TaskInstance.TYPE_APPROVAL_TASK_DRAFTED 
+						|| type == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED ) {
+					taskResult.add(task);
+				} else if (type == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED ) {
+					UserInfo userInfo = task.getAssignee();
+					if (userInfo != null) {
+						String assigneeId = userInfo.getId();
+						if (userId.equalsIgnoreCase(assigneeId) && task.getStatus() == Instance.STATUS_RUNNING ) {
+							taskResult.add(task);
+						}
+					}
+				}
+			}
+			TaskInstanceInfo[] resultTasks = new TaskInstanceInfo[taskResult.size()];
+			taskResult.toArray(resultTasks);
+			result.setTasks(resultTasks);
+			return result;
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
@@ -8253,18 +8280,24 @@ public class InstanceServiceImpl implements IInstanceService {
 	public InstanceInfoList getForwardHistoryList(String instanceId, RequestParams params) throws Exception {
 		
 		String userId = SmartUtil.getCurrentUser().getId();
+		String type = "informationWork";
 
-//		int currentPage = params.getCurrentPage()-1;
-//		int pageCount = params.getPageSize();
+		int currentPage = params.getCurrentPage()-1;
+		int pageCount = params.getPageSize();
 
-		int currentPage = 0;
-		int pageCount = 10;
-		
 		TskTaskCond tempTaskCond = new TskTaskCond();
 		tempTaskCond.setExtendedProperties(new Property[]{new Property("recordId", instanceId)});
 		TskTask[] tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tempTaskCond, IManager.LEVEL_ALL);
-		if (tasks == null || tasks.length == 0)
-			return new InstanceInfoList();
+		if (tasks == null || tasks.length == 0) {
+			TskTaskCond processTaskCond = new TskTaskCond();
+			processTaskCond.setProcessInstId(instanceId);
+			tasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, processTaskCond, IManager.LEVEL_ALL);
+			if (tasks == null || tasks.length == 0) {
+				return new InstanceInfoList();
+			} else {
+				type = "processWork";
+			}
+		}
 		
 		String prcInstId = tasks[0].getProcessInstId();
 		
@@ -8288,8 +8321,80 @@ public class InstanceServiceImpl implements IInstanceService {
 			task.setObjId(referenceTaskId);
 		}
 		InstanceInfoList instanceInfoList = new InstanceInfoList();
-		IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, instanceId);
-		TaskInstanceInfo[] taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		TaskInstanceInfo[] taskInstanceInfo = null;
+		if (type.equalsIgnoreCase("informationWork")) {
+			IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, instanceId);
+			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		} else {
+			PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(userId, instanceId, IManager.LEVEL_ALL);
+			PWInstanceInfo workInstObj = ModelConverter.getPWInstanceInfoByPrcProcessInst(null, prcInst);
+			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		}
+		instanceInfoList.setInstanceDatas(taskInstanceInfo);
+		instanceInfoList.setPageSize(pageCount);
+		int totalPages = (int)totalSize % pageCount;
+		if(totalPages == 0)
+			totalPages = (int)totalSize / pageCount;
+		else
+			totalPages = (int)totalSize / pageCount + 1;
+		
+		instanceInfoList.setTotalPages(totalPages);
+		instanceInfoList.setCurrentPage(currentPage + 1);
+		instanceInfoList.setTotalSize((int)totalSize);
+		
+		return instanceInfoList;
+	}
+	@Override
+	public InstanceInfoList getForwardTasksById(String forwardId, RequestParams params) throws Exception {
+		if (CommonUtil.isEmpty(forwardId))
+			return new InstanceInfoList();
+		String userId = SmartUtil.getCurrentUser().getId();
+		String type = "informationWork";
+
+		int currentPage = params.getCurrentPage()-1;
+		int pageCount = params.getPageSize();
+
+		TskTaskCond taskCond = new TskTaskCond();
+		taskCond.setForwardId(forwardId);
+		long totalSize = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardIdSize(userId, taskCond);
+		if (totalSize == 0)
+			return new InstanceInfoList();
+		
+		taskCond.setPageSize(pageCount);
+		taskCond.setPageNo(currentPage);
+		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		
+		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardId(userId, taskCond, IManager.LEVEL_ALL);
+		
+		String instanceId = null;
+		if (allTasks != null && allTasks.length != 0) {
+			TskTask tempTask = allTasks[0];
+			String taskDef = tempTask.getDef();
+			String taskType = tempTask.getFromRefType();
+			if (taskType.equalsIgnoreCase(TskTask.TASKTYPE_SINGLE)) {
+				type = "informationWork";
+			} else {
+				type = "processWork";
+			}
+			String[] taskDefInfo = StringUtils.tokenizeToStringArray(taskDef, "|");
+			if (type.equalsIgnoreCase("informationWork")) {
+				instanceId = taskDefInfo[1];
+			} else {
+				instanceId = tempTask.getProcessInstId();
+			}
+		} else {
+			return new InstanceInfoList();
+		}
+		InstanceInfoList instanceInfoList = new InstanceInfoList();
+		TaskInstanceInfo[] taskInstanceInfo = null;
+		if (type.equalsIgnoreCase("informationWork")) {
+			IWInstanceInfo workInstObj = ModelConverter.getIWInstanceInfoByRecordId(null, instanceId);
+			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		} else {
+			PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(userId, instanceId, IManager.LEVEL_ALL);
+			PWInstanceInfo workInstObj = ModelConverter.getPWInstanceInfoByPrcProcessInst(null, prcInst);
+			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
+		}
 		instanceInfoList.setInstanceDatas(taskInstanceInfo);
 		instanceInfoList.setPageSize(pageCount);
 		int totalPages = (int)totalSize % pageCount;
