@@ -118,7 +118,7 @@ public class WorkInstanceInfo extends InstanceInfo {
 		return false;
 	}
 	
-	public WorkInstance getWorkInstance(){
+	public WorkInstance getInstance(){
 		WorkInstance workInstance = new WorkInstance();
 		workInstance.setCreatedDate(this.getCreatedDate());
 		workInstance.setId(this.getId());
