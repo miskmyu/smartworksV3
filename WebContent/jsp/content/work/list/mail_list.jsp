@@ -120,7 +120,7 @@
 		<ul class="portlet_r" style="display: block">
 
 			<!-- 컨텐츠 -->
-			<div class="contents_space">
+			<div class="contents_space" style="border:1px solid #F00">
 				<div class="buttonSet">
 					<button class="js_delete_mails_btn"><span class="icon_mail_delet"></span><fmt:message key="common.button.delete"/></button>
  					<%if(mailFolder.getType() != MailFolder.TYPE_SYSTEM_JUNK){ %><button class="js_move_mails_btn" targetId="<%=smartWorks.getFolderIdByType(MailFolder.TYPE_SYSTEM_JUNK)%>"><fmt:message key="mail.button.register_spam"/></button><%} %>
