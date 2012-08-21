@@ -210,7 +210,7 @@
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
 			%>
-				<div class="reply">
+				<div class="list_reply">
 					<div class="up_point_sgr pos_works"></div>
 					<ul class="bg p10">
 						<%
@@ -258,7 +258,7 @@
 										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 										</a>
-										<span class="fl">
+										<span class="fl" style="line-height:15px">
 											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
 												<span class="t_name"><%=owner.getLongName()%></span>
 											</a>

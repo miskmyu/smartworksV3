@@ -1352,7 +1352,7 @@ $(function() {
 				type : 'POST',
 				data : JSON.stringify(paramsJson),
 				success : function(data, status, jqXHR) {
-					var showAllComments = commentItem.find('.js_show_all_comments');
+					var showAllComments = spaceSubInstance.find('.js_show_all_comments');
 					if(!isEmpty(showAllComments)){
 						showAllComments.find('span').click();
 					}else{
