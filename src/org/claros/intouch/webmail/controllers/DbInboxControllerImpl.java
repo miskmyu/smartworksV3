@@ -226,7 +226,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	public void checkEmail() throws Exception {
 		
 		int index = -1;
-		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1) return;		
+		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1){
+			System.out.println("CheckEmail already running, please try it again!! index=" + index + ", userId=" + SmartUtil.getCurrentUser().getId() + ", companyId=" + SmartUtil.getCurrentUser().getCompanyId());
+			return;		
+		}
 		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
 				System.out.println(" Start Checking Email : " + (new Date()));

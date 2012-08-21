@@ -21,6 +21,8 @@ import net.smartworks.server.engine.infowork.form.model.SwfFormFieldDef;
 
 public interface IWorkService {
 
+	public WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception;
+	
 	public WorkInfo[] getMyAllWorksByCategoryId(String categoryId) throws Exception;
 
 	public WorkInfo[] getAllWorksByCategoryId(String categoryId) throws Exception;
