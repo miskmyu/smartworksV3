@@ -337,6 +337,11 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
+	public WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception {
+		return workService.getAllWorkCategoryByCategoryId(categoryId);
+	}
+	
+	@Override
 	public WorkInfo[] getMyAllWorksByCategoryId(String categoryId) throws Exception {
 		return workService.getMyAllWorksByCategoryId(categoryId);
 	}

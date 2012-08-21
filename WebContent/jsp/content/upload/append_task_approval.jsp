@@ -211,80 +211,84 @@
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
 			%>
 				<div class="list_reply">
-					<div class="up_point_sgr pos_works"></div>
-					<ul class="bg p10">
-						<%
-						for(TaskInstanceInfo task : tasks){
-							if(!task.getApprovalId().equals(approvalInstId)) continue;
-							UserInfo owner = task.getAssignee();
-							String statusImage = "";
-							String statusTitle = "";
-							switch (task.getStatus()) {
-							// 인스턴스가 현재 진행중인 경우..
-							case Instance.STATUS_RUNNING:
-								statusImage = "icon_status_running";
-								statusTitle = "content.status.running";
-								break;
-							// 인스턴스가 지연진행중인 경우....
-							case Instance.STATUS_DELAYED_RUNNING:
-								statusImage = "icon_status_d_running";
-								statusTitle = "content.status.delayed_running";
-								break;
-							// 인스턴스가 반려된 경우...
-							case Instance.STATUS_RETURNED:
-								statusImage = "icon_status_returned";
-								statusTitle = "content.status.returned";
-								break;
+						<div class="up_point_sgr pos_works"></div>
+						<ul class="bg p10">
+							<%
+							for(TaskInstanceInfo task : tasks){
+								if(!task.getApprovalId().equals(approvalInstId)) continue;
+								UserInfo owner = task.getAssignee();
+								String statusImage = "";
+								String statusTitle = "";
+								switch (task.getStatus()) {
+								// 인스턴스가 현재 진행중인 경우..
+								case Instance.STATUS_RUNNING:
+									statusImage = "icon_status_running";
+									statusTitle = "content.status.running";
+									break;
+								// 인스턴스가 지연진행중인 경우....
+								case Instance.STATUS_DELAYED_RUNNING:
+									statusImage = "icon_status_d_running";
+									statusTitle = "content.status.delayed_running";
+									break;
 								// 인스턴스가 반려된 경우...
-							case Instance.STATUS_COMPLETED:
-								statusImage = "icon_status_completed";
-								statusTitle = "content.status.completed";
-								break;
-								// 기타 잘못되어 상태가 없는 경우..
-							case Instance.STATUS_REJECTED:
-								statusImage = "icon_status_rejected";
-								statusTitle = "content.status.rejected";
-								break;
-							default:
-								statusImage = "icon_status_not_yet";
-								statusTitle = "content.status.not_yet";
-							}
-							if(!SmartUtil.isBlankObject(approvalTask) && approvalTask.getId().equals(task.getId()))
-								continue;
-					%>
-								<li class="sub_instance_list">
-										<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-										<span class="approval_stage"><%=task.getName() %></span>
-										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
-											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
-										</a>
-										<span class="fl" style="line-height:15px">
-											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-												<span class="t_name"><%=owner.getLongName()%></span>
+								case Instance.STATUS_RETURNED:
+									statusImage = "icon_status_returned";
+									statusTitle = "content.status.returned";
+									break;
+									// 인스턴스가 반려된 경우...
+								case Instance.STATUS_COMPLETED:
+									statusImage = "icon_status_completed";
+									statusTitle = "content.status.completed";
+									break;
+									// 기타 잘못되어 상태가 없는 경우..
+								case Instance.STATUS_REJECTED:
+									statusImage = "icon_status_rejected";
+									statusTitle = "content.status.rejected";
+									break;
+								default:
+									statusImage = "icon_status_not_yet";
+									statusTitle = "content.status.not_yet";
+								}
+								if(!SmartUtil.isBlankObject(approvalTask) && approvalTask.getId().equals(task.getId()))
+									continue;
+						%>
+									<li class="sub_instance_list">
+										<div class="det_title">	
+											<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+											<span class="approval_stage"><%=task.getName() %></span>
+											<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+												<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 											</a>
-											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED 
-														|| task.getStatus()==TaskInstance.STATUS_REJECTED 
-														|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %>
-											</div>
-										</span>
-								</li>					
-						<%
-						}
-						if(!SmartUtil.isBlankObject(approvalTask)){
-						%>
-							<li class="sub_instance_list">
-									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
-									<span class="approval_stage"><%=approvalTask.getName() %></span>
-									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-						        	<span class="comment_box">
-										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
-						        	</span>								
-							</li>
-						<%
-						}
-						%>
-					</ul>
+											<span class="fl" style="line-height:15px">
+												<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+													<span class="t_name"><%=owner.getLongName()%></span>
+												</a>
+												<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+												<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED 
+															|| task.getStatus()==TaskInstance.STATUS_REJECTED 
+															|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %>
+												</div>
+											</span>
+										</div>
+									</li>				
+							<%
+							}
+							if(!SmartUtil.isBlankObject(approvalTask)){
+							%>	
+								<div class="sub_instance_list">
+									<div class="det_title">	
+										<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
+										<span class="approval_stage"><%=approvalTask.getName() %></span>
+										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+							        	<span class="comment_box">
+											<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+							        	</span>	
+							       </div>							
+								</div>
+							<%
+							}
+							%>
+						</ul>
 				</div>
 			<%
 			}

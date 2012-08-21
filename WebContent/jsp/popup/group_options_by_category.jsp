@@ -9,7 +9,8 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	WorkInfo[] groups = smartWorks.getMyAllWorksByCategoryId(request.getParameter("categoryId"));
+	//WorkInfo[] groups = smartWorks.getMyAllWorksByCategoryId(request.getParameter("categoryId"));
+	WorkInfo[] groups = smartWorks.getAllWorkCategoryByCategoryId(request.getParameter("categoryId"));
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
