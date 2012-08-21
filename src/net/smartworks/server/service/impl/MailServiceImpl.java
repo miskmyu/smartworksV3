@@ -1707,7 +1707,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		if(!SmartUtil.getCurrentUser().isUseMail()) return;
 		try {
 		    ConnectionMetaHandler handler = getConnectionMetaHandler();
-			if(handler == null)  return;
+			if(handler == null){
+				System.out.println("========= ConnectionMetaHanlder is null error !!!! ===========");
+				return;
+			}
 			
 			ConnectionProfile profile = getConnectionProfile();
 			AuthProfile auth = getAuthProfile();
@@ -1715,6 +1718,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			InboxController inCont = inFact.getInboxController();
 			inCont.checkEmail();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
