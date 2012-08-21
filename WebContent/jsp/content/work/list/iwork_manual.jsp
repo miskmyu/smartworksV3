@@ -82,7 +82,7 @@ function submitForms() {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 
-<div class="contents_space js_iwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>">
+<div class="contents_space js_iwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>">
 	<div class="border">
 
 		<form name="frmIWorkManual" class="js_validation_required">		
