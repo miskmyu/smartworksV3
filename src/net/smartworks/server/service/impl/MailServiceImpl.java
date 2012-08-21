@@ -1623,7 +1623,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			FolderDbObject tmp = null;
 			try{
-				tmp = foldCont.getFolder(folderName);
+				tmp = foldCont.getFolderByName(folderName);
 			}catch(Exception e){	
 			}
 			if(tmp != null){
