@@ -145,7 +145,7 @@
 						}
 						if(!SmartUtil.isBlankObject(forwardedTask)){
 						%>
-							<li class="sub_instance_list">
+							<div class="sub_instance_list">
 								<div class="det_title">	
 									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
@@ -153,7 +153,7 @@
 										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
 						        	</span>		
 						        </div>						
-							</li>
+							</div>
 						<%
 						}
 						%>

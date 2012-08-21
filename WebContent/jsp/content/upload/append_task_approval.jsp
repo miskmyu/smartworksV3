@@ -275,7 +275,7 @@
 							}
 							if(!SmartUtil.isBlankObject(approvalTask)){
 							%>	
-								<li class="sub_instance_list">
+								<div class="sub_instance_list">
 									<div class="det_title">	
 										<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
 										<span class="approval_stage"><%=approvalTask.getName() %></span>
@@ -284,7 +284,7 @@
 											<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
 							        	</span>	
 							       </div>							
-								</li>
+								</div>
 							<%
 							}
 							%>
