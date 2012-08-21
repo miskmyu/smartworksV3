@@ -139,7 +139,8 @@ $(document).ready(function(){
 		                for(var i=0; i<eventInstances.length; i++){
 		                	var event = eventInstances[i];
 		                	var ownerHtml = "";
-	                		ownerHtml = event.ownerPicture + '&' + event.ownerName + '&' + event.name;
+	                		ownerHtml = event.ownerPicture + '&=' + event.ownerName + '&=' + event.name;
+	                		console.log('ownerName=', event.ownerName, ", name=", event.name);
 
 	                		events.push({
 			                 	id: event.id,
@@ -181,7 +182,7 @@ $(document).ready(function(){
 	    eventRender: function(event, element) {
 	    	var title = $(element).find('.fc-event-title');
 	    	var titleText = title.html();
-	    	var tokens = titleText.split('&amp;');
+	    	var tokens = titleText.split("&amp;=");
 	    	var titleHtml = (tokens.length==3) ? '<img class="profile_size_s" src="' + tokens[0] + '" title="' + tokens[1] + '"/>  ' +  tokens[2] : tokens[0]; 
 	    	title.html(titleHtml);
 	    	//var eventTime = $(element).find('.fc-event-time').html();

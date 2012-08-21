@@ -31,28 +31,6 @@
 	String forwardId = "";
 	if(!SmartUtil.isBlankObject(taskInstId)){
 		workInstance = (WorkInstance)session.getAttribute("workInstance");
-		tasks = workInstance.getTasks();
-		if(!SmartUtil.isBlankObject(tasks)){
-			for(TaskInstanceInfo task : tasks){
-				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
-					forwardedTask = task;
-					forwardId = task.getForwardId();
-					subject = task.getSubject();
-					content = task.getContent();
-					break;
-				}
-			}
-			if(SmartUtil.isBlankObject(forwardedTask)){
-				for(TaskInstanceInfo task : tasks){
-					if(task.isForwardedTask(taskInstId)){
-						forwardId = task.getForwardId();
-						subject = task.getSubject();
-						content = task.getContent();
-						break;
-					}
-				}
-			}
-		}
 	}
 
 	String forwarderId = "";
