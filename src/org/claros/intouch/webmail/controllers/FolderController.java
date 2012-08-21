@@ -13,6 +13,7 @@ public interface FolderController {
 	public List getFolders() throws Exception;
 	public List getFolders(String parentId) throws Exception;
 	public FolderDbObject getFolder(String folder) throws Exception;
+	public FolderDbObject getFolderByName(String folder) throws Exception;
 	public FolderDbObjectWrapper getFolderById(String folderId) throws Exception;
 	public List getMailsByFolder(String folder) throws Exception;
 	public void createFolder(FolderDbObject item) throws Exception;

@@ -103,7 +103,7 @@
 	<!-- 메일 검색 -->
 	<div class="mail_srch">
 		<div class="srch_wh srch_wsize_mail">
-			<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>">
+			<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
 			<button onclick="" title="<fmt:message key="search.search"/>"></button>
 		</div>
 	</div>
@@ -115,9 +115,9 @@
 			
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_mail_list_page js_work_list_page" currentHref="<%=SmartUtil.getLastHref(request) %>" workId=<%=work.getId()%> folderId="<%=folderId%>">
-	<div class="portlet_t"><div class="portlet_tl"></div></div>
-	<div class="portlet_l" style="display: block;">
-		<ul class="portlet_r" style="display: block;">
+	<div class="portlet_t" style="border:1px solid #F00"><div class="portlet_tl"></div></div>
+	<div class="portlet_l" style="display: block ">
+		<ul class="portlet_r" style="display: block">
 
 			<!-- 컨텐츠 -->
 			<div class="contents_space">
@@ -157,6 +157,6 @@
 
 		</ul>
 	</div>
-	<div class="portlet_b" style="display: block;"></div>
+	<div class="portlet_b" style="display: block"></div>
 </div>
 <!-- 컨텐츠 레이아웃//-->

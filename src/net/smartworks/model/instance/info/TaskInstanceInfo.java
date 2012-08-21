@@ -205,7 +205,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 		taskInstance.setTaskType(this.getTaskType());
 		taskInstance.setType(this.getType());
 		taskInstance.setWork((this.getWork()!=null) ? this.getWork().getWork():null);
-		taskInstance.setWorkInstance((this.getWorkInstance()!=null) ? this.getWorkInstance().getWorkInstance():null);
+		taskInstance.setWorkInstance((this.getWorkInstance()!=null) ? this.getWorkInstance().getInstance():null);
 		taskInstance.setWorkSpace((this.getWorkSpace()!=null) ? this.getWorkSpace().getWorkSpace():null);
 		return taskInstance;
 	}

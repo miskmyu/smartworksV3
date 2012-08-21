@@ -104,7 +104,7 @@
 			MemoInstanceInfo memo=null;
 			int workType = (SmartUtil.isBlankObject(work)) ? -1 : work.getType();
 	%>
-			<li class="sub_instance_list js_sub_instance_list" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>"  workType="<%=workType%>">
+			<li class="sub_instance_list js_sub_instance_list js_space_sub_instance" instanceId="<%=workInstance.getId() %>" taskInstId="<%=taskInstance.getId()%>"  workType="<%=workType%>">
 				<%
 				switch(workInstance.getType()){
 				

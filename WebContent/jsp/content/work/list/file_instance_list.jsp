@@ -222,7 +222,7 @@
 					if(displayType!=FileCategory.DISPLAY_BY_WORK){
 					%>
 						<td>
-							<img class="<%=fileInstance.getWork().getIconClass()%>"/><%=((SmartWorkInfo)(fileInstance.getWork())).getFullpathName()%>
+							<span class="<%=fileInstance.getWork().getIconClass()%>"/><%=((SmartWorkInfo)(fileInstance.getWork())).getFullpathName()%></span>
 						</td>
 					<%
 					}
