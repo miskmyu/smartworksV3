@@ -207,7 +207,49 @@ public class WorkServiceImpl implements IWorkService {
 			// Exception Handling Required			
 		}
 	}
+	
+	
+	private void getCategoryIdByCategoryId(String userId, String companyId, String categoryId, List<CtgCategory> ctgList) throws Exception {
 
+		CtgCategoryCond ctgCond = new CtgCategoryCond();
+		ctgCond.setCompanyId(companyId);
+		ctgCond.setParentId(categoryId);
+		ctgCond.setOrders(new Order[]{new Order(CtgCategory.A_NAME, true)});
+		CtgCategory[] ctgs = getCtgManager().getCategorys(userId, ctgCond, IManager.LEVEL_LITE);
+		if (ctgs == null || ctgs.length == 0)
+			return;
+		for (int i = 0; i < ctgs.length; i++) {
+			CtgCategory ctg = ctgs[i];
+			if (ctgList == null) {
+				ctgList = new ArrayList<CtgCategory>();
+			}
+			if (!ctgList.contains(ctg)) {
+				ctgList.add(ctg);
+			}
+			getCategoryIdByCategoryId(userId, companyId, ctg.getObjId(), ctgList);
+		}
+	}
+	
+	
+	public WorkInfo[] getAllWorkCategoryByCategoryId(String categoryId) throws Exception {
+
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+		String companyId = user.getCompanyId();
+		
+		List<CtgCategory> ctgList = new ArrayList();
+		getCategoryIdByCategoryId(userId, companyId, categoryId, ctgList);
+		
+		if (ctgList.size() == 0)
+			return null;
+		
+		CtgCategory[] ctgs = new CtgCategory[ctgList.size()];
+		ctgList.toArray(ctgs);
+		
+		WorkInfo[] workCtgs = (WorkCategoryInfo[])ModelConverter.getWorkCategoryInfoArrayByCtgCategoryArray(ctgs);
+
+		return workCtgs;
+	}
 	/*
 	 * 전체 카테고리 조회 (서비스시작 상태인 업무 조회)
 	 * @see net.smartworks.server.service.IWorkService#getMyAllWorksByCategoryId(java.lang.String)
