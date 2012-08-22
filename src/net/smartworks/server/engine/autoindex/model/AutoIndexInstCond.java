@@ -16,8 +16,8 @@ public class AutoIndexInstCond extends MisObjectCond {
 	String formId = null;
 	String fieldId = null;
 	String refType = null;//해당 업무가 프로세스냐 정보관리냐
-	String type = null;//자동생성타입이 사용자지정, 날짜, 시퀀스등....
-	String Value = null;
+	String idType = null;//자동생성타입이 사용자지정, 날짜, 시퀀스등....
+	String idValue = null;
 	String seperator = null;
 	int seq = -1;
 	
@@ -45,17 +45,17 @@ public class AutoIndexInstCond extends MisObjectCond {
 	public void setRefType(String refType) {
 		this.refType = refType;
 	}
-	public String getType() {
-		return type;
+	public String getIdType() {
+		return idType;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setIdType(String idType) {
+		this.idType = idType;
 	}
-	public String getValue() {
-		return Value;
+	public String getIdValue() {
+		return idValue;
 	}
-	public void setValue(String value) {
-		Value = value;
+	public void setIdValue(String idValue) {
+		idValue = idValue;
 	}
 	public String getSeperator() {
 		return seperator;

@@ -157,11 +157,13 @@ public class SwfManagerImpl extends AbstractManager implements ISwfManager {
 					String objId = obj.getObjId();
 					String objStr = obj.getObjString();
 					String desc = obj.getDescription();
+					String formType = obj.getFormType();
 					if (objStr != null) {
 						obj = (SwfForm) SwfForm.toObject(objStr);
 						obj.setPackageId(pkgId);
 						obj.setObjString(objStr);
 						obj.setDescription(desc);
+						obj.setFormType(formType);
 						if (obj.getObjId() == null)
 							obj.setObjId(objId);
 					}

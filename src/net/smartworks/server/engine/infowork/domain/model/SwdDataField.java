@@ -101,6 +101,7 @@ public class SwdDataField extends BaseObject {
 		appendAttributeString(A_REFFORM, refForm, buf);
 		appendAttributeString(A_REFFORMFIELD, refFormField, buf);
 		appendAttributeString(A_REFRECORDID, refRecordId, buf);
+		appendAttributeString(A_SELECTEDVALUE, selectedValue, buf);
 		return buf.toString();
 	}
 	public String toElementsString(String tab, boolean lite) {
@@ -132,6 +133,7 @@ public class SwdDataField extends BaseObject {
 			Node refForm = attrMap.getNamedItem(A_REFFORM);
 			Node refFormField = attrMap.getNamedItem(A_REFFORMFIELD);
 			Node refRecordId = attrMap.getNamedItem(A_REFRECORDID);
+			Node selectedValue = attrMap.getNamedItem(A_SELECTEDVALUE);
 			if (id != null)
 				obj.setId(id.getNodeValue());
 			if (name != null)
@@ -146,6 +148,8 @@ public class SwdDataField extends BaseObject {
 				obj.setRefFormField(refFormField.getNodeValue());
 			if (refRecordId != null)
 				obj.setRefRecordId(refRecordId.getNodeValue());
+			if (selectedValue != null)
+				obj.setSelectedValue(selectedValue.getNodeValue());
 		}
 		
 		// elements 값 설정

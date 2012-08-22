@@ -271,8 +271,8 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 		String formId = null;
 		String fieldId = null;
 		String refType = null;
-		String type = null;
-		String value = null;
+		String idType = null;
+		String idValue = null;
 		String seperator = null;
 		int seq = -1;
 		String creationUser = null;
@@ -286,15 +286,15 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 			formId = cond.getFormId();
 			fieldId = cond.getFieldId();
 			refType = cond.getRefType();
-			type = cond.getType();
-			value = cond.getValue();
+			idType = cond.getIdType();
+			idValue = cond.getIdValue();
 			seq = cond.getSeq();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
 		}
-		buf.append(" from AutoIndexDef obj");
+		buf.append(" from AutoIndexInst obj");
 		buf.append(" where obj.objId is not null");
 		Map filterMap = new HashMap();
 		//TODO 시간 검색에 대한 확인 필요
@@ -309,10 +309,10 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 				buf.append(" and obj.fieldId = :fieldId");
 			if (refType != null)
 				buf.append(" and obj.refType = :refType");
-			if (type != null)
-				buf.append(" and obj.type = :type");
-			if (value != null)
-				buf.append(" and obj.value = :value");
+			if (idType != null)
+				buf.append(" and obj.idType = :idType");
+			if (idValue != null)
+				buf.append(" and obj.idValue = :idValue");
 			if (seq != -1)
 				buf.append(" and obj.seq = :seq");
 			if (creationUser != null)
@@ -338,10 +338,10 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 				query.setString("fieldId", fieldId);
 			if (refType != null)
 				query.setString("refType", refType);
-			if (type != null)
-				query.setString("refId", type);
-			if (value != null)
-				query.setString("value", value);
+			if (idType != null)
+				query.setString("idType", idType);
+			if (idValue != null)
+				query.setString("idValue", idValue);
 			if (seq != -1)
 				query.setInteger("seq", seq);
 			if (creationUser != null)
