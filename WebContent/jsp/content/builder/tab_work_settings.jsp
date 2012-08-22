@@ -377,6 +377,10 @@
 					<!-- 권한 //-->
 
 					<!-- 권한 -->
+					<%
+					//업무타입이 프로세스 타입이면, 수정권한 항목 안보이게 설정
+					if(work.getType() != SmartWork.TYPE_PROCESS){
+					 %>
 					<div class="mt10 gray_style">
 						<table>
 							<tr>
@@ -420,6 +424,9 @@
 							</tr>
 						</table>
 					</div>
+				<%  }
+					//end jybae 
+				%>
 					<!-- 권한 //-->					
 
 					<!-- 권한 -->

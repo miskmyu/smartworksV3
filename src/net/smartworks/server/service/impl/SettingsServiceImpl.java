@@ -42,7 +42,9 @@ import net.smartworks.server.engine.authority.model.SwaDepartment;
 import net.smartworks.server.engine.authority.model.SwaDepartmentCond;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
+import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.id.IDCreator;
 import net.smartworks.server.engine.config.manager.ISwcManager;
 import net.smartworks.server.engine.config.model.SwcEventDay;
 import net.smartworks.server.engine.config.model.SwcEventDayCond;
@@ -2014,7 +2016,9 @@ public class SettingsServiceImpl implements ISettingsService {
 				swoDepartment = getSwoManager().getDepartment(userId, departmentId, IManager.LEVEL_ALL);
 			} else {
 				swoDepartment = new SwoDepartment();
-				swoDepartment.setId(CommonUtil.newId());
+				//start 2012.08.21 부서 추가 시 dept_ 가 안붙어서, smartUtil.newid(); 대신 추가
+				swoDepartment.setId(IDCreator.createId(SmartServerConstant.DEPT_ABBR));
+				//end jybae
 				swoDepartment.setCompanyId(companyId);
 				swoDepartment.setType("BASIC");
 				swoDepartment.setDomainId("frm_dept_SYSTEM");
