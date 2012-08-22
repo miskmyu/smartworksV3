@@ -268,7 +268,7 @@
 												</div>
 												<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED 
 															|| task.getStatus()==TaskInstance.STATUS_REJECTED 
-															|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %>
+															|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %><%} %>
 												</div>
 											</span>
 										</div>
