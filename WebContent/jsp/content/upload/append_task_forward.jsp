@@ -133,7 +133,7 @@
 											</a>
 											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
 										</div>
-										<div>fffff<%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
+										<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %><%} %></div>
 									</span>
 								</div>
 							</li>					
