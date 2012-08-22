@@ -8351,8 +8351,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		String userId = SmartUtil.getCurrentUser().getId();
 		String type = "informationWork";
 
-		int currentPage = -2;
-		int pageCount = -2;
+		int currentPage = -1;
+		int pageCount = -1;
 		
 		if (params != null) {
 			currentPage = params.getCurrentPage()-1;
@@ -8404,7 +8404,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
 		}
 		instanceInfoList.setInstanceDatas(taskInstanceInfo);
-		if (params != null) {instanceInfoList.setPageSize(pageCount);
+		if (params != null) {
+			instanceInfoList.setPageSize(pageCount);
 			int totalPages = (int)totalSize % pageCount;
 			if(totalPages == 0)
 				totalPages = (int)totalSize / pageCount;
