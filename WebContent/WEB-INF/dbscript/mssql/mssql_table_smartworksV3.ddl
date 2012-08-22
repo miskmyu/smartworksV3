@@ -2434,13 +2434,15 @@ CREATE TABLE SwAutoIndexRuls (
     primary key (objId, indexSeq)
 );
 
-CREATE TABLE SwAutoIndexSeq (
+CREATE TABLE SwAutoIndexInst (
 	objId varchar(50) NOT NULL,
+	instanceId varchar(100),
 	formId varchar(100),
 	fieldId varchar(10),
-	refType varchar(100),
-	refId varchar(100),
-	seqValue varchar(100),
+	refType varchar(10),
+	idType varchar(50),
+	idValue varchar(200),
+	seq int,
 	creator	varchar(50),
 	createdtime datetime,
 	modifier varchar(50),
