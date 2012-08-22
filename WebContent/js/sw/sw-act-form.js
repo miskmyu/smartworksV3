@@ -257,11 +257,14 @@ $(function() {
 		var input = $(targetElement(e));
 		if(!input.hasClass('js_show_instance')) input = input.parents('.js_show_instance');
 		var instanceId = input.attr('instanceId');
+		if(isEmpty(instanceId)) instanceId = null;
 		var taskInstId = input.attr('taskInstId');
+		if(isEmpty(taskInstId)) taskInstId = null;
 		var formId = input.attr('formId');
-		var isApproval = input.attr('isApproval');
-		var isForward = input.attr('isForward');
-		smartPop.showInstance(isEmpty(instanceId) ? null : instanceId, isEmpty(taskInstId) ? null : taskInstId, null, formId, isApproval=='true', isForward=='true');
+		if(isEmpty(formId)) formId = null;
+		var forwardId = input.attr('forwardId');
+		if(isEmpty(forwardId)) forwardId = null;
+		smartPop.showInstance(instanceId, taskInstId, null, formId, forwardId);
 		return false;
 	});
 

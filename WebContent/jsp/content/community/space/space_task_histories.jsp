@@ -557,18 +557,20 @@
 				   <div class="reply_section pos_reply">  
 				        <div class="list_reply">
 				            <ul class="js_comment_list">
-				            	<li class="comment_list js_comment_instance" style="display:none">
-									<div class="noti_pic">
-										<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-											<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
-										</a>
-									</div>
-									<div class="noti_in">
-										<span class="t_name"><%=cUser.getLongName()%></span>
-										<span	class="t_date pl10"><%=(new LocalDate()).toLocalString()%></span>
-										<div class="js_comment_content"></div>
-									</div>
-				            	</li>
+				            	<div class="det_title">
+					            	<li class="comment_list js_comment_instance" style="display:none">
+										<div class="noti_pic">
+											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+												<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+											</a>
+										</div>
+										<div class="noti_in">
+											<span class="t_name"><%=cUser.getLongName()%></span>
+											<span	class="t_date pl10"><%=(new LocalDate()).toLocalString()%></span>
+											<div class="js_comment_content"></div>
+										</div>
+					            	</li>
+				            	</div>
 				            	<%
 				            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 				            		session.setAttribute("subComments", null);

@@ -1235,102 +1235,138 @@ $(function() {
 	
 	$('.js_toggle_update_histories').live('click', function(e){
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_toggle_update_histories')) input = input.parents('.js_toggle_update_histories');
 		var workSpace = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
 		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = workSpace.attr('instId');
-			$.ajax({
-				url : 'update_histories.sw',
-				data : {
-					instanceId : instanceId
-				},
-				success : function(data, status, jqXHR) {
-					target.html(data).show();
-				},
-				error : function(e) {
-				}
-			});
-			
+			target.addClass('js_update');
 		}else{
 			target.html('').hide();
+			if(!target.hasClass('js_update')){
+				target.addClass('js_update').removeClass('js_download').removeClass('js_forward').removeClass('js_related');
+			}else{
+				target.removeClass('js_update');
+				return false;
+			}
 		}
+		var instanceId = workSpace.attr('instId');
+		$.ajax({
+			url : 'update_histories.sw',
+			data : {
+				instanceId : instanceId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data).show();
+				var target_point = $(target).find("div.up_point:first");
+				target_point.css({"left": (input.position().left) + "px"});
+			},
+			error : function(e) {
+			}
+		});				
 		return false;
 	});
 	
 	$('.js_toggle_forward_histories').live('click', function(e){
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_toggle_forward_histories')) input = input.parents('.js_toggle_forward_histories');
 		var workSpace = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
 		var target = workSpace.find('.js_instance_histories');
 		
 		if(isEmpty(target.children())){
-			var instanceId = workSpace.attr('instId');
-			$.ajax({
-				url : 'forward_histories.sw',
-				data : {
-					instanceId : instanceId
-				},
-				success : function(data, status, jqXHR) {
-					target.html(data).show();
-				},
-				error : function(e) {
-				}
-			});
-			
+			target.addClass('js_foward');			
 		}else{
 			target.html('').hide();
+			if(!target.hasClass('js_forward')){
+				target.addClass('js_forward').removeClass('js_download').removeClass('js_update').removeClass('js_related');
+			}else{
+				target.removeClass('js_forward');
+				return false;
+			}
 		}
+		var instanceId = workSpace.attr('instId');
+		$.ajax({
+			url : 'forward_histories.sw',
+			data : {
+				instanceId : instanceId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data).show();
+				var target_point = $(target).find("div.up_point:first");
+				target_point.css({"left": (input.position().left) + "px"});
+			},
+			error : function(e) {
+			}
+		});
 		return false;
 	});
 	
 	$('.js_toggle_download_histories').live('click', function(e){
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_toggle_download_histories')) input = input.parents('.js_toggle_download_histories');
 		var workSpace = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
 		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = workSpace.attr('instId');
-			$.ajax({
-				url : 'download_histories.sw',
-				data : {
-					instanceId : instanceId
-				},
-				success : function(data, status, jqXHR) {
-					target.html(data).show();
-				},
-				error : function(e) {
-				}
-			});
-			
+			target.addClass('js_download');			
 		}else{
 			target.html('').hide();
+			if(!target.hasClass('js_download')){
+				target.addClass('js_download').removeClass('js_update').removeClass('js_forward').removeClass('js_related');
+			}else{
+				target.removeClass('js_download');
+				return false;
+			}
 		}
+		var instanceId = workSpace.attr('instId');
+		$.ajax({
+			url : 'download_histories.sw',
+			data : {
+				instanceId : instanceId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data).show();
+				var target_point = $(target).find("div.up_point:first");
+				target_point.css({"left": (input.position().left) + "px"});
+			},
+			error : function(e) {
+			}
+		});
 		return false;
 	});
 	
 	$('.js_toggle_related_instances').live('click', function(e){
 		var input = $(targetElement(e));
+		if(!input.hasClass('js_toggle_related_instances')) input = input.parents('.js_toggle_related_instances');
 		var workSpace = input.parents('.js_iwork_space_page');
 		if(isEmpty(workSpace)) workSpace = input.parents('.js_pwork_space_page');
 		var target = workSpace.find('.js_instance_histories');
 		if(isEmpty(target.children())){
-			var instanceId = workSpace.attr('instId');
-			$.ajax({
-				url : 'related_instances.sw',
-				data : {
-					instanceId : instanceId
-				},
-				success : function(data, status, jqXHR) {
-					target.html(data).show();
-				},
-				error : function(e) {
-				}
-			});
-			
+			target.addClass('js_related');			
 		}else{
 			target.html('').hide();
+			if(!target.hasClass('js_related')){
+				target.addClass('js_related').removeClass('js_download').removeClass('js_forward').removeClass('js_update');
+			}else{
+				target.removeClass('js_related');
+				return false;
+			}
 		}
+		var instanceId = workSpace.attr('instId');
+		$.ajax({
+			url : 'related_instances.sw',
+			data : {
+				instanceId : instanceId
+			},
+			success : function(data, status, jqXHR) {
+				target.html(data).show();
+				var target_point = $(target).find("div.up_point:first");
+				target_point.css({"left": (input.position().left) + "px"});
+			},
+			error : function(e) {
+			}
+		});
 		return false;
 	});
 	

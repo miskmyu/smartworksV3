@@ -8351,20 +8351,28 @@ public class InstanceServiceImpl implements IInstanceService {
 		String userId = SmartUtil.getCurrentUser().getId();
 		String type = "informationWork";
 
-		int currentPage = params.getCurrentPage()-1;
-		int pageCount = params.getPageSize();
-
+		int currentPage = -1;
+		int pageCount = -1;
+		
+		if (params != null) {
+			currentPage = params.getCurrentPage()-1;
+			pageCount = params.getPageSize();
+		}
 		TskTaskCond taskCond = new TskTaskCond();
 		taskCond.setForwardId(forwardId);
-		long totalSize = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardIdSize(userId, taskCond);
+		long totalSize = SwManagerFactory.getInstance().getTskManager().getTaskSize(userId, taskCond);
 		if (totalSize == 0)
 			return new InstanceInfoList();
+
+		if (params != null) {
+			taskCond.setPageSize(pageCount);
+			taskCond.setPageNo(currentPage);
+			taskCond.setOrders(new Order[]{new Order("creationDate", false)});
+		} else {
+			taskCond.setOrders(new Order[]{new Order("creationDate", true)});
+		}
 		
-		taskCond.setPageSize(pageCount);
-		taskCond.setPageNo(currentPage);
-		taskCond.setOrders(new Order[]{new Order("creationDate", false)});
-		
-		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardId(userId, taskCond, IManager.LEVEL_ALL);
+		TskTask[] allTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, taskCond, IManager.LEVEL_ALL);
 		
 		String instanceId = null;
 		if (allTasks != null && allTasks.length != 0) {
@@ -8396,17 +8404,18 @@ public class InstanceServiceImpl implements IInstanceService {
 			taskInstanceInfo = ModelConverter.getTaskInstanceInfoArrayByTskTaskArray(workInstObj, allTasks);
 		}
 		instanceInfoList.setInstanceDatas(taskInstanceInfo);
-		instanceInfoList.setPageSize(pageCount);
-		int totalPages = (int)totalSize % pageCount;
-		if(totalPages == 0)
-			totalPages = (int)totalSize / pageCount;
-		else
-			totalPages = (int)totalSize / pageCount + 1;
-		
-		instanceInfoList.setTotalPages(totalPages);
-		instanceInfoList.setCurrentPage(currentPage + 1);
+		if (params != null) {
+			instanceInfoList.setPageSize(pageCount);
+			int totalPages = (int)totalSize % pageCount;
+			if(totalPages == 0)
+				totalPages = (int)totalSize / pageCount;
+			else
+				totalPages = (int)totalSize / pageCount + 1;
+			
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage + 1);
+		}
 		instanceInfoList.setTotalSize((int)totalSize);
-		
 		return instanceInfoList;
 	}
 

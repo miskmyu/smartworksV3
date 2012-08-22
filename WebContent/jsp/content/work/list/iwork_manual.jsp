@@ -82,7 +82,7 @@ function submitForms() {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 
-<div class="contents_space js_iwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>">
+<div class="contents_space js_iwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>">
 	<div class="border">
 
 		<form name="frmIWorkManual" class="js_validation_required">		
@@ -162,7 +162,6 @@ function submitForms() {
 	            	if(work.getCommentCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 	            	%>
 		            	<li>
-		            		<img class="repl_tinfo">
 	            			<a href="comment_list_in_manual.sw?workId=<%=work.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
 	            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=work.getCommentCount() %></fmt:param><</fmt:message></strong></span>
 	            			</a>

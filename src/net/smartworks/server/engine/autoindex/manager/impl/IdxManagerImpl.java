@@ -18,8 +18,8 @@ import net.smartworks.server.engine.autoindex.manager.IIdxManager;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.autoindex.model.AutoIndexRule;
-import net.smartworks.server.engine.autoindex.model.AutoIndexSeq;
-import net.smartworks.server.engine.autoindex.model.AutoIndexSeqCond;
+import net.smartworks.server.engine.autoindex.model.AutoIndexInst;
+import net.smartworks.server.engine.autoindex.model.AutoIndexInstCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
@@ -200,17 +200,17 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public AutoIndexSeq getAutoIndexSeq(String userId, String objId, String level) throws AutoIndexException {
+	public AutoIndexInst getAutoIndexInst(String userId, String objId, String level) throws AutoIndexException {
 		try {
 			if (level == null)
 				level = LEVEL_ALL;
 			if (level.equals(LEVEL_ALL)) {
-				AutoIndexSeq obj = (AutoIndexSeq)this.get(AutoIndexSeq.class, objId);
+				AutoIndexInst obj = (AutoIndexInst)this.get(AutoIndexInst.class, objId);
 				return obj;
 			} else {
-				AutoIndexSeqCond cond = new AutoIndexSeqCond();
+				AutoIndexInstCond cond = new AutoIndexInstCond();
 				cond.setObjId(objId);
-				return getAutoIndexSeq(userId, cond, level);
+				return getAutoIndexInst(userId, cond, level);
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
@@ -219,11 +219,11 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public AutoIndexSeq getAutoIndexSeq(String userId, AutoIndexSeqCond cond, String level) throws AutoIndexException {
+	public AutoIndexInst getAutoIndexInst(String userId, AutoIndexInstCond cond, String level) throws AutoIndexException {
 		if (level == null)
 			level = LEVEL_ALL;
 		cond.setPageSize(2);
-		AutoIndexSeq[] objs = getAutoIndexSeqs(userId, cond, level);
+		AutoIndexInst[] objs = getAutoIndexInsts(userId, cond, level);
 		if (CommonUtil.isEmpty(objs))
 			return null;
 		try {
@@ -237,7 +237,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public void setAutoIndexSeq(String userId, AutoIndexSeq obj, String level) throws AutoIndexException {
+	public void setAutoIndexInst(String userId, AutoIndexInst obj, String level) throws AutoIndexException {
 		try {
 			fill(userId, obj);
 			set(obj);
@@ -249,9 +249,9 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public void removeAutoIndexSeq(String userId, String objId) throws AutoIndexException {
+	public void removeAutoIndexInst(String userId, String objId) throws AutoIndexException {
 		try {
-			remove(AutoIndexSeq.class, objId);
+			remove(AutoIndexInst.class, objId);
 		} catch (Exception e) {
 			logger.error(e, e);
 			throw new AutoIndexException(e);
@@ -259,19 +259,22 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public void removeAutoIndexSeq(String userId, AutoIndexSeqCond cond) throws AutoIndexException {
-		AutoIndexSeq obj = getAutoIndexSeq(userId, cond, null);
+	public void removeAutoIndexInst(String userId, AutoIndexInstCond cond) throws AutoIndexException {
+		AutoIndexInst obj = getAutoIndexInst(userId, cond, null);
 		if (obj == null)
 			return;
 		removeAutoIndexDef(userId, obj.getObjId());
 	}
-	private Query appendQuery(StringBuffer buf, AutoIndexSeqCond cond) throws Exception {
+	private Query appendQuery(StringBuffer buf, AutoIndexInstCond cond) throws Exception {
 		String objId = null;
+		String instanceId = null;
 		String formId = null;
 		String fieldId = null;
 		String refType = null;
-		String refId = null;
-		String seqValue = null;
+		String type = null;
+		String value = null;
+		String seperator = null;
+		int seq = -1;
 		String creationUser = null;
 		Date creationDate = null;
 		String modificationUser = null;
@@ -279,11 +282,13 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 		
 		if (cond != null) {
 			objId = cond.getObjId();
+			instanceId = cond.getInstanceId();
 			formId = cond.getFormId();
 			fieldId = cond.getFieldId();
 			refType = cond.getRefType();
-			refId = cond.getRefId();
-			seqValue = cond.getSeqValue();
+			type = cond.getType();
+			value = cond.getValue();
+			seq = cond.getSeq();
 			creationUser = cond.getCreationUser();
 			creationDate = cond.getCreationDate();
 			modificationUser = cond.getModificationUser();
@@ -296,16 +301,20 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 		if (cond != null) {
 			if (objId != null)
 				buf.append(" and obj.objId = :objId");
+			if (instanceId != null)
+				buf.append(" and obj.instanceId = :instanceId");
 			if (formId != null)
 				buf.append(" and obj.formId = :formId");
 			if (fieldId != null)
 				buf.append(" and obj.fieldId = :fieldId");
 			if (refType != null)
 				buf.append(" and obj.refType = :refType");
-			if (refId != null)
-				buf.append(" and obj.refId = :refId");
-			if (seqValue != null)
-				buf.append(" and obj.seqValue = :seqValue");
+			if (type != null)
+				buf.append(" and obj.type = :type");
+			if (value != null)
+				buf.append(" and obj.value = :value");
+			if (seq != -1)
+				buf.append(" and obj.seq = :seq");
 			if (creationUser != null)
 				buf.append(" and obj.creationUser = :creationUser");
 			if (creationDate != null)
@@ -321,16 +330,20 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 		if (cond != null) {
 			if (objId != null)
 				query.setString("objId", objId);
+			if (instanceId != null)
+				query.setString("instanceId", instanceId);
 			if (formId != null)
 				query.setString("formId", formId);
 			if (fieldId != null)
 				query.setString("fieldId", fieldId);
 			if (refType != null)
 				query.setString("refType", refType);
-			if (refId != null)
-				query.setString("refId", refId);
-			if (seqValue != null)
-				query.setString("seqValue", seqValue);
+			if (type != null)
+				query.setString("refId", type);
+			if (value != null)
+				query.setString("value", value);
+			if (seq != -1)
+				query.setInteger("seq", seq);
 			if (creationUser != null)
 				query.setString("creationUser", creationUser);
 			if (creationDate != null)
@@ -343,7 +356,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 		return query;
 	}
 	@Override
-	public long getAutoIndexSeqSize(String userId, AutoIndexSeqCond cond) throws AutoIndexException {
+	public long getAutoIndexInstSize(String userId, AutoIndexInstCond cond) throws AutoIndexException {
 		try {
 			StringBuffer buf = new StringBuffer();
 			buf.append("select");
@@ -359,7 +372,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 	}
 
 	@Override
-	public AutoIndexSeq[] getAutoIndexSeqs(String userId, AutoIndexSeqCond cond, String level) throws AutoIndexException {
+	public AutoIndexInst[] getAutoIndexInsts(String userId, AutoIndexInstCond cond, String level) throws AutoIndexException {
 		try {
 			if (level == null)
 				level = LEVEL_ALL;
@@ -370,7 +383,7 @@ public class IdxManagerImpl extends AbstractManager implements IIdxManager {
 			List list = query.list();
 			if (list == null || list.isEmpty())
 				return null;
-			AutoIndexSeq[] objs = new AutoIndexSeq[list.size()];
+			AutoIndexInst[] objs = new AutoIndexInst[list.size()];
 			list.toArray(objs);
 			return objs;
 		} catch (Exception e) {

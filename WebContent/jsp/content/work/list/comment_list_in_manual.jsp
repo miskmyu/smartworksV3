@@ -54,7 +54,7 @@ if (comments != null) {
 						<span class="t_name"><%=commentor.getLongName()%></span>
 					</a>
 					<span class="t_date"><%=comment.getLastModifiedDate().toLocalString()%></span>
-					<div><%=comment.getComment()%><%if(comment.isNew()){ %><span class="icon_new"></span><%} %></div>
+					<div><%=comment.getComment()%><%if(comment.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
 				</div>
 			</div>
 		</li>
