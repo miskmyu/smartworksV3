@@ -31,7 +31,7 @@ if (comments != null) {
 	for (CommentInstanceInfo comment : comments) {
 		UserInfo commentor = comment.getCommentor();
 %>
-		<li class="js_sub_instance_list" instanceId="<%=comment.getId()%>">
+		<li class="sub_instance_list js_sub_instance_list" instanceId="<%=comment.getId()%>">
 			<div class="det_title">
 				<div class="noti_pic">
 					<a class="js_pop_user_info" href="<%=commentor.getSpaceController() %>?cid=<%=commentor.getSpaceContextId()%>" userId="<%=commentor.getId()%>" longName="<%=commentor.getLongName() %>" minPicture="<%=commentor.getMinPicture() %>" profile="<%=commentor.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(commentor)%>">
@@ -42,9 +42,11 @@ if (comments != null) {
 					<%
 					if(comment.getOwner().getId().equals(cUser.getId())){
 					%>
-						<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
-							<div class="btn_x fr"></div>
-						</a>
+						<div class="delet_action">
+							<a href="" class=" js_delete_comment_btn" title="<fmt:message key='common.title.deleted'/>">
+								<div class="btn_x fr"></div>
+							</a>
+						</div>
 					<%
 					}
 					%>
@@ -52,7 +54,7 @@ if (comments != null) {
 						<span class="t_name"><%=commentor.getLongName()%></span>
 					</a>
 					<span class="t_date"><%=comment.getLastModifiedDate().toLocalString()%></span>
-					<div><%=comment.getComment()%><%if(comment.isNew()){ %><span class="icon_new"></span><%} %></div>
+					<div><%=comment.getComment()%><%if(comment.isNew()){ %><span class="ml5 icon_new"></span><%} %></div>
 				</div>
 			</div>
 		</li>

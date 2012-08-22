@@ -93,7 +93,7 @@ function submitForms() {
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 업무 설명 보기 -->
-<div class="contents_space js_pwork_manual_page js_space_sub_instance" workId="<%=work.getId()%>">
+<div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>">
 
 	<!-- 보더 -->
 	<div class="border">
@@ -256,24 +256,25 @@ function submitForms() {
 	        <div class="list_reply">
 	            <ul class="js_comment_list">
 	            	<li class="js_comment_instance" style="display:none">
-						<div class="noti_pic">
-							<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName() %>" minPicture="<%=cUser.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-							</a>
-						</div>
-						<div class="noti_in">
-							<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
-								<span class="t_name"><%=cUser.getLongName()%></span>
-							</a>
-							<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
-							<div class="js_comment_content"></div>
+	            		<div class="det_title">
+							<div class="noti_pic">
+								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName() %>" minPicture="<%=cUser.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+								</a>
+							</div>
+							<div class="noti_in">
+								<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
+									<span class="t_name"><%=cUser.getLongName()%></span>
+								</a>
+								<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
+								<div class="js_comment_content"></div>
+							</div>
 						</div>
 	            	</li>
 	            	<%
 	            	if(work.getCommentCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 	            	%>
 		            	<li>
-		            		<img class="repl_tinfo">
 	            			<a href="comment_list_in_manual.sw?workId=<%=work.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
 	            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=work.getCommentCount() %></fmt:param><</fmt:message></strong></span>
 	            			</a>

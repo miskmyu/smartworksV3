@@ -168,6 +168,7 @@
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
+							<jsp:param value="<%=forwardedTask.getForwardId() %>" name="forwardId"/>
 						</jsp:include>
 					<%
 					}

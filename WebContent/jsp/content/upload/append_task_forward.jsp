@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.									 -->
 <!-- Created Date	: 2011.9.											 -->
 
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
+<%@page import="net.smartworks.model.instance.info.InstanceInfoList"%>
 <%@page import="net.smartworks.model.instance.TaskInstance"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
@@ -20,26 +22,39 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 	
+	String forwardId = request.getParameter("forwardId");
 	String taskInstId = request.getParameter("taskInstId");
-
+	
 	WorkInstance workInstance = null;
 	TaskInstanceInfo[] tasks = null;
 	TaskInstanceInfo forwardedTask = null;
+	String workInstId = "";
 	String subject = "";
 	String content = "";
-	String workInstId = "";
-	String forwardId = "";
-	if(!SmartUtil.isBlankObject(taskInstId)){
-		workInstance = (WorkInstance)session.getAttribute("workInstance");
-	}
-
 	String forwarderId = "";
 	String forwarderName = "";
 	String forwardDate = "";
 	if(!SmartUtil.isBlankObject(forwardId)){
-		forwarderId = forwardedTask.getAssigner().getId();
-		forwarderName = forwardedTask.getAssigner().getLongName();
-		forwardDate = forwardedTask.getCreatedDate().toLocalDateTimeSimpleString();
+		workInstance = (WorkInstance)session.getAttribute("workInstance");
+		RequestParams params = (RequestParams)request.getAttribute("requestParams");
+
+		if(SmartUtil.isBlankObject(params)){
+			params = new RequestParams();
+			params.setPageSize(20);
+			params.setCurrentPage(1);
+		}
+		InstanceInfoList instanceList = smartWorks.getForwardTasksById(forwardId, params);
+		if(!SmartUtil.isBlankObject(instanceList)){
+			tasks = (TaskInstanceInfo[])instanceList.getInstanceDatas();
+		}
+		if(!SmartUtil.isBlankObject(tasks)){
+			TaskInstanceInfo forwardTask = tasks[0];
+			subject = forwardTask.getSubject();
+			content = forwardTask.getContent();
+			forwarderId = forwardTask.getAssigner().getId();
+			forwarderName = forwardTask.getAssigner().getLongName();
+			forwardDate = forwardTask.getCreatedDate().toLocalDateTimeSimpleString();
+		}		
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -66,11 +81,11 @@
 			if(!SmartUtil.isBlankObject(forwardId) && !SmartUtil.isBlankObject(tasks)){
 			%>
 				<div class="list_reply">
+				
 					<div class="up_point_sgr pos_works"></div>
 					<ul class="bg p10">
 						<%
 						for(TaskInstanceInfo task : tasks){
-							if(!task.getForwardId().equals(forwardedTask.getForwardId())) continue;
 							UserInfo owner = task.getAssignee();
 							String statusImage = "";
 							String statusTitle = "";
@@ -100,33 +115,39 @@
 								statusImage = "icon_status_not_yet";
 								statusTitle = "content.status.not_yet";
 							}
-							if(forwardedTask.getId().equals(task.getId()))
+							if(task.getId().equals(taskInstId)){
+								forwardedTask = task;
 								continue;
+							}
 					%>
-								<li class="sub_instance_list">
-										<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-										<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
-											<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
+							<li class="sub_instance_list">
+								<div class="det_title">	
+									<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+									<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+										<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
+									</a>
+									<span class="fl" style="line-height:15px">
+										<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+											<span class="t_name"><%=owner.getLongName()%></span>
 										</a>
-										<span class="fl" style="line-height:15px">
-											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-												<span class="t_name"><%=owner.getLongName()%></span>
-											</a>
-											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-											<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
-										</span>
-								</li>					
+										<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+										<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
+									</span>
+								</div>
+							</li>					
 						<%
 						}
 						if(!SmartUtil.isBlankObject(forwardedTask)){
 						%>
-							<li class="sub_instance_list">
+							<div class="sub_instance_list">
+								<div class="det_title">	
 									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 						        	<span class="comment_box">
 										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
-						        	</span>								
-							</li>
+						        	</span>		
+						        </div>						
+							</div>
 						<%
 						}
 						%>
