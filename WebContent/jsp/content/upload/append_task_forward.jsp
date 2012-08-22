@@ -122,16 +122,18 @@
 					%>
 							<li class="sub_instance_list">
 								<div class="det_title">	
-									<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
-									<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+									<span class="<%=statusImage%> vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+									<a class="js_pop_user_info vm" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 										<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 									</a>
-									<span class="fl" style="line-height:15px">
-										<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-											<span class="t_name"><%=owner.getLongName()%></span>
-										</a>
-										<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
-										<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %></div>
+									<span class="txt_info">
+										<div>
+											<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+												<span class="t_name"><%=owner.getLongName()%></span>
+											</a>
+											<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+										</div>
+										<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="ml5 icon_new"></span><%} %><%} %></div>
 									</span>
 								</div>
 							</li>					
@@ -141,7 +143,7 @@
 						%>
 							<div class="sub_instance_list">
 								<div class="det_title">	
-									<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
+									<span class="icon_status_running vm" title="<fmt:message key='content.status.running'/>" ></span>
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 						        	<span class="comment_box">
 										<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>

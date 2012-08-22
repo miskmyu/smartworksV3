@@ -394,7 +394,11 @@ public class BuilderServiceImpl implements IBuilderService {
 						} else if(mode.equalsIgnoreCase(SwaResource.MODE_WRITE)) {
 							swaResource.setPermission(rdoWriteLevel.equals(Integer.toString(WritePolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : SwaResource.PERMISSION_SELECT);
 						} else if(mode.equalsIgnoreCase(SwaResource.MODE_MODIFY)) {
+							//start 2012.08.22 프로세스 권한 설정일 경우,수정권한 안하게 설정
+							if(rdoKeyField != null){
 							swaResource.setPermission(rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_PUBLIC)) ? SwaResource.PERMISSION_ALL : rdoEditLevel.equals(Integer.toString(EditPolicy.LEVEL_CUSTOM)) ? SwaResource.PERMISSION_SELECT : SwaResource.PERMISSION_NO);
+							}
+							//end jybae 
 						}
 						getSwaManager().setResource(userId, swaResource, null);
 					}

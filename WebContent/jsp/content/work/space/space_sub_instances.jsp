@@ -304,21 +304,23 @@
 					   <div class="reply_section pos_reply">  
 					        <div class="list_reply">
 					            <ul class="js_comment_list">
-					            	<li class="js_comment_instance" style="display:none">
-										<div class="noti_pic">
-											<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" 
-													userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
-												<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
-											</a>
-										</div>
-										<div class="noti_in">
-											<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
-												<span class="t_name"><%=cUser.getLongName()%></span>
-											</a>
-											<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
-											<div class="js_comment_content"></div>
-										</div>
-					            	</li>
+					            	<div class="det_title">
+						            	<li class="js_comment_instance" style="display:none">
+											<div class="noti_pic">
+												<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" 
+														userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+													<img src="<%=cUser.getMinPicture()%>" align="bottom" class="profile_size_c"/>
+												</a>
+											</div>
+											<div class="noti_in">
+												<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
+													<span class="t_name"><%=cUser.getLongName()%></span>
+												</a>
+												<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
+												<div class="js_comment_content"></div>
+											</div>
+						            	</li>
+					            	</div>
 					            	<%
 					            	if(instance.getSubInstanceCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
 					            		session.setAttribute("subComments", null);

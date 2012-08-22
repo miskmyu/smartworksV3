@@ -19,6 +19,7 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.community.User;
@@ -678,7 +679,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}					
 					// end -- added by sjlee
 					
-					mailInstanceInfo.setSubject(mailContent.getSubject());
+					mailInstanceInfo.setSubject(MimeUtility.decodeText(mailContent.getSubject()));
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
 					mailInstanceInfo.setReceivers(receivers);
 					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
@@ -1140,6 +1141,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 				}
 				if(mailContent != null && !mailContent.equals("")){
+					if(mailContent.indexOf("=?")>0){
+						System.out.println("Mail Content contains NONE-ENCODED Characters!!!");
+//						mailContent = new String(mailContent.getBytes("8859_1"), System.getProperty("file.enconding"));
+						mailContent = new String(mailContent.getBytes("8859_1"), "euc-kr");
+					}else{
+						System.out.println("Mail Content contains ENCODED Characters!!!");						
+						mailContent = MimeUtility.decodeText(mailContent);						
+//						mailContent = new String(mailContent.getBytes("8859_1"), System.getProperty("file.enconding"));
+//						mailContent = new String(mailContent.getBytes("8859_1"), "euc-kr");
+					}
 					mailContent = mailContent.replace('\"', '\'');
 				}
 				instance.setMailContents(mailContent);
@@ -1280,7 +1291,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 			ArrayList parts = new ArrayList();
 			EmailPart bodyPart = new EmailPart();
-			bodyPart.setContentType("text/html; charset=UTF-8");
+//			bodyPart.setContentType("text/html; charset=UTF-8");
+			bodyPart.setContentType("text/html; charset=EUC-KR");
 			/*
 			HtmlCleaner cleaner = new HtmlCleaner(body);
 			cleaner.clean(false,false);
@@ -1438,7 +1450,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 			ArrayList parts = new ArrayList();
 			EmailPart bodyPart = new EmailPart();
-			bodyPart.setContentType("text/html; charset=UTF-8");
+//			bodyPart.setContentType("text/html; charset=UTF-8");
+			bodyPart.setContentType("text/html; charset=EUC-KR");
 			/*
 			HtmlCleaner cleaner = new HtmlCleaner(body);
 			cleaner.clean(false,false);

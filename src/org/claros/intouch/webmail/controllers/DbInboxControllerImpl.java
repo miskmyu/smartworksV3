@@ -46,8 +46,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 	
 	static List<CheckingModel> checkingQueue = new LinkedList<CheckingModel>();
 	synchronized static int addChecking(String userId, String companyId){
-		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(companyId))
+		if(SmartUtil.isBlankObject(userId) || SmartUtil.isBlankObject(companyId)){
+			System.out.println("UserId or CompanyId does not exist Error!!!!, UserId=" + userId + ", CompanyId=" + companyId);
 			return -1;
+		}
 		if(SmartUtil.isBlankObject(checkingQueue)){
 			checkingQueue.add(new CheckingModel(userId, companyId));
 			return 0;
@@ -55,12 +57,14 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		
 		for(int index=0; index<checkingQueue.size(); index++){
 			CheckingModel checkingModel = checkingQueue.get(index);
-			if(checkingModel.getUserId().equals(userId))
+			if(checkingModel.getUserId().equals(userId)){
+				System.out.println("CheckEmail is already Running !!!!, Model UserId=" + checkingModel.getUserId() + ", UserId=" + userId + ", Size=" + checkingQueue.size() +  ", Index=" + index);
 				return -1;
+			}
 		}
 		
 		checkingQueue.add(new CheckingModel(userId, companyId));
-		return checkingQueue.size()-1;
+		return checkingQueue.size() -1;
 	}
 	synchronized static void addThreadToChecking(int index, Thread thread){
 		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
@@ -76,9 +80,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		
 		for(int index=0; index<checkingQueue.size(); index++){
 			CheckingModel checkingModel = checkingQueue.get(index);
-			if(checkingModel.getThread() == thread)
+			if(checkingModel.getThread() == thread){
 				checkingQueue.remove(index);
 				return checkingModel;
+			}
 		}
 		return null;
 
@@ -96,133 +101,133 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		return null;
 
 	}
-	public void checkEmailWithHeader() throws Exception {
-		
-		int index = -1;
-		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1){
-			return;
-		}
-		
-		Thread checkingEmail = new Thread(new Runnable() {
-			public void run() {
-				System.out.println(" Start Checking Email : " + (new Date()));
-				int newMessages = -1;
-				
-				CheckingModel thisModel = getModel(Thread.currentThread());
-				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
-				Protocol protocol = factory.getProtocol(null);
-				try {
-					// fetch all messages from the remote pop3 server
-					protocol.disconnect();
-					handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
-					
-					ArrayList headers = protocol.fetchAllHeaders();
-					ArrayList toBeDeleted = new ArrayList();
-					if (headers != null) {
-						EmailHeader header = null;
-						for (int i=0;i<headers.size()  && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
-							header = (EmailHeader)headers.get(i);
-							int msgId = header.getMessageId();
-							try {
-								ByteArrayOutputStream bos = new ByteArrayOutputStream();
-								ObjectOutputStream os = new ObjectOutputStream(bos);
-								os.writeObject(header);
-								byte bHeader[] = bos.toByteArray();
-								String md5Header = MD5.getHashString(bHeader);
-
-								MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, null);
-								MailController mailCont = mailFact.getMailController();
-								DbMailControllerImpl dbMailCont = (DbMailControllerImpl)mailCont;
-								if (!dbMailCont.mailAlreadyFetched(md5Header)) {
-									Message msg = protocol.getMessage(msgId);
-									if (!msg.getFolder().isOpen()) {
-										msg.getFolder().open(Folder.READ_ONLY);
-									}
-							
-									// find the destionation folderId for the message
-									String folderId = findDestinationFolderId(msg);
-							
-									// if message should be directly deleted it shouldn't be 
-									// stored in DB.
-									if (folderId != null) {
-										// create a byte array from the message content. 
-										bos = new ByteArrayOutputStream();
-										msg.writeTo(bos);
-										byte bMsg[] = bos.toByteArray();
-							
-										// serialize the message byte array
-										os = new ObjectOutputStream(bos);
-										os.writeObject(bMsg);
-
-										// create an email db item
-										MsgDbObject item = new MsgDbObject();
-										item.setEmail(bos.toByteArray());
-										item.setUniqueId(md5Header);
-										item.setFolderId(new Long(folderId));
-										item.setUnread(new Boolean(true));
-										item.setUsername(auth.getEmailId());
-										item.setMsgSize(new Long(bMsg.length));
-										
-										item.setSender(header.getFromShown());
-										item.setReceiver(header.getToShown());
-										item.setCc(header.getCcShown());
-										item.setBcc(header.getBccShown());
-										item.setReplyTo(header.getReplyToShown());
-//										item.setMultipart(header.isMultipart());
-										item.setSentDate(header.getDate());
-//										item.setPriority(new Integer(header.getPriority()));
-										item.setSubject(header.getSubject());
-
-										// save the email db item.
-										mailCont.appendEmail(item, thisModel.getCompanyId());
-										msg = null;
-										bMsg = null;
-										item = null;
-									}
-									toBeDeleted.add(new Integer(msgId));
-								}else{
-									Message msg = protocol.getMessage(msgId);									
-								}
-							} catch (Exception e) {
-								toBeDeleted.add(new Integer(msgId));
-							}
-						}
-					}
-				
-					// fetched messages are deleted if the user requested so.
-					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
-					if (deleteFetched != null && deleteFetched.equals("yes")) {
-						if (toBeDeleted.size() > 0) {
-							int ids[] = new int[toBeDeleted.size()];
-							for (int i=0;i<toBeDeleted.size();i++) {
-								Integer id = (Integer)toBeDeleted.get(i);
-								ids[i] = id.intValue();
-							}
-							protocol.deleteMessages(ids);
-						}
-					}
-					newMessages = toBeDeleted.size();
-				}catch(Exception e){
-				} finally {
-				}
-				protocol.disconnect();
-				System.out.println(" End Checking Email : " + (new Date()));
-				if(newMessages != -1)
-					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
-				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
-				FolderController foldCont = fFactory.getFolderController();				
-				try{
-					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
-					CheckingModel checkingEmail = getChecking(Thread.currentThread());
-					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
-					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
-				}catch(Exception e){
-				}
-			}
-		});
-		addThreadToChecking(index, checkingEmail);
-		checkingEmail.start();
-	}
+//	public void checkEmailWithHeader() throws Exception {
+//		
+//		int index = -1;
+//		if((index = addChecking(SmartUtil.getCurrentUser().getId(), SmartUtil.getCurrentUser().getCompanyId())) == -1){
+//			return;
+//		}
+//		
+//		Thread checkingEmail = new Thread(new Runnable() {
+//			public void run() {
+//				System.out.println(" Start Checking Email : " + (new Date()));
+//				int newMessages = -1;
+//				
+//				CheckingModel thisModel = getModel(Thread.currentThread());
+//				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
+//				Protocol protocol = factory.getProtocol(null);
+//				try {
+//					// fetch all messages from the remote pop3 server
+//					protocol.disconnect();
+//					handler = protocol.connect(org.claros.commons.mail.utility.Constants.CONNECTION_READ_WRITE);
+//					
+//					ArrayList headers = protocol.fetchAllHeaders();
+//					ArrayList toBeDeleted = new ArrayList();
+//					if (headers != null) {
+//						EmailHeader header = null;
+//						for (int i=0;i<headers.size()  && toBeDeleted.size()<MailAccount.MAX_MESSAGES_PER_FETCH;i++) {
+//							header = (EmailHeader)headers.get(i);
+//							int msgId = header.getMessageId();
+//							try {
+//								ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//								ObjectOutputStream os = new ObjectOutputStream(bos);
+//								os.writeObject(header);
+//								byte bHeader[] = bos.toByteArray();
+//								String md5Header = MD5.getHashString(bHeader);
+//
+//								MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, null);
+//								MailController mailCont = mailFact.getMailController();
+//								DbMailControllerImpl dbMailCont = (DbMailControllerImpl)mailCont;
+//								if (!dbMailCont.mailAlreadyFetched(md5Header)) {
+//									Message msg = protocol.getMessage(msgId);
+//									if (!msg.getFolder().isOpen()) {
+//										msg.getFolder().open(Folder.READ_ONLY);
+//									}
+//							
+//									// find the destionation folderId for the message
+//									String folderId = findDestinationFolderId(msg);
+//							
+//									// if message should be directly deleted it shouldn't be 
+//									// stored in DB.
+//									if (folderId != null) {
+//										// create a byte array from the message content. 
+//										bos = new ByteArrayOutputStream();
+//										msg.writeTo(bos);
+//										byte bMsg[] = bos.toByteArray();
+//							
+//										// serialize the message byte array
+//										os = new ObjectOutputStream(bos);
+//										os.writeObject(bMsg);
+//
+//										// create an email db item
+//										MsgDbObject item = new MsgDbObject();
+//										item.setEmail(bos.toByteArray());
+//										item.setUniqueId(md5Header);
+//										item.setFolderId(new Long(folderId));
+//										item.setUnread(new Boolean(true));
+//										item.setUsername(auth.getEmailId());
+//										item.setMsgSize(new Long(bMsg.length));
+//										
+//										item.setSender(header.getFromShown());
+//										item.setReceiver(header.getToShown());
+//										item.setCc(header.getCcShown());
+//										item.setBcc(header.getBccShown());
+//										item.setReplyTo(header.getReplyToShown());
+////										item.setMultipart(header.isMultipart());
+//										item.setSentDate(header.getDate());
+////										item.setPriority(new Integer(header.getPriority()));
+//										item.setSubject(header.getSubject());
+//
+//										// save the email db item.
+//										mailCont.appendEmail(item, thisModel.getCompanyId());
+//										msg = null;
+//										bMsg = null;
+//										item = null;
+//									}
+//									toBeDeleted.add(new Integer(msgId));
+//								}else{
+//									Message msg = protocol.getMessage(msgId);									
+//								}
+//							} catch (Exception e) {
+//								toBeDeleted.add(new Integer(msgId));
+//							}
+//						}
+//					}
+//				
+//					// fetched messages are deleted if the user requested so.
+//					String deleteFetched = (auth.isDeleteAfterFetched()) ? "yes" : "no";
+//					if (deleteFetched != null && deleteFetched.equals("yes")) {
+//						if (toBeDeleted.size() > 0) {
+//							int ids[] = new int[toBeDeleted.size()];
+//							for (int i=0;i<toBeDeleted.size();i++) {
+//								Integer id = (Integer)toBeDeleted.get(i);
+//								ids[i] = id.intValue();
+//							}
+//							protocol.deleteMessages(ids);
+//						}
+//					}
+//					newMessages = toBeDeleted.size();
+//				}catch(Exception e){
+//				} finally {
+//				}
+//				protocol.disconnect();
+//				System.out.println(" End Checking Email : " + (new Date()));
+//				if(newMessages != -1)
+//					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
+//				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
+//				FolderController foldCont = fFactory.getFolderController();				
+//				try{
+//					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
+//					CheckingModel checkingEmail = getChecking(Thread.currentThread());
+//					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
+//					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
+//				}catch(Exception e){
+//				}
+//			}
+//		});
+//		addThreadToChecking(index, checkingEmail);
+//		checkingEmail.start();
+//	}
 	public void checkEmail() throws Exception {
 		
 		int index = -1;
@@ -232,10 +237,11 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		}
 		Thread checkingEmail = new Thread(new Runnable() {
 			public void run() {
-				System.out.println(" Start Checking Email : " + (new Date()));
+				System.out.println( auth.getEmailId() + " Start Checking Email : " + (new Date()));
 				int newMessages = -1;
 				
 				CheckingModel thisModel = getModel(Thread.currentThread());
+				System.out.println("UserId=" + thisModel.getUserId() + ", CompanyId=" + thisModel.getCompanyId() + ", Thread=" + thisModel.getThread() + " just started !!!");
 				ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 				Protocol protocol = factory.getProtocol(null);
 
@@ -337,22 +343,23 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 				} finally {
 				}
 				protocol.disconnect();
-				System.out.println(" End Checking Email : " + (new Date()));
+				System.out.println(auth.getEmailId() + " End Checking Email : " + (new Date()));
 				if(newMessages != -1)
-					System.out.println("" + newMessages +  " 개의 새로운 메시지 도착!!!");
+					System.out.println(auth.getEmailId() + " " + newMessages +  " 개의 새로운 메시지 도착!!!");
 				FolderControllerFactory fFactory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = fFactory.getFolderController();
 				try{
 					int unreadMails = foldCont.countUnreadMessages(foldCont.getInboxFolder().getId().toString());
 					CheckingModel checkingEmail = getChecking(Thread.currentThread());
 					SmartUtil.publishNoticeCount(checkingEmail.getUserId(), checkingEmail.getCompanyId(), new Notice(Notice.TYPE_MAILBOX, unreadMails));
-					System.out.println(" Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
+					System.out.println(auth.getEmailId() + " Mailbox Notice Published [MAILBOX = " + unreadMails + " ]");					
 				}catch(Exception e){
 				}
 			}
 		});
 		addThreadToChecking(index, checkingEmail);
 		checkingEmail.start();
+		System.out.println("New Thread=" + checkingEmail + " just started !!!");
 	}
 }
 
