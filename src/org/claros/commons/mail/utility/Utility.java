@@ -147,7 +147,8 @@ public class Utility {
 					if ((j = addr.indexOf("<")) > 0) {
 						fullname = org.claros.commons.utility.Utility.extendedTrim(addr.substring(0, j).trim(), "\"");
 						email = org.claros.commons.utility.Utility.extendedTrim(org.claros.commons.utility.Utility.extendedTrim(addr.substring(j + 1), ">"), "\"").trim();
-						String charset = "utf-8";
+//						String charset = "utf-8";
+						String charset = "EUC-KR";
 						outAddr[counter] = new InternetAddress(email, fullname, charset);
 					} else {
 						outAddr[counter] = new InternetAddress(addr);
@@ -235,7 +236,8 @@ public class Utility {
 			for(int counter=0; counter<size; counter++) {
 				try {
 					UserInfo user = newTotalUsers[counter];
-					String charset = "utf-8";
+//					String charset = "utf-8";
+					String charset = "EUC-KR";
 					outAddr[counter] = new InternetAddress(user.getId(), user.getLongName(), charset);
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();

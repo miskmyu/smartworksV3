@@ -119,7 +119,8 @@ public class Smtp {
 			mimeMsg.addHeader("Sensitivity", EmailSensitivity.toStringValue(sensitivity));
 		}
 
-		String charset = "utf-8";
+//		String charset = "utf-8";
+		String charset = "EUC-KR";
 		
 		mimeMsg.setSubject(MimeUtility.encodeText(subject,charset,null));
 		ArrayList parts = msg.getParts();

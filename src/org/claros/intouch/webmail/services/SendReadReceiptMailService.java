@@ -71,7 +71,8 @@ public class SendReadReceiptMailService extends BaseService {
 
 			ArrayList parts = new ArrayList();
 			EmailPart bodyPart = new EmailPart();
-			bodyPart.setContentType("text/html; charset=UTF-8");
+//			bodyPart.setContentType("text/html; charset=UTF-8");
+			bodyPart.setContentType("text/html; charset=EUC-KR");
 			
 			String body = getText(request, "read.receipt.email.message");
 			body = org.claros.commons.utility.Utility.replaceAllOccurances(body, "#FROM#", org.claros.intouch.common.utility.Utility.htmlCheck(
