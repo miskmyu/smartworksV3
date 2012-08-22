@@ -126,7 +126,7 @@
 							owner = task.getAssigner();
 							int forwardedUserCount = 0;
 						%>
-							<li class="sub_instance_list js_show_instance" taskInstId="<%=task.getId() %>" forwardId="<%=task.getForwardId()%>">
+							<li class="sub_instance_list js_show_instance" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId() %>" forwardId="<%=task.getForwardId()%>">
 								<div class="det_title" style="line-height: 16px">
 						        	<span class="number"><%=currentCount %></span>
 						            <span class="<%=statusImage %> vm" title="<fmt:message key='statusTitle'/>"></span>

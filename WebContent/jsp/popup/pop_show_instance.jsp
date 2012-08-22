@@ -33,7 +33,7 @@
 	String taskInstId = request.getParameter("taskInstId");
 	String formId = request.getParameter("formId");
 	String forwardId = request.getParameter("forwardId");
-	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId) && SmartUtil.isBlankObject(taskInstId)) workId = smartWorks.getWorkIdByFormId(formId);
+	if(SmartUtil.isBlankObject(workId) && !SmartUtil.isBlankObject(formId)) workId = smartWorks.getWorkIdByFormId(formId);
 	
 	int workType = WorkInstance.TYPE_INFORMATION;
 	Instance instance = null;
