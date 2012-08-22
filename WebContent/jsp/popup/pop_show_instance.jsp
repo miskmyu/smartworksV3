@@ -126,7 +126,7 @@
 		<%
 		if(!SmartUtil.isBlankObject(taskInstance) && !SmartUtil.isBlankObject(forwardId)){
 		%>
-			<div class="js_form_task_forward  js_form_task">
+			<div class="js_form_task_forward  js_form_task mb10">
 				<jsp:include page="/jsp/content/upload/append_task_forward.jsp">
 					<jsp:param value="<%=instId %>" name="taskInstId"/>
 				</jsp:include>
@@ -135,7 +135,7 @@
 		}
 		%>
 		<!-- 상세보기 컨텐츠 -->
-		<div class="contents_space">				            
+		<div class="p10">				            
 	       <div class="up form_read js_form_content">      
 	       </div>
 		</div>

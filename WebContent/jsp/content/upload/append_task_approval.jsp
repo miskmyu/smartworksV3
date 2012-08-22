@@ -254,16 +254,18 @@
 						%>
 									<li class="sub_instance_list">
 										<div class="det_title">	
-											<span class="<%=statusImage%> vm fl" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
+											<span class="<%=statusImage%> vm" title="<fmt:message key='<%=statusTitle%>'/>" ></span>
 											<span class="approval_stage"><%=task.getName() %></span>
-											<a class="js_pop_user_info noti_pic" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
+											<a class="js_pop_user_info vm" href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>" userId="<%=owner.getId()%>" longName="<%=owner.getLongName() %>" minPicture="<%=owner.getMinPicture() %>" profile="<%=owner.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(owner)%>">
 												<img src="<%=owner.getMinPicture()%>" class="profile_size_c"/>
 											</a>
-											<span class="fl" style="line-height:15px">
-												<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
-													<span class="t_name"><%=owner.getLongName()%></span>
-												</a>
-												<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+											<span class="txt_info">
+												<div>
+													<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>">
+														<span class="t_name"><%=owner.getLongName()%></span>
+													</a>
+													<span class="t_date"><%=task.getLastModifiedDate().toLocalString()%></span>
+												</div>
 												<div><%if(task.getStatus()==TaskInstance.STATUS_COMPLETED 
 															|| task.getStatus()==TaskInstance.STATUS_REJECTED 
 															|| task.getStatus()==TaskInstance.STATUS_RETURNED){ %><%=CommonUtil.toNotNull(task.getComments())%><%if(task.isNew()){ %><span class="icon_new"></span><%} %><%} %>
@@ -277,7 +279,7 @@
 							%>	
 								<div class="sub_instance_list">
 									<div class="det_title">	
-										<span class="icon_status_running vm fl" title="<fmt:message key='content.status.running'/>" ></span>
+										<span class="icon_status_running vm" title="<fmt:message key='content.status.running'/>" ></span>
 										<span class="approval_stage"><%=approvalTask.getName() %></span>
 										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 							        	<span class="comment_box">

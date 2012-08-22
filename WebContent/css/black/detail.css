@@ -94,10 +94,11 @@
 .repl_write {background: url("../../images/header_nico.png") no-repeat 0 -411px; padding: 2px 0 1px 17px; font-size: 11px; color: #23579E;  margin-left: 5px}
 a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0 -435px; text-decoration: underline}
 
-/* 댓글 목록, 전자결재 결재 댓글, 대댓글(li:hover(det_title)가 필료없을 때  */
+/* 댓글 목록, 전자결재 결재 댓글  */
 .list_reply {margin:0} 
 .list_reply .bg {background-color:#ededed}
 .list_reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
+.list_reply .det_title .txt_info {display:inline-block; line-height:15px; vertical-align: middle}/* 댓글 나올 시 오른쪽 두줄정보  */
 
 /* 수정이력, 연결업무, 다운로드 이력 */
 .history_list .task_state {min-width: 55px; line-height: 22px; margin: 2px 0 0 0; text-align:center}
