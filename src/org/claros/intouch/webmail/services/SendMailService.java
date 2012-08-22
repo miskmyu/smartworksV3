@@ -149,7 +149,8 @@ public class SendMailService extends BaseService {
 
 			ArrayList parts = new ArrayList();
 			EmailPart bodyPart = new EmailPart();
-			bodyPart.setContentType("text/html; charset=UTF-8");
+//			bodyPart.setContentType("text/html; charset=UTF-8");
+			bodyPart.setContentType("text/html; charset=EUC-KR");
 			/*
 			HtmlCleaner cleaner = new HtmlCleaner(body);
 			cleaner.clean(false,false);
