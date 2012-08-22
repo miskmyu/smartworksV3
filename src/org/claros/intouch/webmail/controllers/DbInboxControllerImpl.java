@@ -60,7 +60,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		}
 		
 		checkingQueue.add(new CheckingModel(userId, companyId));
-		return checkingQueue.size()-1;
+		return 0;
 	}
 	synchronized static void addThreadToChecking(int index, Thread thread){
 		if( index<0 || thread==null || !(index < checkingQueue.size())) return;
@@ -76,9 +76,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		
 		for(int index=0; index<checkingQueue.size(); index++){
 			CheckingModel checkingModel = checkingQueue.get(index);
-			if(checkingModel.getThread() == thread)
+			if(checkingModel.getThread() == thread){
 				checkingQueue.remove(index);
 				return checkingModel;
+			}
 		}
 		return null;
 
