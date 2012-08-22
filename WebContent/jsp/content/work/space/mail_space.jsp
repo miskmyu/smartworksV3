@@ -144,10 +144,10 @@
 					</div>
 					<!-- 업무 내용 -->
 					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
-<%--  						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
+   						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							style="font-size: 11px; font: arial, sans-serif;" scrolling="no"
 							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
- --%>					</div>
+					</div>
 					<!-- 업무 내용 //-->
 					
 				<!-- 이전 다음 목록 버튼 -->
@@ -171,20 +171,20 @@
 </div>
 <!-- 컨텐츠 레이아웃//-->
 <script type="text/javascript">
-	var mailSpace = $('js_mail_space_page');
+/* 	var mailSpace = $('.js_mail_space_page');
 	var partId = mailSpace.attr('partId');
-	$.ajax({
+ 	$.ajax({
 		url : 'webmail/dumpPart.service',
 		data : {
 			partId: partId
 		},
 		success : function(data, status, jqXHR) {
-			mailSpace.find().html(data).show();
+			mailSpace.find('.js_form_content').html(data).show();
 		},
 		error : function(xhr, ajaxOptions, thrownError){
 			
 		}
 	});
-
+ */
 	doIframeAutoHeight();
 </script>
