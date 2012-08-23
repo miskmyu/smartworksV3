@@ -2,6 +2,7 @@ package net.smartworks.server.engine.common.menuitem.manager;
 
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.menuitem.exception.ItmException;
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItem;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemList;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemListCond;
@@ -22,4 +23,8 @@ public interface IItmManager extends IManager {
 
 	public int getMaxItmSeq(String userId) throws ItmException;
 
+	
+	public FormChange getFormChange(String userId, String objId, String level) throws ItmException;
+	public void setFormChange(String userId, FormChange formChange, String level) throws ItmException;
+	
 }

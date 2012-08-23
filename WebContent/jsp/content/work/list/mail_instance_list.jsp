@@ -69,7 +69,13 @@
 			<tr class="tit_bg">
 				<th class="check"><input type="checkbox" class="js_toggle_select_all" /></th>
 				<th class="important"><div class="icon_important"></div></th>
-				<th class="read r_line"><div class="icon_mail_read"></div></th>
+				<th class="read r_line">
+					<a href="" class="js_select_field_sorting"><div fieldId="<%=MailContent.A_UNREAD%>" class="icon_mail_read"></div>
+					</a>
+						<span class="js_progress_span"></span>
+				</th>
+				
+				
 				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>

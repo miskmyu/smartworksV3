@@ -8,6 +8,8 @@ import java.util.List;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.menuitem.exception.ItmException;
 import net.smartworks.server.engine.common.menuitem.manager.IItmManager;
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
+import net.smartworks.server.engine.common.menuitem.model.FormChangeCond;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItem;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemList;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemListCond;
@@ -324,6 +326,26 @@ public class ItmManagerImpl extends AbstractManager implements IItmManager {
 
 		return maxItmSeq;
 
+	}
+	@Override
+	public FormChange getFormChange(String userId, String objId, String level) throws ItmException {
+		try {
+			FormChange obj = (FormChange)this.get(FormChange.class, objId);
+			return obj;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	@Override
+	public void setFormChange(String userId, FormChange obj, String level) throws ItmException {
+		try {
+			fill(userId, obj);
+			set(obj);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
 	}
 
 }

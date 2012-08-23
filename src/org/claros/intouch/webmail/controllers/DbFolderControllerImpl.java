@@ -600,7 +600,10 @@ public class DbFolderControllerImpl implements FolderController {
 					FolderDbObject item = getFolder(tmp.getId().toString());
 					item.setFolderName(newName);
 					
-					dao.update(item);
+					//dao.update(item);
+					String sql = "update folder_db_objects set folder_name = '"+newName+"' where id = '"+tmp.getId()+"'";
+					dao.executeUpdate(sql);
+					
 				} finally {
 					JdbcUtil.close(dao);
 					dao = null;

@@ -1062,7 +1062,10 @@ public class InstanceServiceImpl implements IInstanceService {
 							infoMap.put("instanceId", oldRecord.getExtendedAttributeValue("recordId"));
 						} else if (formType.equalsIgnoreCase("PROCESS")) {
 							infoMap.put("refType", TskTask.TASKTYPE_COMMON);
-							infoMap.put("instanceId", oldRecord.getExtendedAttributeValue("prcInstId"));
+							String tempInstanceId = oldRecord.getExtendedAttributeValue("prcInstId");
+							if (CommonUtil.isEmpty(tempInstanceId))
+								tempInstanceId = oldRecord.getExtendedAttributeValue("recordId");
+							infoMap.put("instanceId", tempInstanceId);
 						}
 						
 						SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field, oldRecord, "view", infoMap, isFirst);
