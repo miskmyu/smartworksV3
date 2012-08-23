@@ -3734,7 +3734,10 @@ public class ModelConverter {
 				if(leftOperType.equals(FormField.TYPE_USER)) {
 					rightOperand = getUserByUserId(rightOperValue);
 				} else if(leftOperType.equals(FormField.TYPE_OTHER_WORK)) {
-					rightOperand = workService.getWorkById(rightOperValue);
+					//start 2012.08.23 다른업무참조항목 상세필터 저장,수정,삭제,조회 수정
+					//rightOperand = workService.getWorkById(rightOperValue);
+					//end jybae
+					rightOperand = (String)rightOperValue;
 				} else if(leftOperType.equals(FormField.TYPE_DATETIME)) {
 					rightOperand = LocalDate.convertGMTStringToLocalDate(rightOperValue);
 				} else if(leftOperType.equals(FormField.TYPE_DATE)) {
