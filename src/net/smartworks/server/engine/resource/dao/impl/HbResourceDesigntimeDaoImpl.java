@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
@@ -498,41 +499,12 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 
 			if (frmCtt == null)
 				continue;
-			frmCList.add(frmCtt + "|oldFormId|" + frm.getId());
+			frmCList.add(frmCtt);
 		}
 		if (!frmCList.isEmpty())
 			obj.setFormContentList(frmCList);
 		
 		obj = SmartServerModelUtil.clonePackage(obj);
-		
-		///TODO remove kmyu 20120823
-		if (frmCList == null || frmCList.size() == 0) {
-			String oldSigleFormId = frmList.get(0).getFormId();
-			try {
-				Element docElem = XmlUtil.parse(obj.getContent(), false, "UTF-8").getDocumentElement();
-				String newSigleFormId = CommonUtil.toNull(docElem.getAttribute("id"));
-				//KMYU 20120823 DELETE
-				//FormChange fc = new FormChange();
-				//fc.setOldFormId(oldSigleFormId);
-				//fc.setNewFormId(newSigleFormId);
-				//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		obj.setCategoryId(categoryId);
 		if (!CommonUtil.isEmpty(targetPackageName)) {
@@ -656,29 +628,9 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 				for (Iterator<String> formItr = formCttList.iterator(); formItr.hasNext();) {
 					String frmCtt = formItr.next();
 
-					//KMYU 20120823 DELETE
-					String[] formInfo = StringUtils.tokenizeToStringArray(frmCtt, "|oldFormId|");
-					frmCtt = formInfo[0];
-					String oldFormId = formInfo[1];
-					
-					
-					
-					
-					
 					Element docElem = XmlUtil.parse(frmCtt, false, "UTF-8").getDocumentElement();
 					String frmId = docElem.getAttribute("id");
 					String frmName = docElem.getAttribute("name");
-					
-					//KMYU 20120823 DELETE
-					//FormChange fc = new FormChange();
-					//fc.setOldFormId(oldFormId);
-					//fc.setNewFormId(frmId);
-					//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
-					
-					
-					
-					
-					
 					
 					IFormModel oldFrm = this.retrieveForm(frmId, version);
 					if (oldFrm != null)
@@ -702,12 +654,6 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 					// 폼 생성
 					this.getHibernateTemplate().save(frm);
 					this.updateFormContent(frmId, version, frmCtt);
-					
-					//KMYU 20120823 DELETE
-					//FormChange fc = new FormChange();
-					//fc.setOldFormId(oldFormId);
-					//fc.setNewFormId(frmId);
-					//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
 					
 					// 워크 타입 생성
 					IWorkTypeModel workType = new HbWorkTypeModel();
