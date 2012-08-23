@@ -35,8 +35,8 @@
 		<property name="formId" type="string" length="100"/>
 		<property name="fieldId" type="string" length="10"/>
 		<property name="refType" type="string" length="10"/>
-		<property name="type"  column="idType" type="string" length="50"/>
-		<property name="value" column="idValue" type="string" length="200"/>
+		<property name="idType"  type="string" length="50"/>
+		<property name="idValue" type="string" length="200"/>
 		<property name="seq" type="int"/>
 		<property name="creationUser" column="creator" type="string" length="50"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>

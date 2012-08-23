@@ -68,8 +68,12 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.autoindex.manager.IIdxManager;
+import net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
+import net.smartworks.server.engine.autoindex.model.AutoIndexInst;
+import net.smartworks.server.engine.autoindex.model.AutoIndexInstCond;
 import net.smartworks.server.engine.autoindex.model.AutoIndexRule;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Filter;
@@ -708,6 +712,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formId = (String)requestBody.get("formId");
 			boolean retry = CommonUtil.toBoolean(requestBody.get("retry"));
 			
+			String recordId = (String)requestBody.get("recordId");
+			String taskInstId = (String)requestBody.get("taskInstId");
+			String prcInstId = null;
+			if (!CommonUtil.isEmpty(taskInstId)) {
+				TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(userId, taskInstId, IManager.LEVEL_LITE);
+				if (task != null)
+					prcInstId = task.getProcessInstId();
+			}
+			
 			boolean isFirstSetMode = !retry; //초기 데이터 입력인지 수정인지를 판단한다
 			
 			//레코드 폼정보를 가져온다
@@ -716,6 +729,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			SwfForm form = getSwfManager().getForm(null, formId);
 			if (form == null)
 				return null;
+			String formType = form.getFormType();
 			SwfField[] fields = form.getFields();
 			if (CommonUtil.isEmpty(fields))
 				return null;
@@ -735,12 +749,17 @@ public class InstanceServiceImpl implements IInstanceService {
 			domainFieldList.toArray(domainFields);
 			
 			SwdRecord record = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
+
+			record.setExtendedAttributeValue("recordId", recordId);
+			record.setExtendedAttributeValue("prcInstId", prcInstId);
+			record.setExtendedAttributeValue("formType", formType);
 			
 			if (record.getCreationDate() == null)
 				record.setCreationDate(new LocalDate());
 			
 			//새로 값이 셋팅되어 변경될 레코드 클론
 			SwdRecord oldRecord = (SwdRecord)record.clone();
+			
 			SwdRecord newRecord = (SwdRecord)record.clone();
 			
 			Map<String, SwdDataField> resultMap = new HashMap<String, SwdDataField>();
@@ -770,16 +789,31 @@ public class InstanceServiceImpl implements IInstanceService {
 		}
 	}
 	
-	public SwdDataField getAutoIndexSwdDataField(String userId, SwfForm form, SwfField field, SwdRecord oldRecord) throws Exception {
+	public SwdDataField getAutoIndexSwdDataField(String userId, SwfForm form, SwfField field, SwdRecord oldRecord, String mode, Map infoMap, boolean isFirst) throws Exception {
 		if (field == null)
+			return null;
+
+		String formatType = field.getFormat().getType();
+		if (!formatType.equalsIgnoreCase("autoIndex"))
 			return null;
 		
 		String fieldId = field.getId();
+		String formId = form.getId();
+		
+		//사용자가 업무를 완료 하는 시점에 시퀀스를 다시 조회 하고 내용을 autoIndexInst에 저장하기위하여 호출한다
+		String instanceId = (String)infoMap.get("instanceId");
+		String refType = (String)infoMap.get("refType"); //COMMON, SINGLE
+		
+		boolean isSaveMode = false;
+		IIdxManager idxMgr = SwManagerFactory.getInstance().getAutoIndexManager();
+		if (!CommonUtil.isEmpty(mode) && mode.equalsIgnoreCase("save")) {
+			isSaveMode = true;
+		}
 		
 		AutoIndexDefCond autoIndexDefCond = new AutoIndexDefCond();
 		autoIndexDefCond.setFormId(form.getId());
 		autoIndexDefCond.setFieldId(fieldId);
-		AutoIndexDef autoIndexDef = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexDef(userId, autoIndexDefCond, null);
+		AutoIndexDef autoIndexDef = idxMgr.getAutoIndexDef(userId, autoIndexDefCond, null);
 		if (autoIndexDef == null) {
 			return null;
 		}
@@ -798,6 +832,19 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			if (ruleId.equalsIgnoreCase("ruleId.code")) {
 				valueBuff.append(rule.getCodeValue()).append(CommonUtil.toNotNull(rule.getSeperator()));
+				
+//				if (isSaveMode) {
+//					AutoIndexInst autoIndexInst = new AutoIndexInst();
+//					autoIndexInst.setInstanceId(instanceId);
+//					autoIndexInst.setFormId(formId);
+//					autoIndexInst.setFieldId(fieldId);
+//					autoIndexInst.setRefType(refType);
+//					autoIndexInst.setIdType(ruleId);
+//					autoIndexInst.setIdValue(rule.getCodeValue());
+//					autoIndexInst.setSeperator(rule.getSeperator());
+//					idxMgr.setAutoIndexInst(userId, autoIndexInst, IManager.LEVEL_ALL);
+//				}
+				
 			} else if (ruleId.equalsIgnoreCase("ruleId.date")) {
 				String dateFormat = rule.getType();
 				if (CommonUtil.isEmpty(dateFormat)) {
@@ -816,11 +863,23 @@ public class InstanceServiceImpl implements IInstanceService {
 					} else if (dateFormat.equalsIgnoreCase("DD")) {
 						dateFormat = "dd";
 					}
-					LocalDate now = new LocalDate();
-					SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-					String dateStr = sdf.format(now);
-					valueBuff.append(dateStr).append(CommonUtil.toNotNull(rule.getSeperator()));
 				}
+				LocalDate now = new LocalDate();
+				SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+				String dateStr = sdf.format(now);
+				valueBuff.append(dateStr).append(CommonUtil.toNotNull(rule.getSeperator()));
+
+//				if (isSaveMode) {
+//					AutoIndexInst autoIndexInst = new AutoIndexInst();
+//					autoIndexInst.setInstanceId(instanceId);
+//					autoIndexInst.setFormId(formId);
+//					autoIndexInst.setFieldId(fieldId);
+//					autoIndexInst.setRefType(refType);
+//					autoIndexInst.setIdType(ruleId);
+//					autoIndexInst.setIdValue(dateStr);
+//					autoIndexInst.setSeperator(rule.getSeperator());
+//					idxMgr.setAutoIndexInst(userId, autoIndexInst, IManager.LEVEL_ALL);
+//				}
 			} else if (ruleId.equalsIgnoreCase("ruleId.sequence")) {
 				
 				/*<autoIndexRule ruleId="ruleId.sequence" increment="2"
@@ -829,27 +888,134 @@ public class InstanceServiceImpl implements IInstanceService {
 				int increment = rule.getIncrement();
 				String incrementBy = rule.getIncrementBy();
 				String digits = rule.getDigits();
-
-				/*int user_no = 30;
-				String result_user_no = String.format("%0"+digit+"d", user_no);
-				%04d 의 의미
-				 % -  명령의시작
-				 0 - 채워질 문자
-				 4 - 총 자리수
-				 d - 십진정수*/
 				
-				
-				//TODO 구현필요
-				
-			} else if (ruleId.equalsIgnoreCase("ruleId.list")) {
-				String itemsStr = rule.getItems();
-				String[] items = StringUtils.tokenizeToStringArray(itemsStr, "||");
-				if (items == null || items.length == 0) {
-					items = new String[1];
-					items[0] = " ";
+				boolean isIncrementValue = true;
+				String result_value = null;
+				String beforeSeq = null;
+				if (!CommonUtil.isEmpty(instanceId)) {
+					AutoIndexInstCond lastAutoIndexInstCond = new AutoIndexInstCond();
+					lastAutoIndexInstCond.setFormId(formId);
+					lastAutoIndexInstCond.setInstanceId(instanceId);
+					lastAutoIndexInstCond.setFieldId(fieldId);
+					lastAutoIndexInstCond.setIdType("ruleId.sequence");
+					AutoIndexInst[] autoIndex = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(userId, lastAutoIndexInstCond, null);
+					if (autoIndex != null && autoIndex.length > 0) {
+						isIncrementValue = false;
+						beforeSeq = autoIndex[0].getIdValue();
+					}
 				}
-				selectedListValue = items[0];
-				valueBuff.append(items[0]).append(CommonUtil.toNotNull(rule.getSeperator()));
+				
+				//이전 레코드를 조회한다
+				AutoIndexInstCond autoCond = new AutoIndexInstCond();
+				autoCond.setFormId(formId);
+				autoCond.setFieldId(fieldId);
+				autoCond.setIdType("ruleId.sequence");
+				autoCond.setOrders(new Order[]{new Order("creationDate", false)});
+				AutoIndexInst[] autoIndexInsts = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(userId, autoCond, IManager.LEVEL_ALL);
+				
+				String seqValue = "0";
+				if (autoIndexInsts != null && autoIndexInsts.length != 0) {
+					seqValue = autoIndexInsts[0].getIdValue();
+				}
+				
+				if (isIncrementValue) {
+					
+					//조회된 자동채번아이디에서 시퀀스 부분을 조회하고 그값에다가 incrementBy, increment를 이용해 증가한다
+					//증가주기가 '매번','하루','한달','일년' 에 따라 증가유무를 결정한다
+					int value = Integer.parseInt(seqValue);
+					Date now = new Date();
+					if (autoIndexInsts != null && autoIndexInsts.length != 0) {
+						Date indexCreateDate = autoIndexInsts[0].getCreationDate();
+						indexCreateDate.setTime(indexCreateDate.getTime() + TimeZone.getDefault().getRawOffset());
+
+						if (incrementBy.equalsIgnoreCase("incrementBy.item")) {
+							value = value + increment;
+						} else if (incrementBy.equalsIgnoreCase("incrementBy.day")) {
+							SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM.dd");
+							if(sf.format(indexCreateDate).equalsIgnoreCase(sf.format(now))) {
+								value = value + increment;
+							} else {
+								value = 1;
+							}
+						} else if (incrementBy.equalsIgnoreCase("incrementBy.month")) {
+							SimpleDateFormat sf = new SimpleDateFormat("yyyy.MM");
+							if(sf.format(indexCreateDate).equalsIgnoreCase(sf.format(now))) {
+								value = value + increment;
+							} else {
+								value = 1;
+							}
+						} else if (incrementBy.equalsIgnoreCase("incrementBy.year")) {
+							SimpleDateFormat sf = new SimpleDateFormat("yyyy");
+							if(sf.format(indexCreateDate).equalsIgnoreCase(sf.format(now))) {
+								value = value + increment;
+							} else {
+								value = 1;
+							}
+						}
+					} else {
+						value = value + increment;
+					}
+					//digits 를 적용한다
+					//%04d 의 의미
+					//% -  명령의시작
+					//0 - 채워질 문자
+					//4 - 총 자리수
+					//d - 십진정수
+					result_value = String.format("%0"+digits+"d", value);
+				} else {
+					result_value = beforeSeq;
+				}
+				
+				valueBuff.append(result_value).append(CommonUtil.toNotNull(rule.getSeperator()));
+				
+				if (isSaveMode && isIncrementValue) {
+					AutoIndexInst autoIndexInst = new AutoIndexInst();
+					autoIndexInst.setInstanceId(instanceId);
+					autoIndexInst.setFormId(formId);
+					autoIndexInst.setFieldId(fieldId);
+					autoIndexInst.setRefType(refType);
+					autoIndexInst.setIdType(ruleId);
+					autoIndexInst.setIdValue(result_value);
+					autoIndexInst.setSeperator(rule.getSeperator());
+					idxMgr.setAutoIndexInst(userId, autoIndexInst, IManager.LEVEL_ALL);
+				}
+			} else if (ruleId.equalsIgnoreCase("ruleId.list")) {
+				
+//				String itemsStr = rule.getItems();
+//				String[] items = StringUtils.tokenizeToStringArray(itemsStr, "||");
+//				if (items == null || items.length == 0) {
+//					items = new String[1];
+//					items[0] = " ";
+//				}
+//				selectedListValue = items[0];
+
+				selectedListValue = oldRecord.getDataField(fieldId).getSelectedValue();
+				if (!CommonUtil.isEmpty(instanceId) && isFirst) {
+					AutoIndexInstCond lastAutoIndexInstCond = new AutoIndexInstCond();
+					lastAutoIndexInstCond.setFormId(formId);
+					lastAutoIndexInstCond.setInstanceId(instanceId);
+					lastAutoIndexInstCond.setFieldId(fieldId);
+					lastAutoIndexInstCond.setIdType("ruleId.list");
+					lastAutoIndexInstCond.setOrders(new Order[]{new Order("creationDate", false)});
+					AutoIndexInst[] autoIndex = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(userId, lastAutoIndexInstCond, null);
+					if (autoIndex != null && autoIndex.length > 0) {
+						selectedListValue = autoIndex[0].getIdValue();
+					}
+				}
+				
+				valueBuff.append(selectedListValue).append(CommonUtil.toNotNull(rule.getSeperator()));
+				
+				if (isSaveMode) {
+					AutoIndexInst autoIndexInst = new AutoIndexInst();
+					autoIndexInst.setInstanceId(instanceId);
+					autoIndexInst.setFormId(formId);
+					autoIndexInst.setFieldId(fieldId);
+					autoIndexInst.setRefType(refType);
+					autoIndexInst.setIdType(ruleId);
+					autoIndexInst.setIdValue(selectedListValue);
+					autoIndexInst.setSeperator(rule.getSeperator());
+					idxMgr.setAutoIndexInst(userId, autoIndexInst, IManager.LEVEL_ALL);
+				}
 			}
 		}
 		
@@ -872,23 +1038,37 @@ public class InstanceServiceImpl implements IInstanceService {
 			String formatType = field.getFormat().getType();
 			
 			if (mappings == null || formatType.equalsIgnoreCase("autoIndex")) {
-				if (formatType.equalsIgnoreCase("autoIndex") && isFirst) {
+				if (formatType.equalsIgnoreCase("autoIndex")) {
 					
 					boolean isEditMode = false;
 					if (isEditMode) {
-						//수정모드 = 업무를 수정하는 단계로 이전에 사용자 선택 리스트가 있다면 이전에 사용자가 선택하였던 아이템을 넘겨야 한다
-
-						SwdDataField oldDataField = oldRecord.getDataField(fieldId);
-						//TODO 레코드 아이디로 콤보박스가 선택되어진 값을 가져와서 입력해준다
-						//oldDataField.setSelectedValue(selectedValue);
-						
-						resultMap.put(fieldId, oldDataField);
-						newRecord.setDataField(fieldId, oldDataField);
+//						//수정모드 = 업무를 수정하는 단계로 이전에 사용자 선택 리스트가 있다면 이전에 사용자가 선택하였던 아이템을 넘겨야 한다
+//
+//						SwdDataField oldDataField = oldRecord.getDataField(fieldId);
+//						//TODO 레코드 아이디로 콤보박스가 선택되어진 값을 가져와서 입력해준다
+//						//oldDataField.setSelectedValue(selectedValue);
+//						
+//						resultMap.put(fieldId, oldDataField);
+//						newRecord.setDataField(fieldId, oldDataField);
 						return;
 						
 					} else {
 						//입력모드 = 업무를 처음 작성하는 단계로 아이디값을 새로 따야한다
-						SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field, oldRecord);
+						
+						String formType = oldRecord.getExtendedAttributeValue("formType");
+						Map infoMap = new HashMap();
+						if (formType.equalsIgnoreCase("SINGLE")) {
+							infoMap.put("refType", TskTask.TASKTYPE_SINGLE);
+							infoMap.put("instanceId", oldRecord.getExtendedAttributeValue("recordId"));
+						} else if (formType.equalsIgnoreCase("PROCESS")) {
+							infoMap.put("refType", TskTask.TASKTYPE_COMMON);
+							String tempInstanceId = oldRecord.getExtendedAttributeValue("prcInstId");
+							if (CommonUtil.isEmpty(tempInstanceId))
+								tempInstanceId = oldRecord.getExtendedAttributeValue("recordId");
+							infoMap.put("instanceId", tempInstanceId);
+						}
+						
+						SwdDataField dataField = getAutoIndexSwdDataField(userId, form, field, oldRecord, "view", infoMap, isFirst);
 						
 						if (dataField == null) {
 							resultMap.put(fieldId, oldRecord.getDataField(fieldId));
@@ -1750,6 +1930,7 @@ public class InstanceServiceImpl implements IInstanceService {
 				String refFormField = null;
 				String refRecordId = null;
 				Object fieldValue = frmSmartFormMap.get(fieldId);
+				String autoIndexSelectedValue = null;
 				if(!keyDuplicable) {
 					if(fieldId.equals(keyColumn)) {
 						long objectCount = getSwdManager().getObjectsCountByFormFieldId(domainId, fieldId, tableName, instanceId, String.valueOf(fieldValue));
@@ -1761,6 +1942,8 @@ public class InstanceServiceImpl implements IInstanceService {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					groupId = (String)valueMap.get("groupId");
 					refForm = (String)valueMap.get("refForm");
+					String autoIndexValue = (String)valueMap.get("value");
+					autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 					users = (ArrayList<Map<String,String>>)valueMap.get("users");
 
 					if(!CommonUtil.isEmpty(groupId)) {
@@ -1807,6 +1990,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 						refRecordId = resultRefRecordId;
 						value = resultValue;
+					} else if(!CommonUtil.isEmpty(autoIndexValue)) {
+						value = autoIndexValue;
 					}
 				} else if(fieldValue instanceof String) {
 					value = (String)frmSmartFormMap.get(fieldId);
@@ -1852,6 +2037,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setRefFormField(refFormField);
 				fieldData.setRefRecordId(refRecordId);
 				fieldData.setValue(value);
+				if (!CommonUtil.isEmpty(autoIndexSelectedValue))
+					fieldData.setSelectedValue(autoIndexSelectedValue);
 	
 				fieldDataList.add(fieldData);
 
@@ -1940,7 +2127,11 @@ public class InstanceServiceImpl implements IInstanceService {
 			if (!CommonUtil.isEmpty((String)requestBody.get("makeNewNotClone")))
 				obj.setExtendedAttributeValue("makeNewNotClone", (String)requestBody.get("makeNewNotClone"));
 			
+			//필드중에 자동채번 필드가 있다면 시퀀스를 저장 시점으로 다시 갱신하기 위하여 아래를 호출한다
+			populateAutoIndexField(userId, TskTask.TASKTYPE_SINGLE, formId, obj.getRecordId(), obj);
+
 			instanceId = getSwdManager().setRecord(userId, obj, IManager.LEVEL_ALL);
+			
 
 			TskTaskCond tskCond = new TskTaskCond();
 			tskCond.setExtendedProperties(new Property[] {new Property("recordId", instanceId)});
@@ -1997,7 +2188,27 @@ public class InstanceServiceImpl implements IInstanceService {
 			return null;			
 		}
 	}
-
+	private void populateAutoIndexField(String userId, String type, String formId, String instanceId, SwdRecord record) throws Exception {
+		Map infoMap = new HashMap();
+		if (type.equalsIgnoreCase(TskTask.TASKTYPE_COMMON)) {
+			infoMap.put("instanceId", instanceId);
+			infoMap.put("refType", TskTask.TASKTYPE_COMMON);
+		} else {
+			infoMap.put("instanceId", instanceId);
+			infoMap.put("refType", TskTask.TASKTYPE_SINGLE);
+		}
+		
+		SwfForm form = SwManagerFactory.getInstance().getSwfManager().getForm(userId, formId);
+		SwfField[] fields = form.getFields();
+		for (int i = 0; i < fields.length; i++) {
+			SwfField field = fields[i];
+			SwdDataField dataField = record.getDataField(field.getId());
+			SwdDataField tempDataField = getAutoIndexSwdDataField(userId, form, field, record, "save", infoMap, false);
+			if (tempDataField != null)
+				record.setDataField(dataField.getId(), tempDataField);
+		}
+	}
+	
 	@Override
 	public void removeInformationWorkInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
@@ -2033,6 +2244,15 @@ public class InstanceServiceImpl implements IInstanceService {
 			}
 
 			getSwdManager().removeRecord(user.getId(), record.getDomainId(), record.getRecordId());
+			
+			AutoIndexInstCond cond = new AutoIndexInstCond();
+			cond.setInstanceId(record.getRecordId());
+			AutoIndexInst[] autoIndex = SwManagerFactory.getInstance().getAutoIndexManager().getAutoIndexInsts(user.getId(), cond, null);
+			if (autoIndex != null) {
+				for (int i = 0; i < autoIndex.length; i++) {
+					SwManagerFactory.getInstance().getAutoIndexManager().removeAutoIndexInst(user.getId(), autoIndex[i].getObjId());
+				}
+			}
 			
 		}catch (Exception e){
 			// Exception Handling Required
@@ -2406,10 +2626,13 @@ public class InstanceServiceImpl implements IInstanceService {
 				}
 				
 				Object fieldValue = smartFormInfoMap.get(fieldId);
+				String autoIndexSelectedValue = null;
 				if (fieldValue instanceof LinkedHashMap) {
 					Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
 					groupId = (String)valueMap.get("groupId");
 					refForm = (String)valueMap.get("refForm");
+					String autoIndexValue = (String)valueMap.get("value");
+					autoIndexSelectedValue = (String)valueMap.get("selectedValue");
 					users = (ArrayList<Map<String,String>>)valueMap.get("users");
 	
 					if(!CommonUtil.isEmpty(groupId)) {
@@ -2454,6 +2677,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						}
 						refRecordId = resultRefRecordId;
 						value = resultValue;
+					} else if(!CommonUtil.isEmpty(autoIndexValue)) {
+						value = autoIndexValue;
 					}
 				} else if(fieldValue instanceof String) {
 					
@@ -2490,6 +2715,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setRefFormField(refFormField);
 				fieldData.setRefRecordId(refRecordId);
 				fieldData.setValue(value);
+				if (!CommonUtil.isEmpty(autoIndexSelectedValue))
+					fieldData.setSelectedValue(autoIndexSelectedValue);
 
 				fieldDataList.add(fieldData);
 
@@ -3109,6 +3336,9 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 			task = getTskManager().executeTask(userId, task, "execute");
 
+			//자동채번을 위하여 아래를 호출한다
+			populateAutoIndexField(userId, TskTask.TASKTYPE_COMMON, formId, task.getProcessInstId(), recordObj);
+			
 			String taskInstId = task.getObjId();
 
 			if(fileGroupMap.size() > 0) {
@@ -6742,6 +6972,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			domainFieldList.toArray(domainFields);
 			
 			SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
+			
 			String taskDocument = null;
 			String groupId = null;
 			Map<String, List<Map<String, String>>> fileGroupMap = null;
@@ -6813,6 +7044,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
 				getTskManager().executeTask(userId, task, action);
+
+				//자동채번을 위하여 아래를 호출한다
+				populateAutoIndexField(userId, TskTask.TASKTYPE_COMMON, formId, task.getProcessInstId(), recordObj);
+				
  				SmartUtil.removeNoticeByExecutedTaskId(task.getAssignee(), task.getObjId());
 			}
 			if (logger.isInfoEnabled()) {
