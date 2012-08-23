@@ -58,6 +58,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -494,14 +495,45 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			if (frmType != null && frmType.equalsIgnoreCase(IFormModel.TYPE_SINGLE))
 				continue;
 			String frmCtt = retrieveFormContent(frm.getId());
+
 			if (frmCtt == null)
 				continue;
-			frmCList.add(frmCtt);
+			frmCList.add(frmCtt + "|oldFormId|" + frm.getId());
 		}
 		if (!frmCList.isEmpty())
 			obj.setFormContentList(frmCList);
 		
 		obj = SmartServerModelUtil.clonePackage(obj);
+		
+		///TODO remove kmyu 20120823
+		if (frmCList == null || frmCList.size() == 0) {
+			String oldSigleFormId = frmList.get(0).getFormId();
+			try {
+				Element docElem = XmlUtil.parse(obj.getContent(), false, "UTF-8").getDocumentElement();
+				String newSigleFormId = CommonUtil.toNull(docElem.getAttribute("id"));
+				//KMYU 20120823 DELETE
+				//FormChange fc = new FormChange();
+				//fc.setOldFormId(oldSigleFormId);
+				//fc.setNewFormId(newSigleFormId);
+				//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		obj.setCategoryId(categoryId);
 		if (!CommonUtil.isEmpty(targetPackageName)) {
 			obj.setName(targetPackageName);
@@ -529,6 +561,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			String name = pkg.getName();
 			String desc = pkg.getDescription();
 			String ctt = pkg.getContent();
+			
 			List<String> formCttList = pkg.getFormContentList();
 			
 			if (pkgId == null)
@@ -571,6 +604,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 					}
 					
 				} else if (type.equals(IPackageModel.TYPE_SINGLE)) {
+					
 					Element docElem = null;
 					String frmId = null;
 					if (ctt != null) {
@@ -621,9 +655,30 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			if (formCttList != null && !formCttList.isEmpty()) {
 				for (Iterator<String> formItr = formCttList.iterator(); formItr.hasNext();) {
 					String frmCtt = formItr.next();
+
+					//KMYU 20120823 DELETE
+					String[] formInfo = StringUtils.tokenizeToStringArray(frmCtt, "|oldFormId|");
+					frmCtt = formInfo[0];
+					String oldFormId = formInfo[1];
+					
+					
+					
+					
+					
 					Element docElem = XmlUtil.parse(frmCtt, false, "UTF-8").getDocumentElement();
 					String frmId = docElem.getAttribute("id");
 					String frmName = docElem.getAttribute("name");
+					
+					//KMYU 20120823 DELETE
+					//FormChange fc = new FormChange();
+					//fc.setOldFormId(oldFormId);
+					//fc.setNewFormId(frmId);
+					//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
+					
+					
+					
+					
+					
 					
 					IFormModel oldFrm = this.retrieveForm(frmId, version);
 					if (oldFrm != null)
@@ -647,6 +702,12 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 					// 폼 생성
 					this.getHibernateTemplate().save(frm);
 					this.updateFormContent(frmId, version, frmCtt);
+					
+					//KMYU 20120823 DELETE
+					//FormChange fc = new FormChange();
+					//fc.setOldFormId(oldFormId);
+					//fc.setNewFormId(frmId);
+					//SwManagerFactory.getInstance().getIItmManager().setFormChange("", fc, null);
 					
 					// 워크 타입 생성
 					IWorkTypeModel workType = new HbWorkTypeModel();

@@ -14,16 +14,49 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import net.smartworks.server.engine.category.model.CtgCategory;
+import net.smartworks.server.engine.category.model.CtgCategoryCond;
 import net.smartworks.server.engine.common.loginuser.exception.LoginUserException;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.docfile.exception.DocFileException;
+import net.smartworks.server.engine.common.util.id.IDCreator;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
+import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.process.xpdl.util.ProcessModelHelper;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Activities;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Activity;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Implementation7;
+import net.smartworks.server.engine.process.xpdl.xpdl2.PackageType;
+import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Task;
+import net.smartworks.server.engine.process.xpdl.xpdl2.TaskApplication;
+import net.smartworks.server.engine.resource.exception.SmartServerRuntimeException;
+import net.smartworks.server.engine.resource.model.IFormContent;
+import net.smartworks.server.engine.resource.model.IFormModel;
+import net.smartworks.server.engine.resource.model.IPackageModel;
+import net.smartworks.server.engine.resource.model.IProcessContent;
+import net.smartworks.server.engine.resource.model.IProcessModel;
+import net.smartworks.server.engine.resource.model.IWorkTypeModel;
+import net.smartworks.server.engine.resource.model.hb.HbFormContent;
+import net.smartworks.server.engine.resource.model.hb.HbFormModel;
+import net.smartworks.server.engine.resource.model.hb.HbPackageModel;
+import net.smartworks.server.engine.resource.model.hb.HbProcessModel;
+import net.smartworks.server.engine.resource.model.hb.HbWorkTypeModel;
+import net.smartworks.server.engine.resource.util.SmartServerModelUtil;
+import net.smartworks.server.engine.resource.util.SmartServerUtil;
+import net.smartworks.server.engine.resource.util.XmlUtil;
+import net.smartworks.server.engine.resource.util.convert.Xml2Obj;
+import net.smartworks.util.LocalDate;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.w3c.dom.Element;
 
 public class LoginUserManagerImpl extends AbstractManager implements ILoginUserManager {
 
@@ -235,4 +268,111 @@ public class LoginUserManagerImpl extends AbstractManager implements ILoginUserM
 		
 	}
 
+	public void copyAllCategory(String targetCtgId, String parentCtgId) throws Exception {
+		
+		
+		//카테고리를 복사를 한다
+		CtgCategory ctg = SwManagerFactory.getInstance().getCtgManager().getCategory("", targetCtgId, null);
+		
+		if (ctg == null)
+			return;
+		String oldCtgId = ctg.getObjId();
+		
+		CtgCategory newCtg = (CtgCategory)ctg.clone();
+		
+		String newCtgId = "newCtg_"+CommonUtil.newId();
+		
+		newCtg.setParentId(parentCtgId);
+		newCtg.setObjId(newCtgId);
+		newCtg.setName("복사본_" + newCtg.getName());
+		
+		SwManagerFactory.getInstance().getCtgManager().setCategory("", newCtg, null);
+		//CategoryChange cc = new CategoryChange();
+		//cc.setOldCategoryId(oldCtgId);
+		//cc.setNewCategoryId(newCtgId);
+		//SwManagerFactory.getInstance().getIItmManager().setCategoryChange("", categoryChange);
+		System.out.println(newCtg.getName() + " 카테고리 생성 (old : " + oldCtgId + " , new : " + newCtgId + ")" );
+		
+		
+		
+		
+		
+		
+		CtgCategoryCond subCtgCond = new CtgCategoryCond();
+		subCtgCond.setParentId(oldCtgId);
+		CtgCategory[] subCtgs = SwManagerFactory.getInstance().getCtgManager().getCategorys("", subCtgCond, null);
+		
+		if (subCtgs == null || subCtgs.length == 0)
+			return;
+		for (int i = 0; i < subCtgs.length; i++) {
+			CtgCategory subCtg = subCtgs[i];
+			copyAllCategory(subCtg.getObjId(), newCtgId);
+		}
+	}
+	
+	
+	public void copyAllPackage(String categoryId, String targetCategoryId) throws Exception {
+		
+
+		PkgPackageCond pkgCond = new PkgPackageCond();
+		pkgCond.setCategoryId(categoryId);
+		PkgPackage[] pkgs = SwManagerFactory.getInstance().getPkgManager().getPackages("", pkgCond, null);
+		if (pkgs == null || pkgs.length == 0)
+			return;
+		for (int i = 0; i < pkgs.length; i++) {
+			PkgPackage pkg = pkgs[i];
+			IPackageModel newPkg = SwManagerFactory.getInstance().getDesigntimeManager().clonePackage("", targetCategoryId, "복사본_" + pkg.getName() , "설명", pkg.getPackageId(), 1);
+//			System.out.println(newPkg.getName() + " 패키지 생성 (old : " + oldPkgId + " , new : " + newPkgId + ")" );
+			String oldPkgId = pkg.getPackageId();
+			String newPkgId = newPkg.getPackageId();
+
+			
+			//CategoryChange cc = new CategoryChange();
+			//cc.setOldCategoryId(oldCtgId);
+			//cc.setNewCategoryId(newCtgId);
+			//SwManagerFactory.getInstance().getIItmManager().setCategoryChange("", categoryChange);
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
