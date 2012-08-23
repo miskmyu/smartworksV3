@@ -5,3 +5,7 @@
 
 .glo_btn_space .btn_gray {display:block; float:left; margin-right: 5px}
 .btn_gray {line-height:17px}
+
+
+/* Upload - New Picture */
+.js_new_picture_fields textarea {width:620px}
