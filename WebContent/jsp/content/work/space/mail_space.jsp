@@ -146,7 +146,7 @@
 					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
    						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							style="font-size: 11px; font: arial, sans-serif;" scrolling="no"
-							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
+							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" onload="reloadMailContent();" /></iframe>
 					</div>
 					<!-- 업무 내용 //-->
 					
@@ -186,5 +186,16 @@
 		}
 	});
  */
+ var reloadMailContent = function(){	
+/* 
+ 	var title = $('.js_mail_space_page').find('iframe').contents().find('title');
+ 	var body = $('.js_mail_space_page').find('iframe').contents().find('body');
+ 	var titleHtml = title[0].innerHTML;
+ 	if(titleHtml!="" && body.html()=="" && titleHtml.indexOf('iframe')>0){
+  		title.html('');
+  		$('.js_mail_space_page').find('iframe').contents().find('body')[0].innerHTML=titleHtml;
+ 	}
+  */	
 	doIframeAutoHeight();
+ };
 </script>
