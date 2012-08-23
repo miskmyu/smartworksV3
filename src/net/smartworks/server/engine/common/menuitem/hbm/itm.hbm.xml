@@ -57,5 +57,13 @@
 		<property name="newFormId" type="string" length="100"/>
 	</class>
 	
+	<class name="CategoryChange" table="CategoryChange">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="oldCategoryId" type="string" length="100"/>
+		<property name="newCategoryId" type="string" length="100"/>
+	</class>
+	
 	
 </hibernate-mapping>
