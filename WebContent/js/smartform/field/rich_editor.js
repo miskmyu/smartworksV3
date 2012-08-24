@@ -57,6 +57,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 				sSkinURI: skinURI,
 				fCreator: "createSEditorInIFrame"
 			});
+			options.container.find('iframe').contents().find('iframe').css({width:"100%"});
 		}
 	}else{
 		if(readOnly) {

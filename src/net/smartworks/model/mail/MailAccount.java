@@ -12,6 +12,8 @@ public class MailAccount{
 	private String userName;
 	private String password;
 	private boolean deleteAfterFetched;
+	private boolean useSignature;
+	private String signature;
 	
 	public String getEmailServerId() {
 		return emailServerId;
@@ -62,6 +64,22 @@ public class MailAccount{
 
 	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
 		this.deleteAfterFetched = deleteAfterFetched;
+	}
+
+	public boolean isUseSignature() {
+		return useSignature;
+	}
+
+	public void setUseSignature(boolean useSignature) {
+		this.useSignature = useSignature;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 
 	public MailAccount() {

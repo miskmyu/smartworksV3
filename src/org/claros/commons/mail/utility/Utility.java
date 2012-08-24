@@ -40,6 +40,10 @@ public class Utility {
 				String address = org.claros.commons.utility.Utility.doCharsetCorrections(add.getAddress());
 
 				if (personal != null && personal.length() > 0) {
+					personal = personal.replaceAll("\"", " ");
+					personal = personal.replaceAll("\'", " ");
+					personal = personal.replaceAll("&quot;", " ");
+					personal = personal.replaceAll("&#39;", " ");
 					if (address != null && address.length() > 0) {
 						str[j] = personal + " <" + address + ">";
 					} else {
@@ -90,6 +94,10 @@ public class Utility {
 				String address = org.claros.commons.utility.Utility.doCharsetCorrections(add.getAddress());
 
 				if (personal != null && personal.length() > 0) {
+					personal = personal.replaceAll("\"", " ");
+					personal = personal.replaceAll("\'", " ");
+					personal = personal.replaceAll("&quot;", " ");
+					personal = personal.replaceAll("&#39;", " ");
 					str[j] = personal;
 				} else if (address != null && address.length() > 0) { 
 					str[j] = address;

@@ -105,18 +105,18 @@
 					    	<dt><fmt:message key="common.title.sender"/> :</dt>
 					        <dd><%=instance.getSender().getEmailAddressShown() %></dd>
 					        <dt><fmt:message key="common.title.receivers"/> :</dt>
-					        <dd><%=instance.getReceiversShown() %></dd>
+					        <dd><%=instance.getReceiversShownBrief() %></dd>
 							<%
 							if(!SmartUtil.isBlankObject(instance.getCcReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.cc_receivers"/> :</dt>
-						        <dd><%=CommonUtil.toNotNull(instance.getCcReceiversShown()) %></dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getCcReceiversShownBrief()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getBccReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.bcc_receivers"/> :</dt>
-						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShown()) %></dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShownBrief()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getAttachments())){
