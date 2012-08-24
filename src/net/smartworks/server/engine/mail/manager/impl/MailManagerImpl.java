@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.mail.exception.MailException;
 import net.smartworks.server.engine.mail.manager.IMailManager;
@@ -148,6 +149,18 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 			if(unread != -1) 
 				buf.append(" and obj.unread = :unread");
 		}
+		Order[] orders = cond.getOrders();
+		if (orders != null && orders.length != 0) {
+			for (int i = 0; i < orders.length; i++) {
+				Order order = orders[i];
+				String fieldId = order.getField();
+				if (fieldId.equalsIgnoreCase("modifiedTime")) {
+					order.setField("sentDate");
+					orders[i] = order;
+				}
+			}
+		}
+		
 		this.appendOrderQuery(buf, "obj", cond);
 
 		Query query = this.createQuery(buf.toString(), cond);
@@ -158,7 +171,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 			if(folderId != -1)
 				query.setLong("folderId", folderId);
 			if(searchKey != null)
-				query.setString("searchKey", searchKey);
+				query.setString("searchKey", CommonUtil.toLikeString(searchKey));
 			if(unread != -1)
 				query.setInteger("unread", unread);
 		}

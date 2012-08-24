@@ -105,18 +105,18 @@
 					    	<dt><fmt:message key="common.title.sender"/> :</dt>
 					        <dd><%=instance.getSender().getEmailAddressShown() %></dd>
 					        <dt><fmt:message key="common.title.receivers"/> :</dt>
-					        <dd><%=instance.getReceiversShown() %></dd>
+					        <dd><%=instance.getReceiversShownBrief() %></dd>
 							<%
 							if(!SmartUtil.isBlankObject(instance.getCcReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.cc_receivers"/> :</dt>
-						        <dd><%=CommonUtil.toNotNull(instance.getCcReceiversShown()) %></dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getCcReceiversShownBrief()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getBccReceivers())){
 							%>
 						        <dt><fmt:message key="common.title.bcc_receivers"/> :</dt>
-						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShown()) %></dd>
+						        <dd><%=CommonUtil.toNotNull(instance.getBccReceiversShownBrief()) %></dd>
 							<%
 							}
 							if(!SmartUtil.isBlankObject(instance.getAttachments())){
@@ -146,7 +146,7 @@
 					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
    						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							style="font-size: 11px; font: arial, sans-serif;" scrolling="no"
-							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" /></iframe>
+							src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" onload="reloadMailContent();" /></iframe>
 					</div>
 					<!-- 업무 내용 //-->
 					
@@ -186,5 +186,21 @@
 		}
 	});
  */
+ var reloadMailContent = function(){	
+  
+ 	var title = $('.js_mail_space_page').find('iframe').contents().find('title');
+ 	var body = $('.js_mail_space_page').find('iframe').contents().find('body');
+ 	var titleHtml = title.html();
+ 	if(titleHtml!="" && body.html()=="" && titleHtml.indexOf('iframe')>0){
+// 		titleHtml = titleHtml.replace('&lt;/head&gt;', '');
+// 		titleHtml = titleHtml.replace(/&lt;/html&gt;$/, '');
+ 		titleHtml = titleHtml.replace(/&lt;/g, '<');
+ 		titleHtml = titleHtml.replace(/&gt;/g, '>');
+ 		console.log('titleHtml=', titleHtml);
+  		title.html('');
+  		$('.js_mail_space_page').find('iframe').contents().find('body').html(titleHtml);
+ 	}
+ 	
 	doIframeAutoHeight();
+ };
 </script>

@@ -163,7 +163,7 @@
 					<tr class="instance_list <%if(instanceInfo.isUnread()){%>not_read<%}%>">
 						<td class="tc"><input name="chkSelectMail" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
 						<td><div class="<%if(instanceInfo.getPriority()>0 && instanceInfo.getPriority()<EmailPriority.NORMAL){ %>icon_important<%}%>"></div></td>
-						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read checked<%}%>"></div></td>
+						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
 						<td><a href="<%=target%>" class="js_content"><%if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){%><%=receivers%><%}else{%><%=sender%><%} %></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=subject%></a></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>

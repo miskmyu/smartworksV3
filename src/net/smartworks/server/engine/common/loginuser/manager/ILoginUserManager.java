@@ -26,5 +26,5 @@ public interface ILoginUserManager {
 	public void deleteAllLoginUser(String user) throws LoginUserException;
 	
 	public void setLoginUserHistory(String user, LoginUserHistory obj) throws LoginUserException;
-
+	
 }

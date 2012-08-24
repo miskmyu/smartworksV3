@@ -291,6 +291,18 @@
 										<input name="chkUserProfileEmailDeleteFetched" type="checkbox" class="" <%if(mailAccount.isDeleteAfterFetched()){%>checked<%}%>>		
 									</td>
 								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th><fmt:message key="profile.title.email.use_signature" /></th>
+									<td>
+										<input name="chkUserProfileEmailUseSign" type="checkbox" <%if(mailAccount.isUseSignature()){ %>checked<%} %>>
+									</td>
+								</tr>
+								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
+									<th><fmt:message key="profile.title.email.signature" /></th>
+									<td>
+										<div class="js_email_signature_field js_auto_load_profile" signature="<%=CommonUtil.toNotNull(mailAccount.getSignature())%>"></div>
+									</td>
+								</tr>
 							<%
 							}
 							%>

@@ -257,7 +257,7 @@ smartMessage.bundle['ko'] = {
 	commentTaskForwardConfirm : "업무전달을 완료하려고 합니다. 정말로 완료하시겠습니까? ",
 	leaveGroupConfirmation : "그룹을 탈퇴하려고 합니다. 정말로 탈퇴하시겠습니까? ",
 	pushoutGroupMemberConfirmation : "그룹구성원을 강퇴하려고 합니다. 정말로 강퇴시키시겠습니까? ",
-	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
+	removeMailFolderConfirmation : "메일폴더를 삭제하려고 합니다. 폴더를 삭제하면 안에 있는 모든 메일들도 같이 삭제됩니다. 정말로 삭제하시겠습니까?",
 	addAdjunctConfirmation : "겸직원을 추가하려고 합니다. 정말로 추가하시겠습니까?",
 	removeCommentConfirmation : "댓글을 삭제하려고 합니다. 정말로 삭제하시겠습니까?",
 	

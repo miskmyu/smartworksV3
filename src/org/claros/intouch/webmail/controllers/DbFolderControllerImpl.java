@@ -136,7 +136,7 @@ public class DbFolderControllerImpl implements FolderController {
 			dao = Utility.getDbConnection();
 			String username = auth.getEmailId();
 		
-			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=?";
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? ORDER BY FOLDER_NAME ASC";
 			List folders = dao.readList(FolderDbObject.class, sql, new Object[] {username});
 		
 			myList = new ArrayList();
@@ -169,7 +169,7 @@ public class DbFolderControllerImpl implements FolderController {
 			String username = auth.getEmailId();
 			Long lParent = (SmartUtil.isBlankObject(parentId)) ? new Long(0) : new Long(parentId);
 		
-			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND PARENT_ID = ?";
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND PARENT_ID = ? ORDER BY FOLDER_NAME ASC";
 			List folders = dao.readList(FolderDbObject.class, sql, new Object[] {username, lParent});
 		
 			myList = new ArrayList();
@@ -567,15 +567,16 @@ public class DbFolderControllerImpl implements FolderController {
 		if (getDraftsFolder() == null) {
 			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_DRAFTS(profile), Constants.FOLDER_TYPE_DRAFTS));
 		}
-		if (getBackupFolder() == null && profile.isAutoBackup()) {
-			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_BACKUP(profile), Constants.FOLDER_TYPE_BACKUP));
-		}
-		if (getBackupInboxFolder() == null && profile.isAutoBackup()) {
-			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile), Constants.FOLDER_TYPE_B_INBOX));
-		}
-		if (getBackupSentFolder() == null && profile.isAutoBackup()) {
-			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_SENT(profile), Constants.FOLDER_TYPE_B_SENT));
-		}
+		
+//		if (getBackupFolder() == null && profile.isAutoBackup()) {
+//			createFolder(new FolderDbObject(null, new Long(0), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_BACKUP(profile), Constants.FOLDER_TYPE_BACKUP));
+//		}
+//		if (getBackupInboxFolder() == null && profile.isAutoBackup()) {
+//			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile), Constants.FOLDER_TYPE_B_INBOX));
+//		}
+//		if (getBackupSentFolder() == null && profile.isAutoBackup()) {
+//			createFolder(new FolderDbObject(null, getBackupFolder().getId(), auth.getEmailId(), org.claros.commons.mail.utility.Constants.FOLDER_SENT(profile), Constants.FOLDER_TYPE_B_SENT));
+//		}
 	}
 
 	/* (non-Javadoc)

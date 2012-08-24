@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
@@ -58,6 +59,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -494,6 +496,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			if (frmType != null && frmType.equalsIgnoreCase(IFormModel.TYPE_SINGLE))
 				continue;
 			String frmCtt = retrieveFormContent(frm.getId());
+
 			if (frmCtt == null)
 				continue;
 			frmCList.add(frmCtt);
@@ -502,6 +505,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			obj.setFormContentList(frmCList);
 		
 		obj = SmartServerModelUtil.clonePackage(obj);
+		
 		obj.setCategoryId(categoryId);
 		if (!CommonUtil.isEmpty(targetPackageName)) {
 			obj.setName(targetPackageName);
@@ -529,6 +533,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			String name = pkg.getName();
 			String desc = pkg.getDescription();
 			String ctt = pkg.getContent();
+			
 			List<String> formCttList = pkg.getFormContentList();
 			
 			if (pkgId == null)
@@ -571,6 +576,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 					}
 					
 				} else if (type.equals(IPackageModel.TYPE_SINGLE)) {
+					
 					Element docElem = null;
 					String frmId = null;
 					if (ctt != null) {
@@ -621,6 +627,7 @@ public class HbResourceDesigntimeDaoImpl extends HibernateDaoSupport implements 
 			if (formCttList != null && !formCttList.isEmpty()) {
 				for (Iterator<String> formItr = formCttList.iterator(); formItr.hasNext();) {
 					String frmCtt = formItr.next();
+
 					Element docElem = XmlUtil.parse(frmCtt, false, "UTF-8").getDocumentElement();
 					String frmId = docElem.getAttribute("id");
 					String frmName = docElem.getAttribute("name");

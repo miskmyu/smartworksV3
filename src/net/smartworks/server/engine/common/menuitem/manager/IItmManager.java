@@ -25,13 +25,15 @@ public interface IItmManager extends IManager {
 
 	public int getMaxItmSeq(String userId) throws ItmException;
 
-	
+
+	//이동예정
 	public FormChange getFormChange(String userId, String objId, String level) throws ItmException;
 	public void setFormChange(String userId, FormChange formChange, String level) throws ItmException;
 	public FormChange getFormChange(String userId, FormChangeCond cond, String level) throws ItmException;
 	public FormChange[] getFormChanges(String userId, FormChangeCond cond, String level) throws ItmException;
-	
 	public CategoryChange getCategoryChange(String userId, String objId, String level) throws ItmException;
 	public void setCategoryChange(String userId, CategoryChange categoryChange, String level) throws ItmException;
+	public void copyAllCategory(String targetCtgId, String parentCtgId) throws Exception;
+	
 	
 }

@@ -249,7 +249,7 @@ smartMessage.bundle['en'] = {
 	commentTaskApprovalConfirm : "Do you really want to perform the Approval task? ",
 	leaveGroupConfirmation : "Do you really want to leave this Group? ",
 	pushoutGroupMemberConfirmation : "Do you really want to push out the Group Member? ",
-	removeMailFolderConfirmation : "Do you really want to remove Mail Folder? ",
+	removeMailFolderConfirmation : "All the mails in the Folder would be deleted if you remove this Folder. Do you really want to remove Mail Folder? ",
 	addAdjunctConfirmation : "Do you really want to add Adjunct Member? ",
 	removeCommentConfirmation : "Do you really want to remove the Comment?",
 	

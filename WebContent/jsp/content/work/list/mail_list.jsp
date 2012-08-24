@@ -48,6 +48,7 @@
 	selectListParam = function(progressSpan, isGray){
 		var mailList = $('.js_mail_list_page');
 		var forms = mailList.find('form:visible');
+		var searchForm = $('.js_mail_list_title_page').find('form:visible');
 		var paramsJson = {};
 		var workId = mailList.attr('workId');
 		paramsJson["href"] = "jsp/content/work/list/mail_instance_list.jsp?workId=" + workId;
@@ -58,6 +59,8 @@
 				paramsJson[form.attr('name')] = mergeObjects(form.serializeObject(), SmartWorks.GridLayout.serializeObject(form));
 			}
 		}
+		paramsJson[searchForm.attr('name')] = mergeObjects(searchForm.serializeObject(), SmartWorks.GridLayout.serializeObject(searchForm));
+		
 		if(!isEmpty(searchFilters)){
 			var searchFilterArray = new Array();
 			for(var i=0; i<searchFilters.length; i++){
@@ -93,7 +96,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 타이틀 -->
-<div class="body_titl list">
+<div class="body_titl list js_mail_list_title_page">
 	<div class="body_titl_area ti_mail title">
 		<div class="title myspace_h"><%=mailFolder.getName() %>
 			<span class="t_mail"><span class="t_s11"><fmt:message key="mail.title.count.unread"/></span><span class="new_mail <%=unreadCountTarget%>"><%=mailFolder.getUnreadItemCount() %></span><span class="bar"> / </span><%=mailFolder.getTotalItemCount() %></span><span class=" t_s11"><fmt:message key="mail.title.count"/></span>
@@ -101,12 +104,13 @@
 	</div>
 
 	<!-- 메일 검색 -->
-	<div class="mail_srch">
+	<form name="frmSearchInstance" class="mail_srch">
+		<span class="js_progress_span"></span>
 		<div class="srch_wh srch_wsize_mail">
-			<input id="" class="nav_input" type="text" href="" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
-			<button onclick="" title="<fmt:message key="search.search"/>"></button>
+			<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
+			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parent().prev('.js_progress_span:first'), false);return false;"></button>
 		</div>
-	</div>
+	</form>
 	<!-- 메일 검색//-->
 
 	<div class="solid_line cb"></div>

@@ -49,7 +49,7 @@
 		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
 	</class>
 	
-	<class name="FormChange" table="FormChange">
+	<!-- <class name="FormChange" table="FormChange">
 		<id name="objId" type="string" length="50" unsaved-value="undefined">
 			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
 		</id>
@@ -63,7 +63,7 @@
 		</id>
 		<property name="oldCategoryId" type="string" length="100"/>
 		<property name="newCategoryId" type="string" length="100"/>
-	</class>
+	</class> -->
 	
 	
 </hibernate-mapping>

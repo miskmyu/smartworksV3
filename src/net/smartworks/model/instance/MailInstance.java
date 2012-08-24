@@ -7,9 +7,12 @@ import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class MailInstance extends Instance {
+	
+	public final static int BRIEF_EMAILADDRESS_COUNT = 3;
 
 	private User sender;
 	private LocalDate sendDate;
@@ -167,6 +170,25 @@ public class MailInstance extends Instance {
 		return shown;
 	}
 	
+	public String getReceiversShownBrief(){
+		if(SmartUtil.isBlankObject(this.receivers)) return "";
+		String shown = receivers[0].getEmailAddressShown();
+		for(int i=1; i<this.receivers.length; i++){
+			if(i==BRIEF_EMAILADDRESS_COUNT){
+				String usersShown = this.getBccReceiversShown().replaceAll("<", "&lt;");
+				usersShown = usersShown.replaceAll(">", "&gt;");
+				usersShown = usersShown.replaceAll("\"", "&quot;");
+				usersShown = usersShown.replaceAll("\'", "&#39;");
+				shown = shown + " <a href='' class='js_show_all_users_shown' usersShown=\"" + usersShown + "\">" 
+						+ SmartMessage.getString("content.sentence.with_other_users", new Object[]{this.receivers.length-BRIEF_EMAILADDRESS_COUNT})
+						+ "</a>";
+				break;
+			}
+			shown = shown + ", " +  receivers[i].getEmailAddressShown();
+		}
+		return shown;
+	}
+	
 	public String getReceiversHtml(){
 		if(SmartUtil.isBlankObject(this.receivers)) return "";
 		String userField = "";
@@ -178,8 +200,28 @@ public class MailInstance extends Instance {
 	public String getCcReceiversShown(){
 		if(SmartUtil.isBlankObject(this.ccReceivers)) return "";
 		String shown = ccReceivers[0].getEmailAddressShown();
-		for(int i=1; i<this.ccReceivers.length; i++)
+		for(int i=1; i<this.ccReceivers.length; i++){
 			shown = shown + ", " +  ccReceivers[i].getEmailAddressShown();
+		}
+		return shown;		
+	}
+	
+	public String getCcReceiversShownBrief(){
+		if(SmartUtil.isBlankObject(this.ccReceivers)) return "";
+		String shown = ccReceivers[0].getEmailAddressShown();
+		for(int i=1; i<this.ccReceivers.length; i++){
+			if(i==BRIEF_EMAILADDRESS_COUNT){
+				String usersShown = this.getCcReceiversShown().replaceAll("<", "&lt;");
+				usersShown = usersShown.replaceAll(">", "&gt;");
+				usersShown = usersShown.replaceAll("\"", "&quot;");
+				usersShown = usersShown.replaceAll("\'", "&#39;");
+				shown = shown + " <a href='' class='js_show_all_users_shown' usersShown=\"" + usersShown + "\">" 
+						+ SmartMessage.getString("content.sentence.with_other_users", new Object[]{this.ccReceivers.length-BRIEF_EMAILADDRESS_COUNT})
+						+ "</a>";
+				break;
+			}
+			shown = shown + ", " +  ccReceivers[i].getEmailAddressShown();
+		}
 		return shown;		
 	}
 	
@@ -194,8 +236,28 @@ public class MailInstance extends Instance {
 	public String getBccReceiversShown(){
 		if(SmartUtil.isBlankObject(this.bccReceivers)) return "";
 		String shown = bccReceivers[0].getEmailAddressShown();
-		for(int i=1; i<this.bccReceivers.length; i++)
+		for(int i=1; i<this.bccReceivers.length; i++){
 			shown = shown + ", " +  bccReceivers[i].getEmailAddressShown();
+		}
+		return shown;		
+	}
+
+	public String getBccReceiversShownBrief(){
+		if(SmartUtil.isBlankObject(this.bccReceivers)) return "";
+		String shown = bccReceivers[0].getEmailAddressShown();
+		for(int i=1; i<this.bccReceivers.length; i++){
+			if(i==BRIEF_EMAILADDRESS_COUNT){
+				String usersShown = this.getBccReceiversShown().replaceAll("<", "&lt;");
+				usersShown = usersShown.replaceAll(">", "&gt;");
+				usersShown = usersShown.replaceAll("\"", "&quot;");
+				usersShown = usersShown.replaceAll("\'", "&#39;");
+				shown = shown + " <a href='' class='js_show_all_users_shown' usersShown=\"" + usersShown  + "\">" 
+						+ SmartMessage.getString("content.sentence.with_other_users", new Object[]{this.bccReceivers.length-BRIEF_EMAILADDRESS_COUNT})
+						+ "</a>";
+				break;
+			}
+			shown = shown + ", " +  bccReceivers[i].getEmailAddressShown();
+		}
 		return shown;		
 	}
 
