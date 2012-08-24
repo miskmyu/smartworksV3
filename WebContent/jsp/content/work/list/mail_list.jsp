@@ -134,7 +134,7 @@
 						if(!SmartUtil.isBlankObject(folders)){
 							for(int i=0; i<folders.length; i++){
 								MailFolder folder = folders[i];
-								if(folder.getType() != MailFolder.TYPE_USER || folder.getId().equals(folderId)) continue;
+								if(folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS || folder.getId().equals(folderId) || folder.getType() == MailFolder.TYPE_SYSTEM_TRASH) continue;
 						%>
 								<option value=<%=folder.getId() %>><%=folder.getName() %></option>
 						<%

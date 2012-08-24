@@ -413,8 +413,9 @@ public class DbMailControllerImpl implements MailController {
 	public void moveEmails(int[] msgs, String destFolder) throws Exception {
 		FolderControllerFactory fact = new FolderControllerFactory(auth, profile, handler);
 		FolderController cont = fact.getFolderController();
-		FolderDbObject foldObj = cont.getInboxFolder();
-
+		//2012.08.24 임시저장함으로 변경
+		FolderDbObject foldObj = cont.getDraftsFolder();
+		//jy.bae 
 		// message can not be moved to the INBOX
 		if (foldObj.getId().toString().equals(destFolder)) {
 			throw new SystemException();
