@@ -17,7 +17,7 @@
 
 <!--  전체 레이아웃 -->
 	<!-- 팝업 컨텐츠 -->
-		<div class="pop_list_area">
+		<div class="pop_list_area mail_address">
 			<ul>
 				<li class="js_drill_down">
 					<div>

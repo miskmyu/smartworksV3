@@ -689,7 +689,7 @@ button.space {height: 18px; padding: 1px 3px}
 .nav_mail_list {height: 16px; vertical-align: top !important}
 .nav_mail_list span {vertical-align: top !important; color: #FFA24D}
 .nav_mail_list span b {vertical-align: top !important}
-	
+a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
