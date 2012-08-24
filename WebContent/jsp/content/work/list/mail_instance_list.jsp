@@ -60,7 +60,7 @@
 <table>
 		<%
 		SortingField sortedField = null;
-		int pageSize = 0, totalPages = 0, currentPage = 0;
+		int pageSize = instanceList.getPageSize(), totalPages = instanceList.getTotalPages(), currentPage = instanceList.getCurrentPage();
 		if (instanceList != null && !SmartUtil.isBlankObject(instanceList.getInstanceDatas()) && (work != null)) {
 			int type = instanceList.getType();
 			sortedField = instanceList.getSortedField();
