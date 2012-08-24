@@ -413,4 +413,12 @@ $(function() {
 		return true;
 	});
 
+	$('.js_show_all_users_shown').live('click', function(e){
+		var input = $(targetElement(e));
+		var usersShown = input.attr('usersShown');
+		usersShown = usersShown.replace(/</g, "&lt;");
+		usersShown = usersShown.replace(/>/g, "&gt;");
+		input.parent().html(usersShown);
+		return false;
+	});
 });

@@ -19,7 +19,7 @@ function loadMyProfileField() {
 			});
 		}		
 	}
-	
+		
 	var mySignPictureFields = $('div.js_my_signpic_field');
 	if(!isEmpty(mySignPictureFields)) {
 		for(var i=0; i<mySignPictureFields.length; i++) {
@@ -39,6 +39,31 @@ function loadMyProfileField() {
 				required: false
 			});
 		}		
+	}
+
+	var emailSignatureFields = $('div.js_email_signature_field:visible');
+	if(!isEmpty(emailSignatureFields)) {
+		for(var i=0; i<emailSignatureFields.length; i++) {
+			var emailSignatureField = $(emailSignatureFields[i]);
+			
+			var signature = emailSignatureField.attr('signature');
+			var gridRow = SmartWorks.GridLayout.newGridRow();
+			var gridTable = SmartWorks.GridLayout.newGridTable();
+			emailSignatureField.html(gridTable.html(gridRow));
+
+			SmartWorks.FormRuntime.RichEditorBuilder.buildEx({
+				container: gridRow,
+				fieldId: "emailSignature",
+				fieldName: "",
+				columns: 1,
+				value: signature,
+				required: false
+			});
+			gridRow.find('.form_label').hide();
+			gridRow.find('.form_value').css({width:"100%"});
+			gridRow.find('#emailSignature').css({height:"200px"});			
+		}
+		
 	}
 };
 

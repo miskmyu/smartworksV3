@@ -640,6 +640,7 @@ $(function() {
 		var emailAccountInfos = input.parents('tr').nextAll('.js_email_account_info');
 		if(input.is(':checked')){
 			emailAccountInfos.show();
+			loadMyProfileField();
 		}else{
 			emailAccountInfos.hide();			
 		}

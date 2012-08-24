@@ -9,6 +9,7 @@ public class AuthProfile {
     private String password;
     private String emailId;
     private boolean deleteAfterFetched=false;
+    private String signature; 
 
     public AuthProfile() {
         super();
@@ -54,4 +55,13 @@ public class AuthProfile {
 	public void setDeleteAfterFetched(boolean deleteAfterFetched) {
 		this.deleteAfterFetched = deleteAfterFetched;
 	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	
 }
