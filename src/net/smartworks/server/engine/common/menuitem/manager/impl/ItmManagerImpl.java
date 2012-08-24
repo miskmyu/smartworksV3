@@ -8,6 +8,9 @@ import java.util.List;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.menuitem.exception.ItmException;
 import net.smartworks.server.engine.common.menuitem.manager.IItmManager;
+import net.smartworks.server.engine.common.menuitem.model.CategoryChange;
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
+import net.smartworks.server.engine.common.menuitem.model.FormChangeCond;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItem;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemList;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemListCond;
@@ -325,5 +328,133 @@ public class ItmManagerImpl extends AbstractManager implements IItmManager {
 		return maxItmSeq;
 
 	}
-
+	@Override
+	public FormChange getFormChange(String userId, String objId, String level) throws ItmException {
+		try {
+			FormChange obj = (FormChange)this.get(FormChange.class, objId);
+			return obj;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	@Override
+	public void setFormChange(String userId, FormChange obj, String level) throws ItmException {
+		try {
+			fill(userId, obj);
+			set(obj);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	@Override
+	public CategoryChange getCategoryChange(String userId, String objId, String level) throws ItmException {
+		try {
+			CategoryChange obj = (CategoryChange)this.get(CategoryChange.class, objId);
+			return obj;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	@Override
+	public void setCategoryChange(String userId, CategoryChange obj, String level) throws ItmException {
+		try {
+			fill(userId, obj);
+			set(obj);
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	@Override
+	public FormChange getFormChange(String userId, FormChangeCond cond, String level) throws ItmException {
+		if (level == null)
+			level = LEVEL_ALL;
+		cond.setPageSize(2);
+		FormChange[] FormChangeLists = getFormChanges(userId, cond, level);
+		if (CommonUtil.isEmpty(FormChangeLists))
+			return null;
+		try {
+			if (FormChangeLists.length != 1)
+				throw new ItmException("More than 1 Object");
+		} catch (ItmException e) {
+			logger.error(e, e);
+			throw e;
+		}
+		return FormChangeLists[0];
+	}
+	
+	public FormChange[] getFormChanges(String userId, FormChangeCond cond, String level) throws ItmException {
+		try {
+			if (level == null)
+				level = LEVEL_ALL;
+			StringBuffer buf = new StringBuffer();
+			buf.append("select");
+			if (level.equals(LEVEL_ALL)) {
+				buf.append(" obj");
+			} else {
+				buf.append(" obj.objId, obj.oldFormId, obj.newFormId"); 
+			}
+			Query query = this.appendQuery(buf, cond);
+			List list = query.list();
+			if (list == null || list.isEmpty())
+				return null;
+			if (!level.equals(LEVEL_ALL)) {
+				List objList = new ArrayList();
+				for (Iterator itr = list.iterator(); itr.hasNext();) {
+					Object[] fields = (Object[]) itr.next();
+					FormChange obj = new FormChange();
+					int j = 0;
+					obj.setObjId((String)fields[j++]);
+					obj.setOldFormId((String)fields[j++]);
+					obj.setNewFormId((String)fields[j++]);
+					objList.add(obj);
+				}
+				list = objList;
+			}
+			FormChange[] objs = new FormChange[list.size()];
+			list.toArray(objs);
+			return objs;
+		} catch (Exception e) {
+			logger.error(e, e);
+			throw new ItmException(e);
+		}
+	}
+	private Query appendQuery(StringBuffer buf, FormChangeCond cond) throws Exception {
+		String objId = null;
+		String oldFormId = null;
+		String newFormId = null;
+		
+		FormChange[] formChange = null;
+		
+		if (cond != null) {
+			objId = cond.getObjId();
+			oldFormId = cond.getOldFormId();
+			newFormId = cond.getNewFormId();
+		}
+		buf.append(" from FormChange obj");
+		buf.append(" where obj.objId is not null");
+		if (cond != null) {
+			if (objId != null)
+				buf.append(" and obj.objId =:objId");
+			if (oldFormId != null)
+				buf.append(" and obj.oldFormId =:oldFormId");
+			if (newFormId != null)
+				buf.append(" and obj.newFormId =:newFormId");
+		}
+		this.appendOrderQuery(buf, "obj", cond);
+		
+		Query query = this.createQuery(buf.toString(), cond);
+		if (cond != null) {
+			if (objId != null)
+				query.setString("objId", objId);
+			if (oldFormId != null)
+				query.setString("oldFormId", oldFormId);
+			if (newFormId != null)
+				query.setString("newFormId", newFormId);
+		}		
+		return query;
+	}
 }

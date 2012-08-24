@@ -206,7 +206,10 @@
 	 									</jsp:include> 
 	 								<%
 					 				} else if (fieldType.equals(FormField.TYPE_OTHER_WORK)) {
-					 					String operandValue = URLEncoder.encode(((Work) rightOperand).getName(), "UTF-8");
+					 					//2012.08.23 상세필터를 다른업무참조필드로 항목으로 저장후 검색하면 안보이고, 수정,삭제 못하는 현상 수정
+					 					//String operandValue = URLEncoder.encode(((Work) rightOperand).getName(), "UTF-8");
+					 					String operandValue = URLEncoder.encode((String) rightOperand, "UTF-8");
+					 					//end jybae
 									 %> 
 									 	<jsp:include page="/jsp/content/work/field/work_field.jsp">
 									 		<jsp:param name="operator" value="<%=operator%>" />
