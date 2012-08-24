@@ -35,7 +35,6 @@ import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.mail.MailFolder;
 import net.smartworks.model.notice.Notice;
-import net.smartworks.model.notice.NoticeMessage;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -130,12 +129,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		String username = mailAccounts[0].getUserName();
 		String password = mailAccounts[0].getPassword();
 		boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
+		boolean isUseSignature = mailAccounts[0].isUseSignature();
+		String signature = mailAccounts[0].getSignature();
 		if (username != null && password != null) {
 			auth = new AuthProfile();
 			auth.setEmailId(emailId);
 			auth.setUsername(username);
 			auth.setPassword(password);
 			auth.setDeleteAfterFetched(isDeleteAfterFetched);
+			auth.setSignature(isUseSignature ? signature : "");
 		}
 
 		try {
@@ -195,12 +197,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
 			boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
+			boolean isUseSignature = mailAccounts[0].isUseSignature();
+			String signature = mailAccounts[0].getSignature();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
 				auth.setDeleteAfterFetched(isDeleteAfterFetched);
+				auth.setSignature(isUseSignature ? signature : "");
 			}
 	    }
 
@@ -259,12 +264,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			String username = mailAccounts[0].getUserName();
 			String password = mailAccounts[0].getPassword();
 			boolean isDeleteAfterFetched = (profile.isDeleteFetched()) ? true : mailAccounts[0].isDeleteAfterFetched();
+			boolean isUseSignature = mailAccounts[0].isUseSignature();
+			String signature = mailAccounts[0].getSignature();
 			if (username != null && password != null) {
 				auth = new AuthProfile();
 				auth.setEmailId(emailId);
 				auth.setUsername(username);
 				auth.setPassword(password);
 				auth.setDeleteAfterFetched(isDeleteAfterFetched);
+				auth.setSignature(isUseSignature ? signature : "");
 			}
 	    }
 
@@ -1298,28 +1306,8 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			cleaner.clean(false,false);
 			*/
 			
-//String appendSignature = PropertyFile.getConfiguration("/config/config.xml").getString("common-params.append-signature");
-//String sign = "";
-//if (appendSignature != null && appendSignature.toLowerCase().equals("true")) {
-//	Cache cache = CacheManager.getContent("server.signature");
-//	if (cache == null) {
-//		BufferedInputStream is = new BufferedInputStream(new FileInputStream(Paths.getCfgFolder() + "/server_signature.txt"));
-//		int byte_;
-//		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//		while ((byte_ = is.read ()) != -1) {
-//			bos.write (byte_);
-//		}
-//		is.close();
-//		sign = new String(bos.toByteArray());
-//		bos.close();
-//		
-//		cache = new Cache();
-//		CacheManager.putContent("server.signature", sign, Integer.MAX_VALUE);
-//	} else {
-//		sign = (String)cache.getValue();
-//	}
-//}
-//body = body + sign;
+			body = body + auth.getSignature();
+
 			bodyPart.setContent(body);
 			parts.add(0, bodyPart);
 			
@@ -1707,9 +1695,23 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				AuthProfile auth = getAuthProfile(request);
 				ConnectionMetaHandler handler = (ConnectionMetaHandler)request.getSession().getAttribute("handler");
 				ConnectionProfile profile = (ConnectionProfile)request.getSession().getAttribute("profile");
+
 				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = factory.getFolderController();
+
+				List mails = foldCont.getMailsByFolder(folderId);
+				if(!SmartUtil.isBlankObject(mails)){
+					int[] msgs = new int[mails.size()];
+					for(int i=0; i<mails.size(); i++){
+						msgs[i] = ((MsgDbObject)mails.get(i)).getId().intValue();
+					}
+					MailControllerFactory mailFactory = new MailControllerFactory(auth, profile, handler, folderId);
+					MailController mailCont = mailFactory.getMailController();
+					mailCont.moveEmails(msgs, foldCont.getTrashFolder().getId().toString());
+				}
+
 				foldCont.deleteFolder(folderId);
+
 			}
 
 		} catch (Exception e) {
