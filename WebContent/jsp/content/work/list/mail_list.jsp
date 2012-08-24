@@ -105,12 +105,12 @@
 
 	<!-- 메일 검색 -->
 	<form name="frmSearchInstance" class="mail_srch">
-		<span class="js_progress_span"></span>
 		<div class="srch_wh srch_wsize_mail">
 			<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
-			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parent().prev('.js_progress_span:first'), false);return false;"></button>
+			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parents('.js_mail_list_title_page').find('.js_progress_span:first'), false);return false;"></button>
 		</div>
 	</form>
+	<span class="js_progress_span fr" style="margin:30px 5px 0 0"></span>
 	<!-- 메일 검색//-->
 
 	<div class="solid_line cb"></div>
@@ -138,7 +138,7 @@
 						if(!SmartUtil.isBlankObject(folders)){
 							for(int i=0; i<folders.length; i++){
 								MailFolder folder = folders[i];
-								if(folder.getType() != MailFolder.TYPE_USER || folder.getId().equals(folderId)) continue;
+								if(folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS || folder.getId().equals(folderId) || folder.getType() == MailFolder.TYPE_SYSTEM_TRASH) continue;
 						%>
 								<option value=<%=folder.getId() %>><%=folder.getName() %></option>
 						<%

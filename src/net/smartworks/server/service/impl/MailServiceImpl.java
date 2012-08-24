@@ -577,7 +577,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			mailContentCond.setUnread(unread);
 
 			String searchKey = params.getSearchKey();
-			mailContentCond.setSearchKey(searchKey);
+			mailContentCond.setSearchKey(CommonUtil.toNull(searchKey));
 
 			long totalCount = getMailManager().getMailContentSize(userId, mailContentCond);
 

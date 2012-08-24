@@ -60,7 +60,7 @@
 <table>
 		<%
 		SortingField sortedField = null;
-		int pageSize = 0, totalPages = 0, currentPage = 0;
+		int pageSize = instanceList.getPageSize(), totalPages = instanceList.getTotalPages(), currentPage = instanceList.getCurrentPage();
 		if (instanceList != null && !SmartUtil.isBlankObject(instanceList.getInstanceDatas()) && (work != null)) {
 			int type = instanceList.getType();
 			sortedField = instanceList.getSortedField();
@@ -68,7 +68,11 @@
 		%>
 			<tr class="tit_bg">
 				<th class="check"><input type="checkbox" class="js_toggle_select_all" /></th>
-				<th class="important"><div class="icon_important"></div></th>
+				<th class="important">
+					<a href="" class="js_select_field_sorting"><div fieldId="<%=MailContent.A_PRIORITY%>" class="icon_important"></div>
+					</a>
+						<span class="js_progress_span"></span>
+				</th>
 				<th class="read r_line">
 					<a href="" class="js_select_field_sorting"><div fieldId="<%=MailContent.A_UNREAD%>" class="icon_mail_read"></div>
 					</a>
