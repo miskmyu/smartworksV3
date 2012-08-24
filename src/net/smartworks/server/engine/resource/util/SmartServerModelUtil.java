@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.smartworks.server.engine.common.menuitem.model.FormChange;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.common.util.id.IDCreator;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.process.xpdl.util.ProcessModelHelper;
 import net.smartworks.server.engine.process.xpdl.xpdl2.PackageType;
 import net.smartworks.server.engine.resource.exception.SmartServerRuntimeException;
@@ -85,6 +87,17 @@ public class SmartServerModelUtil {
 				if (oldFrmId == null || oldFrmId.length() == 0)
 					continue;
 				newFrmId = IDCreator.createId(SmartServerConstant.FORM_ABBR);
+				
+				//KMYU 20120823 DELETE
+				FormChange fc = new FormChange();
+				fc.setOldFormId(oldFrmId);
+				fc.setNewFormId(newFrmId);
+				try {
+					SwManagerFactory.getInstance().getItmManager().setFormChange("", fc, null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 				frmElem.setAttribute("id", newFrmId);
 				frmElem.setAttribute("version", version+CommonUtil.EMPTY);
 				frmIdMap.put(oldFrmId, newFrmId);
@@ -142,6 +155,20 @@ public class SmartServerModelUtil {
 				} catch (Exception e) {
 					throw new SmartServerRuntimeException(e);
 				}
+				String oldFormId = frmElem.getAttribute("id");
+				String newFormId = frmId;
+				
+				//KMYU 20120823 DELETE
+				FormChange fc = new FormChange();
+				fc.setOldFormId(oldFormId);
+				fc.setNewFormId(newFormId);
+				try {
+					SwManagerFactory.getInstance().getItmManager().setFormChange("", fc, null);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				System.out.println(oldFormId + ":" + newFormId);
 				frmElem.setAttribute("id", frmId);
 				try {
 					ctt = XmlUtil.elementToString(frmElem, "UTF-8", true, true);

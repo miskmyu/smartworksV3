@@ -21,7 +21,6 @@ import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.docfile.exception.DocFileException;
 
 import org.hibernate.Query;
 
@@ -232,7 +231,6 @@ public class LoginUserManagerImpl extends AbstractManager implements ILoginUserM
 		} catch (Exception e) {
 			throw new LoginUserException(e);
 		}
-		
 	}
 
 }

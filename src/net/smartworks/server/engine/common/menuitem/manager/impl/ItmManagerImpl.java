@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import net.smartworks.server.engine.category.model.CtgCategory;
+import net.smartworks.server.engine.category.model.CtgCategoryCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.menuitem.exception.ItmException;
 import net.smartworks.server.engine.common.menuitem.manager.IItmManager;
@@ -15,8 +17,18 @@ import net.smartworks.server.engine.common.menuitem.model.ItmMenuItem;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemList;
 import net.smartworks.server.engine.common.menuitem.model.ItmMenuItemListCond;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.pkg.model.PkgPackage;
+import net.smartworks.server.engine.pkg.model.PkgPackageCond;
+import net.smartworks.server.engine.resource.exception.SmartServerRuntimeException;
+import net.smartworks.server.engine.resource.model.IPackageModel;
+import net.smartworks.server.engine.resource.util.XmlUtil;
 
 import org.hibernate.Query;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ItmManagerImpl extends AbstractManager implements IItmManager {
 
@@ -377,8 +389,11 @@ public class ItmManagerImpl extends AbstractManager implements IItmManager {
 		if (CommonUtil.isEmpty(FormChangeLists))
 			return null;
 		try {
-			if (FormChangeLists.length != 1)
+			if (FormChangeLists.length != 1) {
+				System.out.println("oldFormId : " + cond.getOldFormId());
 				throw new ItmException("More than 1 Object");
+				
+			}
 		} catch (ItmException e) {
 			logger.error(e, e);
 			throw e;
@@ -456,5 +471,313 @@ public class ItmManagerImpl extends AbstractManager implements IItmManager {
 				query.setString("newFormId", newFormId);
 		}		
 		return query;
+	}
+	
+	public void copyAllCategory(String targetCtgId, String parentCtgId) throws Exception {
+		
+		List packageList = new ArrayList();
+		copyAllCategory(targetCtgId, parentCtgId, packageList);
+		System.out.println("##################################################################################################");
+		System.out.println("END OF COPY CATEGORY AND PACKAGE - total packageCount : " + packageList.size());
+		System.out.println("##################################################################################################");
+		for (int i = 0; i < packageList.size(); i++) {
+			IPackageModel pkg = (IPackageModel)packageList.get(i);
+			populateNewMappingFormIdToCopyPackage(pkg);
+			System.out.println(" 0.5 초간 딜레이! ");
+			Thread.sleep(500);
+		}
+		
+	}
+	
+	
+	public void copyAllCategory(String targetCtgId, String parentCtgId, List packageList) throws Exception {
+		
+		
+		//카테고리를 복사를 한다
+		CtgCategory ctg = SwManagerFactory.getInstance().getCtgManager().getCategory("kmyu@maninsoft.co.kr", targetCtgId, null);
+		
+		if (ctg == null)
+			return;
+		String oldCtgId = ctg.getObjId();
+		
+		CtgCategory newCtg = (CtgCategory)ctg.clone();
+		
+		String newCtgId = CommonUtil.newId();
+		
+		newCtg.setParentId(parentCtgId);
+		newCtg.setObjId(newCtgId);
+		newCtg.setName(newCtg.getName());
+		
+		SwManagerFactory.getInstance().getCtgManager().setCategory("kmyu@maninsoft.co.kr", newCtg, null);
+		CategoryChange cc = new CategoryChange();
+		cc.setOldCategoryId(oldCtgId);
+		cc.setNewCategoryId(newCtgId);
+		SwManagerFactory.getInstance().getItmManager().setCategoryChange("kmyu@maninsoft.co.kr", cc, null);
+		System.out.println(newCtg.getName() + " 카테고리 생성 (old : " + oldCtgId + " , new : " + newCtgId + ")" );
+		
+		this.copyAllPackage(oldCtgId, newCtgId, packageList);
+		
+		CtgCategoryCond subCtgCond = new CtgCategoryCond();
+		subCtgCond.setParentId(oldCtgId);
+		CtgCategory[] subCtgs = SwManagerFactory.getInstance().getCtgManager().getCategorys("", subCtgCond, null);
+		
+		if (subCtgs == null || subCtgs.length == 0)
+			return;
+		for (int i = 0; i < subCtgs.length; i++) {
+			CtgCategory subCtg = subCtgs[i];
+			copyAllCategory(subCtg.getObjId(), newCtgId, packageList);
+		}
+	}
+	
+	
+	public void copyAllPackage(String categoryId, String targetCategoryId, List packageList) throws Exception {
+		
+		PkgPackageCond pkgCond = new PkgPackageCond();
+		pkgCond.setCategoryId(categoryId);
+		PkgPackage[] pkgs = SwManagerFactory.getInstance().getPkgManager().getPackages("kmyu@maninsoft.co.kr", pkgCond, null);
+		if (pkgs == null || pkgs.length == 0)
+			return;
+		for (int i = 0; i < pkgs.length; i++) {
+			PkgPackage pkg = pkgs[i];
+			IPackageModel newPkg = SwManagerFactory.getInstance().getDesigntimeManager().clonePackage("kmyu@maninsoft.co.kr", targetCategoryId, pkg.getName() , "설명", pkg.getPackageId(), 1);
+			if (!packageList.contains(newPkg))
+				packageList.add(newPkg);
+			System.out.println(newPkg.getName() + " 패키지 생성 (old : " + pkg.getPackageId() + " , new : " + newPkg.getPackageId() + ")" );
+
+			System.out.println(" 0.5 초간 딜레이! ");
+			Thread.sleep(500);
+			
+		}
+	}
+	
+	public void populateNewMappingFormIdToCopyPackage(IPackageModel pkg) throws Exception {
+		
+		List formList = pkg.getFormContentList();
+		String formCnt = pkg.getContent();
+		
+		if (formList != null && !formList.isEmpty()) {
+			for (Iterator<String> formItr = formList.iterator(); formItr.hasNext();) {
+				String formXml = formItr.next();
+
+				if (CommonUtil.isEmpty(formXml))
+					return;
+				
+				Document doc = XmlUtil.parse(formXml, false, "UTF-8");
+				Element root = doc.getDocumentElement();
+				
+				String formId = root.getAttribute("id");
+				String version = root.getAttribute("version");
+				String formName = root.getAttribute("name");
+				String formTitle = root.getAttribute("title");
+				String formSystemName = root.getAttribute("systemName");
+				
+				Node childrenNode = XmlUtil.getXpathNode(root, "./mappingForms");
+				if (childrenNode == null)
+					return;
+
+				NodeList entityNodeList = XmlUtil.getXpathNodeList(childrenNode, "./mappingForm");
+				if (CommonUtil.isEmpty(entityNodeList)) {
+					System.out.println("Not Exist mappingForm Form! ");
+				} else {
+					for(int i = 0 ; i < entityNodeList.getLength() ; i++) {
+						Element entity = (Element)entityNodeList.item(i);
+						String targetFormId = entity.getAttribute("targetFormId");
+						String newTargetFormId = null;
+
+						FormChangeCond formChangeCond = new FormChangeCond();
+						formChangeCond.setOldFormId(targetFormId);
+						FormChange formChange = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond, null);
+						
+						if (CommonUtil.isEmpty(formChange)) {
+							FormChangeCond formChangeCond2 = new FormChangeCond();
+							formChangeCond2.setNewFormId(targetFormId);
+							FormChange formChange2 = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond2, null);
+							if (CommonUtil.isEmpty(formChange2)) {
+								System.out.println("########## targetFormId : "+targetFormId+"  ############## FORM UPDATE : FORMID - " + formId + " #############################");
+							} else {
+								System.out.println("## already change formId : " + targetFormId);
+							}
+						} else {
+							newTargetFormId = formChange.getNewFormId();
+							entity.setAttribute("targetFormId", newTargetFormId);
+						}
+					}
+				}
+				
+				//다른업무 참조
+				
+				Node childrenNode2 = XmlUtil.getXpathNode(root, "./children");
+				NodeList entityNodeList2 = XmlUtil.getXpathNodeList(childrenNode2, "./formEntity");
+				
+				for(int i = 0 ; i < entityNodeList2.getLength() ; i++) {
+					Element entity = (Element)entityNodeList2.item(i);
+					String fieldId = entity.getAttribute("id");
+					Element format = (Element)XmlUtil.getXpathNode(entity, "./format");
+
+					if (format != null) {
+						String formatType = format.getAttribute("type");
+						if (formatType.equalsIgnoreCase("refFormField")) {
+
+							Element refForm = (Element)XmlUtil.getXpathNode(format, "./refForm");
+							if (refForm != null) {
+								String id = refForm.getAttribute("id");
+								
+								String newTargetFormId = null;
+
+								FormChangeCond formChangeCond = new FormChangeCond();
+								formChangeCond.setOldFormId(id);
+								FormChange formChange = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond, null);
+								
+								if (CommonUtil.isEmpty(formChange)) {
+									FormChangeCond formChangeCond2 = new FormChangeCond();
+									formChangeCond2.setNewFormId(id);
+									FormChange formChange2 = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond2, null);
+									if (CommonUtil.isEmpty(formChange2)) {
+										System.out.println("######## id : "+id+"  ################ FAIL FORM UPDATE REF FORMID : FORMID - " + formId + "#############################");
+									} else {
+										System.out.println("## already change formId : " + id);
+									}
+								} else {
+									newTargetFormId = formChange.getNewFormId();
+									refForm.setAttribute("id", newTargetFormId);
+								}
+							}
+						}
+					}
+				}
+
+				
+				//필드별 맵핑
+
+
+				Node childrenNode3 = XmlUtil.getXpathNode(root, "./children");
+				NodeList entityNodeList3 = XmlUtil.getXpathNodeList(childrenNode3, "./formEntity");
+				
+				for(int i = 0 ; i < entityNodeList3.getLength() ; i++) {
+					Element entity = (Element)entityNodeList3.item(i);
+					String fieldId = entity.getAttribute("id");
+					Element mappings = (Element)XmlUtil.getXpathNode(entity, "./mappings");
+					if (mappings == null)
+						continue;
+					Element pre = (Element)XmlUtil.getXpathNode(mappings, "./pre");
+					NodeList preMappingList = XmlUtil.getXpathNodeList(pre, "./mapping");
+					Element post = (Element)XmlUtil.getXpathNode(mappings, "./post");
+					NodeList potMappingList = XmlUtil.getXpathNodeList(post, "./mapping");
+
+					//가져오기 맵핑
+					if (!CommonUtil.isEmpty(preMappingList) && preMappingList.getLength() != 0) {
+						for(int j = 0 ; j < preMappingList.getLength() ; j++) {
+							Element entity2 = (Element)preMappingList.item(j);
+							String mappingFormId = entity2.getAttribute("mappingFormId");
+
+							String newTargetFormId = null;
+
+							FormChangeCond formChangeCond = new FormChangeCond();
+							formChangeCond.setOldFormId(mappingFormId);
+							FormChange formChange = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond, null);
+
+							if (CommonUtil.isEmpty(formChange)) {
+								FormChangeCond formChangeCond2 = new FormChangeCond();
+								formChangeCond2.setNewFormId(mappingFormId);
+								FormChange formChange2 = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond2, null);
+								if (CommonUtil.isEmpty(formChange2)) {
+									System.out.println("######### mappingFormId : "+mappingFormId+"  ############### FAIL FORM UPDATE : FORMID - " + formId + "#############################");
+								} else {
+									System.out.println("## already change formId : " + mappingFormId);
+								}
+							} else {
+								newTargetFormId = formChange.getNewFormId();
+								entity2.setAttribute("mappingFormId", newTargetFormId);
+							}
+						}
+					}
+
+					
+					
+					//내보내기 맵핑
+					if (!CommonUtil.isEmpty(potMappingList) && potMappingList.getLength() !=0) {
+						for(int j = 0 ; j < potMappingList.getLength() ; j++) {
+							Element entity2 = (Element)potMappingList.item(j);
+							String mappingFormId = entity2.getAttribute("mappingFormId");
+
+							String newTargetFormId = null;
+
+							FormChangeCond formChangeCond = new FormChangeCond();
+							formChangeCond.setOldFormId(mappingFormId);
+							FormChange formChange = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond, null);
+
+							if (CommonUtil.isEmpty(formChange)) {
+								FormChangeCond formChangeCond2 = new FormChangeCond();
+								formChangeCond2.setNewFormId(mappingFormId);
+								FormChange formChange2 = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond2, null);
+								if (CommonUtil.isEmpty(formChange2)) {
+									System.out.println("######### mappingFormId : "+mappingFormId+"  ############### FAIL FORM UPDATE : FORMID - " + formId + "#############################");
+								} else {
+									System.out.println("## already change formId : " + mappingFormId);
+								}
+							} else {
+								newTargetFormId = formChange.getNewFormId();
+								entity2.setAttribute("mappingFormId", newTargetFormId);
+							}
+						}
+					}
+				}	
+				updateFormContent(formId, 1, net.smartworks.server.engine.common.util.XmlUtil.toXmlString(doc));
+				System.out.println(formId + " 폼(프로세스) mapping Info 업데이트 완료!! ");
+			}
+		} else if (!CommonUtil.isEmpty(formCnt)) {
+			
+			Document doc = XmlUtil.parse(formCnt, false, "UTF-8");
+			Element root = doc.getDocumentElement();
+			
+			String formId = root.getAttribute("id");
+			String version = root.getAttribute("version");
+			String formName = root.getAttribute("name");
+			String formTitle = root.getAttribute("title");
+			String formSystemName = root.getAttribute("systemName");
+			
+			Node childrenNode = XmlUtil.getXpathNode(root, "./mappingForms");
+			if (childrenNode == null)
+				return;
+
+			NodeList entityNodeList = XmlUtil.getXpathNodeList(childrenNode, "./mappingForm");
+			if (CommonUtil.isEmpty(entityNodeList))
+				return;
+			
+			for(int i = 0 ; i < entityNodeList.getLength() ; i++) {
+				Element entity = (Element)entityNodeList.item(i);
+				String targetFormId = entity.getAttribute("targetFormId");
+				String newTargetFormId = null;
+
+				FormChangeCond formChangeCond = new FormChangeCond();
+				formChangeCond.setOldFormId(targetFormId);
+				FormChange formChange = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond, null);
+				
+				if (CommonUtil.isEmpty(formChange)) {
+					FormChangeCond formChangeCond2 = new FormChangeCond();
+					formChangeCond2.setNewFormId(targetFormId);
+					FormChange formChange2 = SwManagerFactory.getInstance().getItmManager().getFormChange("", formChangeCond2, null);
+					if (CommonUtil.isEmpty(formChange2)) {
+						System.out.println("########### targetFormId : "+targetFormId+"  ############# FAIL FORM UPDATE : FORMID - " + formId + "#############################");
+					} else {
+						System.out.println("## already change formId : " + targetFormId);
+					}
+				} else {
+					newTargetFormId = formChange.getNewFormId();
+					entity.setAttribute("targetFormId", newTargetFormId);
+				}
+			}
+			updateFormContent(formId, 1, net.smartworks.server.engine.common.util.XmlUtil.toXmlString(doc));
+			System.out.println(formId + " 폼(정보관리) mapping Info 업데이트 완료!! ");
+		}
+	}
+
+	private void updateFormContent(String formId, int version, String content) throws SmartServerRuntimeException {
+		String hql = "update HbFormContent set content = :content where formId = :formId and version = :version";
+		Query query = this.getSession().createQuery(hql);
+		query.setString("content", content);
+		query.setString("formId", formId);
+		query.setInteger("version", version);
+		query.executeUpdate();
 	}
 }

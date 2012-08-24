@@ -228,12 +228,13 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 22px; float: left; height:18px}
 
 /* Nav Mail Btn*/
-.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 25px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_notread {background: url("../../images/nav_img.png") no-repeat -113px -560px; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px}
@@ -684,11 +685,11 @@ button.space {height: 18px; padding: 1px 3px}
 .mail_list_section .view_title dl { clear:both; font-size:12px; margin:0 0 10px; overflow:hidden}
 .mail_list_section .view_title dt { clear:both; float:left; min-width:65px; text-align:right; color:#919191}
 .mail_list_section .view_title dd { margin:0 0 0 70px; word-wrap: break-word}
-.mail_list_section .read_frame { margin:10px}
+.mail_list_section .read_frame { margin:10px; overflow-y: auto}
 .nav_mail_list {height: 16px; vertical-align: top !important}
 .nav_mail_list span {vertical-align: top !important; color: #FFA24D}
 .nav_mail_list span b {vertical-align: top !important}
-	
+a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}	
 /* Icon */
 .icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
 .icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}

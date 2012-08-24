@@ -26,6 +26,9 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <ul>
+	<!-- 안 읽은 편지함 
+	<li><a href=""><span class="icon_mail_notread"></span> 안읽음 [<b></b>]</a></li>
+	-->
 	<%
 	if(folders != null){
 		for (MailFolder folder : folders) {
