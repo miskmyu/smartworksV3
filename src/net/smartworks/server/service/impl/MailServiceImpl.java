@@ -1160,6 +1160,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 //						mailContent = new String(mailContent.getBytes("8859_1"), "euc-kr");
 					}
 					mailContent = mailContent.replace('\"', '\'');
+					mailContent = mailContent.replace("&lt;", "<");
+					mailContent = mailContent.replace("&gt;", ">");
+					
 				}
 				instance.setMailContents(mailContent);
 				instance.setAttachments(finalAttachments);

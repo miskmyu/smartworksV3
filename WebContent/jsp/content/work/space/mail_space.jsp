@@ -187,15 +187,20 @@
 	});
  */
  var reloadMailContent = function(){	
-/* 
+  
  	var title = $('.js_mail_space_page').find('iframe').contents().find('title');
  	var body = $('.js_mail_space_page').find('iframe').contents().find('body');
- 	var titleHtml = title[0].innerHTML;
+ 	var titleHtml = title.html();
  	if(titleHtml!="" && body.html()=="" && titleHtml.indexOf('iframe')>0){
+// 		titleHtml = titleHtml.replace('&lt;/head&gt;', '');
+// 		titleHtml = titleHtml.replace(/&lt;/html&gt;$/, '');
+ 		titleHtml = titleHtml.replace(/&lt;/g, '<');
+ 		titleHtml = titleHtml.replace(/&gt;/g, '>');
+ 		console.log('titleHtml=', titleHtml);
   		title.html('');
-  		$('.js_mail_space_page').find('iframe').contents().find('body')[0].innerHTML=titleHtml;
+  		$('.js_mail_space_page').find('iframe').contents().find('body').html(titleHtml);
  	}
-  */	
+ 	
 	doIframeAutoHeight();
  };
 </script>
