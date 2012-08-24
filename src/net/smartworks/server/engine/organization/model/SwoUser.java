@@ -68,6 +68,7 @@ public class SwoUser extends SwoObject {
 	private String position;
 	private String email;
 	private boolean useMail;
+	private boolean useSign;
 	private String lang;
 	private String locale;
 	private String timeZone;
@@ -77,7 +78,6 @@ public class SwoUser extends SwoObject {
 	private String mobileNo;
 	private String extensionNo;
 	private String sign;
-	private boolean useSign;
 
 	public SwoUser() {
 		super();
@@ -434,5 +434,4 @@ public class SwoUser extends SwoObject {
 	public void setUseSign(boolean useSign) {
 		this.useSign = useSign;
 	}
-
 }

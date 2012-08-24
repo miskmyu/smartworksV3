@@ -60,6 +60,8 @@
 		<property name="mailUserName" column="mailUserName" type="string" length="50"/>
 		<property name="mailPassword" column="mailPassword" type="string" length="50" not-null="true"/>
 		<property name="mailDeleteFetched" column="mailDeleteFetched" type="string" length="10"/>
+		<property name="useMailSign" column="useMailSign" type="boolean"/>
+		<property name="mailSignature" column="mailSignature" type="string" length="4000"/>
 		<property name="creationUser" column="creator" type="string" length="30"/>
 		<property name="creationDate" column="createdTime" type="timestamp"/>
 		<property name="modificationUser" column="modifier" type="string" length="30"/>

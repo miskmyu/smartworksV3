@@ -870,6 +870,8 @@ public class WorkServiceImpl implements IWorkService {
 			String selUserProfileEmailServerName = null;
 			String chkUserProfileEmailDeleteFetched = null;
 			String pwUserProfileEmailPW = null;
+			String emailSignature = null;
+			String chkUserProfileEmailUseSign = null;
 
 			while (itr.hasNext()) {
 				String fieldId = (String)itr.next();
@@ -918,6 +920,10 @@ public class WorkServiceImpl implements IWorkService {
 						chkUserProfileEmailDeleteFetched = valueString;
 					else if(fieldId.equals("pwUserProfileEmailPW"))
 						pwUserProfileEmailPW = valueString;
+					else if(fieldId.equals("emailSignature"))
+						emailSignature = valueString;
+					else if(fieldId.equals("chkUserProfileEmailUseSign"))
+						chkUserProfileEmailUseSign = valueString;
 				}
 			}
 
@@ -953,6 +959,7 @@ public class WorkServiceImpl implements IWorkService {
 			user.setMobileNo(txtUserProfileCellNo);
 			user.setPosition(txtUserProfilePosition);
 			user.setEmpNo(txtUserProfileEmpId);
+			
 			try {
 				getSwoManager().setUser(txtUserProfileUserId, user, null);
 				MailAccountCond mailAccountCond = new MailAccountCond();
@@ -976,6 +983,12 @@ public class WorkServiceImpl implements IWorkService {
 					if (!CommonUtil.isEmpty(chkUserProfileEmailDeleteFetched) && chkUserProfileEmailDeleteFetched.equalsIgnoreCase("on"))
 						mailDeleteFetched = "true";
 					mailAccount.setMailDeleteFetched(mailDeleteFetched);
+					mailAccount.setMailSignature(emailSignature);
+					if (chkUserProfileEmailUseSign != null && chkUserProfileEmailUseSign.equalsIgnoreCase("on")) {
+						mailAccount.setUseMailSign(true);
+					} else {
+						mailAccount.setUseMailSign(false);
+					}
 					getMailManager().setMailAccount(txtUserProfileUserId, mailAccount, IManager.LEVEL_ALL);
 					ConnectionProfile profile = null;
 					ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();

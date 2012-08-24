@@ -242,5 +242,4 @@ public class SwoUserExtend {
 	public void setModifiedTime(Date modifiedTime) {
 		this.modifiedTime = modifiedTime;
 	}
-
 }
