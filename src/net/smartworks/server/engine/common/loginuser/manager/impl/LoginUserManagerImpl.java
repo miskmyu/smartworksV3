@@ -14,30 +14,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import net.smartworks.server.engine.category.model.CtgCategory;
-import net.smartworks.server.engine.category.model.CtgCategoryCond;
 import net.smartworks.server.engine.common.loginuser.exception.LoginUserException;
 import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
 import net.smartworks.server.engine.common.loginuser.model.LoginUser;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
 import net.smartworks.server.engine.common.loginuser.model.LoginUserHistory;
 import net.smartworks.server.engine.common.manager.AbstractManager;
-import net.smartworks.server.engine.common.menuitem.model.CategoryChange;
-import net.smartworks.server.engine.common.menuitem.model.FormChange;
-import net.smartworks.server.engine.common.menuitem.model.FormChangeCond;
 import net.smartworks.server.engine.common.util.CommonUtil;
-import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.pkg.model.PkgPackage;
-import net.smartworks.server.engine.pkg.model.PkgPackageCond;
-import net.smartworks.server.engine.resource.exception.SmartServerRuntimeException;
-import net.smartworks.server.engine.resource.model.IPackageModel;
-import net.smartworks.server.engine.resource.util.XmlUtil;
 
 import org.hibernate.Query;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class LoginUserManagerImpl extends AbstractManager implements ILoginUserManager {
 
@@ -246,125 +231,6 @@ public class LoginUserManagerImpl extends AbstractManager implements ILoginUserM
 		} catch (Exception e) {
 			throw new LoginUserException(e);
 		}
-		
 	}
 
-	public void copyAllCategory(String targetCtgId, String parentCtgId) throws Exception {
-		
-		
-		//카테고리를 복사를 한다
-		CtgCategory ctg = SwManagerFactory.getInstance().getCtgManager().getCategory("jybae@maninsoft.co.kr", targetCtgId, null);
-		
-		if (ctg == null)
-			return;
-		String oldCtgId = ctg.getObjId();
-		
-		CtgCategory newCtg = (CtgCategory)ctg.clone();
-		
-		String newCtgId = "newCtg_"+CommonUtil.newId();
-		
-		newCtg.setParentId(parentCtgId);
-		newCtg.setObjId(newCtgId);
-		newCtg.setName("복사본_" + newCtg.getName());
-		
-		SwManagerFactory.getInstance().getCtgManager().setCategory("jybae@maninsoft.co.kr", newCtg, null);
-		CategoryChange cc = new CategoryChange();
-		cc.setOldCategoryId(oldCtgId);
-		cc.setNewCategoryId(newCtgId);
-		SwManagerFactory.getInstance().getItmManager().setCategoryChange("jybae@maninsoft.co.kr", cc, null);
-		System.out.println(newCtg.getName() + " 카테고리 생성 (old : " + oldCtgId + " , new : " + newCtgId + ")" );
-		
-		this.copyAllPackage(oldCtgId, newCtgId);
-		
-		CtgCategoryCond subCtgCond = new CtgCategoryCond();
-		subCtgCond.setParentId(oldCtgId);
-		CtgCategory[] subCtgs = SwManagerFactory.getInstance().getCtgManager().getCategorys("", subCtgCond, null);
-		
-		if (subCtgs == null || subCtgs.length == 0)
-			return;
-		for (int i = 0; i < subCtgs.length; i++) {
-			CtgCategory subCtg = subCtgs[i];
-			copyAllCategory(subCtg.getObjId(), newCtgId);
-		}
-	}
-	
-	
-	public void copyAllPackage(String categoryId, String targetCategoryId) throws Exception {
-		
-		PkgPackageCond pkgCond = new PkgPackageCond();
-		pkgCond.setCategoryId(categoryId);
-		PkgPackage[] pkgs = SwManagerFactory.getInstance().getPkgManager().getPackages("jybae@maninsoft.co.kr", pkgCond, null);
-		if (pkgs == null || pkgs.length == 0)
-			return;
-		for (int i = 0; i < pkgs.length; i++) {
-			PkgPackage pkg = pkgs[i];
-			IPackageModel newPkg = SwManagerFactory.getInstance().getDesigntimeManager().clonePackage("jybae@maninsoft.co.kr", targetCategoryId, "복사본_" + pkg.getName() , "설명", pkg.getPackageId(), 1);
-			System.out.println(newPkg.getName() + " 패키지 생성 (old : " + pkg.getPackageId() + " , new : " + newPkg.getPackageId() + ")" );
-			System.out.println(" 1 초간 딜레이! ");
-			Thread.sleep(1000);
-			populateNewMappingFormIdToCopyPackage(newPkg);
-			
-		}
-	}
-	
-	public void populateNewMappingFormIdToCopyPackage(IPackageModel pkg) throws Exception {
-		
-		List formList = pkg.getFormContentList();
-		
-		if (formList != null && !formList.isEmpty()) {
-			for (Iterator<String> formItr = formList.iterator(); formItr.hasNext();) {
-				String formXml = formItr.next();
-
-				if (CommonUtil.isEmpty(formXml))
-					return;
-				
-				Document doc = XmlUtil.parse(formXml, false, "UTF-8");
-				Element root = doc.getDocumentElement();
-				
-				String formId = root.getAttribute("id");
-				String version = root.getAttribute("version");
-				String formName = root.getAttribute("name");
-				String formTitle = root.getAttribute("title");
-				String formSystemName = root.getAttribute("systemName");
-				
-				Node childrenNode = XmlUtil.getXpathNode(root, "./mappingForms");
-				if (childrenNode == null)
-					return;
-
-				NodeList entityNodeList = XmlUtil.getXpathNodeList(childrenNode, "./mappingForm");
-				if (CommonUtil.isEmpty(entityNodeList))
-					return;
-				
-				for(int i = 0 ; i < entityNodeList.getLength() ; i++) {
-					Element entity = (Element)entityNodeList.item(i);
-					String targetFormId = entity.getAttribute("targetFormId");
-					String newTargetFormId = null;
-
-					FormChangeCond formChangeCond = new FormChangeCond();
-					formChangeCond.setOldFormId(targetFormId);
-					FormChange formChange = null;//SwManagerFactory.getInstance().getItmManager().getFormChanges("", formChangeCond, null);
-					
-					if (CommonUtil.isEmpty(newTargetFormId)) {
-						System.out.println("######################## FAIL FORM UPDATE : FORMID - " + formId + "#############################");
-					} else {
-						newTargetFormId = formChange.getNewFormId();
-					}
-					entity.setAttribute("targetFormId", newTargetFormId);
-				}
-				updateFormContent(formId, 1, net.smartworks.server.engine.common.util.XmlUtil.toXmlString(doc));
-				System.out.println(formId + " 폼 mapping Info 업데이트 완료!! ");
-				System.out.println(" 1 초간 딜레이! ");
-				Thread.sleep(1000);
-			}
-		}
-	}
-
-	private void updateFormContent(String formId, int version, String content) throws SmartServerRuntimeException {
-		String hql = "update HbFormContent set content = :content where formId = :formId and version = :version";
-		Query query = this.getSession().createQuery(hql);
-		query.setString("content", content);
-		query.setString("formId", formId);
-		query.setInteger("version", version);
-		query.executeUpdate();
-	}
 }

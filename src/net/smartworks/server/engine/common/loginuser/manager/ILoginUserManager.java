@@ -26,13 +26,5 @@ public interface ILoginUserManager {
 	public void deleteAllLoginUser(String user) throws LoginUserException;
 	
 	public void setLoginUserHistory(String user, LoginUserHistory obj) throws LoginUserException;
-
-	
-	
-	//삭제예정
-	public void copyAllCategory(String targetCtgId, String parentCtgId) throws Exception;
-	
-	
-	
 	
 }
