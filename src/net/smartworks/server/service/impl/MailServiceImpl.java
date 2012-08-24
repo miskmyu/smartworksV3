@@ -1309,7 +1309,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			cleaner.clean(false,false);
 			*/
 			
-			body = body + auth.getSignature();
+//			body = body + "<br/><br/><br/><br/>" +  auth.getSignature();
 
 			bodyPart.setContent(body);
 			parts.add(0, bodyPart);

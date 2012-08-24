@@ -104,6 +104,9 @@ function submitForms(action) {
 		instance.setReceivers(new User[]{receiver});
 	}
 	
+	if(!SmartUtil.isBlankObject(cUser.getMailAccounts()) && cUser.getMailAccounts()[0].isUseSignature()){
+		instance.setMailContents(instance.getMailContents() + "<br/><br/><br/>" + cUser.getMailAccounts()[0].getSignature().replace("\"", "\'"));
+	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
