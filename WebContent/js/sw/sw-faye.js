@@ -1,12 +1,7 @@
 
 
-// 모든 화면이 브라우저에 로드되면, smartTalk를 초기화하여 채팅, 알림, 전체알림기능들을 사용할 수 있게 한다.
-$(document).ready(function(){
- 	smartTalk.init();
-});
-
 // 채팅서버의 연결할 url, faye Context, etc...
-var serverUrl = "http://" + document.domain + ":8011";
+var serverUrl = "http://localhost:8011";
 var swContext = "/faye";
 var currentUserId = currentUser.userId;
 
@@ -670,6 +665,18 @@ var smartTalk = {
 	}
 };
 
+//모든 화면이 브라우저에 로드되면, smartTalk를 초기화하여 채팅, 알림, 전체알림기능들을 사용할 수 있게 한다.
+$(document).ready(function(){
+	$.ajax({
+		url : 'get_server_ip_address.sw',
+		success : function(data, status, jqXHR) {
+			serverUrl = "http://" + data + ":8011";
+		 	smartTalk.init();
+		 	console.log('Message Server = ' + serverUrl + " is initialized successfully !!!");
+		}
+	});
+	
+});
 
 
 //	var repeat1 = function() {
