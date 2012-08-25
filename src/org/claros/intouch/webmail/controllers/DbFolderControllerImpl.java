@@ -136,7 +136,7 @@ public class DbFolderControllerImpl implements FolderController {
 			dao = Utility.getDbConnection();
 			String username = auth.getEmailId();
 		
-			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? ORDER BY FOLDER_NAME ASC";
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? ORDER BY PARENT_ID ASC, FOLDER_TYPE ASC, FOLDER_NAME ASC";
 			List folders = dao.readList(FolderDbObject.class, sql, new Object[] {username});
 		
 			myList = new ArrayList();
@@ -219,15 +219,17 @@ public class DbFolderControllerImpl implements FolderController {
 		return fld;
 	}
 
-	public FolderDbObject getFolderByName(String folderName) throws Exception {
+	public FolderDbObject getFolderByName(String parentId, String folderName) throws Exception {
 		IGenericDao dao = null;
 		FolderDbObject fld = null;
+		
+		Long lFolder = (SmartUtil.isBlankObject(parentId)) ? 0 : new Long(parentId);		
 		try {			
 			dao = Utility.getDbConnection();
 			String username = auth.getEmailId();
 			
-			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND FOLDER_NAME = ?";
-			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, folderName});
+			String sql = "SELECT * FROM FOLDER_DB_OBJECTS WHERE USERNAME=? AND PARENT_ID = ? AND FOLDER_NAME = ?";
+			fld = (FolderDbObject)dao.read(FolderDbObject.class, sql, new Object[] {username, lFolder, folderName});
 		}catch (Exception e){
 			e.printStackTrace();
 		} finally {

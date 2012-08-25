@@ -431,7 +431,7 @@ public class SmartUtil {
 		return info;
 	}
 	
-	public static String getFilesDetailInfo(List<Map<String, String>> files){
+	public static String getFilesDetailInfo(List<Map<String, String>> files, String workId, String taskInstId, String recordId){
 		String html = "<ul>";
 		if(SmartUtil.isBlankObject(files)) return html;
 		for(int i=0; i<files.size(); i++){
@@ -442,7 +442,7 @@ public class SmartUtil {
 			String fileSize = file.get("fileSize");
 			long size = (SmartUtil.isBlankObject(fileSize)) ? 0 : Long.parseLong(fileSize);
 			html = html + "<li><span class='vm icon_file_" + (SmartUtil.isBlankObject(fileType) ? "none" : fileType.toLowerCase()) + "'></span><a href='download_file.sw?fileId=" + fileId + 
-							"&fileName=" + fileName + "' class='qq-upload-file'>" + fileName + "</a><span class='qq-upload-size'>" + SmartUtil.getBytesAsString(size) + "</span></li>";
+					"&fileName=" + fileName + "&workId=" + workId + "&taskInstId=" + taskInstId + "&recordId=" + recordId + "' class='qq-upload-file'>" + fileName + "</a><span class='qq-upload-size'>" + SmartUtil.getBytesAsString(size) + "</span></li>";
 		}
 		return html = html + "</ul>";
 	}

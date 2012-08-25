@@ -108,7 +108,7 @@
 								<div><%=board.getBriefContent()%></div>
 							</a>
 
-							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles()) %></div><%} %>
+							<%if(!SmartUtil.isBlankObject(board.getFiles())){ %><div><%=SmartUtil.getFilesDetailInfo(board.getFiles(), work.getId(), null, board.getId()) %></div><%} %>
 							
 						</div>
 					</div>
@@ -165,7 +165,7 @@
 							
 							<%if(!SmartUtil.isBlankObject(file.getFiles())){ %>
 								<div>
-								<%=SmartUtil.getFilesDetailInfo(file.getFiles()) %>
+								<%=SmartUtil.getFilesDetailInfo(file.getFiles(), work.getId(), null, file.getId()) %>
 								</div>
 							<%} %>
 							<%if(!SmartUtil.isBlankObject(file.getContent())){ %>

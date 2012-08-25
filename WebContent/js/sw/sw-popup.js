@@ -259,28 +259,33 @@ smartPop = {
 	progressTarget : "",
 	progressCenter : function(){
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo($(document));
-		smartPop.overlay();
+		if(!$.browser.msie)
+			smartPop.overlay();
 	},
 	
 	progressCont : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo(target);
-		smartPop.overlay();
+		if(!$.browser.msie)
+			smartPop.overlay();
 	},
 	progressContGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh_02.gif" align="bottom"/>').appendTo(target);
-		smartPop.overlay();
+		if(!$.browser.msie)
+			smartPop.overlay();
 	},
 	progressNav : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr.gif" align="bottom"/>').appendTo(target);
-		smartPop.overlay();
+		if(!$.browser.msie)
+			smartPop.overlay();
 	},
 	progressNavGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr_02.gif" align="bottom"/>').appendTo(target);
-		smartPop.overlay();
+		if(!$.browser.msie)
+			smartPop.overlay();
 	},
 
 	closeProgress : function(){
@@ -837,8 +842,10 @@ smartPop = {
 		});
 	},	
 
-	createMailFolder : function(folderId, folderName, folderDesc){
-		$.get("pop_new_mail_folder.sw?folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
+	createMailFolder : function(folderId, folderName, folderDesc, parentId, parentName){
+		parentId = (isEmpty(parentId)) ? null : parentId;
+		parentName = (isEmpty(parentName)) ? "" : parentName;
+		$.get("pop_new_mail_folder.sw?parentId=" + parentId + "&parentName="+ parentName + "&folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
 			$(data).modal({
 				opacity: 50,
 				overlayCss: {backgroundColor:"#fff"},
