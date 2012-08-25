@@ -485,6 +485,8 @@ public class SmartUtil {
 	}
 	
 	public static String getSubjectString(String userId){
+		if (CommonUtil.isEmpty(userId))
+			return null;
 		return userId.replace('.' , '_');
 	}
 	
