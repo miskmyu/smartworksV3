@@ -153,7 +153,7 @@
 										<%}%>>
 										<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
 										<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
-												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml()%>">
+												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>">
 										<%	} %>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
 										<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>

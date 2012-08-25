@@ -6,6 +6,7 @@ import java.util.Map;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.instance.Instance;
 import net.smartworks.model.work.FileCategory;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.util.LocalDate;
@@ -76,7 +77,7 @@ public class FileInstanceInfo extends WorkInstanceInfo {
 
 	public String getFilesHtml(){
 		if(SmartUtil.isBlankObject(this.fileGroupId) || SmartUtil.isBlankObject(this.files)) return "";
-		return SmartUtil.getFilesDetailInfo(this.files);
+		return SmartUtil.getFilesDetailInfo(this.files, SmartWork.ID_FILE_MANAGEMENT, null, this.getId());
 	}
 	
 }
