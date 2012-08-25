@@ -8,14 +8,18 @@
 
 package net.smartworks.controller;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.smartworks.model.instance.info.EventInstanceInfo;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
+import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,5 +178,11 @@ public class CommunityController {
 	public @ResponseBody void updateDepartmentSetting(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		smartworks.updateDepartmentSetting(requestBody, request);
 	}
+
+	@RequestMapping(value = "/get_server_ip_address", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody String getServerIPAddress(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		return InetAddress.getLocalHost().getHostAddress();
+	}	
 
 }
