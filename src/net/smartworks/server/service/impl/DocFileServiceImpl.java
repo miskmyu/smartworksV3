@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.docfile.exception.DocFileException;
 import net.smartworks.server.engine.docfile.manager.IDocFileManager;
@@ -31,7 +33,13 @@ import net.smartworks.server.engine.docfile.model.FileDownloadHistory;
 import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.process.task.model.TskTask;
+import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.server.engine.worklist.model.TaskWork;
+import net.smartworks.server.engine.worklist.model.TaskWorkCond;
 import net.smartworks.server.service.IDocFileService;
+import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.util.OSValidator;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartUtil;
@@ -166,7 +174,11 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 	
 	    		String fileId = request.getParameter("fileId");
 	    		String fileName = request.getParameter("fileName");
-	
+	    		
+	    		String packageId = CommonUtil.toNull(request.getParameter("workId"));
+	    		String taskInstId = CommonUtil.toNull(request.getParameter("taskInstId"));
+	    		String recordId = CommonUtil.toNull(request.getParameter("recordId"));
+	    		
 	    		User user = SmartUtil.getCurrentUser();
 	
 	    		String sourceFile = "";
@@ -203,7 +215,7 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 	    		}
 	    		
 	    		//파일 다운로드 이력을 남긴다
-	    		saveFileDownloadHistory(user.getId(), doc);
+	    		saveFileDownloadHistory(user.getId(), doc, packageId, taskInstId, recordId);
 	    		
 	    	}catch(Throwable t){
 	    		t.printStackTrace();
@@ -228,7 +240,7 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 			// Exception Handling Required			
 		}
 	}
-	private void saveFileDownloadHistory(String userId, IFileModel file) throws Exception {
+	private void saveFileDownloadHistory(String userId, IFileModel file, String packageId, String taskInstId, String recordId) throws Exception {
 		
 		FileDownloadHistory obj = getDocManager().getFileDownloadHistoryInfoByFileId(file.getId());
 		if (obj == null) {
@@ -237,6 +249,37 @@ public class DocFileServiceImpl extends AbstractManager implements IDocFileServi
 		obj.setFileId(file.getId());
 		obj.setFileName(file.getFileName());
 		obj.setDownloadUserId(userId);
+		
+		if (!CommonUtil.isEmpty(packageId) && !obj.getRefPackageId().equalsIgnoreCase(packageId)) {
+
+			if (CommonUtil.isEmpty(taskInstId)) {
+				TskTaskCond tskTaskCond = new TskTaskCond();
+				tskTaskCond.setExtendedProperties(new Property[]{new Property("recordId", recordId)});
+				TskTask[] tskTasks = SwManagerFactory.getInstance().getTskManager().getTasks(userId, tskTaskCond, IManager.LEVEL_LITE);
+				if (tskTasks != null && tskTasks.length != 0) {
+					taskInstId = tskTasks[0].getObjId();
+				}
+			}
+			TaskWorkCond taskCond = new TaskWorkCond();
+			taskCond.setTskObjIdIns(new String[]{taskInstId});
+			TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskCond);
+			if (taskWork != null && taskWork.length != 0) {
+				TaskWork task = taskWork[0];
+				String taskId = task.getTskObjId();
+				String taskName = task.getTskName();
+				String prcInstId = task.getPrcObjId();
+				String prcInstName = task.getPrcTitle();
+				String pkgId = task.getPackageId();
+				String pkgName = task.getPackageName();
+				
+				obj.setRefTaskId(taskId);
+				obj.setRefTaskName(taskName);
+				obj.setRefPrcInstId(prcInstId);
+				obj.setRefPrcInstName(prcInstName);
+				obj.setRefPackageId(pkgId);
+				obj.setRefPackageName(pkgName);
+			}
+		}
 		
 		getDocManager().createFileDownloadHistory(userId, obj);
 		
