@@ -672,7 +672,7 @@ public class CommonUtil {
 		if (str == null || str.length() == 0)
 			return true;
 		String tmp = str.trim();
-		return tmp.length() == 0 || tmp.equals(NULL) || tmp.equals("undefined");
+		return tmp.length() == 0 || tmp.equalsIgnoreCase(NULL) || tmp.equalsIgnoreCase("undefined");
 	}
 	
 	public static boolean isEqual(Object a, Object b) {
