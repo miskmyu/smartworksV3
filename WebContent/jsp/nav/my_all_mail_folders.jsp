@@ -74,13 +74,15 @@
 			<li class="<%=listClass %> folder_actions">
 			<!--  모든폴더에 공통으로 필요한 html -->
 				<%if(folder.getType() == MailFolder.TYPE_GROUP || folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
-					<a href="my_all_mail_folders.sw" class="" folderId="<%=folder.getId()%>">
+					<a href="my_all_mail_folders.sw" class="js_mail_folder" folderId="<%=folder.getId()%>">
 				<%}else{ %>
-					<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>">
+					<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content js_mail_folder" folderId="<%=folder.getId()%>">
 				<%} %> 
 						<span class="<%=iconClass%>"></span>
-						<span class="nav_mail_list"><%=folder.getName() %><span class="<%=unreadCountTarget%>"><%if (folder.getUnreadItemCount() > 0) {%> [<b><%=folder.getUnreadItemCount()%></b>]<%}%></span></span>								
-						<span class="js_progress_span"></span>
+						<span class="nav_mail_list"><%=folder.getName() %>
+							<span class="<%=unreadCountTarget%>"><%if (folder.getUnreadItemCount() > 0) {%> [<b><%=folder.getUnreadItemCount()%></b>]<%}%></span>
+							<span class="js_progress_span"></span>
+						</span>								
 						<%
 						if(folder.getType() == MailFolder.TYPE_USER){
 						%>
