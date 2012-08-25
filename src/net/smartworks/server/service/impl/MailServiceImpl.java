@@ -469,10 +469,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							break;
 						case MailFolder.TYPE_SYSTEM_BACKUP:
 						case MailFolder.TYPE_USER:
+						case MailFolder.TYPE_GROUP:
 							index = 5 + customCount++;
 						}
 						mailFolders[index] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
 						mailFolders[index].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+						if(tmp.getParentId()>0){
+							FolderDbObjectWrapper parent = folderCont.getFolderById(tmp.getParentId().toString());
+							mailFolders[index].setParentName(parent.getFolderName());
+						}
 					}
 				}else if((Integer.parseInt(folderId) == MailFolder.TYPE_SYSTEM_BACKUP) && folders.size()==2){
 					for(int i=0; i<mailFolders.length; i++){
@@ -488,12 +493,20 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						}
 						mailFolders[index] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
 						mailFolders[index].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+						if(tmp.getParentId()>0){
+							FolderDbObjectWrapper parent = folderCont.getFolderById(tmp.getParentId().toString());
+							mailFolders[index].setParentName(parent.getFolderName());
+						}
 					}
 				}else{
 					for(int i=0; i<mailFolders.length; i++){
 						tmp = (FolderDbObjectWrapper)folders.get(i);
 						mailFolders[i] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
 						mailFolders[i].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+						if(tmp.getParentId()>0){
+							FolderDbObjectWrapper parent = folderCont.getFolderById(tmp.getParentId().toString());
+							mailFolders[i].setParentName(parent.getFolderName());
+						}
 					}					
 				}
 			}
@@ -1217,6 +1230,10 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			mailFolder = new MailFolder(fld.getId().toString(), fld.getFolderName(), fld.getFolderType());
 			mailFolder.setUnreadItemCount(fld.getUnreadItemCount().intValue());
 			mailFolder.setTotalItemCount(fld.getTotalItemCount().intValue());
+			if(fld.getParentId()>0){
+				FolderDbObjectWrapper parent = folderCont.getFolderById(fld.getParentId().toString());
+				mailFolder.setParentName(parent.getFolderName());
+			}
 			return mailFolder;
 		}catch (Exception e){
 			e.printStackTrace();
@@ -1599,6 +1616,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	@Override
 	public void newMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
+		String parentId = (String)requestBody.get("parentId");
+		String sFolderType = (String)requestBody.get("folderType");
+		int folderType = (SmartUtil.isBlankObject(sFolderType)) ? 0 : Integer.parseInt(sFolderType);
 		String folderName = (String)requestBody.get("folderName");
 		String folderDesc = (String)requestBody.get("folderDesc");
 		
@@ -1629,7 +1649,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			
 			FolderDbObject tmp = null;
 			try{
-				tmp = foldCont.getFolderByName(folderName);
+				tmp = foldCont.getFolderByName(parentId, folderName);
 			}catch(Exception e){	
 			}
 			if(tmp != null){
@@ -1637,10 +1657,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 			}
 			
 			FolderDbObject folder = new FolderDbObject();
-			folder.setFolderType(org.claros.intouch.common.utility.Constants.FOLDER_TYPE_CUSTOM);
+			folder.setFolderType(folderType);
 			folder.setFolderName(folderName);
 			folder.setUsername(auth.getEmailId());
-			folder.setParentId(new Long(0));
+			Long lParent = (SmartUtil.isBlankObject(parentId)) ? 0 : new Long(parentId);
+			folder.setParentId(lParent);
 			
 			foldCont.createFolder(folder);
 		}
@@ -1701,20 +1722,43 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 				FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
 				FolderController foldCont = factory.getFolderController();
+				
+				FolderDbObject[] folders = null;
+				FolderDbObject folder = foldCont.getFolderById(folderId);
 
-				List mails = foldCont.getMailsByFolder(folderId);
-				if(!SmartUtil.isBlankObject(mails)){
-					int[] msgs = new int[mails.size()];
-					for(int i=0; i<mails.size(); i++){
-						msgs[i] = ((MsgDbObject)mails.get(i)).getId().intValue();
+				if(folder.getFolderType() == MailFolder.TYPE_GROUP){
+					List lFolders = foldCont.getFolders(folderId);
+					if(!SmartUtil.isBlankObject(lFolders)){
+						folders = new FolderDbObject[lFolders.size()+1];
+						int index;
+						for(index=0; index<lFolders.size(); index++)
+							folders[index] = (FolderDbObject)lFolders.get(index);
+						folders[index] = folder;
+					}else{
+						folders = new FolderDbObject[]{folder};
 					}
-					MailControllerFactory mailFactory = new MailControllerFactory(auth, profile, handler, folderId);
-					MailController mailCont = mailFactory.getMailController();
-					mailCont.moveEmails(msgs, foldCont.getTrashFolder().getId().toString());
+				}else{
+					folders = new FolderDbObject[]{folder};
 				}
-
-				foldCont.deleteFolder(folderId);
-
+				
+				for(int i=0; i<folders.length; i++){
+					folderId = folders[i].getId().toString();
+					List mails = foldCont.getMailsByFolder(folderId);
+					if(!SmartUtil.isBlankObject(mails)){
+						int[] msgs = new int[mails.size()];
+						for(int j=0; j<mails.size(); j++){
+							msgs[j] = ((MsgDbObject)mails.get(j)).getId().intValue();
+						}
+						MailControllerFactory mailFactory = new MailControllerFactory(auth, profile, handler, folderId);
+						MailController mailCont = mailFactory.getMailController();
+						mailCont.moveEmails(msgs, foldCont.getTrashFolder().getId().toString());
+					}
+					try{
+						foldCont.deleteFolder(folderId);
+					}catch (Exception e){
+						e.printStackTrace();						
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -1794,5 +1838,45 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		} catch (ServerDownException e) {
 		}
 		return false;
+	}
+
+	@Override
+	public MailFolder[] getMailFolders() throws Exception {
+		try{
+			MailFolder[] mailFolders = null;
+	
+		    ConnectionMetaHandler handler = getConnectionMetaHandler();
+		    if(handler == null) return null;
+		    
+			ConnectionProfile profile = getConnectionProfile();
+			AuthProfile auth = getAuthProfile();
+			
+			FolderControllerFactory foldFact = new FolderControllerFactory(auth, profile, handler);
+			FolderController folderCont = foldFact.getFolderController();
+			
+			List folders = folderCont.getFolders();
+			if (folders != null) {
+				FolderDbObjectWrapper tmp = null;
+				mailFolders = new MailFolder[folders.size()];
+				for(int i=0; i<mailFolders.length; i++){
+					tmp = (FolderDbObjectWrapper)folders.get(i);
+					mailFolders[i] = new MailFolder(tmp.getId().toString(), tmp.getParentId().toString(), tmp.getFolderName(), tmp.getFolderType());
+					mailFolders[i].setUnreadItemCount(tmp.getUnreadItemCount().intValue());
+					if(tmp.getParentId()>0){
+						try{
+							FolderDbObject parent = folderCont.getFolderById(tmp.getParentId().toString());
+							if(parent!=null)
+								mailFolders[i].setParentName(parent.getFolderName());
+						}catch (Exception e){
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			return mailFolders;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -243,7 +243,7 @@ public class ImapFolderControllerImpl implements FolderController {
 		return item;
 	}
 
-	public FolderDbObject getFolderByName(String folder) throws Exception {
+	public FolderDbObject getFolderByName(String parentId, String folder) throws Exception {
 		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(folder);
 		Folder f = protocol.getFolder();

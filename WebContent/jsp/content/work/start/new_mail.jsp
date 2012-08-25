@@ -91,21 +91,23 @@ function submitForms(action) {
 	String msgId = request.getParameter("msgId");
 	String sSendType = request.getParameter("sendType");
 	int sendType = (SmartUtil.isBlankObject(sSendType)) ? MailFolder.SEND_TYPE_NONE : Integer.parseInt(sSendType);
-	MailInstance instance = null;
+	MailInstance instance = new MailInstance();
 	if(!SmartUtil.isBlankObject(folderId) && !SmartUtil.isBlankObject(msgId)){
 		instance = smartWorks.getMailInstanceById(folderId, msgId, sendType);
 	}else if(sendType == MailFolder.SEND_TYPE_WORK_CONTENT){
 		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
-		instance = new MailInstance();
 		instance.setMailContents(mailContents);
 	}else if(!SmartUtil.isBlankObject(receiverId)){
-		instance = new MailInstance();
 		User receiver = smartWorks.getUserById(receiverId);
 		instance.setReceivers(new User[]{receiver});
+	}else{
+		instance.setMailContents("");
 	}
 	
-	if(!SmartUtil.isBlankObject(cUser.getMailAccounts()) && cUser.getMailAccounts()[0].isUseSignature()){
-		instance.setMailContents(instance.getMailContents() + "<br/><br/><br/>" + cUser.getMailAccounts()[0].getSignature().replace("\"", "\'"));
+	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
+	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
+	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
+		instance.setMailContents(instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

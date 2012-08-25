@@ -75,6 +75,8 @@ public class MailAccount{
 	}
 
 	public String getSignature() {
+		if(SmartUtil.isBlankObject(this.signature)) return this.signature;
+		String signature = this.signature.replaceAll("\"", "\'");
 		return signature;
 	}
 

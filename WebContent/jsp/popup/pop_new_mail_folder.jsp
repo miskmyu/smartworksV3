@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.										 -->
 <!-- Created Date	: 2011.9.												 -->
 
+<%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.KeyMap"%>
@@ -19,6 +20,8 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String parentId = request.getParameter("parentId");
+	String parentName = request.getParameter("parentName");
 	String folderId = request.getParameter("folderId");
 	String folderName = request.getParameter("folderName");
 	String folderDesc = request.getParameter("folderDesc");
@@ -32,9 +35,14 @@
 		var newMailFolder = $('.js_new_mail_folder_page');
 		if (SmartWorks.GridLayout.validate(newMailFolder.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			var forms = newMailFolder.find('form');
+			var parentId = newMailFolder.attr('parentId');
 			var folderId = newMailFolder.attr('folderId');
+			var folderType = forms.find('input[name="chkFolderType"]:checked').attr('value');
 			var paramsJson = {};
+			if(isEmpty(folderType)) folderType = <%=MailFolder.TYPE_USER%>;
+			if(!isEmpty(parentId)) paramsJson['parentId'] = parentId;
 			if(!isEmpty(folderId)) paramsJson['folderId'] = folderId;
+			paramsJson['folderType'] = "" + folderType;
 			paramsJson['folderName'] = forms.find('input[name="txtFolderName"]').attr('value');
 			paramsJson['folderDesc'] = forms.find('input[name="txtFolderDesc"]').attr('value');
 			console.log(JSON.stringify(paramsJson));
@@ -67,7 +75,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  전체 레이아웃 -->
-<div class="pop_corner_all js_new_mail_folder_page" folderId="<%=CommonUtil.toNotNull(folderId)%>" folderName="<%=CommonUtil.toNotNull(folderName)%>" folderDesc="<%=CommonUtil.toNotNull(folderDesc)%>">
+<div class="pop_corner_all js_new_mail_folder_page" parentId="<%=CommonUtil.toNotNull(parentId) %>" folderId="<%=CommonUtil.toNotNull(folderId)%>" folderName="<%=CommonUtil.toNotNull(folderName)%>" folderDesc="<%=CommonUtil.toNotNull(folderDesc)%>">
 
 	<!-- 팝업 타이틀 -->
 	<div class="form_title">
@@ -92,6 +100,28 @@
 	<form name="frmNewMailFolder" class="js_validation_required">
 		<div class="contents_space">
 			<table>
+				<%
+				if(SmartUtil.isBlankObject(parentId) && SmartUtil.isBlankObject(folderId)){
+				%>
+					<tr>
+						<td  class="required_label"><fmt:message key="mail.title.folder_type" /></td>
+						<td>
+							<input name="chkFolderType" class="required" type="radio" value="<%=MailFolder.TYPE_GROUP%>"><fmt:message key="mail.title.group"/>	
+							<input name="chkFolderType" class="required" type="radio" value="<%=MailFolder.TYPE_USER%>"><fmt:message key="mail.title.folder"/>	
+						</td>
+					</tr>
+				<%
+				}else if(!SmartUtil.isBlankObject(parentId) && !SmartUtil.isBlankObject(parentName)){
+				%>
+					<tr>
+						<td><fmt:message key="mail.title.parent_name" /></td>
+						<td>
+							<input class="fieldline" type="text" readonly value="<%=CommonUtil.toNotNull(parentName)%>">		
+						</td>
+					</tr>
+				<%
+				}
+				%>
 				<tr>
 					<td  class="required_label"><fmt:message key="mail.title.folder_name" /></td>
 					<td>

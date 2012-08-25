@@ -144,7 +144,7 @@
 					<th width="15%"><fmt:message key="settings.title.email.delete_fetched"/></th>
 					<td width="85%"><input name="chkEmailServerDeleteFetched" class="fieldline" type="checkbox" <%if(emailServer.isDeleteFetched()){ %>checked<%} %>/></td>
 				</tr>
-				<tr>
+<%-- 				<tr>
 					<th width="15%"><fmt:message key="settings.title.email.auto_backup"/></th>
 					<td width="85%">
 						<input name="chkEmailServerAutoBackup" class="fieldline js_check_mail_auto_backup" type="checkbox" style="width:20px" <%if(emailServer.isAutoBackup()){ %>checked<%} %>/>
@@ -154,7 +154,7 @@
 						</span>
 					</td>
 				</tr>
-			</tbody>
+ --%>			</tbody>
 		</table>
 	</form>
 

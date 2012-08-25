@@ -1665,4 +1665,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getForwardTasksById(forwardId, params);
 	}
 
+	@Override
+	public MailFolder[] getMailFolders() throws Exception {
+		return mailService.getMailFolders();
+	}
+
 }
