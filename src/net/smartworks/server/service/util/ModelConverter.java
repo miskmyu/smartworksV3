@@ -1059,6 +1059,8 @@ public class ModelConverter {
 		workInstanceInfo.setSubInstanceCount(subInstanceCount);
 		workInstanceInfo.setSubInstances(subInstancesInInstances);
 		workInstanceInfo.setSubject(task.getPrcTitle());
+		if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE) || task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL))
+			workInstanceInfo.setSubject(task.getTskTitle());
 		//workInstanceInfo.setType(Instance.TYPE_WORK);
 		workInstanceInfo.setWork(workInfo);
 		workInstanceInfo.setWorkSpace(getWorkSpaceInfo(task.getPrcWorkSpaceType(), task.getPrcWorkSpaceId()));
@@ -1357,8 +1359,10 @@ public class ModelConverter {
 					} else {
 						instInfo.setId(task.getPrcObjId());
 					}
+					instInfo.setSubject(task.getTskTitle());
 				} else {
 					instInfo.setId(task.getPrcObjId());
+					instInfo.setSubject(task.getPrcTitle());
 				}
 //				String singleWorkInfos = task.getTskDef();
 //				String recordId = null;
@@ -1369,7 +1373,6 @@ public class ModelConverter {
 //					recordId = singleWorkInfo[1];
 //				}
 //				instInfo.setId(recordId);
-				instInfo.setSubject(task.getPrcTitle());
 				instInfo.setType(Instance.TYPE_WORK);
 				
 				SmartWorkInfo workInfo = new SmartWorkInfo();
@@ -1478,6 +1481,7 @@ public class ModelConverter {
 				tskInfo.setId(task.getTskObjId());
 				tskInfo.setName(task.getTskName());
 				tskInfo.setCreatedDate(new LocalDate(task.getPrcCreateDate().getTime()));
+				tskInfo.setSubject(task.getPrcTitle());
 				
 //				if (task.getLastTskType().equalsIgnoreCase(TskTask.TASKTYPE_APPROVAL)) {
 //					tskInfo.setTaskType(TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED);
@@ -1500,6 +1504,7 @@ public class ModelConverter {
 				} else if (task.getTskType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE)) {
 					
 					tskInfo.setForwardId(task.getTskForwardId());
+					tskInfo.setSubject(task.getTskTitle());
 					if (TskTask.TASKTYPE_SINGLE.equalsIgnoreCase(task.getPrcType())) {
 						tskInfo.setTaskType(TaskInstance.TYPE_INFORMATION_TASK_FORWARDED);
 					} else {
@@ -1516,7 +1521,6 @@ public class ModelConverter {
 				tskInfo.setWorkInstance(instInfo);
 				tskInfo.setAssignee(getUserInfoByUserId(task.getTskAssignee()));
 				tskInfo.setPerformer(getUserInfoByUserId(task.getTskAssignee()));
-				tskInfo.setSubject(task.getPrcTitle());
 				tskInfo.setWork(workInfo);
 				tskInfo.setWorkSpace(getWorkSpaceInfo(task.getTskWorkSpaceType(), task.getTskWorkSpaceId()));
 				

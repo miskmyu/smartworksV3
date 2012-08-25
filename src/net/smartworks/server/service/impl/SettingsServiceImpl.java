@@ -82,6 +82,7 @@ import org.claros.commons.mail.models.ConnectionProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -1982,13 +1983,47 @@ public class SettingsServiceImpl implements ISettingsService {
 	
 	@Override
 	public void removeMember(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-
 		try {
-			User cUser = SmartUtil.getCurrentUser();
 			String userId = (String)requestBody.get("userId");
 			if(userId.equals(""))
 				return;
-			getSwoManager().removeUser(cUser.getId(), userId);
+
+			SwoUser user = SwManagerFactory.getInstance().getSwoManager().getUser(userId, userId, null);
+			
+			String userDepartmentId = user.getDeptId();
+			String removeDepartmentId = (String)requestBody.get("departmentId");
+			if (userDepartmentId.equalsIgnoreCase(removeDepartmentId)) {
+				String adjunctDeptIdStr = user.getAdjunctDeptIds();
+				if (CommonUtil.isEmpty(adjunctDeptIdStr)) {
+					getSwoManager().removeUser(user.getId(), userId);
+				} else {
+					StringBuffer adjunctDeptIdsBuf = new StringBuffer();
+					String[] adjunctDeptIds = StringUtils.tokenizeToStringArray(adjunctDeptIdStr , ";");
+					
+					if (adjunctDeptIds != null && adjunctDeptIds.length != 0) {
+						String[] deptIdAndRole = StringUtils.tokenizeToStringArray(adjunctDeptIds[0], "|");
+						user.setDeptId(deptIdAndRole[0]);
+						adjunctDeptIdStr = StringUtils.replace(adjunctDeptIdStr, adjunctDeptIds[0]+";", "");
+						user.setAdjunctDeptIds(CommonUtil.toNull(adjunctDeptIdStr));
+						SwManagerFactory.getInstance().getSwoManager().setUser(userId, user, null);
+						
+					}
+				}
+			} else {
+				String adjunctDeptIdStr = user.getAdjunctDeptIds();
+				StringBuffer adjunctDeptIdsBuf = new StringBuffer();
+				String[] adjunctDeptIds = StringUtils.tokenizeToStringArray(adjunctDeptIdStr , ";");
+				for (int i = 0; i < adjunctDeptIds.length; i++) {
+					if (CommonUtil.isEmpty(adjunctDeptIds))
+						continue;
+					String[] deptIdAndRole = StringUtils.tokenizeToStringArray(adjunctDeptIds[i], "|");
+					if (!deptIdAndRole[0].equalsIgnoreCase(removeDepartmentId)) {
+						adjunctDeptIdsBuf.append(adjunctDeptIds[i]).append(";");
+					}
+				}
+				user.setAdjunctDeptIds(adjunctDeptIdsBuf.toString());
+				SwManagerFactory.getInstance().getSwoManager().setUser(userId, user, null);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();			
 		}
