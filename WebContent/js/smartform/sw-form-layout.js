@@ -76,6 +76,9 @@ SmartWorks.GridLayout = function(config) {
 			$form = $($.parseXML(this_.options.formXml)).find('form');
 		}
 		
+		$htmlForm.attr("workId", this_.options.workId);
+		$htmlForm.attr("taskInstId", this_.options.taskInstId);
+		$htmlForm.attr("recordId", this_.options.recordId);
 		$htmlForm.attr("formId", $form.attr('id'));
 		$htmlForm.attr("formName", $form.attr('name'));
 		var mode = this_.options.mode;

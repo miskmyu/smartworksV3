@@ -346,6 +346,8 @@ public interface ISmartWorks {
 
 	public abstract MailFolder[] getMailFoldersById(String folderId) throws Exception;
 
+	public abstract MailFolder[] getMailFolders() throws Exception;
+
 	public abstract MailInstance getMailInstanceById(String folderId, String msgId, int sendType) throws Exception;
 
 	public abstract void setMyProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

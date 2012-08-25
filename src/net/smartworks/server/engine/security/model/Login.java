@@ -267,5 +267,4 @@ public class Login implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
 }

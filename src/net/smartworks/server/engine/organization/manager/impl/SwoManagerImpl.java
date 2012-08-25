@@ -1149,6 +1149,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 			
 			if (userMap.containsKey(obj.getId())) {
 				userMap.put(obj.getId(), obj);
+				getUserExtend(userId, obj.getId(), false);
 			}
 			
 		} catch (Exception e) {
@@ -2069,7 +2070,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		StringBuffer sqlBuf = new StringBuffer();
 		sqlBuf.append(" select id, deptId, name, 'u' as type from sworguser where deptId = '"+ deptId +"' ");
 		sqlBuf.append(" union ");
-		sqlBuf.append(" select id, deptId, name, 'u' as type from sworguser where adjunctDeptIds like = '%"+ deptId +"%' ");
+		sqlBuf.append(" select id, deptId, name, 'u' as type from sworguser where adjunctDeptIds like = '%"+ deptId +"|%' ");
 		sqlBuf.append(" union ");
 		sqlBuf.append(" select id, parentId as deptId, name, 'd' as type from sworgDept where parentId = '"+ deptId +"'");
 		
@@ -2118,7 +2119,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 				}
 			} else {
 				//겸직적용
-				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where adjunctDeptIds like '%"+ departmentId +"%' ");
+				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where adjunctDeptIds like '%"+ departmentId +"|%' ");
 				sqlBuf.append(" union ");
 				sqlBuf.append(" select id, name, deptId, pos, roleId, picture, '' as description, 'u' as type from sworguser where deptId = '" + departmentId + "' and type != 'SYSTEM'");
 				sqlBuf.append(" union ");
@@ -2537,7 +2538,7 @@ public class SwoManagerImpl extends AbstractManager implements ISwoManager {
 		buff.append(" where user.deptId = dept.id");
 		buff.append(" and user.id != 'admin@maninsoft.co.kr' ");
 		buff.append(" and user.companyId = company.id");
-		buff.append(" and (dept.id = :deptId or user.adjunctDeptIds like '%").append(departmentId).append("%')");
+		buff.append(" and (dept.id = :deptId or user.adjunctDeptIds like '%").append(departmentId).append("|%')");
 		buff.append(" order by user.roleId asc, user.name asc");
 		Query query = this.getSession().createQuery(buff.toString());
 		query.setString("deptId", departmentId);

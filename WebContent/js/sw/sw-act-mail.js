@@ -342,8 +342,15 @@ $(function() {
 		return false;
 	});
 
-	$('a.js_new_mail_folder_btn').live('click', function(e){
-		smartPop.createMailFolder(null, null, null);
+	$('.js_new_mail_folder_btn').live('click', function(e){
+		var input = $(targetElement(e));
+		if(isEmpty(input.siblings('span'))){
+			smartPop.createMailFolder(null, null, null, null, null);
+		}else{
+			var parentId = input.attr('parentId');
+			var parentName = input.attr('parentName');
+			smartPop.createMailFolder(null, null, null, parentId, parentName);
+		}
 		return false;
 		
 	});

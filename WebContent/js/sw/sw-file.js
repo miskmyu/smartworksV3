@@ -86,8 +86,11 @@ function fileUploader(groupId, target) {
         	
         	file.attr('fileId', responseJSON.fileId).attr('fileName', fileName).attr('fileSize', responseJSON.fileSize).attr('fullPathName', responseJSON.fullPathName).attr('localFilePath', localFilePath);
         	var ext = getExt(fileName);
+        	var workId = file.parents('form[name="frmSmartForm"]').attr('workId');
+        	var taskInstId = file.parents('form[name="frmSmartForm"]').attr('taskInstId');
+        	var recordId = file.parents('form[name="frmSmartForm"]').attr('recordId');
     		file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
-        	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName);
+        	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + responseJSON.fileId + "&fileName=" + fileName + "&workId=" + workId + "&taskInstId=" + taskInstId + "&recordId=" + recordId);
         	file.find('.qq-delete-text').show();
         	if(file.hasClass('qq-upload-success') && $('form.js_validation_required').find('.sw_required').hasClass('sw_error')){
         		$('form.js_validation_required').find('.sw_required').removeClass('sw_error');
@@ -227,11 +230,14 @@ function createUploader(groupId, target, isMultiple, isProfile, isTempFile, file
 					var ext = getExt(fileName);
 
 					var file = $(uploadFileTemplate).appendTo(files);
+		        	var workId = file.parents('form[name="frmSmartForm"]').attr('workId');
+		        	var taskInstId = file.parents('form[name="frmSmartForm"]').attr('taskInstId');
+		        	var recordId = file.parents('form[name="frmSmartForm"]').attr('recordId');
 					file.addClass('qq-upload-success');
 					file.attr('fileId', data[i].id).attr('fileName', fileName).attr('fileSize', data[i].fileSize);
 					file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
 					file.find('.qq-upload-file').text(displayFileName);
-		        	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName);
+		        	file.find('.qq-upload-file').attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName + "&workId=" + workId + "&taskInstId=" + taskInstId + "&recordId=" + recordId);
 					file.find('.qq-upload-size').text(data[i].fileSize);
 					file.find('.qq-upload-cancel').remove();
 					file.find('.qq-upload-spinner').remove();
@@ -276,10 +282,13 @@ function viewFiles(groupId, target){
 					var ext = getExt(fileName);
 					
 					var file = $(viewFileTemplate).appendTo(files);
+		        	var workId = file.parents('form[name="frmSmartForm"]').attr('workId');
+		        	var taskInstId = file.parents('form[name="frmSmartForm"]').attr('taskInstId');
+		        	var recordId = file.parents('form[name="frmSmartForm"]').attr('recordId');
 					file.attr('fileId', data[i].id);
 					file.find('.qq-upload-file').prev('span').addClass('icon_file_' + ext).addClass('vm');
 					file.find('.qq-upload-file').text(displayFileName);
-		        	file.find('.qq-upload-file').attr('fileName', fileName).attr('fileId', data[i].id).attr('fileSize', data[i].fileSize).attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName);
+		        	file.find('.qq-upload-file').attr('fileName', fileName).attr('fileId', data[i].id).attr('fileSize', data[i].fileSize).attr('href', 'download_file.sw?fileId=' + data[i].id + "&fileName=" + fileName + "&workId=" + workId + "&taskInstId=" + taskInstId + "&recordId=" + recordId);
 					file.find('.qq-upload-size').text(getBytesWithUnit(data[i].fileSize));
 				}
 			},

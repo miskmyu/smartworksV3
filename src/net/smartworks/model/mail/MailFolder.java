@@ -15,6 +15,7 @@ public class MailFolder extends BaseObject {
 	public static final int TYPE_SYSTEM_BACKUP 	= 7;
 	public static final int TYPE_SYSTEM_B_INBOX = 71;
 	public static final int TYPE_SYSTEM_B_SENT 	= 73;
+	public static final int TYPE_GROUP 			= 8;
 	
 	
 	public static final int SEND_TYPE_NONE		= 0;
@@ -33,9 +34,11 @@ public class MailFolder extends BaseObject {
 	public static final String ID_STRING_DRAFTS = "Drafts";
 	public static final String ID_STRING_USER 	= "User";
 	public static final String ID_STRING_BACKUP = "Backup";
+	public static final String ID_STRING_GROUP 	= "Group";
 	
 	private int type = TYPE_USER;
 	private String parentId;
+	private String parentName;
 	private String desc;
 	private int unreadItemCount = 0;
 	private int totalItemCount = 0;
@@ -62,6 +65,28 @@ public class MailFolder extends BaseObject {
 		return super.getName();
 	}
 	
+	public String getFullName(){
+		switch(type){
+		case 1:
+			return SmartMessage.getString("mail.title.folder.inbox");
+		case 2:
+			return SmartMessage.getString("mail.title.folder.drafts");
+		case 3:
+			return SmartMessage.getString("mail.title.folder.sent");
+		case 4:
+			return SmartMessage.getString("mail.title.folder.trash");
+		case 5:
+			return SmartMessage.getString("mail.title.folder.junk");
+		case 7:
+			return SmartMessage.getString("mail.title.folder.backup");
+		case 71:
+			return SmartMessage.getString("mail.title.folder.inbox");
+		case 73:
+			return SmartMessage.getString("mail.title.folder.sent");
+		}
+		return SmartUtil.isBlankObject(parentName) ? super.getName() : parentName + ">" + super.getName();
+	}
+	
 	public String getIdString(){
 		switch(type){
 		case 1:
@@ -82,6 +107,8 @@ public class MailFolder extends BaseObject {
 			return ID_STRING_INBOX;
 		case 73:
 			return ID_STRING_SENT;
+		case 8:
+			return ID_STRING_GROUP;
 		}
 		return "";
 	}
@@ -99,6 +126,14 @@ public class MailFolder extends BaseObject {
 
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	public String getDesc() {

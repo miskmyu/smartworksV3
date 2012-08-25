@@ -41,7 +41,7 @@
 			<!-- 타이틀 -->
 			<div class="body_titl">
 				<div class="body_titl_area ti_mail title">
-					<div class="title myspace_h"><%=mailFolder.getName() %>
+					<div class="title myspace_h"><%=mailFolder.getFullName() %>
 						<span class="t_mail">
 							<span class="t_s11"><fmt:message key="mail.title.count.unread"/></span>
 							<span class="new_mail"><%=mailFolder.getUnreadItemCount() %></span><fmt:message key="mail.title.count"/>
@@ -70,13 +70,19 @@
 					<select class="js_select_move_folder">
 						<option>[<fmt:message key="mail.button.move"/>]</option>
 						<%
-						MailFolder[] folders = smartWorks.getMailFoldersById("");
+						MailFolder[] folders = smartWorks.getMailFolders();
 						if(!SmartUtil.isBlankObject(folders)){
 							for(int i=0; i<folders.length; i++){
 								MailFolder folder = folders[i];
-								if(folder.getType() != MailFolder.TYPE_USER || folder.getId().equals(folderId)) continue;
+								if(	folder.getType() == MailFolder.TYPE_GROUP 
+										|| folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS 
+										|| folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP 
+										|| folder.getType() == MailFolder.TYPE_SYSTEM_B_INBOX 
+										|| folder.getType() == MailFolder.TYPE_SYSTEM_B_SENT
+										|| folder.getId().equals(folderId) 
+										|| folder.getType() == MailFolder.TYPE_SYSTEM_TRASH) continue;
 						%>
-								<option value=<%=folder.getId() %>><%=folder.getName() %></option>
+								<option value=<%=folder.getId() %>><%=folder.getFullName() %></option>
 						<%
 							}
 						}

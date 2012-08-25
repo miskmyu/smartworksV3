@@ -65,11 +65,15 @@
 			case MailFolder.TYPE_SYSTEM_B_SENT :
 				iconClass = "icon_mail_sent";
 				break;
+			case MailFolder.TYPE_GROUP :
+				iconClass = "icon_mail_group";
+				listClass = "js_drill_down";
+				break;
 			}
 	%>
 			<li class="<%=listClass %> folder_actions">
 			<!--  모든폴더에 공통으로 필요한 html -->
-				<%if(folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
+				<%if(folder.getType() == MailFolder.TYPE_GROUP || folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
 					<a href="my_all_mail_folders.sw" class="" folderId="<%=folder.getId()%>">
 				<%}else{ %>
 					<a href="mail_list.sw?cid=<%=folder.getId()%>" class="js_content" folderId="<%=folder.getId()%>">
@@ -85,10 +89,18 @@
 								<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
 							</span>
 						<%
+						}else if(folder.getType() == MailFolder.TYPE_GROUP){
+						%>
+							<span class="ctgr_action">
+								<span title="<fmt:message key='nav.mail.new_folder'/>" class="js_new_mail_folder_btn btn_folder_add" parentId="<%=folder.getId() %>" parentName="<%=folder.getName()%>"></span>
+								<span title="<fmt:message key='mail.button.remove_folder'/>" class="js_remove_mail_folder_btn btn_remove_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>"></span>
+								<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
+							</span>
+						<%
 						}
 						%>
 				</a>
-				<%if(folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
+				<%if(folder.getType() == MailFolder.TYPE_GROUP || folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
 					<div class="js_drill_down_target" style="display: none"></div>
 				<%} %>
 			</li>

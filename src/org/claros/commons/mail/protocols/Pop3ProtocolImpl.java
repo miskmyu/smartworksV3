@@ -240,6 +240,8 @@ public class Pop3ProtocolImpl implements Protocol {
 				header.setReplyTo(msg.getReplyTo());
 				header.setSize(msg.getSize());
 				header.setSubject(msg.getSubject());
+				String[] sPriority = msg.getHeader("X-Priority");
+				header.setPriority(Short.parseShort(sPriority[0]));
                 
 				// now set the human readables.
 				header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));

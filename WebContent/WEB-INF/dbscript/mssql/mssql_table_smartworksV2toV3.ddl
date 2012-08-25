@@ -829,3 +829,7 @@ CREATE TABLE SwAutoIndexInst (
 	modifiedtime datetime,
     primary key (objId)
 );
+
+ALTER TABLE swmailaccount add mailSignature character varying(4000);
+ALTER TABLE swmailaccount add useMailSign bit;
+update swmailaccount set useMailSign='0'

@@ -34,6 +34,8 @@ public class MailAccount extends MisObject {
 	public static final String A_MAILUSERNAME = "mailUserName";
 	public static final String A_MAILDELETEFETCHED = "mailDeleteFetched";
 	public static final String A_MAILPASSWORD = "mailPassword";
+	public static final String A_MAILSIGNATURE = "mailSignature";
+	public static final String A_USEMAILSIGN = "useMailSign";
 
 	private String userId;
 	private String mailServerId;
@@ -42,6 +44,8 @@ public class MailAccount extends MisObject {
 	private String mailUserName;
 	private String mailDeleteFetched;
 	private String mailPassword;
+	private String mailSignature;
+	private boolean useMailSign;
 
 	public MailAccount() {
 		super();
@@ -66,6 +70,8 @@ public class MailAccount extends MisObject {
 		appendAttributeString(A_MAILSERVERNAME, mailServerName, buf);
 		appendAttributeString(A_MAILID, mailId, buf);
 		appendAttributeString(A_MAILPASSWORD, mailPassword, buf);
+		appendAttributeString(A_MAILSIGNATURE, mailSignature, buf);
+		appendAttributeString(A_USEMAILSIGN, useMailSign, buf);
 		return buf.toString();
 	}
 
@@ -94,6 +100,8 @@ public class MailAccount extends MisObject {
 			Node mailServerName = attrMap.getNamedItem(A_MAILSERVERNAME);
 			Node mailId = attrMap.getNamedItem(A_MAILID);
 			Node mailPassword = attrMap.getNamedItem(A_MAILPASSWORD);
+			Node mailSignature = attrMap.getNamedItem(A_MAILSIGNATURE);
+			Node useMailSign = attrMap.getNamedItem(A_USEMAILSIGN);
 
 			if(userId != null)
 				obj.setUserId(userId.getNodeValue());
@@ -105,6 +113,10 @@ public class MailAccount extends MisObject {
 				obj.setMailId(mailId.getNodeValue());
 			if(mailPassword != null)
 				obj.setMailPassword(mailPassword.getNodeValue());
+			if(mailSignature != null)
+				obj.setMailSignature(mailSignature.getNodeValue());
+			if(useMailSign != null)
+				obj.setUseMailSign(CommonUtil.toBoolean(useMailSign.getNodeValue()));
 		}
 
 		return  obj;
@@ -254,5 +266,16 @@ public class MailAccount extends MisObject {
 	public void setMailPassword(String mailPassword) {
 		this.mailPassword = mailPassword;
 	}
-
+	public String getMailSignature() {
+		return mailSignature;
+	}
+	public void setMailSignature(String mailSignature) {
+		this.mailSignature = mailSignature;
+	}
+	public boolean isUseMailSign() {
+		return useMailSign;
+	}
+	public void setUseMailSign(boolean useMailSign) {
+		this.useMailSign = useMailSign;
+	}
 }

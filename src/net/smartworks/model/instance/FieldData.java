@@ -57,8 +57,8 @@ public class FieldData {
 		this.value = value;
 	}
 	
-	public String getFilesHtml(){
+	public String getFilesHtml(String workId, String taskInstId, String recordId){
 		if(SmartUtil.isBlankObject(this.value) || SmartUtil.isBlankObject(this.files)) return "";
-		return SmartUtil.getFilesDetailInfo(this.files);
+		return SmartUtil.getFilesDetailInfo(this.files, workId, taskInstId, recordId);
 	}
 }
