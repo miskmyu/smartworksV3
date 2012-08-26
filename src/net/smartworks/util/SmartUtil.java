@@ -25,12 +25,17 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
+import net.smartworks.server.engine.common.loginuser.manager.ILoginUserManager;
+import net.smartworks.server.engine.common.loginuser.model.LoginUser;
+import net.smartworks.server.engine.common.loginuser.model.LoginUserCond;
+import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.security.model.Login;
 import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.service.impl.SmartWorks;
 
@@ -610,6 +615,46 @@ public class SmartUtil {
 	
 	private static void updateChatterStatus(boolean isOnline, String userId){
 		
+		try{
+			UserInfo[] userInfos = null;
+			List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+			
+			ILoginUserManager loginMgr = SwManagerFactory.getInstance().getLoginUserManager();
+			
+			LoginUser targetLoginUser = loginMgr.getLoginUser(userId, userId, null);
+			if (CommonUtil.isEmpty(targetLoginUser)) {
+				if (isOnline) {
+					LoginUser newLoginUser = new LoginUser();
+					newLoginUser.setUserId(userId);
+					loginMgr.setLoginUser(userId, newLoginUser);
+				}
+			} else {
+				if (!isOnline) {
+					LoginUserCond cond = new LoginUserCond();
+					cond.setUserId(targetLoginUser.getUserId());
+					loginMgr.removeLoginUser(userId, cond);
+				}
+			}
+			
+			LoginUser[] loginUsers = loginMgr.getLoginUsers(userId, null, IManager.LEVEL_LITE);
+
+			if(!CommonUtil.isEmpty(loginUsers)) {
+				for(LoginUser loginUser : loginUsers) {
+					String loginId = loginUser.getUserId();
+					UserInfo userInfo = ModelConverter.getUserInfoByUserId(loginId);
+					userInfo.setOnline(true);
+					userInfoList.add(userInfo);
+				}
+			}
+			if(userInfoList.size() > 0) {
+				userInfos = new UserInfo[userInfoList.size()];
+				userInfoList.toArray(userInfos);
+			}
+			//체터리스트 갱신 (publishAChatters)
+			publishAChatters(userInfos);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	static Thread messageAgent = null;
