@@ -359,12 +359,12 @@ $(function() {
 			target.find('.js_chatter_list').html('').removeClass('searching');
 			setTimeout(function(){ setRightPosition("resize", null); }, 600);
 		}else{
-			setRightPosition("resize", null);
 			$.ajax({
 				url : 'available_chatter_list.sw',
 				data : {},
 				success : function(data, status, jqXHR) {
 					target.find('.js_chatter_list').html(data);
+					setRightPosition("resize", null);
 				},
 				error : function(xhr, ajaxOptions, thrownError){
 				}

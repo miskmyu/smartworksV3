@@ -47,6 +47,7 @@ bayeux.bind('subscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.ONLINE, getUserId(channel));
+		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.ONLINE, getUserId(channel));
 	}
 });
 
@@ -55,6 +56,7 @@ bayeux.bind('unsubscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.OFFLINE, getUserId(channel));
+		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.OFFLINE, getUserId(channel));
 	}
 });
 

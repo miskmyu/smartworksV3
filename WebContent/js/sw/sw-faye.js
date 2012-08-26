@@ -392,13 +392,17 @@ var smartTalk = {
 		}
 
 		if (type === msgType.JOINED_IN_CHAT) {
-			
+			if(sender !== currentUser.userId){
+				var chatterInfo = chatManager.chatterInfo(chatId, sender);
+				updateChattingBoxTitle(chatId, chatterList);
+				updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
+			}
 		} else if (type === msgType.LEAVE_CHAT) {
 			if(sender !== currentUser.userId){
 				var chatterInfo = chatManager.chatterInfo(chatId, sender);
 				var chatterList = chatManager.removeChatter(chatId, sender);
-				updateChattingBoxTitle(chatId, chatterList);
 				updateChatterStatus(chatId, chatterInfo, userStatus.LEAVED);
+				updateChattingBoxTitle(chatId, chatterList);
 			}
 		} else if (type === msgType.WRITING_CHAT_MESSAGE) {
 
@@ -445,7 +449,10 @@ var smartTalk = {
 			smartTalk.sendJoinChat(chatId, userId,
 					chatManager.chatterInfos(chatId));
 			var chatterInfo = chatManager.chatterInfo(chatId, userId);
-			if(chatterInfo != null) updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
+			if(chatterInfo != null){
+				updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
+				smartTalk.publishJoinedChat(chatId);
+			}
 		}
 		//console.log("ONLINE : " + userId);		
 	},
