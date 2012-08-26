@@ -4365,7 +4365,7 @@ public class ModelConverter {
 			ImageCategoryInfo allImageCategoryInfo = new ImageCategoryInfo();
 			allImageCategoryInfo.setId(FileCategory.ID_ALL_FILES);
 			allImageCategoryInfo.setName(FileCategory.NAME_ALL_FILES);
-			allImageCategoryInfo.setLength(fileWorks.length);
+			allImageCategoryInfo.setLength(fileWorks == null ? 0 : fileWorks.length);
 			imageCategoryMap.put(FileCategory.ID_ALL_FILES, allImageCategoryInfo);
 
 			switch (displayType) {

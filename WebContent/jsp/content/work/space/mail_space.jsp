@@ -51,7 +51,7 @@
 					</div>
 				</div>
 
-				<div class="fr">
+				<div class="fr mt30">
                 	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
 				</div>
 			    			    
