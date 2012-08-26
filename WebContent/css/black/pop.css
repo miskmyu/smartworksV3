@@ -64,7 +64,7 @@
 
 
 /* Smart Pop */
-.pop_notice_section {padding-left: 10px; text-align: left; color:#7d7d7d}
+.pop_notice_section {padding-left: 10px; text-align: left; color:#7d7d7d; line-height: 17px}
 .pop_message_h {padding:10px 0}
 
 .icon_pop_Info {background: url("../../images/body_icon.png") no-repeat scroll -547px -257px transparent; display: block; font-size: 14px; font-weight: bold; line-height: 20px; padding: 2px 0 0 33px; text-align: left; margin-bottom: 10px}

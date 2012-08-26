@@ -104,9 +104,11 @@ public class DumpPartService extends BaseService {
 				String fn = part.getFilename();
 				if (fn != null) {
 					if (fn.equals("Text Body")) {
-						fn = Utility.replaceAllOccurances(email.getBaseHeader().getSubject(), " ", "_") + ".txt";
+//						fn = Utility.replaceAllOccurances(email.getBaseHeader().getSubject(), " ", "_") + ".txt";
+						fn = email.getBaseHeader().getSubject().replaceAll(" ", "_").replaceAll(",", "_") + ".txt";
 					} else if (fn.equals("Html Body")) {
-						fn = Utility.replaceAllOccurances(email.getBaseHeader().getSubject(), " ", "_") + ".html";
+//						fn = Utility.replaceAllOccurances(email.getBaseHeader().getSubject(), " ", "_") + ".html";
+						fn = email.getBaseHeader().getSubject().replaceAll(" ", "_").replaceAll(",", "_") + ".html";
 					}
 				}
 				

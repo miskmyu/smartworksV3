@@ -55,6 +55,7 @@ var chatHistory = {
 		var chatInfos = $.jStorage.get(currentUserId);
 		if(chatInfos) chatHistory.chatInfos = chatInfos;
 		var index = $.jStorage.index();
+		console.log("CHAT LIST Restored : " + chatHistory.chatInfos);
 	},
 	
 	updateChatList : function(chatList){
@@ -71,7 +72,7 @@ var chatHistory = {
 		}
 		chatHistory.chatInfos = newChatInfos;
 		$.jStorage.set(currentUserId, chatHistory.chatInfos);
-		//console.log(chatHistory.chatInfos);
+		console.log("CHAT LIST Updated : " + chatHistory.chatInfos);
 	},
 
 	existInHistory : function(chatId){
@@ -392,11 +393,11 @@ var smartTalk = {
 		}
 
 		if (type === msgType.JOINED_IN_CHAT) {
-			if(sender !== currentUser.userId){
-				var chatterInfo = chatManager.chatterInfo(chatId, sender);
-				updateChattingBoxTitle(chatId, chatterList);
-				updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
-			}
+//			if(sender !== currentUser.userId){
+//				var chatterInfo = chatManager.chatterInfo(chatId, sender);
+//				updateChattingBoxTitle(chatId, chatterList);
+//				updateChatterStatus(chatId, chatterInfo, userStatus.ONLINE);
+//			}
 		} else if (type === msgType.LEAVE_CHAT) {
 			if(sender !== currentUser.userId){
 				var chatterInfo = chatManager.chatterInfo(chatId, sender);
