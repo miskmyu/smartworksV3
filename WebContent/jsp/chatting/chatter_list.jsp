@@ -36,6 +36,7 @@
 			
 		}
 	}
+	
 </script>
 <%
 	User cUser = SmartUtil.getCurrentUser();

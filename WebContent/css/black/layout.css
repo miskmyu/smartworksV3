@@ -228,13 +228,14 @@ tr.list_action_item:hover td.btn_move_field .move_actions{display:block; cursor:
 .icon_contacts_works {background: url("../../images/body_icon.png") no-repeat -550px -650px; padding:0 0 0 22px; float: left; height:18px}
 
 /* Nav Mail Btn*/
-.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
-.icon_mail_notread {background: url("../../images/nav_img.png") no-repeat -113px -560px; height:16px; width: 22px; margin: 0 1px 0 0; display: inline-block}
+.icon_mail_inbox {background: url("../../images/nav_img.png") no-repeat 0 1px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_sent {background: url("../../images/nav_img.png") no-repeat 0 -24px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_junk {background: url("../../images/nav_img.png") no-repeat 0 -69px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_drafts {background: url("../../images/nav_img.png") no-repeat 0 -46px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_trash {background: url("../../images/nav_img.png") no-repeat 0 -96px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_notread {background: url("../../images/nav_img.png") no-repeat -113px -560px; height:16px; width: 21px; display: inline-block}
+.icon_mail_group {background: url("../../images/nav_img.png") no-repeat 0 -507px transparent; height:16px; width: 21px; display: inline-block}
+.icon_mail_user {background: url("../../images/nav_img.png") no-repeat 0 -740px transparent; height:16px; width: 21px; display: inline-block}
 
 a .btn_unread_mail {background: url("../../images/nav_img.png") no-repeat 0 -125px transparent; height:20px; width:20px; display: inline-block; float:right}
 a .btn_unread_mail:hover, .btn_unread_mail.current {background: url("../../images/nav_img.png") no-repeat 0 -150px}
@@ -285,8 +286,8 @@ a .btn_add_category:hover, .btn_add_category.current {background: url("../../ima
 a .btn_apps {background: url("../../images/nav_img.png") no-repeat -157px -344px transparent; height:25px;  width:26px; display: inline-block; float:right}
 a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png") no-repeat -157px -379px}
 
-.btn_add_work {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; float:left}
-.btn_add_work:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:12px; float:left}
+.btn_add_work, .btn_add_folder {background: url("../../images/nav_img.png") no-repeat 0 -393px transparent; height:15px;  width:12px; float:left}
+.btn_add_work:hover, .btn_add_folder:hover {background: url("../../images/nav_img.png") no-repeat 0 -417px transparent; height:15px;  width:12px; float:left}
 .btn_text_category, .btn_change_work,.btn_text_folder
  {background: url("../../images/nav_img.png") no-repeat -23px -393px transparent; height:15px;  width:17px; float:left; cursor: pointer}
 .btn_text_category:hover, .btn_change_work:hover, .btn_text_folder:hover
@@ -355,8 +356,8 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 #m_setting li {padding:1px 0 1px 20px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%}
 #m_setting li:hover {display:block; background-color:#6b6b6b}
 
-#all_works .menu_2dep, #my_works .menu_2dep, #community_department .menu_2dep {padding:2px 0 2px 14px}
-#all_works .menu_2dep div, #my_works .menu_2dep div {padding:2px 0 2px 14px}
+#all_works .menu_2dep, #my_works .menu_2dep, #community_department .menu_2dep, #my_mail .menu_2dep {padding:2px 0 2px 7px}
+#all_works .menu_2dep div, #my_works .menu_2dep div, #my_mail .menu_2dep div {padding:2px 0 2px 7px}
 
 #all_works .nav_sub_area, #my_works .nav_sub_area, #my_communities .nav_sub_area, #my_mail .nav_sub_area, #m_setting .nav_sub_area, #community_department .nav_sub_area, #community_group .nav_sub_area
 {display: inline; float: left; position: relative; width: 180px}

@@ -699,8 +699,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						}
 					}					
 					// end -- added by sjlee
-					
-					mailInstanceInfo.setSubject(MimeUtility.decodeText(mailContent.getSubject()));
+					String subject = MimeUtility.decodeText(mailContent.getSubject());
+					if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
+					mailInstanceInfo.setSubject(subject);
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
 					mailInstanceInfo.setReceivers(receivers);
 					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
@@ -1086,6 +1087,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						bccReceivers[k] = new User(addrBcc[k].getAddress(), addrBcc[k].getPersonal());
 				}
 				
+				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
 				instance = new MailInstance(msgId, subject, sender, new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setCreatedDate(new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setReceivers(receivers);

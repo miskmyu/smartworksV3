@@ -1100,7 +1100,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 		}*/
 		
 		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
-				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM") && CommonUtil.isEmpty(cond.getRecordId())) {
 			
 			if (workSpaceIdIns != null) {
 				if(first) {
@@ -1209,7 +1209,7 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			query.setString("refRecordId", refRecordId);
 
 		if (!domain.getObjId().equalsIgnoreCase("frm_company_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_dept_SYSTEM") && 
-				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM")) {
+				!domain.getObjId().equalsIgnoreCase("frm_role_SYSTEM") && !domain.getObjId().equalsIgnoreCase("frm_user_SYSTEM") && CommonUtil.isEmpty(cond.getRecordId())) {
 			if (workSpaceIdIns != null) {
 				for (int j=0; j<workSpaceIdIns.length; j++) {
 					query.setString("workSpaceIdIn"+j, workSpaceIdIns[j]);

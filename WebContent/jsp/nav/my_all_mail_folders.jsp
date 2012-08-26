@@ -94,16 +94,16 @@
 						}else if(folder.getType() == MailFolder.TYPE_GROUP){
 						%>
 							<span class="ctgr_action">
-								<span title="<fmt:message key='nav.mail.new_folder'/>" class="js_new_mail_folder_btn btn_folder_add" parentId="<%=folder.getId() %>" parentName="<%=folder.getName()%>"></span>
 								<span title="<fmt:message key='mail.button.remove_folder'/>" class="js_remove_mail_folder_btn btn_remove_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>"></span>
 								<span title="<fmt:message key='mail.button.text_folder'/>" class="js_text_mail_folder_btn btn_text_folder" folderId="<%=folder.getId() %>" folderName="<%=folder.getName()%>" folderDesc="<%=folder.getDesc()%>"></span>
-							</span>
+								<span title="<fmt:message key='nav.mail.new_folder'/>" class="js_new_mail_folder_btn btn_add_folder" parentId="<%=folder.getId() %>" parentName="<%=folder.getName()%>"></span>
+								</span>
 						<%
 						}
 						%>
 				</a>
 				<%if(folder.getType() == MailFolder.TYPE_GROUP || folder.getType() == MailFolder.TYPE_SYSTEM_BACKUP){ %>
-					<div class="js_drill_down_target" style="display: none"></div>
+					<div class="menu_2dep js_drill_down_target" style="display: none"></div>
 				<%} %>
 			</li>
 	<%

@@ -401,6 +401,7 @@ public class SctXPathFunction implements Function, Functions {
 	private String getTaskDocument(String prcInstId, String activityId) throws Exception {
 		TskTaskCond taskCond = new TskTaskCond();
 		taskCond.setProcessInstId(prcInstId);
+		taskCond.setType(TskTask.TASKTYPE_COMMON);
 		taskCond.setStatus(CommonUtil.toDefault((String) MisUtil.taskStatusMap().get("executed"), "executed"));
 		Property[] extProps = new Property[1];
 		extProps[0] = new Property("activityId", activityId);
