@@ -239,10 +239,11 @@ $(function() {
 		if(isEmpty($(target).children())){
 			if(input.hasClass('js_popup'))
 				smartPop.progressCont(input.find('span:last'));
-			else if(input.hasClass('js_builder'))
+			else if(input.hasClass('js_builder') || input.hasClass('js_mail_folder'))
 				smartPop.progressNav(input.find('span.js_progress_span'));						
 			else
-				smartPop.progressNav(input.find('span:last'));						
+				smartPop.progressNav(input.find('span:last'));
+
 			$.ajax({
 				url : url,
 				data : {

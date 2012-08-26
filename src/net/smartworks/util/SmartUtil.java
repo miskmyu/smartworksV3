@@ -36,9 +36,12 @@ import net.smartworks.service.impl.SmartWorks;
 
 import org.apache.axis.utils.StringUtils;
 import org.cometd.bayeux.client.ClientSession;
+import org.cometd.bayeux.client.ClientSessionChannel;
 import org.cometd.client.BayeuxClient;
 import org.cometd.client.transport.ClientTransport;
 import org.cometd.client.transport.LongPollingTransport;
+import org.cometd.bayeux.Channel;
+import org.cometd.bayeux.Message;
 import org.eclipse.jetty.client.HttpClient;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -519,6 +522,8 @@ public class SmartUtil {
 	
 	private static final String SUBJECT_SMARTWORKS = "/smartworks";
 	private static final String SUBJECT_BROADCASTING = "broadcasting";
+	private static final String SUBJECT_ONLINE = "online";
+	private static final String SUBJECT_OFFLINE = "offline";
 	private static final String MSG_TYPE_BROADCASTING = "BCAST";
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
@@ -530,7 +535,7 @@ public class SmartUtil {
 	private static String getMessageChannel(String companyId, String channel){
 		return SUBJECT_SMARTWORKS + "/" + companyId + "/" + channel; 
 	}
-
+	
 	public static void publishBcast(String[] messages){
 		publishMessage(getMessageChannel(SUBJECT_BROADCASTING), MSG_TYPE_BROADCASTING, messages);
 	}
@@ -603,11 +608,18 @@ public class SmartUtil {
 		publishMessage( getMessageChannel(companyId, SmartUtil.getSubjectString(userId)), MSG_TYPE_NOTICE_COUNT, data);
 	}
 	
+	private static void updateChatterStatus(boolean isOnline, String userId){
+		
+	}
+	
 	static Thread messageAgent = null;
 	static List<MessageModel> messageQueue = new LinkedList<MessageModel>();
+	static String companyId = null;
 	
 	public synchronized static void publishMessage(String channel, String msgType, Object message){
-		if(messageAgent == null) {
+		if(messageAgent == null && companyId == null) {
+			if(SmartUtil.isBlankObject(SmartUtil.getCurrentUser().getCompanyId())) return;
+			companyId = SmartUtil.getCurrentUser().getCompanyId();
 			messageAgent = new Thread(new Runnable() {
 				public void run() {
 					try{
@@ -618,11 +630,32 @@ public class SmartUtil {
 						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
 						client.handshake();
 
+						client.getChannel(SmartUtil.getMessageChannel(companyId, SUBJECT_ONLINE)).subscribe(
+							new ClientSessionChannel.MessageListener() {
+								public void onMessage(ClientSessionChannel channel, Message message) {
+									if (!message.isSuccessful()) {
+										System.out.println("Chatter [" + message.get("data") + "] is ONLINE now !!!");
+										SmartUtil.updateChatterStatus(true, (String)message.get("data"));
+									}
+								}
+							}
+						);
+						client.getChannel(SmartUtil.getMessageChannel(companyId ,SUBJECT_OFFLINE)).subscribe(
+							new ClientSessionChannel.MessageListener() {
+								public void onMessage(ClientSessionChannel channel, Message message) {
+									if (!message.isSuccessful()) {
+										System.out.println("Chatter [" + message.get("data") + "] is OFFLINE now !!!");
+										SmartUtil.updateChatterStatus(false, (String)message.get("data"));
+									}
+								}
+							}
+						);									
+						
 						MessageModel message = null;
 
 						while(true) {
 							try {
-								message = null;
+								message = null;								
 								while(message == null) {
 									try {
 										message = messageQueue.remove(0);
