@@ -134,7 +134,7 @@
 						if(forwardedTask == null){
 						%>
 							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
-							<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+							<%--프로세스전자결재 완료시까지 버튼숨김 <a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a> --%>
 						<%
 						}
 						%>
