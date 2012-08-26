@@ -78,7 +78,9 @@
 		taskInstId = "";
 		approvalTask = null;
 	}
-		
+	
+	String lastWid = (String)session.getAttribute("wid");
+	
  	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -473,7 +475,7 @@
 <!-- 목록 버튼 -->
 <div class="tc">
 	<div class="btn_gray" >
-    	<a href="<%=instance.getWork().getController(wid) %>?cid=<%=instance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(wid) %>" class="js_content"> 
+    	<a href="<%=instance.getWork().getController(lastWid) %>?cid=<%=instance.getWork().getContextId() %>&wid=<%=CommonUtil.toNotNull(lastWid) %>" class="js_content"> 
     		<span class="txt_btn_start"></span> 
     		<span class="txt_btn_center"><fmt:message key="common.button.list"/></span> 
     		<span class="txt_btn_end"></span>
