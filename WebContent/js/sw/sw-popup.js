@@ -18,8 +18,8 @@ onCloseEffect = function(dialog){
 };
 
 showInfoOptions = {
-	opacity: 50,
-	overlayCss: {backgroundColor:"#fff"},
+	opacity: 10,
+	overlayCss: {backgroundColor:"#000"},
 	containerCss:{
 		backgroundColor:"#fff",
 		borderColor:"#000",
@@ -40,13 +40,13 @@ smartPop = {
 
 	overlay : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		var curtain = $('<span id="sw_overlay_span" class="op30" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#ffffff;"></span>');
+		var curtain = $('<span id="sw_overlay_span" class="op10" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#000;"></span>');
 		curtain.appendTo($(target));
 	},
 	
 	overlayDark : function(target){
 		if(isEmpty($(target))) target = $(document.body);
-		var curtain = $('<span id="sw_overlay_span" class="op50" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#ffffff;"></span>');
+		var curtain = $('<span id="sw_overlay_span" class="op10" style="position:absolute; top:0; left:0; width:' + $(document).width() + 'px; height:' + $(document).height() + 'px; z-index:10000; display:block; background-color:#000;"></span>');
 		curtain.appendTo($(target));
 	},
 	
@@ -259,32 +259,32 @@ smartPop = {
 	progressTarget : "",
 	progressCenter : function(){
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo($(document));
-		if(!$.browser.msie)
+		//if(!$.browser.msie)//
 			smartPop.overlay();
 	},
 	
 	progressCont : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh.gif"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)//
 			smartPop.overlay();
 	},
 	progressContGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_wh_02.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)//
 			smartPop.overlay();
 	},
 	progressNav : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)//
 			smartPop.overlay();
 	},
 	progressNavGray : function(target){
 		smartPop.progressTarget= target;
 		$('<img class="js_progress_icon" src="images/load_gr_02.gif" align="bottom"/>').appendTo(target);
-		if(!$.browser.msie)
+		//if(!$.browser.msie)//
 			smartPop.overlay();
 	},
 
@@ -312,7 +312,7 @@ smartPop = {
 				opacity: 0,
 				autoPosition: false,
 				fixed: false,
-				overlayCss: {backgroundColor:"#fff"},
+				overlayCss: {backgroundColor:"#000"},
 				containerCss: containerCss,
 				overlayClose: true,
 				onShow: function(dialog){
@@ -432,7 +432,7 @@ smartPop = {
 				opacity: 0,
 				autoPosition: false,
 				fixed: false,
-				overlayCss: {backgroundColor:"#fff"},
+				overlayCss: {backgroundColor:"#000"},
 				containerCss: containerCss,
 				overlayClose: true,
 				onShow: function(dialog){
@@ -528,7 +528,7 @@ smartPop = {
 				opacity: 0,
 				autoPosition: false,
 				fixed: false,
-				overlayCss: {backgroundColor:"#fff"},
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					width:conWidth
 				},
@@ -573,8 +573,8 @@ smartPop = {
 		if(isEmpty(formId) || isEmpty(target)) return;
 		$.get("pop_select_work_item.sw", {formId: formId}, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
 					width:800
@@ -611,8 +611,8 @@ smartPop = {
 	selectApprovalLine : function(){
 		$.get("pop_select_approval_line.sw", {}, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					width:600
 				},
@@ -637,8 +637,8 @@ smartPop = {
 	createGroup : function(){
 		$.get("pop_new_group.sw", function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
 					width:600
@@ -671,8 +671,8 @@ smartPop = {
 	inviteGroupMembers : function(groupId){
 		$.get("pop_invite_group_members.sw?groupId=" + groupId, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
 					width:600
@@ -703,8 +703,8 @@ smartPop = {
 	createWorkCategory : function(categoryId, categoryName, categoryDesc){
 		$.get("pop_new_category.sw?categoryId="+ categoryId + "&categoryName=" + categoryName + "&categoryDesc=" + categoryDesc, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:200,
 					width:460
@@ -745,8 +745,8 @@ smartPop = {
 						+ "&workName=" + workName + "&workTypeName=" + workTypeName + "&workDesc=" + workDesc + "&categoryId=" + categoryId + "&groupId=" + groupId;
 		$.get( url, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:300,
 					width:560
@@ -778,8 +778,8 @@ smartPop = {
 		var url = "pop_move_work_definition.sw?workId=" + workId + "&workName=" + workName + "&type=" + type + "&workFullName=" + workFullName + "&categoryId=" + categoryId + "&groupId=" + groupId + "&workDesc=" + workDesc;
 		$.get( url, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:300,
 					width:560
@@ -811,8 +811,8 @@ smartPop = {
 		if(isEmpty(formId) || isEmpty(target)) return;
 		$.get("pop_download_from_appstore.sw", {formId: formId}, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:500,
 					width:800
@@ -847,8 +847,8 @@ smartPop = {
 		parentName = (isEmpty(parentName)) ? "" : parentName;
 		$.get("pop_new_mail_folder.sw?parentId=" + parentId + "&parentName="+ parentName + "&folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:200,
 					width:460
@@ -879,8 +879,8 @@ smartPop = {
 	createFileFolder : function(workSpaceId, parentId, folderId, folderName){
 		$.get("pop_new_file_folder.sw?workSpaceId=" + workSpaceId + "&parentId="+ parentId + "&folderId=" + folderId + "&folderName=" + folderName, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:200,
 					width:460
@@ -908,8 +908,8 @@ smartPop = {
 	createImageFolder : function(workSpaceId, parentId, folderId, folderName){
 		$.get("pop_new_image_folder.sw?workSpaceId=" + workSpaceId + "&parentId="+ parentId + "&folderId=" + folderId + "&folderName=" + folderName, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:200,
 					width:460
@@ -939,8 +939,8 @@ smartPop = {
 			var width = 860;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				autoPosition: false,
 				containerCss:{
 					top: 30,
@@ -973,8 +973,8 @@ smartPop = {
 			var width = 620;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				autoPosition: false,
 				containerCss:{
 					top: 30,
@@ -993,8 +993,8 @@ smartPop = {
 			var width = 800;
 			var left = (($(window).width() - width) / 2) + $(window).scrollLeft();
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				autoPosition: false,
 				containerCss:{
 					top: 30,
@@ -1011,8 +1011,8 @@ smartPop = {
 	reassignPerformer : function(workId, instanceId, taskInstId){
 		$.get("pop_reassign_performer.sw?workId=" + workId + "&instanceId="+ instanceId + "&taskInstId=" + taskInstId, function(data){
 			$(data).modal({
-				opacity: 50,
-				overlayCss: {backgroundColor:"#fff"},
+				opacity: 10,
+				overlayCss: {backgroundColor:"#000"},
 				containerCss:{
 					height:200,
 					width:460
