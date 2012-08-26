@@ -60,8 +60,8 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 #notice_message_box .reply {background: url("../../images/header_nico.png") no-repeat scroll -828px -268px transparent; clear:both; overflow: hidden; padding: 0 0 0 23px; margin: 6px 0 0 4px}
 
 /*Top Menu*/
-.top_menu {z-index:40; margin:0 auto; width:138px} /* 검색 추가 후에는 width:345px으로 변경 */
-.top_menu ul {width:138px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
+.top_menu {width:71px; margin:0 auto; z-index:40} /* 검색 추가 시 width:345px으로 변경, 대시보드 추가 시 width:138px */
+.top_menu ul {width:71px; height:34px; background:url("../../images/top_menu.png") no-repeat left top}
 .top_menu ul li {float:left; height:34px; background:url("../../images/top_menu.png") no-repeat; text-align:center; vertical-align:middle; font-weight:bold}
 .top_menu ul li a:hover,
 .top_menu ul li .current {background:url("../../images/top_menu.png") no-repeat; height:34px}
@@ -411,7 +411,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 .up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block}
 .up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background-position: -677px -190px; font-weight:bold}
 
-.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 27px; display:block}
+.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:29px; padding:4px 0 3px 27px; display:block}
 .up_event a:hover, .up_event .current,  .up_event a.current:hover {background-position: -278px -190px; font-weight:bold}
 
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}

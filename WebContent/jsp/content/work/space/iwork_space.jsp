@@ -120,40 +120,42 @@
 		                    
 		            <!-- 우측 버튼-->
 		            <div class="fr"  style="line-height: 30px">
-		            <div class="txt_btn t_s11 h_auto fr">
-		                <a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
-		            </div>
 		            
-					<!-- 전자결재, 업무전달 버튼들 -->
-					<div class="fr cb" style="height:22px">
-						<%
-						if(forwardedTask == null){
-						%>
-							<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
-						<%
-						}
-						if(approvalTask == null && forwardedTask == null){
-						%>
+			            <!-- 주소복사 -->
+			            <div class="txt_btn t_s11 h_auto fr" style="visibility: hidden">
+			                <a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
+			            </div>
+		            
+						<!-- 전자결재, 업무전달 버튼들 -->
+						<div class="fr cb" style="height:22px">
 							<%
-							if(instance.getOwner().getId().equals(cUser.getId())){
+							if(forwardedTask == null){
 							%>
-								<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+								<a href="" class="js_toggle_forward_btn" title="<fmt:message key='common.button.forward'/>"><span class="icon_forward_w"></span></a>
+							<%
+							}
+							if(approvalTask == null && forwardedTask == null){
+							%>
+								<%
+								if(instance.getOwner().getId().equals(cUser.getId())){
+								%>
+									<a href="" class="js_toggle_approval_btn" title="<fmt:message key='common.button.approval'/>"><span class="icon_approval_w"></span></a>
+								<%
+								}
+								%>
 							<%
 							}
 							%>
-						<%
-						}
-						%>
-						<%
-						if(cUser.isUseMail()){
-						%>
-	                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
-	                	<%
-	                	}
-	                	%>
-	                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
-					</div>
-					<!-- 전자결재, 업무전달 버튼들 //-->
+							<%
+							if(cUser.isUseMail()){
+							%>
+		                		<a href="" class="js_email_content_btn" title="<fmt:message key='common.button.email'/>"><span class="icon_mail_w"></span></a>
+		                	<%
+		                	}
+		                	%>
+		                	<a class="js_print_content_btn" href="" title="<fmt:message key='common.button.print'/>"><span class="icon_print_w"></span></a>
+						</div>
+						<!-- 전자결재, 업무전달 버튼들 //-->
 					</div>
 					<!-- 우측 버튼//-->
 		                    

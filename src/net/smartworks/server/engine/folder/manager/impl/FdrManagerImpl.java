@@ -9,6 +9,7 @@
 package net.smartworks.server.engine.folder.manager.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -118,6 +119,10 @@ public class FdrManagerImpl extends AbstractManager implements IFdrManager {
 		String[] objIdNotIns = null;
 		String workspaceId = null;
 		String refType = null;
+		String creationUser = null;
+		Date creationDate = null;
+		String modificationUser = null;
+		Date modificationDate = null;
 
 		if (cond != null) {
 			objId = cond.getObjId();
@@ -132,6 +137,10 @@ public class FdrManagerImpl extends AbstractManager implements IFdrManager {
 			objIdNotIns = cond.getObjIdNotIns();
 			workspaceId = cond.getWorkspaceId();
 			refType = cond.getRefType();
+			creationUser = cond.getCreationUser();
+			creationDate = cond.getCreationDate();
+			modificationUser = cond.getModificationUser();
+			modificationDate = cond.getModificationDate();
 		}
 		buf.append(" from FdrFolder obj");
 		if (folderFiles != null && folderFiles.length != 0) {
@@ -167,6 +176,14 @@ public class FdrManagerImpl extends AbstractManager implements IFdrManager {
 				}
 				buf.append(")");
 			}
+			if (creationUser != null)
+				buf.append(" and obj.creationUser = :creationUser");
+			if (creationDate != null)
+				buf.append(" and obj.creationDate = :creationDate");
+			if (modificationUser != null)
+				buf.append(" and obj.modificationUser = :modificationUser");
+			if (modificationDate != null)
+				buf.append(" and obj.modificationDate = :modificationDate");
 			if (filters != null) {
 				if (!CommonUtil.isEmpty(filters)) {
 					if (CommonUtil.isEmpty(logicalOperator))
@@ -251,6 +268,14 @@ public class FdrManagerImpl extends AbstractManager implements IFdrManager {
 					query.setString("objIdNotIn"+i, objIdNotIns[i]);
 				}
 			}
+			if (creationUser != null)
+				query.setString("creationUser", creationUser);
+			if (creationDate != null)
+				query.setTimestamp("creationDate", creationDate);
+			if (modificationUser != null)
+				query.setString("modificationUser", modificationUser);
+			if (modificationDate != null)
+				query.setTimestamp("modificationDate", modificationDate);
 			if (filters != null) {
 				if (!CommonUtil.isEmpty(filterMap)) {
 					Filter f;
