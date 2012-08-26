@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.community.info.WorkSpaceInfo"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="net.smartworks.model.work.info.SmartWorkInfo"%>
@@ -194,13 +195,15 @@
 				String workId = instanceInfo.getWork().getId();
 				String target = ((WorkInstanceInfo)instanceInfo).getController() + "?cid=" + ((WorkInstanceInfo)instanceInfo).getContextId() + "&workId=" + workId;
 				List<Map<String, String>> fileNames = fileInstance.getFiles();
+				String fileId = (fileNames.size()==1) ? fileNames.get(0).get("fileId") : "";
 				String fileName = (fileNames.size()==1) ? fileNames.get(0).get("fileName") : "";
 				String fileSize = (fileNames.size()==1) ? fileNames.get(0).get("fileSize") : "";
 				long size = (SmartUtil.isBlankObject(fileSize)) ? 0 : Long.parseLong(fileSize);
 				fileSize = SmartUtil.getBytesAsString(size);
 			%>
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
-					<td class="tc"><input name="chkSelectMail" class="js_check_file_instance" type="checkbox" value="<%=instanceInfo.getId()%>"/></td>
+					<%-- <td class="tc"><input name="chkSelectMail" class="js_check_file_instance" type="checkbox" value="<%=instanceInfo.getId()%>"/></td> --%>
+					<td class="tc"><input name="chkSelectMail" class="js_check_file_instance" type="checkbox" value="<%=fileId%>"/></td>
 					<td class="tc"><%=currentCount%></td>
 					<td>
   						<span class="js_pop_files_detail" filesDetail="<%=fileInstance.getFilesHtml()%>"><%=fileName %></span>

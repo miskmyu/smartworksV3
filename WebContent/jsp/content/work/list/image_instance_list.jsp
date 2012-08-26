@@ -49,7 +49,7 @@
 	if(!SmartUtil.isBlankObject(strLastDate))		
 		lastDate = LocalDate.convertLocalStringToLocalDate(strLastDate);
 	
-	String workId = "pkg_309666dd2bb5493c9d7e618b3a0aad96";//자료실의 워크아이디, 하드코딩 제거할수 있는 방법?
+	String workId = SmartWork.ID_FILE_MANAGEMENT;
 %>
 
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />

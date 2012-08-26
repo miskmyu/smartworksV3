@@ -224,8 +224,8 @@
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
 							<div class="srch_wh srch_wsize">
-								<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
-									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
+								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
 						</form>
 
