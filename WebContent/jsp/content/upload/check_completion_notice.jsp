@@ -28,9 +28,9 @@
 		<!-- 완료시 알림을 원하는지를 선택하는 선택박스 -->
 		<div class="pr10">
 			<%if("approvalWork".equals(workType)){ %>
-				<input name="chkApprovalCompletionNotice" class="pl15" type="checkbox"/><fmt:message key="common.title.approval_completion_notice" />
+				<%-- <input name="chkApprovalCompletionNotice" class="pl15" type="checkbox"/><fmt:message key="common.title.approval_completion_notice" /> --%>
 			<%}else{ %>
-				<input name="chkWorkCompletionNotice" class="pl15" type="checkbox"/><fmt:message key="common.title.work_completion_notice" />
+				<%-- <input name="chkWorkCompletionNotice" class="pl15" type="checkbox"/><fmt:message key="common.title.work_completion_notice" /> --%>
 			<%}%>
 		</div>
 	</form>

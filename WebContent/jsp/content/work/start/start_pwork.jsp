@@ -113,7 +113,7 @@ function submitForms(e) {
 			if(SmartUtil.isBlankObject(startTask.getApprovalLineId())){
 			%>
 				<div class="fr">
-					<a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a>
+					<%--프로세스전자결재 완료시까지 버튼숨김  <a href="" class="js_toggle_approval_btn"><img src="images/btn_approvep.gif" title="<fmt:message key='common.button.approval'/>" /> </a> --%>
 				</div>
 				<div class="fr">
 					<a href="" class="js_toggle_forward_btn"><img src="images/btn_referw.gif" title="<fmt:message key='common.button.forward'/>" /> </a>
