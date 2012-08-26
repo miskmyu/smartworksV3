@@ -8408,11 +8408,31 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 		User cUser = SmartUtil.getCurrentUser();
 		String userId = cUser.getId();
+		
+		if (tagetFolderId.equalsIgnoreCase(FileCategory.ID_UNCATEGORIZED)) {
+			
+			FdrFolderCond cond = new FdrFolderCond();
+			cond.setFolderFiles(new FdrFolderFile[]{new FdrFolderFile((String)fileIds.get(0))});
+			
+			FdrFolder[] sourceFolders = getFdrManager().getFolders(userId, cond, IManager.LEVEL_ALL);
+
+			if (sourceFolders != null && sourceFolders.length != 0) {
+				FdrFolderFile[] folderFiles = sourceFolders[0].getFolderFiles();
+				for (int i = 0; i < folderFiles.length; i++) {
+					FdrFolderFile folderFile = folderFiles[i];
+					if (fileIds.contains(folderFile.getFileId())) {
+						sourceFolders[0].removeFolderFile(folderFile);
+					}
+				}
+				getFdrManager().setFolder(userId, sourceFolders[0], null);
+			}
+			return;
+		}
 
 		FdrFolderCond targetFolderCond = new FdrFolderCond();
 		targetFolderCond.setObjId(tagetFolderId);
 		FdrFolder[] targetFolders = getFdrManager().getFolders(userId, targetFolderCond, IManager.LEVEL_ALL);
-		if (targetFolders == null | targetFolders.length == 0)
+		if (targetFolders == null || targetFolders.length == 0)
 			return;
 		
 		FdrFolderCond cond = new FdrFolderCond();
@@ -8421,6 +8441,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		FdrFolder[] sourceFolders = getFdrManager().getFolders(userId, cond, IManager.LEVEL_ALL);
 
 		if (sourceFolders == null || sourceFolders.length == 0) {
+			
 			for (int i = 0; i < fileIds.size(); i++) {
 				String fileId = (String)fileIds.get(i);
 				FdrFolderFile folderFile = new FdrFolderFile();
@@ -8431,6 +8452,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			
 		} else {
 				
+			String sourceFolderId = sourceFolders[0].getObjId();
+			if (tagetFolderId.equalsIgnoreCase(sourceFolderId))
+				return;
+			
 			FdrFolderFile[] folderFiles = sourceFolders[0].getFolderFiles();
 			for (int i = 0; i < folderFiles.length; i++) {
 				FdrFolderFile folderFile = folderFiles[i];
