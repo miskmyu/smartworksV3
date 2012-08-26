@@ -30,7 +30,7 @@
 			<!-- 검색 -->
 			<form class="po_left" name="frmSearchInstance">
 				<div class="srch_wh srch_wsize">
-					<input class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance'/>" name="txtSearchInstance">
+					<input class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance'/>" name="txtSearchInstance">
 					<button onclick="popSelectListParam($(this).parents('form').next(), false);return false;" title="<fmt:message key='search.search_instance'/>"></button>
 				</div>
 			</form>

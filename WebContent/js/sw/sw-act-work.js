@@ -1245,6 +1245,7 @@ $(function() {
 			var isMultiUsers = userField.attr('multiUsers');
 
 			var documentHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+			if($.browser.msie) documentHeight = document.body.scrollHeight;
 			var inputPosition = input.position();
 			var inputOffset = input.offset();
 			var listTop = inputOffset.top + input.height();

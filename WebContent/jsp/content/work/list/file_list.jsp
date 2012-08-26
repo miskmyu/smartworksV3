@@ -156,7 +156,7 @@
 						<div class="title_line_options fr">
 							<form name="frmSearchInstance" class="po_left">
 								<div class="srch_wh srch_wsize m0">
-									<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<input name="txtSearchInstance" class="nav_input" type="text" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 								</div>
 							</form>					

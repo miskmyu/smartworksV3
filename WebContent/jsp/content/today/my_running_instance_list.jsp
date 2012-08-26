@@ -94,7 +94,7 @@
 					
 					<form name="frmSearchInstance" class="fr js_search_running_instance">
 						<div class="srch_wh srch_wsize">
-							<input name="txtSearchInstance" class="nav_input" type="text" title="<fmt:message key="search.search_running_instance"/>"
+							<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" title="<fmt:message key="search.search_running_instance"/>"
 								placeholder="<fmt:message key="search.search_running_instance"/>">
 							<button title="<fmt:message key='search.search'/>" onclick="selectListParam($('.js_running_instance_title').find('.js_progress_span:first'), false);return false;"></button>
 						</div>

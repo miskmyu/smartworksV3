@@ -106,7 +106,7 @@
 	<!-- 메일 검색 -->
 	<form name="frmSearchInstance" class="mail_srch">
 		<div class="srch_wh srch_wsize_mail">
-			<input name="txtSearchInstance" class="nav_input" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
+			<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
 			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parents('.js_mail_list_title_page').find('.js_progress_span:first'), false);return false;"></button>
 		</div>
 	</form>
