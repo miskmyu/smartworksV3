@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
@@ -67,7 +68,36 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <div class="glo_btn_space js_upload_buttons_page">
+<%
 
+	if (!CommonUtil.isEmpty(workId) && workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
+		if (communities != null && communities.length != 0) {
+%>
+<!--  완료 및 취소 버튼 -->
+	<div class="fr">
+		<span class="btn_gray"> 
+			<!--  완료버튼을 클릭시 해당 업로드 화면페이지에 있는 submitForms()함수를 실행한다.. -->
+			<a href="" class="js_complete_action" onclick='submitForms();return false;'> 
+				<span class="txt_btn_start"></span>
+				<span class="txt_btn_center"><fmt:message key="common.button.complete"/></span> 
+				<span class="txt_btn_end"></span> 
+			</a>
+		</span> 
+				
+		<span class="btn_gray">
+			<!--  취소버튼을 클릭시 sw_act_work 에서 click event 로 정의 되어있는 함수를 실행한다... -->
+			<a href="" class="js_cancel_action"> 
+				<span class="txt_btn_start"></span> 
+				<span class="txt_btn_center"><fmt:message key="common.button.cancel" /></span> 
+				<span class="txt_btn_end"></span> 
+			</a> 
+		</span>
+	</div>
+	<!--  완료 및 취소 버튼 //-->
+<%
+		}
+	} else {
+%>
 	<!--  완료 및 취소 버튼 -->
 	<div class="fr">
 		<span class="btn_gray"> 
@@ -89,7 +119,9 @@
 		</span>
 	</div>
 	<!--  완료 및 취소 버튼 //-->
-
+<%
+	}
+%>
 	<!--  접근권한 및 등록할 공간정보를 선택하는 박스들 -->
 	<form name="frmAccessSpace" class="js_validation_required">
 		<div id="" class="fr form_space">
