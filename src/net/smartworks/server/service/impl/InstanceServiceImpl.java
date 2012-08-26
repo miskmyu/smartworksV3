@@ -69,7 +69,6 @@ import net.smartworks.model.work.info.SmartWorkInfo;
 import net.smartworks.model.work.info.WorkCategoryInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.server.engine.autoindex.manager.IIdxManager;
-import net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
 import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.autoindex.model.AutoIndexInst;
@@ -103,6 +102,7 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.folder.manager.IFdrManager;
 import net.smartworks.server.engine.folder.model.FdrFolder;
 import net.smartworks.server.engine.folder.model.FdrFolderCond;
+import net.smartworks.server.engine.folder.model.FdrFolderFile;
 import net.smartworks.server.engine.infowork.domain.manager.ISwdManager;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataRef;
@@ -3060,7 +3060,11 @@ public class InstanceServiceImpl implements IInstanceService {
 					String name = (String)userMap.get("name");
 
 					AprApproval apr = new AprApproval();
-					apr.setName(aprAprDefs[i-1].getName());
+					if (hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.3level") || hdnApprovalLineId.equalsIgnoreCase("system.approvalLine.default.2level")) {
+						apr.setName(aprAprDefs[i-1].getName());
+					} else {
+						apr.setName(aprAprDefs[i-1].getAprName());
+					}
 					apr.setType(aprAprDefs[i-1].getType());
 					apr.setApprover(id);
 					apr.setMandatory(true);
@@ -8297,16 +8301,20 @@ public class InstanceServiceImpl implements IInstanceService {
 	public BoardInstanceInfo[] getRecentBoardInstances(String spaceId, int maxLength) throws Exception {
 		return getBoardInstancesByWorkSpaceId(spaceId, maxLength);
 	}
-	@Override
-	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+	private void createNewFolder(Map<String, Object> requestBody, HttpServletRequest request, String type) throws Exception {
 		try {
 			User cUser = SmartUtil.getCurrentUser();
 			String userId = cUser.getId();
 			String companyId = cUser.getCompanyId();
 
 			String workSpaceId = (String)requestBody.get("workSpaceId");
-
-			Map<String, Object> frmNewFileFolder = (Map<String, Object>)requestBody.get("frmNewFileFolder");
+			
+			Map<String, Object> frmNewFileFolder = null;
+			if (type.equalsIgnoreCase(TskTask.TASKREFTYPE_IMAGE)) {
+				frmNewFileFolder = (Map<String, Object>)requestBody.get("frmNewImageFolder");
+			} else if (type.equalsIgnoreCase(TskTask.TASKREFTYPE_FILE)) {
+				frmNewFileFolder = (Map<String, Object>)requestBody.get("frmNewFileFolder");
+			}
 			Set<String> keySet = frmNewFileFolder.keySet();
 			Iterator<String> itr = keySet.iterator();
 
@@ -8336,7 +8344,7 @@ public class InstanceServiceImpl implements IInstanceService {
 			//fdrFolder.setDescription(description); TO-DO : 폴더에 대한 설명
 			fdrFolder.setDisplayOrder((int)folderCount);
 			fdrFolder.setWorkspaceId(workSpaceId);
-			fdrFolder.setRefType(TskTask.TASKREFTYPE_FILE); //TO-DO : 사진 메뉴에서도 폴더 생성 가능하게 될 시에 구현 (사진폴더 - 파일폴더)
+			fdrFolder.setRefType(type);
 
 			getFdrManager().createFolder(userId, fdrFolder);
 
@@ -8345,49 +8353,138 @@ public class InstanceServiceImpl implements IInstanceService {
 			throw new Exception();
 		}
 	}
-	@Override
-	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		try {
+	private void setFolder(Map<String, Object> requestBody, HttpServletRequest request, String type) throws Exception {
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		String workSpaceId = (String)requestBody.get("workSpaceId");
+		String folderId = (String)requestBody.get("folderId");
+		Map frmNewFolderMap = null;
+		if (type.equalsIgnoreCase(TskTask.TASKREFTYPE_FILE)) {
+			frmNewFolderMap = (Map)requestBody.get("frmNewFileFolder");
+		} else if (type.equalsIgnoreCase(TskTask.TASKREFTYPE_IMAGE)) {
+			frmNewFolderMap = (Map)requestBody.get("frmNewImageFolder");
+		}
+		String newFolderName = (String)frmNewFolderMap.get("txtFolderName");
+		
+		if (CommonUtil.isEmpty(newFolderName) || CommonUtil.isEmpty(folderId) || CommonUtil.isEmpty(frmNewFolderMap))
+			return;
+		
+		FdrFolder folder = getFdrManager().getFolder(userId, folderId, null);
+		if (CommonUtil.isEmpty(folder))
+			return;
+		
+		folder.setName(newFolderName);
+		getFdrManager().setFolder(userId, folder, null);
+	}
+	private void removeFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		//{workSpaceId=kmyu@maninsoft.co.kr, parentId=AllFiles, folderId=402880eb39619295013961a176070005}
+		String workSpaceId = (String)requestBody.get("workSpaceId");
+		String parentId = (String)requestBody.get("parentId");
+		String folderId = (String)requestBody.get("folderId");
+
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		
+		if (CommonUtil.isEmpty(folderId))
+			return;
+		
+		FdrFolder folder = getFdrManager().getFolder(userId, folderId, null);
+		
+		if (CommonUtil.isEmpty(folder))
+			return;
+		
+		getFdrManager().removeFolder(userId, folderId);
+		
+	}
+	private void moveFile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		//{workSpaceId=kmyu@maninsoft.co.kr, tagetFolderId=402880eb39619295013961a176070005, instanceIds=[dr_4028801a395699310139569931090000]}
+		
+		String workSpaceId = (String)requestBody.get("workSpaceId");
+		String tagetFolderId = (String)requestBody.get("tagetFolderId");
+		List fileIds = (List)requestBody.get("instanceIds");
+		
+		if (fileIds == null || fileIds.size() == 0)
+			return;
+		
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+
+		FdrFolderCond targetFolderCond = new FdrFolderCond();
+		targetFolderCond.setObjId(tagetFolderId);
+		FdrFolder[] targetFolders = getFdrManager().getFolders(userId, targetFolderCond, IManager.LEVEL_ALL);
+		if (targetFolders == null | targetFolders.length == 0)
+			return;
+		
+		FdrFolderCond cond = new FdrFolderCond();
+		cond.setFolderFiles(new FdrFolderFile[]{new FdrFolderFile((String)fileIds.get(0))});
+		
+		FdrFolder[] sourceFolders = getFdrManager().getFolders(userId, cond, IManager.LEVEL_ALL);
+
+		if (sourceFolders == null || sourceFolders.length == 0) {
+			for (int i = 0; i < fileIds.size(); i++) {
+				String fileId = (String)fileIds.get(i);
+				FdrFolderFile folderFile = new FdrFolderFile();
+				folderFile.setFileId(fileId);
+				targetFolders[0].addFolderFile(folderFile);
+			}
+			getFdrManager().setFolder(userId, targetFolders[0], null);
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception();
+		} else {
+				
+			FdrFolderFile[] folderFiles = sourceFolders[0].getFolderFiles();
+			for (int i = 0; i < folderFiles.length; i++) {
+				FdrFolderFile folderFile = folderFiles[i];
+				if (fileIds.contains(folderFile.getFileId())) {
+					sourceFolders[0].removeFolderFile(folderFile);
+				}
+			}
+			for (int i = 0; i < fileIds.size(); i++) {
+				String fileId = (String)fileIds.get(i);
+				FdrFolderFile folderFile = new FdrFolderFile();
+				folderFile.setFileId(fileId);
+				targetFolders[0].addFolderFile(folderFile);
+			}
+			getFdrManager().setFolder(userId, sourceFolders[0], null);
+			getFdrManager().setFolder(userId, targetFolders[0], null);
 		}
 	}
 	@Override
+	public void createNewFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		createNewFolder(requestBody, request, TskTask.TASKREFTYPE_FILE);
+	}
+	@Override
+	public void setFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		setFolder(requestBody, request, TskTask.TASKREFTYPE_FILE);
+	}
+	@Override
 	public void removeFileFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		removeFolder(requestBody, request);
 	}
 	@Override
 	public void createNewImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		createNewFolder(requestBody, request, TskTask.TASKREFTYPE_IMAGE);
 	}
 	@Override
 	public void setImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		setFolder(requestBody, request, TskTask.TASKREFTYPE_IMAGE);
 	}
 	@Override
 	public void removeImageFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		removeFolder(requestBody, request);
 	}
 	@Override
 	public void removeImageInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		removeInformationWorkInstance(requestBody, request);
 	}
 	@Override
 	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
+		System.out.println(requestBody);
 		
 	}
 	@Override
 	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		
+		moveFile(requestBody, request);		
 	}
 	@Override
 	public ImageInstance getImageInstanceById(String instId) throws Exception {

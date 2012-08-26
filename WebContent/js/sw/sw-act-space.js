@@ -627,11 +627,13 @@ $(function() {
 		var input = $(targetElement(e));
 		var imageList = input.parents('.js_image_list_page');
 		var workSpaceId = imageList.attr("workSpaceId");
+		var workId = input.attr("workId");
 		var instanceId = input.attr("instanceId");
 		smartPop.confirm(smartMessage.get("removeConfirmation"), function(){
 			var paramsJson = {};
 			paramsJson['workSpaceId'] = workSpaceId;
 			paramsJson['instanceId'] = instanceId;
+			paramsJson['workId'] = workId;
 			smartPop.progressCenter();
 			console.log(JSON.stringify(paramsJson));
 			$.ajax({
@@ -659,6 +661,7 @@ $(function() {
 		var input = $(targetElement(e));
 		var imageList = input.parents('.js_image_list_page');
 		var workSpaceId = imageList.attr("workSpaceId");
+		var selectedFolder = imageList.find('.js_image_instance_list_page').attr('parentId');
 		var selectedImages = imageList.find('.js_image_instance_list_page .js_check_image_instance:checked');
 		var targetId = input.find('option:selected').attr('value');
 		if(isEmpty(targetId))
@@ -672,6 +675,7 @@ $(function() {
 			var paramsJson = {};
 			paramsJson['workSpaceId'] = workSpaceId;
 			paramsJson['tagetFolderId'] = targetId;
+			paramsJson['sourceFolderId'] = selectedFolder;
 			var instanceIds = new Array();
 			for(var i=0; i<selectedImages.length; i++){
 				instanceIds.push($(selectedImages[i]).attr('value'));

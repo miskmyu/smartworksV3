@@ -35,6 +35,10 @@ public class FdrFolderFile extends MisObject {
 	public FdrFolderFile() {
 		super();
 	}
+	public FdrFolderFile(String fileId) {
+		super();
+		this.fileId = fileId;
+	}
 	public FdrFolderFile(String folderId, String fileId) {
 		this.folderId = folderId;
 		this.fileId = fileId;

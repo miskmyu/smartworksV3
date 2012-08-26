@@ -48,6 +48,8 @@
 	LocalDate lastDate = new LocalDate();
 	if(!SmartUtil.isBlankObject(strLastDate))		
 		lastDate = LocalDate.convertLocalStringToLocalDate(strLastDate);
+	
+	String workId = "pkg_309666dd2bb5493c9d7e618b3a0aad96";//자료실의 워크아이디, 하드코딩 제거할수 있는 방법?
 %>
 
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -124,7 +126,8 @@
 				%>
 				<!--폴더 목록1 -->
 				<li class="mt10">
-					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>">
+					<%-- <input type="checkbox" class="tl js_check_image_instance" value="<%=image.getId()%>"> --%>
+					<input type="checkbox" class="tl js_check_image_instance" value="<%=image.getFileId()%>">
 					<div class="picture_detail_area">
 						
 						<!-- 삭제버튼 -->
@@ -133,7 +136,7 @@
 						if(image.isEditableForMe()){
 						%>
 							<div class="ctgr_action">
-								<span class="btn_remove_category js_remove_image_instance_btn" instanceId="<%=image.getId() %>" title="<fmt:message key='common.button.delete'/>"></span>
+								<span class="btn_remove_category js_remove_image_instance_btn" instanceId="<%=image.getId() %>" workId="<%=workId%>" title="<fmt:message key='common.button.delete'/>"></span>
 							</div>
 						<%
 						}
