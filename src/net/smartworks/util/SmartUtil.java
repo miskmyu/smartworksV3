@@ -633,20 +633,20 @@ public class SmartUtil {
 						client.getChannel(SmartUtil.getMessageChannel(companyId, SUBJECT_ONLINE)).subscribe(
 							new ClientSessionChannel.MessageListener() {
 								public void onMessage(ClientSessionChannel channel, Message message) {
-									if (!message.isSuccessful()) {
+//									if (message.isSuccessful()) {
 										System.out.println("Chatter [" + message.get("data") + "] is ONLINE now !!!");
 										SmartUtil.updateChatterStatus(true, (String)message.get("data"));
-									}
+//									}
 								}
 							}
 						);
 						client.getChannel(SmartUtil.getMessageChannel(companyId ,SUBJECT_OFFLINE)).subscribe(
 							new ClientSessionChannel.MessageListener() {
 								public void onMessage(ClientSessionChannel channel, Message message) {
-									if (!message.isSuccessful()) {
+//									if (message.isSuccessful()) {
 										System.out.println("Chatter [" + message.get("data") + "] is OFFLINE now !!!");
 										SmartUtil.updateChatterStatus(false, (String)message.get("data"));
-									}
+//									}
 								}
 							}
 						);									
