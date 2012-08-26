@@ -19,7 +19,7 @@ var msgType = {
 	JOIN_CHAT : "JOINCHAT"
 };
 
-var http = require('http'), faye = require('faye');
+var http = require('http'), faye = require('./faye-node');
 var port = 8011;
 
 var bayeux = new faye.NodeAdapter({
