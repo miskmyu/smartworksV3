@@ -8397,7 +8397,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		
 	}
 	private void moveFile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		//{workSpaceId=kmyu@maninsoft.co.kr, tagetFolderId=402880eb39619295013961a176070005, instanceIds=[dr_4028801a395699310139569931090000]}
+		//{workSpaceId=kmyu@maninsoft.co.kr, tagetFolderId=402880eb39619295013961a176070005, instanceIds=[file_4028801a395699310139569931090000]}
 		
 		String workSpaceId = (String)requestBody.get("workSpaceId");
 		String tagetFolderId = (String)requestBody.get("tagetFolderId");
@@ -8478,9 +8478,7 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public void moveFileInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println(requestBody);
-		
+		moveFile(requestBody, request);
 	}
 	@Override
 	public void moveImageInstances(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
