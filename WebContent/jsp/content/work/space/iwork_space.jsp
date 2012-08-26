@@ -120,7 +120,9 @@
 		                    
 		            <!-- 우측 버튼-->
 		            <div class="fr"  style="line-height: 30px">
-		            <div class="txt_btn t_s11 h_auto fr">
+		            
+		            <!-- 주소복사 -->
+		            <div class="txt_btn t_s11 h_auto fr" style="visibility: hidden">
 		                <a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
 		            </div>
 		            

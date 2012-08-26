@@ -211,12 +211,12 @@ function logout() {
  			</span> 
 		</li>
 		<!--  스마트케스트 메뉴 // -->
- --%>
+
 		<!--  대시보드 메뉴  -->
 		<li class="idx3">
  				<a href="dashboard.sw?cid=<%=ISmartWorks.CONTEXT_PREFIX_DASHBOARD + cUser.getId()%>"><fmt:message key="header.top_menu.dashboard" /></a> 
 		</li>
-		<!--  대시보드 메뉴  //-->
+		<!--  대시보드 메뉴  //-->  --%>
 	</ul>
 	
 	<!-- 통합 검색 기능  -->

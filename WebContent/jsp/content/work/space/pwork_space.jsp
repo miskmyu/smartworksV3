@@ -123,7 +123,10 @@
 		                    
 	            <!-- 우측 버튼-->
 	            <div class="fr" style="line-height: 15px">
-	                <div class="txt_btn t_s11 h_auto fr cb"><a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a></div>
+	            <!-- 주소복사 -->
+	                <div class="txt_btn t_s11 h_auto fr cb" style="visibility: hidden">
+	                	<a id="js_copy_address" href=""><fmt:message key="common.button.copy_url"/></a>
+	                </div>
 	            
 				<!-- 전자결재, 업무전달 버튼들 -->
 					<div class="fr cb">
