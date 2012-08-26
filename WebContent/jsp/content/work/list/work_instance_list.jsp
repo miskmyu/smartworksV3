@@ -322,10 +322,10 @@ if(!SmartUtil.isBlankObject(sortedField)){
 	<div class="num_box">
 		<span class="js_progress_span"></span>
 		<select class="js_select_page_size" name="selPageSize" title="<fmt:message key='common.title.count_in_page'/>">
-			<option <%if (pageSize == 10) {%> selected <%}%>>10</option>
 			<option <%if (pageSize == 20) {%> selected <%}%>>20</option>
 			<option <%if (pageSize == 30) {%> selected <%}%>>30</option>
 			<option <%if (pageSize == 50) {%> selected <%}%>>50</option>
+			<option <%if (pageSize == 100) {%> selected <%}%>>100</option>
 		</select>
 	</div>
 	<!-- 페이징 //-->

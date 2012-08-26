@@ -240,11 +240,16 @@ public class Pop3ProtocolImpl implements Protocol {
 				header.setReplyTo(msg.getReplyTo());
 				header.setSize(msg.getSize());
 				header.setSubject(msg.getSubject());
-				String[] sPriority = msg.getHeader("X-Priority");
-				header.setPriority(Short.parseShort(sPriority[0]));
-                
+				try{
+					String[] sPriority =  msg.getHeader("X-Priority");
+					header.setPriority(Short.parseShort(sPriority[0]));
+				}catch (Exception e){
+				}
 				// now set the human readables.
-				header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
+				try{
+					header.setDateShown(Formatter.formatDate(header.getDate(), "dd.MM.yyyy HH:mm"));
+				}catch (Exception e){
+				}
 				header.setFromShown(Utility.addressArrToString(header.getFrom()));
 				header.setToShown(Utility.addressArrToString(header.getTo()));
 				header.setReplyToShown(Utility.addressArrToString(header.getReplyTo()));
@@ -257,6 +262,7 @@ public class Pop3ProtocolImpl implements Protocol {
 			}
 		} catch (Exception e) {
 			System.out.println("Could not fetch message headers. Is mbox connection still alive???");
+			e.printStackTrace();
 			throw new ConnectionException(e);
 		}
 		return header;
