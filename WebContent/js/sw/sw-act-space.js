@@ -719,6 +719,11 @@ $(function() {
 		return true;
 	});
 	
+	$('.js_check_file_instance').live('click', function(e){
+		e.stopPropagation();
+		return true;
+	});
+	
 	$('a.js_file_instance_list').live('click', function(e){
 		var input = $(targetElement(e)).parents('a');
 		var fileList = input.parents('.js_file_list_page');
