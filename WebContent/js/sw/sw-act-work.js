@@ -1421,7 +1421,7 @@ $(function() {
 		body.find('textarea').css({height:"56px"});
 		body.html(body.html().replace(/\"images\//g, "\"" + hostNPort + "/smartworksV3/images/"));
 		body.html(body.html().replace(/textarea/g,  "div"));
-		var contents = '<html>' + header + '<body><br/><br/><br/><div id="wrap"><div>' + body.html() + '</div></div><br/><br/><br/></body></html>';
+		var contents = '<html><head>' + header + '</head><body><br/><br/><br/><div id="wrap"><div>' + body.html() + '</div></div><br/><br/><br/></body></html>';
 		
 		var paramsJson = {};
 		paramsJson['contents'] = contents;

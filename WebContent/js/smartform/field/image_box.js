@@ -43,7 +43,7 @@ SmartWorks.FormRuntime.ImageBoxBuilder.build = function(config) {
 	
 	var picSize = 'style="min-height:0px; max-width:' + ((picWidth) ? picWidth : 300) + 'px;' + ((picHeight) ? ('height:' + picHeight + 'px;"') : '"' );
 	var src = (isBlank(imgSource)) ? 'src=""' : ' src="' + imgSource + '" ';
-	var $image = $('<div ' + required + ' style="width:' + valueWidth + '%"><img class="js_auto_picture" onerror="$(this).hide();" ' + picSize + src + '><div>');
+	var $image = $('<div ' + required + ' style="width:' + valueWidth + '%"><img class="js_auto_picture" onerror="$(this).hide();" onsuccess="$(this).show();" ' + picSize + src + '><div>');
 	var $label = null;
 	$label = $('<div class="form_label" style="width:' + labelWidth + '%"><span id="' + id + '"></span></div>').append(spanRequired);
 	$label.appendTo(options.container);

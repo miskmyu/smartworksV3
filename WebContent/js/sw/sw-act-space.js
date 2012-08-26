@@ -14,12 +14,13 @@ $(function() {
 				}
 			});
 		}	
-		$('.js_now_time_string').html(now.format("TT h:MM:ss"));		
+		$('.js_now_time_string').html(now.format("TT h:MM:ss"));
 		setTimeout(function(){
 			updateNowString();
 		}, 1000);
 	};
-	updateNowString();
+	
+	if(!isEmpty($('.js_now_time_string'))) updateNowString();
 
 	$('a.js_space_tab_index').live('click',function(e) {
 		var input = $(targetElement(e)).parents('a:first');
