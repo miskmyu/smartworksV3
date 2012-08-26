@@ -411,7 +411,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 .up_pic a {background: url("../../images/header_nico.png") no-repeat -677px -155px; height:22px; width:27px; padding:4px 0 3px 34px; display:block}
 .up_pic a:hover, .up_pic .current,  .up_pic a.current:hover {background-position: -677px -190px; font-weight:bold}
 
-.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:39px; padding:4px 0 3px 27px; display:block}
+.up_event a {background: url("../../images/header_nico.png") no-repeat -278px -155px; height:22px; width:29px; padding:4px 0 3px 27px; display:block}
 .up_event a:hover, .up_event .current,  .up_event a.current:hover {background-position: -278px -190px; font-weight:bold}
 
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:29px; padding:4px 0 3px 23px; display:block}
