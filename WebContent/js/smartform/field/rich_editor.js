@@ -65,7 +65,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 			options.container.find('.form_value').append(value);
 		} else {
 			options.container.find('.form_value textarea').text(value);
-			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').text(value);
+			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
 		}
 	}
 

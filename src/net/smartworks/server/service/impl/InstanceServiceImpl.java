@@ -2443,11 +2443,35 @@ public class InstanceServiceImpl implements IInstanceService {
 
 			String commentId = (String)requestBody.get("commentId");
 
-			Opinion opinion = new Opinion();
-			opinion.setObjId(commentId);
+//			Opinion opinion = new Opinion();
+//			opinion.setObjId(commentId);
+//
+//			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
+			
+			OpinionCond opinionCond = new OpinionCond();
+			opinionCond.setObjId(commentId);
+			
+			Opinion opinion = getOpinionManager().getOpinion(userId, opinionCond, IManager.LEVEL_ALL);
+			if (opinion == null)
+				return;
+			String refCommentId = opinion.getObjId();
+			getOpinionManager().removeOpinion(userId, opinion.getObjId());
+			//알림이 있다면 알림도 지운다
+			
 
-			getOpinionManager().setOpinion(userId, opinion, IManager.LEVEL_ALL);
-
+//			PublishNotice pubNoticeObj = new PublishNotice(tskTask.getAssignee(), PublishNotice.TYPE_COMMENT, PublishNotice.REFTYPE_COMMENT_INFORWORK, opinion.getObjId());
+//			getPublishNoticeManager().setPublishNotice("linkadvisor", pubNoticeObj, IManager.LEVEL_ALL);
+//			
+			PublishNoticeCond pubNoticeCond = new PublishNoticeCond();
+			pubNoticeCond.setRefId(refCommentId);
+			PublishNotice pubNotice = getPublishNoticeManager().getPublishNotice(userId, pubNoticeCond, null);
+			if (pubNotice == null)
+				return;
+			String pubTargetUser = pubNotice.getAssignee();
+			getPublishNoticeManager().removePublishNotice(userId, pubNotice.getObjId());
+			
+			SmartUtil.increaseNoticeCountByNoticeType(pubTargetUser, Notice.TYPE_COMMENT);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
