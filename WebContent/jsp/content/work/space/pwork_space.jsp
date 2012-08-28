@@ -166,7 +166,7 @@
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="padding: 0 45px; height:80px">
+			<div class="define_space" style="padding: 0 45px; min-height:88px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
