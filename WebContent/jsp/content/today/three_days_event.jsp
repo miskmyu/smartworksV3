@@ -25,9 +25,9 @@
 	
 	// 회사 달력에 있는 3일의 달력정보를 가져온다...
 	CompanyCalendar[] threeDaysCC = smartWorks.getCompanyCalendars(new LocalDate(), 3);
-	LocalDate today = threeDaysCC[0].getDate();
-	LocalDate tomorrow = threeDaysCC[1].getDate();
-	LocalDate afterTomorrow = threeDaysCC[2].getDate();
+	LocalDate today = new LocalDate(threeDaysCC[0].getDate().getLocalDate());
+	LocalDate tomorrow = new LocalDate(threeDaysCC[1].getDate().getLocalDate());
+	LocalDate afterTomorrow =  new LocalDate(threeDaysCC[2].getDate().getLocalDate());
 	
 	EventInstanceInfo[] events = null;
 	if(SmartUtil.isBlankObject(wid))
