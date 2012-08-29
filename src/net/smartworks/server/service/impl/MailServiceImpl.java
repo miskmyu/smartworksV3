@@ -699,7 +699,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						}
 					}					
 					// end -- added by sjlee
-					String subject = MimeUtility.decodeText(mailContent.getSubject());
+					String subject = (SmartUtil.isBlankObject(mailContent.getSubject())) ? "" : MimeUtility.decodeText(mailContent.getSubject());
 					if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
 					mailInstanceInfo.setSubject(subject);
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
