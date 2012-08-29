@@ -218,7 +218,9 @@ public class FormField extends BaseObject{
 	}
 	public boolean isImportableField() {
 		if(this.type == null) return false;
-		if(	type.equals(TYPE_FILE) || type.equals(TYPE_OTHER_WORK) || type.equals(TYPE_IMAGE) || type.equals(TYPE_DATA_GRID))
+		//if(	type.equals(TYPE_FILE) || type.equals(TYPE_OTHER_WORK) || type.equals(TYPE_IMAGE) || type.equals(TYPE_DATA_GRID))
+		//if(	type.equals(TYPE_FILE) || type.equals(TYPE_IMAGE) || type.equals(TYPE_DATA_GRID))
+		if(type.equals(TYPE_IMAGE) || type.equals(TYPE_DATA_GRID))
 			return false;
 		return true;
 	}
