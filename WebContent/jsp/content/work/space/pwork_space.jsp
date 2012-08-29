@@ -166,7 +166,7 @@
 			<div class="define_space js_process_instance_viewer" style="display:none; height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="padding: 0 45px; height:80px">
+			<div class="define_space" style="padding: 0 45px; height:88px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -220,7 +220,7 @@
 					                    <div class="title"><%=count%>) <%=task.getName() %></div>
 					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
 					                    <div class="noti_in_s">
-						                    <div class="t_date"><%=task.getPerformer().getLongName()%></div>
+						                    <div class="name"><%=task.getPerformer().getLongName()%></div>
 						                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
 					                    </div>
 					                    <!-- task 정보 //-->

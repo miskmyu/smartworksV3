@@ -16,9 +16,9 @@
 		<property name="folderId" column="folder_id" type="long"/>
 		<property name="uniqueId" column="unique_id" type="string" length="100"/>
 		<property name="sender" column="sender" type="string" length="255"/>
-		<property name="receiver" column="receiver" type="string" length="8000"/>
-		<property name="cc" column="cc" type="string" length="8000"/>
-		<property name="bcc" column="bcc" type="string" length="8000"/>
+		<property name="receiver" column="receiver" type="text"/>
+		<property name="cc" column="cc" type="text"/>
+		<property name="bcc" column="bcc" type="text"/>
 		<property name="replyTo" column="replyTo" type="string" length="255"/>
 		<property name="subject" column="subject" type="string" length="255"/>
 		<property name="multipart" column="multipart" type="integer"/>

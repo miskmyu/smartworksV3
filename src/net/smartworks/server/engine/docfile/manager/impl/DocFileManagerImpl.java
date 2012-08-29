@@ -8,16 +8,13 @@
 
 package net.smartworks.server.engine.docfile.manager.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URL;
@@ -36,8 +33,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.smartworks.model.community.Community;
 import net.smartworks.model.community.User;
@@ -45,13 +40,10 @@ import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.work.FileCategory;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.InformationWork;
-import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.Work;
-import net.smartworks.server.engine.autoindex.exception.AutoIndexException;
-import net.smartworks.server.engine.autoindex.model.AutoIndexDef;
-import net.smartworks.server.engine.autoindex.model.AutoIndexDefCond;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.manager.IManager;
+import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.model.Filters;
 import net.smartworks.server.engine.common.model.SmartServerConstant;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -68,7 +60,17 @@ import net.smartworks.server.engine.docfile.model.HbFileModel;
 import net.smartworks.server.engine.docfile.model.IDocumentModel;
 import net.smartworks.server.engine.docfile.model.IFileModel;
 import net.smartworks.server.engine.factory.SwManagerFactory;
-import net.smartworks.server.engine.like.exception.LikeException;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomain;
+import net.smartworks.server.engine.infowork.domain.model.SwdDomainCond;
+import net.smartworks.server.engine.infowork.domain.model.SwdField;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
+import net.smartworks.server.engine.infowork.form.model.SwfField;
+import net.smartworks.server.engine.infowork.form.model.SwfFieldRef;
+import net.smartworks.server.engine.infowork.form.model.SwfForm;
+import net.smartworks.server.engine.infowork.form.model.SwfFormCond;
+import net.smartworks.server.engine.infowork.form.model.SwfFormRef;
+import net.smartworks.server.engine.infowork.form.model.SwfFormat;
 import net.smartworks.server.engine.organization.exception.SwoException;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoCompany;
@@ -77,7 +79,6 @@ import net.smartworks.server.engine.process.process.exception.PrcException;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
-import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.IWorkService;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.OSValidator;
@@ -86,31 +87,23 @@ import net.smartworks.util.SmartUtil;
 import net.smartworks.util.Thumbnail;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.tuscany.sdo.api.SDOUtil;
-import org.dom4j.Document;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
-import org.htmlcleaner.HtmlCleaner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.xml.sax.InputSource;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.media.MediaFileSource;
@@ -123,11 +116,6 @@ import com.google.gdata.data.youtube.YouTubeMediaGroup;
 import com.google.gdata.data.youtube.YouTubeNamespace;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
-import commonj.sdo.DataObject;
-import commonj.sdo.helper.HelperContext;
-import commonj.sdo.helper.XMLDocument;
-import commonj.sdo.helper.XMLHelper;
 
 public class DocFileManagerImpl extends AbstractManager implements IDocFileManager {
 
@@ -1013,6 +1001,9 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 	@Override
 	public int uploadExcelToWork(Map<String, Object> requestBody, HttpServletRequest request) throws DocFileException {
+		
+		User cUser = SmartUtil.getCurrentUser();
+		
 		String workId = (String)requestBody.get("workId");
 		InformationWork work = (InformationWork)request.getSession().getAttribute("smartWork");
 		try{
@@ -1051,6 +1042,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 			requestMap.put("formName", work.getForm().getName());
 			requestMap.put("frmAccessSpace", requestBody.get("frmAccessSpace"));
 			FormField[] importFields = work.getForm().getImportFields();
+			
 			for(int r=1; r<rows; r++){
 				XSSFRow row = sheet.getRow(r);
 				if (row == null) {
@@ -1106,7 +1098,81 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 						break;
 					}
 					if(value!=null){
-						smartForm.put(field.getId(), value);
+						if (field.getType().equalsIgnoreCase("refFormField")) {
+							
+							SwfFormCond formCond = new SwfFormCond();
+							formCond.setId(work.getForm().getId());
+							SwfForm[] swForms = SwManagerFactory.getInstance().getSwfManager().getForms(cUser.getId(), formCond, IManager.LEVEL_ALL);
+							
+							if (swForms == null || swForms.length == 0)
+								continue;
+							
+							SwfField[] swFields = swForms[0].getFields();
+							if (swFields == null)
+								continue;
+							SwfField targetField = null;
+							for (int i = 0; i < swFields.length; i++) {
+								SwfField swField = swFields[i];
+								if (field.getId().equalsIgnoreCase(swField.getId())) {
+									targetField = swField;
+									break;
+								}
+							}
+							if (targetField == null)
+								continue;
+							SwfFormat swFormat = targetField.getFormat();
+							if (swFormat == null)
+								continue;
+							SwfFormRef formRef = swFormat.getRefForm();
+							if (formRef == null)
+								continue;
+							SwfFieldRef fieldRef = formRef.getField();
+							if (fieldRef == null)
+								continue;
+							
+							String targetFormId = formRef.getId();
+							String targetFieldId = fieldRef.getId();
+
+							SwdDomainCond domainCond = new SwdDomainCond();
+							domainCond.setFormId(targetFormId);
+							SwdDomain domain = SwManagerFactory.getInstance().getSwdManager().getDomain(cUser.getId(), domainCond, IManager.LEVEL_ALL);
+							
+							SwdField[] swdField = domain.getFields();
+							SwdField targetSwdField = null;
+							for (int i = 0; i < swdField.length; i++) {
+								SwdField tempField = swdField[i];
+								if (tempField.getFormFieldId().equalsIgnoreCase(targetFieldId)) {
+									targetSwdField = tempField;
+									break;
+								}
+							}
+							if (targetSwdField == null)
+								continue;
+
+							SwdRecordCond recordCond = new SwdRecordCond();
+							recordCond.setFormId(targetFormId);
+							recordCond.setFilter(new Filter[]{new Filter("=", targetSwdField.getTableColumnName(), value)});
+							SwdRecord[] records = SwManagerFactory.getInstance().getSwdManager().getRecords(cUser.getId(), recordCond, IManager.LEVEL_LITE);
+							if (records == null || records.length != 1) //같은게 하나이상이면 입력을 포기한다
+								continue;
+							
+							//다른업무 참조
+							   /*0   =   {
+							      refForm=frm_board_SYSTEM,
+							      refFormField=2,
+							      refRecordId=dr_402880ea396b54a001396b54a09d0000,
+							      value=게시판에서 글을 남겨요
+							   },*/
+							Map refDataMap = new LinkedHashMap();
+							refDataMap.put("refForm", targetFormId);
+							refDataMap.put("refFormField", targetFieldId);
+							refDataMap.put("refRecordId", records[0].getRecordId());
+							refDataMap.put("value", value);
+							smartForm.put(field.getId(), refDataMap);
+							
+						} else {
+							smartForm.put(field.getId(), value);
+						}
 					}else if(user!=null){
 						Map<String, Object> usersMap = new LinkedHashMap<String, Object>();
 						List<Map<String, Object>> userArrayMap = new ArrayList<Map<String, Object>>();
