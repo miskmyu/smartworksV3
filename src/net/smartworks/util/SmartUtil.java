@@ -335,10 +335,11 @@ public class SmartUtil {
 		if(context != null) {
 			Authentication auth = context.getAuthentication();
 			if(auth != null) {
-				if(((Login)auth.getPrincipal()).getId() != null)
+				if(((Login)auth.getPrincipal()).getId() != null){
 					user = (Login)auth.getPrincipal();
-				else
+				}else{
 					response.sendRedirect("logout");
+				}
 			} else {
 				response.sendRedirect("logout");
 			}
@@ -529,6 +530,7 @@ public class SmartUtil {
 	private static final String SUBJECT_BROADCASTING = "broadcasting";
 	private static final String SUBJECT_ONLINE = "online";
 	private static final String SUBJECT_OFFLINE = "offline";
+	private static final String SUBJECT_ALL = "*";
 	private static final String MSG_TYPE_BROADCASTING = "BCAST";
 	private static final String MSG_TYPE_NOTICE_COUNT = "NCOUNT";
 	private static final String MSG_TYPE_AVAILABLE_CHATTERS = "ACHATTERS";
@@ -656,46 +658,60 @@ public class SmartUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	static Thread messageAgent = null;
+	static ClientSession fayeClient = null;
 	static List<MessageModel> messageQueue = new LinkedList<MessageModel>();
-	static String companyId = null;
 	
+	
+	private synchronized static void initializeFayeClient(){
+		try{
+			HttpClient httpClient = new HttpClient();
+			httpClient.start();
+			Map<String, Object> options = new HashMap<String, Object>();
+			ClientTransport transport = LongPollingTransport.create(options, httpClient);
+			fayeClient = new BayeuxClient("http://localhost:8011/faye", transport);
+			fayeClient.handshake();
+		}catch (Exception e){
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Faye Client has been created successfully !!!");		
+
+		fayeClient.getChannel(SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_ONLINE)).subscribe(
+				new ClientSessionChannel.MessageListener() {
+					public void onMessage(ClientSessionChannel channel, Message message) {
+						String[] subjects = message.getChannel().toString().split("/");
+						String companyId = (subjects.length>1) ? subjects[1] : "NONE";
+						System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is ONLINE now !!!");
+						SmartUtil.updateChatterStatus(true, (String)message.get("data"));
+					}
+				}
+			);
+			System.out.print("Channel [" + SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_ONLINE) + "] has been subscribed successfully !!");
+	
+			fayeClient.getChannel(SmartUtil.getMessageChannel(SUBJECT_ALL ,SUBJECT_OFFLINE)).subscribe(
+				new ClientSessionChannel.MessageListener() {
+					public void onMessage(ClientSessionChannel channel, Message message) {
+						String[] subjects = message.getChannel().toString().split("/");
+						String companyId = (subjects.length>1) ? subjects[1] : "NONE";
+						System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is OFFLINE now !!!");
+						SmartUtil.updateChatterStatus(false, (String)message.get("data"));
+					}
+				}
+			);
+			System.out.print("Channel [" + SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_OFFLINE) + "] has been subscribed successfully !!");
+	}
 	public synchronized static void publishMessage(String channel, String msgType, Object message){
-		if(messageAgent == null && companyId == null) {
-			if(SmartUtil.isBlankObject(SmartUtil.getCurrentUser().getCompanyId())) return;
-			companyId = SmartUtil.getCurrentUser().getCompanyId();
+
+		if(fayeClient == null){
+			SmartUtil.initializeFayeClient();
+		}
+			
+		if(messageAgent == null) {
 			messageAgent = new Thread(new Runnable() {
 				public void run() {
 					try{
-						HttpClient httpClient = new HttpClient();
-						httpClient.start();
-						Map<String, Object> options = new HashMap<String, Object>();
-						ClientTransport transport = LongPollingTransport.create(options, httpClient);
-						ClientSession client = new BayeuxClient("http://localhost:8011/faye", transport);
-						client.handshake();
-
-						client.getChannel(SmartUtil.getMessageChannel(companyId, SUBJECT_ONLINE)).subscribe(
-							new ClientSessionChannel.MessageListener() {
-								public void onMessage(ClientSessionChannel channel, Message message) {
-//									if (message.isSuccessful()) {
-										System.out.println("Chatter [" + message.get("data") + "] is ONLINE now !!!");
-										SmartUtil.updateChatterStatus(true, (String)message.get("data"));
-//									}
-								}
-							}
-						);
-						client.getChannel(SmartUtil.getMessageChannel(companyId ,SUBJECT_OFFLINE)).subscribe(
-							new ClientSessionChannel.MessageListener() {
-								public void onMessage(ClientSessionChannel channel, Message message) {
-//									if (message.isSuccessful()) {
-										System.out.println("Chatter [" + message.get("data") + "] is OFFLINE now !!!");
-										SmartUtil.updateChatterStatus(false, (String)message.get("data"));
-//									}
-								}
-							}
-						);									
-						
 						MessageModel message = null;
 
 						while(true) {
@@ -713,9 +729,9 @@ public class SmartUtil {
 								data.put("msgType", message.msgType);
 								data.put("sender", "smartServer");
 								data.put("body", message.message);
-								
-								client.getChannel(message.channel).publish(data);
+								fayeClient.getChannel(message.channel).publish(data);
 							} catch(Exception e){
+								
 								//e.printStackTrace();
 							}
 						}

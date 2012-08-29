@@ -4,7 +4,6 @@ var fayeServer = "fayeServer";
  
 var swSubject = {
 	SMARTWORKS : "/smartworks",
-	COMPANYID : "/Semiteq",
 	BROADCASTING : "/broadcasting",
 	FAYESERVER : "/fayeServer",
 	ONLINE : "/online",
@@ -19,7 +18,8 @@ var msgType = {
 	JOIN_CHAT : "JOINCHAT"
 };
 
-var http = require('http'), faye = require('./faye-node');
+//var http = require('http'), faye = require('./faye-node');
+var http = require('http'), faye = require('faye');
 var port = 8011;
 
 var bayeux = new faye.NodeAdapter({
@@ -38,8 +38,17 @@ bayeux.attach(server);
 server.listen(port);
 
 function getUserId(channel){
-	var pos = swSubject.SMARTWORKS.length + swSubject.COMPANYID.length + 1;
-	var newChannel = channel.substring(pos).replace(/_/g, '.' );
+	var subjects = channel.split('/');
+	var newChannel = "";
+	if(subjects.length>2)
+		newChannel = subjects[2].replace(/_/g, '.' );
+	return newChannel;
+}
+function getSmartworksNCompany(channel){
+	var subjects = channel.split('/');
+	var newChannel = "";
+	if(subjects.length>1)
+		newChannel = subjects[0] + "/" + subjects[1];
 	return newChannel;
 }
 bayeux.bind('subscribe', function(clientId, channel) {
@@ -47,7 +56,7 @@ bayeux.bind('subscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.ONLINE, getUserId(channel));
-		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.ONLINE, getUserId(channel));
+		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.ONLINE, getUserId(channel));
 	}
 });
 
@@ -56,7 +65,7 @@ bayeux.bind('unsubscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.OFFLINE, getUserId(channel));
-		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.OFFLINE, getUserId(channel));
+		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.OFFLINE, getUserId(channel));
 	}
 });
 
@@ -67,7 +76,7 @@ bayeux.bind('disconnect', function(clientId) {
 bayeux.bind('publish', function(clientId, channel, data) {
 	console.log('[ PUBLISH] =======================================');
 	console.log(channel, data);
-	console.log('==================================================')
+	console.log('==================================================');
 });
 
 
@@ -80,14 +89,14 @@ function uniqid() {
 
 var serverCallback = function(message) {
 	if (message.msgType === msgType.CHAT_REQUEST) {
+		var companyId = message.channel.split("/")[1];
 		var chatterInfos = message.chatterInfos;
-		var sender = message.sender.replace(/\./g, '_');
 		var chatId = "chatId" + uniqid();
 		if (chatterInfos != null && chatterInfos.length > 0) {
 			for ( var i = 0; i < chatterInfos.length; i++) {
 				if((chatterInfos[i] == null) || (chatterInfos[i].userId == null)) continue;
 				bayeux.getClient().publish(swSubject.SMARTWORKS
-						+ swSubject.COMPANYID + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
+						+ companyId + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
 					msgType : msgType.JOIN_CHAT,
 					sender : message.sender,
 					chatId : chatId,
@@ -98,5 +107,4 @@ var serverCallback = function(message) {
 	}
 };
 
-bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.COMPANYID
-		+ swSubject.FAYESERVER, serverCallback);
+bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.ALL + swSubject.FAYESERVER, serverCallback);

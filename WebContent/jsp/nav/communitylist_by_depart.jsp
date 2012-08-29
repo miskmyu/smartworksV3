@@ -31,8 +31,8 @@
 		%>
 					<li>
 						<span class="dep">
-							<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>">
-								<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
+							<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_user">
+								<span class="<%=iconType%> js_user"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s js_user"><%=user.getLongName()%>
 							</a>
 						</span>
 					</li>
