@@ -410,7 +410,7 @@ public class CommunityServiceImpl implements ICommunityService {
 							SwoGroupMember swoGroupMember = new SwoGroupMember();
 							swoGroupMember.setUserId(groupUserId);
 							swoGroupMember.setJoinType(SwoGroupMember.JOINTYPE_INVITE);
-							swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_READY);
+							swoGroupMember.setJoinStatus(SwoGroupMember.JOINSTATUS_COMPLETE);
 							swoGroupMember.setJoinDate(new LocalDate());
 							//중복유저추가 방지소스
 							if(!groupList.contains(groupUserId)){
@@ -1372,6 +1372,28 @@ public class CommunityServiceImpl implements ICommunityService {
 		
 		SwoGroupMember groupMember = group.getGroupMember(userId);
 		group.removeGroupMember(groupMember);
+		
+		if (groupMember.getJoinType().equalsIgnoreCase(SwoGroupMember.JOINTYPE_GROUPLEADER)) {
+			SwoGroupMember[] groupMembers = group.getSwoGroupMembers();
+			if (groupMembers == null || groupMembers.length == 0 || (groupMembers.length == 1 && groupMembers[0].getUserId().equalsIgnoreCase(userId))) {
+				//getSwoManager().removeGroup(userId, group.getId());
+				//return;
+				group.setGroupLeader("admin");
+				if (groupMembers != null && groupMembers.length != 0) {
+					groupMembers[0].setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+					groupMembers[0].setUserId("admin");
+				}
+			} else {
+				for (int i = 0; i < groupMembers.length; i++) {
+					SwoGroupMember groupMem = groupMembers[i];
+					if (!groupMem.getUserId().equalsIgnoreCase(userId)) {
+						group.setGroupLeader(groupMem.getUserId());
+						groupMem.setJoinType(SwoGroupMember.JOINTYPE_GROUPLEADER);
+					}	
+				}
+			}
+		}
+		
 		if (seraService != null) {
 			seraService.scoreCoursePointByType(groupId, Course.TYPE_COURSEPOINT_MEMBER, 1, false);
 		} else {
