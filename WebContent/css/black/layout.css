@@ -727,7 +727,7 @@ a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}
 .t_size12 {font-size:12px}
 .t_action_disabled {color:#454545 !important; text-decoration:none !important}
 .t_date, .t_text_s11, .t_s11,
-.t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal}
+.t_date a, .t_text_s11 a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal; word-wrap: break-word}
 .t_white {font-size:12px; font-weight:normal}
 .t_nav {font-size:14px; font-weight:bold; color:#FFF}
 .t_nowork, .t_nowork a { text-align:center; padding:8px 0 !important; color:#666 !important}
