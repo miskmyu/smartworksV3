@@ -67,6 +67,7 @@ public class SchManagerImpl extends AbstractManager implements ISchManager {
 		queryBuffer.append(" 		, '' as userDeptName ");
 		queryBuffer.append(" 		, '' as userDeptDesc  ");
 		queryBuffer.append(" 	from sworggroup grp ");
+		queryBuffer.append(" 	where grp.groupType != 'C' ");
 		queryBuffer.append(" ) workspaceinfo ");
 		queryBuffer.append(" where workspaceinfo.name like :key ");
 		
