@@ -712,7 +712,7 @@ a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
 .user_select + input[type="text"] {width:100px !important}
 
-/* Text style */
+/* Text style  */
 .t_red, .t_sunday {color:#e54b4b}
 .t_saturday {color:#4b79c8}
 .t_light_orange {color:#fff4a7;font-weight:normal}
