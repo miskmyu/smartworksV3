@@ -1099,7 +1099,8 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 					}
 					if(value!=null){
 						if (field.getType().equalsIgnoreCase("refFormField")) {
-							
+							if (value.indexOf(".0") != -1)
+								value = StringUtils.replace(value, ".0", "");
 							SwfFormCond formCond = new SwfFormCond();
 							formCond.setId(work.getForm().getId());
 							SwfForm[] swForms = SwManagerFactory.getInstance().getSwfManager().getForms(cUser.getId(), formCond, IManager.LEVEL_ALL);
