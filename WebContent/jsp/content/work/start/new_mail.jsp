@@ -107,7 +107,7 @@ function submitForms(action) {
 	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
 	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
 	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
-		instance.setMailContents(instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
+		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

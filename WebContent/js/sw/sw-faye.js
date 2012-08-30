@@ -338,6 +338,13 @@ var smartTalk = {
 
 	},
 
+	startSubOnAll : function() {
+		smartTalk.subscribe(smartTalk.myChannel("/*"), function(message) {
+			console.log("SubOnAll Message = ", message);
+		});
+
+	},
+
 	// 현재 사용자 계정으로 Subscribe를 하여, 현재사용자에게만 오는 메시지를 받아서 처리한다.
 	startSubOnMe : function() {
 		smartTalk.subscribe(smartTalk.myChannel(swSubject.USERID), function(message) {

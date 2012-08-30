@@ -2493,3 +2493,19 @@ CREATE TABLE SwLoginUserHistory (
 	loginTime timestamp,
     primary key (id)
 );
+
+CREATE TABLE SwAutoIndexInst (
+	objId character varying(50) NOT NULL,
+	instanceId character varying(100),
+	formId character varying(100),
+	fieldId character varying(10),
+	refType character varying(10),
+	idType character varying(50),
+	idValue character varying(200),
+	seq int,
+	creator	character varying(50),
+	createdtime timestamp,
+	modifier character varying(50),
+	modifiedtime timestamp,
+    primary key (objId)
+);
