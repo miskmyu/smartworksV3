@@ -62,11 +62,22 @@ function submitForms(action) {
 		success : function(data, status, jqXHR) {
 			// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 			var lastHref = newMail.attr('lastHref');
-			if(isEmpty(lastHref))
-				window.location.reload(true);
-			else
-				document.location.href = lastHref; 
-			smartPop.closeProgress();
+			if(action === "send"){
+				smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
+					if(isEmpty(lastHref))
+						window.location.reload(true);
+					else
+						document.location.href = lastHref; 
+					smartPop.closeProgress();				
+				});
+			}else{
+				if(isEmpty(lastHref))
+					window.location.reload(true);
+				else
+					document.location.href = lastHref; 
+				smartPop.closeProgress();								
+			}
+
 		},
 		error : function(e) {
 			// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...

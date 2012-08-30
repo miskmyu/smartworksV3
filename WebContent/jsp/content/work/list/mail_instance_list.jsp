@@ -117,6 +117,12 @@
 					</a>				
 					<span class="js_progress_span"></span>
 				</th>
+				<th class="read r_line">
+		 			<a href="" class="js_select_field_sorting">
+						<img src="images/icon_file.gif" fieldId="<%=MailContent.A_MULTIPART%>">
+					</a>				
+					<span class="js_progress_span"></span>
+				</th>
 				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
@@ -166,6 +172,7 @@
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
 						<td><a href="<%=target%>" class="js_content"><%if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){%><%=receivers%><%}else{%><%=sender%><%} %></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=subject%></a></td>
+						<td><%if(instanceInfo.isMultipart()){ %><a href="<%=target%>" class="js_content"><img src="images/icon_file.gif"></a><%} %></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>
 					</tr>
 		<%
@@ -212,6 +219,12 @@
 						if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
 							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 						%>"></span>
+					</a>				
+					<span class="js_progress_span"></span>
+				</th>
+				<th class="read r_line">
+		 			<a href="" class="js_select_field_sorting" >
+						<img src="images/icon_file.gif" fieldId="<%=MailContent.A_MULTIPART%>">
 					</a>				
 					<span class="js_progress_span"></span>
 				</th>

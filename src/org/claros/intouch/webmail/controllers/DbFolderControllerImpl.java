@@ -584,7 +584,7 @@ public class DbFolderControllerImpl implements FolderController {
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#renameFolder(java.lang.String, java.lang.String)
 	 */
-	public void renameFolder(String oldName, String newName) throws Exception {
+	public void renameFolder(String parentId, String oldName, String newName) throws Exception {
 		if (oldName.equals(org.claros.commons.mail.utility.Constants.FOLDER_INBOX(profile))) {
 			throw new SystemException();
 		}
@@ -602,9 +602,9 @@ public class DbFolderControllerImpl implements FolderController {
 					
 					FolderDbObject item = getFolder(tmp.getId().toString());
 					item.setFolderName(newName);
-					
+					String newParentId = (SmartUtil.isBlankObject(parentId)) ? "0" : parentId;
 					//dao.update(item);
-					String sql = "update folder_db_objects set folder_name = '"+newName+"' where id = '"+tmp.getId()+"'";
+					String sql = "update folder_db_objects set folder_name = '" +newName+ "', parent_id='" + newParentId + "' where id = '"+tmp.getId()+"'";
 					dao.executeUpdate(sql);
 					
 				} finally {
