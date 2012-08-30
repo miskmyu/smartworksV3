@@ -678,29 +678,30 @@ public class SmartUtil {
 		}
 		System.out.println("Faye Client has been created successfully !!!");		
 
-		fayeClient.getChannel(SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_ONLINE)).subscribe(
-				new ClientSessionChannel.MessageListener() {
-					public void onMessage(ClientSessionChannel channel, Message message) {
-						String[] subjects = message.getChannel().toString().split("/");
-						String companyId = (subjects.length>1) ? subjects[1] : "NONE";
-						System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is ONLINE now !!!");
-						SmartUtil.updateChatterStatus(true, (String)message.get("data"));
-					}
+		fayeClient.getChannel(SmartUtil.getMessageChannel("Semiteq", SUBJECT_ONLINE)).subscribe(
+			new ClientSessionChannel.MessageListener() {
+				public void onMessage(ClientSessionChannel channel, Message message) {
+					String[] subjects = message.getChannel().toString().split("/");
+					String companyId = (subjects.length>2) ? subjects[2] : "NONE";
+					System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is ONLINE now !!!");
+					SmartUtil.updateChatterStatus(true, (String)message.get("data"));
 				}
-			);
-			System.out.print("Channel [" + SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_ONLINE) + "] has been subscribed successfully !!");
-	
-			fayeClient.getChannel(SmartUtil.getMessageChannel(SUBJECT_ALL ,SUBJECT_OFFLINE)).subscribe(
-				new ClientSessionChannel.MessageListener() {
-					public void onMessage(ClientSessionChannel channel, Message message) {
-						String[] subjects = message.getChannel().toString().split("/");
-						String companyId = (subjects.length>1) ? subjects[1] : "NONE";
-						System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is OFFLINE now !!!");
-						SmartUtil.updateChatterStatus(false, (String)message.get("data"));
-					}
+			}
+		);
+		System.out.println("Channel [" + SmartUtil.getMessageChannel("Semiteq", SUBJECT_ONLINE) + "] has been subscribed successfully !!");
+
+		fayeClient.getChannel(SmartUtil.getMessageChannel("Semiteq", SUBJECT_OFFLINE)).subscribe(
+			new ClientSessionChannel.MessageListener() {
+				public void onMessage(ClientSessionChannel channel, Message message) {
+					String[] subjects = message.getChannel().toString().split("/");
+					String companyId = (subjects.length>2) ? subjects[2] : "NONE";
+					System.out.println("Chatter [" + companyId + "." + message.get("data") + "] is OFFLINE now !!!");
+					SmartUtil.updateChatterStatus(false, (String)message.get("data"));							
 				}
-			);
-			System.out.print("Channel [" + SmartUtil.getMessageChannel(SUBJECT_ALL, SUBJECT_OFFLINE) + "] has been subscribed successfully !!");
+			}
+		);
+		System.out.println("Channel [" + SmartUtil.getMessageChannel("Semiteq", SUBJECT_OFFLINE) + "] has been subscribed successfully !!");
+		
 	}
 	public synchronized static void publishMessage(String channel, String msgType, Object message){
 

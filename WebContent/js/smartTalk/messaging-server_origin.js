@@ -4,6 +4,7 @@ var fayeServer = "fayeServer";
  
 var swSubject = {
 	SMARTWORKS : "/smartworks",
+	COMPANYID : "/Semiteq",
 	BROADCASTING : "/broadcasting",
 	FAYESERVER : "/fayeServer",
 	ONLINE : "/online",
@@ -38,17 +39,8 @@ bayeux.attach(server);
 server.listen(port);
 
 function getUserId(channel){
-	var subjects = channel.split('/');
-	var newChannel = "";
-	if(subjects.length>3)
-		newChannel = subjects[3].replace(/_/g, '.' );
-	return newChannel;
-}
-function getSmartworksNCompany(channel){
-	var subjects = channel.split('/');
-	var newChannel = "";
-	if(subjects.length>2)
-		newChannel = "/" + subjects[1] + "/" + subjects[2];
+	var pos = swSubject.SMARTWORKS.length + swSubject.COMPANYID.length + 1;
+	var newChannel = channel.substring(pos).replace(/_/g, '.' );
 	return newChannel;
 }
 bayeux.bind('subscribe', function(clientId, channel) {
@@ -56,7 +48,7 @@ bayeux.bind('subscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.ONLINE, getUserId(channel));
-		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.ONLINE, getUserId(channel));
+		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.ONLINE, getUserId(channel));
 	}
 });
 
@@ -65,7 +57,7 @@ bayeux.bind('unsubscribe', function(clientId, channel) {
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
 		bayeux.getClient().publish(channel + swSubject.OFFLINE, getUserId(channel));
-		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.OFFLINE, getUserId(channel));
+		bayeux.getClient().publish(swSubject.SMARTWORKS + swSubject.COMPANYID + swSubject.OFFLINE, getUserId(channel));
 	}
 });
 
@@ -89,14 +81,14 @@ function uniqid() {
 
 var serverCallback = function(message) {
 	if (message.msgType === msgType.CHAT_REQUEST) {
-		var companyId = message.channel.split("/")[2];
 		var chatterInfos = message.chatterInfos;
+		var sender = message.sender.replace(/\./g, '_');
 		var chatId = "chatId" + uniqid();
 		if (chatterInfos != null && chatterInfos.length > 0) {
 			for ( var i = 0; i < chatterInfos.length; i++) {
 				if((chatterInfos[i] == null) || (chatterInfos[i].userId == null)) continue;
 				bayeux.getClient().publish(swSubject.SMARTWORKS
-						+ companyId + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
+						+ swSubject.COMPANYID + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
 					msgType : msgType.JOIN_CHAT,
 					sender : message.sender,
 					chatId : chatId,
@@ -107,4 +99,5 @@ var serverCallback = function(message) {
 	}
 };
 
-bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.ALL + swSubject.FAYESERVER, serverCallback);
+bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.COMPANYID
+		+ swSubject.FAYESERVER, serverCallback);
