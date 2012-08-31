@@ -52,6 +52,13 @@ public class FormController {
 				"");
 	}
 	
+	@RequestMapping("/empty_content")
+	public ModelAndView emptyContent(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		return SmartUtil.returnMnv(request, "jsp/content/work/form/empty_content.jsp", "");
+	}
+	
 	@RequestMapping("/date_field")
 	public ModelAndView dateField(HttpServletRequest request, HttpServletResponse response) {
 	
