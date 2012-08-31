@@ -53,7 +53,7 @@ boolean runningOnly = Boolean.parseBoolean(request.getParameter("runningOnly"));
 
 // lastDate와 assignedOnly값을 가지고 현재 진행중인 모든 인스턴스리스트를 가져온다...
 InstanceInfo[] instances = smartWorks.getMyRunningInstances(lastDate, 20, assignedOnly, runningOnly, params);
-if (instances != null) {
+if(!SmartUtil.isBlankObject(instances)) {
 %>
 <div class="space_section">
 <ul>
@@ -499,6 +499,10 @@ if (instances != null) {
 		<!-- 더보기 버튼 !!-->
 	</ul>
 	</div>
+<%
+}else{
+%>
+	<div class="tc"><fmt:message key="common.message.no_instance"/></div>
 <%
 }
 %>	
