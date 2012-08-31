@@ -5,13 +5,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import javax.mail.internet.MimeUtility;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.text.html.parser.Parser;
+
+import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
@@ -99,7 +103,8 @@ public class DumpPartService extends BaseService {
 				response.setContentType(part.getContentType());
 				response.setHeader ("Pragma", "public");
 				response.setHeader ("Cache-Control", "must-revalidate");
-				response.setDateHeader ("Expires",0); 
+				response.setDateHeader ("Expires",0);
+				response.setCharacterEncoding("utf-8");
 				
 				String fn = part.getFilename();
 				if (fn != null) {
@@ -126,6 +131,11 @@ public class DumpPartService extends BaseService {
                 	
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
+						if(!SmartUtil.isBlankObject(content)){
+							if(content.indexOf("=?")>0){
+								content = MimeUtility.decodeText(content);						
+							}
+						}
 						HtmlCleaner cleaner = new HtmlCleaner(content);
 						cleaner.setOmitXmlDeclaration(true);
 						cleaner.setOmitXmlnsAttributes(true);
@@ -147,12 +157,17 @@ public class DumpPartService extends BaseService {
                 	if(null!=obj) content = obj.toString();
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
-						HtmlCleaner cleaner = new HtmlCleaner(content);
-						cleaner.setOmitXmlDeclaration(true);
-						cleaner.setOmitXmlnsAttributes(true);
-						cleaner.setUseCdataForScriptAndStyle(false);
-						cleaner.clean(false,false);
-						content = cleaner.getCompactXmlAsString();
+//						HtmlCleaner cleaner = new HtmlCleaner(content);
+//						cleaner.setOmitXmlDeclaration(true);
+//						cleaner.setOmitXmlnsAttributes(true);
+//						cleaner.setUseCdataForScriptAndStyle(false);
+//						cleaner.clean(false,false);
+//						content = cleaner.getCompactXmlAsString();
+						if(!SmartUtil.isBlankObject(content)){
+							if(content.indexOf("=?")>0){
+								content = MimeUtility.decodeText(content);						
+							}						}
+						
 						if (modifyOutput) {
 							content = HTMLMessageParser.prepareInlineHTMLContent(email, content);
 						}

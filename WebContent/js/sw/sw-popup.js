@@ -842,10 +842,11 @@ smartPop = {
 		});
 	},	
 
-	createMailFolder : function(folderId, folderName, folderDesc, parentId, parentName){
+	createMailFolder : function(folderId, folderName, folderDesc, parentId, parentName, folderType){
 		parentId = (isEmpty(parentId)) ? null : parentId;
 		parentName = (isEmpty(parentName)) ? "" : parentName;
-		$.get("pop_new_mail_folder.sw?parentId=" + parentId + "&parentName="+ parentName + "&folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
+		folderType = (isEmpty(folderType)) ? "" : folderType;
+		$.get("pop_new_mail_folder.sw?parentId=" + parentId + "&parentName="+ parentName + "&folderType=" + folderType + "&folderId="+ folderId + "&folderName=" + folderName + "&folderDesc=" + folderDesc, function(data){
 			$(data).modal({
 				opacity: 10,
 				overlayCss: {backgroundColor:"#000"},

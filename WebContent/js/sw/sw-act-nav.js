@@ -211,7 +211,7 @@ $(function() {
 
 	$('.js_drill_down').live('click', function(e) {
 		if($(targetElement(e)).hasClass('js_checkbox')) return true;
-		if($(targetElement(e)).hasClass('js_department')) return true;
+		if($(targetElement(e)).hasClass('js_department') || $(targetElement(e)).hasClass('js_user')) return true;
 		var input = $(targetElement(e)).parents('li.js_drill_down:first').find('a:first');
 		var target = input.siblings('div.js_drill_down_target:first');
 		if(input.hasClass('js_popup')) target = input.parent().siblings('div.js_drill_down_target:first');

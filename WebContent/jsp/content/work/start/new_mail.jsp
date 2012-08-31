@@ -21,6 +21,7 @@
 
 //완료버튼 클릭시 create_new_board.sw 서비스를 실행하기 위해 submit하는 스크립트..
 function submitForms(action) {
+
 	smartPop.confirm( smartMessage.get('sendMailConfirm'), function(){
 		var newMail = $('.js_new_mail_page');
 	
@@ -61,7 +62,6 @@ function submitForms(action) {
 		else if(action === "save")
 			url = "save_mail.sw";
 		// send_mail.sw서비스를 요청한다..
-		
 		$.ajax({
 			url : url,
 			contentType : 'application/json',
@@ -70,11 +70,22 @@ function submitForms(action) {
 			success : function(data, status, jqXHR) {
 				// 성공시에 프로그래스바를 제거하고 성공메시지를 보여준다...
 				var lastHref = newMail.attr('lastHref');
-				if(isEmpty(lastHref))
-					window.location.reload(true);
-				else
-					document.location.href = lastHref; 
-				smartPop.closeProgress();
+				if(action === "send"){
+					smartPop.showInfo(smartPop.INFO, smartMessage.get("sendMailSucceed"), function(){
+						if(isEmpty(lastHref))
+							window.location.reload(true);
+						else
+							document.location.href = lastHref; 
+						smartPop.closeProgress();				
+					});
+				}else{
+					if(isEmpty(lastHref))
+						window.location.reload(true);
+					else
+						document.location.href = lastHref; 
+					smartPop.closeProgress();								
+				}
+	
 			},
 			error : function(e) {
 				// 서비스 에러시에는 메시지를 보여주고 현재페이지에 그래도 있는다...
@@ -116,7 +127,7 @@ function submitForms(action) {
 	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
 	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
 	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
-		instance.setMailContents(instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
+		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->

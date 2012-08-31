@@ -314,7 +314,7 @@ public class ImapFolderControllerImpl implements FolderController {
 	/* (non-Javadoc)
 	 * @see org.claros.groupware.webmail.controllers.FolderController#renameFolder(java.lang.String, java.lang.String)
 	 */
-	public void renameFolder(String oldName, String newName) throws Exception {
+	public void renameFolder(String parentId, String oldName, String newName) throws Exception {
 		ProtocolFactory factory = new ProtocolFactory(profile, auth, handler);
 		ImapProtocolImpl protocol = (ImapProtocolImpl)factory.getImap(oldName);
 		protocol.renameFolder(newName);
