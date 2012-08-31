@@ -280,9 +280,9 @@
 									</td>
 								</tr>
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>
-									<th class="required_label"><fmt:message key="profile.title.email.password_confirm" /></th>
+									<th class=""><fmt:message key="profile.title.email.senderUserTitle" /></th>
 									<td>
-										<input name="pwUserProfileEmailPWCfm" type="password" class="required fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getPassword())%>">		
+										<input name="txtUserProfileSenderUserTitle" type="senderUserTitle" class="fieldline" value="<%=CommonUtil.toNotNull(mailAccount.getSenderUserTitle())%>">		
 									</td>
 								</tr>
 								<tr class="js_email_account_info" <%if(!cUser.isUseMail()){ %>style="display:none" <%} %>>

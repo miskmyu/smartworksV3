@@ -155,7 +155,8 @@
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
 					String sender = (SmartUtil.isBlankObject(instanceInfo.getSender())) ? SmartMessage.getString("mail.title.no.sender") : instanceInfo.getSender().getName();
-					String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceiversShown();
+					//String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceiversShown();
+					String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceivers()[0].getLongName();
 					String subject = (SmartUtil.isBlankObject(instanceInfo.getSubject())) ? SmartMessage.getString("mail.title.unknown.subject") : instanceInfo.getSubject();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 					String sendDateStr = (SmartUtil.isBlankObject(instanceInfo.getSendDate())) ? "" : instanceInfo.getSendDate().toLocalString();
