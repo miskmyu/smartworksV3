@@ -192,8 +192,10 @@ public class MailInstance extends Instance {
 	public String getReceiversHtml(){
 		if(SmartUtil.isBlankObject(this.receivers)) return "";
 		String userField = "";
-		for(int i=0; i<this.receivers.length; i++)
-			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "'>" + receivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		for(int i=0; i<this.receivers.length; i++){
+			String name = (SmartUtil.isBlankObject(receivers[i].getLongName())) ? receivers[i].getId() : receivers[i].getLongName();
+			userField = userField + "<span class='js_community_item user_select' comId='" + receivers[i].getId() + "'>" + name + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		}
 		return userField;
 	}
 	
@@ -228,8 +230,10 @@ public class MailInstance extends Instance {
 	public String getCcReceiversHtml(){
 		if(SmartUtil.isBlankObject(this.ccReceivers)) return "";
 		String userField = "";
-		for(int i=0; i<this.ccReceivers.length; i++)
-			userField = userField + "<span class='js_community_item user_select' comId='" + ccReceivers[i].getId() + "'>" + ccReceivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		for(int i=0; i<this.ccReceivers.length; i++){
+			String name = (SmartUtil.isBlankObject(ccReceivers[i].getLongName())) ? ccReceivers[i].getId() : ccReceivers[i].getLongName();
+			userField = userField + "<span class='js_community_item user_select' comId='" + ccReceivers[i].getId() + "'>" + name + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		}
 		return userField;
 	}
 	
@@ -264,8 +268,10 @@ public class MailInstance extends Instance {
 	public String getBccReceiversHtml(){
 		if(SmartUtil.isBlankObject(this.bccReceivers)) return "";
 		String userField = "";
-		for(int i=0; i<this.bccReceivers.length; i++)
-			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "'>" + bccReceivers[i].getLongName() + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		for(int i=0; i<this.bccReceivers.length; i++){
+			String name = (SmartUtil.isBlankObject(bccReceivers[i].getLongName())) ? bccReceivers[i].getId() : bccReceivers[i].getLongName();
+			userField = userField + "<span class='js_community_item user_select' comId='" + bccReceivers[i].getId() + "'>" + name + "<a class='js_remove_community' href=''>&nbsp;x</a></span>";
+		}
 		return userField;
 	}
 	

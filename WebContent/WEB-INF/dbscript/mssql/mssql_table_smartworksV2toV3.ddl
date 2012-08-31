@@ -833,3 +833,5 @@ CREATE TABLE SwAutoIndexInst (
 ALTER TABLE swmailaccount add mailSignature character varying(4000);
 ALTER TABLE swmailaccount add useMailSign bit;
 update swmailaccount set useMailSign='0'
+
+ALTER TABLE swmailaccount add senderUserTitle varchar(50);

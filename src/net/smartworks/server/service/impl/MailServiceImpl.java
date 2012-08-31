@@ -1060,8 +1060,16 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					break;
 				case MailFolder.SEND_TYPE_REPLY_ALL:
 					addrFrom = currentUser;
-					addrTo = (InternetAddress[])email.getBaseHeader().getFrom();			
-					addrCc = (InternetAddress[])email.getBaseHeader().getCc();
+					addrTo = (InternetAddress[])email.getBaseHeader().getFrom();
+					InternetAddress[] toTmp = (InternetAddress[])email.getBaseHeader().getTo();
+					InternetAddress[] ccTmp = (InternetAddress[])email.getBaseHeader().getCc();
+					int toTmpLength = (toTmp==null) ? 0 : toTmp.length;
+					int ccTmpLength = (ccTmp==null) ? 0 : ccTmp.length;
+					addrCc = new InternetAddress[toTmpLength+ccTmpLength];
+					for(int k=0; k<toTmpLength; k++)
+						addrCc[k] = toTmp[k];
+					for(int j=toTmpLength; j<toTmpLength+ccTmpLength; j++)
+						addrCc[j] = ccTmp[j-toTmpLength];
 					addrBcc = (InternetAddress[])email.getBaseHeader().getBcc();
 					subject = SmartMessage.getString("mail.title.prefix.reply") + subject;
 					break;
@@ -1674,6 +1682,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 	public void setMailFolder(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try {
 
+			String parentId = (String)requestBody.get("parentId");
 			String folderId = (String)requestBody.get("folderId");
 			String folderName = (String)requestBody.get("folderName");
 			String folderDesc = (String)requestBody.get("folderDesc");
@@ -1702,7 +1711,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				FolderController foldCont = factory.getFolderController();
 				
 				FolderDbObject itm = foldCont.getFolderById(folderId);
-				foldCont.renameFolder(itm.getFolderName(), folderName);
+				foldCont.renameFolder(parentId, itm.getFolderName(), folderName);
 			}
 
 		} catch (Exception e) {

@@ -161,6 +161,7 @@ smartMessage.bundle['en'] = {
 	setMailFolderError : "Error has been occured while removing Mail Folder. Please contact the Administrator!",
 	removeMailFolderSucceed : "Mail Folder has been removed successfully.",
 	removeMailFolderError : "Error has been occured while removing Mail Folder. Please contact the Administrator!",
+	sendMailConfirm: "Do you really want to send email?",
 	commentTaskForwardSucceed : "Forward Task has been performed successfully.",
 	commentTaskForwardError : "Error has been occured while performing the Forward Task. Please contact the Administrator!",
 	commentTaskApprovalSucceed : "Approval Task has been performed successfully.",

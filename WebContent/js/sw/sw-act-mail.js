@@ -385,10 +385,13 @@ $(function() {
 	
 	$('.js_text_mail_folder_btn').live('click', function(e){
 		var input = $(targetElement(e));
+		var folderType = input.attr('folderType');
+		var parentId = input.attr('parentId');
+		var parentName = input.attr('parentName');
 		var folderId = input.attr('folderId');
 		var folderName = input.attr('folderName');
 		var folderDesc = input.attr('folderDesc');
-		smartPop.createMailFolder(folderId, folderName, folderDesc);
+		smartPop.createMailFolder(folderId, folderName, folderDesc, parentId, parentName, folderType);
 		return false;
 		
 	});

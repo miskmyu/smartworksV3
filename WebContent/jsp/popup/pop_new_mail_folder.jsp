@@ -20,6 +20,8 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String sFolderType = request.getParameter("folderType");
+	int folderType = (SmartUtil.isBlankObject(sFolderType)) ? 0 : Integer.parseInt(sFolderType);
 	String parentId = request.getParameter("parentId");
 	String parentName = request.getParameter("parentName");
 	String folderId = request.getParameter("folderId");
@@ -36,11 +38,13 @@
 		if (SmartWorks.GridLayout.validate(newMailFolder.find('form.js_validation_required'), $('.js_pop_error_message'))) {
 			var forms = newMailFolder.find('form');
 			var parentId = newMailFolder.attr('parentId');
+			var selParent = newMailFolder.find('select[name="selParentId"] option:selected');
 			var folderId = newMailFolder.attr('folderId');
 			var folderType = forms.find('input[name="chkFolderType"]:checked').attr('value');
 			var paramsJson = {};
 			if(isEmpty(folderType)) folderType = <%=MailFolder.TYPE_USER%>;
-			if(!isEmpty(parentId)) paramsJson['parentId'] = parentId;
+			if(!isEmpty(selParent)) paramsJson['parentId'] = selParent.attr('value');
+			else if(!isEmpty(parentId)) paramsJson['parentId'] = parentId;
 			if(!isEmpty(folderId)) paramsJson['folderId'] = folderId;
 			paramsJson['folderType'] = "" + folderType;
 			paramsJson['folderName'] = forms.find('input[name="txtFolderName"]').attr('value');
@@ -111,12 +115,26 @@
 						</td>
 					</tr>
 				<%
-				}else if(!SmartUtil.isBlankObject(parentId) && !SmartUtil.isBlankObject(parentName)){
+				}else if(folderType == MailFolder.TYPE_USER){
 				%>
 					<tr>
-						<td><fmt:message key="mail.title.parent_name" /></td>
+						<td class="required_label"><fmt:message key="mail.title.parent_name" /></td>
 						<td>
-							<input class="fieldline" type="text" readonly value="<%=CommonUtil.toNotNull(parentName)%>">		
+							<select name="selParentId">
+								<option value=""><fmt:message key="common.title.none"/></option>
+								<%
+								MailFolder[] folders = smartWorks.getMailFolders();
+								if(!SmartUtil.isBlankObject(folders)){
+									for(int i=0; i<folders.length; i++){
+										MailFolder folder = folders[i];
+										if(folder.getType()!=MailFolder.TYPE_GROUP) continue;
+								%>
+										<option value=<%=folder.getId() %> <%if(parentId.equals(folder.getId())){ %>selected<%} %>><%=folder.getFullName() %></option>
+								<%
+									}
+								}
+								%>
+							</select>
 						</td>
 					</tr>
 				<%

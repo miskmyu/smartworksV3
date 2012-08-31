@@ -870,6 +870,7 @@ public class WorkServiceImpl implements IWorkService {
 			String selUserProfileEmailServerName = null;
 			String chkUserProfileEmailDeleteFetched = null;
 			String pwUserProfileEmailPW = null;
+			String txtUserProfileSenderUserTitle = null;
 			String emailSignature = null;
 			String chkUserProfileEmailUseSign = null;
 
@@ -920,6 +921,8 @@ public class WorkServiceImpl implements IWorkService {
 						chkUserProfileEmailDeleteFetched = valueString;
 					else if(fieldId.equals("pwUserProfileEmailPW"))
 						pwUserProfileEmailPW = valueString;
+					else if(fieldId.equals("txtUserProfileSenderUserTitle"))
+						txtUserProfileSenderUserTitle = valueString;
 					else if(fieldId.equals("emailSignature"))
 						emailSignature = valueString;
 					else if(fieldId.equals("chkUserProfileEmailUseSign"))
@@ -989,6 +992,7 @@ public class WorkServiceImpl implements IWorkService {
 					} else {
 						mailAccount.setUseMailSign(false);
 					}
+					mailAccount.setSenderUserTitle(CommonUtil.toNull(txtUserProfileSenderUserTitle));
 					getMailManager().setMailAccount(txtUserProfileUserId, mailAccount, IManager.LEVEL_ALL);
 					ConnectionProfile profile = null;
 					ConnectionProfile[] profiles = settingsService.getMailConnectionProfiles();

@@ -117,6 +117,12 @@
 					</a>				
 					<span class="js_progress_span"></span>
 				</th>
+				<th class="read r_line">
+		 			<a href="" class="js_select_field_sorting">
+						<img src="images/icon_file.gif" fieldId="<%=MailContent.A_MULTIPART%>">
+					</a>				
+					<span class="js_progress_span"></span>
+				</th>
 				<%
 				if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){
 				%>
@@ -155,7 +161,8 @@
 				MailInstanceInfo[] instanceInfos = (MailInstanceInfo[]) instanceList.getInstanceDatas();
 				for (MailInstanceInfo instanceInfo : instanceInfos) {
 					String sender = (SmartUtil.isBlankObject(instanceInfo.getSender())) ? SmartMessage.getString("mail.title.no.sender") : instanceInfo.getSender().getName();
-					String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceiversShown();
+					//String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceiversShown();
+					String receivers = (SmartUtil.isBlankObject(instanceInfo.getReceivers())) ? SmartMessage.getString("mail.title.no.receivers") : instanceInfo.getReceivers()[0].getLongName();
 					String subject = (SmartUtil.isBlankObject(instanceInfo.getSubject())) ? SmartMessage.getString("mail.title.unknown.subject") : instanceInfo.getSubject();
 					String target = (savedInstance ? "new_mail.sw?folderId=" : "mail_space.sw?folderId=") + folderId + "&msgId=" + instanceInfo.getId();
 					String sendDateStr = (SmartUtil.isBlankObject(instanceInfo.getSendDate())) ? "" : instanceInfo.getSendDate().toLocalString();
@@ -166,6 +173,7 @@
 						<td><div class="<%if(instanceInfo.isUnread()) {%>icon_mail_read<%}%>"></div></td>
 						<td><a href="<%=target%>" class="js_content"><%if((folder.getType() == MailFolder.TYPE_SYSTEM_SENT) || (folder.getType() == MailFolder.TYPE_SYSTEM_DRAFTS)){%><%=receivers%><%}else{%><%=sender%><%} %></a></td>
 						<td><a href="<%=target%>" class="js_content"><%=subject%></a></td>
+						<td><%if(instanceInfo.isMultipart()){ %><a href="<%=target%>" class="js_content"><img src="images/icon_file.gif"></a><%} %></td>
 						<td class="tr"><a href="<%=target%>" class="js_content"><%=sendDateStr%></a></td>
 					</tr>
 		<%
@@ -212,6 +220,12 @@
 						if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
 							if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 						%>"></span>
+					</a>				
+					<span class="js_progress_span"></span>
+				</th>
+				<th class="read r_line">
+		 			<a href="" class="js_select_field_sorting" >
+						<img src="images/icon_file.gif" fieldId="<%=MailContent.A_MULTIPART%>">
 					</a>				
 					<span class="js_progress_span"></span>
 				</th>

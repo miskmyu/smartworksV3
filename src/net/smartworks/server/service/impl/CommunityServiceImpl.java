@@ -1880,6 +1880,7 @@ public class CommunityServiceImpl implements ICommunityService {
 					vMailAccount.setPassword(sMailAccount.getMailPassword());
 					vMailAccount.setSignature(sMailAccount.getMailSignature());
 					vMailAccount.setUseSignature(sMailAccount.isUseMailSign());
+					vMailAccount.setSenderUserTitle(sMailAccount.getSenderUserTitle());
 					vMailAccountList.add(vMailAccount);
 				}
 			}

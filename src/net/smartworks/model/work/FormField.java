@@ -36,6 +36,7 @@ public class FormField extends BaseObject{
 	public static final String ID_RECEIVERS = "to";
 	public static final String ID_SEND_DATE = "date";
 	public static final String ID_MAIL_SIZE = "size";
+	public static final String ID_MULTIPART = "multipart";
 
 	public static final String TYPE_OBJECT_ID = "objectId"; // work
 	public static final String TYPE_TEXT = "textInput"; //string

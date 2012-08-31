@@ -73,7 +73,7 @@ public class RenameMailFolderService extends BaseService {
 			FolderControllerFactory factory = new FolderControllerFactory(auth, profile, handler);
 			FolderController foldCont = factory.getFolderController();
 			FolderDbObject itm = foldCont.getFolder(oldName);
-			foldCont.renameFolder(itm.getFolderName(), folderName);
+			foldCont.renameFolder(itm.getParentId().toString(), itm.getFolderName(), folderName);
 			
 			out.print("ok."+java.net.URLEncoder.encode(folderName, "utf-8"));
 		} catch (Exception e) {

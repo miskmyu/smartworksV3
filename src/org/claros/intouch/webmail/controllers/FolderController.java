@@ -21,7 +21,7 @@ public interface FolderController {
 	public Integer countTotalMessages(String folder) throws Exception;
 	public void emptyFolder(String folder) throws Exception;
 	public void deleteFolder(String folder) throws Exception;
-	public void renameFolder(String oldName, String newName) throws Exception;
+	public void renameFolder(String parentId, String oldName, String newName) throws Exception;
 	public ArrayList getHeadersByFolder(String folder) throws Exception;
 	public void createDefaultFolders() throws Exception;
 	public FolderDbObject getJunkFolder() throws Exception;

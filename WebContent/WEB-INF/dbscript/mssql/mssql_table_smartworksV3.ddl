@@ -2401,6 +2401,7 @@ CREATE TABLE SwMailAccount (
 	mailPassword varchar(50) NOT NULL,
 	mailSignature varchar(4000),
 	useMailSign bit,
+	senderUserTitle varchar(50),
 	mailDeleteFetched varchar(10),
 	creator	varchar(50),
 	createdtime datetime,
