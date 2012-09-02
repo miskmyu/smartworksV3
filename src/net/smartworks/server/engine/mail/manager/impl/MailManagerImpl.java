@@ -583,7 +583,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 			} else {
 				StringBuffer buf = new StringBuffer();
 				buf.append("update MailAccount set ");
-				buf.append(" userId=:userId, mailServerId=:mailServerId, mailServerName=:mailServerName, mailId=:mailId,mailUserName=:mailUserName,mailDeleteFetched=:mailDeleteFetched, mailPassword=:mailPassword, mailSignature=:mailSignature, useMailSign=:useMailSign ");
+				buf.append(" userId=:userId, mailServerId=:mailServerId, mailServerName=:mailServerName, mailId=:mailId,mailUserName=:mailUserName,mailDeleteFetched=:mailDeleteFetched, mailPassword=:mailPassword, mailSignature=:mailSignature, useMailSign=:useMailSign, senderUserTitle=:senderUserTitle ");
 				buf.append(" where objId=:objId");
 				Query query = this.getSession().createQuery(buf.toString());
 				query.setString(MailAccount.A_USERID, obj.getUserId());
@@ -593,6 +593,9 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				query.setString(MailAccount.A_MAILUSERNAME, obj.getMailUserName());
 				query.setString(MailAccount.A_MAILDELETEFETCHED, obj.getMailDeleteFetched());
 				query.setString(MailAccount.A_MAILPASSWORD, obj.getMailPassword());
+				query.setString(MailAccount.A_MAILSIGNATURE, obj.getMailSignature());
+				query.setBoolean(MailAccount.A_USEMAILSIGN, obj.isUseMailSign());
+				query.setString(MailAccount.A_SENDERUSERTITLE, obj.getSenderUserTitle());
 				query.setString(MailAccount.A_OBJID, obj.getObjId());
 				query.executeUpdate();
 			}
@@ -723,7 +726,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 				buf.append(" obj");
 			} else {
 				buf.append(" obj.objId,");
-				buf.append(" obj.userId, obj.mailServerId, obj.mailServerName, obj.mailId,obj.mailUserName,obj.mailDeleteFetched, obj.mailPassword, obj.mailSignature, obj.useMailSign,");
+				buf.append(" obj.userId, obj.mailServerId, obj.mailServerName, obj.mailId,obj.mailUserName,obj.mailDeleteFetched, obj.mailPassword, obj.mailSignature, obj.useMailSign, obj.senderUserTitle,");
 				buf.append(" obj.creationUser, obj.creationDate, obj.modificationUser, obj.modificationDate");
 			}
 			Query query = this.appendQuery(buf, cond);
@@ -746,6 +749,7 @@ public class MailManagerImpl extends AbstractManager implements IMailManager {
 					obj.setMailPassword((String)fields[j++]);
 					obj.setMailSignature((String)fields[j++]);
 					obj.setUseMailSign((Boolean)fields[j++]);
+					obj.setSenderUserTitle((String)fields[j++]);
 					obj.setCreationUser((String)fields[j++]);
 					obj.setCreationDate((Timestamp)fields[j++]);
 					obj.setModificationUser((String)fields[j++]);

@@ -32,6 +32,8 @@
 	<%
 	if(folders != null){
 		for (MailFolder folder : folders) {
+			if (folder == null)
+				continue;
 			String iconClass = "";
 			String unreadCountTarget = "";
 			String listClass = "";

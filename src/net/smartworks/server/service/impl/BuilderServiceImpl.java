@@ -339,6 +339,7 @@ public class BuilderServiceImpl implements IBuilderService {
 				SwdField[] swdFields = null;
 				if(swdDomain != null) {
 					swdDomain.setKeyColumn(rdoKeyField);
+					swdDomain.setTitleFieldId(rdoKeyField);
 					swdFields = swdDomain.getFields();
 				}
 
