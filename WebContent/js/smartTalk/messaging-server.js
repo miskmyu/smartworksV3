@@ -1,3 +1,4 @@
+
 var serverUrl = "http://localhost:8011";
 var swContext = "/faye";
 var fayeServer = "fayeServer";
@@ -8,6 +9,7 @@ var swSubject = {
 	FAYESERVER : "/fayeServer",
 	ONLINE : "/online",
 	OFFLINE : "/offline",
+	CHATREQUEST: "/chatRequest",
 	ALL : "/*"
 };
 
@@ -44,28 +46,61 @@ function getUserId(channel){
 		newChannel = subjects[3].replace(/_/g, '.' );
 	return newChannel;
 }
-function getSmartworksNCompany(channel){
+function getCompanyId(channel){
 	var subjects = channel.split('/');
 	var newChannel = "";
 	if(subjects.length>2)
-		newChannel = "/" + subjects[1] + "/" + subjects[2];
+		newChannel = subjects[2];
 	return newChannel;
 }
+
 bayeux.bind('subscribe', function(clientId, channel) {
 	console.log('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
 	var pos = channel.indexOf('@');
 	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
-		bayeux.getClient().publish(channel + swSubject.ONLINE, getUserId(channel));
-		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.ONLINE, getUserId(channel));
+		var userId = getUserId(channel);
+		var companyId = getCompanyId(channel);
+		bayeux.getClient().publish(channel + swSubject.ONLINE, userId);
+
+		var options = {
+				host: "localhost",
+				port: "8080",
+				path: "/smartworksV3/services/common/smartTalkService.jsp?method=updateChatterStatus&userId=" + userId + "&status=online"  + "&companyId=" + companyId
+			};
+		try{
+			http.request(options, function(response){
+				response.on('data', function(data) {
+				});
+				response.on('end', function() {
+				});
+			}).end();
+		}catch (e){
+		}
 	}
 });
 
 bayeux.bind('unsubscribe', function(clientId, channel) {
 	console.log('[UNSUBSCRIBE] ' + clientId + ' -> ' + channel);
 	var pos = channel.indexOf('@');
-	if((pos != -1) && (channel.indexOf('/',pos) == -1)){		
-		bayeux.getClient().publish(channel + swSubject.OFFLINE, getUserId(channel));
-		bayeux.getClient().publish(getSmartworksNCompany(channel) + swSubject.OFFLINE, getUserId(channel));
+	if((pos != -1) && (channel.indexOf('/',pos) == -1)){
+		var userId = getUserId(channel);
+		var companyId = getCompanyId(channel);
+		bayeux.getClient().publish(channel + swSubject.OFFLINE, userId);
+
+		var options = {
+				host: "localhost",
+				port: "8080",
+				path: "/smartworksV3/services/common/smartTalkService.jsp?method=updateChatterStatus&userId=" + userId + "&status=offline" + "&companyId=" + companyId
+			};
+		try{
+			http.request(options, function(response){
+				response.on('data', function(data) {
+				});
+				response.on('end', function() {
+				});
+			}).end();
+		}catch (e){
+		}
 	}
 });
 
@@ -87,16 +122,16 @@ function uniqid() {
 	return newDate.getTime();
 };
 
-var serverCallback = function(message) {
+var chatRequestCallback = function(message) {
 	if (message.msgType === msgType.CHAT_REQUEST) {
-		var companyId = message.channel.split("/")[2];
+		var companyId = message.companyId;
 		var chatterInfos = message.chatterInfos;
 		var chatId = "chatId" + uniqid();
 		if (chatterInfos != null && chatterInfos.length > 0) {
 			for ( var i = 0; i < chatterInfos.length; i++) {
 				if((chatterInfos[i] == null) || (chatterInfos[i].userId == null)) continue;
 				bayeux.getClient().publish(swSubject.SMARTWORKS
-						+ companyId + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
+						+ "/" + companyId + "/" + chatterInfos[i].userId.replace(/\./g,'_'), {
 					msgType : msgType.JOIN_CHAT,
 					sender : message.sender,
 					chatId : chatId,
@@ -107,4 +142,4 @@ var serverCallback = function(message) {
 	}
 };
 
-bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.ALL + swSubject.FAYESERVER, serverCallback);
+bayeux.getClient().subscribe(swSubject.SMARTWORKS + swSubject.CHATREQUEST + swSubject.FAYESERVER, chatRequestCallback);

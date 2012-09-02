@@ -39,7 +39,6 @@ public class FormController {
 	@RequestMapping("/load_detail_form")
 	public ModelAndView loadDetailForm(HttpServletRequest request,
 			HttpServletResponse response) {
-
 		return SmartUtil.returnMnv(request, "jsp/content/work/form/load_detail_form.jsp",
 				"");
 	}

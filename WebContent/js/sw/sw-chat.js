@@ -222,28 +222,32 @@ function startChattingWindow(message) {
 
 var blinkingOn = new Array();
 function isBlinkingOn(chatId){
-	for(var i=0; i<blinkingOn.length; i++)
-		if(blinkingOn[i] === chatId)
+	for(var i=0; i<blinkingOn.length; i++){
+		if(blinkingOn[i] === chatId){
 			return true;
+		}
+	}
 	return false;
 }
 function removeBlinkingOn(chatId){
-	for(var i=0; i<blinkingOn.length; i++)
+	for(var i=0; i<blinkingOn.length; i++){
 		if(blinkingOn[i] === chatId){
 			blinkingOn.splice(i,1);
 			return;
 		}
+	}
 }
 
 function receivedMessageOnChatId(message) {
 	var chatId = message.chatId;
 	var senderInfo = message.senderInfo;
 	var chatMessage = message.chatMessage;
+	var senderName = (senderInfo.userId === currentUserId) ? '' : '<span class="">' + senderInfo.longName + '</span>';
 	var sendDate = new Date(message.sendDate);
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
 	var data = "<li>" + 
 					"<div class='noti_pic'>" +
-						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + 
+						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + senderName + 
 					"</div>" + 
 					"<div class='noti_in'>" + chatMessage + "<span class='t_date ml3' >" + printDateTime(sendDate) + "</span></div>" +
 				"</li>";
@@ -251,11 +255,13 @@ function receivedMessageOnChatId(message) {
 	target[0].scrollTop = target[0].scrollHeight;
 	var chattingBox = $('#'+chatId);
 	if(chattingBox.find('div.js_chatting_body').css('display') === "none"){
+		if(isBlinkingOn(chatId)) return;
 		blinkingOn.push(chatId);
 		var repeatBlinking = function(){
+			var id = chatId;
 			setTimeout(function(){
 				chattingBox.fadeTo('slow', 0.2).fadeTo('slow', 1.0);							
-				if(isBlinkingOn(chatId)) repeatBlinking();
+				if(isBlinkingOn(id)) repeatBlinking();
 			}, 3000);			
 		};
 		repeatBlinking();
@@ -352,13 +358,16 @@ $(function() {
 	
 	$('a.js_toggle_chatter_list').live('click',function(e) {
 		var input = $(targetElement(e));
-		var chatterList = input.parents('div.js_chatter_list');
+		var chatterList = input.parents('div.js_chatter_list_page');
 		var target = chatterList.find('div.js_chatter_search_area');
 		var display = target.css('display');
 		if (display !== "none") {
-			target.find('.js_chatter_list').html('').removeClass('searching');
+			if(!isEmpty(target.find('input.js_auto_complete').attr('value')) || target.find('.js_chatter_list').hasClass('searching')){
+				target.find('.js_chatter_list').html('').removeClass('searching');
+				target.find('input.js_auto_complete').attr('value', '');
+			}
 			setTimeout(function(){ setRightPosition("resize", null); }, 600);
-		}else{
+		}else if(isEmpty(target.find('.js_chatter_list').html())){
 			$.ajax({
 				url : 'available_chatter_list.sw',
 				data : {},
@@ -369,8 +378,10 @@ $(function() {
 				error : function(xhr, ajaxOptions, thrownError){
 				}
 			});
-			
-			chatterList.find('input.js_auto_complete').focus();
+			target.find('input.js_auto_complete').focus();
+		}else{
+			setTimeout(function(){ setRightPosition("resize", null); }, 600);
+			target.find('input.js_auto_complete').focus();
 		}
 		target.slideToggle(500);
 		return false;
