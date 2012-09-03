@@ -147,19 +147,22 @@
 	
 		var mode = "view";
 		var showInstance = $('.js_show_instance_page');
-		var workId = showInstance.attr("workId");
-		var instId = showInstance.attr("instId");
-		var taskInstId = showInstance.attr("taskInstId");
-		var formContent = showInstance.find('div.js_form_content');
-		new SmartWorks.GridLayout({
-			target : formContent,
-			mode : mode,
-			workId : workId,
-			recordId : instId,
-			taskInstId : taskInstId,
-			onSuccess : function(){
-			}
-		});
+		var workType = showInstance.attr("workType");
+		if (parseInt(workType) != <%=SmartWork.TYPE_PROCESS%>) {
+			var workId = showInstance.attr("workId");
+			var instId = showInstance.attr("instId");
+			var taskInstId = showInstance.attr("taskInstId");
+			var formContent = showInstance.find('div.js_form_content');
+			new SmartWorks.GridLayout({
+				target : formContent,
+				mode : mode,
+				workId : workId,
+				recordId : instId,
+				taskInstId : taskInstId,
+				onSuccess : function(){
+				}
+			});
+		}
 	</script>
 </div>
 <!-- 전체 레이아웃//-->
