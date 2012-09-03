@@ -73,7 +73,7 @@
 
 .btn_plus_space {padding:0 0 4px 5px; width:25px;}
 .btn_plus {background: url("../../images/btn_plus.gif") no-repeat 0 0 transparent; border: 0 none; cursor: pointer; height: 16px; padding: 0; width: 16px; display:inline-block}
-a .btn_plus:hover {background-position:0 -16px}
+.btn_plus:hover {background-position:0 -16px}
 .btn_tree_plus {background: url("../../images/btn_tree.png") no-repeat 0 0 transparent; border: 0 none; cursor: pointer; height: 14px; padding: 0; width: 16px; display:inline-block}
 a .btn_tree_plus:hover {background-position:0 -14px}
 .btn_tree_minus {background: url("../../images/btn_tree.png") no-repeat -17px 0 transparent; border: 0 none; cursor: pointer; height: 14px; padding: 0; width: 16px; display:inline-block}
