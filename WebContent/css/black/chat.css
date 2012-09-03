@@ -26,12 +26,13 @@
 .chat_section .btn_addf a:hover, .chat_de_section .btn_addf a:hover 
  {background: url("../../images/chat_img.png") no-repeat scroll -53px -25px transparent;}
 
-.chat_section .chat_body {background-color:#FFF; margin: 0 2px; min-height:100px; max-height:300px; width:269px; color:#454545; overflow-y:auto;}
+.chat_section .chat_body {background-color:#FFF; margin: 0 2px; min-height:100px; max-height:300px; width:265px; color:#454545; padding:0 2px; overflow-y:auto;}
 .chat_input_area { border-top:1px solid #9C9C9C; padding: 0 3px;}
-.chat_textarea {vertical-align: top; width:100%; border:none; max-height:35px; min-height:16px; outline: medium none; overflow-y:hidden;}
+.chat_textarea {vertical-align: top; border:none; max-height:35px; min-height:16px; outline: medium none; overflow-y:hidden;}
 
 .chat_list li {border-bottom:1px dashed #9C9C9C; margin:3px 2px; color:#454545; vertical-align: middle; padding: 2px 0; overflow:hidden;}	
 .chat_list li.end {border-bottom:none;}
+.chat_list .noti_in {margin-left:28px; line-height:13px}
 
 /* Chat MSG Section */
 .msg_section {background-color:#f5f3ec; color:#454545; font-size:11px; padding:5px; margin: 0 2px; border-bottom: 1px solid #FFFFFF;}

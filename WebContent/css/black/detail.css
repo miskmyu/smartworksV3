@@ -349,7 +349,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 /*프로파일 화면 구성*/
 .photo_section {width:150px; float:left}
 .photo_section .qq-upload-button {top:115px; left:24px}
-.photo_section .t_text_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
+.photo_section .t_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
 .js_my_signpic_field .form_value img {margin-left: 20px}
 
 /* Icon button style */
