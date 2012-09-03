@@ -244,11 +244,11 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .select_btn_space {text-align:left; line-height: 24px; padding-left: 5px; margin-bottom:10px}
 .move_btn_space.top {border-top: none}
 .move_btn_space.bottom {border-bottom:none; background-color: #FFF}
-.move_btn_space span a {float:right; margin-top: 4px; color:#666666 !important}
-.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 15px}
-.icon_arr_ppage a:hover {background-position: -49px -314px}
-.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
-.icon_arr_npage a:hover {background-position: -66px -314px}
+.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_ppage a:hover {background-position: -47px -314px}
+.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -20px -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_npage a:hover {background-position: -67px -314px}
 
 /* 탭 */
 .tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
