@@ -21,6 +21,7 @@ var swSubject = {
 	FAYESERVER : "/fayeServer",
 	ONLINE : "/online",
 	OFFLINE : "/offline",
+	CHATREQUEST : "/chatRequest",
 	ALL : "/*"
 };
 
@@ -35,7 +36,7 @@ var msgType = {
 	CHAT_MESSAGE : "CHATTING",		// 채팅 메시지..
 	WRITING_CHAT_MESSAGE : "WRITING",// 채팅 메시지를 쓰고 있다는 메시지...
 	CHATTERS_INVITED : "CHTSINVITED",// 채팅 참여자들을 초청했다는 메시지..
-	AVAILABLE_CHATTERS : "ACHATTERS" // 채팅 가능한 사용자들을 알려주는 메시지 
+	AVAILABLE_CHATTERS : "ACHATTERS"// 채팅 가능한 사용자들을 알려주는 메시지 
 };
 
 var smartMsgClient = null;
@@ -55,7 +56,6 @@ var chatHistory = {
 		var chatInfos = $.jStorage.get(currentUserId);
 		if(chatInfos) chatHistory.chatInfos = chatInfos;
 		var index = $.jStorage.index();
-		console.log("CHAT LIST Restored : " + chatHistory.chatInfos);
 	},
 	
 	updateChatList : function(chatList){
@@ -72,7 +72,6 @@ var chatHistory = {
 		}
 		chatHistory.chatInfos = newChatInfos;
 		$.jStorage.set(currentUserId, chatHistory.chatInfos);
-		console.log("CHAT LIST Updated : " + chatHistory.chatInfos);
 	},
 
 	existInHistory : function(chatId){
@@ -339,7 +338,7 @@ var smartTalk = {
 	},
 
 	startSubOnAll : function() {
-		smartTalk.subscribe(smartTalk.myChannel("/*"), function(message) {
+		smartTalk.subscribe(smartTalk.myChannel("/**"), function(message) {
 			console.log("SubOnAll Message = ", message);
 		});
 
@@ -381,9 +380,10 @@ var smartTalk = {
 	chattingRequest : function(chatterInfos) {
 		if(chatManager.isSameChat(chatterInfos)) return;
 		if((chatterInfos.length == 2) && (chatterInfos[0].userId === chatterInfos[1].userId)) return;
-		smartTalk.publish(smartTalk.myChannel(swSubject.FAYESERVER), {
+		smartTalk.publish(swSubject.SMARTWORKS + swSubject.CHATREQUEST + swSubject.FAYESERVER, {
 			msgType : msgType.CHAT_REQUEST,
 			sender : currentUserId,
+			companyId : currentUser.companyId,
 			chatterInfos : chatterInfos
 		});
 	},
@@ -419,6 +419,9 @@ var smartTalk = {
 				receivedMessageOnChatId(message);
 				chatHistory.setHistory(chatId, message);
 		} else if( type === msgType.CHATTERS_INVITED){
+			setTimeout(function(){
+				smartTalk.publishWritingStatus(chatId);
+			}, 500);
 			if(sender !== currentUser.userId){
 				var chatterInfos = message.chatterInfos;
 				var users = chatManager.chatById(chatId).users;
@@ -491,7 +494,7 @@ var smartTalk = {
 		chat.subscription = smartTalk.subscribe(smartTalk.myChannel("/" + message.chatId), smartTalk.dataOnChatId); 
 		for ( var i = 0; i < users.length; i++) {
 			var chatterInfo = users[i];
-			if ((chatterInfo.userId === currentUser.userId) || chatterInfo.userId === message.sender){
+			if (chatterInfo.userId === currentUser.userId){
 				chatterInfo.status = userStatus.ONLINE;
 			}else{
 				//console.log('chatterInfo=', chatterInfo, ', userId=', chatterInfo.userId);
@@ -516,8 +519,7 @@ var smartTalk = {
 		var users = chat.users;
 		for(var i=0; i<users.length; i++){
 			var user = users[i];
-			var chatters = chatManager.chatters(user.userId);
-			if(chatters==1){
+			if(user.userId !== currentUserId){
 				smartMsgClient.unsubscribe(user.onlineSub);
 				smartMsgClient.unsubscribe(user.offlineSub);				
 			}
@@ -600,12 +602,13 @@ var smartTalk = {
 	},
 
 	publishJoinedChat : function(chatId) {
-		smartTalk.publish(smartTalk.myChannel("/"
-				+ chatId), {
-			msgType : msgType.JOINED_IN_CHAT,
-			chatId : chatId,
-			sender : currentUserId
-		});
+		setTimeout(function(){
+			smartTalk.publish(smartTalk.myChannel("/"
+					+ chatId), {
+				msgType : msgType.JOINED_IN_CHAT,
+				chatId : chatId,
+				sender : currentUserId
+			});}, 500);
 	},
 
 	publishChattersInvited : function(chatId, chatterInfos) {
@@ -692,66 +695,3 @@ $(document).ready(function(){
 	});
 	
 });
-
-
-//	var repeat1 = function() {
-// clearInterval(timer);
-// smartTalk.publishBcast(new Array(
-// " Hello, this is SmartWorks!! Welcome~~",
-// "오늘은 삼겹살데이 입니다. 점심시간에 가급적이면 많은 분들이 참석바랍니다.!!! from 경영기획본부"));
-// };
-// smartTalk.publishNoticeCount({
-// type : 0,
-// count : 0
-// });
-// smartTalk.publishNoticeCount({
-// type : 1,
-// count : 1
-// });
-// smartTalk.publishNoticeCount({
-// type : 2,
-// count : 2
-// });
-// smartTalk.publishNoticeCount({
-// type : 3,
-// count : 3
-// });
-// smartTalk.publishNoticeCount({
-// type : 4,
-// count : 4
-// });
-// smartTalk.publishNoticeCount({
-// type : 5,
-// count : 5
-// });
-//
-// setTimeout(function() {
-//	smartTalk.publish(swSubject.SMARTWORKS + swSubject.COMPANYID
-//			+ swSubject.BROADCASTING, {
-//		msgType : msgType.AVAILABLE_CHATTERS,
-//		sender : "smartworks.net",
-//		userInfos : new Array({
-//			userId : "ysjung@maninsoft.co.kr",
-//			longName : "대표이사 정윤식",
-//			minPicture : "images/no_user_picture_min.jpg"
-//		}, {
-//			userId : "jskim@maninsoft.co.kr",
-//			longName : "과장 김지숙",
-//			minPicture : "images/no_user_picture_min.jpg"
-//		}, {
-//			userId : "hsshin@maninsoft.co.kr",
-//			longName : "선임연구원 신현성",
-//			minPicture : "images/no_user_picture_min.jpg"
-//		}, {
-//			userId : "kmyu@maninsoft.co.kr",
-//			longName : "선임연구원 유광민",
-//			minPicture : "images/no_user_picture_min.jpg"
-//		}, {
-//			userId : "hjlee@maninsoft.co.kr",
-//			longName : "대리 이현정",
-//			minPicture : "images/no_user_picture_min.jpg"
-//		})
-//	});
-//}, 5000);
-//
-

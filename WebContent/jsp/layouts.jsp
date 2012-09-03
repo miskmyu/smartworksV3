@@ -245,10 +245,10 @@ function logout() {
 		<!-- Footer //-->
 
 	</div>
-<%-- 	
+ 	
  	<jsp:include page="/jsp/chatting/chatter_list.jsp" />
 
- --%>
+
 <script type="">smartPop.closeProgress();</script>
 </body>
 </html>

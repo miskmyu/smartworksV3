@@ -240,15 +240,15 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .nav_paginate .next a:hover { background-position:-12px -552px}
 
 /* Prev Page, Next Page  */
-.move_btn_space, .select_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space, .select_btn_space {background-color: #f6f6f6; border-bottom: 1px solid #E8E8E8; font-weight: bold; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
 .select_btn_space {text-align:left; line-height: 24px; padding-left: 5px; margin-bottom:10px}
 .move_btn_space.top {border-top: none}
 .move_btn_space.bottom {border-bottom:none; background-color: #FFF}
-.move_btn_space span a {float:right; margin-top: 4px; color:#666666 !important}
-.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 15px}
-.icon_arr_ppage a:hover {background-position: -49px -314px}
-.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
-.icon_arr_npage a:hover {background-position: -66px -314px}
+.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_ppage a:hover {background-position: -47px -314px}
+.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -20px -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_npage a:hover {background-position: -67px -314px}
 
 /* 탭 */
 .tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
@@ -437,6 +437,6 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 /* Manual */
 .det_contents {margin: 15px 0 10px}
 .js_manual_tasks .proc_task {min-height: 61px}
-.manual_df_img {min-height: 288px; vertical-align: top}
-.manual_df_img img {border: 1px solid #C7C7C7; width:360px; min-height:280px; display:block; margin-right: 10px}
+.manual_df_img {min-height: 290px; vertical-align: top}
+.manual_df_img img {border: 1px solid #C7C7C7; width:360px; max-height:290px; display:block; margin-right: 10px}
 .js_form_desc_view {min-height: 290px}

@@ -16,24 +16,24 @@
 	function updateAvailableChatters(message) {
 		var userInfos = message;
 		var availableChatterList = $("#available_chatter_list");
-		if (userInfos != null && !(availableChatterList.hasClass('searching')) && (availableChatterList.parent().is(':visible'))) {
+		var isIdle = isEmpty($('.js_chatter_list_page').find('input.js_auto_complete').attr('value'));
+		if(!isEmpty(availableChatterList) && isIdle){
 			var nickNameBase = ($('.js_chatter_list_page').attr('nickNameBase') === 'true');
 			var data = "<ul>";
 			var length = userInfos.length;
+			var chatterLength = 0;
 			for (var i = 0; i < length; i++) {
 				if(userInfos[i].userId === currentUserId)
 					continue;
-
+	
 				data = data + "<li><a href='' comId='" + userInfos[i].userId + "' userId='" + userInfos[i].userId + "'>" +
 									"<img src='" + userInfos[i].minPicture + "' class='mr2 profile_size_s' title='" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +  "'>" + (nickNameBase ? userInfos[i].nickName : userInfos[i].longName) +
 									"<span class='chat_online'></span></a></li>";
+				chatterLength++;
 			}
 			data = data + "</ul>";
-			$("#available_chatter_list").html(data).parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length-1) + ")");
-		}else{
-			var length = isEmpty(userInfos) ? 0 : userInfos.length-1;
-			$("#available_chatter_list").parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (length) + ")");
-			
+			availableChatterList.html(data);
+			$("#available_chatter_list").parents('div.js_chatter_list').find('span.js_chatters_number').html("(" + (chatterLength) + ")");
 		}
 	}
 	
@@ -77,7 +77,7 @@
 
 		<!-- Body -->
 		<div class="chat_de_list js_chatter_list" id="available_chatter_list">
-<%-- 			<ul>
+ 			<ul>
 				<%
 				if(!SmartUtil.isBlankObject(chatters)) {
 					for (UserInfo chatter : chatters) {
@@ -97,7 +97,7 @@
 				}
 				%>
 			</ul>
- --%>		</div>
+		</div>
 		<!-- Body //-->
 
 		<!-- 검색영역 -->
