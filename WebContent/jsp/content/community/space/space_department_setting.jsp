@@ -94,7 +94,7 @@
 					<!-- Left -->
 					<div class="photo_section">
 						<div class="js_department_profile_field" imgSource=<%=department.getOrgPicture() %>></div>
-						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
+						<div class="t_s11"><fmt:message key="profile.title.size_desc"/></div>
 					</div>
 					<!-- Left//-->
 					<!--Right-->
