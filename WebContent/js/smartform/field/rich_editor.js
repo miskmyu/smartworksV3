@@ -85,7 +85,7 @@ richEditorSetValue = function($this, id, value){
 	var smartForm = $this.parents('form[name="frmSmartForm"]');
 	var richEditor = smartForm.find('.js_type_richEditor[fieldId="' + id + '"]');
 	var frame = richEditor.find('iframe');
-	frame.contents().find('html').html('<link href="css/default.css" type="text/css" rel="stylesheet" />' + unescape(value));
+	frame.contents().find('html').html('<link href="css/default-iframe.css" type="text/css" rel="stylesheet" />' + unescape(value));
 	doIframeAutoHeight();
 };
 
