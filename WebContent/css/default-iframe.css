@@ -7,7 +7,7 @@ html, body {
 	color:#454545; height:100%
 }
 
-img {max-width:610px; border:0 none}
+img {max-width:610px !important; border:0 none}
 
 table {
 	border-spacing: 0;
