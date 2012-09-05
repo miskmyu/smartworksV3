@@ -240,15 +240,15 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .nav_paginate .next a:hover { background-position:-12px -552px}
 
 /* Prev Page, Next Page  */
-.move_btn_space, .select_btn_space {background-color: #f6f6f6; font-size: 11px; border-bottom: 1px solid #E8E8E8; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
+.move_btn_space, .select_btn_space {background-color: #f6f6f6; border-bottom: 1px solid #E8E8E8; font-weight: bold; line-height: 20px; height:23px; text-align:right; padding-right: 5px}
 .select_btn_space {text-align:left; line-height: 24px; padding-left: 5px; margin-bottom:10px}
 .move_btn_space.top {border-top: none}
 .move_btn_space.bottom {border-bottom:none; background-color: #FFF}
-.move_btn_space span a {float:right; margin-top: 4px; color:#666666 !important}
-.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 15px}
-.icon_arr_ppage a:hover {background-position: -49px -314px}
-.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -17px -314px transparent; display:block; height: 16px; width: 16px}
-.icon_arr_npage a:hover {background-position: -66px -314px}
+.move_btn_space span a {float:right; margin-top: 3px; color:#666666 !important}
+.icon_arr_ppage a {background: url("../../images/header_nico.png") no-repeat scroll 0 -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_ppage a:hover {background-position: -47px -314px}
+.icon_arr_npage a {background: url("../../images/header_nico.png") no-repeat scroll -20px -314px transparent; display:block; height: 16px; width: 18px}
+.icon_arr_npage a:hover {background-position: -67px -314px}
 
 /* 탭 */
 .tab {height: 31px; position: relative; top: 6px; z-index: 31; margin-left:5px}
@@ -349,7 +349,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 /*프로파일 화면 구성*/
 .photo_section {width:150px; float:left}
 .photo_section .qq-upload-button {top:115px; left:24px}
-.photo_section .t_text_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
+.photo_section .t_s11 {margin:28px 0 0 0; text-align:center; width:110px; line-height: 12px}
 .js_my_signpic_field .form_value img {margin-left: 20px}
 
 /* Icon button style */

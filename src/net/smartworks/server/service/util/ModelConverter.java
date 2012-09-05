@@ -2587,7 +2587,11 @@ public class ModelConverter {
 			if (!CommonUtil.isEmpty(approvalId)) {
 				taskType = TaskInstance.TYPE_APPROVAL_TASK_FORWARDED;
 			} else {
-				taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+				if (paretWorkInstObj.getWork() != null && paretWorkInstObj.getWork().getType() == ProcessWork.TYPE_PROCESS) {
+					taskType = TaskInstance.TYPE_PROCESS_TASK_FORWARDED;
+				} else {
+					taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+				}
 			}
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
@@ -3966,6 +3970,11 @@ public class ModelConverter {
 			processWorkInstance = new ProcessWorkInstance();
 		
 		getWorkInstanceByPrcProcessInst(userId, processWorkInstance, prcInst);
+		
+		TskTaskCond taskForwardCond = new TskTaskCond();
+		taskForwardCond.setProcessInstId(prcInst.getObjId());
+		long forwardCount = SwManagerFactory.getInstance().getTskManager().getFirstForwardTasksOnGroupByForwardIdSize(userId, taskForwardCond);
+		processWorkInstance.setNumberOfForwardHistories((int)forwardCount);
 		
 		return processWorkInstance;
 	}

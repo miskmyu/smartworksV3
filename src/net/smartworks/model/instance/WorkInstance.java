@@ -134,7 +134,7 @@ public class WorkInstance extends Instance {
 	public TaskInstanceInfo getMyRunningForwardedTask(){
 		if(SmartUtil.isBlankObject(tasks)) return null;
 		for(TaskInstanceInfo task : tasks){
-			if(	(task.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || task.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			if(	(task.getTaskType() == TaskInstance.TYPE_PROCESS_TASK_FORWARDED || task.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || task.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
 				&& !SmartUtil.isBlankObject(task.getAssignee()) 
 				&& task.getAssignee().getId().equals(SmartUtil.getCurrentUser().getId())
 				&& task.getStatus() == TaskInstance.STATUS_RUNNING){
