@@ -687,7 +687,6 @@ button.space {height: 18px; padding: 1px 3px}
 .mail_list_section .view_title dt { clear:both; float:left; min-width:65px; text-align:right; color:#919191}
 .mail_list_section .view_title dd { margin:0 0 0 70px; word-wrap: break-word}
 .mail_list_section .read_frame { margin:10px; overflow-y: auto}
-.mail_list_section img { width:100% !important}
 
 .nav_mail_list {height: 16px; vertical-align: top !important}
 .nav_mail_list span {vertical-align: top !important; color: #FFA24D}
