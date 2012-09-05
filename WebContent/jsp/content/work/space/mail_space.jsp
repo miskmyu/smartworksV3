@@ -150,7 +150,7 @@
 					</div>
 					<!-- 업무 내용 -->
 					<div id="SvcGuideIndutyIframe" class="read_frame list_contents js_form_content">
-   						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight iframe_section"
+   						<iframe id="guideIndutyIframe" name="guideIndutyIframe" align="center" frameborder="0" height="100%" width="100%" class="autoHeight"
 							 scrolling="no" src="webmail/dumpPart.service?partid=<%=instance.getPartId()%>" border="0" onload="reloadMailContent();" />
 							</iframe>
 					</div>
