@@ -1465,7 +1465,7 @@ $(function() {
 		var body = $('ul.portlet_r').clone();
 		if(isMailSpace){
 			body = $('ul.portlet_r .mail_list_section').clone();
-			body.find('.move_btn_space span').remove();
+			body.find('.move_btn_space').remove();
 		}else{
 			body.find('#js_copy_address').parents('.txt_btn').remove();
 			body.find('.js_toggle_forward_btn').remove();
