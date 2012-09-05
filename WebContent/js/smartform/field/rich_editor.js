@@ -39,7 +39,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $textarea = null;
-	var displayStyle = (isMobile.any()) ? "" :  "display:none;";
+	var displayStyle = (isMobile.any()) ? "" :  "display:none;border:1px solid;";
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
 	}else{
