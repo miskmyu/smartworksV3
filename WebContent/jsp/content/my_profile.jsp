@@ -145,7 +145,7 @@
 						<!--  *** js_my_profile_field : sw_act_work.js에서 화면로딩이 완료되면 이 클래스로 찾아서,  	-->
 						<!--      현재사용자의 사진을 보여주고, 다른 사진을 올리줄 있도록하는 기능을 제공한다. 			-->
 						<div class="js_my_profile_field js_auto_load_profile"></div>
-						<div class="t_text_s11"><fmt:message key="profile.title.size_desc"/></div>
+						<div class="t_s11"><fmt:message key="profile.title.size_desc"/></div>
 					</div>	
 					<div class="table_normal600 fl">				
 						<table>

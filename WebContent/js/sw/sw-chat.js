@@ -242,14 +242,14 @@ function receivedMessageOnChatId(message) {
 	var chatId = message.chatId;
 	var senderInfo = message.senderInfo;
 	var chatMessage = message.chatMessage;
-	var senderName = (senderInfo.userId === currentUserId) ? '' : '<span class="">' + senderInfo.longName + '</span>';
+	var senderName = (senderInfo.userId === currentUserId) ? '' : '<div class="t_s11">' + senderInfo.longName + '</div>';
 	var sendDate = new Date(message.sendDate);
 	var target = $('#' + chatId).find('div.js_chatting_message_list');
 	var data = "<li>" + 
 					"<div class='noti_pic'>" +
-						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + senderName + 
+						"<img src='" + senderInfo.minPicture + "' class='profile_size_s' title='" + senderInfo.longName+ "'>" + 
 					"</div>" + 
-					"<div class='noti_in'>" + chatMessage + "<span class='t_date ml3' >" + printDateTime(sendDate) + "</span></div>" +
+					"<div class='noti_in'>" + senderName + chatMessage + "<span class='t_date ml3' >" + printDateTime(sendDate) + "</span></div>" +
 				"</li>";
 	target.find('ul').append(data);
 	target[0].scrollTop = target[0].scrollHeight;
