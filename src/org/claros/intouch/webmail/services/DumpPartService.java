@@ -133,7 +133,6 @@ public class DumpPartService extends BaseService {
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
 						if(!SmartUtil.isBlankObject(content)){
-							content = StringEscapeUtils.unescapeHtml(content);
 							if(content.indexOf("=?")>0){
 								content = MimeUtility.decodeText(content);						
 							}
@@ -166,7 +165,6 @@ public class DumpPartService extends BaseService {
 //						cleaner.clean(false,false);
 //						content = cleaner.getCompactXmlAsString();
 						if(!SmartUtil.isBlankObject(content)){
-							content = StringEscapeUtils.unescapeHtml(content);
 							if(content.indexOf("=?")>0){
 								content = MimeUtility.decodeText(content);						
 							}						}
