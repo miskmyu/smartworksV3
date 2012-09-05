@@ -6,18 +6,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.internet.MimeMessage;
 
 import net.smartworks.model.mail.MailAccount;
+import net.smartworks.model.mail.MailAttachment;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.util.SmartUtil;
 
 import org.claros.commons.auth.models.AuthProfile;
+import org.claros.commons.mail.exception.MailboxActionException;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
+import org.claros.commons.mail.models.Email;
 import org.claros.commons.mail.models.EmailHeader;
+import org.claros.commons.mail.models.EmailPart;
+import org.claros.commons.mail.parser.MessageParser;
 import org.claros.commons.mail.protocols.Protocol;
 import org.claros.commons.mail.protocols.ProtocolFactory;
 import org.claros.commons.utility.MD5;
@@ -306,7 +313,7 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setCc(header.getCcShown());
 										item.setBcc(header.getBccShown());
 										item.setReplyTo(header.getReplyToShown());
-										item.setMultipart(header.isMultipart());
+										item.setMultipart(hasAttachment((MimeMessage)msg));
 										item.setSentDate(header.getDate());
 										item.setPriority(new Integer(header.getPriority()));
 										item.setSubject(header.getSubject());
@@ -360,6 +367,34 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 		addThreadToChecking(index, checkingEmail);
 		checkingEmail.start();
 		System.out.println("New Thread=" + checkingEmail + " just started !!!");
+	}
+	
+	private boolean hasAttachment(MimeMessage msg){
+		if(msg==null) return false;
+		MimeMessage mimeMsg = (MimeMessage)msg;
+		Email email = null;
+		try {
+			email = MessageParser.parseMessage(mimeMsg);
+		} catch (Exception e) {
+
+		}
+		if (email != null && email.getParts().size()>1) {
+			List parts = email.getParts();
+			for (int j=0;j<parts.size();j++) {
+				EmailPart tmp = (EmailPart)parts.get(j);
+				String mime = tmp.getContentType();
+				mime = mime.toLowerCase(new Locale(SmartUtil.getCurrentUser().getLocale())).trim();
+				if (mime.indexOf(";") > 0) {
+					mime = mime.substring(0, mime.indexOf(";"));
+				}
+				if (mime.indexOf(" ") > 0) {
+					mime = mime.substring(0, mime.indexOf(" "));
+				}
+				if(!mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) && !mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML))
+					return true;
+			}
+		}
+		return false;
 	}
 }
 

@@ -687,6 +687,7 @@ button.space {height: 18px; padding: 1px 3px}
 .mail_list_section .view_title dt { clear:both; float:left; min-width:65px; text-align:right; color:#919191}
 .mail_list_section .view_title dd { margin:0 0 0 70px; word-wrap: break-word}
 .mail_list_section .read_frame { margin:10px; overflow-y: auto}
+
 .nav_mail_list {height: 16px; vertical-align: top !important}
 .nav_mail_list span {vertical-align: top !important; color: #FFA24D}
 .nav_mail_list span b {vertical-align: top !important}
@@ -751,6 +752,10 @@ a.js_show_all_users_shown, .js_show_all_users_shown {color:#3377ca !important}
 .line_width {padding:0 10px}
 .dline_left_gray {border-left:1px dashed #c2c2c2}
 .line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
+
+/* Iframe Section */
+.iframe_section body {font-size: 11px; font-family: dotum,Helvetica,sans-serif}
+.iframe_section img {width:100%}
 
 /*Footer*/
 #footer {text-align:center; height:28px; color:#454545; margin: 15px 10px 10px 240px}

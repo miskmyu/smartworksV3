@@ -17,6 +17,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 	var value = (options.dataField && options.dataField.value) || '';
+	value = unescape(value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -39,7 +40,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	
 	var $textarea = null;
 	if(readOnly){
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
 	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}
@@ -61,8 +62,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		}
 	}else{
 		if(readOnly) {
-			options.container.find('.form_value').text('');
-			options.container.find('.form_value').append(value);
+			options.container.find('.form_value').find('iframe').contents().html(value);
 		} else {
 			options.container.find('.form_value textarea').text(value);
 			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
@@ -74,11 +74,19 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		if ($richEditorHiddenInput.length === 0) {
 			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + value + "'>");
 		} else {
-			$richEditorHiddenInput.attr('value', value);
+			$richEditorHiddenInput.attr('value', escape(value));
 		}
 	}
 	
 	return options.container;
+};
+
+richEditorSetValue = function($this, id, value){
+	var smartForm = $this.parents('form[name="frmSmartForm"]');
+	var richEditor = smartForm.find('.js_type_richEditor[fieldId="' + id + '"]');
+	var frame = richEditor.find('iframe');
+	frame.contents().find('html').html('<link href="css/default-iframe.css" type="text/css" rel="stylesheet" />' + unescape(value));
+	doIframeAutoHeight();
 };
 
 SmartWorks.FormRuntime.RichEditorBuilder.buildEx = function(config){
@@ -173,4 +181,4 @@ SmartWorks.FormRuntime.RichEditorBuilder.dataField = function(config){
 	return dataField;
 };
 
-// oEditors.getById[id].exec("PASTE_HTML", [sHTML]);
+
