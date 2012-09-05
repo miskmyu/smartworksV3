@@ -63,6 +63,7 @@ import org.claros.commons.mail.models.EmailHeader;
 import org.claros.commons.mail.models.EmailPart;
 import org.claros.commons.mail.models.EmailPriority;
 import org.claros.commons.mail.parser.HTMLMessageParser;
+import org.claros.commons.mail.parser.MessageParser;
 import org.claros.commons.mail.protocols.Smtp;
 import org.claros.commons.mail.utility.Constants;
 import org.claros.commons.mail.utility.Utility;
@@ -374,7 +375,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setCc(header.getCcShown());
 		item.setBcc(header.getBccShown());
 		item.setReplyTo(header.getReplyToShown());
-		item.setMultipart(header.isMultipart());
+		item.setMultipart(hasAttachment(msg));
 		item.setSentDate(header.getDate());
 		item.setPriority(new Integer(header.getPriority()));
 		item.setSubject(header.getSubject());
@@ -383,6 +384,34 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		MailControllerFactory mailFact = new MailControllerFactory(auth, profile, handler, fItem.getFolderName());
 		MailController mailCont = mailFact.getMailController();
 		mailCont.appendEmail(item, null);
+	}
+	
+	private boolean hasAttachment(MimeMessage msg){
+		if(msg==null) return false;
+		MimeMessage mimeMsg = (MimeMessage)msg;
+		Email email = null;
+		try {
+			email = MessageParser.parseMessage(mimeMsg);
+		} catch (Exception e) {
+
+		}
+		if (email != null && email.getParts().size()>1) {
+			List parts = email.getParts();
+			for (int j=0;j<parts.size();j++) {
+				EmailPart tmp = (EmailPart)parts.get(j);
+				String mime = tmp.getContentType();
+				mime = mime.toLowerCase(new Locale(SmartUtil.getCurrentUser().getLocale())).trim();
+				if (mime.indexOf(";") > 0) {
+					mime = mime.substring(0, mime.indexOf(";"));
+				}
+				if (mime.indexOf(" ") > 0) {
+					mime = mime.substring(0, mime.indexOf(" "));
+				}
+				if(!mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN) && !mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML))
+					return true;
+			}
+		}
+		return false;
 	}
 	
 	private void saveDraft(AuthProfile auth, MimeMessage msg, EmailHeader header, HttpServletRequest request) throws Exception {
@@ -417,7 +446,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 		item.setCc(header.getCcShown());
 		item.setBcc(header.getBccShown());
 		item.setReplyTo(header.getReplyToShown());
-		item.setMultipart(header.isMultipart());
+		item.setMultipart(hasAttachment(msg));
 		item.setSentDate(header.getDate());
 		item.setPriority(new Integer(header.getPriority()));
 		item.setSubject(header.getSubject());
