@@ -769,18 +769,18 @@ function loadWriteMailFields() {
 			writeMailField.html(gridTable.html(gridRow));
 			
 			var receiversTitle = writeMailField.attr("receiversTitle");
-			var receiversHtml = writeMailField.attr('receivers') || "";
+			var receiversHtml = unescape(writeMailField.attr('receivers')) || "";
 			var ccReceiversTitle = writeMailField.attr("ccReceiversTitle");
-			var ccReceiversHtml = writeMailField.attr('ccReceivers') || "";
+			var ccReceiversHtml = unescape(writeMailField.attr('ccReceivers')) || "";
 			var bccReceiversTitle = writeMailField.attr("bccReceiversTitle");
-			var bccReceiversHtml = writeMailField.attr('bccReceivers') || "";
+			var bccReceiversHtml = unescape(writeMailField.attr('bccReceivers')) || "";
 			var priorityTitle = writeMailField.attr("priorityTitle");
 			var priority = writeMailField.attr('priority');
 			var subjectTitle = writeMailField.attr("subjectTitle");
-			var subject = writeMailField.attr('subject');
-			var contents = writeMailField.attr('contents');
+			var subject = unescape(writeMailField.attr('subject'));
+			var contents = unescape(writeMailField.attr('contents'));
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
-			var attachments = writeMailField.attr('attachments');
+			var attachments = unescape(writeMailField.attr('attachments'));
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
 				container: gridRow,
 				fieldId: "emailReceivers",

@@ -17,6 +17,7 @@ import javax.swing.text.html.parser.Parser;
 
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.claros.commons.auth.models.AuthProfile;
 import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
@@ -132,6 +133,7 @@ public class DumpPartService extends BaseService {
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
 						if(!SmartUtil.isBlankObject(content)){
+							content = StringEscapeUtils.unescapeHtml(content);
 							if(content.indexOf("=?")>0){
 								content = MimeUtility.decodeText(content);						
 							}
@@ -149,7 +151,7 @@ public class DumpPartService extends BaseService {
 					} else {
 						response.setContentType(part.getContentType());
 					}
-					out.print(content);
+					out.print("<link href=\"css/default-iframe.css\" type=\"text/css\" rel=\"stylesheet\" />" + content);
 				} else if (part.getContentType().toLowerCase().startsWith("text/html") || part.isHTMLText()) {
 					PrintWriter out = response.getWriter();
                 	String content = "";
@@ -164,6 +166,7 @@ public class DumpPartService extends BaseService {
 //						cleaner.clean(false,false);
 //						content = cleaner.getCompactXmlAsString();
 						if(!SmartUtil.isBlankObject(content)){
+							content = StringEscapeUtils.unescapeHtml(content);
 							if(content.indexOf("=?")>0){
 								content = MimeUtility.decodeText(content);						
 							}						}
@@ -174,7 +177,7 @@ public class DumpPartService extends BaseService {
 					} else {
 						response.setContentType(part.getContentType());
 					}
-					out.print(content);
+					out.print("<link href=\"css/default-iframe.css\" type=\"text/css\" rel=\"stylesheet\" />" + content);
 				} else {
 					String tmpContType = (part.getContentType() == null) ? "application/octet-stream" : part.getContentType();
 					int pos = tmpContType.indexOf(";");

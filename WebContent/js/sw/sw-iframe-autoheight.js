@@ -13,9 +13,11 @@ var doIframeAutoHeight = function (){
 var setHeight = function(e){
     if(e.contentDocument){
 //		e.height = e.contentDocument.body.offsetHeight + 35; //높이 조절        
-		e.height = e.contentDocument.body.scrollHeight + 35; //높이 조절        
+//		e.height = e.contentDocument.body.scrollHeight + 35; //높이 조절        
+		e.height = e.contentDocument.body.scrollHeight; //높이 조절        
     } else {
-        e.height = e.contentWindow.document.body.scrollHeight + 35;
+//        e.height = e.contentWindow.document.body.scrollHeight + 35;
+        e.height = e.contentWindow.document.body.scrollHeight;
     }
 };
 

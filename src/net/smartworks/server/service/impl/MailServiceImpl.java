@@ -50,6 +50,7 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.exception.LoginInvalidException;
 import org.claros.commons.auth.models.AuthProfile;
@@ -1105,7 +1106,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						bccReceivers[k] = new User(addrBcc[k].getAddress(), addrBcc[k].getPersonal());
 				}
 				
-				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
+//				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
 				instance = new MailInstance(msgId, subject, sender, new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setCreatedDate(new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setReceivers(receivers);
@@ -1182,9 +1183,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 				}
 				if(mailContent != null && !mailContent.equals("")){
-					mailContent = mailContent.replace('\"', '\'');
-					mailContent = mailContent.replace("&lt;", "<");
-					mailContent = mailContent.replace("&gt;", ">");
+//					mailContent = mailContent.replace('\"', '\'');
+//					mailContent = mailContent.replace("&lt;", "<");
+//					mailContent = mailContent.replace("&gt;", ">");
 					
 				}
 				instance.setMailContents(mailContent);

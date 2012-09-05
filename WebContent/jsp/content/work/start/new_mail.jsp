@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.								 -->
 <!-- Created Date	: 2011.9.										 -->
 
+<%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="net.smartworks.model.mail.MailAccount"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
@@ -115,7 +116,8 @@ function submitForms(action) {
 	if(!SmartUtil.isBlankObject(folderId) && !SmartUtil.isBlankObject(msgId)){
 		instance = smartWorks.getMailInstanceById(folderId, msgId, sendType);
 	}else if(sendType == MailFolder.SEND_TYPE_WORK_CONTENT){
-		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
+//		String mailContents = ((String)request.getAttribute("mailContents")).replace("\"", "\'");
+		String mailContents = (String)request.getAttribute("mailContents");
 		instance.setMailContents(mailContents);
 	}else if(!SmartUtil.isBlankObject(receiverId)){
 		User receiver = smartWorks.getUserById(receiverId);
@@ -127,7 +129,8 @@ function submitForms(action) {
 	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
 	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
 	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
-		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
+//		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
+		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature());
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -176,8 +179,8 @@ function submitForms(action) {
 						<form name="frmNewMail" class="form_title js_validation_required">
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
 								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
-								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=instance.getReceiversHtml() %>" ccReceivers="<%=instance.getCcReceiversHtml() %>" bccReceivers="<%=instance.getBccReceiversHtml() %>" 
-									priority="<%=instance.getPriority()%>" subject="<%=CommonUtil.toNotNull(instance.getSubject()) %>" contents="<%=CommonUtil.toNotNull(instance.getMailContents()) %>" attachments="<%=instance.getAttachmentsHtml()%>"<%} %>>
+								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=StringEscapeUtils.escapeHtml(instance.getReceiversHtml()) %>" ccReceivers="<%=StringEscapeUtils.escapeHtml(instance.getCcReceiversHtml()) %>" bccReceivers="<%=StringEscapeUtils.escapeHtml(instance.getBccReceiversHtml()) %>" 
+									priority="<%=instance.getPriority()%>" subject="<%=StringEscapeUtils.escapeHtml(instance.getSubject()) %>" contents="<%=StringEscapeUtils.escapeHtml(instance.getMailContents()) %>" attachments="<%=StringEscapeUtils.escapeHtml(instance.getAttachmentsHtml())%>"<%} %>>
 							</div>
 						</form>
 					</div>
