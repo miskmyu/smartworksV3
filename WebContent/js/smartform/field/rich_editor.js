@@ -39,10 +39,12 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $textarea = null;
+//	var displayStyle = (isMobile.any()) ? "border:1px solid;" :  "display:none;";
+	var displayStyle = (true) ? "border:1px solid;" :  "display:none;";
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
 	}else{
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;' + displayStyle + '" id="' + id + '"></textarea></span></div>').find('textarea').html(value.replace(/textarea/g, "div"));
 	}
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -50,7 +52,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	}
 	if(!options.refreshData){
 		$textarea.appendTo(options.container);
-		if (!readOnly) {
+//		if (!readOnly && !isMobile.any()) {
+		if (!readOnly && false) {
 			var skinURI = (currentUser.locale == 'ko') ? "smarteditor/SEditorSkinKOR.html" : "smarteditor/SEditorSkinENG.html";
 			nhn.husky.EZCreator.createInIFrame({
 				oAppRef: oEditors,
@@ -64,7 +67,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		if(readOnly) {
 			options.container.find('.form_value').find('iframe').contents().html(value);
 		} else {
-			options.container.find('.form_value textarea').text(value);
+			options.container.find('.form_value textarea').html(value);
 			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
 		}
 	}
@@ -72,7 +75,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if (readOnly) {
 		var $richEditorHiddenInput = $('#richEditorHiddenInput'+id);
 		if ($richEditorHiddenInput.length === 0) {
-			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + value + "'>");
+			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + escape(value) + "'>");
 		} else {
 			$richEditorHiddenInput.attr('value', escape(value));
 		}

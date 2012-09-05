@@ -128,9 +128,11 @@ function submitForms(action) {
 	
 	MailAccount[] mailAccounts = smartWorks.getMyMailAccounts();
 	MailAccount myMailAccount = (SmartUtil.isBlankObject(mailAccounts)) ? null : mailAccounts[0];
+	String mailSignature = "";
 	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
 //		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
-		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature());
+		instance.setMailContents("\n\n\n" + instance.getMailContents());
+		mailSignature =  "\n\n\n" + myMailAccount.getSignature();
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -179,8 +181,8 @@ function submitForms(action) {
 						<form name="frmNewMail" class="form_title js_validation_required">
 							<div class="js_write_mail_fields" receiversTitle="<fmt:message key='common.title.receivers'/>" ccReceiversTitle="<fmt:message key='common.title.cc_receivers'/>" 
 								bccReceiversTitle="<fmt:message key='common.title.bcc_receivers'/>" priorityTitle="<fmt:message key='common.title.priority'/>" subjectTitle="<fmt:message key='common.title.subject'/>" attachmentsTitle="<fmt:message key='common.title.attachments'/>"
-								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=StringEscapeUtils.escapeHtml(instance.getReceiversHtml()) %>" ccReceivers="<%=StringEscapeUtils.escapeHtml(instance.getCcReceiversHtml()) %>" bccReceivers="<%=StringEscapeUtils.escapeHtml(instance.getBccReceiversHtml()) %>" 
-									priority="<%=instance.getPriority()%>" subject="<%=StringEscapeUtils.escapeHtml(instance.getSubject()) %>" contents="<%=StringEscapeUtils.escapeHtml(instance.getMailContents()) %>" attachments="<%=StringEscapeUtils.escapeHtml(instance.getAttachmentsHtml())%>"<%} %>>
+								<%if(!SmartUtil.isBlankObject(instance)){ %> receivers="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getReceiversHtml())) %>" ccReceivers="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getCcReceiversHtml())) %>" bccReceivers="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getBccReceiversHtml())) %>" 
+									priority="<%=instance.getPriority()%>" subject="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getSubject())) %>" contents="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getMailContents())) %>" mailSignature="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(mailSignature)) %>" attachments="<%=StringEscapeUtils.escapeHtml(CommonUtil.toNotNull(instance.getAttachmentsHtml()))%>"<%} %>>
 							</div>
 						</form>
 					</div>

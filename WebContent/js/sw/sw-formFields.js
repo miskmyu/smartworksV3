@@ -779,6 +779,8 @@ function loadWriteMailFields() {
 			var subjectTitle = writeMailField.attr("subjectTitle");
 			var subject = unescape(writeMailField.attr('subject'));
 			var contents = unescape(writeMailField.attr('contents'));
+			var mailSignature = unescape(writeMailField.attr('mailSignature'));
+			contents = (isMobile.any()) ? contents : contents + mailSignature;
 			var attachmentsTitle = writeMailField.attr("attachmentsTitle");
 			var attachments = unescape(writeMailField.attr('attachments'));
 			SmartWorks.FormRuntime.UserFieldBuilder.buildEx({
