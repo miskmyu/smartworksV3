@@ -17,7 +17,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 	var value = (options.dataField && options.dataField.value) || '';
-	value = unescape(value);
+//	value = unescape(value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -40,7 +40,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	
 	var $textarea = null;
 	if(readOnly){
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
+//		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
 	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}
@@ -62,7 +63,9 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		}
 	}else{
 		if(readOnly) {
-			options.container.find('.form_value').find('iframe').contents().html(value);
+//			options.container.find('.form_value').find('iframe').contents().html(value);
+			options.container.find('.form_value').text('');
+			options.container.find('.form_value').append(value);
 		} else {
 			options.container.find('.form_value textarea').html(value);
 			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
@@ -85,7 +88,9 @@ richEditorSetValue = function($this, id, value){
 	var smartForm = $this.parents('form[name="frmSmartForm"]');
 	var richEditor = smartForm.find('.js_type_richEditor[fieldId="' + id + '"]');
 	var frame = richEditor.find('iframe');
-	frame.contents().find('html').html('<link href="css/default-iframe.css" type="text/css" rel="stylesheet" />' + unescape(value));
+	frame.contents().find('html').html("");
+	value = unescape(value);
+	frame.contents().find('html').html('<link href="css/default-iframe.css" type="text/css" rel="stylesheet" />' + value);
 	doIframeAutoHeight();
 };
 
