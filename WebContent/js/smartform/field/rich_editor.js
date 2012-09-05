@@ -39,12 +39,10 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $textarea = null;
-//	var displayStyle = (isMobile.any()) ? "border:1px solid;" :  "display:none;";
-	var displayStyle = (true) ? "border:1px solid;" :  "display:none;";
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
 	}else{
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;' + displayStyle + '" id="' + id + '"></textarea></span></div>').find('textarea').html(value.replace(/textarea/g, "div"));
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}
 	if ($graphic.attr('hidden') == 'true'){
 		$label.hide();
@@ -52,8 +50,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	}
 	if(!options.refreshData){
 		$textarea.appendTo(options.container);
-//		if (!readOnly && !isMobile.any()) {
-		if (!readOnly && false) {
+		if (!readOnly) {
 			var skinURI = (currentUser.locale == 'ko') ? "smarteditor/SEditorSkinKOR.html" : "smarteditor/SEditorSkinENG.html";
 			nhn.husky.EZCreator.createInIFrame({
 				oAppRef: oEditors,
