@@ -50,6 +50,7 @@ import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.claros.commons.auth.MailAuth;
 import org.claros.commons.auth.exception.LoginInvalidException;
 import org.claros.commons.auth.models.AuthProfile;
@@ -699,8 +700,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						}
 					}					
 					// end -- added by sjlee
-					String subject = (SmartUtil.isBlankObject(mailContent.getSubject())) ? "" : MimeUtility.decodeText(mailContent.getSubject());
-					if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
+					String subject = mailContent.getSubject();
+					if(SmartUtil.isBlankObject(subject)){
+						subject = SmartMessage.getString("mail.title.no.subject");
+					}else{
+						if(subject.indexOf("=?")>0){
+							subject = MimeUtility.decodeText(subject);						
+						}
+						subject = subject.replaceAll("\"", "\'");
+					}
 					mailInstanceInfo.setSubject(subject);
 					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
 					mailInstanceInfo.setReceivers(receivers);
@@ -1035,6 +1043,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				if (subject == null || subject.equals("")) {
 					subject = SmartMessage.getString("mail.title.no.subject");
 				}
+				if(subject.indexOf("=?")>0){
+					subject = MimeUtility.decodeText(subject);						
+				}
 
 				InternetAddress addrFrom = null;
 				InternetAddress[] addrTo = null;	
@@ -1095,7 +1106,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						bccReceivers[k] = new User(addrBcc[k].getAddress(), addrBcc[k].getPersonal());
 				}
 				
-				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
+//				if(!SmartUtil.isBlankObject(subject)) subject = subject.replaceAll("\"", "\'");
 				instance = new MailInstance(msgId, subject, sender, new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setCreatedDate(new LocalDate(email.getBaseHeader().getDate().getTime()));
 				instance.setReceivers(receivers);
@@ -1172,19 +1183,9 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					}
 				}
 				if(mailContent != null && !mailContent.equals("")){
-					if(mailContent.indexOf("=?")>0){
-						System.out.println("Mail Content contains NONE-ENCODED Characters!!!");
-//						mailContent = new String(mailContent.getBytes("8859_1"), System.getProperty("file.enconding"));
-						mailContent = new String(mailContent.getBytes("8859_1"), "euc-kr");
-					}else{
-						System.out.println("Mail Content contains ENCODED Characters!!!");						
-						mailContent = MimeUtility.decodeText(mailContent);						
-//						mailContent = new String(mailContent.getBytes("8859_1"), System.getProperty("file.enconding"));
-//						mailContent = new String(mailContent.getBytes("8859_1"), "euc-kr");
-					}
-					mailContent = mailContent.replace('\"', '\'');
-					mailContent = mailContent.replace("&lt;", "<");
-					mailContent = mailContent.replace("&gt;", ">");
+//					mailContent = mailContent.replace('\"', '\'');
+//					mailContent = mailContent.replace("&lt;", "<");
+//					mailContent = mailContent.replace("&gt;", ">");
 					
 				}
 				instance.setMailContents(mailContent);
