@@ -6,14 +6,3 @@ html {
 html, body {
 	color:#454545; height:100%
 }
-
-img {max-width:600px !important; width:auto; border:0 none}
-
-table {
-	border-spacing: 0;
-	border-collapse: collapse;
-	width: 100%;
-	line-height: 22px;
-	font-size:12px
-}
-td, th {display: table-cell; vertical-align: inherit}
