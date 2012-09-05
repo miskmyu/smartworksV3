@@ -39,7 +39,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $textarea = null;
-	var displayStyle = (isMobile.any()) ? "border:1px solid;" :  "display:none;";
+//	var displayStyle = (isMobile.any()) ? "border:1px solid;" :  "display:none;";
+	var displayStyle = (true) ? "border:1px solid;" :  "display:none;";
 	if(readOnly){
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
 	}else{
@@ -51,7 +52,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	}
 	if(!options.refreshData){
 		$textarea.appendTo(options.container);
-		if (!readOnly && !isMobile.any()) {
+//		if (!readOnly && !isMobile.any()) {
+		if (!readOnly && false) {
 			var skinURI = (currentUser.locale == 'ko') ? "smarteditor/SEditorSkinKOR.html" : "smarteditor/SEditorSkinENG.html";
 			nhn.husky.EZCreator.createInIFrame({
 				oAppRef: oEditors,
