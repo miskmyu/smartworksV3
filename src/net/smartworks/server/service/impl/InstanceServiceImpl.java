@@ -181,6 +181,7 @@ import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2036,7 +2037,11 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setRefForm(refForm);
 				fieldData.setRefFormField(refFormField);
 				fieldData.setRefRecordId(refRecordId);
-
+				
+				//unescape
+				if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
+					value = StringUtil.unescape(value);
+				}
 				value = StringUtils.replace(value, "﻿", ""); // 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
 
 				fieldData.setValue(value);
@@ -2742,6 +2747,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				fieldData.setRefFormField(refFormField);
 				fieldData.setRefRecordId(refRecordId);
 
+				//unescape
+				if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
+					value = StringUtil.unescape(value);
+				}
 				value = StringUtils.replace(value, "﻿", "");// 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
 				
 				fieldData.setValue(value);
