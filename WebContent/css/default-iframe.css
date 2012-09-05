@@ -1,90 +1,13 @@
-@charset "utf-8";
-
 html {
      font-size: 12px;
      font-family: dotum,Helvetica,sans-serif;
-}
-
-body {
-	 scrollbar-face-color:#FFFFFF;
-	 scrollbar-highlight-color:#C7C7C7;
-	 scrollbar-shadow-color:#C7C7C7;
-	 scrollbar-3dlight-color:#FFFFFF;
-	 scrollbar-arrow-color:#C7C7C7;
-	 scrollbar-track-color:#FFFFFF;
-	 scrollbar-darkshadow-color:#FFFFFF;
 }
 
 html, body {
 	color:#454545; height:100%
 }
 
-a:link, a:visited, a:hover, a:focus, a:active {
-     text-decoration: none;
-     color:#454545;
-}
-
-a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, body, center, canvas, caption, cite, code, command, datalist, dd, del, details, dfn, dl, div, dt, em, embed, fieldset, figcaption, figure, font, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, keygen, legend, li, meter, nav, menu, object, ol, output, p, pre, progress, q, s, samp, section, small, span, source, strike, strong, sub, sup, table, tbody, tfoot, thead, th, tr, tdvideo, tt, u, ul, var {
-     margin: 0pt;
-     padding: 0pt;
-}
-
-h1, h2, h3, h4, h5, h6, th, td, button, textarea, sub {
-	 text-align:left;
-	 padding:2px;
-}
-
-body, button, select, input, textarea, sub {
-     font-family: dotum, Helvetica, sans-serif;
-	 font-size: 12px;
-}
- 
-input[type="text"] {
-	width:100%;
-	color:#666666;
-	padding:1px 0
-}
-
-textarea {width:99.4%}
-
-
-select, input, textarea {
-	color:#666666
-}
-
-textarea{
-	overflow-y:hidden
-}
-
-em, cite, address, optgroup {
-	font-style: normal;
-}
-
-img, button, textarea, input, fieldset {
-	border:0 none;
-	outline:medium none;
-  	vertical-align: middle;
-}
-
-img {width:100%}
-
-select {
-  	vertical-align: middle;
-	border:1px solid #C7C7C7;
-}
-
-input[type="image"], input[type="text"], input[type="submit"],
-input[type="password"], textarea {
-	resize: none;
-}
-
-input[type="image"]	{padding:0}
-
-input[type="radio"], input[type="checkbox"] {margin:0 4px 2px 0}
-	
-ul, ol, li {
-	list-style: none outside none;
-}
+img {width:100%; border:0 none}
 
 table {
 	border-spacing: 0;
@@ -94,45 +17,3 @@ table {
 	font-size:12px
 }
 td, th {display: table-cell; vertical-align: inherit}
-
-legend, hr {
-	left: 0pt;
-	overflow: hidden;
-	position: absolute;
-	top: 0pt;
-}
-
-legend, hr, caption {
-     font-size: 0pt;
-     height: 0pt;
-     line-height: 0;
-     visibility: hidden;
-     width: 0pt;
-}
-
-article, aside, audio, canvas, command, datalist, details, embed,
-figcaption, figure, footer, header, hgroup, keygen, meter, nav,
-output, progress, section, source, video {
-     display: block;
-}
-
-mark, rp, rt, ruby, summary, time {
-     display: inline;
-}
-
-.fl {float:left !important}
-.fr {float:right !important}
-.fn {float:none !important}
-.cb {display:block; clear:both !important}
-.tb {font-weight:bold !important}
-
-.tl {text-align:left !important}
-.tc {text-align:center !important}
-.tr {text-align:right !important}
-
-.vt {vertical-align:top !important}
-.vm{vertical-align:middle !important}
-.vb{vertical-align:bottom !important}
-
-.h_auto {height:auto !important}
-.w_auto {width:auto !important}
