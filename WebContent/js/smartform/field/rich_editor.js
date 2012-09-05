@@ -62,7 +62,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		}
 	}else{
 		if(readOnly) {
-			options.container.find('.form_value').find('iframe').contents().html(value);
+			options.container.find('.form_value').find('iframe').contents().find('html').html(value);
+			doIframeAutoHeight();
 		} else {
 			options.container.find('.form_value textarea').html(value);
 			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
