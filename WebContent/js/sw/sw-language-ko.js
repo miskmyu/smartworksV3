@@ -208,7 +208,7 @@ smartMessage.bundle['ko'] = {
 	moveFileInstancesError : "파일을 이동하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	removeMailFolderSucceed : "메일폴더가 정상적으로 삭제되었습니다.",
 	removeMailFolderError : "메일폴더를 삭제하는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
-	sendMailConfirm: "메일을 전송하려고 합니다. 정말로 전송하시겠습니까?",
+	sendMailConfirm: "메일을 보내려고 합니다. 정말로 보내시겠습니까?",
 	sendMailSucceed : "메일 보내기가 정상적으로 이루어졌습니다.",
 	sendMailError : "메일을 보내는 중에 오류가 발생하였습니다. 관리자에게 확인바랍니다!",
 	moveMailSucceed : "메일이 정상적으로 이동되었습니다.",
