@@ -480,15 +480,13 @@ CREATE TABLE swdomain (
 	tblname varchar(100),
 	keycolumn varchar(100),
 	titlefieldid varchar(50),
-	keyDuplicable Number(3),
+	keyDuplicable Number(3) default '0',
 	masterid varchar(50),
 	masterfieldid varchar(50),
 	systemdomainyn char(1),
 	publishmode varchar(10),
 	primary key (id)
 );
-
-alter table swdomain add constraint swdomain_df default 0 for keyDuplicable
 
 CREATE TABLE swremoveddomain (
 	formid varchar(50) NOT NULL,
@@ -2284,7 +2282,7 @@ CREATE TABLE SwLike (
 -- 메세지
 CREATE TABLE SWMessage(
 	id varchar(50) NOT NULL,
-	content varchar(4000),
+	content char,
 	sendUserId varchar(50),
 	targetUserId varchar(50),
 	deleteUserId varchar(50),
