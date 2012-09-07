@@ -404,7 +404,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 /* upload Icon */
 .up_works a {background: url("../../images/header_nico.png") no-repeat -4px -155px; height:22px; width:44px; padding:4px 0 3px 26px; display:block}
 .up_works a:hover, .up_works .current,  .up_works a.current:hover {background-position: -4px -190px; font-weight:bold}
-
+7
 .up_file a {background: url("../../images/header_nico.png") no-repeat -147px -155px; height:22px; width:32px; padding:4px 0 3px 25px; display:block}
 .up_file a:hover, .up_file .current,  .up_file a.current:hover {background-position: -147px -190px; font-weight:bold}
 
@@ -417,7 +417,7 @@ li.sub_instance_list > .det_title:hover .delet_action, li.instance_list > .det_t
 .up_memo a {background: url("../../images/header_nico.png") no-repeat -426px -155px; height:22px; width:34px; padding:4px 0 3px 23px; display:block}
 .up_memo a:hover, .up_memo .current,  .up_memo a.current:hover {background-position: -426px -190px; font-weight:bold}
 
-.up_comment a {background: url("../../images/header_nico.png") no-repeat -827px -155px; height:22px; width:34px; padding:4px 0 3px 23px; display:block}
+.up_comment a {background: url("../../images/header_nico.png") no-repeat -827px -155px; height:22px; width:34px; padding:4px 0 3px 23px; display:mblock}
 .up_comment a:hover, .up_comment .current,  .up_comment a.current:hover {background-position: -827px -190px; font-weight:bold}
 
 .up_board a {background: url("../../images/header_nico.png") no-repeat -564px -155px; height:22px; width:32px; padding:4px 0 3px 27px; display:block}
