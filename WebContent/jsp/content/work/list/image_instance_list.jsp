@@ -147,7 +147,10 @@
 							<a class="js_show_picture_detail" instanceId="<%=image.getId()%>" href=""><img src="<%=image.getImgSource()%>"></a>
 						</div>
 					</div>
- 					<div><%=image.getFileName()%></div>
+ 					<div><%=image.getFileName()%>
+ 						<%if(((WorkInstanceInfo)image).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)image).getSubInstanceCount() %></b>]</font><%} %>
+						<%if(image.isNew()){ %><span class="icon_new"></span><%} %>					
+ 					</div>
 					<div class="t_date"><%=image.getOwner().getLongName()%> <%=image.getLastModifiedDate().toLocalString()%></div>
  				</li>
 				<!--폴더 목록1 //--> 	 
