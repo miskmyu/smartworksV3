@@ -4,6 +4,7 @@ import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class InstanceInfo implements Comparable<InstanceInfo> {
 
@@ -20,6 +21,7 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	private LocalDate lastModifiedDate;
 	
 	public boolean isNew() {
+		if(SmartUtil.isBlankObject(lastModifiedDate)) return false;
 		return lastModifiedDate.isNew();
 	}
 	public String getId() {

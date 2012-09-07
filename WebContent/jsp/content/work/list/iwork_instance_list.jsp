@@ -134,7 +134,7 @@
 												data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
 									<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
 									<%
-									if(displayFields[count++].getId().equals(work.getKeyField())){
+									if(displayFields[count++].getId().equals(work.getKeyField().getId())){
 									%>
 										<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
 										<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
