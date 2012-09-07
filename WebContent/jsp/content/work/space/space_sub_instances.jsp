@@ -198,7 +198,7 @@
 							<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
 							<!-- 인스턴스 마지막수정일자 //-->
 							<div>
-								<a href="" class=""><img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
+								<a href="" class="js_show_picture_detail" instanceId="<%=image.getId()%>"><img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
 								<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
 							</div>
 							<%if(!SmartUtil.isBlankObject(image.getContent())){ %><div><%=image.getContent() %></div><%} %>

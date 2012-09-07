@@ -154,3 +154,6 @@ a .btn_tree_minus:hover {background-position:-17px -14px}
 .js_tab_work_sharing_page textarea {width: 98.5%}
 .js_tab_work_sharing_page td, .js_tab_work_sharing_page th {padding:2px 5px; border:0}
 .js_tab_work_sharing_page th {color:#23579E; font-weight: normal}
+
+/* Form 조회화면 */
+.form_read {overflow: hidden}
