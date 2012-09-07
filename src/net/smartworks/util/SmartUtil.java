@@ -499,6 +499,24 @@ public class SmartUtil {
 		return userId.replace('.' , '_');
 	}
 	
+	public static String smartEncode(String value){
+		if(SmartUtil.isBlankObject(value)) return value;
+		value = value.replaceAll("\"", "&quot;");
+		value = value.replaceAll("\'", "&squo;");
+		value = value.replaceAll("<", "&lt;");
+		value = value.replaceAll(">", "&gt;");
+		return value;
+	}
+	
+	public static String smartDecode(String value){
+		if(SmartUtil.isBlankObject(value)) return value;
+		value = value.replaceAll("&quot;", "\"");
+		value = value.replaceAll("&squo;", "\'");
+		value = value.replaceAll("&lt;", "<");
+		value = value.replaceAll("&gt;", ">");
+		return value;
+	}
+	
 	public static boolean isBlankObject(Object obj){
 		if(obj==null) return true;
 		if(obj.equals("null")) return true;
