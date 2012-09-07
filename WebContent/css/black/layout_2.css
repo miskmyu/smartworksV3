@@ -327,3 +327,7 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .icon_status_returned {background: url("../../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+
+/* 프린트시  이미지 사이즈 */
+#printFrame .form_read .form_value img {max-width:610px}
+
