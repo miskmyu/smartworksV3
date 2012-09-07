@@ -45,7 +45,8 @@ public class StringUtil {
 	 * String UnEscape 처리
 	 * 
 	 * @param src
-	 * @return
+	 * @return.
+	 * 들어오는 src에 사용자가 입력한 값중 % 가포함되어 있다면 사용할수 없음
 	 */
 	public static String unescape(String src) {
 		StringBuffer tmp = new StringBuffer();
@@ -83,6 +84,7 @@ public class StringUtil {
 	 * String Escape 처리
 	 * @param src
 	 * @return
+	 * 들어오는 src에 사용자가 입력한 값중 % 가포함되어 있다면 사용할수 없음
 	 */
 	public static String escape(String src) {
 		int i;

@@ -2781,7 +2781,12 @@ public class CommunityServiceImpl implements ICommunityService {
 	@Override
 	public boolean canIUploadToWorkSpace(String workSpaceId, String workId) throws Exception {
 		//workspaceId 는 부서아이디, 그룹아이디가 넘어온다
-		
+
+		User user = SmartUtil.getCurrentUser();
+		String cUserId = user.getId();
+//		if (cUserId.equalsIgnoreCase(workSpaceId))
+			
+			
 		if (CommonUtil.isEmpty(workSpaceId)) {
 			CommunityInfo[] myCommunites = getMyCommunitiesForUpload(workId);
 			if (CommonUtil.isEmpty(myCommunites)) {
@@ -2791,7 +2796,6 @@ public class CommunityServiceImpl implements ICommunityService {
 			}
 		}
 		
-		User user = SmartUtil.getCurrentUser();
 		String type = null;
 		if (workId.equalsIgnoreCase("pkg_62eeb90b11e1466b86d2d7c4dadf63ca")) {
 			//공지사항
