@@ -110,21 +110,27 @@
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc"><%=currentCount%></td>
 					<td>
-						<img src="<%=owner.getMidPicture()%>" class="profile_size_m"/>
+						<a class="js_content_work_space" href="<%=target %>">					
+							<img src="<%=owner.getMidPicture()%>" class="profile_size_m"/>
+						</a>
 					</td>
 					<td>
-						<%=((MemoInstanceInfo)instanceInfo).getContent() %>
-						<%if(((MemoInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((MemoInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
-						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+						<a class="js_content_work_space" href="<%=target %>">					
+							<%=((MemoInstanceInfo)instanceInfo).getContent() %>
+							<%if(((MemoInstanceInfo)instanceInfo).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((MemoInstanceInfo)instanceInfo).getSubInstanceCount() %></b>]</font><%} %>
+							<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+						</a>
 					</td>
 					<td class="tr pr10">
 						<%
 						if(!SmartUtil.isBlankObject(lastModifier)){
 						%>
-							<div class="noti_in_m">
-								<span class="t_name"><%=lastModifier.getLongName()%></span>
-								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-							</div>
+							<a class="js_content_work_space" href="<%=target %>">					
+								<div class="noti_in_m">
+									<span class="t_name"><%=lastModifier.getLongName()%></span>
+									<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
+								</div>
+							</a>
 						<%
 						}
 						%>

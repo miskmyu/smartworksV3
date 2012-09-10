@@ -122,38 +122,42 @@
 									<%}else if(data.getFieldType().equals(FormField.TYPE_FILE)){%>
 										class="tc"
 									<%}%>>
-									<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
-									<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
-											<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>">
-									<%	} %>
-									<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
-									<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>
-									<%}else if(data.getFieldType().equals(FormField.TYPE_CURRENCY)){%><%=data.getSymbol()%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
-									<%}else if(data.getFieldType().equals(FormField.TYPE_IMAGE) ||
-												data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
-												data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
-									<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
-									<%
-									if(displayFields[count++].getId().equals(work.getKeyField().getId())){
-									%>
-										<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
-										<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
-									<%
-									}
-									%>
+									<a class="js_content_work_space" href="<%=target %>">
+										<%if(data.getFieldType().equals(FormField.TYPE_FILE) && !SmartUtil.isBlankObject(data.getValue())){%>
+										<%	if(!SmartUtil.isBlankObject(data.getFiles())){%>
+												<img src="images/icon_file.gif" class="js_pop_files_detail" filesDetail="<%=data.getFilesHtml(work.getId(), null, instanceInfo.getId())%>">
+										<%	} %>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_NUMBER)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_PERCENT)){%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) + "%" : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_CURRENCY)){%><%=data.getSymbol()%><%=data.getValue() != null ? CommonUtil.toNotNull(nf.format(Float.parseFloat(data.getValue()))) : CommonUtil.toNotNull(data.getValue())%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_IMAGE) ||
+													data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
+													data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
+										<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
+										<%
+										if(displayFields[count++].getId().equals(work.getKeyField().getId())){
+										%>
+											<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
+											<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+										<%
+										}
+										%>
+									</a>
 							</td>
 					<%
 						}
 					}
 					%>
 					<td>
-						<div class="noti_pic js_content_work_space">
-							<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
-						</div>
-						<div class="noti_in_s">
-							<span class="t_name"><%=lastModifier.getLongName()%></span>
-							<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-						</div>
+						<a class="js_content_work_space" href="<%=target %>">
+							<div class="noti_pic">
+								<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
+							</div>
+							<div class="noti_in_s">
+								<span class="t_name"><%=lastModifier.getLongName()%></span>
+								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
+							</div>
+						</a>
 					</td>
 					<td class="tc"><%=instanceInfo.getViews() %></td>
 				</tr>
