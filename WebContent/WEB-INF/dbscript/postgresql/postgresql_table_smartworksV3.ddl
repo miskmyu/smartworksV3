@@ -1092,7 +1092,7 @@ CREATE TABLE SWMemo (
 CREATE TABLE swmenuitem(
 	objid character varying(50) NOT NULL,
 	name character varying(255) NULL,
-	menuseqno integer NULL,
+	menuseqno int NULL,
 	imgpath character varying(150) NULL,
 	categoryid character varying(50) NULL,
 	packageid character varying(50) NULL,
@@ -1103,10 +1103,9 @@ CREATE TABLE swmenuitem(
 	createdtime timestamp without time zone NULL,
 	modifier character varying(50) NULL,
 	modifiedtime timestamp without time zone NULL,
-	itmseq integer NOT NULL,
+	itmseq int NOT NULL,
 	primary key (objid, itmseq)
-) 
-;
+);
 
 CREATE TABLE swmenuitemlist(
 	objid character varying(50) NOT NULL ,

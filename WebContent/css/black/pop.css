@@ -140,3 +140,6 @@ td.form_col .btn_x {display:none}
 
 /* simplemodal-wrap */
 .simplemodal-wrap {overflow:visible !important}
+
+/* Pop Print */
+.pop_print {border:none; width:100%; min-height:550px}
