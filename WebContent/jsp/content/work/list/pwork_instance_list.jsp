@@ -173,34 +173,43 @@
 				<tr class="instance_list js_content_work_space" href="<%=target%>">
 					<td class="tc vm"><%=currentCount%></td>
 					<td class="tc vm">
+						<a class="js_content_work_space" href="<%=target %>">					
 							<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>"></span>
+						</a>
 					</td>
 					<td>
-						<div class="noti_pic">
-							<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s" />
-						</div>
-						<div class="noti_in_s">
-							<span class="t_name"><%=owner.getLongName()%></span>
-							<div class="t_date"><%if(instanceInfo.getCreatedDate()!=null){%><%=instanceInfo.getCreatedDate().toLocalString()%><%} %></div>
-						</div>
+						<a class="js_content_work_space" href="<%=target %>">					
+							<div class="noti_pic">
+								<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s" />
+							</div>
+							<div class="noti_in_s">
+								<span class="t_name"><%=owner.getLongName()%></span>
+								<div class="t_date"><%if(instanceInfo.getCreatedDate()!=null){%><%=instanceInfo.getCreatedDate().toLocalString()%><%} %></div>
+							</div>
+						</a>
 					</td>
 					<td>
-						<%=instanceInfo.getSubject()%>
-						<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
-						<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+						<a class="js_content_work_space" href="<%=target %>">					
+							<%=instanceInfo.getSubject()%>
+							<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
+							<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
+						</a>
 					</td>
-					<td><%=lastTask.getName()%></td>
+					<td>
+						<a class="js_content_work_space" href="<%=target %>"><%=lastTask.getName()%></a></td>
 					<td>
 						<%
 						if(!SmartUtil.isBlankObject(lastModifier)){
 						%>
-							<div class="noti_pic">
-								<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
-							</div>
-							<div class="noti_in_s">
-								<span class="t_name"><%=lastModifier.getLongName()%></span>
-								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-							</div>
+							<a class="js_content_work_space" href="<%=target %>">					
+								<div class="noti_pic">
+									<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
+								</div>
+								<div class="noti_in_s">
+									<span class="t_name"><%=lastModifier.getLongName()%></span>
+									<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
+								</div>
+							</a>
 						<%
 						}
 						%>

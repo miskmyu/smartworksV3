@@ -402,7 +402,7 @@ $(function() {
 
 	$('.js_select_task_manual').live('click', function(e){
 		var input = $(targetElement(e));
-		if(!input.hasClass('js_select_task_manual')) input = input.parents('.js_select_task_manual:first');
+		if(!input.hasClass('js_manual_task')) input = input.parents('.js_manual_task:first');
 		var target = $("#"+input.attr("taskId"));
 		var target_point = $(target).find("div.up_point:first");
 		var selectedManualTask = input;
@@ -515,7 +515,7 @@ $(function() {
 	$('.js_select_task_instance').live("click", function(e){
 		smartPop.progressCenter();
 		var input = $(targetElement(e));
-		if(!input.hasClass('js_select_task_instance')) input = input.parents('.js_select_task_instance:first');		
+		if(!input.hasClass('js_instance_task')) input = input.parents('.js_instance_task:first');
 		clickOnTask(input);
 		smartPop.closeProgress();
 		return false;
