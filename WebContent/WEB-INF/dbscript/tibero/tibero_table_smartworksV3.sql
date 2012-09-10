@@ -188,7 +188,7 @@ CREATE TABLE swprocess (
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -210,7 +210,7 @@ CREATE TABLE swform (
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -537,7 +537,7 @@ CREATE TABLE swgadget (
 	classname varchar(255),
 	location varchar(255),
 	enabledyn char(1),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -589,7 +589,7 @@ CREATE TABLE aprapr (
     aprcreatedate timestamp,
     aprmodifyuser varchar(50),
     aprmodifydate timestamp,
-    aprdesc char,
+    aprdesc clob,
     aprstatus varchar(50),
     aprtype varchar(50),
     aprapprover varchar(50),
@@ -616,7 +616,7 @@ CREATE TABLE apraprline (
     aprcreatedate timestamp,
     aprmodifyuser varchar(50),
     aprmodifydate timestamp,
-    aprdesc char,
+    aprdesc clob,
     aprstatus varchar(50),
     aprcorr varchar(50),
     aprRefAppLineDefId varchar(50),
@@ -672,7 +672,7 @@ CREATE TABLE collist (
     coltype varchar(100),
     colcorr varchar(200),
     colstatus varchar(50),
-    coldesc char,
+    coldesc clob,
     primary key(colobjid)
 );
 
@@ -689,7 +689,7 @@ CREATE TABLE collistitem (
     coltype varchar(100),
     colref varchar(100),
     collabel varchar(100),
-    colexpr char,
+    colexpr clob,
     colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
@@ -706,13 +706,13 @@ CREATE TABLE lnklnk (
     lnkfromtype varchar(100),
     lnkfromref varchar(200),
     lnkfromlabel varchar(100),
-    lnkfromexpr char,
+    lnkfromexpr clob,
     lnktotype varchar(100),
     lnktoref varchar(200),
     lnktolabel varchar(100),
-    lnktoexpr char,
+    lnktoexpr clob,
     lnkcondtype varchar(100),
-    lnkcondexpr char,
+    lnkcondexpr clob,
     primary key(lnkobjid)
 );
 
@@ -758,8 +758,8 @@ CREATE TABLE colvalue (
     colref varchar(200),
     colexpdate timestamp,
     colstatus varchar(50),
-    coldesc char,
-    colvalue char,
+    coldesc clob,
+    colvalue clob,
     primary key(colobjid)
 );
 
@@ -1226,7 +1226,7 @@ CREATE TABLE apraprdef(
 	aprname varchar(150),
 	aprperson varchar(50),
 	dueDate varchar(100),
-	level varchar(50),
+	level_ varchar(50),
 	creator varchar(50),
 	createdtime timestamp NULL,
 	modifier varchar(50),
@@ -2325,7 +2325,7 @@ CREATE TABLE folder_db_objects (
 
 CREATE TABLE msg_db_objects (
     id Number NOT NULL,
-    uid varchar(100),
+    uid_ varchar(100),
     username varchar(255) NOT NULL,
     folder_id Number NOT NULL,
     unique_id varchar(100) NOT NULL,
@@ -2340,13 +2340,13 @@ CREATE TABLE msg_db_objects (
     sentdate timestamp,
     unread smallint NOT NULL,
     msg_size Number NOT NULL,
-    email varbinary(max) NOT NULL,
+    email blob NOT NULL,
     primary key (id)
 );
 
 CREATE TABLE msg_db_uids (
     username varchar(255) NOT NULL,
-    uid varchar(100) NOT NULL
+    uid_ varchar(100) NOT NULL
 );
 
 
