@@ -122,8 +122,10 @@ function submitForms() {
 							<ul>
 								<!-- 태스크 -->
 								<li class="proc_task not_yet js_manual_task js_select_task_manual selected" taskId="js_process_diagram">
-									<div class="title"><%=work.getName()%></div>
-									<div><fmt:message key="common.title.process_diagram"/></div>
+									<a class="js_select_task_manual" href="">
+										<div class="title"><%=work.getName()%></div>
+										<div><fmt:message key="common.title.process_diagram"/></div>
+									</a>
 								</li>
 								<!-- 태스크 //-->
 								<%
@@ -138,13 +140,15 @@ function submitForms() {
 								%>
 										<!-- 태스크 -->
 										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
-											<div class="title"><%=count%>) <%=task.getName()%></div>
-											
-					                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
-						                    <div class="noti_in_s">
-							                    <div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div>
-							                    <div class="name"><%=assigningName %></div>
-						                    </div>
+											<a class="js_select_task_manual" href="">
+												<div class="title"><%=count%>) <%=task.getName()%></div>
+												
+						                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
+							                    <div class="noti_in_s">
+								                    <div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div>
+								                    <div class="name"><%=assigningName %></div>
+							                    </div>
+							            	</a>
 										</li>
 										<!-- 태스크 //-->
 								<%

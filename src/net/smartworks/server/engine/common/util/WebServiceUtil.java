@@ -29,7 +29,8 @@ public class WebServiceUtil {
 		if (returnType.equalsIgnoreCase(RETURN_TYPE_ARRAY)) {
 			returnValue = (String[])call.invoke(new Object[]{inputParams});
 		} else {
-			returnValue = new String[] {(String)call.invoke(new Object[]{inputParams})};
+			//returnValue = new String[] {(String)call.invoke(new Object[]{inputParams})};
+			returnValue = new String[] {(String)call.invoke(inputParams)};
 		}
 		
 		Log logger = LogFactory.getLog(WebServiceUtil.class);

@@ -206,54 +206,68 @@
 					<td class="tc"><input name="chkSelectMail" class="js_check_file_instance" type="checkbox" value="<%=fileId%>"/></td>
 					<td class="tc"><%=currentCount%></td>
 					<td>
-  						<span class="js_pop_files_detail" filesDetail="<%=fileInstance.getFilesHtml()%>"><%=fileName %></span>
+						<a class="js_content_work_space" href="<%=target %>">
+	  						<span class="js_pop_files_detail" filesDetail="<%=fileInstance.getFilesHtml()%>"><%=fileName %></span>
+						</a>
 					</td>
-					<td class="tr"><%=fileSize %></a></td>
+					<td class="tr">
+						<a class="js_content_work_space" href="<%=target %>"><%=fileSize %></a>
+					</td>
 					<%
 					if(displayType==FileCategory.DISPLAY_ALL){
 					%>
-						<td><%=fileInstance.getWorkSpace().getName()%></td>
+						<td>
+							<a class="js_content_work_space" href="<%=target %>"><%=fileInstance.getWorkSpace().getName()%></a>
+						</td>
 					<%
 					}
 					if(displayType!=FileCategory.DISPLAY_BY_CATEGORY){
 					%>
 						<td>
- 							<%if(!SmartUtil.isBlankObject(fileInstance.getFileCategory())){%><%=fileInstance.getFileCategory().getName()%><%} %>
+							<a class="js_content_work_space" href="<%=target %>">						
+ 								<%if(!SmartUtil.isBlankObject(fileInstance.getFileCategory())){%><%=fileInstance.getFileCategory().getName()%><%} %>
+ 							</a>
  						</td>
 					<%
 					}
 					if(displayType!=FileCategory.DISPLAY_BY_WORK){
 					%>
 						<td>
-							<span class="<%=fileInstance.getWork().getIconClass()%>"/><%=((SmartWorkInfo)(fileInstance.getWork())).getFullpathName()%></span>
+							<a class="js_content_work_space" href="<%=target %>">				
+								<span class="<%=fileInstance.getWork().getIconClass()%>"><%=((SmartWorkInfo)(fileInstance.getWork())).getFullpathName()%></span>
+							</a>
 						</td>
 					<%
 					}
 					%>
 					<td>
  						<%if(!SmartUtil.isBlankObject(fileInstance.getWorkInstance())){%>
- 							<%=fileInstance.getWorkInstance().getSubject()%>
-							<%if(((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount() %></b>]</font><%} %>
-							<%if(fileInstance.getWorkInstance().isNew()){ %><span class="icon_new"></span><%} %> 							
+							<a class="js_content_work_space" href="<%=target %>">					
+	 							<%=fileInstance.getWorkInstance().getSubject()%>
+								<%if(((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount() %></b>]</font><%} %>
+								<%if(fileInstance.getWorkInstance().isNew()){ %><span class="icon_new"></span><%} %> 							
+							</a>
  						<%} %>
 					</td>
 					<td>
 						<%
 						if(!SmartUtil.isBlankObject(lastModifier)){
 						%>
-							<%
-							if(displayType!=FileCategory.DISPLAY_BY_OWNER){
-							%>
-								<div class="noti_pic js_content_work_space">
-									<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
+							<a class="js_content_work_space" href="<%=target %>">						
+								<%
+								if(displayType!=FileCategory.DISPLAY_BY_OWNER){
+								%>
+									<div class="noti_pic">
+										<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
+									</div>
+								<%
+								}
+								%>
+								<div class="noti_in_s">
+									<span class="t_name"><%=lastModifier.getLongName()%></span>
+									<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
 								</div>
-							<%
-							}
-							%>
-							<div class="noti_in_s">
-								<span class="t_name"><%=lastModifier.getLongName()%></span>
-								<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-							</div>
+							</a>
 						<%
 						}
 						%>
