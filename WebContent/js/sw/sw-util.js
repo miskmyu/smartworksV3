@@ -340,3 +340,21 @@ var isMobile = {
         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
     }
 };
+
+var smartEncode = function(value){
+	if(isEmpty(value)) return value;
+	vlaue = value.replace(/\"/g,"&quot;");
+	vlaue = value.replace(/\'/g,"&squo;");
+	vlaue = value.replace(/</g,"&lt;");
+	vlaue = value.replace(/>/g,"&gt;");
+	return value;
+};
+
+var smartDecode = function(value){
+	if(isEmpty(value)) return value;
+	vlaue = value.replace(/&quot;/g,"\"");
+	vlaue = value.replace(/&squo;/g,"\'");
+	vlaue = value.replace(/&lt;/g,"<");
+	vlaue = value.replace(/&gt;/g,">");
+	return value;
+};

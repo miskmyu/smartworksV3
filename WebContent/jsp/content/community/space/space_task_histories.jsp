@@ -258,7 +258,7 @@
 							<!-- 인스턴스 마지막수정일자 //-->
 							
 							<div>
-								<a href="javascript:imgResize('<%=image.getOriginImgSource()%>')">
+								<a class="js_show_picture_detail" instanceId="<%=image.getId()%>" href="">
 								<img src="<%=image.getImgSource()%>" style="max-width:200px"></a>
 								<%if(image.isNew()){ %><span class="icon_new vt"></span><%} %>
 							</div>

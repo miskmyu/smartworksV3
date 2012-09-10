@@ -143,7 +143,7 @@ if (subInstances != null) {
 						<div><%=((SmartWorkInfo)workInstance.getWork()).getFullpathName()%></div>
 						<a href="<%=owner.getSpaceController() %>?cid=<%=owner.getSpaceContextId()%>"><span class="t_name"><%=owner.getLongName()%></span></a>
 						<span class="t_date pl10"><%=workInstance.getLastModifiedDate().toLocalString()%></span>
-						<div><a href="" class=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:100px;"></a>
+						<div><a href="" class="js_show_picture_detail" instanceId="<%=image.getId()%>" href=""><img src="<%=image.getImgSource()%>" style="min-height:20px;width:100px;"></a>
 							<%if(((WorkInstanceInfo)workInstance).getSubInstanceCount()>0){ %><font class="vt t_sub_count">[<b><%=((WorkInstanceInfo)workInstance).getSubInstanceCount() %></b>]</font><%} %>
 							<%if(workInstance.isNew()){ %><span class="vt icon_new"></span><%} %>
 						</div>

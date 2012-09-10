@@ -17,7 +17,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if(!options.refreshData)
 		options.container.html('');
 	var value = (options.dataField && options.dataField.value) || '';
-//	value = unescape(value);
+//	value = smartDecode(value);
 	var $entity = options.entity;
 	var $graphic = $entity.find('graphic');
 	var readOnly = $graphic.attr('readOnly') === 'true' || options.mode === 'view';
@@ -40,7 +40,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	
 	var $textarea = null;
 	if(readOnly){
-//		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + escape(value) + '\');"></iframe></div>');
+//		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + smartEncode(value) + '\');"></iframe></div>');
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
 	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
@@ -76,9 +76,9 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	if (readOnly) {
 		var $richEditorHiddenInput = $('#richEditorHiddenInput'+id);
 		if ($richEditorHiddenInput.length === 0) {
-			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + escape(value) + "'>");
+			options.container.append("<input id='richEditorHiddenInput"+id+"' type='hidden' name='" + id + "' value='" + smartEncode(value) + "'>");
 		} else {
-			$richEditorHiddenInput.attr('value', escape(value));
+			$richEditorHiddenInput.attr('value', smartEncode(value));
 		}
 	}
 	
@@ -90,7 +90,7 @@ richEditorSetValue = function($this, id, value){
 	var richEditor = smartForm.find('.js_type_richEditor[fieldId="' + id + '"]');
 	var frame = richEditor.find('iframe');
 	frame.contents().find('html').html("");
-	value = unescape(value);
+	value = smartDecode(value);
 	frame.contents().find('html').html('<link href="css/default-iframe.css" type="text/css" rel="stylesheet" />' + value);
 	doIframeAutoHeight();
 };

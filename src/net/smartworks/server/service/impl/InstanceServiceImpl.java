@@ -2040,7 +2040,9 @@ public class InstanceServiceImpl implements IInstanceService {
 				
 				//unescape
 				if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
-					value = StringUtil.unescape(value);
+					//value = StringUtil.unescape(value);
+					value = SmartUtil.smartDecode(value);
+					value = StringUtils.replace(value, "&nbsp;", "<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>");
 				}
 				value = StringUtils.replace(value, "﻿", ""); // 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
 
@@ -2749,10 +2751,11 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				//unescape
 				if (fieldInfoMap.get(fieldId).getFormFieldType().equalsIgnoreCase("text")) {
-					value = StringUtil.unescape(value);
+					//value = StringUtil.unescape(value);
+					value = SmartUtil.smartDecode(value);
+					value = StringUtils.replace(value, "&nbsp;", "<span class=\"Apple-tab-span\" style=\"white-space:pre\"> </span>");
 				}
 				value = StringUtils.replace(value, "﻿", "");// 에디터로 작성된 내용중 자판에 없는 특수문자가 하나 숨어 들어온다 그문자를 제거하는 소스
-				
 				fieldData.setValue(value);
 				if (!CommonUtil.isEmpty(autoIndexSelectedValue))
 					fieldData.setSelectedValue(autoIndexSelectedValue);

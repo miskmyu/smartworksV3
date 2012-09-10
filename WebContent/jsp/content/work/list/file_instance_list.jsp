@@ -231,7 +231,11 @@
 					}
 					%>
 					<td>
- 						<%if(!SmartUtil.isBlankObject(fileInstance.getWorkInstance())){%><%=fileInstance.getWorkInstance().getSubject()%><%} %>
+ 						<%if(!SmartUtil.isBlankObject(fileInstance.getWorkInstance())){%>
+ 							<%=fileInstance.getWorkInstance().getSubject()%>
+							<%if(((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=((WorkInstanceInfo)fileInstance.getWorkInstance()).getSubInstanceCount() %></b>]</font><%} %>
+							<%if(fileInstance.getWorkInstance().isNew()){ %><span class="icon_new"></span><%} %> 							
+ 						<%} %>
 					</td>
 					<td>
 						<%
