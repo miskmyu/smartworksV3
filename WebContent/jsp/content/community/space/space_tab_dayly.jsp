@@ -86,7 +86,7 @@
 		String selectedDateStr = "";
 		for(int i = 0; i<calendars.length; i++){
 			String dateStr = (i==selectedIndex) 
-								? calendars[i].getDate().toLocalDateString() : calendars[i].getDate().toLocalDateShortString();
+								? new LocalDate(calendars[i].getDate().getLocalDate()).toLocalDateString() : calendars[i].getDate().toLocalDateShortString();
 			if(i==selectedIndex) selectedDateStr = calendars[i].getDate().toLocalDateSimpleString();
 			String liClass = (i==selectedIndex) ? "current" : "";
 			int dayOfWeek = calendars[i].getDate().getDayOfWeek();
