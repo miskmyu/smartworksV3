@@ -579,6 +579,7 @@ smartPop = {
 					height:500,
 					width:800
 				},
+				autoResize : true,
 				overlayClose: false,
 				onShow: function(dialog){
 					$('.js_pop_select_work_item').die('click');
@@ -616,6 +617,7 @@ smartPop = {
 				containerCss:{
 					width:600
 				},
+				autoResize : true,
 				overlayClose: false,
 				onShow: function(dialog){
 					$('.js_pop_select_approval_line').die('click');

@@ -217,12 +217,14 @@
 						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
 						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
-					                    <div class="title"><%=count%>) <%=task.getName() %></div>
-					                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
-					                    <div class="noti_in_s">
-						                    <div class="name"><%=task.getPerformer().getLongName()%></div>
-						                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
-					                    </div>
+					                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
+						                    <div class="title"><%=count%>) <%=task.getName() %></div>
+						                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
+						                    <div class="noti_in_s">
+							                    <div class="name"><%=task.getPerformer().getLongName()%></div>
+							                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
+						                    </div>
+						                <%if(isSelectable){%></a><%} %>
 					                    <!-- task 정보 //-->
 						            </li>
 				            		<!-- 태스크 //--> 
@@ -237,7 +239,7 @@
 			        </div>
 			        <!-- 태스크 시작//-->
            			<%
-           			if(taskHistories[taskHistories.length-1].getStatus() == Instance.STATUS_COMPLETED){
+           			if(instance.getStatus() == Instance.STATUS_COMPLETED){
            			%>
 				        <div class="proc_start_compl fl js_task_stop js_instance_task"><fmt:message key="process.task.stop"/></div>
 			        <%
