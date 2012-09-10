@@ -121,7 +121,7 @@ CREATE TABLE sworgrole (
 --	categoryid character varying(50),
 --	code character varying(50),
 --	name character varying(255),
---	disporder integer,
+--	disporder int,
 --	description character varying(4000),
 --	primary key (id)
 --);
@@ -132,7 +132,7 @@ CREATE TABLE swcategory (
 	companyid character varying(100),
 	parentid character varying(50),
 	name character varying(255),
-	disporder integer,
+	disporder int,
 	description character varying(4000),
 	creator character varying(30),
 	createdtime timestamp,
@@ -145,7 +145,7 @@ CREATE TABLE swcategory (
 --	id character varying(50) NOT NULL,
 --	ctgname character varying(100) NULL,
 --	ctgvalue character varying(100) NULL,
---	ctgseq integer NOT NULL,
+--	ctgseq int NOT NULL,
 --	primary key (id, ctgseq)
 --);
 
@@ -153,7 +153,7 @@ CREATE TABLE swpackage (
 	id character varying(50) NOT NULL,
 	categoryid character varying(50),
 	packageid character varying(50),
-	version integer,
+	version int,
 	name character varying(100),
 	type character varying(20),
 	status character varying(30),
@@ -170,7 +170,7 @@ CREATE TABLE swprocess (
 	id character varying(50) NOT NULL,
 	packageid character varying(50),
 	processid character varying(50),
-	version integer,
+	version int,
 	name character varying(100),
 	status character varying(30),
 	publishmode character varying(10),
@@ -191,7 +191,7 @@ CREATE TABLE swform (
 	id character varying(50) NOT NULL,
 	packageid character varying(50),
 	formid character varying(50),
-	version integer,
+	version int,
 	name character varying(100),
 	type character varying(20),
 	status character varying(30),
@@ -213,16 +213,16 @@ CREATE TABLE swworktype (
 	id character varying(50) NOT NULL,
 	name character varying(255),
 	formuid character varying(50),
-	stepcount integer,
+	stepcount int,
 	type character varying(30),
-	duration integer,
+	duration int,
 	primary key (id)
 );
 
 --CREATE TABLE swworktypeperformerline (
 --	worktypeid character varying(50) NOT NULL,
---	step integer,
---	performertype integer,
+--	step int,
+--	performertype int,
 --	performer character varying(30),
 --	primary key (worktypeid, step)
 --);
@@ -230,7 +230,7 @@ CREATE TABLE swworktype (
 -- 의견
 CREATE TABLE swopinion (
 	id character varying(50) NOT NULL,
-	reftype integer,
+	reftype int,
 	groupid character varying(50),
 	refid character varying(50),
 	domainid character varying(400),
@@ -248,7 +248,7 @@ CREATE TABLE swopinion (
 --CREATE TABLE swqna (
 --	id character varying(50) NOT NULL,
 --	parentid character varying(50),
---	reftype integer,
+--	reftype int,
 --	refid character varying(50),
 --	writer character varying(30),
 --	writtentime timestamp without time zone,
@@ -269,7 +269,7 @@ CREATE TABLE swtag (
 --CREATE TABLE swpost (
 --	id character varying(50) NOT NULL,
 --	tagid character varying(50),
---	reftype integer,
+--	reftype int,
 --	refgroupid character varying(50),
 --	refid character varying(50),
 --	typename character varying(255),
@@ -286,7 +286,7 @@ CREATE TABLE swtag (
 --	ownerdept character varying(50),
 --	owneruser character varying(50),
 --  	filegroupid character varying(255),
---  	reftype integer,
+--  	reftype int,
 --  	refid character varying(50),
 --	domainid character varying(50),
 --	workitemid character varying(50),
@@ -302,7 +302,7 @@ CREATE TABLE swfile (
   	type character varying(10),	  
   	filename character varying(255),
   	filepath character varying(1000),  
-	filesize integer,
+	filesize int,
 	writtentime timestamp,
 	deleteAction bool,
   	primary key(id)
@@ -326,14 +326,14 @@ CREATE TABLE swdocgroup (
 --CREATE TABLE swactinst (
 --	id character varying(50) NOT NULL,
 --	prcinstid character varying(50),		
---	repeatcount integer,
---	loopcount integer,
---	exestep integer,
+--	repeatcount int,
+--	loopcount int,
+--	exestep int,
 --	uptodateyn char(1),
 --	activityid character varying(50),
 --	name character varying(50),		
 --	status character varying(30),
---	type integer,
+--	type int,
 --	apprefid character varying(50),
 --	starttime timestamp without time zone,
 --	endtime timestamp without time zone,
@@ -343,10 +343,10 @@ CREATE TABLE swdocgroup (
 --CREATE TABLE swprcinst (
 --	id character varying(50) NOT NULL,
 --	processid character varying(50),
---	version integer,
+--	version int,
 --	title character varying(255),
---	type integer,
---	step integer,
+--	type int,
+--	step int,
 --	status character varying(30),
 --	initiator character varying(50),
 --	starttime timestamp without time zone,
@@ -359,7 +359,7 @@ CREATE TABLE swdocgroup (
 
 --CREATE TABLE swprcinstprop (
 --	id character varying(50) NOT NULL,
---	step integer NOT NULL,
+--	step int NOT NULL,
 --	name character varying(100) NOT NULL,
 --	data character varying(4000),
 --	primary key (id, step)
@@ -369,7 +369,7 @@ CREATE TABLE swdocgroup (
 --	prcinstid character varying(50) NOT NULL,
 --	refid character varying(50) NOT NULL,
 --	name character varying(50) NOT NULL,
---	type integer,
+--	type int,
 --	datatype character varying(50),
 --	data text,
 --	primary key (prcinstid, refid, name)
@@ -378,11 +378,11 @@ CREATE TABLE swdocgroup (
 --CREATE TABLE swruntimeerror (
 --	id character varying(50) NOT NULL,
 --	processid character varying(50),
---	version integer,
+--	version int,
 --	prcinstid character varying(50),
 --	actinstid character varying(50),
---	status integer,
---	step integer,
+--	status int,
+--	step int,
 --	performer character varying(50),
 --	reactor character varying(50),
 --	source character varying(50),
@@ -399,9 +399,9 @@ CREATE TABLE swdocgroup (
 --	id character varying(50) NOT NULL,
 --	worktypeid character varying(50),
 --	title character varying(255),
---	status integer,
+--	status int,
 --	assigner character varying(30),
---	assigneetype integer,
+--	assigneetype int,
 --	assignee character varying(30),
 --	performer character varying(30),
 --	keyword character varying(255),
@@ -411,8 +411,8 @@ CREATE TABLE swdocgroup (
 --	completedtime timestamp without time zone,
 --	duetime timestamp without time zone,
 --	previousid character varying(50),
---	type integer,
---	step integer,
+--	type int,
+--	step int,
 --	refid character varying(50),
 --	groupid character varying(50),
 --	deletedyn char(1),
@@ -434,7 +434,7 @@ CREATE TABLE swdocgroup (
 --CREATE TABLE swworkitemparticipant (
 --	id character varying(50) NOT NULL,
 --	workitemid character varying(50),
---	participanttype integer,
+--	participanttype int,
 --	participant character varying(30),
 --	primary key (id)
 --);
@@ -469,7 +469,7 @@ CREATE TABLE swdomain (
 	id character varying(50) NOT NULL,
 	companyid character varying(100),
 	formid character varying(50),
-	formversion integer,
+	formversion int,
 	formname character varying(100),
 	tblowner character varying(100),
 	tblname character varying(100),
@@ -501,7 +501,7 @@ CREATE TABLE swdomainfield (
 	arrayyn char(1),
 	systemfieldyn char(1),
 	uniqueyn character varying(1),
-	disporder integer,
+	disporder int,
 	tablewidth float,
 	primary key (id)
 );
@@ -541,7 +541,7 @@ CREATE TABLE swauthresource (
 	id 	character varying(50) NOT NULL,
 	companyid character varying(50),
 	resourceid character varying(50) NOT NULL,	
-	type integer NOT NULL,
+	type int NOT NULL,
 	authmode char(1) NOT NULL,
 	permission character varying(20),	
 	creator character varying(50),
@@ -592,7 +592,7 @@ CREATE TABLE aprapr (
     aprismanda boolean,
     aprismodify boolean,
     approvalline character varying(100),
-    aprseq integer,
+    aprseq int,
     primary key (aprobjid)
 );
 
@@ -600,7 +600,7 @@ CREATE TABLE apraprextprop (
  	aprobjid character varying(100) NOT NULL,
     aprname character varying(100),
     aprvalue character varying(100),
-    aprseq integer NOT NULL,
+    aprseq int NOT NULL,
     primary key (aprobjid, aprseq)
 );
 
@@ -635,7 +635,7 @@ CREATE TABLE apraprlineextprop (
     aprobjid character varying(100) NOT NULL,
     aprname character varying(100),
     aprvalue character varying(100),
-    aprseq integer NOT NULL,
+    aprseq int NOT NULL,
   	primary key (aprobjid, aprseq)
 );
 
@@ -654,7 +654,7 @@ CREATE TABLE apraprlineextprop (
 --    chtobjid character varying(100) NOT NULL,
 --    chtname character varying(100),
 --    chtvalue character varying(100),
---    chtseq integer NOT NULL
+--    chtseq int NOT NULL
 --);
 
 CREATE TABLE collist (
@@ -675,7 +675,7 @@ CREATE TABLE collistextprop (
     colobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(100),
-    colseq integer NOT NULL,
+    colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
 
@@ -685,7 +685,7 @@ CREATE TABLE collistitem (
     colref character varying(100),
     collabel character varying(100),
     colexpr text,
-    colseq integer NOT NULL,
+    colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
 
@@ -715,7 +715,7 @@ CREATE TABLE lnklnkextprop (
     lnkobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(100),
-    lnkseq integer NOT NULL,
+    lnkseq int NOT NULL,
     primary key(lnkobjid, lnkseq)
 );
 
@@ -738,7 +738,7 @@ CREATE TABLE colmapextprop (
     colobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(100),
-    colseq integer NOT NULL,
+    colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
 
@@ -762,7 +762,7 @@ CREATE TABLE colvalueextprop (
     colobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(100),
-    colseq integer NOT NULL,
+    colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
 
@@ -783,7 +783,7 @@ CREATE TABLE colvalueextprop (
 --    mdlobjid character varying(100) NOT NULL,
 --    mdlname character varying(100),
 --    mdlvalue character varying(100),
---    mdlseq integer NOT NULL,
+--    mdlseq int NOT NULL,
 --	  primary key(mdlobjid, mdlseq)
 --);
 
@@ -807,7 +807,7 @@ CREATE TABLE prcprcextprop (
     prcobjid character varying(100) NOT NULL,
     prcname character varying(100),
     prcvalue character varying(100),
-    prcseq integer NOT NULL,
+    prcseq int NOT NULL,
 	primary key(prcobjid, prcseq)
 );
 
@@ -841,7 +841,7 @@ CREATE TABLE prcprcinstextprop (
     prcobjid character varying(100) NOT NULL,
     prcname character varying(100),
     prcvalue character varying(100),
-    prcseq integer NOT NULL,
+    prcseq int NOT NULL,
 	primary key(prcobjid, prcseq)
 );
 
@@ -872,8 +872,8 @@ CREATE TABLE tsktask (
     tskmultiinstid character varying(100),
     tskmultiinstorder character varying(10),
     tskmultiinstflowcond character varying(10),
-    tskstep integer,
-    tskloopcnt integer,
+    tskstep int,
+    tskloopcnt int,
     tskexpectstartdate timestamp without time zone NULL ,
     tskexpectenddate timestamp without time zone NULL ,
     tskrealstartdate timestamp without time zone NULL ,
@@ -928,7 +928,7 @@ CREATE TABLE tsktaskdefextprop (
     tskobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(100),
-    tskseq integer NOT NULL,
+    tskseq int NOT NULL,
 	primary key(tskobjid, tskseq)
 );
 
@@ -936,7 +936,7 @@ CREATE TABLE tsktaskextprop (
     tskobjid character varying(100) NOT NULL,
     tskname character varying(100),
     tskvalue character varying(800),
-    tskseq integer NOT NULL,
+    tskseq int NOT NULL,
 	primary key(tskobjid, tskseq)
 );
 
@@ -1171,7 +1171,7 @@ CREATE TABLE swworkhour (
 	companyid character varying(50),
 	type character varying(50),
 	startdayofweek character varying(50),
-	workingdays integer,
+	workingdays int,
 	validfromdate timestamp without time zone,
 	validtodate timestamp without time zone,
 	monstarttime timestamp without time zone,
@@ -1208,7 +1208,7 @@ CREATE TABLE sworgconfig(
 	createdtime timestamp without time zone NULL,
 	modifier character varying(50) NULL,
 	modifiedtime timestamp without time zone NULL,
-	isactivity integer NULL,
+	isactivity int NULL,
 	primary key (id)
 )
 ;
@@ -1225,7 +1225,7 @@ CREATE TABLE apraprdef(
 	createdtime timestamp without time zone NULL,
 	modifier character varying(50),
 	modifiedtime timestamp without time zone NULL,
-	defseq integer NOT NULL,
+	defseq int NOT NULL,
 	primary key (objid, defseq)
 );
 
@@ -1238,7 +1238,7 @@ CREATE TABLE apraprdef(
 --	filepath character varying(200),
 --	filesize decimal(19, 0) NULL,
 --	writtentime timestamp without time zone NULL,
---	constrainteger docfile_pkey primary key (id)
+--	constraint docfile_pkey primary key (id)
 --);
 
 
@@ -1259,7 +1259,7 @@ CREATE TABLE apraprdef(
 --	lcsexpiredate timestamp without time zone NULL,
 --	lcsdesc text,
 --	lcsstatus character varying(50),
---	constrainteger lcslcs_pkey primary key (lcsobjid)
+--	constraint lcslcs_pkey primary key (lcsobjid)
 --);
 
 
@@ -1267,9 +1267,9 @@ CREATE TABLE apraprdef(
 --	lcsobjid character varying(100),
 --	lcsname character varying(100),
 --	lcsvalue character varying(100),
---	lcsseq integer NOT NULL,
---	constrainteger lcslcsextprop_pkey primary key (lcsobjid, lcsseq),
---	constrainteger fklcslcsextprop foreign key (lcsobjid)
+--	lcsseq int NOT NULL,
+--	constraint lcslcsextprop_pkey primary key (lcsobjid, lcsseq),
+--	constraint fklcslcsextprop foreign key (lcsobjid)
 --	references lcslcs (lcsobjid)
 --);
 
@@ -1291,9 +1291,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq integer NOT NULL,
---	constrainteger prcprcinstrelextprop_pkey primary key (prcobjid, prcseq),
---	constrainteger fkprcprcinstrelextprop foreign key (prcobjid)
+--	prcseq int NOT NULL,
+--	constraint prcprcinstrelextprop_pkey primary key (prcobjid, prcseq),
+--	constraint fkprcprcinstrelextprop foreign key (prcobjid)
 --	references prcprcinstrel (prcobjid)
 --);
 
@@ -1308,10 +1308,10 @@ CREATE TABLE prcprcinstrel(
 --	prctype character varying(50),
 --	prcprcinstid character varying(100),
 --	prcvariableid character varying(100),
---	prcrequired tinyinteger NULL,
+--	prcrequired tinyint NULL,
 --	prcmode character varying(50),
 --	prcvalue text,
---        constrainteger prcprcinstvariable_pkey primary key (prcobjid)
+--        constraint prcprcinstvariable_pkey primary key (prcobjid)
 --);
 
 
@@ -1319,9 +1319,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq integer NOT NULL,
---	constrainteger prcprcinstvariableextprop_pkey primary key (prcobjid, prcseq),
---	constrainteger fkprcprcinstvariableextprop foreign key (prcobjid)
+--	prcseq int NOT NULL,
+--	constraint prcprcinstvariableextprop_pkey primary key (prcobjid, prcseq),
+--	constraint fkprcprcinstvariableextprop foreign key (prcobjid)
 --	references prcprcinstvariable (prcobjid)
 --);
 
@@ -1336,9 +1336,9 @@ CREATE TABLE prcprcinstrel(
 --	prctype character varying(50),
 --	prcprcid character varying(100),
 --	prcinitialvalue character varying(100),
---	prcrequired tinyinteger NULL,
+--	prcrequired tinyint NULL,
 --	prcmode character varying(50),
---	constrainteger prcprcvariable_pkey primary key (prcobjid)
+--	constraint prcprcvariable_pkey primary key (prcobjid)
 --);
 
 
@@ -1346,9 +1346,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq integer NOT NULL,
---	constrainteger prcprcvariableextprop_pkey primary key (prcobjid, prcseq),
---	constrainteger fkprcprcvariableextprop foreign key (prcobjid)
+--	prcseq int NOT NULL,
+--	constraint prcprcvariableextprop_pkey primary key (prcobjid, prcseq),
+--	constraint fkprcprcvariableextprop foreign key (prcobjid)
 --	references prcprcvariable (prcobjid)
 --);
 
@@ -1364,7 +1364,7 @@ CREATE TABLE prcprcinstrel(
 --	createdtime timestamp without time zone NULL,
 --	modifier character varying(50),
 --	modifiedtime timestamp without time zone NULL,
---	constrainteger swcustomer_pkey primary key (id)
+--	constraint swcustomer_pkey primary key (id)
 --);
 
   
@@ -1372,9 +1372,9 @@ CREATE TABLE prcprcinstrel(
 --	id character varying(50),
 --	swcname character varying(100),
 --	swcvalue character varying(100),
---	swcseq integer NOT NULL,
---	constrainteger swcustomerextprop_pkey primary key (id, swcseq),
---	constrainteger fkswccustomerextprop foreign key (id)
+--	swcseq int NOT NULL,
+--	constraint swcustomerextprop_pkey primary key (id, swcseq),
+--	constraint fkswccustomerextprop foreign key (id)
 --	references swcustomer (id)
 --);
 
@@ -1440,7 +1440,7 @@ CREATE TABLE sworguserdetail(
 --	productcode character varying(50),
 --	packagerels text,
 --	extvalue text,
---	constrainteger swproduct_pkey primary key (id)
+--	constraint swproduct_pkey primary key (id)
 --);
 
 
@@ -1448,9 +1448,9 @@ CREATE TABLE sworguserdetail(
 --	id character varying(50),
 --	swmname character varying(100),
 --	swmvalue character varying(100),
---	swmseq integer NOT NULL,
---	constrainteger swproductextprop_pkey primary key (id, swmseq),
---	constrainteger fkswmproductextprop foreign key (id)
+--	swmseq int NOT NULL,
+--	constraint swproductextprop_pkey primary key (id, swmseq),
+--	constraint fkswmproductextprop foreign key (id)
 --	references swproduct (id)
 --);
 
@@ -1467,7 +1467,7 @@ CREATE TABLE sworguserdetail(
 --	createdtime timestamp without time zone NULL,
 --	modifier character varying(50),
 --	modifiedtime timestamp without time zone NULL,	
---	constrainteger swproductfile_pkey primary key (id)
+--	constraint swproductfile_pkey primary key (id)
 --);
 
 
@@ -1479,9 +1479,9 @@ CREATE TABLE sworguserdetail(
 --	swmdesc text,
 --	swmimage text,
 --	swmimagetn text,
---	swmseq integer NOT NULL,
---	constrainteger swproductprop_pkey primary key (id, swmseq),
---	constrainteger fkswmproductproperty foreign key (id)
+--	swmseq int NOT NULL,
+--	constraint swproductprop_pkey primary key (id, swmseq),
+--	constraint fkswmproductproperty foreign key (id)
 --	references swproduct (id)
 --);
 
@@ -1504,7 +1504,7 @@ CREATE TABLE swwebappserviceparameter(
 	parametername character varying(255),
 	parametertype character varying(150),
 	type character varying(50),
-	webseq integer NOT NULL,
+	webseq int NOT NULL,
 	primary key (objid, webseq)
 );
 
@@ -1528,7 +1528,7 @@ CREATE TABLE swwebserviceparameter(
 	parametername character varying(255),
 	parametertype character varying(150),
 	type character varying(50),
-	webseq integer NOT NULL,
+	webseq int NOT NULL,
 	primary key (objid, webseq)
 );
 
@@ -1545,7 +1545,7 @@ CREATE TABLE swwebserviceparameter(
 --	updmethod character varying(50),
 --	updsrc text,
 --	updtgt text,	
---	constrainteger updupd_pkey primary key (updobjid)
+--	constraint updupd_pkey primary key (updobjid)
 --);
 --
 --
@@ -1553,9 +1553,9 @@ CREATE TABLE swwebserviceparameter(
 --	updobjid character varying(100),
 --	updname character varying(100),
 --	updvalue character varying(100),
---	updseq integer NOT NULL,
---	constrainteger updupdextprop_pkey primary key (updobjid, updseq),
---	constrainteger fkupdupdextprop foreign key (updobjid)
+--	updseq int NOT NULL,
+--	constraint updupdextprop_pkey primary key (updobjid, updseq),
+--	constraint fkupdupdextprop foreign key (updobjid)
 --	references updupd (updobjid)
 --);
 
@@ -2070,7 +2070,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprApr] ADD 
---	CONSTRAinteger [FkAprAprLineAprs] FOREIGN KEY 
+--	CONSTRAint [FkAprAprLineAprs] FOREIGN KEY 
 --	(
 --		[approvalLine]
 --	) REFERENCES [dbo].[AprAprLine] (
@@ -2079,7 +2079,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprAprExtProp] ADD 
---	CONSTRAinteger [FkAprAprExtProp] FOREIGN KEY 
+--	CONSTRAint [FkAprAprExtProp] FOREIGN KEY 
 --	(
 --		[aprObjId]
 --	) REFERENCES [dbo].[AprApr] (
@@ -2088,7 +2088,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprAprLineExtProp] ADD 
---	CONSTRAinteger [FkAprAprLineExtProp] FOREIGN KEY 
+--	CONSTRAint [FkAprAprLineExtProp] FOREIGN KEY 
 --	(
 --		[aprObjId]
 --	) REFERENCES [dbo].[AprAprLine] (
@@ -2097,7 +2097,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [ChtChartExtProp] ADD 
---	CONSTRAinteger [FkChtChartExtProp] FOREIGN KEY 
+--	CONSTRAint [FkChtChartExtProp] FOREIGN KEY 
 --	(
 --		[chtObjId]
 --	) REFERENCES [ChtChart] (
@@ -2106,7 +2106,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkListExtProp] ADD 
---	CONSTRAinteger [FkLnkListExtProp] FOREIGN KEY 
+--	CONSTRAint [FkLnkListExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkList] (
@@ -2115,7 +2115,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkListItem] ADD 
---	CONSTRAinteger [FkLnkListItem] FOREIGN KEY 
+--	CONSTRAint [FkLnkListItem] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkList] (
@@ -2124,7 +2124,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkLnkExtProp] ADD 
---	CONSTRAinteger [FkLnkLnkExtProp] FOREIGN KEY 
+--	CONSTRAint [FkLnkLnkExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkLnk] (
@@ -2133,7 +2133,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkMapExtProp] ADD 
---	CONSTRAinteger [FkLnkMapExtProp] FOREIGN KEY 
+--	CONSTRAint [FkLnkMapExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkMap] (
@@ -2142,7 +2142,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkValueExtProp] ADD 
---	CONSTRAinteger [FkLnkValueExtProp] FOREIGN KEY 
+--	CONSTRAint [FkLnkValueExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkValue] (
@@ -2151,7 +2151,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [MdlModelExtProp] ADD 
---	CONSTRAinteger [FkMdlModelExtProp] FOREIGN KEY 
+--	CONSTRAint [FkMdlModelExtProp] FOREIGN KEY 
 --	(
 --		[mdlObjId]
 --	) REFERENCES [MdlModel] (
@@ -2160,7 +2160,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [PrcPrcExtProp] ADD 
---	CONSTRAinteger [FkPrcPrcExtProp] FOREIGN KEY 
+--	CONSTRAint [FkPrcPrcExtProp] FOREIGN KEY 
 --	(
 --		[prcObjId]
 --	) REFERENCES [PrcPrc] (
@@ -2169,7 +2169,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [PrcPrcInstExtProp] ADD 
---	CONSTRAinteger [FkPrcPrcInstExtProp] FOREIGN KEY 
+--	CONSTRAint [FkPrcPrcInstExtProp] FOREIGN KEY 
 --	(
 --		[prcObjId]
 --	) REFERENCES [PrcPrcInst] (
@@ -2178,7 +2178,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [TskTaskDefExtProp] ADD 
---	CONSTRAinteger [FkTskTaskDefExtProp] FOREIGN KEY 
+--	CONSTRAint [FkTskTaskDefExtProp] FOREIGN KEY 
 --	(
 --		[tskObjId]
 --	) REFERENCES [TskTaskDef] (
@@ -2187,7 +2187,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [TskTaskExtProp] ADD 
---	CONSTRAinteger [FkTskTaskExtProp] FOREIGN KEY 
+--	CONSTRAint [FkTskTaskExtProp] FOREIGN KEY 
 --	(
 --		[tskObjId]
 --	) REFERENCES [TskTask] (
@@ -2223,7 +2223,7 @@ CREATE TABLE SWOrgGroupMember (
 	joinStatus	character varying(1),
 	joinTime	timestamp without time zone,
 	outTime 	timestamp without time zone,
-	memberSeq	integer,
+	memberSeq	int,
 	creator character varying(50),
 	createdtime timestamp without time zone ,
 	modifier character varying(50),
@@ -2237,7 +2237,7 @@ CREATE TABLE SwFolder (
 	companyid character varying(100),
 	parentid character varying(50),
 	name character varying(255),
-	disporder integer,
+	disporder int,
 	description character varying(4000),
 	creator character varying(30),
 	createdtime timestamp without time zone,
@@ -2252,14 +2252,14 @@ CREATE TABLE SwFolder (
 CREATE TABLE SwFolderFile (
 	folderId character varying(50) NOT NULL,
 	fileId character varying(50) NOT NULL,
-	fileSeq integer,
+	fileSeq int,
   	primary key(folderId, fileId)
 );
 
 -- 좋아요
 CREATE TABLE SwLike (
 	id character varying(50) NOT NULL,
-	refType integer,
+	refType int,
 	refId character varying(50),
 	creator character varying(50),
 	createdTime timestamp without time zone,
@@ -2304,7 +2304,7 @@ CREATE TABLE folder_db_objects (
     username character varying(255) NOT NULL,
     parent_id bigint NOT NULL,
     folder_name character varying(100) NOT NULL,
-    folder_type integer NOT NULL,
+    folder_type int NOT NULL,
     primary key (id)
 );
 
@@ -2327,7 +2327,7 @@ CREATE TABLE msg_db_objects (
     replyTo character varying(255),
     subject character varying(255),
     multipart smallint,
-    priority integer,
+    priority int,
     sentdate timestamp without time zone,
     unread smallint NOT NULL,
     msg_size bigint NOT NULL,
@@ -2364,7 +2364,7 @@ CREATE TABLE msg_rules (
 --알림 카운트를 세고 알림 조회를 위한 테이블
 CREATE TABLE SWPublishNotice (
 	id character varying(50) NOT NULL,
-	type integer,
+	type int,
 	refType character varying(50),
 	refId character varying(100),
 	assignee character varying(50),
@@ -2382,11 +2382,11 @@ CREATE TABLE SwMailServer (
 	name character varying(100) NOT NULL,
 	companyId character varying(50) NOT NULL,
 	fetchServer character varying(50),
-	fetchServerPort integer,
+	fetchServerPort int,
 	fetchProtocol character varying(10),
 	fetchSsl bool,
 	smtpServer character varying(50),
-	smtpServerPort integer,
+	smtpServerPort int,
 	smtpAuthenticated bool,
 	smtpSsl bool,
 	creator	character varying(50),
@@ -2414,7 +2414,7 @@ CREATE TABLE SwMailAccount (
 CREATE TABLE SwAutoIndexDef (
 	objId character varying(50) NOT NULL,
 	formId character varying(100) NOT NULL,
-	version integer,
+	version int,
 	fieldId character varying(10) NOT NULL,	
 	creator	character varying(50),
 	createdtime timestamp,
@@ -2429,7 +2429,7 @@ CREATE TABLE SwAutoIndexRuls (
 	type character varying(50),
 	codeValue character varying(100),
 	seperator character varying(10),
-	increment integer,
+	increment int,
 	incrementBy character varying(50),
 	digits character varying(10),
 	items character varying(500),
