@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1195,6 +1196,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
+							if(fileName.contains("=?")){
+								fileName = new String(fileName.getBytes("8859_1"),"euc-kr");
+							}else{
+								fileName = MimeUtility.decodeText(fileName);
+							}
 							if( !fileName.equals("Html Body")){
 								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
