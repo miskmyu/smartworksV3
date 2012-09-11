@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Proxy;
 import java.math.BigInteger;
