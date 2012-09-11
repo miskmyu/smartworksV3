@@ -188,7 +188,7 @@ CREATE TABLE swprocess (
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -210,7 +210,7 @@ CREATE TABLE swform (
 	owner varchar(30),
 	encoding varchar(15),
 	description varchar(4000),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -537,7 +537,7 @@ CREATE TABLE swgadget (
 	classname varchar(255),
 	location varchar(255),
 	enabledyn char(1),
-	content char,
+	content clob,
 	primary key (id)
 );
 
@@ -589,7 +589,7 @@ CREATE TABLE aprapr (
     aprcreatedate timestamp,
     aprmodifyuser varchar(50),
     aprmodifydate timestamp,
-    aprdesc char,
+    aprdesc clob,
     aprstatus varchar(50),
     aprtype varchar(50),
     aprapprover varchar(50),
@@ -616,7 +616,7 @@ CREATE TABLE apraprline (
     aprcreatedate timestamp,
     aprmodifyuser varchar(50),
     aprmodifydate timestamp,
-    aprdesc char,
+    aprdesc clob,
     aprstatus varchar(50),
     aprcorr varchar(50),
     aprRefAppLineDefId varchar(50),
@@ -672,11 +672,11 @@ CREATE TABLE collist (
     coltype varchar(100),
     colcorr varchar(200),
     colstatus varchar(50),
-    coldesc char,
+    coldesc clob,
     primary key(colobjid)
 );
 
-CREATE TABLE collischarprop (
+CREATE TABLE collistextprop (
     colobjid varchar(100) NOT NULL,
     tskname varchar(100),
     tskvalue varchar(100),
@@ -689,7 +689,7 @@ CREATE TABLE collistitem (
     coltype varchar(100),
     colref varchar(100),
     collabel varchar(100),
-    colexpr char,
+    colexpr clob,
     colseq int NOT NULL,
     primary key(colobjid, colseq)
 );
@@ -706,13 +706,13 @@ CREATE TABLE lnklnk (
     lnkfromtype varchar(100),
     lnkfromref varchar(200),
     lnkfromlabel varchar(100),
-    lnkfromexpr char,
+    lnkfromexpr clob,
     lnktotype varchar(100),
     lnktoref varchar(200),
     lnktolabel varchar(100),
-    lnktoexpr char,
+    lnktoexpr clob,
     lnkcondtype varchar(100),
-    lnkcondexpr char,
+    lnkcondexpr clob,
     primary key(lnkobjid)
 );
 
@@ -758,8 +758,8 @@ CREATE TABLE colvalue (
     colref varchar(200),
     colexpdate timestamp,
     colstatus varchar(50),
-    coldesc char,
-    colvalue char,
+    coldesc clob,
+    colvalue clob,
     primary key(colobjid)
 );
 
@@ -799,11 +799,11 @@ CREATE TABLE prcprc (
     prccreatedate timestamp,
     prcmodifyuser varchar(50),
     prcmodifydate timestamp,
-    tskdesc char,
+    tskdesc clob,
     prcdid varchar(100),
     prcdver varchar(100),
     prcprcid varchar(100),
-    prcdiagram char,
+    prcdiagram clob,
     prcType varchar(100),
 	primary key(prcobjid)
 );
@@ -825,14 +825,14 @@ CREATE TABLE prcprcinst (
     prcmodifydate timestamp,
     prcstatus varchar(100),
     prctitle varchar(255),
-    tskdesc char,
+    tskdesc clob,
     tskpriority varchar(50),
     prcdid varchar(100),
     prcdver varchar(100),
     prcprcid varchar(100),
-    prcdiagram char,
+    prcdiagram clob,
     issubinstance varchar(50) NULL,
-    prcinstvariable char NULL,
+    prcinstvariable clob NULL,
     prcPackageId varchar(100),
     prcType varchar(100),
     prcWorkspaceId varchar(100),
@@ -842,7 +842,7 @@ CREATE TABLE prcprcinst (
 	primary key(prcobjid)
 );
 
-CREATE TABLE prcprcinscharprop (
+CREATE TABLE prcprcinstextprop (
     prcobjid varchar(100) NOT NULL,
     prcname varchar(100),
     prcvalue varchar(100),
@@ -862,9 +862,9 @@ CREATE TABLE tsktask (
     tsktype varchar(100),
     tskprcinstid varchar(50),
     tsktitle varchar(255),
-    tskdesc char,
+    tskdesc clob,
     tskpriority varchar(50),
-    tskdoc char,
+    tskdoc clob,
     tskassigner varchar(50),
     tskassignee varchar(50),
     tskperformer varchar(50),
@@ -883,7 +883,7 @@ CREATE TABLE tsktask (
     tskexpectenddate timestamp NULL ,
     tskrealstartdate timestamp NULL ,
     tskrealenddate timestamp NULL ,
-    tskinstvariable char NULL,
+    tskinstvariable clob NULL,
     isStartActivity varchar(10),
     tskFromRefType varchar(50),
     tskFromRefId varchar(100),
@@ -912,9 +912,9 @@ CREATE TABLE tsktaskdef (
     tsktype varchar(100),
     tskprcinstid varchar(100),
     tsktitle varchar(200),
-    tskdesc char,
+    tskdesc clob,
     tskpriority varchar(100),
-    tskdoc char,
+    tskdoc clob,
     tskassigner varchar(100),
     tskassignee varchar(100),
     tskassigndate varchar(100),
@@ -957,7 +957,7 @@ CREATE TABLE SWNotice (
 	modifiedTime timestamp NULL,
 	filegroupid varchar(255) NULL,
 	title varchar(255) NULL,
-	content char NULL,
+	content clob NULL,
 	primary key (id)
 );
 
@@ -966,7 +966,7 @@ CREATE TABLE SwBoard (
 	id 	varchar(50) NOT NULL,
 	title varchar(255),
 	priority varchar(10),
-	content char,
+	content clob,
 	filegroupid varchar(255),
 	domainid varchar(50),
 	workitemid varchar(50),
@@ -988,7 +988,7 @@ CREATE TABLE SWAttachment (
 	createdtime timestamp NULL,
 	modifier varchar(50) NULL,
 	modifiedtime timestamp NULL,
-	content char NULL,
+	content clob NULL,
 	filegroupid varchar(255) NULL,
 	searchword varchar(255) NULL,
 	ownerdept varchar(255) NULL,
@@ -1010,7 +1010,7 @@ CREATE TABLE sworgcontact (
 	swaddress varchar(255),
 	swcountry varchar(50),
 	swcat varchar(50),
-	swdesc char,
+	swdesc clob,
 	swattach varchar(255),
 	domainid varchar(50),
 	workitemid varchar(50),
@@ -1033,7 +1033,7 @@ CREATE TABLE SWEvent (
 	modifiedTime timestamp NULL,
 	enddate timestamp NULL,
 	relatedusers varchar(4000) NULL, -- userField는 varchar(4000)으로 생성
-	content char NULL,
+	content clob NULL,
 	startdate timestamp NULL,
 	name varchar(255) NULL,
 	place varchar(255) NULL,
@@ -1051,7 +1051,7 @@ CREATE TABLE SWMemo (
 	createdtime timestamp,
 	modifier varchar(50),
 	modifiedtime timestamp,
-	content char,
+	content clob,
 	title varchar(255)
 );
 
@@ -1148,7 +1148,7 @@ CREATE TABLE sworgteam(
 	name varchar(255) NULL,
 	teamleader varchar(50) NULL,
 	dept varchar(50) NULL,
-	member char NULL,
+	member clob NULL,
 	accesslevel varchar(50) NULL,
 	state varchar(50) NULL,
 	description varchar(4000) NULL,
@@ -1226,7 +1226,7 @@ CREATE TABLE apraprdef(
 	aprname varchar(150),
 	aprperson varchar(50),
 	dueDate varchar(100),
-	level varchar(50),
+	level_ varchar(50),
 	creator varchar(50),
 	createdtime timestamp NULL,
 	modifier varchar(50),
@@ -2282,7 +2282,7 @@ CREATE TABLE SwLike (
 -- 메세지
 CREATE TABLE SWMessage(
 	id varchar(50) NOT NULL,
-	content char,
+	content clob,
 	sendUserId varchar(50),
 	targetUserId varchar(50),
 	deleteUserId varchar(50),
@@ -2325,14 +2325,14 @@ CREATE TABLE folder_db_objects (
 
 CREATE TABLE msg_db_objects (
     id Number NOT NULL,
-    uid varchar(100),
+    uid_ varchar(100),
     username varchar(255) NOT NULL,
     folder_id Number NOT NULL,
     unique_id varchar(100) NOT NULL,
     sender varchar(255),
-    receiver char,
-    cc char,
-    bcc char,
+    receiver clob,
+    cc clob,
+    bcc clob,
     replyTo varchar(255),
     subject varchar(255),
     multipart smallint,
@@ -2340,13 +2340,13 @@ CREATE TABLE msg_db_objects (
     sentdate timestamp,
     unread smallint NOT NULL,
     msg_size Number NOT NULL,
-    email varbinary(max) NOT NULL,
+    email blob NOT NULL,
     primary key (id)
 );
 
 CREATE TABLE msg_db_uids (
     username varchar(255) NOT NULL,
-    uid varchar(100) NOT NULL
+    uid_ varchar(100) NOT NULL
 );
 
 
