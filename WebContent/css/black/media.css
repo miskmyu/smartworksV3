@@ -1,11 +1,11 @@
 @charset "utf-8";
 
-@media screen and (max-width:1023px){.red_tab_content .right_cap {top:-25px; left:15px}} /* ipad */
-@media screen and (-webkit-min-device-pixel-ratio:1.5) {.red_tab_content .right_cap {top:-22px; left:15px}} /* 안드로이드 계열 */
-@media screen and (-webkit-min-device-pixel-ratio:2) {.red_tab_content .right_cap {top:-22px; left:15px}} /* 레티나  계열, iPhone 4 */
-
-@media screen and (max-width:1023px){.btn_gray .txt_btn_center {line-height: 17px}}
+@media screen and (-webkit-min-device-pixel-ratio:1.5) {} /* 안드로이드 계열 */
+@media screen and (-webkit-min-device-pixel-ratio:2) {} /* 레티나  계열, iPhone 4 */
+@media screen and (max-width:1000px){} /* iPad, Tab  */
+	
+@media screen and (max-width:1000px){.btn_gray .txt_btn_center {line-height: 17px}} /* iPad, Tab  */
 
 /* Pop Print */
-@media screen and (max-width:1023px){.pop_print_section {height:550px; overflow-y:auto}}
-@media screen and (max-width:1023px){.pop_print {min-height:400px}}
+@media screen and (max-width:1000px){.pop_print_section {height:460px}}
+@media screen and (max-width:1000px){.pop_print {min-height:450px; overflow-y:auto}}
