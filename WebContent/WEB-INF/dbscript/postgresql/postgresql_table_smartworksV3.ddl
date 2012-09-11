@@ -1238,7 +1238,7 @@ CREATE TABLE apraprdef(
 --	filepath character varying(200),
 --	filesize decimal(19, 0) NULL,
 --	writtentime timestamp without time zone NULL,
---	constraint docfile_pkey primary key (id)
+--	constrainteger docfile_pkey primary key (id)
 --);
 
 
@@ -1259,7 +1259,7 @@ CREATE TABLE apraprdef(
 --	lcsexpiredate timestamp without time zone NULL,
 --	lcsdesc text,
 --	lcsstatus character varying(50),
---	constraint lcslcs_pkey primary key (lcsobjid)
+--	constrainteger lcslcs_pkey primary key (lcsobjid)
 --);
 
 
@@ -1267,9 +1267,9 @@ CREATE TABLE apraprdef(
 --	lcsobjid character varying(100),
 --	lcsname character varying(100),
 --	lcsvalue character varying(100),
---	lcsseq int NOT NULL,
---	constraint lcslcsextprop_pkey primary key (lcsobjid, lcsseq),
---	constraint fklcslcsextprop foreign key (lcsobjid)
+--	lcsseq integer NOT NULL,
+--	constrainteger lcslcsextprop_pkey primary key (lcsobjid, lcsseq),
+--	constrainteger fklcslcsextprop foreign key (lcsobjid)
 --	references lcslcs (lcsobjid)
 --);
 
@@ -1291,9 +1291,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq int NOT NULL,
---	constraint prcprcinstrelextprop_pkey primary key (prcobjid, prcseq),
---	constraint fkprcprcinstrelextprop foreign key (prcobjid)
+--	prcseq integer NOT NULL,
+--	constrainteger prcprcinstrelextprop_pkey primary key (prcobjid, prcseq),
+--	constrainteger fkprcprcinstrelextprop foreign key (prcobjid)
 --	references prcprcinstrel (prcobjid)
 --);
 
@@ -1308,10 +1308,10 @@ CREATE TABLE prcprcinstrel(
 --	prctype character varying(50),
 --	prcprcinstid character varying(100),
 --	prcvariableid character varying(100),
---	prcrequired tinyint NULL,
+--	prcrequired tinyinteger NULL,
 --	prcmode character varying(50),
 --	prcvalue text,
---        constraint prcprcinstvariable_pkey primary key (prcobjid)
+--        constrainteger prcprcinstvariable_pkey primary key (prcobjid)
 --);
 
 
@@ -1319,9 +1319,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq int NOT NULL,
---	constraint prcprcinstvariableextprop_pkey primary key (prcobjid, prcseq),
---	constraint fkprcprcinstvariableextprop foreign key (prcobjid)
+--	prcseq integer NOT NULL,
+--	constrainteger prcprcinstvariableextprop_pkey primary key (prcobjid, prcseq),
+--	constrainteger fkprcprcinstvariableextprop foreign key (prcobjid)
 --	references prcprcinstvariable (prcobjid)
 --);
 
@@ -1336,9 +1336,9 @@ CREATE TABLE prcprcinstrel(
 --	prctype character varying(50),
 --	prcprcid character varying(100),
 --	prcinitialvalue character varying(100),
---	prcrequired tinyint NULL,
+--	prcrequired tinyinteger NULL,
 --	prcmode character varying(50),
---	constraint prcprcvariable_pkey primary key (prcobjid)
+--	constrainteger prcprcvariable_pkey primary key (prcobjid)
 --);
 
 
@@ -1346,9 +1346,9 @@ CREATE TABLE prcprcinstrel(
 --	prcobjid character varying(100),
 --	prcname character varying(100),
 --	prcvalue character varying(100),
---	prcseq int NOT NULL,
---	constraint prcprcvariableextprop_pkey primary key (prcobjid, prcseq),
---	constraint fkprcprcvariableextprop foreign key (prcobjid)
+--	prcseq integer NOT NULL,
+--	constrainteger prcprcvariableextprop_pkey primary key (prcobjid, prcseq),
+--	constrainteger fkprcprcvariableextprop foreign key (prcobjid)
 --	references prcprcvariable (prcobjid)
 --);
 
@@ -1364,7 +1364,7 @@ CREATE TABLE prcprcinstrel(
 --	createdtime timestamp without time zone NULL,
 --	modifier character varying(50),
 --	modifiedtime timestamp without time zone NULL,
---	constraint swcustomer_pkey primary key (id)
+--	constrainteger swcustomer_pkey primary key (id)
 --);
 
   
@@ -1372,9 +1372,9 @@ CREATE TABLE prcprcinstrel(
 --	id character varying(50),
 --	swcname character varying(100),
 --	swcvalue character varying(100),
---	swcseq int NOT NULL,
---	constraint swcustomerextprop_pkey primary key (id, swcseq),
---	constraint fkswccustomerextprop foreign key (id)
+--	swcseq integer NOT NULL,
+--	constrainteger swcustomerextprop_pkey primary key (id, swcseq),
+--	constrainteger fkswccustomerextprop foreign key (id)
 --	references swcustomer (id)
 --);
 
@@ -1440,7 +1440,7 @@ CREATE TABLE sworguserdetail(
 --	productcode character varying(50),
 --	packagerels text,
 --	extvalue text,
---	constraint swproduct_pkey primary key (id)
+--	constrainteger swproduct_pkey primary key (id)
 --);
 
 
@@ -1448,9 +1448,9 @@ CREATE TABLE sworguserdetail(
 --	id character varying(50),
 --	swmname character varying(100),
 --	swmvalue character varying(100),
---	swmseq int NOT NULL,
---	constraint swproductextprop_pkey primary key (id, swmseq),
---	constraint fkswmproductextprop foreign key (id)
+--	swmseq integer NOT NULL,
+--	constrainteger swproductextprop_pkey primary key (id, swmseq),
+--	constrainteger fkswmproductextprop foreign key (id)
 --	references swproduct (id)
 --);
 
@@ -1467,7 +1467,7 @@ CREATE TABLE sworguserdetail(
 --	createdtime timestamp without time zone NULL,
 --	modifier character varying(50),
 --	modifiedtime timestamp without time zone NULL,	
---	constraint swproductfile_pkey primary key (id)
+--	constrainteger swproductfile_pkey primary key (id)
 --);
 
 
@@ -1479,9 +1479,9 @@ CREATE TABLE sworguserdetail(
 --	swmdesc text,
 --	swmimage text,
 --	swmimagetn text,
---	swmseq int NOT NULL,
---	constraint swproductprop_pkey primary key (id, swmseq),
---	constraint fkswmproductproperty foreign key (id)
+--	swmseq integer NOT NULL,
+--	constrainteger swproductprop_pkey primary key (id, swmseq),
+--	constrainteger fkswmproductproperty foreign key (id)
 --	references swproduct (id)
 --);
 
@@ -1545,7 +1545,7 @@ CREATE TABLE swwebserviceparameter(
 --	updmethod character varying(50),
 --	updsrc text,
 --	updtgt text,	
---	constraint updupd_pkey primary key (updobjid)
+--	constrainteger updupd_pkey primary key (updobjid)
 --);
 --
 --
@@ -1553,9 +1553,9 @@ CREATE TABLE swwebserviceparameter(
 --	updobjid character varying(100),
 --	updname character varying(100),
 --	updvalue character varying(100),
---	updseq int NOT NULL,
---	constraint updupdextprop_pkey primary key (updobjid, updseq),
---	constraint fkupdupdextprop foreign key (updobjid)
+--	updseq integer NOT NULL,
+--	constrainteger updupdextprop_pkey primary key (updobjid, updseq),
+--	constrainteger fkupdupdextprop foreign key (updobjid)
 --	references updupd (updobjid)
 --);
 
@@ -2070,7 +2070,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprApr] ADD 
---	CONSTRAint [FkAprAprLineAprs] FOREIGN KEY 
+--	CONSTRAinteger [FkAprAprLineAprs] FOREIGN KEY 
 --	(
 --		[approvalLine]
 --	) REFERENCES [dbo].[AprAprLine] (
@@ -2079,7 +2079,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprAprExtProp] ADD 
---	CONSTRAint [FkAprAprExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkAprAprExtProp] FOREIGN KEY 
 --	(
 --		[aprObjId]
 --	) REFERENCES [dbo].[AprApr] (
@@ -2088,7 +2088,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [dbo].[AprAprLineExtProp] ADD 
---	CONSTRAint [FkAprAprLineExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkAprAprLineExtProp] FOREIGN KEY 
 --	(
 --		[aprObjId]
 --	) REFERENCES [dbo].[AprAprLine] (
@@ -2097,7 +2097,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [ChtChartExtProp] ADD 
---	CONSTRAint [FkChtChartExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkChtChartExtProp] FOREIGN KEY 
 --	(
 --		[chtObjId]
 --	) REFERENCES [ChtChart] (
@@ -2106,7 +2106,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkListExtProp] ADD 
---	CONSTRAint [FkLnkListExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkLnkListExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkList] (
@@ -2115,7 +2115,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkListItem] ADD 
---	CONSTRAint [FkLnkListItem] FOREIGN KEY 
+--	CONSTRAinteger [FkLnkListItem] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkList] (
@@ -2124,7 +2124,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkLnkExtProp] ADD 
---	CONSTRAint [FkLnkLnkExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkLnkLnkExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkLnk] (
@@ -2133,7 +2133,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkMapExtProp] ADD 
---	CONSTRAint [FkLnkMapExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkLnkMapExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkMap] (
@@ -2142,7 +2142,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [LnkValueExtProp] ADD 
---	CONSTRAint [FkLnkValueExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkLnkValueExtProp] FOREIGN KEY 
 --	(
 --		[lnkObjId]
 --	) REFERENCES [LnkValue] (
@@ -2151,7 +2151,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [MdlModelExtProp] ADD 
---	CONSTRAint [FkMdlModelExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkMdlModelExtProp] FOREIGN KEY 
 --	(
 --		[mdlObjId]
 --	) REFERENCES [MdlModel] (
@@ -2160,7 +2160,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [PrcPrcExtProp] ADD 
---	CONSTRAint [FkPrcPrcExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkPrcPrcExtProp] FOREIGN KEY 
 --	(
 --		[prcObjId]
 --	) REFERENCES [PrcPrc] (
@@ -2169,7 +2169,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [PrcPrcInstExtProp] ADD 
---	CONSTRAint [FkPrcPrcInstExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkPrcPrcInstExtProp] FOREIGN KEY 
 --	(
 --		[prcObjId]
 --	) REFERENCES [PrcPrcInst] (
@@ -2178,7 +2178,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [TskTaskDefExtProp] ADD 
---	CONSTRAint [FkTskTaskDefExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkTskTaskDefExtProp] FOREIGN KEY 
 --	(
 --		[tskObjId]
 --	) REFERENCES [TskTaskDef] (
@@ -2187,7 +2187,7 @@ CREATE TABLE swwebserviceparameter(
 --GO
 --
 --ALTER TABLE [TskTaskExtProp] ADD 
---	CONSTRAint [FkTskTaskExtProp] FOREIGN KEY 
+--	CONSTRAinteger [FkTskTaskExtProp] FOREIGN KEY 
 --	(
 --		[tskObjId]
 --	) REFERENCES [TskTask] (
