@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1195,6 +1196,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
+							if(fileName.contains("=?")){
+								fileName = new String(fileName.getBytes("8859_1"),"euc-kr");
+							}else{
+								fileName = MimeUtility.decodeText(fileName);
+							}
 							if( !fileName.equals("Html Body")){
 								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
@@ -1462,17 +1468,23 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 			Address adrs[] = Utility.stringListToAddressArray(from.get("users"));
 			header.setFrom(adrs);
+			//start 12.09.05 각종 Shown에 set 누락
+			header.setFromShown(Utility.addressArrToString(adrs));
 			
 			Address tos[] = Utility.stringListToAddressArray(receivers.get("users"));
 			header.setTo(tos);
+			header.setToShown(Utility.addressArrToString(tos));
 			
 			if (ccReceivers != null) {
 				Address ccs[] = Utility.stringListToAddressArray(ccReceivers.get("users"));
 				header.setCc(ccs);
+				header.setCcShown(Utility.addressArrToString(ccs));
 			}
 			if (bccReceivers != null) {
 				Address bccs[] = Utility.stringListToAddressArray(bccReceivers.get("users"));
 				header.setBcc(bccs);
+				header.setBccShown(Utility.addressArrToString(bccs));
+				//end jy.bae
 			}
 			header.setSubject(subject);
 			header.setDate(new Date());

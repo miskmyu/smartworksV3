@@ -197,9 +197,7 @@
  	var title = $('.js_mail_space_page').find('iframe').contents().find('title');
  	var body = $('.js_mail_space_page').find('iframe').contents().find('body');
  	var titleHtml = title.html();
- 	//if(titleHtml!="" && body.html()=="" && titleHtml.indexOf('iframe')>0){
- 	//jybae. 2012.08.29 메일 내용이 title로 가버리는 문제 때문에 밑에 한줄 수정
- 	if(titleHtml!="" && body.html()==""){
+ 	if(titleHtml!="" && body.html()=="" && titleHtml.indexOf('iframe')>0){
 // 		titleHtml = titleHtml.replace('&lt;/head&gt;', '');
 // 		titleHtml = titleHtml.replace(/&lt;/html&gt;$/, '');
  		titleHtml = titleHtml.replace(/&lt;/g, '<');

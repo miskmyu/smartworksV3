@@ -175,7 +175,9 @@ public class MailInstance extends Instance {
 		String shown = receivers[0].getEmailAddressShown();
 		for(int i=1; i<this.receivers.length; i++){
 			if(i==BRIEF_EMAILADDRESS_COUNT){
-				String usersShown = this.getBccReceiversShown().replaceAll("<", "&lt;");
+				//Start 2012.09.10 받는사람 클릭시 사라지는 버그 수정 잘못된 메소드 호출
+				String usersShown = this.getReceiversShown().replaceAll("<", "&lt;");
+				//End jybae 
 				usersShown = usersShown.replaceAll(">", "&gt;");
 				usersShown = usersShown.replaceAll("\"", "&quot;");
 				usersShown = usersShown.replaceAll("\'", "&#39;");
