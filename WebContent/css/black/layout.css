@@ -109,7 +109,6 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 /*Search-white */
 .srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px}
-.srch_wh input[type="text"] { height:14px}
 .srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px; margin: 0}
 .srch_wh button, .srch_wh .srch_icon, .mail_srch  button {
 	background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
@@ -632,10 +631,11 @@ margin: 0 auto}
 .red_stroke {background: url("../../images/bgRoundRedStrokeLeft.gif") no-repeat; height:40px; text-align:center}
 .red_stroke .red_stroke_right {background: url("../../images/bgRoundRedStrokeRight.gif") no-repeat; width:15px; height:40px; float:right}
 .red_tab_content {
-	background: url("../../images/bgRoundRedContentLeft.gif") no-repeat; margin-top:3px; padding-left: 30px; display:inline-table; height:30px;
-	text-align:center; color:#fff; font-size:14px; font-weight:bold; line-height: 29px;
+	background: url("../../images/bgRoundRedContentLeft.gif") no-repeat; margin-top:3px; padding:6px 0 0 25px; display:inline-block; height:30px;
+	text-align:center; color:#fff; font-size:14px; font-weight:bold
 }
-.red_tab_content .right_cap {background: url("../../images/bgRoundRedContentRight.gif") no-repeat; width:27px; height:30px; float:right}
+.red_tab_content .right_cap {background: url("../../images/bgRoundRedContentRight.gif") no-repeat; width:27px; height:30px; position:relative; top:-6px; float:right}
+@media screen and (-webkit-min-device-pixel-ratio:0) {.red_tab_content .right_cap {top:-22px; left:15px}}
 
 /* Work ING, Communities Setting - Title */
 #work_ing {margin:0 20px}

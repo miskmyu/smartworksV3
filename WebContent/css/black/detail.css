@@ -410,7 +410,7 @@ a .icon_btn_edit:hover {background-position:-36px -859px}
 
 .approval_group {margin: 0 5px; overflow:hidden}
 .approval_area { width:126px; height:134px; border:1px solid #cccccc; padding:4px; float:left; margin: 0 0 -1px -1px}
-.approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px; border-bottom:1px solid #ececec}
+.approval_area .label { background-color:#ececec; padding: 1px; text-align: center; margin: -4px -4px 5px; height:15px}
 .approval_area .approval {text-align:center; height: 72px; overflow: hidden}
 .approval_area .name {height:24px; vertical-align: bottom; display: table-cell}
 .approval_area .name .t_name {font-size:11px; height: 12px; overflow: hidden}
