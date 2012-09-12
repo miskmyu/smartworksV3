@@ -131,8 +131,8 @@ function submitForms(action) {
 	String mailSignature = "";
 	if(!SmartUtil.isBlankObject(myMailAccount) && myMailAccount.isUseSignature()){
 //		instance.setMailContents("<br/><br/><br/>" + instance.getMailContents() + "<br/><br/><br/>" + myMailAccount.getSignature().replace("\"", "\'"));
-		instance.setMailContents("\n\n\n" + instance.getMailContents());
-		mailSignature =  "\n\n\n" + myMailAccount.getSignature();
+		instance.setMailContents(instance.getMailContents());
+		mailSignature = myMailAccount.getSignature();
 	}
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
