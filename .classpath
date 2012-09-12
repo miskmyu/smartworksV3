@@ -10,5 +10,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="src/resource"/>
 	<classpathentry kind="lib" path="src/default"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Administrator/바탕 화면/tibero4-jdbc.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
