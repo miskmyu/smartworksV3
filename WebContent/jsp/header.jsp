@@ -120,7 +120,7 @@ function logout() {
 			<!-- 메모 알림 영역 
 			<li class="icon_memo">
 				<a id="" href=""
-					title=""> 
+						title=""> 
 		 				<em class="icon_number"><%=notices[Notice.TYPE_MESSAGE].getLength()%><span></span></em> 
 				</a>
 			</li>
