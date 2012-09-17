@@ -5,10 +5,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.mail.internet.MimeUtility;
+import javax.mail.util.SharedByteArrayInputStream;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +32,8 @@ import org.claros.intouch.webmail.controllers.MailController;
 import org.claros.intouch.webmail.factory.MailControllerFactory;
 
 import org.htmlcleaner.HtmlCleaner;
+
+import com.google.gdata.util.common.net.UriEncoder;
 
 public class DumpPartService extends BaseService {
 
@@ -107,7 +111,7 @@ public class DumpPartService extends BaseService {
 				response.setDateHeader ("Expires",0);
 				response.setCharacterEncoding("utf-8");
 				
-				String fn = part.getFilename();
+				String fn = org.claros.commons.utility.Utility.decodeEUCKRChars(part.getFilename());
 				if (fn != null) {
 					if (fn.equals("Text Body")) {
 //						fn = Utility.replaceAllOccurances(email.getBaseHeader().getSubject(), " ", "_") + ".txt";
@@ -133,9 +137,7 @@ public class DumpPartService extends BaseService {
 					if (!download) {
 						response.setHeader("Content-Type", "text/html");
 						if(!SmartUtil.isBlankObject(content)){
-							if(content.indexOf("=?")>0){
-								content = MimeUtility.decodeText(content);						
-							}
+							content = org.claros.commons.utility.Utility.updateTRChars(content);						
 						}
 						HtmlCleaner cleaner = new HtmlCleaner(content);
 						cleaner.setOmitXmlDeclaration(true);
@@ -165,9 +167,8 @@ public class DumpPartService extends BaseService {
 //						cleaner.clean(false,false);
 //						content = cleaner.getCompactXmlAsString();
 						if(!SmartUtil.isBlankObject(content)){
-							if(content.indexOf("=?")>0){
-								content = MimeUtility.decodeText(content);						
-							}						}
+							content = org.claros.commons.utility.Utility.updateTRChars(content);						
+						}
 						
 						if (modifyOutput) {
 							content = HTMLMessageParser.prepareInlineHTMLContent(email, content);
@@ -191,10 +192,6 @@ public class DumpPartService extends BaseService {
 						byte[] b = baos.toByteArray();
 						sos.write(b);
 						sos.close();
-					} else if (obj instanceof String) {
-						PrintWriter out = response.getWriter();
-						String content = part.getContent().toString();
-						out.write(content);
 					} else if (obj instanceof ByteArrayInputStream) {
 						ServletOutputStream sos = response.getOutputStream();
 						ByteArrayInputStream bais = (ByteArrayInputStream)obj;
@@ -206,6 +203,21 @@ public class DumpPartService extends BaseService {
 						}
 						sos.close();
 						bais.close();
+					} else if (obj instanceof SharedByteArrayInputStream) {
+						ServletOutputStream sos = response.getOutputStream();
+						SharedByteArrayInputStream bais = (SharedByteArrayInputStream)obj;
+						int i = -1;
+						int len = 0;
+						while ((i = bais.read()) != -1) {
+							sos.write(i);
+							len++;
+						}
+						sos.close();
+						bais.close();
+					} else if (obj instanceof String) {
+						PrintWriter out = response.getWriter();
+						String content = part.getContent().toString();
+						out.write(content);
 					}
 				}
 			} else {

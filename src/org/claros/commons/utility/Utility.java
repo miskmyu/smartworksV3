@@ -3,6 +3,8 @@ package org.claros.commons.utility;
 import java.net.URLDecoder;
 import java.util.Locale;
 
+import net.smartworks.util.SmartUtil;
+
 public class Utility {
 	
 	private final static char trChars[] = {'\u0131', '\u0130', '\u015F', '\u015E', '\u011F', '\u011E', 
@@ -163,40 +165,92 @@ public class Utility {
 	 * @param a
 	 * @return
 	 */
+	
+	public static String decodeEUCKRChars(String str){
+		if ((str == null) || (str.length() == 0))
+			return "";
+		String ret = "";
+		String strLowerCase = str.toLowerCase(new Locale("en", "US"));
+		if(strLowerCase.indexOf("=?euc-kr?b?")>-1) {
+			
+			String[] tokens = str.split("\\?=");
+			for(int i=0; i<tokens.length; i++){
+				tokens[i] = tokens[i].trim();
+				String encodingLowerCase = (tokens[i].length()>11) ? tokens[i].substring(0, 11).toLowerCase() : "";
+				if(encodingLowerCase.equals("=?euc-kr?b?")){
+					try{
+						ret = ret + javax.mail.internet.MimeUtility.decodeText(tokens[i] + "?=");
+					}catch(Exception e){}
+				}else if(!SmartUtil.isBlankObject(tokens[i])){
+					ret = ret + tokens[i] + "?=";
+				}
+			}
+			try{
+				ret = javax.mail.internet.MimeUtility.encodeText(ret);
+			}catch (Exception e){}
+		}else{
+			ret = str;
+		}
+		return ret;
+		
+	}
+	
 	public static String updateTRChars(String str) {
 		if ((str == null) || (str.length() == 0))
 			return "";
 		String ret = "";
-		try{
-			ret = javax.mail.internet.MimeUtility.decodeText(str);
-		}
-		catch(Exception e){
-		}
-		String strLowerCase = ret.toLowerCase(new Locale("en", "US"));
-		if(strLowerCase.startsWith("=?iso-8859-9?q?")) {
-			ret = ret.substring(15);
-			if(strLowerCase.endsWith("?=")) {
-				ret = ret.substring(0, ret.length()-2);
-			}
-			else
-			{
-				int pos = -1;
-				while ((pos = ret.indexOf("?=")) != -1) {
-					ret = ret.substring(0, pos) 
-						+ ret.substring(pos+2, ret.length());
+		String strLowerCase = str.toLowerCase(new Locale("en", "US"));
+		if(strLowerCase.indexOf("=?euc-kr?b?")>-1) {
+			
+			String[] tokens = str.split("\\?=");
+			for(int i=0; i<tokens.length; i++){
+				tokens[i] = tokens[i].trim();
+				String encodingLowerCase = (tokens[i].length()>11) ? tokens[i].substring(0, 11).toLowerCase() : "";
+				if(encodingLowerCase.equals("=?euc-kr?b?")){
+					try{
+						ret = ret + javax.mail.internet.MimeUtility.decodeText(tokens[i] + "?=");
+					}catch(Exception e){}
+				}else if(!SmartUtil.isBlankObject(tokens[i])){
+					ret = ret + tokens[i] + "?=";
 				}
 			}
-			try {
-				ret = ret.replace('=', '%');
-				ret = URLDecoder.decode(ret, "iso-8859-9");
-			} catch(Exception ex) { }
-		}
-		for (int i = 0; i < trDirtyChars.length; i++) {
-			int pos = -1;
-			while ((pos = ret.indexOf(trDirtyChars[i])) != -1) {
-				ret = ret.substring(0, pos)
-					+ trCleanChars[i] 
-					+ ret.substring(pos+1, ret.length());
+		}else{
+			
+			try{
+				ret = javax.mail.internet.MimeUtility.decodeText(str);
+//				ret = javax.mail.internet.MimeUtility.decodeText(new String(str.getBytes("8859_1"),"KSC5601"));
+//				ret = new String(ret.getBytes("8859_1"),"KSC5601");
+//				String subject2 = new String(ret.getBytes(),"KSC5601");
+//				String subject3 = new String(ret.getBytes(),"KSC5601");
+			}
+			catch(Exception e){
+			}
+			strLowerCase = ret.toLowerCase(new Locale("en", "US"));
+			if(strLowerCase.startsWith("=?iso-8859-9?q?")) {
+				ret = ret.substring(15);
+				if(strLowerCase.endsWith("?=")) {
+					ret = ret.substring(0, ret.length()-2);
+				}
+				else
+				{
+					int pos = -1;
+					while ((pos = ret.indexOf("?=")) != -1) {
+						ret = ret.substring(0, pos) 
+							+ ret.substring(pos+2, ret.length());
+					}
+				}
+				try {
+					ret = ret.replace('=', '%');
+					ret = URLDecoder.decode(ret, "iso-8859-9");
+				} catch(Exception ex) { }
+			}		
+			for (int i = 0; i < trDirtyChars.length; i++) {
+				int pos = -1;
+				while ((pos = ret.indexOf(trDirtyChars[i])) != -1) {
+					ret = ret.substring(0, pos)
+						+ trCleanChars[i] 
+						+ ret.substring(pos+1, ret.length());
+				}
 			}
 		}
 		return ret;

@@ -83,8 +83,6 @@ import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.util.StringUtils;
 
-import com.tmax.tibero.jdbc.TbSQLException;
-
 public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 
 	private ISwfManager swfManager;
@@ -893,25 +891,13 @@ public class SwdManagerImpl extends AbstractManager implements ISwdManager {
 			objList.toArray(objs);
 			return objs;
 		} catch (SQLGrammarException e) {
-			
-			if (e.getSQLException() instanceof TbSQLException) {
-				if(e.getSQLState().equals("42000")) {
-					this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
-					this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-					this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
-					this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
-					this.addTableColumn("", domain.getTableName(), "hits", "int");
-					return this.getRecords(user, cond, level);
-				}
-			} else {
-				if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
-					this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
-					this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
-					this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
-					this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
-					this.addTableColumn("", domain.getTableName(), "hits", "int");
-					return this.getRecords(user, cond, level);
-				}
+			if(e.getSQLState().equals("42S22") || e.getSQLState().equals("42703")) {
+				this.addTableColumn("", domain.getTableName(), "workspaceId", "varchar(100)");
+				this.addTableColumn("", domain.getTableName(), "workspaceType", "varchar(50)");
+				this.addTableColumn("", domain.getTableName(), "accessLevel", "varchar(50)");
+				this.addTableColumn("", domain.getTableName(), "accessValue", "varchar(4000)");
+				this.addTableColumn("", domain.getTableName(), "hits", "int");
+				return this.getRecords(user, cond, level);
 			}
 			if (query != null)
 				logger.error("Query: " + query.getQueryString());

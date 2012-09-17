@@ -248,8 +248,7 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .gray_style th {background-color:#f5f5f5; font-weight: bold; white-space:nowrap}
 .gray_style td { background-color:#FFF; border-bottom:none; padding: 2px 8px}
 
-.pos_works {left:40px; top:1px; position:relative; z-index:20}
-.det_title {padding:5px 0}
+
 
 /* 상단 날짜 */	
 .tab_portletx {color:#ffffff; text-align:center; vertical-align:middle; padding-top:10px}

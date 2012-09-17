@@ -701,10 +701,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					if(!SmartUtil.isBlankObject(sender)){
 						int start = sender.indexOf("<");
 						int end = sender.indexOf(">");
-						if(start == -1 || end == -1)
+						if(start == -1 || end == -1){
 							senderId = sender;
-						else
+						}else{
 							senderId = sender.substring(start+1, end);
+							sender = sender.substring(0, start-1);
+						}
 					}
 					
 					// start -- added by sjlee
@@ -717,30 +719,29 @@ public class MailServiceImpl extends BaseService implements IMailService {
 							for(int j=0; j<receiversArr.length; j++){
 								String receiver = receiversArr[j];
 								String receiverId = null;
-								if(!SmartUtil.isBlankObject(receiversArr[j])){
-									int start = receiversArr[j].lastIndexOf("<");
-									int end = receiversArr[j].lastIndexOf(">");
-									if(start == -1 || end == -1)
-										receiverId = receiversArr[j];
-									else
-										receiverId = receiversArr[j].substring(start+1, end);
+								if(!SmartUtil.isBlankObject(receiver)){
+									int start = receiver.lastIndexOf("<");
+									int end = receiver.lastIndexOf(">");
+									if(start == -1 || end == -1){
+										receiverId = receiver;
+									}else{
+										receiverId = receiver.substring(start+1, end);
+										receiver = receiver.substring(0, start-1);
+									}
 								}
-								receivers[j] = new UserInfo(receiverId, receiver);
+								receivers[j] = new UserInfo(receiverId, org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(receiver)));
 							}
 						}
 					}					
 					// end -- added by sjlee
-					String subject = mailContent.getSubject();
+					String subject = org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(mailContent.getSubject()));
 					if(SmartUtil.isBlankObject(subject)){
 						subject = SmartMessage.getString("mail.title.no.subject");
 					}else{
-						if(subject.indexOf("=?")>0){
-							subject = MimeUtility.decodeText(subject);						
-						}
 						subject = subject.replaceAll("\"", "\'");
 					}
 					mailInstanceInfo.setSubject(subject);
-					mailInstanceInfo.setSender(new UserInfo(senderId, sender));
+					mailInstanceInfo.setSender(new UserInfo(senderId, org.claros.intouch.common.utility.Utility.htmlCheck(org.claros.commons.utility.Utility.updateTRChars(sender))));
 					mailInstanceInfo.setReceivers(receivers);
 					if(!SmartUtil.isBlankObject(mailContent.getSentDate()))
 						mailInstanceInfo.setSendDate(new LocalDate(mailContent.getSentDate().getTime()-TimeZone.getDefault().getRawOffset()));
@@ -1073,9 +1074,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				if (subject == null || subject.equals("")) {
 					subject = SmartMessage.getString("mail.title.no.subject");
 				}
-				if(subject.indexOf("=?")>0){
-					subject = MimeUtility.decodeText(subject);						
-				}
 
 				InternetAddress addrFrom = null;
 				InternetAddress[] addrTo = null;	
@@ -1180,6 +1178,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									cleaner.clean(false,false);
 									mailContent = cleaner.getCompactXmlAsString();
 									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
+									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
 									continue;
 								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
 									mailContent = "";
@@ -1191,16 +1190,12 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									cleaner.setUseCdataForScriptAndStyle(false);
 									cleaner.clean(true,false);
 									mailContent = cleaner.getXmlAsString();
+									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
 									continue;
 								}
 							}	
 
 							String fileName = org.claros.commons.utility.Utility.updateTRChars(tmp.getFilename());
-							if(fileName.contains("=?")){
-								fileName = new String(fileName.getBytes("8859_1"),"euc-kr");
-							}else{
-								fileName = MimeUtility.decodeText(fileName);
-							}
 							if( !fileName.equals("Html Body")){
 								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
 								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
@@ -1216,12 +1211,6 @@ public class MailServiceImpl extends BaseService implements IMailService {
 					for(int j=0; j<count; j++){
 						finalAttachments[j] = attachments[j];
 					}
-				}
-				if(mailContent != null && !mailContent.equals("")){
-//					mailContent = mailContent.replace('\"', '\'');
-//					mailContent = mailContent.replace("&lt;", "<");
-//					mailContent = mailContent.replace("&gt;", ">");
-					
 				}
 				instance.setMailContents(mailContent);
 				instance.setAttachments(finalAttachments);
@@ -1365,15 +1354,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 			ArrayList parts = new ArrayList();
 			EmailPart bodyPart = new EmailPart();
-//			bodyPart.setContentType("text/html; charset=UTF-8");
-			bodyPart.setContentType("text/html; charset=EUC-KR");
+			bodyPart.setContentType("text/html; charset=UTF-8");
+//			bodyPart.setContentType("text/html; charset=EUC-KR");
 			/*
 			HtmlCleaner cleaner = new HtmlCleaner(body);
 			cleaner.clean(false,false);
 			*/
 			
-//			body = body + "<br/><br/><br/><br/>" +  auth.getSignature();
-
 			bodyPart.setContent(body);
 			parts.add(0, bodyPart);
 			
@@ -1420,6 +1407,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						
 					} catch (Exception e) {
 						e.printStackTrace();
+						throw e;
 					}
 				}
 				parts.addAll(newLst);
@@ -1441,6 +1429,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	

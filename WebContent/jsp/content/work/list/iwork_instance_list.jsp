@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.text.NumberFormat"%>
 <%@page import="net.smartworks.model.instance.SortingField"%>
@@ -133,6 +134,7 @@
 										<%}else if(data.getFieldType().equals(FormField.TYPE_IMAGE) ||
 													data.getFieldType().equals(FormField.TYPE_RICHTEXT_EDITOR) ||
 													data.getFieldType().equals(FormField.TYPE_DATA_GRID)){%>
+										<%}else if(data.getFieldType().equals(FormField.TYPE_CHECK_BOX)){%><%=(data.getValue() != null && data.getValue().equals("true")) ? SmartMessage.getString("common.title.boolean.true") : SmartMessage.getString("common.title.boolean.false")%>
 										<%}else{%><%=CommonUtil.toNotNull(data.getValue())%><%} %>
 										<%
 										if(displayFields[count++].getId().equals(work.getKeyField().getId())){

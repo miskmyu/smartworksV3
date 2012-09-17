@@ -8,16 +8,8 @@
 
 package net.smartworks.server.engine.worklist.manager.impl;
 
-import java.io.BufferedWriter;
-import java.io.CharArrayReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Proxy;
 import java.math.BigInteger;
 import java.sql.Clob;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,9 +35,6 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.engine.jdbc.SerializableClobProxy;
-
-import com.tmax.tibero.jdbc.TbClob;
 
 public class WorkListManagerImpl extends AbstractManager implements IWorkListManager {
 
