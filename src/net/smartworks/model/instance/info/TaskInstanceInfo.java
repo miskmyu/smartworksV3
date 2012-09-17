@@ -160,7 +160,14 @@ public class TaskInstanceInfo extends InstanceInfo {
 		}
 		return false;
 	}
-
+	
+	public boolean isTaskForMe(String userId){
+		if(	!SmartUtil.isBlankObject(this.getAssignee()) && this.getAssignee().getId().equals(userId)){
+			return true;
+		}
+		return false;
+	}
+	
 	public String getContent() {
 		return content;
 	}

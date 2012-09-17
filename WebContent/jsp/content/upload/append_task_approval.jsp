@@ -218,6 +218,7 @@
 							<%
 							for(TaskInstanceInfo task : tasks){
 								if(!task.getApprovalId().equals(approvalInstId)) continue;
+								if(task.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED && (task.getStatus() == TaskInstance.STATUS_COMPLETED || !task.isTaskForMe(cUser.getId()))) continue;
 								UserInfo owner = task.getAssignee();
 								String statusImage = "";
 								String statusTitle = "";

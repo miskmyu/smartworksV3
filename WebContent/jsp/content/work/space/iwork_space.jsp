@@ -49,6 +49,7 @@
 	TaskInstanceInfo[] tasks = instance.getTasks();
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
+	String approvalTaskInstId = null;
 	if(tasks != null && instance.getStatus() != Instance.STATUS_REJECTED && instance.getStatus() != Instance.STATUS_REJECTED){
 		if(!SmartUtil.isBlankObject(taskInstId)){
 			for(TaskInstanceInfo task : tasks){
@@ -57,6 +58,7 @@
 					break;
 				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId, null)){
 					approvalTask = task;
+					approvalTaskInstId = taskInstId;
 					break;
 				}
 			}
@@ -65,6 +67,12 @@
 			approvalTask = instance.getMyRunningApprovalTask();
 			if(!SmartUtil.isBlankObject(approvalTask)){
 				taskInstId = approvalTask.getId();
+				approvalTaskInstId = taskInstId;
+			}else{
+				approvalTask = instance.getApprovalTask();
+				if(!SmartUtil.isBlankObject(approvalTask)){
+					approvalTaskInstId = approvalTask.getId();
+				}
 			}
 		}
 		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(forwardedTask)){
@@ -185,7 +193,7 @@
 					if(approvalTask!=null || instance.isApprovalWork()){
 					%>
 						<jsp:include page="/jsp/content/upload/append_task_approval.jsp">
-							<jsp:param value="<%=taskInstId %>" name="taskInstId"/>
+							<jsp:param value="<%=approvalTaskInstId %>" name="taskInstId"/>
 						</jsp:include>
 					<%
 					}
