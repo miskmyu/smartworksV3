@@ -2596,6 +2596,8 @@ public class ModelConverter {
 			taskInstInfo.setComments(swTask.getDocument());
 			taskInstInfo.setContent(swTask.getExtendedPropertyValue("workContents"));
 			taskInstInfo.setForwardId(swTask.getForwardId());
+			if (!CommonUtil.isEmpty(swTask.getApprovalId()))
+				taskInstInfo.setApprovalId(swTask.getApprovalId());
 			taskInstInfo.setAssigner(getUserInfoByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
 		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
 			taskType = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
