@@ -21,6 +21,8 @@ import org.claros.commons.mail.models.EmailSensitivity;
 import org.claros.commons.mail.utility.Utility;
 import org.claros.commons.utility.Formatter;
 
+import sun.net.www.content.text.plain;
+
 /**
  * @author Umut Gokbayrak
  *
@@ -126,7 +128,7 @@ public class MessageParser {
 		if (p == null) return null;
 		System.setProperty("mail.mime.base64.ignoreerrors", "true");		
 		try {
-            if (!p.isMimeType("text/rfc822-headers") && p.isMimeType("text/*")) {
+            if (!p.isMimeType("text/rfc822-headers") && !p.isMimeType("text/rtf") && p.isMimeType("text/*")) {
             	try {
                     EmailPart myPart = new EmailPart();
                     myPart.setSize(p.getSize());
@@ -167,7 +169,7 @@ public class MessageParser {
                 } catch (Exception e) {
                     log.error("Part is mimeType multipart/* but exception occured", e);
                 }
-		} else if (p.isMimeType("message/rfc822")) {
+            } else if (p.isMimeType("message/rfc822")) {
             	fetchParts((Part) p.getContent(), parts);
             } else {
             	try {

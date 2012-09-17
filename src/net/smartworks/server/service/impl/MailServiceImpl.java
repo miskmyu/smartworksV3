@@ -1397,11 +1397,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								for(int att=0; att<instance.getAttachments().length; att++){
 									MailAttachment attachment = instance.getAttachments()[att];
 									if(attachment.getPart().getId() == tmp.getId()){
-										EmailPart part = attachment.getPart();;
-										tmp.setDisposition(part.getDisposition());
-										tmp.setDataSource(part.getDataSource());
-										tmp.setContent(part.getContent());
-//										tmp = attachment.getPart();
+										tmp = attachment.getPart();
 										break;
 									}
 								}
@@ -1411,6 +1407,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 						
 					} catch (Exception e) {
 						e.printStackTrace();
+						throw e;
 					}
 				}
 				parts.addAll(newLst);
@@ -1432,6 +1429,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	

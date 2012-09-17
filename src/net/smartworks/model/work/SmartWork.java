@@ -189,6 +189,14 @@ public class SmartWork extends Work {
 		return true;
 	}
 	
+	public boolean canIStop(){
+		if(SmartUtil.isBlankObject(this.editingUser)) return false;
+		String currentUserId = SmartUtil.getCurrentUser().getId();
+		if(isEditing && currentUserId.equals(this.editingUser.getId()))
+			return true;
+		return false;
+	}
+	
 	public boolean amIBuilderUser(){
 		if(SmartUtil.getCurrentUser().getUserLevel() > User.USER_LEVEL_INTERNAL_USER) return true;
 		if(SmartUtil.isBlankObject(builderPolicy) || !builderPolicy.isCustomChecked() || SmartUtil.isBlankObject(builderPolicy.getCustoms())) return false;

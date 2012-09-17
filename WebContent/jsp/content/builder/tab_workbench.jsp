@@ -120,8 +120,8 @@
 							SmartMessage.getString("builder.title.service_started") : 
 							SmartMessage.getString("builder.title.service_stopped");							
 					String editingStatus = (isEditable) ? 
-							SmartMessage.getString("builder.title.editable") : 
-							SmartMessage.getString("builder.title.not_editable");
+							SmartMessage.getString("builder.title.editable") : (work.canIStop() ? SmartMessage.getString("builder.title.editing") : 
+							SmartMessage.getString("builder.title.not_editable"));
 					String myCategoryId = (SmartUtil.isBlankObject(work.getMyCategory())) ? "" : work.getMyCategory().getId();
 					String myGroupId = (SmartUtil.isBlankObject(work.getMyGroup())) ? "" : work.getMyGroup().getId();
 					%>
@@ -152,7 +152,7 @@
 									<span class="txt_btn_end"></span>
 								</a>
 							</span>
-							<span class="btn_gray" <%if(!work.isEditing()){%>style="display:none"<%} %>>
+							<span class="btn_gray" <%if(!work.canIStop()){%>style="display:none"<%} %>>
 								<a href="" class="js_stop_work_editing">
 									<span class="txt_btn_start"></span>
 										<span class="txt_btn_center"><fmt:message key="builder.button.stop_edit"/></span>
