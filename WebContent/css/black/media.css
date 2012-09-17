@@ -9,8 +9,8 @@
 	.btn_gray .txt_btn_center {line-height: 17px}
 	.icon_btn_tail {line-height: 22px} /* Button */
 	
-	.pop_print_section {height:460px} /* Pop Print */
-	.pop_print {min-height:450px; overflow-y:auto}
+	.pop_print_section {height:430px; overflow-y:auto} /* Pop Print */
+	.pop_print {min-height:430px; overflow-y:auto}
 	}
 
 
