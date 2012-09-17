@@ -86,12 +86,14 @@
 		approvalLine = smartWorks.getApprovalLineById(null);		
 	}
 
+	boolean isForwarded = SmartUtil.isBlankObject(approvalTask) ? false : (approvalTask.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) ? true : false;
+	String forwardId = SmartUtil.isBlankObject(approvalTask) ? "" : approvalTask.getForwardId();
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
-<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalInstId="<%=approvalInstId %>" taskInstId="<%=taskInstId%>" >
+<div class="js_append_task_approval_page" workInstId="<%=workInstId %>" approvalInstId="<%=approvalInstId %>" taskInstId="<%=taskInstId%>" forwardId="<%=forwardId%>">
 	<!-- 결재선 Section -->
 	<div class="approval_section">
 		<div class="tit"><span><fmt:message key="common.button.approval"/></span></div>
@@ -205,7 +207,7 @@
 				if (workInstance != null)
 					isReturned = (workInstance.getStatus()==Instance.STATUS_RETURNED);
 				%>
-				isReturned="<%=isReturned%>">
+				isReturned="<%=isReturned%>" isForwarded="<%=isForwarded%>">
 			</div>
 			<%
 			if(!SmartUtil.isBlankObject(approvalInstId) && !SmartUtil.isBlankObject(tasks)){
@@ -283,7 +285,11 @@
 										<span class="approval_stage"><%=approvalTask.getName() %></span>
 										<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 							        	<span class="comment_box">
-											<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+							        		<%if(isForwarded){ %>
+												<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='forward.message.leave_comment'/>"></textarea>
+											<%}else{ %>
+												<textarea style="width:79%" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='approval.message.leave_comment'/>"></textarea>
+											<%} %>
 							        	</span>	
 							       </div>							
 								</div>
