@@ -116,6 +116,15 @@ function logout() {
 				</a>
 			</li>
 			<!-- 쪽지 알림 영역 //-->
+			
+			<!-- 메모 알림 영역 
+			<li class="icon_memo">
+				<a id="" href=""
+						title=""> 
+		 				<em class="icon_number"><%=notices[Notice.TYPE_MESSAGE].getLength()%><span></span></em> 
+				</a>
+			</li>
+			<!-- 메모 알림 영역 //-->
 	
 			<!-- 댓글 알림 영역  -->
 			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. --> 

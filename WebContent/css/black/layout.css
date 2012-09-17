@@ -23,30 +23,35 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 .notice_icons {display:block; height:29px; float:left; z-index:40}
 .notice_icons a:link, a:visited, a:hover, a:focus, a:active {text-decoration: none}
 .notice_icons li {float:left; margin-right:4px; width:34px; height:31px}
+.notice_icons li a {display:block; height:29px; z-index:40; position:relative}
 .notice_icons > span {vertical-align:bottom}
-.icon_info a {background: url("../../images/header_nico.png") no-repeat scroll -5px -14px transparent; display:block; height:29px; position:relative}
-.icon_info a:hover  {background: url("../../images/header_nico.png") no-repeat scroll -5px -55px transparent; display:block; height:29px; position:relative}
-.icon_info .current, .icon_info a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -5px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_info a {background: url("../../images/header_nico.png") no-repeat scroll -5px -14px transparent}
+.icon_info a:hover  {background: url("../../images/header_nico.png") no-repeat scroll -5px -55px transparent}
+.icon_info .current, .icon_info a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -5px -94px transparent}
 
-.icon_note a {background: url("../../images/header_nico.png") no-repeat scroll -42px -14px transparent; display:block; height:29px; position:relative}
-.icon_note a:hover {background: url("../../images/header_nico.png") no-repeat scroll -42px -55px transparent; display:block; height:29px; position:relative}
-.icon_note .current, .icon_note a.current:hover{background: url("../../images/header_nico.png") no-repeat scroll -42px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_note a {background: url("../../images/header_nico.png") no-repeat scroll -42px -14px transparent}
+.icon_note a:hover {background: url("../../images/header_nico.png") no-repeat scroll -42px -55px transparent}
+.icon_note .current, .icon_note a.current:hover{background: url("../../images/header_nico.png") no-repeat scroll -42px -94px transparent}
 
-.icon_reply a {background: url("../../images/header_nico.png") no-repeat scroll -79px -14px transparent; display:block; height:29px; position:relative}
-.icon_reply a:hover {background: url("../../images/header_nico.png") no-repeat scroll -79px -55px transparent; display:block; height:29px; position:relative}
-.icon_reply .current, .icon_reply a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -79px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_memo a {background: url("../../images/header_nico.png") no-repeat scroll -232px -14px transparent}
+.icon_memo a:hover {background: url("../../images/header_nico.png") no-repeat scroll -232px -55px transparent}
+.icon_memo .current, .icon_memo a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -232px -94px transparent}
 
-.icon_assworks a {background: url("../../images/header_nico.png") no-repeat scroll -116px -14px transparent; display:block; height:29px; position:relative}
-.icon_assworks a:hover {background: url("../../images/header_nico.png") no-repeat scroll -116px -55px transparent; display:block; height:29px; position:relative}
-.icon_assworks .current, .icon_assworks a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -116px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_reply a {background: url("../../images/header_nico.png") no-repeat scroll -79px -14px transparent}
+.icon_reply a:hover {background: url("../../images/header_nico.png") no-repeat scroll -79px -55px transparent}
+.icon_reply .current, .icon_reply a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -79px -94px transparent}
 
-.icon_mail a {background: url("../../images/header_nico.png") no-repeat scroll -153px -14px transparent; display:block; height:29px; position:relative}
-.icon_mail a:hover {background: url("../../images/header_nico.png") no-repeat scroll -153px -55px transparent; display:block; height:29px; position:relative}
-.icon_mail .current, .icon_mail a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -153px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_assworks a {background: url("../../images/header_nico.png") no-repeat scroll -116px -14px transparent}
+.icon_assworks a:hover {background: url("../../images/header_nico.png") no-repeat scroll -116px -55px transparent}
+.icon_assworks .current, .icon_assworks a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -116px -94px transparent}
 
-.icon_saved a {background: url("../../images/header_nico.png") no-repeat scroll -190px -14px transparent; display:block; height:29px; position:relative}
-.icon_saved a:hover {background: url("../../images/header_nico.png") no-repeat scroll -190px -55px transparent; display:block; height:29px; position:relative}
-.icon_saved .current, .icon_saved a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -190px -94px transparent; display:block; height:29px; z-index:40; position:relative}
+.icon_mail a {background: url("../../images/header_nico.png") no-repeat scroll -153px -14px transparent}
+.icon_mail a:hover {background: url("../../images/header_nico.png") no-repeat scroll -153px -55px transparent}
+.icon_mail .current, .icon_mail a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -153px -94px transparent}
+
+.icon_saved a {background: url("../../images/header_nico.png") no-repeat scroll -190px -14px transparent}
+.icon_saved a:hover {background: url("../../images/header_nico.png") no-repeat scroll -190px -55px transparent}
+.icon_saved .current, .icon_saved a.current:hover {background: url("../../images/header_nico.png") no-repeat scroll -190px -94px transparent}
 
 .icon_number { 
 	background: url("../../images/header_nico.png") no-repeat scroll -321px -102px transparent; 
@@ -109,6 +114,7 @@ body, #nav { background: url("../../images/bg_body.png") repeat-y #ece9e2}
 
 /*Search-white */
 .srch_wh {background: none repeat scroll 0 0 #FFF; border-color: #c7c7c7; border-style: solid; border-width: 1px; height:16px}
+.srch_wh input[type="text"] { height:14px}
 .srch_wh .nav_input {width:155px; background-color: #FFF; color: #999897; padding:1px; margin: 0}
 .srch_wh button, .srch_wh .srch_icon, .mail_srch  button {
 	background-color:#FFFFFF; background:url("../../images/btn_srch_w.gif") no-repeat 0 0 transparent; border:0 none; cursor:pointer;  height:13px;
@@ -631,11 +637,10 @@ margin: 0 auto}
 .red_stroke {background: url("../../images/bgRoundRedStrokeLeft.gif") no-repeat; height:40px; text-align:center}
 .red_stroke .red_stroke_right {background: url("../../images/bgRoundRedStrokeRight.gif") no-repeat; width:15px; height:40px; float:right}
 .red_tab_content {
-	background: url("../../images/bgRoundRedContentLeft.gif") no-repeat; margin-top:3px; padding:6px 0 0 25px; display:inline-block; height:30px;
-	text-align:center; color:#fff; font-size:14px; font-weight:bold
+	background: url("../../images/bgRoundRedContentLeft.gif") no-repeat; margin-top:3px; padding-left: 30px; display:inline-table; height:30px;
+	text-align:center; color:#fff; font-size:14px; font-weight:bold; line-height: 29px;
 }
-.red_tab_content .right_cap {background: url("../../images/bgRoundRedContentRight.gif") no-repeat; width:27px; height:30px; position:relative; top:-6px; float:right}
-@media screen and (-webkit-min-device-pixel-ratio:0) {.red_tab_content .right_cap {top:-22px; left:15px}}
+.red_tab_content .right_cap {background: url("../../images/bgRoundRedContentRight.gif") no-repeat; width:27px; height:30px; float:right}
 
 /* Work ING, Communities Setting - Title */
 #work_ing {margin:0 20px}
