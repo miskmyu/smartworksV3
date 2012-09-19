@@ -17,6 +17,7 @@ CREATE TABLE sworguser (
 	id character varying(50) NOT NULL,
 	companyid character varying(50),
 	deptid character varying(50),
+	adjunctDeptIds character varying(500),
 	roleid character varying(50),
 	authid character varying(50),
 	empno character varying(50),
@@ -60,6 +61,12 @@ CREATE TABLE sworgdept (
 	createdtime timestamp,
 	modifier	character varying(50),
 	modifiedtime timestamp,
+	picture character varying(50),
+	workspaceid character varying(100),
+	workspacetype character varying(50),
+	accesslevel character varying(50),
+	accessvalue character varying(4000),
+	hits integer,
 	primary key (id)
 );
 
@@ -158,6 +165,8 @@ CREATE TABLE swpackage (
 	type character varying(20),
 	status character varying(30),
 	latestdeployedyn char(1),
+	helpUrl character varying(500),
+	manualFileName character varying(100),
 	creator character varying(30),
 	createdtime timestamp,
 	modifier character varying(30),
@@ -475,13 +484,15 @@ CREATE TABLE swdomain (
 	tblname character varying(100),
 	keycolumn character varying(100),
 	titlefieldid character varying(50),
-	keyDuplicable bool,
+	keyDuplicable bool default '0',
 	masterid character varying(50),
 	masterfieldid character varying(50),
 	systemdomainyn char(1),
 	publishmode character varying(10),
 	primary key (id)
 );
+
+
 
 CREATE TABLE swremoveddomain (
 	formid character varying(50) NOT NULL,
@@ -1105,7 +1116,8 @@ CREATE TABLE swmenuitem(
 	modifiedtime timestamp without time zone NULL,
 	itmseq int NOT NULL,
 	primary key (objid, itmseq)
-);
+)
+;
 
 CREATE TABLE swmenuitemlist(
 	objid character varying(50) NOT NULL ,
@@ -1226,7 +1238,8 @@ CREATE TABLE apraprdef(
 	modifier character varying(50),
 	modifiedtime timestamp without time zone NULL,
 	defseq int NOT NULL,
-	primary key (objid, defseq)
+	constraint apraprdef_pkey primary key (objid, defseq),
+	constraint fkaprapprovaldef foreign key (objid) references apraprlinedef (objid)
 );
 
 
@@ -1505,7 +1518,9 @@ CREATE TABLE swwebappserviceparameter(
 	parametertype character varying(150),
 	type character varying(50),
 	webseq int NOT NULL,
-	primary key (objid, webseq)
+	constraint swwebappserviceparameter_pkey primary key (objid, webseq),
+	constraint fkwebappservice foreign key (objid)
+	references swwebappservice (objid)
 );
 
 
@@ -1529,7 +1544,9 @@ CREATE TABLE swwebserviceparameter(
 	parametertype character varying(150),
 	type character varying(50),
 	webseq int NOT NULL,
-	primary key (objid, webseq)
+	constraint swwebserviceparameter_pkey primary key (objid, webseq),
+	constraint fkwebservice foreign key (objid)
+	references swwebservice (objid)
 );
 
 --CREATE TABLE updupd(  
@@ -2208,6 +2225,8 @@ CREATE TABLE SWOrgGroup (
 	status	character varying(1),
 	picture character varying(100),
 	description	character varying(4000),
+	maxMember int,
+	autoApproval bool,
 	creator	character varying(50),
 	createdTime	timestamp without time zone,
 	modifier	character varying(50),
@@ -2291,13 +2310,7 @@ CREATE TABLE SwLoginUser (
 	loginTime timestamp without time zone,
 	primary key (userId)
 );
-
-CREATE SEQUENCE folder_db_objects_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
+CREATE SEQUENCE folder_db_objects_seq INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 --메일관련 테이블 Start
 CREATE TABLE folder_db_objects (
     id bigint DEFAULT nextval('folder_db_objects_seq'::regclass) NOT NULL,
@@ -2307,13 +2320,7 @@ CREATE TABLE folder_db_objects (
     folder_type int NOT NULL,
     primary key (id)
 );
-
-CREATE SEQUENCE msg_db_objects_seq
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
+CREATE SEQUENCE msg_db_objects_seq INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 CREATE TABLE msg_db_objects (
     id bigint DEFAULT nextval('msg_db_objects_seq'::regclass) NOT NULL,
     uid character varying(100),
@@ -2339,15 +2346,7 @@ CREATE TABLE msg_db_uids (
     username character varying(255) NOT NULL,
     uid character varying(100) NOT NULL
 );
-
-
-CREATE SEQUENCE msg_rules_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
+CREATE SEQUENCE msg_rules_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
 
 CREATE TABLE msg_rules (
     id bigint DEFAULT nextval('msg_rules_seq'::regclass) NOT NULL,
@@ -2403,13 +2402,19 @@ CREATE TABLE SwMailAccount (
 	mailServerId character varying(50) NOT NULL,
 	mailServerName character varying(100) NOT NULL,
 	mailId character varying(50) NOT NULL,
+	mailUserName character varying(50),
 	mailPassword character varying(50) NOT NULL,
+	mailSignature character varying(4000),
+	useMailSign bool,
+	senderUserTitle character varying(50),
+	mailDeleteFetched character varying(10),
 	creator	character varying(50),
 	createdtime timestamp without time zone,
 	modifier character varying(50),
 	modifiedtime timestamp without time zone,
     primary key (id)
 );
+
 -- 아이디 자동생성
 CREATE TABLE SwAutoIndexDef (
 	objId character varying(50) NOT NULL,
@@ -2439,11 +2444,13 @@ CREATE TABLE SwAutoIndexRuls (
 
 CREATE TABLE SwAutoIndexSeq (
 	objId character varying(50) NOT NULL,
+	instanceId character varying(100),
 	formId character varying(100),
 	fieldId character varying(10),
 	refType character varying(100),
-	refId character varying(100),
-	seqValue character varying(100),
+	idType character varying(50),
+	idValue character varying(200),
+	seq int,
 	creator	character varying(50),
 	createdtime timestamp,
 	modifier character varying(50),
