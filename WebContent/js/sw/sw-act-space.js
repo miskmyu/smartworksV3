@@ -840,17 +840,26 @@ $(function() {
 			return false;
 		}
 		var appendTaskForward = workSpacePage.find('.js_append_task_forward_page');
+		var appendTaskApproval = workSpacePage.find('.js_append_task_approval_page');
 		var comment = appendTaskForward.find('textarea[name="txtaCommentContent"]').attr('value');
-		if(isEmpty(comment)){
+		var comment2 = appendTaskApproval.find('textarea[name="txtaCommentContent"]').attr('value');
+		if(isEmpty(comment) && isEmpty(comment2)){
 			smartPop.showInfo(smartPop.WARN, smartMessage.get("missingCommentTaskForward"));			
 			return false;
 		}
 		smartPop.confirm(smartMessage.get("commentTaskForwardConfirm"), function(){
 			var paramsJson = {};
-			paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
-			paramsJson['forwardId'] = appendTaskForward.attr('forwardId');
-			paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
-			paramsJson['comments'] = comment;
+			if(!isEmpty(comment)){
+				paramsJson['workInstId'] = appendTaskForward.attr('workInstId');
+				paramsJson['forwardId'] = appendTaskForward.attr('forwardId');
+				paramsJson['taskInstId'] = appendTaskForward.attr('taskInstId');
+				paramsJson['comments'] = comment;
+			}else if(!isEmpty(comment2)){
+				paramsJson['workInstId'] = appendTaskApproval.attr('workInstId');
+				paramsJson['forwardId'] = appendTaskApproval.attr('forwardId');
+				paramsJson['taskInstId'] = appendTaskApproval.attr('taskInstId');
+				paramsJson['comments'] = comment2;				
+			}
 			console.log(JSON.stringify(paramsJson));
 			var progressSpan = workSpacePage.find('.js_progress_span');
 			smartPop.progressCont(progressSpan);

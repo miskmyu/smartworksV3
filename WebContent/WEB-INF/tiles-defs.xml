@@ -145,6 +145,12 @@
 		<put-attribute name="content" value="/jsp/content/builder/tab_work_sharing.jsp" />
 	</definition>
 
+	<definition name="situationMonitoring" template="/u-city/jsp/situation_monitoring.jsp">
+		<put-attribute name="content" value="/u-city/jsp/content/situation_list.jsp" />
+	</definition>
+	<definition name="situationDetail" extends="situationMonitoring">
+		<put-attribute name="content" value="/u-city/jsp/content/situation_space.jsp" />
+	</definition>
 
 	<definition name="seraCampus" template="/sera/jsp/layouts.jsp">
 		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />

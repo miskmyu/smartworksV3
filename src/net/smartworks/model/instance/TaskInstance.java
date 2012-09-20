@@ -7,6 +7,7 @@ import net.smartworks.model.work.Work;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 
 public class TaskInstance extends Instance {
 
@@ -40,6 +41,9 @@ public class TaskInstance extends Instance {
 	private String forwardId;
 
 	public String getName() {
+		if(this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
+			return SmartMessage.getString("common.title.forwarded");
+		}
 		return name;
 	}
 	public void setName(String name) {

@@ -604,6 +604,7 @@ function loadTaskApprovalFields() {
 			var drafterName = taskApprovalField.attr("drafterName");
 			var draftDate = taskApprovalField.attr("draftDate");
 			var isReturned = taskApprovalField.attr("isReturned");
+			var isForwarded = taskApprovalField.attr("isForwarded");
 			var readOnly = isEmpty(subject) ? false : true;
 			var actionRequired = taskApprovalField.attr("actionRequired");
 			SmartWorks.FormRuntime.TextInputBuilder.buildEx({
@@ -681,6 +682,9 @@ function loadTaskApprovalFields() {
 					if(isReturned=='true'){
 						iworkSpace.find('.js_btn_submit_approval').show().siblings().hide();
 						iworkSpace.find('.js_btn_reject_approval').show();						
+					}else if(isForwarded=='true'){
+						iworkSpace.find('.js_btn_reply_forward').show().siblings().hide();
+						iworkSpace.find('.js_btn_cancel').show();						
 					}else{
 						iworkSpace.find('.js_btn_approve_approval').show().siblings().hide();
 						iworkSpace.find('.js_btn_return_approval').show();

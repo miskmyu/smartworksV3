@@ -1,0 +1,112 @@
+@charset "utf-8";
+/* Pop Layout*/
+.p_layout {position:absolute}
+.p_layout .point {background: url("../images/pop_point_top.png") no-repeat; width:15px; height:9px; position:relative; left:43px; top:1px}
+
+/* Pop Block */
+.pop_block { border:1px solid #7f8a9b; width:385px; line-height:16px; overflow:hidden; background-color:#FFF; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; margin:0 2px 2px 0}
+.pop_block .header { background-color:#4795c4; height:26px; color:#FFF; font-weight:bold; font-size:14px; padding: 12px 0 0 10px; border-top: 1px solid #63BFDC; border-bottom: 1px solid #63BFDC;}
+.pop_block dt { margin-bottom:5px; font-weight:bold; text-align:left; overflow:hidden}
+.pop_block dd { text-align:left; margin-bottom:10px}
+.pop_block .content_section {padding:10px; margin:5px; background-color:#F5F5F5; text-align:center; overflow:hidden; line-height:18px}
+.pop_block .content_area { display:inline-block; text-align:center; width:100%}
+.pop_block .content_area .text {vertical-align:middle; height:40px; width:100%; display: table-cell}
+.pop_block label { line-height:14px} 
+.pop_block input[type="text"] { padding:2px 5px}
+.bor_line { border-top:2px solid #145f99}
+.bg_w { background-color:#FFF !important}
+
+/* 2단 */
+.left_space { width:250px; float:left; text-align:left}
+.right_space { width:95px; float:right}
+
+/* Icon */
+.icon_pop_Info {background: url("../images/icon.png") no-repeat scroll -585px -199px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Confirm {background: url("../images/icon.png") no-repeat scroll -585px -199px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Warn {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+.icon_pop_Error {background: url("../images/icon.png") no-repeat scroll -585px -249px transparent; display: block; height:34px; display: block; font-size: 14px; font-weight: bold; height: 35px; line-height: 38px; padding: 0 0 0 45px; text-align: left; margin-bottom: 10px}
+
+/* Btn */
+.btn_pop_l {background: url("../images/btn_pop_l.png") no-repeat scroll 0 0; height:27px; float:left; cursor:pointer}
+.btn_pop_r {background: url("../images/btn_pop_r.png") no-repeat scroll 100% 0; height:27px; padding:0 8px; line-height:31px; font-weight:bold; font-size:12px; color:#333333}
+.btn_close a {background: url("../images/icon.png") no-repeat scroll -166px -713px; height:11px; width:11px; margin-right:10px; float:right; display:block}
+.btn_close a:hover {background: url("../images/icon.png") no-repeat scroll -190px -713px}
+
+/* Sera Top Popup */
+.sera_tpop_section {position: absolute}
+.sera_tpop {background:#F1F7FC; border: 1px solid #4C87BE; font-family: dotum,Helvetica,sans-serif; -webkit-box-shadow: 1px 1px 1px #787878; -moz-box-shadow: 1px 1px 1px #787878; box-shadow: 1px 1px 1px #787878; width:230px; color:#666666}
+.sera_tpop li {position:relative; clear:both; overflow:hidden;}
+.sera_tpop li:hover {display:block; background-color:#ffeed9; color:#454545;}
+.sera_tpop li:hover .btn_x {display:block; overflow: hidden; vertical-align:middle;}
+.sera_tpop li .btn_x {display:none}
+.sera_tpop li .info_ms_section {margin:0 10px; padding: 6px 0; overflow: hidden}
+.sera_tpop .info_ms_title {margin:10px 15px 5px; border-bottom: 1px solid #9f9f9f;} /* title */
+.sera_tpop .info_img {border: 1px solid #C7C7C7}
+.sera_tpop .info_img,.sera_tpop .info_list {float:left;}
+.sera_tpop .info_list {padding:0 0 0 5px; width:176px}
+.sera_tpop .more { border:none; background-color:#e0e0e0}
+.sera_tpop .more a { color:#608eba; text-align:center; display:block}
+.sera_tpop .more a:hover {color:#1a5083}
+.sera_tpop li .layer_pop_section {margin:0 10px; padding: 4px 0; overflow: hidden; font-weight:bold; color:#454545} /* Layer Pop Menu */
+.sera_tpop .layer_pop_tit {border-bottom: 1px solid #cccccc; color: #006699; font-weight: bold; line-height: 20px; margin: 5px 10px;}
+
+/* Layer popup list */
+.pop_list_area {border: 1px solid #c7c7c7; text-align: left; background-color: #FFF; margin-top: 1px; font-size: 11px; width:100%}
+.pop_list_area form {overflow-y: auto; max-height: 200px}
+
+.pop_list_area li {}
+.pop_list_area li:hover {text-decoration: none !important;}
+
+.pop_list_area li .dep {padding:4px 0 4px 10px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
+
+.pop_list_area li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
+
+.pop_list_area li .menu_2dep li .dep {padding:2px 0 2px 24px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
+.pop_list_area li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
+
+.pop_list_area li .menu_2dep li .menu_2dep li .dep {padding:2px 0 2px 34px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
+.pop_list_area li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
+
+.pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep {padding:2px 0 2px 44px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%;}
+.pop_list_area li .menu_2dep li .menu_2dep li .menu_2dep li .dep:hover {display:block; background-color:#fffccd;text-decoration: none;}
+
+/* Global Btn Space */
+.glo_btn_space {background-color:#FFF; padding:8px 0; overflow: hidden; margin:0 10px; border-top:1px solid #ededed}
+/* Global Btn Space Button */
+.btn {background-color:#666666; float:right; height:22px; position:absolute;}
+.btn_gray {display:inline-block;}
+.btn_gray .txt_btn_start {background: url("../images/form_btn_default_l.gif") repeat scroll 0 0 transparent;
+			 float:left; height:28px; width:12px;}
+.btn_gray .txt_btn_center {background: url("../images/form_btn_default_c.gif") repeat scroll 0 0 transparent;
+    		float:left; color:#fff; height:28px; padding:0 3px; text-align:center; font-weight:bold; color:#555555; line-height: 28px}
+.btn_gray .txt_btn_end {background: url("../images/form_btn_default_r.gif") repeat scroll 0 0 transparent;
+    		float:left; height:28px; width:12px;}
+
+/* Smart Pop */
+.pop_corner_all{ border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border: 1px solid #c7c7c7; background-color:#FFF; -webkit-box-shadow: 0px 2px 10px #505050;}
+.smart_pop_section {width:390px; border: 1px solid #c7c7c7; background-color:#FFF;}
+.smart_userinfo_section {width:300px; border: 1px solid #c7c7c7; background-color:#FFF;}
+.pop_contents {padding: 10px; overflow:hidden;}
+.pop_title {font-weight:bold; font-size:14px; position:absolute; color:#454545;}
+
+.pop_notice_section {padding-left: 10px; text-align: left; color:#7d7d7d}
+.pop_message_h {padding:10px 0;}
+
+/* Close Btn */
+a .pop_btn_x {background: url("../../images/pop_btn_x.gif") no-repeat scroll left top transparent; border: 0 none; cursor: pointer; height: 15px;
+    padding: 0; position: relative; right: 3px; top:2px; width: 15px; float: right;} 
+a:hover .pop_btn_x {background-color:#e5e5e5;}
+
+/* Policy */
+.policy_wrap {background: url("../images/policy_bg.png") no-repeat scroll 0 0 transparent; border: 1px solid #666666; height: 441px; padding: 140px 25px 0; width: 532px}
+.policy_wrap h2 {color: #FFFFFF; font: bold 14px 'NanumGothic','ngttf'; margin-bottom: 5px}
+.policy_wrap .content {background-color: #FFFFFF; border: 1px solid #1C60A3; height: 130px; line-height: 20px; margin-bottom: 15px; overflow-y: scroll; padding: 10px; text-align: justify; width: 512px}
+
+.joinus_policy_section { border:1px solid #c7c7c7; padding:5px; overflow-y: auto; height:100px; color: #868686}
+
+/* 공지 팝업 */
+.window_pop {padding:0; width:560px; height:100%; }
+.window_pop .header {background:url(../images/window_pop/mail_top_bg.jpg) no-repeat 0 0; width:560px; height:92px; display:block}
+.window_pop .body {background:url(../images/window_pop/mail_bg.jpg) repeat-y 0 0; width:510px; height:auto; display:block; padding:5px 25px; line-height:18px}
+.window_pop .footer {background:url(../images/window_pop/mail_bottom_bg.jpg) no-repeat 0 0; width:760px; height:58px; display:block}
+

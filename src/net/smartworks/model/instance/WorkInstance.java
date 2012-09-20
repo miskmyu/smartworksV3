@@ -131,6 +131,18 @@ public class WorkInstance extends Instance {
 		return null;
 	}
 	
+	public TaskInstanceInfo getApprovalTask(){
+		if(SmartUtil.isBlankObject(tasks)) return null;
+		for(TaskInstanceInfo task : tasks){
+			if(task.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+				&& !SmartUtil.isBlankObject(task.getAssignee()) 
+				&& (task.getStatus() != TaskInstance.STATUS_REJECTED) && (task.getStatus() != TaskInstance.STATUS_ABORTED)){
+					return task;
+				}
+		}
+		return null;
+	}
+	
 	public TaskInstanceInfo getMyRunningForwardedTask(){
 		if(SmartUtil.isBlankObject(tasks)) return null;
 		for(TaskInstanceInfo task : tasks){

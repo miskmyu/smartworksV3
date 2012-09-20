@@ -8,6 +8,7 @@ import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.WorkCategory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
 
 public class TaskInstanceInfo extends InstanceInfo {
@@ -28,6 +29,9 @@ public class TaskInstanceInfo extends InstanceInfo {
 	private String approvalLineId="";
 	
 	public String getName() {
+		if(this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED){
+			return SmartMessage.getString("common.title.forwarded");
+		}
 		return name;
 	}
 	public void setName(String name) {
@@ -134,7 +138,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 	
 	public boolean isRunningForwardedForMe(String userId, String taskInstId){
 		if(	taskInstId.equals(this.getId()) 
-			&& (this.getTaskType() == TaskInstance.TYPE_PROCESS_TASK_FORWARDED || this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED || this.getType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED) 
+			&& (this.getTaskType() == TaskInstance.TYPE_PROCESS_TASK_FORWARDED || this.getTaskType() == TaskInstance.TYPE_INFORMATION_TASK_FORWARDED) 
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
 			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
@@ -148,7 +152,7 @@ public class TaskInstanceInfo extends InstanceInfo {
 		if(SmartUtil.isBlankObject(taskInstId)) taskInstId = this.getId();
 		if(	taskInstId.equals(this.getId())
 			&& (SmartUtil.isBlankObject(processTaskInstId) || (!SmartUtil.isBlankObject(approvalTaskId) && approvalTaskId.equals(processTaskInstId)))
-			&& this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED 
+			&& (this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED || this.getTaskType() == TaskInstance.TYPE_APPROVAL_TASK_FORWARDED)
 			&& !SmartUtil.isBlankObject(this.getAssignee()) 
 			&& this.getAssignee().getId().equals(userId)
 			&& this.getStatus() == TaskInstance.STATUS_RUNNING){
@@ -156,7 +160,14 @@ public class TaskInstanceInfo extends InstanceInfo {
 		}
 		return false;
 	}
-
+	
+	public boolean isTaskForMe(String userId){
+		if(	!SmartUtil.isBlankObject(this.getAssignee()) && this.getAssignee().getId().equals(userId)){
+			return true;
+		}
+		return false;
+	}
+	
 	public String getContent() {
 		return content;
 	}
