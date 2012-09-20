@@ -4217,6 +4217,262 @@ public class InstanceServiceImpl implements IInstanceService {
 
 		return tableColName;
 	}
+	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+
+		try{
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			//TODO workId = category 프로세스 인스턴스정보에는 패키지 컬럼이 없고 다이어 그램 컬럼에 정보가 들어가 있다
+			//임시로 프로세스 다이어그램아이디 필드를 이용하고 프로세스인스턴스가 생성되는 시점(업무 시작, 처리 개발 완료)에 패키지 아이디 컬럼을 추가해 그곳에서 조회하는걸로 변경한다
+			PrcProcessInstCond prcInstCond = new PrcProcessInstCond();
+			if (runningOnly)
+				prcInstCond.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			String filterId = params.getFilterId();
+
+			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
+
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
+
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					if(formFieldId.equalsIgnoreCase("status")) {
+						int rightOperandInt = Integer.parseInt(rightOperand);
+						if(rightOperandInt == Instance.STATUS_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_RETURNED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_COMPLETED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+					}
+
+					filter.setLeftOperandType(formFieldType);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				prcInstCond.setFilter(filters);
+			}
+//모든 패키지이기 때문에 필터아이디가 넘어 올수 없다 각 필터아이디는 workId(packageId)에 따라 붙기 때문에
+//			if(filterId != null) {
+//			}
+//모든 업무패키지의 권한을 따져야 한다면 아래 내용을 수정하여 작성해야함
+//			PkgPackageCond pkgPackageCond = new PkgPackageCond();
+//			pkgPackageCond.setPackageId(workId);
+//			PkgPackage pkgPackage = getPkgManager().getPackage(userId, pkgPackageCond, IManager.LEVEL_LITE);
+//
+//			if(!ModelConverter.isAccessibleAllInstance(ModelConverter.getResourceIdByPkgPackage(pkgPackage), userId))
+//				prcInstCond.setCreationUser(userId);
+//
+//			String[] workSpaceIdIns = ModelConverter.getWorkSpaceIdIns(user);
+//			//prcInstCond.setWorkSpaceIdIns(workSpaceIdIns);
+//
+//			String[] groupIdsByNotBelongToClosedGroup = ModelConverter.getGroupIdsByNotBelongToClosedGroup(user);
+//			prcInstCond.setWorkSpaceIdNotIns(groupIdsByNotBelongToClosedGroup);
+//
+//			prcInstCond.setLikeAccessValues(workSpaceIdIns);
+
+			String searchKey = params.getSearchKey();
+			prcInstCond.setSearchKey(searchKey);
+
+			long totalCount = getPrcManager().getProcessInstExtendsSize(user.getId(), prcInstCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				prcInstCond.setPageNo(currentPage-1);
+
+			prcInstCond.setPageSize(pageSize);
+
+			SortingField sf = params.getSortingField();
+
+			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
+			//한군데에서 관리 하도록 상수로 변경 필요
+			if (sf == null) {
+				sf = new SortingField();
+				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setAscending(false);
+			}
+			String sfColumnNameTemp = sf.getFieldId();
+			
+			if (sfColumnNameTemp.equalsIgnoreCase("status")) {
+				sfColumnNameTemp = "prcStatus"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("subject")) {
+				sfColumnNameTemp = "prcTitle";
+			} else if (sfColumnNameTemp.equalsIgnoreCase("lastTask")) {
+				sfColumnNameTemp = "lastTask_tskname"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("creator")) {
+				sfColumnNameTemp = "prcCreateUser"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("createdTime")) {
+				sfColumnNameTemp = "prcCreateDate"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifier")) {
+				sfColumnNameTemp = "lastTask_tskassignee"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
+				sfColumnNameTemp = "lastTask_tskexecuteDate"; 
+			} else {
+				sfColumnNameTemp = "prcCreateDate";
+			}
+
+			prcInstCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
+
+			PrcProcessInstExtend[] processInstExtends = getPrcManager().getProcessInstExtends(userId, prcInstCond);
+
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+
+			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
+			PWInstanceInfo[] pWInstanceInfos = null;
+
+			if(!CommonUtil.isEmpty(processInstExtends)) {
+				int length = processInstExtends.length;
+				for(int i=0; i<length; i++) {
+					PWInstanceInfo pwInstInfo = new PWInstanceInfo();
+					PrcProcessInstExtend prcInst = processInstExtends[i];
+					pwInstInfo.setId(prcInst.getPrcObjId());
+					pwInstInfo.setOwner(ModelConverter.getUserInfoByUserId(prcInst.getPrcCreateUser()));
+					pwInstInfo.setCreatedDate(new LocalDate(prcInst.getPrcCreateDate().getTime()));
+					int status = -1;
+					if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						status = Instance.STATUS_RUNNING;
+					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						status = Instance.STATUS_COMPLETED;
+					}
+					pwInstInfo.setStatus(status);
+					pwInstInfo.setSubject(prcInst.getPrcTitle());
+					int type = WorkInstance.TYPE_PROCESS;
+					pwInstInfo.setType(type);
+
+					WorkCategoryInfo groupInfo = null;
+					if (!CommonUtil.isEmpty(prcInst.getSubCtgId()))
+						groupInfo = new WorkCategoryInfo(prcInst.getSubCtgId(), prcInst.getSubCtg());
+						
+					WorkCategoryInfo categoryInfo = new WorkCategoryInfo(prcInst.getParentCtgId(), prcInst.getParentCtg());
+					
+					WorkInfo workInfo = new SmartWorkInfo(prcInst.getPrcDid(), prcInst.getPrcName(), SmartWork.TYPE_PROCESS, groupInfo, categoryInfo);
+					pwInstInfo.setWork(workInfo);
+		
+					TaskInstanceInfo lastTaskInfo = null;
+					
+					if (!CommonUtil.isEmpty(prcInst.getLastTask_tskObjId())) {
+						lastTaskInfo = new TaskInstanceInfo();
+						
+						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN) || prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CREATE)) {
+							pwInstInfo.setLastModifiedDate(new LocalDate(prcInst.getLastTask_tskCreateDate().getTime()));
+						} else {
+							pwInstInfo.setLastModifiedDate(new LocalDate(prcInst.getLastTask_tskExecuteDate().getTime()));//마지막태스크 수행일
+						}
+						pwInstInfo.setLastModifier(ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee()));//마지막태스크 수행자
+						
+						String id = prcInst.getLastTask_tskObjId();
+						String subject = prcInst.getLastTask_tskTitle();
+						int tskType = WorkInstance.TYPE_TASK;
+						String name = prcInst.getLastTask_tskName();
+						String assignee = prcInst.getLastTask_tskAssignee();
+						String performer = prcInst.getLastTask_tskAssignee();
+						
+						int tskStatus = -1;
+						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+							tskStatus = Instance.STATUS_COMPLETED;
+						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
+							tskStatus = Instance.STATUS_COMPLETED;
+						}
+						UserInfo owner = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee());
+						UserInfo lastModifier = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee()); 
+						LocalDate lastModifiedDate = new LocalDate((prcInst.getLastTask_tskCreateDate().getTime()));
+						
+						lastTaskInfo.setId(id);
+						lastTaskInfo.setLastModifiedDate(lastModifiedDate);
+						lastTaskInfo.setLastModifier(lastModifier);
+						lastTaskInfo.setOwner(owner);
+						lastTaskInfo.setStatus(tskStatus);
+						lastTaskInfo.setSubject(subject);
+						lastTaskInfo.setType(tskType);
+						lastTaskInfo.setWork(workInfo);
+						lastTaskInfo.setWorkInstance(pwInstInfo);
+						lastTaskInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getLastTask_tskWorkSpaceType(), prcInst.getLastTask_tskWorkSpaceId()));
+						lastTaskInfo.setName(name);
+						lastTaskInfo.setTaskType(tskType);
+						lastTaskInfo.setAssignee(ModelConverter.getUserInfoByUserId(assignee));
+						lastTaskInfo.setPerformer(ModelConverter.getUserInfoByUserId(performer));
+						//WorkInstanceInfo workInstanceInfo = paretProcessInstObj;
+						pwInstInfo.setLastTask(lastTaskInfo);//마지막 태스크
+					}
+					pwInstInfo.setLastTaskCount(prcInst.getLastTask_tskCount());
+					pwInstInfo.setWorkSpace(ModelConverter.getWorkSpaceInfo(prcInst.getPrcWorkSpaceType(), prcInst.getPrcWorkSpaceId()));
+					pwInstanceInfoList.add(pwInstInfo);
+				}
+			}
+
+			if(pwInstanceInfoList.size() > 0) {
+				pWInstanceInfos = new PWInstanceInfo[pwInstanceInfoList.size()];
+				pwInstanceInfoList.toArray(pWInstanceInfos);
+			}
+			instanceInfoList.setInstanceDatas(pWInstanceInfos);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sf);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
+			return instanceInfoList;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;			
+		}
+		
+	}
+	
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
 		
 		try{

@@ -51,6 +51,8 @@ public interface IInstanceService {
 
 	public InstanceInfoList getIWorkInstanceListByFormId(String formId, RequestParams params) throws Exception;
 
+	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
+	
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception;
 
 	public InstanceInfoList getWorkInstanceList(String workSpaceId, RequestParams params) throws Exception;

@@ -463,7 +463,10 @@ public class SmartWorks implements ISmartWorks {
 	public InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception {
 		return instanceService.getIWorkInstanceList(workId, params);
 	}
-
+	@Override
+	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+		return instanceService.getAllPWorkInstanceList(runningOnly, params);
+	}
 	@Override
 	public InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception {
 		return instanceService.getPWorkInstanceList(workId, params);

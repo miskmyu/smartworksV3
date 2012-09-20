@@ -264,6 +264,8 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getIWorkInstanceList(String workId, RequestParams params) throws Exception;
 	
+	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
+	
 	public abstract InstanceInfoList getPWorkInstanceList(String workId, RequestParams params) throws Exception;
 	
 	public abstract InstanceInfoList getWorkInstanceList(String workSpaceId, RequestParams params) throws Exception;
