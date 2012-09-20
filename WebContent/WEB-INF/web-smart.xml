@@ -67,7 +67,7 @@
  	<session-config>
         <session-timeout>-1</session-timeout>
     </session-config>
-    
+
   <servlet>
     <servlet-name>InitiatorBase</servlet-name>
 <!--     <display-name>InitiatorBase</display-name>
@@ -89,38 +89,6 @@
 
   <display-name>intouch2</display-name>
 
-<!--
-   <filter>
-    <filter-name>Compress</filter-name>
-    <filter-class>org.claros.intouch.common.filters.GZIPFilter</filter-class>
-  </filter>
-  
-  <filter-mapping>
-    <filter-name>Compress</filter-name>
-    <url-pattern>*.jsp</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>Compress</filter-name>
-    <url-pattern>*.html</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>Compress</filter-name>
-    <url-pattern>*.css</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>Compress</filter-name>
-    <url-pattern>*.js</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>Compress</filter-name>
-    <url-pattern>*.cl</url-pattern>
-  </filter-mapping>
-
-  <listener>
-    <listener-class>org.claros.intouch.common.filters.SessionListener</listener-class>
-  </listener>
-
- -->
   <servlet>
     <servlet-name>LoginService</servlet-name>
     <servlet-class>org.claros.intouch.profiling.services.LoginService</servlet-class>
@@ -433,11 +401,7 @@
     <servlet-name>UploadFileService</servlet-name>
     <servlet-class>org.claros.intouch.webdisk.services.UploadFileService</servlet-class>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>LoginService</servlet-name>
-    <url-pattern>/profiling/login.cl</url-pattern>
-  </servlet-mapping>
+   
   <servlet-mapping>
     <servlet-name>ListHeadersService</servlet-name>
     <url-pattern>/webmail/listHeaders.cl</url-pattern>
@@ -523,138 +487,8 @@
     <url-pattern>/webmail/attForwardArrange.cl</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>SavePreferencesService</servlet-name>
-    <url-pattern>/preferences/savePreferences.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>LoadPreferencesService</servlet-name>
-    <url-pattern>/preferences/loadPreferences.cl</url-pattern>
-  </servlet-mapping>
-  
-  <!-- CHAT BEGINS -->
-  <servlet-mapping>
-    <servlet-name>Authenticate</servlet-name>
-    <url-pattern>/chat/authenticate.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Contacts</servlet-name>
-    <url-pattern>/chat/contacts.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Listener</servlet-name>
-    <url-pattern>/chat/listener.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Subscriptions</servlet-name>
-    <url-pattern>/chat/subscriptions.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Logout</servlet-name>
-    <url-pattern>/profiling/logout.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Sender</servlet-name>
-    <url-pattern>/chat/sender.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ShowAvatar</servlet-name>
-    <url-pattern>/chat/avatar.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Preferences</servlet-name>
-    <url-pattern>/chat/preferences.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Status</servlet-name>
-    <url-pattern>/chat/status.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Roaster</servlet-name>
-    <url-pattern>/chat/roaster.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetListService</servlet-name>
-    <url-pattern>/contacts/getList.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetContactDetailsService</servlet-name>
-    <url-pattern>/contacts/getContactDetails.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SaveContactService</servlet-name>
-    <url-pattern>/contacts/saveContact.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteContactService</servlet-name>
-    <url-pattern>/contacts/deleteContact.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ExportVcardService</servlet-name>
-    <url-pattern>/contacts/exportVcard.service</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ExportAllContactsService</servlet-name>
-    <url-pattern>/contacts/exportAllContacts.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ImportContactsService</servlet-name>
-    <url-pattern>/contacts/importContacts.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>SaveSenderService</servlet-name>
     <url-pattern>/webmail/saveSender.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>MarkAsReadService</servlet-name>
-    <url-pattern>/chat/markAsRead.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SaveCheckContactService</servlet-name>
-    <url-pattern>/contacts/saveCheckContact.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>LogoutChatService</servlet-name>
-    <url-pattern>/chat/logout.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>CreateNewNoteService</servlet-name>
-    <url-pattern>/notes/createNewNote.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ChangeColorService</servlet-name>
-    <url-pattern>/notes/changeColor.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SetPosService</servlet-name>
-    <url-pattern>/notes/setPos.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SaveNoteService</servlet-name>
-    <url-pattern>/notes/saveNote.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteNoteService</servlet-name>
-    <url-pattern>/notes/deleteNote.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetNotesByFolderService</servlet-name>
-    <url-pattern>/notes/getNotesByFolder.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetNotebooksService</servlet-name>
-    <url-pattern>/notes/getNotebooks.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>AddNotebookService</servlet-name>
-    <url-pattern>/notes/addNotebook.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteNotebookService</servlet-name>
-    <url-pattern>/notes/deleteNotebook.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetRssItemsService</servlet-name>
-    <url-pattern>/rss/getRssItems.cl</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ListNewMailHeadersService</servlet-name>
@@ -664,91 +498,6 @@
     <servlet-name>ImapIdleCheckService</servlet-name>
     <url-pattern>/webmail/imapIdleCheck.service</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetEventService</servlet-name>
-    <url-pattern>/calendar/getEvent.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SaveEventService</servlet-name>
-    <url-pattern>/calendar/saveEvent.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteEventService</servlet-name>
-    <url-pattern>/calendar/deleteEvent.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetEventsService</servlet-name>
-    <url-pattern>/calendar/getEvents.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetTasksService</servlet-name>
-    <url-pattern>/tasks/getTasks.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteTaskService</servlet-name>
-    <url-pattern>/tasks/deleteTask.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ClickTaskService</servlet-name>
-    <url-pattern>/tasks/clickTask.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SaveTaskService</servlet-name>
-    <url-pattern>/tasks/saveTask.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetTaskService</servlet-name>
-    <url-pattern>/tasks/getTask.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>CheckAlertService</servlet-name>
-    <url-pattern>/calendar/checkAlert.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SetReminderToOkService</servlet-name>
-    <url-pattern>/calendar/setReminderOk.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GetFileListService</servlet-name>
-    <url-pattern>/webdisk/getFileList.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ShowImgPreviewService</servlet-name>
-    <url-pattern>/webdisk/showImgPreview.service</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DownloadService</servlet-name>
-    <url-pattern>/webdisk/download.service</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>DeleteItemService</servlet-name>
-    <url-pattern>/webdisk/deleteItem.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>RenameItemService</servlet-name>
-    <url-pattern>/webdisk/renameItem.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>MoveItemService</servlet-name>
-    <url-pattern>/webdisk/moveItem.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ForwardFileService</servlet-name>
-    <url-pattern>/webdisk/forwardFile.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>CreateDirService</servlet-name>
-    <url-pattern>/webdisk/createDir.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>RenameDirService</servlet-name>
-    <url-pattern>/webdisk/renameDir.cl</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>UploadFileService</servlet-name>
-    <url-pattern>/webdisk/uploadFile.cl</url-pattern>
-  </servlet-mapping>
-   
   <jsp-config>
 	  <taglib>
 	    <taglib-uri>http://jakarta.apache.org/taglibs/i18n-1.0</taglib-uri>

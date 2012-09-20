@@ -314,7 +314,10 @@ public class DbInboxControllerImpl extends InboxControllerBase implements InboxC
 										item.setBcc(header.getBccShown());
 										item.setReplyTo(header.getReplyToShown());
 										item.setMultipart(hasAttachment((MimeMessage)msg));
-										item.setSentDate(header.getDate());
+										if(SmartUtil.isBlankObject(header.getDate()))
+											item.setSentDate(new Date());
+										else
+											item.setSentDate(header.getDate());
 										item.setPriority(new Integer(header.getPriority()));
 										item.setSubject(header.getSubject());
 

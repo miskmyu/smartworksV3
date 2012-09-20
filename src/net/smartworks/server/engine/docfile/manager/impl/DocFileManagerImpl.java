@@ -202,6 +202,7 @@ public class DocFileManagerImpl extends AbstractManager implements IDocFileManag
 
 			// 메일 받은날짜의 년, 월 정보를 얻는다.
 			Calendar calendar = Calendar.getInstance();
+			if(SmartUtil.isBlankObject(date)) date = new Date();
 			calendar.setTime(date);
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH) + 1;
