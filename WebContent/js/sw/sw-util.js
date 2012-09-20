@@ -247,7 +247,7 @@ Date.prototype.format = function (mask, utc) {
 };
 
 isEmailAddress = function(emailAddress){
-	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9_\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	if (filter.test(emailAddress)) {
 		return true;
 	}
