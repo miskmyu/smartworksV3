@@ -151,6 +151,9 @@
 	<definition name="situationDetail" extends="situationMonitoring">
 		<put-attribute name="content" value="/u-city/jsp/content/situation_space.jsp" />
 	</definition>
+	<definition name="situationManual" extends="situationMonitoring">
+		<put-attribute name="content" value="/u-city/jsp/content/situation_manual.jsp" />
+	</definition>
 
 	<definition name="seraCampus" template="/sera/jsp/layouts.jsp">
 		<put-attribute name="sera_header" value="/sera/jsp/header.jsp" />

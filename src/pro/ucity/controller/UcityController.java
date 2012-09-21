@@ -44,12 +44,6 @@ public class UcityController extends ExceptionInterceptor {
 		this.smartworks = smartworks;
 	}
 
-	@RequestMapping("/situationMonitoring")
-	public ModelAndView situationMonitoring(HttpServletRequest request, HttpServletResponse response) {
-
-		return SmartUtil.returnMnvSera(request, "u-city/jsp/situation_monitoring.jsp", "situationMonitoring.tiles");
-	}
-
 	@RequestMapping("/loginc")
 	public ModelAndView loginc(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mnv = new ModelAndView();
@@ -75,10 +69,22 @@ public class UcityController extends ExceptionInterceptor {
 		return mnv;
 	}
 
+	@RequestMapping("/situationMonitoring")
+	public ModelAndView situationMonitoring(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/situation_monitoring.jsp", "situationMonitoring.tiles");
+	}
+
 	@RequestMapping("/situationDetail")
 	public ModelAndView situationDetail(HttpServletRequest request, HttpServletResponse response) {
 
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_space.jsp", "situationDetail.tiles");
+	}
+
+	@RequestMapping("/situationManual")
+	public ModelAndView situationManual(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_manual.jsp", "situationManual.tiles");
 	}
 
 }
