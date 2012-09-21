@@ -54,7 +54,7 @@
 	session.setAttribute("requestParams", params);
 	session.setAttribute("workId", workId);
 
-	InstanceInfoList instanceList = smartWorks.getPWorkInstanceList(workId, params);
+	InstanceInfoList instanceList = smartWorks.getAllPWorkInstanceList(false, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />

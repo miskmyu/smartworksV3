@@ -15,6 +15,7 @@
 	<annotation-driven />
 
 	<context:component-scan base-package="net.smartworks" />
+	<context:component-scan base-package="pro.ucity" />
 
 	<beans:bean id="imageServer" class="net.smartworks.util.SmartConfUtil" factory-method="createInstance">
 		<beans:property name="imageServer">
