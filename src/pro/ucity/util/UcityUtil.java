@@ -26,7 +26,7 @@ public class UcityUtil {
 		super();
 	}
 
-	public static Map<String, Object> createRequestBody(TaskInstance taskInstance, Map<String, Object> data){
+	public static Map<String, Object> createStartProcessRB(TaskInstance taskInstance, Map<String, Object> data){
 		if(taskInstance == null || data == null) return null;
 		
 		Map<String, Object> requestBody = new HashMap<String, Object>();
