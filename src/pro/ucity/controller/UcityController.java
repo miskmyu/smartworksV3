@@ -87,4 +87,10 @@ public class UcityController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_manual.jsp", "situationManual.tiles");
 	}
 
+	@RequestMapping("/situationManualEnvOccurrence")
+	public ModelAndView situationManualEnvOccurrence(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_manual_env_occurrence.jsp", "situationManualEnvOccurrence.tiles");
+	}
+
 }

@@ -26,8 +26,9 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
-	String workId = work.getId();
-	SmartDiagram diagram = work.getDiagram();
+// 	String workId = work.getId();
+	String workId = "pkg_9564849550184543b06fa46e3290f296";
+ 	SmartDiagram diagram = work.getDiagram();
 	SmartTaskInfo[] tasks = null;
 	if (diagram != null)
 		tasks = diagram.getTasks();
