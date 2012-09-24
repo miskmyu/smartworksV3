@@ -101,10 +101,9 @@ function logout() {
 <link href="u-city/css/layout.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/detail.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/form.css" type="text/css" rel="stylesheet" />
-<link href="u-city/css/pop.css" type="text/css" rel="stylesheet" />
-<link href="u-city/css/media.css" type="text/css" rel="stylesheet"/>
+<link href="css/black/media.css" type="text/css" rel="stylesheet"/>
 
-<link href="css/ui-lightness/jquery-ui-1s.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />
+<link href="css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" title="ui-theme" />
 <link href="css/ext/ext-all.css" type="text/css" rel="stylesheet" />
 <link href="css/fileuploader/fileuploader.css" type="text/css" rel="stylesheet"/>
 <link href="smarteditor/css/default_kor.css" rel="stylesheet" type="text/css" />

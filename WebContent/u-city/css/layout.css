@@ -1,0 +1,214 @@
+@charset "utf-8";
+
+#wrap {height:auto; width:972px; margin:0; z-index:1;}
+body {background-color: #22282F}
+#content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
+#content a:hover { text-decoration:underline}
+
+/*Search*/	
+.srch {
+	width:170px; height:15px; background-color: #2d353e; color: #999; border:1px solid #13161b; padding:2px 15px 0 7px}
+.srch input[type="text"] {background-color:#2d353e}
+.srch button {
+	background:url("../../images/btn_srch.png") no-repeat;cursor:pointer;height:23px;
+	width:25px;padding:0; position:relative;top:-23px;left:169px;border:0
+}
+.srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat}
+.srch_wsize {margin: 0 5px 0 0;overflow:hidden}
+
+.icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; min-height:18px}
+.icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:18px}
+.icon_pworks {background: url("../../images/icon_pworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_cworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 20px; float: left; min-height:17px}
+.icon_sworks {background: url("../../images/icon_sworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_gworks {background: url("../../images/icon_category.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_iworks {background: url("../../images/icon_iworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_pworks_off {background: url("../../images/icon_pworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_cworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_sworks_off {background: url("../../images/icon_sworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:17px}
+.icon_gworks_off {background: url("../../images/icon_category_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; min-height:17px}
+.icon_iworks_off {background: url("../../images/icon_iworks_off.gif") no-repeat 0 1px transparent; padding:0 0 0 19px;  float: left; min-height:17px}
+.icon_stworks {background: url("../../images/icon_stworks.gif") no-repeat 0 1px transparent; padding:0 0 0 19px; height:17px}
+
+.icon_depart {background: url("../../images/icon_depart.gif") no-repeat 0 0 transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
+.icon_group {background: url("../../images/icon_group.gif") no-repeat 0 0 transparent; height:20px; padding:0 0 0 21px; display: inline-block; float:left}
+.icon_pe {height:20px; padding:0 5px 0 0; display: inline-block; float:left}
+.icon_b1dep {background: url("../../images/nav_img.png") no-repeat 0 -349px transparent; padding:0 0 0 13px}
+.icon_b2dep {background: url("../../images/nav_img.png") no-repeat 0 -366px transparent; padding:0 0 0 12px}
+.icon_folder {background: url("../../images/icon_folder.gif") no-repeat 0 3px transparent; height:14px; padding:0 0 0 21px; font-weight:bold}
+/* new Icon added by ysjung */
+.icon_new {background: url("../../images/icon_new.gif") no-repeat 0 0 transparent; display:inline-block; height:8px; width:20px}
+.title_folder {height:14px; font-weight:bold; margin-top:3px}
+
+/* Noice */
+.noti_pic {float:left; margin: 0 5px 0 0}
+.noti_in_bodytitle {word-wrap: break-word; text-align:left; vertical-align:middle; float:left; line-height:16px; width:72%} /* Body Title로 들어갈 때 */
+.noti_in [type="text"] {border:1px solid #c7c7c7; width:96px; height:20px} /* 전자결재 - 결재선 */
+.noti_in { margin-left:34px; line-height: 14px} /* img profile_size_c 뒤에 옴 */
+.noti_in_s { margin-left:26px; line-height: 13px} /* img profile_size_s 뒤에 옴 */
+.noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* img profile_size_m 뒤에 옴 */
+.noti_in_m + div {line-height: 19px; padding:0 0 0 58px}
+.js_content_list .noti_in_m {padding:0 0 0 87px} /* 처리할 업무 List */
+.case_2line {line-height:20px}
+
+/* Btn Folder n Picture */
+.btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
+.btn_fold a:hover {background-position:-360px -536px}
+.lft_fd .btn_fold a {background-position:-395px -468px; left:4px}
+.lft_fd .btn_fold a:hover {background-position:-395px -536px}
+
+/* Contents*/
+#content {color:#a6a6a6; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
+
+/* Table Format */
+.up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
+.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%} /* 한줄 input, text박스 쓸때 */
+.up_padding {padding:0; position:relative; width:100%}
+.fieldline.community_names {line-height:17px}
+
+.up_form {position:absolute}
+.up_point {background: url("../../images/up_point.gif") no-repeat left top; width:11px; height:7px}
+.up_point_sgr {background: url("../../images/up_point_sgr.png") no-repeat left top; width:11px; height:7px}
+.up_point_b {background: url("../../images/up_point_b.gif") no-repeat left top; width:11px; height:7px}
+.up_textarea {height:30px; vertical-align:top; border: 1px solid #c7c7c7; margin: 0} /* 라인 포함된 textarea h50 */
+.input_1line_first { height:21px; padding-bottom: 5px; position:relative} /* 한줄라인 input정보- 맨위줄*/
+.input_1line {overflow:hidden; width:100%; position:relative; margin:8px 0} /* 한줄라인 input정보 */
+
+.txt_btn {font-family: Dotum; font-size: 11px; height: 19px; font-weight:normal}
+.txt_btn .po_right {float:right; margin-left:10px}
+.txt_btn .po_left {float:left; margin-right:10px}
+.txt_btn .po_left > span {line-height: 20px}
+.txt_btn .ch_right {float:right; margin-left:7px}
+.txt_btn .btn_r {float:right; margin:5px 0 0 0; display: inline-block}
+.txt_btn .btn_r .fr {line-height: 17px; margin-left:3px}
+
+.txt_btn .current { font-weight:bold}
+.txt_btn a, .txt_btn a:focus, .txt_btn a:active, .txt_btn a:link, .txt_btn a:visited {text-decoration:none}
+.txt_btn a:hover {text-decoration:underline; }
+.txt_btn_height {height:16px; padding: 5px 0; text-align: center}
+.txt_btn.deliver {margin: 0 10px 10px; color: #979797; border-bottom: 1px dotted #cccccc}
+
+/* 검색- 자동 완성어 list, layer_pop list */
+.srch_list, .srch_list_nowid {z-index:100; position:absolute; width:447px; max-height:330px; overflow-y:auto; margin-top: 1px; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
+.srch_list li, .srch_list_nowid li {position:relative; color:#454545}
+.srch_list li a, .srch_list_nowid li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545}
+/*.srch_list li a:hover {display:block; background-color:#fffccd; color:#454545}*/
+.srch_list li.sw_hover, .srch_list_nowid li.sw_hover, .srch_list li a:hover , .srch_list_nowid li a:hover {display:block; background-color:#ffeed9; color:#454545}
+.srch_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
+.srch_list_nowid {width:none} 
+
+/* 검색- community name list */
+.com_list {z-index:100; position:absolute; width:250px; max-height:330px; overflow-y:auto; margin-top: 1px; box-shadow:1px 1px 1px #dfdfdf; -moz-box-shadow:1px 1px 1px #dfdfdf; -webkit-box-shadow:1px 1px 1px #dfdfdf; background:#FFF; border: 1px solid #c7c7c7; font-family: '돋움',dotum,Helvetica,sans-serif}
+.com_list li {position:relative; color:#454545}
+.com_list li a {padding:4px 8px; display:block; overflow: hidden; vertical-align:middle; position:relative; top:50%; color:#454545}
+/*.com_list li a:hover {display:block; background-color:#fffccd; color:#454545}*/
+.com_list li.sw_hover {display:block; background-color:#fff7eb; color:#454545}
+.com_list .nav_sub_area {display: inline; float: left; position: relative; width: 410px}
+
+/* 입력폼 */
+.form_wrap {background: none repeat scroll 0 0 #1a1f23; height:100%}
+.form_wrap .input_check {float:left; margin-left:5px}
+.form_title {padding:10px}
+.form_title .title {font-weight:bold; font-size:14px; padding:0 0 0 19px; position:absolute} /* 타이틀 우측으로 아이콘이 있을때 */
+.form_title .title_noico  {font-weight:bold; font-size:14px; font-family:'돋움',Dotum, Arial, sans-serif; padding: 0 0 0 19px; margin-bottom:2px; float: none} /* 타이틀 우측으로 아이콘이 없을때 */
+.form_contents {padding:0 20px 10px; text-align: center}
+/* .form_contents table tr {height:30px} */
+.form_contents table .before_icon {padding:2px 10px 2px 0}
+.form_contents .title_2dep {text-align:left} 
+.form_contents .item {width:80px}
+.form_contents .tcontents {width:100%}
+.form_space {padding-right:5px}
+
+.report_title th{width:17%;font-weight:normal}
+.icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
+
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }
+.js_upload_buttons .glo_btn_space  {display: table; width:100%; margin:0}
+.js_upload_buttons_page > div.fr {margin-right: 10px}
+.glo_btn_space .btn_finish {float:right; padding-right:10px}
+
+.pos_works {left:40px; top:1px; position:relative; z-index:20}
+
+.subject_list { margin-left:5px}
+.subject_list li {color: #bababa; float: left; margin-right: 5px}
+.subject_list .on a {color: #2F3743; font-weight: bold}
+
+/* Common Button */
+.buttonSet {padding:5px 0 7px} 
+.buttonSet button, .button {background: -moz-linear-gradient(center top , #FFFFFF, #EBEBEB) repeat scroll 0 0 #FFFFFF; background: -webkit-gradient(linear,0% 20%,0% 80%,from(white),to(#EBEBEB)); background: -o-linear-gradient(top,white,#EBEBEB); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ffffff,endColorStr=#ebebeb); text-decoration: none!important; border: 1px solid #A1A1A1; border-radius: 3px 3px 3px 3px; color: #555555; cursor: pointer; display: inline-block; letter-spacing: 0; margin: 0; overflow: visible; padding: 3px 5px 2px; vertical-align: middle}
+button.space {height: 18px; padding: 1px 3px}
+.buttonSet select {height:21px; margin:0; padding:0}
+.buttonSet .button {padding: 4px 8px 3px}
+   	
+/* Icon */
+.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
+.icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
+.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
+.icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
+.icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
+
+.icon_txt {text-decoration: none!important; border-radius: 3px 3px 3px 3px; display: inline-block; color: #FFF; padding: 0 1px; font-size:10.5px; height:14px; letter-spacing:-1px; margin-right:3px; line-height:16px; min-width:42px; text-align:center}
+.icon_txt.blue {background: -moz-linear-gradient(center top , #8bbaf2, #468ee3) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#8bbaf2),to(#468ee3)); background: -o-linear-gradient(top,#8bbaf2,#468ee3); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#8bbaf2,endColorStr=#468ee3); border: 1px solid #3a87e1}
+.icon_txt.gray {background: -moz-linear-gradient(center top , #adadad, #838383) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#adadad),to(#838383)); background: -o-linear-gradient(top,#adadad,#838383); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#adadad,endColorStr=#838383); border: 1px solid #7a7a7a}
+.icon_txt.red {background: -moz-linear-gradient(center top , #ca9191, #ae5858) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#ca9191),to(#ae5858)); background: -o-linear-gradient(top,#ca9191,#ae5858); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#ca9191,endColorStr=#ae5858); border: 1px solid #a55050}
+.icon_txt.orange {background: -moz-linear-gradient(center top , #e8a96a, #dd832d) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#e8a96a),to(#dd832d)); background: -o-linear-gradient(top,#e8a96a,#dd832d); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#e8a96a,endColorStr=#dd832d); border: 1px solid #d97c27}
+.download_section .icon_txt {min-width:30px}
+
+/* 사람지정  */
+.user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
+-webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
+.user_select + input[type="text"] {width:100px !important}
+
+/* Text style  */
+.t_red, .t_sunday {color:#e54b4b}
+.t_saturday {color:#4b79c8}
+.t_light_orange {color:#fff4a7;font-weight:normal}
+.t_red_bold {color:#e54b4b; font-weight:bold}
+.t_up_num {color:#e54b4b; font-weight:bold}
+.t_gbold {color:#656565; font-weight:bold}
+.t_gray { color:#919191; font-weight:normal}
+.t_name, .t_name a, .t_blue {color:#a6a6a6 !important}
+.space_name, .space_name a {color:#23579e !important; font-size:11px}
+.t_woname {color:#23579e; font-weight:bold}
+.t_size11 {font-size:11px}
+.t_size12 {font-size:12px}
+.t_action_disabled {color:#454545 !important; text-decoration:none !important}
+.t_date, .t_s11, .t_date a, .t_s11 a {font-size:11px; color:#999897 !important; font-weight:normal; word-wrap: break-word}
+.t_white {font-size:12px; font-weight:normal}
+.t_nav {font-size:14px; font-weight:bold; color:#FFF}
+.t_nowork, .t_nowork a { text-align:center; padding:8px 0 !important; color:#666 !important}
+.t_mail { font-size:11px; color:#333333}
+.new_mail {color:#f38f1b}
+.bar { font-weight:normal; color:#999999}
+.arr {font-size:10px; margin-right:2px; color:#23579E}
+.t_location {font-size:11px; color:#999897; position:relative; top:27px; margin-left:5px}
+.bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
+.bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
+.bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
+.bul_gray {background: url("../../images/dot-gray.gif")no-repeat; padding:0 0 0 7px; line-height:15px}
+
+/* Line Style */
+.solid_line { border-top:2px solid #999999; width:100%}
+.table_line { border-top:2px solid #7f7f7f; width:100%}
+.solid_line_s { border-top:1px solid #c7c7c7; width:100%}
+.solid_line_sd2 {border-top:1px solid #ececec; width:100%; display:block}
+.solid_line_sb { border-bottom:1px solid #c7c7c7; width:100%}
+.dash_line {border-top:1px dashed #9c9c9c; margin: 0 10px}
+.dash_line_full {border-top:1px dashed #9c9c9c; margin: 10px}
+.line_width {padding:0 10px}
+.dline_left_gray {border-left:1px dashed #c2c2c2}
+.line_daspace_dateed {border-bottom:1px daspace_dateed #DCDFE0; margin:0 15px 0 0}
+
+/* Iframe Section */
+.iframe_section body {font-size: 11px; font-family: dotum,Helvetica,sans-serif}
+.iframe_section img {width:100%}
+
+/* Status Icons */
+.icon_status_running {background: url("../../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_d_running {background: url("../../images/icon_status_d_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_returned {background: url("../../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_rejected {background: url("../../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
