@@ -8,15 +8,16 @@
 
 package pro.ucity.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
 
@@ -26,12 +27,20 @@ public class UcityUtil {
 		super();
 	}
 
-	public static Map<String, Object> createStartProcessRB(TaskInstance taskInstance, Map<String, Object> data){
-		if(taskInstance == null || data == null) return null;
+	public static void startUServiceProcess(TaskInstance taskInstance, Map<String, Object> data) throws Exception{
+		if(taskInstance == null || data == null){
+			throw new Exception("Invalid parameters exception !!!");
+		}
+		
+		HttpServletRequest request = null;
+		
+		SwServiceFactory.getInstance().getWorkService().getRecord(request);
 		
 		Map<String, Object> requestBody = new HashMap<String, Object>();
 		SmartForm form = taskInstance.getSmartForm();
-		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())) return null;
+		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
+			throw new Exception("Invalid Form information exception !!!");
+		}
 		
 		requestBody.put("workId", taskInstance.getWork().getId());
 		requestBody.put("formId", form.getId());
@@ -51,7 +60,13 @@ public class UcityUtil {
 		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
 		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
 		requestBody.put("frmAccessSpace", accessData);
-		return requestBody;
+		
+		SwServiceFactory.getInstance().getInstanceService().startProcessWorkInstance(requestBody, null);
+		
+	}
+	
+	public static void performUServiceTask(TaskInstance taskInstance, Map<String, Object> data) throws Exception{
+		
 	}
 }
 

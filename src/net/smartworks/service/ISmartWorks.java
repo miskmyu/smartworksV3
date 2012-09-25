@@ -748,4 +748,8 @@ public interface ISmartWorks {
 	
 	public abstract InstanceInfoList getForwardTasksById(String forwardId, RequestParams params) throws Exception;
 
+	public abstract SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception;
+
+	public abstract TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception;
+	
 }

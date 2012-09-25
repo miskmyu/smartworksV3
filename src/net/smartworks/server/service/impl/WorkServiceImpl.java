@@ -1924,4 +1924,9 @@ public class WorkServiceImpl implements IWorkService {
 			}
 		}
 	}
+	@Override
+	public SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

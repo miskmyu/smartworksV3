@@ -1673,4 +1673,14 @@ public class SmartWorks implements ISmartWorks {
 		return mailService.getMailFolders();
 	}
 
+	@Override
+	public SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception {
+		return workService.getRecordByKeyValue(workId, keyValue);
+	}
+
+	@Override
+	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception {
+		return instanceService.getTaskInstanceById(workId, taskInstId);
+	}
+
 }

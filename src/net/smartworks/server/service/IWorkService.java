@@ -51,6 +51,8 @@ public interface IWorkService {
 
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception;
 
+	public SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception;
+
 	public String setWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public void removeWorkSearchFilter(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

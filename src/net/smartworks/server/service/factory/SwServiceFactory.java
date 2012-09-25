@@ -12,6 +12,7 @@ import net.smartworks.server.service.ICommunityService;
 import net.smartworks.server.service.IInstanceService;
 import net.smartworks.server.service.INoticeService;
 import net.smartworks.server.service.ISeraService;
+import net.smartworks.server.service.IWorkService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +37,7 @@ public class SwServiceFactory {
 	}
 	protected final Log logger = LogFactory.getLog(getClass());
 	
+	private IWorkService workService;
 	private IInstanceService instanceService;
 	private ICommunityService communityService;
 	private INoticeService noticeService;
@@ -52,6 +54,12 @@ public class SwServiceFactory {
 	}
 	public void setInstanceService(IInstanceService instanceService) {
 		this.instanceService = instanceService;
+	}
+	public IWorkService getWorkService() {
+		return workService;
+	}
+	public void setWorkService(IWorkService workService) {
+		this.workService = workService;
 	}
 	public INoticeService getNoticeService() {
 		return noticeService;

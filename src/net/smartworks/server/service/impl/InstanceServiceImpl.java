@@ -9071,5 +9071,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		instanceInfoList.setTotalSize((int)totalSize);
 		return instanceInfoList;
 	}
+	@Override
+	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
