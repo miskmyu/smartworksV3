@@ -33,6 +33,11 @@ import net.smartworks.server.engine.infowork.form.manager.ISwfManager;
 import net.smartworks.server.engine.infowork.form.model.SwfField;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
+import net.smartworks.server.engine.organization.model.SwoGroup;
+import net.smartworks.server.engine.organization.model.SwoGroupCond;
+import net.smartworks.server.engine.organization.model.SwoGroupMember;
+import net.smartworks.server.engine.organization.model.SwoUser;
+import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.process.approval.model.AprApproval;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLine;
 import net.smartworks.server.engine.process.approval.model.AprApprovalLineCond;
@@ -581,9 +586,44 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 		String refUsersStr  = obj.getExtendedPropertyValue("referenceUser");
 		if (CommonUtil.isEmpty(refUsersStr))
 			return;
-		String[] refUsers = StringUtils.tokenizeToStringArray(refUsersStr, ";");
-		if (CommonUtil.isEmpty(refUsers))
+		String[] refUsersTemp = StringUtils.tokenizeToStringArray(refUsersStr, ";");
+		if (CommonUtil.isEmpty(refUsersTemp))
 			return;
+		
+		List refUserIdList = new ArrayList();
+		
+		//부서를 선택하였을경우
+		for (int i = 0; i < refUsersTemp.length; i++) {
+			String users = refUsersTemp[i];
+			if (users.indexOf("dept_") != -1) {
+				String deptId = users;
+				SwoUserCond userCond = new SwoUserCond();
+				userCond.setDeptId(deptId);
+				SwoUser[] deptUsers = SwManagerFactory.getInstance().getSwoManager().getUsers(user, userCond, IManager.LEVEL_LITE);
+				for (int j = 0; j < deptUsers.length; j++) {
+					if (!refUserIdList.contains(deptUsers[j]))
+						refUserIdList.add(deptUsers[j].getId());
+				}
+			} else if (users.indexOf("group_") != -1) {
+				String groupId = users;
+				SwoGroupCond groupCond = new SwoGroupCond();
+				groupCond.setId(groupId);
+				SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(user, groupCond, IManager.LEVEL_ALL);
+				
+				SwoGroupMember[] member = group.getSwoGroupMembers();
+				if (member != null) {
+					for (int j = 0; j < member.length; j++) {
+						if (!refUserIdList.contains(member[j].getUserId()))
+							refUserIdList.add(member[j].getUserId());
+					}
+				}
+			} else{
+				refUserIdList.add(users);
+			}
+		}
+		
+		String[] refUsers = new String[refUserIdList.size()];
+		refUserIdList.toArray(refUsers);
 		
 		//TODO 왜하는지 모르겠다 삭제 예정
 //		TskTaskCond cond = new TskTaskCond();

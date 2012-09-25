@@ -1926,7 +1926,39 @@ public class WorkServiceImpl implements IWorkService {
 	}
 	@Override
 	public SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		//테스트 미실행
+		
+		
+		if (CommonUtil.isEmpty(workId) || CommonUtil.isEmpty(keyValue)) 
+			return null;
+		
+		User user = SmartUtil.getCurrentUser();
+		String userId = user.getId();
+			
+		//키컬럼을 구한다
+		SwfFormCond formCond = new SwfFormCond();
+		formCond.setPackageId(workId);
+		SwfForm[] form = SwManagerFactory.getInstance().getSwfManager().getForms(userId, formCond, IManager.LEVEL_LITE);
+		if (form == null || form.length == 0)
+			return null;
+		
+		String formId = form[0].getId();
+		SwdDomainCond domainCond = new SwdDomainCond();
+		domainCond.setFormId(formId);
+		SwdDomain domain = SwManagerFactory.getInstance().getSwdManager().getDomain(userId, domainCond, IManager.LEVEL_LITE);
+		
+		if (CommonUtil.isEmpty(domain))
+			return null;
+		
+		String titleFieldId = domain.getTitleFieldId();
+		
+		String tableColName = getSwdManager().getTableColName(domain.getObjId(), titleFieldId);
+		
+		SwdRecordCond recordCond = new SwdRecordCond();
+		recordCond.setFilter(new Filter[]{new Filter("=", tableColName, keyValue)});
+		
+		SwdRecord record = SwManagerFactory.getInstance().getSwdManager().getRecord(userId, recordCond, IManager.LEVEL_ALL);
+		
+		return record;
 	}
 }

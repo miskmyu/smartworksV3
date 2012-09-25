@@ -181,7 +181,8 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 	}
 	public String toMailTo(String user, TskTask obj) throws Exception {
 		String assignee = obj.getAssignee();
-		if (assignee == null)
+		return assignee;
+		/*if (assignee == null)
 			return null;
 		MailAccountCond cond = new MailAccountCond();
 		cond.setUserId(user);
@@ -197,7 +198,7 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 			}
 		} else {
 			return userObj.getId();
-		}
+		}*/
 	}
 	public String getMailContent() {
 		return mailContent;
@@ -291,6 +292,9 @@ public class TskManagerMailAdvisorImpl extends AbstractTskManagerAdvisor {
 		if(mailServerName.equals("smtp.gmail.com")) {
 			mailProps.put("mail.smtp.startls.enable", "true");
 			mailProps.put("mail.transport.protocol", "smtp");
+			mailProps.put("mail.smtp.port", "465");
+			mailProps.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		} else if (mailServerName.equals("smtp.daum.net")) {
 			mailProps.put("mail.smtp.port", "465");
 			mailProps.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		}
