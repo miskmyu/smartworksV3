@@ -102,41 +102,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">
-    <div class="portlet_t"><div class="portlet_tl"></div></div>
-    <div class="portlet_l" style="display: block;">
-	    <ul class="portlet_r" style="display: block;">		            
-			<!-- 타이틀 -->
-			<div class="body_titl_pic">		
-	                <div class="noti_pic mr7"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></div>
-	                <div class="noti_in_bodytitle case_2line">
-	                    <div>
-		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>
-		                    <span class="t_date"><%=instance.getCreatedDate().toLocalString()%></span>
-						</div>
-						<div>
-                    		<span class="icon_pworks t_date"> <%=work.getFullpathName() %>
-                    			<span class="title_picico ml5"><%=instance.getSubject()%></span>
-                    		</span> 
-                    	</div>
-	                </div>
-		                    
-	            <!-- 우측 버튼-->
-	            <div class="fr" style="line-height: 15px">
-		            <!-- 주소복사 -->
-	                <div class="txt_btn t_s11 h_auto fr cb" style="visibility: hidden">
-	                </div>
-	            
-					<!-- 전자결재, 업무전달 버튼들 -->
-					<div class="fr cb">
-	            	</div>	            	
-				</div>
-				
-	            <!-- 우측 버튼 -->
-		                    
-               	<div class="solid_line cb"></div>
-			</div>
-			<!-- 타이틀 -->
+<div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
 			<!-- 프로세스다이어그램 -->
 			<div class="define_space js_process_instance_viewer" style="height:512px;"></div>
@@ -256,120 +222,8 @@
 				}
 				%>
 			</div>
-				
-			<!-- 버튼 영역 -->
-			<div class="glo_btn_space">
-			
-				<!-- 수정, 삭제버튼 -->
-			    <div class="fr">
-
-			        <span class="btn_gray js_btn_do_forward" style="display:none">
-			        	<a href="" class="js_forward_work_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_forward"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_reply_forward" style="display:none">
-			        	<a href="" class="js_reply_forward">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reply_forward"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_do_approval" style="display:none">
-			        	<a href="" class="js_approval_work_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_approve_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.approve_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_submit_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.submit_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_return_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.return_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_reject_approval" style="display:none">
-			        	<a href="" class="js_reply_approval">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reject_approval"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-			
-			        <span class="btn_gray js_btn_do_email" style="display:none">
-			        	<a href="" class="js_email_iwork_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.do_email"/></span>
-				            <span class="txt_btn_end"></span>
-			            </a>
-			   		</span>
-				
-					<span class="btn_gray ml5 js_btn_complete" style="display:none">
-			        	<a href="" class="js_perform_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.complete"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-					<span class="btn_gray ml5 js_btn_return" style="display:none">
-			        	<a href="" class="js_return_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.return"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-					<span class="btn_gray ml5 js_btn_reassign" style="display:none">
-			        	<a href="" class="js_reassign_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.reassign"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-					<span class="btn_gray ml5 js_btn_temp_save" style="display:none">
-			        	<a href="" class="js_temp_save_task_instance">
-				            <span class="txt_btn_start"></span>
-				            <span class="txt_btn_center"><fmt:message key="common.button.temp_save"/></span>
-				            <span class="txt_btn_end"></span>
-				    	</a>
-			   		</span>
-				</div>
-				<!-- 수정, 삭제버튼 //-->    					  
-
-				<!--  실행시 표시되는 프로그래스아이콘을 표시할 공간 -->
-				<div class="fr form_space js_progress_span" ></div>
-
-				<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->
-				<span class="form_space sw_error_message js_space_error_message" style="text-align:right; color: red"></span>
-
-			</div>
-			<!-- 버튼 영역 //-->     				
+				 				
 			<div class="js_instance_histories"></div>
-		</ul>
-	</div>
-	<div class="portlet_b" style="display: block;"></div>
 </div> 
 <!-- 컨텐츠 레이아웃//-->
 <script type="text/javascript">

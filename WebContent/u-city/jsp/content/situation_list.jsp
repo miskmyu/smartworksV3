@@ -169,56 +169,17 @@
 
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_situation_list_page js_work_list_page">
-	<div class="portlet_t"><div class="portlet_tl"></div></div>
-	<div class="portlet_l" style="display: block;">
-		<ul class="portlet_r" style="display: block;">
-
-			<!-- 타이틀 -->
-			<div class="body_titl">
-				<div class="body_titl_pworks title"><%=work.getName()%></div>				
-				<!-- 우측 버튼 -->
-				<div class="fr txt_btn icon_smartbuilder">
-					<%if(work.amIBuilderUser()){ %>
-						<a href="tab_workbench.sw?cid=<%=work.getContextId() %>" class="js_content">
-							<fmt:message key="header.global_menu.smartbuilder"/>
-						</a>
-					<%} %>
-				</div>
-				<div class="txt_btn" style="line-height: 27px">
-				</div>
-				<!-- 우측 버튼 //-->
-
-				<div class="solid_line"></div>
-			</div>
-			<!-- 타이틀 -->
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-<%-- 
-				<div>
-					<jsp:include page="/jsp/content/work/report/work_report.jsp">
-						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
-					</jsp:include>
-				</div>
- --%>
+
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt15">
-					<div class="title"><fmt:message key="common.title.instance_list" /></div>
-					<div class="title_line_btns">
-					<%
-					if(work.getWritePolicy().isWritableForMe()) {
-					%>
-						<div class="icon_btn_start">
-							<a href="start_pwork.sw?workId=<%=workId%>" class="js_create_new_work icon_btn_tail" workId="<%=workId%>"><fmt:message key="common.button.start_new_pwork"/></a>
-						</div>
-					<%
-						}
-					%>
-					</div>
+					<div class="title"><%=work.getName()%></div>
 					
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
-							<div class="srch_wh srch_wsize">
+							<div class="srch srch_wsize">
 								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
@@ -282,8 +243,6 @@
 
 				<!-- 목록보기 -->
 			</div>
-		</ul>
-	</div>
-	<div class="portlet_b" style="display: block;"></div>
+
 </div>
 <!-- 컨텐츠 레이아웃//-->
