@@ -5285,5 +5285,82 @@ public class ModelConverter {
 		}
 		return fileCategoryInfos;
 	}
+	
+	public static TaskInstance getTaskInstanceByTskTask(String userId, WorkInstance processWorkInstObj, TskTask swTask) throws Exception {
+		
+		if (swTask == null)
+			return null;
+		
+		TaskInstance taskInstance = new TaskInstance();
+		
+		taskInstance.setId(swTask.getObjId());
+		taskInstance.setSubject(swTask.getTitle());
+		taskInstance.setName(swTask.getName());
 
+		taskInstance.setAssignee(getUserByUserId(swTask.getAssignee()));
+		taskInstance.setAssigner(getUserByUserId(swTask.getAssigner()));
+
+		taskInstance.setCreatedDate(new LocalDate(swTask.getCreationDate().getTime()));
+		taskInstance.setLastModifier(getUserByUserId(swTask.getModificationUser()));
+		taskInstance.setLastModifiedDate(new LocalDate(swTask.getModificationDate().getTime()));
+		
+		taskInstance.setStartTask(CommonUtil.toBoolean(swTask.getIsStartActivity()));
+		
+		String tskStatus = swTask.getStatus();
+		if (tskStatus.equalsIgnoreCase("11")) {
+			taskInstance.setStatus(Instance.STATUS_RUNNING);
+		} else if (tskStatus.equals("21")) {
+			taskInstance.setStatus(Instance.STATUS_COMPLETED);
+			taskInstance.setPerformer(getUserByUserId(swTask.getPerformer()));
+		}
+
+		int type = WorkInstance.TYPE_TASK;
+		int taskType = 0;
+		taskInstance.setType(type);
+
+		String tskType = swTask.getType();
+		if(tskType.equals(TskTask.TASKTYPE_SINGLE)) {
+			if(tskStatus.equals("11")) {
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_ASSIGNED;
+			} else if(tskStatus.equals("21")) {
+				taskType = TaskInstance.TYPE_INFORMATION_TASK_UPDATED;
+			}
+		} else if(tskType.equals(TskTask.TASKTYPE_REFERENCE)) {
+			String approvalId = swTask.getApprovalId();
+			if (!CommonUtil.isEmpty(approvalId)) {
+				taskType = TaskInstance.TYPE_APPROVAL_TASK_FORWARDED;
+			} else {
+				if (processWorkInstObj.getWork() != null && processWorkInstObj.getWork().getType() == ProcessWork.TYPE_PROCESS) {
+					taskType = TaskInstance.TYPE_PROCESS_TASK_FORWARDED;
+				} else {
+					taskType = TaskInstance.TYPE_INFORMATION_TASK_FORWARDED;
+				}
+			}
+			taskInstance.setForwardId(swTask.getForwardId());
+			if (!CommonUtil.isEmpty(swTask.getApprovalId()))
+				taskInstance.setApprovalId(swTask.getApprovalId());
+			taskInstance.setAssigner(getUserByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+		} else if(tskType.equals(TskTask.TASKTYPE_APPROVAL)) {
+			taskType = TaskInstance.TYPE_APPROVAL_TASK_ASSIGNED;
+			taskInstance.setApprovalId(swTask.getApprovalId());
+			taskInstance.setAssigner(getUserByUserId(swTask.getExtendedPropertyValue("processInstCreationUser")));
+		}
+		taskInstance.setTaskType(taskType);
+
+		taskInstance.setOwner(getUserByUserId(swTask.getAssignee()));
+		
+		taskInstance.setWork(processWorkInstObj.getWork());
+		taskInstance.setWorkInstance(processWorkInstObj);
+
+		taskInstance.setWorkSpace(processWorkInstObj.getWorkSpace());
+		taskInstance.setAccessPolicy(processWorkInstObj.getAccessPolicy());
+		
+		String formId = swTask.getForm();
+		SwfForm form = SwManagerFactory.getInstance().getSwfManager().getForm(userId, formId);
+		
+		taskInstance.setSmartForm(getSmartFormBySwfFrom(null, form));
+		
+		return taskInstance;
+	}
+	
 }
