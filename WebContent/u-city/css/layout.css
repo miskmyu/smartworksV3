@@ -208,3 +208,6 @@ button.space {height: 18px; padding: 1px 3px}
 .icon_status_not_yet {background: url("../../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_completed {background: url("../../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_rejected {background: url("../../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+
+/* Global Btn Space */
+.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }
