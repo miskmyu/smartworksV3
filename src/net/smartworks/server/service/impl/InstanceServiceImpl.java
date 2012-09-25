@@ -9073,8 +9073,20 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 	@Override
 	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		
+		User cUser = SmartUtil.getCurrentUser();
+		String userId = cUser.getId();
+		
+		TskTask task = SwManagerFactory.getInstance().getTskManager().getTask(userId, taskInstId, null);
+		if (task == null)
+			return null;
+		
+		PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(userId, task.getProcessInstId(), IManager.LEVEL_ALL);
+		ProcessWorkInstance pworkInstObj = ModelConverter.getProcessWorkInstanceByPrcProcessInst(userId, null, prcInst);
+		
+		TaskInstance taskInstance = ModelConverter.getTaskInstanceByTskTask(userId, pworkInstObj, task);
+		
+		return taskInstance;
 	}
 
 }
