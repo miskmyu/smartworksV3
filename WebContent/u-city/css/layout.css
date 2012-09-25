@@ -6,15 +6,11 @@ body {background-color: #22282F}
 #content a:hover { text-decoration:underline}
 
 /*Search*/	
-.srch {
-	width:170px; height:15px; background-color: #2d353e; color: #999; border:1px solid #13161b; padding:2px 15px 0 7px}
-.srch input[type="text"] {background-color:#2d353e}
+.srch {	width:170px; height:15px; margin: 0 5px 0 0}
+.srch input[type="text"] {background-color:#2d353e; border: 1px solid #13161B; float: left; width: 146px; padding: 1px 2px; margin-right: 2px; color: #A6A6A6}
 .srch button {
-	background:url("../../images/btn_srch.png") no-repeat;cursor:pointer;height:23px;
-	width:25px;padding:0; position:relative;top:-23px;left:169px;border:0
-}
+	background:url("../images/btn_srch.png") no-repeat; cursor:pointer; height:15px; width:15px; padding:0; border:0}
 .srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat}
-.srch_wsize {margin: 0 5px 0 0;overflow:hidden}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; min-height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:18px}
