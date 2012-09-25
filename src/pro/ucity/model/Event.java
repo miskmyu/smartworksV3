@@ -42,4 +42,6 @@ public class Event {
 	public static final int TASK_EVENT_PROCESSING			= 2;
 	public static final int TASK_EVENT_RELEASE				= 3;
 	
+	public static final String PROCESS_ID_기상특보 = "pkg_9564849550184543b06fa46e3290f296";
+
 }
