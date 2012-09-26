@@ -15,4 +15,5 @@ public class Service {
 	public static final String ID_MEDIABOARD 		= "1111";
 	public static final String ID_PERM_CONTROL 		= "1112";
 	public static final String ID_SMS_MMS 			= "1113";
+	
 }

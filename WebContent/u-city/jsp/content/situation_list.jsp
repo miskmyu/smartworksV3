@@ -1,3 +1,5 @@
+<%@page import="pro.ucity.model.System"%>
+<%@page import="pro.ucity.util.UcityTest"%>
 <%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
@@ -161,6 +163,9 @@
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
 	}
+	
+	UcityTest.startProcess(System.PROCESS_ENV_WEAHTER);
+	
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>

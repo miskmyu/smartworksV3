@@ -75,6 +75,7 @@ import net.smartworks.model.sera.info.TeamInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
+import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
@@ -367,6 +368,8 @@ public interface ISmartWorks {
 	public abstract String getFormXml(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	public abstract SwdRecord getRecord(HttpServletRequest request) throws Exception;
+
+	public abstract SwdRecord getRecord(String workId, String recordId, String taskInstId) throws Exception;
 
 	public abstract SwdRecord refreshDataFields(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
@@ -751,5 +754,8 @@ public interface ISmartWorks {
 	public abstract SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception;
 
 	public abstract TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception;
+
+	public abstract SmartForm getFormById(String formId, String workId) throws Exception;
+
 	
 }

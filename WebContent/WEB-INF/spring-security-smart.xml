@@ -12,11 +12,13 @@
 		<intercept-url pattern="/login.sw" access="permitAll" />
 		<intercept-url pattern="/css/*.css" access="permitAll" />
 		<intercept-url pattern="/images/*.*" access="permitAll" />
+		<intercept-url pattern="/css/*.css" access="permitAll" />
+		<intercept-url pattern="/images/*.*" access="permitAll" />
 		<intercept-url pattern="/admin/**/*" access="hasRole('ADMINISTRATOR') and fullyAuthenticated" />
 		<intercept-url pattern="/**" access="permitAll" />
 		<form-login login-page="/login.sw" login-processing-url="/j_spring_security_check" default-target-url="/index.sw" authentication-failure-url="/login.sw?type=failedLogin" />
 		<remember-me />
-		<logout invalidate-session="false" logout-success-url="/login.sw?type=logout" logout-url="/logout" />
+		<logout invalidate-session="false" logout-success-url="/login.sw?type=logout" logout-url="/logoutc" />
 		<session-management invalid-session-url="/login.sw?type=expiredSession" session-authentication-error-url="/login.sw?type=unauthorized">
 			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
 		</session-management>

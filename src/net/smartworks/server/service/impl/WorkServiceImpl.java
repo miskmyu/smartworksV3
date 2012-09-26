@@ -75,8 +75,6 @@ import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
 import net.smartworks.server.engine.pkg.model.PkgPackage;
 import net.smartworks.server.engine.pkg.model.PkgPackageCond;
-import net.smartworks.server.engine.process.process.model.PrcSwProcess;
-import net.smartworks.server.engine.process.process.model.PrcSwProcessCond;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
@@ -92,12 +90,7 @@ import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
-import org.claros.commons.auth.MailAuth;
-import org.claros.commons.auth.models.AuthProfile;
-import org.claros.commons.mail.models.ConnectionMetaHandler;
 import org.claros.commons.mail.models.ConnectionProfile;
-import org.claros.intouch.webmail.controllers.FolderController;
-import org.claros.intouch.webmail.factory.FolderControllerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -839,6 +832,24 @@ public class WorkServiceImpl implements IWorkService {
 			// Exception Handling Required			
 		}
 	}
+	
+	@Override
+	public SmartForm getFormById(String formId, String workId) throws Exception{
+		
+		if (CommonUtil.isEmpty(formId))
+			return null;
+		
+		String userId = SmartUtil.getCurrentUser().getId();
+		SwfFormCond swfCond = new SwfFormCond();
+		swfCond.setId(formId);
+		SwfForm[] swfForms = getSwfManager().getForms(userId, swfCond, IManager.LEVEL_ALL);
+		if (swfForms == null || swfForms.length == 0)
+			return null;
+		SmartForm smForm = ModelConverter.getSmartFormBySwfFrom(null, swfForms[0]);
+		
+		return smForm;
+	}
+	
 	@Override
 	public void setMyProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
@@ -1027,17 +1038,11 @@ public class WorkServiceImpl implements IWorkService {
 			// Exception Handling Required			
 		}
 	}
-
 	@Override
-	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
-
+	public SwdRecord getRecord(String workId, String recordId, String taskInstId) throws Exception{
 		try {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
-
-			String workId = request.getParameter("workId");
-			String recordId = request.getParameter("recordId");
-			String taskInstId = request.getParameter("taskInstId");
 
 			SwdRecord swdRecord = null;
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -1153,7 +1158,17 @@ public class WorkServiceImpl implements IWorkService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
+		}		
+	}
+
+	@Override
+	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
+
+		String workId = request.getParameter("workId");
+		String recordId = request.getParameter("recordId");
+		String taskInstId = request.getParameter("taskInstId");
+		
+		return getRecord(workId, recordId, taskInstId);
 	}
 
 	@Override

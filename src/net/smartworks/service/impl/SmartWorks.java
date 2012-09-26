@@ -71,6 +71,7 @@ import net.smartworks.model.sera.info.TeamInfo;
 import net.smartworks.model.service.ExternalForm;
 import net.smartworks.model.service.WSDLDetail;
 import net.smartworks.model.service.WebService;
+import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
@@ -1681,6 +1682,16 @@ public class SmartWorks implements ISmartWorks {
 	@Override
 	public TaskInstance getTaskInstanceById(String workId, String taskInstId) throws Exception {
 		return instanceService.getTaskInstanceById(workId, taskInstId);
+	}
+
+	@Override
+	public SwdRecord getRecord(String workId, String recordId, String taskInstId) throws Exception {
+		return workService.getRecord(workId, recordId, taskInstId);
+	}
+
+	@Override
+	public SmartForm getFormById(String formId, String workId) throws Exception {
+		return workService.getFormById(formId, workId);
 	}
 
 }
