@@ -1,6 +1,9 @@
 package pro.ucity.model;
 
+import java.sql.ResultSet;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import pro.ucity.util.UcityUtil;
@@ -15,11 +18,15 @@ import net.smartworks.util.SmartUtil;
 public class Adapter {
 
 	public static final String FIELD_SEPERATOR = "||";
-	public static final int LENGTH_COMM_HEADER = 4;
-	public static final int LENGTH_COMM_TYPE = 2;
+	public static final int LENGTH_COMM_HEADER = 50;
+	public static final int LENGTH_EVENT_CODE = 4;
+	public static final int LENGTH_EVENT_TYPE = 2;
 	
-	public static final int COMM_TYPE_OCCURRENCE = 1;
-	public static final int COMM_TYPE_RELEASE = 2;
+	public static final int POS_EVENT_CODE = 37;
+	public static final int POS_EVENT_TYPE = 39;
+	
+	public static final int EVENT_TYPE_OCCURRENCE = 1;
+	public static final int EVENT_TYPE_RELEASE = 2;
 	
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
 		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
@@ -38,7 +45,7 @@ public class Adapter {
 	private String commBody;
 	
 	private int process=-1;
-	private int commType;
+	private int eventType;
 	
 	private String eventId;
 	private String occuredDate;
@@ -63,11 +70,11 @@ public class Adapter {
 	public void setProcess(int process) {
 		this.process = process;
 	}
-	public int getCommType() {
-		return commType;
+	public int getEventType() {
+		return eventType;
 	}
-	public void setCommType(int commType) {
-		this.commType = commType;
+	public void setEventType(int eventType) {
+		this.eventType = eventType;
 	}
 	public String getEventId() {
 		return eventId;
@@ -94,64 +101,65 @@ public class Adapter {
 		this.locationName = locationName;
 	}
 	
-	public Adapter(String commHeader, String commType, String commBody){
+	public Adapter(String commHeader, String commBody){
 		super();
 		this.commHeader = commHeader;
 		this.commBody = commBody;
-		parseProcess(commHeader);
-		parseCommType(commType);
+		parseCommHeader(commHeader);
 		parseCommBody(commBody);
 	}
 
-	private void parseProcess(String commHeader){
+	public Adapter(ResultSet resultSet){
+		super();
+		if(SmartUtil.isBlankObject(resultSet)) return;
+		this.setResult(resultSet);
+	}
+	private void parseCommHeader(String commHeader){
 		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
 		
-		if(	commHeader.equals(Event.ID_ENV_GALE) ||
-			commHeader.equals(Event.ID_ENV_AIRFLOW) ||
-			commHeader.equals(Event.ID_ENV_STORM) ||
-			commHeader.equals(Event.ID_ENV_HEAVY_SNOWFALL) ||
-			commHeader.equals(Event.ID_ENV_DRYING) ||
-			commHeader.equals(Event.ID_ENV_STORM_SURGES) ||
-			commHeader.equals(Event.ID_ENV_TSUNAMI) ||
-			commHeader.equals(Event.ID_ENV_COLD_WAVE) ||
-			commHeader.equals(Event.ID_ENV_TYPHOON) ||
-			commHeader.equals(Event.ID_ENV_ASIAN_DUST) ||
-			commHeader.equals(Event.ID_ENV_HEATWAVE) ||
-			commHeader.equals(Event.ID_ENV_FINE_DUST)){
+		String eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
+		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
+		
+		if(	eventCode.equals(Event.ID_ENV_GALE) ||
+			eventCode.equals(Event.ID_ENV_AIRFLOW) ||
+			eventCode.equals(Event.ID_ENV_STORM) ||
+			eventCode.equals(Event.ID_ENV_HEAVY_SNOWFALL) ||
+			eventCode.equals(Event.ID_ENV_DRYING) ||
+			eventCode.equals(Event.ID_ENV_STORM_SURGES) ||
+			eventCode.equals(Event.ID_ENV_TSUNAMI) ||
+			eventCode.equals(Event.ID_ENV_COLD_WAVE) ||
+			eventCode.equals(Event.ID_ENV_TYPHOON) ||
+			eventCode.equals(Event.ID_ENV_ASIAN_DUST) ||
+			eventCode.equals(Event.ID_ENV_HEATWAVE) ||
+			eventCode.equals(Event.ID_ENV_FINE_DUST)){
 			this.process = System.PROCESS_ENV_WEAHTER;
-		}else if(commHeader.equals(Event.ID_ENV_OZONE)){
+		}else if(eventCode.equals(Event.ID_ENV_OZONE)){
 			this.process = System.PROCESS_ENV_ATMOSPHERE;
-		}else if(commHeader.equals(Event.ID_ENV_CANAL_WAY) || commHeader.equals(Event.ID_ENV_WATER)){
+		}else if(eventCode.equals(Event.ID_ENV_CANAL_WAY) || commHeader.equals(Event.ID_ENV_WATER)){
 			this.process = System.PROCESS_ENV_WATER;
-		}else if(commHeader.equals(Event.ID_TRAFFIC_ILLEGAL_PARKING)){
+		}else if(eventCode.equals(Event.ID_TRAFFIC_ILLEGAL_PARKING)){
 			this.process = System.PROCESS_TRAFFIC_ILLEGAL_PARKING;
-		}else if(commHeader.equals(Event.ID_TRAFFIC_INCIDENT) || 
+		}else if(eventCode.equals(Event.ID_TRAFFIC_INCIDENT) || 
 				commHeader.equals(Event.ID_TRAFFIC_ACCIDENTS) ||
 				commHeader.equals(Event.ID_TRAFFIC_HIT_AND_RUN) ||
 				commHeader.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN)){
 			this.process = System.PROCESS_TRAFFIC_INCIDENT;
-		}else if(commHeader.equals(Event.ID_DISASTER_FIRE)){
+		}else if(eventCode.equals(Event.ID_DISASTER_FIRE)){
 			this.process = System.PROCESS_DISASTER_FIRE;
-		}else if(commHeader.equals(Event.ID_CRIME_EMERGENCY)){
+		}else if(eventCode.equals(Event.ID_CRIME_EMERGENCY)){
 			this.process = System.PROCESS_CRIME_CCTV;
-		}else if(commHeader.equals(Event.ID_CRIME_VEHICLE)){
+		}else if(eventCode.equals(Event.ID_CRIME_VEHICLE)){
 			this.process = System.PROCESS_CRIME_VEHICLES;
-		}else if(commHeader.equals(Event.ID_WATERWORKS_LEAKS)){
+		}else if(eventCode.equals(Event.ID_WATERWORKS_LEAKS)){
 			this.process = System.PROCESS_WATERWORKS_LEAKS;
-		}else if(commHeader.equals(Event.ID_FACILITY_TROUBLE) || commHeader.equals(Event.ID_FACILITY_EMERGENCY)){
+		}else if(eventCode.equals(Event.ID_FACILITY_TROUBLE) || commHeader.equals(Event.ID_FACILITY_EMERGENCY)){
 			this.process = System.PROCESS_FACILITY_MANAGEMENT;
-		}else{
-			return;
 		}
-	}
-	
-	private void parseCommType(String commType){
-		if(SmartUtil.isBlankObject(commType) || commType.length()!=LENGTH_COMM_TYPE) return;
-	
-		if(commType.equals(Event.COMM_TYPE_OCCURRENCE))
-			this.commType = COMM_TYPE_OCCURRENCE;
-		if(commType.equals(Event.COMM_TYPE_RELEASE))
-			this.commType = COMM_TYPE_RELEASE;
+
+		if(eventType.equals(Event.COMM_TYPE_OCCURRENCE))
+			this.eventType = EVENT_TYPE_OCCURRENCE;
+		if(eventType.equals(Event.COMM_TYPE_RELEASE))
+			this.eventType = EVENT_TYPE_RELEASE;
 	
 	}
 	private void parseCommBody(String commBody){
@@ -245,7 +253,7 @@ public class Adapter {
 	}
 	
 	public void startProcess() throws Exception{
-		if(this.process<0 || this.process>System.MAX_PROCESS || this.commType!=COMM_TYPE_OCCURRENCE) return;
+		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_OCCURRENCE) return;
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
@@ -259,14 +267,28 @@ public class Adapter {
 	
 	public void performTask(String taskInstId) throws Exception{
 		TaskInstance taskInstance = null;
-		if(SmartUtil.isBlankObject(taskInstId)){
-			taskInstance = UcityUtil.getTaskInstanceByEventId(this.eventId, System.getProcessId(this.process));
-		}else{
-			taskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(System.getProcessId(this.process), taskInstId);
-		}
+		if(SmartUtil.isBlankObject(taskInstId)) return;
+		
+		taskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(System.getProcessId(this.process), taskInstId);
 		
 		if(SmartUtil.isBlankObject(taskInstance)) return;
 		
 		UcityUtil.performUServiceTask(taskInstance, this.getDataRecord());		
+	}
+	
+	public void setResult(ResultSet result){
+		try{
+			if(result.getRow()>0){ 
+				String commContent = result.getString("CMNC_TG_CONT");
+				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
+				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
+				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
+				this.parseCommHeader(this.commHeader);
+				this.parseCommBody(this.commBody);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 }
