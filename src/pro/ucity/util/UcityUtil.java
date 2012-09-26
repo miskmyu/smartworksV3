@@ -32,10 +32,6 @@ public class UcityUtil {
 			throw new Exception("Invalid parameters exception !!!");
 		}
 		
-		HttpServletRequest request = null;
-		
-		SwServiceFactory.getInstance().getWorkService().getRecord(request);
-		
 		Map<String, Object> requestBody = new HashMap<String, Object>();
 		SmartForm form = taskInstance.getSmartForm();
 		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
@@ -66,7 +62,42 @@ public class UcityUtil {
 	}
 	
 	public static void performUServiceTask(TaskInstance taskInstance, Map<String, Object> data) throws Exception{
+		if(taskInstance == null || data == null){
+			throw new Exception("Invalid parameters exception !!!");
+		}
+
+		Map<String, Object> requestBody = new HashMap<String, Object>();
+		SmartForm form = taskInstance.getSmartForm();
+		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
+			throw new Exception("Invalid Form information exception !!!");
+		}
 		
+		requestBody.put("workId", taskInstance.getWork().getId());
+		requestBody.put("instanceId", taskInstance.getWorkInstance().getId());
+		requestBody.put("taskInstId", taskInstance.getId());
+		requestBody.put("formId", form.getId());
+		requestBody.put("formName", form.getName());
+		
+		Map<String, Object> fieldData = new HashMap<String, Object>();
+		for(int i=0; i<form.getFields().length; i++){
+			FormField field = form.getFields()[i];
+			if(data.containsKey(field.getName())){
+				fieldData.put(field.getId(), data.get(field.getName()));
+			}
+		}
+		requestBody.put("frmSmartForm", fieldData);
+		
+		Map<String, Object> accessData = new HashMap<String, Object>();	
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
+		requestBody.put("frmAccessSpace", accessData);
+
+		SwServiceFactory.getInstance().getInstanceService().performTaskInstance(requestBody, null);
+	}
+	
+	public static TaskInstance getTaskInstanceByEventId(String eventId, String workId) throws Exception{
+		return null;
 	}
 }
 

@@ -34,14 +34,12 @@ public class Event {
 	public static final String ID_FACILITY_TROUBLE 			= "0601";
 	public static final String ID_FACILITY_EMERGENCY		= "0602";
 	
-	public static final String TYPE_OCCURRENCE				= "01";
-	public static final String TYPE_RELEASE					= "02";
-	public static final String TYPE_PROCESSING				= "03";
+	public static final String COMM_TYPE_OCCURRENCE			= "01";
+	public static final String COMM_TYPE_RELEASE			= "02";
+	public static final String COMM_TYPE_PROCESSING			= "03";
 	
 	public static final int TASK_EVENT_OCCURRENCE			= 1;
 	public static final int TASK_EVENT_PROCESSING			= 2;
 	public static final int TASK_EVENT_RELEASE				= 3;
 	
-	public static final String PROCESS_ID_기상특보 = "pkg_9564849550184543b06fa46e3290f296";
-
 }
