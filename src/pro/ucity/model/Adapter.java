@@ -17,7 +17,7 @@ import net.smartworks.util.SmartUtil;
 
 public class Adapter {
 
-	public static final String FIELD_SEPERATOR = "||";
+	public static final String FIELD_SEPERATOR = "\\|\\|";
 	public static final int LENGTH_COMM_HEADER = 50;
 	public static final int LENGTH_EVENT_CODE = 4;
 	public static final int LENGTH_EVENT_TYPE = 2;
@@ -29,16 +29,16 @@ public class Adapter {
 	public static final int EVENT_TYPE_RELEASE = 2;
 	
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트ID", "event_Id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")}		
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")}		
 	};
 	
 	private String commHeader;
@@ -115,6 +115,7 @@ public class Adapter {
 		this.setResult(resultSet);
 	}
 	private void parseCommHeader(String commHeader){
+		int sizeHeader = commHeader.length();
 		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
 		
 		String eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
@@ -156,9 +157,9 @@ public class Adapter {
 			this.process = System.PROCESS_FACILITY_MANAGEMENT;
 		}
 
-		if(eventType.equals(Event.COMM_TYPE_OCCURRENCE))
+		if(eventType.equals(Event.TYPE_OCCURRENCE))
 			this.eventType = EVENT_TYPE_OCCURRENCE;
-		if(eventType.equals(Event.COMM_TYPE_RELEASE))
+		if(eventType.equals(Event.TYPE_RELEASE))
 			this.eventType = EVENT_TYPE_RELEASE;
 	
 	}
@@ -240,14 +241,14 @@ public class Adapter {
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
-			if(keyMap.getId().equals("event_id"))
-				dataRecord.put(keyMap.getKey(), this.eventId);
-			else if(keyMap.getId().equals("occured_date"))
-				dataRecord.put(keyMap.getKey(), this.occuredDate);
-			else if(keyMap.getId().equals("facilityId"))
-				dataRecord.put(keyMap.getKey(), this.facilityId);
-			else if(keyMap.getId().equals("locationName"))
-				dataRecord.put(keyMap.getKey(), this.locationName);
+			if(keyMap.getKey().equals("event_id"))
+				dataRecord.put(keyMap.getId(), this.eventId);
+			else if(keyMap.getKey().equals("occured_date"))
+				dataRecord.put(keyMap.getId(), this.occuredDate);
+			else if(keyMap.getKey().equals("facility_id"))
+				dataRecord.put(keyMap.getId(), this.facilityId);
+			else if(keyMap.getKey().equals("location_name"))
+				dataRecord.put(keyMap.getId(), this.locationName);
 		}
 		return dataRecord;
 	}
@@ -257,10 +258,6 @@ public class Adapter {
 		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
-		
-		TaskInstance startTaskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(processWork.getId(), processWork.getDiagram().getStartTask().getId());
-		if(startTaskInstance==null) return;
-		
 		
 		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.getDataRecord());
 	}
