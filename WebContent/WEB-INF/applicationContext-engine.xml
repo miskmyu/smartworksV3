@@ -53,11 +53,13 @@
 	<beans:bean id="communityService" class="net.smartworks.server.service.impl.CommunityServiceImpl"/>
 	<beans:bean id="noticeService" class="net.smartworks.server.service.impl.NoticeServiceImpl"/>
 	<beans:bean id="seraService" class="net.smartworks.server.service.impl.SeraServiceImpl"/>
+	<beans:bean id="workService" class="net.smartworks.server.service.impl.WorkServiceImpl"/>
 	<beans:bean id="swServiceFactory" class="net.smartworks.server.service.factory.SwServiceFactory" factory-method="createInstance">
 		<beans:property name="instanceService" ref="instanceService"/>
 		<beans:property name="communityService" ref="communityService"/>
 		<beans:property name="noticeService" ref="noticeService"/>
 		<beans:property name="seraService" ref="seraService"/>
+		<beans:property name="workService" ref="workService"/>
 	</beans:bean>
 	
 	<beans:bean id="swManagerFactory" class="net.smartworks.server.engine.factory.SwManagerFactory" factory-method="createInstance">
