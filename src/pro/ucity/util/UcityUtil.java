@@ -13,10 +13,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
+import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.TaskInstanceInfo;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.SmartForm;
+import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartUtil;
@@ -96,7 +101,23 @@ public class UcityUtil {
 		SwServiceFactory.getInstance().getInstanceService().performTaskInstance(requestBody, null);
 	}
 	
-	public static TaskInstance getTaskInstanceByEventId(String eventId, String workId) throws Exception{
+	public static TaskInstance getTaskInstanceByEventId(String eventId, String processId) throws Exception{
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(processId)) return null;
+		
+		InstanceInfoList instanceList = SwServiceFactory.getInstance().getInstanceService().getAllPWorkInstanceList(true, null);
+		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())) return null;
+		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
+		for(int i=0; i<instances.length; i++){
+			if(!instances[i].getWork().getId().equals(processId)) continue;
+			ProcessWorkInstance processInstance = (ProcessWorkInstance)SwServiceFactory.getInstance().getInstanceService().getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
+			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
+			for(int j=0; j<processInstance.getTasks().length; j++){
+				TaskInstanceInfo taskInstance = processInstance.getTasks()[j];
+				if(!taskInstance.isRunning()) continue;
+			}
+			
+		}
+		
 		return null;
 	}
 }
