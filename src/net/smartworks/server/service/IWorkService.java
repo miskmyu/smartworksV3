@@ -10,6 +10,7 @@ import net.smartworks.model.filter.SearchFilter;
 import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.report.Data;
 import net.smartworks.model.report.Report;
+import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.Work;
 import net.smartworks.model.work.info.FileCategoryInfo;
 import net.smartworks.model.work.info.ImageCategoryInfo;
@@ -49,7 +50,11 @@ public interface IWorkService {
 
 	public String getFormXml(String formId, String workId) throws Exception;
 
+	public SmartForm getFormById(String formId, String workId) throws Exception;
+
 	public SwdRecord getRecord(HttpServletRequest request) throws Exception;
+
+	public SwdRecord getRecord(String workId, String recordId, String taskInstId) throws Exception;
 
 	public SwdRecord getRecordByKeyValue(String workId, String keyValue) throws Exception;
 

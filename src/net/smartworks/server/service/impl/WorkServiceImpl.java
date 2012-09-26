@@ -839,6 +839,12 @@ public class WorkServiceImpl implements IWorkService {
 			// Exception Handling Required			
 		}
 	}
+	
+	@Override
+	public SmartForm getFormById(String formId, String workId) throws Exception{
+		return null;
+	}
+	
 	@Override
 	public void setMyProfile(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 
@@ -1027,17 +1033,11 @@ public class WorkServiceImpl implements IWorkService {
 			// Exception Handling Required			
 		}
 	}
-
 	@Override
-	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
-
+	public SwdRecord getRecord(String workId, String recordId, String taskInstId) throws Exception{
 		try {
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
-
-			String workId = request.getParameter("workId");
-			String recordId = request.getParameter("recordId");
-			String taskInstId = request.getParameter("taskInstId");
 
 			SwdRecord swdRecord = null;
 			SwfFormCond swfFormCond = new SwfFormCond();
@@ -1153,7 +1153,17 @@ public class WorkServiceImpl implements IWorkService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
+		}		
+	}
+
+	@Override
+	public SwdRecord getRecord(HttpServletRequest request) throws Exception {
+
+		String workId = request.getParameter("workId");
+		String recordId = request.getParameter("recordId");
+		String taskInstId = request.getParameter("taskInstId");
+		
+		return getRecord(workId, recordId, taskInstId);
 	}
 
 	@Override

@@ -254,7 +254,7 @@ public class Adapter {
 		if(startTaskInstance==null) return;
 		
 		
-		UcityUtil.startUServiceProcess(startTaskInstance, this.getDataRecord());
+		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.getDataRecord());
 	}
 	
 	public void performTask(String taskInstId) throws Exception{
@@ -264,6 +264,9 @@ public class Adapter {
 		}else{
 			taskInstance = SwServiceFactory.getInstance().getInstanceService().getTaskInstanceById(System.getProcessId(this.process), taskInstId);
 		}
+		
+		if(SmartUtil.isBlankObject(taskInstance)) return;
+		
 		UcityUtil.performUServiceTask(taskInstance, this.getDataRecord());		
 	}
 }
