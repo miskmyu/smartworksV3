@@ -79,8 +79,8 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/get_report_data", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> getReportData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Data reportData = smartworks.getReportData(request);
+	public @ResponseBody Map<String, Object> getReportData(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Data reportData = smartworks.getReportData(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());
@@ -94,7 +94,7 @@ public class ReportController {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Map<String, Object> getReportDataByDef(@RequestBody Map<String, Object> requestBody, HttpServletRequest request, HttpServletResponse response) throws Exception {
 //		Data reportData = smartworks.getReportDataByDef(requestBody, request);
-		Data reportData = smartworks.getReportData(request);
+		Data reportData = smartworks.getReportData(requestBody, request);
 		// TO DO : Exception handler
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("xFieldName", reportData.getxFieldName());
