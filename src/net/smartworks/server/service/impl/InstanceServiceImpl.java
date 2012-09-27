@@ -141,6 +141,8 @@ import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
+import net.smartworks.server.engine.organization.model.SwoGroup;
+import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
@@ -181,7 +183,6 @@ import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartTest;
 import net.smartworks.util.SmartUtil;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -2109,6 +2110,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				obj.setWorkSpaceType(workSpaceType);
 				obj.setAccessLevel(accessLevel);
 				obj.setAccessValue(accessValue);
+				
+				//워크스페이스(workspaceid) 가 비공개 그룹이라면 무조건 비공개 그룹의 선택 공개로 저장이 된다
+				populatePrivateGroupAuth(userId, obj);
+				
 			}
 
 			String recId = obj.getRecordId();
@@ -2197,6 +2202,72 @@ public class InstanceServiceImpl implements IInstanceService {
 			e.printStackTrace();
 			return null;			
 		}
+	}
+	private void populatePrivateGroupAuth(String userId, TskTask obj) throws Exception {
+		if (obj == null)
+			return;
+		String workSpaceId = obj.getWorkSpaceId();
+		if (CommonUtil.isEmpty(workSpaceId))
+			return;
+		if (workSpaceId.indexOf("group_") == -1)
+			return;
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, workSpaceId, IManager.LEVEL_LITE);
+		if (group == null)
+			return;
+		String groupType = group.getGroupType();
+		if (groupType.equalsIgnoreCase(SwoGroup.GROUP_TYPE_PUBLIC))
+			return;
+
+		obj.setAccessLevel("2");
+		obj.setAccessValue(workSpaceId);
+//		StringBuffer accessValueBuf = new StringBuffer();
+//		SwoGroupMember[] member = group.getSwoGroupMembers();
+//		if (member == null || member.length == 0) {
+//			obj.setAccessValue(userId);
+//		} else {
+//			boolean isFirst = true;
+//			for (int i = 0; i < member.length; i++) {
+//				String memberId = member[i].getUserId();
+//				
+//				accessValueBuf.append("")
+//			}
+//			
+//			
+//		}
+		
+	}
+	private void populatePrivateGroupAuth(String userId, SwdRecord obj) throws Exception {
+		if (obj == null)
+			return;
+		String workSpaceId = obj.getWorkSpaceId();
+		if (CommonUtil.isEmpty(workSpaceId))
+			return;
+		if (workSpaceId.indexOf("group_") == -1)
+			return;
+		SwoGroup group = SwManagerFactory.getInstance().getSwoManager().getGroup(userId, workSpaceId, IManager.LEVEL_LITE);
+		if (group == null)
+			return;
+		String groupType = group.getGroupType();
+		if (groupType.equalsIgnoreCase(SwoGroup.GROUP_TYPE_PUBLIC))
+			return;
+
+		obj.setAccessLevel("2");
+		obj.setAccessValue(workSpaceId);
+//		StringBuffer accessValueBuf = new StringBuffer();
+//		SwoGroupMember[] member = group.getSwoGroupMembers();
+//		if (member == null || member.length == 0) {
+//			obj.setAccessValue(userId);
+//		} else {
+//			boolean isFirst = true;
+//			for (int i = 0; i < member.length; i++) {
+//				String memberId = member[i].getUserId();
+//				
+//				accessValueBuf.append("")
+//			}
+//			
+//			
+//		}
+		
 	}
 	private void populateAutoIndexField(String userId, String type, String formId, String instanceId, SwdRecord record) throws Exception {
 		Map infoMap = new HashMap();
@@ -3358,6 +3429,10 @@ public class InstanceServiceImpl implements IInstanceService {
 				task.setWorkSpaceType(workSpaceType);
 				task.setAccessLevel(accessLevel);
 				task.setAccessValue(accessValue);
+				
+				//프로세스업무의 시작 공간 위치가 비공개 그룹이라면 해당 업무는 비공개 그룹원들에게만 공개가 된다
+				populatePrivateGroupAuth(userId, task);
+				
 			}
 			task.setDocument(taskDocument);
 
@@ -7216,7 +7291,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (cuser != null)
 			userId = cuser.getId();
 		
-		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") || action.equalsIgnoreCase("SAVE")) {
+		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") || action.equalsIgnoreCase("ABEND") || action.equalsIgnoreCase("SAVE")) {
 			
 			/*{
 			workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d, 
@@ -7577,6 +7652,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public String reassignTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "delegate");
+	}
+	@Override
+	public String abendTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return executeTask(requestBody, request, "abend");
 	}
 	@Override
 	public String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {

@@ -1694,4 +1694,9 @@ public class SmartWorks implements ISmartWorks {
 		return workService.getFormById(formId, workId);
 	}
 
+	@Override
+	public String abendTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.abendTaskInstance(requestBody, request);
+	}
+
 }

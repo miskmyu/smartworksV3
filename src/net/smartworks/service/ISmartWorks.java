@@ -447,6 +447,8 @@ public interface ISmartWorks {
 	
 	public abstract String reassignTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String abendTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public abstract String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract void startWorkService(String workId) throws Exception;

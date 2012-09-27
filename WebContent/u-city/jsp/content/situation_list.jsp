@@ -142,15 +142,16 @@
 </script>
 <%
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks"); 
-	String cid = request.getParameter("cid");
+/* 	String cid = request.getParameter("cid");
 	String wid = request.getParameter("wid");
 
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
-	session.setAttribute("lastLocation", "situation_list.sw");
+	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
+ */
+ 	session.setAttribute("lastLocation", "situation_list.sw");
 	
-//	String workId = SmartUtil.getSpaceIdFromContentContext(cid);
-	String workId = "pkg_9564849550184543b06fa46e3290f296";
+	String workId = System.getProcessId(System.PROCESS_ENV_WEAHTER);
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork) smartWorks.getWorkById(workId);
 	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
@@ -164,7 +165,7 @@
 		selectedFilterId = params.getFilterId();
 	}
 	
-	UcityTest.startProcess(System.PROCESS_ENV_WEAHTER);
+//	UcityTest.startProcess(System.PROCESS_ENV_WEAHTER);
 	
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
@@ -178,7 +179,7 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 				
-				<div class="title"><%=work.getName()%></div>
+				<div class="title">통합 상황 모니터링</div>
 				
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt20">
@@ -231,7 +232,7 @@
 					</div>
 				</div>
 				<!-- 목록보기 타이틀-->
-				
+
 				<!-- 상세필터 및 새업무등록하기 화면 -->
 				<div id="search_filter" class="filter_section js_new_work_form"></div>
 				<!-- 상세필터 -->

@@ -123,6 +123,8 @@ public interface IInstanceService {
 
 	public String reassignTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
+	public String abendTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String addCommentOnWork(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
