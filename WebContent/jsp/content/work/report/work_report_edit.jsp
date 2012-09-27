@@ -140,7 +140,7 @@
 				<span class="txt_btn_end"></span>
 			</a> 
 		</span> 
-		<span class="btn_gray ml5">
+		<span class="btn_gray">
 			<a href="" class="js_work_report_close"> 
 				<span class="txt_btn_start"></span> 
 				<span class="txt_btn_center"><fmt:message key="common.button.cancel"/></span> 

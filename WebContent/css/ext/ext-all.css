@@ -8,6 +8,10 @@ h1,h2,h3,h4,h5,h6{font-size:100%}
 input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}
 */
 
+/* Black Chart by jskim */
+.black path {stroke:#a6a6a6}
+.black text {fill:#a6a6a6}
+.black #ext-sprite-1660 {fill:#22282f;stroke:#13161B}
 
 caption,th{text-align:left}
 

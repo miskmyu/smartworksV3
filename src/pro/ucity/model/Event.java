@@ -1,5 +1,7 @@
 package pro.ucity.model;
 
+import net.smartworks.util.SmartUtil;
+
 public class Event {
 
 	public static final String ID_ENV_GALE 					= "0101";
@@ -42,4 +44,62 @@ public class Event {
 	public static final int TASK_EVENT_PROCESSING			= 2;
 	public static final int TASK_EVENT_RELEASE				= 3;
 	
+	public static String getEventNameByCode(String eventName){
+		if(SmartUtil.isBlankObject(eventName)) return "";
+		
+		if(eventName.equals(ID_ENV_GALE)){
+			return "강풍";
+		}else if(eventName.equals(ID_ENV_AIRFLOW)){
+			return "풍량";
+		}else if(eventName.equals(ID_ENV_STORM)){
+			return "호우";
+		}else if(eventName.equals(ID_ENV_HEAVY_SNOWFALL)){
+			return "대설";
+		}else if(eventName.equals(ID_ENV_DRYING)){
+			return "건조";
+		}else if(eventName.equals(ID_ENV_STORM_SURGES)){
+			return "폭풍해일";
+		}else if(eventName.equals(ID_ENV_TSUNAMI)){
+			return "지진해일";
+		}else if(eventName.equals(ID_ENV_COLD_WAVE)){
+			return "한파";
+		}else if(eventName.equals(ID_ENV_TYPHOON)){
+			return "태풍";
+		}else if(eventName.equals(ID_ENV_ASIAN_DUST)){
+			return "황사";
+		}else if(eventName.equals(ID_ENV_HEATWAVE)){
+			return "폭염";
+		}else if(eventName.equals(ID_ENV_FINE_DUST)){
+			return "대기특보(미세먼지)";
+		}else if(eventName.equals(ID_ENV_OZONE)){
+			return "대기특보(오존)";
+		}else if(eventName.equals(ID_ENV_CANAL_WAY)){
+			return "주운";
+		}else if(eventName.equals(ID_ENV_WATER)){
+			return "수질";
+		}else if(eventName.equals(ID_TRAFFIC_INCIDENT)){
+			return "돌발상황";
+		}else if(eventName.equals(ID_TRAFFIC_ILLEGAL_PARKING)){
+			return "불법주정차(용의차량)상황";
+		}else if(eventName.equals(ID_TRAFFIC_ACCIDENTS)){
+			return "교통사고상황";
+		}else if(eventName.equals(ID_TRAFFIC_HIT_AND_RUN)){
+			return "뺑소니상황";
+		}else if(eventName.equals(ID_TRAFFIC_VEHICLE_BREAKDOWN)){
+			return "차량고장상황";
+		}else if(eventName.equals(ID_DISASTER_FIRE)){
+			return "화재";
+		}else if(eventName.equals(ID_CRIME_VEHICLE)){
+			return "방범(용의차량)상황";
+		}else if(eventName.equals(ID_CRIME_EMERGENCY)){
+			return "비상벨상황";
+		}else if(eventName.equals(ID_WATERWORKS_LEAKS)){
+			return "누수발생";
+		}else if(eventName.equals(ID_FACILITY_TROUBLE)){
+			return "장애발생";
+		}else if(eventName.equals(ID_FACILITY_EMERGENCY)){
+			return "긴급메세지";
+		}
+		return "";
+	}	
 }
