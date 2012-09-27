@@ -179,7 +179,13 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 				
-				<div class="title">통합 상황 모니터링</div>
+				<div class="title">통합 상황 모니터링
+				
+					<div class="txt_btn fr h_auto pt5">
+                		<a href="" class="">현황판 ▼</a>
+                	</div>
+                
+				</div>
 				
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt20">
