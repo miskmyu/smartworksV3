@@ -181,7 +181,7 @@
 				<div class="title"><%=work.getName()%></div>
 				
 				<!-- 목록보기 타이틀-->
-				<div class="list_title_space js_work_list_title mt15">
+				<div class="list_title_space js_work_list_title mt20">
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="po_left">
 							<div class="srch">

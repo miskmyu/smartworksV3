@@ -155,7 +155,7 @@ button.space {height: 18px; padding: 1px 3px}
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
 -webkit-border-radius:6px; -moz-border-radius:6px; border-radius:6px; font-size:11px}
-.user_select + input[type="text"] {width:100px !important}
+.user_sel_area input[type="text"] {border:0; height:14px}
 
 /* Text style  */
 .t_red, .t_sunday {color:#e54b4b}
