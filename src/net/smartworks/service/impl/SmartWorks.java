@@ -1699,4 +1699,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.abendTaskInstance(requestBody, request);
 	}
 
+	@Override
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+		return instanceService.getAllUcityPWorkInstanceList(runningOnly, params);
+	}
+
 }
