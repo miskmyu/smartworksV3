@@ -87,12 +87,9 @@ public class UcityUtil {
 		requestBody.put("workId", processId);
 		requestBody.put("formId", form.getId());
 		requestBody.put("formName", form.getName());
-		requestBody.put("serviceName", "");
-		requestBody.put("serviceName", "");
-		requestBody.put("serviceName", "");
-		requestBody.put("serviceName", "");
-		requestBody.put("serviceName", "");
-		requestBody.put("serviceName", "");
+		requestBody.put("serviceName", data.get("serviceName"));
+		requestBody.put("eventName", data.get("eventName"));
+		requestBody.put("eventLocation", data.get("eventLocation"));
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
 		for(int i=0; i<form.getFields().length; i++){

@@ -186,7 +186,7 @@
                 	</div>                
 				</div>
 
-				<jsp:include page="/jsp/content/work/report/work_report.jsp">
+				<jsp:include page="/u-city/jsp/content/situation_report.jsp">
 					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 				</jsp:include>
 				

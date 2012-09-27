@@ -23,13 +23,13 @@ import pro.ucity.model.Adapter;
 import pro.ucity.model.OPSituation;
 import pro.ucity.util.UcityUtil;
 
-public class TesterScheduler2 extends QuartzJobBean  {
+public class DBReadScheduler extends QuartzJobBean  {
 	
 	@Override
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+	synchronized protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 				
 		System.out.println("스케쥴러 동작 시간 : " + new Date());
 		Adapter.readHistoryTableToStart();
-		OPSituation.readHistoryTableToStart();
+//		OPSituation.readHistoryTableToStart();
 	}
 }

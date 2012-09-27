@@ -283,7 +283,9 @@ public class Adapter {
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
 		
-		dataRecord.put("serviceName", this.getServiceCode());
+		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
+		dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
+		dataRecord.put("eventPlace", this.locationName);
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
@@ -344,7 +346,7 @@ public class Adapter {
 	
 	public static void readHistoryTableToStart(){
 		try {
-			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -413,7 +415,7 @@ public class Adapter {
 	
 	public static ResultSet readHistoryTable(String eventId){
 		try {
-			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
