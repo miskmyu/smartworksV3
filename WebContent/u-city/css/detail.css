@@ -53,7 +53,7 @@
 .contents_space .det_title, .reply .det_title, .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
-.contents_space .border_no_topline{border:1px solid #c7c7c7; border-width:0 1px 1px 1px; padding:10px}
+.contents_space .border_no_topline {border: 1px solid #6D6D6D; margin: 2px 0 5px; padding: 5px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
 .contents_space > .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
@@ -126,7 +126,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table .tit_bg .date {width:100px}
 
 .list_contents table th {text-align:center}
-.list_contents table td {border-bottom: 1px solid #444444}
+.list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 .po_left {float: left}
 
