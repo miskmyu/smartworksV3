@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.smartworks.model.community.User;
+import net.smartworks.model.community.info.DepartmentInfo;
+import net.smartworks.model.community.info.GroupInfo;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.process.process.exception.PrcException;
@@ -27,6 +29,7 @@ import net.smartworks.server.engine.worklist.manager.IWorkListManager;
 import net.smartworks.server.engine.worklist.model.SubTaskWorkCond;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.engine.worklist.model.TaskWorkCond;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
 import org.hibernate.Query;
@@ -114,7 +117,29 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append(" 				and tskassignee != '' ");
 		queryBuffer.append(" 			) tsktask ");
 		queryBuffer.append(" 			where 1=1 ");
-		queryBuffer.append("			and (tsktask.tskAssignee ='").append(userId).append("' or (tsktask.tskAccessLevel not in ('1','2')) or (tsktask.tskaccessLevel = '2' and tsktask.tskaccessValue like '%").append(userId).append("%')) ");
+		
+		//내가 속한 부서, 그룹으로 데이터를 조회한다
+		StringBuffer accessValueBuf = new StringBuffer();
+		accessValueBuf.append(" tsktask.tskaccessValue like '%").append(userId).append("%' ");
+		
+		User user = SmartUtil.getCurrentUser();
+		String myDeptId = user.getDepartmentId();
+		accessValueBuf.append(" or tsktask.tskaccessValue like '%").append(myDeptId).append("%' ");
+		DepartmentInfo[] adjunctDeptIds = user.getDepartments();
+		if (adjunctDeptIds != null && adjunctDeptIds.length != 0) {
+			for (int i = 0; i < adjunctDeptIds.length; i++) {
+				accessValueBuf.append(" or tsktask.tskaccessValue like '%").append(adjunctDeptIds[i].getId()).append("%' ");
+			}
+		}
+		GroupInfo[] myGroups = SwServiceFactory.getInstance().getCommunityService().getMyGroups();
+		if (myGroups != null && myGroups.length != 0) {
+			for (int i = 0; i < myGroups.length; i++) {
+				accessValueBuf.append(" or tsktask.tskaccessValue like '%").append(myGroups[i].getId()).append("%' ");
+			}
+		}		
+		queryBuffer.append("	and (tsktask.tskAssignee ='").append(userId).append("' or (tsktask.tskAccessLevel not in ('1','2')) or (tsktask.tskaccessLevel = '2' and (").append(accessValueBuf.toString()).append("))) ");
+		
+		//queryBuffer.append("			and (tsktask.tskAssignee ='").append(userId).append("' or (tsktask.tskAccessLevel not in ('1','2')) or (tsktask.tskaccessLevel = '2' and tsktask.tskaccessValue like '%").append(userId).append("%')) ");
 		if (fromDate != null)
 			queryBuffer.append(" 			and tsktask.tskModifyDate < :fromDate ");
 		if (expectEndDateFrom != null)
@@ -403,9 +428,30 @@ public class WorkListManagerImpl extends AbstractManager implements IWorkListMan
 		queryBuffer.append("	where tsktype not in ('and','route','SUBFLOW','xor') ");
 		queryBuffer.append("	and task.tskform = form.formid ");
 		
+		User user = SmartUtil.getCurrentUser();
+		String currentUser = user.getId();
+		
+		//내가 속한 부서, 그룹으로 데이터를 조회한다
+		StringBuffer accessValueBuf = new StringBuffer();
+		accessValueBuf.append(" task.tskaccessValue like '%").append(currentUser).append("%' ");
+		String myDeptId = user.getDepartmentId();
+		accessValueBuf.append(" or task.tskaccessValue like '%").append(myDeptId).append("%' ");
+		DepartmentInfo[] adjunctDeptIds = user.getDepartments();
+		if (adjunctDeptIds != null && adjunctDeptIds.length != 0) {
+			for (int i = 0; i < adjunctDeptIds.length; i++) {
+				accessValueBuf.append(" or task.tskaccessValue like '%").append(adjunctDeptIds[i].getId()).append("%' ");
+			}
+		}
+		GroupInfo[] myGroups = SwServiceFactory.getInstance().getCommunityService().getMyGroups();
+		if (myGroups != null && myGroups.length != 0) {
+			for (int i = 0; i < myGroups.length; i++) {
+				accessValueBuf.append(" or task.tskaccessValue like '%").append(myGroups[i].getId()).append("%' ");
+			}
+		}
+		
 		//assginee가 나거나 엑세스레벨이 공개이거나 만약 비공개라면 엑세스벨류에 내가 있는것
-		String currentUser = SmartUtil.getCurrentUser().getId();
-		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and task.tskaccessValue like '%").append(currentUser).append("%')) ");
+//		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and task.tskaccessValue like '%").append(currentUser).append("%')) ");
+		queryBuffer.append("	and (task.tskAssignee ='").append(currentUser).append("' or (task.tskAccessLevel not in ('1','2')) or (task.tskaccessLevel = '2' and (").append(accessValueBuf.toString()).append("))) ");
 		
 		queryBuffer.append("	and form.packageId is not null ");
 		if (!CommonUtil.isEmpty(packageStatus))
