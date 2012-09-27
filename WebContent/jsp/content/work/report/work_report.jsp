@@ -87,7 +87,7 @@
 	<div>
 		<!-- 컨텐츠 -->
 		<div class="js_work_report_edit" style="display:none"></div>
-		<div class="js_work_report_view border_noTopLine" style="display:none">
+		<div class="js_work_report_view border_no_topline" style="display:none">
 			<%
 			if(!SmartUtil.isBlankObject(lastReport)){
 			%>
