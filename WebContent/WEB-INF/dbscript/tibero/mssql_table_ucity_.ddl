@@ -13,8 +13,8 @@ CREATE TABLE UcityWorkList (
 	isSms varchar(10),
 	eventPlace varchar(100),	
 	creator	varchar(50),
-	createdtime datetime,
+	createdtime timestamp,
 	modifier varchar(50),
-	modifiedtime datetime,
+	modifiedtime timestamp,
 	primary key (objId)
 );
