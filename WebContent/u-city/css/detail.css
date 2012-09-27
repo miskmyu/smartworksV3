@@ -56,7 +56,7 @@
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
-.contents_space .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
+.contents_space > .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
 
 /* Reply Info */
 .task_information {vertical-align:bottom; float:left}
@@ -135,7 +135,8 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .nmake_title_space .title_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -331px transparent; height:20px; font-size:14px; font-weight:bold; padding: 0 8px 0 28px; float:left; line-height: 23px}
 		
 /* 프로세스 */
-.process_section { position:relative; float: left; width:100%}
+.process_section { position:relative; float: left; width:100%; color:#454545}
+.process_section a {color:#454545 !important}
 .process_space {line-height:15px}
 .process_space ul {margin:0}
 .process_space li { float:left}
@@ -146,13 +147,13 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .process_space li.js_select_task_instance {}
 .process_space li.js_select_task_instance:hover, .process_space li.selected { border: 1px solid red; cursor:pointer}
 
-.proc_btn_prev {background: url("../../images/proc_bg.png") no-repeat -70px 0 transparent; width:11px; height:19px; position: absolute; left: 0; margin: 22px 0 0 20px}
-a .proc_btn_prev:hover {background: url("../../images/proc_bg.png") no-repeat -70px -28px transparent}
-.proc_btn_next {background: url("../../images/proc_bg.png") no-repeat -129px 0 transparent; width:11px; height:19px; position: absolute; right: 0; margin: 22px 20px 0 0}
-a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -129px -28px; transparent}
+.proc_btn_prev {background: url("../images/proc_bg.png") no-repeat -70px 0 transparent; width:11px; height:19px; position: absolute; left: 0; margin: 22px 0 0 20px}
+a .proc_btn_prev:hover {background: url("../images/proc_bg.png") no-repeat -70px -28px transparent}
+.proc_btn_next {background: url("../images/proc_bg.png") no-repeat -129px 0 transparent; width:11px; height:19px; position: absolute; right: 0; margin: 22px 20px 0 0}
+a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129px -28px; transparent}
 
-.proc_arr_next {background: url("../../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
-.proc_start_compl {background: url("../../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
+.proc_arr_next {background: url("../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
+.proc_start_compl {background: url("../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
 
 .proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px 7px 4px; width:150px; margin:0 5px 17px 0; min-height: 45px}
 .proc_task.completed {background-color: #e4e4e4} /* 완료 */			
@@ -170,7 +171,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
 
 /* 페이징 */
-.paginate {padding-top: 10px; position: relative; text-align: center; font-size: 12px; font-weight: bold}
+.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127}
 .paginate strong {color:#ff7e7e; margin:0 20px 0 0}
 .paginate .num {margin:0 20px 0 0; text-decoration: none; vertical-align: middle}
 
@@ -185,7 +186,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .paginate a.next span:hover {background-position: -45px -376px}
 .paginate a.next_end span:hover {background-position: -65px -376px}
 
-.num_box {float:right; margin: -20px 5px 0; position:relative}
+.num_box {float:right; margin: -28px 5px 0; position:relative}
 
 /* Nav Paging */
 .nav_paginate {color:#dddddd; font-size:11px; margin:0 6px 0 0; text-align:right}
