@@ -38,8 +38,8 @@ public class Adapter {
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	
-	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y'";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y'";
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
 
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
@@ -365,7 +365,7 @@ public class Adapter {
 			try{
 				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
-				rs.last(); 
+				rs.last();
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {

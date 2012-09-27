@@ -89,7 +89,7 @@ public class UcityUtil {
 		requestBody.put("formName", form.getName());
 		requestBody.put("serviceName", data.get("serviceName"));
 		requestBody.put("eventName", data.get("eventName"));
-		requestBody.put("eventLocation", data.get("eventLocation"));
+		requestBody.put("eventPlace", data.get("eventPlace"));
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
 		for(int i=0; i<form.getFields().length; i++){
@@ -398,16 +398,11 @@ public class UcityUtil {
 						dataRecord = cmHistory.getDataRecord();
 						break;
 					case System.TABLE_ID_DEVMID_SEND_STATUS:
-//						OPSituation opSituation = new OPSituation(result);
-//						dataRecord = opSituation.getDataRecord();
 						break;
 					case System.TABLE_ID_DEVMID_DEVICE_STATUS:
-//						OPSituation opSituation = new OPSituation(result);
-//						dataRecord = opSituation.getDataRecord();
 						break;
 					case System.TABLE_ID_ADAPTER_HISTORY:
-//						Adapter adapter = new Adapter(result);
-						Adapter adapter = new Adapter(UcityTest.ADAPTER_HEADER_ENV_GALE, UcityTest.ADAPTER_BODY_ENV_GALE);
+						Adapter adapter = new Adapter(result);
 						dataRecord = adapter.getDataRecord();
 						break;
 					}

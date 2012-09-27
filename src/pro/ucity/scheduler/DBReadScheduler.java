@@ -28,8 +28,8 @@ public class DBReadScheduler extends QuartzJobBean  {
 	@Override
 	synchronized protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 				
-		System.out.println("스케쥴러 동작 시간 : " + new Date());
-		Adapter.readHistoryTableToStart();
+//		System.out.println("스케쥴러 동작 시간 : " + new Date());
+//		Adapter.readHistoryTableToStart();
 //		OPSituation.readHistoryTableToStart();
 	}
 }
