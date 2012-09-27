@@ -6,8 +6,8 @@ body {background-color: #22282F}
 #content a:hover { text-decoration:underline}
 
 /*Search*/	
-.srch {	width:170px; height:15px; margin: 0 5px 0 0}
-.srch input[type="text"] {background-color:#2d353e; border: 1px solid #13161B; float: left; width: 146px; padding: 1px 2px; margin-right: 2px; color: #A6A6A6}
+.srch {	width:170px; height:15px; margin: 0 10px 0 0}
+.srch input[type="text"] {float: left; width: 146px; margin: 0 2px 0 0;}
 .srch button {
 	background:url("../images/btn_srch.png") no-repeat; cursor:pointer; height:15px; width:15px; padding:0; border:0}
 .srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat}
@@ -58,7 +58,7 @@ body {background-color: #22282F}
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
-.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%} /* 한줄 input, text박스 쓸때 */
+.fieldline {border:1px solid #13161B; left:0px; background: none repeat scroll 0 0 #2D353E; vertical-align:middle; text-align:left; width:99.4%; padding:2px; color: #a6a6a6 !important} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 .fieldline.community_names {line-height:17px}
 
@@ -118,7 +118,7 @@ body {background-color: #22282F}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }
+.glo_btn_space {padding:8px 0 5px 0; border-top: 1px solid #444444; margin:0 10px; min-height:20px }
 .js_upload_buttons .glo_btn_space  {display: table; width:100%; margin:0}
 .js_upload_buttons_page > div.fr {margin-right: 10px}
 .glo_btn_space .btn_finish {float:right; padding-right:10px}
@@ -137,13 +137,13 @@ button.space {height: 18px; padding: 1px 3px}
 .buttonSet .button {padding: 4px 8px 3px}
    	
 /* Icon */
-.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
-.icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
-.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
-.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
-.icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
-.icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
-.icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
+.icon_division_s {background: url("../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
+.icon_attach {background: url("../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
+.icon_in_down {background: url("../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_mail_delet {background: url("../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
+.icon_mail_write {background: url("../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
+.icon_mail_send {background: url("../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
 
 .icon_txt {text-decoration: none!important; border-radius: 3px 3px 3px 3px; display: inline-block; color: #FFF; padding: 0 1px; font-size:10.5px; height:14px; letter-spacing:-1px; margin-right:3px; line-height:16px; min-width:42px; text-align:center}
 .icon_txt.blue {background: -moz-linear-gradient(center top , #8bbaf2, #468ee3) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#8bbaf2),to(#468ee3)); background: -o-linear-gradient(top,#8bbaf2,#468ee3); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#8bbaf2,endColorStr=#468ee3); border: 1px solid #3a87e1}
@@ -154,8 +154,8 @@ button.space {height: 18px; padding: 1px 3px}
 
 /* 사람지정  */
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
--webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
-.user_select + input[type="text"] {width:100px !important}
+-webkit-border-radius:6px; -moz-border-radius:6px; border-radius:6px; font-size:11px}
+.user_sel_area input[type="text"] {border:0; height:14px}
 
 /* Text style  */
 .t_red, .t_sunday {color:#e54b4b}
@@ -208,6 +208,3 @@ button.space {height: 18px; padding: 1px 3px}
 .icon_status_not_yet {background: url("../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_completed {background: url("../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_rejected {background: url("../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-
-/* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }

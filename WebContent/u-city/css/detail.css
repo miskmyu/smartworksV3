@@ -128,7 +128,6 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
-.r_line {border-right:1px solid #cccccc}
 .po_left {float: left}
 
 /* 새로 만들기 부분 타이틀 */
@@ -171,9 +170,9 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
 
 /* 페이징 */
-.paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold}
-.paginate strong {color:#ed1c24}
-.paginate .num {margin-right:1px; padding: 2px 3px; text-decoration: none; vertical-align: middle}
+.paginate {padding-top: 10px; position: relative; text-align: center; font-size: 12px; font-weight: bold}
+.paginate strong {color:#ff7e7e; margin:0 20px 0 0}
+.paginate .num {margin:0 20px 0 0; text-decoration: none; vertical-align: middle}
 
 .spr { cursor: pointer; display: inline-block; overflow: hidden; vertical-align: middle}
 .paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -344px transparent; display: inline-block; height: 20px; width:20px; position:relative; left:4px}
@@ -301,7 +300,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /* Icon button style */
 .title_line_btns {float:right; position: relative}
-.title_line_options {float:left; position:relative; top:0}
+.title_line_options {float:left; position:relative; top:0; margin:0 0 3px 0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
 .icon_btn_edit {background: url("../images/body_icon.png") 0 -859px no-repeat; height:18px; width:24px; display:inline-block}
@@ -323,5 +322,3 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 .btn_app_shar {background: url("../../images/body_icon.png") no-repeat -225px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
 .current .btn_app_shar {background-position:-225px -547px}
 .btn_app_shar_go {background: url("../../images/body_icon.png") no-repeat -277px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
-
-select {background-color: #2D353E; border: 1px solid #13161B; vertical-align: middle; color: #A6A6A6;}
