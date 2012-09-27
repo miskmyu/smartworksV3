@@ -7291,7 +7291,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (cuser != null)
 			userId = cuser.getId();
 		
-		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") || action.equalsIgnoreCase("SAVE")) {
+		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") || action.equalsIgnoreCase("ABEND") || action.equalsIgnoreCase("SAVE")) {
 			
 			/*{
 			workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d, 
@@ -7652,6 +7652,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public String reassignTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "delegate");
+	}
+	@Override
+	public String abendTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return executeTask(requestBody, request, "abend");
 	}
 	@Override
 	public String tempSaveTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
