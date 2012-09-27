@@ -42,4 +42,8 @@ public class Event {
 	public static final int TASK_EVENT_PROCESSING			= 2;
 	public static final int TASK_EVENT_RELEASE				= 3;
 	
+	public static String getEventNameByCode(String enentName){
+		return null;
+	}
+	
 }

@@ -269,11 +269,21 @@ public class Adapter {
 		}
 	}
 	
+	public String getServiceName(){
+		return Service.getServiceNameByCode(this.serviceCode);
+	}
+	
+	public String getEventName(){
+		return Event.getEventNameByCode(this.eventCode);
+	}
+	
 	public Map<String, Object> getDataRecord(){
 		if(this.process<0 || this.process>System.MAX_PROCESS) return null;
 		
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
+		
+		dataRecord.put("serviceName", this.getServiceCode());
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];

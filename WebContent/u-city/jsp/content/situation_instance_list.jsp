@@ -174,7 +174,7 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
 							eventPlace = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
-							isSms = extendedProperty.getValue().equals("Y");			
+							isSms = "Y".equals(extendedProperty.getValue());			
 						}
 					}
 				}

@@ -16,4 +16,7 @@ public class Service {
 	public static final String ID_PERM_CONTROL 		= "1112";
 	public static final String ID_SMS_MMS 			= "1113";
 	
+	public static String getServiceNameByCode(String serviceCode){
+		return "";
+	}
 }
