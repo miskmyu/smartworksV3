@@ -142,7 +142,6 @@ import net.smartworks.server.engine.organization.manager.ISwoManager;
 import net.smartworks.server.engine.organization.model.SwoDepartment;
 import net.smartworks.server.engine.organization.model.SwoDepartmentCond;
 import net.smartworks.server.engine.organization.model.SwoGroup;
-import net.smartworks.server.engine.organization.model.SwoGroupMember;
 import net.smartworks.server.engine.organization.model.SwoUser;
 import net.smartworks.server.engine.organization.model.SwoUserCond;
 import net.smartworks.server.engine.pkg.manager.IPkgManager;
@@ -189,6 +188,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
+import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 
 @Service
 public class InstanceServiceImpl implements IInstanceService {
@@ -3453,8 +3455,10 @@ public class InstanceServiceImpl implements IInstanceService {
 			//참조자, 전자결재, 연결업무 정보를 셋팅한다
 			setReferenceApprovalToTask(userId, task, requestBody);
 			
+			//UCITY ucityAdvisor에서 사용할 값을 셋팅한다 
+			setUcityExtendedProperty(requestBody, task);
+
 			//태스크를 실행하며 프로세스업무를 실행한다
-			
 			task = getTskManager().executeTask(userId, task, "execute");
 
 			//자동채번을 위하여 아래를 호출한다
@@ -4292,8 +4296,200 @@ public class InstanceServiceImpl implements IInstanceService {
 
 		return tableColName;
 	}
-	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+	
+	public InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
+	
+		try {
+			User user = SmartUtil.getCurrentUser();
+			String userId = user.getId();
+			
+			UcityWorkListCond ucityWorkListCond = new UcityWorkListCond();
+			
+			SearchFilter searchFilter = params.getSearchFilter();
+			List<Filter> filterList = new ArrayList<Filter>();
+			if(searchFilter != null) {
+				Condition[] conditions = searchFilter.getConditions();
+				for(Condition condition : conditions) {
+					Filter filter = new Filter();
 
+					FormField leftOperand = condition.getLeftOperand();
+					String formFieldId = leftOperand.getId();
+					String tableColName = getProcessTableColName(formFieldId);
+
+					String formFieldType = leftOperand.getType();
+					String operator = condition.getOperator();
+					String rightOperand = (String)condition.getRightOperand();
+
+					if(formFieldId.equalsIgnoreCase("status")) {
+						int rightOperandInt = Integer.parseInt(rightOperand);
+						if(rightOperandInt == Instance.STATUS_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_DELAYED_RUNNING)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_RETURNED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_RUNNING;
+						else if(rightOperandInt == Instance.STATUS_COMPLETED)
+							rightOperand = PrcProcessInst.PROCESSINSTSTATUS_COMPLETE;
+					}
+
+					filter.setLeftOperandType(formFieldType);
+					filter.setLeftOperandValue(tableColName);
+					filter.setOperator(operator);
+					filter.setRightOperandType(formFieldType);
+					filter.setRightOperandValue(rightOperand);
+					filterList.add(filter);
+				}
+
+				Filter[] filters = new Filter[filterList.size()];
+				filterList.toArray(filters);
+
+				ucityWorkListCond.setFilter(filters);
+			}
+			String searchKey = params.getSearchKey();
+			ucityWorkListCond.setSearchKey(searchKey);
+
+			long totalCount = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkListSize(user.getId(), ucityWorkListCond);
+
+			int pageSize = params.getPageSize();
+			if(pageSize == 0) pageSize = 20;
+
+			int currentPage = params.getCurrentPage();
+			if(currentPage == 0) currentPage = 1;
+
+			int totalPages = (int)totalCount % pageSize;
+
+			if(totalPages == 0)
+				totalPages = (int)totalCount / pageSize;
+			else
+				totalPages = (int)totalCount / pageSize + 1;
+
+			int result = 0;
+
+			if(params.getPagingAction() != 0) {
+				if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXT10) {
+					result = (((currentPage - 1) / 10) * 10) + 11;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_NEXTEND) {
+					result = totalPages;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREV10) {
+					result = ((currentPage - 1) / 10) * 10;
+				} else if(params.getPagingAction() == RequestParams.PAGING_ACTION_PREVEND) {
+					result = 1;
+				}
+				currentPage = result;
+			}
+
+			if(previousPageSize != pageSize)
+				currentPage = 1;
+
+			previousPageSize = pageSize;
+
+			if((long)((pageSize * (currentPage - 1)) + 1) > (int)totalCount)
+				currentPage = 1;
+
+			if (currentPage > 0)
+				ucityWorkListCond.setPageNo(currentPage-1);
+
+			ucityWorkListCond.setPageSize(pageSize);
+
+			SortingField sf = params.getSortingField();
+
+			//화면에서 사용하고 있는 컬럼의 상수값과 실제 프로세스 인스턴스 데이터 베이스의 컬럼 이름이 맞지 않아 컨버팅 작업
+			//한군데에서 관리 하도록 상수로 변경 필요
+			if (sf == null) {
+				sf = new SortingField();
+				sf.setFieldId(FormField.ID_CREATED_DATE);
+				sf.setAscending(false);
+			}
+			String sfColumnNameTemp = sf.getFieldId();
+			
+			if (sfColumnNameTemp.equalsIgnoreCase("status")) {
+				sfColumnNameTemp = "status"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("subject")) {
+				sfColumnNameTemp = "title";
+			} else if (sfColumnNameTemp.equalsIgnoreCase("lastTask")) {
+				sfColumnNameTemp = "runningTaskName"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("creator")) {
+				sfColumnNameTemp = "creationUser"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("createdTime")) {
+				sfColumnNameTemp = "creationDate"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifier")) {
+				sfColumnNameTemp = "modificationUser"; 
+			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
+				sfColumnNameTemp = "modificationDate"; 
+			} else {
+				sfColumnNameTemp = "creationDate";
+			}
+
+			ucityWorkListCond.setOrders(new Order[]{new Order(sfColumnNameTemp, sf.isAscending())});
+
+			UcityWorkList[] workLists = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkLists(userId, ucityWorkListCond, null);
+			
+			InstanceInfoList instanceInfoList = new InstanceInfoList();
+			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
+			PWInstanceInfo[] pWInstanceInfos = null;
+			for (int i = 0; i < workLists.length; i++) {
+				UcityWorkList workList = workLists[i];
+				PWInstanceInfo pworkInfo = new PWInstanceInfo();
+				
+				pworkInfo.setId(workList.getPrcInstId());
+				pworkInfo.setCreatedDate(new LocalDate(workList.getCreationDate().getTime()));
+				pworkInfo.setLastModifiedDate(new LocalDate(workList.getModificationDate().getTime()));
+				pworkInfo.setLastModifier(ModelConverter.getUserInfoByUserId(workList.getModificationUser()));
+				
+				if (!CommonUtil.isEmpty(workList.getRunningTaskId())) {
+					TaskWorkCond taskWorkCond = new TaskWorkCond();
+					taskWorkCond.setTskObjId(workList.getRunningTaskId());
+					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
+					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
+					pworkInfo.setLastTaskCount(taskWork.length);
+				}
+				pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
+				int status = -1;
+				if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+					status = Instance.STATUS_RUNNING;
+				} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+					status = Instance.STATUS_COMPLETED;
+				}
+				pworkInfo.setStatus(status);
+				pworkInfo.setSubject(workList.getTitle());
+				pworkInfo.setType(WorkInstance.TYPE_PROCESS);
+				pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+				//pworkInfo.setWorkSpace(workSpace);
+				
+				Property p1 = new Property("serviceName",workList.getServiceName());
+				Property p2 = new Property("eventName",workList.getEventName());
+				Property p3 = new Property("type",workList.getType());
+				Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
+				Property p5 = new Property("eventPlace",workList.getEventPlace());
+				Property p6 = new Property("isSms",workList.getIsSms());
+
+				Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6};
+				
+				pworkInfo.setExtentedProperty(properties);
+				
+				pwInstanceInfoList.add(pworkInfo);
+			}
+			if(pwInstanceInfoList.size() > 0) {
+				pWInstanceInfos = new PWInstanceInfo[pwInstanceInfoList.size()];
+				pwInstanceInfoList.toArray(pWInstanceInfos);
+			}
+			
+			instanceInfoList.setInstanceDatas(pWInstanceInfos);
+			instanceInfoList.setPageSize(pageSize);
+			instanceInfoList.setTotalSize((int)totalCount);
+			instanceInfoList.setSortedField(sf);
+			instanceInfoList.setTotalPages(totalPages);
+			instanceInfoList.setCurrentPage(currentPage);
+			instanceInfoList.setType(InstanceInfoList.TYPE_PROCESS_INSTANCE_LIST);
+			
+			return instanceInfoList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
+	
+	public InstanceInfoList getAllPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception {
 		try{
 			User user = SmartUtil.getCurrentUser();
 			String userId = user.getId();
@@ -7285,6 +7481,25 @@ public class InstanceServiceImpl implements IInstanceService {
 			// Exception Handling Required			
 		}
 	}
+	private void setUcityExtendedProperty(Map<String, Object> requestBody, TskTask obj) throws Exception {
+		if (obj == null) 
+			return;
+		
+		String serviceName = (String)requestBody.get("serviceName");
+		String eventName = (String)requestBody.get("eventName");
+		String type = (String)requestBody.get("type");
+		String isSms = (String)requestBody.get("isSms");
+		String externalDisplay = (String)requestBody.get("externalDisplay");
+		String eventPlace = (String)requestBody.get("eventPlace");
+		
+		obj.setExtendedAttributeValue("ucity_serviceName", serviceName);
+		obj.setExtendedAttributeValue("ucity_eventName", eventName);
+		obj.setExtendedAttributeValue("ucity_type", type);
+		obj.setExtendedAttributeValue("ucity_isSms", isSms);
+		obj.setExtendedAttributeValue("ucity_externalDisplay", externalDisplay);
+		obj.setExtendedAttributeValue("ucity_eventPlace", eventPlace);
+		
+	}
 	private String executeTask(Map<String, Object> requestBody, HttpServletRequest request, String action) throws Exception {
 		User cuser = SmartUtil.getCurrentUser();
 		String userId = null;
@@ -7416,10 +7631,12 @@ public class InstanceServiceImpl implements IInstanceService {
 				task.setAccessLevel(accessLevel);
 				task.setAccessValue(accessValue);
 			}*/
-
 			if (action.equalsIgnoreCase("save")) {
 				getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			} else {
+				//UCITY ucityAdvisor에서 사용할 값을 셋팅한다 
+				setUcityExtendedProperty(requestBody, task);
+
 				getTskManager().executeTask(userId, task, action);
 
 				//자동채번을 위하여 아래를 호출한다
@@ -7558,92 +7775,6 @@ public class InstanceServiceImpl implements IInstanceService {
 	@Override
 	public String performTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "execute");
-// execute, return, delegate, save 함수를 한곳(executeTask(Map<String, Object> requestBody, HttpServletRequest request, String action))으로 모으기전 execute 소스 - 테스트 진행 후 한곳으로 합쳐지는게 불가능하다면 이전으로 돌리기 위해 주석 처리함
-//		/*{
-//			workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d, 
-//			instanceId=402880eb35426e06013542712d7c0002, 
-//			taskInstId=402880eb35426e060135427135d20004, 
-//			formId=frm_5aeb1a53f9cf439dbe83693be9e27624, 
-//			formName=승인자 결재, 
-//			frmSmartForm={
-//				8=승인자 의견, 
-//				12={
-//					users=[
-//						{
-//							id=kmyu@maninsoft.co.kr, 
-//							name=연구소장 유광민
-//						}
-//					]
-//				}, 
-//				16={users=[{id=kmyu@maninsoft.co.kr, name=연구소장 유광민}]}, 
-//				76={users=[{id=kmyu@maninsoft.co.kr, name=연구소장 유광민}]}
-//			}
-//		}*/
-//		
-//		try {
-//			
-//			User cuser = SmartUtil.getCurrentUser();
-//			String userId = null;
-//			if (cuser != null)
-//				userId = cuser.getId();
-//
-//			if (logger.isInfoEnabled()) {
-//				logger.info("ExecuteTask Task Start [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ") ] by " + userId);
-//			}
-//			//태스크인스턴스 아이디를 이용하여 저장 되어 있는 태스크를 조회 하고 실행 가능 여부를 판단한다
-//			String taskInstId = (String)requestBody.get("taskInstId");
-//			if (CommonUtil.isEmpty(taskInstId))
-//				throw new Exception("ExecuteTaskId Is Null");
-//			TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
-//			if (task == null)
-//				throw new Exception("Not Exist Task Object(data) : taskId = " + taskInstId);
-//			if (!task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN))
-//				throw new Exception("Task Is Not Executable Status : taskId = " + taskInstId +" (status - " + task.getStatus() + ")");
-//			if (!task.getAssignee().equalsIgnoreCase(userId)) 
-//				throw new Exception("Task is Not Executable Assignee : taskId = " + taskInstId + " (assignee - " + task.getAssignee() + " But performer - " + userId + ")");
-//			
-//			//태스크에 사용자가 입력한 업무 데이터를 셋팅한다
-//			String formId = (String)requestBody.get("formId");
-//			SwfForm form = getSwfManager().getForm(userId, formId);
-//			SwfField[] formFields = form.getFields();
-//			List domainFieldList = new ArrayList();
-//			
-//			for (SwfField field: formFields) {
-//				SwdField domainField = new SwdField();
-//				domainField.setFormFieldId(field.getId());
-//				domainField.setFormFieldName(field.getName());
-//				domainField.setFormFieldType(field.getSystemType());
-//				domainField.setArray(field.isArray());
-//				domainField.setSystemField(field.isSystem());
-//				domainFieldList.add(domainField);
-//			}
-//			SwdField[] domainFields = new SwdField[domainFieldList.size()];
-//			domainFieldList.toArray(domainFields);
-//			
-//			SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
-//			String taskDocument = null;
-//			if (recordObj != null)
-//				taskDocument = recordObj.toString();
-//			task.setDocument(taskDocument);
-//			if (logger.isInfoEnabled()) {
-//				logger.info("ExecuteTask Task [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + "), document : " + recordObj.toString() + " ] ");
-//			}
-//			//태스크의 실제 완료 시간을 입력한다
-//			if (task.getRealStartDate() == null)
-//				task.setRealStartDate(new LocalDate(new Date().getTime()));
-//			task.setRealEndDate(new LocalDate(new Date().getTime()));
-//			//태스크를 실행한다
-//			TskTask executedTask = getTskManager().executeTask(userId, task, "execute");
-//			String prcInstId = executedTask.getProcessInstId();
-//			if (logger.isInfoEnabled()) {
-//				logger.info("ExecuteTask Task Done [processInstanceId : " + (String)requestBody.get("instanceId") + ", " + (String)requestBody.get("formName") + "( taskId : " + (String)requestBody.get("taskInstId") + ")] ");
-//			}
-//			return prcInstId;
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw e;
-//		}
 	}
 	@Override
 	public String returnTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {

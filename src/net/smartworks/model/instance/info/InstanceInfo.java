@@ -3,6 +3,7 @@ package net.smartworks.model.instance.info;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.community.info.WorkSpaceInfo;
 import net.smartworks.model.work.info.WorkInfo;
+import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartUtil;
 
@@ -19,6 +20,8 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	private LocalDate createdDate;
 	private UserInfo lastModifier;
 	private LocalDate lastModifiedDate;
+	
+	private Property[] extentedProperty;
 	
 	public boolean isNew() {
 		if(SmartUtil.isBlankObject(lastModifiedDate)) return false;
@@ -109,5 +112,11 @@ public class InstanceInfo implements Comparable<InstanceInfo> {
 	@Override
 	public int compareTo(InstanceInfo o) {
 		return this.getLastModifiedDate().compareTo(((InstanceInfo)o).getLastModifiedDate());
+	}
+	public Property[] getExtentedProperty() {
+		return extentedProperty;
+	}
+	public void setExtentedProperty(Property[] extentedProperty) {
+		this.extentedProperty = extentedProperty;
 	}
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="pro.ucity.manager.ucityWorkList.model" default-lazy="false">
+	<class name="UcityWorkList" table="UcityWorkList">
+		<id name="objId" type="string" length="50" unsaved-value="undefined">
+			<generator class="net.smartworks.server.engine.common.model.util.IdGen"/>
+		</id>
+		<property name="prcInstId" column="prcInstId" type="string" length="50"/>
+		<property name="packageId" column="packageId" type="string" length="100"/>
+		<property name="status" column="status" type="string" length="100"/>
+		<property name="title" column="title" type="string" length="200"/>
+		<property name="runningTaskId" column="runningTaskId" type="string" length="50"/>
+		<property name="runningTaskName" column="runningTaskName" type="string" length="200"/>
+		<property name="serviceName" column="serviceName" type="string" length="200"/>
+		<property name="eventName" column="eventName" type="string" length="200"/>
+		<property name="type" column="type" type="string" length="100"/>
+		<property name="externalDisplay" column="externalDisplay" type="string" length="200"/>
+		<property name="isSms" column="isSms" type="string" length="10"/>
+		<property name="eventPlace" column="eventPlace" type="string" length="100"/>
+		<property name="creationUser" column="creator" type="string" length="50"/>
+		<property name="creationDate" column="createdTime" type="timestamp"/>
+		<property name="modificationUser" column="modifier" type="string" length="50"/>
+		<property name="modificationDate" column="modifiedTime" type="timestamp"/>
+	</class>
+</hibernate-mapping>

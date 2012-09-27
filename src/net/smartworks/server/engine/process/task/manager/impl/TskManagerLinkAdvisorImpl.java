@@ -69,7 +69,6 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 	private static Pattern pattern = Pattern.compile("\\{\\$[^$]+\\}");
 	
 	public void postExecuteTask(String user, TskTask obj, String action) throws Exception {
-		
 		if (obj.getType().equalsIgnoreCase(TskTask.TASKTYPE_REFERENCE))
 			return;
 		
