@@ -652,9 +652,9 @@ public class SmartWorks implements ISmartWorks {
 	}
 
 	@Override
-	public Data getReportData(HttpServletRequest request) throws Exception {
+	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		// TODO Auto-generated method stub
-		return workService.getReportData(request);
+		return workService.getReportData(requestBody, request);
 	}
 
 	@Override

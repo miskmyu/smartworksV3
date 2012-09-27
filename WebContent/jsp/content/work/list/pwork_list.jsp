@@ -205,7 +205,7 @@
 						<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 					</jsp:include>
 				</div>
- --%> 
+ --%>
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt15">
 					<div class="title"><fmt:message key="common.title.instance_list" /></div>

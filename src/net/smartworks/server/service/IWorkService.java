@@ -46,7 +46,7 @@ public interface IWorkService {
 
 	public List<SwfFormFieldDef> findFormFieldByForm(String formId, boolean deployedCondition) throws SwfException, Exception;
 
-	public Data getReportData(HttpServletRequest request) throws Exception;
+	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String getFormXml(String formId, String workId) throws Exception;
 
