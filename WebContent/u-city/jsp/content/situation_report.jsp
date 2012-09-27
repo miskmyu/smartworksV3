@@ -35,11 +35,16 @@
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
+
 <!--  전체 레이아웃 -->
-<div class="js_work_report_page mt15" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
-	<div class="list_title_space solid_line_sb pb3">
-		<div class="title"><fmt:message key="report.title.report" /></div>
-		<div class="title_line_options js_work_report_list_box">
+<div class="js_work_report_page" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
+	
+	<div class="title_list">통합 상황 모니터링	
+	
+		<!-- 우측 영역 -->
+		<div class="title_line_options">
+		<span class="fl js_progress_span"></span>
+		<div class="fl js_work_report_list_box" style="position: relative; top: -4px;">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 				<option value="<%=Report.REPORT_ID_NONE %>" 
 					<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>
@@ -81,13 +86,15 @@
 		<a href="work_report_edit.sw" class="js_edit_work_report ml5" title="<fmt:message key='report.button.edit_report'/>">
 			<span class="icon_btn_edit"></span>
 		</a>
-		<span class="js_progress_span"></span>
+	</div>
+		<!-- 우측 영역 //-->
+		   	               
 	</div>
 	
-	<div>
+	<div class="cb">
 		<!-- 컨텐츠 -->
 		<div class="js_work_report_edit" style="display:none"></div>
-		<div class="js_work_report_view border_no_topline" style="display:none">
+		<div class="js_work_report_view border_no_topline black" style="display:none">
 			<%
 			if(!SmartUtil.isBlankObject(lastReport)){
 			%>

@@ -778,43 +778,26 @@ public class WorkServiceImpl implements IWorkService {
 	}
 
 	@Override
-	public Data getReportData(HttpServletRequest request) throws Exception {
+	public Data getReportData(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		try{
-			
+			/*{
+				"frmWorkReport":
+					{
+						"rdoWorkReportType":"1",
+						"selReportChartType":"3",
+						"selReportXAxis":"modifiedTime",
+						"selReportXAxisSelectorDate":"byMonth",
+						"rdoReportXAxisSort":"ascend",
+						"selReportYAxis":"modifiedTime",
+						"selReportYAxisValue":"count",
+						"selReportFilterName":"system.allInstances"
+					},
+				"frmAccessPolicy":
+					{
+						"selAccessPolicy":"3"
+					}
+			}*/
 			return SmartTest.getReportData();
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		}catch (Exception e){
 			// Exception Handling Required

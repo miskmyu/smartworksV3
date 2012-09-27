@@ -38,7 +38,7 @@
 <!--  전체 레이아웃 -->
 <div class="border_no_topline">
 <form name="frmWorkReport" class="form_contents js_validation_required js_work_report_edit_page" workId="<%=workId%>" reportId="<%=reportId%>">
-	<table class="table_normal report_title js_report_title">
+	<table class="table_normal js_report_title">
 		<tr style="display:none" class="js_work_report_name">
 			<th class="required_label"><fmt:message key="report.title.report_name" /></th>
 			<td colspan="4">
@@ -61,7 +61,7 @@
 			</td>
 		</tr>
 	</table>
-	<table class="table_normal report_title js_form_by_report_title">
+	<table class="table_normal js_form_by_report_title">
 		<%
 		if (reportType == Report.TYPE_CHART || reportType == Report.TYPE_MATRIX) {
 		%>
@@ -140,7 +140,7 @@
 				<span class="txt_btn_end"></span>
 			</a> 
 		</span> 
-		<span class="btn_gray ml5">
+		<span class="btn_gray">
 			<a href="" class="js_work_report_close"> 
 				<span class="txt_btn_start"></span> 
 				<span class="txt_btn_center"><fmt:message key="common.button.cancel"/></span> 

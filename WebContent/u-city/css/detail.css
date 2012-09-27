@@ -56,7 +56,7 @@
 .contents_space .border_no_topline {border: 1px solid #6D6D6D; margin: 2px 0 5px; padding: 5px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
-.contents_space > .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
+.contents_space > .title, .contents_space .title_list {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
 
 /* Reply Info */
 .task_information {vertical-align:bottom; float:left}
@@ -128,7 +128,6 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
-.po_left {float: left}
 
 /* 새로 만들기 부분 타이틀 */
 .nmake_title_space {background-color:#F7F7F7; padding:5px; overflow:hidden}
