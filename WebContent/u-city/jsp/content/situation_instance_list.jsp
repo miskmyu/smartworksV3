@@ -84,7 +84,10 @@
 					if(sortedField.getFieldId().equals(FIELD_ID_SERVICE_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
-				</a>/				
+				</a>
+				<span class="js_progress_span"></span>
+			</th>
+			<th>				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FIELD_ID_EVENT_NAME)){
@@ -159,7 +162,7 @@
 				String serviceType = "";
 				String externalDisplay = "";
 				String eventPlace = "";
-				boolean isSms = false;
+				String isSms = "";
 				if(!SmartUtil.isBlankObject(extendedProperties)){
 					for(int i=0; i<extendedProperties.length; i++){
 						Property extendedProperty = extendedProperties[i];
@@ -174,7 +177,7 @@
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
 							eventPlace = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
-							isSms = "Y".equals(extendedProperty.getValue());			
+							isSms = ("Y".equals(extendedProperty.getValue())) ? "예" : "아니요";			
 						}
 					}
 				}
@@ -231,14 +234,21 @@
  						<a class="js_ucity_content" href="<%=target %>"><%if(!SmartUtil.isBlankObject(lastTask)){%><%=lastTask.getName()%><%} %></a>
  					</td>
 					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=externalDisplay%></a>
+					</td>
+					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
+					</td>
+					<td>
 						<a class="js_ucity_content" href="<%=target %>">					
 							<div class="noti_in_s">
 								<div class="t_date"><%=instanceInfo.getCreatedDate().toLocalDateTimeSimpleString()%></div>
 							</div>
 						</a>
 					</td>
-					<td> </td>
-					<td> </td>
+					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=eventPlace%></a>
+					</td>
 				</tr>
 	<%
 				currentCount--;
@@ -263,7 +273,10 @@
 					if(sortedField.getFieldId().equals(FIELD_ID_SERVICE_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
-				</a>/				
+				</a>
+				<span class="js_progress_span"></span>
+			</th>
+			<th>				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FIELD_ID_EVENT_NAME)){
