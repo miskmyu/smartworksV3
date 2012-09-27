@@ -104,8 +104,25 @@
 <!-- 컨텐츠 레이아웃-->
 <div class="section_portlet js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
+ 			<!-- 타이틀 -->
+			<div class="body_titl_pic">
+				<div>		
+ 	            <!-- 다이어그램 보기 -->
+					<div class="txt_btn fr cb h_auto">
+	                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
+	                </div>
+	                <div class="txt_btn fr cb h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+				<!--  다이어그램 보기// -->
+				</div>
+				
+	            <!-- 우측 버튼 -->
+		                    
+               	<div class="solid_line cb"></div>
+			</div>
+			<!-- 타이틀 -->
+
 			<!-- 프로세스다이어그램 -->
-			<div class="define_space js_process_instance_viewer" style="height:512px;"></div>
+			<div class="define_space js_process_instance_viewer" style="display:none;height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
 			<div class="define_space" style="padding: 0 45px; height:88px">
@@ -161,9 +178,7 @@
 					                    <!-- task 정보 -->
 					                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
 						                    <div class="title"><%=count%>) <%=task.getName() %></div>
-						                    <img src="<%=task.getPerformer().getMinPicture()%>" class="noti_pic profile_size_s">
 						                    <div class="noti_in_s">
-							                    <div class="name"><%=task.getPerformer().getLongName()%></div>
 							                    <div class="t_date"><%=task.getLastModifiedDate().toLocalString() %></div>
 						                    </div>
 						                <%if(isSelectable){%></a><%} %>
@@ -398,8 +413,8 @@
 	
 	if(!isEmpty(selectedTask)) clickOnTask(selectedTask);
 
-	var target = pworkSpace.find('.js_process_instance_viewer');
+/* 	var target = pworkSpace.find('.js_process_instance_viewer');
 	var instanceId = pworkSpace.attr('instId');
 	loadInstanceViewer(target, {instanceId : instanceId });
-	
+ */	
 </script>
