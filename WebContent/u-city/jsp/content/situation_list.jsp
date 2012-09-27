@@ -184,14 +184,15 @@
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt20">
 					<div class="title_line_options">
-						<form name="frmSearchInstance" class="po_left">
+						<span class="fl js_progress_span"></span>
+						<form name="frmSearchInstance" class="fl">
 							<div class="srch">
 								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
 						</form>
 
-						<form class="form_space po_left js_form_filter_name" name="frmPworkFilterName">
+						<form class="form_space fl js_form_filter_name" name="frmPworkFilterName">
 							<select name="selFilterName" class="js_select_search_filter" href="search_filter.sw?workId=<%=workId%>">
 								<option value="<%=SearchFilter.FILTER_ALL_INSTANCES%>" 
 									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
@@ -228,7 +229,6 @@
 						<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
 							<span class="icon_btn_edit"></span>
 						</a>
-						<span class="js_progress_span"></span>
 					</div>
 				</div>
 				<!-- 목록보기 타이틀-->

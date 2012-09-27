@@ -102,7 +102,7 @@ function logout() {
 <link href="u-city/css/detail.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/form.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/pop.css" type="text/css" rel="stylesheet" />
-<link href="u-city/css/ext-all.css" type="text/css" rel="stylesheet" />
+<link href="css/ext/ext-all.css" type="text/css" rel="stylesheet" />
 <link href="css/black/media.css" type="text/css" rel="stylesheet"/>
 
 

@@ -39,12 +39,12 @@
 <!--  전체 레이아웃 -->
 <div class="js_work_report_page" workId="<%=workId %>" reportId="<%=lastReportId%>" reportType="<%=lastReportType %>" chartType="<%=lastChartType%>">
 	
-	<div class="title">통합 상황 모니터링	
+	<div class="title_list">통합 상황 모니터링	
 	
 		<!-- 우측 영역 -->
 		<div class="title_line_options">
 		<span class="fl js_progress_span"></span>
-		<div class="fl js_work_report_list_box">
+		<div class="fl js_work_report_list_box" style="position: relative; top: -4px;">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 				<option value="<%=Report.REPORT_ID_NONE %>" 
 					<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>

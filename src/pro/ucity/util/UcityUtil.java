@@ -51,7 +51,7 @@ public class UcityUtil {
 		if(!adapter.isValid() || adapter.getEventType() != Adapter.EVENT_TYPE_OCCURRENCE){
 			throw new Exception("Invalid result set exception !!!");
 		}
-		adapter.startProcess();				
+		adapter.startProcess();	
 	}
 
 	public static void startPortalService(ResultSet resultSet, ResultSet joinResultSet) throws Exception{
@@ -217,17 +217,17 @@ public class UcityUtil {
 		SwServiceFactory.getInstance().getInstanceService().abendTaskInstance(requestBody, null);
 	}
 	
-	public static ResultSet readTaskTable(String tableName, String eventId, String status) throws Exception{
+	public static Map<String,Object> readTaskTable(String tableName, String eventId, String status) throws Exception{
 		
-		ResultSet resultSet = null;
+		Map<String,Object> dataRecord = null;
 		int tableId = System.getTableId(tableName);
 		switch(tableId){
 		case System.TABLE_ID_ADAPTER_HISTORY:
-			resultSet = Adapter.readHistoryTable(eventId);
+			dataRecord = Adapter.readHistoryTable(eventId);
 			break;
-//		case System.TABLE_ID_COMMID_TRACE:
-//			resultSet = CMHistory.readHistoryTable(eventId);
-//			break;
+		case System.TABLE_ID_COMMID_TRACE:
+			dataRecord = CMHistory.readHistoryTable(eventId, status);
+			break;
 //		case System.TABLE_ID_OPPORTAL_SITUATION:
 //			resultSet = OPSituation.readHistoryTable(eventId, status);
 //			break;
@@ -242,7 +242,7 @@ public class UcityUtil {
 		case System.TABLE_ID_DEVMID_SEND_STATUS:
 			break;
 		}
-		return resultSet;
+		return dataRecord;
 	}
 	
 	synchronized public static void resumePollingForRunningTasks(String processId) throws Exception{
@@ -357,57 +357,30 @@ public class UcityUtil {
 				String status = currentStatus;
 				TaskInstance taskInstance = currentTaskInstance;
 				long timeout = currentTimeout;
-				ResultSet result = null;
-				while(timeout > 0 && result==null) {
+				Map<String, Object> dataRecord = null;
+				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord)) {
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
 						if(!taskInstance.isRunning()) break;
-						result = UcityUtil.readTaskTable(tableName, eventId, status);
+						dataRecord = UcityUtil.readTaskTable(tableName, eventId, status);
 					} catch(Exception e) {
 						if(timeout<System.DEFAULT_POLLING_INTERVAL){
 							timeout=0;
 							break;
 						}
 						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+						dataRecord = null;
 						try{
 							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+							continue;
 						}catch (Exception ex){
 							ex.printStackTrace();
 							timeout=0;
 							break;
 						}
-					}
-					int tableId = System.getTableId(tableName);
-					Map<String, Object> dataRecord = null;
-					switch(tableId){
-					case System.TABLE_ID_OPPORTAL_SITUATION:
-						OPSituation opSituation = new OPSituation(result);
-						dataRecord = opSituation.getDataRecord();
-						break;
-					case System.TABLE_ID_OPPORTAL_DISPLAY:
-						OPDisplay opDisplay = new OPDisplay(result);
-						dataRecord = opDisplay.getDataRecord();
-						break;
-					case System.TABLE_ID_INTCON_SITUATION:
-						ICSituation icSituation = new ICSituation(result);
-						dataRecord = icSituation.getDataRecord();
-						break;
-					case System.TABLE_ID_COMMID_TRACE:
-						CMHistory cmHistory = new CMHistory(result);
-						dataRecord = cmHistory.getDataRecord();
-						break;
-					case System.TABLE_ID_DEVMID_SEND_STATUS:
-						break;
-					case System.TABLE_ID_DEVMID_DEVICE_STATUS:
-						break;
-					case System.TABLE_ID_ADAPTER_HISTORY:
-						Adapter adapter = new Adapter(result);
-						dataRecord = adapter.getDataRecord();
-						break;
 					}
 					if(SmartUtil.isBlankObject(dataRecord)){
-						result = null;
 						if(timeout<System.DEFAULT_POLLING_INTERVAL){
 							timeout=0;
 							break;
@@ -415,32 +388,36 @@ public class UcityUtil {
 						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
 						try{
 							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+							continue;
 						}catch (Exception ex){
 							ex.printStackTrace();
 							timeout=0;
 							break;
 						}
-					}
-					try{
-						UcityUtil.performUServiceTask(taskInstance, dataRecord);
-					}catch (Exception e){
-						e.printStackTrace();
-						if(timeout<System.DEFAULT_POLLING_INTERVAL){
-							timeout=0;
-							break;
-						}
-						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+					}else{
 						try{
-							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
-						}catch (Exception ex){
-							ex.printStackTrace();
-							timeout=0;
-							break;
+							UcityUtil.performUServiceTask(taskInstance, dataRecord);
+						}catch (Exception e){
+							e.printStackTrace();
+							if(timeout<System.DEFAULT_POLLING_INTERVAL){
+								timeout=0;
+								break;
+							}
+							timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
+							dataRecord = null;
+							try{
+								Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
+								continue;
+							}catch (Exception ex){
+								ex.printStackTrace();
+								timeout=0;
+								break;
+							}
 						}
 					}
 				}
 				
-				if(timeout==0 && SmartUtil.isBlankObject(result)){
+				if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
 					try{
 						UcityUtil.abendUServiceTask(taskInstance);
 					}catch (Exception e){
