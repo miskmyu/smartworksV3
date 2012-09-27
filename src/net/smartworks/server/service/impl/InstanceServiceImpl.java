@@ -4694,7 +4694,7 @@ public class InstanceServiceImpl implements IInstanceService {
 						
 						int tskStatus = -1;
 						if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
-							tskStatus = Instance.STATUS_COMPLETED;
+							tskStatus = Instance.STATUS_RUNNING;
 						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 							tskStatus = Instance.STATUS_COMPLETED;
 						}
@@ -4972,6 +4972,8 @@ public class InstanceServiceImpl implements IInstanceService {
 						status = Instance.STATUS_RUNNING;
 					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
 						status = Instance.STATUS_COMPLETED;
+					} else if (prcInst.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						status = Instance.STATUS_ABORTED;
 					}
 					pwInstInfo.setStatus(status);
 					pwInstInfo.setSubject(prcInst.getPrcTitle());
@@ -5011,6 +5013,8 @@ public class InstanceServiceImpl implements IInstanceService {
 							tskStatus = Instance.STATUS_COMPLETED;
 						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_COMPLETE)) {
 							tskStatus = Instance.STATUS_COMPLETED;
+						} else if (prcInst.getLastTask_tskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+							tskStatus = Instance.STATUS_ABORTED;
 						}
 						UserInfo owner = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee());
 						UserInfo lastModifier = ModelConverter.getUserInfoByUserId(prcInst.getLastTask_tskAssignee()); 
@@ -7506,7 +7510,7 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (cuser != null)
 			userId = cuser.getId();
 		
-		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") || action.equalsIgnoreCase("ABEND") || action.equalsIgnoreCase("SAVE")) {
+		if (action == null || action.equalsIgnoreCase("EXECUTE") || action.equalsIgnoreCase("RETURN") ||  action.equalsIgnoreCase("SAVE")) {
 			
 			/*{
 			workId=pkg_cf3b0087995f4f99a41c93e2fe95b22d, 
@@ -7767,6 +7771,20 @@ public class InstanceServiceImpl implements IInstanceService {
 			}*/
 
 			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
+			return taskInstId;
+		} else if (action.equalsIgnoreCase("ABEND")) {
+			
+			String taskInstId = (String)requestBody.get("taskInstId");
+			if (CommonUtil.isEmpty(taskInstId))
+				return null;
+			
+			TskTask task = getTskManager().getTask(userId, taskInstId, IManager.LEVEL_ALL);
+			task.setStatus(TskTask.TASKSTATUS_ABORTED);
+			String prcInstId = task.getProcessInstId();
+			PrcProcessInst prcInst = getPrcManager().getProcessInst(userId, prcInstId, IManager.LEVEL_ALL);
+			prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_ABORTED);
+			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
+			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 			return taskInstId;
 		}
 		return null;
