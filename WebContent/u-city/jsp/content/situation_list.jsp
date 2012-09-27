@@ -165,8 +165,6 @@
 		selectedFilterId = params.getFilterId();
 	}
 	
-//	UcityTest.startProcess(System.PROCESS_ENV_WEAHTER);
-	
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
