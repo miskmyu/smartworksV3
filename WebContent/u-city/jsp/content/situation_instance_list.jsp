@@ -30,7 +30,7 @@
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
-	SmartTaskInfo[] tasks = work.getDiagram().getTasks();
+/* 	SmartTaskInfo[] tasks = work.getDiagram().getTasks();
 	SmartTaskInfo startTask = null;
 	if(!SmartUtil.isBlankObject(tasks)){
 		for(int i=0; i<tasks.length; i++){
@@ -41,7 +41,8 @@
 		}
 		startTask = tasks[0];
 	}
-	String workId = work.getId();
+ */
+ 	String workId = work.getId();
 	if(SmartUtil.isBlankObject(params)){
 		String savedWorkId = (String)session.getAttribute("workId");
 		params = (RequestParams)session.getAttribute("requestParams");
