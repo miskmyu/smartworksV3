@@ -4437,11 +4437,16 @@ public class InstanceServiceImpl implements IInstanceService {
 				pworkInfo.setLastModifier(ModelConverter.getUserInfoByUserId(workList.getModificationUser()));
 				
 				if (!CommonUtil.isEmpty(workList.getRunningTaskId())) {
-					TaskWorkCond taskWorkCond = new TaskWorkCond();
-					taskWorkCond.setTskObjId(workList.getRunningTaskId());
-					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
-					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
-					pworkInfo.setLastTaskCount(taskWork.length);
+//					TaskWorkCond taskWorkCond = new TaskWorkCond();
+//					taskWorkCond.setTskObjId(workList.getRunningTaskId());
+//					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
+//					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
+					TskTask lastTask = SwManagerFactory.getInstance().getTskManager().getTask(userId, workList.getRunningTaskId(), IManager.LEVEL_ALL);
+					if (lastTask != null) {
+						UserInfo assigneeInfo = ModelConverter.getUserInfoByUserId(lastTask.getAssignee());
+						pworkInfo.setLastTask(new TaskInstanceInfo(lastTask.getObjId(), lastTask.getName(), SmartWork.TYPE_PROCESS, assigneeInfo , assigneeInfo, new LocalDate(lastTask.getModificationDate().getTime())));
+						pworkInfo.setLastTaskCount(1);
+					}
 				}
 				pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
 				int status = -1;

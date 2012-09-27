@@ -780,7 +780,42 @@ public class WorkServiceImpl implements IWorkService {
 	@Override
 	public Data getReportData(HttpServletRequest request) throws Exception {
 		try{
+			
 			return SmartTest.getReportData();
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		}catch (Exception e){
 			// Exception Handling Required
 			e.printStackTrace();
