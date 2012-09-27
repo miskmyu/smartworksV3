@@ -7,7 +7,7 @@ import net.smartworks.model.work.info.WorkInfo;
 import net.smartworks.util.LocalDate;
 
 public class PWInstanceInfo extends WorkInstanceInfo {
-
+	
 	public PWInstanceInfo() {
 		super();
 		super.setType(WorkInstance.TYPE_PROCESS);

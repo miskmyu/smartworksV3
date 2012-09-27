@@ -119,7 +119,7 @@
 		var forms = pworkList.find('form:visible');
 		var paramsJson = {};
 		var workId = pworkList.attr('workId');
-		paramsJson["href"] = "jsp/content/work/list/pwork_instance_list.jsp?workId=" + workId;
+		paramsJson["href"] = "u-city/jsp/content/situation_instance_list.jsp?workId=" + workId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
