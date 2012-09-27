@@ -228,14 +228,17 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=serviceType%></a>
 					</td>
 					<td>
- 						<a class="js_ucity_content" href="<%=target %>"><%if(!SmartUtil.isBlankObject(lastTask)){%><%=lastTask.getName()%><%} %></a></td>
+ 						<a class="js_ucity_content" href="<%=target %>"><%if(!SmartUtil.isBlankObject(lastTask)){%><%=lastTask.getName()%><%} %></a>
+ 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>">					
 							<div class="noti_in_s">
-								<div class="t_date"><%=instanceInfo.getCreatedDate().toLocalString()%></div>
+								<div class="t_date"><%=instanceInfo.getCreatedDate().toLocalDateTimeSimpleString()%></div>
 							</div>
 						</a>
 					</td>
+					<td> </td>
+					<td> </td>
 				</tr>
 	<%
 				currentCount--;
