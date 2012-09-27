@@ -178,13 +178,6 @@
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
-				
-				<div class="title">통합 상황 모니터링
-				
-					<div class="txt_btn fr h_auto pt5">
-                		<a href="" class="">현황판 ▼</a>
-                	</div>                
-				</div>
 
 				<jsp:include page="/u-city/jsp/content/situation_report.jsp">
 					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
