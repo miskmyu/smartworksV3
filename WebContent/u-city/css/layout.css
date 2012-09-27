@@ -58,7 +58,7 @@ body {background-color: #22282F}
 
 /* Table Format */
 .up {border:1px solid #c7c7c7; padding: 0; vertical-align:middle; background-color: #FFF} /* 높이가 있는 라인박스 쓸때 */
-.fieldline {border:1px solid #c7c7c7; left:0px; background: none repeat scroll 0 0 #FFFFFF; vertical-align:middle; text-align:left; width:99.4%} /* 한줄 input, text박스 쓸때 */
+.fieldline {border:1px solid #13161B; left:0px; background: none repeat scroll 0 0 #2D353E; vertical-align:middle; text-align:left; width:99.4%; color: #a6a6a6 !important} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 .fieldline.community_names {line-height:17px}
 
