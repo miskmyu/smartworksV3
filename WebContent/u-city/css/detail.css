@@ -301,7 +301,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /* Icon button style */
 .title_line_btns {float:right; position: relative}
-.title_line_options {float:left; position:relative; top:0; margin:0 0 3px 0}
+.title_line_options {float:right; position:relative; top:0; margin:0 0 3px 0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
 .icon_btn_edit {background: url("../images/body_icon.png") 0 -859px no-repeat; height:18px; width:24px; display:inline-block}
