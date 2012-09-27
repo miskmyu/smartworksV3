@@ -118,7 +118,7 @@ body {background-color: #22282F}
 .report_title th{width:17%;font-weight:normal}
 .icon_pos_right {position:absolute; right:0; top:0} /* Icon Position Right */
 
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }
+.glo_btn_space {padding:8px 0 5px 0; border-top: 1px solid #6d6d6d; margin:0 10px; min-height:20px }
 .js_upload_buttons .glo_btn_space  {display: table; width:100%; margin:0}
 .js_upload_buttons_page > div.fr {margin-right: 10px}
 .glo_btn_space .btn_finish {float:right; padding-right:10px}
@@ -137,13 +137,13 @@ button.space {height: 18px; padding: 1px 3px}
 .buttonSet .button {padding: 4px 8px 3px}
    	
 /* Icon */
-.icon_division_s {background: url("../../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
-.icon_attach {background: url("../../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
-.icon_in_down {background: url("../../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
-.icon_in_up {background: url("../../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
-.icon_mail_delet {background: url("../../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
-.icon_mail_write {background: url("../../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
-.icon_mail_send {background: url("../../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
+.icon_division_s {background: url("../images/icon_division_s.gif") no-repeat scroll 0 0 transparent; color:#999879; font-size:11px; padding:1px 0 1px 20px}
+.icon_attach {background: url("../images/ico_attach.gif") no-repeat scroll 0 0 transparent; width:16px; height:16px; display:inline-block; margin-left: 3px; padding: 0 5px 0 0; vertical-align: middle}
+.icon_in_down {background: url("../images/nav_img.png") no-repeat -115px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_in_up {background: url("../images/nav_img.png") no-repeat -139px -549px; width:7px; height:7px; margin:0 0 0 4px; display:inline-block}
+.icon_mail_delet {background: url("../images/nav_img.png") no-repeat -115px -453px; width:7px; height:8px; margin:0 3px 0 0; display:inline-block}
+.icon_mail_write {background: url("../images/nav_img.png") no-repeat 0 -455px; width:12px; height:12px; margin:0 5px 0 0; display:inline-block}
+.icon_mail_send {background: url("../images/nav_img.png") no-repeat -139px -453px; width:8px; height:7px; margin:0 4px 0 0; display:inline-block}
 
 .icon_txt {text-decoration: none!important; border-radius: 3px 3px 3px 3px; display: inline-block; color: #FFF; padding: 0 1px; font-size:10.5px; height:14px; letter-spacing:-1px; margin-right:3px; line-height:16px; min-width:42px; text-align:center}
 .icon_txt.blue {background: -moz-linear-gradient(center top , #8bbaf2, #468ee3) repeat scroll 0 0 transparent; background: -webkit-gradient(linear,0% 20%,0% 80%,from(#8bbaf2),to(#468ee3)); background: -o-linear-gradient(top,#8bbaf2,#468ee3); filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#8bbaf2,endColorStr=#468ee3); border: 1px solid #3a87e1}
@@ -208,6 +208,3 @@ button.space {height: 18px; padding: 1px 3px}
 .icon_status_not_yet {background: url("../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_completed {background: url("../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
 .icon_status_rejected {background: url("../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-
-/* Global Btn Space */
-.glo_btn_space {background-color:#FFF; padding:8px 0 5px 0; border-top: 1px solid #c7c7c7; margin:0 10px; min-height:20px }

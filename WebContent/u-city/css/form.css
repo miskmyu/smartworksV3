@@ -53,7 +53,7 @@
 
 /* 상세필터 */
 .filter_section {overflow:hidden; clear:both}
-.filter_group {border:1px solid #e2e2e2; padding:5px; margin:0 0 3px 0;}
+.filter_group {border:1px solid #6d6d6d; padding:5px; margin:5px 0;}
 .filter_group table { margin:0; text-align:right; } 
 .filter_area {padding:1px 0; clear:both; float:right;}
 .filter_area .selb_size_fir {float:left; margin-right:5px;}
