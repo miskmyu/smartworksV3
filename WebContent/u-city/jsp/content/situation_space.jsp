@@ -108,10 +108,10 @@
 			<div class="title">title
 			
 				<!-- 다이어그램 보기 -->
-				<div class="txt_btn fr cb h_auto">
+				<div class="txt_btn fr h_auto pt5">
                 	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
                 </div>
-                <div class="txt_btn fr cb h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
+                <div class="txt_btn fr h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
 				
 			</div>

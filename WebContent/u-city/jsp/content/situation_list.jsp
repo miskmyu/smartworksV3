@@ -119,7 +119,7 @@
 		var forms = pworkList.find('form:visible');
 		var paramsJson = {};
 		var workId = pworkList.attr('workId');
-		paramsJson["href"] = "jsp/content/work/list/pwork_instance_list.jsp?workId=" + workId;
+		paramsJson["href"] = "u-city/jsp/content/situation_instance_list.jsp?workId=" + workId;
 		var searchFilters = pworkList.find('form[name="frmSearchFilter"]');
 		for(var i=0; i<forms.length; i++){
 			var form = $(forms[i]);
@@ -179,7 +179,13 @@
 			<!-- 목록보기 -->
 			<div class=" contents_space">
 				
-				<div class="title">통합 상황 모니터링</div>
+				<div class="title">통합 상황 모니터링
+				
+					<div class="txt_btn fr h_auto pt5">
+                		<a href="" class="">현황판 ▼</a>
+                	</div>
+                
+				</div>
 				
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt20">

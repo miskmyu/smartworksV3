@@ -759,5 +759,7 @@ public interface ISmartWorks {
 
 	public abstract SmartForm getFormById(String formId, String workId) throws Exception;
 
+	public abstract InstanceInfoList getAllUcityPWorkInstanceList(boolean runningOnly, RequestParams params) throws Exception;
+	
 	
 }

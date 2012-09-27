@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.server.engine.common.model.Property"%>
 <%@page import="net.smartworks.model.work.info.SmartTaskInfo"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
 <%@page import="net.smartworks.model.instance.SortingField"%>
@@ -26,23 +28,19 @@
 <%@ page import="net.smartworks.service.ISmartWorks"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%
+	String FIELD_ID_SERVICE_NAME = "serviceName";
+	String FIELD_ID_EVENT_NAME = "eventName";
+	String FIELD_ID_TYPE = "type";
+	String FIELD_ID_EXTERNAL_DISPLAY = "externalDisplay";
+	String FIELD_ID_EVENT_PLACE = "eventPlace";
+	String FIELD_ID_IS_SMS = "isSms";
+
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	User cUser = SmartUtil.getCurrentUser();
 	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
-/* 	SmartTaskInfo[] tasks = work.getDiagram().getTasks();
-	SmartTaskInfo startTask = null;
-	if(!SmartUtil.isBlankObject(tasks)){
-		for(int i=0; i<tasks.length; i++){
-			if(tasks[i].isStartTask()){
-				startTask = tasks[i];
-				break;
-			}
-		}
-		startTask = tasks[0];
-	}
- */
- 	String workId = work.getId();
+
+	String workId = work.getId();
 	if(SmartUtil.isBlankObject(params)){
 		String savedWorkId = (String)session.getAttribute("workId");
 		params = (RequestParams)session.getAttribute("requestParams");
@@ -55,7 +53,7 @@
 	session.setAttribute("requestParams", params);
 	session.setAttribute("workId", workId);
 
-	InstanceInfoList instanceList = smartWorks.getAllPWorkInstanceList(false, params);
+	InstanceInfoList instanceList = smartWorks.getAllUcityPWorkInstanceList(false, params);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
@@ -71,11 +69,8 @@
 		if(sortedField==null) sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
-	 		<th style="width:40px;">
-				<span><fmt:message key="common.title.number"/></span>
-			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_STATUS%>"><fmt:message key='common.title.status'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_STATUS%>">상태
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_STATUS)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -84,31 +79,31 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_SERVICE_NAME%>">U-서비스명
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
+					if(sortedField.getFieldId().equals(FIELD_ID_SERVICE_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>/				
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>"><fmt:message key='common.title.created_date'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
+					if(sortedField.getFieldId().equals(FIELD_ID_EVENT_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>				
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
+					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_LAST_TASK)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -117,14 +112,33 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>/
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-					<fmt:message key='common.title.last_modified_date' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+				</a>
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
@@ -138,6 +152,33 @@
 		if(instanceList.getInstanceDatas() != null) {
 			PWInstanceInfo[] instanceInfos = (PWInstanceInfo[])instanceList.getInstanceDatas();
 			for (PWInstanceInfo instanceInfo : instanceInfos) {
+				
+				Property[] extendedProperties = instanceInfo.getExtentedProperty();
+				String serviceName = "";
+				String eventName = "";
+				String serviceType = "";
+				String externalDisplay = "";
+				String eventPlace = "";
+				boolean isSms = false;
+				if(!SmartUtil.isBlankObject(extendedProperties)){
+					for(int i=0; i<extendedProperties.length; i++){
+						Property extendedProperty = extendedProperties[i];
+						if(extendedProperty.getName().equals(FIELD_ID_SERVICE_NAME)){
+							serviceName = CommonUtil.toNotNull(extendedProperty.getValue());
+						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_NAME)){
+							eventName = CommonUtil.toNotNull(extendedProperty.getValue());							
+						}else if(extendedProperty.getName().equals(FIELD_ID_TYPE)){
+							serviceType = CommonUtil.toNotNull(extendedProperty.getValue());							
+						}else if(extendedProperty.getName().equals(FIELD_ID_EXTERNAL_DISPLAY)){
+							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());							
+						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
+							eventPlace = CommonUtil.toNotNull(extendedProperty.getValue());							
+						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
+							isSms = extendedProperty.getValue().equals("Y");			
+						}
+					}
+				}
+				
 				UserInfo owner = instanceInfo.getOwner();
 				UserInfo lastModifier = instanceInfo.getLastModifier();
 				TaskInstanceInfo lastTask = instanceInfo.getLastTask();
@@ -172,48 +213,28 @@
 				}
 			%>
 				<tr class="instance_list js_ucity_content" href="<%=target%>">
-					<td class="tc vm"><%=currentCount%></td>
 					<td class="tc vm">
 						<a class="js_ucity_content" href="<%=target %>">					
 							<span class="<%=statusImage%>" title="<fmt:message key='<%=statusTitle%>'/>"></span>
 						</a>
 					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>">					
-							<div class="noti_pic">
-								<img src="<%=owner.getMinPicture()%>" title="<%=owner.getLongName()%>" class="profile_size_s" />
-							</div>
-							<div class="noti_in_s">
-								<span class="t_name"><%=owner.getLongName()%></span>
-								<div class="t_date"><%if(instanceInfo.getCreatedDate()!=null){%><%=instanceInfo.getCreatedDate().toLocalString()%><%} %></div>
-							</div>
-						</a>
+						<a class="js_ucity_content" href="<%=target %>"><%=serviceName%></a>
 					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>">					
-							<%=instanceInfo.getSubject()%>
-							<%if(instanceInfo.getSubInstanceCount()>0){ %><font class="t_sub_count">[<b><%=instanceInfo.getSubInstanceCount() %></b>]</font><%} %>
-							<%if(instanceInfo.isNew()){ %><span class="icon_new"></span><%} %>
-						</a>
+						<a class="js_ucity_content" href="<%=target %>"><%=eventName%></a>
+					</td>
+					<td>
+						<a class="js_ucity_content" href="<%=target %>"><%=serviceType%></a>
 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=lastTask.getName()%></a></td>
 					<td>
-						<%
-						if(!SmartUtil.isBlankObject(lastModifier)){
-						%>
-							<a class="js_ucity_content" href="<%=target %>">					
-								<div class="noti_pic">
-									<img src="<%=lastModifier.getMinPicture()%>" title="<%=lastModifier.getLongName()%>" class="profile_size_s" />
-								</div>
-								<div class="noti_in_s">
-									<span class="t_name"><%=lastModifier.getLongName()%></span>
-									<div class="t_date"><%=instanceInfo.getLastModifiedDate().toLocalString()%></div>
-								</div>
-							</a>
-						<%
-						}
-						%>
+						<a class="js_ucity_content" href="<%=target %>">					
+							<div class="noti_in_s">
+								<div class="t_date"><%=instanceInfo.getCreatedDate().toLocalString()%></div>
+							</div>
+						</a>
 					</td>
 				</tr>
 	<%
@@ -224,11 +245,8 @@
 			sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
-	 		<th style="width:40px;">
-				<span><fmt:message key="common.title.number"/></span>
-			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_STATUS%>"><fmt:message key='common.title.status'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_STATUS%>">상태
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_STATUS)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
@@ -237,47 +255,66 @@
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_SERVICE_NAME%>">U-서비스명
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
+					if(sortedField.getFieldId().equals(FIELD_ID_SERVICE_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>/				
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>"><fmt:message key='common.title.created_date'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
+					if(sortedField.getFieldId().equals(FIELD_ID_EVENT_NAME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
 				<span class="js_progress_span"></span>
 			</th>				
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
+					if(sortedField.getFieldId().equals(FIELD_ID_TYPE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
 			 		<span class="<%
-					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
+					if(sortedField.getFieldId().equals(FormField.ID_LAST_TASK)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
 				<span class="js_progress_span"></span>
 			</th>
 			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIER %>">
-					<fmt:message key='common.title.last_modifier' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIER)){
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_EXTERNAL_DISPLAY)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
+			 		<span class="<%
+					if(sortedField.getFieldId().equals(FIELD_ID_IS_SMS)){
+						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
+					%>"></span>
+				</a>						
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
-				</a>/
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_MODIFIED_DATE%>">
-					<fmt:message key='common.title.last_modified_date' />
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_LAST_MODIFIED_DATE)){
+				</a>
+				<span class="js_progress_span"></span>
+			</th>
+			<th>
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 				<span class="js_progress_span"></span>
