@@ -43,6 +43,8 @@ import net.smartworks.server.engine.worklist.manager.impl.WorkListManagerImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import pro.ucity.manager.ucityWorkList.manager.IUcityWorkListManager;
+
 public class SwManagerFactory {
 
 	private static SwManagerFactory factory;
@@ -76,7 +78,16 @@ public class SwManagerFactory {
 	private IPublishNoticeManager publishNoticeManager;
 	private IMailManager mailManager;
 	private IIdxManager autoIndexManager;
+	
+	//UCITY
+	private IUcityWorkListManager ucityWorkListManager;
 
+	public IUcityWorkListManager getUcityWorkListManager() {
+		return ucityWorkListManager;
+	}
+	public void setUcityWorkListManager(IUcityWorkListManager ucityWorkListManager) {
+		this.ucityWorkListManager = ucityWorkListManager;
+	}
 	//SERA
 	private ISeraManager seraManager;
 

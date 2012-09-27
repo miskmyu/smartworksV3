@@ -11,6 +11,16 @@
 	
 	<beans:bean id="testCommonAdvice" class="net.smartworks.server.engine.common.advisor.CommonAdvisor"/>
 	
+	
+	<!-- ucity Advisor -->
+	<beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
+	<aop:config>
+		<aop:aspect id="ucityAdvisor" ref="tskManagerUcityAdvisor">
+			<aop:pointcut id="ucityMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>
+			<aop:around pointcut-ref="ucityMethod" method="invoke"/>
+		</aop:aspect>
+	</aop:config>
+	
 	<!-- aop:config>
 		<aop:aspect id="commonAdvice" ref="testCommonAdvice">
 			<aop:pointcut id="publicMethod" expression="execution(public * net.smartworks.server.engine.process..*(..))"/>
@@ -88,4 +98,6 @@
 			<aop:around pointcut-ref="swdMethod" method="invoke"/>
 		</aop:aspect>
 	</aop:config>
+	
+	
 </beans:beans>

@@ -97,7 +97,7 @@ function logout() {
 
 </script>
 
-<link href="css/default.css" type="text/css" rel="stylesheet" />
+<link href="u-city/css/default.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/layout.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/detail.css" type="text/css" rel="stylesheet" />
 <link href="u-city/css/form.css" type="text/css" rel="stylesheet" />

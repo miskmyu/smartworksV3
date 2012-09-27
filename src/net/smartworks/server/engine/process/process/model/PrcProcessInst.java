@@ -23,6 +23,7 @@ public class PrcProcessInst extends MisObject {
 	public static final String PROCESSINSTSTATUS_COMPLETE = "3";
 	public static final String PROCESSINSTSTATUS_RETURN = "4";
 	public static final String PROCESSINSTSTATUS_CANCEL = "5";
+	public static final String PROCESSINSTSTATUS_ABORTED = "6";
 	
 	public static final String PROCESSINSTTYPE_PROCESS = "PROCESS";
 	public static final String PROCESSINSTTYPE_INFORMATION = "SINGLE";

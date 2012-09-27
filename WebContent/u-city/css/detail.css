@@ -48,15 +48,15 @@
 .body_titl .t_date {font-size:11px; color:#999897; line-height:12px; position: relative; vertical-align: bottom}
 
 /* 본문 컨텐츠 */
-.define_space {padding: 0 25px; overflow: hidden} /* 상하 여백이 필요 없을때 */
-.contents_space {padding: 15px 20px 10px}
+.define_space {padding: 20px 25px 0; overflow: hidden} /* 상하 여백이 필요 없을때 */
+.contents_space {padding: 10px 20px}
 .contents_space .det_title, .reply .det_title, .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
 .contents_space .border {border:1px solid #c7c7c7; background-color:#FFF; padding:10px}
 .contents_space .border_no_topline{border:1px solid #c7c7c7;border-width:0 1px 1px 1px;background-color:#FFF; padding:10px}
 .contents_space table > td,
 .contents_space table > th { padding:3px 10px}
-.contents_space .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
+.contents_space > .title {border-bottom: 1px solid #6D6D6D; font-size:16px; color:#FFF; font-weight: bold; padding: 0 0 3px}
 
 /* Reply Info */
 .task_information {vertical-align:bottom; float:left}
@@ -128,7 +128,6 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
-.r_line {border-right:1px solid #cccccc}
 .po_left {float: left}
 
 /* 새로 만들기 부분 타이틀 */
@@ -136,7 +135,8 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .nmake_title_space .title_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -331px transparent; height:20px; font-size:14px; font-weight:bold; padding: 0 8px 0 28px; float:left; line-height: 23px}
 		
 /* 프로세스 */
-.process_section { position:relative; float: left; width:100%}
+.process_section { position:relative; float: left; width:100%; color:#454545}
+.process_section a {color:#454545 !important}
 .process_space {line-height:15px}
 .process_space ul {margin:0}
 .process_space li { float:left}
@@ -147,13 +147,13 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .process_space li.js_select_task_instance {}
 .process_space li.js_select_task_instance:hover, .process_space li.selected { border: 1px solid red; cursor:pointer}
 
-.proc_btn_prev {background: url("../../images/proc_bg.png") no-repeat -70px 0 transparent; width:11px; height:19px; position: absolute; left: 0; margin: 22px 0 0 20px}
-a .proc_btn_prev:hover {background: url("../../images/proc_bg.png") no-repeat -70px -28px transparent}
-.proc_btn_next {background: url("../../images/proc_bg.png") no-repeat -129px 0 transparent; width:11px; height:19px; position: absolute; right: 0; margin: 22px 20px 0 0}
-a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -129px -28px; transparent}
+.proc_btn_prev {background: url("../images/proc_bg.png") no-repeat -70px 0 transparent; width:11px; height:19px; position: absolute; left: 0; margin: 22px 0 0 20px}
+a .proc_btn_prev:hover {background: url("../images/proc_bg.png") no-repeat -70px -28px transparent}
+.proc_btn_next {background: url("../images/proc_bg.png") no-repeat -129px 0 transparent; width:11px; height:19px; position: absolute; right: 0; margin: 22px 20px 0 0}
+a .proc_btn_next:hover {background: url("../images/proc_bg.png") no-repeat -129px -28px; transparent}
 
-.proc_arr_next {background: url("../../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
-.proc_start_compl {background: url("../../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
+.proc_arr_next {background: url("../images/proc_bg.png") no-repeat -86px -82px transparent; width:23px; height:10px; margin:26px 5px 26px 0}
+.proc_start_compl {background: url("../images/proc_bg.png") no-repeat -11px -10px transparent; height:32px; padding-top: 15px; text-align: center; vertical-align: middle; width:44px; margin: 7px 5px 0 0}
 
 .proc_task {border: 1px solid #d2d2d2; border-radius: 6px; box-shadow: 1px 1px 5px #C7C7C7 inset; overflow: hidden; padding: 7px 7px 4px; width:150px; margin:0 5px 17px 0; min-height: 45px}
 .proc_task.completed {background-color: #e4e4e4} /* 완료 */			
@@ -166,14 +166,14 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .proc_task .name {color: #999897 !important; font-size: 11px; font-weight: normal; word-wrap: break-word; max-height: 27px; overflow: hidden;}
 
 /* 프로세스 포인트 위치 */
-.pos_default {left: 58px; position: relative; top: 1px; margin-top:5px; z-index: 20}
+.pos_default {left: 58px; position: relative; top: 1px; z-index: 20}
 .pos_reply_point {left: 86px; position: relative; top: 1px; z-index: 20}
 .pos_reply {left: 60px; position: relative; top: 1px; z-index: 20}
 
 /* 페이징 */
-.paginate {padding-top: 10px; position: relative; text-align: center; font-family: tahoma;font-size: 12px; font-weight: bold}
-.paginate strong {color:#ed1c24}
-.paginate .num {margin-right:1px; padding: 2px 3px; text-decoration: none; vertical-align: middle}
+.paginate {padding: 10px 0; position: relative; text-align: center; font-size: 12px; font-weight: bold; background-color: #1E2127}
+.paginate strong {color:#ff7e7e; margin:0 20px 0 0}
+.paginate .num {margin:0 20px 0 0; text-decoration: none; vertical-align: middle}
 
 .spr { cursor: pointer; display: inline-block; overflow: hidden; vertical-align: middle}
 .paginate a.pre_end span {background: url("../../images/header_nico.png") no-repeat scroll 0 -344px transparent; display: inline-block; height: 20px; width:20px; position:relative; left:4px}
@@ -186,7 +186,7 @@ a .proc_btn_next:hover {background: url("../../images/proc_bg.png") no-repeat -1
 .paginate a.next span:hover {background-position: -45px -376px}
 .paginate a.next_end span:hover {background-position: -65px -376px}
 
-.num_box {float:right; margin: -20px 5px 0; position:relative}
+.num_box {float:right; margin: -28px 5px 0; position:relative}
 
 /* Nav Paging */
 .nav_paginate {color:#dddddd; font-size:11px; margin:0 6px 0 0; text-align:right}
@@ -301,7 +301,7 @@ a:hover.btn_arr_next2 {background: url("../../images/body_icon.png") no-repeat -
 
 /* Icon button style */
 .title_line_btns {float:right; position: relative}
-.title_line_options {float:left; position:relative; top:0}
+.title_line_options {float:left; position:relative; top:0; margin:0 0 3px 0}
 .title_line_options select {margin:0}
 .txt_btn .title_line_btns {margin-right:10px}
 .icon_btn_edit {background: url("../images/body_icon.png") 0 -859px no-repeat; height:18px; width:24px; display:inline-block}
@@ -323,5 +323,3 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 .btn_app_shar {background: url("../../images/body_icon.png") no-repeat -225px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
 .current .btn_app_shar {background-position:-225px -547px}
 .btn_app_shar_go {background: url("../../images/body_icon.png") no-repeat -277px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
-
-select {background-color: #2D353E; border: 1px solid #13161B; vertical-align: middle; color: #A6A6A6;}

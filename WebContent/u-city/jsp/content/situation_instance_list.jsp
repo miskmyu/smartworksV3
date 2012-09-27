@@ -224,10 +224,10 @@
 			sortedField = new SortingField();
 	%>
 		<tr class="tit_bg">
-	 		<th class="r_line" style="width:40px;">
+	 		<th style="width:40px;">
 				<span><fmt:message key="common.title.number"/></span>
 			</th>
-			<th class="r_line">
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_STATUS%>"><fmt:message key='common.title.status'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_STATUS)){
@@ -236,7 +236,7 @@
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
-			<th class="r_line">
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_OWNER%>"><fmt:message key='common.title.owner'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_OWNER)){
@@ -251,7 +251,7 @@
 				</a>
 				<span class="js_progress_span"></span>
 			</th>				
-			<th class="r_line">
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_SUBJECT%>"><fmt:message key='common.title.instance_subject'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){
@@ -260,7 +260,7 @@
 				</a>				
 				<span class="js_progress_span"></span>
 			</th>
-			<th class="r_line">
+			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>"><fmt:message key='common.title.last_task'/>
 			 		<span class="<%
 					if(sortedField.getFieldId().equals(FormField.ID_SUBJECT)){

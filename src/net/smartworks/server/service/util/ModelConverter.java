@@ -552,6 +552,8 @@ public class ModelConverter {
 			taskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 			taskInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			taskInfo.setStatus(TaskInstance.STATUS_ABORTED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			taskInfo.setStatus(TaskInstance.STATUS_RETURNED);
 		}
@@ -991,6 +993,8 @@ public class ModelConverter {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 			lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			lastTask.setStatus(TaskInstance.STATUS_ABORTED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			lastTask.setStatus(TaskInstance.STATUS_RETURNED);
 		}
@@ -1071,6 +1075,8 @@ public class ModelConverter {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_ABORTED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
 		}
@@ -1158,6 +1164,8 @@ public class ModelConverter {
 						instInfo.setStatus(Instance.STATUS_COMPLETED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 						instInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						instInfo.setStatus(Instance.STATUS_ABORTED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 						instInfo.setStatus(Instance.STATUS_REJECTED);
 					}
@@ -1194,6 +1202,8 @@ public class ModelConverter {
 						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 						lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+						lastTask.setStatus(TaskInstance.STATUS_ABORTED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 						lastTask.setStatus(TaskInstance.STATUS_RETURNED);
 					}
@@ -1254,6 +1264,8 @@ public class ModelConverter {
 						instInfo.setStatus(Instance.STATUS_COMPLETED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 						instInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						instInfo.setStatus(Instance.STATUS_ABORTED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 						instInfo.setStatus(Instance.STATUS_REJECTED);
 					}
@@ -1289,6 +1301,8 @@ public class ModelConverter {
 						lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 						lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+						lastTask.setStatus(TaskInstance.STATUS_ABORTED);
 					} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 						lastTask.setStatus(TaskInstance.STATUS_RETURNED);
 					}
@@ -1333,6 +1347,8 @@ public class ModelConverter {
 						tskInfo.setStatus(Instance.STATUS_COMPLETED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 						tskInfo.setStatus(Instance.STATUS_RETURNED);
+					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+						tskInfo.setStatus(Instance.STATUS_ABORTED);
 					} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 						tskInfo.setStatus(Instance.STATUS_REJECTED);
 					}
@@ -1426,6 +1442,8 @@ public class ModelConverter {
 					instInfo.setStatus(Instance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 					instInfo.setStatus(Instance.STATUS_RETURNED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+					instInfo.setStatus(Instance.STATUS_ABORTED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 					instInfo.setStatus(Instance.STATUS_REJECTED);
 				}
@@ -1463,6 +1481,8 @@ public class ModelConverter {
 					lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 					lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+					lastTask.setStatus(TaskInstance.STATUS_ABORTED);
 				} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 					lastTask.setStatus(TaskInstance.STATUS_RETURNED);
 				}
@@ -1530,6 +1550,8 @@ public class ModelConverter {
 					tskInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 					tskInfo.setStatus(TaskInstance.STATUS_RETURNED);
+				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+					tskInfo.setStatus(TaskInstance.STATUS_ABORTED);
 				} else if (task.getPrcStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 					tskInfo.setStatus(TaskInstance.STATUS_REJECTED);
 				}
@@ -1790,6 +1812,8 @@ public class ModelConverter {
 			instInfo.setStatus(Instance.STATUS_RUNNING);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 			instInfo.setStatus(Instance.STATUS_RETURNED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+			instInfo.setStatus(Instance.STATUS_ABORTED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 			instInfo.setStatus(Instance.STATUS_REJECTED);
 		}
@@ -2403,6 +2427,8 @@ public class ModelConverter {
 			status = Instance.STATUS_COMPLETED;
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 			status = Instance.STATUS_RETURNED;
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+			status = Instance.STATUS_ABORTED;
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 			status = Instance.STATUS_REJECTED;
 		}
@@ -2515,6 +2541,8 @@ public class ModelConverter {
 			}
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			status = Instance.STATUS_RETURNED;
+		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			status = Instance.STATUS_ABORTED;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CREATE)) {
 			status = Instance.STATUS_PLANNED;
 		} else if (task.getStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
@@ -3921,6 +3949,8 @@ public class ModelConverter {
 			instance.setStatus(Instance.STATUS_RUNNING);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 			instance.setStatus(Instance.STATUS_RETURNED);
+		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+			instance.setStatus(Instance.STATUS_ABORTED);
 		} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 			instance.setStatus(Instance.STATUS_REJECTED);
 		}
@@ -4133,6 +4163,8 @@ public class ModelConverter {
 				workInstance.setStatus(Instance.STATUS_COMPLETED);
 			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RETURN)) {
 				workInstance.setStatus(Instance.STATUS_RETURNED);
+			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_ABORTED)) {
+				workInstance.setStatus(Instance.STATUS_ABORTED);
 			} else if (prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_CANCEL)) {
 				workInstance.setStatus(Instance.STATUS_REJECTED);
 			}
@@ -5045,6 +5077,8 @@ public class ModelConverter {
 			lastTask.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 			lastTask.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			lastTask.setStatus(TaskInstance.STATUS_ABORTED);
 		} else if (task.getLastTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			lastTask.setStatus(TaskInstance.STATUS_RETURNED);
 		}
@@ -5079,6 +5113,8 @@ public class ModelConverter {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_COMPLETED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_CANCEL)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_REJECTED);
+		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_ABORTED)) {
+			workInstanceInfo.setStatus(TaskInstance.STATUS_ABORTED);
 		} else if (task.getTskStatus().equalsIgnoreCase(TskTask.TASKSTATUS_RETURNED)) {
 			workInstanceInfo.setStatus(TaskInstance.STATUS_RETURNED);
 		}
