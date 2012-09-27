@@ -15,6 +15,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import net.smartworks.model.instance.info.InstanceInfoList;
+import net.smartworks.model.instance.info.RequestParams;
+import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.service.factory.SwServiceFactory;
+import net.smartworks.util.SmartUtil;
+
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -23,20 +29,11 @@ import pro.ucity.model.Adapter;
 import pro.ucity.model.OPSituation;
 import pro.ucity.util.UcityUtil;
 
-public class DBReadScheduler extends QuartzJobBean  {
+public class ResumePollingScheduler extends QuartzJobBean  {
 	
-	
-	public static boolean isDbReadSchedulerRunning = false;
 	@Override
-	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		if(!isDbReadSchedulerRunning) startScheduler();
-	}
-	
-	synchronized static void startScheduler(){
-		isDbReadSchedulerRunning = true;
-		System.out.println("스케쥴러 동작 시간 : " + new Date());
-		Adapter.readHistoryTableToStart();
-//		OPSituation.readHistoryTableToStart();
-		isDbReadSchedulerRunning = false;		
+	synchronized protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+				
+		System.out.println("Resume Polling 스케쥴러 동작 시간 : " + new Date());
 	}
 }

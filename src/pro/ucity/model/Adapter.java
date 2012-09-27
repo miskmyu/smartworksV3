@@ -29,7 +29,7 @@ public class Adapter {
 	
 	public static final int POS_SERVICE_CODE = 33;
 	public static final int POS_EVENT_CODE = 37;
-	public static final int POS_EVENT_TYPE = 39;
+	public static final int POS_EVENT_TYPE = 41;
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
@@ -283,6 +283,8 @@ public class Adapter {
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
 		KeyMap[] keyMaps = Adapter.ADAPTER_HISTORY_FIELDS[this.process];
 		
+		if(!this.isValid()) return null;
+		
 		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
 		dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
 		dataRecord.put("eventPlace", this.locationName);
@@ -344,7 +346,7 @@ public class Adapter {
 		return false;
 	}
 	
-	public static void readHistoryTableToStart(){
+	synchronized public static void readHistoryTableToStart(){
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
@@ -413,7 +415,7 @@ public class Adapter {
 		}
 	}
 	
-	public static ResultSet readHistoryTable(String eventId){
+	public static Map<String,Object> readHistoryTable(String eventId){
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
@@ -436,35 +438,33 @@ public class Adapter {
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow(); 
-				rs.beforeFirst();
-				if (count != 0) {
-					while(rs.next()) {
-						try{
-							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
-							updatePstmt = con.prepareStatement(adapterUpdateSql);
-							updatePstmt.setString(1, communicationId);
-							boolean result = updatePstmt.execute();
-							Adapter adapter = new Adapter(rs);
-							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
-								con.commit();
-								java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
-								try {
-									if (selectPstmt != null)
-										selectPstmt.close();
-									if (updatePstmt != null)
-										updatePstmt.close();
-									con.close();
-								} catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								return rs;
-							}else{
-								con.rollback();
+				rs.first();
+				if (count == 1) {
+					try{
+						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+						updatePstmt = con.prepareStatement(adapterUpdateSql);
+						updatePstmt.setString(1, communicationId);
+						boolean result = updatePstmt.execute();
+						Adapter adapter = new Adapter(rs);
+						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
+							con.commit();
+							java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
+							try {
+								if (selectPstmt != null)
+									selectPstmt.close();
+								if (updatePstmt != null)
+									updatePstmt.close();
+								con.close();
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
-						}catch (Exception we){
-							we.printStackTrace();
+							return adapter.getDataRecord();
+						}else{
+							con.rollback();
 						}
+					}catch (Exception we){
+						we.printStackTrace();
 					}
 				}
 			}catch (Exception e1){
