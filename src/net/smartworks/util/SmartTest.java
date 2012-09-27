@@ -1300,7 +1300,28 @@ public class SmartTest {
 		wsdlDetail.setPorts(new WSDLPort[]{port1, port2});
 		return wsdlDetail;
 	}
-	
+
+	public static Data getReportData2() throws Exception{
+
+		Data reportData = new Data();
+	    Map<String,Object> value1 = new HashMap<String, Object>();
+	    Map<String,Object> value2 = new HashMap<String, Object>();
+	    List<Map<String , Object>> values  = new java.util.ArrayList<Map<String,Object>>();
+	    value1.put("name", "광민");
+	    value1.put("count", 1);
+	    values.add(value1);
+	    value2.put("name", "준영");
+	    value2.put("count", 10);
+	    values.add(value2);
+	    reportData.setValues(values);
+	    reportData.setGroupNames(new String[]{"count"});
+	    reportData.setxFieldName("name");
+	    reportData.setyValueName("count");
+	    
+	    return reportData;
+		
+		
+	}
 	public static Data getReportData() throws Exception{
 		Data reportData = new Data();
 	    Map<String,Object> value1 = new HashMap<String, Object>();
