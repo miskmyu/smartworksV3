@@ -1,6 +1,10 @@
 package pro.ucity.model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,15 +23,25 @@ public class Adapter {
 
 	public static final String FIELD_SEPERATOR = "\\|\\|";
 	public static final int LENGTH_COMM_HEADER = 50;
+	public static final int LENGTH_SERVICE_CODE = 4;
 	public static final int LENGTH_EVENT_CODE = 4;
 	public static final int LENGTH_EVENT_TYPE = 2;
 	
+	public static final int POS_SERVICE_CODE = 33;
 	public static final int POS_EVENT_CODE = 37;
 	public static final int POS_EVENT_TYPE = 39;
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
 	
+	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
+	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+	
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y'";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y'";
+	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
+
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
@@ -45,7 +59,10 @@ public class Adapter {
 	private String commBody;
 	
 	private int process=-1;
-	private int eventType;
+	private int eventType;	
+	private String serviceCode;
+	private String eventCode;
+	private String communicationId;
 	
 	private String eventId;
 	private String occuredDate;
@@ -75,6 +92,24 @@ public class Adapter {
 	}
 	public void setEventType(int eventType) {
 		this.eventType = eventType;
+	}
+	public String getServiceCode() {
+		return serviceCode;
+	}
+	public void setServiceCode(String serviceCode) {
+		this.serviceCode = serviceCode;
+	}
+	public String getEventCode() {
+		return eventCode;
+	}
+	public void setEventCode(String eventCode) {
+		this.eventCode = eventCode;
+	}
+	public String getCommunicationId() {
+		return communicationId;
+	}
+	public void setCommunicationId(String communicationId) {
+		this.communicationId = communicationId;
 	}
 	public String getEventId() {
 		return eventId;
@@ -118,7 +153,8 @@ public class Adapter {
 		int sizeHeader = commHeader.length();
 		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
 		
-		String eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
+		this.serviceCode = commHeader.substring(Adapter.POS_SERVICE_CODE, Adapter.POS_SERVICE_CODE+Adapter.LENGTH_SERVICE_CODE);
+		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
 		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
 		
 		if(	eventCode.equals(Event.ID_ENV_GALE) ||
@@ -276,7 +312,8 @@ public class Adapter {
 	public void setResult(ResultSet result){
 		try{
 			if(result.getRow()>0){ 
-				String commContent = result.getString("CMNC_TG_CONT");
+				this.communicationId = result.getString(FIELD_NAME_COMM_TG_ID);
+				String commContent = result.getString(FIELD_NAME_COMM_CONTENT);
 				if(SmartUtil.isBlankObject(commContent) || commContent.length()<Adapter.LENGTH_COMM_HEADER) return;
 				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
@@ -286,6 +323,156 @@ public class Adapter {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public boolean isValid(){
+		if(	this.process != -1 && !SmartUtil.isBlankObject(this.commHeader) 
+				&& !SmartUtil.isBlankObject(this.commBody) && this.eventType !=0 && !SmartUtil.isBlankObject(this.eventId))
+			return true;
+		return false;
+	}
+	
+	public static void readHistoryTableToStart(){
+		try {
+			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		Connection con = null;
+		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
+				
+		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
+		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+		try {
+			
+			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			con.setAutoCommit(false);
+			
+			try{
+				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = selectPstmt.executeQuery();				
+				rs.last(); 
+				int count = rs.getRow(); 
+				rs.beforeFirst();
+				if (count != 0) {
+					java.lang.System.out.println("############ 이벤트 발생 ################");
+					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
+					java.lang.System.out.println("조회 데이터 수 : " + rs.getRow());
+					java.lang.System.out.println("------------ 데이터 처리 ----------------");					
+					while(rs.next()) {
+						try{
+							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+							updatePstmt = con.prepareStatement(adapterUpdateSql);
+							updatePstmt.setString(1, communicationId);
+							boolean result = updatePstmt.execute();
+							try{
+								UcityUtil.startUService(rs);
+								con.commit();
+								java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
+							}catch (Exception se){
+								se.printStackTrace();
+								con.rollback();
+							}
+						}catch (Exception we){
+							we.printStackTrace();
+						}
+					}
+					java.lang.System.out.println("############ 이벤트 처리 완료 ################");
+				}
+			}catch (Exception e1){
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPstmt != null)
+					selectPstmt.close();
+				if (updatePstmt != null)
+					updatePstmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static ResultSet readHistoryTable(String eventId){
+		try {
+			Class.forName("net.sourceforge.jtds.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		Connection con = null;
+		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
+				
+		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
+		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+		try {
+			
+			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			con.setAutoCommit(false);
+			
+			try{
+				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = selectPstmt.executeQuery();				
+				rs.last(); 
+				int count = rs.getRow(); 
+				rs.beforeFirst();
+				if (count != 0) {
+					while(rs.next()) {
+						try{
+							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+							updatePstmt = con.prepareStatement(adapterUpdateSql);
+							updatePstmt.setString(1, communicationId);
+							boolean result = updatePstmt.execute();
+							Adapter adapter = new Adapter(rs);
+							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
+								con.commit();
+								java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
+								try {
+									if (selectPstmt != null)
+										selectPstmt.close();
+									if (updatePstmt != null)
+										updatePstmt.close();
+									con.close();
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								return rs;
+							}else{
+								con.rollback();
+							}
+						}catch (Exception we){
+							we.printStackTrace();
+						}
+					}
+				}
+			}catch (Exception e1){
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (selectPstmt != null)
+					selectPstmt.close();
+				if (updatePstmt != null)
+					updatePstmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }
