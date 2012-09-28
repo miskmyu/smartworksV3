@@ -4416,7 +4416,8 @@ public class InstanceServiceImpl implements IInstanceService {
 				sfColumnNameTemp = "modificationUser"; 
 			} else if (sfColumnNameTemp.equalsIgnoreCase("modifiedTime")) {
 				sfColumnNameTemp = "modificationDate"; 
-			} else {
+			} 
+			if (CommonUtil.isEmpty(sfColumnNameTemp)){
 				sfColumnNameTemp = "creationDate";
 			}
 

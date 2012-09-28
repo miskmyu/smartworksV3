@@ -95,6 +95,7 @@
 		<beans:property name="publishNoticeManager" ref="publishNoticeManager"/>
 		<beans:property name="mailManager" ref="mailManager"/>
 		<beans:property name="autoIndexManager" ref="autoIndexManager"/>
+		<beans:property name="reportManager" ref="reportManager"/>
 		
 		<beans:property name="ucityWorkListManager" ref="ucityWorkListManager"/>
 
@@ -105,6 +106,7 @@
 
 	<beans:bean id="ucityWorkListManager" class="pro.ucity.manager.ucityWorkList.manager.impl.UcityWorkListManagerImpl"/>
 	
+	<beans:bean id="reportManager" class="net.smartworks.server.engine.report.manager.impl.ReportManagerImpl"/>
 	<beans:bean id="autoIndexManager" class="net.smartworks.server.engine.autoindex.manager.impl.IdxManagerImpl"/>
 	<beans:bean id="mailManager" class="net.smartworks.server.engine.mail.manager.impl.MailManagerImpl"/>
 	<beans:bean id="publishNoticeManager" class="net.smartworks.server.engine.publishnotice.manager.impl.PublishNoticeManagerImpl"/>

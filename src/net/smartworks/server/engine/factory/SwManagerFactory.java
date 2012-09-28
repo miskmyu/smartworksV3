@@ -35,6 +35,7 @@ import net.smartworks.server.engine.process.monitoring.manager.IMonManager;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.publishnotice.manager.IPublishNoticeManager;
+import net.smartworks.server.engine.report.manager.IReportManager;
 import net.smartworks.server.engine.resource.manager.IResourceDesigntimeManager;
 import net.smartworks.server.engine.resource.manager.IResourceRuntimeManager;
 import net.smartworks.server.engine.sera.manager.ISeraManager;
@@ -78,6 +79,7 @@ public class SwManagerFactory {
 	private IPublishNoticeManager publishNoticeManager;
 	private IMailManager mailManager;
 	private IIdxManager autoIndexManager;
+	private IReportManager reportManager;
 	
 	//UCITY
 	private IUcityWorkListManager ucityWorkListManager;
@@ -91,6 +93,12 @@ public class SwManagerFactory {
 	//SERA
 	private ISeraManager seraManager;
 
+	public IReportManager getReportManager() {
+		return reportManager;
+	}
+	public void setReportManager(IReportManager reportManager) {
+		this.reportManager = reportManager;
+	}
 	public ISeraManager getSeraManager() {
 		return seraManager;
 	}
