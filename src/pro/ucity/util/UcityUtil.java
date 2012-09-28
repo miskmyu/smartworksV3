@@ -228,15 +228,13 @@ public class UcityUtil {
 		case System.TABLE_ID_COMMID_TRACE:
 			dataRecord = CMHistory.readHistoryTable(eventId, status);
 			break;
-//		case System.TABLE_ID_OPPORTAL_SITUATION:
-//			resultSet = OPSituation.readHistoryTable(eventId, status);
-//			break;
-//		case System.TABLE_ID_OPPORTAL_DISPLAY:
-//			resultSet = OPDisplay.readHistoryTable(eventId);
-//			break;
-//		case System.TABLE_ID_INTCON_SITUATION:
-//			resultSet = ICSituation.readHistoryTable(eventId);
-//			break;
+		case System.TABLE_ID_OPPORTAL_SITUATION:
+			dataRecord = OPSituation.readHistoryTable(eventId, status);
+			break;
+		case System.TABLE_ID_OPPORTAL_DISPLAY:
+			break;
+		case System.TABLE_ID_INTCON_SITUATION:
+			break;
 		case System.TABLE_ID_DEVMID_DEVICE_STATUS:
 			break;
 		case System.TABLE_ID_DEVMID_SEND_STATUS:
