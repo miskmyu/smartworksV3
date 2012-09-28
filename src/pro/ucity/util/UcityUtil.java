@@ -232,6 +232,7 @@ public class UcityUtil {
 			dataRecord = OPSituation.readHistoryTable(eventId, status);
 			break;
 		case System.TABLE_ID_OPPORTAL_DISPLAY:
+			dataRecord = OPDisplay.readHistoryTable(eventId, status);
 			break;
 		case System.TABLE_ID_INTCON_SITUATION:
 			break;
@@ -267,6 +268,7 @@ public class UcityUtil {
 				String eventId = null;
 				String tableName = null;
 				String status = null;
+				String displayId = null;
 				String timeout = null;
 				for(int k=0; k<record.getDataFields().length; k++){
 					SwdDataField dataField = record.getDataFields()[k];
@@ -276,12 +278,14 @@ public class UcityUtil {
 						tableName = System.getTableName(dataField.getValue());
 					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_STATUS)){
 						status = dataField.getValue();
+					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DISPLAY_ID)){
+						displayId = dataField.getValue();
 					}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
 						timeout = dataField.getValue();
 					}
 				}
 				if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
-					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, timeout, taskInstance);
+					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, timeout, taskInstance);
 				}
 			}
 			
@@ -306,6 +310,7 @@ public class UcityUtil {
 			String eventId = null;
 			String tableName = null;
 			String status = null;
+			String displayId = null;
 			String timeout = null;
 			for(int k=0; k<record.getDataFields().length; k++){
 				SwdDataField dataField = record.getDataFields()[k];
@@ -315,15 +320,25 @@ public class UcityUtil {
 					tableName = System.getTableName(dataField.getValue());
 				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_STATUS)){
 					status = dataField.getValue();
+				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_DISPLAY_ID)){
+					displayId = dataField.getValue();
 				}else if(dataField.getName().equals(System.DATA_FIELD_NAME_TIMEOUT)){
 					timeout = dataField.getValue();
 				}
 			}
 			if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
 				try{
-					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, timeout, taskInstance);
+					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, timeout, taskInstance);
 				}catch (Exception e){
 					throw e;
+				}
+			}else if(!SmartUtil.isBlankObject(eventId)){
+				try{
+					Map<String,Object> dataRecord = new HashMap<String,Object>();
+					dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
+					UcityUtil.performUServiceTask(taskInstance, dataRecord);
+				}catch (Exception e){
+					e.printStackTrace();
 				}
 			}
 		}
@@ -332,9 +347,10 @@ public class UcityUtil {
 	public static String currentEventId = null;
 	public static String currentTableName = null;
 	public static String currentStatus = null;
+	public static String currentDisplayId = null;
 	public static TaskInstance currentTaskInstance = null;
 	public static long currentTimeout = System.DEFAULT_TASK_TIMEOUT;
-	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String timeout, TaskInstance taskInstance) throws Exception{
+	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
 		
 		long timeoutInMilliseconds =  System.DEFAULT_TASK_TIMEOUT;
@@ -345,6 +361,7 @@ public class UcityUtil {
 		currentEventId = eventId;
 		currentTableName = tableName;
 		currentStatus = status;
+		currentDisplayId = displayId;
 		currentTaskInstance = taskInstance;
 		currentTimeout = timeoutInMilliseconds;
 		
@@ -353,6 +370,7 @@ public class UcityUtil {
 				String eventId = currentEventId;
 				String tableName = currentTableName;
 				String status = currentStatus;
+				String displayId = currentDisplayId;
 				TaskInstance taskInstance = currentTaskInstance;
 				long timeout = currentTimeout;
 				Map<String, Object> dataRecord = null;
@@ -361,7 +379,10 @@ public class UcityUtil {
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
 						if(!taskInstance.isRunning()) break;
-						dataRecord = UcityUtil.readTaskTable(tableName, eventId, status);
+						if(System.getTableId(tableName) == System.TABLE_ID_OPPORTAL_DISPLAY)
+							dataRecord = UcityUtil.readTaskTable(tableName, eventId, displayId);
+						else
+							dataRecord = UcityUtil.readTaskTable(tableName, eventId, status);
 					} catch(Exception e) {
 						if(timeout<System.DEFAULT_POLLING_INTERVAL){
 							timeout=0;
@@ -393,6 +414,9 @@ public class UcityUtil {
 							break;
 						}
 					}else{
+						if(System.getTableId(tableName)==System.TABLE_ID_OPPORTAL_SITUATION && OPSituation.isDisplayableStatus(status)){
+							dataRecord = OPDisplay.checkForDisplay(eventId, dataRecord);
+						}
 						try{
 							UcityUtil.performUServiceTask(taskInstance, dataRecord);
 						}catch (Exception e){
