@@ -43,7 +43,6 @@
 	
 		<!-- 우측 영역 -->
 		<div class="title_line_options">
-		<span class="fl js_progress_span"></span>
 		<div class="fl js_work_report_list_box" style="position: relative; top: -4px;">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 				<option value="<%=Report.REPORT_ID_NONE %>" 

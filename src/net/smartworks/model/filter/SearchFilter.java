@@ -15,6 +15,7 @@ public class SearchFilter extends BaseObject{
 	public static final String FILTER_RECENT_INSTANCES = SYSTEM_FILTER_PREFIX + "recentInstances";
 	public static final String FILTER_MY_RECENT_INSTANCES = SYSTEM_FILTER_PREFIX + "myRecentInstances";
 	public static final String FILTER_MY_RUNNING_INSTANCES = SYSTEM_FILTER_PREFIX + "myRunningInstances";
+	public static final String FILTER_RUNNING_INSTANCES = SYSTEM_FILTER_PREFIX + "runningInstances";
 	public static final String FILTER_MY_ASSIGEND_INSTANCES = SYSTEM_FILTER_PREFIX + "myAssignedInstances";
 	public static final String FILTER_BY_WORK_ID = SYSTEM_FILTER_PREFIX + "byWorkId";
 	public static final String FILTER_BY_FILE_CATEGORY_ID = SYSTEM_FILTER_PREFIX + "byFileCategoryId";
@@ -72,6 +73,12 @@ public class SearchFilter extends BaseObject{
 	public static SearchFilter getMyRunningInstancesFilter(User currentUser){
 		return new SearchFilter(FILTER_MY_RUNNING_INSTANCES, FILTER_MY_RUNNING_INSTANCES, new Condition[] {
 					new Condition(FormField.FIELD_OWNER, ConditionOperator.EQUAL.getId(), currentUser ),
+					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_NOT_YET ),
+					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_COMPLETED )
+				});
+	}
+	public static SearchFilter getRunningInstancesFilter(){
+		return new SearchFilter(FILTER_MY_RUNNING_INSTANCES, FILTER_MY_RUNNING_INSTANCES, new Condition[] {
 					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_NOT_YET ),
 					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_COMPLETED )
 				});

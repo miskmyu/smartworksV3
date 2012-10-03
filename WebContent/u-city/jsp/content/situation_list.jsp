@@ -172,7 +172,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!-- 컨텐츠 레이아웃-->
-<div class="section_portlet js_situation_list_page js_work_list_page">
+<div class="section_portlet js_pwork_list_page js_work_list_page">
 
 			<!-- 목록보기 -->
 			<div class=" contents_space">
@@ -184,7 +184,6 @@
 				<!-- 목록보기 타이틀-->
 				<div class="list_title_space js_work_list_title mt20">
 					<div class="title_line_options">
-						<span class="fl js_progress_span"></span>
 						<form name="frmSearchInstance" class="fl">
 							<div class="srch">
 								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
@@ -198,21 +197,13 @@
 									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_ALL_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
 									<fmt:message key='filter.name.all_instances' />
 								</option>
-								<option value="<%=SearchFilter.FILTER_MY_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.my_instances' />
-								</option>
 								<option value="<%=SearchFilter.FILTER_RECENT_INSTANCES%>"
 									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.recent_instances' />
+									최근 발생항목
 								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RECENT_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RECENT_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.my_recent_instances' />
-								</option>
-								<option value="<%=SearchFilter.FILTER_MY_RUNNING_INSTANCES%>"
-									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_MY_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
-									<fmt:message key='filter.name.my_running_instances' />
+								<option value="<%=SearchFilter.FILTER_RUNNING_INSTANCES%>"
+									<%if(SmartUtil.isBlankObject(selectedFilterId) || SearchFilter.FILTER_RUNNING_INSTANCES.equals(selectedFilterId)){%> selected <%} %>>
+									진행중인 항목
 								</option>
 								<%
 								SearchFilterInfo[] filters = work.getSearchFilters();

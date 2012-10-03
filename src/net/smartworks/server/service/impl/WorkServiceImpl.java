@@ -759,6 +759,7 @@ public class WorkServiceImpl implements IWorkService {
 			else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) return SearchFilter.getRecentInstancesFilter();
 			else if(filterId.equals(SearchFilter.FILTER_MY_RECENT_INSTANCES)) return SearchFilter.getMyRecentInstancesFilter(ModelConverter.getUserByUserId(user.getId()));
 			else if(filterId.equals(SearchFilter.FILTER_MY_RUNNING_INSTANCES)) return SearchFilter.getMyRunningInstancesFilter(ModelConverter.getUserByUserId(user.getId()));
+			else if(filterId.equals(SearchFilter.FILTER_RUNNING_INSTANCES)) return SearchFilter.getRunningInstancesFilter();
 			else return ModelConverter.getSearchFilterByFilterId(type, workId, filterId);
 		}catch (Exception e){
 			e.printStackTrace();

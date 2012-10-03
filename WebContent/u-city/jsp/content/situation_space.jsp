@@ -77,21 +77,21 @@
  			<!-- 타이틀 -->
 			<div class="title">상황 상세 화면
 			
-				<!-- 다이어그램 보기 -->
+<%-- 				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
                 	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
                 </div>
                 <div class="txt_btn fr h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
-				
+ --%>				
 			</div>
 			<!-- 타이틀 -->
 
 			<!-- 프로세스다이어그램 -->
-			<div class="define_space js_process_instance_viewer" style="display:none;height:512px;"></div>
+			<div class="define_space js_process_instance_viewer" style="height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="height:68px">
+			<div class="define_space" style="display:none;height:68px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -222,6 +222,19 @@
 	<%
 	}
 	%>
+	function clickOnTaskInDiagram(formId){
+		var taskInstances = $('.js_pwork_space_page .js_instance_task');
+		if(!isEmpty(taskInstances)){
+			var selectedTask = null;
+			for(var i=0; i<taskInstances.length; i++){
+				var taskInstance = $(taskInstances[i]);
+				if(taskInstance.attr('formId') === formId)
+					selectedTask = taskInstance;
+			}
+			if(!isEmpty(selectedTask))
+				clickOnTask(selectedTask);			
+		}
+	}
 	function clickOnTask(input){
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
@@ -378,8 +391,8 @@
 	
 	if(!isEmpty(selectedTask)) clickOnTask(selectedTask);
 
-/* 	var target = pworkSpace.find('.js_process_instance_viewer');
+ 	var target = pworkSpace.find('.js_process_instance_viewer');
 	var instanceId = pworkSpace.attr('instId');
 	loadInstanceViewer(target, {instanceId : instanceId });
- */	
+	
 </script>

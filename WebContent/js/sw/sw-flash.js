@@ -110,9 +110,9 @@ function loadChartViewer(target, params){
 	loadFlash(target, APPNAME_CHART_VIEWER, params);
 };
 
-function selectActivity(act) {
-	console.log("selectActivity Called!!! act=" + act);
-	parent.selectActivity(act);
+function taskSelectionCallback(id, formId, formName) {
+	console.log("taskSelectionCallback Called!!! id=" + id + ", formId=" + formId + ", formName=" + formName);
+	clickOnTaskInDiagram(formId);
 };
 
 function loadCallback(appName, height){
