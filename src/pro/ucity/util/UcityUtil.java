@@ -235,6 +235,7 @@ public class UcityUtil {
 			dataRecord = OPDisplay.readHistoryTable(eventId, status);
 			break;
 		case System.TABLE_ID_INTCON_SITUATION:
+			dataRecord = ICSituation.readHistoryTable(eventId);
 			break;
 		case System.TABLE_ID_DEVMID_DEVICE_STATUS:
 			break;
