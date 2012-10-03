@@ -180,10 +180,10 @@ public class UcityUtil {
 		requestBody.put("taskInstId", taskInstance.getId());
 		requestBody.put("formId", form.getId());
 		requestBody.put("formName", form.getName());
-		if(SmartUtil.isBlankObject(data.get("externalDisplay"))){
+		if(!SmartUtil.isBlankObject(data.get("externalDisplay"))){
 			requestBody.put("externalDisplay", data.get("externalDisplay"));
 		}
-		if(SmartUtil.isBlankObject(data.get("isSms"))){
+		if(!SmartUtil.isBlankObject(data.get("isSms"))){
 			requestBody.put("isSms", data.get("isSms"));
 		}
 		
