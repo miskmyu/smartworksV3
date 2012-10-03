@@ -10,11 +10,14 @@ package pro.ucity.manager.ucityWorkList.manager.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.smartworks.server.engine.common.manager.AbstractManager;
+import net.smartworks.server.engine.common.model.Filter;
 import net.smartworks.server.engine.common.util.CommonUtil;
+import net.smartworks.server.engine.common.util.DateUtil;
 
 import org.hibernate.Query;
 
@@ -114,6 +117,9 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		Date creationDate = null;
 		String modificationUser = null;
 		Date modificationDate = null;
+
+		Filter[] filters = null;
+		String logicalOperator = null;
 		
 		if (cond != null) {
 			objId = cond.getObjId();
@@ -137,6 +143,9 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			creationDate = cond.getCreationDate();
 			modificationUser = cond.getModificationUser();
 			modificationDate = cond.getModificationDate();
+			
+			filters = cond.getFilter();
+			logicalOperator = cond.getOperator();
 		}
 		buf.append(" from UcityWorkList obj");
 		buf.append(" where obj.objId is not null");
@@ -178,7 +187,82 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			if (modificationDate != null)
 				buf.append(" and obj.modificationDate = :modificationDate");
 			if (searchKey != null) {
-				buf.append("and (obj.status like :searchKey or obj.title like :searchKey or obj.runningTaskName like :searchKey )");
+				buf.append(" and (obj.status like :searchKey or obj.title like :searchKey or obj.runningTaskName like :searchKey or " +
+						"obj.serviceName like :searchKey or obj.eventName like :searchKey or obj.externalDisplay like :searchKey or obj.isSms like :searchKey or obj.creationDate like :searchKey or obj.eventPlace like :searchKey )");
+			}
+			if (filters != null) {
+				if (!CommonUtil.isEmpty(filters)) {
+					if (CommonUtil.isEmpty(logicalOperator))
+						logicalOperator = "and";
+					String operator;
+					String left;
+					String right;
+					String rightType;
+					int i = 0;
+					
+					for (int j = 0; j < filters.length; j++) {
+						Filter f = filters[j];
+						operator = f.getOperator();
+						left = f.getLeftOperandValue();
+						right = f.getRightOperandValue();
+						rightType = f.getRightOperandType();
+						if (left == null)
+							throw new Exception("left operand of filter condition is null.");
+						if (operator == null) {
+							operator = "=";
+						} else {
+							operator = operator.trim();
+						}
+						//left = CommonUtil.toDefault(fieldColumnMap.get(left), left);
+						buf.append(CommonUtil.SPACE).append(logicalOperator);
+						
+						String oper1;
+						String oper2;
+						if (operator.equalsIgnoreCase("datein")) {
+							oper1 = ">=";
+							oper2 = "<=";
+							right = "a" + i++;
+							filterMap.put(right, f);
+							buf.append(CommonUtil.SPACE).append("(" + left);
+							buf.append(CommonUtil.SPACE).append(oper1);
+							buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+							buf.append(CommonUtil.SPACE).append("and");
+							buf.append(CommonUtil.SPACE).append(left);
+							buf.append(CommonUtil.SPACE).append(oper2);
+							buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append("_" + right).append(")");
+						} else if (operator.equalsIgnoreCase("datenotin")) {
+							oper1 = "<";
+							oper2 = ">";
+							right = "a" + i++;
+							filterMap.put(right, f);
+							buf.append(CommonUtil.SPACE).append("(" + left);
+							buf.append(CommonUtil.SPACE).append(oper1);
+							buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+							buf.append(CommonUtil.SPACE).append("or");
+							buf.append(CommonUtil.SPACE).append(left);
+							buf.append(CommonUtil.SPACE).append(oper2);
+							buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append("_" + right).append(")");
+						} else {
+							buf.append(CommonUtil.SPACE).append(left);
+							if (right == null) {
+								if (operator.equals("!=") || 
+										(operator.indexOf("=") == -1 && !operator.equalsIgnoreCase("is"))) {
+									buf.append(" is not null");
+								} else {
+									buf.append(" is null");
+								}
+							} else {
+								if (rightType == null || !rightType.equalsIgnoreCase(Filter.OPERANDTYPE_FIELD)) {
+									right = "a" + i++;
+									filterMap.put(right, f);
+								}
+								buf.append(CommonUtil.SPACE).append(operator);
+								buf.append(CommonUtil.SPACE).append(CommonUtil.COLON).append(right);
+							}
+							
+						}
+					}
+				}
 			}
 		}
 		this.appendOrderQuery(buf, "obj", cond);
@@ -236,6 +320,48 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				query.setString("modificationUser", modificationUser);
 			if (modificationDate != null)
 				query.setTimestamp("modificationDate", modificationDate);
+			if (filters != null) {
+				if (!CommonUtil.isEmpty(filterMap)) {
+					Filter f;
+					String operType;
+					String operValue;
+					String operator;
+					
+					Iterator keyItr = filterMap.keySet().iterator();
+					String param = null;
+					while (keyItr.hasNext()) {
+						param = (String)keyItr.next();
+						f = (Filter)filterMap.get(param);
+						operType = f.getRightOperandType();
+						operator = f.getOperator();
+						if (operator.equalsIgnoreCase("like")) {
+							operValue = CommonUtil.toLikeString(f.getRightOperandValue());
+						} else {
+							operValue = f.getRightOperandValue();
+						}	
+						if (operType == null || operType.equalsIgnoreCase(Filter.OPERANDTYPE_STRING)) {
+							query.setString(param, operValue);
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_INT)) {
+							query.setInteger(param, CommonUtil.toInt(operValue));
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_FLOAT)) {
+							query.setFloat(param, CommonUtil.toFloat(operValue));
+						} else if (operType.equalsIgnoreCase(Filter.OPERANDTYPE_DATE)) {
+							 if (operator.equalsIgnoreCase("datein") || operator.equalsIgnoreCase("datenotin")) {
+									query.setTimestamp(param, DateUtil.toFromDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+									query.setTimestamp("_" + param, DateUtil.toToDate(DateUtil.toDate(operValue), DateUtil.CYCLE_DAY));
+								 } else {
+									query.setTimestamp(param, DateUtil.toDate(operValue));
+								 }		
+							} else if (operType.equalsIgnoreCase("number")) {
+							query.setDouble(param, Double.parseDouble(operValue));
+						} else if (operType.equalsIgnoreCase("boolean")) {
+							query.setBoolean(param, CommonUtil.toBoolean(operValue));
+						} else {
+							query.setParameter(param, operValue);
+						}
+					}
+				}
+			}
 		}
 		return query;
 	}
