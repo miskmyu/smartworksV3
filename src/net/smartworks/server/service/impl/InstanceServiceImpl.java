@@ -4333,6 +4333,18 @@ public class InstanceServiceImpl implements IInstanceService {
 					}
 
 					filter.setLeftOperandType(formFieldType);
+					if (tableColName.equalsIgnoreCase("lastTask_tskname")) {
+						tableColName = "runningTaskName";
+					} else if (tableColName.equalsIgnoreCase("prcStatus")) {
+						tableColName = "status";
+					} else if (tableColName.equalsIgnoreCase("prcTitle")) {
+						tableColName = "title";
+					} else if (tableColName.equalsIgnoreCase("prcCreateDate")) {
+						tableColName = "createdTime";
+					} else if (tableColName.equalsIgnoreCase("lastTask_tskexecuteDate")) {
+						tableColName = "modifiedTime";
+					}
+					
 					filter.setLeftOperandValue(tableColName);
 					filter.setOperator(operator);
 					filter.setRightOperandType(formFieldType);
@@ -4345,8 +4357,21 @@ public class InstanceServiceImpl implements IInstanceService {
 
 				ucityWorkListCond.setFilter(filters);
 			}
+
+			LocalDate priviousDate = new LocalDate(new LocalDate().getTime() - LocalDate.ONE_DAY*7);
+			
+			String filterId = params.getFilterId();
+			if(filterId != null) {
+				if(filterId.equals(SearchFilter.FILTER_ALL_INSTANCES)) {
+				} else if(filterId.equals(SearchFilter.FILTER_RECENT_INSTANCES)) {
+					ucityWorkListCond.addFilter(new Filter(">=", FormField.ID_LAST_MODIFIED_DATE, Filter.OPERANDTYPE_DATE, priviousDate.toGMTSimpleDateString()));
+				} else if(filterId.equals(SearchFilter.FILTER_RUNNING_INSTANCES)) {
+					ucityWorkListCond.addFilter(new Filter("=", "status", Filter.OPERANDTYPE_STRING, PrcProcessInst.PROCESSINSTSTATUS_RUNNING));
+				}
+			}
+			
 			String searchKey = params.getSearchKey();
-			ucityWorkListCond.setSearchKey(searchKey);
+			ucityWorkListCond.setSearchKey(CommonUtil.toNull(searchKey));
 
 			long totalCount = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkListSize(user.getId(), ucityWorkListCond);
 
@@ -4428,52 +4453,55 @@ public class InstanceServiceImpl implements IInstanceService {
 			InstanceInfoList instanceInfoList = new InstanceInfoList();
 			List<PWInstanceInfo> pwInstanceInfoList = new ArrayList<PWInstanceInfo>();
 			PWInstanceInfo[] pWInstanceInfos = null;
-			for (int i = 0; i < workLists.length; i++) {
-				UcityWorkList workList = workLists[i];
-				PWInstanceInfo pworkInfo = new PWInstanceInfo();
-				
-				pworkInfo.setId(workList.getPrcInstId());
-				pworkInfo.setCreatedDate(new LocalDate(workList.getCreationDate().getTime()));
-				pworkInfo.setLastModifiedDate(new LocalDate(workList.getModificationDate().getTime()));
-				pworkInfo.setLastModifier(ModelConverter.getUserInfoByUserId(workList.getModificationUser()));
-				
-				if (!CommonUtil.isEmpty(workList.getRunningTaskId())) {
-//					TaskWorkCond taskWorkCond = new TaskWorkCond();
-//					taskWorkCond.setTskObjId(workList.getRunningTaskId());
-//					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
-//					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
-					TskTask lastTask = SwManagerFactory.getInstance().getTskManager().getTask(userId, workList.getRunningTaskId(), IManager.LEVEL_ALL);
-					if (lastTask != null) {
-						UserInfo assigneeInfo = ModelConverter.getUserInfoByUserId(lastTask.getAssignee());
-						pworkInfo.setLastTask(new TaskInstanceInfo(lastTask.getObjId(), lastTask.getName(), SmartWork.TYPE_PROCESS, assigneeInfo , assigneeInfo, new LocalDate(lastTask.getModificationDate().getTime())));
-						pworkInfo.setLastTaskCount(1);
+			
+			if (workLists != null) {
+				for (int i = 0; i < workLists.length; i++) {
+					UcityWorkList workList = workLists[i];
+					PWInstanceInfo pworkInfo = new PWInstanceInfo();
+					
+					pworkInfo.setId(workList.getPrcInstId());
+					pworkInfo.setCreatedDate(new LocalDate(workList.getCreationDate().getTime()));
+					pworkInfo.setLastModifiedDate(new LocalDate(workList.getModificationDate().getTime()));
+					pworkInfo.setLastModifier(ModelConverter.getUserInfoByUserId(workList.getModificationUser()));
+					
+					if (!CommonUtil.isEmpty(workList.getRunningTaskId())) {
+	//					TaskWorkCond taskWorkCond = new TaskWorkCond();
+	//					taskWorkCond.setTskObjId(workList.getRunningTaskId());
+	//					TaskWork[] taskWork = SwManagerFactory.getInstance().getWorkListManager().getTaskWorkList(userId, taskWorkCond);
+	//					pworkInfo.setLastTask(ModelConverter.getTaskInstanceInfo(user, taskWork[0]));
+						TskTask lastTask = SwManagerFactory.getInstance().getTskManager().getTask(userId, workList.getRunningTaskId(), IManager.LEVEL_ALL);
+						if (lastTask != null) {
+							UserInfo assigneeInfo = ModelConverter.getUserInfoByUserId(lastTask.getAssignee());
+							pworkInfo.setLastTask(new TaskInstanceInfo(lastTask.getObjId(), lastTask.getName(), SmartWork.TYPE_PROCESS, assigneeInfo , assigneeInfo, new LocalDate(lastTask.getModificationDate().getTime())));
+							pworkInfo.setLastTaskCount(1);
+						}
 					}
+					pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
+					int status = -1;
+					if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+						status = Instance.STATUS_RUNNING;
+					} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
+						status = Instance.STATUS_COMPLETED;
+					}
+					pworkInfo.setStatus(status);
+					pworkInfo.setSubject(workList.getTitle());
+					pworkInfo.setType(WorkInstance.TYPE_PROCESS);
+					pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
+					//pworkInfo.setWorkSpace(workSpace);
+					
+					Property p1 = new Property("serviceName",workList.getServiceName());
+					Property p2 = new Property("eventName",workList.getEventName());
+					Property p3 = new Property("type",workList.getType());
+					Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
+					Property p5 = new Property("eventPlace",workList.getEventPlace());
+					Property p6 = new Property("isSms",workList.getIsSms());
+	
+					Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6};
+					
+					pworkInfo.setExtentedProperty(properties);
+					
+					pwInstanceInfoList.add(pworkInfo);
 				}
-				pworkInfo.setOwner(ModelConverter.getUserInfoByUserId(workList.getCreationUser()));
-				int status = -1;
-				if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
-					status = Instance.STATUS_RUNNING;
-				} else if (workList.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE)) {
-					status = Instance.STATUS_COMPLETED;
-				}
-				pworkInfo.setStatus(status);
-				pworkInfo.setSubject(workList.getTitle());
-				pworkInfo.setType(WorkInstance.TYPE_PROCESS);
-				pworkInfo.setWork(ModelConverter.getWorkInfoByPackageId(workList.getPackageId()));
-				//pworkInfo.setWorkSpace(workSpace);
-				
-				Property p1 = new Property("serviceName",workList.getServiceName());
-				Property p2 = new Property("eventName",workList.getEventName());
-				Property p3 = new Property("type",workList.getType());
-				Property p4 = new Property("externalDisplay",workList.getExternalDisplay());
-				Property p5 = new Property("eventPlace",workList.getEventPlace());
-				Property p6 = new Property("isSms",workList.getIsSms());
-
-				Property[] properties = new Property[]{p1, p2, p3, p4, p5, p6};
-				
-				pworkInfo.setExtentedProperty(properties);
-				
-				pwInstanceInfoList.add(pworkInfo);
 			}
 			if(pwInstanceInfoList.size() > 0) {
 				pWInstanceInfos = new PWInstanceInfo[pwInstanceInfoList.size()];
