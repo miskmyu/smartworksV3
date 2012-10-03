@@ -176,7 +176,7 @@ function logout() {
 <script type="text/javascript" src="u-city/js/ucity-formFields.js"></script>
 
 <script type="text/javascript" src='js/smartform/smartworks.js'></script>
-<script type="text/javascript" src='js/smartform/sw-form-layout.js'></script>
+<script type="text/javascript" src='u-city/js/sw-form-layout.js'></script>
 <script type="text/javascript" src='js/smartform/sw-form-field-builder.js'></script>
 <script type="text/javascript" src='js/smartform/sw-form-dataFields.js'></script>
 <script type="text/javascript" src='js/smartform/field/currency_input.js'></script>

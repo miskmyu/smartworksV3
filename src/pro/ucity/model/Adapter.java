@@ -362,7 +362,7 @@ public class Adapter {
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
-			con.setAutoCommit(false);
+//			con.setAutoCommit(false);
 			
 			try{
 				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -383,11 +383,11 @@ public class Adapter {
 							boolean result = updatePstmt.execute();
 							try{
 								UcityUtil.startUService(rs);
-								con.commit();
+//								con.commit();
 								java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
 							}catch (Exception se){
 								se.printStackTrace();
-								con.rollback();
+//								con.rollback();
 							}
 						}catch (Exception we){
 							we.printStackTrace();
@@ -431,7 +431,7 @@ public class Adapter {
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
-			con.setAutoCommit(false);
+//			con.setAutoCommit(false);
 			
 			try{
 				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -447,7 +447,7 @@ public class Adapter {
 						boolean result = updatePstmt.execute();
 						Adapter adapter = new Adapter(rs);
 						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
-							con.commit();
+//							con.commit();
 							java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
 							try {
 								if (selectPstmt != null)
@@ -461,7 +461,7 @@ public class Adapter {
 							}
 							return adapter.getDataRecord();
 						}else{
-							con.rollback();
+//							con.rollback();
 						}
 					}catch (Exception we){
 						we.printStackTrace();

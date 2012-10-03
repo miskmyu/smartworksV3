@@ -76,7 +76,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_SERVICE_NAME%>">U-서비스명
@@ -85,7 +84,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 			<th>				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
@@ -94,7 +92,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>				
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
@@ -103,7 +100,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
@@ -112,7 +108,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
@@ -121,7 +116,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
@@ -130,21 +124,18 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
 					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 		</tr>	
 		<%	
@@ -265,7 +256,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_SERVICE_NAME%>">U-서비스명
@@ -274,7 +264,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 			<th>				
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_NAME%>">이벤트명
@@ -283,7 +272,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>				
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_TYPE%>">구분
@@ -292,7 +280,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>				
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_LAST_TASK%>">진행단계
@@ -301,7 +288,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EXTERNAL_DISPLAY%>">외부표출
@@ -310,7 +296,6 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 	 			<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_IS_SMS%>">SMS발송
@@ -319,21 +304,18 @@
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} 
 					%>"></span>
 				</a>						
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
 					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 			<th>
 				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_PLACE%>">발생장소
 					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_PLACE)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
-				<span class="js_progress_span"></span>
 			</th>
 		</tr>	
 	<%		
@@ -406,11 +388,9 @@ if(!SmartUtil.isBlankObject(sortedField)){
 			}
 		}
 		%>
-		<span class="js_progress_span"></span>
 	</div>
 	
 	<div class="num_box">
-		<span class="js_progress_span"></span>
 		<select class="js_select_page_size" name="selPageSize" title="<fmt:message key='common.title.count_in_page'/>">
 			<option <%if (pageSize == 20) {%> selected <%}%>>20</option>
 			<option <%if (pageSize == 30) {%> selected <%}%>>30</option>

@@ -27,16 +27,23 @@ public class DBReadScheduler extends QuartzJobBean  {
 	
 	
 	public static boolean isDbReadSchedulerRunning = false;
+	public static int schedulerCount = 0;
 	@Override
 	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
-		if(!isDbReadSchedulerRunning) startScheduler();
+		if(!isDbReadSchedulerRunning){
+			startScheduler();
+		}else{
+			System.out.println("진행중인 스케줄러가 있어 그냥 지나감...!!!");			
+		}
 	}
 	
 	synchronized static void startScheduler(){
 		isDbReadSchedulerRunning = true;
-		System.out.println("스케쥴러 동작 시간 : " + new Date());
+		schedulerCount++;
+		System.out.println( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
 		Adapter.readHistoryTableToStart();
 //		OPSituation.readHistoryTableToStart();
+		System.out.println( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 		isDbReadSchedulerRunning = false;		
 	}
 }

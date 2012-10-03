@@ -56,37 +56,7 @@
 	String approvalTaskInstId = "";
 	TaskInstanceInfo approvalTask = null;
 	TaskInstanceInfo forwardedTask = null;
-	if(taskHistories != null && instance.getStatus() != Instance.STATUS_REJECTED){
-		if(!SmartUtil.isBlankObject(taskInstId)){
-			for(TaskInstanceInfo task : taskHistories){
-				if(task.isRunningForwardedForMe(cUser.getId(), taskInstId)){
-					forwardedTask = task;
-					break;
-				}else if(task.isRunningApprovalForMe(cUser.getId(), taskInstId, null)){
-					approvalTaskInstId = task.getId();
-					approvalTask = task;
-					taskInstId = task.getApprovalTaskId();
-					break;
-				}
-			}
-		}
-		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(approvalTask)){
-			approvalTask = instance.getMyRunningApprovalTask();
-			if(!SmartUtil.isBlankObject(approvalTask)){
-				approvalTaskInstId = approvalTask.getId();
-				taskInstId = approvalTask.getApprovalTaskId();
-			}
-		}
-		if(SmartUtil.isBlankObject(taskInstId) && SmartUtil.isBlankObject(forwardedTask)){
-			forwardedTask = instance.getMyRunningForwardedTask();
-			if(!SmartUtil.isBlankObject(forwardedTask)){
-				taskInstId = forwardedTask.getId();
-			}			
-		}
-	}
-	if(SmartUtil.isBlankObject(approvalTask)){
-		approvalTaskInstId = "";
-	}
+
 	TaskInstanceInfo taskInstance = (SmartUtil.isBlankObject(taskInstId)) ? ((SmartUtil.isBlankObject(taskHistories)) ? null : taskHistories[0]) : instance.getTaskInstanceById(taskInstId);
 
  	session.setAttribute("cid", cid);
@@ -105,23 +75,23 @@
 <div class="contents_space js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
  			<!-- 타이틀 -->
-			<div class="title">title
+			<div class="title">상황 상세 화면
 			
-				<!-- 다이어그램 보기 -->
+<%-- 				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
                 	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
                 </div>
                 <div class="txt_btn fr h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
 				<!--  다이어그램 보기// -->
-				
+ --%>				
 			</div>
 			<!-- 타이틀 -->
 
 			<!-- 프로세스다이어그램 -->
-			<div class="define_space js_process_instance_viewer" style="display:none;height:512px;"></div>
+			<div class="define_space js_process_instance_viewer" style="height:512px;"></div>
 			
 			<!-- 프로세스 영역 -->
-			<div class="define_space" style="height:68px">
+			<div class="define_space" style="display:none;height:68px">
 			
 				<!-- 방향 Prev -->
         		<a href="" class="js_instance_tasks_left"><div class="proc_btn_prev" style="display:block"></div></a>
@@ -149,8 +119,7 @@
 				        									 		&& instance.getStatus()==Instance.STATUS_RETURNED
 				        									 		&& !SmartUtil.isBlankObject(approvalTask) 
 				        									 		&& task.getId().equals(approvalTask.getApprovalTaskId()))) ? "edit" : "view";
-				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)
-				        										&& !task.getAssignee().getId().equals(cUser.getId())) ? false : true;
+				        			boolean isSelectable = ((task.getStatus()==TaskInstance.STATUS_RUNNING||task.getStatus()==TaskInstance.STATUS_DELAYED_RUNNING)) ? false : true;
 				        			String approvalLineId = "";
 				        			if(task.getStatus() == TaskInstance.STATUS_RETURNED){
 				        				statusClass = "proc_task returned";
@@ -253,6 +222,19 @@
 	<%
 	}
 	%>
+	function clickOnTaskInDiagram(formId){
+		var taskInstances = $('.js_pwork_space_page .js_instance_task');
+		if(!isEmpty(taskInstances)){
+			var selectedTask = null;
+			for(var i=0; i<taskInstances.length; i++){
+				var taskInstance = $(taskInstances[i]);
+				if(taskInstance.attr('formId') === formId)
+					selectedTask = taskInstance;
+			}
+			if(!isEmpty(selectedTask))
+				clickOnTask(selectedTask);			
+		}
+	}
 	function clickOnTask(input){
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
@@ -409,8 +391,8 @@
 	
 	if(!isEmpty(selectedTask)) clickOnTask(selectedTask);
 
-/* 	var target = pworkSpace.find('.js_process_instance_viewer');
+ 	var target = pworkSpace.find('.js_process_instance_viewer');
 	var instanceId = pworkSpace.attr('instId');
 	loadInstanceViewer(target, {instanceId : instanceId });
- */	
+	
 </script>
