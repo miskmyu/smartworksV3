@@ -17,7 +17,7 @@
 			<beans:value>0/10 * * * * ?</beans:value>
 		</beans:property>
 	</beans:bean>
- 	<beans:bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
+  	<beans:bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
 		<beans:property name="triggers">
 			<beans:list>
 				<beans:ref local="cronTrigger1" />

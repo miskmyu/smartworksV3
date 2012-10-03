@@ -54,6 +54,7 @@ import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
 import net.smartworks.server.engine.process.task.model.TskTaskDef;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
+import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.util.LocalDate;
 import net.smartworks.util.SmartMessage;
 import net.smartworks.util.SmartUtil;
@@ -192,7 +193,7 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 				
 				//PrcInstance 종료
 				PrcProcessInst prcInst = this.getPrcManager().getProcessInst("linkadvisor", obj.getProcessInstId(), IManager.LEVEL_LITE);
-				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_CANCEL);
+				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_COMPLETE);
 				if (!CommonUtil.isEmpty(title))
 					prcInst.setTitle(title);
 				this.getPrcManager().setProcessInst("linkadvisor", prcInst, IManager.LEVEL_LITE);
@@ -212,6 +213,27 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 							}
 						}
 					}
+				}
+
+				//전자결재와 함께 보내진 참조업무들을 종료 시킨다.
+				TskTaskCond refTaskWithApprovalCond = new TskTaskCond();
+				refTaskWithApprovalCond.setProcessInstId(obj.getProcessInstId());
+				refTaskWithApprovalCond.setApprovalId(apprLineId);
+				refTaskWithApprovalCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+				refTaskWithApprovalCond.setType(TskTask.TASKTYPE_REFERENCE);
+				TskTask[] refTasks = this.getTskManager().getTasks(user, refTaskWithApprovalCond, IManager.LEVEL_ALL);
+				if (!CommonUtil.isEmpty(refTasks)) {
+					for (int i = 0; i < refTasks.length; i++) {
+						TskTask refTask = refTasks[i];
+						refTask.setStatus(TskTask.TASKSTATUS_CANCEL);
+						this.getTskManager().setTask(user, refTask, IManager.LEVEL_ALL);
+						
+						PublishNoticeCond noticeCond = new PublishNoticeCond();
+						noticeCond.setAssignee(refTask.getAssignee());
+						noticeCond.setRefId(refTask.getObjId());
+						noticeCond.setRefType(PublishNotice.REFTYPE_ASSIGNED_TASK);
+						SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice(user, noticeCond);
+					}	
 				}
 				
 				String sourceTaskId = obj.getFromRefId();
