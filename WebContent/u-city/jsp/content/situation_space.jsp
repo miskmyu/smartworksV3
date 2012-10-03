@@ -231,7 +231,7 @@
 				if(taskInstance.attr('formId') === formId)
 					selectedTask = taskInstance;
 			}
-			if(!isEmpty(selectedTask))
+			if(!isEmpty(selectedTask) && selectedTask.hasClass("completed"))
 				clickOnTask(selectedTask);			
 		}
 	}
