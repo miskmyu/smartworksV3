@@ -183,8 +183,8 @@
 				
 			<!-- 상세보기 컨텐츠 -->
 			<div class="js_form_header">
-				<div class="up_point pos_default js_form_content_pointer"></div>
-
+				<div class="form_title">title</div>
+				
 				<!--  전자결재화면이 나타나는 곳 -->
 				<div class="js_form_task_approval js_form_task p0 mb15" 
 					<%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>></div>
