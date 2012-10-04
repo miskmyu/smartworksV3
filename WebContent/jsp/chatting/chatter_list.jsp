@@ -60,7 +60,7 @@
 <!-- 채팅Default -->	 
 <div class="chat_de_section js_chatter_list js_chatter_list_page" nickNameBase="<%=nickNameBase%>">
 	<!-- 상단 -->
-	<div class="top_group">
+	<%-- <div class="top_group">
 		<a href="" class="js_toggle_chatter_list">
 			<div class="chatic_titl sera"><fmt:message key="chat.title.chatting"/><span class="t_white js_chatters_number">(<%=!SmartUtil.isBlankObject(chatters) ? chatters.length-1 : 0%>)</span></div>
 		</a>
@@ -69,7 +69,7 @@
 			<div class="ch_right btn_admin"><a><span></span></a></div>
 		</div>
 		<!-- 상단 우측 아이콘//-->
-	</div>
+	</div> --%>
 	<!-- 상단 //-->
 
 	<!--온라인 일때는 class="chat_online", 오프라인 일때는 chat_offline -->
