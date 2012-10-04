@@ -86,6 +86,12 @@
  --%>				
 			</div>
 			<!-- 타이틀 -->
+			
+			<!-- 목록보기 -->
+			<div class="button_set">
+				<div><a href="">목록보기</a></div>
+			</div>
+			<!-- 목록보기 //-->
 
 			<!-- 프로세스다이어그램 -->
 			<div class="define_space js_process_instance_viewer" style="height:512px;"></div>
@@ -176,19 +182,30 @@
 			<!--프로세스 영역//-->
 				
 			<!-- 상세보기 컨텐츠 -->
-			<div class="contents_space js_form_header">
-				<div class="up_point pos_default js_form_content_pointer"></div>
-
+			<div class="js_form_header">
+				<div class="form_title">title</div>
+				
 				<!--  전자결재화면이 나타나는 곳 -->
 				<div class="js_form_task_approval js_form_task p0 mb15" 
 					<%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>></div>
 				
-				<div class="form_wrap up form_read js_form_content"></div>
+				<div class="form_wrap up form_read js_form_content"> </div>
 				<div class="js_check_completion_notice" style="display:none">
 					<jsp:include page="/jsp/content/upload/check_completion_notice.jsp"></jsp:include>
 				</div>
 			</div>
-
+			<!-- 목록보기 -->
+			<div class="mt10 fr">
+				<span class="btn_gray">
+					<a class="" href="">
+					<span class="txt_btn_start"></span>
+					<span class="txt_btn_center">목록보기</span>
+					<span class="txt_btn_end"></span>
+					</a>
+				</span>
+			</div>
+			<!-- 목록보기// -->
+			
 			<!-- 업무전달화면이 나타나는 곳 -->
 			<div class="js_form_task_forward  js_form_task" <%if(forwardedTask==null){ %>style="display:none"<%} %>>
 				<%
