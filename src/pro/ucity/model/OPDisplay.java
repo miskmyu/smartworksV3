@@ -22,7 +22,7 @@ public class OPDisplay {
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	public static final String FIELD_NAME_REQUEST_DATE = "REQUEST_DATE";
 
-	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by desc " + FIELD_NAME_REQUEST_DATE;
+	public static final String QUERY_SELECT_FOR_CHECK = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) order by " + FIELD_NAME_REQUEST_DATE + " desc";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_DISPLAY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? ";
 	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_DISPLAY_ID + " = ?";
 
@@ -148,24 +148,24 @@ public class OPDisplay {
 			else if(keyMap.getKey().equals("DISPLAY_SECOND"))
 				dataRecord.put(keyMap.getId(), this.displaySecond);
 			else if(keyMap.getKey().equals("MB_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equals(this.mbYn));
-				if("Y".equals(this.mbYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : " ") +  keyMap.getId();
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.mbYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.mbYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "미디어보드";
 			}else if(keyMap.getKey().equals("VMS_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equals(this.vmsYn));
-				if("Y".equals(this.vmsYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : " ") +  keyMap.getId();
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.vmsYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.vmsYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "VMS";
 			}else if(keyMap.getKey().equals("BIT_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equals(this.bitYn));
-				if("Y".equals(this.bitYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : " ") +  keyMap.getId();
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.bitYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.bitYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "BIT";
 			}else if(keyMap.getKey().equals("WP_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equals(this.wpYn));
-				if("Y".equals(this.wpYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : " ") +  keyMap.getId();
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.wpYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.wpYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "홈세대기";
 			}else if(keyMap.getKey().equals("MP_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equals(this.mpYn));
-				if("Y".equals(this.mpYn))
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.mpYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.mpYn))
 					isSms = this.mpYn;
 			}else if(keyMap.getKey().equals("REQUEST_DATE"))
 				dataRecord.put(keyMap.getId(), this.requestDate);
@@ -174,7 +174,7 @@ public class OPDisplay {
 		if(!SmartUtil.isBlankObject(externalDisplay))
 			dataRecord.put("externalDisplay", externalDisplay);
 		if(!SmartUtil.isBlankObject(isSms))
-			dataRecord.put("isSms", isSms);
+			dataRecord.put("isSms",  "Y".equalsIgnoreCase(isSms) ? "on" : "");
 		
 		return dataRecord;
 //		return UcityTest.getOPDisplayDataRecord();

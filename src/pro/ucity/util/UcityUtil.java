@@ -23,6 +23,7 @@ import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ProcessWork;
@@ -259,7 +260,7 @@ public class UcityUtil {
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
 		
-		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, null);
+		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, new RequestParams());
 		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 			return;
 		}
