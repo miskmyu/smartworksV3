@@ -27,10 +27,6 @@
 .body_titl_pic .title_section {position:absolute}
 .body_titl_pworks {background: url("../../images/body_title_proces.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
 .body_titl_iworks {background: url("../../images/body_title_inform.png") no-repeat 0 -2px transparent; padding:22px 0 0 68px; line-height:18px}
-.body_titl > .group {background: url("../../images/body_title.png") no-repeat 0 -625px transparent; padding:0 10px 0 0; line-height:18px; min-height:51px; width:50px}
-.body_titl > .depart {background: url("../../images/body_title.png") no-repeat 0 -574px transparent; padding:0 10px 0 0; line-height:18px; min-height:51px; width:50px}
-.body_titl > .user, .form_title > .user {background: url("../../images/body_title.png") no-repeat 0 -725px transparent; padding:0 10px 0 0; line-height:18px; min-height:52px; width:50px}
-.body_titl > .smartcaster {background: url("../../images/body_title.png") no-repeat 0 -776px transparent; padding:20px 0 0 68px; line-height:18px}
 
 .body_titl_area {background: url("../../images/body_title.png") no-repeat 0 0 transparent; padding:22px 0 0 68px; line-height:18px}
 .body_titl_area.ti_company {background-position:0 0}
@@ -48,7 +44,7 @@
 .body_titl .t_date {font-size:11px; color:#999897; line-height:12px; position: relative; vertical-align: bottom}
 
 /* 본문 컨텐츠 */
-.define_space {padding: 20px 25px 0; overflow: hidden} /* 상하 여백이 필요 없을때 */
+.define_space {padding: 10px 0 5px; overflow: hidden}
 .contents_space {padding: 10px 20px}
 .contents_space .det_title, .reply .det_title, .det_title {overflow:hidden} /* 타이틀 */
 .contents_space .area {padding:10px}
@@ -322,3 +318,6 @@ a .icon_btn_edit:hover {background-position:-43px -859px}
 .btn_app_shar {background: url("../../images/body_icon.png") no-repeat -225px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
 .current .btn_app_shar {background-position:-225px -547px}
 .btn_app_shar_go {background: url("../../images/body_icon.png") no-repeat -277px -527px transparent; height:16px;  width:16px; display: inline-block; padding-right:5px; vertical-align: middle}
+
+/* Button Set */
+.button_set {background-color: #1E2127; font-size: 11px; padding: 5px; border-bottom: 1px solid #444444; text-align: right}
