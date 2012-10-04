@@ -4,6 +4,9 @@
 <!-- Author			: Maninsoft, Inc.						 -->
 <!-- Created Date	: 2011.9.								 -->
 
+<%@page import="net.smartworks.server.engine.factory.SwManagerFactory"%>
+<%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkList"%>
+<%@page import="pro.ucity.manager.ucityWorkList.model.UcityWorkListCond"%>
 <%@page import="net.smartworks.model.approval.ApprovalLine"%>
 <%@page import="net.smartworks.model.community.info.UserInfo"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
@@ -59,6 +62,10 @@
 
 	TaskInstanceInfo taskInstance = (SmartUtil.isBlankObject(taskInstId)) ? ((SmartUtil.isBlankObject(taskHistories)) ? null : taskHistories[0]) : instance.getTaskInstanceById(taskInstId);
 
+	UcityWorkListCond cond = new UcityWorkListCond();
+	cond.setPrcInstId(instance.getId());
+	UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
+	
  	session.setAttribute("cid", cid);
 	if(SmartUtil.isBlankObject(wid))
 		session.removeAttribute("wid");
@@ -75,7 +82,7 @@
 <div class="contents_space js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
  			<!-- 타이틀 -->
-			<div class="title">상황 상세 화면
+			<div class="title"><%=workList.getServiceName() %> / <%=workList.getEventName() %>(장소 : <%=workList.getEventPlace() %>) 상세화면 
 			
 <%-- 				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
@@ -144,7 +151,7 @@
 				        			}
 				        	%>
 			            			<!-- 태스크 --> 
-						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskInstId="<%=task.getId()%>" 
+						            <li class="<%=statusClass %> js_instance_task <%if(isSelectable){%>js_select_task_instance<%} %>" formId="<%=task.getFormId() %>" taskName="<%=task.getName() %>" taskInstId="<%=task.getId()%>" 
 						            		formMode="<%=formMode %>" isApprovalWork="<%=task.isApprovalWork()%>" approvalLineId=<%=CommonUtil.toNotNull(approvalLineId) %>>
 					                    <!-- task 정보 -->
 					                    <%if(isSelectable){%><a class="js_select_task_instance" href=""><%} %>
@@ -183,7 +190,7 @@
 				
 			<!-- 상세보기 컨텐츠 -->
 			<div class="js_form_header">
-				<div class="form_title">title</div>
+				<div class="form_title js_selected_task_title"><%=taskInstance.getName() %></div>
 				
 				<!--  전자결재화면이 나타나는 곳 -->
 				<div class="js_form_task_approval js_form_task p0 mb15" 
@@ -256,6 +263,7 @@
 		var pworkSpace = input.parents('.js_pwork_space_page');
 		var workId = pworkSpace.attr("workId");
 		var formId = input.attr("formId");
+		var taskName = input.attr("taskName");
 		var formMode = input.attr("formMode");
 		var instId = input.attr("taskInstId");
 		var isApprovalWork = input.attr("isApprovalWork");
@@ -292,6 +300,7 @@
 		pworkSpace.find('.js_instance_task').removeClass('selected');
 		selectedTask.addClass('selected');
 		formContentPointer.css({"left": selectedTask.position().left + selectedTask.outerWidth()/2 + "px"});
+		pworkSpace.find('.js_selected_task_title').html(taskName);
 		new SmartWorks.GridLayout({
 			target : formContent,
 			mode : formMode,
