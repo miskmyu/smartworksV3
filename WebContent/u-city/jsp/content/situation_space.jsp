@@ -189,9 +189,7 @@
 				<div class="js_form_task_approval js_form_task p0 mb15" 
 					<%if(approvalTask==null && (SmartUtil.isBlankObject(taskInstance) || !taskInstance.isApprovalWork())){ %>style="display:none"<%} %>></div>
 				
-				<div class="form_wrap up form_read js_form_content"> 
-					<div>title</div> 
-				</div>
+				<div class="form_wrap up form_read js_form_content"> </div>
 				<div class="js_check_completion_notice" style="display:none">
 					<jsp:include page="/jsp/content/upload/check_completion_notice.jsp"></jsp:include>
 				</div>
