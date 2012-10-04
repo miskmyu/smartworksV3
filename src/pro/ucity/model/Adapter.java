@@ -23,18 +23,23 @@ public class Adapter {
 
 	public static final String FIELD_SEPERATOR = "\\|\\|";
 	public static final int LENGTH_COMM_HEADER = 50;
+//	public static final int LENGTH_COMM_HEADER = 50;
 	public static final int LENGTH_SERVICE_CODE = 4;
 	public static final int LENGTH_EVENT_CODE = 4;
 	public static final int LENGTH_EVENT_TYPE = 2;
 	
-	public static final int POS_SERVICE_CODE = 33;
-	public static final int POS_EVENT_CODE = 37;
-	public static final int POS_EVENT_TYPE = 41;
+//	public static final int POS_SERVICE_CODE = 33;
+//	public static final int POS_EVENT_CODE = 37;
+//	public static final int POS_EVENT_TYPE = 41;
+	public static final int POS_SERVICE_CODE = 33-33;
+	public static final int POS_EVENT_CODE = 37-33;
+	public static final int POS_EVENT_TYPE = 41-33;
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
 	
-	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	//public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	
@@ -150,8 +155,8 @@ public class Adapter {
 		this.setResult(resultSet);
 	}
 	private void parseCommHeader(String commHeader){
-		int sizeHeader = commHeader.length();
-		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
+//		int sizeHeader = commHeader.length();
+//		if(SmartUtil.isBlankObject(commHeader) || commHeader.length() != LENGTH_COMM_HEADER) return;
 		
 		this.serviceCode = commHeader.substring(Adapter.POS_SERVICE_CODE, Adapter.POS_SERVICE_CODE+Adapter.LENGTH_SERVICE_CODE);
 		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
@@ -200,73 +205,74 @@ public class Adapter {
 	
 	}
 	private void parseCommBody(String commBody){
-		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
-		
-		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
-		if(tokens.length != ADAPTER_HISTORY_FIELDS[System.PROCESS_ENV_WEAHTER].length) return;
-		
-		switch(process){
-		case System.PROCESS_ENV_WEAHTER:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_ENV_ATMOSPHERE:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_ENV_WATER:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_TRAFFIC_INCIDENT:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_DISASTER_FIRE:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_CRIME_CCTV:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_CRIME_VEHICLES:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_WATERWORKS_LEAKS:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		case System.PROCESS_FACILITY_MANAGEMENT:
-			this.eventId = tokens[0];
-			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
-			break;
-		}
+		this.eventId = this.communicationId;
+//		if(SmartUtil.isBlankObject(commBody) || this.process<0 || this.process>System.MAX_PROCESS) return;
+//		
+//		String[] tokens = commBody.split(Adapter.FIELD_SEPERATOR);
+//		if(tokens.length != ADAPTER_HISTORY_FIELDS[System.PROCESS_ENV_WEAHTER].length) return;
+//		
+//		switch(process){
+//		case System.PROCESS_ENV_WEAHTER:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_ENV_ATMOSPHERE:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_ENV_WATER:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_TRAFFIC_ILLEGAL_PARKING:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_TRAFFIC_INCIDENT:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_DISASTER_FIRE:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_CRIME_CCTV:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_CRIME_VEHICLES:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_WATERWORKS_LEAKS:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		case System.PROCESS_FACILITY_MANAGEMENT:
+//			this.eventId = tokens[0];
+//			this.occuredDate = tokens[1];
+//			this.facilityId = tokens[2];
+//			this.locationName = tokens[3];
+//			break;
+//		}
 	}
 	
 	public String getServiceName(){
@@ -332,7 +338,7 @@ public class Adapter {
 				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
 				this.parseCommHeader(this.commHeader);
-				this.parseCommBody(this.commBody);
+				this.parseCommBody(this.commBody);				
 			}
 		}catch (Exception e){
 			e.printStackTrace();

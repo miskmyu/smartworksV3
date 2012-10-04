@@ -29,7 +29,7 @@ public class CMHistory {
 	public static final KeyMap[] COMMID_TRACE_FIELDS = {
 		new KeyMap("트랜잭션 아이디", "TRST_ID"), new KeyMap("송수신 구분", "SR_FLAG"), new KeyMap("메시지 아이디", "MSG_ID"), new KeyMap("시스템 코드", "SYS_CD"),
 		new KeyMap("데이터 타입", "DATA_TYP"), new KeyMap("발생 일시", "OUTB_DTM"), new KeyMap("성공여부", "SCSS_YN"), new KeyMap("에러 코드", "ERR_CD"),
-		new KeyMap("요청 응답 키", "RR_KEY"), new KeyMap("수신 프로토콜 타입", "R_PRTCL_TYP"), new KeyMap("수신 MEP 타입", "R_MEP"), new KeyMap("메시지 종류 구분", "MSG_KND_GUBN"),
+		new KeyMap("요청 응답 키", "RR_KEY"), new KeyMap("수신 프로토콜 타입", "R_PRTCL_TYP"), new KeyMap("수신 MEP 타입", "R_MEP"), new KeyMap("메시지 원본","MSG_ORIG"), new KeyMap("메시지 종류 구분", "MSG_KND_GUBN"),
 		new KeyMap("송신 프로토콜 타입", "S_PRTCL_TYP"), new KeyMap("재시도 횟수", "RTR_CNT"), new KeyMap("송신 MEP 타입", "S_MEP"), new KeyMap("수신 이벤트 내용", "RCV_EVET_CNTN"),
 		new KeyMap("이벤트 발생 아이디", "EVET_OUTB_ID")
 	};
@@ -45,6 +45,7 @@ public class CMHistory {
 	private String rrKey;
 	private String rPrtclTyp;
 	private String rMep;
+	private String msgOrig;
 	private String msgKndGubn;
 	private String sPrtclTyp;
 	private String rtrCnt;
@@ -117,6 +118,12 @@ public class CMHistory {
 	}
 	public void setrMep(String rMep) {
 		this.rMep = rMep;
+	}
+	public String getMsgOrig() {
+		return msgOrig;
+	}
+	public void setMsgOrig(String msgOrig) {
+		this.msgOrig = msgOrig;
 	}
 	public String getMsgKndGubn() {
 		return msgKndGubn;
@@ -191,6 +198,8 @@ public class CMHistory {
 				dataRecord.put(keyMap.getId(), this.rPrtclTyp);
 			else if(keyMap.getKey().equals("R_MEP"))
 				dataRecord.put(keyMap.getId(), this.rMep);
+			else if(keyMap.getKey().equals("MSG_ORIG"))
+				dataRecord.put(keyMap.getId(), this.msgOrig);
 			else if(keyMap.getKey().equals("MSG_KND_GUBN"))
 				dataRecord.put(keyMap.getId(), this.msgKndGubn);
 			else if(keyMap.getKey().equals("S_PRTCL_TYP"))
@@ -253,6 +262,9 @@ public class CMHistory {
 		}catch (Exception ex){}
 		try{
 			this.rMep = result.getString("R_MEP");
+		}catch (Exception ex){}
+		try{
+			this.rMep = result.getString("MSG_ORIG");
 		}catch (Exception ex){}
 		try{
 			this.msgKndGubn = result.getString("MSG_KND_GUBN");

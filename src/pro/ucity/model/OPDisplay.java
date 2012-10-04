@@ -174,7 +174,7 @@ public class OPDisplay {
 		if(!SmartUtil.isBlankObject(externalDisplay))
 			dataRecord.put("externalDisplay", externalDisplay);
 		if(!SmartUtil.isBlankObject(isSms))
-			dataRecord.put("isSms",  "Y".equalsIgnoreCase(isSms) ? "on" : "");
+			dataRecord.put("isSms", isSms);
 		
 		return dataRecord;
 //		return UcityTest.getOPDisplayDataRecord();

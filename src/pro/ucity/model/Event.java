@@ -36,7 +36,8 @@ public class Event {
 	public static final String ID_FACILITY_TROUBLE 			= "0601";
 	public static final String ID_FACILITY_EMERGENCY		= "0602";
 	
-	public static final String TYPE_OCCURRENCE			= "01";
+//	public static final String TYPE_OCCURRENCE			= "01";
+	public static final String TYPE_OCCURRENCE			= "20";
 	public static final String TYPE_RELEASE			= "02";
 	public static final String TYPE_PROCESSING			= "03";
 	
