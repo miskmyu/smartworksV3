@@ -16,7 +16,7 @@
 	</body>
 </html>
 <script type="text/javascript">
-$(function() {
+ $(function() {
 	
     $('input[type="submit"]').click();
 });

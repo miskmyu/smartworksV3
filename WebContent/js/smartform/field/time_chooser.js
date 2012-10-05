@@ -38,7 +38,7 @@ SmartWorks.FormRuntime.TimeChooserBuilder.build = function(config) {
 	
 	var $text = null;
 	if(readOnly){
-		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"></div>').text(value);
+		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><span>' + (isEmpty(value) ? '&nbsp;' : value) + '</span></div>');
 	}else{	
 		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><div class="icon_fb_space form_time_input"><input readonly="readonly" type="text" name="' + id + '"' + required + '><a href="" class="js_timepicker_button"><span class="icon_fb_time"></span></a></div></div>');
 		$text.find('input').attr('value', value);
@@ -52,7 +52,7 @@ SmartWorks.FormRuntime.TimeChooserBuilder.build = function(config) {
 		smartCommon.liveTimePicker();
 	}else{
 		if(readOnly){
-			options.container.find('.form_value').text(value);
+			options.container.find('.form_value span').html(isEmpty(value) ? '&nbsp;' : value);
 		}else{
 			options.container.find('.form_value input').attr('value', value);
 		}

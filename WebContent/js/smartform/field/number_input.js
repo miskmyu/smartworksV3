@@ -39,9 +39,9 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 	var $number = null;
 	if(readOnly){
 		if(value=='')
-			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>');
+			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
 		else
-			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			$number = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + (value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true }) + '</span></div>');
 	}else{	
 		$number = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text"' + required + '></div>');
 		if(value!='')
@@ -56,7 +56,7 @@ SmartWorks.FormRuntime.NumberInputBuilder.build = function(config) {
 		$number.appendTo(options.container);
 	}else if(value!=''){
 		if(readOnly)
-			options.container.find('.form_value').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			options.container.find('.form_value span').html(isEmpty(value) ? '&nbsp;' : value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 		else
 			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 	}
