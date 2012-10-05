@@ -57,7 +57,7 @@ body {background-color: #22282F}
 #content {color:#a6a6a6; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
 
 /* Table Format */
-.up {border-top:1px solid #6d6d6d; border-bottom:1px solid #6d6d6d;  padding: 0; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
+.up {border:1px solid #6d6d6d;  padding: 0; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
 .fieldline {border:1px solid #13161B; left:0px; background: none repeat scroll 0 0 #2D353E; vertical-align:middle; text-align:left; width:99.4%; padding:2px; color: #a6a6a6 !important} /* 한줄 input, text박스 쓸때 */
 .up_padding {padding:0; position:relative; width:100%}
 .fieldline.community_names {line-height:17px}
@@ -104,7 +104,7 @@ body {background-color: #22282F}
 /* 입력폼 */
 .form_wrap {height:100%}
 .form_wrap .input_check {float:left; margin-left:5px}
-.form_title {background: url("../images/dot_label.png") no-repeat 0 10px; font-weight: bold; padding: 7px 10px; font-size: 14px; color:#FFF}
+.form_title {background: url("../images/dot_label.png") no-repeat 0 11px; font-weight: bold; padding: 7px 10px 4px; font-size: 14px; color:#FFF}
 .form_contents {padding:0 20px 10px; text-align: center}
 /* .form_contents table tr {height:30px} */
 .form_contents table .before_icon {padding:2px 10px 2px 0}
