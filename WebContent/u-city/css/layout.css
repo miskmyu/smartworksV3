@@ -104,7 +104,7 @@ body {background-color: #22282F}
 /* 입력폼 */
 .form_wrap {height:100%}
 .form_wrap .input_check {float:left; margin-left:5px}
-.form_title {background: url("../images/dot_label.png") no-repeat 0 10px; font-weight: bold; padding: 7px 10px}
+.form_title {background: url("../images/dot_label.png") no-repeat 0 10px; font-weight: bold; padding: 7px 10px; font-size: 14px; color:#FFF}
 .form_contents {padding:0 20px 10px; text-align: center}
 /* .form_contents table tr {height:30px} */
 .form_contents table .before_icon {padding:2px 10px 2px 0}
