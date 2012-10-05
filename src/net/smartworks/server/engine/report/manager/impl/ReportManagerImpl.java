@@ -15,13 +15,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
-
 import net.smartworks.model.report.Data;
 import net.smartworks.server.engine.common.manager.AbstractManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.report.manager.IReportManager;
-import net.smartworks.util.SmartTest;
+
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
 
 public class ReportManagerImpl extends AbstractManager implements IReportManager  {
 
@@ -46,8 +46,9 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		tableBuff.append("		end as prccreatedate_half ");
 		tableBuff.append("	, usr.name as prcCreateUser ");
 		tableBuff.append("	, usr.pos as prcCreateUser_pos ");
-		tableBuff.append("	, case when usr.authid = 'ADMINISTRATOR' then '관리자' when usr.authid='USER' then '사용자' end as prcCreateUser_authId ");
 		tableBuff.append("	, case when usr.locale = 'ko' then '한국어' when usr.locale ='en' then '영어' end as prcCreateUser_locale ");
+		
+		tableBuff.append("	, cast(case when usr.authid = 'ADMINISTRATOR' then '관리자' when usr.authid='USER' then '사용자' end as varchar2(100)) as prcCreateUser_authId ");
 		tableBuff.append("	, dept.name as prccreateuser_dept ");
 		tableBuff.append("	, prcInst.prcmodifyDate ");
 		tableBuff.append("	, TO_CHAR(prcInst.prcmodifyDate, 'yyyy-MM-dd HH24') as prcmodifyDate_yyyymmddhh  ");
@@ -103,11 +104,23 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		} else if (argName.equalsIgnoreCase("lastTask")) {
 			//마지막태스크
 			return "lastTaskName";
+		} else if (argName.equalsIgnoreCase("creator")) {
+			//생성자
+			return "prccreateUser";
+		} else if (argName.equalsIgnoreCase("createdTime")) {
+			//생성일
+			return "prccreateDate";
+		} else if (argName.equalsIgnoreCase("modifier")) {
+			//수정자
+			return "lastTaskuserName";
+		} else if (argName.equalsIgnoreCase("modifiedTime")) {
+			//수정일
+			return "prcmodifyDate";
 		} else {
 			return null;
 		}
 	}
-	private String getColumnName(String argName, String argName2) {
+	/*private String getColumnName(String argName, String argName2) {
 		if (argName.equalsIgnoreCase("creator")) {
 			if (argName2.equalsIgnoreCase("userName")) {
 				//사용자이름
@@ -199,7 +212,7 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		} else {
 			return null;
 		}
-	}
+	}*/
 	private String getZaxisFunction(String argName) {
 		if (argName.equalsIgnoreCase("count")) {
 			//시간별
@@ -219,6 +232,122 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 		} else {
 			return null;
 		}
+	}
+	
+	public String getColumnNameByUserSelect(String key, String subKey) throws Exception {
+		
+		key = CommonUtil.toNotNull(key);
+		subKey = CommonUtil.toNull(subKey);
+		
+		if (key.equalsIgnoreCase("status")) {
+			//상태
+			return "prcStatus";
+		} else if (key.equalsIgnoreCase("subject")) {
+			//제목
+			return "prcTitle";
+		} else if (key.equalsIgnoreCase("lastTask")) {
+			//마지막태스크
+			return "lastTaskName";
+		}
+		
+		if (key.equalsIgnoreCase("creator") && subKey != null) {
+			if (subKey.equalsIgnoreCase("userName")) {
+				//사용자이름
+				return "prcCreateUser";
+			} else if (subKey.equalsIgnoreCase("userDepartment")) {
+				//사용자부서
+				return "prccreateuser_dept";
+			} else if (subKey.equalsIgnoreCase("userPosition")) {
+				//사용자직급
+				return "prcCreateUser_pos";
+			} else if (subKey.equalsIgnoreCase("userLevel")) {
+				//사용자레벨
+				return "prcCreateUser_authId";
+			} else if (subKey.equalsIgnoreCase("userLocale")) {
+				//사용자언어
+				return "prcCreateUser_locale";
+			}
+		} else if(key.equalsIgnoreCase("creator")) {
+			return "prccreateUser";
+		}
+		
+		if (key.equalsIgnoreCase("createdTime") && subKey != null) {
+			if (subKey.equalsIgnoreCase("byHour")) {
+				//시간별
+				return "prccreatedate_yyyymmddhh";
+			} else if (subKey.equalsIgnoreCase("byDay")) {
+				//일별
+				return "prccreatedate_yyyymmdd";
+			} else if (subKey.equalsIgnoreCase("byWeek")) {
+				//주별
+				return "prccreatedate_week";
+			} else if (subKey.equalsIgnoreCase("byMonth")) {
+				//월별
+				return "prccreatedate_yyyymm";
+			} else if (subKey.equalsIgnoreCase("byQuarter")) {
+				//분기별
+				return "prccreatedate_quarter";
+			} else if (subKey.equalsIgnoreCase("byHalfYear")) {
+				//반기별
+				return "prccreatedate_half";
+			} else if (subKey.equalsIgnoreCase("byYear")) {
+				//년별
+				return "prccreatedate_yyyy";
+			}
+		} else if(key.equalsIgnoreCase("createdTime")) {
+			return "prccreateDate";
+		}
+		
+		if (key.equalsIgnoreCase("modifier") && subKey != null) {
+			if (subKey.equalsIgnoreCase("userName")) {
+				//사용자이름
+				return "lastTaskuserName";
+			} else if (subKey.equalsIgnoreCase("userDepartment")) {
+				//사용자부서
+				return "lastTaskuserName_dept";
+			} else if (subKey.equalsIgnoreCase("userPosition")) {
+				//사용자직급
+				return "lastTaskuserName_pos";
+			} else if (subKey.equalsIgnoreCase("userLevel")) {
+				//사용자레벨
+				return "lastTaskuserName_authId";
+			} else if (subKey.equalsIgnoreCase("userLocale")) {
+				//사용자언어
+				return "lastTaskuserName_locale";
+			} else {
+				return null;
+			}
+		} else if(key.equalsIgnoreCase("modifier")) {
+			return "lastTaskuserName";
+		}
+		
+		if (key.equalsIgnoreCase("modifiedTime") && subKey != null) {
+			if (subKey.equalsIgnoreCase("byHour")) {
+				//시간별
+				return "prcmodifyDate_yyyymmddhh";
+			} else if (subKey.equalsIgnoreCase("byDay")) {
+				//일별
+				return "prcmodifyDate_yyyymmdd";
+			} else if (subKey.equalsIgnoreCase("byWeek")) {
+				//주별
+				return "prcmodifyDate_week";
+			} else if (subKey.equalsIgnoreCase("byMonth")) {
+				//월별
+				return "prcmodifyDate_yyyymm";
+			} else if (subKey.equalsIgnoreCase("byQuarter")) {
+				//분기별
+				return "prcmodifyDate_quarter";
+			} else if (subKey.equalsIgnoreCase("byHalfYear")) {
+				//반기별
+				return "prcmodifyDate_half";
+			} else if (subKey.equalsIgnoreCase("byYear")) {
+				//년별
+				return "prcmodifyDate_yyyy";
+			}
+		} else if(key.equalsIgnoreCase("modifiedTime")) {
+			return "prcmodifyDate";
+		}
+		return key;
 	}
 	
 	@Override
@@ -263,12 +392,18 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 			//ORACLE
 			sqlBuf.append(" select ");
 			
-			String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
+			//String xAxis =  (getColumnName(selReportXAxis) == null ? selReportXAxisSelectorDate == null || selReportXAxisSelectorDate == "" ? getColumnName(selReportXAxis, selReportXAxisSelectorUser) : getColumnName(selReportXAxis, selReportXAxisSelectorDate)  : getColumnName(selReportXAxis));
+
+			String tempXSubKey = CommonUtil.toNull(selReportXAxisSelectorDate) == null ? selReportXAxisSelectorUser : selReportXAxisSelectorDate;
+			
+			String xAxis =  getColumnNameByUserSelect(selReportXAxis, tempXSubKey);
 			sqlBuf.append(xAxis);
 			String zAxis = null;
 			if (!CommonUtil.isEmpty(selReportZAxis)) {
 				resultColumnCount = 3;
-				zAxis =  (getColumnName(selReportZAxis) == null ? selReportZAxisSelectorDate == null || selReportZAxisSelectorDate == "" ? getColumnName(selReportZAxis, selReportZAxisSelectorUser) : getColumnName(selReportZAxis, selReportZAxisSelectorDate)  : getColumnName(selReportZAxis));
+				//zAxis =  (getColumnName(selReportZAxis) == null ? selReportZAxisSelectorDate == null || selReportZAxisSelectorDate == "" ? getColumnName(selReportZAxis, selReportZAxisSelectorUser) : getColumnName(selReportZAxis, selReportZAxisSelectorDate)  : getColumnName(selReportZAxis));
+				String tempZSubKey = CommonUtil.toNull(selReportZAxisSelectorDate) ==  null ? selReportZAxisSelectorUser : selReportZAxisSelectorDate;
+				zAxis = getColumnNameByUserSelect(selReportZAxis, tempZSubKey);
 				sqlBuf.append(" , ").append(zAxis);
 			}
 			String function = getZaxisFunction(selReportYAxisValue);
@@ -299,6 +434,7 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 				}
 			}
 			Query query = this.getSession().createSQLQuery(sqlBuf.toString());
+			
 			List list = query.list();
 			if (list == null || list.isEmpty())
 				return null;
@@ -320,8 +456,8 @@ public class ReportManagerImpl extends AbstractManager implements IReportManager
 					
 					String value1 = (String)fields[j++];
 					String value2 = (String)fields[j++];
-					if (!zAxisValueList.contains(value2))
-						zAxisValueList.add(value2);
+					if (!zAxisValueList.contains(CommonUtil.toNotNull(value2)))
+						zAxisValueList.add(CommonUtil.toNotNull(value2));
 					
 					BigDecimal value3 = (BigDecimal)fields[j++];
 

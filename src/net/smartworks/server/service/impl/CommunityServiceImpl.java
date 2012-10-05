@@ -277,7 +277,8 @@ public class CommunityServiceImpl implements ICommunityService {
 			SwoGroup[] swoGroups = getSwoManager().getGroups(user.getId(), swoGroupCond, IManager.LEVEL_ALL);
 			if(swoGroups != null) {
 				for(SwoGroup swoGroup : swoGroups) {
-					GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
+//					GroupInfo groupInfo = ModelConverter.getGroupInfoByGroupId(swoGroup.getId());
+					GroupInfo groupInfo = ModelConverter.getGroupInfoBySwoGroup(null, swoGroup);
 					groupInfoList.add(groupInfo);
 				}
 				GroupInfo[] groupInfos = new GroupInfo[groupInfoList.size()];

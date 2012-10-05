@@ -85,6 +85,7 @@ public class LoginDaoImpl extends JdbcDaoSupport implements LoginDao {
 	 * @see com.maninsoft.smart.portal.webapp.common.dao.LoginDao#retrieveUserId(java.lang.String)
 	 */
 	public Login retrieveUserId(String userId) throws DataAccessException, ObjectRetrievalFailureException {
+		
 		Login login = (Login) selectQuery00.findObject(userId);
 		
 		String adjunctDeptIds = login.getAdjunctDeptIds();
