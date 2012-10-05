@@ -19,6 +19,7 @@ public class Event {
 	public static final String ID_ENV_OZONE 				= "0113";
 	public static final String ID_ENV_CANAL_WAY 			= "0114";
 	public static final String ID_ENV_WATER 				= "0115";
+	public static final String ID_ENV_WARNING 				= "0116";
 	
 	public static final String ID_TRAFFIC_INCIDENT 			= "0201";
 	public static final String ID_TRAFFIC_ILLEGAL_PARKING 	= "0202";
@@ -36,9 +37,8 @@ public class Event {
 	public static final String ID_FACILITY_TROUBLE 			= "0601";
 	public static final String ID_FACILITY_EMERGENCY		= "0602";
 	
-//	public static final String TYPE_OCCURRENCE			= "01";
-	public static final String TYPE_OCCURRENCE			= "20";
-	public static final String TYPE_RELEASE			= "02";
+	public static final String TYPE_OCCURRENCE			= "01";
+	public static final String TYPE_RELEASE				= "02";
 	public static final String TYPE_PROCESSING			= "03";
 	
 	public static final int TASK_EVENT_OCCURRENCE			= 1;
@@ -78,6 +78,8 @@ public class Event {
 			return "주운";
 		}else if(eventName.equals(ID_ENV_WATER)){
 			return "수질";
+		}else if(eventName.equals(ID_ENV_WARNING)){
+			return "환경경보";
 		}else if(eventName.equals(ID_TRAFFIC_INCIDENT)){
 			return "돌발상황";
 		}else if(eventName.equals(ID_TRAFFIC_ILLEGAL_PARKING)){

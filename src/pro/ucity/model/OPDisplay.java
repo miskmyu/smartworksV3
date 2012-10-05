@@ -29,7 +29,7 @@ public class OPDisplay {
 	public static final KeyMap[] OPPORTAL_DISPLAY_FIELDS = {
 		new KeyMap("U서비스 이벤트 아이디", "SITUATION_ID"), new KeyMap("상황표출 아이디", "DISPLAY_ID"), new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("상황표출 내용", "DISPLAY_CONTENT"),
 		new KeyMap("상황표출 이미지경로", "DISPLAY_IMAGE_PATH"), new KeyMap("상황표출 동영상경로", "DISPLAY_MOVIE_PATH"), new KeyMap("상황표출시간(초)", "DISPLAY_SECOND"), new KeyMap("미디어보드표출여부", "MB_YN"),
-		new KeyMap("VMS표출여부", "VMS_YN"), new KeyMap("BIT표출여부", "BIT_YN"), new KeyMap("홈세대기표출여부", "WP_YN"), new KeyMap("휴대폰표출여부", "MP_YN"),
+		new KeyMap("환경VMS표출여부", "ENV_VMS_YN"), new KeyMap("교통VMS표출여부", "TRA_VMS_YN"), new KeyMap("BIT표출여부", "BIT_YN"), new KeyMap("KIOSK표출여부", "KIOSK_YN"),
 		new KeyMap("표츌요청일시", "REQUEST_DATE")
 	};
 	
@@ -40,12 +40,12 @@ public class OPDisplay {
 	private String displayMoviePath;
 	private String displaySecond;
 	private String mbYn;
-	private String vmsYn;
+	private String envVmsYn;
+	private String traVmsYn;
 	private String bitYn;
-	private String wpYn;
-	private String mpYn;
+	private String kioskYn;
 	private String requestDate;
-		
+	
 	public String getSituationId() {
 		return situationId;
 	}
@@ -88,29 +88,29 @@ public class OPDisplay {
 	public void setMbYn(String mbYn) {
 		this.mbYn = mbYn;
 	}
-	public String getVmsYn() {
-		return vmsYn;
+	public String getEnvVmsYn() {
+		return envVmsYn;
 	}
-	public void setVmsYn(String vmsYn) {
-		this.vmsYn = vmsYn;
+	public void setEnvVmsYn(String envVmsYn) {
+		this.envVmsYn = envVmsYn;
+	}
+	public String getTraVmsYn() {
+		return traVmsYn;
+	}
+	public void setTraVmsYn(String traVmsYn) {
+		this.traVmsYn = traVmsYn;
+	}
+	public String getKioskYn() {
+		return kioskYn;
+	}
+	public void setKioskYn(String kioskYn) {
+		this.kioskYn = kioskYn;
 	}
 	public String getBitYn() {
 		return bitYn;
 	}
 	public void setBitYn(String bitYn) {
 		this.bitYn = bitYn;
-	}
-	public String getWpYn() {
-		return wpYn;
-	}
-	public void setWpYn(String wpYn) {
-		this.wpYn = wpYn;
-	}
-	public String getMpYn() {
-		return mpYn;
-	}
-	public void setMpYn(String mpYn) {
-		this.mpYn = mpYn;
 	}
 	public String getRequestDate() {
 		return requestDate;
@@ -151,22 +151,22 @@ public class OPDisplay {
 				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.mbYn) ? "on" : "");
 				if("Y".equalsIgnoreCase(this.mbYn))
 					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "미디어보드";
-			}else if(keyMap.getKey().equals("VMS_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.vmsYn) ? "on" : "");
-				if("Y".equalsIgnoreCase(this.vmsYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "VMS";
+			}else if(keyMap.getKey().equals("ENV_VMS_YN")){
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.envVmsYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.envVmsYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "환경VMS";
 			}else if(keyMap.getKey().equals("BIT_YN")){
 				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.bitYn) ? "on" : "");
 				if("Y".equalsIgnoreCase(this.bitYn))
 					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "BIT";
-			}else if(keyMap.getKey().equals("WP_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.wpYn) ? "on" : "");
-				if("Y".equalsIgnoreCase(this.wpYn))
-					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "홈세대기";
-			}else if(keyMap.getKey().equals("MP_YN")){
-				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.mpYn) ? "on" : "");
-				if("Y".equalsIgnoreCase(this.mpYn))
-					isSms = this.mpYn;
+			}else if(keyMap.getKey().equals("TRA_VMS_YN")){
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.traVmsYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.traVmsYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "교통VMS";	
+			}else if(keyMap.getKey().equals("KIOSK_YN")){
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.kioskYn) ? "on" : "");
+				if("Y".equalsIgnoreCase(this.kioskYn))
+					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "KIOSK";		
 			}else if(keyMap.getKey().equals("REQUEST_DATE"))
 				dataRecord.put(keyMap.getId(), this.requestDate);
 		}
@@ -215,16 +215,16 @@ public class OPDisplay {
 			this.mbYn = result.getString("MB_YN");
 		}catch (Exception ex){}
 		try{
-			this.vmsYn = result.getString("VMS_YN");
+			this.envVmsYn = result.getString("ENV_VMS_YN");
 		}catch (Exception ex){}
 		try{
 			this.bitYn = result.getString("BIT_YN");
 		}catch (Exception ex){}
 		try{
-			this.wpYn = result.getString("WP_YN");
+			this.traVmsYn = result.getString("TRA_VMS_YN");
 		}catch (Exception ex){}
 		try{
-			this.mpYn = result.getString("MP_YN");
+			this.kioskYn = result.getString("KIOSK_YN");
 		}catch (Exception ex){}
 		try{
 			this.requestDate = result.getString("REQUEST_DATE");

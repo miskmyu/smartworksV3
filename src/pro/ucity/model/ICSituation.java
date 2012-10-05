@@ -17,9 +17,14 @@ import net.smartworks.util.SmartUtil;
 
 public class ICSituation {
 
-	public static final String FIELD_NAME_EVENT_ID = "EVENT_ID";
+	public static final String FIELD_NAME_EVENT_ID = "ID";
+	public static final String FIELD_NAME_DONE = "DONE_YN";
 
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ?";
+	public static final String MSG_TYPE_OCCURRENCE = "O";
+	public static final String MSG_TYPE_RELEASE = "R";
+	
+	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and (" + FIELD_NAME_DONE + " != 'Y' or " + FIELD_NAME_DONE + " is null)";
+	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and " + FIELD_NAME_DONE + " = 'Y'";
 
 	public static final KeyMap[] INTCON_SITUATION_FIELDS = {
 		new KeyMap("키ID", "ID"), new KeyMap("이벤트구분ID", "EVENT_ID"), new KeyMap("X좌표", "POS_X"), new KeyMap("Y좌표", "POS_Y"),
@@ -227,7 +232,7 @@ public class ICSituation {
 		return false;
 	}
 
-	public static Map<String,Object> readHistoryTable(String eventId){
+	public static Map<String,Object> readHistoryTable(String eventId, String status){
 		
 		if(SmartUtil.isBlankObject(eventId)) return null;
 		try {
@@ -239,7 +244,7 @@ public class ICSituation {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_PERFORM;
+		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);

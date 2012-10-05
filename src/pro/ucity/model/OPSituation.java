@@ -44,8 +44,8 @@ public class OPSituation {
 	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
 		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
-		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("담당자명", "CHARGE_USER_NAME"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
-		new KeyMap("접수내용", "RECEIVE_CONTENT"), new KeyMap("처리내용", "HANDLING_CONTENT")
+		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
+		new KeyMap("내용", "CONTENTS"), new KeyMap("담당자명", "CHARGE_USER_NAME")
 	};
 
 	private int process=-1;
@@ -60,8 +60,7 @@ public class OPSituation {
 	private String chargeUserName;
 	private String startDate;
 	private String endDate;
-	private String receiveContent;
-	private String handlingContent;
+	private String contents;
 		
 	public int getProcess() {
 		return process;
@@ -129,19 +128,12 @@ public class OPSituation {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public String getReceiveContent() {
-		return receiveContent;
+	public String getContents() {
+		return contents;
 	}
-	public void setReceiveContent(String receiveContent) {
-		this.receiveContent = receiveContent;
+	public void setContents(String contents) {
+		this.contents = contents;
 	}
-	public String getHandlingContent() {
-		return handlingContent;
-	}
-	public void setHandlingContent(String handlingContent) {
-		this.handlingContent = handlingContent;
-	}
-
 	public OPSituation(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -177,10 +169,8 @@ public class OPSituation {
 				dataRecord.put(keyMap.getId(), this.startDate);
 			else if(keyMap.getKey().equals("END_DATE"))
 				dataRecord.put(keyMap.getId(), this.endDate);
-			else if(keyMap.getKey().equals("RECEIVE_CONTENT"))
-				dataRecord.put(keyMap.getId(), this.receiveContent);
-			else if(keyMap.getKey().equals("HANDLING_CONTENT"))
-				dataRecord.put(keyMap.getId(), this.handlingContent);
+			else if(keyMap.getKey().equals("CONTENTS"))
+				dataRecord.put(keyMap.getId(), this.contents);
 		}
 		return dataRecord;
 //		return UcityTest.getOPSituationDataRecord();
@@ -228,10 +218,7 @@ public class OPSituation {
 			this.endDate = result.getString("END_DATE");
 		}catch (Exception ex){}
 		try{
-			this.receiveContent = result.getString("RECEIVE_CONTENT");
-		}catch (Exception ex){}
-		try{
-			this.handlingContent = result.getString("HANDLING_CONTENT");
+			this.contents = result.getString("CONTENTS");
 		}catch (Exception ex){}
 	}
 	
@@ -260,10 +247,7 @@ public class OPSituation {
 			this.endDate = result.getString("END_DATE");
 		}catch (Exception ex){}
 		try{
-			this.receiveContent = result.getString("RECEIVE_CONTENT");
-		}catch (Exception ex){}
-		try{
-			this.handlingContent = result.getString("HANDLING_CONTENT");
+			this.contents = result.getString("CONTENTS");
 		}catch (Exception ex){}
 	}
 	
