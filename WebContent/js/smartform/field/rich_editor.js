@@ -41,7 +41,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	var $textarea = null;
 	if(readOnly){
 //		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + smartEncode(value) + '\');"></iframe></div>');
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>').find('span').html(isEmpty(value) ? '&nbsp;' : value);
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span>' + (isEmpty(value) ? '&nbsp;' : value) + '</span></div>');
 	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}

@@ -39,7 +39,7 @@ SmartWorks.FormRuntime.TextInputBuilder.build = function(config) {
 	
 	var $text = null;
 	if(readOnly){
-		$text = $('<div class="form_value" fieldId="' + id + '" style="width:' + valueWidth + '%"><span></span></div>').text(isEmpty(value) ? '&nbsp;' : value);
+		$text = $('<div class="form_value" fieldId="' + id + '" style="width:' + valueWidth + '%"><span>' + (isEmpty(value) ? '&nbsp;' : value) + '</span></div>');
 	}else if(multiLines > 1){	
 		$text = $('<div class="form_value" style="width:' + valueWidth + '%"><textarea rows="' + multiLines + '" name="' + id + '"' + required + '></textarea></div>');
 		$text.find('textarea').attr('value', value);
@@ -55,7 +55,7 @@ SmartWorks.FormRuntime.TextInputBuilder.build = function(config) {
 		$text.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value span').text(isEmpty(value) ? '&nbsp;' : value);
+			options.container.find('.form_value span').html(isEmpty(value) ? '&nbsp;' : value);
 		else if(multiLines > 1)
 			options.container.find('.form_value textarea').attr('value', value);			
 		else

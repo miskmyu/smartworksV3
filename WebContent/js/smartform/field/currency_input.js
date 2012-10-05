@@ -43,9 +43,9 @@ SmartWorks.FormRuntime.CurrencyInputBuilder.build = function(config) {
 	var $currency = null;
 	if(readOnly){
 		if(value=='')
-			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span></span></div>').find('span').text('&nbsp;');
+			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
 		else
-			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span></span></div>').find('span').text(value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			$currency = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>' + (value).formatCurrency({ symbol: currency ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true }) + '</span></div>').find('span');
 	}else{	
 		$currency = $('<div name="' + id + '" class="form_value form_number_input" style="width:' + valueWidth + '%"><input type="text" symbol="' + currency + '"'  + required + '></div>');
 		if(value!='')

@@ -65,7 +65,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 	if(!options.refreshData)	
 		$input_container.appendTo(options.container);
 	else
-		options.container.find('.form_value span').html($input_container.children());
+		options.container.find('.form_value').html($input_container.children());
 
 	if ($graphic.attr('hidden') == 'true') {
 		$label.hide();

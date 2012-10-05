@@ -38,7 +38,10 @@ SmartWorks.FormRuntime.DateChooserBuilder.build = function(config) {
 	
 	var $text = null;
 	if(readOnly){
-		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><span></span></div>').text(isEmpty(value) ? '&nbsp;' : value);
+		if(isEmpty(value))
+			$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
+		else
+			$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><span>' + value + '</span></div>');
 	}else{	
 		$text = $('<div class="form_value form_value_max_width" style="width:' + valueWidth + '%"><div class="icon_fb_space form_date_input"><input readonly="readonly" type="text" name="' + id + '"' + required + '><a href="" class="js_todaypicker_button"><span class="icon_fb_date"></span></a></div></div>');
 		$text.find('input').attr('value', value);	
@@ -53,7 +56,7 @@ SmartWorks.FormRuntime.DateChooserBuilder.build = function(config) {
 		smartCommon.liveTodayPicker();
 	}else{
 		if(readOnly)
-			options.container.find('.form_value span').text(isEmpty(value) ? '&nbsp;' : value);
+			options.container.find('.form_value span').html(isEmpty(value) ? '&nbsp;' : value);
 		else
 			options.container.find('.form_value input').attr('value', value);
 	}
