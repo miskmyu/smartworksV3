@@ -84,7 +84,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 					<div class="js_community_list srch_list_nowid" style="display: none"></div><span class="js_community_popup"></span><a href=""' + userPicker + '><span ' + icoClass + '></span></a></div></div>');
 
 	if(readOnly){
-		$user = $('<div class="form_value" style="width:' + valueWidth + '%"></div>');
+		$user = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>');
 		var viewUsersHtml = '';
 		for(var i=0; i<users.length; i++) {
 			var separator = ', ';
@@ -101,7 +101,7 @@ SmartWorks.FormRuntime.UserFieldBuilder.build = function(config) {
 				separator = '';
 			viewUsersHtml = viewUsersHtml + '<a href="' + href + '"><span>' + users[i].longName + separator + '</span></a>';
 		}
-		$user.html(viewUsersHtml);
+		$user.find('span').html(viewUsersHtml);
 	}else{	
 		$user = $html;
 	}
