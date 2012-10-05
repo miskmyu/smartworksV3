@@ -40,7 +40,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 		$label.appendTo(options.container);
 	
 	var $staticItems = $format.find('list staticItems staticItem');
-	var $input_container = $('<div class="form_value" style="width:' + valueWidth + '%"></div>');
+	var $input_container = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>');
 	
 	var $fieldset = $('<fieldset' + required + '></fieldset>');
 	for ( var i = 0; i < $staticItems.length; i++) {
@@ -65,7 +65,7 @@ SmartWorks.FormRuntime.RadioButtonBuilder.build = function(config) {
 	if(!options.refreshData)	
 		$input_container.appendTo(options.container);
 	else
-		options.container.find('.form_value').html($input_container.children());
+		options.container.find('.form_value span').html($input_container.children());
 
 	if ($graphic.attr('hidden') == 'true') {
 		$label.hide();

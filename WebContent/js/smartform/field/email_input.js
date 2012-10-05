@@ -38,7 +38,7 @@ SmartWorks.FormRuntime.EmailInputBuilder.build = function(config) {
 	
 	var $email = null;
 	if(readOnly){
-		$email = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').text(value);
+		$email = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>').find('span').text(isEmpty(value) ? '&nbsp;' : value);
 	}else{	
 		$email = $('<div class="form_value" style="width:' + valueWidth + '%"><input type="text" name="' + id + '"' + required + '></div>');
 		$email.find('input').attr('value', value);
@@ -51,7 +51,7 @@ SmartWorks.FormRuntime.EmailInputBuilder.build = function(config) {
 		$email.appendTo(options.container);
 	}else{
 		if(readOnly)
-			options.container.find('.form_value').text(value);
+			options.container.find('.form_value span').text(isEmpty(value) ? '&nbsp;' : value);
 		else
 			options.container.find('.form_value input').attr('value', value);
 	}

@@ -52,7 +52,7 @@ SmartWorks.FormRuntime.ComboBoxBuilder.build = function(config) {
 		$staticItems = $(staticItemsStr);
 	}
 	//
-	var $input = $('<div class="form_value" style="width:' + valueWidth + '%"><select name="' + id + '"' + required + '></select><div>');
+	var $input = $('<div class="form_value" style="width:' + valueWidth + '%"><span><select name="' + id + '"' + required + '></select></span><div>');
 
 	$input.attr('fieldId', id);
 	if (readOnly) {

@@ -42,9 +42,9 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 	
 	if (readOnly) {
 		if(value==''){
-			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>');
+			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span>&nbsp;</span></div>');
 		}else{
-			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"></div>').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			$percent = $('<div class="form_value form_number_input" style="width:' + valueWidth + '%"><span></span></div>').find('span').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 			$percent.text($percent.text() + "%");
 		}
 	} else {
@@ -63,8 +63,8 @@ SmartWorks.FormRuntime.PercentInputBuilder.build = function(config) {
 		$percent.appendTo(options.container);
 	}else if(value!=''){
 		if(readOnly){
-			options.container.find('.form_value').text(value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
-			options.container.find('.form_value').text(options.container.find('.form_value').text() + '%');
+			options.container.find('.form_value span').text(isEmpty(value) ? '&nbsp;' : value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
+			options.container.find('.form_value span').text(options.container.find('.form_value span').text() + '%');
 		}else{
 			options.container.find('.form_value input').attr('value', value).formatCurrency({ symbol: '' ,colorize: true, negativeFormat: '-%s%n', roundToDecimalPlace: -1, eventOnDecimalsEntered: true });
 			options.container.find('.form_value input').attr('value', options.container.find('.form_value input').attr('value') + '%');

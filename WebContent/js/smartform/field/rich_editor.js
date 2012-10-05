@@ -41,7 +41,7 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 	var $textarea = null;
 	if(readOnly){
 //		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><iframe align="center" frameborder="0" height="100%" width="100%" class="autoHeight" scrolling="no" border="0" onload="richEditorSetValue( $(this), ' + id + ', \'' + smartEncode(value) + '\');"></iframe></div>');
-		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"></div>').html(value);
+		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span></span></div>').find('span').html(isEmpty(value) ? '&nbsp;' : value);
 	}else{
 		$textarea = $('<div class="form_value" style="width:' + valueWidth + '%"><span' + required + '><textarea style="width:100%; height:' + height + 'px;display:none" id="' + id + '">'+ value.replace(/textarea/g, "div") +'</textarea></span></div>');
 	}
@@ -65,8 +65,8 @@ SmartWorks.FormRuntime.RichEditorBuilder.build = function(config) {
 		if(readOnly) {
 //			options.container.find('.form_value').find('iframe').contents().find('html').html(value);
 //			doIframeAutoHeight();
-			options.container.find('.form_value').text('');
-			options.container.find('.form_value').append(value);
+			options.container.find('.form_value span').text('');
+			options.container.find('.form_value span').append(isEmpty(value) ? '&nbsp;' : value);
 		} else {
 			options.container.find('.form_value textarea').html(value);
 			options.container.find('iframe').contents().find('iframe').css({width:"100%"}).contents().find('.smartOutput').html(value);
