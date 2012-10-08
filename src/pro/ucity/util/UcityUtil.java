@@ -23,6 +23,7 @@ import net.smartworks.model.instance.ProcessWorkInstance;
 import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.model.instance.info.InstanceInfoList;
 import net.smartworks.model.instance.info.PWInstanceInfo;
+import net.smartworks.model.instance.info.RequestParams;
 import net.smartworks.model.security.AccessPolicy;
 import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ProcessWork;
@@ -244,6 +245,7 @@ public class UcityUtil {
 			dataRecord = OPDisplay.readHistoryTable(eventId, status);
 			break;
 		case System.TABLE_ID_INTCON_SITUATION:
+			dataRecord = ICSituation.readHistoryTable(eventId, status);
 			break;
 		case System.TABLE_ID_DEVMID_DEVICE_STATUS:
 			break;
@@ -258,7 +260,7 @@ public class UcityUtil {
 		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
 		
-		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, null);
+		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, new RequestParams());
 		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
 			return;
 		}
@@ -345,6 +347,13 @@ public class UcityUtil {
 				try{
 					Map<String,Object> dataRecord = new HashMap<String,Object>();
 					dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
+					UcityUtil.performUServiceTask(taskInstance, dataRecord);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}else{
+				try{
+					Map<String,Object> dataRecord = new HashMap<String,Object>();
 					UcityUtil.performUServiceTask(taskInstance, dataRecord);
 				}catch (Exception e){
 					e.printStackTrace();

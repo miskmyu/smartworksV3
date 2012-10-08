@@ -43,7 +43,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 		if(schedulerCount==1){
 			try{
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 시작 : " + new Date());
-				UcityUtil.resumePollingForRunningTasks(null);
+//				UcityUtil.resumePollingForRunningTasks(null);
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 종료 : " + new Date());
 			}catch (Exception e){
 				e.printStackTrace();

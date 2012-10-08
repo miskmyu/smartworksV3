@@ -82,7 +82,7 @@
 <div class="contents_space js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
  			<!-- 타이틀 -->
-			<div class="title"><%=workList.getServiceName() %> / <%=workList.getEventName() %><%if(!SmartUtil.isBlankObject(workList.getEventPlace())){ %>(장소 : <%=workList.getEventPlace() %>)<%} %> 상세화면 
+			<div class="title"><%=workList.getServiceName() %> / <%=workList.getEventName() %><%if(!SmartUtil.isBlankObject(workList.getEventPlace())) {%>(장소 : <%=workList.getEventPlace() %>)<%} %> 상세화면 
 			
 <%-- 				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
