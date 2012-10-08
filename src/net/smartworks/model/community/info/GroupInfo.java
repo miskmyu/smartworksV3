@@ -4,7 +4,14 @@ package net.smartworks.model.community.info;
 public class GroupInfo extends WorkSpaceInfo {
 
 	private String desc;
+	private boolean	isPublic = false;
 	
+	public boolean isPublic() {
+		return isPublic;
+	}
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
 	public String getDesc() {
 		return desc;
 	}

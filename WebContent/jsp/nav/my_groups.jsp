@@ -20,11 +20,19 @@
 	<%
 	if (groups != null) {
 		for (GroupInfo group : groups) {
+			boolean isPublic = group.isPublic();
+			//사용자의 그룹이 공개인지 비공개인지 알수가 없어 이름뒤에 임시로 "공개", "비공개" 를 붙혀준다, 차후 이미지로 변경되어야 함
+			String isPublicStr = "";
+			if (isPublic) {
+				isPublicStr = " (공개)";
+			} else {
+				isPublicStr = " (비공개)";
+			}
 	%>
 			<li>
 				<a href="<%=group.getSpaceController() %>?cid=<%=group.getSpaceContextId()%>&wid=<%=group.getId() %>" title="<%=group.getDesc()%>">
 					<span class="icon_pe"><img src="<%=group.getMinPicture()%>" class="profile_size_s"></span> 
-					<span class="nav_sub_area"><%=group.getName()%></span>
+					<span class="nav_sub_area"><%=group.getName() + isPublicStr%></span>
 				</a>
 			</li>
 	<%

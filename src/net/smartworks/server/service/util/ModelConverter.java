@@ -3037,7 +3037,12 @@ public class ModelConverter {
 		} else {
 			groupInfo.setSmallPictureName(picture);
 		}
-
+		if (swoGroup.getGroupType() != null && swoGroup.getGroupType().equalsIgnoreCase("C")) {
+			groupInfo.setPublic(false);
+		} else {
+			groupInfo.setPublic(true);
+		}
+		
 		return groupInfo;
 	}
 

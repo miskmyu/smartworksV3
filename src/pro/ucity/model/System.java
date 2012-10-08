@@ -24,11 +24,17 @@ public class System {
 	public static final int ID_DEVICE_MIDDLEWARE 		= 4;
 	public static final int ID_ADAPTER 					= 5;
 
-	
+
+	//dev
 	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
-	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
-	public static final String DATABASE_USERNAME = "bpmuser";
-	public static final String DATABASE_PASSWORD = "bpmadmin";
+	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@dev.smartworks.net:8629:tibero";
+	public static final String DATABASE_USERNAME = "tibero";
+	public static final String DATABASE_PASSWORD = "tmax";
+	//개발
+//	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
+//	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
+//	public static final String DATABASE_USERNAME = "bpmuser";
+//	public static final String DATABASE_PASSWORD = "bpmadmin";
 	
 	public static final int TABLE_ID_OPPORTAL_SITUATION 	= 11;
 	public static final int TABLE_ID_OPPORTAL_DISPLAY 		= 12;
