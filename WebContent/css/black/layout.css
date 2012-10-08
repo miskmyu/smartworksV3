@@ -302,7 +302,8 @@ a .btn_apps:hover, .btn_apps.current {background: url("../../images/nav_img.png"
  {background: url("../../images/nav_img.png") no-repeat -46px -393px transparent; height:15px;  width:12px; float:left; cursor: pointer}
 .btn_remove_category:hover, .btn_remove_work:hover,.btn_remove_folder:hover
  {background: url("../../images/nav_img.png") no-repeat -46px -417px transparent; height:15px;  width:12px; float:left}
-
+.icon_private {background: url("../../images/body_icon.png") no-repeat -553px -850px transparent; height:10px;  width:10px; display:inline-block}
+ 
 /* Btn Folder n Picture */
 .btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
 .btn_fold a:hover {background-position:-360px -536px}
