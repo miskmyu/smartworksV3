@@ -28,13 +28,19 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	String cid = (String)session.getAttribute("cid");
-
 	String wid = (String)session.getAttribute("wid");
-
-	String spaceId = SmartUtil.getSpaceIdFromContentContext(cid);
-	// cid를 가지고 현재 공간과 공간의 타입을 가져온다.
-	WorkSpace workSpace = smartWorks.getWorkSpaceById(spaceId);
-	int spaceType = SmartUtil.getSpaceTypeFromContentContext(cid);
+	WorkSpace workSpace = (WorkSpace)session.getAttribute("workSpace");
+	String spaceId = null;
+	int spaceType = -1;
+	if(SmartUtil.isBlankObject(workSpace)){
+		spaceId = SmartUtil.getSpaceIdFromContentContext(cid);
+		// cid를 가지고 현재 공간과 공간의 타입을 가져온다.
+		workSpace = smartWorks.getWorkSpaceById(spaceId);
+		spaceType = SmartUtil.getSpaceTypeFromContentContext(cid);		
+	}else{
+		spaceId = workSpace.getId();
+		spaceType = workSpace.getSpaceType();
+	}
 	
 	// 호출하면서 설정된 Work ID와 Instance ID 를 가져온다..
 	String workId = request.getParameter("workId");

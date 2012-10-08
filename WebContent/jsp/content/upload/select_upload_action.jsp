@@ -15,9 +15,14 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
+	String cid = request.getParameter("cid");
+	String wid = request.getParameter("wid");
+	
 	int spaceType = SmartUtil.getSpaceTypeFromContentContext((String)session.getAttribute("cid"));
 	String workSpaceId = SmartUtil.getSpaceIdFromContentContext((String)session.getAttribute("cid"));
-	
+
+	session.setAttribute("cid", cid);
+	session.setAttribute("wid", wid);
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
