@@ -244,7 +244,8 @@ public class ICSituation {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
+//		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
+		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);

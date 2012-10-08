@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +34,10 @@ public class Adapter {
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
-	
-	//public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
-	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
+	//dev
+	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	//개발
+//	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	
@@ -139,7 +141,10 @@ public class Adapter {
 		return occuredDate;
 	}
 	public void setOccuredDate(String occuredDate) {
-		this.occuredDate = occuredDate;
+		if(!SmartUtil.isBlankObject(occuredDate) && occuredDate.length()==12)
+			this.occuredDate = occuredDate.substring(0,4) + "-" + occuredDate.substring(4,2) + "-" + occuredDate.substring(6,2) + " " + occuredDate.substring(8,2) + ":" + occuredDate.substring(10,2);
+		else
+			this.occuredDate = occuredDate;
 	}
 	public String getEnvEventType() {
 		return envEventType;

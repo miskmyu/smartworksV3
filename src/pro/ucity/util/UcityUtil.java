@@ -351,6 +351,13 @@ public class UcityUtil {
 				}catch (Exception e){
 					e.printStackTrace();
 				}
+			}else{
+				try{
+					Map<String,Object> dataRecord = new HashMap<String,Object>();
+					UcityUtil.performUServiceTask(taskInstance, dataRecord);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
 	}
