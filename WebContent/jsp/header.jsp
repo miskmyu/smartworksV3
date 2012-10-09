@@ -157,6 +157,15 @@ function logout() {
 				</a>
 			</li>
 			<!-- 할당업무 알림 영역  //-->
+			
+			<!-- 업무 알림 영역 
+			<li class="icon_info_works">
+				<a href="">
+					<em class="icon_number"><%=notices[Notice.TYPE_ASSIGNED].getLength()%><span></span></em>
+				</a>
+			</li>
+			<!-- 업무 알림 영역  //-->
+			
 	
 			<!-- 메일 알림 영역  -->
 			<!-- *** js_notice_count : sw_act_nav.sw에서 이벤트를 받아 Message List Box를 보여준다. -->
