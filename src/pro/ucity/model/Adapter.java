@@ -35,9 +35,9 @@ public class Adapter {
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
 	//dev
-	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+//	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
 	//개발
-//	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
+	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	
