@@ -1704,4 +1704,9 @@ public class SmartWorks implements ISmartWorks {
 		return instanceService.getAllUcityPWorkInstanceList(runningOnly, params);
 	}
 
+	@Override
+	public String createTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return instanceService.createTaskInstance(requestBody, request);
+	}
+
 }

@@ -7825,6 +7825,10 @@ public class InstanceServiceImpl implements IInstanceService {
 	}
 
 	@Override
+	public String createTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
+		return executeTask(requestBody, request, "create");
+	}
+	@Override
 	public String performTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception {
 		return executeTask(requestBody, request, "execute");
 	}

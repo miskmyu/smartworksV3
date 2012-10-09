@@ -10,8 +10,12 @@ package pro.ucity.util;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
+import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 import pro.ucity.model.Adapter;
 import pro.ucity.model.CMHistory;
 import pro.ucity.model.ICSituation;
@@ -29,7 +33,8 @@ import net.smartworks.model.work.FormField;
 import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
-import net.smartworks.model.work.info.SmartTaskInfo;
+import net.smartworks.model.work.info.SmartFormInfo;
+import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
 import net.smartworks.server.service.IInstanceService;
@@ -44,15 +49,17 @@ public class UcityUtil {
 		super();
 	}
 	
-	public static void startUService(ResultSet resultSet) throws Exception{
+	public static void endUService(ResultSet resultSet) throws Exception{
 		if(SmartUtil.isBlankObject(resultSet)){
 			throw new Exception("Invalid parameters exception !!!");
 		}
 		Adapter adapter = new Adapter(resultSet);
-		if(!adapter.isValid() || adapter.getEventType() != Adapter.EVENT_TYPE_OCCURRENCE){
+		if(!adapter.isValid() || adapter.getEventType() != Adapter.EVENT_TYPE_RELEASE){
 			throw new Exception("Invalid result set exception !!!");
 		}
-		adapter.startProcess();	
+		
+		
+		adapter.endProcess();
 	}
 
 	public static void startPortalService(ResultSet resultSet, ResultSet joinResultSet) throws Exception{
@@ -69,7 +76,7 @@ public class UcityUtil {
 		opSituation.startProcess();
 	}
 
-	public static void startUServiceProcess(String processId, Map<String, Object> data) throws Exception{
+	public static void startUServiceProcess(String processId, String eventId, String eventTime, Map<String, Object> data) throws Exception{
 		if(processId == null || data == null){
 			throw new Exception("Invalid parameters exception !!!");
 		}
@@ -91,6 +98,8 @@ public class UcityUtil {
 		requestBody.put("serviceName", data.get("serviceName"));
 		requestBody.put("eventName", data.get("eventName"));
 		requestBody.put("eventPlace", data.get("eventPlace"));
+		requestBody.put("eventId", eventId);
+		requestBody.put("eventTime", eventTime);
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
 		for(int i=0; i<form.getFields().length; i++){
@@ -111,44 +120,65 @@ public class UcityUtil {
 		UcityUtil.startPollingForRunningTasks(processId, instanceId);
 	}
 	
-	public static void startUServiceProcess(String processId, String startTaskName, Map<String, Object> data) throws Exception{
-		if(processId == null || startTaskName == null || data == null){
+	public static void endUServiceProcess(String processId, String eventId, Map<String, Object> data) throws Exception{
+		if(processId == null || data == null){
 			throw new Exception("Invalid parameters exception !!!");
 		}
 		
 		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
-		
-		Map<String, Object> requestBody = new HashMap<String, Object>();
-		
+		IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();
 		
 		ProcessWork work = (ProcessWork)workService.getWorkById(processId);
-		
-		SmartTaskInfo startTask = null;
+		if(SmartUtil.isBlankObject(work) || SmartUtil.isBlankObject(work.getDiagram()) || SmartUtil.isBlankObject(work.getDiagram().getTasks())){
+			throw new Exception("Invalid Process Work exception !!!");
+		}
+		SmartForm endForm = null;
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
-			SmartTaskInfo task = work.getDiagram().getTasks()[i];
-			if(task.getName().equals(startTaskName)){
-				startTask = task;
+			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
+			if(SmartUtil.isBlankObject(form)) continue;
+			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
+				endForm = workService.getFormById(form.getId(), processId);
 				break;
 			}
-		}		
-		if(SmartUtil.isBlankObject(startTask)){
-			throw new Exception("Invalid start task name exception !!!");			
 		}
-		SmartForm form = workService.getFormById(startTask.getForm().getId(), processId);
-		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
-			throw new Exception("Invalid Form information exception !!!");
+		if(SmartUtil.isBlankObject(endForm)){
+			throw new Exception("Invalid U Serive End Form exception !!!");			
 		}
 		
+		InstanceInfoList instanceList = instanceService.getAllPWorkInstanceList(true, new RequestParams());
+		if(SmartUtil.isBlankObject(instanceList) || SmartUtil.isBlankObject(instanceList.getInstanceDatas())){
+			return;
+		}
+		
+		ProcessWorkInstance endProcessInstance = null;
+		
+		PWInstanceInfo[] instances = (PWInstanceInfo[])instanceList.getInstanceDatas();
+		for(int i=0; i<instances.length; i++){			
+			if(!SmartUtil.isBlankObject(processId) && !instances[i].getWork().getId().equals(processId)) continue;
+			ProcessWorkInstance processInstance = (ProcessWorkInstance)instanceService.getWorkInstanceById(SmartWork.TYPE_PROCESS, processId, instances[i].getId());
+			if(SmartUtil.isBlankObject(processInstance) || SmartUtil.isBlankObject(processInstance.getTasks())) continue;
+			UcityWorkListCond cond = new UcityWorkListCond();
+			cond.setPrcInstId(processInstance.getId());
+			UcityWorkList workList = SwManagerFactory.getInstance().getUcityWorkListManager().getUcityWorkList("", cond, null);
+			if(eventId.equals(workList.getEventId())){
+				endProcessInstance = processInstance;
+				break;
+			}
+		}
+		
+		if(SmartUtil.isBlankObject(endProcessInstance)){
+			throw new Exception("Invalid Process Instance exception !!!");						
+		}
+
+		Map<String, Object> requestBody = new HashMap<String, Object>();		
 		requestBody.put("workId", processId);
-		requestBody.put("formId", form.getId());
-		requestBody.put("formName", form.getName());
-		requestBody.put("serviceName", data.get("serviceName"));
-		requestBody.put("eventName", data.get("eventName"));
-		requestBody.put("eventPlace", data.get("eventPlace"));
+		requestBody.put("instanceId", endProcessInstance.getId());
+		requestBody.put("formId", endForm.getId());
+		requestBody.put("formName", endForm.getName());
 		
 		Map<String, Object> fieldData = new HashMap<String, Object>();
-		for(int i=0; i<form.getFields().length; i++){
-			FormField field = form.getFields()[i];
+		for(int i=0; i<endForm.getFields().length; i++){
+			FormField field = endForm.getFields()[i];
 			if(data.containsKey(field.getName())){
 				fieldData.put(field.getId(), data.get(field.getName()));
 			}
@@ -161,7 +191,7 @@ public class UcityUtil {
 		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
 		requestBody.put("frmAccessSpace", accessData);
 		
-		String instanceId = SwServiceFactory.getInstance().getInstanceService().startProcessWorkInstance(requestBody, null);
+		String instanceId = SwServiceFactory.getInstance().getInstanceService().createTaskInstance(requestBody, null);
 		UcityUtil.startPollingForRunningTasks(processId, instanceId);
 	}
 	
@@ -232,9 +262,9 @@ public class UcityUtil {
 		Map<String,Object> dataRecord = null;
 		int tableId = System.getTableId(tableName);
 		switch(tableId){
-		case System.TABLE_ID_ADAPTER_HISTORY:
-			dataRecord = Adapter.readHistoryTable(eventId);
-			break;
+//		case System.TABLE_ID_ADAPTER_HISTORY:
+//			dataRecord = Adapter.readHistoryTable(eventId);
+//			break;
 		case System.TABLE_ID_COMMID_TRACE:
 			dataRecord = CMHistory.readHistoryTable(eventId, status);
 			break;
@@ -361,13 +391,64 @@ public class UcityUtil {
 			}
 		}
 	}
+
+	static List<PollingModel> pollingQueue = new LinkedList<PollingModel>();
+	synchronized static int addPolling(String eventId, String tableName, String status, String displayId, long timeout, TaskInstance taskInstance){
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)){
+			java.lang.System.out.println("EventId or TaskInstance does not exist Error!!!!, EventId=" + eventId);
+			return -1;
+		}
+		if(SmartUtil.isBlankObject(pollingQueue)){
+			pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, timeout, taskInstance));
+			return 0;
+		}
+		
+		for(int index=0; index<pollingQueue.size(); index++){
+			PollingModel pollingModel = pollingQueue.get(index);
+			if(pollingModel.getEventId().equals(eventId) && pollingModel.getTaskInstance().getId().equals(taskInstance.getId())){
+				java.lang.System.out.println("PollingTask is already Running !!!!, Model Event Id=" + pollingModel.getEventId() + ", Task Name=" + taskInstance.getName() + ", Size=" + pollingQueue.size() +  ", Index=" + index);
+				return -1;
+			}
+		}
+		
+		pollingQueue.add(new PollingModel(eventId, tableName, status, displayId, timeout, taskInstance));
+		return pollingQueue.size() -1;
+	}
+	synchronized static void addThreadToPolling(int index, Thread thread){
+		if( index<0 || thread==null || !(index < pollingQueue.size())) return;
+		
+		PollingModel pollingModel = pollingQueue.get(index);
+		pollingModel.setThread(thread);
+		pollingQueue.set(index, pollingModel);
+	}
 	
-	public static String currentEventId = null;
-	public static String currentTableName = null;
-	public static String currentStatus = null;
-	public static String currentDisplayId = null;
-	public static TaskInstance currentTaskInstance = null;
-	public static long currentTimeout = System.DEFAULT_TASK_TIMEOUT;
+	synchronized static PollingModel getPolling(Thread thread){
+		if(thread==null || SmartUtil.isBlankObject(pollingQueue))
+			return null;
+		
+		for(int index=0; index<pollingQueue.size(); index++){
+			PollingModel pollingModel = pollingQueue.get(index);
+			if(pollingModel.getThread() == thread){
+				pollingQueue.remove(index);
+				return pollingModel;
+			}
+		}
+		return null;
+
+	}
+	
+	static PollingModel getModel(Thread thread){
+		if(thread==null || SmartUtil.isBlankObject(pollingQueue))
+			return null;
+		
+		for(int index=0; index<pollingQueue.size(); index++){
+			PollingModel pollingModel = pollingQueue.get(index);
+			if(pollingModel.getThread() == thread)
+				return pollingModel;
+		}
+		return null;
+
+	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
 		
@@ -376,23 +457,25 @@ public class UcityUtil {
 			timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
 		}catch (Exception e){}
 		
-		currentEventId = eventId;
-		currentTableName = tableName;
-		currentStatus = status;
-		currentDisplayId = displayId;
-		currentTaskInstance = taskInstance;
-		currentTimeout = timeoutInMilliseconds;
-		
+		int index = -1;
+		if((index = addPolling(eventId, tableName, status, displayId, timeoutInMilliseconds, taskInstance)) == -1){
+			java.lang.System.out.println("Add Polling already running, Event Id=" + eventId + ", Task Name=" + taskInstance.getName());
+			return;		
+		}
+
 		Thread pollingForRunningTask = new Thread(new Runnable() {
 			public void run() {
-				String eventId = currentEventId;
-				String tableName = currentTableName;
-				String status = currentStatus;
-				String displayId = currentDisplayId;
-				TaskInstance taskInstance = currentTaskInstance;
-				long timeout = currentTimeout;
+				PollingModel thisModel = getModel(Thread.currentThread());
+				String eventId = thisModel.getEventId();
+				String tableName = thisModel.getTableName();
+				String status = thisModel.getStatus();
+				String displayId = thisModel.getDisplayId();
+				TaskInstance taskInstance = thisModel.getTaskInstance();
+				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord)) {
+					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+					
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
 						taskInstance = (TaskInstance)instanceService.getTaskInstanceById(taskInstance.getWork().getId(), taskInstance.getId());
@@ -409,6 +492,7 @@ public class UcityUtil {
 						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
 						dataRecord = null;
 						try{
+							java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
 							continue;
 						}catch (Exception ex){
@@ -424,6 +508,7 @@ public class UcityUtil {
 						}
 						timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
 						try{
+							java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 							Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
 							continue;
 						}catch (Exception ex){
@@ -436,8 +521,12 @@ public class UcityUtil {
 							dataRecord = OPDisplay.checkForDisplay(eventId, dataRecord);
 						}
 						try{
-							UcityUtil.performUServiceTask(taskInstance, dataRecord);
+						java.lang.System.out.println("############ START Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
+						UcityUtil.performUServiceTask(taskInstance, dataRecord);
+						java.lang.System.out.println("############ END Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
+						break;
 						}catch (Exception e){
+							java.lang.System.out.println("############ END(ERROR) Perform Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " ################");
 							e.printStackTrace();
 							if(timeout<System.DEFAULT_POLLING_INTERVAL){
 								timeout=0;
@@ -446,6 +535,7 @@ public class UcityUtil {
 							timeout = timeout - System.DEFAULT_POLLING_INTERVAL;
 							dataRecord = null;
 							try{
+								java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 								Thread.sleep(System.DEFAULT_POLLING_INTERVAL);
 								continue;
 							}catch (Exception ex){
@@ -458,16 +548,82 @@ public class UcityUtil {
 				}
 				
 				if(timeout==0 && SmartUtil.isBlankObject(dataRecord)){
+					java.lang.System.out.println("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					try{
 						UcityUtil.abendUServiceTask(taskInstance);
 					}catch (Exception e){
 						e.printStackTrace();
 					}
+				}else{
+					java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+					PollingModel pollingTask = getPolling(Thread.currentThread());					
 				}
 			}
 		});
+		addThreadToPolling(index, pollingForRunningTask);
 		pollingForRunningTask.start();
 		Thread.sleep(1000);
+	}
+}
+
+class PollingModel {
+	PollingModel(String eventId, String tableName, String status, String displayId, long timeout, TaskInstance taskInstance) {
+		this.eventId = eventId;
+		this.tableName = tableName;
+		this.status = status;
+		this.displayId = displayId;
+		this.taskInstance = taskInstance;
+		this.timeout = timeout;
+	}
+	
+	protected Thread thread=null;
+	protected String eventId = null;
+	protected String tableName = null;
+	protected String status = null;
+	protected String displayId = null;
+	protected long timeout = System.DEFAULT_TASK_TIMEOUT;
+	protected TaskInstance taskInstance = null;
+	public Thread getThread() {
+		return thread;
+	}
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getDisplayId() {
+		return displayId;
+	}
+	public void setDisplayId(String displayId) {
+		this.displayId = displayId;
+	}
+	public long getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+	}
+	public TaskInstance getTaskInstance() {
+		return taskInstance;
+	}
+	public void setTaskInstance(TaskInstance taskInstance) {
+		this.taskInstance = taskInstance;
 	}
 }
 

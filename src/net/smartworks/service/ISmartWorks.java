@@ -443,6 +443,8 @@ public interface ISmartWorks {
 
 	public abstract String performTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
+	public abstract String createTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+	
 	public abstract String returnTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 	
 	public abstract String reassignTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
