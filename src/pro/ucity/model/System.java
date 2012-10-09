@@ -70,7 +70,8 @@ public class System {
 	
 	public static final long DEFAULT_TASK_TIMEOUT				= 10 * 60 * 1000;
 	public static final long DEFAULT_POLLING_INTERVAL 			= 10 * 1000;
-		
+	
+	public static final String TASK_FORM_NAME_USERVICE_END 		= "상황발생 종료화면";
 	public static String getProcessId(int process){
 		if(process<0 || process>MAX_PROCESS) return null;
 		

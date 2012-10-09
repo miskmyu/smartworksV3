@@ -67,7 +67,9 @@
 				break;
 			}
 		}
-	}		
+	}
+	
+	boolean isPrivateGroup = (workSpace.getClass().equals(Group.class) && !((Group)workSpace).isPublic()) ? true : false;
 	
 %>
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
@@ -203,9 +205,14 @@
 				int accessLevel = work.getAccessPolicy().getLevel();
 				if (accessLevel == AccessPolicy.LEVEL_PUBLIC) {
 				%>
-					<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
-					<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
-					<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<%if(isPrivateGroup){%>
+						<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.group_public" /></option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+					<%}else{ %>
+						<option selected value="<%=AccessPolicy.LEVEL_PUBLIC%>"><fmt:message key="common.security.access.public" /></option>
+						<option value="<%=AccessPolicy.LEVEL_PRIVATE%>"><fmt:message key="common.security.access.private" /></option>
+						<option class="js_access_level_custom" value="<%=AccessPolicy.LEVEL_CUSTOM%>"><fmt:message key="common.security.access.custom" /></option>
+					<%} %>
 				<%
 				// 읽기권한이 사용자지정이면, 비공개 또는 사용자지정 중에서 선택할 수 있다..
 				} else if (accessLevel == AccessPolicy.LEVEL_CUSTOM) {
