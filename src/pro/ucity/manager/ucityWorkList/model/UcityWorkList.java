@@ -34,6 +34,9 @@ public class UcityWorkList  extends MisObject{
 	private String externalDisplay;
 	private String isSms;
 	private String eventPlace;
+	private String eventId;
+	private String eventTime;
+	
 	public String getPrcInstId() {
 		return prcInstId;
 	}
@@ -106,5 +109,16 @@ public class UcityWorkList  extends MisObject{
 	public void setEventPlace(String eventPlace) {
 		this.eventPlace = eventPlace;
 	}
-	
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public String getEventTime() {
+		return eventTime;
+	}
+	public void setEventTime(String eventTime) {
+		this.eventTime = eventTime;
+	}	
 }

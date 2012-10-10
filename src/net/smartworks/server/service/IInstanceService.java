@@ -119,6 +119,8 @@ public interface IInstanceService {
 	
 	public String setBoardInstance(HttpServletRequest request) throws Exception;
 	
+	public String createTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
+
 	public String performTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;
 
 	public String returnTaskInstance(Map<String, Object> requestBody, HttpServletRequest request) throws Exception;

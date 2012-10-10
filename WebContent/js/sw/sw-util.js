@@ -343,18 +343,18 @@ var isMobile = {
 
 var smartEncode = function(value){
 	if(isEmpty(value)) return value;
-	vlaue = value.replace(/\"/g,"&quot;");
-	vlaue = value.replace(/\'/g,"&squo;");
-	vlaue = value.replace(/</g,"&lt;");
-	vlaue = value.replace(/>/g,"&gt;");
+	value = value.replace(/\"/g,"&quot;");
+	value = value.replace(/\'/g,"&squo;");
+	value = value.replace(/</g,"&lt;");
+	value = value.replace(/>/g,"&gt;");
 	return value;
 };
 
 var smartDecode = function(value){
 	if(isEmpty(value)) return value;
-	vlaue = value.replace(/&quot;/g,"\"");
-	vlaue = value.replace(/&squo;/g,"\'");
-	vlaue = value.replace(/&lt;/g,"<");
-	vlaue = value.replace(/&gt;/g,">");
+	value = value.replace(/&quot;/g,"\"");
+	value = value.replace(/&squo;/g,"\'");
+	value = value.replace(/&lt;/g,"<");
+	value = value.replace(/&gt;/g,">");
 	return value;
 };

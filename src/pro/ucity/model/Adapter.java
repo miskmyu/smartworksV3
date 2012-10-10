@@ -40,9 +40,13 @@ public class Adapter {
 	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
 	
-	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
+	public static final String DVSN_RECV_TYPE = "RECV";
+//  public static final String DVSN_SEND_TYPE = "SEND";
+ 	
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
 
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
@@ -486,7 +490,16 @@ public class Adapter {
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
 		
-		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.getDataRecord());
+		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());
+	}
+	
+	public void endProcess() throws Exception{
+		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_RELEASE) return;
+		
+		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
+		if(processWork==null) return;
+		
+		UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
 	}
 	
 	public void performTask(String taskInstId) throws Exception{
@@ -524,10 +537,13 @@ public class Adapter {
 	}
 	
 	synchronized public static void readHistoryTableToStart(){
+		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+			return;
 		}
 
 		Connection con = null;
@@ -548,10 +564,9 @@ public class Adapter {
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
-					java.lang.System.out.println("############ 이벤트 발생 ################");
+					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-					java.lang.System.out.println("조회 데이터 수 : " + rs.getRow());
-					java.lang.System.out.println("------------ 데이터 처리 ----------------");					
+					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
 					while(rs.next()) {
 						try{
 							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
@@ -561,28 +576,44 @@ public class Adapter {
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
-									UcityUtil.startUService(rs);
+									adapter.startProcess();	
 									con.commit();
-									java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									se.printStackTrace();
 									con.rollback();
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
+								}
+							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
+								try{
+									adapter.endProcess();
+									con.commit();
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+								}catch (Exception se){
+									se.printStackTrace();
+									con.rollback();
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 								}
 							}else{
 								con.rollback();
+								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
 							we.printStackTrace();
+							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+							return;
 						}
 					}
-					java.lang.System.out.println("############ 이벤트 처리 완료 ################");
+					java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				}
 			}catch (Exception e1){
 				e1.printStackTrace();
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 			}
 		} catch (Exception e) {
-			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
 			e.printStackTrace();
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 		} finally {
 			try {
 				if (selectPstmt != null)
@@ -594,79 +625,86 @@ public class Adapter {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 		}
 	}
 	
-	public static Map<String,Object> readHistoryTable(String eventId){
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		Connection con = null;
-		PreparedStatement selectPstmt = null;
-		PreparedStatement updatePstmt = null;
-				
-		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
-		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
-		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
-			con.setAutoCommit(false);
-			
-			try{
-				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs = selectPstmt.executeQuery();				
-				rs.last(); 
-				int count = rs.getRow(); 
-				rs.first();
-				if (count == 1) {
-					try{
-						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
-						updatePstmt = con.prepareStatement(adapterUpdateSql);
-						updatePstmt.setString(1, communicationId);
-						boolean result = updatePstmt.execute();
-						Adapter adapter = new Adapter(rs);
-						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
-							con.commit();
-							java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
-							try {
-								if (selectPstmt != null)
-									selectPstmt.close();
-								if (updatePstmt != null)
-									updatePstmt.close();
-								con.close();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							return adapter.getDataRecord();
-						}else{
-							con.rollback();
-						}
-					}catch (Exception we){
-						we.printStackTrace();
-					}
-				}
-			}catch (Exception e1){
-				e1.printStackTrace();
-			}
-		} catch (Exception e) {
-			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
-			e.printStackTrace();
-		} finally {
-			try {
-				if (selectPstmt != null)
-					selectPstmt.close();
-				if (updatePstmt != null)
-					updatePstmt.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+//	public static Map<String,Object> readHistoryTable(String eventId){
+//		java.lang.System.out.println("############ START checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		}
+//
+//		Connection con = null;
+//		PreparedStatement selectPstmt = null;
+//		PreparedStatement updatePstmt = null;
+//				
+//		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
+//		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+//		try {
+//			
+//			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			con.setAutoCommit(false);
+//			
+//			try{
+//				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//				ResultSet rs = selectPstmt.executeQuery();				
+//				rs.last(); 
+//				int count = rs.getRow(); 
+//				rs.first();
+//				if (count == 1) {
+//					try{
+//						java.lang.System.out.println("============== ADAPTER 처리 이벤트 발견 ===============");
+//						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+//						updatePstmt = con.prepareStatement(adapterUpdateSql);
+//						updatePstmt.setString(1, communicationId);
+//						boolean result = updatePstmt.execute();
+//						Adapter adapter = new Adapter(rs);
+//						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
+//							con.commit();
+//							try {
+//								if (selectPstmt != null)
+//									selectPstmt.close();
+//								if (updatePstmt != null)
+//									updatePstmt.close();
+//								con.close();
+//							} catch (SQLException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//							return adapter.getDataRecord();
+//						}else{
+//							con.rollback();
+//						}
+//					}catch (Exception we){
+//						we.printStackTrace();
+//						java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//					}
+//				}
+//			}catch (Exception e1){
+//				e1.printStackTrace();
+//				java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//		} finally {
+//			try {
+//				if (selectPstmt != null)
+//					selectPstmt.close();
+//				if (updatePstmt != null)
+//					updatePstmt.close();
+//				con.close();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		return null;
+//	}
 }

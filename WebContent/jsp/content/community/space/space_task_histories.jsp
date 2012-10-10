@@ -1,3 +1,5 @@
+<%@page import="com.sun.tools.doclets.internal.toolkit.util.Group"%>
+<%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>
 <%@page import="net.smartworks.model.instance.info.InstanceInfo"%>
@@ -65,6 +67,11 @@
 
 	TaskInstanceInfo[] tasksHistories = (TaskInstanceInfo[])session.getAttribute("taskHistories");
 	String workSpaceId = (String)session.getAttribute("wid");
+	WorkSpace currentWorkSpace = smartWorks.getWorkSpaceById(workSpaceId);
+	boolean amICommentable = true;
+	if(currentWorkSpace.getClass().equals(Department.class) || currentWorkSpace.getClass().equals(Group.class)){
+		amICommentable = currentWorkSpace.amIMember();
+	}
 	
 %>
 <!--  다국어 지원을 위해, 로케일 및 다국어 resource bundle 을 설정 한다. -->
@@ -599,22 +606,26 @@
 							</ul>
 				        </div>
 				        
-				        <div class="reply_input js_return_on_comment" style="display:none">
-							<div class="noti_pic">
-								<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
-							</div>
-							<div class="noti_in">
-								<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
-							</div>
-				        </div>
+						<%if(amICommentable){%>
+					        <div class="reply_input js_return_on_comment" style="display:none">
+								<div class="noti_pic">
+									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
+								</div>
+								<div class="noti_in">
+									<textarea style="width:560px" class="up_textarea" name="txtaCommentContent" placeholder="<fmt:message key='work.message.leave_comment'/>"></textarea>
+								</div>
+					        </div>
+				        <%} %>
 				    
 				    </div>
 				    <!-- 댓글 //-->
 				</div>
-			    <div class="btns_action js_action_btns">
-			    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
-			    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
-			    </div>
+				<%if(amICommentable){ %>
+				    <div class="btns_action js_action_btns">
+				    	<a class="js_add_comment" href=""><span class="t_action"><fmt:message key="common.button.add_comment"/></span></a>
+				    	<a class="js_add_like" href=""><span class="t_action"><fmt:message key="common.button.add_like"/></span></a>
+				    </div>
+				<%} %>
 			</li>
 	<%		
 		}

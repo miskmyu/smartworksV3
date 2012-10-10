@@ -37,11 +37,12 @@ public class OPSituation {
 	public static final String SYMBOL_FOR_OP_START = "ST";
 
 	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)  and " + FIELD_NAME_SITUATION_ID + " like '" + SYMBOL_FOR_OP_START + "%' and " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_OCCURRED + "'";
-	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SITUATION + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_OCCURRED + "'";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ?";
+	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_OPPORTAL_SITUATION + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " =  ?";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
+	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
 	
 	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.SITTN_EVENT_NM FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ''";
-	
+
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
 		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
 		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
@@ -104,6 +105,19 @@ public class OPSituation {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getStatusName(){
+		if(SmartUtil.isBlankObject(this.status)) return "";
+		if(this.status.equals(STATUS_SITUATION_OCCURRED)){
+			return "발생";
+		}else if(this.status.equals(STATUS_SITUATION_ACCEPTED)){
+			return "접수";
+		}else if(this.status.equals(STATUS_SITUATION_PROCESSING)){
+			return "처리";
+		}else if(this.status.equals(STATUS_SITUATION_RELEASE)){
+			return "종료";
+		}
+		return "기타";
+	}
 	public String getChargeUserId() {
 		return chargeUserId;
 	}
@@ -160,7 +174,7 @@ public class OPSituation {
 			else if(keyMap.getKey().equals("SEQ"))
 				dataRecord.put(keyMap.getId(), this.seq);
 			else if(keyMap.getKey().equals("STATUS"))
-				dataRecord.put(keyMap.getId(), this.status);
+				dataRecord.put(keyMap.getId(), this.getStatusName());
 			else if(keyMap.getKey().equals("CHARGE_USER_ID"))
 				dataRecord.put(keyMap.getId(), this.chargeUserId);
 			else if(keyMap.getKey().equals("CHARGE_USER_NAME"))
@@ -180,7 +194,7 @@ public class OPSituation {
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
 		
-		UcityUtil.startUServiceProcess(System.getProcessId(this.process), TASK_NAME_SITUATION_OCCURRENCE,  this.getDataRecord());
+		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.situationId, this.startDate, this.getDataRecord());
 	}
 	
 	public void performTask(String processId, String taskInstId) throws Exception{
@@ -296,10 +310,12 @@ public class OPSituation {
 					while(rs.next()) {
 						try{
 							String situationId = rs.getString(OPSituation.FIELD_NAME_SITUATION_ID);
+							String status = rs.getString(OPSituation.FIELD_NAME_STATUS);
 							selectPstmt = con.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 							ResultSet joinRs = selectPstmt.executeQuery();				
 							updatePstmt = con.prepareStatement(opSituationUpdateSql);
 							updatePstmt.setString(1, situationId);
+							updatePstmt.setString(2, status);
 							boolean result = updatePstmt.execute();
 							try{
 								UcityUtil.startPortalService(rs, joinRs);
@@ -347,8 +363,10 @@ public class OPSituation {
 
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
+		PreparedStatement updatePstmt = null;
 				
-		String opSituationSelectSql = OPSituation.QUERY_SELECT_FOR_PERFORM;
+		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
+		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
@@ -356,15 +374,20 @@ public class OPSituation {
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				selectPstmt.setString(1, eventId);
-				selectPstmt.setString(2, status);
+				if(!status.equals(STATUS_SITUATION_PROCESSING))
+					selectPstmt.setString(2, status);
 				ResultSet rs = selectPstmt.executeQuery();				
 				rs.last(); 
 				int count = rs.getRow();
 				rs.first();
-				if (count == 1) {
+				if (count >= 1) {
 					try{
 						OPSituation opSituation = new OPSituation(rs);
 						if(opSituation.isValid()){
+							updatePstmt = con.prepareStatement(opSituationUpdateSql);
+							updatePstmt.setString(1, opSituation.getSituationId());
+							updatePstmt.setString(2, status);
+							boolean result = updatePstmt.execute();
 							try {
 								if (selectPstmt != null)
 									selectPstmt.close();
@@ -374,6 +397,8 @@ public class OPSituation {
 								e.printStackTrace();
 							}
 							return opSituation.getDataRecord();
+						}else{
+							
 						}
 					}catch (Exception we){
 						we.printStackTrace();
