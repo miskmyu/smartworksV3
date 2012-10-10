@@ -326,7 +326,26 @@ public class UcityUtil {
 					}
 				}
 				if(!SmartUtil.isBlankObject(eventId) && !SmartUtil.isBlankObject(tableName)){
-					UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, timeout, taskInstance);
+					try{
+						UcityUtil.invokePollingForRunningTask(eventId, tableName, status, displayId, timeout, taskInstance);
+					}catch (Exception e){
+						throw e;
+					}
+				}else if(!SmartUtil.isBlankObject(eventId)){
+					try{
+						Map<String,Object> dataRecord = new HashMap<String,Object>();
+						dataRecord.put(System.DATA_FIELD_NAME_EVENT_ID, eventId);
+						UcityUtil.performUServiceTask(taskInstance, dataRecord);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
+				}else{
+					try{
+						Map<String,Object> dataRecord = new HashMap<String,Object>();
+						UcityUtil.performUServiceTask(taskInstance, dataRecord);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
 				}
 			}
 			
