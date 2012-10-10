@@ -34,6 +34,7 @@ import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartForm;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.model.work.info.SmartFormInfo;
+import net.smartworks.model.work.info.SmartTaskInfo;
 import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.infowork.domain.model.SwdDataField;
 import net.smartworks.server.engine.infowork.domain.model.SwdRecord;
@@ -62,20 +63,59 @@ public class UcityUtil {
 		adapter.endProcess();
 	}
 
-	public static void startPortalService(ResultSet resultSet, ResultSet joinResultSet) throws Exception{
-		if(SmartUtil.isBlankObject(resultSet) || SmartUtil.isBlankObject(joinResultSet)){
+	public static void startPortalProcess(String processId, String eventId, String eventTime, Map<String, Object> data) throws Exception{
+		if(processId == null || data == null){
 			throw new Exception("Invalid parameters exception !!!");
 		}
-		OPSituation opSituation = new OPSituation(resultSet, joinResultSet);
-		if(!opSituation.isValid() || !opSituation.getStatus().equals(OPSituation.STATUS_SITUATION_OCCURRED)){
-			throw new Exception("Invalid result set exception !!!");					
+		
+		IWorkService workService = SwServiceFactory.getInstance().getWorkService();
+		
+		Map<String, Object> requestBody = new HashMap<String, Object>();
+		
+		
+		ProcessWork work = (ProcessWork)workService.getWorkById(processId);
+		if(SmartUtil.isBlankObject(work.getDiagram()) || SmartUtil.isBlankObject(work.getDiagram().getTasks())){
+			throw new Exception("Invalid Process Diagram or Tasks exception !!!");			
 		}
-		if(!opSituation.getStatus().equals(OPSituation.STATUS_SITUATION_OCCURRED)){
-			throw new Exception("Invalid situation status exception !!!");					
-		}				
-		opSituation.startProcess();
+		
+		SmartForm form = null;
+		for(int i=0; i<work.getDiagram().getTasks().length; i++){
+			SmartTaskInfo task = work.getDiagram().getTasks()[i];
+			if(task.getName().equals(OPSituation.TASK_NAME_SITUATION_OCCURRENCE)){
+				form = workService.getFormById(task.getForm().getId(), processId);
+			}
+		}
+		if(SmartUtil.isBlankObject(form) || SmartUtil.isBlankObject(form.getFields())){
+			throw new Exception("Invalid Form information exception !!!");
+		}
+		
+		requestBody.put("workId", processId);
+		requestBody.put("formId", form.getId());
+		requestBody.put("formName", form.getName());
+		requestBody.put("serviceName", data.get("serviceName"));
+		requestBody.put("eventName", data.get("eventName"));
+		requestBody.put("eventId", eventId);
+		requestBody.put("eventTime", eventTime);
+		
+		Map<String, Object> fieldData = new HashMap<String, Object>();
+		for(int i=0; i<form.getFields().length; i++){
+			FormField field = form.getFields()[i];
+			if(data.containsKey(field.getName())){
+				fieldData.put(field.getId(), data.get(field.getName()));
+			}
+		}
+		requestBody.put("frmSmartForm", fieldData);
+		
+		Map<String, Object> accessData = new HashMap<String, Object>();	
+		accessData.put("selWorkSpace", SmartUtil.getSystemUser().getId());
+		accessData.put("selWorkSpaceType", ISmartWorks.SPACE_TYPE_USER);
+		accessData.put("selAccessLevel", AccessPolicy.LEVEL_PUBLIC);
+		requestBody.put("frmAccessSpace", accessData);
+		
+		String instanceId = SwServiceFactory.getInstance().getInstanceService().startProcessWorkInstance(requestBody, null);
+		UcityUtil.startPollingForRunningTasks(processId, instanceId);
 	}
-
+	
 	public static void startUServiceProcess(String processId, String eventId, String eventTime, Map<String, Object> data) throws Exception{
 		if(processId == null || data == null){
 			throw new Exception("Invalid parameters exception !!!");

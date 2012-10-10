@@ -44,7 +44,7 @@ public class Event {
 	public static final int TASK_EVENT_OCCURRENCE			= 1;
 	public static final int TASK_EVENT_PROCESSING			= 2;
 	public static final int TASK_EVENT_RELEASE				= 3;
-	
+		
 	public static String getEventNameByCode(String eventName){
 		if(SmartUtil.isBlankObject(eventName)) return "";
 		
@@ -104,5 +104,91 @@ public class Event {
 			return "긴급메세지";
 		}
 		return "";
+	}
+	
+	public static int getProcessByEventId(String eventId){
+		
+		if(SmartUtil.isBlankObject(eventId)) return -1;
+		
+		if(	eventId.equals(Event.ID_ENV_GALE) ||
+			eventId.equals(Event.ID_ENV_AIRFLOW) ||
+			eventId.equals(Event.ID_ENV_STORM) ||
+			eventId.equals(Event.ID_ENV_HEAVY_SNOWFALL) ||
+			eventId.equals(Event.ID_ENV_DRYING) ||
+			eventId.equals(Event.ID_ENV_STORM_SURGES) ||
+			eventId.equals(Event.ID_ENV_TSUNAMI) ||
+			eventId.equals(Event.ID_ENV_COLD_WAVE) ||
+			eventId.equals(Event.ID_ENV_TYPHOON) ||
+			eventId.equals(Event.ID_ENV_ASIAN_DUST) ||
+			eventId.equals(Event.ID_ENV_HEATWAVE) ||
+			eventId.equals(Event.ID_ENV_FINE_DUST) ||
+			eventId.equals(Event.ID_ENV_WARNING)){
+			return System.PROCESS_ENV_WEAHTER;
+		}else if(eventId.equals(Event.ID_ENV_OZONE)){
+			return System.PROCESS_ENV_ATMOSPHERE;
+		}else if(eventId.equals(Event.ID_ENV_CANAL_WAY) || eventId.equals(Event.ID_ENV_WATER)){
+			return System.PROCESS_ENV_WATER;
+		}else if(eventId.equals(Event.ID_TRAFFIC_ILLEGAL_PARKING)){
+			return System.PROCESS_TRAFFIC_ILLEGAL_PARKING;
+		}else if(eventId.equals(Event.ID_TRAFFIC_INCIDENT) || 
+				eventId.equals(Event.ID_TRAFFIC_ACCIDENTS) ||
+				eventId.equals(Event.ID_TRAFFIC_HIT_AND_RUN) ||
+				eventId.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN)){
+			return System.PROCESS_TRAFFIC_INCIDENT;
+		}else if(eventId.equals(Event.ID_DISASTER_FIRE)){
+			return System.PROCESS_DISASTER_FIRE;
+		}else if(eventId.equals(Event.ID_CRIME_EMERGENCY)){
+			return System.PROCESS_CRIME_CCTV;
+		}else if(eventId.equals(Event.ID_CRIME_VEHICLE)){
+			return System.PROCESS_CRIME_VEHICLES;
+		}else if(eventId.equals(Event.ID_WATERWORKS_LEAKS)){
+			return System.PROCESS_WATERWORKS_LEAKS;
+		}else if(eventId.equals(Event.ID_FACILITY_TROUBLE) || eventId.equals(Event.ID_FACILITY_EMERGENCY)){
+			return System.PROCESS_FACILITY_MANAGEMENT;
+		}
+		return -1;
+	}
+	
+	public static String getEventIdByCode(String userviceCode, String serviceCode, String eventCode){
+		if(SmartUtil.isBlankObject(userviceCode) || SmartUtil.isBlankObject(serviceCode) || SmartUtil.isBlankObject(eventCode)) return "";
+		
+		if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("11"))
+			return ID_ENV_STORM;
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("13"))
+			return ID_ENV_TYPHOON;
+		else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("093"))
+			return ID_ENV_WATER;
+		else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091"))
+			return ID_ENV_WARNING;
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && serviceCode.equals("11"))
+			return ID_TRAFFIC_INCIDENT;
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("11"))
+			return ID_TRAFFIC_ACCIDENTS;
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("12"))
+			return ID_TRAFFIC_HIT_AND_RUN;
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("13"))
+			return ID_TRAFFIC_VEHICLE_BREAKDOWN;
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && serviceCode.equals("12"))
+			return ID_DISASTER_FIRE;
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && serviceCode.equals("14"))
+			return ID_CRIME_VEHICLE;
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && serviceCode.equals("15"))
+			return ID_CRIME_EMERGENCY;
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("091"))
+			return ID_WATERWORKS_LEAKS;
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && serviceCode.equals("11"))
+			return ID_FACILITY_TROUBLE;
+		return "";
+		
+/* TO DO
+		FCL 시설물 92 시설물파손(12)
+		SEC 방재 91 강도(11)
+		SEC 방재	91 미아(12)
+		SEC 방재	91 응급(13)
+		SEC 방재	92 지하차도침수(14)
+		SEC 방재	92 수위경보(15)
+		TRF 교통	91 교통혼잡(15)
+*/
+		
 	}	
 }

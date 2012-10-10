@@ -24,7 +24,7 @@ public class ICSituation {
 	public static final String MSG_TYPE_RELEASE = "R";
 	
 	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and (" + FIELD_NAME_DONE + " != 'Y' or " + FIELD_NAME_DONE + " is null)";
-	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and " + FIELD_NAME_DONE + " = 'Y'";
+	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_INTCON_SITUATION + " where " + FIELD_NAME_EVENT_ID + " = ? and " + FIELD_NAME_DONE + " = 'N'";
 
 	public static final KeyMap[] INTCON_SITUATION_FIELDS = {
 		new KeyMap("키ID", "ID"), new KeyMap("이벤트구분ID", "EVENT_ID"), new KeyMap("X좌표", "POS_X"), new KeyMap("Y좌표", "POS_Y"),
