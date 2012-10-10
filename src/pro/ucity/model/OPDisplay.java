@@ -27,10 +27,10 @@ public class OPDisplay {
 	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_DISPLAY + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_DISPLAY_ID + " = ?";
 
 	public static final KeyMap[] OPPORTAL_DISPLAY_FIELDS = {
-		new KeyMap("U서비스 이벤트 아이디", "SITUATION_ID"), new KeyMap("상황표출 아이디", "DISPLAY_ID"), new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("상황표출 내용", "DISPLAY_CONTENT"),
+		new KeyMap("상황표출 아이디", "DISPLAY_ID"), new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("상황표출 내용", "DISPLAY_CONTENT"),
 		new KeyMap("상황표출 이미지경로", "DISPLAY_IMAGE_PATH"), new KeyMap("상황표출 동영상경로", "DISPLAY_MOVIE_PATH"), new KeyMap("상황표출시간(초)", "DISPLAY_SECOND"), new KeyMap("미디어보드표출여부", "MB_YN"),
 		new KeyMap("환경VMS표출여부", "ENV_VMS_YN"), new KeyMap("교통VMS표출여부", "TRA_VMS_YN"), new KeyMap("BIT표출여부", "BIT_YN"), new KeyMap("KIOSK표출여부", "KIOSK_YN"),
-		new KeyMap("표츌요청일시", "REQUEST_DATE")
+		new KeyMap("표출요청일시", "REQUEST_DATE"), new KeyMap("표출중지", "STOP_REQUEST"), new KeyMap("표출중지일시", "STOP_REQUEST_DATE"), new KeyMap("표출중지요청아이디", "STOP_REQUEST_USER_ID")
 	};
 	
 	private String situationId;
@@ -45,6 +45,9 @@ public class OPDisplay {
 	private String bitYn;
 	private String kioskYn;
 	private String requestDate;
+	private String stopRequest;
+	private String stopRequestDate;
+	private String stopRequestUserId;
 	
 	public String getSituationId() {
 		return situationId;
@@ -118,6 +121,24 @@ public class OPDisplay {
 	public void setRequestDate(String requestDate) {
 		this.requestDate = requestDate;
 	}
+	public String getStopRequest() {
+		return stopRequest;
+	}
+	public void setStopRequest(String stopRequest) {
+		this.stopRequest = stopRequest;
+	}
+	public String getStopRequestDate() {
+		return stopRequestDate;
+	}
+	public void setStopRequestDate(String stopRequestDate) {
+		this.stopRequestDate = stopRequestDate;
+	}
+	public String getStopRequestUserId() {
+		return stopRequestUserId;
+	}
+	public void setStopRequestUserId(String stopRequstUserId) {
+		this.stopRequestUserId = stopRequestUserId;
+	}
 	public OPDisplay(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
@@ -169,6 +190,12 @@ public class OPDisplay {
 					externalDisplay = externalDisplay + (SmartUtil.isBlankObject(externalDisplay) ? "" : ", ") +  "KIOSK";		
 			}else if(keyMap.getKey().equals("REQUEST_DATE"))
 				dataRecord.put(keyMap.getId(), this.requestDate);
+		     else if(keyMap.getKey().equals("STOP_REQUEST"))
+				dataRecord.put(keyMap.getId(), "Y".equalsIgnoreCase(this.stopRequest) ? "on" : "");
+		     else if(keyMap.getKey().equals("STOP_REQUEST_DATE"))
+				dataRecord.put(keyMap.getId(), this.stopRequestDate);
+		     else if(keyMap.getKey().equals("STOP_REQUEST_USER_ID"))
+				dataRecord.put(keyMap.getId(), this.stopRequestUserId);
 		}
 		
 		if(!SmartUtil.isBlankObject(externalDisplay))
@@ -228,6 +255,15 @@ public class OPDisplay {
 		}catch (Exception ex){}
 		try{
 			this.requestDate = result.getString("REQUEST_DATE");
+		}catch (Exception ex){}
+		try{
+			this.requestDate = result.getString("STOP_REQUEST");
+		}catch (Exception ex){}
+		try{
+			this.requestDate = result.getString("STOP_REQUEST_DATE");
+		}catch (Exception ex){}
+		try{
+			this.requestDate = result.getString("STOP_REQUEST_USER_ID");
 		}catch (Exception ex){}
 	}
 	
