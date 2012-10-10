@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.manager.ucityWorkList.model.UcityWorkList;
 import pro.ucity.manager.ucityWorkList.model.UcityWorkListCond;
 import pro.ucity.model.Adapter;

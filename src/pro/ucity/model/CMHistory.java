@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
@@ -322,8 +324,12 @@ public class CMHistory {
 				
 		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = con.prepareStatement(cmHistorySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

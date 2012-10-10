@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
@@ -359,9 +361,15 @@ public class OPSituation {
 		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
 			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
+				te.printStackTrace();
+				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+				return;
+			}
 			con.setAutoCommit(false);
-			
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
@@ -447,8 +455,12 @@ public class OPSituation {
 		String opSituationSelectSql = (status.equals(STATUS_SITUATION_PROCESSING)) ?  OPSituation.QUERY_SELECT_FOR_PROCESS_PERFORM : OPSituation.QUERY_SELECT_FOR_PERFORM;
 		String opSituationUpdateSql = OPSituation.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

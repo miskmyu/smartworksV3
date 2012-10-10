@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
@@ -247,8 +249,12 @@ public class ICSituation {
 //		String icSituationSelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? ICSituation.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		String icSituationSelectSql = ICSituation.QUERY_SELECT_FOR_RELEASE_PERFORM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = con.prepareStatement(icSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

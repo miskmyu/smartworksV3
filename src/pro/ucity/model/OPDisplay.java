@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.util.UcityTest;
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
@@ -288,8 +290,12 @@ public class OPDisplay {
 		String opDisplaySelectSql = OPDisplay.QUERY_SELECT_FOR_CHECK;
 		String opDisplayUpdateSql = OPDisplay.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -351,8 +357,12 @@ public class OPDisplay {
 				
 		String opDisplaySelectSql = OPDisplay.QUERY_SELECT_FOR_PERFORM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				te.printStackTrace();
+				return null;
+			}
 			
 			try{
 				selectPstmt = con.prepareStatement(opDisplaySelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

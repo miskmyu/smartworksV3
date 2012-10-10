@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tmax.tibero.jdbc.TbSQLException;
+
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
 import net.smartworks.model.instance.TaskInstance;
@@ -518,8 +520,14 @@ public class Adapter {
 		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
 		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+				te.printStackTrace();
+				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+				return;
+			}
 			con.setAutoCommit(false);
 			
 			try{
