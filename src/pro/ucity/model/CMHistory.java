@@ -17,15 +17,31 @@ import net.smartworks.util.SmartUtil;
 
 public class CMHistory {
 
-	public static final String FIELD_NAME_COMMID_EVENT_ID = "EVET_OUTB_ID";
-	public static final String FIELD_NAME_COMMID_MSG_TYPE = "MSG_KND_GUBN";
+	//DEV
+//	public static final String FIELD_NAME_COMMID_EVENT_ID = "EVET_OUTB_ID";
+//	public static final String FIELD_NAME_COMMID_MSG_TYPE = "MSG_KND_GUBN";
+//	
+	//개발
+	public static final String FIELD_NAME_COMMID_EVENT_ID = "b.U_SVC_EVENT_ID";
+	public static final String FIELD_NAME_COMMID_OUTB_ID = "a.EVET_OUTB_ID";
+	public static final String FIELD_NAME_COMMID_EOUTB_ID = "b.EVENT_OUTB_ID";
+	public static final String FIELD_NAME_COMMID_MSG_TYPE = "SR_FLAG";
 	
-	public static final String MSG_TYPE_OCCURRENCE = "O";
+	//DEV
+//	public static final String MSG_TYPE_OCCURRENCE = "O";
+//	public static final String MSG_TYPE_RELEASE = "R";
+	//개발
+	public static final String MSG_TYPE_OCCURRENCE = "S";
 	public static final String MSG_TYPE_RELEASE = "R";
 	
-	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
+	//DEV
+//	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
+//	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
+	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
+	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
 		
+	  
+
 	public static final KeyMap[] COMMID_TRACE_FIELDS = {
 		new KeyMap("트랜잭션 아이디", "TRST_ID"), new KeyMap("송수신 구분", "SR_FLAG"), new KeyMap("메시지 아이디", "MSG_ID"), new KeyMap("시스템 코드", "SYS_CD"),
 		new KeyMap("데이터 타입", "DATA_TYP"), new KeyMap("발생 일시", "OUTB_DTM"), new KeyMap("성공여부", "SCSS_YN"), new KeyMap("에러 코드", "ERR_CD"),

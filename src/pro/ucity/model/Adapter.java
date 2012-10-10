@@ -35,14 +35,18 @@ public class Adapter {
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
 	//dev
-	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+//	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
 	//개발
-//	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
+	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
 	
-	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
+	public static final String DVSN_RECV_TYPE = "RECV";
+//  public static final String DVSN_SEND_TYPE = "SEND";
+ 	
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
 
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {

@@ -252,7 +252,7 @@
 			var selectedTask = null;
 			for(var i=0; i<taskInstances.length; i++){
 				var taskInstance = $(taskInstances[i]);
-				if(taskInstance.attr('formId') === formId)
+				if(taskInstance.attr('formId') === formId && taskInstance.hasClass("completed"))
 					selectedTask = taskInstance;
 			}
 			if(!isEmpty(selectedTask) && selectedTask.hasClass("completed"))
