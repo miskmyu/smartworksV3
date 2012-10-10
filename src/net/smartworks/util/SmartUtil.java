@@ -718,7 +718,7 @@ public class SmartUtil {
 	public synchronized static void publishMessage(String channel, String msgType, Object message){
 
 		if(fayeClient == null){
-			SmartUtil.initializeFayeClient();
+//			SmartUtil.initializeFayeClient();
 		}
 			
 		if(messageAgent == null) {
