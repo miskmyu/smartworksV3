@@ -34,6 +34,12 @@ public class OPSituation {
 	public static final String FIELD_NAME_STATUS = "STATUS";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
 	
+	public static final String FIELD_NAME_USERVICE_CODE = "USERVICE_CD";
+	public static final String FIELD_NAME_SERVICE_CODE = "UNIT_SVC_CD";
+	public static final String FIELD_NAME_EVENT_CODE = "SITTN_EVENT_CD";
+	public static final String FIELD_NAME_EVENT_NAME = "SITTN_EVENT_NM";
+	public static final String FIELD_NAME_EVENT_DESC = "SITTN_EVENT_DESC";
+	
 	public static final String SYMBOL_FOR_OP_START = "ST";
 
 	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)  and " + FIELD_NAME_SITUATION_ID + " like '" + SYMBOL_FOR_OP_START + "%' and " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_OCCURRED + "'";
@@ -41,8 +47,8 @@ public class OPSituation {
 	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and " + FIELD_NAME_STATUS + " = ? and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
 	public static final String QUERY_SELECT_FOR_PROCESS_PERFORM = "select * from " + System.TABLE_NAME_OPPORTAL_SITUATION + " where " + FIELD_NAME_SITUATION_ID + " = ? and (" + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_PROCESSING + "' or " + FIELD_NAME_STATUS + " = '" + STATUS_SITUATION_RELEASE + "') and (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null)";
 	
-	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.SITTN_EVENT_NM FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ''";
-
+	public static final String QUERY_SELECT_EVENT_CODE = "SELECT A.* FROM CMDB.TM_CM_STAT_EVENT A, USITUATION.TH_ST_SITUATION_HISTORY B, USITUATION.TM_ST_SITUATION C WHERE B.SITUATION_ID = C.SITUATION_ID AND C.CATEGORY_ID = A.CATEGORY_ID AND B.SITUATION_ID = ? AND B.SEQ = '1'";
+	
 	public static final KeyMap[] OPPORTAL_SITUATION_FIELDS = {
 		new KeyMap("상황 아이디", "SITUATION_ID"), new KeyMap("순번", "SEQ"), new KeyMap("상태", "STATUS"),
 		new KeyMap("담당자 아이디", "CHARGE_USER_ID"), new KeyMap("시작일시", "START_DATE"), new KeyMap("종료일시", "END_DATE"),
@@ -51,9 +57,13 @@ public class OPSituation {
 
 	private int process=-1;
 	private int eventType;	
+	private String userviceCode;
 	private String serviceCode;
 	private String eventCode;
-
+	private String serviceName;
+	private String eventName;
+	private String eventDesc;
+	
 	private String situationId;
 	private String seq;
 	private String status;
@@ -75,6 +85,12 @@ public class OPSituation {
 	public void setEventType(int eventType) {
 		this.eventType = eventType;
 	}
+	public String getUserviceCode() {
+		return userviceCode;
+	}
+	public void setUserviceCode(String userviceCode) {
+		this.userviceCode = userviceCode;
+	}
 	public String getServiceCode() {
 		return serviceCode;
 	}
@@ -86,6 +102,24 @@ public class OPSituation {
 	}
 	public void setEventCode(String eventCode) {
 		this.eventCode = eventCode;
+	}
+	public String getServiceName() {
+		return serviceName;
+	}
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public String getEventName() {
+		return eventName;
+	}
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+	public String getEventDesc() {
+		return eventDesc;
+	}
+	public void setEventDesc(String eventDesc) {
+		this.eventDesc = eventDesc;
 	}
 	public String getSituationId() {
 		return situationId;
@@ -166,6 +200,9 @@ public class OPSituation {
 		KeyMap[] keyMaps = OPSituation.OPPORTAL_SITUATION_FIELDS;
 		
 		if(!this.isValid()) return null;
+
+		dataRecord.put("serviceName", this.serviceName);
+		dataRecord.put("eventName", this.eventName);
 		
 		for(int i=0; i<keyMaps.length; i++){
 			KeyMap keyMap = keyMaps[i];
@@ -189,10 +226,33 @@ public class OPSituation {
 		return dataRecord;
 //		return UcityTest.getOPSituationDataRecord();
 	}
+
+	private void setJoinResult(ResultSet joinResult){
+		if(SmartUtil.isBlankObject(joinResult)) return;
+		
+		try{
+			this.userviceCode = joinResult.getString(FIELD_NAME_USERVICE_CODE);
+		}catch (Exception e){}
+		try{
+			this.serviceCode = joinResult.getString(FIELD_NAME_SERVICE_CODE);
+		}catch (Exception e){}
+		try{
+			this.eventCode = joinResult.getString(FIELD_NAME_EVENT_CODE);
+		}catch (Exception e){}
+		try{
+			this.eventName = joinResult.getString(FIELD_NAME_EVENT_NAME);
+		}catch (Exception e){}
+		try{
+			this.eventDesc = joinResult.getString(FIELD_NAME_EVENT_DESC);
+		}catch (Exception e){}
+		
+		this.process = Event.getProcessByEventId(Event.getEventIdByCode(this.userviceCode, this.serviceCode, this.eventCode));
+		this.serviceName = Service.getServiceNameByCode(Service.getServiceCodeByUCode(this.userviceCode));
+	}
 	
 	public void startProcess() throws Exception{		
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
-		if(processWork==null) return;
+		if(processWork==null || SmartUtil.isBlankObject(this.serviceName) || SmartUtil.isBlankObject(this.eventName)) return;
 		
 		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.situationId, this.startDate, this.getDataRecord());
 	}
@@ -263,6 +323,8 @@ public class OPSituation {
 		try{
 			this.contents = result.getString("CONTENTS");
 		}catch (Exception ex){}
+		
+		setJoinResult(joinResult);
 	}
 	
 	public boolean isValid(){
@@ -278,10 +340,13 @@ public class OPSituation {
 	}
 	
 	public static void readHistoryTableToStart(){
+		java.lang.System.out.println("############ START checking PORTAL History To Start  ################");
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
+			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
+			return;
 		}
 
 		Connection con = null;
@@ -294,7 +359,7 @@ public class OPSituation {
 		try {
 			
 			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
-//			con.setAutoCommit(false);
+			con.setAutoCommit(false);
 			
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -303,39 +368,45 @@ public class OPSituation {
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
-					java.lang.System.out.println("############ 이벤트 발생 ################");
+					java.lang.System.out.println("============== PORTAL 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-					java.lang.System.out.println("조회 데이터 수 : " + rs.getRow());
-					java.lang.System.out.println("------------ 데이터 처리 ----------------");					
+					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
 					while(rs.next()) {
 						try{
 							String situationId = rs.getString(OPSituation.FIELD_NAME_SITUATION_ID);
 							String status = rs.getString(OPSituation.FIELD_NAME_STATUS);
+							
 							selectPstmt = con.prepareStatement(opSituationJoinSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-							ResultSet joinRs = selectPstmt.executeQuery();				
+							selectPstmt.setString(1, situationId);
+							ResultSet joinRs = selectPstmt.executeQuery();
+							
 							updatePstmt = con.prepareStatement(opSituationUpdateSql);
 							updatePstmt.setString(1, situationId);
 							updatePstmt.setString(2, status);
 							boolean result = updatePstmt.execute();
 							try{
 								UcityUtil.startPortalService(rs, joinRs);
-//								con.commit();
+								con.commit();
+								java.lang.System.out.println("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");
 							}catch (Exception se){
+								java.lang.System.out.println("[ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 								se.printStackTrace();
-//								con.rollback();
+								con.rollback();
 							}
-							java.lang.System.out.println("ID : '" + situationId + "' UPDATE STATUS COMPLETE!");
 						}catch (Exception we){
+							java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
 							we.printStackTrace();
+							java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
+							return;
 						}
 					}
-					java.lang.System.out.println("############ 이벤트 처리 완료 ################");
 				}
 			}catch (Exception e1){
+				java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
 				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
+			java.lang.System.out.println("[ERROR] PORTAL 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -348,6 +419,7 @@ public class OPSituation {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
 		}
 
 	}

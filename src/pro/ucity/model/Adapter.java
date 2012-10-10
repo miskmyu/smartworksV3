@@ -285,43 +285,8 @@ public class Adapter {
 		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
 		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
 		
-		if(	eventCode.equals(Event.ID_ENV_GALE) ||
-			eventCode.equals(Event.ID_ENV_AIRFLOW) ||
-			eventCode.equals(Event.ID_ENV_STORM) ||
-			eventCode.equals(Event.ID_ENV_HEAVY_SNOWFALL) ||
-			eventCode.equals(Event.ID_ENV_DRYING) ||
-			eventCode.equals(Event.ID_ENV_STORM_SURGES) ||
-			eventCode.equals(Event.ID_ENV_TSUNAMI) ||
-			eventCode.equals(Event.ID_ENV_COLD_WAVE) ||
-			eventCode.equals(Event.ID_ENV_TYPHOON) ||
-			eventCode.equals(Event.ID_ENV_ASIAN_DUST) ||
-			eventCode.equals(Event.ID_ENV_HEATWAVE) ||
-			eventCode.equals(Event.ID_ENV_FINE_DUST) ||
-			eventCode.equals(Event.ID_ENV_WARNING)){
-			this.process = System.PROCESS_ENV_WEAHTER;
-		}else if(eventCode.equals(Event.ID_ENV_OZONE)){
-			this.process = System.PROCESS_ENV_ATMOSPHERE;
-		}else if(eventCode.equals(Event.ID_ENV_CANAL_WAY) || commHeader.equals(Event.ID_ENV_WATER)){
-			this.process = System.PROCESS_ENV_WATER;
-		}else if(eventCode.equals(Event.ID_TRAFFIC_ILLEGAL_PARKING)){
-			this.process = System.PROCESS_TRAFFIC_ILLEGAL_PARKING;
-		}else if(eventCode.equals(Event.ID_TRAFFIC_INCIDENT) || 
-				commHeader.equals(Event.ID_TRAFFIC_ACCIDENTS) ||
-				commHeader.equals(Event.ID_TRAFFIC_HIT_AND_RUN) ||
-				commHeader.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN)){
-			this.process = System.PROCESS_TRAFFIC_INCIDENT;
-		}else if(eventCode.equals(Event.ID_DISASTER_FIRE)){
-			this.process = System.PROCESS_DISASTER_FIRE;
-		}else if(eventCode.equals(Event.ID_CRIME_EMERGENCY)){
-			this.process = System.PROCESS_CRIME_CCTV;
-		}else if(eventCode.equals(Event.ID_CRIME_VEHICLE)){
-			this.process = System.PROCESS_CRIME_VEHICLES;
-		}else if(eventCode.equals(Event.ID_WATERWORKS_LEAKS)){
-			this.process = System.PROCESS_WATERWORKS_LEAKS;
-		}else if(eventCode.equals(Event.ID_FACILITY_TROUBLE) || commHeader.equals(Event.ID_FACILITY_EMERGENCY)){
-			this.process = System.PROCESS_FACILITY_MANAGEMENT;
-		}
-
+		this.process = Event.getProcessByEventId(this.eventCode);
+		
 		if(eventType.equals(Event.TYPE_OCCURRENCE))
 			this.eventType = EVENT_TYPE_OCCURRENCE;
 		if(eventType.equals(Event.TYPE_RELEASE))
@@ -541,8 +506,8 @@ public class Adapter {
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+			e.printStackTrace();
 			return;
 		}
 
@@ -580,9 +545,9 @@ public class Adapter {
 									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
 									con.rollback();
-									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 								}
 							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
 								try{
@@ -590,30 +555,29 @@ public class Adapter {
 									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
 								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
 									con.rollback();
-									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 								}
 							}else{
 								con.rollback();
 								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
-							we.printStackTrace();
 							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+							we.printStackTrace();
 							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 							return;
 						}
 					}
-					java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				}
 			}catch (Exception e1){
-				e1.printStackTrace();
 				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+			e.printStackTrace();
 		} finally {
 			try {
 				if (selectPstmt != null)
