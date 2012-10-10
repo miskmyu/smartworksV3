@@ -1,4 +1,5 @@
 @charset "utf-8";
+/* Page Print용 CSS*/
 
 /* #wrap {height:100%; width:757px; margin:0 auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px}
 #header {text-align:center; margin:0 0 10px 0}
@@ -280,7 +281,8 @@ tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
 .det_title {padding:5px 0}
 li.sub_instance_list > .det_title {}
 li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
-
+.pos_works {left:40px; top:1px; position:relative; z-index:20}
+.up_textarea {height:30px; vertical-align:top; border: 1px solid #c7c7c7; margin: 0} /* 라인 포함된 textarea h50 */
 
 /* Text style */
 .t_red, .t_sunday {color:#e54b4b}
