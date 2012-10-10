@@ -6,3 +6,5 @@ html {
 html, body {
 	color:#454545; height:100%
 }
+body img {max-width:680px}
+body table img {width:auto}
