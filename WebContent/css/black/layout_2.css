@@ -274,6 +274,14 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
 .user_select + input[type="text"] {width:160 !importantpx}
 
+/* 댓글 */
+tr.instance_list {}
+tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
+.det_title {padding:5px 0}
+li.sub_instance_list > .det_title {}
+li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
+
+
 /* Text style */
 .t_red, .t_sunday {color:#e54b4b}
 .t_saturday {color:#4b79c8}
