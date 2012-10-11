@@ -108,7 +108,7 @@
 	    <ul class="portlet_r" style="display: block;">		            
 			<!-- 타이틀 -->
 			<div class="body_titl_pic">		
-	                <div class="noti_pic mr7"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></div>
+	                <div class="noti_pic mr7"><a class="js_pop_user_info" href="<%=instance.getOwner().getSpaceController() %>?cid=<%=instance.getOwner().getSpaceContextId()%>" userId="<%=instance.getOwner().getId()%>" longName="<%=instance.getOwner().getLongName() %>" minPicture="<%=instance.getOwner().getMinPicture() %>" profile="<%=instance.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(instance.getOwner().getUserInfo())%>"><img src="<%=instance.getOwner().getMidPicture() %>"  class="profile_size_m"/></a></div>
 	                <div class="noti_in_bodytitle case_2line">
 	                    <div>
 		                    <span class="t_name"><%=instance.getOwner().getLongName()%></span>

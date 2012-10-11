@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.work.MailWork"%>
 <%@page import="net.smartworks.model.mail.MailFolder"%>
 <%@page import="net.smartworks.model.report.ChartReport"%>
@@ -89,6 +91,19 @@
 	MailFolder mailFolder = smartWorks.getMailFolderById(folderId);
 	MailWork work = new MailWork(folderId, mailFolder.getName(), "");
 	String unreadCountTarget = (mailFolder.getType()==MailFolder.TYPE_SYSTEM_INBOX) ? "js_folder_unread_count" : "";
+
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	String searchKey = "";
+	if (params == null){
+		SmartWork smartWork = (SmartWork)session.getAttribute("smartWork");
+		String savedWorkId = (SmartUtil.isBlankObject(smartWork)) ? "" : smartWork.getId();
+		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(work.getId())){
+			params = (RequestParams)session.getAttribute("requestParams");
+		}
+	}if (params != null){
+		searchKey = params.getSearchKey();
+	}
+	
 	session.setAttribute("smartWork", work);
 	session.removeAttribute("workInstance");
 %>
@@ -106,7 +121,7 @@
 	<!-- 메일 검색 -->
 	<form name="frmSearchInstance" class="mail_srch">
 		<div class="srch_wh srch_wsize_mail">
-			<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
+			<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key="search.search_mail"/>" title="<fmt:message key="search.search_mail"/>" />
 			<button title="<fmt:message key="search.search"/>" onclick="selectListParam($(this).parents('.js_mail_list_title_page').find('.js_progress_span:first'), false);return false;"></button>
 		</div>
 	</form>

@@ -41,7 +41,6 @@ public class System {
 	public static final int TABLE_ID_INTCON_SITUATION 		= 21;
 	public static final int TABLE_ID_COMMID_TRACE 			= 31;
 	public static final int TABLE_ID_DEVMID_SEND_STATUS 	= 41;
-	public static final int TABLE_ID_DEVMID_DEVICE_STATUS 	= 42;
 	public static final int TABLE_ID_ADAPTER_HISTORY		= 51;	
 	
 	//DEV
@@ -59,7 +58,6 @@ public class System {
 	public static final String TABLE_NAME_INTCON_SITUATION 		= "US1.TN_CTL_EVENT_INFO";
 	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS 	= "TN_IDM_SEND_STATUS";
-	public static final String TABLE_NAME_DEVMID_DEVICE_STATUS 	= "TN_IDM_DEVICE_STATUS";
 	public static final String TABLE_NAME_ADAPTER_HISTORY		= "TB_UAST_CMNC_HS";
 	public static final String TABLE_NAME_COMMID_JOIN             = "CMDB.TN_CM_EVENT_OUTB_INFO";
 	
@@ -67,6 +65,7 @@ public class System {
 	public static final String DATA_FIELD_NAME_TABLE_ID			= "Table Id";
 	public static final String DATA_FIELD_NAME_STATUS			= "Status";
 	public static final String DATA_FIELD_NAME_DISPLAY_ID		= "Display Id";
+	public static final String DATA_FIELD_NAME_DEVICE_ID		= "Device Id";
 	public static final String DATA_FIELD_NAME_TIMEOUT			= "Timeout Minutes";
 	
 	public static final long DEFAULT_TASK_TIMEOUT				= 10 * 60 * 1000;
@@ -141,8 +140,6 @@ public class System {
 			return TABLE_NAME_COMMID_TRACE;
 		case System.TABLE_ID_DEVMID_SEND_STATUS:
 			return TABLE_NAME_DEVMID_SEND_STATUS;
-		case System.TABLE_ID_DEVMID_DEVICE_STATUS:
-			return TABLE_NAME_DEVMID_DEVICE_STATUS;
 		case System.TABLE_ID_ADAPTER_HISTORY:	
 			return TABLE_NAME_ADAPTER_HISTORY;		
 		}
@@ -162,8 +159,6 @@ public class System {
 			return System.TABLE_ID_COMMID_TRACE;
 		}else if(tableName.equals(TABLE_NAME_DEVMID_SEND_STATUS)){
 			return System.TABLE_ID_DEVMID_SEND_STATUS;
-		}else if(tableName.equals(TABLE_NAME_DEVMID_DEVICE_STATUS)){
-			return System.TABLE_ID_DEVMID_DEVICE_STATUS;
 		}else if(tableName.equals(TABLE_NAME_ADAPTER_HISTORY)){	
 			return System.TABLE_ID_ADAPTER_HISTORY;
 		}

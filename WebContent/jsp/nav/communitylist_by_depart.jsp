@@ -31,7 +31,7 @@
 		%>
 					<li>
 						<span class="dep">
-							<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_user">
+							<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_user js_pop_user_info" userId="<%=user.getId()%>" longName="<%=user.getLongName() %>" minPicture="<%=user.getMinPicture() %>" profile="<%=user.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(user.getUser().getUserInfo())%>">
 								<span class="<%=iconType%> js_user"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s js_user"><%=user.getLongName()%>
 							</a>
 						</span>

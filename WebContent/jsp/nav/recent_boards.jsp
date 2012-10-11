@@ -48,7 +48,7 @@
  			String target = "iwork_space.sw?cid=" + ISmartWorks.CONTEXT_PREFIX_IWORK_SPACE + board.getId() + "&wid=" + communityId + "&workId=" + SmartWork.ID_BOARD_MANAGEMENT;
  	%>
       <li>
-       <a href="<%=target %>" class="js_content">
+       <a href="<%=target %>" class="js_content js_pop_user_info" userId="<%=board.getOwner().getId()%>" longName="<%=board.getOwner().getLongName() %>" minPicture="<%=board.getOwner().getMinPicture() %>" profile="<%=board.getOwner().getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(board.getOwner().getUser().getUserInfo())%>">
 	       <img class="profile_size_s" src="<%=board.getOwner().getMinPicture()%>">
 	       <div>
 	       <%=board.getSubject() %>

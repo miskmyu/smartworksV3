@@ -157,13 +157,15 @@
 	InformationWork work = (InformationWork) smartWorks.getWorkById(workId);
 	String selectedFilterId = SearchFilter.FILTER_ALL_INSTANCES;
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	String searchKey = "";
 	if (params == null){
 		String savedWorkId = (String)session.getAttribute("workId");
-		if(!SmartUtil.isBlankObject(workId) && workId.equals(work.getId())){
+		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
 		}
 	}if (params != null){
 		selectedFilterId = params.getFilterId();
+		searchKey = params.getSearchKey();
 	}
 
 	session.setAttribute("smartWork", work);
@@ -233,9 +235,9 @@
 						</div>
 					
 						<div class="title_line_options">
-							<form name="frmSearchInstance" class="po_left">
+							<form name="frmSearchInstance" class="po_left"> 
 								<div class="srch_wh srch_wsize">
-									<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 								</div>
 							</form>

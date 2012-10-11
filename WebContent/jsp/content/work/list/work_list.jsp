@@ -1,3 +1,5 @@
+<%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
+<%@page import="net.smartworks.model.instance.info.RequestParams"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
 <%@page import="net.smartworks.model.filter.info.SearchFilterInfo"%>
 <%@page import="net.smartworks.model.work.ProcessWork"%>
@@ -140,6 +142,17 @@
 	WorkSpace workSpace = smartWorks.getWorkSpaceById(wid);
 	String workSpaceName = (SmartUtil.isBlankObject(wid)) ? cUser.getCompany() : workSpace.getName(); 
 
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	String searchKey = "";
+	if (params == null){
+		String savedWorkId = (String)session.getAttribute("workId");
+		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(SmartWork.ID_ALL_WORKS)){
+			params = (RequestParams)session.getAttribute("requestParams");
+		}
+	}if (params != null){
+		searchKey = params.getSearchKey();
+	}
+	
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "work_list.sw");
@@ -173,7 +186,7 @@
 						<form name="frmSearchInstance" class="po_left">
 							<span class="js_progress_span"></span>
 							<div class="srch_wh srch_wsize m0">
-								<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+								<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 								<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 							</div>
 						</form>
