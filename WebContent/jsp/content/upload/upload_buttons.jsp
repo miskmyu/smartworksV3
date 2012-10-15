@@ -4,6 +4,7 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="net.smartworks.util.SmartMessage"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.sera.Course"%>
 <%@page import="net.smartworks.model.community.WorkSpace"%>
@@ -184,8 +185,13 @@
 						// 현재사용자가 속해있는 그룹들을 선택하는 옵션들을 구성한다..
 						for (CommunityInfo community : communities) {
 							if (community.getClass().equals(GroupInfo.class)) {
+								GroupInfo group = (GroupInfo)community;
+								String isPublicStr = "";
+								if (!group.isPublic()) {
+									isPublicStr = " (" + SmartMessage.getString("common.security.access.private") + ")";
+								} 
 						%>
-								<option value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_GROUP%>"><%=community.getName()%></option>
+								<option value="<%=community.getId()%>"  workSpaceType="<%=ISmartWorks.SPACE_TYPE_GROUP%>"><%=community.getName() + isPublicStr%></option>
 						<%
 							}
 						}
