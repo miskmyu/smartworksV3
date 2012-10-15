@@ -55,16 +55,32 @@ public class UcityUtil {
 	
 	public static FormField[] getSituationListFields() throws Exception{
 		return new FormField[] { 
-			FormField.FIELD_STATUS, 
-			new FormField("ucity.serviceName", "U-서비스명", FormField.TYPE_COMBO),
-			new FormField("ucity.eventName", "이벤트명", FormField.TYPE_COMBO),
-			new FormField("ucity.type", "구분", FormField.TYPE_COMBO),
-			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_COMBO),
-			new FormField("ucity.externalDisplay", "외부표출", FormField.TYPE_COMBO),
-			new FormField("ucity.isSms", "SMS발송", FormField.TYPE_COMBO),
-			new FormField("ucity.serviceTime", "발생일시", FormField.TYPE_DATETIME),
-			new FormField("ucity.servicePlace", "발생장소", FormField.TYPE_TEXT)
+			new FormField(FormField.ID_STATUS, "상태", FormField.TYPE_COMBO_STATUS), 
+			new FormField("serviceName", "U-서비스명", FIELD_TYPE_COMBO_U_SERVICE),
+			new FormField("eventName", "이벤트명", FIELD_TYPE_COMBO_U_EVENT),
+//			new FormField("ucity.type", "구분", FIELD_TYPE_COMBO_U_TYPE),
+			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_TEXT),
+			new FormField("externalDisplay", "외부표출", FormField.TYPE_TEXT),
+			new FormField("isSms", "SMS발송", FormField.TYPE_COMBO_BOOLEAN),
+			new FormField("eventTime", "발생일시", FormField.TYPE_DATETIME),
+			new FormField("eventPlace", "발생장소", FormField.TYPE_TEXT)
 		};
+	}
+
+	public static final String FIELD_TYPE_COMBO_U_SERVICE = "comboUService";
+	public static final String FIELD_TYPE_COMBO_U_EVENT = "comboUEvent";
+	public static final String FIELD_TYPE_COMBO_U_TYPE = "comboUEvent";
+	public static String getPageNameByField(FormField field) throws Exception{
+		if(SmartUtil.isBlankObject(field)) return "";
+		if(field.getType().equals(FormField.TYPE_COMBO_STATUS))
+			return "combo_u_status_field";
+		else if(field.getType().equals(FIELD_TYPE_COMBO_U_SERVICE))
+			return "combo_u_service_field";
+		else if(field.getType().equals(FIELD_TYPE_COMBO_U_EVENT))
+			return "combo_u_event_field";
+		else if(field.getType().equals(FIELD_TYPE_COMBO_U_TYPE))
+			return "combo_u_type_field";
+		return field.getPageName();
 	}
 	
 	public static void endUService(ResultSet resultSet) throws Exception{

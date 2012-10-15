@@ -56,6 +56,11 @@ public class FormField extends BaseObject{
 	public static final String TYPE_TIME = "timeField"; //time
 	public static final String TYPE_DATETIME = "dateTimeChooser"; //datetime
 	public static final String TYPE_DATA_GRID = "dataGrid"; //
+	
+	public static final String TYPE_COMBO_BOOLEAN = "comboBoolean";
+	public static final String TYPE_COMBO_STATUS = "comboStatus";
+	public static final String TYPE_COMBO_PROCESS_TYPE = "comboProcessType";
+	
 	public static final String[] FORM_FIELD_TYPES_ALL = new String[] {
 		TYPE_TEXT, TYPE_USER, TYPE_FILE, TYPE_OTHER_WORK, TYPE_RICHTEXT_EDITOR, TYPE_NUMBER, TYPE_CURRENCY, TYPE_PERCENT,
 		TYPE_COMBO, TYPE_IMAGE, TYPE_CHECK_BOX, TYPE_RADIO_BUTTON, TYPE_EMAIL, TYPE_DATE, TYPE_TIME, TYPE_DATETIME, TYPE_DATA_GRID
@@ -73,12 +78,12 @@ public class FormField extends BaseObject{
 		SmartMessage.getString(PREFIX+TYPE_DATE), SmartMessage.getString(PREFIX+TYPE_TIME), SmartMessage.getString(PREFIX+TYPE_DATETIME)
 	};
 
-	public static final FormField FIELD_STATUS = new FormField(ID_STATUS, SmartMessage.getString("common.title.status"), TYPE_COMBO);
+	public static final FormField FIELD_STATUS = new FormField(ID_STATUS, SmartMessage.getString("common.title.status"), TYPE_COMBO_STATUS);
 	public static final FormField FIELD_SUBJECT = new FormField(ID_SUBJECT, SmartMessage.getString("common.title.instance_subject"), TYPE_TEXT);
 	public static final FormField FIELD_TASK_NAME = new FormField(ID_TASK_NAME, SmartMessage.getString("common.title.task_name"), TYPE_TEXT);
 	public static final FormField FIELD_LAST_TASK = new FormField(ID_LAST_TASK, SmartMessage.getString("common.title.last_task"), TYPE_TEXT);
 	public static final FormField FIELD_PROCESS_TIME = new FormField(ID_PROCESS_TIME, SmartMessage.getString("common.title.process_time"), TYPE_TIME);
-	public static final FormField FIELD_PROCESS_TYPE = new FormField(ID_PROCESS_TYPE, SmartMessage.getString("common.title.process_type"), TYPE_COMBO);
+	public static final FormField FIELD_PROCESS_TYPE = new FormField(ID_PROCESS_TYPE, SmartMessage.getString("common.title.process_type"), TYPE_COMBO_PROCESS_TYPE);
 	public static final FormField FIELD_WORK = new FormField(ID_WORK, SmartMessage.getString("common.title.work_name"), TYPE_TEXT);
 	public static final FormField FIELD_WORK_INSTANCE = new FormField(ID_WORK_INSTANCE, SmartMessage.getString("common.title.instance_subject"), TYPE_TEXT);
 	public static final FormField FIELD_WORK_SPACE = new FormField(ID_WORK_SPACE, SmartMessage.getString("common.title.work_space_name"), TYPE_TEXT);
@@ -130,7 +135,7 @@ public class FormField extends BaseObject{
 	
 	public String getPageName(){
 		if(this.type == null) return null;
-		if(type.equals(TYPE_TEXT) || type.equals(TYPE_RICHTEXT_EDITOR) || type.equals(TYPE_COMBO) || type.equals(TYPE_IMAGE) || type.equals(TYPE_EMAIL) || type.equals(TYPE_RADIO_BUTTON)){
+		if(type.equals(TYPE_TEXT) || type.equals(TYPE_RICHTEXT_EDITOR) || type.equals(TYPE_IMAGE) || type.equals(TYPE_EMAIL) || type.equals(TYPE_RADIO_BUTTON)){
 			return "string_field";
 		}else if(type.equals(TYPE_USER)){
 			return "user_field";
@@ -148,6 +153,12 @@ public class FormField extends BaseObject{
 			return "time_field";
 		}else if(type.equals(TYPE_DATETIME)){
 			return "datetime_field";
+		}else if(type.equals(TYPE_COMBO_BOOLEAN)){
+			return "combo_boolean_field";
+		}else if(type.equals(TYPE_COMBO_STATUS)){
+			return "combo_status_field";
+		}else if(type.equals(TYPE_COMBO_PROCESS_TYPE)){
+			return "combo_process_type_field";
 		}
 		return null;
 	}
