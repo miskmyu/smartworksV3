@@ -105,6 +105,8 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 		String runningTaskName = null;
 
 		String serviceName = null;
+		String eventId = null;
+		String eventTime = null;
 		String eventName = null;
 		String type = null;
 		String externalDisplay = null;
@@ -131,6 +133,8 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			runningTaskId = cond.getRunningTaskId();
 			runningTaskName = cond.getRunningTaskName();
 			serviceName = cond.getServiceName();
+			eventId = cond.getEventId();
+			eventTime = cond.getEventTime();
 			eventName = cond.getEventName();
 			type = cond.getType();
 			externalDisplay = cond.getExternalDisplay();
@@ -168,6 +172,10 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				buf.append(" and obj.runningTaskName = :runningTaskName");
 			if (serviceName != null)
 				buf.append(" and obj.serviceName = :serviceName");
+			if (eventId != null)
+				buf.append(" and obj.eventId = :eventId");
+			if (eventTime != null)
+				buf.append(" and obj.eventTime = :eventTime");
 			if (eventName != null)
 				buf.append(" and obj.eventName = :eventName");
 			if (type != null)
@@ -300,6 +308,10 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				query.setString("runningTaskName", runningTaskName);
 			if (serviceName != null)
 				query.setString("serviceName", serviceName);
+			if (eventId != null)
+				query.setString("eventId", eventId);
+			if (eventTime != null)
+				query.setString("eventTime", eventTime);
 			if (eventName != null)
 				query.setString("eventName", eventName);
 			if (type != null)

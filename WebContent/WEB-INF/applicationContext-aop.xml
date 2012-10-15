@@ -20,7 +20,7 @@
 			<aop:around pointcut-ref="ucityMethod" method="invoke"/>
 		</aop:aspect>
 	</aop:config>
-
+	 
 	<!-- aop:config>
 		<aop:aspect id="commonAdvice" ref="testCommonAdvice">
 			<aop:pointcut id="publicMethod" expression="execution(public * net.smartworks.server.engine.process..*(..))"/>
