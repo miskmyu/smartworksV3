@@ -40,6 +40,7 @@ import net.smartworks.server.engine.common.model.Order;
 import net.smartworks.server.engine.common.model.Property;
 import net.smartworks.server.engine.common.util.CommonUtil;
 import net.smartworks.server.engine.factory.SwManagerFactory;
+import net.smartworks.server.engine.infowork.domain.model.SwdRecordCond;
 import net.smartworks.server.engine.mail.model.MailContent;
 import net.smartworks.server.engine.message.manager.IMessageManager;
 import net.smartworks.server.engine.message.model.Message;
@@ -600,12 +601,74 @@ public class NoticeServiceImpl implements INoticeService {
 				
 				if (CommonUtil.isEmpty(user.getCompanyId()) || CommonUtil.isEmpty(user.getId()))
 					return assignTaskNoticeBox;
-		
+				
 				PublishNoticeCond assignedCond = new PublishNoticeCond();
 				assignedCond.setType(PublishNotice.TYPE_ASSIGNED);
 				assignedCond.setRefType(PublishNotice.REFTYPE_ASSIGNED_TASK);
 				assignedCond.setAssignee(user.getId());
 
+
+				//노티스카운트 벨리데이션체크
+				TskTaskCond myAssigneTaskCond = new TskTaskCond();
+				myAssigneTaskCond.setAssignee(user.getId());
+				myAssigneTaskCond.setStatus(TskTask.TASKSTATUS_ASSIGN);
+				
+				//해당 벨리데이션을 카운트 비교후 맞지 않을때에만 수행을 하려면 아래 주석을 풀고 컴파일 (현재는 무조건 검사하도록 한다)
+				
+				//long totalMyTaskSize = getTskManager().getTaskSize(user.getId(), myAssigneTaskCond);
+				//if (totalSize != totalMyTaskSize) {
+					
+					Map<String, PublishNotice> noticeTaskIdMap = new HashMap<String, PublishNotice>();
+					Map<String, TskTask> myTaskIdsMap = new HashMap<String, TskTask>();
+					
+					PublishNotice[] tempNotices = getPublishNoticeManager().getPublishNotices(user.getId(), assignedCond, IManager.LEVEL_ALL);
+					TskTask[] myTasks = getTskManager().getTasks(user.getId(), myAssigneTaskCond, IManager.LEVEL_LITE);
+					for (int i = 0; i < tempNotices.length; i++) {
+						noticeTaskIdMap.put(tempNotices[i].getRefId(), tempNotices[i]);
+					}
+					for (int i = 0; i < myTasks.length; i++) {
+						myTaskIdsMap.put(myTasks[i].getObjId(), myTasks[i]);
+					}
+					
+					if (noticeTaskIdMap.size() != 0) {
+						Iterator itr = noticeTaskIdMap.keySet().iterator();
+						while (itr.hasNext()) {
+							String taskId = (String)itr.next();
+							PublishNotice tempNotice = (PublishNotice)noticeTaskIdMap.get(taskId);
+							TskTask myTask = (TskTask)myTaskIdsMap.get(tempNotice.getRefId());
+							if (myTask != null) {
+								String status = myTask.getStatus();
+								if (status.equalsIgnoreCase(TskTask.TASKSTATUS_ASSIGN)) {
+									continue;
+								} else {
+									getPublishNoticeManager().removePublishNotice(user.getId(), tempNotice.getObjId());
+								}
+							} else {
+								getPublishNoticeManager().removePublishNotice(user.getId(), tempNotice.getObjId());
+							}
+						}
+					}
+					if (myTaskIdsMap.size() != 0) {
+						Iterator itr = myTaskIdsMap.keySet().iterator();
+						while (itr.hasNext()) {
+							String taskId = (String)itr.next();
+							TskTask myTask = (TskTask)myTaskIdsMap.get(taskId);
+							PublishNotice notice = (PublishNotice)noticeTaskIdMap.get(myTask.getObjId());
+							if (notice == null) {
+								
+								PublishNotice newNotice = new PublishNotice();
+								newNotice.setType(PublishNotice.TYPE_ASSIGNED);
+								newNotice.setRefType(PublishNotice.REFTYPE_ASSIGNED_TASK);
+								newNotice.setRefId(taskId);
+								newNotice.setAssignee(myTask.getAssignee());
+								getPublishNoticeManager().setPublishNotice(user.getId(), newNotice, IManager.LEVEL_ALL);
+							}
+						}
+					}
+				//}
+
+				SmartUtil.increaseNoticeCountByNoticeType(user.getId(), noticeType);
+				
 				long totalSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), assignedCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
@@ -662,6 +725,45 @@ public class NoticeServiceImpl implements INoticeService {
 				PublishNoticeCond commentCond = new PublishNoticeCond(user.getId(), PublishNotice.TYPE_COMMENT, null, null);
 				
 				long totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
+				
+				if (totalCommentSize != 0) {
+					
+					PublishNotice[] tempNotice = getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, IManager.LEVEL_ALL);
+					
+					String[] opinionIdIns = new String[tempNotice.length];
+					for (int i = 0; i < tempNotice.length; i++) {
+						opinionIdIns[i] = tempNotice[i].getRefId();
+					}
+					OpinionCond opinionCond = new OpinionCond();
+					opinionCond.setObjIdIns(opinionIdIns);
+					opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
+					opinionCond.setPageNo(0);
+					opinionCond.setPageSize(10);
+					Opinion[] tempOpinions = getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+					
+					for (int i = 0; i < tempOpinions.length; i++) {
+						Opinion tempOpinion = tempOpinions[i];
+						
+						String formId = tempOpinion.getRefFormId();
+						String recordId = tempOpinion.getRefId();
+						
+						SwdRecordCond recCond = new SwdRecordCond();
+						recCond.setFormId(formId);
+						recCond.setRecordId(recordId);
+						long size = SwManagerFactory.getInstance().getSwdManager().getRecordSize(user.getId(), recCond);
+						
+						if (size != 0)
+							continue;
+						
+						PublishNoticeCond pubCond = new PublishNoticeCond();
+						pubCond.setRefId(tempOpinion.getObjId());
+						getPublishNoticeManager().removePublishNotice(user.getId(), pubCond);
+						
+						
+					}
+					SmartUtil.increaseNoticeCountByNoticeType(user.getId(), noticeType);
+				}
+				totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
 				
 				if (!CommonUtil.isEmpty(lastNoticeId)) {
 					commentCond.setRefId(lastNoticeId);//opinionId

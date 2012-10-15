@@ -61,13 +61,21 @@
 	// 그룹인경우....
 	if (thisGroup != null) {
 		String target = thisGroup.getSpaceController() + "?cid=" + thisGroup.getSpaceContextId() + "&wid=" + thisGroup.getId(); 
-		thisGroup.setPublic(true);
+		//thisGroup.setPublic(true);
 	%>
 		<li>
 			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisGroup.getOrgPicture()%>"></a>
 		</li>
 		<li class="info m0">
-			<div><b><%=thisGroup.getName()%></b></div>
+			<div><b><%=thisGroup.getName()%></b>
+			<%
+			if (!thisGroup.isPublic()) {
+			%>
+			<span class="icon_private"></span>
+			<%
+			}
+			%>
+			</div>
 			<div class="bul_org"><fmt:message key="group.role.leader" /> : <%=thisGroup.getLeader().getLongName()%></div>
 			<div class="bul_org"><fmt:message key="group.created_date" /> : <%=thisGroup.getOpenDate().toLocalDateSimpleString()%></div>
 			<div class="bul_org"><fmt:message key="group.members_count" /> : <%=thisGroup.getNumberOfGroupMember()%></div>
