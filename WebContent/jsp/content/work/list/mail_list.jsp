@@ -95,12 +95,17 @@
 	RequestParams params = (RequestParams)request.getAttribute("requestParams");
 	String searchKey = "";
 	if (params == null){
-		SmartWork smartWork = (SmartWork)session.getAttribute("smartWork");
-		String savedWorkId = (SmartUtil.isBlankObject(smartWork)) ? "" : smartWork.getId();
+		Object objectWork = null;
+		try{
+			objectWork = (Object)session.getAttribute("smartWork");
+		}catch (Exception e){}
+		
+		String savedWorkId = (SmartUtil.isBlankObject(objectWork) || !objectWork.getClass().equals(MailWork.class)) ? "" : ((MailWork)objectWork).getId();
 		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(work.getId())){
 			params = (RequestParams)session.getAttribute("requestParams");
 		}
-	}if (params != null){
+	}
+	if (params != null){
 		searchKey = params.getSearchKey();
 	}
 	

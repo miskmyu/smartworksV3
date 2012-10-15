@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.											 -->
 <!-- Created Date	: 2011.9.													 -->
 
+<%@page import="pro.ucity.model.Event"%>
+<%@page import="pro.ucity.util.UcityUtil"%>
 <%@page import="net.smartworks.model.work.FormField"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.model.instance.Instance"%>
@@ -33,7 +35,7 @@
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 
 <!--  좌측의 필드항목과 우측의 값을 계산하는 조건실행을 위한 오퍼레이터 선택박스 -->
-<input name="hdnFieldType" type="hidden" value="<%=FormField.TYPE_COMBO %>"/>
+<input name="hdnFieldType" type="hidden" value="<%=UcityUtil.FIELD_TYPE_COMBO_U_EVENT %>"/>
 <select name="selFilterOperator" class="selb_size_sec">
 	<%
 	for (KeyMap generalOper : generalOpers) {
@@ -47,18 +49,16 @@
 </select>
 <span class="str_field">
 	<select name="txtFilterStringOperand">
-		<option value="<%=Instance.STATUS_RUNNING%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_RUNNING){%> selected<%} %>>
-			<fmt:message key="content.status.running" />
-		</option>
-		<option value="<%=Instance.STATUS_DELAYED_RUNNING%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_DELAYED_RUNNING){%> selected<%} %>>
-			<fmt:message key="content.status.delayed_running" />
-		</option>
-		<option value="<%=Instance.STATUS_RETURNED%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_RETURNED){%> selected<%} %>>
-			<fmt:message key="content.status.returned" />
-		</option>
-		<option value="<%=Instance.STATUS_COMPLETED%>" <%if((operandValue != null) && Integer.parseInt(operandValue) == Instance.STATUS_COMPLETED){%> selected<%} %>>
-			<fmt:message key="content.status.completed" />
-		</option>
+		<%
+		String[] eventNames = Event.getAllEventNames();
+		if(!SmartUtil.isBlankObject(eventNames)){
+			for(int i=0; i<eventNames.length; i++){
+		%>
+			<option value="<%=eventNames[i]%>" <%if(eventNames[i].equals(operandValue)){%> selected<%} %>><%=eventNames[i] %></option>
+		<%
+			}
+		}
+		%>
 	</select> 
 </span>
 

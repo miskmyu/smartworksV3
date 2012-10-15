@@ -125,9 +125,17 @@
 						%> 
 							<jsp:include page="/jsp/content/work/field/datetime_field.jsp"></jsp:include>
 						<%
-						} else if (fieldType.equals(FormField.TYPE_COMBO)) {
+						} else if (fieldType.equals(FormField.TYPE_COMBO_BOOLEAN)) {
 						%> 
-							<jsp:include page="/jsp/content/work/field/combo_field.jsp"></jsp:include>
+							<jsp:include page="/jsp/content/work/field/combo_boolean_field.jsp"></jsp:include>
+						<%
+						} else if (fieldType.equals(FormField.TYPE_COMBO_STATUS)) {
+						%> 
+							<jsp:include page="/jsp/content/work/field/combo_status_field.jsp"></jsp:include>
+						<%
+						} else if (fieldType.equals(FormField.TYPE_COMBO_PROCESS_TYPE)) {
+						%> 
+							<jsp:include page="/jsp/content/work/field/combo_process_type_field.jsp"></jsp:include>
 						<%
 						} else {
 						%> 
@@ -260,9 +268,23 @@
 											<jsp:param name="operandValueSecond" value="<%=timeValue %>" />
 										</jsp:include> 
 									<%
-					 				} else if (fieldType.equals(FormField.TYPE_COMBO)) {
+					 				} else if (fieldType.equals(FormField.TYPE_COMBO_BOOLEAN)) {
 	 								%> 
-	 									<jsp:include page="/jsp/content/work/field/combo_field.jsp">
+	 									<jsp:include page="/jsp/content/work/field/combo_boolean_field.jsp">
+	 										<jsp:param name="operator" value="<%=operator%>" />
+	 										<jsp:param name="operandValue" value="<%=rightOperand %>" />
+	 									</jsp:include> 
+									<%
+					 				} else if (fieldType.equals(FormField.TYPE_COMBO_STATUS)) {
+	 								%> 
+	 									<jsp:include page="/jsp/content/work/field/combo_status_field.jsp">
+	 										<jsp:param name="operator" value="<%=operator%>" />
+	 										<jsp:param name="operandValue" value="<%=rightOperand %>" />
+	 									</jsp:include> 
+									<%
+					 				} else if (fieldType.equals(FormField.TYPE_COMBO_PROCESS_TYPE)) {
+	 								%> 
+	 									<jsp:include page="/jsp/content/work/field/combo_process_type_field.jsp">
 	 										<jsp:param name="operator" value="<%=operator%>" />
 	 										<jsp:param name="operandValue" value="<%=rightOperand %>" />
 	 									</jsp:include> 

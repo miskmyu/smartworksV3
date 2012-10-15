@@ -26,15 +26,15 @@ public class System {
 
 
 	//dev
-//	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
-//	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@dev.smartworks.net:8629:tibero";
-//	public static final String DATABASE_USERNAME = "tibero";
-//	public static final String DATABASE_PASSWORD = "tmax";
-	//개발
 	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
-	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
-	public static final String DATABASE_USERNAME = "bpmuser";
-	public static final String DATABASE_PASSWORD = "bpmadmin";
+	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@dev.smartworks.net:8629:tibero";
+	public static final String DATABASE_USERNAME = "tibero";
+	public static final String DATABASE_PASSWORD = "tmax";
+	//개발
+//	public static final String DATABASE_JDBC_DRIVE = "com.tmax.tibero.jdbc.TbDriver";
+//	public static final String DATABASE_CONNECTION = "jdbc:tibero:thin:@10.2.10.147:8629:CNUCTIDV";
+//	public static final String DATABASE_USERNAME = "bpmuser";
+//	public static final String DATABASE_PASSWORD = "bpmadmin";
 	
 	public static final int TABLE_ID_OPPORTAL_SITUATION 	= 11;
 	public static final int TABLE_ID_OPPORTAL_DISPLAY 		= 12;
@@ -44,22 +44,22 @@ public class System {
 	public static final int TABLE_ID_ADAPTER_HISTORY		= 51;	
 	
 	//DEV
-//	public static final String TABLE_NAME_OPPORTAL_SITUATION 	    = "TH_ST_SITUATION_HISTORY";
-//	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "TN_ST_DISPLAY";
-//	public static final String TABLE_NAME_INTCON_SITUATION 		= "TN_CTL_EVENT_INFO";
-//	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
-//	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
-//	public static final String TABLE_NAME_DEVMID_DEVICE_STATUS 	= "TN_IDM_DEVICE_STATUS";
-//	public static final String TABLE_NAME_ADAPTER_HISTORY		    = "TB_UAST_CMNC_HS";
+	public static final String TABLE_NAME_OPPORTAL_SITUATION 	    = "TH_ST_SITUATION_HISTORY";
+	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "TN_ST_DISPLAY";
+	public static final String TABLE_NAME_INTCON_SITUATION 		= "TN_CTL_EVENT_INFO";
+	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
+	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
+	public static final String TABLE_NAME_ADAPTER_HISTORY		    = "TB_UAST_CMNC_HS";
+	public static final String TABLE_NAME_COMMID_JOIN             = "CMDB.TN_CM_EVENT_OUTB_INFO";
 	
 	//개발서버
-	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";
-	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "USITUATION.TN_ST_DISPLAY";
-	public static final String TABLE_NAME_INTCON_SITUATION 		= "US1.TN_CTL_EVENT_INFO";
-	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
-	public static final String TABLE_NAME_DEVMID_SEND_STATUS 	= "TN_IDM_SEND_STATUS";
-	public static final String TABLE_NAME_ADAPTER_HISTORY		= "TB_UAST_CMNC_HS";
-	public static final String TABLE_NAME_COMMID_JOIN             = "CMDB.TN_CM_EVENT_OUTB_INFO";
+//	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";
+//	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "USITUATION.TN_ST_DISPLAY";
+//	public static final String TABLE_NAME_INTCON_SITUATION 		= "US1.TN_CTL_EVENT_INFO";
+//	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
+//	public static final String TABLE_NAME_DEVMID_SEND_STATUS 	= "TN_IDM_SEND_STATUS";
+//	public static final String TABLE_NAME_ADAPTER_HISTORY		= "TB_UAST_CMNC_HS";
+//	public static final String TABLE_NAME_COMMID_JOIN             = "CMDB.TN_CM_EVENT_OUTB_INFO";
 	
 	public static final String DATA_FIELD_NAME_EVENT_ID			= "Event Id";
 	public static final String DATA_FIELD_NAME_TABLE_ID			= "Table Id";
@@ -76,50 +76,50 @@ public class System {
 		if(process<0 || process>MAX_PROCESS) return null;
 		
 		//dev
-//		switch(process){
-//		case PROCESS_ENV_WEAHTER:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_ENV_ATMOSPHERE:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_ENV_WATER:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_TRAFFIC_INCIDENT:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_DISASTER_FIRE:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_CRIME_CCTV:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_CRIME_VEHICLES:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_WATERWORKS_LEAKS:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-//		case PROCESS_FACILITY_MANAGEMENT:
-//			return "pkg_9564849550184543b06fa46e3290f296";
-		
-		//개발서버
 		switch(process){
 		case PROCESS_ENV_WEAHTER:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_ENV_ATMOSPHERE:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_ENV_WATER:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_TRAFFIC_INCIDENT:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_DISASTER_FIRE:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_CRIME_CCTV:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_CRIME_VEHICLES:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_WATERWORKS_LEAKS:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
 		case PROCESS_FACILITY_MANAGEMENT:
-			return "pkg_6247af34746044228556b5366752141e";
+			return "pkg_9564849550184543b06fa46e3290f296";
+		
+		//개발서버
+//		switch(process){
+//		case PROCESS_ENV_WEAHTER:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_ENV_ATMOSPHERE:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_ENV_WATER:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_TRAFFIC_INCIDENT:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_DISASTER_FIRE:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_CRIME_CCTV:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_CRIME_VEHICLES:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_WATERWORKS_LEAKS:
+//			return "pkg_6247af34746044228556b5366752141e";
+//		case PROCESS_FACILITY_MANAGEMENT:
+//			return "pkg_6247af34746044228556b5366752141e";
 		
 		}
 		

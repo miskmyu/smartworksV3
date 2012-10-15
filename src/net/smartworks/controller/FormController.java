@@ -111,4 +111,22 @@ public class FormController {
 	
 		return SmartUtil.returnMnv(request, "jsp/content/work/field/work_field.jsp", "");
 	}
+	
+	@RequestMapping("/combo_status_field")
+	public ModelAndView comboStatusField(HttpServletRequest request, HttpServletResponse response) {
+	
+		return SmartUtil.returnMnv(request, "jsp/content/work/field/combo_status_field.jsp", "");
+	}
+	
+	@RequestMapping("/combo_boolean_field")
+	public ModelAndView comboBooleanField(HttpServletRequest request, HttpServletResponse response) {
+	
+		return SmartUtil.returnMnv(request, "jsp/content/work/field/combo_boolean_field.jsp", "");
+	}
+	
+	@RequestMapping("/combo_process_type_field")
+	public ModelAndView comboProcessTypeField(HttpServletRequest request, HttpServletResponse response) {
+	
+		return SmartUtil.returnMnv(request, "jsp/content/work/field/combo_process_type_field.jsp", "");
+	}
 }

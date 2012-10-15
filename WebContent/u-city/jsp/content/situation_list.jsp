@@ -217,7 +217,7 @@
 								%>
 							</select>
 						</form>
-						<a href="search_filter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
+						<a href="searchFilter.sw?workId=<%=workId%>" class="js_edit_search_filter" title="<fmt:message key='filter.button.edit_search_filter' />">
 							<span class="icon_btn_edit"></span>
 						</a>
 					</div>
