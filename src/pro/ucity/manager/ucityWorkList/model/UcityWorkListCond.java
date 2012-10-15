@@ -34,6 +34,8 @@ public class UcityWorkListCond  extends MisObjectCond{
 	private String externalDisplay;
 	private String isSms;
 	private String eventPlace;
+	private String eventId;
+	private String eventTime;
 	
 	private String searchKey;
 	
@@ -115,6 +117,18 @@ public class UcityWorkListCond  extends MisObjectCond{
 	}
 	public void setEventPlace(String eventPlace) {
 		this.eventPlace = eventPlace;
+	}
+	public String getEventId() {
+		return eventId;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public String getEventTime() {
+		return eventTime;
+	}
+	public void setEventTime(String eventTime) {
+		this.eventTime = eventTime;
 	}
 	
 }

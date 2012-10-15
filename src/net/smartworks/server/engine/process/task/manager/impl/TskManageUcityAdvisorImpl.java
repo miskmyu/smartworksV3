@@ -52,6 +52,8 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 
 			//InstanceServiceImpl 의 setUcityExtendedProperty 메소드에서 값을 넘긴다
 			String serviceName = obj.getExtendedAttributeValue("ucity_serviceName");
+			String eventId = obj.getExtendedAttributeValue("ucity_eventId");
+			String eventTime = obj.getExtendedAttributeValue("ucity_eventTime");
 			String eventName = obj.getExtendedAttributeValue("ucity_eventName");
 			String type = obj.getExtendedAttributeValue("ucity_type");
 			String externalDisplay = obj.getExtendedAttributeValue("ucity_externalDisplay");
@@ -77,6 +79,8 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 				ucityWorkList.setRunningTaskName(runningTaskName);
 				
 				ucityWorkList.setServiceName(serviceName);
+				ucityWorkList.setEventId(eventId);
+				ucityWorkList.setEventTime(eventTime);
 				ucityWorkList.setEventName(eventName);
 				ucityWorkList.setType(type);
 				ucityWorkList.setExternalDisplay(externalDisplay);
@@ -97,6 +101,10 @@ public class TskManageUcityAdvisorImpl extends AbstractTskManagerAdvisor {
 
 				if (!CommonUtil.isEmpty(serviceName))
 					ucityWorkList.setServiceName(serviceName);
+				if (!CommonUtil.isEmpty(eventId))
+					ucityWorkList.setEventId(eventId);
+				if (!CommonUtil.isEmpty(eventTime))
+					ucityWorkList.setEventTime(eventTime);
 				if (!CommonUtil.isEmpty(eventName))
 					ucityWorkList.setEventName(eventName);
 				if (!CommonUtil.isEmpty(type))

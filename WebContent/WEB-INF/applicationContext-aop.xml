@@ -13,14 +13,14 @@
 	
 	
 	<!-- ucity Advisor -->
-	<beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
+  	<beans:bean id="tskManagerUcityAdvisor" class="net.smartworks.server.engine.process.task.manager.impl.TskManageUcityAdvisorImpl"/>
 	<aop:config>
 		<aop:aspect id="ucityAdvisor" ref="tskManagerUcityAdvisor">
 			<aop:pointcut id="ucityMethod" expression="target(net.smartworks.server.engine.process.task.manager.impl.TskManagerImpl)"/>
 			<aop:around pointcut-ref="ucityMethod" method="invoke"/>
 		</aop:aspect>
-	</aop:config>
-	
+	</aop:config> 
+	 
 	<!-- aop:config>
 		<aop:aspect id="commonAdvice" ref="testCommonAdvice">
 			<aop:pointcut id="publicMethod" expression="execution(public * net.smartworks.server.engine.process..*(..))"/>

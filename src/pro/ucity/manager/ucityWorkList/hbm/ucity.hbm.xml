@@ -12,7 +12,9 @@
 		<property name="runningTaskId" column="runningTaskId" type="string" length="50"/>
 		<property name="runningTaskName" column="runningTaskName" type="string" length="200"/>
 		<property name="serviceName" column="serviceName" type="string" length="200"/>
+		<property name="eventId" column="eventId" type="string" length="50"/>
 		<property name="eventName" column="eventName" type="string" length="200"/>
+		<property name="eventTime" column="eventTime" type="string" length="100"/>
 		<property name="type" column="type" type="string" length="100"/>
 		<property name="externalDisplay" column="externalDisplay" type="string" length="200"/>
 		<property name="isSms" column="isSms" type="string" length="10"/>

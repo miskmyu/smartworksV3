@@ -142,11 +142,11 @@
 					                                <span>
 					                                	<%=member.getId() %>
 					                                </span>
-					                                <span class="bar">|</span>
+					                                <!-- <span class="bar">|</span> -->
 				                                </div>
 				                                <%-- <div><span><%=member.getId() %></span><span class="bar">|</span></div> --%>
-				                                <div style="width:100px"><span>가입일: <br>2012.03.25</span><span class="bar">|</span></div>
-				                                <div style="width:100px"><span>최근 방문일: <br>2012.05.12 18:50</div>
+				                                <!-- <div style="width:100px"><span>가입일: <br>2012.03.25</span><span class="bar">|</span></div>
+				                                <div style="width:100px"><span>최근 방문일: <br>2012.05.12 18:50</div> -->
 				                                <div class="buttonSet">
 				                                	<span class="bar">|</span>
 				                                	<%

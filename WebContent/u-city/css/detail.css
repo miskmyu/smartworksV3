@@ -116,6 +116,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .lft_step {text-align: center; display:inline-block}
 .lft_step div {}
 .lft_step div a {display:block; margin:14px 0; height:74px}
+.lft_step .end a {margin-bottom:0}
 .lft_step .arr {background: url("../images/portal_proces.png") no-repeat -297px -49px transparent; width:30px; height:17px; margin:0; display:inline-block}
 .lft_step .s1 a {background: url("../images/portal_proces.png") no-repeat 0 -63px transparent}
 .lft_step .s2 a {background: url("../images/portal_proces.png") no-repeat 0 -177px transparent}

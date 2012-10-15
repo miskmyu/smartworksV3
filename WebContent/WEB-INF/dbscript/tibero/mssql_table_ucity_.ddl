@@ -7,6 +7,8 @@ CREATE TABLE UcityWorkList (
 	runningTaskId varchar(50),
 	runningTaskName varchar(200),
 	serviceName varchar(200),
+	eventId varchar(50),
+	eventTime varchar(100),
 	eventName varchar(200),
 	type varchar(100),
 	externalDisplay varchar(200),

@@ -3305,16 +3305,28 @@ public class InstanceServiceImpl implements IInstanceService {
 			PrcProcess prc = prcs[0];
 			String processId = prc.getProcessId();
 			
-			//패키지 정보로 프로세스 첫번째 taskdef를 찾는다
-			Property[] extProps = new Property[] {new Property("processId", processId), new Property("startActivity", "true")};
-			TskTaskDefCond taskCond = new TskTaskDefCond();
-			taskCond.setExtendedProperties(extProps);
-			TskTaskDef[] taskDefs = getTskManager().getTaskDefs(userId, taskCond, IManager.LEVEL_ALL);
-			if (CommonUtil.isEmpty(taskDefs))
-				throw new Exception(new StringBuffer("No start activity. -> processId:").append(processId).toString());
-			TskTaskDef taskDef = taskDefs[0];
-			String taskDefId = taskDef.getObjId();
-			
+			TskTaskDef taskDef = null;
+			String taskDefId = null;
+			if (!CommonUtil.isEmpty(formId)) {
+				//formId 로 실행할 태스크를 조회한다
+				TskTaskDefCond tskDefCond = new TskTaskDefCond();
+				tskDefCond.setForm(formId);
+				TskTaskDef[] taskDefs = SwManagerFactory.getInstance().getTskManager().getTaskDefs(userId, tskDefCond, IManager.LEVEL_ALL);
+				if (taskDefs == null || taskDefs.length == 0)
+					throw new Exception("Not Exist Task Definition : formId = " + formId);
+				taskDef = taskDefs[0];
+				taskDefId = taskDef.getObjId();
+			} else {
+				//패키지 정보로 프로세스 첫번째 taskdef를 찾는다
+				Property[] extProps = new Property[] {new Property("processId", processId), new Property("startActivity", "true")};
+				TskTaskDefCond taskCond = new TskTaskDefCond();
+				taskCond.setExtendedProperties(extProps);
+				TskTaskDef[] taskDefs = getTskManager().getTaskDefs(userId, taskCond, IManager.LEVEL_ALL);
+				if (CommonUtil.isEmpty(taskDefs))
+					throw new Exception(new StringBuffer("No start activity. -> processId:").append(processId).toString());
+				taskDef = taskDefs[0];
+				taskDefId = taskDef.getObjId();
+			}
 			//넘어온 frmSamrtForm 정보로 레코드를 생성한다
 			SwfForm form = getSwfManager().getForm(userId, formId);
 			SwfField[] formFields = form.getFields();
@@ -7524,6 +7536,8 @@ public class InstanceServiceImpl implements IInstanceService {
 			return;
 		
 		String serviceName = (String)requestBody.get("serviceName");
+		String eventId = (String)requestBody.get("eventId");
+		String eventTime = (String)requestBody.get("eventTime");
 		String eventName = (String)requestBody.get("eventName");
 		String type = (String)requestBody.get("type");
 		String isSms = (String)requestBody.get("isSms");
@@ -7531,6 +7545,8 @@ public class InstanceServiceImpl implements IInstanceService {
 		String eventPlace = (String)requestBody.get("eventPlace");
 		
 		obj.setExtendedAttributeValue("ucity_serviceName", serviceName);
+		obj.setExtendedAttributeValue("ucity_eventId", eventId);
+		obj.setExtendedAttributeValue("ucity_eventTime", eventTime);
 		obj.setExtendedAttributeValue("ucity_eventName", eventName);
 		obj.setExtendedAttributeValue("ucity_type", type);
 		obj.setExtendedAttributeValue("ucity_isSms", isSms);
@@ -7820,6 +7836,208 @@ public class InstanceServiceImpl implements IInstanceService {
 			getTskManager().setTask(userId, task, IManager.LEVEL_ALL);
 			getPrcManager().setProcessInst(userId, prcInst, IManager.LEVEL_ALL);
 			return taskInstId;
+		} else if (action.equalsIgnoreCase("create")) {
+			//이미 생성된 인스턴스에 새로운 태스크를 생성하여 수행한다 기존에 생성되어 흘러가던 태스크와 별개로
+			//업무태스크가 생서되어 흘러간다
+			
+			//인스턴스를 조회한다
+			String instanceId = (String)requestBody.get("instanceId");
+			String formId = (String)requestBody.get("formId");
+			
+			//인스턴스의 상태를 조회한후 완료된 건이라면 상태를 다시 실행중으로 변경하여 태스크를 진행한다
+			
+			PrcProcessInst prcInst = SwManagerFactory.getInstance().getPrcManager().getProcessInst(userId, instanceId, IManager.LEVEL_ALL);
+			if (prcInst == null)
+				throw new Exception("Not Exist Process Instance : instancId = " + instanceId);
+			
+			if (!prcInst.getStatus().equalsIgnoreCase(PrcProcessInst.PROCESSINSTSTATUS_RUNNING)) {
+				prcInst.setStatus(PrcProcessInst.PROCESSINSTSTATUS_RUNNING);
+			}
+			String processId = prcInst.getProcessId();
+			
+			//formId 로 실행할 태스크를 조회한다
+			TskTaskDefCond tskDefCond = new TskTaskDefCond();
+			tskDefCond.setForm(formId);
+			TskTaskDef[] taskDefs = SwManagerFactory.getInstance().getTskManager().getTaskDefs(userId, tskDefCond, IManager.LEVEL_ALL);
+			if (taskDefs == null || taskDefs.length == 0)
+				throw new Exception("Not Exist Task Definition : formId = " + formId);
+			
+			TskTaskDef taskDef = taskDefs[0];
+			
+			//새로운 태스크를 생성한다
+			String taskDefId = taskDef.getObjId();
+			
+			//넘어온 frmSamrtForm 정보로 레코드를 생성한다
+			SwfForm form = getSwfManager().getForm(userId, formId);
+			SwfField[] formFields = form.getFields();
+			List domainFieldList = new ArrayList();
+			
+			//제목으로 사용할 필드 (필수>단문>첫번째)
+			List requiredFieldIdList = new ArrayList();
+			List textInputFieldIdList = new ArrayList();
+			for (SwfField field: formFields) {
+				//제목으로 사용할 필드 (필수>단문>첫번째)
+				if (field.isRequired() && field.getFormat().getType().equals("textInput"))
+					requiredFieldIdList.add(field.getId());
+				//제목으로 사용할 필드 (필수>단문>첫번째)
+				if (field.getFormat().getType().equals("textInput"))
+					textInputFieldIdList.add(field.getId());
+				SwdField domainField = new SwdField();
+				domainField.setFormFieldId(field.getId());
+				domainField.setFormFieldName(field.getName());
+				domainField.setFormFieldType(field.getSystemType());
+				domainField.setArray(field.isArray());
+				domainField.setSystemField(field.isSystem());
+				domainFieldList.add(domainField);
+			}
+			SwdField[] domainFields = new SwdField[domainFieldList.size()];
+			domainFieldList.toArray(domainFields);
+			
+			SwdRecord recordObj = getSwdRecordByRequestBody(userId, domainFields, requestBody, request);
+			String taskDocument = null;
+			Map<String, List<Map<String, String>>> fileGroupMap = null;
+			if (recordObj != null) {
+				taskDocument = recordObj.toString();
+				fileGroupMap = recordObj.getFileGroupMap();
+			}
+			
+			String title = null;
+			if (!CommonUtil.isEmpty(taskDef.getExtendedPropertyValue("subjectFieldId"))) {
+				title = CommonUtil.toNotNull(recordObj.getDataFieldValue(taskDef.getExtendedPropertyValue("subjectFieldId")));
+			} else {
+				if (requiredFieldIdList.size() != 0) {
+					for (int i = 0; i < requiredFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)requiredFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
+					}
+				} else {
+					for (int i = 0; i < textInputFieldIdList.size(); i++) {
+						String temp = recordObj.getDataFieldValue((String)textInputFieldIdList.get(i));
+						if (!CommonUtil.isEmpty(temp)) {
+							title = temp;
+							break;
+						}
+						
+					}
+				}
+			}
+			
+			//태스크를 생성하여 실행한다
+			TskTask task = new TskTask();
+			task.setType(taskDef.getType());
+			task.setName(taskDef.getName());
+			task.setTitle(CommonUtil.toDefault(title, taskDef.getName() + "(No Title) - " + new LocalDate()));
+			task.setAssignee(userId);
+			task.setAssigner(userId);
+			task.setForm(taskDef.getForm());
+			task.setDef(taskDef.getObjId());
+			task.setIsStartActivity("false");
+			
+			task.setProcessInstId(instanceId);
+
+			Map<String, Object> frmAccessSpaceMap = (Map<String, Object>)requestBody.get("frmAccessSpace");
+			if(!CommonUtil.isEmpty(frmAccessSpaceMap)) {
+				Set<String> keySet = frmAccessSpaceMap.keySet();
+				Iterator<String> itr = keySet.iterator();
+				List<Map<String, String>> users = null;
+				String workSpaceId = null;
+				String workSpaceType = null;
+				String accessLevel = null;
+				String accessValue = null;
+
+				while (itr.hasNext()) {
+					String fieldId = (String)itr.next();
+					Object fieldValue = frmAccessSpaceMap.get(fieldId);
+					if (fieldValue instanceof LinkedHashMap) {
+						Map<String, Object> valueMap = (Map<String, Object>)fieldValue;
+						users = (ArrayList<Map<String,String>>)valueMap.get("users");
+						if(!CommonUtil.isEmpty(users)) {
+							String symbol = ";";
+							if(users.size() == 1) {
+								accessValue = users.get(0).get("id");
+							} else {
+								accessValue = "";
+								for(int i=0; i < users.subList(0, users.size()).size(); i++) {
+									Map<String, String> user = users.get(i);
+									accessValue += user.get("id") + symbol;
+								}
+							}
+						}
+					} else if(fieldValue instanceof String) {
+						if(fieldId.equals("selWorkSpace")) {
+							workSpaceId = (String)fieldValue;
+						} else if(fieldId.equals("selWorkSpaceType")) {
+							workSpaceType = (String)fieldValue;
+						} else if(fieldId.equals("selAccessLevel")) {
+							accessLevel = (String)fieldValue;
+						}
+					}
+				}
+
+				if(String.valueOf(AccessPolicy.LEVEL_CUSTOM).equals(accessLevel) && CommonUtil.isEmpty(accessValue)) {
+					accessValue = ModelConverter.getAccessValue(userId, processId);
+				}
+
+				task.setWorkSpaceId(workSpaceId);
+				task.setWorkSpaceType(workSpaceType);
+				task.setAccessLevel(accessLevel);
+				task.setAccessValue(accessValue);
+				
+				//프로세스업무의 시작 공간 위치가 비공개 그룹이라면 해당 업무는 비공개 그룹원들에게만 공개가 된다
+				populatePrivateGroupAuth(userId, task);
+				
+			}
+			task.setDocument(taskDocument);
+
+			//date to localdate - Date now = new Date();
+			LocalDate now = new LocalDate();
+			task.setExpectStartDate(new LocalDate(now.getTime()));
+			task.setRealStartDate(new LocalDate(now.getTime()));
+			//date to localdate - Date expectEndDate = new Date();
+			LocalDate expectEndDate = new LocalDate();
+			if (taskDef != null &&  !CommonUtil.isEmpty(taskDef.getDueDate())) {
+				//dueDate 는 분단위로 설정이 되어 있다
+				expectEndDate.setTime(new LocalDate(now.getTime() + ((Long.parseLong(taskDef.getDueDate())) * 60 * 1000)).getTime());
+			} else {
+				expectEndDate.setTime(new LocalDate(now.getTime() + 1800000).getTime());
+			}
+			task.setExpectEndDate(expectEndDate);
+			
+			//참조자, 전자결재, 연결업무 정보를 셋팅한다
+			setReferenceApprovalToTask(userId, task, requestBody);
+			
+			//UCITY ucityAdvisor에서 사용할 값을 셋팅한다 
+			setUcityExtendedProperty(requestBody, task);
+
+			//태스크를 실행하며 프로세스업무를 실행한다
+			task = getTskManager().executeTask(userId, task, "execute");
+
+			//자동채번을 위하여 아래를 호출한다
+			populateAutoIndexField(userId, TskTask.TASKTYPE_COMMON, formId, task.getProcessInstId(), recordObj);
+			
+			String taskInstId = task.getObjId();
+
+			if(fileGroupMap.size() > 0) {
+				for(Map.Entry<String, List<Map<String, String>>> entry : fileGroupMap.entrySet()) {
+					String fileGroupId = entry.getKey();
+					List<Map<String, String>> fileGroups = entry.getValue();
+
+					try {
+						for(int i=0; i < fileGroups.subList(0, fileGroups.size()).size(); i++) {
+							Map<String, String> file = fileGroups.get(i);
+							String fileId = file.get("fileId");
+							String fileName = file.get("fileName");
+							String fileSize = file.get("fileSize");
+							getDocManager().insertFiles("Files", taskInstId, fileGroupId, fileId, fileName, fileSize);
+						}
+					} catch (Exception e) {
+						throw new DocFileException("file upload fail...");
+					}
+				}
+			}
 		}
 		return null;
 	}
