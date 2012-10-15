@@ -105,6 +105,36 @@ public class Event {
 		}
 		return "";
 	}
+	public static String[] getAllEventNames(){
+		return new String[]{
+				"강풍",	
+				"호우",
+				"대설",
+				"건조",
+				"폭풍해일",
+				"지진해일",
+				"한파",
+				"태풍",
+				"황사",
+				"폭염",
+				"대기특보(미세먼지)",
+				"대기특보(오존)",
+				"주운",
+				"수질",
+				"환경경보",
+				"돌발상황",
+				"불법주정차(용의차량)상황",
+				"교통사고상황",
+				"뺑소니상황",
+				"차량고장상황",
+				"화재",
+				"방범(용의차량)상황",
+				"비상벨상황",
+				"누수발생",
+				"장애발생",
+				"긴급메세지"
+		};
+	}
 	
 	public static int getProcessByEventId(String eventId){
 		

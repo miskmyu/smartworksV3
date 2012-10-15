@@ -93,4 +93,34 @@ public class UcityController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/situation_manual_env_occurrence.jsp", "situationManualEnvOccurrence.tiles");
 	}
 
+	@RequestMapping("/searchFilter")
+	public ModelAndView searchFilter(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/search_filter.jsp", "");
+	}
+
+	@RequestMapping("/combo_u_status_field")
+	public ModelAndView comboUStatusField(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_status_field.jsp", "");
+	}
+
+	@RequestMapping("/combo_u_service_field")
+	public ModelAndView comboUServiceField(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_service_field.jsp", "");
+	}
+
+	@RequestMapping("/combo_u_event_field")
+	public ModelAndView comboUEventField(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_event_field.jsp", "");
+	}
+
+	@RequestMapping("/combo_u_type_field")
+	public ModelAndView comboUTypeField(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_type_field.jsp", "");
+	}
+
 }
