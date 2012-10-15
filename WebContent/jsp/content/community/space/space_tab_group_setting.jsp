@@ -34,6 +34,7 @@
 
 	WorkSpace workSpace = (WorkSpace)session.getAttribute("workSpace");
 	Group group = (Group)workSpace;
+	UserInfo[] users = null;
 	
 %>
 <script type="text/javascript">
@@ -167,7 +168,7 @@
 										<input name="rdoGroupAutoApproval" type="radio" <%if(!group.isAutoApproval()){ %>checked<%} %> value="false" /><label><fmt:message key="group.label.leader_approval"/></label>
 									</td>
 								</tr>
-								<tr>
+								<%-- <tr>
 									<th><fmt:message key="group.title.invitable_members"/></th>
 									<td>
 										<input name="chkInvitableMembersLeader" type="checkbox" <%if(group.getInvitableMembers().isLeaderChecked()){ %>checked<%} %> /><label><fmt:message key="group.title.leader"/></label>
@@ -179,7 +180,7 @@
 													<div class="icon_fb_space">
 														<div class="fieldline community_names js_community_names sw_required">
 															<%
-															UserInfo[] users = group.getInvitableMembers().getCustoms();
+															users = group.getInvitableMembers().getCustoms();
 															if(!SmartUtil.isBlankObject(users)){
 																for(int i=0; i<users.length; i++){
 																	UserInfo user = users[i];
@@ -200,7 +201,7 @@
 											</span>
 										</div>
 									</td>
-								</tr>
+								</tr> --%>
 								<tr>
 									<th><fmt:message key="group.title.board.write_policy"/></th>
 									<td>
