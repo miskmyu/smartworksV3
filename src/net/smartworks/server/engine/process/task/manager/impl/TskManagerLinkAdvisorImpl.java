@@ -494,7 +494,13 @@ public class TskManagerLinkAdvisorImpl extends AbstractTskManagerAdvisor {
 			
 			apprTask.setWorkSpaceId(approver);
 			apprTask.setWorkSpaceType("4");
-			apprTask.setAccessLevel("3");
+			
+			
+			String accessLevel = obj != null ? obj.getAccessLevel() : preApprTask.getAccessLevel();
+			String accessValue = obj != null ? obj.getAccessValue() : preApprTask.getAccessValue();
+			
+			apprTask.setAccessLevel(accessLevel);
+			apprTask.setAccessValue(accessValue);
 			
 			if (obj != null) {
 				if (CommonUtil.isEmpty(obj.getFromRefId())) {

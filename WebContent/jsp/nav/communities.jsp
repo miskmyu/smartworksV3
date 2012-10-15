@@ -15,7 +15,7 @@
 	<!-- *** js_collapse_parent_siblings : sw_act_nav.js 에서 이클래스의 클릭이벤트를 받아서 -->
 	<!--            아래의 js_callapsible 클래스를 찾아 toggle 한다 -->
 	<li>
-		<a href="" class="js_collapse_parent_siblings arr_on"><fmt:message key="nav.communities.my_communities" /></a>
+		<a href="" class="js_collapse_parent_siblings arr_off"><fmt:message key="nav.communities.my_communities" /></a>
 		<span></span><!--  프로그래스아이콘이 실행되는 곳 -->
 	</li>
 	
@@ -36,7 +36,7 @@
 <!-- 나의 커뮤너티 와 검색박스가 있는 헤더 // -->
 
 <!--  나의부서, 나의 그룹에서 커뮤너티를 찾을수 있는 트리 화면  -->
-<div class='nav_sub_list js_collapsible js_nav_my_com'>
+<div style="display:none" class='nav_sub_list js_collapsible js_nav_my_com'>
 	<!-- 내부 메뉴 -->
 	<div class="tab_buttons js_nav_tab_com">
 	
