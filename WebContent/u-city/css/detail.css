@@ -97,37 +97,52 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .list_reply .approval_stage {float: left; height: 21px; margin-right: 5px; min-width: 60px; line-height:22px}
 .list_reply .det_title .txt_info {display:inline-block; line-height:15px; vertical-align: middle}/* 댓글 나올 시 오른쪽 두줄정보  */
 
-/* 수정이력, 연결업무, 다운로드 이력 */
-.history_list .task_state {min-width: 55px; line-height: 22px; margin: 2px 0 0 0; text-align:center}
-.history_list .number { text-align:right; min-width:20px; padding-right:5px}
-.history_list .noti_pic {float:none}
-.history_list > ul > .sub_instance_list span {float:none; display:inline-block}
-.js_instance_histories {padding:0 20px}
-
-.btns_action {margin:5px 0 5px 62px; font-size:10.5px}
-.btns_action a:link, .btns_action a:visited, .btns_action a:active {color:#52a4e3 !important}
-.btns_action a:hover, .btns_action a:focus {text-decoration: underline}
-.btns_action > .js_add_comment {padding:0 5px 0 0; background: url("../../images/dot_gray.gif") no-repeat scroll 100% 5px transparent}
-
 /* 목록  타이틀 */
-.list_title_space .title, .list_title, .default_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
+.list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
+.list_title_space .title.guide {background: url("../images/icon_guide.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:20px 0 25px}
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #6d6d6d; border-bottom:1px solid #444444}
-.list_contents table .tit_bg .check {width:37px}
-.list_contents table .tit_bg .important {width:17px}
-.list_contents table .tit_bg .read {width:27px}
-.list_contents table .tit_bg .file {width:16px}
-.list_contents table .tit_bg .to, .list_contents table .tit_bg .from {width:135px}
-.list_contents table .tit_bg .date {width:100px}
+
 
 .list_contents table th {text-align:center}
 .list_contents table td {border-bottom: 1px solid #444444; text-align: center}
 .list_contents table td {padding:4px 5px; border-left:none; border-right:none}
 
-/* 새로 만들기 부분 타이틀 */
-.nmake_title_space {background-color:#F7F7F7; padding:5px; overflow:hidden}
-.nmake_title_space .title_stat {background: url("../../images/body_icon.png") no-repeat scroll 0 -331px transparent; height:20px; font-size:14px; font-weight:bold; padding: 0 8px 0 28px; float:left; line-height: 23px}
+/* Working Guide */
+.section_guide { border:1px solid #404850; clear:both; padding:20px; overflow:hidden}
+.section_lft {width:108px; float:left; text-align:center}
+.lft_title {background: url("../images/portal_proces.png") no-repeat 0 0 transparent; width:102px; height:26px; margin: 0 0 24px; display:inline-block}
+.lft_step {text-align: center; display:inline-block}
+.lft_step div {}
+.lft_step div a {display:block; margin:14px 0; height:74px}
+.lft_step .arr {background: url("../images/portal_proces.png") no-repeat -297px -49px transparent; width:30px; height:17px; margin:0; display:inline-block}
+.lft_step .s1 a {background: url("../images/portal_proces.png") no-repeat 0 -63px transparent}
+.lft_step .s2 a {background: url("../images/portal_proces.png") no-repeat 0 -177px transparent}
+.lft_step .s3 a {background: url("../images/portal_proces.png") no-repeat 0 -299px transparent}
+.lft_step .s1.current a {background-position: -146px -49px; height:102px; width:102px}
+.lft_step .s2.current a {background-position: -146px -164px; height:102px; width:102px}
+.lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
+.section_rgt {width:770px; float:right}
+.group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; float:left; width:666px}
+.section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative; top:100px}
+.working_proces { text-align:center}
+.working_proces ul { display:inline-block}
+.working_proces .task {background: url("../images/portal_proces.png") no-repeat -349px 0 transparent; width:107px; height:116px}
+.working_proces li {float:left; position:relative}
+.working_proces .task.current { background-position:-489px 0}
+.working_proces .arr { width:9px; height:17px; background: url("../images/portal_proces.png") no-repeat -468px -49px transparent; margin: 47px 11px}
+.working_proces .task_tx {color: #FFFFFF; display: table-cell; font-weight: bold; width:107px; height: 116px; line-height: 16px; padding: 0 10px; text-align: center; vertical-align: middle}
+.working_proces span {background: url("../images/portal_proces.png") no-repeat -349px -143px transparent; width:25px; height:26px; position: absolute; top:3px; left:3px; display:inline-block}
+.working_proces .n1 {background-position: -351px -143px; left:0}
+.working_proces .n2 {background-position: -350px -189px;}
+.working_proces .n3 {background-position: -350px -234px;}
+.working_proces .n4 {background-position: -350px -280px;}
+.working_proces .n5 {background-position: -350px -325px;}
+.section_guide_tx { margin:40px 0 0 0; line-height:17px}
+.section_guide_tx .title {background: url("../images/portal_proces.png") no-repeat -349px -370px transparent; font-size:14px; padding:0 0 0 20px; font-weight:bold; color:#FFF}
+.section_guide_tx .dep2 { margin:15px 5px}
+.section_guide_tx .dep2 .title {background: url("../images/portal_proces.png") no-repeat -349px -399px transparent; color:#4c6542; font-weight:bold; font-size:12px; padding:0 0 5px 10px}
 		
 /* 프로세스 */
 .process_section { position:relative; float: left; width:100%; color:#454545}
