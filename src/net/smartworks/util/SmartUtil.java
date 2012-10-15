@@ -701,6 +701,7 @@ public class SmartUtil {
 	
 	
 	private synchronized static void initializeFayeClient(){
+		
 		try{
 			HttpClient httpClient = new HttpClient();
 			httpClient.start();

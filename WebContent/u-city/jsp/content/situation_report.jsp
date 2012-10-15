@@ -46,8 +46,7 @@
 		<div class="fl js_work_report_list_box" style="position: relative; top: -4px;">
 			<select name="selMyReportList" class="js_select_work_report" href="work_report_view.sw?workId=<%=workId%>&workType=<%=work.getType()%>">							
 				<option value="<%=Report.REPORT_ID_NONE %>" 
-					<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>
-					<fmt:message key="report.title.no_report" />
+					<%if(SmartUtil.isBlankObject(lastReportId) || lastReportId.equals(Report.REPORT_ID_NONE)){ %> selected <%} %>>통계 항목을 선택하세요
 				</option>
 				<%
 				Report[] defaultReports = null;
@@ -82,9 +81,6 @@
 			</select>
 			
 		</div>			
-		<a href="work_report_edit.sw" class="js_edit_work_report ml5" title="<fmt:message key='report.button.edit_report'/>">
-			<span class="icon_btn_edit"></span>
-		</a>
 	</div>
 		<!-- 우측 영역 //-->
 		   	               

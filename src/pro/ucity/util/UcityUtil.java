@@ -61,7 +61,7 @@ public class UcityUtil {
 //			new FormField("ucity.type", "구분", FIELD_TYPE_COMBO_U_TYPE),
 			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_TEXT),
 			new FormField("externalDisplay", "외부표출", FormField.TYPE_TEXT),
-			new FormField("isSms", "SMS발송", FormField.TYPE_COMBO_BOOLEAN),
+			new FormField("isSms", "SMS발송", FIELD_TYPE_COMBO_U_ISSMS),
 			new FormField("eventTime", "발생일시", FormField.TYPE_DATETIME),
 			new FormField("eventPlace", "발생장소", FormField.TYPE_TEXT)
 		};
@@ -70,6 +70,7 @@ public class UcityUtil {
 	public static final String FIELD_TYPE_COMBO_U_SERVICE = "comboUService";
 	public static final String FIELD_TYPE_COMBO_U_EVENT = "comboUEvent";
 	public static final String FIELD_TYPE_COMBO_U_TYPE = "comboUEvent";
+	public static final String FIELD_TYPE_COMBO_U_ISSMS = "comboUIsSms";
 	public static String getPageNameByField(FormField field) throws Exception{
 		if(SmartUtil.isBlankObject(field)) return "";
 		if(field.getType().equals(FormField.TYPE_COMBO_STATUS))
@@ -80,6 +81,8 @@ public class UcityUtil {
 			return "combo_u_event_field";
 		else if(field.getType().equals(FIELD_TYPE_COMBO_U_TYPE))
 			return "combo_u_type_field";
+		else if(field.getType().equals(FIELD_TYPE_COMBO_U_ISSMS))
+			return "combo_u_issms_field";
 		return field.getPageName();
 	}
 	
