@@ -85,7 +85,7 @@
 			<ul>
 				<li>
 					<!-- 리더 -->
-					<a href="<%=leader.getSpaceController()%>?cid=<%=leader.getSpaceContextId()%>&wid=<%=leader.getId()%>">
+					<a href="<%=leader.getSpaceController()%>?cid=<%=leader.getSpaceContextId()%>&wid=<%=leader.getId()%>" class="js_pop_user_info" userId="<%=leader.getId()%>" longName="<%=leader.getLongName() %>" minPicture="<%=leader.getMinPicture() %>" profile="<%=leader.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(leader.getUserInfo())%>">
 					    <span class="icon_pe"><span class="leader"></span><img class="profile_size_s" src="<%=leader.getMinPicture()%>"></span>
 					    <span class="nav_sub_area"><%=leader.getLongName() %>(<fmt:message key="group.role.leader"/>)</span>
 					</a>
@@ -105,9 +105,9 @@
 						break;
 					}else{
 					%>
-						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>">
+						<a title="<%=member.getLongName() %>" href="<%=member.getSpaceController()%>?cid=<%=member.getSpaceContextId()%>&wid=<%=member.getId()%>" class="js_pop_user_info" userId="<%=member.getId()%>" longName="<%=member.getLongName() %>" minPicture="<%=member.getMinPicture() %>" profile="<%=member.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(member.getUser().getUserInfo())%>">
 							<span class="icon_pe">
-						    	<img class="profile_size_s" title="" src="<%=member.getMinPicture()%>">
+						    	<img class="profile_size_s" src="<%=member.getMinPicture()%>">
 						    </span>
 						</a>
 				<%
@@ -151,7 +151,7 @@
 					%>
 								<li>
 									<span class="dep">
-										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>">
+										<a href="<%=user.getSpaceController()%>?cid=<%=user.getSpaceContextId()%>&wid=<%=user.getId()%>" class="js_pop_user_info" userId="<%=user.getId()%>" longName="<%=user.getLongName() %>" minPicture="<%=user.getMinPicture() %>" profile="<%=user.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(user.getUser().getUserInfo())%>">
 											<span class="<%=iconType%>"></span><img src="<%=user.getMinPicture() %>" class="profile_size_s"><%=user.getLongName()%>
 										</a>
 									</span>

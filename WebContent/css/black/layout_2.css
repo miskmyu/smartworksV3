@@ -1,4 +1,5 @@
 @charset "utf-8";
+/* Page Print용 CSS*/
 
 /* #wrap {height:100%; width:757px; margin:0 auto; color:#454545; text-decoration:none; font-family: '돋움',dotum,Helvetica,sans-serif; font-size:12px}
 #header {text-align:center; margin:0 0 10px 0}
@@ -273,6 +274,15 @@ a.icon_show:hover {background: url("../../images/body_icon.png") no-repeat -42px
 .user_select {background: none repeat scroll 0 0 #E5F3FF; border: 1px solid #97bee2; color: #333333; padding: 1px 6px 0 5px; margin: 0 2px 0 3px;
 -webkit-border-radius:10px; -moz-border-radius:10px; border-radius:10px; font-size:11px}
 .user_select + input[type="text"] {width:160 !importantpx}
+
+/* 댓글 */
+tr.instance_list {}
+tr.instance_list:hover {background-color:#fff7eb; cursor:pointer}
+.det_title {padding:5px 0}
+li.sub_instance_list > .det_title {}
+li.sub_instance_list > .det_title:hover, li.instance_list > .det_title:hover {background-color:#fff7eb; cursor:pointer}
+.pos_works {left:40px; top:1px; position:relative; z-index:20}
+.up_textarea {height:30px; vertical-align:top; border: 1px solid #c7c7c7; margin: 0} /* 라인 포함된 textarea h50 */
 
 /* Text style */
 .t_red, .t_sunday {color:#e54b4b}

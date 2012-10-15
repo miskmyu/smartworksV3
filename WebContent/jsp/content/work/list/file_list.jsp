@@ -86,7 +86,18 @@
 	int displayType = (SmartUtil.isBlankObject(wid)) ? FileCategory.DISPLAY_ALL : FileCategory.DISPLAY_BY_CATEGORY;
 
 	FileCategoryInfo[] categories = smartWorks.getFileCategoriesByType(displayType, wid, "");
-	
+
+	RequestParams params = (RequestParams)request.getAttribute("requestParams");
+	String searchKey = "";
+	if (params == null){
+		String savedWorkId = (String)session.getAttribute("workId");
+		if(!SmartUtil.isBlankObject(savedWorkId) && savedWorkId.equals(SmartWork.ID_FILE_MANAGEMENT)){
+			params = (RequestParams)session.getAttribute("requestParams");
+		}
+	}if (params != null){
+		searchKey = params.getSearchKey();
+	}
+		
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", wid);
 	session.setAttribute("lastLocation", "file_list.sw");
@@ -156,7 +167,7 @@
 						<div class="title_line_options fr">
 							<form name="frmSearchInstance" class="po_left">
 								<div class="srch_wh srch_wsize m0">
-									<input name="txtSearchInstance" class="nav_input" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
+									<input name="txtSearchInstance" class="nav_input" value="<%=CommonUtil.toNotNull(searchKey) %>" onkeydown="if(event.keyCode == 13){ $(this).next().click();return false;}" type="text" placeholder="<fmt:message key='search.search_instance' />">
 									<button title="<fmt:message key='search.search_instance'/>" onclick="selectListParam($('.js_work_list_title').find('.js_progress_span:first'), false);return false;"></button>
 								</div>
 							</form>					

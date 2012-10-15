@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.tmax.tibero.jdbc.TbSQLException;
 
 import pro.ucity.util.UcityUtil;
 import net.smartworks.model.KeyMap;
@@ -33,26 +36,32 @@ public class Adapter {
 	
 	public static final int EVENT_TYPE_OCCURRENCE = 1;
 	public static final int EVENT_TYPE_RELEASE = 2;
-	
-	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	//dev
+//	public static final String FIELD_NAME_COMM_TG_ID = "CMNC_TG_ID";
+	//개발
+	public static final String FIELD_NAME_COMM_TG_ID = "RECV_CMNC_TG_ID";
 	public static final String FIELD_NAME_COMM_CONTENT = "CMNC_TG_CONT";
 	public static final String FIELD_NAME_READ_CONFIRM = "BPM_CNFM_YN";
+	public static final String FIELD_NAME_DVSN_TYPE = "COMM_DVSN_CD";
 	
-	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
-	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where " + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null";
+	public static final String DVSN_RECV_TYPE = "RECV";
+//  public static final String DVSN_SEND_TYPE = "SEND";
+ 	
+	public static final String QUERY_SELECT_FOR_START = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
+	public static final String QUERY_SELECT_FOR_PERFORM = "select * from " + System.TABLE_NAME_ADAPTER_HISTORY + " where (" + FIELD_NAME_READ_CONFIRM + " != 'Y' or " + FIELD_NAME_READ_CONFIRM + " is null) and " + FIELD_NAME_DVSN_TYPE + " = '" + DVSN_RECV_TYPE + "'";
 	public static final String QUERY_UPDATE_FOR_READ_CONFIRM = "update " + System.TABLE_NAME_ADAPTER_HISTORY + " set " + FIELD_NAME_READ_CONFIRM + " = 'Y' where " + FIELD_NAME_COMM_TG_ID + " = ?";
 
 	public static final KeyMap[][] ADAPTER_HISTORY_FIELDS = {
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("특보분류", "env_event_type"), new KeyMap("발생내용", "event_content")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("오염물질수", "pollution_number"), new KeyMap("오염물질구분", "pollution_type"), new KeyMap("오염물질측정치", "pollution_value"), new KeyMap("오염등급", "pollution_level"), new KeyMap("오염물질 예/정보구분", "pollution_example")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("노트링크 시작 ID", "link_start_id"), new KeyMap("노트링크 종료 ID", "link_end_id"), new KeyMap("돌발상황 유형", "outbreak_type"), new KeyMap("돌발상황 코드", "outbreak_code")},
 		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")},
-		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name")}		
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("차량번호", "car_number"), new KeyMap("차량차종", "car_type"), new KeyMap("범죄유형", "crime_code")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("탐지분류", "search_type")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("임계치 값", "threshold_value")},
+		{new KeyMap("이벤트 ID", "event_id"), new KeyMap("상황발생일시", "occured_date"), new KeyMap("상황발생시설물ID", "facility_id"), new KeyMap("발생장소명", "location_name"), new KeyMap("시설물이상구분", "facility_type")}		
 	};
 	
 	private String commHeader;
@@ -66,8 +75,25 @@ public class Adapter {
 	
 	private String eventId;
 	private String occuredDate;
+	private String envEventType;
+	private String eventContent;
 	private String facilityId;
 	private String locationName;
+	private String pollutionNumber;
+	private String pollutionType;
+	private String pollutionValue;
+	private String pollutionLevel;
+	private String pollutionExample;
+	private String carNumber;
+	private String carType;
+	private String crimeCode;
+	private String linkStartId;
+	private String linkEndId;
+	private String outbreakType;
+	private String outbreakCode;
+	private String searchType;
+	private String thresholdValue;
+	private String facilityType;
 	
 	public String getCommHeader() {
 		return commHeader;
@@ -121,7 +147,22 @@ public class Adapter {
 		return occuredDate;
 	}
 	public void setOccuredDate(String occuredDate) {
-		this.occuredDate = occuredDate;
+		if(!SmartUtil.isBlankObject(occuredDate) && occuredDate.length()==12)
+			this.occuredDate = occuredDate.substring(0,4) + "-" + occuredDate.substring(4,2) + "-" + occuredDate.substring(6,2) + " " + occuredDate.substring(8,2) + ":" + occuredDate.substring(10,2);
+		else
+			this.occuredDate = occuredDate;
+	}
+	public String getEnvEventType() {
+		return envEventType;
+	}
+	public void setEnvEventType(String envEventType) {
+		this.envEventType = envEventType;
+	}
+	public String getEventContent() {
+		return eventContent;
+	}
+	public void setEventContent(String eventContent) {
+		this.eventContent = eventContent;
 	}
 	public String getFacilityId() {
 		return facilityId;
@@ -134,8 +175,97 @@ public class Adapter {
 	}
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}	
+	public String getPollutionNumber() {
+		return pollutionNumber;
 	}
-	
+	public void setPollutionNumber(String pollutionNumber) {
+		this.pollutionNumber = pollutionNumber;
+	}
+	public String getPollutionType() {
+		return pollutionType;
+	}
+	public void setPollutionType(String pollutionType) {
+		this.pollutionType = pollutionType;
+	}
+	public String getPollutionValue() {
+		return pollutionValue;
+	}
+	public void setPollutionValue(String pollutionValue) {
+		this.pollutionValue = pollutionValue;
+	}
+	public String getPollutionLevel() {
+		return pollutionLevel;
+	}
+	public void setPollutionLevel(String pollutionLevel) {
+		this.pollutionLevel = pollutionLevel;
+	}
+	public String getPollutionExample() {
+		return pollutionExample;
+	}
+	public void setPollutionExample(String pollutionExample) {
+		this.pollutionExample = pollutionExample;
+	}
+	public String getCarNumber() {
+		return carNumber;
+	}
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
+	}
+	public String getCarType() {
+		return carType;
+	}
+	public void setCarType(String carType) {
+		this.carType = carType;
+	}
+	public String getCrimeCode() {
+		return crimeCode;
+	}
+	public void setCrimeCode(String crimeCode) {
+		this.crimeCode = crimeCode;
+	}
+	public String getLinkStartId() {
+		return linkStartId;
+	}
+	public void setLinkStartId(String linkStartId) {
+		this.linkStartId = linkStartId;
+	}
+	public String getLinkEndId() {
+		return linkEndId;
+	}
+	public void setLinkEndId(String linkEndId) {
+		this.linkEndId = linkEndId;
+	}
+	public String getOutbreakType() {
+		return outbreakType;
+	}
+	public void setOutbreakType(String outbreakType) {
+		this.outbreakType = outbreakType;
+	}
+	public String getOutbreakCode() {
+		return outbreakCode;
+	}
+	public void setOutbreakCode(String outbreakCode) {
+		this.outbreakCode = outbreakCode;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	public String getThresholdValue() {
+		return thresholdValue;
+	}
+	public void setThresholdValue(String thresholdValue) {
+		this.thresholdValue = thresholdValue;
+	}
+	public String getFacilityType() {
+		return facilityType;
+	}
+	public void setFacilityType(String facilityType) {
+		this.facilityType = facilityType;
+	}
 	public Adapter(String commHeader, String commBody){
 		super();
 		this.commHeader = commHeader;
@@ -157,42 +287,8 @@ public class Adapter {
 		this.eventCode = commHeader.substring(Adapter.POS_EVENT_CODE, Adapter.POS_EVENT_CODE+Adapter.LENGTH_EVENT_CODE);
 		String eventType = commHeader.substring(Adapter.POS_EVENT_TYPE, Adapter.POS_EVENT_TYPE+Adapter.LENGTH_EVENT_TYPE);
 		
-		if(	eventCode.equals(Event.ID_ENV_GALE) ||
-			eventCode.equals(Event.ID_ENV_AIRFLOW) ||
-			eventCode.equals(Event.ID_ENV_STORM) ||
-			eventCode.equals(Event.ID_ENV_HEAVY_SNOWFALL) ||
-			eventCode.equals(Event.ID_ENV_DRYING) ||
-			eventCode.equals(Event.ID_ENV_STORM_SURGES) ||
-			eventCode.equals(Event.ID_ENV_TSUNAMI) ||
-			eventCode.equals(Event.ID_ENV_COLD_WAVE) ||
-			eventCode.equals(Event.ID_ENV_TYPHOON) ||
-			eventCode.equals(Event.ID_ENV_ASIAN_DUST) ||
-			eventCode.equals(Event.ID_ENV_HEATWAVE) ||
-			eventCode.equals(Event.ID_ENV_FINE_DUST)){
-			this.process = System.PROCESS_ENV_WEAHTER;
-		}else if(eventCode.equals(Event.ID_ENV_OZONE)){
-			this.process = System.PROCESS_ENV_ATMOSPHERE;
-		}else if(eventCode.equals(Event.ID_ENV_CANAL_WAY) || commHeader.equals(Event.ID_ENV_WATER)){
-			this.process = System.PROCESS_ENV_WATER;
-		}else if(eventCode.equals(Event.ID_TRAFFIC_ILLEGAL_PARKING)){
-			this.process = System.PROCESS_TRAFFIC_ILLEGAL_PARKING;
-		}else if(eventCode.equals(Event.ID_TRAFFIC_INCIDENT) || 
-				commHeader.equals(Event.ID_TRAFFIC_ACCIDENTS) ||
-				commHeader.equals(Event.ID_TRAFFIC_HIT_AND_RUN) ||
-				commHeader.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN)){
-			this.process = System.PROCESS_TRAFFIC_INCIDENT;
-		}else if(eventCode.equals(Event.ID_DISASTER_FIRE)){
-			this.process = System.PROCESS_DISASTER_FIRE;
-		}else if(eventCode.equals(Event.ID_CRIME_EMERGENCY)){
-			this.process = System.PROCESS_CRIME_CCTV;
-		}else if(eventCode.equals(Event.ID_CRIME_VEHICLE)){
-			this.process = System.PROCESS_CRIME_VEHICLES;
-		}else if(eventCode.equals(Event.ID_WATERWORKS_LEAKS)){
-			this.process = System.PROCESS_WATERWORKS_LEAKS;
-		}else if(eventCode.equals(Event.ID_FACILITY_TROUBLE) || commHeader.equals(Event.ID_FACILITY_EMERGENCY)){
-			this.process = System.PROCESS_FACILITY_MANAGEMENT;
-		}
-
+		this.process = Event.getProcessByEventId(this.eventCode);
+		
 		if(eventType.equals(Event.TYPE_OCCURRENCE))
 			this.eventType = EVENT_TYPE_OCCURRENCE;
 		if(eventType.equals(Event.TYPE_RELEASE))
@@ -209,14 +305,19 @@ public class Adapter {
 		case System.PROCESS_ENV_WEAHTER:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
+			this.envEventType = tokens[2];
+			this.eventContent = tokens[3];
 			break;
 		case System.PROCESS_ENV_ATMOSPHERE:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.pollutionNumber = tokens[4];
+			this.pollutionType = tokens[5];
+			this.pollutionValue = tokens[6];
+			this.pollutionLevel = tokens[7];
+			this.pollutionExample = tokens[8];
 			break;
 		case System.PROCESS_ENV_WATER:
 			this.eventId = tokens[0];
@@ -229,12 +330,17 @@ public class Adapter {
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.carNumber = tokens[4];
+			this.carType = tokens[5];
+			this.crimeCode = tokens[6];
 			break;
 		case System.PROCESS_TRAFFIC_INCIDENT:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
-			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
+			this.linkStartId = tokens[2];
+			this.linkEndId = tokens[3];
+			this.outbreakType = tokens[4];
+			this.outbreakCode = tokens[5];
 			break;
 		case System.PROCESS_DISASTER_FIRE:
 			this.eventId = tokens[0];
@@ -247,24 +353,29 @@ public class Adapter {
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.carNumber = tokens[4];
+			this.carType = tokens[5];
+			this.crimeCode = tokens[6];
 			break;
 		case System.PROCESS_CRIME_VEHICLES:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
-			this.locationName = tokens[3];
+			this.searchType = tokens[3];
 			break;
 		case System.PROCESS_WATERWORKS_LEAKS:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.thresholdValue = tokens[4];
 			break;
 		case System.PROCESS_FACILITY_MANAGEMENT:
 			this.eventId = tokens[0];
 			this.occuredDate = tokens[1];
 			this.facilityId = tokens[2];
 			this.locationName = tokens[3];
+			this.facilityType = tokens[4];
 			break;
 		}
 	}
@@ -286,7 +397,10 @@ public class Adapter {
 		if(!this.isValid()) return null;
 		
 		dataRecord.put("serviceName", Service.getServiceNameByCode(this.getServiceCode()));
-		dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
+		if(this.process == System.PROCESS_ENV_WEAHTER)
+			dataRecord.put("eventName", this.envEventType);
+		else
+			dataRecord.put("eventName", Event.getEventNameByCode(this.getEventCode()));
 		dataRecord.put("eventPlace", this.locationName);
 		
 		for(int i=0; i<keyMaps.length; i++){
@@ -295,10 +409,44 @@ public class Adapter {
 				dataRecord.put(keyMap.getId(), this.eventId);
 			else if(keyMap.getKey().equals("occured_date"))
 				dataRecord.put(keyMap.getId(), this.occuredDate);
+			else if(keyMap.getKey().equals("env_event_type"))
+				dataRecord.put(keyMap.getId(), this.envEventType);
+			else if(keyMap.getKey().equals("event_content"))
+				dataRecord.put(keyMap.getId(), this.eventContent);
+			else if(keyMap.getKey().equals("facility_id"))
+				dataRecord.put(keyMap.getId(), this.facilityId);
 			else if(keyMap.getKey().equals("facility_id"))
 				dataRecord.put(keyMap.getId(), this.facilityId);
 			else if(keyMap.getKey().equals("location_name"))
 				dataRecord.put(keyMap.getId(), this.locationName);
+			else if(keyMap.getKey().equals("pollution_number"))
+				dataRecord.put(keyMap.getId(), this.pollutionNumber);
+			else if(keyMap.getKey().equals("pollution_type"))
+				dataRecord.put(keyMap.getId(), this.pollutionType);
+			else if(keyMap.getKey().equals("pollution_value"))
+				dataRecord.put(keyMap.getId(), this.pollutionValue);
+			else if(keyMap.getKey().equals("pollution_level"))
+				dataRecord.put(keyMap.getId(), this.pollutionLevel);
+			else if(keyMap.getKey().equals("pollution_example"))
+				dataRecord.put(keyMap.getId(), this.pollutionExample);
+			else if(keyMap.getKey().equals("car_number"))
+				dataRecord.put(keyMap.getId(), this.carNumber);
+			else if(keyMap.getKey().equals("car_type"))
+				dataRecord.put(keyMap.getId(), this.carType);
+			else if(keyMap.getKey().equals("crime_code"))
+				dataRecord.put(keyMap.getId(), this.crimeCode);
+			else if(keyMap.getKey().equals("link_start_id"))
+				dataRecord.put(keyMap.getId(), this.linkStartId);
+			else if(keyMap.getKey().equals("link_end_id"))
+				dataRecord.put(keyMap.getId(), this.linkEndId);
+			else if(keyMap.getKey().equals("outbreak_type"))
+				dataRecord.put(keyMap.getId(), this.outbreakType);
+			else if(keyMap.getKey().equals("outbreak_code"))
+				dataRecord.put(keyMap.getId(), this.outbreakCode);
+			else if(keyMap.getKey().equals("search_type"))
+				dataRecord.put(keyMap.getId(), this.searchType);
+			else if(keyMap.getKey().equals("threshold_value"))
+				dataRecord.put(keyMap.getId(), this.thresholdValue);
 		}
 		return dataRecord;
 	}
@@ -309,7 +457,16 @@ public class Adapter {
 		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
 		if(processWork==null) return;
 		
-		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.getDataRecord());
+		UcityUtil.startUServiceProcess(System.getProcessId(this.process), this.eventId, this.occuredDate, this.getDataRecord());
+	}
+	
+	public void endProcess() throws Exception{
+		if(this.process<0 || this.process>System.MAX_PROCESS || this.eventType!=EVENT_TYPE_RELEASE) return;
+		
+		ProcessWork processWork = (ProcessWork)SwServiceFactory.getInstance().getWorkService().getWorkById(System.getProcessId(this.process));
+		if(processWork==null) return;
+		
+		UcityUtil.endUServiceProcess(System.getProcessId(this.process), this.eventId, this.getDataRecord());
 	}
 	
 	public void performTask(String taskInstId) throws Exception{
@@ -332,7 +489,7 @@ public class Adapter {
 				this.commHeader = commContent.substring(0, Adapter.LENGTH_COMM_HEADER);
 				this.commBody = commContent.substring(Adapter.LENGTH_COMM_HEADER);
 				this.parseCommHeader(this.commHeader);
-				this.parseCommBody(this.commBody);
+				this.parseCommBody(this.commBody);				
 			}
 		}catch (Exception e){
 			e.printStackTrace();
@@ -347,10 +504,13 @@ public class Adapter {
 	}
 	
 	synchronized public static void readHistoryTableToStart(){
+		java.lang.System.out.println("############ START checking ADAPTER History To Start  ################");
 		try {
 			Class.forName(System.DATABASE_JDBC_DRIVE);
 		} catch (ClassNotFoundException e) {
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
+			return;
 		}
 
 		Connection con = null;
@@ -360,8 +520,14 @@ public class Adapter {
 		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_START;
 		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
 		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			try{
+				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+			}catch (TbSQLException te){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
+				te.printStackTrace();
+				java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+				return;
+			}
 			con.setAutoCommit(false);
 			
 			try{
@@ -371,10 +537,9 @@ public class Adapter {
 				int count = rs.getRow(); 
 				rs.beforeFirst();
 				if (count != 0) {
-					java.lang.System.out.println("############ 이벤트 발생 ################");
+					java.lang.System.out.println("============== ADAPTER 이벤트 발생 ===============");
 					java.lang.System.out.println("이벤트 발생 시간 : " + new Date());
-					java.lang.System.out.println("조회 데이터 수 : " + rs.getRow());
-					java.lang.System.out.println("------------ 데이터 처리 ----------------");					
+					java.lang.System.out.println("이벤트 발생 갯수 : " + count);
 					while(rs.next()) {
 						try{
 							String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
@@ -384,27 +549,42 @@ public class Adapter {
 							Adapter adapter = new Adapter(rs);
 							if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_OCCURRENCE){
 								try{
-									UcityUtil.startUService(rs);
+									adapter.startProcess();	
 									con.commit();
-									java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 발생 이벤트(아이디 : '" + communicationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
+									se.printStackTrace();
+									con.rollback();
+								}
+							}else if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE){
+								try{
+									adapter.endProcess();
+									con.commit();
+									java.lang.System.out.println("[SUCCESS] 새로운 ADAPTER 종료 이벤트(아이디 : '" + communicationId + ")가 정상적으로 처리되었습니다!");
+								}catch (Exception se){
+									java.lang.System.out.println("[ERROR] 새로운 ADAPTER 종료 이벤트를 처리하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
 									con.rollback();
 								}
 							}else{
 								con.rollback();
+								java.lang.System.out.println("[ERROR] 새로운 ADAPTER 이벤트를 시작하는데 오류가 발생하였습니다!");
 							}
 						}catch (Exception we){
+							java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 							we.printStackTrace();
+							java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
+							return;
 						}
 					}
-					java.lang.System.out.println("############ 이벤트 처리 완료 ################");
 				}
 			}catch (Exception e1){
+				java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 				e1.printStackTrace();
 			}
 		} catch (Exception e) {
-			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
+			java.lang.System.out.println("[ERROR] ADAPTER 이벤트 데이터베이스 오류 종료");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -417,79 +597,86 @@ public class Adapter {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			java.lang.System.out.println("############ END checking ADAPTER History To Start  ################");
 		}
 	}
 	
-	public static Map<String,Object> readHistoryTable(String eventId){
-		try {
-			Class.forName(System.DATABASE_JDBC_DRIVE);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		Connection con = null;
-		PreparedStatement selectPstmt = null;
-		PreparedStatement updatePstmt = null;
-				
-		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
-		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
-		try {
-			
-			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
-			con.setAutoCommit(false);
-			
-			try{
-				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs = selectPstmt.executeQuery();				
-				rs.last(); 
-				int count = rs.getRow(); 
-				rs.first();
-				if (count == 1) {
-					try{
-						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
-						updatePstmt = con.prepareStatement(adapterUpdateSql);
-						updatePstmt.setString(1, communicationId);
-						boolean result = updatePstmt.execute();
-						Adapter adapter = new Adapter(rs);
-						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
-							con.commit();
-							java.lang.System.out.println("ID : '" + communicationId + "' UPDATE STATUS COMPLETE!");
-							try {
-								if (selectPstmt != null)
-									selectPstmt.close();
-								if (updatePstmt != null)
-									updatePstmt.close();
-								con.close();
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							return adapter.getDataRecord();
-						}else{
-							con.rollback();
-						}
-					}catch (Exception we){
-						we.printStackTrace();
-					}
-				}
-			}catch (Exception e1){
-				e1.printStackTrace();
-			}
-		} catch (Exception e) {
-			java.lang.System.out.println("UPDATE FAIL!!!!!!!!!!!!!!!!!!!!!!!!");
-			e.printStackTrace();
-		} finally {
-			try {
-				if (selectPstmt != null)
-					selectPstmt.close();
-				if (updatePstmt != null)
-					updatePstmt.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
+//	public static Map<String,Object> readHistoryTable(String eventId){
+//		java.lang.System.out.println("############ START checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		try {
+//			Class.forName(System.DATABASE_JDBC_DRIVE);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		}
+//
+//		Connection con = null;
+//		PreparedStatement selectPstmt = null;
+//		PreparedStatement updatePstmt = null;
+//				
+//		String adapterSelectSql = Adapter.QUERY_SELECT_FOR_PERFORM;
+//		String adapterUpdateSql = Adapter.QUERY_UPDATE_FOR_READ_CONFIRM;
+//		try {
+//			
+//			con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
+//			con.setAutoCommit(false);
+//			
+//			try{
+//				selectPstmt = con.prepareStatement(adapterSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//				ResultSet rs = selectPstmt.executeQuery();				
+//				rs.last(); 
+//				int count = rs.getRow(); 
+//				rs.first();
+//				if (count == 1) {
+//					try{
+//						java.lang.System.out.println("============== ADAPTER 처리 이벤트 발견 ===============");
+//						String communicationId = rs.getString(Adapter.FIELD_NAME_COMM_TG_ID);
+//						updatePstmt = con.prepareStatement(adapterUpdateSql);
+//						updatePstmt.setString(1, communicationId);
+//						boolean result = updatePstmt.execute();
+//						Adapter adapter = new Adapter(rs);
+//						if(adapter.isValid() && adapter.getEventType() == Adapter.EVENT_TYPE_RELEASE && adapter.getEventId().equals(eventId)){
+//							con.commit();
+//							try {
+//								if (selectPstmt != null)
+//									selectPstmt.close();
+//								if (updatePstmt != null)
+//									updatePstmt.close();
+//								con.close();
+//							} catch (SQLException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//							return adapter.getDataRecord();
+//						}else{
+//							con.rollback();
+//						}
+//					}catch (Exception we){
+//						we.printStackTrace();
+//						java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//					}
+//				}
+//			}catch (Exception e1){
+//				e1.printStackTrace();
+//				java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			java.lang.System.out.println("[ERROR ] ADAPTER 처리 이벤트 데이터베이스 오류 종료!");
+//		} finally {
+//			try {
+//				if (selectPstmt != null)
+//					selectPstmt.close();
+//				if (updatePstmt != null)
+//					updatePstmt.close();
+//				con.close();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		java.lang.System.out.println("############ END checking ADAPTER History To Process(Event Id:" + eventId +  ")  ################");
+//		return null;
+//	}
 }

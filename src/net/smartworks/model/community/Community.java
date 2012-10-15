@@ -4,6 +4,7 @@ import net.smartworks.model.BaseObject;
 import net.smartworks.model.community.info.UserInfo;
 import net.smartworks.model.sera.Mentor;
 import net.smartworks.model.sera.SeraUser;
+import net.smartworks.model.work.ProcessWork;
 import net.smartworks.model.work.SmartWork;
 import net.smartworks.server.engine.common.manager.IManager;
 import net.smartworks.server.engine.common.util.CommonUtil;
@@ -11,6 +12,7 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.organization.model.SwoCompany;
 import net.smartworks.server.engine.organization.model.SwoCompanyCond;
 import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.service.ISmartWorks;
 import net.smartworks.util.SmartConfUtil;
 import net.smartworks.util.SmartUtil;
@@ -167,10 +169,23 @@ public class Community extends BaseObject {
 	}
 
 	public boolean amIMember(){
-		if(SmartUtil.isBlankObject(getMembers())) return false;
-		for(UserInfo member : getMembers()){
-			if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
-				return true;			
+		if(this.getClass().equals(Department.class)){
+			try{
+				UserInfo[] users = (UserInfo[])SwServiceFactory.getInstance().getCommunityService().getAllUsersByDepartmentId(this.getId());
+				if(SmartUtil.isBlankObject(users)) return false;
+				for(UserInfo member : users){
+					if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+						return true;			
+				}				
+			}catch (Exception e){
+				return false;
+			}
+		}else{
+			if(SmartUtil.isBlankObject(getMembers())) return false;
+			for(UserInfo member : getMembers()){
+				if(member.getId().equals(SmartUtil.getCurrentUser().getId()))
+					return true;			
+			}
 		}
 		return false;
 	}

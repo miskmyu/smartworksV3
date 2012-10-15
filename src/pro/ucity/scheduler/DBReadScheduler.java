@@ -8,11 +8,6 @@
 
 package pro.ucity.scheduler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 
 import org.quartz.JobExecutionContext;
@@ -43,7 +38,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 		if(schedulerCount==1){
 			try{
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 시작 : " + new Date());
-				UcityUtil.resumePollingForRunningTasks(null);
+//				UcityUtil.resumePollingForRunningTasks(null);
 				System.out.println( schedulerCount + "진행중인 태스크 재시동 종료 : " + new Date());
 			}catch (Exception e){
 				e.printStackTrace();
@@ -51,7 +46,7 @@ public class DBReadScheduler extends QuartzJobBean  {
 		}
 		System.out.println( schedulerCount + "번째 스케쥴러 동작 시작 : " + new Date());
 		Adapter.readHistoryTableToStart();
-//		OPSituation.readHistoryTableToStart();
+		OPSituation.readHistoryTableToStart();
 		System.out.println( schedulerCount +"번째 스케쥴러 동작 종료 : " + new Date());
 		isDbReadSchedulerRunning = false;		
 	}

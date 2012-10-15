@@ -122,9 +122,10 @@
 	// 사용자인 경우....
 	} else if (thisUser != null) {
 		String target = thisUser.getSpaceController() + "?cid=" + thisUser.getSpaceContextId() + "&wid=" + thisUser.getId(); 
+		String userDetailInfo = SmartUtil.getUserDetailInfo(thisUser.getUserInfo());
 	%>
 		<li>
-			<a href="<%=target %>"><img class="profile_size_66" src="<%=thisUser.getOrgPicture()%>"></a>
+			<a href="<%=target %>" class="js_pop_user_info" userId="<%=thisUser.getId()%>" longName="<%=thisUser.getLongName() %>" minPicture="<%=thisUser.getMinPicture() %>" profile="<%=thisUser.getOrgPicture()%>" userDetail="<%=userDetailInfo%>"><img class="profile_size_66" src="<%=thisUser.getOrgPicture()%>"></a>
 		</li>
 		<li class="info m0">
 			<div><%=thisUser.getPosition()%></div>

@@ -218,7 +218,7 @@ $(function() {
 		
 	});
 
-	$('a.js_pop_user_info').live('mouseleave', function(e){
+	$('.js_pop_user_info').live('mouseleave', function(e){
 		if(onUserInfoTimer!=null){
 			clearTimeout(onUserInfoTimer);
 			onUserInfoTimer = null;

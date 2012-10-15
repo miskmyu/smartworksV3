@@ -12,7 +12,9 @@
 	String cid = request.getParameter("cid");
 	String departmentId = SmartUtil.getSpaceIdFromContentContext(cid);
 	Department department = smartWorks.getDepartmentById(departmentId);
-
+	
+	boolean amIMember = department.amIMember();
+	
 	session.setAttribute("cid", cid);
 	session.setAttribute("wid", departmentId);
 	session.setAttribute("workSpace", department);
@@ -26,7 +28,9 @@
 
 	<jsp:include page="/jsp/content/community/space/space_title.jsp"></jsp:include>
 	
-	<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
+	<%if(amIMember){ %>
+		<jsp:include page="/jsp/content/upload/select_upload_action.jsp"></jsp:include>
+	<%} %>
 	
 	<div class="js_space_instance_list">
 		<jsp:include page="/jsp/content/community/space/space_tab_timeline.jsp"></jsp:include>

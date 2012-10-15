@@ -17,34 +17,20 @@ import net.smartworks.model.instance.TaskInstance;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.util.SmartUtil;
 
-public class CMHistory {
+public class DMHistory {
 
-	//DEV
-//	public static final String FIELD_NAME_COMMID_EVENT_ID = "EVET_OUTB_ID";
-//	public static final String FIELD_NAME_COMMID_MSG_TYPE = "MSG_KND_GUBN";
-//	
-	//개발
-	public static final String FIELD_NAME_COMMID_EVENT_ID = "b.U_SVC_EVENT_ID";
-	public static final String FIELD_NAME_COMMID_OUTB_ID = "a.EVET_OUTB_ID";
-	public static final String FIELD_NAME_COMMID_EOUTB_ID = "b.EVENT_OUTB_ID";
-	public static final String FIELD_NAME_COMMID_MSG_TYPE = "SR_FLAG";
+	public static final String DEVICE_ID_MEDIABOARD		= "";
+	public static final String DEVICE_ID_TRAFFIC_BIT	= "";
+	public static final String DEVICE_ID_TRAFFIC_VMS	= "";
+	public static final String DEVICE_ID_KIOSK			= "";
+	public static final String DEVICE_ID_ENV_VMS		= "";
 	
-	//DEV
-//	public static final String MSG_TYPE_OCCURRENCE = "O";
-//	public static final String MSG_TYPE_RELEASE = "R";
-	//개발
-	public static final String MSG_TYPE_OCCURRENCE = "S";
-	public static final String MSG_TYPE_RELEASE = "R";
+	public static final String FLAG_STOP_DISPLAY 	= "Y";
 	
-	//DEV
-//	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-//	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select * from " + System.TABLE_NAME_COMMID_TRACE + " where " + FIELD_NAME_COMMID_EVENT_ID + " = ? and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
-	public static final String QUERY_SELECT_FOR_OCCURRENCE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
-	public static final String QUERY_SELECT_FOR_RELEASE_PERFORM = "select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
+	public static final String QUERY_SELECT_FOR_DISPLAY_PERFORM = "";//"select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_OCCURRENCE + "'";
+	public static final String QUERY_SELECT_FOR_STOP_PERFORM = "";//"select a.* from " + System.TABLE_NAME_COMMID_TRACE + " a, " + System.TABLE_NAME_COMMID_JOIN + " b where " + FIELD_NAME_COMMID_EVENT_ID +" = ? and " + FIELD_NAME_COMMID_OUTB_ID + " = " + FIELD_NAME_COMMID_EOUTB_ID + " and " + FIELD_NAME_COMMID_MSG_TYPE + " = '" + MSG_TYPE_RELEASE + "'";
 		
-	  
-
-	public static final KeyMap[] COMMID_TRACE_FIELDS = {
+	public static final KeyMap[] DEVMID_TRACE_FIELDS = {
 		new KeyMap("트랜잭션 아이디", "TRST_ID"), new KeyMap("송수신 구분", "SR_FLAG"), new KeyMap("메시지 아이디", "MSG_ID"), new KeyMap("시스템 코드", "SYS_CD"),
 		new KeyMap("데이터 타입", "DATA_TYP"), new KeyMap("발생 일시", "OUTB_DTM"), new KeyMap("성공여부", "SCSS_YN"), new KeyMap("에러 코드", "ERR_CD"),
 		new KeyMap("요청 응답 키", "RR_KEY"), new KeyMap("수신 프로토콜 타입", "R_PRTCL_TYP"), new KeyMap("수신 MEP 타입", "R_MEP"), new KeyMap("메시지 원본","MSG_ORIG"), new KeyMap("메시지 종류 구분", "MSG_KND_GUBN"),
@@ -179,7 +165,7 @@ public class CMHistory {
 	public void setEvetOutbId(String evetOutbId) {
 		this.evetOutbId = evetOutbId;
 	}
-	public CMHistory(ResultSet resultSet){
+	public DMHistory(ResultSet resultSet){
 		super();
 		if(SmartUtil.isBlankObject(resultSet)) return;
 		this.setResult(resultSet);
@@ -188,7 +174,7 @@ public class CMHistory {
 	public Map<String, Object> getDataRecord(){
 		
 		Map<String, Object> dataRecord = new HashMap<String, Object>();
-		KeyMap[] keyMaps = CMHistory.COMMID_TRACE_FIELDS;
+		KeyMap[] keyMaps = DMHistory.DEVMID_TRACE_FIELDS;
 		
 		if(!this.isValid()) return null;
 		
@@ -310,7 +296,7 @@ public class CMHistory {
 		return false;
 	}
 
-	public static Map<String,Object> readHistoryTable(String eventId, String status){
+	public static Map<String,Object> readHistoryTable(String eventId, String status, String deviceId){
 		
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(status)) return null;
 		try {
@@ -322,7 +308,7 @@ public class CMHistory {
 		Connection con = null;
 		PreparedStatement selectPstmt = null;
 				
-		String cmHistorySelectSql = (status.equals(MSG_TYPE_OCCURRENCE)) ? CMHistory.QUERY_SELECT_FOR_OCCURRENCE_PERFORM : CMHistory.QUERY_SELECT_FOR_RELEASE_PERFORM;
+		String cmHistorySelectSql = (status.equals(FLAG_STOP_DISPLAY)) ? DMHistory.QUERY_SELECT_FOR_STOP_PERFORM : DMHistory.QUERY_SELECT_FOR_DISPLAY_PERFORM;
 		try {
 			try{
 				con = DriverManager.getConnection(System.DATABASE_CONNECTION, System.DATABASE_USERNAME, System.DATABASE_PASSWORD);
@@ -340,7 +326,7 @@ public class CMHistory {
 				rs.first();
 				if (count == 1) {
 					try{
-						CMHistory cmHistory = new CMHistory(rs);
+						DMHistory cmHistory = new DMHistory(rs);
 						if(cmHistory.isValid()){
 							try {
 								if (selectPstmt != null)
