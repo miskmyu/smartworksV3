@@ -53,6 +53,20 @@ public class UcityUtil {
 		super();
 	}
 	
+	public static FormField[] getSituationListFields() throws Exception{
+		return new FormField[] { 
+			FormField.FIELD_STATUS, 
+			FormField.FIELD_LAST_TASK,
+			new FormField("ucity.serviceName", "U-서비스명", FormField.TYPE_TEXT),
+			new FormField("ucity.eventName", "이벤트명", FormField.TYPE_TEXT),
+			new FormField("ucity.type", "구분", FormField.TYPE_TEXT),
+			new FormField("ucity.externalDisplay", "외부표출", FormField.TYPE_TEXT),
+			new FormField("ucity.isSms", "SMS발송", FormField.TYPE_TEXT),
+			new FormField("ucity.serviceTime", "발생일시", FormField.TYPE_DATETIME),
+			new FormField("ucity.servicePlace", "발생장소", FormField.TYPE_TEXT)
+		};
+	}
+	
 	public static void endUService(ResultSet resultSet) throws Exception{
 		if(SmartUtil.isBlankObject(resultSet)){
 			throw new Exception("Invalid parameters exception !!!");

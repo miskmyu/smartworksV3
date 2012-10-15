@@ -1180,6 +1180,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									mailContent = cleaner.getCompactXmlAsString();
 									mailContent = HTMLMessageParser.prepareInlineHTMLContent(email, mailContent);
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
+									i = j;
 									continue;
 								}else if(mime.equals(MailAttachment.MIME_TYPE_TEXT_PLAIN)){
 									mailContent = "";
@@ -1192,6 +1193,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 									cleaner.clean(true,false);
 									mailContent = cleaner.getXmlAsString();
 									mailContent = org.claros.commons.utility.Utility.updateTRChars(mailContent);
+									i = j;
 									continue;
 								}
 							}	
@@ -1202,6 +1204,11 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
 								attachments[count].setPart(tmp);
 								count++;
+							}else{
+//								attachments[count] = new MailAttachment(Integer.toString(j), fileName, mime, tmp.getSize());
+//								attachments[count].setFileType(SmartUtil.getFileExtension(fileName));
+//								attachments[count].setPart(tmp);
+//								count++;								
 							}
 						}
 					}
