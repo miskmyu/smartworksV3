@@ -56,12 +56,12 @@ public class UcityUtil {
 	public static FormField[] getSituationListFields() throws Exception{
 		return new FormField[] { 
 			FormField.FIELD_STATUS, 
-			FormField.FIELD_LAST_TASK,
-			new FormField("ucity.serviceName", "U-서비스명", FormField.TYPE_TEXT),
-			new FormField("ucity.eventName", "이벤트명", FormField.TYPE_TEXT),
-			new FormField("ucity.type", "구분", FormField.TYPE_TEXT),
-			new FormField("ucity.externalDisplay", "외부표출", FormField.TYPE_TEXT),
-			new FormField("ucity.isSms", "SMS발송", FormField.TYPE_TEXT),
+			new FormField("ucity.serviceName", "U-서비스명", FormField.TYPE_COMBO),
+			new FormField("ucity.eventName", "이벤트명", FormField.TYPE_COMBO),
+			new FormField("ucity.type", "구분", FormField.TYPE_COMBO),
+			new FormField(FormField.ID_LAST_TASK, "진행단계", FormField.TYPE_COMBO),
+			new FormField("ucity.externalDisplay", "외부표출", FormField.TYPE_COMBO),
+			new FormField("ucity.isSms", "SMS발송", FormField.TYPE_COMBO),
 			new FormField("ucity.serviceTime", "발생일시", FormField.TYPE_DATETIME),
 			new FormField("ucity.servicePlace", "발생장소", FormField.TYPE_TEXT)
 		};
