@@ -144,6 +144,10 @@
 						%> 
 							<jsp:include page="/u-city/jsp/content/combo_u_type_field.jsp"></jsp:include>
 						<%
+						} else if (fieldType.equals(UcityUtil.FIELD_TYPE_COMBO_U_ISSMS)) {
+						%> 
+							<jsp:include page="/u-city/jsp/content/combo_u_issms_field.jsp"></jsp:include>
+						<%
 						} else {
 						%> 
 							<jsp:include page="/jsp/content/work/field/string_field.jsp"></jsp:include>

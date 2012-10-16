@@ -123,4 +123,10 @@ public class UcityController extends ExceptionInterceptor {
 		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_type_field.jsp", "");
 	}
 
+	@RequestMapping("/combo_u_issms_field")
+	public ModelAndView comboUIsSmsField(HttpServletRequest request, HttpServletResponse response) {
+
+		return SmartUtil.returnMnvSera(request, "u-city/jsp/content/combo_u_issms_field.jsp", "");
+	}
+
 }
