@@ -193,6 +193,24 @@
 						</tbody>
 					</table>
 				</div>
+				<!-- 메시징서비스 설정 -->
+				<div class="default_title_space pt20"><div class="title"><fmt:message key="settings.title.company.messaging_setting"/></div></div>
+				
+				<div class="boTb">
+					<table>
+						<colgroup>
+							<col width="25%" />
+							<col width="75%" />
+						</colgroup>
+						<tbody>
+							<tr class="end">
+								<th><fmt:message key="settings.title.company.use_messaging"/></th>
+								<td><input name="chkUseMessagingService" type="checkbox" <% if(companyGeneral.isUseMessagingService() == true){%>checked<%} %> /></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 로그인화면 이미지 설정 -->
 
 				<div>
 					<!-- 실행시 데이터 유효성 검사이상시 에러메시지를 표시할 공간 -->

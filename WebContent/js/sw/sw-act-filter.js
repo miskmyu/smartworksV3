@@ -124,8 +124,15 @@ $(function() {
 	});
 	
 	$('a.js_search_filter_close').live('click', function(e) {
+		var input = $(targetElement(e));
 		$('#search_filter').slideUp(500).html('');
 		$('a.js_edit_search_filter').show();
+		var progressSpan = $('.js_edit_search_filter').next('span.js_progress_span:first');
+		if(isEmpty(input.parents('.js_pop_instance_list_page'))){
+			selectListParam(progressSpan, false);
+		}else{
+			popSelectListParam(progressSpan, false);
+		}		
 		return false;
 	});
 

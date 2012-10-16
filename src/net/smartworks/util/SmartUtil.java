@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.smartworks.model.community.User;
 import net.smartworks.model.community.info.UserInfo;
+import net.smartworks.model.company.CompanyGeneral;
 import net.smartworks.model.mail.MailAccount;
 import net.smartworks.model.notice.Notice;
 import net.smartworks.model.work.SmartWork;
@@ -34,6 +35,7 @@ import net.smartworks.server.engine.factory.SwManagerFactory;
 import net.smartworks.server.engine.publishnotice.model.PublishNotice;
 import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
 import net.smartworks.server.engine.security.model.Login;
+import net.smartworks.server.service.ISettingsService;
 import net.smartworks.server.service.factory.SwServiceFactory;
 import net.smartworks.server.service.util.ModelConverter;
 import net.smartworks.service.ISmartWorks;
@@ -701,7 +703,14 @@ public class SmartUtil {
 	
 	
 	private synchronized static void initializeFayeClient(){
+
 		try{
+			ISettingsService settingsService = SwServiceFactory.getInstance().getSettingsService();
+			if(settingsService!=null){
+				CompanyGeneral companyGeneral = settingsService.getCompanyGeneral();
+				if(!companyGeneral.isUseMessagingService()) return;				
+			}
+			
 			HttpClient httpClient = new HttpClient();
 			httpClient.start();
 			Map<String, Object> options = new HashMap<String, Object>();
@@ -720,43 +729,45 @@ public class SmartUtil {
 		if(fayeClient == null){
 			SmartUtil.initializeFayeClient();
 		}
-			
-		if(messageAgent == null) {
-			messageAgent = new Thread(new Runnable() {
-				public void run() {
-					try{
-						MessageModel message = null;
 
-						while(true) {
-							try {
-								message = null;								
-								while(message == null) {
-									try {
-										message = messageQueue.remove(0);
-									} catch(Exception e) {
-										Thread.sleep(1000);
+		if(fayeClient != null){
+			if(messageAgent == null) {
+				messageAgent = new Thread(new Runnable() {
+					public void run() {
+						try{
+							MessageModel message = null;
+	
+							while(true) {
+								try {
+									message = null;								
+									while(message == null) {
+										try {
+											message = messageQueue.remove(0);
+										} catch(Exception e) {
+											Thread.sleep(1000);
+										}
 									}
+									
+									Map<String, Object> data = new HashMap<String, Object>();
+									data.put("msgType", message.msgType);
+									data.put("sender", "smartServer");
+									data.put("body", message.message);
+									fayeClient.getChannel(message.channel).publish(data);
+								} catch(Exception e){
+									
+									//e.printStackTrace();
 								}
-								
-								Map<String, Object> data = new HashMap<String, Object>();
-								data.put("msgType", message.msgType);
-								data.put("sender", "smartServer");
-								data.put("body", message.message);
-								fayeClient.getChannel(message.channel).publish(data);
-							} catch(Exception e){
-								
-								//e.printStackTrace();
 							}
+						}catch(Exception e){
+							//e.printStackTrace();
 						}
-					}catch(Exception e){
-						//e.printStackTrace();
 					}
-				}
-			});
-			messageAgent.start();
+				});
+				messageAgent.start();
+			}
+	
+			messageQueue.add(new MessageModel(channel, msgType, message));
 		}
-
-		messageQueue.add(new MessageModel(channel, msgType, message));
 	}
 }
 

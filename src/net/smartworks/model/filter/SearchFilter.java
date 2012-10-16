@@ -55,7 +55,7 @@ public class SearchFilter extends BaseObject{
 	}
 	public static SearchFilter getMyInstancesFilter(User currentUser){
 		return new SearchFilter(FILTER_MY_INSTANCES, FILTER_MY_INSTANCES, new Condition[] {
-						new Condition(FormField.FIELD_OWNER, ConditionOperator.EQUAL.getId(), currentUser )
+						new Condition(FormField.FIELD_LAST_MODIFIER, ConditionOperator.EQUAL.getId(), currentUser )
 					});
 	}
 
@@ -66,13 +66,13 @@ public class SearchFilter extends BaseObject{
 	}
 	public static SearchFilter getMyRecentInstancesFilter(User currentUser){
 		return new SearchFilter(FILTER_MY_RECENT_INSTANCES, FILTER_MY_RECENT_INSTANCES, new Condition[] {
-					new Condition(FormField.FIELD_OWNER, ConditionOperator.EQUAL.getId(), currentUser ),
+					new Condition(FormField.FIELD_LAST_MODIFIER, ConditionOperator.EQUAL.getId(), currentUser ),
 					new Condition(FormField.FIELD_LAST_MODIFIED_DATE, ConditionOperator.RECENT_DAYS.getId(), null)
 				});
 	}
 	public static SearchFilter getMyRunningInstancesFilter(User currentUser){
 		return new SearchFilter(FILTER_MY_RUNNING_INSTANCES, FILTER_MY_RUNNING_INSTANCES, new Condition[] {
-					new Condition(FormField.FIELD_OWNER, ConditionOperator.EQUAL.getId(), currentUser ),
+					new Condition(FormField.FIELD_LAST_MODIFIER, ConditionOperator.EQUAL.getId(), currentUser ),
 					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_NOT_YET ),
 					new Condition(FormField.FIELD_STATUS, ConditionOperator.NOT_EQUAL.getId(), WorkInstance.STATUS_COMPLETED )
 				});

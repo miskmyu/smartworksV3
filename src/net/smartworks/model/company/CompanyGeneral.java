@@ -28,7 +28,14 @@ public class CompanyGeneral extends BaseObject {
 	private String sendMailPassword;
 	private boolean sendMailNotification;
 	private boolean testAfterSaving;
+	private boolean useMessagingService=true;
 	
+	public boolean isUseMessagingService() {
+		return useMessagingService;
+	}
+	public void setUseMessagingService(boolean useMessagingService) {
+		this.useMessagingService = useMessagingService;
+	}
 	public String getLogoName() {
 		return logoName;
 	}
