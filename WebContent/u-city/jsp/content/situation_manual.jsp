@@ -1,3 +1,6 @@
+<%@page import="pro.ucity.model.OPSituation"%>
+<%@page import="pro.ucity.model.System"%>
+<%@page import="pro.ucity.model.Event"%>
 <%@page import="net.smartworks.server.engine.common.util.CommonUtil"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.LocalDate"%>
@@ -25,13 +28,24 @@
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User cUser = SmartUtil.getCurrentUser();
 
-	ProcessWork work = (ProcessWork)session.getAttribute("smartWork");
-// 	String workId = work.getId();
-	String workId = "pkg_9564849550184543b06fa46e3290f296";
- 	SmartDiagram diagram = work.getDiagram();
+	String userviceCode = request.getParameter("userviceCode");
+	String serviceCode = request.getParameter("serviceCode");
+	String eventCode = request.getParameter("eventCode");
+	String situationStatus = OPSituation.STATUS_SITUATION_RELEASE;//request.getParameter("situationStatus");
+	
+	String eventId = Event.ID_ENV_GALE;//Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
+
+	String workId = System.getProcessIdByProcessStatus(Event.getProcessByEventId(eventId), situationStatus);
+	ProcessWork work = (ProcessWork)smartWorks.getWorkById(workId);
+
+	SmartDiagram diagram = null;
 	SmartTaskInfo[] tasks = null;
-	if (diagram != null)
-		tasks = diagram.getTasks();
+	if(!SmartUtil.isBlankObject(work)){
+		diagram = work.getDiagram();
+		if (diagram != null)
+			tasks = diagram.getTasks();
+	}
+	
 %>
 <script type="text/javascript">
 
@@ -96,12 +110,102 @@ function submitForms() {
 <!-- 업무 설명 보기 -->
 <div class="contents_space js_pwork_manual_page js_sub_instance_list js_space_sub_instance" workId="<%=work.getId()%>" workType="<%=work.getType()%>">
 
+	<!-- 타이틀-->
+	<div class="list_title_space mt20">
+		<div class="title guide"><%=CommonUtil.toNotNull(Event.getEventNameByCode(eventId)) %> 운영 가이드</div>
+	</div>
+	<!-- 타이틀//-->
+
+	<!-- 컨텐츠 -->
+	<div class="section_guide">
+
+		<!-- Left Section -->
+		<div class="section_lft">
+			<div class="lft_title"></div>
+			<div class="lft_step">
+				<div class="s1 <%if(OPSituation.STATUS_SITUATION_OCCURRED.equals(situationStatus)){ %>current<%}%>">
+					<a href=""> </a>
+				</div>
+				<div class="arr"></div>
+				<div class="s2 <%if(OPSituation.STATUS_SITUATION_PROCESSING.equals(situationStatus)){ %>current<%}%>">
+					<a href=""> </a>
+				</div>
+				<div class="arr"></div>
+				<div class="s3 <%if(OPSituation.STATUS_SITUATION_RELEASE.equals(situationStatus)){ %>current<%}%> end">
+					<a href=""> </a>
+				</div>
+			</div>
+		</div>
+		<!-- Left Section //-->
+
+		<!-- Right Section -->
+		<div class="section_rgt">
+			<div class="point"></div>
+			<div class="group_rgt js_manual_tasks_holder" style="overflow:hidden">
+				<div class="working_proces js_manual_tasks">
+					<ul>
+						<!-- 태스크 //-->
+						<%
+						if (tasks != null) {
+							int count = 0;
+							for (SmartTaskInfo task : tasks) {
+								count++;
+								UserInfo assignedUser = task.getAssignedUser();
+								String assignedUserImg = (SmartUtil.isBlankObject(assignedUser)) ? User.getNoUserPicture() : assignedUser.getMinPicture();
+								String assigningPosition = (SmartUtil.isBlankObject(assignedUser)) ? "" : assignedUser.getPosition();
+								String assigningName = (SmartUtil.isBlankObject(assignedUser)) ? task.getAssigningName() : assignedUser.getName();
+						%>
+								<li class="task js_manual_task js_select_task_manual" taskId="<%=task.getId()%>">
+									<a class="js_select_task_manual" href=""> 
+										<span class="<%=("n" + count)%>"> </span>
+										<div class="task_tx"><%=task.getName()%></div>
+									</a>
+								</li>
+								<%if(count!=tasks.length){ %>
+									<li class="arr"></li>
+								<%} %>
+						<%
+								}
+							}
+						%>
+						<!-- 태스크 -->
+					</ul>
+				</div>
+				<div class="section_guide_tx">
+					<div class="title">상급자 보고</div>
+					<div class="dep2">
+						<div class="title">상급자 보고가 필요한 경우</div>
+						<div class="ml10">기상특보에서 이벤트 등급이 B등급 이상일 경우, 혹은 예고없이 찾아온 기상
+							상황이 발생할때 상급자에게 보고하시면 됩니다.</div>
+					</div>
+
+					<div class="dep2">
+						<div class="title">상급자 정보 열람 및 선택방법</div>
+						<div class="ml10">
+							① 상급자 정보를 열람 및 선택하시기 위한 방법을 순차적으로 설명합니다.<br /> ② 상급자 정보를 열람 및
+							선택하시기 위한 방법을 순차적으로 설명합니다.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Right Section //-->
+
+	</div>
+	<!-- 컨텐츠 //-->
+<%-- 
 	<!-- 보더 -->
 	<div class="border">
 
 		<form name="frmPWorkManual">	
 			<!-- 업무 정의 -->
-			<div class="js_work_desc_view mb10"><%if(!SmartUtil.isBlankObject(work.getDesc())) {%><%=work.getDesc()%><%}else{ %><fmt:message key="common.message.no_work_desc" /><%} %></div>
+			<div class="js_work_desc_view mb10"><%
+				if (!SmartUtil.isBlankObject(work.getDesc())) {
+			%><%=work.getDesc()%><%
+				} else {
+			%><fmt:message key="common.message.no_work_desc" /><%
+				}
+			%></div>
 			<div class="js_work_desc_edit mb10" style="display:none">
 				<div><fmt:message key="builder.title.work_desc"/> : </div>
 				<textarea name="txtaWorkDesc" class="fieldline" rows="4" style="width:99%"><%=CommonUtil.toNotNull(work.getDesc())%></textarea>
@@ -130,31 +234,31 @@ function submitForms() {
 								</li>
 								<!-- 태스크 //-->
 								<%
-								if (tasks != null) {
-									int count = 0;
-									for (SmartTaskInfo task : tasks) {
-										count++;
-										UserInfo assignedUser = task.getAssignedUser();
-										String assignedUserImg = (SmartUtil.isBlankObject(assignedUser)) ? User.getNoUserPicture() : assignedUser.getMinPicture();
-										String assigningPosition = (SmartUtil.isBlankObject(assignedUser)) ? "" : assignedUser.getPosition();
-										String assigningName = (SmartUtil.isBlankObject(assignedUser)) ? task.getAssigningName() : assignedUser.getName();
+									if (tasks != null) {
+										int count = 0;
+										for (SmartTaskInfo task : tasks) {
+											count++;
+											UserInfo assignedUser = task.getAssignedUser();
+											String assignedUserImg = (SmartUtil.isBlankObject(assignedUser)) ? User.getNoUserPicture() : assignedUser.getMinPicture();
+											String assigningPosition = (SmartUtil.isBlankObject(assignedUser)) ? "" : assignedUser.getPosition();
+											String assigningName = (SmartUtil.isBlankObject(assignedUser)) ? task.getAssigningName() : assignedUser.getName();
 								%>
 										<!-- 태스크 -->
-										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId() %>">
+										<li class="proc_task not_yet js_manual_task js_select_task_manual" taskId="<%=task.getId()%>">
 											<a class="js_select_task_manual" href="">
 												<div class="title"><%=count%>) <%=task.getName()%></div>
 												
 						                    	<img src="<%=assignedUserImg%>" class="noti_pic profile_size_s">
 							                    <div class="noti_in_s">
 								                    <div class="t_date"><%=CommonUtil.toNotNull(assigningPosition)%></div>
-								                    <div class="name"><%=assigningName %></div>
+								                    <div class="name"><%=assigningName%></div>
 							                    </div>
 							            	</a>
 										</li>
 										<!-- 태스크 //-->
 								<%
 									}
-								}
+									}
 								%>
 							</ul>
 						</div>
@@ -169,8 +273,8 @@ function submitForms() {
 	
 			<!-- 업무설명 영역 -->
 			<%
-			String diagramImage = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getOrgImage();
-			String diagramDesc = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getDescription(); 
+				String diagramImage = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getOrgImage();
+				String diagramDesc = (SmartUtil.isBlankObject(work.getDiagram())) ? "" : work.getDiagram().getDescription();
 			%>
 			<div class="js_task_manual" id="js_process_diagram">
 				<div class="up_point pos_default"></div>
@@ -183,18 +287,24 @@ function submitForms() {
 									<tr>
 										<td class="vt">
 											<div class="manual_df_img">
-												<img src="<%=diagramImage %>"/>
+												<img src="<%=diagramImage%>"/>
 											</div>
 										</td>
 										<td class ="dline_left_gray pl10 vt" style="width:100%">
-			 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(diagramDesc)){%><%=diagramDesc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
+			 								<div class="js_form_desc_view"><%
+			 									if (!SmartUtil.isBlankObject(diagramDesc)) {
+			 								%><%=diagramDesc%><%
+			 									} else {
+			 								%><fmt:message key="common.message.no_form_desc"/><%
+			 									}
+			 								%></div>
 											<div class="js_form_desc_edit"  style="display:none">
 			 									<span><fmt:message key="builder.title.process_desc"/> : </span>
 			 									<span class="fr js_select_editor_box" fieldName="txtaProcessDesc">
 				 									<input name="rdoEditor" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
 													<input name="rdoEditor" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 												</span>
-												<textarea class="fieldline js_form_desc_text" name="txtaProcessDesc" cols="" rows="18" style="height: 262px"><%=CommonUtil.toNotNull(diagramDesc) %></textarea>
+												<textarea class="fieldline js_form_desc_text" name="txtaProcessDesc" cols="" rows="18" style="height: 262px"><%=CommonUtil.toNotNull(diagramDesc)%></textarea>
 												<div class="js_form_desc_editor"></div>
 											</div>
 										</td>
@@ -207,13 +317,13 @@ function submitForms() {
 				</div>
 			</div>
 			<%
-			if(tasks!=null){
-				for(int i=0; i<tasks.length; i++){				
-					SmartFormInfo form = tasks[i].getForm();
-					if(form!=null){
-						String desc = form.getDescription();
+				if (tasks != null) {
+					for (int i = 0; i < tasks.length; i++) {
+						SmartFormInfo form = tasks[i].getForm();
+						if (form != null) {
+							String desc = form.getDescription();
 			%>
-						<div class="js_task_manual" id="<%=tasks[i].getId() %>" style="display:none">
+						<div class="js_task_manual" id="<%=tasks[i].getId()%>" style="display:none">
 							<div class="up_point pos_default"></div>
 							<div class="form_wrap up">
 								<div class="area">
@@ -224,18 +334,24 @@ function submitForms() {
 												<tr>
 													<td class="vt">
 														<div class="manual_df_img">
-															<img src="<%=form.getOrgImage() %>"/>
+															<img src="<%=form.getOrgImage()%>"/>
 														</div>
 													</td>
 													<td class ="dline_left_gray pl10 vt" style="width:100%">
-						 								<div class="js_form_desc_view"><%if(!SmartUtil.isBlankObject(desc)){%><%=desc%><%}else{ %><fmt:message key="common.message.no_form_desc"/><%} %></div>
+						 								<div class="js_form_desc_view"><%
+						 									if (!SmartUtil.isBlankObject(desc)) {
+						 								%><%=desc%><%
+						 									} else {
+						 								%><fmt:message key="common.message.no_form_desc"/><%
+						 									}
+						 								%></div>
 														<div class="js_form_desc_edit"  style="display:none">
 						 									<span><fmt:message key="builder.title.form_desc"/> : </span>
-						 									<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId() %>">
-							 									<input name="rdoEditor<%=i %>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
-																<input name="rdoEditor<%=i %>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
+						 									<span class="fr js_select_editor_box" fieldName="txtaFormDesc<%=tasks[i].getId()%>">
+							 									<input name="rdoEditor<%=i%>" type="radio" checked value="text"/><fmt:message key="builder.button.text"/>
+																<input name="rdoEditor<%=i%>" type="radio" value="editor"/><fmt:message key="builder.button.editor"/>
 															</span>
-															<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId() %>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(desc) %></textarea>
+															<textarea class="fieldline js_form_desc_text" name="txtaFormDesc<%=tasks[i].getId()%>" cols="" rows="22" style="height: 262px"><%=CommonUtil.toNotNull(desc)%></textarea>
 															<div class="js_form_desc_editor"></div>
 														</div>
 													</td>
@@ -248,9 +364,9 @@ function submitForms() {
 							</div>
 						</div>
 			<%
+				}
 					}
 				}
-			}
 			%>
 			<!-- 업무설명 영역 //-->
 		    <div class="js_manual_attachments_field mt10" style="display:none" 
@@ -266,12 +382,12 @@ function submitForms() {
 	            	<li class="js_comment_instance" style="display:none">
 	            		<div class="det_title">
 							<div class="noti_pic">
-								<a class="js_pop_user_info" href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName() %>" minPicture="<%=cUser.getMinPicture() %>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
+								<a class="js_pop_user_info" href="<%=cUser.getSpaceController()%>?cid=<%=cUser.getSpaceContextId()%>" userId="<%=cUser.getId()%>" longName="<%=cUser.getLongName()%>" minPicture="<%=cUser.getMinPicture()%>" profile="<%=cUser.getOrgPicture()%>" userDetail="<%=SmartUtil.getUserDetailInfo(cUser.getUserInfo())%>">
 									<img src="<%=cUser.getMinPicture()%>" class="profile_size_c"/>
 								</a>
 							</div>
 							<div class="noti_in">
-								<a href="<%=cUser.getSpaceController() %>?cid=<%=cUser.getSpaceContextId()%>">
+								<a href="<%=cUser.getSpaceController()%>?cid=<%=cUser.getSpaceContextId()%>">
 									<span class="t_name"><%=cUser.getLongName()%></span>
 								</a>
 								<span class="t_date"><%=(new LocalDate()).toLocalString()%></span>
@@ -280,23 +396,23 @@ function submitForms() {
 						</div>
 	            	</li>
 	            	<%
-	            	if(work.getCommentCount()>WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT){
+	            		if (work.getCommentCount() > WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT) {
 	            	%>
 		            	<li>
-	            			<a href="comment_list_in_manual.sw?workId=<%=work.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE %>" class="js_show_all_comments">
-	            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=work.getCommentCount() %></fmt:param><</fmt:message></strong></span>
+	            			<a href="comment_list_in_manual.sw?workId=<%=work.getId()%>&fetchCount=<%=WorkInstance.FETCH_ALL_SUB_INSTANCE%>" class="js_show_all_comments">
+	            				<span><strong><fmt:message key="common.title.show_all_comments"><fmt:param><%=work.getCommentCount()%></fmt:param><</fmt:message></strong></span>
 	            			</a>
 		            	</li>
 					<%
-	            	}
-					if(work.getCommentCount()>0) {
+						}
+						if (work.getCommentCount() > 0) {
 					%>
 						<jsp:include page="/jsp/content/work/list/comment_list_in_manual.jsp">
 							<jsp:param value="<%=work.getId()%>" name="workId"/>
 							<jsp:param value="<%=WorkInstance.DEFAULT_SUB_INSTANCE_FETCH_COUNT%>" name="fetchCount"/>
 						</jsp:include>
 					<%
-					}
+						}
 					%>
 				</ul>
 	        </div>
@@ -322,7 +438,7 @@ function submitForms() {
 			<!-- 수정하기 -->
 			<div class="fr ml5">
 				<%
-				if(work.amIBuilderUser()) {
+					if (work.amIBuilderUser()) {
 				%>
 					<span class="btn_gray js_modify_work_manual"> 
 						<a href="">
@@ -346,7 +462,7 @@ function submitForms() {
 						</a>
 					</span>
 				<%
-				}
+					}
 				%>
 			</div>
 			<!-- 수정하기 //-->
@@ -361,79 +477,79 @@ function submitForms() {
 		
 			<span class="po_left pt3">
 				<%
-				if (!SmartUtil.isBlankObject(work.getManualFileId())) {
+					if (!SmartUtil.isBlankObject(work.getManualFileId())) {
 				%>
 					<span class="fl mr7 js_manual_file" title="<fmt:message key='work.title.manual_file'/>" groupId="<%=work.getManualFileId()%>"></span> 
 				<%
-				}
-				if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
-				%> 
+ 					}
+ 					if (!SmartUtil.isBlankObject(work.getHelpUrl())) {
+ 				%> 
 					<a href="<%=work.getHelpUrl()%>" class="icon_web_manual" title="<fmt:message key='work.title.help_url'/>" target="_blank"></a>
 				<%
-				}
+					}
 				%>
 			</span>
 	
 			<!-- 우측 권한 아이콘 -->
 			<span class="btn_r">
 				<%
-				switch (work.getAccessPolicy().getLevel()) {
-				case AccessPolicy.LEVEL_PUBLIC:
+					switch (work.getAccessPolicy().getLevel()) {
+					case AccessPolicy.LEVEL_PUBLIC:
 				%>
 					<div class="fr"><fmt:message key="common.security.access.public" /></div>
 				<%
 					break;
-				case AccessPolicy.LEVEL_PRIVATE:
+					case AccessPolicy.LEVEL_PRIVATE:
 				%>
 					<div class="fr"><fmt:message key="common.security.access.private" /></div>
 				<%
 					break;
-				case AccessPolicy.LEVEL_CUSTOM:
+					case AccessPolicy.LEVEL_CUSTOM:
 				%>
 					<div class="fr"><fmt:message key="common.security.access.custom" /></div>
 				<%
 					break;
-				}
+					}
 				%>
 		
 				<div class="ch_right"><span class="icon_body_read"  title="<fmt:message key='common.security.title.access'/>"></span></div>
 		
 				<%
-				switch (work.getWritePolicy().getLevel()) {
-				case WritePolicy.LEVEL_PUBLIC:
-				%>
+							switch (work.getWritePolicy().getLevel()) {
+							case WritePolicy.LEVEL_PUBLIC:
+						%>
 					<div class="fr"><fmt:message key="common.security.write.public" /></div>
 				<%
 					break;
-				case WritePolicy.LEVEL_CUSTOM:
+					case WritePolicy.LEVEL_CUSTOM:
 				%>
 					<div class="fr"><fmt:message key="common.security.write.custom" /></div>
 				<%
 					break;
-				}
+					}
 				%>
 		
 				<div class="ch_right"><span class="icon_body_register" title="<fmt:message key='common.security.title.write'/>"></span></div>
 		
 				<%
-				switch (work.getEditPolicy().getLevel()) {
-				case EditPolicy.LEVEL_PUBLIC:
-				 %>
+							switch (work.getEditPolicy().getLevel()) {
+							case EditPolicy.LEVEL_PUBLIC:
+						%>
 					<div class="fr"><fmt:message key="common.security.edit.public" /></div> 
 				<%
-					break;
-				case EditPolicy.LEVEL_PRIVATE:
-				%>
+ 					break;
+ 					case EditPolicy.LEVEL_PRIVATE:
+ 				%>
 					<div class="fr"><fmt:message key="common.security.edit.private" /></div> 
 				<%
-				 	break;
-				case EditPolicy.LEVEL_CUSTOM:
-				%>
+ 					break;
+ 					case EditPolicy.LEVEL_CUSTOM:
+ 				%>
 					<div class="fr"><fmt:message key="common.security.edit.custom" /></div> 
 				<%
-				 	break;
-				 }
-				%>
+ 					break;
+ 					}
+ 				%>
 				<div class="ch_right"><span class="icon_body_modify" title="<fmt:message key='common.security.title.edit'/>"></span></div>
 			</span>
 			<!-- 우측 권한 아이콘//-->
@@ -443,7 +559,8 @@ function submitForms() {
 		<!-- 우측 버튼 //-->
 	</div>
 	<!-- 보더 // -->			
-</div>
+ --%>
+ </div>
 <!-- 업무 설명 보기 -->
 
 <script>

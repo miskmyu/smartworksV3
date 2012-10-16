@@ -44,13 +44,13 @@ public class System {
 	public static final int TABLE_ID_ADAPTER_HISTORY		= 51;	
 	
 	//DEV
-	public static final String TABLE_NAME_OPPORTAL_SITUATION 	    = "TH_ST_SITUATION_HISTORY";
+	public static final String TABLE_NAME_OPPORTAL_SITUATION    = "TH_ST_SITUATION_HISTORY";
 	public static final String TABLE_NAME_OPPORTAL_DISPLAY 		= "TN_ST_DISPLAY";
 	public static final String TABLE_NAME_INTCON_SITUATION 		= "TN_CTL_EVENT_INFO";
 	public static final String TABLE_NAME_COMMID_TRACE 			= "TB_COM_INTG_LOG";
 	public static final String TABLE_NAME_DEVMID_SEND_STATUS   	= "TN_IDM_SEND_STATUS";
-	public static final String TABLE_NAME_ADAPTER_HISTORY		    = "TB_UAST_CMNC_HS";
-	public static final String TABLE_NAME_COMMID_JOIN             = "CMDB.TN_CM_EVENT_OUTB_INFO";
+	public static final String TABLE_NAME_ADAPTER_HISTORY	    = "TB_UAST_CMNC_HS";
+	public static final String TABLE_NAME_COMMID_JOIN           = "CMDB.TN_CM_EVENT_OUTB_INFO";
 	
 	//개발서버
 //	public static final String TABLE_NAME_OPPORTAL_SITUATION 	= "USITUATION.TH_ST_SITUATION_HISTORY";
@@ -121,6 +121,96 @@ public class System {
 //		case PROCESS_FACILITY_MANAGEMENT:
 //			return "pkg_6247af34746044228556b5366752141e";
 		
+		}
+		
+		return null;
+	}
+
+	public static String getProcessIdByProcessStatus(int process, String status){
+		if(process<0 || process>MAX_PROCESS) return null;
+		
+		//개발서버
+		switch(process){
+		case PROCESS_ENV_WEAHTER:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_ENV_ATMOSPHERE:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_ENV_WATER:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_TRAFFIC_INCIDENT:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_DISASTER_FIRE:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_CRIME_CCTV:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_CRIME_VEHICLES:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_WATERWORKS_LEAKS:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;
+		case PROCESS_FACILITY_MANAGEMENT:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_c54deaaf347e4b3bbd437d5e9b4aef1c";
+			return null;		
 		}
 		
 		return null;
