@@ -37,4 +37,9 @@ $(function() {
 		return false;
 	});
 
+	$('.js_select_situation_manual').live('mouseenter', function(e) {
+		var input = $(targetElement(e)).parents('.js_select_situation_manual');
+		input.addClass('current').siblings().removeClass('current');
+		return false;
+	});
 });
