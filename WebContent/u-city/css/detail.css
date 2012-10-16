@@ -126,7 +126,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
 .section_rgt {margin:0 0 0 100px}
 .group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; margin: 0 0 0 30px}
-.section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative; top:100px}
+.section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative}
 .working_proces {}
 .working_proces ul { display:inline-block}
 .working_proces .task {background: url("../images/portal_proces.png") no-repeat -349px 0 transparent; width:107px; height:116px}
