@@ -107,7 +107,22 @@ function loadGanttTaskListViewerApp(target, params){
 };
 
 function loadChartViewer(target, params){
-	loadFlash(target, APPNAME_CHART_VIEWER, params);
+	var options = {
+			chartType 	: 'LINE_CHART',
+			viewType	: '',
+			acumData	: 'true',
+			fillColor 	: '0x000fff',
+			gadgetId 	: '',
+			xmlData		: ''
+	};
+	SmartWorks.extend(options, params);
+	loadFlash(target, APPNAME_CHART_VIEWER, getGeneralParams()
+											+ '&chartType=' + options.chartType,
+											+ '&viewType=' + options.viewType,
+											+ '&acumData=' + options.acumData,
+											+ '&fillColor=' + options.fillColor,
+											+ '&gadgetId=' + options.gadgetId,
+											+ '&xmlData=' + options.xmlData);
 };
 
 function taskSelectionCallback(id, formId, formName) {

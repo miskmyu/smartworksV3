@@ -125,6 +125,96 @@ public class System {
 		
 		return null;
 	}
+
+	public static String getProcessIdByProcessStatus(int process, String status){
+		if(process<0 || process>MAX_PROCESS) return null;
+		
+		//개발서버
+		switch(process){
+		case PROCESS_ENV_WEAHTER:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_17a57e3cea6e4127b4bf1f5bc2da3c9a";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_ENV_ATMOSPHERE:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_ENV_WATER:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_TRAFFIC_ILLEGAL_PARKING:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_TRAFFIC_INCIDENT:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_DISASTER_FIRE:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_CRIME_CCTV:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_CRIME_VEHICLES:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_WATERWORKS_LEAKS:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;
+		case PROCESS_FACILITY_MANAGEMENT:
+			if(OPSituation.STATUS_SITUATION_OCCURRED.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_PROCESSING.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			else if(OPSituation.STATUS_SITUATION_RELEASE.equals(status))
+				return "pkg_336b0e079fc44ab19acbe49ded2e8b12";
+			return null;		
+		}
+		
+		return null;
+	}
 	
 	public static String getTableName(String tableId){
 		if(SmartUtil.isBlankObject(tableId)) return null;
