@@ -4,6 +4,8 @@
 <!-- Author			: Maninsoft, Inc.												 -->
 <!-- Created Date	: 2011.9.														 -->
 
+<%@page import="java.util.TimeZone"%>
+<%@page import="java.util.Date"%>
 <%@page import="net.smartworks.model.work.SmartWork"%>
 <%@page import="net.smartworks.model.community.info.DepartmentInfo"%>
 <%@page import="net.smartworks.model.community.info.GroupInfo"%>
@@ -25,9 +27,9 @@
 	
 	// 회사 달력에 있는 3일의 달력정보를 가져온다...
 	CompanyCalendar[] threeDaysCC = smartWorks.getCompanyCalendars(new LocalDate(), 3);
-	LocalDate today = new LocalDate(threeDaysCC[0].getDate().getGMTDate());
-	LocalDate tomorrow = new LocalDate(threeDaysCC[1].getDate().getGMTDate());
-	LocalDate afterTomorrow =  new LocalDate(threeDaysCC[2].getDate().getGMTDate());
+	LocalDate today = new LocalDate(threeDaysCC[0].getDate().getLocalDate());
+	LocalDate tomorrow = new LocalDate(threeDaysCC[1].getDate().getLocalDate());
+	LocalDate afterTomorrow =  new LocalDate(threeDaysCC[2].getDate().getLocalDate());
 	
 	EventInstanceInfo[] events = null;
 	if(SmartUtil.isBlankObject(wid))
@@ -175,8 +177,8 @@
 												boolean hasTodayEvent=false, hasTomorrowEvent=false, hasAfterEvent=false;
 												// Start 이벤트가 있으면 있는 만큼 돌면서 리스트를 만든다...
 												for (EventInstanceInfo event : events) {
-													if (((cnt == 0) && today.isSameDate(event.getStart())) || ((cnt == 1) && tomorrow.isSameDate(event.getStart()))
-															|| ((cnt == 2) && tomorrow.isAfterDate(event.getStart()))) {
+													if (((cnt == 0) && today.isSameDate(new LocalDate(event.getStart().getTime() - TimeZone.getDefault().getRawOffset()))) || ((cnt == 1) && tomorrow.isSameDate(new LocalDate(event.getStart().getTime() - TimeZone.getDefault().getRawOffset())))
+															|| ((cnt == 2) && tomorrow.isAfterDate(new LocalDate(event.getStart().getTime() - TimeZone.getDefault().getRawOffset())))) {
 														UserInfo owner = event.getOwner();
 														WorkSpaceInfo workSpace = event.getWorkSpace();
 														if (cnt < 2) {

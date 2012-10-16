@@ -2220,8 +2220,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (groupType.equalsIgnoreCase(SwoGroup.GROUP_TYPE_PUBLIC))
 			return;
 
-		obj.setAccessLevel("2");
-		obj.setAccessValue(workSpaceId);
+		if (!obj.getAccessLevel().equalsIgnoreCase("1")) {
+			obj.setAccessLevel("2");
+			obj.setAccessValue(workSpaceId);
+		}
 //		StringBuffer accessValueBuf = new StringBuffer();
 //		SwoGroupMember[] member = group.getSwoGroupMembers();
 //		if (member == null || member.length == 0) {
@@ -2253,8 +2255,10 @@ public class InstanceServiceImpl implements IInstanceService {
 		if (groupType.equalsIgnoreCase(SwoGroup.GROUP_TYPE_PUBLIC))
 			return;
 
-		obj.setAccessLevel("2");
-		obj.setAccessValue(workSpaceId);
+		if (!obj.getAccessLevel().equalsIgnoreCase("1")) {
+			obj.setAccessLevel("2");
+			obj.setAccessValue(workSpaceId);
+		}
 //		StringBuffer accessValueBuf = new StringBuffer();
 //		SwoGroupMember[] member = group.getSwoGroupMembers();
 //		if (member == null || member.length == 0) {
