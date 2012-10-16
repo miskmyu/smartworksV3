@@ -99,7 +99,7 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 
 /* 목록  타이틀 */
 .list_title_space .title {font-size:14px; font-weight:bold; padding: 0 10px 0 0; line-height: 18px; color:#FFF; float:left}
-.list_title_space .title.guide {background: url("../images/icon_guide.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:20px 0 25px}
+.list_title_space .title.guide {background: url("../images/icon_guide.png") no-repeat 0 0 transparent; padding:0 0 0 22px; margin:0 0 20px}
 .list_contents {clear:both}
 .list_contents table tr .end, .list_contents table td .end {border-bottom: 0 none}
 .list_contents table .tit_bg {background-color:#171b1e; border-top:1px solid #6d6d6d; border-bottom:1px solid #444444}
@@ -124,10 +124,10 @@ a .repl_write:hover {background: url("../../images/header_nico.png") no-repeat 0
 .lft_step .s1.current a {background-position: -146px -49px; height:102px; width:102px}
 .lft_step .s2.current a {background-position: -146px -164px; height:102px; width:102px}
 .lft_step .s3.current a {background-position: -146px -285px; height:102px; width:102px}
-.section_rgt {width:770px; float:right}
-.group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; float:left; width:666px}
-.section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative; top:100px}
-.working_proces { text-align:center}
+.section_rgt {margin:0 0 0 114px}
+.group_rgt {background-color:#1c1f21; border-radius:8px; padding:35px 40px; margin: 0 0 0 23px}
+.section_rgt .point {background: url("../images/guide_arr.png") no-repeat 0 0 transparent; width:23px; height:45px; float:left; position:relative}
+.working_proces {}
 .working_proces ul { display:inline-block}
 .working_proces .task {background: url("../images/portal_proces.png") no-repeat -349px 0 transparent; width:107px; height:116px}
 .working_proces li {float:left; position:relative}

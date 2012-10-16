@@ -160,7 +160,7 @@ public class LocalDate extends Date{
 	}
 
 	public String toLocalDateString(){
-		return DateFormat.getDateInstance(DateFormat.FULL, this.locale).format(getTime());
+		return DateFormat.getDateInstance(DateFormat.FULL, this.locale).format(getLocalTime());
 	}
 	
 	public String toLocalMonthFullString(){

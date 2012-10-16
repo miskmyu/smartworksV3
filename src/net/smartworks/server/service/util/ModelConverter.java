@@ -153,8 +153,11 @@ import net.smartworks.server.engine.process.task.model.TskTaskDefCond;
 import net.smartworks.server.engine.process.xpdl.util.ProcessModelHelper;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Activities;
 import net.smartworks.server.engine.process.xpdl.xpdl2.Activity;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Implementation7;
 import net.smartworks.server.engine.process.xpdl.xpdl2.PackageType;
 import net.smartworks.server.engine.process.xpdl.xpdl2.ProcessType1;
+import net.smartworks.server.engine.process.xpdl.xpdl2.Task;
+import net.smartworks.server.engine.process.xpdl.xpdl2.TaskApplication;
 import net.smartworks.server.engine.process.xpdl.xpdl2.WorkflowProcesses;
 import net.smartworks.server.engine.worklist.model.TaskWork;
 import net.smartworks.server.service.ICommunityService;
@@ -3482,6 +3485,9 @@ public class ModelConverter {
 		PackageType pt = ProcessModelHelper.load(processXpdl);
 		WorkflowProcesses prcs = pt.getWorkflowProcesses();
 		List prcList = prcs.getWorkflowProcess();
+		
+		Map taskFormNameMap = new HashMap();
+		
 		for (Iterator prcItr = prcList.iterator(); prcItr.hasNext();) {
 			ProcessType1 prc = (ProcessType1) prcItr.next();
 			Activities acts = prc.getActivities();
@@ -3515,6 +3521,34 @@ public class ModelConverter {
 //						String peformer = ((Performer)performerList.get(0)).getValue();
 //						activityPerformerMap.put(actId, peformer);
 //					}
+					
+					//폼네임을 구한다
+					Implementation7 impl = act.getImplementation();
+					if (impl == null)
+						continue;
+					Task task = impl.getTask();
+					if (task == null)
+						continue;
+					TaskApplication taskApp = task.getTaskApplication();
+					if (taskApp == null)
+						continue;
+					Sequence taskAppAttrs = taskApp.getAnyAttribute();
+					String formId = taskApp.getName();
+					String formName = null;
+					if (taskAppAttrs != null && taskAppAttrs.size() > 0) {
+						for (int i=0; i<taskAppAttrs.size(); i++) {
+							commonj.sdo.Property taskAppAttr = taskAppAttrs.getProperty(i);
+							String attrName = taskAppAttr.getName();
+							Object attrValue = taskAppAttrs.getValue(i);
+							if (CommonUtil.isEmpty(attrName) || attrValue == null)
+								continue;
+							if (attrName.equals("FormName")) {
+								formName = (String)attrValue;
+							} 
+						}
+						if (!CommonUtil.isEmpty(formId) && !CommonUtil.isEmpty(formName))
+							taskFormNameMap.put(formId, formName);
+					}
 				}
 			}
 		}
@@ -3548,7 +3582,7 @@ public class ModelConverter {
 				SmartFormInfo formInfo = new SmartFormInfo();
 				formInfo.setDescription(taskDef.getDescription());
 				formInfo.setId(taskDef.getForm());
-				formInfo.setName(taskDef.getName());
+				formInfo.setName(CommonUtil.toDefault((String)taskFormNameMap.get(taskDef.getForm()), taskDef.getName()));
 				
 				String minImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swPrcs[0].getPackageId() + "/" + taskDef.getForm() + "_tn.png";
 				String orgImageName = SmartConfUtil.getInstance().getImageServer() + SmartUtil.getCurrentUser().getCompanyId() + "/workDef/" + swPrcs[0].getPackageId() + "/" + taskDef.getForm() + ".png";
