@@ -1407,6 +1407,7 @@ $(function() {
 		body.find('.js_print_content_btn').remove();
 		body.find('.js_view_instance_diagram').remove();
 		body.find('.body_titl_pic .solid_line').before(topLogo);
+		body.find('input[type="hidden"]').remove();
 //		body.find('.js_instance_tasks_left').remove();
 //		body.find('.js_instance_tasks_right').remove();
 //		body.find('.js_task_start').remove();
@@ -1474,6 +1475,7 @@ $(function() {
 			body.find('.js_print_content_btn').remove();
 			body.find('.js_view_instance_diagram').remove();
 			body.find('.body_titl_pic .solid_line').before(topLogo);
+			body.find('input[type="hidden"]').remove();
 	//		body.find('.js_instance_tasks_left').remove();
 	//		body.find('.js_instance_tasks_right').remove();
 	//		body.find('.js_task_start').remove();
