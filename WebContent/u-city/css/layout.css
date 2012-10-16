@@ -10,7 +10,6 @@ body {background-color: #22282F}
 .srch input[type="text"] {float: left; width: 146px; margin: 0 2px 0 0;}
 .srch button {
 	background:url("../images/btn_srch.png") no-repeat; cursor:pointer; height:15px; width:15px; padding:0; border:0}
-.srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; min-height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:18px}
