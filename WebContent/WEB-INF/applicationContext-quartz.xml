@@ -23,6 +23,6 @@
 				<beans:ref local="cronTrigger1" />
 			</beans:list>
 		</beans:property>
-	</beans:bean>   
+	</beans:bean>    
 	
 </beans:beans>
