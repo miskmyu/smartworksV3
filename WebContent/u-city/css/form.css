@@ -4,7 +4,7 @@
 .form_layout {}
 .form_layout table {padding:10px 5px 10px; background-color: #171B1E}
 .form_layout table td,.form_layout table th {padding:0; border-bottom: 1px solid #444444}
-.form_label {font-weight:bold; width:90px; line-height:21px; float:left !important; text-align: right}
+.form_label {font-weight:bold; width:90px; line-height:22px; float:left !important; text-align: right}
 .form_label > span, .form_value > span, .form_value > * {padding:0 15px; word-wrap: break-word; display: table-cell}
 .form_label > span {float:right}
 .form_label, .form_value {float:left; font-size:12px; padding: 5px 0}
