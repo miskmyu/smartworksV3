@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#wrap {height:auto; width:972px; margin:0; z-index:1;}
+#wrap {height:auto; min-width: 970px; max-width:1170px; margin:0; z-index:1;}
 body {background-color: #22282F}
 #content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
 #content a:hover { text-decoration:underline}
@@ -46,9 +46,6 @@ body {background-color: #22282F}
 
 /* Contents*/
 #content {color:#a6a6a6; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
-
-/* Section Portlet */
-.section_portlet { width:974px}
 
 /* Table Format */
 .up {border:1px solid #6d6d6d;  padding: 0; vertical-align:middle} /* 높이가 있는 라인박스 쓸때 */
