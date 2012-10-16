@@ -31,7 +31,7 @@
 	String userviceCode = request.getParameter("userviceCode");
 	String serviceCode = request.getParameter("serviceCode");
 	String eventCode = request.getParameter("eventCode");
-	String situationStatus = OPSituation.STATUS_SITUATION_OCCURRED;//request.getParameter("situationStatus");
+	String situationStatus = OPSituation.STATUS_SITUATION_RELEASE;//request.getParameter("situationStatus");
 	
 	String eventId = Event.ID_ENV_GALE;//Event.getEventIdByCode(userviceCode, serviceCode, eventCode);
 
