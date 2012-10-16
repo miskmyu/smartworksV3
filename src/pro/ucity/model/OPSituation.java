@@ -369,7 +369,7 @@ public class OPSituation {
 				java.lang.System.out.println("############ END checking PORTAL History To Start  ################");
 				return;
 			}
-			con.setAutoCommit(false);
+//			con.setAutoCommit(false);
 			try{
 				selectPstmt = con.prepareStatement(opSituationSelectSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = selectPstmt.executeQuery();				
@@ -398,12 +398,13 @@ public class OPSituation {
 								try{
 									OPSituation opSituation = new OPSituation(rs, joinRs);
 									opSituation.startProcess();
-									con.commit();
+//									con.commit();
 									java.lang.System.out.println("[SUCCESS] 새로운 PORTAL 발생 이벤트(아이디 : '" + situationId + ")가 정상적으로 시작되었습니다!");
 								}catch (Exception se){
 									java.lang.System.out.println("[ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");
 									se.printStackTrace();
-									con.rollback();
+//									if(con != null)
+//										con.rollback();
 								}
 							}else{
 								java.lang.System.out.println("[JOIN ERROR] 새로운 PORTAL 발생 이벤트를 시작하는데 오류가 발생하였습니다!");								
@@ -429,7 +430,8 @@ public class OPSituation {
 					selectPstmt.close();
 				if (updatePstmt != null)
 					updatePstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -504,7 +506,8 @@ public class OPSituation {
 			try {
 				if (selectPstmt != null)
 					selectPstmt.close();
-				con.close();
+				if(con != null)
+					con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

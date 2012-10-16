@@ -1,4 +1,4 @@
-<%@page import="com.sun.tools.doclets.internal.toolkit.util.Group"%>
+<%@page import="net.smartworks.model.community.Group"%>
 <%@page import="net.smartworks.model.community.Department"%>
 <%@page import="net.smartworks.model.instance.WorkInstance"%>
 <%@page import="net.smartworks.util.SmartTest"%>

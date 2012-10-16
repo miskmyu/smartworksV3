@@ -212,8 +212,10 @@ public class UcityUtil {
 		for(int i=0; i<work.getDiagram().getTasks().length; i++){
 			SmartFormInfo form = work.getDiagram().getTasks()[i].getForm();
 			if(SmartUtil.isBlankObject(form)) continue;
+			java.lang.System.out.println("[form no = [" + i + "], form name = [" + form.getName() + "]");
 			if(form.getName().equals(System.TASK_FORM_NAME_USERVICE_END)){
 				endForm = workService.getFormById(form.getId(), processId);
+				java.lang.System.out.println("[endform]"+endForm.getName());
 				break;
 			}
 		}
@@ -578,7 +580,10 @@ public class UcityUtil {
 		long timeoutInMilliseconds =  System.DEFAULT_TASK_TIMEOUT;
 		try{
 			timeoutInMilliseconds = Integer.parseInt(timeout) * 60*1000;
-		}catch (Exception e){}
+		}catch (Exception e){
+			java.lang.System.out.println("#####parseInt Exception [" + timeout + "]#####" );
+			e.printStackTrace();
+		}
 		
 		int index = -1;
 		if((index = addPolling(eventId, tableName, status, displayId, deviceId, timeoutInMilliseconds, taskInstance)) == -1){
@@ -598,7 +603,7 @@ public class UcityUtil {
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
 				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
-					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
+					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Timeout=" + timeout + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
 					try {
