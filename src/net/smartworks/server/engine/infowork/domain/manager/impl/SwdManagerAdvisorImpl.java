@@ -29,11 +29,17 @@ import net.smartworks.server.engine.infowork.form.model.SwfField;
 import net.smartworks.server.engine.infowork.form.model.SwfForm;
 import net.smartworks.server.engine.infowork.form.model.SwfMapping;
 import net.smartworks.server.engine.infowork.form.model.SwfMappings;
+import net.smartworks.server.engine.infowork.form.model.SwfOperand;
+import net.smartworks.server.engine.opinion.model.Opinion;
+import net.smartworks.server.engine.opinion.model.OpinionCond;
 import net.smartworks.server.engine.process.process.manager.IPrcManager;
 import net.smartworks.server.engine.process.task.manager.ITskManager;
 import net.smartworks.server.engine.process.task.model.TskTask;
 import net.smartworks.server.engine.process.task.model.TskTaskCond;
+import net.smartworks.server.engine.publishnotice.model.PublishNoticeCond;
+import net.smartworks.server.service.util.SmartCommonConstants;
 import net.smartworks.util.LocalDate;
+import net.smartworks.util.SmartUtil;
 
 public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 	public SwdManagerAdvisorImpl() {
@@ -330,6 +336,19 @@ public class SwdManagerAdvisorImpl extends AbstractSwdManagerAdvisor {
 		
 		// 댓글 삭제
 		//getOpinionManager().deleteOpinionByRef("admin", SmartCommonConstants.TYPE_REF_SINGLE_WORK, domain.getFormId(), recordId);
+		
+		//알림 삭제
+		OpinionCond opCond = new OpinionCond();
+		opCond.setRefFormId(domain.getFormId());
+		opCond.setRefId(recordId);
+		Opinion[] op = SwManagerFactory.getInstance().getOpinionManager().getOpinions("admin", opCond, IManager.LEVEL_LITE);
+		if (op != null && op.length != 0) {
+			for (int i = 0; i < op.length; i++) {
+				PublishNoticeCond noticeCond = new PublishNoticeCond();
+				noticeCond.setRefId(op[i].getObjId());
+				SwManagerFactory.getInstance().getPublishNoticeManager().removePublishNotice("admin", noticeCond);
+			}
+		}
 		
 		// 전달업무 삭제
 		this.removeProcessInstsByRecordId(user, domain.getFormId(), recordId);

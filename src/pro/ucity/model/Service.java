@@ -55,6 +55,17 @@ public class Service {
 		}
 		return "";
 	}
+	
+	public static String[] getAllServiceNames(){
+		return new String[] {
+				"환경",
+				"교통",			
+				"방범",			
+				"방재",			
+				"상수도",			
+				"시설물"				
+		};
+	}
 
 	public static String getServiceCodeByUCode(String userviceCode){
 		if(SmartUtil.isBlankObject(userviceCode)) return "";

@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#wrap {height:auto; width:972px; margin:0; z-index:1;}
+#wrap {height:auto; min-width: 970px; max-width:1170px; margin:0; z-index:1;}
 body {background-color: #22282F}
 #content a:link, #content a:visited, #content a:focus, #content a:active{color:#a6a6a6; text-decoration:none}
 #content a:hover { text-decoration:underline}
@@ -10,7 +10,6 @@ body {background-color: #22282F}
 .srch input[type="text"] {float: left; width: 146px; margin: 0 2px 0 0;}
 .srch button {
 	background:url("../images/btn_srch.png") no-repeat; cursor:pointer; height:15px; width:15px; padding:0; border:0}
-.srch button:hover, .srch .srch_icon:hover{background:url("../../images/btn_srch.png") -25px 0 no-repeat}
 
 .icon_aworks {background: url("../../images/body_icon.png") no-repeat -550px -708px transparent; padding:0 0 0 19px; float: left; min-height:18px}
 .icon_dworks {background: url("../../images/icon_dworks.png") no-repeat 0 1px transparent; padding:0 0 0 19px; float: left; min-height:18px}
@@ -44,14 +43,6 @@ body {background-color: #22282F}
 .noti_in_s {line-height: 13px} /* img profile_size_s 뒤에 옴 */
 .noti_in_m {word-wrap: break-word; text-align:left; padding:0 0 0 58px; line-height:16px} /* img profile_size_m 뒤에 옴 */
 .noti_in_m + div {line-height: 19px; padding:0 0 0 58px}
-.js_content_list .noti_in_m {padding:0 0 0 87px} /* 처리할 업무 List */
-.case_2line {line-height:20px}
-
-/* Btn Folder n Picture */
-.btn_fold a {background: url("../../images/body_icon.png") no-repeat -360px -468px transparent; height:45px; width:8px; left: 220px; position: absolute; }
-.btn_fold a:hover {background-position:-360px -536px}
-.lft_fd .btn_fold a {background-position:-395px -468px; left:4px}
-.lft_fd .btn_fold a:hover {background-position:-395px -536px}
 
 /* Contents*/
 #content {color:#a6a6a6; font-family: '돋움',dotum,Helvetica,sans-serif; z-index:20}
@@ -176,19 +167,11 @@ button.space {height: 18px; padding: 1px 3px}
 .t_mail { font-size:11px; color:#333333}
 .new_mail {color:#f38f1b}
 .bar { font-weight:normal; color:#999999}
-.arr {font-size:10px; margin-right:2px; color:#23579E}
 .t_location {font-size:11px; color:#999897; position:relative; top:27px; margin-left:5px}
 .bul_dot {background: url("../../images/dot_a.gif") no-repeat scroll left 9px transparent; font-size: 12px; font-weight: bold; padding: 2px 0 2px 10px}
 .bul_arr_orng {background: url("../../images/body_icon.png") no-repeat 0 -622px transparent; width:4px; height:9px; display: inline-block; padding: 0 5px 0 0}
 .bul_org {background: url("../../images/nav_img.png")no-repeat -287px 5px; padding:0 0 0 7px; line-height:15px}
 .bul_gray {background: url("../../images/dot-gray.gif")no-repeat; padding:0 0 0 7px; line-height:15px}
-
-/* Line Style */
-.solid_line { border-top:1px solid #6d6d6d; width:100%}
-
-/* Iframe Section */
-.iframe_section body {font-size: 11px; font-family: dotum,Helvetica,sans-serif}
-.iframe_section img {width:100%}
 
 /* Status Icons */
 .icon_status_running {background: url("../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}

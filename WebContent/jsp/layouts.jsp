@@ -1,3 +1,4 @@
+<%@page import="net.smartworks.model.company.CompanyGeneral"%>
 <%@page import="net.smartworks.server.engine.common.manager.IManager"%>
 <%@page import="net.smartworks.server.service.factory.SwServiceFactory"%>
 <%@page import="net.smartworks.server.engine.common.loginuser.model.LoginUser"%>
@@ -66,6 +67,7 @@
 	}
 	ISmartWorks smartWorks = (ISmartWorks) request.getAttribute("smartWorks");
 	User currentUser = SmartUtil.getCurrentUser();
+	CompanyGeneral companyGeneral = smartWorks.getCompanyGeneral();
 	
 %>
 <fmt:setLocale value="<%=currentUser.getLocale() %>" scope="request" />
@@ -145,8 +147,10 @@ function logout() {
 <script type="text/javascript" src="js/jquery/fullcalendar.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-1.8.21.custom.min.js"></script>
 
-<script type="text/javascript" src="js/jstorage/jstorage.js"></script>
-<script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
+<%if(companyGeneral.isUseMessagingService()){ %>
+	<script type="text/javascript" src="js/jstorage/jstorage.js"></script>
+	<script type="text/javascript" src="js/faye/faye-browser-min.js"></script>
+<%} %>
 <!-- <script type="text/javascript" src="js/ext/bootstrap.js"></script> -->
 <script type="text/javascript" src="js/ext/ext-all.js"></script>
 
@@ -161,8 +165,10 @@ function logout() {
 <script type="text/javascript" src="js/sw/sw-flash.js"></script>
 <script type="text/javascript" src="js/sw/sw-iframe-autoheight.js"></script>
 
-<script type="text/javascript" src="js/sw/sw-faye.js"></script>
-<script type="text/javascript" src="js/sw/sw-chat.js"></script>
+<%if(companyGeneral.isUseMessagingService()){ %>
+	<script type="text/javascript" src="js/sw/sw-faye.js"></script>
+	<script type="text/javascript" src="js/sw/sw-chat.js"></script>
+<%} %>
 <script type="text/javascript" src="js/sw/sw-report.js"></script>
 <script type="text/javascript" src="js/sw/sw-file.js"></script>
 <script type="text/javascript" src="js/sw/sw-webmail.js"></script>
@@ -246,8 +252,9 @@ function logout() {
 		<!-- Footer //-->
 
 	</div>
- 	
- 	<jsp:include page="/jsp/chatting/chatter_list.jsp" />
+ 	<%if(companyGeneral.isUseMessagingService()){ %>
+ 		<jsp:include page="/jsp/chatting/chatter_list.jsp" />
+ 	<%} %>
 
 
 <script type="">smartPop.closeProgress();</script>

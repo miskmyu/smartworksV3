@@ -33,6 +33,7 @@
 	String FIELD_ID_TYPE = "type";
 	String FIELD_ID_EXTERNAL_DISPLAY = "externalDisplay";
 	String FIELD_ID_EVENT_PLACE = "eventPlace";
+	String FIELD_ID_EVENT_TIME = "eventTime";
 	String FIELD_ID_IS_SMS = "isSms";
 
 	ISmartWorks smartWorks = (ISmartWorks)request.getAttribute("smartWorks");
@@ -126,8 +127,8 @@
 				</a>						
 			</th>
 			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>
@@ -153,6 +154,7 @@
 				String serviceType = "";
 				String externalDisplay = "";
 				String eventPlace = "";
+				String eventTime = "";
 				String isSms = "";
 				if(!SmartUtil.isBlankObject(extendedProperties)){
 					for(int i=0; i<extendedProperties.length; i++){
@@ -167,6 +169,8 @@
 							externalDisplay = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_PLACE)){
 							eventPlace = CommonUtil.toNotNull(extendedProperty.getValue());							
+						}else if(extendedProperty.getName().equals(FIELD_ID_EVENT_TIME)){
+							eventTime = CommonUtil.toNotNull(extendedProperty.getValue());							
 						}else if(extendedProperty.getName().equals(FIELD_ID_IS_SMS)){
 							isSms = ("Y".equals(extendedProperty.getValue())) ? "예" : "아니요";			
 						}
@@ -231,11 +235,7 @@
 						<a class="js_ucity_content" href="<%=target %>"><%=isSms%></a>
 					</td>
 					<td>
-						<a class="js_ucity_content" href="<%=target %>">					
-							<div class="noti_in_s">
-								<div class="t_date"><%=instanceInfo.getCreatedDate().toLocalDateTimeSimpleString()%></div>
-							</div>
-						</a>
+						<a class="js_ucity_content" href="<%=target %>"><%=eventTime %></a>
 					</td>
 					<td>
 						<a class="js_ucity_content" href="<%=target %>"><%=eventPlace%></a>
@@ -306,8 +306,8 @@
 				</a>						
 			</th>
 			<th>
-				<a href="" class="js_select_field_sorting" fieldId="<%=FormField.ID_CREATED_DATE%>">발생일시
-					<span class="<%if(sortedField.getFieldId().equals(FormField.ID_CREATED_DATE)){
+				<a href="" class="js_select_field_sorting" fieldId="<%=FIELD_ID_EVENT_TIME%>">발생일시
+					<span class="<%if(sortedField.getFieldId().equals(FIELD_ID_EVENT_TIME)){
 						if(sortedField.isAscending()){ %>icon_in_up<%}else{ %>icon_in_down<%}} %>"></span>
 				</a>
 			</th>

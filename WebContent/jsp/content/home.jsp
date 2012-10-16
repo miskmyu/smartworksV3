@@ -14,7 +14,9 @@
 	User cUser = SmartUtil.getCurrentUser();
 
 	session.setAttribute("cid", ISmartWorks.CONTEXT_HOME);
+	session.setAttribute("workSpace", cUser);
 	session.setAttribute("lastLocation", "home.sw");
+	
 	session.removeAttribute("wid");
 	session.removeAttribute("smartWork");
 	session.removeAttribute("workInstance");
