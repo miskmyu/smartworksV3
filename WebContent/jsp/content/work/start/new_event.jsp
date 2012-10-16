@@ -117,6 +117,7 @@ function submitForms() {
 								smartPop.showInfo(smartPop.ERROR, smartMessage.get("createEventError"));
 						}
 					});
+					alet('wait');
 				}
 			});
 		}
