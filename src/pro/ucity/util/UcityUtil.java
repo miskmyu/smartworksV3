@@ -549,6 +549,29 @@ public class UcityUtil {
 		return null;
 
 	}
+	
+	static boolean isPollingInterrupted(Thread thread){
+		if(thread==null || SmartUtil.isBlankObject(pollingQueue))
+			return false;
+		
+		for(int index=0; index<pollingQueue.size(); index++){
+			PollingModel pollingModel = pollingQueue.get(index);
+			if(pollingModel.getThread() == thread)
+				return pollingModel.isInterrupted();
+		}
+		return false;
+	}
+	
+	static void stopAllPollingsForEvent(String eventId) throws Exception{
+		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(UcityUtil.pollingQueue)) return;
+		for(int i=0; i<pollingQueue.size(); i++){
+			PollingModel pollingModel = pollingQueue.get(i);
+			if(pollingModel.getEventId().equals(eventId)){
+				pollingModel.setInterrupted(true);
+			}
+		}
+		
+	}
 	synchronized public static void invokePollingForRunningTask(String eventId, String tableName, String status, String displayId, String deviceId, String timeout, TaskInstance taskInstance) throws Exception{
 		if(SmartUtil.isBlankObject(eventId) || SmartUtil.isBlankObject(taskInstance)) return;
 		
@@ -574,7 +597,7 @@ public class UcityUtil {
 				TaskInstance taskInstance = thisModel.getTaskInstance();
 				long timeout = thisModel.getTimeout();
 				Map<String, Object> dataRecord = null;
-				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord)) {
+				while(timeout > 0 && SmartUtil.isBlankObject(dataRecord) && !isPollingInterrupted(Thread.currentThread())) {
 					java.lang.System.out.println("############ START checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					
 					IInstanceService instanceService = SwServiceFactory.getInstance().getInstanceService();					
@@ -652,13 +675,16 @@ public class UcityUtil {
 					java.lang.System.out.println("############ END(TIMEOUT) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 					try{
 						UcityUtil.abendUServiceTask(taskInstance);
+						UcityUtil.stopAllPollingsForEvent(eventId);
 					}catch (Exception e){
 						e.printStackTrace();
 					}
+				}else if(isPollingInterrupted(Thread.currentThread())){
+					java.lang.System.out.println("############ END(INTERRUPTED) checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
 				}else{
 					java.lang.System.out.println("############ END checking Table=" + tableName + ", Event Id=" + eventId + ", Task Name=" + taskInstance.getName() + " To Perform  ################");
-					PollingModel pollingTask = getPolling(Thread.currentThread());					
 				}
+				PollingModel pollingTask = getPolling(Thread.currentThread());					
 			}
 		});
 		addThreadToPolling(index, pollingForRunningTask);
@@ -678,6 +704,7 @@ class PollingModel {
 		this.timeout = timeout;
 	}
 	
+	protected boolean interrupted=false;
 	protected Thread thread=null;
 	protected String eventId = null;
 	protected String tableName = null;
@@ -686,6 +713,13 @@ class PollingModel {
 	protected String deviceId = null;
 	protected long timeout = System.DEFAULT_TASK_TIMEOUT;
 	protected TaskInstance taskInstance = null;
+	
+	public boolean isInterrupted() {
+		return interrupted;
+	}
+	public void setInterrupted(boolean interrupted) {
+		this.interrupted = interrupted;
+	}
 	public Thread getThread() {
 		return thread;
 	}
