@@ -1060,14 +1060,13 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				String sendReceiptNotificationEmail = email.getBaseHeader().getReceiptNotificationEmail();
 				String notificationEmail = "";
 
-				String contentHeader = "";
-//				"</br><ul>" +
-//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.sender") + ":</span><span  class='mail_header_value'>" + from + "</span></li>" + 
-//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.send_date") + ":</span><span  class='mail_header_value'>" + date + "</span></li>" +
-//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.receivers") + ":</span><span  class='mail_header_value'>" + to + "</span></li>" +
-//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.cc_receivers") + ":</span><span  class='mail_header_value'>" + cc + "</span></li>" +
-//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.subject") + ":</span><span  class='mail_header_value'>" + subject + "</span></li>" +
-//						"</ul></br></br>";
+				String contentHeader = 	"</br><ul>" +
+						"<li><span>" + SmartMessage.getString("common.title.sender") + ":</span>" + from + "</li>" + 
+						"<li><span>" + SmartMessage.getString("common.title.send_date") + ":</span>" + date + "</li>" +
+						"<li><span>" + SmartMessage.getString("common.title.receivers") + ":</span>" + to + "</li>" +
+						"<li><span>" + SmartMessage.getString("common.title.cc_receivers") + ":</span>" + cc + "</li>" +
+						"<li><span>" + SmartMessage.getString("common.title.subject") + ":</span>" + subject + "</li>" +
+						"</ul></br></br>";
 			
 				if(sendReceiptNotification != null && sendReceiptNotification.booleanValue() && sendReceiptNotificationEmail !=null && email.getBaseHeader().getUnread().booleanValue()){
 					notificationEmail = org.claros.commons.utility.Utility.convertTRCharsToHtmlSafe(sendReceiptNotificationEmail);
