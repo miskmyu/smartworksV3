@@ -181,7 +181,33 @@
 					<jsp:param value="<%=work.getLastReportId() %>" name="reportId"/>
 				</jsp:include>
 				
-				<!-- 목록보기 타이틀-->
+				<!-- 테이블 -->
+				<div class="table_border">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<th rowspan="2">상황발생</th>
+							<th rowspan="2">통신미들웨어</th>
+							<th colspan="3">업무포털</th>
+							<th rowspan="2">단말 연개 미들웨어</th>
+						</tr>
+						<tr>
+							<th>접수</th>
+							<th>처리</th>
+							<th>종료</th>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+				<!-- 테이블 //-->
+				
+				<!-- 상세필터 -->
 				<div class="list_title_space js_work_list_title mt20">
 					<div class="title_line_options">
 						<form name="frmSearchInstance" class="fl">
@@ -222,7 +248,7 @@
 						</a>
 					</div>
 				</div>
-				<!-- 목록보기 타이틀-->
+				<!-- 상세필터//-->
 
 				<!-- 상세필터 및 새업무등록하기 화면 -->
 				<div id="search_filter" class="filter_section js_new_work_form"></div>
