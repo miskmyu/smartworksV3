@@ -1062,7 +1062,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 
 				String contentHeader = 	"</br><ul>" +
 						"<li><span>" + SmartMessage.getString("common.title.sender") + ":</span>" + from + "</li>" + 
-						"<li><span>" + SmartMessage.getString("common.title.send_date") + ":</span>" + date + "</li>" +
+						"<li><span>" + SmartMessage.getString("common.title.send_date") + ":</span>" + email.getBaseHeader().getDate() + "</li>" +
 						"<li><span>" + SmartMessage.getString("common.title.receivers") + ":</span>" + to + "</li>" +
 						"<li><span>" + SmartMessage.getString("common.title.cc_receivers") + ":</span>" + cc + "</li>" +
 						"<li><span>" + SmartMessage.getString("common.title.subject") + ":</span>" + subject + "</li>" +
