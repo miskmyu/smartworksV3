@@ -42,12 +42,10 @@
 	<div class="title_list">통합 상황 모니터링	
 	
 		<!-- 우측 영역 -->
-		<div class="title_line_options">
-		<div class="fl js_work_report_list_box" style="position: relative; top: -4px;">
+		<div class="fr txt_btn js_work_report_list_box" style="position: relative; top: 5px;">
 			<a class="js_select_situation_report" href="situationReportView.sw?workId=<%=workId%>&workType=<%=work.getType()%>">상황발생 추이 보기</a>
 		</div>			
 		<!-- 우측 영역 //-->
-	</div>
 	<div class="cb"></div>
 		<div class="js_work_report_view border_no_topline" style="display:none;"></div>
 </div>	

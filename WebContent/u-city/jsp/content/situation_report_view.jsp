@@ -51,7 +51,7 @@
 		</select>
 		
 	</div>
-	<div id="chart_target" class="form_contents js_work_report_view" style="height:300px;">
+	<div id="chart_target" class="cb pt5 js_work_report_view" style="height:300px;">
 	</div>
 </div>
 <!-- 전체 레이아웃//-->
