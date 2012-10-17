@@ -1059,6 +1059,15 @@ public class MailServiceImpl extends BaseService implements IMailService {
 				Boolean sendReceiptNotification = email.getBaseHeader().getRequestReceiptNotification();
 				String sendReceiptNotificationEmail = email.getBaseHeader().getReceiptNotificationEmail();
 				String notificationEmail = "";
+
+				String contentHeader = "";
+//				"</br><ul>" +
+//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.sender") + ":</span><span  class='mail_header_value'>" + from + "</span></li>" + 
+//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.send_date") + ":</span><span  class='mail_header_value'>" + date + "</span></li>" +
+//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.receivers") + ":</span><span  class='mail_header_value'>" + to + "</span></li>" +
+//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.cc_receivers") + ":</span><span  class='mail_header_value'>" + cc + "</span></li>" +
+//						"<li><span class='mail_header_label'>" + SmartMessage.getString("common.title.subject") + ":</span><span  class='mail_header_value'>" + subject + "</span></li>" +
+//						"</ul></br></br>";
 			
 				if(sendReceiptNotification != null && sendReceiptNotification.booleanValue() && sendReceiptNotificationEmail !=null && email.getBaseHeader().getUnread().booleanValue()){
 					notificationEmail = org.claros.commons.utility.Utility.convertTRCharsToHtmlSafe(sendReceiptNotificationEmail);
@@ -1167,7 +1176,7 @@ public class MailServiceImpl extends BaseService implements IMailService {
 								String contentPostfix = 
 											(sendType == MailFolder.SEND_TYPE_FORWARD || 
 											 sendType == MailFolder.SEND_TYPE_REPLY || 
-											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") : "";
+											 sendType == MailFolder.SEND_TYPE_REPLY_ALL) ? SmartMessage.getString("mail.title.content.postfix") + contentHeader : "";
 								if(mailContent == null &&  mime.equals(MailAttachment.MIME_TYPE_TEXT_HTML)){
 									mailContent = "";
 				                	Object obj = tmp.getContent();
