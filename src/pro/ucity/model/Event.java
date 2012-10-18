@@ -26,13 +26,25 @@ public class Event {
 	public static final String ID_TRAFFIC_ACCIDENTS 		= "0203";
 	public static final String ID_TRAFFIC_HIT_AND_RUN 		= "0204";
 	public static final String ID_TRAFFIC_VEHICLE_BREAKDOWN = "0205";
+	public static final String ID_TRAFFIC_CONTROL_SITUATION ="0206";      //교통통제상황
+	public static final String ID_TRAFFIC_CONGESTION ="0207";             //교통혼잡상황
 	
-	public static final String ID_DISASTER_FIRE 			= "0301";	
+	public static final String ID_DISASTER_FIRE 			= "0301";
+	public static final String ID_DISASTER_TYPHOON 		= "0302";    //태풍상황
+	public static final String ID_DISASTER_UNDERPASS_FLOODING		= "0303";  //지하도침수상황
+	public static final String ID_DISASTER_WATER_LEVEL_ALRAM		= "0304";   //수위경보
 	
-	public static final String ID_CRIME_VEHICLE 			= "0401";
+	
+	public static final String ID_CRIME_VEHICLE 				= "0401";
 	public static final String ID_CRIME_EMERGENCY 			= "0402";
+	public static final String ID_EMERGENCY_SITUATIONS 		= "0403";      //응급상황
+	public static final String ID_ROBBERY_SITUATION 			= "0404";      //강도상황
+	public static final String ID_STRAY_CHILD_SITUATION 		= "0405";      //미아상황
 
-	public static final String ID_WATERWORKS_LEAKS 			= "0501";
+	public static final String ID_WATERWORKS_LEAKS 			= "0501";	   //수량 초과
+	public static final String ID_WATERWORKS_UNDER 			= "0502";      //수량 미만
+	public static final String ID_HYDRAULIC_LEAKS 			= "0503";      //유압 초과
+	public static final String ID_HYDRAULIC_UNDER 			= "0504";      //유압 미만
 
 	public static final String ID_FACILITY_TROUBLE 			= "0601";
 	public static final String ID_FACILITY_EMERGENCY		= "0602";
@@ -90,14 +102,36 @@ public class Event {
 			return "뺑소니상황";
 		}else if(eventId.equals(ID_TRAFFIC_VEHICLE_BREAKDOWN)){
 			return "차량고장상황";
+		}else if(eventId.equals(ID_TRAFFIC_CONTROL_SITUATION)){
+			return "교통통제상황";
+		}else if(eventId.equals(ID_TRAFFIC_CONGESTION)){
+			return "교통혼잡상황";
 		}else if(eventId.equals(ID_DISASTER_FIRE)){
 			return "화재";
+		}else if(eventId.equals(ID_DISASTER_TYPHOON)){
+			return "태풍상황";
+		}else if(eventId.equals(ID_DISASTER_UNDERPASS_FLOODING)){
+			return "지하도침수상황";
+		}else if(eventId.equals(ID_DISASTER_WATER_LEVEL_ALRAM)){
+			return "수위경보";
 		}else if(eventId.equals(ID_CRIME_VEHICLE)){
 			return "방범(용의차량)상황";
 		}else if(eventId.equals(ID_CRIME_EMERGENCY)){
 			return "비상벨상황";
+		}else if(eventId.equals(ID_EMERGENCY_SITUATIONS)){
+			return "응급상황";
+		}else if(eventId.equals(ID_ROBBERY_SITUATION)){
+			return "강도상황";
+		}else if(eventId.equals(ID_STRAY_CHILD_SITUATION)){
+			return "미아상황";
 		}else if(eventId.equals(ID_WATERWORKS_LEAKS)){
-			return "누수발생";
+			return "수량초과";
+		}else if(eventId.equals(ID_WATERWORKS_UNDER)){
+			return "수량미만";
+		}else if(eventId.equals(ID_HYDRAULIC_LEAKS)){
+			return "유압초과";
+		}else if(eventId.equals(ID_HYDRAULIC_UNDER)){
+			return "유압미만";
 		}else if(eventId.equals(ID_FACILITY_TROUBLE)){
 			return "장애발생";
 		}else if(eventId.equals(ID_FACILITY_EMERGENCY)){
@@ -127,10 +161,21 @@ public class Event {
 				"교통사고상황",
 				"뺑소니상황",
 				"차량고장상황",
+				"교통통제상황",
+				"교통혼잡상황",
 				"화재",
+				"태풍상황",
+				"지하도침수상황",
+				"수위경보",
 				"방범(용의차량)상황",
 				"비상벨상황",
-				"누수발생",
+				"응급상황",
+				"강도상황",
+				"미아상황",
+				"수량초과",
+				"수량미만",
+				"유압초과",
+				"유압미만",
 				"장애발생",
 				"긴급메세지"
 		};
@@ -212,15 +257,23 @@ public class Event {
 		}else if(eventId.equals(Event.ID_TRAFFIC_INCIDENT) || 
 				eventId.equals(Event.ID_TRAFFIC_ACCIDENTS) ||
 				eventId.equals(Event.ID_TRAFFIC_HIT_AND_RUN) ||
-				eventId.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN)){
+				eventId.equals(Event.ID_TRAFFIC_VEHICLE_BREAKDOWN) ||
+				eventId.equals(Event.ID_TRAFFIC_CONTROL_SITUATION) ||
+				eventId.equals(Event.ID_TRAFFIC_CONGESTION)){
 			return System.PROCESS_TRAFFIC_INCIDENT;
 		}else if(eventId.equals(Event.ID_DISASTER_FIRE)){
 			return System.PROCESS_DISASTER_FIRE;
-		}else if(eventId.equals(Event.ID_CRIME_EMERGENCY)){
+		}else if(eventId.equals(Event.ID_CRIME_EMERGENCY) ||
+				eventId.equals(Event.ID_EMERGENCY_SITUATIONS) ||
+				eventId.equals(Event.ID_ROBBERY_SITUATION) ||
+				eventId.equals(Event.ID_STRAY_CHILD_SITUATION)){
 			return System.PROCESS_CRIME_CCTV;
 		}else if(eventId.equals(Event.ID_CRIME_VEHICLE)){
 			return System.PROCESS_CRIME_VEHICLES;
-		}else if(eventId.equals(Event.ID_WATERWORKS_LEAKS)){
+		}else if(eventId.equals(Event.ID_WATERWORKS_LEAKS) ||
+				eventId.equals(Event.ID_WATERWORKS_UNDER) ||
+				eventId.equals(Event.ID_HYDRAULIC_LEAKS) ||
+				eventId.equals(Event.ID_HYDRAULIC_UNDER)){
 			return System.PROCESS_WATERWORKS_LEAKS;
 		}else if(eventId.equals(Event.ID_FACILITY_TROUBLE) || eventId.equals(Event.ID_FACILITY_EMERGENCY)){
 			return System.PROCESS_FACILITY_MANAGEMENT;

@@ -174,9 +174,9 @@ button.space {height: 18px; padding: 1px 3px}
 .bul_gray {background: url("../../images/dot-gray.gif")no-repeat; padding:0 0 0 7px; line-height:15px}
 
 /* Status Icons */
-.icon_status_running {background: url("../images/icon_status_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-.icon_status_d_running {background: url("../images/icon_status_d_running.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-.icon_status_returned {background: url("../images/icon_status_returned.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-.icon_status_not_yet {background: url("../images/icon_status_not_yet.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-.icon_status_completed {background: url("../images/icon_status_completed.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
-.icon_status_rejected {background: url("../images/icon_status_rejected.png") no-repeat left top transparent; padding:0 0 0 5px; line-height:21px; display: inline-block; height:21px; width:21px}
+.icon_status_running {background: url("../images/icon_status_running.png") no-repeat left top transparent; display: block; height:21px; width:21px}
+.icon_status_d_running {background: url("../images/icon_status_d_running.png") no-repeat left top transparent; display: block; height:21px; width:21px}
+.icon_status_returned {background: url("../images/icon_status_returned.png") no-repeat left top transparent; display: block; height:21px; width:21px}
+.icon_status_not_yet {background: url("../images/icon_status_not_yet.png") no-repeat left top transparent; display: block; height:21px; width:21px}
+.icon_status_completed {background: url("../images/icon_status_completed.png") no-repeat left top transparent; display: block; height:21px; width:21px}
+.icon_status_rejected {background: url("../images/icon_status_rejected.png") no-repeat left top transparent; display: block; height:21px; width:21px}

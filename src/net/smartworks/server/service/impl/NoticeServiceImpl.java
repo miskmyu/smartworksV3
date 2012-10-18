@@ -727,41 +727,44 @@ public class NoticeServiceImpl implements INoticeService {
 				long totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
 				
 				if (totalCommentSize != 0) {
-					
 					PublishNotice[] tempNotice = getPublishNoticeManager().getPublishNotices(user.getId(), commentCond, IManager.LEVEL_ALL);
-					
-					String[] opinionIdIns = new String[tempNotice.length];
-					for (int i = 0; i < tempNotice.length; i++) {
-						opinionIdIns[i] = tempNotice[i].getRefId();
+					if (tempNotice != null && tempNotice.length != 0) {
+						String[] opinionIdIns = new String[tempNotice.length];
+						for (int i = 0; i < tempNotice.length; i++) {
+							opinionIdIns[i] = tempNotice[i].getRefId();
+						}
+						OpinionCond opinionCond = new OpinionCond();
+						opinionCond.setObjIdIns(opinionIdIns);
+						opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
+						opinionCond.setPageNo(0);
+						opinionCond.setPageSize(10);
+						Opinion[] tempOpinions = getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
+						if (tempOpinions != null && tempOpinions.length != 0) {
+							for (int i = 0; i < tempOpinions.length; i++) {
+								Opinion tempOpinion = tempOpinions[i];
+								
+								String formId = tempOpinion.getRefFormId();
+								String recordId = tempOpinion.getRefId();
+								
+								SwdRecordCond recCond = new SwdRecordCond();
+								recCond.setFormId(formId);
+								recCond.setRecordId(recordId);
+								long size = SwManagerFactory.getInstance().getSwdManager().getRecordSize(user.getId(), recCond);
+								
+								if (size != 0)
+									continue;
+								
+								PublishNoticeCond pubCond = new PublishNoticeCond();
+								pubCond.setRefId(tempOpinion.getObjId());
+								getPublishNoticeManager().removePublishNotice(user.getId(), pubCond);
+							}
+						} else {
+							for (int i = 0; i < tempNotice.length; i++) {
+								getPublishNoticeManager().removePublishNotice(user.getId(), tempNotice[i].getObjId());
+							}
+						}
+						SmartUtil.increaseNoticeCountByNoticeType(user.getId(), noticeType);
 					}
-					OpinionCond opinionCond = new OpinionCond();
-					opinionCond.setObjIdIns(opinionIdIns);
-					opinionCond.setOrders(new Order[]{new Order(Opinion.A_CREATIONDATE, false)});
-					opinionCond.setPageNo(0);
-					opinionCond.setPageSize(10);
-					Opinion[] tempOpinions = getOpinionManager().getOpinions(user.getId(), opinionCond, IManager.LEVEL_ALL);
-					
-					for (int i = 0; i < tempOpinions.length; i++) {
-						Opinion tempOpinion = tempOpinions[i];
-						
-						String formId = tempOpinion.getRefFormId();
-						String recordId = tempOpinion.getRefId();
-						
-						SwdRecordCond recCond = new SwdRecordCond();
-						recCond.setFormId(formId);
-						recCond.setRecordId(recordId);
-						long size = SwManagerFactory.getInstance().getSwdManager().getRecordSize(user.getId(), recCond);
-						
-						if (size != 0)
-							continue;
-						
-						PublishNoticeCond pubCond = new PublishNoticeCond();
-						pubCond.setRefId(tempOpinion.getObjId());
-						getPublishNoticeManager().removePublishNotice(user.getId(), pubCond);
-						
-						
-					}
-					SmartUtil.increaseNoticeCountByNoticeType(user.getId(), noticeType);
 				}
 				totalCommentSize = getPublishNoticeManager().getPublishNoticeSize(user.getId(), commentCond);
 				

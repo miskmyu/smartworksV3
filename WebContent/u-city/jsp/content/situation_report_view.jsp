@@ -27,7 +27,7 @@
 <fmt:setLocale value="<%=cUser.getLocale() %>" scope="request" />
 <fmt:setBundle basename="resource.smartworksMessage" scope="request" />
 <!--  전체 레이아웃 -->
-<div class="filter_group js_work_report_view">
+<div class="js_work_report_view">
 
 	<!-- 컨텐츠 -->
 	<div class="fr">
@@ -81,7 +81,7 @@
 		%>
 		
 	</div>
-	<div id="chart_target" class="cb pt5 js_work_report_view" style="height:300px;">
+	<div id="chart_target" class="chart_area js_work_report_view" style="height:300px;">
 	</div>
 
 	<div class="glo_btn_space">

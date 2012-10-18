@@ -106,11 +106,11 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 
 		String serviceName = null;
 		String eventId = null;
-		String eventTime = null;
+		Date eventTime = null;
 		String eventName = null;
 		String type = null;
 		String externalDisplay = null;
-		String isSms = null;
+		//boolean isSms = false;
 		String eventPlace = null;
 		
 		String searchKey = null;
@@ -138,7 +138,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			eventName = cond.getEventName();
 			type = cond.getType();
 			externalDisplay = cond.getExternalDisplay();
-			isSms = cond.getIsSms();
+			//isSms = cond.isSms();
 			eventPlace = cond.getEventPlace();
 			
 			searchKey = cond.getSearchKey();
@@ -182,8 +182,8 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 				buf.append(" and obj.type = :type");
 			if (externalDisplay != null)
 				buf.append(" and obj.externalDisplay = :externalDisplay");
-			if (isSms != null)
-				buf.append(" and obj.isSms = :isSms");
+//			if (isSms != null)
+//				buf.append(" and obj.isSms = :isSms");
 			if (eventPlace != null)
 				buf.append(" and obj.eventPlace = :eventPlace");
 			if (creationUser != null)
@@ -291,7 +291,7 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			eventName = cond.getEventName();
 			type = cond.getType();
 			externalDisplay = cond.getExternalDisplay();
-			isSms = cond.getIsSms();
+			//isSms = cond.getIsSms();
 			eventPlace = cond.getEventPlace();
 			
 			if (prcInstId != null)
@@ -311,15 +311,15 @@ public class UcityWorkListManagerImpl extends AbstractManager implements IUcityW
 			if (eventId != null)
 				query.setString("eventId", eventId);
 			if (eventTime != null)
-				query.setString("eventTime", eventTime);
+				query.setTimestamp("eventTime", eventTime);
 			if (eventName != null)
 				query.setString("eventName", eventName);
 			if (type != null)
 				query.setString("type", type);
 			if (externalDisplay != null)
 				query.setString("externalDisplay", externalDisplay);
-			if (isSms != null)
-				query.setString("isSms", isSms);
+			//if (isSms != null)
+			//	query.setString("isSms", isSms);
 			if (eventPlace != null)
 				query.setString("eventPlace", eventPlace);
 			if (searchKey != null)
