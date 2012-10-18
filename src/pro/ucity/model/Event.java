@@ -305,23 +305,23 @@ public class Event {
 			return ID_ENV_WATER;
 		else if(userviceCode.equals(Service.USERVICE_CODE_ENVIRONMENT) && serviceCode.equals("091"))
 			return ID_ENV_WARNING;
-		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && serviceCode.equals("11"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && eventCode.equals("11"))
 			return ID_TRAFFIC_INCIDENT;
-		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("11"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && eventCode.equals("11"))
 			return ID_TRAFFIC_ACCIDENTS;
-		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("12"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && eventCode.equals("12"))
 			return ID_TRAFFIC_HIT_AND_RUN;
-		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && serviceCode.equals("13"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_TRAFFIC) && serviceCode.equals("091") && eventCode.equals("13"))
 			return ID_TRAFFIC_VEHICLE_BREAKDOWN;
-		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && serviceCode.equals("12"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("092") && eventCode.equals("12"))
 			return ID_DISASTER_FIRE;
-		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && serviceCode.equals("14"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("14"))
 			return ID_CRIME_VEHICLE;
-		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && serviceCode.equals("15"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_SECURITY) && serviceCode.equals("091") && eventCode.equals("15"))
 			return ID_CRIME_EMERGENCY;
 		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("091"))
 			return ID_WATERWORKS_LEAKS;
-		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && serviceCode.equals("11"))
+		else if(userviceCode.equals(Service.USERVICE_CODE_FACILITY) && serviceCode.equals("092") && eventCode.equals("11"))
 			return ID_FACILITY_TROUBLE;
 		return "";
 		
