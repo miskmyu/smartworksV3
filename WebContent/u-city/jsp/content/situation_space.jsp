@@ -82,19 +82,19 @@
 <div class="contents_space js_pwork_space_page" lastHref="<%=lastHref %>" workId="<%=workId%>" instId="<%=instId%>" taskInstId="<%=CommonUtil.toNotNull(taskInstId) %>">	            
 					 		            
  			<!-- 타이틀 -->
-			<div class="title"><%=workList.getServiceName() %> / <%=workList.getEventName() %><%if(!SmartUtil.isBlankObject(workList.getEventPlace())) {%>(장소 : <%=workList.getEventPlace() %>)<%} %> 상세화면 
-			
-<%-- 				<!-- 다이어그램 보기 -->
+			<div class="title">
+				<%=workList.getServiceName() %> / <%=workList.getEventName() %><%if(!SmartUtil.isBlankObject(workList.getEventPlace())) {%>(장소 : <%=workList.getEventPlace() %>)<%} %> 상세화면 
+
+				<!-- 다이어그램 보기 -->
 				<div class="txt_btn fr h_auto pt5">
-                	<a href="" class="js_view_instance_diagram"><fmt:message key="common.button.view_instance_diagram"/>▼</a>
+                	<a href="">목록보기</a>
                 </div>
-                <div class="txt_btn fr h_auto" style="display:none"><a href="" class="js_close_instance_diagram"><fmt:message key="common.button.close_instance_diagram"/>▼</a></div>	            
-				<!--  다이어그램 보기// -->
- --%>				
+				<!--  다이어그램 보기// -->				
 			</div>
 			<!-- 타이틀 -->
 			
-			<!-- 목록보기 -->
+			
+			<!-- 목록보기
 			<div class="button_set">
 				<div><a href="">목록보기</a></div>
 			</div>
